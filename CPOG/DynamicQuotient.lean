@@ -171,9 +171,30 @@ theorem firstCommit_dotTwo_fails_on_dynamicQuotient
       (CPOG.EpistemicPotentialism.AbstractRel M.G (quotientMap B))
       (CPOG.EpistemicPotentialism.AbstractFirstCommit (quotientMap B) first ca)
       (quotientMap B root)) := by
-  apply CPOG.EpistemicPotentialism.firstCommit_abstract_dotTwo_fails
-    M.G first (quotientMap B) root a b ca cb hc hrootA hrootB hfirstA hfirstB hpersist
-  intro x y hq
-  exact hlabel ((quotientMap_eq_iff B x y).1 hq)
+  apply CPOG.EpistemicPotentialism.not_dotTwo_of_persistent_split
+    (CPOG.EpistemicPotentialism.AbstractRel M.G (quotientMap B))
+    (CPOG.EpistemicPotentialism.AbstractFirstCommit (quotientMap B) first ca)
+    (quotientMap B root) (quotientMap B a) (quotientMap B b)
+  · exact ⟨root, a, rfl, rfl, hrootA⟩
+  · exact ⟨root, b, rfl, rfl, hrootB⟩
+  · intro z haz
+    rcases haz with ⟨s, t, hs, ht, hst⟩
+    have hsa : first s = first a :=
+      hlabel ((quotientMap_eq_iff B s a).1 hs)
+    have hsc : first s = some ca := hsa.trans hfirstA
+    have htc : first t = some ca := hpersist hst hsc
+    exact ⟨t, ht, htc⟩
+  · intro z hbz hhas
+    rcases hbz with ⟨s, t, hs, ht, hst⟩
+    rcases hhas with ⟨u, hu, huc⟩
+    have hsb : first s = first b :=
+      hlabel ((quotientMap_eq_iff B s b).1 hs)
+    have hsbc : first s = some cb := hsb.trans hfirstB
+    have htbc : first t = some cb := hpersist hst hsbc
+    have htu : quotientMap B t = quotientMap B u := ht.trans hu.symm
+    have hlabels : first t = first u :=
+      hlabel ((quotientMap_eq_iff B t u).1 htu)
+    have hcodes : some cb = some ca := htbc.symm.trans (hlabels.trans huc)
+    exact hc (Option.some.inj hcodes).symm
 
 end CPOG.DynamicQuotient
