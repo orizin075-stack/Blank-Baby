@@ -13,6 +13,9 @@ jobs:
       - name: Lean build
         uses: leanprover/lean-action@v1
         with:
+          auto-config: false
+          use-github-cache: false
+          use-mathlib-cache: false
           build: true
           test: false
           lint: false
