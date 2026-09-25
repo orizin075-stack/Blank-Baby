@@ -77,8 +77,7 @@ theorem reachSet_eq_add_of_fixed [Fintype N]
         reachSet E y k = reachSet E y (k + d) := ih
         _ = reachSet E y (k + d + 1) := reachSet_eq_next_persists E y h d
         _ = reachSet E y (k + (d + 1)) := by
-          congr 2
-          omega
+          rw [Nat.add_assoc]
 
 /-- Reachability is monotone in the allowed path length. -/
 theorem reachWithin_mono_le
@@ -144,7 +143,7 @@ theorem reachSet_fixed_card_sub_one
     have hsub := reachSet_subset_next E y k
     refine (Finset.ssubset_iff_subset_ne).2 ⟨hsub, ?_⟩
     intro heq
-    have hk_le : k ≤ n - 1 := by omega
+    have hk_le : k ≤ n - 1 := Nat.le_sub_one_of_lt hk
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hk_le
     have hpersist := reachSet_eq_next_persists E y heq d
     have hfinal : reachSet E y (n - 1) = reachSet E y n := by
@@ -152,8 +151,9 @@ theorem reachSet_fixed_card_sub_one
         reachSet E y (n - 1) = reachSet E y (k + d) := by rw [hd]
         _ = reachSet E y (k + d + 1) := hpersist
         _ = reachSet E y n := by
-          congr 2
-          omega
+          have hone : 1 ≤ n := Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hnpos)
+          have hnstep : n - 1 + 1 = n := Nat.sub_add_cancel hone
+          rw [← hd, hnstep]
     exact hneq (by simpa [n] using hfinal)
   have hgrowth : (reachSet E y 0).card + n ≤ (reachSet E y n).card :=
     card_add_le_of_strict_chain (fun k => reachSet E y k) n hstrict
@@ -175,7 +175,9 @@ theorem reachBoundedBy_card_sub_one
   have hpos : 0 < Fintype.card N := Fintype.card_pos_iff.mpr inferInstance
   have hKsucc : K + 1 = Fintype.card N := by
     dsimp [K]
-    omega
+    have hone : 1 ≤ Fintype.card N :=
+      Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hpos)
+    exact Nat.sub_add_cancel hone
   have hfix : reachSet E y K = reachSet E y (K + 1) := by
     rw [hKsucc]
     exact reachSet_fixed_card_sub_one E y
@@ -204,7 +206,9 @@ theorem supportIter_fixed_card_sub_one
   have hpos : 0 < Fintype.card N := Fintype.card_pos_iff.mpr inferInstance
   have hKsucc : K + 1 = Fintype.card N := by
     dsimp [K]
-    omega
+    have hone : 1 ≤ Fintype.card N :=
+      Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hpos)
+    exact Nat.sub_add_cancel hone
   rw [hKsucc] at h
   simpa [K] using h
 
@@ -221,7 +225,9 @@ theorem fdeIter_fixed_card_sub_one
   have hpos : 0 < Fintype.card N := Fintype.card_pos_iff.mpr inferInstance
   have hKsucc : K + 1 = Fintype.card N := by
     dsimp [K]
-    omega
+    have hone : 1 ≤ Fintype.card N :=
+      Nat.one_le_iff_ne_zero.mpr (Nat.ne_of_gt hpos)
+    exact Nat.sub_add_cancel hone
   rw [hKsucc] at h
   simpa [K] using h
 
