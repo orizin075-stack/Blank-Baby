@@ -52,4 +52,15 @@ theorem live_without_metaphysical_possibility :
   · rintro ⟨v, hR, hSat⟩
     exact hR
 
+
+/-- Historical generation by itself also does not imply metaphysical possibility. -/
+theorem historical_without_metaphysical_possibility :
+    CPOG.Possibility.PossHist liveWitnessSystem () () /\
+    Not (PossMet noMetRel noMetSat () ()) := by
+  constructor
+  · exact CPOG.Possibility.possLive_implies_hist
+      liveWitnessSystem
+      (live_without_metaphysical_possibility).1
+  · exact (live_without_metaphysical_possibility).2
+
 end CPOG.MetaphysicalBridge
