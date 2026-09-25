@@ -10,6 +10,8 @@ import CPOG.OriginAbstraction
 import CPOG.PossibilitySeparation
 import CPOG.SeedEvidence
 import CPOG.MetaphysicalBridge
+import CPOG.LeviBridge
+import CPOG.DecisionSeparation
 import CPOG.Policy
 import CPOG.Dynamics
 import CPOG.FiniteConvergence
@@ -48,6 +50,11 @@ namespace CPOG.PaperClaims
 #check CPOG.EpistemicPotentialism.content_subsumption_failure_of_G_defeat
 #check CPOG.EpistemicPotentialism.subsumption_of_G_stable
 
+-- Evidence accumulation and decision progress are distinct typed relations.
+#check CPOG.DecisionSeparation.evidenceLE_join_left
+#check CPOG.DecisionSeparation.evidence_and_decision_progress_are_typed_separately
+#check CPOG.DecisionSeparation.negative_evidence_reopens_without_mutating_raw_record
+
 -- Theorem 4: Semantic Minimal Quotient / universal factorization.
 #check CPOG.SemanticProvenance.adequate_kernel_refines_observationQuotient
 #check CPOG.SemanticProvenance.observationQuotient_factors_through_every_adequate_abstraction
@@ -61,6 +68,11 @@ namespace CPOG.PaperClaims
 #check CPOG.MetaphysicalBridge.live_without_metaphysical_possibility
 #check CPOG.MetaphysicalBridge.historical_without_metaphysical_possibility
 #check CPOG.MetaphysicalBridge.certification_implies_metaphysical_possibility
+
+-- Conditional bridge to Levi-style serious possibility; converse is not automatic.
+#check CPOG.LeviBridge.possLive_implies_serious_of_compatible
+#check CPOG.LeviBridge.serious_does_not_imply_live
+#check CPOG.LeviBridge.levi_bridge_is_strictly_one_way
 
 -- Provenance policy specialization and open-ended future-policy safety.
 #check CPOG.Policy.adequate_source_abstraction_refines_policyEq
