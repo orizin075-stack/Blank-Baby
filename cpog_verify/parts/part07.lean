@@ -20,7 +20,7 @@ theorem firstCommit_A_B_not_bisimilar
     (hZ : IsBisimulation fcModel fcModel Z) :
     Not (Z .a .b) := by
   exact atom_difference_blocks_bisimulation hZ (a := FCAtom.pA)
-    (by trivial) (by trivial)
+    (by simp [fcModel, PA]) (by simp [fcModel, PA])
 
 theorem firstCommit_classes_distinct
     {E : FCWorld -> FCWorld -> Prop}
