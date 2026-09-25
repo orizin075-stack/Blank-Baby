@@ -25,7 +25,7 @@ jobs:
       - name: Kernel build
         run: lake build
 
-      - name: Independent Lean checker and axiom audit
+      - name: Independent Lean checker
         uses: leanprover/lean-action@v1
         with:
           auto-config: false
@@ -36,5 +36,39 @@ jobs:
           lint: false
           leanchecker: true
           leanchecker-args: "CPOGMain CPOGTheory CPOGCheck"
+
+      - name: Axiom audit CPOGMain
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-github-cache: false
+          use-mathlib-cache: false
+          build: false
+          test: false
+          lint: false
           axiom-audit: true
-          axiom-audit-root: "CPOG"
+          axiom-audit-root: "CPOGMain"
+
+      - name: Axiom audit CPOGTheory
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-github-cache: false
+          use-mathlib-cache: false
+          build: false
+          test: false
+          lint: false
+          axiom-audit: true
+          axiom-audit-root: "CPOGTheory"
+
+      - name: Axiom audit CPOGCheck
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-github-cache: false
+          use-mathlib-cache: false
+          build: false
+          test: false
+          lint: false
+          axiom-audit: true
+          axiom-audit-root: "CPOGCheck"
