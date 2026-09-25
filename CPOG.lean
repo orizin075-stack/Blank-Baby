@@ -10,3 +10,6 @@ import CPOG.Policy
 import CPOG.MetaphysicalBridge
 
 import CPOG.ModalPreservation
+
+import CPOG.DynamicQuotient
+import CPOG.StaticDynamicGap
