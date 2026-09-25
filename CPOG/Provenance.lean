@@ -153,4 +153,80 @@ theorem signature_factor_unique
     exact hx.symm
   rw [hb, hh₁ x, hh₂ x]
 
+/-! ## The quotient itself -/
+
+/-- Setoid induced exactly by the selected semantic observations. -/
+def observationSetoid
+    {ι : Type uI} {α : Type uA}
+    (O : ObservationSystem ι α) : Setoid α where
+  r := ObsEq O
+  iseqv := ⟨obsEq_refl O, obsEq_symm, obsEq_trans⟩
+
+/-- The literal semantic observation quotient X / ~O. -/
+abbrev ObservationQuotient
+    {ι : Type uI} {α : Type uA}
+    (O : ObservationSystem ι α) :=
+  Quotient (observationSetoid O)
+
+/-- Canonical quotient map. -/
+def quotientMap
+    {ι : Type uI} {α : Type uA}
+    (O : ObservationSystem ι α) (x : α) : ObservationQuotient O :=
+  Quotient.mk (observationSetoid O) x
+
+/-- Quotient equality is exactly semantic observational equivalence. -/
+theorem quotientMap_eq_iff_obsEq
+    {ι : Type uI} {α : Type uA}
+    (O : ObservationSystem ι α) (x y : α) :
+    quotientMap O x = quotientMap O y ↔ ObsEq O x y := by
+  constructor
+  · intro h
+    exact Quotient.exact h
+  · intro h
+    exact Quotient.sound h
+
+/-- The quotient map itself is adequate for all observations in O. -/
+theorem quotientMap_adequate
+    {ι : Type uI} {α : Type uA}
+    (O : ObservationSystem ι α) :
+    Adequate O (quotientMap O) := by
+  intro x y h
+  exact (quotientMap_eq_iff_obsEq O x y).1 h
+
+/--
+Direct coarseness theorem for Theorem 4 of the paper: every adequate abstraction has a
+kernel contained in the kernel of the semantic quotient map.
+-/
+theorem adequate_kernel_refines_observationQuotient
+    {ι : Type uI} {α : Type uA} {β : Type uB}
+    (O : ObservationSystem ι α) (A : α → β)
+    (hA : Adequate O A) :
+    ∀ ⦃x y⦄, Kernel A x y → quotientMap O x = quotientMap O y := by
+  intro x y hxy
+  exact Quotient.sound (hA hxy)
+
+/--
+Universal factorization form: every adequate abstraction determines the semantic quotient
+value on its reachable image. Thus the quotient forgets exactly the distinctions invisible
+to O and no more.
+-/
+theorem observationQuotient_factors_through_every_adequate_abstraction
+    {ι : Type uI} {α : Type uA} {β : Type uB}
+    (O : ObservationSystem ι α) (A : α → β)
+    (hA : Adequate O A) :
+    ∃ h : Image A → ObservationQuotient O,
+      ∀ x, h ⟨A x, ⟨x, rfl⟩⟩ = quotientMap O x := by
+  classical
+  let pick : Image A → α := fun b => Classical.choose b.property
+  have hpick : ∀ b : Image A, A (pick b) = b.1 := by
+    intro b
+    exact Classical.choose_spec b.property
+  let h : Image A → ObservationQuotient O := fun b => quotientMap O (pick b)
+  refine ⟨h, ?_⟩
+  intro x
+  apply Quotient.sound
+  apply hA
+  exact hpick ⟨A x, ⟨x, rfl⟩⟩
+
+
 end CPOG.SemanticProvenance
