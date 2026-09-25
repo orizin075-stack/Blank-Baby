@@ -101,6 +101,26 @@ theorem content_formula_subsumption_fails :
       Theory.ContentPositive Theory.ContentWorld.now := Theory.content_subsumption_fails
   exact htheory hsub
 
+theorem firstCommit_abstraction_formula_dotTwo_fails
+    {W Q A : Type} {R : W → W → Prop} {q : W → Q} {lab : W → Option A}
+    {root xA xB : W} {a b : A}
+    (hpersist : Theory.LabelPersistent R lab)
+    (hpres : Theory.AbstractionPreservesLabel q lab)
+    (hrootA : R root xA)
+    (hrootB : R root xB)
+    (hA : lab xA = some a)
+    (hB : lab xB = some b)
+    (hab : a ≠ b) :
+    ¬ Sat (Theory.AbstractRel R q) (Theory.AbstractRel R q)
+      (fun (_ : Unit) => Theory.AbstractHasLabel q lab a)
+      (q root) (dotTwoFormula ()) := by
+  intro hSat
+  have hDot : Theory.DotTwoAt (Theory.AbstractRel R q)
+      (Theory.AbstractHasLabel q lab a) (q root) := by
+    exact hSat
+  exact Theory.firstCommit_abstraction_dotTwo_fails
+    hpersist hpres hrootA hrootB hA hB hab hDot
+
 theorem commutative_formula_dotTwo_valid
     (Atom : Type) (V : Atom → CommState → Prop) (p : Atom) (w : CommState) :
     Sat commR commR V w (dotTwoFormula p) := by
