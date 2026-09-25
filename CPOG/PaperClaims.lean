@@ -6,6 +6,7 @@ import CPOG.DynamicObservation
 import CPOG.GreatestDynamicObservation
 import CPOG.Provenance
 import CPOG.Possibility
+import CPOG.OriginAbstraction
 import CPOG.PossibilitySeparation
 import CPOG.SeedEvidence
 import CPOG.MetaphysicalBridge
@@ -22,7 +23,9 @@ theorem is renamed, removed, or ceases to elaborate, this module fails to build.
 
 namespace CPOG.PaperClaims
 
--- Proposition 1: Historical Persistence.
+-- Recognition-event commitment and Proposition 1: Historical Persistence.
+#check CPOG.Origin.commit_generates_canonical_historical_token
+#check CPOG.Origin.canonical_historical_token_iff_committed
 #check CPOG.History.historical_persistence
 
 -- Proposition 2A: raw prefix-history branching / incomparability refutes .2.
@@ -38,6 +41,7 @@ namespace CPOG.PaperClaims
 #check CPOG.DynamicObservation.dynamic_observation_quotient_is_semantically_safe
 #check CPOG.GreatestDynamicObservation.greatest_dynamic_observation_quotient_is_coarsest
 #check CPOG.GreatestDynamicObservation.greatest_dynamic_observation_quotient_is_safe
+#check CPOG.GreatestDynamicObservation.firstCommit_dotTwo_fails_on_greatest_observation_quotient
 
 -- Theorem 3: generic and concrete defeasible-content Subsumption failure.
 #check CPOG.EpistemicPotentialism.not_subsumption_of_D_stable_G_defeater
@@ -47,6 +51,7 @@ namespace CPOG.PaperClaims
 -- Theorem 4: Semantic Minimal Quotient / universal factorization.
 #check CPOG.SemanticProvenance.adequate_kernel_refines_observationQuotient
 #check CPOG.SemanticProvenance.observationQuotient_factors_through_every_adequate_abstraction
+#check CPOG.OriginAbstraction.origin_individuation_semantic_deflation
 
 -- Four-way possibility separation and conservative seed evidence.
 #check CPOG.Possibility.possLive_implies_hist
