@@ -3,6 +3,7 @@ import CPOG.General
 import CPOG.DeferableGeneration
 import CPOG.DynamicQuotient
 import CPOG.DynamicObservation
+import CPOG.GreatestDynamicObservation
 import CPOG.Provenance
 import CPOG.Possibility
 import CPOG.PossibilitySeparation
@@ -35,10 +36,13 @@ namespace CPOG.PaperClaims
 
 -- Dynamic observation quotient refines the static quotient and preserves G/D/H truth.
 #check CPOG.DynamicObservation.dynamic_observation_quotient_is_semantically_safe
+#check CPOG.GreatestDynamicObservation.greatest_dynamic_observation_quotient_is_coarsest
+#check CPOG.GreatestDynamicObservation.greatest_dynamic_observation_quotient_is_safe
 
 -- Theorem 3: generic and concrete defeasible-content Subsumption failure.
 #check CPOG.EpistemicPotentialism.not_subsumption_of_D_stable_G_defeater
 #check CPOG.EpistemicPotentialism.content_subsumption_failure_of_G_defeat
+#check CPOG.EpistemicPotentialism.subsumption_of_G_stable
 
 -- Theorem 4: Semantic Minimal Quotient / universal factorization.
 #check CPOG.SemanticProvenance.adequate_kernel_refines_observationQuotient
