@@ -30,3 +30,5 @@ import CPOG.DeferableGeneration
 import CPOG.PaperClaims
 
 import CPOG.GreatestDynamicObservation
+
+import CPOG.OriginAbstraction
