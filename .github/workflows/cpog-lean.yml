@@ -1,12 +1,12 @@
-name: CPOG Lean Check
+name: CPOG Proof Closure Check
 
 on:
   push:
-    branches: ["cpog-lean-v45-check"]
+    branches: ["cpog-proof-closure-v47"]
   workflow_dispatch:
 
 concurrency:
-  group: cpog-lean-v45-check
+  group: cpog-proof-closure-v47
   cancel-in-progress: true
 
 jobs:
