@@ -131,7 +131,7 @@ theorem transitive_iff_4_all
         Box R p w -> Box R (Box R p) w := by
   constructor
   · intro hTrans p w
-    exact box_4_of_transitive hTrans p w
+    exact box_4_of_transitive (R := R) hTrans p w
   · exact transitive_of_4_all
 
 
@@ -168,7 +168,7 @@ variable {EventCode : Type u} {Payload : Type v}
 
 theorem token_ne_of_origin_ne
     {t₁ t₂ : HistToken EventCode Payload}
-    (h : t₁.origin != t₂.origin) : t₁ != t₂ := by
+    (h : t₁.origin ≠ t₂.origin) : t₁ ≠ t₂ := by
   intro hEq
   apply h
   exact congrArg HistToken.origin hEq
