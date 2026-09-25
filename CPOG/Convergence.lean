@@ -191,7 +191,4 @@ theorem fdeIter_fixed_of_reachBound
         ⟨y, hbound y x ⟨K + 1, hyx⟩, hy⟩
 
 
-/-! ## Finite sharp bound by support-cardinality rank -/
-
-/-- Encode one support predicate as a finite set. -/
-noncomputable def supportFinset [Fintype N] (S : N → Prop) : Finset N := by
+end CPOG.Convergence
