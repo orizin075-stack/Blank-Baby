@@ -88,7 +88,7 @@ theorem mem_processList_of_mem_input
         exact mem_processList_of_mem_current ds (insert d processed) hmem
       · simpa [processList] using ih (processed := insert a processed) hdrest
 
-def processFiniteClosure
+noncomputable def processFiniteClosure
     {D : Type uD} [Fintype D] [DecidableEq D]
     (processed : Finset D) : Finset D :=
   processList (Finset.univ.toList) processed
@@ -112,7 +112,7 @@ theorem finiteProcessingClosure_reaches_seal
 
 theorem finiteProcessingClosure_schedule_length
     {D : Type uD} [Fintype D] [DecidableEq D] :
-    (Finset.univ : Finset D).toList.length = Fintype.card D := by
+    (Finset.univ : Finset D).toList.length = (Finset.univ : Finset D).card := by
   simp
 
 /-! ## A.3 Jointly admissible finite Max extension -/
