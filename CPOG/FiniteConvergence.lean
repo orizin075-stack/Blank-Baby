@@ -70,6 +70,7 @@ theorem reachWithin_mono_le
     (hkm : k ≤ m) (h : ReachWithin E k y x) :
     ReachWithin E m y x := by
   obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le hkm
+  clear hkm
   induction d with
   | zero => simpa
   | succ d ih =>
@@ -81,7 +82,7 @@ theorem card_add_le_of_strict_chain [Fintype N]
     (s : Nat → Finset N) :
     ∀ m,
       (∀ k, k < m → s k ⊂ s (k + 1)) →
-      s 0 |>.card + m ≤ (s m).card := by
+      (s 0).card + m ≤ (s m).card := by
   intro m
   induction m with
   | zero =>
@@ -89,7 +90,7 @@ theorem card_add_le_of_strict_chain [Fintype N]
       simp
   | succ m ih =>
       intro hstrict
-      have hprev : s 0 |>.card + m ≤ (s m).card :=
+      have hprev : (s 0).card + m ≤ (s m).card :=
         ih (fun k hk => hstrict k (Nat.lt_trans hk (Nat.lt_succ_self m)))
       have hss : s m ⊂ s (m + 1) := hstrict m (Nat.lt_succ_self m)
       have hcard : (s m).card < (s (m + 1)).card := Finset.card_lt_card hss
@@ -102,7 +103,7 @@ theorem card_reachSet_zero [Fintype N]
   classical
   have hset : reachSet E y 0 = {y} := by
     ext x
-    simp [reachSet, ReachWithin]
+    simp [reachSet, ReachWithin, eq_comm]
   simp [hset]
 
 /--
