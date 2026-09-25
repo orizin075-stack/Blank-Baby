@@ -184,6 +184,52 @@ theorem firstCommit_divergence_survives_abstraction
     exact hc (Option.some.inj hSome.symm)
   · exact hrespect
 
+/-- Relation induced on an abstract state space by a concrete G-step. -/
+def AbstractRel {Q : Type} (G : H → H → Prop) (q : H → Q) (qx qy : Q) : Prop :=
+  ∃ x y, q x = qx ∧ q y = qy ∧ G x y
+
+/-- The abstract state has a representative whose persistent FirstCommit code is c. -/
+def AbstractFirstCommit {Q : Type}
+    (q : H → Q) (first : H → Option C) (c : C) (z : Q) : Prop :=
+  ∃ x, q x = z ∧ first x = some c
+
+/--
+Theorem 2B in modal form. If FirstCommit codes persist along generation and the abstraction
+preserves those codes, two distinct first-commit branches still give an explicit .2
+countermodel on the induced abstract frame.
+-/
+theorem firstCommit_abstract_dotTwo_fails
+    {Q : Type}
+    (G : H → H → Prop) (first : H → Option C) (q : H → Q)
+    (root a b : H) (ca cb : C)
+    (hc : ca ≠ cb)
+    (hrootA : G root a) (hrootB : G root b)
+    (hfirstA : first a = some ca) (hfirstB : first b = some cb)
+    (hpersist : ∀ ⦃x y : H⦄ ⦃c : C⦄, G x y → first x = some c → first y = some c)
+    (hpres : ∀ x y, q x = q y → first x = first y) :
+    ¬ DotTwoR (AbstractRel G q) (AbstractFirstCommit q first ca) (q root) := by
+  apply not_dotTwo_of_persistent_split
+    (AbstractRel G q) (AbstractFirstCommit q first ca)
+    (q root) (q a) (q b)
+  · exact ⟨root, a, rfl, rfl, hrootA⟩
+  · exact ⟨root, b, rfl, rfl, hrootB⟩
+  · intro z haz
+    rcases haz with ⟨s, t, hs, ht, hst⟩
+    have hsa : first s = first a := hpres s a hs
+    have hsc : first s = some ca := hsa.trans hfirstA
+    have htc : first t = some ca := hpersist hst hsc
+    exact ⟨t, ht, htc⟩
+  · intro z hbz hhas
+    rcases hbz with ⟨s, t, hs, ht, hst⟩
+    rcases hhas with ⟨u, hu, huc⟩
+    have hsb : first s = first b := hpres s b hs
+    have hsbc : first s = some cb := hsb.trans hfirstB
+    have htbc : first t = some cb := hpersist hst hsbc
+    have htu : q t = q u := ht.trans hu.symm
+    have hlabels : first t = first u := hpres t u htu
+    have hcodes : some cb = some ca := htbc.symm.trans (hlabels.trans huc)
+    exact hc (Option.some.inj hcodes).symm
+
 end FirstCommit
 
 /-! ## Subsumption -/
