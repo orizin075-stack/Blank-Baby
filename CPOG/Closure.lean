@@ -17,10 +17,10 @@ theorem rtc_trans {W : Type uW} {step : W -> W -> Prop}
     {x y z : W} (hxy : RTC step x y) (hyz : RTC step y z) :
     RTC step x z := by
   induction hyz with
-  | refl _ =>
+  | refl =>
       exact hxy
-  | @tail y u v hyu huv ih =>
-      exact RTC.tail ih huv
+  | tail hprev hstep ih =>
+      exact RTC.tail ih hstep
 
 theorem rtc_frame_S4 {W : Type uW}
     (step : W -> W -> Prop)
