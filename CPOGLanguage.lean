@@ -1,6 +1,7 @@
 import Std
 import CPOGMain
 import CPOGTheory
+import CPOGOrigin
 
 namespace CPOG.EpistemicPotentialism.Language
 
