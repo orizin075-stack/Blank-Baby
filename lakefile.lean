@@ -1,9 +1,7 @@
 import Lake
 open Lake DSL
 
-package CPOGGeneral
-
-lean_lib CPOGCheck
+package CPOG
 
 @[default_target]
-lean_lib CPOGGeneral
+lean_lib CPOG
