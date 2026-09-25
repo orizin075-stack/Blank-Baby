@@ -140,4 +140,40 @@ theorem dynamicQuotient_preserves_all_formulas
     Sat M w phi <-> Sat (quotientModel B) (quotientMap B w) phi := by
   exact sat_iff_of_boundedMorphism (quotientMap_boundedMorphism B) phi w
 
+
+/-- Equality in the dynamic quotient can only identify states with the same preserved label. -/
+theorem quotientMap_preserves_label
+    {W : Type uW} {Atom : Type uA} {M : Model W Atom}
+    (B : DynamicEquivalence M)
+    {C : Type} (first : W -> Option C)
+    (hlabel : forall {x y}, B.E x y -> first x = first y) :
+    forall x y, quotientMap B x = quotientMap B y -> first x = first y := by
+  intro x y hq
+  exact hlabel ((quotientMap_eq_iff B x y).1 hq)
+
+/--
+Paper Theorem 2B on an actual dynamic quotient: if the chosen dynamic equivalence
+preserves FirstCommit labels, distinct persistent FirstCommit branches still refute .2
+after quotienting.
+-/
+theorem firstCommit_dotTwo_fails_on_dynamicQuotient
+    {W : Type uW} {Atom : Type uA} {M : Model W Atom}
+    (B : DynamicEquivalence M)
+    {C : Type}
+    (first : W -> Option C)
+    (root a b : W) (ca cb : C)
+    (hc : ca ≠ cb)
+    (hrootA : M.G root a) (hrootB : M.G root b)
+    (hfirstA : first a = some ca) (hfirstB : first b = some cb)
+    (hpersist : forall {x y c}, M.G x y -> first x = some c -> first y = some c)
+    (hlabel : forall {x y}, B.E x y -> first x = first y) :
+    Not (CPOG.EpistemicPotentialism.DotTwoR
+      (CPOG.EpistemicPotentialism.AbstractRel M.G (quotientMap B))
+      (CPOG.EpistemicPotentialism.AbstractFirstCommit (quotientMap B) first ca)
+      (quotientMap B root)) := by
+  apply CPOG.EpistemicPotentialism.firstCommit_abstract_dotTwo_fails
+    M.G first (quotientMap B) root a b ca cb hc hrootA hrootB hfirstA hfirstB hpersist
+  intro x y hq
+  exact hlabel ((quotientMap_eq_iff B x y).1 hq)
+
 end CPOG.DynamicQuotient
