@@ -35,6 +35,6 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: "CPOGMain"
+          leanchecker-args: "CPOGMain CPOGTheory CPOGCheck"
           axiom-audit: true
-          axiom-audit-root: "CPOGMain"
+          axiom-audit-root: "CPOG"
