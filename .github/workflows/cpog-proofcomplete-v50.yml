@@ -24,6 +24,9 @@ jobs:
           python3 fixes/apply_round2.py
           cp fixes/Origin.lean CPOG_ProofComplete_v50/CPOG/Origin.lean
           python3 fixes/apply_round3.py
+          python3 fixes/apply_round4_language.py
+          cp fixes/Policy.lean CPOG_ProofComplete_v50/CPOG/Policy.lean
+          cp fixes/FiniteConvergence.lean CPOG_ProofComplete_v50/CPOG/FiniteConvergence.lean
 
       - name: Install Lean 4.34.0
         shell: bash
@@ -32,6 +35,12 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.34.0
           "$HOME/.elan/bin/elan" default leanprover/lean4:v4.34.0
+
+      - name: Cache Mathlib packages
+        uses: actions/cache@v4
+        with:
+          path: CPOG_ProofComplete_v50/.lake/packages
+          key: cpog-mathlib-v4.34.0
 
       - name: Resolve dependencies
         working-directory: CPOG_ProofComplete_v50
