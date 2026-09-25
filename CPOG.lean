@@ -8,3 +8,5 @@ import CPOG.FiniteConvergence
 import CPOG.History
 import CPOG.Policy
 import CPOG.MetaphysicalBridge
+
+import CPOG.ModalPreservation
