@@ -76,8 +76,8 @@ theorem all_boolean_policies_separate_sources
   · exact heq
   · exfalso
     have hsep := h (fun s => decide (s = s₁))
-    have hbad : (true : Bool) = false := by
-      simpa [heq] using hsep
-    cases hbad
+    have hs21 : s₂ = s₁ := by
+      simpa using hsep
+    exact heq hs21.symm
 
 end CPOG.EpistemicPotentialism.Origin
