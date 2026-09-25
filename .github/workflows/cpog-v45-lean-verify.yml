@@ -1,0 +1,38 @@
+name: CPOG v45 Lean Verification
+
+on:
+  push:
+    branches:
+      - cpog-v45-lean-verify
+    paths:
+      - 'cpog_verify/**'
+      - '.github/workflows/cpog-v45-lean-verify.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cpog_verify
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reassemble verified source
+        run: |
+          cat parts/part*.lean > CPOG.lean
+          test -s CPOG.lean
+          ! grep -nE '\b(sorry|admit|unsafe)\b|^[[:space:]]*axiom[[:space:]]' CPOG.lean
+
+      - name: Build and kernel-check
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: cpog_verify
+          build: true
+          test: false
+          lint: false
+          leanchecker: true
+          leanchecker-args: "CPOG"
+          axiom-audit: true
+          axiom-audit-root: "CPOG"
+          use-github-cache: false
