@@ -1,11 +1,10 @@
 import Lake
 open Lake DSL
 
-package CPOGMain
+package CPOG
 
-lean_lib CPOGTheory
-lean_lib CPOGCheck
-lean_lib CPOGGeneral
+require mathlib from git
+  "https://github.com/leanprover-community/mathlib4" @ "v4.34.0"
 
 @[default_target]
-lean_lib CPOGMain
+lean_lib CPOG
