@@ -246,7 +246,10 @@ theorem factorThroughObservation_unique {I X Z : Type} {Y : I → Type}
   funext q
   refine Quotient.inductionOn q ?_
   intro x
-  rw [hh x]
-  rfl
+  calc
+    h (Quotient.mk (observationSetoid obs) x) = g x := by
+      simpa [observationQuotientMap] using hh x
+    _ = factorThroughObservation obs g hg (Quotient.mk (observationSetoid obs) x) := by
+      rfl
 
 end CPOG.EpistemicPotentialism
