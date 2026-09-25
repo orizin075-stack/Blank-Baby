@@ -156,7 +156,7 @@ theorem reachBoundedBy_card_sub_one
           calc
             reachSet E y K = reachSet E y (K + m) := ih
             _ = reachSet E y (K + m + 1) := hpersist m
-            _ = reachSet E y (K + (m + 1)) := by congr 2 <;> omega
+            _ = reachSet E y (K + (m + 1)) := by simp [Nat.add_assoc]
     have hxmem : x ∈ reachSet E y (K + d) := by
       apply (mem_reachSet_iff E y x (K + d)).2
       rw [← hd]
