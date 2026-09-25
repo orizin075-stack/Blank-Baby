@@ -23,20 +23,20 @@ def ObsEq {ι : Type uI} {α : Type uA}
     (O : ObservationSystem ι α) (x y : α) : Prop :=
   ∀ i, O.observe i x = O.observe i y
 
-@[refl] theorem obsEq_refl
+theorem obsEq_refl
     {ι : Type uI} {α : Type uA}
     (O : ObservationSystem ι α) (x : α) : ObsEq O x x := by
   intro i
   rfl
 
-@[symm] theorem obsEq_symm
+theorem obsEq_symm
     {ι : Type uI} {α : Type uA}
     {O : ObservationSystem ι α} {x y : α}
     (h : ObsEq O x y) : ObsEq O y x := by
   intro i
   exact (h i).symm
 
-@[trans] theorem obsEq_trans
+theorem obsEq_trans
     {ι : Type uI} {α : Type uA}
     {O : ObservationSystem ι α} {x y z : α}
     (hxy : ObsEq O x y) (hyz : ObsEq O y z) : ObsEq O x z := by
@@ -45,7 +45,7 @@ def ObsEq {ι : Type uI} {α : Type uA}
 
 /-- The complete observation signature. -/
 def Signature {ι : Type uI} {α : Type uA}
-    (O : ObservationSystem ι α) : Type (max uI uO) :=
+    (O : ObservationSystem ι α) :=
   (i : ι) → O.Out i
 
 /-- Compute the complete signature of one object. -/
@@ -60,7 +60,7 @@ theorem signature_eq_iff_obsEq
     signature O x = signature O y ↔ ObsEq O x y := by
   constructor
   · intro h i
-    exact congrFun h i
+    exact congrArg (fun f => f i) h
   · intro h
     funext i
     exact h i
