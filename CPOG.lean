@@ -26,3 +26,5 @@ import CPOG.PossibilitySeparation
 import CPOG.MaxAppendix
 
 import CPOG.DeferableGeneration
+
+import CPOG.PaperClaims
