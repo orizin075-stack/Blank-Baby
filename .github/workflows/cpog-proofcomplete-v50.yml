@@ -1,0 +1,49 @@
+name: CPOG ProofComplete v50
+
+on:
+  push:
+    branches: ["cpog-proofcomplete-v50"]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Expand proof package
+        shell: bash
+        run: |
+          base64 -d CPOG_ProofComplete_v50.tar.gz.b64 > CPOG_ProofComplete_v50.tar.gz
+          tar -xzf CPOG_ProofComplete_v50.tar.gz
+
+      - name: Install Lean 4.34.0
+        shell: bash
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.34.0
+          "$HOME/.elan/bin/elan" default leanprover/lean4:v4.34.0
+
+      - name: Resolve dependencies
+        working-directory: CPOG_ProofComplete_v50
+        run: lake update
+
+      - name: Build all proof modules
+        working-directory: CPOG_ProofComplete_v50
+        run: lake build
+
+      - name: Kernel re-check and axiom audit
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: CPOG_ProofComplete_v50
+          auto-config: false
+          use-github-cache: false
+          use-mathlib-cache: true
+          build: false
+          test: false
+          lint: false
+          leanchecker: true
+          leanchecker-args: "CPOG"
+          axiom-audit: true
+          axiom-audit-root: "CPOG"
