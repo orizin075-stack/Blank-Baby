@@ -24,3 +24,5 @@ import CPOG.DynamicObservation
 import CPOG.PossibilitySeparation
 
 import CPOG.MaxAppendix
+
+import CPOG.DeferableGeneration
