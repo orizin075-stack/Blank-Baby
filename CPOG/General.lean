@@ -262,6 +262,22 @@ theorem content_subsumption_failure_of_G_defeat
     rw [hfalse] at htrue
     cases htrue
 
+/--
+A concrete abstraction-map corollary: if an abstraction q preserves the FirstCommit-A
+observation, the A/B branches cannot acquire a common abstract successor.
+-/
+theorem firstCommit_no_common_abstract_successor
+    {H C Q : Type}
+    (G : H → H → Prop) (first : H → Option C) (q : H → Q)
+    (a b : H) (ca cb : C) (hc : ca ≠ cb)
+    (hA : ∀ u, G a u → first u = some ca)
+    (hB : ∀ u, G b u → first u = some cb)
+    (hq : ∀ x y, q x = q y →
+      (FirstCommitIs first ca x ↔ FirstCommitIs first ca y)) :
+    ¬ ∃ u v, G a u ∧ G b v ∧ q u = q v := by
+  exact firstCommit_divergence_survives_abstraction
+    G (fun x y => q x = q y) first a b ca cb hc hA hB hq
+
 /-! ## Generic modal recovery laws -/
 
 /-- Reflexivity validates the T axiom. -/
