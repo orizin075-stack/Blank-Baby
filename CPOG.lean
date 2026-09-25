@@ -18,3 +18,5 @@ import CPOG.Closure
 
 import CPOG.Origin
 import CPOG.SeedEvidence
+
+import CPOG.DynamicObservation
