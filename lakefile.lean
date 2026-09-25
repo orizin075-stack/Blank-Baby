@@ -1,7 +1,7 @@
 import Lake
 open Lake DSL
 
-package cpog_epistemic_check
+package CPOGCheck
 
 @[default_target]
 lean_lib CPOGCheck
