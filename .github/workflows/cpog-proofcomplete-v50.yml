@@ -11,10 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Expand proof package
+      - name: Reassemble and verify proof package
         shell: bash
         run: |
-          base64 -d CPOG_ProofComplete_v50.tar.gz.b64 > CPOG_ProofComplete_v50.tar.gz
+          cat chunks/chunk00 chunks/chunk01 chunks/chunk02a chunks/chunk02b chunks/chunk03a chunks/chunk03b > package.b64
+          echo "cab16e0e8b8a897dc5840a0c259ea70b56428d6e22b39d8b65f2b95f5bb29953  package.b64" | sha256sum -c -
+          base64 -d package.b64 > CPOG_ProofComplete_v50.tar.gz
+          echo "52f3b940e74635948d1cbb40ac6ad3c5349da5ea8bb0ee2e85a307550af2fa00  CPOG_ProofComplete_v50.tar.gz" | sha256sum -c -
           tar -xzf CPOG_ProofComplete_v50.tar.gz
 
       - name: Install Lean 4.34.0
