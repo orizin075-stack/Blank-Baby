@@ -1,3 +1,4 @@
+import Mathlib.Data.List.Infix
 import CPOG.Check
 
 /-!
@@ -117,6 +118,71 @@ theorem singleton_other_branch_first_false
       a :: ta = k := hka.symm
       _ = b :: tb := by simpa using hkb
   exact hab (List.cons.inj heq).1
+
+/-- Prefix extension is transitive. -/
+theorem histExtends_trans
+    {h k m : List A}
+    (hhk : HistExtends h k) (hkm : HistExtends k m) :
+    HistExtends h m := by
+  rcases hhk with ⟨t₁, rfl⟩
+  rcases hkm with ⟨t₂, rfl⟩
+  exact ⟨t₁ ++ t₂, by simp [List.append_assoc]⟩
+
+/--
+Two finite histories that both prefix the same history are comparable by prefix.
+This is the tree property used by Proposition 2A.
+-/
+theorem common_extension_implies_comparable
+    {h k m : List A}
+    (hhm : HistExtends h m) (hkm : HistExtends k m) :
+    HistExtends h k ∨ HistExtends k h := by
+  rcases hhm with ⟨th, hhm⟩
+  rcases hkm with ⟨tk, hkm⟩
+  have heq : h ++ th = k ++ tk := hhm.symm.trans hkm
+  by_cases hlen : h.length ≤ k.length
+  · left
+    have hp : h <+: k ++ tk := ⟨th, heq⟩
+    have hkprefix : h <+: k :=
+      (List.isPrefix_append_of_length (l₁ := h) (l₂ := k) (l₃ := tk) hlen).1 hp
+    rcases hkprefix with ⟨tail, htail⟩
+    exact ⟨tail, htail.symm⟩
+  · right
+    have hklen : k.length ≤ h.length :=
+      Nat.le_of_lt (Nat.lt_of_not_ge hlen)
+    have hp : k <+: h ++ th := ⟨tk, heq.symm⟩
+    have khprefix : k <+: h :=
+      (List.isPrefix_append_of_length (l₁ := k) (l₂ := h) (l₃ := th) hklen).1 hp
+    rcases khprefix with ⟨tail, htail⟩
+    exact ⟨tail, htail.symm⟩
+
+/-- Incomparable raw histories have no common raw-history extension. -/
+theorem incomparable_histories_no_common_extension
+    {h k : List A}
+    (hinc : ¬ HistExtends h k ∧ ¬ HistExtends k h) :
+    ¬ ∃ m, HistExtends h m ∧ HistExtends k m := by
+  rintro ⟨m, hhm, hkm⟩
+  rcases common_extension_implies_comparable hhm hkm with hhk | hkh
+  · exact hinc.1 hhk
+  · exact hinc.2 hkh
+
+/--
+Proposition 2A in its general form: any two incomparable accessible prefix histories yield
+an explicit valuation refuting the modal .2 instance at their common predecessor.
+-/
+theorem raw_incomparable_branching_dotTwo_fails
+    {root h k : List A}
+    (hrh : HistExtends root h)
+    (hrk : HistExtends root k)
+    (hinc : ¬ HistExtends h k ∧ ¬ HistExtends k h) :
+    ¬ DotTwoR HistExtends (fun u => HistExtends h u) root := by
+  apply not_dotTwo_of_persistent_split
+    HistExtends (fun u => HistExtends h u) root h k
+  · exact hrh
+  · exact hrk
+  · intro u hhu
+    exact hhu
+  · intro u hku hhu
+    exact incomparable_histories_no_common_extension hinc ⟨u, hhu, hku⟩
 
 /-- Raw ordered history already refutes .2 once two distinct first actions branch. -/
 theorem raw_prefix_dotTwo_fails
