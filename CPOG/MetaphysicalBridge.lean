@@ -29,4 +29,27 @@ theorem certification_implies_metaphysical_possibility
     PossMet R Sat w (content t) := by
   exact ⟨v, (hsound hcert).1, (hsound hcert).2⟩
 
+
+/-! ## Independence witness: live epistemic possibility need not be metaphysically possible -/
+
+def liveWitnessSystem :
+    CPOG.Possibility.TokenSystem Unit Unit Unit Unit Unit where
+  origin := fun _ => ()
+  committedAt := fun _ _ => True
+  liveAdmissible := fun _ _ _ _ => True
+  futureAllowed := fun _ _ _ _ => True
+  closed := fun _ _ _ _ => False
+
+def noMetRel : Unit -> Unit -> Prop := fun _ _ => False
+
+def noMetSat : Unit -> Unit -> Prop := fun _ _ => False
+
+theorem live_without_metaphysical_possibility :
+    CPOG.Possibility.PossLive liveWitnessSystem () () () () /\
+    Not (PossMet noMetRel noMetSat () ()) := by
+  constructor
+  · exact ⟨True.intro, True.intro⟩
+  · rintro ⟨v, hR, hSat⟩
+    exact hR
+
 end CPOG.MetaphysicalBridge
