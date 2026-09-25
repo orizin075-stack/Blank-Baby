@@ -181,7 +181,9 @@ theorem firstCommit_divergence_survives_abstraction
     exact hA u hau
   · intro u hbu hEq
     have hSome : some cb = some ca := (hB u hbu).symm.trans hEq
-    exact hc (Option.some.inj hSome)
+    have hcbca : cb = ca := by
+      injection hSome
+    exact hc hcbca.symm
   · exact hrespect
 
 end FirstCommit
