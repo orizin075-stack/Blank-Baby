@@ -1,5 +1,6 @@
 import Std
 import CPOGCheck
+import CPOGTheory
 
 namespace CPOG.EpistemicPotentialism
 
