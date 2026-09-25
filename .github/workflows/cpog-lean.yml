@@ -10,14 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Lean build
-        uses: leanprover/lean-action@v1
-        with:
-          auto-config: false
-          use-github-cache: false
-          use-mathlib-cache: false
-          build: true
-          test: false
-          lint: false
-          nanoda: true
-          nanoda-allow-sorry: false
+
+      - name: Install Lean 4.34.0
+        shell: bash
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.34.0
+          "$HOME/.elan/bin/elan" default leanprover/lean4:v4.34.0
+
+      - name: Generate Lake manifest
+        run: lake update
+
+      - name: Kernel build
+        run: lake build
