@@ -33,14 +33,14 @@ def dynSetoid
   r := B.E
   iseqv := B.equiv
 
-abbrev DynamicQuotient
+abbrev DynQuotient
     {W : Type uW} {Atom : Type uA} {M : Model W Atom}
     (B : DynamicEquivalence M) :=
   Quotient (dynSetoid B)
 
 def quotientMap
     {W : Type uW} {Atom : Type uA} {M : Model W Atom}
-    (B : DynamicEquivalence M) (x : W) : DynamicQuotient B :=
+    (B : DynamicEquivalence M) (x : W) : DynQuotient B :=
   Quotient.mk (dynSetoid B) x
 
 theorem quotientMap_eq_iff
@@ -56,7 +56,7 @@ theorem quotientMap_eq_iff
 
 def quotientVal
     {W : Type uW} {Atom : Type uA} {M : Model W Atom}
-    (B : DynamicEquivalence M) : DynamicQuotient B -> Atom -> Prop :=
+    (B : DynamicEquivalence M) : DynQuotient B -> Atom -> Prop :=
   Quotient.lift (fun x => M.val x) (by
     intro x y hxy
     funext a
@@ -66,7 +66,7 @@ def quotientRel
     {W : Type uW} {Atom : Type uA} {M : Model W Atom}
     (B : DynamicEquivalence M)
     (R : W -> W -> Prop) :
-    DynamicQuotient B -> DynamicQuotient B -> Prop :=
+    DynQuotient B -> DynQuotient B -> Prop :=
   fun u v =>
     exists x y,
       quotientMap B x = u /\
@@ -75,7 +75,7 @@ def quotientRel
 
 def quotientModel
     {W : Type uW} {Atom : Type uA} {M : Model W Atom}
-    (B : DynamicEquivalence M) : Model (DynamicQuotient B) Atom where
+    (B : DynamicEquivalence M) : Model (DynQuotient B) Atom where
   G := quotientRel B M.G
   D := quotientRel B M.D
   H := quotientRel B M.H
