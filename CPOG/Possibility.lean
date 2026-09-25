@@ -108,4 +108,37 @@ theorem historical_possibility_stability
   · exact possHist_persistent S G hG hgh hhist
   · exact (possHist_D_invariant S D hD hdh).mp hhist
 
+
+/-- Modal form of G-ratcheting: historical possibility is necessary along every allowed G successor. -/
+theorem possHist_boxG
+    (S : TokenSystem H C T U P) (G : H -> H -> Prop)
+    (hG : CommitPersistent S G)
+    {h : H} {t : T}
+    (hhist : PossHist S h t) :
+    CPOG.EpistemicPotentialism.BoxR G (fun h' => PossHist S h' t) h := by
+  intro h' hGh'
+  exact possHist_persistent S G hG hGh' hhist
+
+/-- Modal form of D-ratcheting: Core-invariant determination preserves historical possibility. -/
+theorem possHist_boxD
+    (S : TokenSystem H C T U P) (D : H -> H -> Prop)
+    (hD : CommitInvariant S D)
+    {h : H} {t : T}
+    (hhist : PossHist S h t) :
+    CPOG.EpistemicPotentialism.BoxR D (fun h' => PossHist S h' t) h := by
+  intro h' hDh'
+  exact (possHist_D_invariant S D hD hDh').mp hhist
+
+/-- Exact bimodal historical-ratchet statement used in the paper. -/
+theorem possHist_GD_ratcheted
+    (S : TokenSystem H C T U P)
+    (G D : H -> H -> Prop)
+    (hG : CommitPersistent S G)
+    (hD : CommitInvariant S D)
+    {h : H} {t : T}
+    (hhist : PossHist S h t) :
+    CPOG.EpistemicPotentialism.BoxR G (fun h' => PossHist S h' t) h /\
+    CPOG.EpistemicPotentialism.BoxR D (fun h' => PossHist S h' t) h := by
+  exact ⟨possHist_boxG S G hG hhist, possHist_boxD S D hD hhist⟩
+
 end CPOG.Possibility
