@@ -5,6 +5,10 @@ on:
     branches: ["cpog-lean-v45-check"]
   workflow_dispatch:
 
+concurrency:
+  group: cpog-lean-v45-check
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
