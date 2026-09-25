@@ -1,2 +1,2 @@
-import CPOGCheck
-import CPOGGeneral
+import CPOG.Check
+import CPOG.General
