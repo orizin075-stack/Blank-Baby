@@ -42,7 +42,7 @@ theorem all_boolean_policies_separate [DecidableEq S] (s t : S) :
     · exact hst
     · have h := hall (fun x => decide (x = s))
       have hts : t ≠ s := Ne.symm hst
-      simp [hst, hts] at h
+      simp [hts] at h
   · intro h
     subst t
     intro P
