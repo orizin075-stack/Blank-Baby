@@ -120,7 +120,9 @@ theorem card_reachSet_zero [Fintype N]
   classical
   have hset : reachSet E y 0 = {y} := by
     ext x
-    simp [reachSet, ReachWithin, eq_comm]
+    rw [mem_reachSet_iff]
+    change (y = x) ↔ (x = y)
+    exact eq_comm
   simp [hset]
 
 /--
@@ -189,7 +191,7 @@ theorem reachBoundedBy_card_sub_one
     have hxmem : x ∈ reachSet E y k :=
       (mem_reachSet_iff E y x k).2 hk
     have hxK : x ∈ reachSet E y K := by
-      rw [heq, hd]
+      rw [heq, ← hd]
       exact hxmem
     exact (mem_reachSet_iff E y x K).1 hxK
 
