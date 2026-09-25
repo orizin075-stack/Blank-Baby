@@ -38,9 +38,10 @@ theorem all_boolean_policies_separate [DecidableEq S] (s t : S) :
     (∀ P : S → Bool, P s = P t) ↔ s = t := by
   constructor
   · intro hall
-    by_contra hne
+    apply Decidable.byContradiction
+    intro hne
     have h := hall (fun x => decide (x = s))
-    have hts : t ≠ s := by exact Ne.symm hne
+    have hts : t ≠ s := Ne.symm hne
     simp [hne, hts] at h
   · intro h
     subst t
