@@ -45,4 +45,32 @@ theorem origin_individuation
     _ = S.origin (tokenOf c₂) := congrArg S.origin hEq
     _ = c₂ := hsection c₂
 
+
+/--
+A successful commitment of EventCode c makes its canonical token historically
+possible.  This is the formal recognition-event -> historical-token bridge.
+-/
+theorem commit_generates_canonical_historical_token
+    (S : TokenSystem H C T U P)
+    (tokenOf : C -> T)
+    (hsection : OriginSection S tokenOf)
+    {h : H} {c : C}
+    (hcommit : S.committedAt h c) :
+    PossHist S h (tokenOf c) := by
+  change S.committedAt h (S.origin (tokenOf c))
+  simpa [hsection c] using hcommit
+
+/--
+For a canonical token, historical possibility is exactly commitment of its
+origin EventCode.
+-/
+theorem canonical_historical_token_iff_committed
+    (S : TokenSystem H C T U P)
+    (tokenOf : C -> T)
+    (hsection : OriginSection S tokenOf)
+    {h : H} {c : C} :
+    PossHist S h (tokenOf c) <-> S.committedAt h c := by
+  change S.committedAt h (S.origin (tokenOf c)) <-> S.committedAt h c
+  rw [hsection c]
+
 end CPOG.Origin
