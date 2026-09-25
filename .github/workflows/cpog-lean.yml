@@ -19,8 +19,8 @@ jobs:
           "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.34.0
           "$HOME/.elan/bin/elan" default leanprover/lean4:v4.34.0
 
-      - name: Generate Lake manifest
-        run: lake update
+      - name: Verify committed Lake manifest
+        run: test -f lake-manifest.json
 
       - name: Get Mathlib cache
         run: lake exe cache get
