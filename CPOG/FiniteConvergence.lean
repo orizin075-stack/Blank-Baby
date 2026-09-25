@@ -51,7 +51,7 @@ theorem reachSet_eq_next_step [Fintype N]
         (mem_reachSet_iff E y z k).1 hzmem0
       exact Or.inr ⟨z, hzx, hz0⟩
 
-/-- Equality at one round persists at every later round. -/
+/-- Equality at one round persists at every later adjacent round. -/
 theorem reachSet_eq_next_persists [Fintype N]
     (E : N → N → Prop) (y : N) {k : Nat}
     (h : reachSet E y k = reachSet E y (k + 1)) :
@@ -62,20 +62,38 @@ theorem reachSet_eq_next_persists [Fintype N]
       simpa using h
   | succ m ih =>
       have hnext := reachSet_eq_next_step E y (k + m) ih
-      convert hnext using 1 <;> omega
+      simpa [Nat.add_assoc] using hnext
+
+/-- If the process is fixed at k, then the k-th set equals every later k+d set. -/
+theorem reachSet_eq_add_of_fixed [Fintype N]
+    (E : N → N → Prop) (y : N) {k : Nat}
+    (h : reachSet E y k = reachSet E y (k + 1)) :
+    ∀ d, reachSet E y k = reachSet E y (k + d) := by
+  intro d
+  induction d with
+  | zero => simp
+  | succ d ih =>
+      calc
+        reachSet E y k = reachSet E y (k + d) := ih
+        _ = reachSet E y (k + d + 1) := reachSet_eq_next_persists E y h d
+        _ = reachSet E y (k + (d + 1)) := by
+          congr 2
+          omega
 
 /-- Reachability is monotone in the allowed path length. -/
 theorem reachWithin_mono_le
     (E : N → N → Prop) {k m : Nat} {y x : N}
     (hkm : k ≤ m) (h : ReachWithin E k y x) :
     ReachWithin E m y x := by
-  obtain ⟨d, rfl⟩ := Nat.exists_eq_add_of_le hkm
+  obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hkm
+  subst m
   clear hkm
   induction d with
-  | zero => simpa
+  | zero =>
+      simpa using h
   | succ d ih =>
       have hs := reachWithin_mono E ih
-      convert hs using 1 <;> omega
+      simpa [Nat.add_assoc] using hs
 
 /-- Cardinality growth across a sequence of strict finite-set refinements. -/
 theorem card_add_le_of_strict_chain [Fintype N]
@@ -126,9 +144,16 @@ theorem reachSet_fixed_card_sub_one
     have hsub := reachSet_subset_next E y k
     refine (Finset.ssubset_iff_subset_ne).2 ⟨hsub, ?_⟩
     intro heq
-    have hpersist := reachSet_eq_next_persists E y heq (n - 1 - k)
+    have hk_le : k ≤ n - 1 := by omega
+    obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hk_le
+    have hpersist := reachSet_eq_next_persists E y heq d
     have hfinal : reachSet E y (n - 1) = reachSet E y n := by
-      convert hpersist using 1 <;> omega
+      calc
+        reachSet E y (n - 1) = reachSet E y (k + d) := by rw [hd]
+        _ = reachSet E y (k + d + 1) := hpersist
+        _ = reachSet E y n := by
+          congr 2
+          omega
     exact hneq (by simpa [n] using hfinal)
   have hgrowth : (reachSet E y 0).card + n ≤ (reachSet E y n).card :=
     card_add_le_of_strict_chain (fun k => reachSet E y k) n hstrict
@@ -147,30 +172,22 @@ theorem reachBoundedBy_card_sub_one
   intro y x hreach
   rcases hreach with ⟨k, hk⟩
   let K := Fintype.card N - 1
+  have hpos : 0 < Fintype.card N := Fintype.card_pos_iff.mpr inferInstance
+  have hKsucc : K + 1 = Fintype.card N := by
+    dsimp [K]
+    omega
+  have hfix : reachSet E y K = reachSet E y (K + 1) := by
+    rw [hKsucc]
+    exact reachSet_fixed_card_sub_one E y
   by_cases hle : k ≤ K
   · exact reachWithin_mono_le E hle hk
-  · have hfix : reachSet E y K = reachSet E y (K + 1) := by
-      have hcard := reachSet_fixed_card_sub_one E y
-      have hpos : 0 < Fintype.card N := Fintype.card_pos_iff.mpr inferInstance
-      convert hcard using 1 <;> dsimp [K] <;> omega
-    have hKk : K ≤ k := Nat.le_of_lt (Nat.lt_of_not_ge hle)
+  · have hKk : K ≤ k := Nat.le_of_lt (Nat.lt_of_not_ge hle)
     obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le hKk
-    subst k
-    have hpersist := reachSet_eq_next_persists E y hfix
-    have hall : ∀ m, reachSet E y K = reachSet E y (K + m) := by
-      intro m
-      induction m with
-      | zero => simp
-      | succ m ih =>
-          have hstep := hpersist m
-          calc
-            reachSet E y K = reachSet E y (K + m) := ih
-            _ = reachSet E y (K + m + 1) := hstep
-            _ = reachSet E y (K + (m + 1)) := by congr 2 <;> omega
-    have hxmem : x ∈ reachSet E y (K + d) :=
-      (mem_reachSet_iff E y x (K + d)).2 hk
+    have heq := reachSet_eq_add_of_fixed E y hfix d
+    have hxmem : x ∈ reachSet E y k :=
+      (mem_reachSet_iff E y x k).2 hk
     have hxK : x ∈ reachSet E y K := by
-      rw [hall d]
+      rw [heq, hd]
       exact hxmem
     exact (mem_reachSet_iff E y x K).1 hxK
 
@@ -180,10 +197,16 @@ theorem supportIter_fixed_card_sub_one
     (E : N → N → Prop) (S : N → Prop) :
     SupportIter E S (Fintype.card N - 1) =
       SupportIter E S (Fintype.card N) := by
-  have hbound := reachBoundedBy_card_sub_one E
-  have h := supportIter_fixed_of_reachBound E S (Fintype.card N - 1) hbound
+  let K := Fintype.card N - 1
+  have hbound : ReachBoundedBy E K := by
+    simpa [K] using reachBoundedBy_card_sub_one E
+  have h := supportIter_fixed_of_reachBound E S K hbound
   have hpos : 0 < Fintype.card N := Fintype.card_pos_iff.mpr inferInstance
-  convert h using 1 <;> omega
+  have hKsucc : K + 1 = Fintype.card N := by
+    dsimp [K]
+    omega
+  rw [hKsucc] at h
+  simpa [K] using h
 
 /-- Sharp finite convergence bound for two-bit FDE propagation. -/
 theorem fdeIter_fixed_card_sub_one
@@ -191,9 +214,15 @@ theorem fdeIter_fixed_card_sub_one
     (E : N → N → Prop) (σ : PropEvidence N) :
     FDEIter E σ (Fintype.card N - 1) =
       FDEIter E σ (Fintype.card N) := by
-  have hbound := reachBoundedBy_card_sub_one E
-  have h := fdeIter_fixed_of_reachBound E σ (Fintype.card N - 1) hbound
+  let K := Fintype.card N - 1
+  have hbound : ReachBoundedBy E K := by
+    simpa [K] using reachBoundedBy_card_sub_one E
+  have h := fdeIter_fixed_of_reachBound E σ K hbound
   have hpos : 0 < Fintype.card N := Fintype.card_pos_iff.mpr inferInstance
-  convert h using 1 <;> omega
+  have hKsucc : K + 1 = Fintype.card N := by
+    dsimp [K]
+    omega
+  rw [hKsucc] at h
+  simpa [K] using h
 
 end CPOG.FiniteConvergence
