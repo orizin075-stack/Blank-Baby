@@ -45,8 +45,9 @@ namespace CPOG.PaperClaims
 #check CPOG.GreatestDynamicObservation.greatest_dynamic_observation_quotient_is_safe
 #check CPOG.GreatestDynamicObservation.firstCommit_dotTwo_fails_on_greatest_observation_quotient
 
--- Theorem 3: generic and concrete defeasible-content Subsumption failure.
+-- Historical-language and defeasible-content Subsumption failure, plus stable-fragment recovery.
 #check CPOG.EpistemicPotentialism.not_subsumption_of_D_stable_G_defeater
+#check CPOG.EpistemicPotentialism.historical_uncommitted_subsumption_fails
 #check CPOG.EpistemicPotentialism.content_subsumption_failure_of_G_defeat
 #check CPOG.EpistemicPotentialism.subsumption_of_G_stable
 
