@@ -1,8 +1,8 @@
-name: CPOG Lean Check
+name: CPOG Proof Complete
 
 on:
   push:
-    branches: ["cpog-lean-v45-check"]
+    branches: ["cpog-proof-complete-v01"]
   workflow_dispatch:
 
 jobs:
@@ -35,6 +35,6 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: "CPOGCheck"
+          leanchecker-args: "CPOGMain"
           axiom-audit: true
-          axiom-audit-root: "CPOGCheck"
+          axiom-audit-root: "CPOGMain"
