@@ -44,7 +44,9 @@ theorem origin_audit_preserves_distinction {Event Content Source : Type}
       (tokenOf e₁ c s) (tokenOf e₂ c s) := by
   intro hObs
   apply hne
-  simpa using hObs ()
+  have hEq := hObs ()
+  change e₁ = e₂ at hEq
+  exact hEq
 
 def PolicyEq {I Source : Type} (P : I → Source → Bool) (s₁ s₂ : Source) : Prop :=
   ∀ i, P i s₁ = P i s₂
@@ -63,14 +65,19 @@ theorem policy_equivalent_sources_are_observation_equivalent
     ObsEq (policyObs (Event := Event) (Content := Content) P)
       (tokenOf e₁ c s₁) (tokenOf e₂ c s₂) := by
   intro i
-  simp [policyObs, hpol i]
+  change (c, P i s₁) = (c, P i s₂)
+  rw [hpol i]
 
 theorem all_boolean_policies_separate_sources
     {Source : Type} [DecidableEq Source] {s₁ s₂ : Source}
     (h : ∀ P : Source → Bool, P s₁ = P s₂) :
     s₁ = s₂ := by
-  by_contra hne
-  have hsep := h (fun s => decide (s = s₁))
-  simp [hne] at hsep
+  by_cases heq : s₁ = s₂
+  · exact heq
+  · exfalso
+    have hsep := h (fun s => decide (s = s₁))
+    have hbad : (true : Bool) = false := by
+      simpa [heq] using hsep
+    cases hbad
 
 end CPOG.EpistemicPotentialism.Origin
