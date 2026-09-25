@@ -1,6 +1,7 @@
 import CPOGTheorems
 import CPOGTheory
 import Std
+import CPOGGeneric
 
 /-!
 CPOG epistemic-potentialism countermodels (minimal executable specification candidate, v03).
