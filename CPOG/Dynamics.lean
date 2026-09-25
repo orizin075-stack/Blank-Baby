@@ -183,7 +183,7 @@ def FDEBlockConsistent (block : N → B) (σ : PropEvidence N) : Prop :=
   SupportBlockConsistent block (fun x => (σ x).1) ∧
   SupportBlockConsistent block (fun x => (σ x).2)
 
-def FDEStep (E : N → N → Prop) (σ : PropEvidence) : PropEvidence :=
+def FDEStep (E : N → N → Prop) (σ : PropEvidence N) : PropEvidence N :=
   fun x =>
     (SupportStep E (fun y => (σ y).1) x,
      SupportStep E (fun y => (σ y).2) x)
