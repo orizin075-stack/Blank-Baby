@@ -437,4 +437,40 @@ theorem greatest_dynamic_observation_quotient_is_safe
   exact dynamic_observation_quotient_is_semantically_safe
     (greatestObservationDynamicEquivalence M O)
 
+
+/--
+Paper Theorem 2B specialized to the canonical coarsest dynamic observation
+quotient.  If the selected observations determine the persistent FirstCommit
+label, distinct FirstCommit branches still refute .2 after taking the greatest
+safe quotient.
+-/
+theorem firstCommit_dotTwo_fails_on_greatest_observation_quotient
+    {ι : Type uI} {W : Type uW} {Atom : Type uA}
+    (M : Model W Atom) (O : ObservationSystem ι W)
+    {C : Type}
+    (first : W -> Option C)
+    (root a b : W) (ca cb : C)
+    (hc : ca ≠ cb)
+    (hrootA : M.G root a) (hrootB : M.G root b)
+    (hfirstA : first a = some ca) (hfirstB : first b = some cb)
+    (hpersist : forall {x y : W} {c : C},
+      M.G x y -> first x = some c -> first y = some c)
+    (hobservesFirst : forall {x y : W}, ObsEq O x y -> first x = first y) :
+    Not (CPOG.EpistemicPotentialism.DotTwoR
+      (CPOG.EpistemicPotentialism.AbstractRel M.G
+        (CPOG.DynamicQuotient.quotientMap
+          (greatestObservationDynamicEquivalence M O).dyn))
+      (CPOG.EpistemicPotentialism.AbstractFirstCommit
+        (CPOG.DynamicQuotient.quotientMap
+          (greatestObservationDynamicEquivalence M O).dyn)
+        first ca)
+      (CPOG.DynamicQuotient.quotientMap
+        (greatestObservationDynamicEquivalence M O).dyn root)) := by
+  apply CPOG.DynamicQuotient.firstCommit_dotTwo_fails_on_dynamicQuotient
+    (B := (greatestObservationDynamicEquivalence M O).dyn)
+    first root a b ca cb hc hrootA hrootB hfirstA hfirstB hpersist
+  intro x y hxy
+  exact hobservesFirst
+    ((greatestObservationDynamicEquivalence M O).respectsObservation hxy)
+
 end CPOG.GreatestDynamicObservation
