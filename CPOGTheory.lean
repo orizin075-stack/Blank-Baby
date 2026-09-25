@@ -99,10 +99,25 @@ def CommRel : CommWorld → CommWorld → Prop
   | .both, .both => True
   | _, _ => False
 
+def commJoin : CommWorld → CommWorld → CommWorld
+  | .root, x => x
+  | x, .root => x
+  | .onlyA, .onlyA => .onlyA
+  | .onlyB, .onlyB => .onlyB
+  | .onlyA, .onlyB => .both
+  | .onlyB, .onlyA => .both
+  | .both, _ => .both
+  | _, .both => .both
+
+theorem commRel_to_join_left (u v : CommWorld) : CommRel u (commJoin u v) := by
+  cases u <;> cases v <;> simp [CommRel, commJoin]
+
+theorem commRel_to_join_right (u v : CommWorld) : CommRel v (commJoin u v) := by
+  cases u <;> cases v <;> simp [CommRel, commJoin]
+
 theorem commRel_convergent : Convergent CommRel := by
-  intro w u v hwu hwv
-  cases w <;> cases u <;> cases v <;>
-    simp [CommRel] at hwu hwv ⊢
+  intro w u v _ _
+  exact ⟨commJoin u v, commRel_to_join_left u v, commRel_to_join_right u v⟩
 
 theorem commutative_quotient_validates_dotTwo (phi : CommWorld → Prop) (w : CommWorld) :
     DotTwoAt CommRel phi w :=
