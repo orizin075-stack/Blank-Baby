@@ -20,7 +20,7 @@ theorem preserve
     (hStep : forall {x y}, R x y -> P x -> P y)
     {x y : W} (hxy : RTC R x y) : P x -> P y := by
   induction hxy with
-  | refl w =>
+  | refl =>
       intro hx
       exact hx
   | tail hPath hLast ih =>
@@ -31,7 +31,7 @@ theorem trans
     {R : Rel W} {x y z : W} (hxy : RTC R x y) (hyz : RTC R y z) :
     RTC R x z := by
   induction hyz with
-  | refl y => exact hxy
+  | refl => exact hxy
   | tail hPath hLast ih => exact RTC.tail ih hLast
 
 theorem reflexive (R : Rel W) : Reflexive (RTC R) := by
@@ -85,7 +85,7 @@ theorem d_validates_T (p : H -> Prop) (h : H) :
 
 theorem d_validates_4 (p : H -> Prop) (h : H) :
     Box S.DReach p h -> Box S.DReach (Box S.DReach p) h :=
-  box_4_of_transitive (dReach_transitive S) p h
+  box_4_of_transitive (R := S.DReach) (dReach_transitive S) p h
 
 theorem step_commit_mono {h h' : H} (hs : S.Step h h') :
     forall e, S.committed h e -> S.committed h' e := by
@@ -96,31 +96,33 @@ theorem step_commit_mono {h h' : H} (hs : S.Step h h') :
 
 theorem historical_persistence {h h' : H} (hr : S.Reach h h') :
     forall e, S.committed h e -> S.committed h' e := by
-  induction hr with
-  | refl w =>
-      intro e he
-      exact he
-  | @tail x y z hPath hLast ih =>
-      intro e he
-      exact step_commit_mono S hLast e (ih e he)
+  intro e he
+  exact RTC.preserve
+    (P := fun k => S.committed k e)
+    (fun hs hc => step_commit_mono S hs e hc)
+    hr he
+
+theorem step_record_preserve {h h' : H} (hs : S.Step h h') :
+    forall e, S.committed h e -> S.record h' e = S.record h e := by
+  intro e he
+  cases hs with
+  | inl hg => exact S.g_record_preserve hg e he
+  | inr hd => exact S.d_record_preserve hd e he
 
 theorem record_persistence {h h' : H} (hr : S.Reach h h') :
     forall e, S.committed h e -> S.record h' e = S.record h e := by
-  induction hr with
-  | refl w =>
-      intro e he
-      rfl
-  | @tail x y z hPath hLast ih =>
-      intro e he
-      have hey : S.committed y e :=
-        historical_persistence S hPath e he
-      have hLastEq : S.record z e = S.record y e := by
-        cases hLast with
-        | inl hg => exact S.g_record_preserve hg e hey
-        | inr hd => exact S.d_record_preserve hd e hey
-      calc
-        S.record z e = S.record y e := hLastEq
-        _ = S.record x e := ih e he
+  intro e he
+  have hp : S.committed h' e /\ S.record h' e = S.record h e :=
+    RTC.preserve
+      (P := fun k => S.committed k e /\ S.record k e = S.record h e)
+      (fun {x y} hs hx => by
+        constructor
+        · exact step_commit_mono S hs e hx.1
+        · calc
+            S.record y e = S.record x e := step_record_preserve S hs e hx.1
+            _ = S.record h e := hx.2)
+      hr ⟨he, rfl⟩
+  exact hp.2
 
 def PossHist (origin : Token -> Event) (h : H) (t : Token) : Prop :=
   S.committed h (origin t)
