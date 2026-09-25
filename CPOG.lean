@@ -28,3 +28,5 @@ import CPOG.MaxAppendix
 import CPOG.DeferableGeneration
 
 import CPOG.PaperClaims
+
+import CPOG.GreatestDynamicObservation
