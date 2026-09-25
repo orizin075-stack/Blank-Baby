@@ -22,6 +22,8 @@ jobs:
           cp fixes/History.lean CPOG_ProofComplete_v50/CPOG/History.lean
           sed -i 's/exact hc (Option.some.inj hSome)/exact hc (Option.some.inj hSome).symm/' CPOG_ProofComplete_v50/CPOG/General.lean
           python3 fixes/apply_round2.py
+          cp fixes/Origin.lean CPOG_ProofComplete_v50/CPOG/Origin.lean
+          python3 fixes/apply_round3.py
 
       - name: Install Lean 4.34.0
         shell: bash
