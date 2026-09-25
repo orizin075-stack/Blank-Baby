@@ -2,6 +2,7 @@ import Std
 import CPOGMain
 import CPOGTheory
 import CPOGOrigin
+import CPOGHistory
 
 namespace CPOG.EpistemicPotentialism.Language
 
