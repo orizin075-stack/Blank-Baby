@@ -24,3 +24,15 @@ jobs:
 
       - name: Kernel build
         run: lake build
+
+      - name: Independent nanoda check
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-github-cache: false
+          use-mathlib-cache: false
+          build: false
+          test: false
+          lint: false
+          nanoda: true
+          nanoda-allow-sorry: false
