@@ -165,7 +165,7 @@ theorem firstCommit_dotTwo_fails_on_dynamicQuotient
     (hc : ca ≠ cb)
     (hrootA : M.G root a) (hrootB : M.G root b)
     (hfirstA : first a = some ca) (hfirstB : first b = some cb)
-    (hpersist : forall {x y c}, M.G x y -> first x = some c -> first y = some c)
+    (hpersist : forall {x y : W} {c : C}, M.G x y -> first x = some c -> first y = some c)
     (hlabel : forall {x y}, B.E x y -> first x = first y) :
     Not (CPOG.EpistemicPotentialism.DotTwoR
       (CPOG.EpistemicPotentialism.AbstractRel M.G (quotientMap B))
