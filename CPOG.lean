@@ -22,3 +22,5 @@ import CPOG.SeedEvidence
 import CPOG.DynamicObservation
 
 import CPOG.PossibilitySeparation
+
+import CPOG.MaxAppendix
