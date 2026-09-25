@@ -20,7 +20,7 @@ theorem content_boxD : Box dR PosOnly .h := by
 theorem content_not_boxG : Not (Box gR PosOnly .h) := by
   intro hbox
   have hp : PosOnly .g := hbox .g (by trivial)
-  unfold PosOnly currentView DecideView currentEvidence currentDecision at hp
+  change Evidence.B = Evidence.T at hp
   cases hp
 
 theorem defeasible_content_subsumption_failure :
