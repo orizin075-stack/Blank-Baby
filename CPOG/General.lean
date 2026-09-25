@@ -262,4 +262,45 @@ theorem content_subsumption_failure_of_G_defeat
     rw [hfalse] at htrue
     cases htrue
 
+/-! ## Generic modal recovery laws -/
+
+/-- Reflexivity validates the T axiom. -/
+theorem box_T_of_reflexive
+    {W : Type} (R : W → W → Prop)
+    (hrefl : ∀ w, R w w)
+    (φ : W → Prop) (w : W) :
+    BoxR R φ w → φ w := by
+  intro hbox
+  exact hbox w (hrefl w)
+
+/-- Transitivity validates the 4 axiom. -/
+theorem box_four_of_transitive
+    {W : Type} (R : W → W → Prop)
+    (htrans : ∀ x y z, R x y → R y z → R x z)
+    (φ : W → Prop) (w : W) :
+    BoxR R φ w → BoxR R (BoxR R φ) w := by
+  intro hbox u hwu v huv
+  exact hbox v (htrans w u v hwu huv)
+
+/-- Reflexive and transitive accessibility validates the S4 frame laws used here. -/
+theorem S4_frame_laws
+    {W : Type} (R : W → W → Prop)
+    (hrefl : ∀ w, R w w)
+    (htrans : ∀ x y z, R x y → R y z → R x z)
+    (φ : W → Prop) (w : W) :
+    (BoxR R φ w → φ w) ∧
+    (BoxR R φ w → BoxR R (BoxR R φ) w) := by
+  exact ⟨box_T_of_reflexive R hrefl φ w,
+    box_four_of_transitive R htrans φ w⟩
+
+/-- Restricted Subsumption recovery for a G-stable predicate. -/
+theorem subsumption_of_G_stable
+    {W : Type} (D G : W → W → Prop) (φ : W → Prop) (w : W)
+    (hDrefl : D w w)
+    (hGstable : ∀ u, G w u → φ w → φ u) :
+    SubsumptionAt D G φ w := by
+  intro hboxD u hGu
+  have hφw : φ w := hboxD w hDrefl
+  exact hGstable u hGu hφw
+
 end CPOG.EpistemicPotentialism
