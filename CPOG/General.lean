@@ -324,6 +324,28 @@ theorem not_subsumption_of_D_stable_G_defeater
   rcases hG with ⟨v, hGv, hNot⟩
   exact hNot (hBoxG v hGv)
 
+/--
+Historical-language specialization.  If every D-successor leaves a fixed code
+uncommitted, while some G-successor commits it, unrestricted Subsumption fails
+for the predicate "this code is uncommitted".
+-/
+theorem historical_uncommitted_subsumption_fails
+    {C : Type uC}
+    (D G : W → W → Prop)
+    (committedAt : W → C → Prop)
+    (c : C) (w : W)
+    (hD : ∀ u, D w u → ¬ committedAt u c)
+    (hG : ∃ v, G w v ∧ committedAt v c) :
+    ¬ SubsumptionAt D G (fun u => ¬ committedAt u c) w := by
+  apply not_subsumption_of_D_stable_G_defeater
+    D G (fun u => ¬ committedAt u c) w
+  · intro u hDu
+    exact hD u hDu
+  · rcases hG with ⟨v, hGv, hcommit⟩
+    refine ⟨v, hGv, ?_⟩
+    intro huncommitted
+    exact huncommitted hcommit
+
 end Subsumption
 
 /-! ## Generic FDE defeat lemmas -/
