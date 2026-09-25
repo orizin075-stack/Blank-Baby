@@ -1,0 +1,20 @@
+name: CPOG Lean Check
+
+on:
+  push:
+    branches: ["cpog-lean-v45-check"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lean build
+        uses: leanprover/lean-action@v1
+        with:
+          build: true
+          test: false
+          lint: false
+          nanoda: true
+          nanoda-allow-sorry: false
