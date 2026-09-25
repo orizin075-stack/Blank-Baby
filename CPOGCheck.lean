@@ -1,3 +1,4 @@
+import CPOGTheorems
 import CPOGTheory
 import Std
 
