@@ -22,9 +22,6 @@ jobs:
       - name: Generate Lake manifest
         run: lake update
 
-      - name: Get Mathlib cache
-        run: lake exe cache get
-
       - name: Kernel build
         run: lake build
 
@@ -38,6 +35,6 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: "CPOG"
+          leanchecker-args: "CPOGMain"
           axiom-audit: true
-          axiom-audit-root: "CPOG"
+          axiom-audit-root: "CPOGMain"
