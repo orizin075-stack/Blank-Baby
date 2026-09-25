@@ -35,7 +35,19 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: "CPOGMain CPOGTheory CPOGCheck"
+          leanchecker-args: "CPOGLanguage CPOGMain CPOGTheory CPOGCheck"
+
+      - name: Axiom audit CPOGLanguage
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-github-cache: false
+          use-mathlib-cache: false
+          build: false
+          test: false
+          lint: false
+          axiom-audit: true
+          axiom-audit-root: "CPOGLanguage"
 
       - name: Axiom audit CPOGMain
         uses: leanprover/lean-action@v1
