@@ -48,8 +48,11 @@ theorem quotientMap_eq_iff
     (B : DynamicEquivalence M) (x y : W) :
     quotientMap B x = quotientMap B y <-> B.E x y := by
   constructor
-  · exact Quotient.exact
-  · exact Quotient.sound
+  · intro h
+    exact Quotient.exact h
+  · intro h
+    change Quotient.mk (dynSetoid B) x = Quotient.mk (dynSetoid B) y
+    exact Quotient.sound h
 
 def quotientVal
     {W : Type uW} {Atom : Type uA} {M : Model W Atom}
