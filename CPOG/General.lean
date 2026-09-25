@@ -15,9 +15,11 @@ This file upgrades the finite countermodels to reusable propositions:
 
 namespace CPOG.EpistemicPotentialism
 
+universe uW uA uH uC uQ
+
 section RelationalModal
 
-variable {W : Type}
+variable {W : Type uW}
 
 /-- Relational box. -/
 def BoxR (R : W → W → Prop) (φ : W → Prop) (w : W) : Prop :=
@@ -67,7 +69,7 @@ end RelationalModal
 
 section RawHistories
 
-variable {A : Type}
+variable {A : Type uA}
 
 /-- `k` extends history `h` by appending a finite tail. -/
 def HistExtends (h k : List A) : Prop :=
@@ -200,7 +202,7 @@ end RawHistories
 
 section FirstCommit
 
-variable {H C : Type}
+variable {H : Type uH} {C : Type uC}
 
 /-- An abstraction/equivalence respects an observed predicate if equivalent histories agree on it. -/
 def RespectsPredicate (E : H → H → Prop) (P : H → Prop) : Prop :=
@@ -251,11 +253,11 @@ theorem firstCommit_divergence_survives_abstraction
   · exact hrespect
 
 /-- Relation induced on an abstract state space by a concrete G-step. -/
-def AbstractRel {Q : Type} (G : H → H → Prop) (q : H → Q) (qx qy : Q) : Prop :=
+def AbstractRel {Q : Type uQ} (G : H → H → Prop) (q : H → Q) (qx qy : Q) : Prop :=
   ∃ x y, q x = qx ∧ q y = qy ∧ G x y
 
 /-- The abstract state has a representative whose persistent FirstCommit code is c. -/
-def AbstractFirstCommit {Q : Type}
+def AbstractFirstCommit {Q : Type uQ}
     (q : H → Q) (first : H → Option C) (c : C) (z : Q) : Prop :=
   ∃ x, q x = z ∧ first x = some c
 
@@ -265,7 +267,7 @@ preserves those codes, two distinct first-commit branches still give an explicit
 countermodel on the induced abstract frame.
 -/
 theorem firstCommit_abstract_dotTwo_fails
-    {Q : Type}
+    {Q : Type uQ}
     (G : H → H → Prop) (first : H → Option C) (q : H → Q)
     (root a b : H) (ca cb : C)
     (hc : ca ≠ cb)
@@ -302,7 +304,7 @@ end FirstCommit
 
 section Subsumption
 
-variable {W : Type}
+variable {W : Type uW}
 
 /-- Local CPOG-style Subsumption instance. -/
 def SubsumptionAt (D G : W → W → Prop) (φ : W → Prop) (w : W) : Prop :=
@@ -353,7 +355,7 @@ while G can reach a state whose evidence is the old evidence joined with explici
 negative support, with the raw decision record still `resolvedPos`.
 -/
 theorem content_subsumption_failure_of_G_defeat
-    {W : Type}
+    {W : Type uW}
     (D G : W → W → Prop)
     (evidence : W → Evidence)
     (decision : W → DecisionRecord)
@@ -379,7 +381,7 @@ A concrete abstraction-map corollary: if an abstraction q preserves the FirstCom
 observation, the A/B branches cannot acquire a common abstract successor.
 -/
 theorem firstCommit_no_common_abstract_successor
-    {H C Q : Type}
+    {H : Type uH} {C : Type uC} {Q : Type uQ}
     (G : H → H → Prop) (first : H → Option C) (q : H → Q)
     (a b : H) (ca cb : C) (hc : ca ≠ cb)
     (hA : ∀ u, G a u → first u = some ca)
@@ -394,7 +396,7 @@ theorem firstCommit_no_common_abstract_successor
 
 /-- Reflexivity validates the T axiom. -/
 theorem box_T_of_reflexive
-    {W : Type} (R : W → W → Prop)
+    {W : Type uW} (R : W → W → Prop)
     (hrefl : ∀ w, R w w)
     (φ : W → Prop) (w : W) :
     BoxR R φ w → φ w := by
@@ -403,7 +405,7 @@ theorem box_T_of_reflexive
 
 /-- Transitivity validates the 4 axiom. -/
 theorem box_four_of_transitive
-    {W : Type} (R : W → W → Prop)
+    {W : Type uW} (R : W → W → Prop)
     (htrans : ∀ x y z, R x y → R y z → R x z)
     (φ : W → Prop) (w : W) :
     BoxR R φ w → BoxR R (BoxR R φ) w := by
@@ -412,7 +414,7 @@ theorem box_four_of_transitive
 
 /-- Reflexive and transitive accessibility validates the S4 frame laws used here. -/
 theorem S4_frame_laws
-    {W : Type} (R : W → W → Prop)
+    {W : Type uW} (R : W → W → Prop)
     (hrefl : ∀ w, R w w)
     (htrans : ∀ x y z, R x y → R y z → R x z)
     (φ : W → Prop) (w : W) :
@@ -423,7 +425,7 @@ theorem S4_frame_laws
 
 /-- Restricted Subsumption recovery for a G-stable predicate. -/
 theorem subsumption_of_G_stable
-    {W : Type} (D G : W → W → Prop) (φ : W → Prop) (w : W)
+    {W : Type uW} (D G : W → W → Prop) (φ : W → Prop) (w : W)
     (hDrefl : D w w)
     (hGstable : ∀ u, G w u → φ w → φ u) :
     SubsumptionAt D G φ w := by
