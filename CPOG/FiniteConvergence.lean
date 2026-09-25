@@ -121,7 +121,7 @@ theorem card_reachSet_zero [Fintype N]
   have hset : reachSet E y 0 = {y} := by
     ext x
     rw [mem_reachSet_iff]
-    change (y = x) ↔ (x = y)
+    simp only [ReachWithin, Finset.mem_singleton]
     exact eq_comm
   simp [hset]
 
