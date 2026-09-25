@@ -19,6 +19,8 @@ jobs:
           base64 -d package.b64 > CPOG_ProofComplete_v50.tar.gz
           echo "52f3b940e74635948d1cbb40ac6ad3c5349da5ea8bb0ee2e85a307550af2fa00  CPOG_ProofComplete_v50.tar.gz" | sha256sum -c -
           tar -xzf CPOG_ProofComplete_v50.tar.gz
+          cp fixes/History.lean CPOG_ProofComplete_v50/CPOG/History.lean
+          sed -i 's/exact hc (Option.some.inj hSome)/exact hc (Option.some.inj hSome).symm/' CPOG_ProofComplete_v50/CPOG/General.lean
 
       - name: Install Lean 4.34.0
         shell: bash
