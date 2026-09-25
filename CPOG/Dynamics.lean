@@ -82,7 +82,7 @@ theorem support_stable_implies_structural
     rcases hright with hbase | ⟨source', hE', hblockSrc⟩
     · exfalso
       apply hnonself
-      exact hblock.trans hbase
+      exact hbase.symm.trans hblock.symm
     · exact ⟨source', hE', hblockSrc⟩
   · intro source hE hnonself
     let S : N → Prop := fun z => block z = block source
@@ -99,7 +99,7 @@ theorem support_stable_implies_structural
     rcases hleft with hbase | ⟨source', hE', hblockSrc⟩
     · exfalso
       apply hnonself
-      exact hblock.symm.trans hbase
+      exact hbase.symm.trans hblock
     · exact ⟨source', hE', hblockSrc⟩
 
 theorem structural_iff_support_stable
@@ -156,7 +156,7 @@ theorem reflexiveClosureStable_implies_structural
     · subst source'
       exfalso
       apply hnonself
-      exact hEq.trans hblock.symm
+      exact hEq.symm.trans hblock.symm
     · exact ⟨source', hEdge, hEq⟩
   · intro source hE hnonself
     have hright : ∃ s, EStar E s right ∧ block s = block source :=
@@ -167,7 +167,7 @@ theorem reflexiveClosureStable_implies_structural
     · subst source'
       exfalso
       apply hnonself
-      exact hEq.trans hblock
+      exact hEq.symm.trans hblock
     · exact ⟨source', hEdge, hEq⟩
 
 theorem structural_iff_reflexiveClosureStable
@@ -177,9 +177,9 @@ theorem structural_iff_reflexiveClosureStable
   · exact structural_implies_reflexiveClosureStable E block
   · exact reflexiveClosureStable_implies_structural E block
 
-abbrev PropEvidence := N → Prop × Prop
+abbrev PropEvidence (N : Type uN) := N → Prop × Prop
 
-def FDEBlockConsistent (block : N → B) (σ : PropEvidence) : Prop :=
+def FDEBlockConsistent (block : N → B) (σ : PropEvidence N) : Prop :=
   SupportBlockConsistent block (fun x => (σ x).1) ∧
   SupportBlockConsistent block (fun x => (σ x).2)
 
@@ -208,7 +208,7 @@ theorem FDE_stable_implies_structural
     StructuralLumpable E block := by
   apply support_stable_implies_structural E block
   intro S hS
-  let σ : PropEvidence := fun x => (S x, False)
+  let σ : PropEvidence N := fun x => (S x, False)
   have hσ : FDEBlockConsistent block σ := by
     constructor
     · exact hS
