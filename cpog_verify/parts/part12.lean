@@ -2,14 +2,21 @@ namespace CPOG
 namespace SubmissionCore
 
 /-!
-# Reviewer-facing theorem core
+# v51 reviewer-facing theorem core
 
-This file adds no new philosophical assumptions and no new proof mechanism.
-It exposes the small theorem set used by the v50 submission manuscript while
-leaving the larger verified library available as supporting infrastructure.
+The facade keeps ten reviewer-facing results.  The two central claims are now
+class theorems rather than canonical-model-only theorems:
+
+* SC3: every persistent exclusive FirstCommit A/B split refutes .2 at its root;
+* SC5-SC6: universal content Subsumption over all evidence-monotone,
+  decision-preserving generation systems is exactly upward closure of the
+  positive decision region, and its failure is exactly defeasibility.
+
+SC4 supplies the same-abstraction modal contrast: independent ordering recovers
+.2 after quotienting, while the FirstCommit root still refutes it.
 -/
 
-/-- SC1. Historical commitment is persistent along the combined history reachability. -/
+/-- SC1. Historical commitment persists along combined history reachability. -/
 theorem historicalPersistence
     {H : Type u} {Event : Type v} {Record : Type w}
     (S : HistorySystem H Event Record)
@@ -25,40 +32,64 @@ theorem deferableDot2
   finite_deferable_dot2 n p S
 
 /--
-SC3. In one history system and one bisimulation-safe quotient, raw order
-non-convergence is erased while FirstCommit separation and the .2 failure remain.
+SC3. General FirstCommit theorem.
+Persistent exclusive A/B FirstCommit alternatives reachable from one root
+force a .2 counterexample for P_A := (F = A).
 -/
-theorem semanticDivergenceContrast :
-    (uRG .root .orderAB /\ uRG .root .orderBA /\
-      Not (exists z, uRG .orderAB z /\ uRG .orderBA z)) /\
-    (uPresentation.classOf .orderAB = uPresentation.classOf .orderBA) /\
-    (uPresentation.classOf .commitA ≠ uPresentation.classOf .commitB) /\
-    (Satisfies (quotientModel unifiedModel uPresentation)
-        (uPresentation.classOf .root) unifiedAntecedent /\
-      Not (Satisfies (quotientModel unifiedModel uPresentation)
-        (uPresentation.classOf .root) unifiedConsequent)) :=
-  same_system_same_abstraction_contrast
+theorem firstCommitClassDot2Failure
+    {W : Type u} {Choice : Type v}
+    (R : Rel W) (F : W -> Option Choice)
+    {r a b : W} {A B : Choice}
+    (hPersist : FirstCommitPersistent R F)
+    (hAB : A ≠ B)
+    (hra : R r a) (hrb : R r b)
+    (ha : F a = some A) (hb : F b = some B) :
+    Dia R (Box R (FirstCommitPA F A)) r /\
+    Not (Box R (Dia R (FirstCommitPA F A)) r) :=
+  firstCommit_dot2_failure_of_persistent_exclusive
+    R F hPersist hAB hra hrb ha hb
 
-/-- SC4. Content-level Subsumption failure is exactly the defeasibility boundary. -/
-theorem subsumptionFailureIffDefeasible (V : ViewFn) :
-    CanonicalContentSubsumptionFailure V <-> ResolvedPosDefeasible V :=
-  content_subsumption_failure_iff_defeasible V
+/--
+SC4. Same model and same bisimulation-safe quotient:
+the independent-order root is raw-nondirected but becomes directed and validates
+.2 for every valuation after abstraction; the FirstCommit root still refutes .2.
+-/
+theorem splitAbstractionModalContrast :
+    Not (DirectedAt splitRG .ri) /\
+    DirectedAt
+      (quotientModel splitModel splitPresentation).rG
+      (splitPresentation.classOf .ri) /\
+    (forall p : SplitClass -> Prop,
+      Dia (quotientModel splitModel splitPresentation).rG
+        (Box (quotientModel splitModel splitPresentation).rG p)
+        (splitPresentation.classOf .ri) ->
+      Box (quotientModel splitModel splitPresentation).rG
+        (Dia (quotientModel splitModel splitPresentation).rG p)
+        (splitPresentation.classOf .ri)) /\
+    (Satisfies (quotientModel splitModel splitPresentation)
+        (splitPresentation.classOf .rf) splitAntecedent /\
+      Not (Satisfies (quotientModel splitModel splitPresentation)
+        (splitPresentation.classOf .rf) splitConsequent)) :=
+  split_same_abstraction_modal_contrast
 
-/-- SC5. Content-level Subsumption is recovered exactly under the canonical stability condition. -/
-theorem subsumptionRecoveryIffStable (V : ViewFn) :
-    CanonicalContentSubsumptionHolds V <->
-      (V .T .resolvedPos = .T -> V .B .resolvedPos = .T) :=
-  content_subsumption_holds_iff_stable V
+/--
+SC5. Representation theorem:
+universal content Subsumption across all evidence-monotone,
+decision-preserving generation systems is equivalent to upward closure of the
+positive decision region under InfoLe.
+-/
+theorem universalSubsumptionIffUpperClosed (V : ViewFn) :
+    UniversalContentSubsumption V <-> PositiveRegionUpperClosed V :=
+  universal_subsumption_iff_positive_region_upperClosed V
 
-/-- SC6. G/D/H modal truth is invariant under the dynamic bisimulation interface. -/
-theorem dynamicBisimulationInvariance
-    {W1 : Type u} {W2 : Type v} {Atom : Type w}
-    {M1 : Model W1 Atom} {M2 : Model W2 Atom}
-    {Z : W1 -> W2 -> Prop}
-    (hZ : IsBisimulation M1 M2 Z)
-    (phi : Formula Atom) {x : W1} {y : W2} (hxy : Z x y) :
-    Satisfies M1 x phi <-> Satisfies M2 y phi :=
-  bisimulation_invariance hZ phi hxy
+/--
+SC6. The corresponding failure theorem:
+universal Subsumption fails exactly when the positive decision region is
+defeasible (not upward closed under information growth).
+-/
+theorem universalSubsumptionFailureIffDefeasible (V : ViewFn) :
+    Not (UniversalContentSubsumption V) <-> EvidenceDefeasible V :=
+  universal_subsumption_failure_iff_defeasible V
 
 /-- SC7. A jointly admissible finite Max batch has an executable ordering. -/
 theorem finiteMaxRealization
@@ -71,7 +102,7 @@ theorem finiteMaxRealization
       RTC (MaxStep admissible) base (base ++ order) :=
   finite_universal_realization admissible base batch h
 
-/-- SC8. A sealed Max extension both completes and conservatively preserves Core modal truth. -/
+/-- SC8. A sealed Max extension completes and conservatively preserves Core modal truth. -/
 theorem maxSealAndConservativity
     {CoreWorld : Type u} {Atom : Type w}
     {C : Model CoreWorld Atom} {MaxWorld : Type v} {Desc : Type u}
@@ -82,7 +113,7 @@ theorem maxSealAndConservativity
         Satisfies E.firewall.maxModel (E.firewall.embed x) phi :=
   sealed_max_completion_and_conservativity E
 
-/-- SC9. Under the explicit role-adequacy conditions, committed/live/believed are pairwise distinct. -/
+/-- SC9. Under role adequacy, committed/live/believed are pairwise distinct. -/
 theorem possibilityRoleSeparation
     {H : Type u} {Token : Type v}
     (M : PossibilityRoleModel H Token)
@@ -92,7 +123,7 @@ theorem possibilityRoleSeparation
     M.committed ≠ M.live :=
   adequate_statuses_are_pairwise_distinct M hAdeq
 
-/-- SC10. Possibility-role adequacy alone does not entail metaphysical possibility. -/
+/-- SC10. Epistemic possibility-role adequacy does not force metaphysical possibility. -/
 theorem epistemicRoleDoesNotForceMetaphysical :
     PossibilityRoleAdequate cpogRoleModel /\
     Not (BridgeToMetaphysical cpogRoleModel roleMetFalse) :=
