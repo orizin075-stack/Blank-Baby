@@ -173,6 +173,48 @@ theorem cpog_role_statuses_distinct :
     cpogRoleModel.committed ≠ cpogRoleModel.live :=
   adequate_statuses_are_pairwise_distinct cpogRoleModel cpog_role_model_adequate
 
+inductive RoleEvent where
+  | e
+
+deriving DecidableEq
+
+def roleHistory : HistorySystem RoleWorld RoleEvent Unit where
+  stepG := roleReachRel
+  stepD := fun x y => x = y
+  committed := fun _ _ => True
+  record := fun _ _ => ()
+  g_commit_mono := by
+    intro h h' hG e hc
+    trivial
+  d_commit_same := by
+    intro h h' hD e
+    subst h'
+    rfl
+  g_record_preserve := by
+    intro h h' hG e hc
+    rfl
+  d_record_preserve := by
+    intro h h' hD e hc
+    rfl
+
+def roleOrigin : RoleToken -> RoleEvent :=
+  fun _ => .e
+
+theorem cpog_role_committed_is_possComm
+    (h : RoleWorld) (t : RoleToken) :
+    cpogRoleModel.committed h t <->
+      roleHistory.PossComm roleOrigin h t := by
+  constructor <;> intro _ <;> trivial
+
+theorem cpog_role_live_is_committed_history_carrier
+    {h : RoleWorld} {t : RoleToken} :
+    cpogRoleModel.live h t ->
+      roleHistory.PossComm roleOrigin h t := by
+  intro hLive
+  have hComm : cpogRoleModel.committed h t :=
+    cpogRoleModel.live_committed hLive
+  exact (cpog_role_committed_is_possComm h t).mp hComm
+
 /-! ## The metaphysical bridge is an extra premise, not a Core theorem -/
 
 def MetPossible
