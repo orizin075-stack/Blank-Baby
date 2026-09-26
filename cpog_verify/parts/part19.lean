@@ -155,7 +155,7 @@ theorem positiveRegionUpperClosedBy_iff_stateUpperClosed
       StateUpperClosed (evidenceDecisionGrowth P) (acceptByView V) := by
   constructor
   · intro h dstate dstate' hRel hPos
-    exact h (dstate.2) hRel.1 hPos
+    simpa [acceptByView, hRel.2] using h (dstate.2) hRel.1 hPos
   · intro h d e e' hLe hPos
     have hRel :
         (evidenceDecisionGrowth P).rel (e, d) (e', d) :=
