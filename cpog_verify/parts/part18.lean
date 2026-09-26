@@ -40,6 +40,17 @@ def OrderedEvidenceDynamics.toLegacyInfo
     exact S.g_decision_same hxy
   d_reflexive := S.d_reflexive
 
+theorem legacy_posOnly_iff_infoOrdered
+    {W : Type u} (V : ViewFn) (S : EvidenceDynamics W) (w : W) :
+    S.PosOnly V w <-> S.toInfoOrdered.PosOnly V w := by
+  rfl
+
+theorem infoOrdered_posOnly_iff_legacy
+    {W : Type u} (V : ViewFn)
+    (S : OrderedEvidenceDynamics infoEvidencePreorder W) (w : W) :
+    S.PosOnly V w <-> S.toLegacyInfo.PosOnly V w := by
+  rfl
+
 theorem infoOrdered_subsumption_iff_legacy
     (V : ViewFn) :
     UniversalContentSubsumptionBy infoEvidencePreorder V <->
@@ -48,21 +59,21 @@ theorem infoOrdered_subsumption_iff_legacy
   · intro hNew W S w hD
     let S' := S.toInfoOrdered
     have hD' : Box S'.dR (S'.PosOnly V) w := by
-      simpa [S', EvidenceDynamics.toInfoOrdered,
-        OrderedEvidenceDynamics.PosOnly, EvidenceDynamics.PosOnly] using hD
+      intro y hwy
+      exact (legacy_posOnly_iff_infoOrdered V S y).mp (hD y hwy)
     have hG' : Box S'.gR (S'.PosOnly V) w :=
       hNew S' w hD'
-    simpa [S', EvidenceDynamics.toInfoOrdered,
-      OrderedEvidenceDynamics.PosOnly, EvidenceDynamics.PosOnly] using hG'
+    intro y hwy
+    exact (legacy_posOnly_iff_infoOrdered V S y).mpr (hG' y hwy)
   · intro hOld W S w hD
     let S' := S.toLegacyInfo
     have hD' : Box S'.dR (S'.PosOnly V) w := by
-      simpa [S', OrderedEvidenceDynamics.toLegacyInfo,
-        OrderedEvidenceDynamics.PosOnly, EvidenceDynamics.PosOnly] using hD
+      intro y hwy
+      exact (infoOrdered_posOnly_iff_legacy V S y).mp (hD y hwy)
     have hG' : Box S'.gR (S'.PosOnly V) w :=
       hOld S' w hD'
-    simpa [S', OrderedEvidenceDynamics.toLegacyInfo,
-      OrderedEvidenceDynamics.PosOnly, EvidenceDynamics.PosOnly] using hG'
+    intro y hwy
+    exact (infoOrdered_posOnly_iff_legacy V S y).mpr (hG' y hwy)
 
 theorem infoOrdered_upperClosed_iff_legacy
     (V : ViewFn) :
