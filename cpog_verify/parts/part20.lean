@@ -13,20 +13,24 @@ theorem generalizedSubsumptionFailureIffDefeasible
     Not (UniversalSubsumptionOn G A) <-> AbstractDefeasible G A :=
   abstract_universalSubsumption_failure_iff_defeasible G A
 
-theorem evidenceOrderTheoremIsExactInstance
+theorem evidenceUpperClosureIsAbstractInstance
     (P : EvidencePreorder) (V : ViewFn) :
-    UniversalContentSubsumptionBy P V <->
-      UniversalSubsumptionOn
+    PositiveRegionUpperClosedBy P V <->
+      UpwardClosedOn
         (evidenceDecisionGrowth P)
         (viewAccepted V) :=
-  evidenceUniversalSubsumptionBy_iff_abstract P V
+  positiveRegionUpperClosedBy_iff_abstract P V
 
 theorem decisionChangingSubsumptionIffProductUpperClosed
     (PE : EvidencePreorder)
     (PD : GrowthSpec DecisionState)
     (V : ViewFn) :
-    UniversalEvaluationSubsumption PE PD V <->
-      EvaluationRegionUpperClosed PE PD V :=
+    UniversalSubsumptionOn
+      (productEvaluationGrowth PE PD)
+      (viewAccepted V) <->
+    UpwardClosedOn
+      (productEvaluationGrowth PE PD)
+      (viewAccepted V) :=
   evaluation_subsumption_iff_product_upperClosed PE PD V
 
 end SubmissionCore
