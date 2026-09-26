@@ -59,7 +59,7 @@ theorem splitAbstractionModalContrast :
 
 /--
 SC5. Generic master representation theorem.
-For any summary-state carrier S, any reflexive admissible-growth relation G,
+For any summary-state carrier S, any admissible-growth relation G,
 and any acceptance predicate A, universal G-over-D Subsumption over every
 G-monotone summary dynamics with reflexive D is equivalent to G-upward closure
 of A.
