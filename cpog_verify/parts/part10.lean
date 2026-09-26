@@ -54,14 +54,15 @@ theorem standardAtomicHom_unique
 
 theorem standard_atomic_initial
     {Base : Type u} (X : AtomicExtension Base) :
-    ∃! f : AtomicHom (StandardAtomicExtension Base) X, True := by
-  refine ⟨standardAtomicHom X, trivial, ?_⟩
-  intro f _
-  exact standardAtomicHom_unique X f
+    exists f : AtomicHom (StandardAtomicExtension Base) X,
+      forall g : AtomicHom (StandardAtomicExtension Base) X, g = f := by
+  refine ⟨standardAtomicHom X, ?_⟩
+  intro g
+  exact standardAtomicHom_unique X g
 
 theorem standard_atomic_freshness
     {Base : Type u} (b : Base) :
-    (StandardAtomicExtension Base).fresh !=
+    (StandardAtomicExtension Base).fresh ≠
       (StandardAtomicExtension Base).base b := by
   intro h
   cases h
