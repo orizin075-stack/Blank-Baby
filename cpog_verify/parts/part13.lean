@@ -161,7 +161,8 @@ theorem universal_subsumption_implies_upperClosed
   let S := evidencePairSystem e e' d hLe
   have hD : Box S.dR (S.PosOnly V) .lower := by
     intro y hly
-    have hy : y = .lower := hly
+    have hy : EvidencePairWorld.lower = y := by
+      simpa [S, evidencePairSystem, evidencePairD] using hly
     subst y
     exact hPos
   have hG : Box S.gR (S.PosOnly V) .lower :=
