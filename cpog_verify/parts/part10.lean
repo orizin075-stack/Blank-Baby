@@ -101,7 +101,7 @@ def FreshStep {Desc : Type u} (F : FreshProvider Desc) :
 
 theorem max_non_leaf
     {Desc : Type u} (F : FreshProvider Desc) (s : List Desc) :
-    exists t, FreshStep F s t /\ t != s := by
+    exists t, FreshStep F s t /\ t ≠ s := by
   refine ⟨s ++ [F.fresh s], rfl, ?_⟩
   intro hEq
   have hLen := congrArg List.length hEq
