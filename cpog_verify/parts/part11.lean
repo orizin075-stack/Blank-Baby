@@ -77,7 +77,7 @@ theorem adequate_live_not_identical_to_belief
     {H : Type u} {Token : Type v}
     (M : PossibilityRoleModel H Token)
     (hAdeq : PossibilityRoleAdequate M) :
-    M.live != M.believed := by
+    M.live ≠ M.believed := by
   intro hEq
   rcases hAdeq.2.1 with ⟨h, t, hLive, hNotBel⟩
   have hPoint := congrFun (congrFun hEq h) t
@@ -87,7 +87,7 @@ theorem adequate_committed_not_identical_to_belief
     {H : Type u} {Token : Type v}
     (M : PossibilityRoleModel H Token)
     (hAdeq : PossibilityRoleAdequate M) :
-    M.committed != M.believed := by
+    M.committed ≠ M.believed := by
   intro hEq
   rcases hAdeq.1 with ⟨h, t, hComm, hNotBel⟩
   have hPoint := congrFun (congrFun hEq h) t
@@ -97,7 +97,7 @@ theorem adequate_committed_not_identical_to_live
     {H : Type u} {Token : Type v}
     (M : PossibilityRoleModel H Token)
     (hAdeq : PossibilityRoleAdequate M) :
-    M.committed != M.live := by
+    M.committed ≠ M.live := by
   intro hEq
   rcases hAdeq.2.2 with ⟨h, h', t, hReach, hComm, hNotLive, hLiveLater⟩
   have hPoint := congrFun (congrFun hEq h) t
@@ -107,9 +107,9 @@ theorem adequate_statuses_are_pairwise_distinct
     {H : Type u} {Token : Type v}
     (M : PossibilityRoleModel H Token)
     (hAdeq : PossibilityRoleAdequate M) :
-    M.live != M.believed /\
-    M.committed != M.believed /\
-    M.committed != M.live := by
+    M.live ≠ M.believed /\
+    M.committed ≠ M.believed /\
+    M.committed ≠ M.live := by
   exact ⟨adequate_live_not_identical_to_belief M hAdeq,
     adequate_committed_not_identical_to_belief M hAdeq,
     adequate_committed_not_identical_to_live M hAdeq⟩
@@ -168,9 +168,9 @@ theorem cpog_role_model_adequate :
       by trivial, by trivial, by trivial, by trivial⟩
 
 theorem cpog_role_statuses_distinct :
-    cpogRoleModel.live != cpogRoleModel.believed /\
-    cpogRoleModel.committed != cpogRoleModel.believed /\
-    cpogRoleModel.committed != cpogRoleModel.live :=
+    cpogRoleModel.live ≠ cpogRoleModel.believed /\
+    cpogRoleModel.committed ≠ cpogRoleModel.believed /\
+    cpogRoleModel.committed ≠ cpogRoleModel.live :=
   adequate_statuses_are_pairwise_distinct cpogRoleModel cpog_role_model_adequate
 
 /-! ## The metaphysical bridge is an extra premise, not a Core theorem -/
