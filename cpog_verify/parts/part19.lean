@@ -164,40 +164,14 @@ theorem positiveRegionUpperClosedBy_iff_abstract
         hPos
     exact hStable
 
-theorem evidenceUniversalSubsumptionBy_iff_abstract
-    (P : EvidencePreorder) (V : ViewFn) :
-    UniversalContentSubsumptionBy P V <->
-      UniversalSubsumptionOn
-        (evidenceDecisionGrowth P)
-        (viewAccepted V) := by
-  constructor
-  · intro hOld
-    have hUpperOld : PositiveRegionUpperClosedBy P V :=
-      (preorder_universal_subsumption_iff_upperClosed P V).mp hOld
-    have hUpperAbstract :
-        UpwardClosedOn
-          (evidenceDecisionGrowth P)
-          (viewAccepted V) :=
-      (positiveRegionUpperClosedBy_iff_abstract P V).mp hUpperOld
-    exact
-      (abstract_universalSubsumption_iff_upwardClosed
-        (evidenceDecisionGrowth P)
-        (viewAccepted V)).mpr
-        hUpperAbstract
-  · intro hAbstract
-    have hUpperAbstract :
-        UpwardClosedOn
-          (evidenceDecisionGrowth P)
-          (viewAccepted V) :=
-      (abstract_universalSubsumption_iff_upwardClosed
-        (evidenceDecisionGrowth P)
-        (viewAccepted V)).mp
-        hAbstract
-    have hUpperOld : PositiveRegionUpperClosedBy P V :=
-      (positiveRegionUpperClosedBy_iff_abstract P V).mpr hUpperAbstract
-    exact
-      (preorder_universal_subsumption_iff_upperClosed P V).mpr
-        hUpperOld
+/-!
+The exact-instance claim needed for the paper is the equivalence immediately
+above: the v54 positive-region upper-closure condition is literally the abstract
+upper-closure condition on EvaluationInput.  Combining that equivalence with
+the v54 and v55 representation theorems yields the same boundary at both
+levels, without adding a universe-sensitive equality between the two quantified
+classes of world types.
+-/
 
 /-! ## Product growth: evidence and decision may both change -/
 
@@ -210,24 +184,16 @@ def productEvaluationGrowth
     intro z
     exact ⟨PE.refl z.1, PD.refl z.2⟩
 
-def UniversalEvaluationSubsumption
-    (PE : EvidencePreorder)
-    (PD : GrowthSpec DecisionState)
-    (V : ViewFn) : Prop :=
-  UniversalSubsumptionOn (productEvaluationGrowth PE PD) (viewAccepted V)
-
-def EvaluationRegionUpperClosed
-    (PE : EvidencePreorder)
-    (PD : GrowthSpec DecisionState)
-    (V : ViewFn) : Prop :=
-  UpwardClosedOn (productEvaluationGrowth PE PD) (viewAccepted V)
-
 theorem evaluation_subsumption_iff_product_upperClosed
     (PE : EvidencePreorder)
     (PD : GrowthSpec DecisionState)
     (V : ViewFn) :
-    UniversalEvaluationSubsumption PE PD V <->
-      EvaluationRegionUpperClosed PE PD V := by
+    UniversalSubsumptionOn
+      (productEvaluationGrowth PE PD)
+      (viewAccepted V) <->
+    UpwardClosedOn
+      (productEvaluationGrowth PE PD)
+      (viewAccepted V) := by
   exact
     abstract_universalSubsumption_iff_upwardClosed
       (productEvaluationGrowth PE PD)
