@@ -99,11 +99,11 @@ theorem gR_transitive : Transitive gR := by
 
 theorem dR_reflexive : Reflexive dR := by
   intro w
-  rfl
+  cases w <;> trivial
 
 theorem dR_transitive : Transitive dR := by
   intro x y z hxy hyz
-  exact Eq.trans hxy hyz
+  cases x <;> cases y <;> cases z <;> simp [dR] at *
 
 theorem sub_greach_iff_gR {x y : SubWorld} :
     subHistory.GReach x y <-> gR x y := by
