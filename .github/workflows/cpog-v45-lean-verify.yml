@@ -37,3 +37,10 @@ jobs:
           axiom-audit: true
           axiom-audit-root: "CPOG"
           use-github-cache: false
+
+      - name: Upload exact checked source
+        uses: actions/upload-artifact@v4
+        with:
+          name: CPOG-v51-exact-source
+          path: cpog_verify/CPOG.lean
+          if-no-files-found: error
