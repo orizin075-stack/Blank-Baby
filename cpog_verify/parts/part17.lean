@@ -156,7 +156,7 @@ theorem info_universal_subsumption_T_forces_B
 
 theorem info_T_to_B_refutation_forces_subsumption_failure
     (V : ViewFn) (d : DecisionState)
-    (hT : V .T d = .T) (hB : V .B d != .T) :
+    (hT : V .T d = .T) (hB : V .B d ≠ .T) :
     Not (UniversalContentSubsumptionBy infoEvidencePreorder V) := by
   intro hSub
   exact hB (info_universal_subsumption_T_forces_B V hSub d hT)
@@ -177,7 +177,7 @@ theorem identityView_fails_info_universal_subsumption :
       identityView_not_info_upperClosed
 
 def NoNewNegativeLe (a b : Evidence) : Prop :=
-  InfoLe a b / (hasNeg b -> hasNeg a)
+  InfoLe a b /\ (hasNeg b -> hasNeg a)
 
 theorem noNewNegative_refl : Reflexive NoNewNegativeLe := by
   intro e
