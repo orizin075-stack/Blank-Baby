@@ -1,10 +1,10 @@
-name: CPOG v49 Max Formalization Verification
-# v49 Max + possibility-role CI
+name: CPOG v50 Submission Core Verification
+# v50 reviewer-facing theorem-core CI
 
 on:
   push:
     branches:
-      - cpog-v49-max-formalization
+      - cpog-v50-submission-core
     paths:
       - 'cpog_verify/**'
       - '.github/workflows/cpog-v45-lean-verify.yml'
