@@ -1,10 +1,10 @@
-name: CPOG v53 Awareness Interface Verification
-# v53 awareness/evidence interface CI
+name: CPOG v54 Order-Parametric Subsumption Verification
+# v54 order-parametric Subsumption CI
 
 on:
   push:
     branches:
-      - cpog-v53-awareness-interface
+      - cpog-v54-order-param-subsumption
     paths:
       - 'cpog_verify/**'
       - '.github/workflows/cpog-v45-lean-verify.yml'
@@ -41,6 +41,6 @@ jobs:
       - name: Upload exact checked source
         uses: actions/upload-artifact@v4
         with:
-          name: CPOG-v53-exact-source
+          name: CPOG-v54-exact-source
           path: cpog_verify/CPOG.lean
           if-no-files-found: error
