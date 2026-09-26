@@ -8,7 +8,7 @@ decision coordinate.  The proof itself needs neither.  This section isolates
 the minimal structure:
 
 * an arbitrary summary-state type S;
-* a reflexive admissible-growth relation on S;
+* an arbitrary admissible-growth relation on S;
 * a G-transition system whose summary is monotone in that relation;
 * a reflexive D-relation;
 * an arbitrary acceptance predicate A : S -> Prop.
@@ -22,9 +22,9 @@ universe u v
 
 structure StateGrowth (S : Type u) where
   rel : Rel S
-  refl : Reflexive rel
 
 structure StatePreorder (S : Type u) extends StateGrowth S where
+  refl : Reflexive rel
   trans : Transitive rel
 
 structure GrowthDynamics
@@ -71,10 +71,8 @@ inductive GenericPairWorld where
 deriving DecidableEq
 
 def genericPairG : Rel GenericPairWorld
-  | .lower, .lower => True
   | .lower, .upper => True
-  | .upper, .upper => True
-  | .upper, .lower => False
+  | _, _ => False
 
 def genericPairD : Rel GenericPairWorld :=
   fun x y => x = y
@@ -93,9 +91,7 @@ def genericPairDynamics
   g_summary_mono := by
     intro x y hxy
     cases x <;> cases y <;> simp [genericPairG] at hxy
-    · exact G.refl s
-    · exact hss
-    · exact G.refl s'
+    exact hss
   d_reflexive := by
     intro x
     rfl
@@ -118,9 +114,10 @@ theorem universal_subsumption_implies_state_upperClosed
 
 /--
 MASTER REPRESENTATION THEOREM.
-For every reflexive admissible-growth relation on an arbitrary summary-state
-carrier and every acceptance predicate, universal G-over-D Subsumption is
-equivalent to upward closure of acceptance under admissible growth.
+For every admissible-growth relation on an arbitrary summary-state carrier
+and every acceptance predicate, universal G-over-D Subsumption is equivalent
+to upward closure of acceptance under admissible growth. No reflexivity or
+transitivity of the growth relation is required.
 -/
 theorem universal_state_subsumption_iff_upperClosed
     {S : Type u} (G : StateGrowth S) (A : S -> Prop) :
@@ -141,9 +138,6 @@ def evidenceDecisionGrowth
     (P : EvidencePreorder) :
     StateGrowth (Evidence × DecisionState) where
   rel := fun x y => P.le x.1 y.1 /\ x.2 = y.2
-  refl := by
-    intro x
-    exact ⟨P.refl x.1, rfl⟩
 
 def acceptByView (V : ViewFn) :
     (Evidence × DecisionState) -> Prop :=
