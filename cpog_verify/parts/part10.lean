@@ -54,7 +54,7 @@ theorem standardAtomicHom_unique
 
 theorem standard_atomic_initial
     {Base : Type u} (X : AtomicExtension Base) :
-    exists! f : AtomicHom (StandardAtomicExtension Base) X, True := by
+    ∃! f : AtomicHom (StandardAtomicExtension Base) X, True := by
   refine ⟨standardAtomicHom X, trivial, ?_⟩
   intro f _
   exact standardAtomicHom_unique X f
