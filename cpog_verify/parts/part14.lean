@@ -136,7 +136,10 @@ theorem split_firstCommit_dot2_failure_raw :
     Not (Box splitRG
       (Dia splitRG (FirstCommitPA splitFirstCommit SplitChoice.A)) .rf) := by
   exact firstCommit_dot2_failure_of_persistent_exclusive
-    splitRG splitFirstCommit
+    (R := splitRG) (F := splitFirstCommit)
+    (r := SplitWorld.rf)
+    (a := SplitWorld.ca0) (b := SplitWorld.cb0)
+    (A := SplitChoice.A) (B := SplitChoice.B)
     splitFirstCommit_persistent
     (by decide)
     (by trivial) (by trivial) rfl rfl
