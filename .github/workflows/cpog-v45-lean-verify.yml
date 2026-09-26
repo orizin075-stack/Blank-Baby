@@ -1,10 +1,10 @@
-name: CPOG v48 Formal Core Verification
-# v48 formal-core CI
+name: CPOG v49 Max Formalization Verification
+# v49 Max + possibility-role CI
 
 on:
   push:
     branches:
-      - cpog-v48-formal-core
+      - cpog-v49-max-formalization
     paths:
       - 'cpog_verify/**'
       - '.github/workflows/cpog-v45-lean-verify.yml'
