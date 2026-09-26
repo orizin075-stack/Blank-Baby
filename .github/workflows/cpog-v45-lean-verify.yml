@@ -1,9 +1,9 @@
-name: CPOG v45 Lean Verification
+name: CPOG v48 Formal Core Verification
 
 on:
   push:
     branches:
-      - cpog-v45-lean-verify
+      - cpog-v48-formal-core
     paths:
       - 'cpog_verify/**'
       - '.github/workflows/cpog-v45-lean-verify.yml'
