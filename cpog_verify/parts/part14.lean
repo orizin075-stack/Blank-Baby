@@ -119,13 +119,13 @@ theorem splitFirstCommit_persistent :
     simp [splitRG, splitFirstCommit] at *
 
 theorem split_firstCommit_has_proper_A_future :
-    splitRG .ca0 .ca1 /\ .ca0 ≠ .ca1 /\
+    splitRG .ca0 .ca1 /\ SplitWorld.ca0 ≠ SplitWorld.ca1 /\
     splitFirstCommit .ca0 = some .A /\
     splitFirstCommit .ca1 = some .A := by
   exact ⟨by trivial, by decide, rfl, rfl⟩
 
 theorem split_firstCommit_has_proper_B_future :
-    splitRG .cb0 .cb1 /\ .cb0 ≠ .cb1 /\
+    splitRG .cb0 .cb1 /\ SplitWorld.cb0 ≠ SplitWorld.cb1 /\
     splitFirstCommit .cb0 = some .B /\
     splitFirstCommit .cb1 = some .B := by
   exact ⟨by trivial, by decide, rfl, rfl⟩
