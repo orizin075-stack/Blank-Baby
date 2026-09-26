@@ -45,7 +45,7 @@ def UpwardClosedOn
 
 def UniversalSubsumptionOn
     {X : Type u} (G : GrowthSpec X) (A : X -> Prop) : Prop :=
-  forall {W : Type v} (S : AbstractUpdateDynamics G W) (w : W),
+  forall {W : Type} (S : AbstractUpdateDynamics G W) (w : W),
     Box S.dR (S.Accepted A) w ->
     Box S.gR (S.Accepted A) w
 
@@ -102,15 +102,15 @@ theorem abstract_universalSubsumption_implies_upwardClosed
     UpwardClosedOn G A := by
   intro x y hxy hAx
   let S := abstractPairSystem G x y hxy
-  have hD : Box S.dR (S.Accepted A) .lower := by
+  have hD : Box S.dR (S.Accepted A) AbstractPairWorld.lower := by
     intro z hlz
     have hz : AbstractPairWorld.lower = z := by
       simpa [S, abstractPairSystem, abstractPairD] using hlz
     subst z
     exact hAx
-  have hG : Box S.gR (S.Accepted A) .lower :=
+  have hG : Box S.gR (S.Accepted A) AbstractPairWorld.lower :=
     hSub S .lower hD
-  exact hG .upper (by trivial)
+  exact hG AbstractPairWorld.upper (by trivial)
 
 theorem abstract_universalSubsumption_iff_upwardClosed
     {X : Type u}
