@@ -161,11 +161,11 @@ def cpogRoleModel : PossibilityRoleModel RoleWorld RoleToken where
 theorem cpog_role_model_adequate :
     PossibilityRoleAdequate cpogRoleModel := by
   constructor
-  · exact ⟨.dormant, .t, by trivial, by trivial⟩
+  · exact ⟨.dormant, .t, by trivial, by simp [cpogRoleModel, roleBelieved]⟩
   constructor
-  · exact ⟨.active, .t, by trivial, by trivial⟩
+  · exact ⟨.active, .t, by trivial, by simp [cpogRoleModel, roleBelieved]⟩
   · exact ⟨.dormant, .active, .t,
-      by trivial, by trivial, by trivial, by trivial⟩
+      by trivial, by trivial, by simp [cpogRoleModel, roleLive], by trivial⟩
 
 theorem cpog_role_statuses_distinct :
     cpogRoleModel.live ≠ cpogRoleModel.believed /\
