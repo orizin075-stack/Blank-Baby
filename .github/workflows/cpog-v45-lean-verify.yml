@@ -1,10 +1,10 @@
-name: CPOG v50 Submission Core Verification
-# v50 reviewer-facing theorem-core CI
+name: CPOG v51 Class Theorems Verification
+# v51 generalized FirstCommit and Subsumption CI
 
 on:
   push:
     branches:
-      - cpog-v50-submission-core
+      - cpog-v51-class-theorems
     paths:
       - 'cpog_verify/**'
       - '.github/workflows/cpog-v45-lean-verify.yml'
