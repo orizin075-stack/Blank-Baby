@@ -1,10 +1,10 @@
-name: CPOG v55 Generic State Representation Verification
-# v55 generic state representation CI
+name: CPOG v56 Persistence Irreversibility Verification
+# v56 persistence/irreversibility CI
 
 on:
   push:
     branches:
-      - cpog-v55-generic-state-representation
+      - cpog-v56-persistence-irreversibility
     paths:
       - 'cpog_verify/**'
       - '.github/workflows/cpog-v45-lean-verify.yml'
@@ -41,6 +41,6 @@ jobs:
       - name: Upload exact checked source
         uses: actions/upload-artifact@v4
         with:
-          name: CPOG-v55-exact-source
+          name: CPOG-v56-exact-source
           path: cpog_verify/CPOG.lean
           if-no-files-found: error
