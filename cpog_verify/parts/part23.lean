@@ -47,7 +47,7 @@ theorem forwardClosure_least
   intro y hy
   rcases hy with ⟨x, hxP, hxy⟩
   have hxQ : Q x := hPQ x hxP
-  exact RTC.preserve hQInv hxy hxQ
+  exact RTC.preserve (R := R) (P := Q) hQInv hxy hxQ
 
 theorem invariantKernel_subset
     {W : Type u} (R : Rel W) (P : W -> Prop) :
@@ -76,7 +76,7 @@ theorem invariantKernel_greatest
   constructor
   · exact hQP x hxQ
   · intro y hxy
-    have hyQ : Q y := RTC.preserve hQInv hxy hxQ
+    have hyQ : Q y := RTC.preserve (R := R) (P := Q) hQInv hxy hxQ
     exact hQP y hyQ
 
 theorem forwardInvariant_iff_closure_subset
