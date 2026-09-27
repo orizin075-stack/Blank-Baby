@@ -46,6 +46,23 @@ theorem incompatible_forward_region_excludes_diamond
   have hQy : Q y := hQ hxy hx
   exact hDisjoint y hPy hQy
 
+
+theorem persistent_incompatible_branches_not_directed
+    {W : Type u}
+    (R : Rel W) (P Q : W -> Prop)
+    {r a b : W}
+    (hP : ForwardInvariantRegion R P)
+    (hQ : ForwardInvariantRegion R Q)
+    (hDisjoint : MutuallyExclusiveRegions P Q)
+    (hra : R r a) (hrb : R r b)
+    (ha : P a) (hb : Q b) :
+    Not (DirectedAt R r) := by
+  intro hDir
+  rcases hDir hra hrb with ⟨z, haz, hbz⟩
+  have hPz : P z := hP haz ha
+  have hQz : Q z := hQ hbz hb
+  exact hDisjoint z hPz hQz
+
 /--
 GENERIC IRREVERSIBLE-DIVERGENCE THEOREM.
 
