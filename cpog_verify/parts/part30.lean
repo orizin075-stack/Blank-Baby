@@ -134,16 +134,16 @@ already reached a fixed point by round |N|-1.
 theorem fdeFiniteConvergenceCardSubOne
     {N : Type u} [Fintype N] [Nonempty N]
     (E : N -> N -> Prop) (sigma : DynamicSafety.PropEvidence N) :
-    FiniteConvergence.FDEIter E sigma (Fintype.card N - 1) =
-      FiniteConvergence.FDEIter E sigma (Fintype.card N) :=
+    Convergence.FDEIter E sigma (Fintype.card N - 1) =
+      Convergence.FDEIter E sigma (Fintype.card N) :=
   FiniteConvergence.fdeIter_fixed_card_sub_one E sigma
 
 /-- PC36. The same sharp |N|-1 fixed-point bound holds for one-bit support propagation. -/
 theorem supportFiniteConvergenceCardSubOne
     {N : Type u} [Fintype N] [Nonempty N]
     (E : N -> N -> Prop) (S : N -> Prop) :
-    FiniteConvergence.SupportIter E S (Fintype.card N - 1) =
-      FiniteConvergence.SupportIter E S (Fintype.card N) :=
+    Convergence.SupportIter E S (Fintype.card N - 1) =
+      Convergence.SupportIter E S (Fintype.card N) :=
   FiniteConvergence.supportIter_fixed_card_sub_one E S
 
 end PaperClaims
