@@ -27,6 +27,8 @@ import CPOG.MaxAppendix
 
 import CPOG.DeferableGeneration
 
+import CPOG.InvariantRepair
+
 import CPOG.PaperClaims
 
 import CPOG.GreatestDynamicObservation
