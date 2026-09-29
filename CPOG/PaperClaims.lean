@@ -2,6 +2,7 @@ import CPOG.History
 import CPOG.General
 import CPOG.DeferableGeneration
 import CPOG.DynamicQuotient
+import CPOG.StaticDynamicGap
 import CPOG.DynamicObservation
 import CPOG.GreatestDynamicObservation
 import CPOG.Provenance
