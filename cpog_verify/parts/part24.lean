@@ -217,13 +217,15 @@ abbrev MaxDynamicQuotient (M : Model W Atom) :=
 def maximalDynamicPresentation
     (M : Model W Atom) :
     QuotientPresentation W (MaxDynamicQuotient M) (DynamicBisimilar M) where
-  classOf := fun x => Quotient.mk' x
+  classOf := fun x => Quotient.mk (dynamicBisimSetoid M) x
   surj := by
     intro q
     exact Quotient.exists_rep q
   class_eq_iff := by
     intro x y
-    exact Quotient.eq
+    constructor
+    · exact Quotient.exact
+    · exact Quotient.sound
 
 theorem maximal_dynamic_quotient_is_safe
     (M : Model W Atom) :
