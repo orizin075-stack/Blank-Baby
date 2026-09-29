@@ -65,7 +65,8 @@ def staticGapModel : Model StaticGapWorld StaticGapAtom where
 
 def staticAtomObservation :
     StaticGapAtom -> StaticGapWorld -> Bool
-  | .p, w => if staticGapVal w .p then true else false
+  | .p, .leftFuture => true
+  | .p, _ => false
 
 theorem static_gap_roots_observationally_equal :
     ObsEq staticAtomObservation
