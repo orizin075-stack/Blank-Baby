@@ -259,7 +259,7 @@ theorem forwardClosure_least
     PredSubset (ForwardClosure R P) Q := by
   intro y hy
   rcases hy with ⟨x, hxP, hxy⟩
-  exact rtc_preserve hQInv hxy (hPQ x hxP)
+  exact rtc_preserve (R := R) (P := Q) hQInv hxy (hPQ x hxP)
 
 theorem invariantKernel_subset
     {W : Type uW} (R : W -> W -> Prop) (P : W -> Prop) :
@@ -286,7 +286,7 @@ theorem invariantKernel_greatest
   constructor
   · exact hQP x hxQ
   · intro y hxy
-    exact hQP y (rtc_preserve hQInv hxy hxQ)
+    exact hQP y (rtc_preserve (R := R) (P := Q) hQInv hxy hxQ)
 
 theorem forwardClosure_idempotent
     {W : Type uW} (R : W -> W -> Prop) (P : W -> Prop) (x : W) :
