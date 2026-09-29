@@ -154,7 +154,7 @@ the explicit FirstCommit .2 counterexample.  This specializes the generic
 quotient constructed in part29.
 -/
 theorem firstCommitFailureOnCoarsestObservationSafeQuotient
-    {I : Type u} {Y : Type v}
+    {I : Type u} {Y : Type}
     (O : I -> FCWorld -> Y) :
     let P :=
       observationBisimilarityPresentation
