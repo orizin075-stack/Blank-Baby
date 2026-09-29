@@ -38,6 +38,9 @@ namespace CPOG.PaperClaims
 -- Theorem 2B: FirstCommit divergence survives a genuine dynamic quotient.
 #check CPOG.DynamicQuotient.firstCommit_dotTwo_fails_on_dynamicQuotient
 
+-- Static observation alone can fail to preserve modal truth.
+#check CPOG.StaticDynamicGap.static_abstraction_changes_modal_truth
+
 -- Dynamic observation quotient refines the static quotient and preserves G/D/H truth.
 #check CPOG.DynamicObservation.dynamic_observation_quotient_is_semantically_safe
 #check CPOG.GreatestDynamicObservation.greatest_dynamic_observation_quotient_is_coarsest
