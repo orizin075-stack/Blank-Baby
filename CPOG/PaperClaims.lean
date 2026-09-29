@@ -30,6 +30,7 @@ namespace CPOG.PaperClaims
 
 -- Proposition 2A: raw prefix-history branching / incomparability refutes .2.
 #check CPOG.EpistemicPotentialism.raw_incomparable_branching_dotTwo_fails
+#check CPOG.EpistemicPotentialism.dotTwo_all_iff_directedAt
 
 -- Deferable/non-exhaustive generation can recover .2 in a directed join model.
 #check CPOG.DeferableGeneration.deferable_generation_validates_dotTwo
