@@ -15,6 +15,7 @@ import CPOG.Policy
 import CPOG.Dynamics
 import CPOG.FiniteConvergence
 import CPOG.MaxAppendix
+import CPOG.InvariantRepair
 
 /-!
 Machine-checked crosswalk between the paper's claims and the Lean declarations
@@ -89,5 +90,22 @@ namespace CPOG.PaperClaims
 #check CPOG.MaxAppendix.finiteProcessingClosure_reaches_seal
 #check CPOG.MaxAppendix.jointlyAdmissible_executes
 #check CPOG.MaxAppendix.modalFirewall_satisfaction
+
+-- v57: common forward-invariance core for irreversible branching and Subsumption.
+#check CPOG.InvariantRepair.persistent_incompatible_branches_counterexample
+#check CPOG.InvariantRepair.persistent_incompatible_branches_dotTwo_fails
+#check CPOG.InvariantRepair.persistent_incompatible_branches_not_directed
+#check CPOG.InvariantRepair.firstCommit_dotTwo_is_invariance_instance
+#check CPOG.InvariantRepair.universalSubsumption_iff_forwardInvariant
+#check CPOG.InvariantRepair.universalSubsumption_failure_iff_nonInvariant
+
+-- v57: canonical least-expansion / greatest-contraction repairs.
+#check CPOG.InvariantRepair.forwardClosure_forwardInvariant
+#check CPOG.InvariantRepair.forwardClosure_least
+#check CPOG.InvariantRepair.invariantKernel_forwardInvariant
+#check CPOG.InvariantRepair.invariantKernel_greatest
+#check CPOG.InvariantRepair.forwardClosure_idempotent
+#check CPOG.InvariantRepair.invariantKernel_idempotent
+#check CPOG.InvariantRepair.canonical_stabilizations_restore_subsumption
 
 end CPOG.PaperClaims
