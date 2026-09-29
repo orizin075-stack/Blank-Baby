@@ -47,6 +47,28 @@ theorem dotTwo_of_directedAt
   rcases hdir u v hwu hwv with ⟨z, huz, hvz⟩
   exact ⟨z, hvz, hbox z huz⟩
 
+
+/--
+Local frame correspondence for the .2 schema.  At a world `w`, .2 is valid
+for every valuation iff the future cone above `w` is directed.
+-/
+theorem dotTwo_all_iff_directedAt
+    (R : W → W → Prop) (w : W) :
+    (∀ φ : W → Prop, DotTwoR R φ w) ↔ DirectedAt R w := by
+  constructor
+  · intro hAll u v hwu hwv
+    by_contra hNo
+    let φ : W → Prop := fun z => R u z
+    have hDiaBox : DiaR R (BoxR R φ) w := by
+      refine ⟨u, hwu, ?_⟩
+      intro z huz
+      exact huz
+    have hBoxDia : BoxR R (DiaR R φ) w := hAll φ hDiaBox
+    rcases hBoxDia v hwv with ⟨z, hvz, huz⟩
+    exact hNo ⟨z, huz, hvz⟩
+  · intro hdir φ
+    exact dotTwo_of_directedAt R φ w hdir
+
 /--
 A persistent split is sufficient to refute the .2 instance: one accessible branch
 makes `φ` permanently true and another makes `φ` permanently false.
