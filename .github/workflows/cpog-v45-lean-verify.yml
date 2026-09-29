@@ -38,6 +38,10 @@ jobs:
           axiom-audit-root: "CPOG"
           use-github-cache: false
 
+      - name: PaperClaims gate
+        run: |
+          lake env lean PaperClaimsCheck.lean
+
       - name: Upload exact checked source
         uses: actions/upload-artifact@v4
         with:
