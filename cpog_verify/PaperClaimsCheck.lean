@@ -1,0 +1,27 @@
+import CPOG
+
+#check CPOG.PaperClaims.localDot2FrameCorrespondence
+#check CPOG.PaperClaims.historicalPersistence
+#check CPOG.PaperClaims.generationS4Frame
+#check CPOG.PaperClaims.determinationS4Frame
+#check CPOG.PaperClaims.combinedHistoryS4Frame
+#check CPOG.PaperClaims.rawHistoryDot2Failure
+#check CPOG.PaperClaims.deferableGenerationDot2
+#check CPOG.PaperClaims.irreversibleDivergence
+#check CPOG.PaperClaims.firstCommitAsInvariantRegionInstance
+#check CPOG.PaperClaims.abstractionModalContrast
+#check CPOG.PaperClaims.maximalDynamicEquivalence
+#check CPOG.PaperClaims.maximalDynamicQuotientTruth
+#check CPOG.PaperClaims.maximalDynamicQuotientCoarsest
+#check CPOG.PaperClaims.staticDynamicGap
+#check CPOG.PaperClaims.originIndividuationSemanticDeflation
+#check CPOG.PaperClaims.semanticMinimalQuotient
+#check CPOG.PaperClaims.historicalSubsumptionFailure
+#check CPOG.PaperClaims.universalSubsumptionRepresentation
+#check CPOG.PaperClaims.universalSubsumptionFailure
+#check CPOG.PaperClaims.canonicalStabilization
+#check CPOG.PaperClaims.awarenessSilence
+#check CPOG.PaperClaims.possibilityRoleSeparation
+#check CPOG.PaperClaims.metaphysicalBridgeNotForced
+#check CPOG.PaperClaims.finiteMaxRealization
+#check CPOG.PaperClaims.maxSealAndConservativity
