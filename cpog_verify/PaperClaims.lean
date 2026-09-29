@@ -34,6 +34,7 @@ If any theorem is renamed, deleted, or stops elaborating, this module fails.
 #check CPOG.PaperClaims.coarsestObservationSafeDynamicQuotient
 #check CPOG.PaperClaims.observationSafeDynamicQuotientTruth
 #check CPOG.PaperClaims.observationSafeDynamicQuotientRespectsObservation
+#check CPOG.PaperClaims.firstCommitFailureOnCoarsestObservationSafeQuotient
 
 -- Awareness / possibility-role separation
 #check CPOG.PaperClaims.awarenessSilence
