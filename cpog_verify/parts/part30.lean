@@ -156,19 +156,23 @@ quotient constructed in part29.
 theorem firstCommitFailureOnCoarsestObservationSafeQuotient
     {I : Type u} {Y : Type v}
     (O : I -> FCWorld -> Y) :
+    let P :=
+      observationBisimilarityPresentation
+        (I := I) (Y := Y) fcModel O
     Satisfies
-      (quotientModel fcModel
-        (observationBisimilarityPresentation fcModel O))
-      ((observationBisimilarityPresentation fcModel O).classOf .root)
+      (quotientModel fcModel P)
+      (P.classOf .root)
       fcAntecedent /\
     Not (Satisfies
-      (quotientModel fcModel
-        (observationBisimilarityPresentation fcModel O))
-      ((observationBisimilarityPresentation fcModel O).classOf .root)
+      (quotientModel fcModel P)
+      (P.classOf .root)
       fcConsequent) := by
+  dsimp only
   exact firstCommit_quotient_dot2_failure
-    (observationBisimilarityDynamicEquiv fcModel O)
-    (observationBisimilarityPresentation fcModel O)
+    (observationBisimilarityDynamicEquiv
+      (I := I) (Y := Y) fcModel O)
+    (observationBisimilarityPresentation
+      (I := I) (Y := Y) fcModel O)
 
 end PaperClaims
 end CPOG
