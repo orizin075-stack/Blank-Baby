@@ -1,5 +1,5 @@
-name: CPOG v57 Paper Claims Package Verification
-# v57 paper-level theorem package CI
+name: CPOG v57 Full Paper Claims Verification
+# v57 full paper-level theorem package: current core + Mathlib-backed legacy-strength results
 
 on:
   push:
@@ -10,6 +10,10 @@ on:
       - '.github/workflows/cpog-v45-lean-verify.yml'
   workflow_dispatch:
 
+concurrency:
+  group: cpog-v57-paperclaims-crosswalk
+  cancel-in-progress: true
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -19,34 +23,55 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Reassemble verified source
+      - name: Install Lean 4.34.0
+        shell: bash
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.34.0
+          "$HOME/.elan/bin/elan" default leanprover/lean4:v4.34.0
+
+      - name: Reassemble exact source
         run: |
           cat parts/part*.lean > CPOG.lean
           test -s CPOG.lean
-          ! grep -nE '\b(sorry|admit|unsafe)\b|^[[:space:]]*axiom[[:space:]]' CPOG.lean
+          ! grep -nE '\\b(sorry|admit|unsafe)\\b|^[[:space:]]*axiom[[:space:]]' CPOG.lean
 
-      - name: Build and kernel-check
+      - name: Verify committed Lake manifest
+        run: test -f lake-manifest.json
+
+      - name: Get Mathlib cache
+        run: lake exe cache get
+
+      - name: Kernel build
+        run: lake build
+
+      - name: Check PaperClaims crosswalk module
+        run: lake env lean PaperClaims.lean
+
+      - name: Independent leanchecker and axiom audit
         uses: leanprover/lean-action@v1
         with:
+          auto-config: false
           lake-package-directory: cpog_verify
-          build: true
+          use-github-cache: false
+          use-mathlib-cache: false
+          build: false
           test: false
           lint: false
           leanchecker: true
           leanchecker-args: "CPOG"
           axiom-audit: true
           axiom-audit-root: "CPOG"
-          use-github-cache: false
 
-      - name: Check PaperClaims crosswalk module
-        run: |
-          lake env lean PaperClaims.lean
-
-      - name: Upload exact checked source
+      - name: Upload exact checked package
         uses: actions/upload-artifact@v4
         with:
-          name: CPOG-v57-paper-package
+          name: CPOG-v57-full-paper-package
           path: |
             cpog_verify/CPOG.lean
             cpog_verify/PaperClaims.lean
+            cpog_verify/lakefile.lean
+            cpog_verify/lake-manifest.json
+            cpog_verify/lean-toolchain
           if-no-files-found: error
