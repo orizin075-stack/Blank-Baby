@@ -1,0 +1,29 @@
+import CPOG
+
+open CPOG
+
+#check CPOG.PaperClaims.modalTFrameCorrespondence
+#check CPOG.PaperClaims.modal4FrameCorrespondence
+#check CPOG.PaperClaims.localDot2FrameCorrespondence
+#check CPOG.PaperClaims.historicalPersistence
+#check CPOG.PaperClaims.rawHistoryDot2Failure
+#check CPOG.PaperClaims.deferableGenerationDot2Recovery
+#check CPOG.PaperClaims.irreversibleDivergenceDot2Failure
+#check CPOG.PaperClaims.firstCommitAsInvariantRegionInstance
+#check CPOG.PaperClaims.splitAbstractionModalContrast
+#check CPOG.PaperClaims.universalSubsumptionIffForwardInvariant
+#check CPOG.PaperClaims.universalSubsumptionFailureIffNonInvariant
+#check CPOG.PaperClaims.evidenceDynamicsIsGenericInstance
+#check CPOG.PaperClaims.awarenessSilence
+#check CPOG.PaperClaims.canonicalStabilizationsRestoreSubsumption
+#check CPOG.PaperClaims.forwardClosureLeast
+#check CPOG.PaperClaims.invariantKernelGreatest
+#check CPOG.PaperClaims.originDifferenceImpliesTokenDifference
+#check CPOG.PaperClaims.semanticMinimalQuotient
+#check CPOG.PaperClaims.semanticProjectionIsBisimulation
+#check CPOG.PaperClaims.semanticQuotientModalInvariance
+#check CPOG.PaperClaims.originSensitiveDynamicContrast
+#check CPOG.PaperClaims.possibilityRoleSeparation
+#check CPOG.PaperClaims.epistemicRoleDoesNotForceMetaphysical
+#check CPOG.PaperClaims.finiteMaxRealization
+#check CPOG.PaperClaims.maxSealAndConservativity
