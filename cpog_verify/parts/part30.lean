@@ -146,5 +146,29 @@ theorem supportFiniteConvergenceCardSubOne
       Convergence.SupportIter E S (Fintype.card N) :=
   FiniteConvergence.supportIter_fixed_card_sub_one E S
 
+
+/--
+PC37. The canonical coarsest observation-safe dynamic quotient still preserves
+the explicit FirstCommit .2 counterexample.  This specializes the generic
+"any DynamicEquiv" preservation theorem to the maximal observation-safe
+quotient constructed in part29.
+-/
+theorem firstCommitFailureOnCoarsestObservationSafeQuotient
+    {I : Type u} {Y : Type v}
+    (O : I -> FCWorld -> Y) :
+    Satisfies
+      (quotientModel fcModel
+        (observationBisimilarityPresentation fcModel O))
+      ((observationBisimilarityPresentation fcModel O).classOf .root)
+      fcAntecedent /\
+    Not (Satisfies
+      (quotientModel fcModel
+        (observationBisimilarityPresentation fcModel O))
+      ((observationBisimilarityPresentation fcModel O).classOf .root)
+      fcConsequent) := by
+  exact firstCommit_quotient_dot2_failure
+    (observationBisimilarityDynamicEquiv fcModel O)
+    (observationBisimilarityPresentation fcModel O)
+
 end PaperClaims
 end CPOG
