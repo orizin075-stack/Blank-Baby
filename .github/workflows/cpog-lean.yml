@@ -5,6 +5,10 @@ on:
     branches: ["cpog-lean-v45-check"]
   workflow_dispatch:
 
+concurrency:
+  group: cpog-lean-v45-check
+  cancel-in-progress: true
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -21,8 +25,11 @@ jobs:
           "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.34.0
           "$HOME/.elan/bin/elan" default leanprover/lean4:v4.34.0
 
-      - name: Verify Lake manifest
-        run: lake update
+      - name: Verify committed Lake manifest
+        run: test -f lake-manifest.json
+
+      - name: Get Mathlib cache
+        run: lake exe cache get
 
       - name: Full kernel build
         run: lake build
