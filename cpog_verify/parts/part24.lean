@@ -224,8 +224,8 @@ def maximalDynamicPresentation
   class_eq_iff := by
     intro x y
     constructor
-    · exact Quotient.exact
-    · exact Quotient.sound
+    · exact @Quotient.exact W (dynamicBisimSetoid M) x y
+    · exact @Quotient.sound W (dynamicBisimSetoid M) x y
 
 theorem maximal_dynamic_quotient_is_safe
     (M : Model W Atom) :
