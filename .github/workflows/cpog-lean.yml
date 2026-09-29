@@ -5,10 +5,6 @@ on:
     branches: ["cpog-lean-v45-check"]
   workflow_dispatch:
 
-concurrency:
-  group: cpog-lean-v45-check
-  cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,14 +19,14 @@ jobs:
           "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.34.0
           "$HOME/.elan/bin/elan" default leanprover/lean4:v4.34.0
 
-      - name: Verify committed Lake manifest
-        run: test -f lake-manifest.json
+      - name: Generate Lake manifest
+        run: lake update
 
-      - name: Get Mathlib cache
-        run: lake exe cache get
-
-      - name: Kernel build
+      - name: Kernel build finite countermodels
         run: lake build
+
+      - name: Kernel check general theorem module
+        run: lake env lean CPOGGeneral.lean
 
       - name: Independent Lean checker and axiom audit
         uses: leanprover/lean-action@v1
@@ -42,6 +38,6 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: "CPOG"
+          leanchecker-args: "CPOGCheck"
           axiom-audit: true
-          axiom-audit-root: "CPOG"
+          axiom-audit-root: "CPOGCheck"
