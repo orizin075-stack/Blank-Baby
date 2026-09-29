@@ -1,10 +1,10 @@
-name: CPOG v56 Persistence Irreversibility Verification
-# v56 persistence/irreversibility CI
+name: CPOG v57 Paper Claims Package Verification
+# v57 paper-level theorem package CI
 
 on:
   push:
     branches:
-      - cpog-v56-persistence-irreversibility
+      - cpog-v57-paperclaims-crosswalk
     paths:
       - 'cpog_verify/**'
       - '.github/workflows/cpog-v45-lean-verify.yml'
@@ -25,6 +25,10 @@ jobs:
           test -s CPOG.lean
           ! grep -nE '\b(sorry|admit|unsafe)\b|^[[:space:]]*axiom[[:space:]]' CPOG.lean
 
+      - name: Check PaperClaims crosswalk module
+        run: |
+          lake env lean PaperClaims.lean
+
       - name: Build and kernel-check
         uses: leanprover/lean-action@v1
         with:
@@ -41,6 +45,8 @@ jobs:
       - name: Upload exact checked source
         uses: actions/upload-artifact@v4
         with:
-          name: CPOG-v56-exact-source
-          path: cpog_verify/CPOG.lean
+          name: CPOG-v57-paper-package
+          path: |
+            cpog_verify/CPOG.lean
+            cpog_verify/PaperClaims.lean
           if-no-files-found: error
