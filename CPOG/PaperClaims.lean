@@ -44,6 +44,9 @@ namespace CPOG.PaperClaims
 #check CPOG.GreatestDynamicObservation.greatest_dynamic_observation_quotient_is_safe
 #check CPOG.GreatestDynamicObservation.firstCommit_dotTwo_fails_on_greatest_observation_quotient
 
+-- Historical-language and content-level Subsumption failure.
+#check CPOG.EpistemicPotentialism.historical_subsumption_fails
+
 -- Theorem 3: generic and concrete defeasible-content Subsumption failure.
 #check CPOG.EpistemicPotentialism.not_subsumption_of_D_stable_G_defeater
 #check CPOG.EpistemicPotentialism.content_subsumption_failure_of_G_defeat
@@ -53,6 +56,9 @@ namespace CPOG.PaperClaims
 #check CPOG.SemanticProvenance.adequate_kernel_refines_observationQuotient
 #check CPOG.SemanticProvenance.observationQuotient_factors_through_every_adequate_abstraction
 #check CPOG.OriginAbstraction.origin_individuation_semantic_deflation
+
+-- G/D historical ratchet and four-way possibility separation.
+#check CPOG.Possibility.possHist_GD_ratcheted
 
 -- Four-way possibility separation and conservative seed evidence.
 #check CPOG.Possibility.possLive_implies_hist
