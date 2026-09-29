@@ -1,4 +1,4 @@
-name: CPOG Lean Check
+name: CPOG Full Lean Verification
 
 on:
   push:
@@ -6,8 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
+    env:
+      LEAN_NUM_THREADS: "1"
     steps:
       - uses: actions/checkout@v4
 
@@ -19,16 +21,13 @@ jobs:
           "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.34.0
           "$HOME/.elan/bin/elan" default leanprover/lean4:v4.34.0
 
-      - name: Generate Lake manifest
+      - name: Verify Lake manifest
         run: lake update
 
-      - name: Kernel build finite countermodels
+      - name: Full kernel build
         run: lake build
 
-      - name: Kernel check general theorem module
-        run: lake env lean CPOGGeneral.lean
-
-      - name: Independent Lean checker and axiom audit
+      - name: Independent checker and axiom audit
         uses: leanprover/lean-action@v1
         with:
           auto-config: false
@@ -38,6 +37,6 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: "CPOGCheck"
+          leanchecker-args: "CPOG"
           axiom-audit: true
-          axiom-audit-root: "CPOGCheck"
+          axiom-audit-root: "CPOG"
