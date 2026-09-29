@@ -56,13 +56,12 @@ theorem not_directedAt_has_nonjoinable_successors
     exists a b,
       R r a /\ R r b /\
       Not (exists z, R a z /\ R b z) := by
-  classical
-  by_contra hNoWitness
-  apply hNot
-  intro a b hra hrb
-  by_contra hNoJoin
-  apply hNoWitness
-  exact ⟨a, b, hra, hrb, hNoJoin⟩
+  exact Classical.byContradiction (fun hNoWitness => by
+    apply hNot
+    intro a b hra hrb
+    exact Classical.byContradiction (fun hNoJoin => by
+      apply hNoWitness
+      exact ⟨a, b, hra, hrb, hNoJoin⟩))
 
 theorem not_directedAt_implies_persistentBranchSplit
     {W : Type u} (R : Rel W) {r : W}
