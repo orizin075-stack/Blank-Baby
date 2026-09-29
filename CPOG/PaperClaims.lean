@@ -28,6 +28,9 @@ namespace CPOG.PaperClaims
 #check CPOG.Origin.canonical_historical_token_iff_committed
 #check CPOG.History.historical_persistence
 
+-- Reflexive-transitive closures used for G/D/H validate the S4 frame laws.
+#check CPOG.Closure.rtc_frame_S4
+
 -- Proposition 2A: raw prefix-history branching / incomparability refutes .2.
 #check CPOG.EpistemicPotentialism.raw_incomparable_branching_dotTwo_fails
 #check CPOG.EpistemicPotentialism.dotTwo_all_iff_directedAt
