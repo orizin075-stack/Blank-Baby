@@ -38,9 +38,14 @@ jobs:
           axiom-audit-root: "CPOG"
           use-github-cache: false
 
+      - name: Check paper claim crosswalk
+        run: lake env lean PaperClaims.lean
+
       - name: Upload exact checked source
         uses: actions/upload-artifact@v4
         with:
           name: CPOG-v57-exact-source
-          path: cpog_verify/CPOG.lean
+          path: |
+            cpog_verify/CPOG.lean
+            cpog_verify/PaperClaims.lean
           if-no-files-found: error
