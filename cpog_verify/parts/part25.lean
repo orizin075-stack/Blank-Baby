@@ -168,32 +168,11 @@ theorem static_observation_equivalence_not_dynamically_safe :
   constructor
   · exact staticGap_x_y_observation_equivalent
   · intro h
-    rcases h with ⟨B, hB⟩
-    let E : StaticGapWorld -> StaticGapWorld -> Prop := B.Z
-    let hDyn : DynamicEquiv staticGapModel E :=
-      { refl := by
-          intro a
-          exact (obsBisimilar_refl staticGapModel staticGapObservation a).choose_spec
-        symm := by
-          intro a b hab
-          have : ObsBisimilar staticGapModel staticGapObservation a b :=
-            ⟨B, hab⟩
-          rcases obsBisimilar_symm this with ⟨C, hC⟩
-          -- We only need a contradiction below; use modal invariance of B directly.
-          exact False.elim (by
-            have hiff :=
-              bisimulation_invariance B.bisim (.boxG .bot) hab
-            exact staticGap_x_not_boxG_bottom
-              (hiff.mpr staticGap_y_boxG_bottom))
-        trans := by
-          intro a b c hab hbc
-          exact False.elim (by
-            have hiff :=
-              bisimulation_invariance B.bisim (.boxG .bot) hB
-            exact staticGap_x_not_boxG_bottom
-              (hiff.mpr staticGap_y_boxG_bottom))
-        bisim := B.bisim }
-    exact staticGap_no_bisimulation_identifies_x_y hDyn hB
+    rcases h with ⟨B, hxy⟩
+    have hiff :=
+      bisimulation_invariance B.bisim (.boxG .bot) hxy
+    exact staticGap_x_not_boxG_bottom
+      (hiff.mpr staticGap_y_boxG_bottom)
 
 /--
 A cleaner direct form of the same gap, avoiding any quotient implementation:
