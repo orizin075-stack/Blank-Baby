@@ -1,6 +1,9 @@
-name = "cpog_v45"
+name = "cpog_v57"
 version = "0.1.0"
-defaultTargets = ["CPOG"]
+defaultTargets = ["CPOG", "PaperClaims"]
 
 [[lean_lib]]
 name = "CPOG"
+
+[[lean_lib]]
+name = "PaperClaims"
