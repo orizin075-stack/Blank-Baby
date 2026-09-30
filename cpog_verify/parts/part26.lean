@@ -243,5 +243,66 @@ theorem maxSealAndConservativity
         Satisfies E.firewall.maxModel (E.firewall.embed x) phi :=
   sealed_max_completion_and_conservativity E
 
+
+/-- PC24. Incompatible invariant branches force local non-directedness. -/
+theorem irreversibleDivergenceNotDirected
+    {W : Type u}
+    (R : Rel W) (P Q : W -> Prop)
+    {r a b : W}
+    (hP : ForwardInvariantRegion R P)
+    (hQ : ForwardInvariantRegion R Q)
+    (hDisjoint : MutuallyExclusiveRegions P Q)
+    (hra : R r a) (hrb : R r b)
+    (ha : P a) (hb : Q b) :
+    Not (DirectedAt R r) :=
+  persistent_incompatible_branches_not_directed
+    R P Q hP hQ hDisjoint hra hrb ha hb
+
+/-- PC25. ForwardClosure is the least forward-invariant expansion of P. -/
+theorem forwardClosureLeast
+    {W : Type u} (R : Rel W) (P Q : W -> Prop)
+    (hQInv : ForwardInvariantRegion R Q)
+    (hPQ : PredSubset P Q) :
+    PredSubset (ForwardClosure R P) Q :=
+  forwardClosure_least R P Q hQInv hPQ
+
+/-- PC26. InvariantKernel is the greatest forward-invariant contraction of P. -/
+theorem invariantKernelGreatest
+    {W : Type u} (R : Rel W) (P Q : W -> Prop)
+    (hQInv : ForwardInvariantRegion R Q)
+    (hQP : PredSubset Q P) :
+    PredSubset Q (InvariantKernel R P) :=
+  invariantKernel_greatest R P Q hQInv hQP
+
+/-- PC27. Both canonical stabilization operators are idempotent pointwise. -/
+theorem canonicalStabilizationIdempotent
+    {W : Type u} (R : Rel W) (P : W -> Prop) (x : W) :
+    (ForwardClosure R (ForwardClosure R P) x <->
+      ForwardClosure R P x) /\
+    (InvariantKernel R (InvariantKernel R P) x <->
+      InvariantKernel R P x) :=
+  ⟨forwardClosure_idempotent_pointwise R P x,
+   invariantKernel_idempotent_pointwise R P x⟩
+
+/-- PC28. The canonical two-state content model recovers Subsumption exactly at stability. -/
+theorem canonicalContentStableRecovery (V : ViewFn) :
+    CanonicalContentSubsumptionHolds V <->
+      (V .T .resolvedPos = .T -> V .B .resolvedPos = .T) :=
+  content_subsumption_holds_iff_stable V
+
+/-- PC29. The v54 Evidence/Decision representation is an exact instance of the generic master theorem. -/
+theorem evidenceDynamicsAsGenericInstance
+    (P : EvidencePreorder) (V : ViewFn) :
+    UniversalContentSubsumptionBy P V <->
+      UniversalStateSubsumption
+        (evidenceDecisionGrowth P) (acceptByView V) :=
+  v54_subsumption_iff_generic_universal_subsumption P V
+
+/-- PC30. Natural identity evaluation recovers universal Subsumption when growth adds no new negative support. -/
+theorem noNewNegativeNaturalRecovery :
+    UniversalContentSubsumptionBy
+      noNewNegativePreorder identityView :=
+  identityView_recovers_noNewNegative_subsumption
+
 end PaperClaims
 end CPOG
