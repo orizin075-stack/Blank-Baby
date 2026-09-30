@@ -1,10 +1,10 @@
-name: CPOG v57 Paper Claims Dynamic Quotient Verification
-# v57 paper-claims/dynamic-quotient CI
+name: CPOG v58 Paper Claims Stability Verification
+# v58 paper-claims/dynamic-quotient/stability CI
 
 on:
   push:
     branches:
-      - cpog-v57-paper-claims-dynamic-quotient
+      - cpog-v58-paperclaims-stability-complete
     paths:
       - 'cpog_verify/**'
       - '.github/workflows/cpog-v45-lean-verify.yml'
@@ -44,7 +44,7 @@ jobs:
       - name: Upload exact checked source
         uses: actions/upload-artifact@v4
         with:
-          name: CPOG-v57-exact-source
+          name: CPOG-v58-exact-source
           path: |
             cpog_verify/CPOG.lean
             cpog_verify/PaperClaims.lean
