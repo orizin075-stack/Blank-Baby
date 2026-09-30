@@ -30,7 +30,11 @@ theorem observationClass_eq_iff_obsEq
       ObsEq O x y := by
   constructor
   · exact Quotient.exact
-  · exact Quotient.sound
+  · intro h
+    change
+      Quotient.mk (observationSetoid O) x =
+        Quotient.mk (observationSetoid O) y
+    exact Quotient.sound h
 
 /--
 Static semantic minimality in quotient form:
