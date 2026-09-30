@@ -57,7 +57,7 @@ namespace CPOG.PaperClaims
 -- Same-model / same-abstraction contrast.
 #check CPOG.split_same_abstraction_modal_contrast
 
--- Generic Subsumption representation and canonical repair.
+-- Generic Subsumption representation, invariant lattice, and canonical repair.
 #check CPOG.universal_state_subsumption_iff_forwardInvariant
 #check CPOG.universal_state_subsumption_failure_iff_nonInvariant
 #check CPOG.forwardClosure_least
@@ -65,6 +65,16 @@ namespace CPOG.PaperClaims
 #check CPOG.forwardClosure_idempotent_pointwise
 #check CPOG.invariantKernel_idempotent_pointwise
 #check CPOG.canonical_stabilizations_restore_subsumption
+#check CPOG.stabilization_adjunction
+#check CPOG.forwardInvariant_iff_rtcInvariant
+#check CPOG.forwardInvariant_iff_forwardClosure_fixed
+#check CPOG.forwardInvariant_iff_invariantKernel_fixed
+#check CPOG.invariant_regions_form_complete_family
+#check CPOG.universalSubsumption_iUnion
+#check CPOG.universalSubsumption_iInter
+#check CPOG.canonical_repair_extremality
+#check CPOG.canonical_stable_approximation
+#check CPOG.universalSubsumption_iff_both_canonical_fixed
 
 -- Evidence-order instances and awareness/evidence interface.
 #check CPOG.preorder_universal_subsumption_iff_upperClosed
@@ -96,9 +106,9 @@ namespace CPOG.PaperClaims
 #check CPOG.SubmissionCore.historicalPersistence
 #check CPOG.SubmissionCore.deferableDot2
 #check CPOG.SubmissionCore.persistentIncompatibleBranchesDot2Failure
-#check CPOG.SubmissionCore.splitAbstractionModalContrast
+#check CPOG.SubmissionCore.directedAtIffDot2All
 #check CPOG.SubmissionCore.universalSubsumptionIffForwardInvariant
-#check CPOG.SubmissionCore.universalSubsumptionFailureIffNonInvariant
+#check CPOG.SubmissionCore.stabilizationAdjunction
 #check CPOG.SubmissionCore.finiteMaxRealization
 #check CPOG.SubmissionCore.maxSealAndConservativity
 #check CPOG.SubmissionCore.possibilityRoleSeparation
