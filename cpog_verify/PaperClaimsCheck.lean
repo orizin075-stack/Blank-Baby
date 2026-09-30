@@ -25,3 +25,11 @@ import CPOG
 #check CPOG.PaperClaims.metaphysicalBridgeNotForced
 #check CPOG.PaperClaims.finiteMaxRealization
 #check CPOG.PaperClaims.maxSealAndConservativity
+
+#check CPOG.PaperClaims.irreversibleDivergenceNotDirected
+#check CPOG.PaperClaims.forwardClosureLeast
+#check CPOG.PaperClaims.invariantKernelGreatest
+#check CPOG.PaperClaims.canonicalStabilizationIdempotent
+#check CPOG.PaperClaims.canonicalContentStableRecovery
+#check CPOG.PaperClaims.evidenceDynamicsAsGenericInstance
+#check CPOG.PaperClaims.noNewNegativeNaturalRecovery
