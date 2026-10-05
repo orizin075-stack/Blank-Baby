@@ -70,9 +70,10 @@ def grade(expected,answer):
     if expected in ('YES','NO'):
         ok=a.startswith('はい') if expected=='YES' else a.startswith('いいえ')
         return 'correct' if ok else 'wrong_certain'
-    if isinstance(expected,Fraction):
+    if isinstance(expected,Fraction) or re.fullmatch(r'\d+(?:\.\d+)?',expected):
+        # claude-patch6: a number is graded exactly (patch5 counted 17 as correct for 7 because '7' is in '17')
         nums=re.findall(r'\d+(?:\.\d+)?',a)
-        return 'correct' if len(nums)==1 and Fraction(nums[0])==expected else 'wrong_certain'
+        return 'correct' if len(nums)==1 and Fraction(nums[0])==Fraction(str(expected)) else 'wrong_certain'
     return 'correct' if a==expected or expected in a else 'wrong_certain'
 
 def main():

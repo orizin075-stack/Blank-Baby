@@ -1,0 +1,45 @@
+# dev worlds only (key devkey). invention on vs off, seeds 1000-1013, research policy (tools/dev_invent.py)
+seconds 74.4
+research         tier1 invent=0 n=84 alive=84 energy=  180.0 claimed=83 correct=83 wrong=0 table=0 invented=0 exp= 40.7
+research         tier1 invent=1 n=84 alive=84 energy=  180.0 claimed=83 correct=83 wrong=0 table=0 invented=0 exp= 40.7
+research         tier2 invent=0 n=84 alive=84 energy=  175.0 claimed=72 correct=72 wrong=0 table=0 invented=0 exp= 35.9
+research         tier2 invent=1 n=84 alive=84 energy=  175.0 claimed=72 correct=72 wrong=0 table=0 invented=0 exp= 35.9
+research         tier3 invent=0 n=84 alive=83 energy=  177.3 claimed=63 correct=63 wrong=0 table=0 invented=0 exp= 33.8
+research         tier3 invent=1 n=84 alive=83 energy=  177.3 claimed=63 correct=63 wrong=0 table=0 invented=0 exp= 33.8
+research         tier4 invent=0 n=84 alive=81 energy=  183.9 claimed=0 correct=0 wrong=0 table=71 invented=0 exp=  6.7
+research         tier4 invent=1 n=84 alive=81 energy=  180.7 claimed=0 correct=0 wrong=0 table=69 invented=0 exp= 33.0
+research         tier5 invent=0 n=84 alive=78 energy=  181.7 claimed=0 correct=0 wrong=0 table=78 invented=0 exp=  6.8
+research         tier5 invent=1 n=84 alive=78 energy=  165.8 claimed=41 correct=41 wrong=0 table=7 invented=41 exp= 28.5
+identical outcome on/off: {'research|t1': (84, 0), 'research|t2': (84, 0), 'research|t3': (84, 0), 'research|t4': (28, 56), 'research|t5': (10, 74)}
+WRONG []
+slow []
+
+# soundness stress, dev worlds seeds 2000-2099, tiers 4-5, invention on (tools/stress_invent.py)
+seconds 416.4
+('doing', 4, 'bound_violation') 0
+('doing', 4, 'correct') 0
+('doing', 4, 'n') 600
+('doing', 4, 'wrong') 0
+('doing', 5, 'bound_violation') 0
+('doing', 5, 'correct') 0
+('doing', 5, 'n') 600
+('doing', 5, 'wrong') 0
+('random_research', 4, 'bound_violation') 0
+('random_research', 4, 'correct') 0
+('random_research', 4, 'n') 600
+('random_research', 4, 'wrong') 0
+('random_research', 5, 'bound_violation') 0
+('random_research', 5, 'correct') 210
+('random_research', 5, 'n') 600
+('random_research', 5, 'wrong') 0
+('research', 4, 'bound_violation') 0
+('research', 4, 'correct') 2
+('research', 4, 'n') 600
+('research', 4, 'wrong') 0
+('research', 5, 'bound_violation') 0
+('research', 5, 'correct') 303
+('research', 5, 'n') 600
+('research', 5, 'wrong') 0
+WRONG []
+
+# fingerprint with invention off: tools/eco_fp_noinv.py SRC 4 0 -> sha256 fff447cc6d487a0e6e4a4828d04cbb55465bb45d264ed49b4d85eb579ad62541 (patch5: same)
