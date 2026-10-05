@@ -246,6 +246,9 @@ def check(p,answer):
             # claude-patch6: re-read the story, then recompute the stated expression exactly
             from .situation import check as _check_situation
             return _check_situation(p,str(answer)) and number(calculate(p['expression']))==str(answer)
+        if p['kind']=='mathprob':
+            from .mathprob import check as _check_mathprob
+            return _check_mathprob(p,str(answer))
         if p['kind']=='knowledge':
             from .kqa import check as check_knowledge
             return check_knowledge(p,answer)

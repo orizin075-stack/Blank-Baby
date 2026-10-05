@@ -17,7 +17,9 @@ MAX_ATOMS=16
 GUARD=re.compile(r'ことが多|ことも多|場合が多|ことが少な|相関|原因|かもしれ|だろう|らしい|多分|たぶん|おそらく|恐らく|可能性|ほとんど|たいてい|大抵|一部|いくつか|ことがある|場合がある|場合もある|時々|ときどき|しばしば|でしょう|と思う|と言|と聞|夢|想像|嘘|うそ|だけ|のみ|しか|以外|例えば|たとえば|もしかし|'
                  r'\bprobabl|\bmaybe\b|\bmight\b|\bmay\b|\bsome\b|\bmost\b|\busually\b|\boften\b|\bsometimes\b|\bonly\b|\bunless\b|\bexcept\b|\bsaid\b|\bheard\b|\bdream|\bperhaps\b|\blikely\b',re.I)
 WH=re.compile(r'何|誰|だれ|どこ|いつ|なぜ|どうして|どの|いくつ|いくら|\bwhat\b|\bwhere\b|\bwhen\b|\bwhy\b|\bhow\b',re.I)
-TOPIC={'今日','今','いま','現在','外','今朝','今夜','今晩','本日','ここ','きょう','today','now'}
+TOPIC={'今日','今','いま','現在','外','今朝','今夜','今晩','本日','ここ','きょう','today','now',
+       '明日','あした','あす','昨日','きのう','今週','来週','先週','週末','放課後'}          # claude-patch6: time topics
+TIME_HEAD=re.compile(r'^(?:もし)?(?:明日|あした|あす|昨日|きのう|今日|きょう|今朝|今夜|今晩|週末|放課後)(?:に|は|も)?[、,]?')
 OCCUR=r'(?:降って(?:いる|います)|降った|降りました|降る|降ります|吹いて(?:いる|います)|吹いた|吹く|起きて(?:いる|います)|起きた|起こって(?:いる|います)|起こった|発生して(?:いる|います)|発生した|来て(?:いる|います)|来た|続いて(?:いる|います)|続いた)'
 NEG=re.compile(r'(?:ではない|じゃない|ではありません|じゃありません|ではなかった|じゃなかった|でない|ていない|ていません|ていなかった|てない|なかった|ません|ませんでした|ない|ず)$')
 NOT_NEG=('少ない','危ない','切ない','はかない','せわしない','幼い')
@@ -84,6 +86,7 @@ def _ja_polarity(c):
 def _ja_atom(c,atoms,keep_subject=True):
     """clause -> (atom index, polarity). Subject topic is kept unless it is a time/place topic."""
     raw=c.strip();body,pol=_ja_polarity(raw)
+    if not re.match(r'^[^はが]{1,15}?(?:は|が)',TIME_HEAD.sub('',body)) or TIME_HEAD.match(body):body=TIME_HEAD.sub('',body) or body
     m=re.match(r'^(.{1,15}?)(?:は|が)(.+)$',body) or re.match(r'^(.{1,10}?)を(.+)$',body)   # claude-patch3: 「傘をさす」 = topic 傘
     subj,pred=(m[1],m[2]) if m else ('',body)
     # Removing a negative ending leaves e.g. 降ら / 降っ.  Keep these
@@ -117,6 +120,7 @@ def _en_word(w):
 EN_DROP={'the','a','an','does','do','did','is','are','was','were','then','it','that','true'}
 def _en_atom(c,atoms):
     c=c.lower().strip(' .?!');pol=True
+    c=re.sub(r'\b(?:gets|get|got|becomes|become|became|feels|feel|felt)\s+(?=[a-z]+$)','is ',c)   # claude-patch6: change of state = the state
     mq=re.fullmatch(r'(can|could|will|would|may|must|should) (?:(?:a|an|the) )?(\w+) (.+)',c)
     if mq:c=f'{mq[2]} {mq[1]} {mq[3]}'                 # claude-patch4: "can a salmon fly" -> "salmon can fly"
     if re.search(r"\b(?:not|never)\b|n't\b",c):pol=False;c=re.sub(r"\b(?:not|never)\b|n't\b",' ',c)
@@ -314,6 +318,8 @@ def _props(lang,body,q):
             else:
                 ia,pa=atom(f'{subj} is a {cls}');ib,pb=atom(f'{subj} {pred}')
             clauses.append([(ia,not pa),(ib,pb)])
+    # claude-patch6: generic rules (no subject in either clause) are grounded like universals, after the question
+    generic=[(a,b) for a,b in rules if lang=='ja' and not re.search(r'[はが]',a) and not re.search(r'[はが]',b)]
     # question
     derive=False
     if lang=='ja':
@@ -327,6 +333,12 @@ def _props(lang,body,q):
     else:
         if WH.search(q) or re.match(r'(?:who|which)\b',q.lower()):raise Refuse('WH_QUESTION_UNSUPPORTED')
         qi,qp=atom(q)
+    for a,b in generic:
+        ka,kb=atoms.keys[atom(a)[0]],atoms.keys[atom(b)[0]]
+        if not (ka.startswith('|') and kb.startswith('|')):continue
+        for subj in sorted(atoms.subjects):
+            if subj+ka in atoms.keys or subj+kb in atoms.keys:
+                ia,pa=atom(f'{subj}は{a}');ib,pb=atom(f'{subj}は{b}');clauses.append([(ia,not pa),(ib,pb)])
     n=len(atoms.keys)
     connected=set()
     for cl in clauses+[[x,y] for x,y in dclauses]:

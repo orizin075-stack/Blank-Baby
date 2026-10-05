@@ -54,7 +54,8 @@ def _dim(u):
     return None
 
 def normalize(q):
-    s=unicodedata.normalize('NFKC',str(q))
+    s=unicodedata.normalize('NFKC',str(q)).replace('平方センチメートル','平方cm').replace('平方メートル','平方m')
+    s=re.sub(r'(cm|mm|km|m)2(?![\d])',r'平方\1',s)          # claude-patch6: cm² is a unit with an exponent
     for a,b in WORD_UNITS:s=s.replace(a,b)
     s=re.sub(r'[〇零一二三四五六七八九十百千万]+(?=\s*(?:個|枚|本|冊|台|人|円|匹|頭|羽|杯|回|点|粒|袋|箱|束|歳|才|つ|日|時間|分|秒|年|月|週間|割|ページ|km|m|cm|kg|g|L))',
              lambda m:str(_kanji_num(m.group())) if _kanji_num(m.group()) is not None else m.group(),s)
@@ -563,13 +564,202 @@ def _b_en_change_role_ok(s):
     if w and not st and w[1].lower() not in ('he','she','they'):return False
     return True
 
+# ---- claude-patch6: Parser B for the families of mathprob.py, read from this file's own tokens.
+# Same contract: a value only when every numeric token is used; otherwise None (never a guess).
+def _b_vals(toks):return [t for t in toks if t['kind'] not in ('per_unit_one','label')]
+def _b_after(s,t,n=4):return s[t['span'][1]:t['span'][1]+n]
+def _b_counter(s,t):
+    m=re.match(r'\s*(km|cm|mm|kg|mg|mL|dL|L|g|m|[^\d\s、,。と]{1,2})',_b_after(s,t,6))
+    return m[1] if m else None
+
+def _b_avg(s,toks):
+    if not re.search(r'平均|\baverage\b|\bmean\b',s,re.I):return None
+    v=_b_vals(toks);cnt=[t for t in v if re.match(r'\s*(?:回|人|日間|日|教科|試合|週|チーム|個|本|冊)\s*(?:の|で|間)',_b_after(s,t,5))]
+    one=[t for t in v if t['value']==1 and re.match(r'\s*(?:日|人|回|試合|週)\s*(?:あたり|の)?\s*平均',_b_after(s,t,8))]
+    vals=[t for t in v if t not in cnt and t not in one]
+    if len(cnt)>1 or len(vals)<2 or len({_b_counter(s,t) for t in vals})!=1:return None
+    if cnt and cnt[0]['value']!=len(vals):return None
+    if not cnt and re.search(r'\b(?:of|the)\s+\d+\s+[a-z]+\s+(?:are|were)\b',s,re.I):return None
+    return _fmt(sum(t['value'] for t in vals)/len(vals))
+
+def _b_lcm(s,toks):
+    lcm=re.search(r'最小公倍数|(?:least|lowest|smallest) common multiple',s,re.I);g=re.search(r'最大公約数|(?:greatest|highest|largest) common (?:divisor|factor)',s,re.I)
+    if bool(lcm)==bool(g):return None
+    v=_b_vals(toks)
+    if not 2<=len(v)<=4 or any(t['value'].denominator!=1 or t['value']<=0 for t in v):return None
+    ns=[int(t['value']) for t in v];acc=ns[0]
+    for x in ns[1:]:
+        a,b=acc,x
+        while b:a,b=b,a%b
+        acc=acc*x//a if lcm else a
+    return _fmt(acc)
+
+def _b_next(s,toks):
+    if not re.search(r'次の数|つぎの数|次に来る|\bcomes? next\b|\bnext number\b',s,re.I):return None
+    v=[t['value'] for t in _b_vals(toks)]
+    if len(v)<4:return None
+    steps=[b-a for a,b in zip(v,v[1:])]
+    if len(set(steps))==1:return _fmt(v[-1]+steps[0])
+    if 0 in v[:-1]:return None
+    rs=[b/a for a,b in zip(v,v[1:])]
+    if len(set(rs))==1 and rs[0].denominator==1:return _fmt(v[-1]*rs[0])
+    return None
+
+def _b_shape(s,toks):
+    area=bool(re.search(r'面積|\barea\b',s,re.I));per=bool(re.search(r'まわり|周り|周の長さ|\bperimeter\b',s,re.I))
+    if area==per:return None
+    v=[t for t in _b_vals(toks) if t['dim']=='len'];allv=_b_vals(toks)
+    one_side=[t for t in allv if t['value']==1 and re.match(r'\s*辺',_b_after(s,t,2))]
+    if len(v)+len(one_side)!=len(allv) or len({t['unit'] for t in v})!=1:return None
+    def near(word):
+        hits=[t for t in v if re.search(word+r'[^\d]{0,4}$',s[max(0,t['span'][0]-8):t['span'][0]],re.I) or re.match(r'\s*(?:cm|m|km|mm)\s+'+word,s[t['span'][1]:t['span'][1]+12],re.I)]
+        return hits[0] if len(hits)==1 else None
+    if re.search(r'正方形|\bsquare\b',s,re.I) and len(v)==1:
+        x=v[0]['value'];return _fmt(x*x if area else 4*x)
+    if re.search(r'長方形|\brectangle\b',s,re.I) and len(v)==2:
+        a,b=near(r'(?:たて|縦)'),near(r'(?:よこ|横)')
+        if not (a and b):a,b=near(r'long|length'),near(r'wide|width')
+        if not (a and b) or a is b:return None
+        return _fmt(a['value']*b['value'] if area else 2*(a['value']+b['value']))
+    if re.search(r'三角形',s) and area and len(v)==2:
+        a,b=near('底辺'),near('高さ')
+        if not (a and b) or a is b:return None
+        return _fmt(a['value']*b['value']/2)
+    return None
+
+def _b_partof(s,toks):
+    v=_b_vals(toks)
+    m=re.search(r'(\d+(?:\.\d+)?)\s*[^\d、。]{0,2}\s*の\s*(\d+)\s*分の\s*(\d+)',s)
+    if m and len(v)==3:
+        if Fraction(m[2])==0:return None
+        r=Fraction(m[1])*Fraction(m[3])/Fraction(m[2])
+        return _fmt(r) if r.denominator==1 or not re.search(r'\d\s*(?:人|個|本|枚|冊|匹|円)',s) else None
+    p=[t for t in v if t['kind']=='percent']
+    if len(p)==1 and len(v)==2 and re.search(r'そのうち|うち',s) and not re.search(r'引き|引|増し|値上|割引|off|discount',s,re.I):
+        base=[t for t in v if t is not p[0]][0];r=base['value']*p[0]['value']/100
+        return _fmt(r) if r.denominator==1 else None
+    return None
+
+def _b_divide(s,toks):
+    v=_b_vals(toks)
+    if len(v)!=2 or not re.search(r'ずつ',s):return None
+    per=[t for t in v if re.match(r'\s*[^\d\s、。]{1,2}\s*ずつ',_b_after(s,t,6))]
+    if len(per)!=1:return None
+    k=per[0]['value'];n=[t for t in v if t is not per[0]][0]['value']
+    if k<=0 or n.denominator!=1 or k.denominator!=1 or n<=k and not re.search(r'あまり|余り',s):return None
+    q=_b_question(_b_sentences(s)) or ''
+    if re.search(r'あまり|余り',q) and not re.search(r'何\s*(?:人|台|つ|組|回)\s*(?:に|分|で|できて|配れて)',q):return _fmt(int(n)%int(k))
+    if re.search(r'何\s*(?:台|脚|艘|そう)\s*(?:いり|要り|必要)|全員[^。]*何\s*(?:台|つ|脚|列|組|回)',q):return _fmt(-(-int(n)//int(k)))
+    if re.search(r'でき|作れ|つくれ|配れ|分けられ',q) and re.search(r'いくつ|何',q):return _fmt(int(n)//int(k))
+    return None
+
+def _b_regroup(s,toks):
+    """N receivers, k each, r left over (or short) -> how many at first"""
+    v=_b_vals(toks)
+    if len(v)!=3 or not re.search(r'はじめ|初め|最初|もともと',s):return None
+    each=[t for t in v if re.match(r'\s*[^\d\s、。]{1,2}\s*ずつ',_b_after(s,t,6))]
+    rest=[t for t in v if re.match(r'\s*[^\d\s、。]{1,2}\s*(?:あまり|余り|足りな|足りま|たりな|たりま)',_b_after(s,t,8))]
+    if len(each)!=1 or len(rest)!=1 or each[0] is rest[0]:return None
+    n=[t for t in v if t is not each[0] and t is not rest[0]][0]
+    if n['span'][0]>each[0]['span'][0]:return None
+    sign=-1 if re.match(r'\s*[^\d\s、。]{1,2}\s*(?:足り|たり)',_b_after(s,rest[0],8)) else 1
+    return _fmt(n['value']*each[0]['value']+sign*rest[0]['value'])
+
+def _b_other_part(s,toks):
+    """everyone minus those described: 「36人…めがねをかけている人は9人…かけていない人は何人」"""
+    v=_b_vals(toks);q=_b_question(_b_sentences(s)) or ''
+    if len(v)!=2 or not re.search(r'(?:ていない|でない|ない)\s*(?:人|もの)?\s*(?:は|が)\s*何',q):return None
+    a,b=v
+    if not re.search(r'(?:ている|でいる|の)\s*(?:人|もの)?\s*(?:は|が)\s*$',s[max(0,b['span'][0]-12):b['span'][0]]):return None
+    return _fmt(a['value']-b['value']) if a['value']>=b['value'] else None
+
+def _b_age(s,toks):
+    v=_b_vals(toks)
+    if len(v)!=2 or not re.search(r'歳',s):return None
+    r=re.search(r'(\d+)\s*(?:歳|才)\s*(年下|年上|若い|上)',s)
+    if not r:return None
+    base=[t for t in v if t['span'][0]!=r.start(1)]
+    if len(base)!=1:return None
+    d=Fraction(r[1]);x=base[0]['value']
+    who=re.search(r'([^\s、。]{1,8})\s*(?:は|が)\s*([^\s、。]{1,8})\s*より\s*\d',s)
+    q=_b_question(_b_sentences(s)) or ''
+    if not who or not re.search(re.escape(who[1])+r'\s*(?:は|が)',q):return None
+    if not re.search(re.escape(who[2])+r'\s*(?:は|が)\s*\d+',s):return None
+    return _fmt(x-d if r[2] in ('年下','若い') else x+d)
+
+def _b_speed(s,toks):
+    v=_b_vals(toks)
+    if len(v)!=2:return None
+    m=re.search(r'(時速|分速|秒速)\s*(\d+(?:\.\d+)?)\s*(km|m)',s)
+    q=_b_question(_b_sentences(s)) or s
+    if m:
+        per={'時速':'時間','分速':'分','秒速':'秒'}[m[1]]
+        a=re.search(r'何\s*(時間|分|秒)',q)
+        d=[t for t in v if t['span'][0]!=m.start(2) and t['dim']=='len']
+        if not a or len(d)!=1:return None
+        tv=d[0]['value']*LEN[d[0]['unit']]/LEN[m[3]]/Fraction(m[2])*TIME[per]/TIME[a[1]]
+        return _fmt(tv)
+    m=re.search(r'時速\s*何\s*(km|m)|分速\s*何\s*(km|m)',q)
+    if m:
+        d=[t for t in v if t['dim']=='len'];tm=[t for t in v if t['dim']=='time']
+        if len(d)!=1 or len(tm)!=1:return None
+        unit=m[1] or m[2];per='時間' if m[1] else '分'
+        return _fmt(d[0]['value']*LEN[d[0]['unit']]/LEN[unit]/(tm[0]['value']*TIME[tm[0]['unit']]/TIME[per]))
+    m=re.search(r'travels?\s+(\d+(?:\.\d+)?)\s*(km|miles|kilometers|meters)\s+in\s+(\d+(?:\.\d+)?)\s*(hours?|minutes?)[^?]*\bspeed\b',s,re.I)
+    if m:return _fmt(Fraction(m[1])/Fraction(m[3])) if Fraction(m[3]) else None
+    return None
+
+def _b_daily(s,toks):
+    v=_b_vals(toks)
+    if len(v)!=2 or not re.search(r'ずつ',s):return None
+    rate=[t for t in v if re.match(r'\s*[^\d\s、。]{1,3}\s*ずつ',_b_after(s,t,7))]
+    if len(rate)!=1 or not re.search(r'毎日|1\s*日\s*(?:に|あたり)',s[:rate[0]['span'][0]]):return None
+    d=[t for t in v if t is not rate[0]][0]
+    unit=re.match(r'\s*(日間?|週間?)',_b_after(s,d,4))
+    if not unit:return None
+    days=d['value']*(7 if unit[1].startswith('週') else 1)
+    return _fmt(rate[0]['value']*days)
+
+def _b_coins_and_items(s,toks):
+    """paid with bills / coins (or a stated sum), bought priced items: sum or change"""
+    v=_b_vals(toks);q=_b_question(_b_sentences(s)) or ''
+    if not re.search(r'円',s) or not re.search(r'おつり|お釣り|合計|全部で|いくら|代金',q):return None
+    used=set();total=Fraction(0)
+    for m in re.finditer(r'1\s*(?:個|本|冊|枚|つ)\s*(\d+)\s*円の\s*[^、。\d]{1,10}?を\s*(\d+)\s*(?:個|本|冊|枚|つ)',s):
+        total+=Fraction(m[1])*Fraction(m[2]);used|={m.start(1),m.start(2)}
+    for m in re.finditer(r'(?<![\d.])(\d+)\s*円の\s*[^、。\d]{1,10}?(?=と|を|、)',s):
+        if m.start(1) in used:continue
+        if re.match(r'を\s*\d',s[m.end():m.end()+3]):return None
+        total+=Fraction(m[1]);used.add(m.start(1))
+    if not used:return None
+    if re.search(r'おつり|お釣り',q):
+        pay=re.search(r'(\d+)\s*円\s*(?:札|玉)?\s*(?:を)?\s*(?:(\d+)\s*枚)?\s*(?:で|出|払)',s)
+        if not pay or pay.start(1) in used:return None
+        used.add(pay.start(1))
+        if pay[2]:used.add(pay.start(2))
+        paid=Fraction(pay[1])*Fraction(pay[2] or 1);r=paid-total
+    else:r=total
+    starts={t['span'][0] for t in v}
+    ones={t['span'][0] for t in toks if t['kind']=='per_unit_one'}
+    if starts-ones!=used-ones or r<0:return None
+    return _fmt(r)
+
+def _b_groups_en(s,toks):
+    v=_b_vals(toks)
+    if len(v)!=2:return None
+    if re.search(r'\bwith\s+\d+\s+\w+\s+(?:in|on)\s+each\b|\bholds?\s+\d+\b[^?]*\bin\s+\d+\b|\bcosts?\s+\d+(?:\.\d+)?\s+\w+\s+each\b',s,re.I):
+        return _fmt(v[0]['value']*v[1]['value'])
+    return None
+
+PB6=(_b_avg,_b_lcm,_b_next,_b_shape,_b_partof,_b_divide,_b_regroup,_b_other_part,_b_age,_b_speed,_b_daily,_b_coins_and_items,_b_groups_en)
+
 def parser_b(q):
     s=normalize(q);toks=tokens(q)
     try:
         cal=_b_calendar(s)
         if cal:return cal
         ja=bool(re.search(r'[぀-ヿ一-鿿]',s))
-        for f in (_b_roles,_b_en_roles):
+        for f in (_b_roles,_b_en_roles)+PB6:
             v=f(s,toks)
             if v is not None:return ('value',v)
         for f in (_b_rate,_b_price,_b_conversion,_b_unit_price,_b_groups,_b_compare,_b_equation,_b_change,_b_en_change):

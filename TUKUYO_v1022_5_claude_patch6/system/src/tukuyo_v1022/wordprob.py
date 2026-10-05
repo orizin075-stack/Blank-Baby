@@ -265,7 +265,7 @@ def _ja(t):
     if NONOCCURRENCE.search(t) and QTY.search(t):
         return {'refused':'WORD_PROBLEM_EVENT_NOT_CONFIRMED'}
     qpos=max(t.rfind('。',0,len(t)-1)+1,0);q=t[qpos:]
-    if not re.search(r'[?？]|何|いくつ|いくら|どれだけ|どのくらい',q):return None
+    if not re.search(r'[?？]|何|いくつ|いくら|どれだけ|どのくらい|求め',q):return None
     if HEDGE.search(t[:qpos]) or HEDGE.search(re.sub(r'たら|と(?=[何いど])','',q)):
         return {'refused':'HEDGED_OR_HYPOTHETICAL_QUANTITIES'} if QTY.search(t) else None
     percentages=_ja_sequential_percent(t)

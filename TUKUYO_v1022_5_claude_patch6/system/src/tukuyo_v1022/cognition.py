@@ -205,6 +205,10 @@ SITUATION_REASONS={'SITUATION_TARGET_NOT_DETERMINED':'聞かれている人や�
     'SITUATION_TIME_OF_QUESTION_UNCLEAR':'いつの数を聞いているのか（はじめか今か）決められません。','SITUATION_HEDGED_OR_NEGATED':'数や出来事がはっきり決まっていないので、答えを確定しません。',
     'SITUATION_HEDGED_OR_UNKNOWN_AMOUNT':'数がはっきり決まっていないので、答えを確定しません。','SITUATION_AMBIGUOUS_VERB':'見方によって増えるとも減るとも読める動詞なので、決められません。',
     'SITUATION_ACTIVITY_EFFECT_UNKNOWN':'読んだ・数えたなどの出来事で数が減るのかどうか決められません。','SITUATION_UNKNOWN_QUESTION_VERB':'質問の動詞の意味を読み取れません。'}
+def _gate_ok(query,res):
+    from .semantic_gate import audit as _semantic_audit
+    try:return bool(_semantic_audit(query,res['answer'],res.get('proof')).get('ok'))
+    except Exception:return False
 def _same_number(a,b):
     try:return proofs.calculate(str(a))==proofs.calculate(str(b))
     except (ValueError,SyntaxError,ZeroDivisionError,OverflowError):return str(a)==str(b)
@@ -234,9 +238,32 @@ def _solve_core(data,query,formal_task=None):
             y=_yes(sit['answer'],sit['proof'],.92)
             if not y['uncertain']:return {**y,'question_role':sit['role'],'second_reading':'SITUATION_MODEL_ONLY'}
         elif not _same_number(r['answer'],sit['answer']) and (r.get('proof') or {}).get('kind') in ('inventory','arithmetic','deliberation'):
+            old_ok,new_ok=_gate_ok(query,r),_gate_ok(query,sit)
+            if new_ok and not old_ok:
+                y=_yes(sit['answer'],sit['proof'],.92)
+                if not y['uncertain']:return {**y,'question_role':sit['role'],'second_reading':'OLDER_READING_DID_NOT_ACCOUNT_FOR_THE_QUESTION'}
+            if old_ok and not new_ok:return r
             return {**_no('PRODUCERS_DISAGREE'),'withheld_answer':str(r['answer']),'situation_answer':sit['answer'],
                     'explanation':f'二つの読み方で答えが食い違った（{r["answer"]} と {sit["answer"]}）ので、答えを確定しません。'}
         else:r={**r,'second_reading':'SITUATION_MODEL_AGREES'}
+    # claude-patch6: problem families no older producer reads (mathprob.py). They answer only when the older
+    # producers abstained, and a disagreement with an older answer withholds both.
+    from .mathprob import solve as _mathprob
+    mp=_mathprob(query)
+    if mp and 'answer' in mp:
+        if r.get('answer') is None or r.get('uncertain'):
+            if r.get('reason') in ('HEDGED_OR_HYPOTHETICAL_QUANTITIES','NON_EXACT_OR_SIGNED_COUNT','DELIBERATION_AMBIGUOUS_QUANTITY'):return r
+            if r.get('reason')=='WORD_PROBLEM_EVENT_NOT_CONFIRMED' and not mp.get('negation_ok'):return r
+            y=_yes(mp['answer'],mp['proof'],.92)
+            if not y['uncertain']:return y
+        elif not _same_number(r['answer'],mp['answer']) and (r.get('proof') or {}).get('kind') in ('inventory','arithmetic','deliberation','meta_derivation','situation','qtime'):
+            old_ok,new_ok=_gate_ok(query,r),_gate_ok(query,mp)
+            if new_ok and not old_ok:
+                y=_yes(mp['answer'],mp['proof'],.92)
+                if not y['uncertain']:return {**y,'second_reading':'OLDER_READING_DID_NOT_ACCOUNT_FOR_THE_QUESTION'}
+            if old_ok and not new_ok:return r
+            return {**_no('PRODUCERS_DISAGREE'),'withheld_answer':str(r['answer']),'mathprob_answer':mp['answer'],
+                    'explanation':f'二つの読み方で答えが食い違った（{r["answer"]} と {mp["answer"]}）ので、答えを確定しません。'}
     return r
 def _solve_core_v5(data,query,formal_task=None):
     learned=state(data);s=normalize(query)

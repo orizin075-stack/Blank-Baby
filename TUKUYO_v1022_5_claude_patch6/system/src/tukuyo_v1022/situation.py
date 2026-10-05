@@ -343,6 +343,7 @@ def _ja(t,query):
     if OTHER_JA.search(LABEL.sub('#',t)) or re.search(r'\d',re.sub(r'[2-9]人(?:合わせて|あわせて|で|の合計|とも)','',q)) or '入り' in t and not PKG.search(t):return None
     ctx={'role':_ja_role(q)}
     try:
+        if NEG_JA.search(q) and not NEG_JA.search(''.join(body)):return None
         if HEDGE_JA.search(''.join(body)) or HEDGE_JA.search(re.sub(r'たら|と(?=[何いど])','',q)) or NEG_JA.search(t):
             _refuse('SITUATION_HEDGED_OR_NEGATED')
         b=_ja_build(body,query)
