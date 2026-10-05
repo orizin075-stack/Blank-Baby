@@ -9,7 +9,7 @@ SP=Path('/tmp/claude-0/-home-user-Blank-Baby/dd3c6b53-ae17-5414-bda7-717330a62fb
 PKG=Path('/home/user/Blank-Baby/TUKUYO_v1022_5_claude_patch6')
 sys.path.insert(0,str(PKG/'system/tools'));from llm_eval import grade
 V={'patch5':(SP/'run4/system',SP/'run4/deliverables/TUKUYO_v1022_5_patch5_TRUST_ANCHOR.txt'),
-   'patch6':(SP/'run6c/system',SP/'run6c/deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt')}
+   'patch6':(SP/'run6f/system',SP/'run6f/deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt')}
 SETS={s:json.loads((PKG/'evidence_claude_patch6'/f'heldout_{s}.json').read_text()) for s in 'FT'}
 SETS.update({s:json.loads((PKG/'evidence_claude_patch5'/f'heldout_{s}.json').read_text()) for s in 'CDE'})
 env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
