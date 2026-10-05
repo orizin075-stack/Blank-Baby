@@ -27,11 +27,13 @@ python -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo_patch5 research-
 | 確かめたこと | 結果 |
 |---|---|
 | 署名と manifest（`verify_release.py`） | 合格（1358 ファイル） |
+| 全体テスト（`run_selftest.py`） | 421/421 合格（29 分）。実行後も署名の検証が通る |
 | 研究エコロジー（`research-ecology --seeds 20 --start 50000`） | 同梱の結果と一致。result_sha256 `df5791db…` も、全 episode も同じ |
 | 研究ニッチの系譜試験（`tools/research_lineage.py --ticks 256 --max-age 80`） | 同梱の結果と一致（受け継ぐ／受け継がない、16 個体すべて） |
 | Parser B の一致率（`think`、未見 E・D・C） | 50/77。179 問すべてで、答えと判定が同梱の結果と同じ |
 | `llm-ask` の正答（未見 E・D・C） | 32/36、42/50、73/93。確信を持った誤り 0 |
 | 研究ニッチを使わない既定の代謝（4 家系・24 tick） | 同梱の結果と一致（正答 54/54、継承 12 回、貯蔵庫 47200）。差分から組み直した patch4 とも同じ数字 |
+| 長時間融合試験（`tools/longrun_fusion.py --minutes 10`、短縮版） | 149 操作（推論 70 問、強制停止 12 回、復元 5 回）で違反 0 |
 
 ### 気をつけること
 
