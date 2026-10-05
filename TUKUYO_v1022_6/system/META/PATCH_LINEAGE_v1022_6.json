@@ -1,6 +1,6 @@
 {
   "schema": "tukuyo.v1022_6.claude_patch_lineage/1",
-  "revision": "v1022.5+claude-patch6",
+  "revision": "v1022.6",
   "parent_revision": "v1022.5+claude-patch5",
   "parent_archive_sha256": "8488dada660dc8ae18401b831183f9cfbf76c60d86eec64cf2271da5f72f3d2b",
   "parent_receipt_public_key": "22jzm2l8ZiBxLF0QvN5IpCcq0NQEdPwcNodO/Ey83zA=",
@@ -12,5 +12,6 @@
     "FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk="
   ],
   "trained_seed_payload_unchanged": true,
-  "new_external_llm_conversation": false
+  "new_external_llm_conversation": false,
+  "content": "v1022.5-fusion + claude-patch3, claude-patch4, claude-patch5 (signed by the parent receipt key) + claude-patch6"
 }

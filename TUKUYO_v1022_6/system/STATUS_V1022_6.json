@@ -1,0 +1,30 @@
+{
+ "release_revision": "v1022.6",
+ "classification": "EXPERIMENTAL",
+ "base": "v1022.5-fusion",
+ "incoming": [
+  "claude-patch3",
+  "claude-patch4",
+  "claude-patch5",
+  "claude-patch6"
+ ],
+ "content": "V1022.5 Fusion with claude-patch3 to claude-patch6: question-role reading (situation model), replayable proofs for new word-problem families, a separately written Parser B, logic and memory paraphrases, the V1023r open-world research preview with law invention inside a fixed grammar, and the V1022.6 long-run fusion test",
+ "preserves_v1022_5_fusion": true,
+ "runtime_llm_required": false,
+ "question_role_reading": true,
+ "replayable_proofs_for_word_problem_families": true,
+ "independent_parser_b_written_by_same_author": true,
+ "open_world_research_preview_v1023r": true,
+ "law_invention_inside_fixed_grammar": true,
+ "invents_new_kinds_of_laws": false,
+ "longrun_fusion_4h_completed": null,
+ "24h_completed": false,
+ "real_external_ai_teacher_campaign_completed": false,
+ "heldout_sets_written_by_same_author_as_code": true,
+ "third_party_heldout_evaluation": false,
+ "publisher_key": "FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk=",
+ "publisher_continuity_requires_out_of_band_trust": true,
+ "general_intelligence_established": false,
+ "self_code_modification": false,
+ "consciousness_established": false
+}

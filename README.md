@@ -3,7 +3,7 @@
 
 ## TUKUYO v1022.5 Fusion + claude-patch6
 
-`TUKUYO_v1022_5_claude_patch6/` は、claude-patch5 を土台にした claude-patch6 です。説明は [README_CLAUDE_PATCH6_JA.md](TUKUYO_v1022_5_claude_patch6/README_CLAUDE_PATCH6_JA.md) にあります。受け取ったままの patch5 は commit `e8a1c8c` にあり、その説明は [README_CLAUDE_PATCH5_JA.md](TUKUYO_v1022_5_claude_patch6/README_CLAUDE_PATCH5_JA.md) です。
+`TUKUYO_v1022_6/` は、claude-patch5 を土台にした claude-patch6 です。説明は [README_CLAUDE_PATCH6_JA.md](TUKUYO_v1022_6/README_CLAUDE_PATCH6_JA.md) にあります。受け取ったままの patch5 は commit `e8a1c8c` にあり、その説明は [README_CLAUDE_PATCH5_JA.md](TUKUYO_v1022_6/README_CLAUDE_PATCH5_JA.md) です。
 
 ### patch6 で変わったこと
 
@@ -11,7 +11,7 @@
 - **問題の型を増やした。** 平均・面積・最小公倍数・数列・割合・あまり・何倍・速さ・1 個の値段・おつり・英語の比較など。どの答えにも、再計算できる証明が付きます。
 - **論理と記憶の言い換え**（明日・昨日、主語のない規則、gets tired、「〜といえば」など）。
 - **研究エンジンが法則を組み立てる。** 手持ちの法則で説明できない世界で、14,906 個の法則の文法から候補を組み立てて試します。文法全体と比べても勝つときだけ主張します。
-- 署名の鍵を新しくしました（patch1〜5 の鍵がこの作業環境にないため）。信頼アンカーは `deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt` です。patch5 で作った個体も、そのまま動きます。
+- 署名の鍵を新しくしました（patch1〜5 の鍵がこの作業環境にないため）。信頼アンカーは `deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt` です。patch5 で作った個体も、そのまま動きます。
 
 ### 結果（くわしくはパッチ README）
 
@@ -34,8 +34,8 @@ F・T は私が作る前に固定しましたが、開発用の問題も私が�
 Python 3.12 以降と `cryptography` が必要です。個体のデータは、配布フォルダの外に置いてください。
 
 ```sh
-cd TUKUYO_v1022_5_claude_patch6/system
-A=../deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt
+cd TUKUYO_v1022_6/system
+A=../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
 python -B tools/verify_release.py . --trusted-pubkey-file $A
 python -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo_patch6 init
 python -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo_patch6 think -- 'りんごが12個あります。妹に5個あげました。あげたのは何個？'

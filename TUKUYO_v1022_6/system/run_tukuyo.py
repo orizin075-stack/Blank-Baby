@@ -37,8 +37,16 @@ def v955_full_status(api,data,migration_trust=None):
     s['ok']=bool(s.get('ok',True) and guard['runtime_guard_installed'] and guard['builtin_spec_ok'] and (not migration_trust or guard['migration'].get('ok',False)))
     return s
 
+RELEASE_REVISION_FALLBACK='v1022.6'
+def release_revision():
+    """the release revision recorded in the signed receipt (the startup guard verifies that receipt against the
+    external trust anchor); a re-sign with --revision changes what the CLI reports without touching code"""
+    try:
+        v=json.loads((Path(__file__).resolve().parent/'META'/'RELEASE_RECEIPT.json').read_text(encoding='utf-8'))['payload']['release_revision']
+        return v if isinstance(v,str) and v and len(v)<=64 else RELEASE_REVISION_FALLBACK
+    except Exception:return RELEASE_REVISION_FALLBACK
 def output(obj):
-    if isinstance(obj,dict):obj['release_revision']='v1022.5-fusion'
+    if isinstance(obj,dict):obj['release_revision']=release_revision()
     print(json.dumps(obj,ensure_ascii=False,sort_keys=True,indent=2,default=str))
 
 def _require_live(data):

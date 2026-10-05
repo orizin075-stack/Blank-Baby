@@ -336,15 +336,15 @@ patch5 の README の評価で使ったセットです。patch6 では、開発�
 ## 8. 使い方
 
 - **署名の鍵を新しくしました。** patch1〜5 の鍵は、patch6 を作った作業環境にありませんでした。そのため patch6 は新しいパッチ鍵で署名しています。古い鍵による相互署名はありません。
-  - 信頼アンカー：`deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt`（`FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk=`）
+  - 信頼アンカー：`deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt`（`FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk=`）
   - 来歴：`system/META/PATCH_LINEAGE_v1022_6.json`（親の archive の sha256、親の鍵、鍵を変えた理由）
   - 学習済みの種（TRAINED_SKILLS）の中身は変えていません。署名だけ新しい鍵です。古い鍵の署名も受け付けます。
 - アンカーは配布物の中にあるので、検証で分かるのは「署名のあとで中身が変わっていないこと」だけです。採用する場合は、ご自身の鍵で署名し直してください。
-- patch5 の個体は、そのまま動きます（§7）。
+- patch5 の個体は、そのまま動きます（§7）。ただし代謝（`metabolism-init`）を動かしている個体は、署名の鍵が変わったので、`runtime-trust-rebind --previous-trust-file 古いアンカー` で子の実行に使うアンカーを 1 回付け替えます（付け替えるまでは安全側に止まります。v1022.6 の README §4）。
 
 ```bash
-cd TUKUYO_v1022_5_claude_patch6/system
-A=../deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt
+cd TUKUYO_v1022_6/system
+A=../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
 python3 -B tools/verify_release.py . --trusted-pubkey-file $A
 python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo init
 python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo think -- '電車に42人乗っていました。駅で15人降りて、9人乗りました。駅で降りたのは何人ですか？'

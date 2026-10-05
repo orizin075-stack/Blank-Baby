@@ -1,0 +1,27 @@
+# adoption_rehearsal.sh run on 2026-10-05T23:30:48Z: release = signed v1022.6 copy, patch5 = the original patch5 tree (anchor 22jzm2...)
+== 1 publisher key (keep the private half outside the release)
+keygen: {'ok': True, 'public_key': 'E0fz/rv2q18GGFZoiUABEfrKm1lk35uJgSKXV/zrOzY='}
+== 2 sign the release as v1022.6, write the anchor, verify
+sign: {'ok': True, 'files': 1366, 'release_revision': 'v1022.6'}
+verify: {'ok': True, 'verified_files': 1366}
+verify_with_the_old_anchor: {'ok': False, 'bad': ['RELEASE_SIGNATURE', 'TRUST_ROOT_MISMATCH']}
+== 3 a new individual
+init: {'ok': True, 'release_revision': 'v1022.6'}
+think: {'answer': '5'}
+learning-audit: {'ok': True}
+whole-audit: {'ok': True}
+== 4 an individual made with patch5 (with a research expedition): used as is
+patch5-init: {'ok': True}
+patch5-research: {'ok': True, 'status': 'CONFIRMED'}
+whole-audit: {'ok': True}
+research-audit: {'ok': True, 'replayed_from_world_key': 1}
+think: {'answer': '20'}
+== 5 an individual made with patch5 that runs a metabolism: needs one explicit rebind
+patch5-init: {'ok': True}
+patch5-metabolism-init: {'ok': True}
+patch5-step: {'ok': True, 'tick': 4}
+step-before-rebind: {'ok': False, 'error': 'ValueError:V1022_CHILD_COMMAND:ValueError:STARTUP_INTEGRITY:EXTERNAL_RUNTIME_TRUST_MISMATCH'}
+rebind: {'ok': True, 'updated_forests': ['v1022_ecology']}
+step-after-rebind: {'ok': True, 'tick': 8}
+metabolism-audit: {'ok': True}
+whole-audit: {'ok': True}
