@@ -282,9 +282,9 @@ def parser():
     c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true');c.add_argument('--research-world',action='store_true',help='claude-patch5: each family lives next to a hidden-rule device; income only from understanding it')
     c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
     sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
-    c=sub.add_parser('research-run',help='claude-patch5 V1023r preview: one research expedition into a hidden-rule world');c.add_argument('--world',default='W1');c.add_argument('--ticks',type=int,default=120);c.add_argument('--regime',choices=('costly_failure','safe_failure'),default='costly_failure');c.add_argument('--tier',type=int,choices=(1,2,3,4));c.add_argument('--noise',type=float,choices=(0.0,0.05,0.1))
+    c=sub.add_parser('research-run',help='claude-patch5 V1023r preview: one research expedition into a hidden-rule world');c.add_argument('--world',default='W1');c.add_argument('--ticks',type=int,default=120);c.add_argument('--regime',choices=('costly_failure','safe_failure'),default='costly_failure');c.add_argument('--tier',type=int,choices=(1,2,3,4,5));c.add_argument('--noise',type=float,choices=(0.0,0.05,0.1))
     sub.add_parser('research-status');sub.add_parser('research-audit')
-    c=sub.add_parser('research-ecology',help='Compare research / random experiments / trial-and-error / naive / oracle on fresh worlds; writes only --out');c.add_argument('--seeds',type=int,default=10);c.add_argument('--start',type=int,default=50000);c.add_argument('--out',type=Path)
+    c=sub.add_parser('research-ecology',help='Compare research / random experiments / trial-and-error / naive / oracle on fresh worlds; writes only --out');c.add_argument('--seeds',type=int,default=10);c.add_argument('--start',type=int,default=50000);c.add_argument('--key');c.add_argument('--out',type=Path)
     c=sub.add_parser('runtime-trust-rebind');c.add_argument('--previous-trust-file',type=Path,required=True)
     cr=sub.add_parser('cap-request');cr.add_argument('surface');cr.add_argument('--out',type=Path,required=True)
     ci=sub.add_parser('cap-install');ci.add_argument('request',type=Path);ci.add_argument('receipt',type=Path)
@@ -739,7 +739,7 @@ def _main(argv=None):
                 else:res=research_life.audit(data)
             elif args.cmd=='research-ecology':
                 from tukuyo_v1023r.evaluate import compare
-                res=compare(args.start,args.seeds)
+                res=compare(args.start,args.seeds,**({'key':args.key} if args.key else {}))
                 if args.out:args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(res,ensure_ascii=False,indent=1),encoding='utf-8')
                 res={k:v for k,v in res.items() if k!='episodes'}
             elif args.cmd=='verified-query':

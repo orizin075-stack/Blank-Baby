@@ -109,6 +109,7 @@ HEDGE_JA=re.compile(r'予定|つもり|かもしれ|らしい|そうです|だ�
 NEG_JA=re.compile(r'ません|なかった|(?<!少)ない(?!よう)|なくて|ずに|ないで')
 OTHER_JA=re.compile(r'ずつ|倍|割|%|パーセント|平均|分の|あまり|余り|時速|分速|秒速|速さ|\d+\s*円の|面積|まわり|周り|より|ちがい|違い|差|以外|ある数|比|回目|番目|'
                     r'\d+\s*(?:時|日|月|年)(?!間)|何時|何日|何曜|ごと|毎|ダース')
+SCOPE_JA=re.compile(r'別の|他の|ほかの|よその|他人|友人の在庫|隣の|隣店')
 QWORD_JA=re.compile(r'何|いくつ|いくら|どれだけ|どのくらい|どれくらい')
 SELF=('わたし','私','ぼく','僕','おれ','自分','あなた')
 TIME_WORDS=('今日','きょう','昨日','きのう','朝','夕方','夜','午前','午後','今','いま','さっき','あとで','はじめ','最初','初め','現在')
@@ -340,7 +341,8 @@ def _ja(t,query):
     if len(qi)!=1 or qi[0]!=len(sents)-1 or len(sents)<2:return None
     q=sents[-1];body=sents[:-1]
     # 「二人合わせて」 is normalized to 2人合わせて: a total marker in the question, not an amount
-    if OTHER_JA.search(LABEL.sub('#',t)) or re.search(r'\d',re.sub(r'[2-9]人(?:合わせて|あわせて|で|の合計|とも)','',q)) or '入り' in t and not PKG.search(t):return None
+    # another person's or another place's stock (「別の人が別の在庫から」) is not this model's case
+    if OTHER_JA.search(LABEL.sub('#',t)) or SCOPE_JA.search(t) or re.search(r'\d',re.sub(r'[2-9]人(?:合わせて|あわせて|で|の合計|とも)','',q)) or '入り' in t and not PKG.search(t):return None
     ctx={'role':_ja_role(q)}
     try:
         if NEG_JA.search(q) and not NEG_JA.search(''.join(body)):return None

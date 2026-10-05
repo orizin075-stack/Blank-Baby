@@ -34,8 +34,9 @@ class Ledger:
     def check(self):
         return self.start+self.income-self.spent==self.energy and sum(a for _,_,a in self.rows)==self.energy-self.start
 
-def run_episode(world,policy,econ=ECON,seed=0,journal=None,prior_claim=None):
-    rng=random.Random(f'policy|{policy}|{seed}');led=Ledger(econ['start']);agent=None if policy in ('naive','oracle') else ResearchAgent(choose='random' if policy=='random_research' else 'info_gain',prior_claim=prior_claim)
+def run_episode(world,policy,econ=ECON,seed=0,journal=None,prior_claim=None,invent=None):
+    # invent: claude-patch6 law invention on/off for the learning policies (None = the agent's default, on)
+    rng=random.Random(f'policy|{policy}|{seed}');led=Ledger(econ['start']);agent=None if policy in ('naive','oracle') else ResearchAgent(choose='random' if policy=='random_research' else 'info_gain',prior_claim=prior_claim,invent=invent)
     truth=world.reveal()['table'] if policy=='oracle' else None
     actions={'probe':0,'trial':0,'work':0,'rest':0};earned=0;alive=True;death_tick=None
     for tick in range(econ['horizon']):
@@ -73,5 +74,6 @@ def run_episode(world,policy,econ=ECON,seed=0,journal=None,prior_claim=None):
         res['wrong_law_claimed']=bool(claim and claim['table']!=rv['table'])
         res['claim_bound_held']=None if not claim else world.true_agreement(claim['table'])>=claim['claimed_min_agreement_99']
         res['unexplained']=agent.method=='TABLE'
+        res['invented_claim']=bool(claim and claim.get('invented'))
         res['report']=rep
     return res

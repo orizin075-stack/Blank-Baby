@@ -10,6 +10,9 @@ DeviceWorld: five switches S1..S5 and one lamp.  The lamp follows a hidden
 boolean law.  Laws come in tiers of growing description length; tier 4 is
 "outside every family the agent knows" (a random table that is far from all
 tier 1-3 laws), so the agent must notice that its hypothesis language fails.
+claude-patch6 adds tier 5: a law from the agent's public invention grammar
+(invent.py) that is at least 4 inputs away from every tier 1-3 law, so the
+agent can only explain it by inventing it.
 The lamp sensor used by experiments is noisy (flip rate <= SENSOR_BOUND);
 the reward from working is the true lamp.
 """
@@ -70,7 +73,7 @@ def hamming(a,b):return bin(a^b).count('1')
 class DeviceWorld:
     kind='device'
     def __init__(self,key,seed,tier,noise,stream=''):
-        if tier not in (1,2,3,4) or not 0<=noise<=SENSOR_BOUND:raise ValueError('V1023R_WORLD_SPEC')
+        if tier not in (1,2,3,4,5) or not 0<=noise<=SENSOR_BOUND:raise ValueError('V1023R_WORLD_SPEC')
         # The law depends on (key, seed); noise, trial inputs and locks also on the stream,
         # so a second visit to the same world sees the same law but fresh randomness.
         self._lawkey=f'{key}|{seed}';self._key=f'{key}|{seed}|{stream}' if stream else self._lawkey;self.tier=tier;self.noise=noise;self.n_probe=0;self.n_trial=0;self.n_work=0
@@ -78,7 +81,7 @@ class DeviceWorld:
         if tier<=3:
             pool=[r for r in lib if r[0]==tier and r[1] not in ('常に消灯','常に点灯')]
             row=pool[int(_u(self._lawkey,'pick',0)*len(pool))];self._name=row[1];self._table=row[2]
-        else:
+        elif tier==4:
             tables=[r[2] for r in lib];n=0
             while True:
                 # A random law over four of the five switches, far from every known law.
@@ -87,6 +90,16 @@ class DeviceWorld:
                 if min(hamming(t,q) for q in tables)>=6:break
                 n+=1
             self._name='未知の表('+','.join(f'S{v+1}' for v in vars_)+')';self._table=t
+        else:
+            # claude-patch6: a grammar law at least 4 inputs away from every tier 1-3 law. The four groups
+            # (threshold, counting, branch, two terms) are equally likely, then a law inside the group.
+            from .invent import groups,GROUPS
+            tables=[r[2] for r in lib];gs=groups();n=0
+            while True:
+                pool=gs[GROUPS[int(_u(self._lawkey,'group5',n)*len(GROUPS))]];name,t=pool[int(_u(self._lawkey,'law5',n)*len(pool))]
+                if min(hamming(t,q) for q in tables)>=4:break
+                n+=1
+            self._name=name;self._table=t
     # ---- what the agent may call --------------------------------------
     def probe(self,x):
         """One experiment: set the switches to x, read the (noisy) lamp sensor."""

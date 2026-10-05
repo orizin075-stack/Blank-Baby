@@ -33,14 +33,17 @@ from .agent import ResearchAgent,switches
 from .ecology import REGIMES,Ledger
 
 NS='v1023r';COMPONENT='open_world_research_v1023r';SCHEMA='tukuyo.v1023r.research/1';WORLD_DIR='v1023r_world'
-CLAIMS={'hidden_rule_world_research':True,'experiments_chosen_by_information_value':True,'method_change_when_language_fails':True,
+CLAIMS_PATCH5={'hidden_rule_world_research':True,'experiments_chosen_by_information_value':True,'method_change_when_language_fails':True,
         'claims_only_after_replication':True,'expedition_death_is_individual_death':False,'open_ended_real_world_research':False,
         'consciousness_established':False}
+# claude-patch6: the agent also builds laws from a fixed grammar written by the patch author; it does not invent new kinds of laws.
+# A state written by patch5 is accepted and gets this boundary on its next save.
+CLAIMS={**CLAIMS_PATCH5,'invents_laws_inside_a_fixed_grammar':True,'invents_new_kinds_of_laws':False}
 TEMPERAMENTS={'thorough':{'science_at':0.5,'signals':{'curiosity':0.8,'truthfulness':0.6,'survival':-0.1}},
               'frugal':{'science_at':0.9,'signals':{'survival':0.7,'curiosity':0.1,'truthfulness':0.2}}}
 
 def _validate(s):
-    if s.get('schema')!=SCHEMA or s.get('claim_boundary')!=CLAIMS:raise ValueError('V1023R_SCHEMA')
+    if s.get('schema')!=SCHEMA or s.get('claim_boundary') not in (CLAIMS,CLAIMS_PATCH5):raise ValueError('V1023R_SCHEMA')
     if type(s.get('expeditions')) is not list or len(s['expeditions'])>512:raise ValueError('V1023R_BOUND')
     if type(s.get('laws')) is not dict or len(s['laws'])>64:raise ValueError('V1023R_LAWS')
 def _default(data):
@@ -122,8 +125,9 @@ def run(data,world_id='W1',ticks=120,regime='costly_failure',tier=None,noise=Non
         'started_with_inherited_law':prior['law'] if prior else None,'journal_head':head,'journal_rows':len(journal),
         'alive':alive,'death_tick':death,'final_energy':led.energy,'ledger':{'start':led.start,'income':led.income,'spent':led.spent},
         'status':agent.status,'method':agent.method,'claim':None if claim is None else {k:v for k,v in claim.items()},
-        'events':[e['event'] for e in agent.events][-24:],'observations':len(agent.obs),'environment_verdict':verdict}
-    s=dict(s);laws=dict(s['laws'])
+        'events':[e['event'] for e in agent.events][-24:],'observations':len(agent.obs),'environment_verdict':verdict,
+        'law_invention':agent.invent}
+    s=dict(s);laws=dict(s['laws']);s['claim_boundary']=CLAIMS
     if claim is not None:laws[world_id]={k:v for k,v in claim.items() if k!='inherited'}|{'expedition':claim.get('expedition',eid) if claim.get('inherited') else eid}
     elif prior and any(e['event']=='REFUTED' for e in agent.events):laws.pop(world_id,None)
     ex['law_after']=laws.get(world_id)
@@ -157,7 +161,7 @@ def audit(data):
         if key is None:continue
         # The world must be the one committed to before the expedition began.
         world=None
-        for tier in (1,2,3,4):
+        for tier in (1,2,3,4,5):
             for noise in (0.0,0.05,0.1):
                 if _commitment(key,ex['world_id'],tier,noise)==ex['world_commitment']:world=DeviceWorld(key,ex['world_id'],tier,noise,stream=eid)
         if world is None:errs.append('V1023R_WORLD_COMMITMENT:'+eid);continue
@@ -167,7 +171,8 @@ def audit(data):
             if e['expedition']==eid:break
             if e['world_id']==ex['world_id']:prior=e['law_after']
         if (prior is None)!=(ex['started_with_inherited_law'] is None):errs.append('V1023R_PRIOR_BINDING:'+eid)
-        agent=ResearchAgent(prior_claim=prior);journal=[]
+        # an expedition recorded before claude-patch6 is replayed without law invention, as it was run
+        agent=ResearchAgent(prior_claim=prior,invent=bool(ex.get('law_invention')));journal=[]
         econ={**REGIMES[ex['regime']],'horizon':ex['ticks']}
         try:
             led2,alive,death=_expedition(world,agent,econ,TEMPERAMENTS[ex['temperament']]['science_at'],journal)
