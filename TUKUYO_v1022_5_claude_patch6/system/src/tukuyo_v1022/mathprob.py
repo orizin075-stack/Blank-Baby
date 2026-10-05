@@ -169,7 +169,7 @@ def _ja_division(t,q,query):
         v=-(-int(n)//int(k))
         return _out('ceil_division','わり算の答えを切り上げ（あまった分にも1つ要る）',f'ceil({_fmt(n)}/{_fmt(k)})',v,'',g,query)
     if re.search(r'(?:いくつ|何\s*(?:'+COUNTER+r'))\s*(?:に|へ|で)?\s*(?:でき|作れ|つくれ|配れ|分けられ|入れられ)',q) or re.search(r'グループ|たば|束|組|班|袋|箱|皿',q) and re.search(r'いくつ|何',q):
-        _need(r==0 or re.search(r'でき|作れ|つくれ|配れ',q))
+        _need(r==0 or re.search(r'でき|作れ|つくれ',q))          # 「49枚を6枚ずつ配ると何人に配れる」 does not deal out every card: no answer (patch3)
         return _out('floor_division','わり算（あまりは数えない）',f'{_fmt(n)}//{_fmt(k)}',q_,'',g,query)
     return None
 

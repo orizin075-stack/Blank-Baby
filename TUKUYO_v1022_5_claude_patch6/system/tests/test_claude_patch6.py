@@ -176,6 +176,8 @@ def test_cp6_expedition_without_invention_record_replays_as_run(tmp_path):
     from tukuyo_v1022 import store
     from tukuyo_v977 import whole_state as whole
     d=tmp_path/'d';run(d,'init')
+    # a fixed world key: in this world the expedition changes method, so a replay WITH invention would not match
+    (d/'v1023r_world').mkdir(parents=True,exist_ok=True);(d/'v1023r_world'/'WORLD_KEY').write_text('cp6-world-key-1')
     old=A.INVENT_DEFAULT;A.INVENT_DEFAULT=False
     try:life.run(d,'W4',120,'safe_failure',4,0.0)
     finally:A.INVENT_DEFAULT=old
