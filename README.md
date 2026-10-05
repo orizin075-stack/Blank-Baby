@@ -3,14 +3,14 @@
 
 ## TUKUYO v1022.5 Fusion + claude-patch5
 
-`TUKUYO_v1022_5_claude_patch5/` は、TUKUYO v1022.5 Fusion に claude-patch5 を当てた配布物です。patch5 では、研究エンジン V1023r、代謝の中の研究ニッチ、Parser B の拡張、長時間融合試験が入りました。受け取った zip の中身を、1 バイトも変えずに置いています。中身の説明は [README_CLAUDE_PATCH5_JA.md](TUKUYO_v1022_5_claude_patch5/README_CLAUDE_PATCH5_JA.md) にあります。
+`TUKUYO_v1022_5_claude_patch6/` は、TUKUYO v1022.5 Fusion に claude-patch5 を当てた配布物です。patch5 では、研究エンジン V1023r、代謝の中の研究ニッチ、Parser B の拡張、長時間融合試験が入りました。受け取った zip の中身を、1 バイトも変えずに置いています。中身の説明は [README_CLAUDE_PATCH5_JA.md](TUKUYO_v1022_5_claude_patch6/README_CLAUDE_PATCH5_JA.md) にあります。
 
 ### 使い方
 
 Python 3.12 以降と `cryptography` が必要です。個体のデータは、配布フォルダの外に置いてください。
 
 ```sh
-cd TUKUYO_v1022_5_claude_patch5/system
+cd TUKUYO_v1022_5_claude_patch6/system
 A=../deliverables/TUKUYO_v1022_5_patch5_TRUST_ANCHOR.txt
 python -B tools/verify_release.py . --trusted-pubkey-file $A
 python -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo_patch5 init
