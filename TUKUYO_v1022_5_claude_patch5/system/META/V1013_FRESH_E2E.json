@@ -1,0 +1,149 @@
+{
+  "checks": {
+    "24h_not_claimed": true,
+    "external_integrity_anchor_prefix_valid": true,
+    "external_witness_pair_completed_short_gate": true,
+    "fresh_process_restart_observed": true,
+    "local_clock_alone_rejected_formal_gate": true,
+    "start_pass": true,
+    "temporal_identity_pass": true,
+    "whole_audit_pass": true
+  },
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "external_witness_protocol_exercised": true,
+    "literal_life_established": false,
+    "shortened_1s_harness_test_only": true
+  },
+  "details": {
+    "formal_audit": {
+      "claim_boundary": {
+        "consciousness_established": false,
+        "formal_duration_requires_external_witness_pair": true,
+        "literal_life_established": false,
+        "local_clock_completion_is_not_formal_duration_proof": true,
+        "restart_continuity_observed": true
+      },
+      "distinct_process_instances": 2,
+      "errors": [],
+      "events": 2,
+      "external_witness_elapsed_seconds": 4.79345365,
+      "externally_anchored_complete": true,
+      "head_sha256": "bb64eb18cf1c19b1e288419d5f55a307af047e2ab3fdc12656e5f30758e63b9c",
+      "local_clock_complete": true,
+      "local_elapsed_seconds": 4.482041,
+      "ok": true,
+      "profile": "24h",
+      "run_id": "211a365f-a6bd-4365-890e-2dca14e63cab",
+      "target_seconds": 1,
+      "version": "v1013"
+    },
+    "identity": {
+      "branch_id": "919c39be-62b4-4020-818c-4f2db33fd326",
+      "checks": {
+        "lineage_continuity": true,
+        "no_illegal_state_jump": true,
+        "same_origin": true,
+        "valid_transition_chain": true
+      },
+      "claim_boundary": {
+        "consciousness_established": false,
+        "functional_temporal_self_identity": true,
+        "literal_soul_established": false
+      },
+      "current_soul_sha256": "961e8e5bf738611a0fc06735d4fb814523483ef5b6287e4717e5eb1f30ce804a",
+      "errors": [],
+      "individual_id": "V1013-FRESH",
+      "lineage_id": "f40aa472-0142-46e8-8f7e-37115ebabb4e",
+      "ok": true,
+      "origin_soul_sha256": "961e8e5bf738611a0fc06735d4fb814523483ef5b6287e4717e5eb1f30ce804a",
+      "same_identity": true,
+      "transition_count": 0,
+      "version": "v989"
+    },
+    "local_only_audit": {
+      "claim_boundary": {
+        "consciousness_established": false,
+        "formal_duration_requires_external_witness_pair": true,
+        "literal_life_established": false,
+        "local_clock_completion_is_not_formal_duration_proof": true,
+        "restart_continuity_observed": true
+      },
+      "distinct_process_instances": 2,
+      "errors": [
+        "FORMAL_DURATION_GATE_INCOMPLETE"
+      ],
+      "events": 2,
+      "external_witness_elapsed_seconds": null,
+      "externally_anchored_complete": false,
+      "head_sha256": "bb64eb18cf1c19b1e288419d5f55a307af047e2ab3fdc12656e5f30758e63b9c",
+      "local_clock_complete": true,
+      "local_elapsed_seconds": 4.482041,
+      "ok": false,
+      "profile": "24h",
+      "run_id": "211a365f-a6bd-4365-890e-2dca14e63cab",
+      "target_seconds": 1,
+      "version": "v1013"
+    },
+    "start": {
+      "externally_anchored_complete": false,
+      "ok": true,
+      "profile": "24h",
+      "run_id": "211a365f-a6bd-4365-890e-2dca14e63cab",
+      "start_event": {
+        "continuity_checkpoint_seq": null,
+        "continuity_checkpoint_sha256": null,
+        "elapsed_local_seconds": 0.004311923,
+        "identity": {
+          "branch_id": "919c39be-62b4-4020-818c-4f2db33fd326",
+          "individual_id": "V1013-FRESH",
+          "lineage_id": "f40aa472-0142-46e8-8f7e-37115ebabb4e"
+        },
+        "kind": "START",
+        "note": "fresh e2e shortened duration gate",
+        "observed_utc_ns": 1790550500305355478,
+        "previous_event_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "process_instance_id": "966cc59f-1d9d-46ba-af69-0e257d06bc4f",
+        "run_id": "211a365f-a6bd-4365-890e-2dca14e63cab",
+        "schema": "tukuyo.v1013.realtime_event/1",
+        "seq": 1,
+        "temporal_identity": {
+          "current_soul_sha256": "961e8e5bf738611a0fc06735d4fb814523483ef5b6287e4717e5eb1f30ce804a",
+          "origin_soul_sha256": "961e8e5bf738611a0fc06735d4fb814523483ef5b6287e4717e5eb1f30ce804a",
+          "transition_count": 0,
+          "transition_head_sha256": null
+        },
+        "whole_state_sha256": "b73cfe047778f35bd3c4b2177f4ad7ecfdc793421cf96ca238d26aad4f321160"
+      },
+      "target_seconds": 1,
+      "version": "v1013"
+    },
+    "tick": {
+      "elapsed_local_seconds": 4.48204135,
+      "ok": true,
+      "process_instance_id": "81d6a079-8a0c-48e4-8d9e-e8c9fe729255",
+      "seq": 2,
+      "version": "v1013"
+    },
+    "whole": {
+      "claim_boundary": {
+        "consciousness_established": false,
+        "functional_soul_model": true,
+        "general_l5": false,
+        "general_l6": false,
+        "literal_soul_established": false
+      },
+      "errors": [],
+      "individual_id": "V1013-FRESH",
+      "ok": true,
+      "seq": 4,
+      "version": "v977"
+    }
+  },
+  "individual_id": "V1013-FRESH",
+  "schema": "tukuyo.v1013.fresh_e2e/1",
+  "version": "v1013"
+}

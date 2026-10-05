@@ -1,0 +1,67 @@
+{
+  "claim_boundary": {
+    "full_v995_binary_reinspection": false,
+    "general_l5": false,
+    "general_l6": false,
+    "literal_life_established": false,
+    "literal_soul_established": false
+  },
+  "command_surface": {
+    "v1008": 136,
+    "v1009": 138,
+    "v1012.1": 143,
+    "v999": 120
+  },
+  "memory_checkpoint_sources": [
+    "v977 soul",
+    "v978 heart",
+    "v996 conversation",
+    "v998 semantic",
+    "v1001 knowledge"
+  ],
+  "missing_from_current": {
+    "v1008": [],
+    "v1009": [],
+    "v999": []
+  },
+  "reasoning_repairs": [
+    "negated antecedent does not trigger modus ponens",
+    "affirming consequent not implemented",
+    "contradiction abstains",
+    "unit mismatch abstains",
+    "unit conversion abstains",
+    "bounded pack/unit-price multiplication",
+    "verified-query recomputes bounded core reasoner"
+  ],
+  "regression_summary": {
+    "new_v1012_1": "7/7 PASS",
+    "v1000_v1003": "4/4 PASS",
+    "v1004_v1008": "4/4 PASS",
+    "v1009_v1010": "8/8 PASS",
+    "v1011_v1012": "5/5 PASS",
+    "v977_v978": "8/8 PASS",
+    "v979_v980": "1/1 PASS",
+    "v981_v983": "3 PASS displayed before runner wall-time",
+    "v984_v985": "2/2 PASS",
+    "v986_v988": "3/3 PASS",
+    "v989": "4/4 PASS",
+    "v993_v995": "7/7 PASS",
+    "v996_v999": "5/5 PASS"
+  },
+  "reintegrated_into_whole_audit": [
+    "v978 heart",
+    "v979 deep soul",
+    "v982 continuity ledger",
+    "v983 homeostasis",
+    "v996 conversation journal",
+    "v998 semantic inference journal",
+    "v999 adaptive policy"
+  ],
+  "schema": "tukuyo.v1012_1.legacy_reintegration_audit/1",
+  "sources": {
+    "v1008": "actual archive extracted and command surface compared",
+    "v1009": "actual archive extracted and command surface compared",
+    "v995_complete": "audit metadata reviewed; 244MB archive not materialized due 100MB tool limit",
+    "v999": "actual archive extracted and command surface compared"
+  }
+}

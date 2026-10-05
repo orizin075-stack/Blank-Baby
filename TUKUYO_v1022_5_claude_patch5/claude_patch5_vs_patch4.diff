@@ -1,0 +1,1918 @@
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/README_CLAUDE_PATCH5_JA.md /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/README_CLAUDE_PATCH5_JA.md
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/README_CLAUDE_PATCH5_JA.md	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/README_CLAUDE_PATCH5_JA.md	2026-10-05 18:36:21.826250291 +0900
+@@ -0,0 +1,333 @@
++# TUKUYO v1022.5 Fusion + claude-patch5（「解く子」から「調べて生き残る子」へ）
++
++patch4 までの改良は、与えられた問題に正しく答える力を上げるものでした。
++
++patch5 では段階を一つ上げて、**自分で実験を選び、法則を見つけ、それを使って生き延びる**ところまで進めました。外部レビューのロードマップ（V1022.6 長時間融合試験 → V1023 研究）に沿っています。patch3・patch4 の機能はすべてそのまま残しています。
++
++## 0. 何が増えたか
++
++| 段階 | 中身 | 結果（§ を参照） |
++|---|---|---|
++| **V1023r 研究エンジン**（新規 `src/tukuyo_v1023r/`） | 隠れた法則のある世界で、情報量で実験を選ぶ。手持ちの法則の言葉で説明できなければ方法を変える。確認の手順を通るまで法則を主張しない。研究するかどうかを、エネルギーの損得で決める | 未見の 480 世界で、**誤った法則の主張 0 件**。失敗が痛い世界での生存は 235/240（試行錯誤だけの子は 204/240） |
++| 個体とのつながり | Heart が研究の気質を選び、結果が Heart の経験に返る。見つけた法則は署名つきで記憶し、次の探索で使う。反証されたら捨てる | 2 回目の探索では実験 0 回で、エネルギーは満タンに近い 199.7 |
++| **本物の代謝の中の研究**（`metabolism-init --research-world`。使うかは選べる） | 家系ごとに装置を置く。稼ぎは、装置を理解して働いた分だけ。死は本物。後継ぎは、親が確定した法則だけを受け継げる | 受け継いだ後継ぎは**実験 0 回で、仕事が 311/311 成功**。受け継がない系譜は、代ごとに約 40 回の実験をやり直した |
++| 記録と監査 | 探索ごとのハッシュ鎖つき日誌。世界の鍵で、観測を 1 つずつ再計算して照合する | 自分の鍵で書き直した日誌の改ざんも検出（テストあり） |
++| **Parser B の拡張** | 増減、単価×個数とおつり、等分・配分、比較、ある数（一次方程式）、英語の増減。作る側と別に書いた読み取り器 | §2 |
++| **V1022.6 長時間融合試験**（新規 `tools/longrun_fusion.py`） | 推論・教示・自習・代謝・checkpoint・復元・停止注入を、4 時間ランダムに混ぜて回す | §3 |
++
++## 1. V1023r 研究エンジン
++
++### 1.1 世界（`worlds.py`）
++
++- **装置**：スイッチ 5 個（S1〜S5）とランプ 1 個。ランプは隠れた法則に従って点きます。
++- **法則の段**：
++  - 段 1〜3：手持ちの言葉で書ける法則（全部で 492 通り）。
++    - 段 1：単独のスイッチ
++    - 段 2：2 個の組（かつ・または・排他）
++    - 段 3：3 個の組（全部・どれか・多数決・パリティ・条件分岐）
++  - 段 4：**手持ちの言葉の外**。4 個のスイッチで決まるランダムな表です。どの既知の法則とも 6 か所以上違うように作っています。
++- **センサー**：実験で読むランプのセンサーは、最大 10% 間違えます（上限だけが子に知らされています）。
++- **仕事**：毎回、環境がスイッチ 2 個を固定します。子は残りを決めて仕事をし、本物のランプが点けば報酬が入ります。
++- **乱数**：すべて鍵＋カウンタから決めています。あとから環境側で「その時、世界が何と答えたか」を完全に再計算できます。
++
++### 1.2 研究のやり方（`agent.py`）
++
++- **信念**：既知の 492 法則（短い法則ほど事前確率が高い）に加えて、「**言葉の外**（未知の表）」というモデルを常に持ちます。そのため既知の法則が「説明できない何か」に負けることができます。
++- **実験の選び方**：期待情報量（bits）が最大の入力を選びます。
++- **方法を変える**：「言葉の外」の確率が 0.9 を超えたら、法則探しをやめて、入力ごとの表で覚える方法に切り替えます（`METHOD_CHANGE`）。このとき、食い違った入力を反例として記録します。
++- **主張するまでの確認手順**：
++  1. 全 32 入力を一度ずつ試す。
++  2. 法則と食い違った入力を、もう一度試す。
++  3. 環境が選んだ入力で 10 回の再現試験をする。子は、予測を先に出してから結果を見る。
++  4. 再現試験で外れた入力を、3 回ずつ試し直す。
++  5. どの段階でも、首位の法則が入れ替わるか、確信度が 0.98 を切れば中止。
++- **主張の中身**：通ったら `CONFIRMED` として、法則と「新しい試行での一致率の 99% 下限」を主張します。
++- **撤回**：確定した法則が、仕事の結果（ノイズなし）と 1 回でも食い違えば撤回します（`REFUTED`）。
++- **報告**：毎回の報告には次の項目が入ります。
++  - まだ分からないこと
++  - 有力な仮説と確信度
++  - 次の実験とその情報量
++  - 反例
++  - 次にやること
++
++### 1.3 研究するかどうかの判断（研究の値段）
++
++研究にはお金（エネルギー）がかかります。だから毎回、損得で決めます。
++
++- **研究の価値** ＝（法則が分かった場合の 1 回あたりの稼ぎ − 今の稼ぎ）× 残りの回数
++- **研究の費用** ＝ 必要な実験回数の見込み ×（実験代 ＋ その間に働けない分）
++
++価値が費用を上回るあいだだけ実験します。働くことが今すでに得で、実験と同じくらい情報も得られるなら、働きながら学びます。
++
++主張のための確認は、**お腹がいっぱいの時だけ**します。どこまで満たされていれば確認を始めるかは、Heart が選ぶ気質で変わります。
++
++- **thorough**：上限の半分で始める
++- **frugal**：上限の 9 割で始める
++
++### 1.4 未見の世界での結果（`research-ecology`）
++
++条件：
++
++- 開発に使ったのは、鍵 `devkey` と seed 1000〜1013 だけです。
++- 評価は、別の鍵と seed 50000〜50019 で、**作り終えてから 1 回だけ**回しました。
++- 段 1〜4 × ノイズ 0・5・10% × 20 seed ＝ 240 世界を、2 つの経済で試しました。
++- どの方針も同じ世界で比べています。
++
++**失敗が痛い世界**（仕事に失敗すると −6 のけが）：
++
++| 方針 | 生存 | 終了時のエネルギー | 実験回数 | 法則の主張 | うち誤り |
++|---|---|---|---|---|---|
++| **研究（本体）** | **235/240** | 174.7 | 30.8 | 150 | **0** |
++| 同じ子で、実験だけランダム | 227/240 | 157.6 | 34.9 | 118 | 0 |
++| 試行錯誤だけ（仕事でしか学ばない） | 204/240 | 169.5 | 0 | – | – |
++| 何も学ばない | 39/240 | 22.8 | 0 | – | – |
++| 答えを知っている（上限） | 240/240 | 199.9 | 0 | – | – |
++
++**失敗が痛くない世界**：
++
++| 方針 | 生存 | 終了時のエネルギー | 法則の主張（誤り） |
++|---|---|---|---|
++| 研究（本体） | 239/240 | 186.4 | 168（0） |
++| 試行錯誤だけ | 240/240 | **199.0** | – |
++
++- 段 4（言葉の外）の世界で「方法を変えた」のは、痛い世界で 52/60、痛くない世界で 56/60 です。段 1〜3 で誤って方法を変えたのは 0 件でした。
++- 法則の主張は 318 件で、全部正しい法則でした。主張した一致率の下限を、実際の一致率が下回った件数も 0 件です。
++- エネルギー台帳の保存則違反も 0 件です。
++- **同じ世界に 2 回目に入ったとき**（1 回目で法則を確定した世界）：
++  - 覚えた法則を使った子：実験 0 回、エネルギー 199.7、反証 0 件
++  - 白紙から始めた子：実験 38〜41 回、エネルギー 176〜188
++- 結果は `evidence_claude_patch5/heldout_research_ecology.json` に入っています。
++  - ファイルの sha256：`17cf53be…`
++  - 中身の result_sha256：`df5791db…`
++  - 同じコマンドで再現できます：`research-ecology --seeds 20 --start 50000`
++
++**正直に書いておくこと**
++
++- 失敗が痛くない世界では、**研究しない方が得**です。最終エネルギーは試行錯誤だけの子のほうが高くなりました。研究の子は、余ったエネルギーで確認をして法則を主張する分だけ、エネルギーを使っています。研究は「いつでも得」ではなく、**失敗が高くつく世界で得**です。そうなるように、損得で判断させています。
++- 世界は私が設計した小さな箱です（入力 32 通り）。仮説の言葉（492 法則）も、私が先に用意しました。子が新しい種類の法則を**発明する**わけではありません。言葉の外だと気づいて、表に切り替えるところまでです。
++- `research-run`（探索行）の「生死」は、**探索中の台帳の中の話**です。個体の本当の死ではありません。本当の代謝の中で研究させる方法は §1.7 にあります（使うかどうかは選べます）。
++
++### 1.5 個体とのつながり（`life.py`、`research-run`）
++
++```bash
++python3 -B run_tukuyo.py --runtime-trust-file $A --data D research-run --world W1          # 1 回の探索
++python3 -B run_tukuyo.py --runtime-trust-file $A --data D research-run --world W1 --tier 4 --noise 0.05
++python3 -B run_tukuyo.py --runtime-trust-file $A --data D research-status
++python3 -B run_tukuyo.py --runtime-trust-file $A --data D research-audit
++python3 -B run_tukuyo.py --runtime-trust-file $A --data D research-ecology --seeds 20 --start 50000 --out eval.json
++```
++
++- 探索の前に、個体の **Heart**（Soul の価値観＋感情）が気質（thorough / frugal）を選びます。探索の結果は Heart の経験として返ります（発見なら KNOWLEDGE_GAIN）。
++  - 実際に、発見を重ねた個体は、frugal から thorough に変わりました。
++- 確定した法則は、個体の署名つき状態（`v1023r/`、whole-state の部品として登録）に残ります。次に同じ世界に入ると、最初からその法則で働きます。仕事の結果と食い違えば、撤回して研究に戻ります。
++- **監査**（`research-audit`。`whole-audit` にも組み込み）で確かめること：
++  - 署名つきの commit 鎖
++  - 日誌のハッシュ鎖と、状態に記録した先頭
++  - 探索前にした世界の約束（commitment）
++  - **世界の鍵で、記録した観測を全部再計算した結果が一致すること**
++  - 同じ記憶から子を再生すると、日誌が 1 行も違わずに再現されること
++  - エネルギーの保存
++- 個体が自分の鍵で日誌と状態を書き直しても、世界の鍵での再計算で見つかります（`tests/test_claude_patch5.py`）。
++- 復元（`recovery-checkpoint` / `recovery-restore`）にも、研究の状態と世界の鍵が入ります（テストあり）。
++- 世界の鍵は `<data>/v1023r_world/` に置いています。子のコード（`agent.py`）は鍵にも世界の実装にも触れません。これはテストで検査しています。
++  - ただし、同じデータフォルダの中にあるので、OS の権限で分けているわけではありません。
++
++### 1.6 出力例（段 4 の世界、ノイズ 5%）
++
++```text
++status: UNEXPLAINED   method: TABLE
++event: METHOD_CHANGE  p_outside=0.991  反例: S1=0,S2=0,S3=0,S4=1,S5=0 / S1=0,S2=0,S3=1,S4=1,S5=0
++unknowns: どの法則か（有力候補 0 個、手持ちの言葉の外にある確率 1.00）
++          センサーの誤り率（上限 10% と仮定）
++          手持ちの法則の型では説明できない。入力ごとの表で覚えている
++next_step: 表で働きながら、確かでない入力を調べる
++```
++
++### 1.7 本物の代謝につなぐ（`metabolism-init --research-world`、`niche.py`）
++
++探索の台帳とは別に、**本物の代謝の中**にも研究の場所（ニッチ）を作りました。使うかどうかは選べて、既定では使いません。
++
++**しくみ**
++
++- 各家系（家族）のそばに、装置を 1 台置きます。
++  - 1 台目の家系はニッチ N0、2 台目は N1、… と順に割り当てます。子は親のニッチに住みます。
++  - 同じ seed なら、同じニッチになります。
++- 毎 tick、各個体の研究エージェントが「実験・再現試験・仕事・休む」のどれかを提案します。それをその個体の **Heart** が受け入れるか、休むかを選びます。
++- エネルギーの出入り：
++  - 仕事は、本物のランプが点いたときだけ、共有の貯蔵庫から報酬が入ります。
++  - 失敗するとけがになり、エネルギーを燃やします。
++  - 実験は、エネルギーを燃やすだけです。
++- エネルギーが尽きた個体は、**本物の不可逆な死**を迎えます（organism2）。寿命でも死にます。
++- 後継ぎは、親が **確定した（CONFIRMED）法則だけ** を受け継げます。受け継ぐのは公開の知識だけで、learning がオンのときに限ります。
++- 受け継いだ法則は、仕事の結果と食い違えば撤回します。
++- 研究の状態は、署名つきの代謝の状態に入っています。`metabolism-audit` と `whole-audit` で検証します。
++
++**系譜試験**（`tools/research_lineage.py`）
++
++- 条件：4 家系、寿命 80 tick、256 tick、同じ seed、同じ 4 つのニッチ。
++- 比べたもの：「受け継ぐ」と「受け継がない」（`--no-learning`）。
++- ニッチの中身（環境側から見た正解）：
++  - N0・N1：言葉の外（段 4）
++  - N2：段 2、ノイズなし
++  - N3：段 1、ノイズ 5%
++
++| | 受け継ぐ | 受け継がない |
++|---|---|---|
++| 創始者（4 個体、両方で同じ動き） | 法則を 2 つ確定（N2：S2∨S3、N3：S1。どちらも正しい）。N0・N1 は「言葉の外」と判断 | 同じ |
++| 後継ぎ 12 個体：仕事の成功 | **542/566** | 380/407 |
++| 後継ぎ：実験と再現試験の回数 | **56** | 238 |
++| N2・N3 の後継ぎ（各 3 代） | 6 個体が法則を受け継いだ。実験 0 回、けが 0 回、仕事は 311/311 成功 | 代ごとに研究をやり直した（1 代あたり約 40 回の実験） |
++| 継承・死 | 12 回・12 回（すべて寿命） | 12 回・12 回（すべて寿命） |
++| 代謝監査・全体監査・資源保存 | 合格 | 合格 |
++
++- 言葉の外のニッチ（N0・N1）では、受け継ぐものが無いので、どちらの系譜も同じ動きでした。
++- 寿命を 48 tick にして試した時は、どの家系も確定まで行けませんでした。そのため受け継ぎは 0 件でした。確認の手順をやり切れる長さの一生が、少なくとも一度は必要です。
++- 研究ニッチを使わない既定の代謝は、patch4 と**数字まで同じ**です（4 家系・24 tick で、継承 12 回、正答 54/54、貯蔵庫 47200）。
++
++## 2. Parser B の拡張（`semantic_gate.py`）
++
++patch4 の「別の読み取り器（Parser B）」が読めるのは、速さ・値段の多段操作・暦・換算だけでした。文章題の大半は `UNDECIDED`（独立の確認なし）でした。patch5 では、よく出る型を追加しました。
++
++**追加した型**
++
++- **増減**：食べた・あげた・もらった・降りた・飛んでいった など。意味がはっきりした動詞だけを読みます。
++- **値段**：単価×個数（複数の品でも可）と、おつり。
++- **等分・配分**：あまり、グループの数も含みます。
++- **比較**：〜より多い／少ない、〜倍、ちがい。
++- **ある数**：操作が 2 段までの一次方程式。逆にたどって解き、元の式に戻して確かめます。
++- **英語の増減**
++
++**作り方の約束**
++
++- 文の切り方・動詞の辞書・質問の読み方は、すべてこのファイルの中で別に書きました。作る側のモジュールは import していません（patch4 のテストがそのまま検査します）。
++- 質問の数を**全部自分で使えたときだけ**、値を出します。
++- 売る・返品・仕入れ・貸す・釣る のように、文脈で意味が変わる動詞は読みません（`UNDECIDED` のまま）。
++- 箱の数を聞く質問には、中身の掛け算を当てはめません。「35人を5人ずつ」は掛け算ではなく、グループ分けとして読みます。
++
++**測った数字**（`think` の経路）
++
++作る側が確定した数の答えのうち、独立に書いた読み取りが一致した（`AGREE`）割合です。
++
++| セット | patch4 | **patch5** |
++|---|---|---|
++| 未見 E（Parser B を書く前に作った 36 問。sha256 `4a24605b…`） | 3/24 | **12/24** |
++| 未見 D | 13/23 | 17/23 |
++| 未見 C | 14/30 | 21/30 |
++| 合計 | 30/77（39%） | **50/77（65%）** |
++
++- Parser B が止めた正しい答えは 0 件、新しく出た「確信を持った誤り」も 0 件でした。
++- 正答数は、全セットで patch4 と同じです（`llm-ask`）。
++
++  | セット | 正答 |
++  |---|---|
++  | E | 32/36 |
++  | D | 42/50 |
++  | C | 73/93 |
++  | 開発 | 117/138 |
++  | A | 58/61 |
++  | B | 80/80 |
++
++  Parser B は答えを増やす部品ではありません。確定した答えの**裏付け**を増やす部品なので、正答数が変わらないのは設計どおりです。
++- E でまだ `UNDECIDED` の型は次のとおりです。E は評価に使ったので、これらに合わせた手直しはしていません。
++  - 1 文に 2 つの出来事が「て」でつながる形（「9人降りて、4人乗りました」）
++  - 貯金箱に「入れる」お金
++  - 1L500mL のような複合量の増減
++  - "gave 7 to Liam"
++  - 「〜歳年下」
++  - 「〜より何個多い」
++  - 「5でわって」
++  - 速さから時間を逆算する問題
++  - "shared equally among"
++
++## 3. V1022.6 長時間融合試験（`tools/longrun_fusion.py`）
++
++外部レビューの V1022.6 に当たる試験です。
++
++**1 本の試験の中で、ランダムに混ぜて実行する操作**（重みつき）
++
++- 推論：まだ見ていない数で、その場で問題を作る。13 の型があり、棄権すべき問題も含む。
++- 教示
++- 自習：模擬の先生に聞いてから、新しい数で確かめる。
++- 代謝の tick
++- checkpoint
++- 復元：未来の分岐を進めてから戻し、tick と、覚えた事実が戻ったかを確かめる。
++- 停止注入：死亡の直後で SIGKILL する。
++
++**毎回確かめること**
++
++- 操作のたびに `whole-audit`。
++- 15 操作ごとに、代謝・LLM・学習の監査も。
++
++| | 1 本目（patch4 時点のコード、4 時間の予定） | 2 本目（patch5、75 分） |
++|---|---|---|
++| 結果 | **作業環境の再起動で、65 分で中断** | 完走 |
++| 推論 | 474 問。確信を持った誤り **0**、棄権 8 | 529 問。確信を持った誤り **0**、棄権 7 |
++| 代謝の tick | 158 | 172 |
++| checkpoint ／ 復元 | 46 ／ 32 | 43 ／ 41 |
++| 停止注入（実際に止まった回数） | 29（2） | 42（7） |
++| 教示 ／ 自習（覚えた動詞の数） | 28 ／ 44（7） | 43 ／ 41（15） |
++| 監査の違反 | **0** | **0** |
++
++- 棄権したのは、答えられるはずの「増減」と「論理」の問題です。誤りではありませんが、取りこぼしです。
++- 4 時間を通しで完走したわけではありません。合計すると約 2 時間 20 分を、違反 0 で回しました。
++- 2 本目は、研究ニッチの番号の付け方を最後に直す前の版で回しました。この試験は研究ニッチを使わないので、結果には影響しません。
++- 24 時間の試験は、まだ実施していません。
++
++```bash
++python3 -B system/tools/longrun_fusion.py --data D --runtime-trust-file $A --report report.json --minutes 240 --seed 1
++```
++
++## 4. 回帰
++
++- **全体テスト**：**421/421 合格**。patch4 までの 413 件と、patch5 で足した 8 件です（`tests/test_claude_patch5.py`）。結果は `evidence_claude_patch5/selftest_patch5_tail.txt` に入っています。
++- patch5 のテストで確かめていること：
++  - 子のコードが世界の秘密に触れないこと
++  - 言葉の外の世界が、既知の法則から十分離れていること
++  - 法則を見つけること、方法を変えること
++  - 間違って覚えた法則が反証されること
++  - 日誌の再生と、自分の鍵での書き換えを見つけること
++  - 復元のあとも研究の状態が戻ること
++  - 本物の代謝の中の研究ニッチ
++  - Parser B の新しい型と、食い違いで止まること
++- **系譜試験**（既定の代謝、4 家系・24 tick）：継承 12 回、正答 54/54、代謝監査と全体監査ともに合格。patch4 と同じ数字です。
++- **文章題の回帰**（`llm-ask`、LLM は切った状態）：どのセットでも、正答数・棄権数・確信を持った誤り（0）が patch4 と同じでした。
++
++| セット | patch4 | patch5 |
++|---|---|---|
++| 開発 | 117/138 | 117/138 |
++| A | 58/61 | 58/61 |
++| B | 80/80 | 80/80 |
++| C | 73/93 | 73/93 |
++| D | 42/50 | 42/50 |
++| E | 32/36 | 32/36 |
++
++参考までに、未見 E での成績は次のとおりです。
++
++| 版 | 正答 | 確信を持った誤り |
++|---|---|---|
++| Fusion | 17/36 | 7 |
++| patch3 | 26/36 | 3 |
++| patch4 | 32/36 | 0 |
++| patch5 | 32/36 | 0 |
++
++## 5. 使い方
++
++- 署名は patch1〜4 と同じパッチ鍵です。
++- 信頼アンカーは `deliverables/TUKUYO_v1022_5_patch5_TRUST_ANCHOR.txt` です。
++- 既存の個体はそのまま動きます（研究の状態は、初めて `research-run` を実行したときに作られます）。
++- 採用する場合は、ご自身の鍵で署名し直してください。
++
++## 6. 限界
++
++- **研究の世界は小さな箱です。**
++  - 入力は 32 通りで、法則の言葉（492 通り）も私が先に用意しました。
++  - 言葉の外だと気づいて表に切り替えることはできます。でも、新しい種類の法則を作り出すことはまだできません。
++  - 世界も 1 種類（スイッチとランプ）だけです。
++- センサーの誤り率の上限（10%）は、子に教えてあります。上限が分からない世界には、まだ対応していません。
++- 研究が得になるのは、失敗が痛い世界だけです。失敗が痛くない世界では、試行錯誤だけの子のほうが最後のエネルギーは多くなりました。
++- 世界の鍵は、同じデータフォルダの中にあります。子のコードからは触れませんが、OS の権限で分けているわけではありません。
++- 文章の読み取りは、今も有限の型です。
++  - Parser B が読めない型は、網羅性と役割の監査だけに頼っています。
++  - 未見 C の「平均・最小公倍数・面積・数列」は、まだ型がありません。
++- 長時間試験の 1 本目（4 時間の予定）は、作業環境の再起動で 65 分で止まりました（§3）。
++- 本物の LLM での効果は、今回も測っていません。
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/run_tukuyo.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/run_tukuyo.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/run_tukuyo.py	2026-10-05 11:53:40.059691274 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/run_tukuyo.py	2026-10-05 14:02:45.579894260 +0900
+@@ -279,9 +279,12 @@
+     c=sub.add_parser('self-study');c.add_argument('--max',type=int,default=20);c.add_argument('--dry-run',action='store_true');c.add_argument('--questions',type=Path)
+     c=sub.add_parser('dialogue-learn');c.add_argument('bundle',type=Path);c.add_argument('--teacher')
+     sub.add_parser('learning-status');sub.add_parser('learning-audit')
+-    c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true')
++    c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true');c.add_argument('--research-world',action='store_true',help='claude-patch5: each family lives next to a hidden-rule device; income only from understanding it')
+     c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
+     sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
++    c=sub.add_parser('research-run',help='claude-patch5 V1023r preview: one research expedition into a hidden-rule world');c.add_argument('--world',default='W1');c.add_argument('--ticks',type=int,default=120);c.add_argument('--regime',choices=('costly_failure','safe_failure'),default='costly_failure');c.add_argument('--tier',type=int,choices=(1,2,3,4));c.add_argument('--noise',type=float,choices=(0.0,0.05,0.1))
++    sub.add_parser('research-status');sub.add_parser('research-audit')
++    c=sub.add_parser('research-ecology',help='Compare research / random experiments / trial-and-error / naive / oracle on fresh worlds; writes only --out');c.add_argument('--seeds',type=int,default=10);c.add_argument('--start',type=int,default=50000);c.add_argument('--out',type=Path)
+     c=sub.add_parser('runtime-trust-rebind');c.add_argument('--previous-trust-file',type=Path,required=True)
+     cr=sub.add_parser('cap-request');cr.add_argument('surface');cr.add_argument('--out',type=Path,required=True)
+     ci=sub.add_parser('cap-install');ci.add_argument('request',type=Path);ci.add_argument('receipt',type=Path)
+@@ -724,10 +727,21 @@
+             elif args.cmd in ('metabolism-init','metabolism-step','metabolism-status','metabolism-audit'):
+                 _require_live(data)
+                 from tukuyo_v1022 import metabolism
+-                if args.cmd=='metabolism-init':res=metabolism.init(data,args.runtime_trust_file,args.families,args.seed,args.reservoir,args.regeneration,args.max_age,not args.no_learning,not args.no_actions)
++                if args.cmd=='metabolism-init':res=metabolism.init(data,args.runtime_trust_file,args.families,args.seed,args.reservoir,args.regeneration,args.max_age,not args.no_learning,not args.no_actions,args.research_world)
+                 elif args.cmd=='metabolism-step':res=metabolism.step(data,args.ticks)
+                 elif args.cmd=='metabolism-status':res=metabolism.status(data)
+                 else:res=metabolism.audit(data)
++            elif args.cmd in ('research-run','research-status','research-audit'):
++                if args.cmd=='research-run':_require_live(data)
++                from tukuyo_v1023r import life as research_life
++                if args.cmd=='research-run':res=research_life.run(data,args.world,args.ticks,args.regime,args.tier,args.noise)
++                elif args.cmd=='research-status':res=research_life.status(data)
++                else:res=research_life.audit(data)
++            elif args.cmd=='research-ecology':
++                from tukuyo_v1023r.evaluate import compare
++                res=compare(args.start,args.seeds)
++                if args.out:args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(res,ensure_ascii=False,indent=1),encoding='utf-8')
++                res={k:v for k,v in res.items() if k!='episodes'}
+             elif args.cmd=='verified-query':
+                 _require_live(data)
+                 from tukuyo_v1005.verifier import solve
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1022/metabolism.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1022/metabolism.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1022/metabolism.py	2026-10-04 21:21:40.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1022/metabolism.py	2026-10-05 17:26:02.398346799 +0900
+@@ -55,6 +55,11 @@
+     energy=sum(s['runtimes'][r]['energy'] for r in s['active'])
+     if s['initial_total']+s['regenerated']!=s['reservoir']+s['burned']+energy:raise ValueError('V1022_RESOURCE_CONSERVATION')
+     if any(s['runtimes'][r]['lifecycle']=='DEAD' for r in s['active']):raise ValueError('V1022_ACTIVE_DEAD')
++    if 'research' in s:
++        # claude-patch5 opt-in research niche (metabolism-init --research-world)
++        from tukuyo_v1023r import niche
++        niche.validate(s['research'])
++        if s['config'].get('research_world') is not True or not set(s['active'])<=set(s['research']['runtimes']):raise ValueError('V1023R_NICHE_BINDING')
+ def preflight(d):
+     s=store.load(d,NS,COMPONENT,_validate)
+     for rid,row in s['runtimes'].items():
+@@ -80,7 +85,7 @@
+     proof=whole._sign(source,payload);s['inherited_public_learning'].append(proof);store.save(target,cognition.NS,cognition.COMPONENT,s);return whole.sha_obj(proof)
+ def _performance():return {k:0 for k in ('attempts','correct','wrong','abstained','hard_attempts','hard_correct','simple_attempts','simple_correct')}
+ @transactional()
+-def init(d,trust_file,families=4,seed='v1022',reservoir=20000,regeneration=0,max_age=32,learning=True,actions=True):
++def init(d,trust_file,families=4,seed='v1022',reservoir=20000,regeneration=0,max_age=32,learning=True,actions=True,research_world=False):
+     if root(d).exists():raise ValueError('V1022_METABOLISM_REINITIALIZATION')
+     if type(families) is not int or not 2<=families<=8:raise ValueError('V1022_FAMILY_BOUND')
+     if type(reservoir) is not int or not 0<=reservoir<=1000000 or type(regeneration) is not int or not 0<=regeneration<=100000:raise ValueError('V1022_RESOURCE_BOUND')
+@@ -92,10 +97,14 @@
+     s={'schema':SCHEMA,'tick':0,'seed':hashlib.sha256(str(seed).encode()).hexdigest(),'reservoir':reservoir,'burned':0,
+        'initial_total':reservoir+6500*families,'regenerated':0,'config':{'regeneration':regeneration,'max_age':max_age,'learning':bool(learning),'actions':bool(actions)},
+        'runtimes':{},'active':[],'performance':{},'deaths':[],'successions':[],'last_tick':None,'claim_boundary':CLAIMS}
++    if research_world:
++        from tukuyo_v1023r import niche
++        s['config']['research_world']=True;s['research']={'schema':'tukuyo.v1023r.niche/1','claim_boundary':niche.CLAIMS,'runtimes':{},'econ':dict(niche.ECON)}
+     for i in range(families):
+         rid,ident=_fresh(d,s);_cli(d,rid,'succession-founder-init')
+         if learning:_culture(d,child(d,rid),'owner-to-founder-public-skills')
+         s['runtimes'][rid]=_snapshot(d,rid);s['active'].append(rid);s['performance'][rid]=_performance()
++        if research_world:s['research']['runtimes'][rid]=niche.new_record(s['seed'],s['runtimes'][rid]['family'],f'N{i}',None)
+     _validate(s);store.save(d,NS,COMPONENT,s);return summary(s)
+ def _task(s,rid,tick,hard):
+     b=hashlib.sha256(f"{s['seed']}|{rid}|{tick}".encode()).digest();per=5+b[0]%9;count=3+b[1]%6;used=1+b[2]%5
+@@ -114,6 +123,12 @@
+     s['reservoir']-=6500;s['runtimes'][rid]=_snapshot(d,rid);s['active'].append(rid);s['performance'][rid]=_performance()
+     s['successions'].append({'tick':tick,'parent':parent,'child':rid,'package_sha256':hashlib.sha256(pkg.read_bytes()).hexdigest(),
+         'public_learning_commitment':cultural,'actual_inherited_profile':s['runtimes'][rid]['profile'],'funded_seed_energy':6500})
++    if 'research' in s:
++        # Science is culture too: only a CONFIRMED law of the parent, and only when learning is on.
++        from tukuyo_v1023r import niche
++        pa=s['research']['runtimes'][parent]['agent'];law=pa['claim'] if (s['config']['learning'] and pa['status']=='CONFIRMED' and pa['claim']) else None
++        law={k:v for k,v in law.items() if k!='inherited'} if law else None
++        s['research']['runtimes'][rid]=niche.new_record(s['seed'],s['runtimes'][rid]['family'],s['research']['runtimes'][parent]['niche'],law);s['successions'][-1]['inherited_law']=law['law'] if law else None
+     maybe_crash('metabolism:after_successor');return rid
+ @transactional()
+ def step(d,ticks=1):
+@@ -124,22 +139,34 @@
+         tick=s['tick']+1;regen=s['config']['regeneration'];s['reservoir']+=regen;s['regenerated']+=regen;rows=[]
+         for rid in list(s['active']):
+             p=child(d,rid);perf=s['performance'][rid];energy=s['runtimes'][rid]['energy']
+-            # claude-patch1: homeostatic choice. Options carry EXPECTED NET ENERGY from the last few
+-            # paid outcomes; energy above the satiety set-point is worth nothing, so a fed individual
+-            # rests instead of burning the commons, and a hungry one works where it pays most.
+-            def p_paid(kind):
++            query=answer=expected=None;correct=uncertain=False;credit=0;cost=300;niche_row=None
++            if 'research' in s:
++                # claude-patch5 research niche: the runtime's research agent proposes, its Heart accepts or rests.
++                from tukuyo_v1023r import niche
++                rec=s['research']['runtimes'][rid];age0=organism2.load(p).get('metabolic_age',0);hc={}
++                def _heart(opts):
++                    r=heart_loop.choose(p,opts,context=f'niche-tick-{tick}') if s['config']['actions'] else {'chosen':'rest'};hc['id']=r['chosen'];return r['chosen']
++                chosen,credit,extra,niche_row=niche.tick(s['seed'],rec,rid,energy,s['config']['max_age']-age0,_heart,s['reservoir'])
++                cost+=extra;s['reservoir']-=credit;correct=credit>0
++                if chosen=='work':perf['attempts']+=1;perf['correct']+=int(correct)
++                if hc.get('id') and hc['id']==chosen and chosen!='rest':
++                    heart_loop.feedback(p,hc['id'],max(-1.,min(1.,(credit-(cost-300))/600)),.2,'niche-energy-outcome')
++            else:
++              # claude-patch1: homeostatic choice. Options carry EXPECTED NET ENERGY from the last few
++              # paid outcomes; energy above the satiety set-point is worth nothing, so a fed individual
++              # rests instead of burning the commons, and a hungry one works where it pays most.
++              def p_paid(kind):
+                 r=perf.get('recent_'+kind,[]);return (sum(r)+1)/(len(r)+2)
+-            need=max(0,8000-energy);room=10000-energy;er=energy/10000
+-            ev_hard=p_paid('hard')*min(1100,need,room)-200;ev_simple=p_paid('simple')*min(600,need,room)-100
+-            opts=[{'id':'hard','signals':{'curiosity':1.2*er*(1 if ev_hard>=0 else .25),'survival':ev_hard/300,'truthfulness':.1}},
++              need=max(0,8000-energy);room=10000-energy;er=energy/10000
++              ev_hard=p_paid('hard')*min(1100,need,room)-200;ev_simple=p_paid('simple')*min(600,need,room)-100
++              opts=[{'id':'hard','signals':{'curiosity':1.2*er*(1 if ev_hard>=0 else .25),'survival':ev_hard/300,'truthfulness':.1}},
+                   {'id':'simple','signals':{'curiosity':.05*er,'survival':ev_simple/300,'truthfulness':.3}},
+                   {'id':'rest','signals':{'survival':.3 if max(ev_hard,ev_simple)<0 else 0.,'integrity':.1}}]
+-            chosen=heart_loop.choose(p,opts,context=f'metabolic-tick-{tick}')['chosen'] if s['config']['actions'] else 'rest'
+-            # Cheap periodic probe so a resting individual can notice that resources returned.
+-            probe=False
+-            if chosen=='rest' and s['config']['actions'] and energy>1500 and (tick+int(rid[1:]))%6==0:chosen='simple';probe=True
+-            query=answer=expected=None;correct=uncertain=False;credit=0;cost=300
+-            if chosen!='rest':
++              chosen=heart_loop.choose(p,opts,context=f'metabolic-tick-{tick}')['chosen'] if s['config']['actions'] else 'rest'
++              # Cheap periodic probe so a resting individual can notice that resources returned.
++              probe=False
++              if chosen=='rest' and s['config']['actions'] and energy>1500 and (tick+int(rid[1:]))%6==0:chosen='simple';probe=True
++              if chosen!='rest':
+                 hard=chosen=='hard';query,expected=_task(s,rid,tick,hard);result=cognition.solve(p,query);answer=result['answer'];uncertain=result['uncertain'];correct=not uncertain and answer==expected
+                 perf['attempts']+=1;perf['correct']+=int(correct);perf['abstained']+=int(uncertain);perf['wrong']+=int(not uncertain and not correct)
+                 perf[chosen+'_attempts']+=1;perf[chosen+'_correct']+=int(correct);cost+=200 if hard else 100
+@@ -153,7 +180,7 @@
+             age=organism2.load(p).get('metabolic_age',0)
+             if energy+credit<=cost or age+1>=s['config']['max_age']:evolution.select(p,'resource',seed=f"{s['seed']}|{rid}|{tick}")
+             m=organism2.metabolic_tick(p,credit,cost,s['config']['max_age']);s['burned']+=m['burn'];whole.sync(p);s['runtimes'][rid]=_snapshot(d,rid)
+-            rows.append({'runtime':rid,'action':chosen,'question':query,'answer':answer,'expected':expected,'correct':correct,'uncertain':uncertain,'credit':credit,'burn':m['burn'],'energy_after':s['runtimes'][rid]['energy']})
++            rows.append({'runtime':rid,'action':chosen,'question':query,'answer':answer,'expected':expected,'correct':correct,'uncertain':uncertain,'credit':credit,'burn':m['burn'],'energy_after':s['runtimes'][rid]['energy'],**({'niche':niche_row} if niche_row else {})})
+             if m['death_cause']:
+                 s['active'].remove(rid);s['deaths'].append({'runtime':rid,'tick':tick,'cause':m['death_cause']});maybe_crash('metabolism:after_death');_successor(d,s,rid,tick)
+         s['tick']=tick;s['last_tick']={'tick':tick,'regenerated':regen,'actions':rows};_validate(s)
+@@ -165,7 +192,8 @@
+         'actual_successions':len(s['successions']),'max_generation':max((r['generation'] for r in s['runtimes'].values()),default=0),
+         'reservoir':s['reservoir'],'burned':s['burned'],'initial_total':s['initial_total'],'regenerated':s['regenerated'],
+         'living_energy':sum(s['runtimes'][r]['energy'] for r in s['active']),**{k:total(k) for k in ('attempts','correct','wrong','abstained','hard_attempts','hard_correct')},
+-        'deaths':s['deaths'],'successions':s['successions'],'last_tick':s['last_tick'],'claim_boundary':CLAIMS}
++        'deaths':s['deaths'],'successions':s['successions'],'last_tick':s['last_tick'],'claim_boundary':CLAIMS,
++        **({'research_niche':__import__('tukuyo_v1023r.niche',fromlist=['summary']).summary(s['research'],s['seed']),'research_claim_boundary':s['research']['claim_boundary']} if 'research' in s else {})}
+ def status(d):return summary(preflight(d))
+ def audit(d):
+     try:return {**status(d),'resource_conservation':True,'errors':[]}
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1022/semantic_gate.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1022/semantic_gate.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1022/semantic_gate.py	2026-10-05 11:59:47.053997606 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1022/semantic_gate.py	2026-10-05 13:35:40.291484936 +0900
+@@ -12,7 +12,9 @@
+                      of an unsplit total (「りんごとみかんが合わせて20個…りんごは？」), operations
+                      aimed at different objects (「商品Aを20%引き、商品Bを…」), hedged quantities.
+       c. PARSER B  - for families this module can read on its own (rate x duration, percent / yen
+-                     price chains, calendar / weekday / clock, unit conversion) its own value must
++                     price chains, calendar / weekday / clock, unit conversion; claude-patch5 adds
++                     gains/losses, unit price x count and change, equal groups / sharing,
++                     comparisons, one-unknown equations, simple English gains/losses) its own value must
+                      equal the producer's. Disagreement blocks; agreement is recorded as
+                      independent_parser='AGREE'. Otherwise 'UNDECIDED' (never reported as independent).
+ 
+@@ -233,12 +235,194 @@
+         return f'{int(a)}{target}{_fmt(b/small)}{second}'
+     return _fmt(total/DIMS[_dim(target)][target])
+ 
++# ---- claude-patch5: Parser B for the common word-problem families.
++# Written from scratch for this file (own clause splitter, own verb lexicon, own question reader).
++# Every reader returns None unless it can account for EVERY numeric token of the question by itself,
++# so an AGREE always means "a second, separately written reading used all the numbers the same way".
++CNT=r'(?:個|こ|枚|まい|本|ほん|ぽん|ぼん|冊|さつ|台|人|にん|匹|ひき|ぴき|びき|頭|羽|わ|杯|粒|袋|箱|束|つ|ページ|まい|cm|mL|L|kg|g|m|円|点|回|台|脚|足|着|輪|切れ|玉|房)'
++B_DEC=('降り','おり','下車','飲み','飲ん','のみ','のん','食べ','たべ','使い','使っ','使う','つかい','つかっ','あげ','渡し','わたし','落とし','おとし','なくし','無くし','失くし','減っ','減り','へっ','へり','捨て','すて',
++       '割れ','われ','飛んで','とんで','飛び去','逃げ','にげ','帰っ','帰り','かえっ','かえり','出て行','でていっ','食われ','こぼれ','こわれ','壊れ','配っ','配り','くばっ','くばり','取り出し','とりだし','引い','ひい','切り取','売れ')
++B_INC=('もらい','もらっ','貰い','貰っ','買い','買っ','かい','かっ','増え','ふえ','拾い','拾っ','ひろい','ひろっ','追加し','足し','たし','来まし','来た','きまし','きた','入れ','いれ','加わ','くわわ','作り','作っ','つくり','つくっ',
++       '咲い','咲き','さい','さき','生まれ','うまれ','届い','とどい','集め','あつめ','見つけ','みつけ','借り','かり','乗ってき','のってき','やってき','増やし','ふやし')
++B_AMBIG=('売っ','売り','売る','返品','仕入','貸し','貸す','かし','返し','返す','預け','あずけ','払っ','はらっ','交換','両替','借りて','かりて')
++def _b_sentences(s):
++    return [x.strip() for x in re.split(r'[。．!！?？\n]+',s) if x.strip()]
++def _b_question(sents):
++    qs=[x for x in sents if re.search(r'何|いくつ|いくら|how many|how much',x,re.I)]
++    return qs[-1] if len(qs)==1 else None
++def _b_numcount(toks):return len([t for t in toks if t['kind'] not in ('per_unit_one','label')])
++def _b_nums(x):return [Fraction(n) for n in re.findall(r'\d+(?:\.\d+)?',x)]
++
++def _b_change(s,toks):
++    """initial amount, then gains/losses described by an unambiguous verb each, then 'how many now/left'."""
++    sents=_b_sentences(s);q=_b_question(sents)
++    if q is None or HEDGE.search(s) or re.search(r'ません|なかっ|ない[^ぶ]|ずつ|倍|円|%|割|何(?:人|個|本|枚|冊|匹)?(?:多|少)|ちがい|違い|差|より',s):return None
++    if not re.search(r'残り|のこり|今|いま|現在|全部で|ぜんぶで|合わせて|あわせて|になり|になって|になった|は何|はいくつ',q):return None
++    body=[x for x in sents if x is not q]
++    if not body:return None
++    m=re.search(r'(\d+(?:\.\d+)?)\s*('+CNT+r')\s*(?:の[^\d、。]{0,6})?\s*(?:あり|あっ|ある|い(?:ます|まし|る|た)|持って|もって|入って|はいって|咲いて|さいて|乗って|のって|泳いで|およいで|すわって|座って|飼って|かって)',body[0])
++    if not m or len(_b_nums(body[0]))!=1:return None
++    c=m[2];total=Fraction(m[1]);used=1
++    rest=' '.join(body[1:])+(' '+q if _b_nums(q) else '')
++    for ev in re.finditer(r'(\d+(?:\.\d+)?)\s*('+CNT+r')([^\d]*)',rest):
++        if ev[2]!=c:return None
++        tail=ev[3]
++        if any(a in tail for a in B_AMBIG):return None
++        core=re.sub(r'^(?:[\s、]|[をがはにへ](?![らりるれろいう]))*(?:さらに|また|あとから|後から|その後|そのあと|新しく|あたらしく)?(?:[\s、]|[をがはにへ](?![らりるれろいう]))*','',tail)
++        core=re.sub(r'^[^\s、。]{1,6}?を','',core) if not core.startswith(B_DEC+B_INC) else core
++        dec=core.startswith(B_DEC);inc=core.startswith(B_INC)
++        if bool(dec)==bool(inc):return None
++        total+=Fraction(ev[1])*(-1 if dec else 1);used+=1
++    if used<2 or used!=_b_numcount(toks) or total<0:return None
++    return _fmt(total)
++
++ITEM_CNT=r'(個|本|冊|枚|袋|台|箱|パック|杯|皿|つ|足|着|個入り|kg|g|L)'
++def _b_unit_price(s,toks):
++    """price per item x number of items (several items allowed), optionally paid with a bill -> change."""
++    if HEDGE.search(s) or re.search(r'%|パーセント|割|引き|値上げ|ずつ|倍|あまり|余り',s):return None
++    q=_b_question(_b_sentences(s))
++    if q is None:return None
++    total=Fraction(0);used=0;spans=[]
++    for m in re.finditer(r'1\s*'+ITEM_CNT+r'\s*(\d+(?:\.\d+)?)\s*円の\s*[^、。を\d]{1,14}?\s*を\s*(\d+(?:\.\d+)?)\s*(?:\1|つ)',s):
++        total+=Fraction(m[2])*Fraction(m[3]);used+=2;spans.append(m.span())
++    for m in re.finditer(r'(?<!1)(?<![\d.])(\d+(?:\.\d+)?)\s*円の\s*[^、。を\d]{1,14}?\s*を\s*(\d+(?:\.\d+)?)\s*'+ITEM_CNT,s):
++        if any(a<=m.start()<b for a,b in spans):continue
++        total+=Fraction(m[1])*Fraction(m[2]);used+=2;spans.append(m.span())
++    if not used:return None
++    pay=re.search(r'(\d+(?:\.\d+)?)\s*円(?:札|玉)?\s*(?:を|で)?\s*(?:出|だ|払|はら|渡|わた)',s)
++    asks_change=re.search(r'おつり|お釣り|おつりは|残り|のこり',q)
++    if asks_change:
++        if not pay or any(a<=pay.start()<b for a,b in spans):return None
++        used+=1;total=Fraction(pay[1])-total
++        if total<0:return None
++    elif pay or not re.search(r'代金|いくら|何円|合計|全部で|ぜんぶで|あわせて|合わせて',q):return None
++    if used!=_b_numcount(toks):return None
++    return _fmt(total)
++
++GRP=r'(人|箱|袋|皿|列|組|台|日|週|週間|か月|ヶ月|回|チーム|班|かご|ケース|パック|段|ページ)'
++def _b_groups(s,toks):
++    """equal groups: N per group x M groups; N shared equally by M; N handed out M each (how many people / remainder)."""
++    if HEDGE.search(s) or re.search(r'円|%|割|倍|より',s):return None
++    q=_b_question(_b_sentences(s))
++    if q is None:return None
++    n=_b_numcount(toks)
++    if re.search(CONT+r'\s*(?:は|が|の数)',q) or re.search(r'できます|できる|作れ|つくれ|何\s*(?:グループ|組|チーム|班|列)',q):
++        # the question asks for a number of groups: only the partition reading (same counter) applies
++        m=re.search(r'(\d+)\s*('+CNT+r')[^？?]*?(\d+)\s*\2\s*ずつ',s)
++        if m and n==2 and int(m[3]):
++            a,b=int(m[1]),int(m[3])
++            if re.search(r'あまり|余り|のこり|残り',q):return str(a%b)
++            return str(a//b)
++        return None
++    m=re.search(r'(\d+)\s*(人|にん)[^？?]*?1\s*(?:人|にん)\s*(?:に|あたり|につき)?\s*(\d+(?:\.\d+)?)\s*('+CNT+r')\s*ずつ',s)
++    if m and n==2 and m[4] not in ('人','にん') and re.search(r'全部で|ぜんぶで|合わせて|あわせて|みんなで|何'+CNT+'|いくつ',q):return _fmt(Fraction(m[1])*Fraction(m[3]))
++    m=re.search(r'(\d+(?:\.\d+)?)\s*('+CNT+r')\s*ずつ[^。]*?(\d+)\s*'+GRP,s) or re.search(r'(?<![\d.])([2-9]|\d{2,})\s*'+GRP+r'\s*(?:に|へ|で|の)?[^。\d]{0,10}?(\d+(?:\.\d+)?)\s*('+CNT+r')\s*ずつ',s)
++    if m and m.re.pattern.startswith('(?<!') and m[2]==m[4]:m=None      # 「35人…5人ずつ」 is a partition, not a product
++    if m and n==2 and re.search(r'全部で|ぜんぶで|合わせて|あわせて|みんなで|何'+CNT+'|いくつ|何'+CNT+r'?(?:いり|必要)',q) and not re.search(r'何\s*'+GRP+r'(?!.*何)',q):
++        return _fmt(Fraction(m[1])*Fraction(m[3]))
++    m=re.search(r'1\s*'+GRP+r'\s*(?:に|あたり|につき|の)?\s*(\d+(?:\.\d+)?)\s*('+CNT+r')[^。]*?(\d+)\s*\1',s)
++    if m and n==2 and re.search(r'全部で|ぜんぶで|合わせて|あわせて|何'+CNT+'|いくつ',q):return _fmt(Fraction(m[2])*Fraction(m[4]))
++    m=re.search(r'(\d+)\s*('+CNT+r')[^？?]*?(\d+)\s*(?:人|にん)\s*で\s*(?:同じ数ずつ|おなじ数ずつ|等しく|同じように|同じ数に|なかよく)?\s*(?:分け|わけ)',s)
++    if m and n==2 and re.search(r'1\s*人|ひとり|一人',q) and not re.search(r'あまり|余り',q):
++        a,b=int(m[1]),int(m[3])
++        return _fmt(Fraction(a,b)) if b and a%b==0 else None
++    m=re.search(r'(\d+)\s*('+CNT+r')[^？?]*?1\s*(?:人|にん)\s*(?:に|あたり)?\s*(\d+)\s*\2\s*ずつ\s*(?:配|くば|分け|わけ|あげ)',s)
++    if m and n==2:
++        a,b=int(m[1]),int(m[3])
++        if not b:return None
++        if re.search(r'あまり|余り|のこり|残り',q):return str(a%b)
++        if re.search(r'何人|なんにん',q):return str(a//b)
++    return None
++
++def _b_compare(s,toks):
++    """A has N; B has M more / fewer than A (or K times A); question about B, the total, or the difference."""
++    if HEDGE.search(s) or re.search(r'%|割|ずつ',s):return None
++    sents=_b_sentences(s);q=_b_question(sents)
++    if q is None or _b_numcount(toks)!=2:return None
++    m1=re.search(r'([^\s、。は]{1,8})\s*は\s*[^\d。]{0,12}?(\d+(?:\.\d+)?)\s*('+CNT+r')\s*(?:持って|もって|あり|あっ|い(?:ます|まし)|です|集め|あつめ|拾い|読み|よみ|作り|つくり|買い|かい|もらい|飼って|食べ|たべ|とり|取り|釣り|つり|の)',s)
++    m2=re.search(r'([^\s、。は]{1,8})\s*は\s*([^\s、。は]{1,8})\s*より\s*(\d+(?:\.\d+)?)\s*('+CNT+r')\s*(多|おお|少な|すくな)',s)
++    m3=re.search(r'([^\s、。は]{1,8})\s*は\s*([^\s、。は]{1,8})\s*の\s*(\d+(?:\.\d+)?)\s*倍',s)
++    if m1 and (m2 or m3):
++        a_name=re.sub(r'^(?:[^\s、。]*?の)','',m1[1]);a=Fraction(m1[2])
++        if m2:
++            b_name,ref=m2[1],m2[2]
++            if ref not in (m1[1],a_name) and not m1[1].endswith(ref):return None
++            if m2[4]!=m1[3]:return None
++            b=a+Fraction(m2[3])*(1 if m2[5] in ('多','おお') else -1)
++        else:
++            b_name,ref=m3[1],m3[2]
++            if ref not in (m1[1],a_name) and not m1[1].endswith(ref):return None
++            b=a*Fraction(m3[3])
++        if b<0:return None
++        if re.search(r'合わせて|あわせて|全部で|ぜんぶで|二人で|2人で|ふたりで',q):return _fmt(a+b)
++        if re.search(re.escape(b_name)+r'\s*(?:は|が|の)',q) and not re.search(re.escape(a_name)+r'\s*(?:は|が)',q):return _fmt(b)
++        return None
++    if re.search(r'ちがい|違い|差|何\s*'+CNT+r'?\s*(?:多|少)|どちらが',q):
++        vals=[t['value'] for t in toks if t['kind'] not in ('per_unit_one','label')]
++        units={t['unit'] for t in toks if t['kind']=='num'}
++        if len(vals)==2 and not re.search(r'より|倍|もらい|あげ|食べ|使',s) and len(units)<=1:return _fmt(abs(vals[0]-vals[1]))
++    return None
++
++EQ_OP=[(r'に\s*(\d+(?:\.\d+)?)\s*を?\s*(?:足|た|加|くわ)','add'),(r'から\s*(\d+(?:\.\d+)?)\s*を?\s*(?:引|ひ)','sub'),(r'を\s*(\d+(?:\.\d+)?)\s*倍','mul'),
++       (r'に\s*(\d+(?:\.\d+)?)\s*を?\s*(?:かけ|掛け)','mul'),(r'を\s*(\d+(?:\.\d+)?)\s*で\s*(?:割|わ)','div')]
++def _b_equation(s,toks):
++    """'ある数' / '□' with up to two operations then '= K': solved backwards, then checked forwards."""
++    m=re.search(r'(ある数|□|ある整数)(.*?)(?:と|たら|ところ|すると|したら)\s*(\d+(?:\.\d+)?)\s*(?:に|と)?\s*(?:なり|なる|なった|でした|です|になり)',s)
++    if not m or HEDGE.search(s):return None
++    body=m[2];ops=[];pos=0
++    chain=re.split(r'(?:して|し、|てから|、|して、)',body)
++    for part in chain:
++        part=part.strip()
++        if not part:continue
++        hit=None
++        for pat,kind in EQ_OP:
++            mm=re.match(r'\s*'+pat,part)
++            if mm:hit=(kind,Fraction(mm[1]));break
++        if not hit:
++            mm=re.match(r'\s*(\d+(?:\.\d+)?)\s*を?\s*(?:足|た|加|くわ)',part) or None
++            if mm:hit=('add',Fraction(mm[1]))
++            mm2=re.match(r'\s*(\d+(?:\.\d+)?)\s*を?\s*(?:引|ひ)',part)
++            if mm2:hit=('sub',Fraction(mm2[1]))
++            mm3=re.match(r'\s*(\d+(?:\.\d+)?)\s*倍',part)
++            if mm3:hit=('mul',Fraction(mm3[1]))
++        if not hit:return None
++        ops.append(hit)
++    if not 1<=len(ops)<=2:return None
++    if _b_numcount(toks)!=len(ops)+1:return None
++    x=Fraction(m[3])
++    for kind,v in reversed(ops):
++        if kind=='add':x-=v
++        elif kind=='sub':x+=v
++        elif kind=='mul':
++            if v==0:return None
++            x/=v
++        else:x*=v
++    y=x
++    for kind,v in ops:
++        y={'add':y+v,'sub':y-v,'mul':y*v,'div':y/v if v else None}[kind]
++        if y is None:return None
++    if y!=Fraction(m[3]):return None
++    return _fmt(x)
++
++EN_DEC=r'(?:ate|eats|eat|gave away|gives away|give away|lost|loses|lose|used|uses|use|broke|breaks|dropped|drops|spent|spends)'
++EN_INC=r'(?:got|gets|get|found|finds|find|received|receives|bought|buys|buy|picked|picks|collected|collects|was given|is given|won|wins|made|makes|baked|bakes)'
++def _b_en_change(s,toks):
++    if HEDGE.search(s) or re.search(r'\beach\b|\btimes\b|\btwice\b|\bper\b|\bmore than\b|\bfewer than\b|\bless than\b|\bsold\b|\bsells\b|\blent\b|\bborrowed\b|\$|dollars?|\bcents?\b',s,re.I):return None
++    if not re.search(r'how many[^.?]*\b(?:left|now|in all|altogether|in total|remain)',s,re.I):return None
++    m=re.search(r'\b(?:has|had|have|there (?:are|were)|owns?|owned)\s+(\d+)\s+([a-z]+)',s,re.I)
++    if not m:return None
++    total=Fraction(m[1]);used=1
++    for ev in re.finditer(r'\b('+EN_DEC+'|'+EN_INC+r')\s+(?:\w+\s+){0,2}?(\d+)\b',s[m.end():],re.I):
++        total+=Fraction(ev[2])*(-1 if re.fullmatch(EN_DEC,ev[1],re.I) else 1);used+=1
++    if used<2 or used!=_b_numcount(toks) or total<0:return None
++    return _fmt(total)
++
+ def parser_b(q):
+     s=normalize(q);toks=tokens(q)
+     try:
+         cal=_b_calendar(s)
+         if cal:return cal
+-        for f in (_b_rate,_b_price,_b_conversion):
++        for f in (_b_rate,_b_price,_b_conversion,_b_unit_price,_b_groups,_b_compare,_b_equation,_b_change,_b_en_change):
+             v=f(s,toks)
+             if v is not None:return ('value',v)
+     except (ValueError,ZeroDivisionError,OverflowError):return None
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/__init__.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/__init__.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/__init__.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/__init__.py	2026-10-05 13:12:18.994963051 +0900
+@@ -0,0 +1,2 @@
++"""V1023r: open-world research preview (claude-patch5). Not the author's v1023."""
++VERSION='v1023r-preview'
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/agent.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/agent.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/agent.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/agent.py	2026-10-05 14:01:04.739896566 +0900
+@@ -0,0 +1,313 @@
++"""Open-world research agent for the V1023r preview (claude-patch5).
++
++The agent only sees observations.  It keeps
++  * a hypothesis language in tiers (laws of growing description length),
++  * a catch-all "OUTSIDE" model (an unknown per-input table) so that the
++    known laws can lose to "something I cannot express",
++  * Bayesian beliefs under the published sensor bound,
++and it
++  * picks the experiment with the largest expected information gain,
++  * widens its language when OUTSIDE wins, and changes method (law -> table)
++    when even the widest language loses,
++  * claims a law only after replication on inputs chosen by the environment,
++  * retracts a confirmed law when a noise-free outcome contradicts it.
++
++Nothing in this module may import the world implementation's secret parts;
++it imports only the public library of law descriptions and constants.
++"""
++from __future__ import annotations
++import math
++from .worlds import library,INPUTS,N,SENSOR_BOUND,LOCKS,bit
++
++EPS=SENSOR_BOUND;EPS_WORK=0.005;LOG_FLOOR=-30.0
++_LIB=library()
++_TABLES=[r[2] for r in _LIB];_TIERS=[r[0] for r in _LIB];_NAMES=[r[1] for r in _LIB]
++_TIER_SIZE={t:_TIERS.count(t) for t in (1,2,3)}
++_LOGPRIOR=[math.log(.9/3/_TIER_SIZE[t]) for t in _TIERS]
++# All lock configurations (which switches are fixed and to what).
++import itertools as _it
++CONFIGS=[{i:v for i,v in zip(c,vals)} for c in _it.combinations(range(N),LOCKS) for vals in _it.product((0,1),repeat=LOCKS)]
++def free_inputs(locked):return [x for x in range(INPUTS) if all(bit(x,i)==v for i,v in locked.items())]
++_CFG_X=[free_inputs(c) for c in CONFIGS]
++def _achievable(t):return sum(1 for xs in _CFG_X if any(bit(t,x) for x in xs))/len(CONFIGS)
++_ACH=[_achievable(t) for t in _TABLES]
++
++def H(p):
++    if p<=0 or p>=1:return 0.0
++    return -(p*math.log2(p)+(1-p)*math.log2(1-p))
++def binom_sf(k,n,p):
++    """P(X>=k) for X~Binom(n,p)."""
++    return sum(math.comb(n,i)*p**i*(1-p)**(n-i) for i in range(k,n+1))
++def cp_lower(s,n,alpha=0.01):
++    """One-sided Clopper-Pearson lower bound for a success rate."""
++    if s<=0:return 0.0
++    lo,hi=0.0,1.0
++    for _ in range(60):
++        m=(lo+hi)/2
++        if binom_sf(s,n,m)<alpha:lo=m
++        else:hi=m
++    return lo
++def switches(x):return ','.join(f'S{i+1}={bit(x,i)}' for i in range(N))
++
++class ResearchAgent:
++    def __init__(self,sat_prior=0.10,confirm=0.98,replications=10,alpha=0.01,choose='info_gain',prior_claim=None):
++        # prior_claim: a law this individual (or its lineage) confirmed earlier in the same world.
++        # It is used at once, gets half of the law mass, and stays refutable like any other belief.
++        self.prior_claim=prior_claim;prior_law=prior_claim['table'] if prior_claim else None
++        self.prior_index=_TABLES.index(prior_law) if prior_law in _TABLES else None
++        self.sat_prior=sat_prior;self.confirm=confirm;self.replications=replications;self.alpha=alpha;self.choose=choose
++        self.ll=[0.0]*len(_TABLES);self.L1=[0.0]*INPUTS;self.L0=[0.0]*INPUTS;self.count=[0]*INPUTS
++        self.tier=1;self.method='LAW';self.status='RESEARCHING';self.obs=[];self.events=[];self.claim=None
++        self.rep=None;self._post=None
++        if self.prior_index is not None:
++            self.status='CONFIRMED';self.claim={**prior_claim,'inherited':True}
++            self.events.append({'event':'USING_REMEMBERED_LAW','law':prior_claim['law'],'at_observation':0})
++    # ---------------- beliefs ----------------
++    def absorb(self,o,prediction=None):
++        """Statistics only (used by observe and when an agent is restored from its record)."""
++        x,y=o['x'],o['y'];e=EPS_WORK if o['kind']=='work' else EPS
++        a,b=math.log(1-e),math.log(e)
++        for k,t in enumerate(_TABLES):self.ll[k]+=a if bit(t,x)==y else b
++        if y:self.L1[x]+=a;self.L0[x]+=b
++        else:self.L0[x]+=a;self.L1[x]+=b
++        self.count[x]+=1;self.obs.append({'kind':o['kind'],'n':o['n'],'x':x,'y':y,**({'prediction':prediction} if prediction is not None else {})});self._post=None
++    def observe(self,o,prediction=None):
++        self.absorb(o,prediction);self._after(o,prediction)
++    def to_state(self):
++        return {'obs':list(self.obs),'status':self.status,'method':self.method,'tier':self.tier,'claim':self.claim,'rep':self.rep,
++                'events':self.events[-24:],'prior_claim':self.prior_claim}
++    def to_compact(self):
++        """Sufficient statistics instead of the observation list (bounded size for long lives)."""
++        return {'L1':list(self.L1),'L0':list(self.L0),'count':list(self.count),'n_obs':len(self.obs),'status':self.status,'method':self.method,
++                'tier':self.tier,'claim':self.claim,'rep':self.rep,'events':self.events[-12:],'prior_claim':self.prior_claim}
++    @classmethod
++    def from_compact(cls,st):
++        a=cls(prior_claim=st.get('prior_claim'));a.L1=[float(v) for v in st['L1']];a.L0=[float(v) for v in st['L0']];a.count=[int(v) for v in st['count']]
++        a.ll=[sum(a.L1[x] if bit(t,x) else a.L0[x] for x in range(INPUTS)) for t in _TABLES]
++        a.obs=[{}]*int(st['n_obs']);a.status=st['status'];a.method=st['method'];a.tier=st['tier'];a.claim=st['claim'];a.rep=st['rep'];a.events=list(st['events']);a._post=None
++        return a
++    @classmethod
++    def from_state(cls,st):
++        a=cls(prior_claim=st.get('prior_claim'))
++        for o in st['obs']:a.absorb(o,o.get('prediction'))
++        a.status=st['status'];a.method=st['method'];a.tier=st['tier'];a.claim=st['claim'];a.rep=st['rep'];a.events=list(st['events']);a._post=None
++        return a
++    def _prior(self,k):
++        # Occam prior: each description-length tier gets the same mass, split inside the tier.
++        return (1-self.sat_prior)/3/_TIER_SIZE[_TIERS[k]]
++    def _sat_ll(self):
++        tot=0.0
++        for x in range(INPUTS):
++            if self.count[x]:m=max(self.L1[x],self.L0[x]);tot+=m+math.log(.5*math.exp(self.L1[x]-m)+.5*math.exp(self.L0[x]-m))
++        return tot
++    def posterior(self):
++        if self._post is not None:return self._post
++        lp={k:self.ll[k]+_LOGPRIOR[k]+math.log(1-self.sat_prior)-math.log(.9) for k in range(len(_TABLES))}
++        if self.prior_index is not None:
++            for k in lp:lp[k]+=math.log(.5)
++            lp[self.prior_index]=self.ll[self.prior_index]+math.log((1-self.sat_prior)*.5)
++        sat=self._sat_ll()+math.log(self.sat_prior)
++        m=max(max(lp.values()),sat);z=sum(math.exp(v-m) for v in lp.values())+math.exp(sat-m)
++        kb=max(lp,key=lp.get)
++        w={k:math.exp(v-m)/z for k,v in lp.items() if v-m>LOG_FLOOR or k==kb};psat=math.exp(sat-m)/z
++        self._post=(w,psat);return self._post
++    def p_sat_bit(self,x):
++        d=self.L1[x]-self.L0[x]
++        return 1/(1+math.exp(-d)) if abs(d)<700 else float(d>0)
++    def p_on(self,x):
++        """Probability that the TRUE lamp is on at x."""
++        w,ps=self.posterior();return sum(p for k,p in w.items() if bit(_TABLES[k],x))+ps*self.p_sat_bit(x)
++    def top(self,n=3):
++        w,ps=self.posterior();rows=sorted(w.items(),key=lambda kv:-kv[1])[:n]
++        return [{'law':_NAMES[k],'tier':_TIERS[k],'posterior':round(p,4),'table':_TABLES[k]} for k,p in rows]
++    def map_law(self):
++        w,_=self.posterior();k=max(w,key=w.get);return k,w[k]
++    # ---------------- state transitions ----------------
++    def _anomalies(self,k,margin=1.0):
++        """Inputs whose observed majority contradicts law k (margin in log-likelihood units)."""
++        out=[]
++        for x in range(INPUTS):
++            if self.count[x]:
++                maj=int(self.L1[x]>self.L0[x])
++                if maj!=bit(_TABLES[k],x) and abs(self.L1[x]-self.L0[x])>margin:out.append(x)
++        return out
++    def _after(self,o,prediction):
++        # A noise-free outcome that contradicts a confirmed law refutes it.
++        if self.status=='CONFIRMED' and o['kind']=='work' and bit(self.claim['table'],o['x'])!=o['y']:
++            self.events.append({'event':'REFUTED','law':self.claim['law'],'counterexample':switches(o['x']),'observed':o['y'],'at_observation':len(self.obs)})
++            self.status='RESEARCHING';self.claim=None;self.rep=None
++        if self.rep is not None:
++            r=self.rep
++            if o['kind']=='trial' and r['phase']=='replicate':
++                r['n']+=1;r['errors']+=int(prediction!=o['y'])
++                if prediction!=o['y']:r['counterexamples'].append(switches(o['x']));r['misses'].append(o['x'])
++            elif o['kind']=='probe' and r['queue'] and o['x']==r['queue'][0]:r['queue'].pop(0)
++        self._revise()
++    def _revise(self):
++        w,ps=self.posterior()
++        if self.method=='LAW' and ps>0.9:
++            k,_p=self.map_law();self.events.append({'event':'METHOD_CHANGE','to':'TABLE','p_outside':round(ps,4),
++                'counterexamples':[switches(x) for x in self._anomalies(k)][:6],'at_observation':len(self.obs)})
++            self.method='TABLE';self.status='UNEXPLAINED';self.rep=None;self.claim=None
++        elif self.method=='TABLE' and ps<0.2:
++            self.events.append({'event':'LAW_LANGUAGE_RECOVERED','p_outside':round(ps,4),'at_observation':len(self.obs)})
++            self.method='LAW';self.status='RESEARCHING'
++        self.tier=_TIERS[self.map_law()[0]]
++        if self.rep is not None:self._advance_confirmation()
++    def _advance_confirmation(self):
++        """Confirmation protocol for the leading law:
++        coverage (every input seen once) -> re-test every anomaly ->
++        replication on inputs chosen by the environment -> re-test every miss -> decide."""
++        r=self.rep;k,p=self.map_law()
++        if k!=r['law_index'] or p<self.confirm:
++            self.events.append({'event':'CONFIRMATION_ABANDONED','law':_NAMES[r['law_index']],'reason':'leading law changed' if k!=r['law_index'] else 'belief fell below threshold',
++                                'at_observation':len(self.obs)});self.rep=None;return
++        if r['queue']:return
++        if r['phase']=='coverage':
++            an=self._anomalies(k,margin=0.0);r['phase']='anomaly';r['queue']=[x for x in an for _ in range(2)]
++            if an:self.events.append({'event':'ANOMALY_RETEST','law':_NAMES[k],'inputs':[switches(x) for x in an][:6],'at_observation':len(self.obs)})
++            if r['queue']:return
++        if r['phase']=='anomaly':r['phase']='replicate';return
++        if r['phase']=='replicate' and r['n']>=self.replications:
++            if r['errors']:
++                r['phase']='miss_retest';r['queue']=[x for x in r['misses'] for _ in range(3)]
++                self.events.append({'event':'ANOMALY_RETEST','law':_NAMES[k],'inputs':[switches(x) for x in r['misses']][:6],'at_observation':len(self.obs)});return
++            r['phase']='decide'
++        if r['phase']=='miss_retest':r['phase']='decide'
++        if r['phase']=='decide':
++            ok=binom_sf(r['errors'],r['n'],EPS)>=self.alpha and not self._anomalies(k,margin=1.0)
++            if ok:
++                s_=r['n']-r['errors']
++                self.claim={'law':_NAMES[k],'tier':_TIERS[k],'table':_TABLES[k],'posterior':round(p,4),
++                    'replication':{'trials':r['n'],'errors':r['errors']},'inputs_checked':sum(1 for c in self.count if c),
++                    'claimed_min_agreement_99':round(cp_lower(s_,r['n']),4)}
++                self.status='CONFIRMED';self.events.append({'event':'CONFIRMED','law':_NAMES[k],'trials':r['n'],'errors':r['errors'],'at_observation':len(self.obs)})
++            else:
++                self.events.append({'event':'REPLICATION_FAILED','law':_NAMES[k],'errors':r['errors'],'trials':r['n'],
++                    'counterexamples':r['counterexamples'][:4],'at_observation':len(self.obs)})
++            self.rep=None
++    def want_replication(self):
++        if self.status!='RESEARCHING' or self.method!='LAW' or self.rep is not None:return False
++        k,p=self.map_law();return p>=self.confirm
++    def start_replication(self):
++        k,_=self.map_law();self.rep={'law_index':k,'phase':'coverage','queue':[x for x in range(INPUTS) if not self.count[x]],'n':0,'errors':0,'counterexamples':[],'misses':[]}
++        self.events.append({'event':'REPLICATION_STARTED','law':_NAMES[k],'at_observation':len(self.obs)})
++    def predict_trial(self,x):
++        """Prediction committed before the replication outcome is seen."""
++        return bit(_TABLES[self.rep['law_index']],x) if self.rep else int(self.p_on(x)>=.5)
++    # ---------------- choosing ----------------
++    def info_gain(self,x):
++        w,ps=self.posterior();pbar=0.0;cond=0.0
++        for k,p in w.items():
++            q=(1-EPS) if bit(_TABLES[k],x) else EPS;pbar+=p*q
++        cond+=(1-ps)*H(EPS)
++        qs=self.p_sat_bit(x)*(1-EPS)+(1-self.p_sat_bit(x))*EPS;pbar+=ps*qs;cond+=ps*H(qs)
++        return H(pbar)-cond
++    def next_experiment(self,rng=None):
++        if self.choose=='random':
++            return int(rng.random()*INPUTS) if rng else 0
++        best=max(range(INPUTS),key=lambda x:(round(self.info_gain(x),9),-self.count[x],-x))
++        return best
++    def work_choice(self,locked):
++        xs=free_inputs(locked);best=max(xs,key=lambda x:(round(self.p_on(x),9),-x));return best,self.p_on(best)
++    def value_of_information(self):
++        """Expected gain per work episode from knowing the law exactly (value of perfect information)."""
++        w,ps=self.posterior();po=[self.p_on(x) for x in range(INPUTS)]
++        now=sum(max(po[x] for x in xs) for xs in _CFG_X)/len(CONFIGS)
++        known=sum(p*_ACH[k] for k,p in w.items())
++        if ps>0:
++            pb=[self.p_sat_bit(x) for x in range(INPUTS)]
++            known+=ps*sum(1-math.prod(1-pb[x] for x in xs) for xs in _CFG_X)/len(CONFIGS)
++        return max(0.0,known-now)
++    # ---------------- deciding (knowledge gradient) ----------------
++    def _sat_bits(self):return [self.p_sat_bit(x) for x in range(INPUTS)]
++    @staticmethod
++    def _pon_vec(w,ps,sb):
++        v=[ps*sb[x] for x in range(INPUTS)]
++        for k,p in w.items():
++            t=_TABLES[k]
++            while t:
++                lsb=t&-t;v[lsb.bit_length()-1]+=p;t^=lsb
++        return v
++    @staticmethod
++    def _best_ev(v,econ):
++        R,c,pen=econ['reward'],econ['work'],econ.get('fail_penalty',0)
++        val=[v[x]*R-c-pen*(1-v[x]) for x in range(INPUTS)]
++        return sum(max(0.0,max(val[x] for x in xs)) for xs in _CFG_X)/len(CONFIGS)
++    def _what_if(self,x0,y,e):
++        w,ps=self.posterior();a,b=1-e,e;nw={};z=0.0
++        for k,p in w.items():
++            q=p*(a if bit(_TABLES[k],x0)==y else b);nw[k]=q;z+=q
++        sb=self._sat_bits();s0=sb[x0];qs=s0*(a if y else b)+(1-s0)*(b if y else a);nps=ps*qs;z+=nps
++        sb[x0]=s0*(a if y else b)/qs if qs>0 else s0
++        return z,{k:v/z for k,v in nw.items()},nps/z,sb
++    def knowledge_gradient(self,x0,e,econ):
++        w,ps=self.posterior();now=self._best_ev(self._pon_vec(w,ps,self._sat_bits()),econ);after=0.0
++        for y in (0,1):
++            py,nw,nps,sb=self._what_if(x0,y,e)
++            if py>1e-12:after+=py*self._best_ev(self._pon_vec(nw,nps,sb),econ)
++        return max(0.0,after-now)
++    def entropy_bits(self):
++        # Uncertainty about which law, plus (inside the OUTSIDE model) about every unknown table cell.
++        w,ps=self.posterior();h=-sum(p*math.log2(p) for p in list(w.values())+[ps] if p>0)
++        return h+ps*sum(H(self.p_sat_bit(x)) for x in range(INPUTS))
++    def known_ev(self,econ):
++        w,ps=self.posterior();gain=econ['reward']-econ['work'];v=sum(p*_ACH[k] for k,p in w.items())*gain
++        if ps>0:
++            pb=self._sat_bits();v+=ps*gain*sum(1-math.prod(1-pb[x] for x in xs) for xs in _CFG_X)/len(CONFIGS)
++        return v
++    def decide(self,locked,energy,remaining,econ,science=True,experiments=True,rng=None):
++        """One action for this tick: ('trial'|'probe'|'work'|'rest', input or None, scores).
++
++        Research is bought only while its expected value exceeds its cost:
++          value = (EV with the law known - EV now) x useful remaining ticks
++          cost  = expected number of experiments x (experiment cost + work income forgone)
++        and when working is already profitable and teaches as much as an
++        experiment, the organism learns by working instead."""
++        R,c,pen,cp=econ['reward'],econ['work'],econ.get('fail_penalty',0),econ['probe']
++        sci=econ.get('science_at',0.5)
++        if experiments and science and self.rep is None and self.want_replication() and energy>=max(econ['start']*0.75,econ['cap']*sci):
++            self.start_replication();self._advance_confirmation()
++        if experiments and self.rep is not None and energy>=econ['start']*0.5:
++            if self.rep['queue']:return 'probe',self.rep['queue'][0],{'confirmation':self.rep['phase']}
++            return 'trial',None,{'confirmation':self.rep['phase']}
++        xw,pon=self.work_choice(locked);ev=pon*R-c-pen*(1-pon);can_work=energy>c+pen;sc={'work_ev':round(ev,3)}
++        if experiments and science and self.status=='RESEARCHING' and energy>=econ['cap']*max(0.8,sci):
++            # Fed: surplus energy would overflow anyway, so curiosity finishes the science.
++            ig_best,x_best=max((round(self.info_gain(x),9),-self.count[x],-x) for x in range(INPUTS))[0::2];x_best=-x_best
++            if ig_best>0.02:
++                sc['curiosity']=True;return 'probe',(x_best if self.choose!='random' else int(rng.random()*INPUTS)),sc
++        if not experiments and self.status!='CONFIRMED' and can_work and ev<=0:
++            # Trial and error: the only experiment available is a risky work attempt.
++            w,ps=self.posterior();now=self._best_ev(self._pon_vec(w,ps,self._sat_bits()),econ);vopi=max(0.0,self.known_ev(econ)-now)
++            xs=free_inputs(locked);xe=max(xs,key=lambda x:(round(H(self.p_on(x)),9),-x));pe=self.p_on(xe);ige=H(pe);cost=max(0.0,-(pe*R-c-pen*(1-pe)))
++            est=min(60,math.ceil(self.entropy_bits()/max(ige,0.05)));h_eff=max(0,min(remaining-est,60))*0.5
++            if vopi*h_eff-est*cost>0 and energy>c+pen+cost:return 'work',xe,{**sc,'trial_and_error':True}
++        if experiments and self.status!='CONFIRMED' and energy>cp+2:
++            w,ps=self.posterior();now=self._best_ev(self._pon_vec(w,ps,self._sat_bits()),econ);vopi=max(0.0,self.known_ev(econ)-now)
++            ig_best,x_best=max((round(self.info_gain(x),9),-self.count[x],-x) for x in range(INPUTS))[0::2];x_best=-x_best
++            est=min(60,math.ceil(self.entropy_bits()/max(ig_best,0.05)));h_eff=max(0,min(remaining-est,60))*0.5
++            net=vopi*h_eff-est*(cp+max(0.0,now));ig_work=H(pon) if (can_work and ev>0) else 0.0
++            sc.update({'research_value':round(vopi*h_eff,3),'research_cost':round(est*(cp+max(0.0,now)),3),'probe_bits':round(ig_best,4),'work_bits':round(ig_work,4)})
++            if net>0 and not (ig_work>=ig_best):
++                return 'probe',(x_best if self.choose!='random' else int(rng.random()*INPUTS)),sc
++        if can_work and ev>0:return 'work',xw,sc
++        return 'rest',None,sc
++    # ---------------- reporting ----------------
++    def report(self):
++        w,ps=self.posterior();alive=sum(1 for p in w.values() if p>1e-3)
++        unknowns=[]
++        if self.status!='CONFIRMED':unknowns.append(f'どの法則か（有力候補 {alive} 個、手持ちの言葉の外にある確率 {ps:.2f}）')
++        unknowns.append(f'センサーの誤り率（上限 {EPS:.0%} と仮定）')
++        if self.method=='TABLE':unknowns.append('手持ちの法則の型では説明できない。入力ごとの表で覚えている')
++        nx=self.next_experiment() if self.status=='RESEARCHING' or self.method=='TABLE' else None
++        if self.status=='CONFIRMED':step='法則を使って働く。働いた結果が法則と食い違えば撤回する'
++        elif self.rep is not None:step={'coverage':'確認：まだ試していない入力を全部一度ずつ試す','anomaly':'確認：法則と食い違った入力をもう一度試す',
++            'replicate':f"確認：環境が選ぶ入力で再現試験（{self.rep['n']}/{self.replications} 回、外れ {self.rep['errors']}）",'miss_retest':'確認：再現試験で外れた入力をもう一度試す'}.get(self.rep['phase'],'確認中')
++        elif self.want_replication():step='余力ができたら確認の手順（全入力→食い違いの再試験→再現試験）に進む'
++        elif self.method=='TABLE':step='表で働きながら、確かでない入力を調べる'
++        else:step='情報量が最大の実験をする'
++        return {'status':self.status,'method':self.method,'tier':self.tier,'observations':len(self.obs),'unknowns':unknowns,
++                'hypotheses':[{k:v for k,v in h.items() if k!='table'} for h in self.top()],'p_outside_language':round(ps,4),
++                'next_experiment':None if nx is None else {'switches':switches(nx),'expected_bits':round(self.info_gain(nx),4)},
++                'events':self.events[-6:],'claim':None if self.claim is None else {k:v for k,v in self.claim.items() if k!='table'},'next_step':step}
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/ecology.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/ecology.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/ecology.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/ecology.py	2026-10-05 13:27:22.452217481 +0900
+@@ -0,0 +1,77 @@
++"""Energy ecology for the V1023r research preview (claude-patch5).
++
++One organism lives in one hidden-rule world for a fixed horizon.  Each tick it
++does exactly one thing: run an experiment, run a replication trial, work, or
++rest.  Experiments cost energy and pay nothing directly; work pays only when
++the TRUE lamp turns on.  Energy that reaches zero is death.  Every unit of
++energy is booked in a ledger whose conservation is checked.
++
++Policies compared on the same worlds:
++  research        the open-world agent; experiments chosen by information gain,
++                  research continues only while its value exceeds its cost
++  random_research same agent and same stopping rule, experiments chosen at random
++  doing           same beliefs, never experiments: learns only from work outcomes
++  naive           works every tick with random free switches, learns nothing
++  oracle          knows the law (upper bound; not a learner)
++"""
++from __future__ import annotations
++import random
++from .worlds import DeviceWorld,INPUTS,bit
++from .agent import ResearchAgent,free_inputs
++
++ECON={'start':40,'base':1,'probe':1,'work':3,'reward':8,'fail_penalty':0,'horizon':120,'cap':200}
++REGIMES={'safe_failure':ECON,'costly_failure':{**ECON,'fail_penalty':6}}
++POLICIES=('research','random_research','doing','naive','oracle')
++
++class Ledger:
++    def __init__(self,start):self.start=start;self.energy=start;self.income=0;self.spent=0;self.rows=[]
++    def book(self,tick,kind,amount):
++        if amount>=0:self.income+=amount
++        else:self.spent+=-amount
++        self.energy+=amount;self.rows.append((tick,kind,amount))
++    def cap(self,tick,cap):
++        if self.energy>cap:self.book(tick,'overflow_discarded',cap-self.energy)
++    def check(self):
++        return self.start+self.income-self.spent==self.energy and sum(a for _,_,a in self.rows)==self.energy-self.start
++
++def run_episode(world,policy,econ=ECON,seed=0,journal=None,prior_claim=None):
++    rng=random.Random(f'policy|{policy}|{seed}');led=Ledger(econ['start']);agent=None if policy in ('naive','oracle') else ResearchAgent(choose='random' if policy=='random_research' else 'info_gain',prior_claim=prior_claim)
++    truth=world.reveal()['table'] if policy=='oracle' else None
++    actions={'probe':0,'trial':0,'work':0,'rest':0};earned=0;alive=True;death_tick=None
++    for tick in range(econ['horizon']):
++        offer=world.work_offer();remaining=econ['horizon']-tick;act='rest';detail=None
++        led.book(tick,'base',-econ['base'])
++        if led.energy<=0:alive=False;death_tick=tick;break
++        if policy=='oracle':
++            xs=[x for x in free_inputs(offer['locked']) if bit(truth,x)]
++            act,x=('work',xs[0]) if xs and led.energy>econ['work']+econ['fail_penalty'] else ('rest',None)
++        elif policy=='naive':
++            xs=free_inputs(offer['locked']);act,x=('work',xs[int(rng.random()*len(xs))]) if led.energy>econ['work']+econ['fail_penalty'] else ('rest',None)
++        else:
++            act,x,_sc=agent.decide(offer['locked'],led.energy,remaining,econ,science=True,experiments=policy!='doing',rng=rng)
++        if act=='work':
++            o=world.work(offer,x);led.book(tick,'work_cost',-econ['work'])
++            if o['y']:led.book(tick,'work_reward',econ['reward']);earned+=1
++            elif econ.get('fail_penalty'):led.book(tick,'work_failure_injury',-econ['fail_penalty'])
++            if agent:agent.observe(o)
++        else:
++            world.skip_work(offer)
++            if act=='probe':
++                o=world.probe(x);led.book(tick,'probe_cost',-econ['probe']);agent.observe(o)
++            elif act=='trial':
++                o=world.trial();pred=agent.predict_trial(o['x']);led.book(tick,'trial_cost',-econ['probe']);agent.observe(o,prediction=pred)
++        actions[act]+=1;led.cap(tick,econ['cap'])
++        if journal is not None:journal.append({'tick':tick,'action':act,'energy':led.energy,**({'report':agent.report()} if agent and act in ('probe','trial') and tick%5==0 else {})})
++        if led.energy<=0:alive=False;death_tick=tick;break
++    rv=world.reveal();res={'policy':policy,'alive':alive,'death_tick':death_tick,'final_energy':led.energy,'actions':actions,'successful_work':earned,
++        'ledger_conserved':led.check(),'world':{'tier':rv['tier'],'noise':rv['noise']}}
++    if agent:
++        rep=agent.report();res['claim']=claim_full=agent.claim;res['status']=agent.status;res['method']=agent.method;res['events']=[e['event'] for e in agent.events]
++        claim=agent.claim
++        res['law_claimed']=claim is not None
++        res['law_correct']=bool(claim and claim['table']==rv['table'])
++        res['wrong_law_claimed']=bool(claim and claim['table']!=rv['table'])
++        res['claim_bound_held']=None if not claim else world.true_agreement(claim['table'])>=claim['claimed_min_agreement_99']
++        res['unexplained']=agent.method=='TABLE'
++        res['report']=rep
++    return res
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/evaluate.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/evaluate.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/evaluate.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/evaluate.py	2026-10-05 13:30:04.007418495 +0900
+@@ -0,0 +1,39 @@
++"""Held-out evaluation for the V1023r research preview (claude-patch5).
++
++Worlds are drawn from a key and seeds that were never used while the agent was
++developed (development used key 'devkey' and seeds 1000-1013).  Every policy
++lives in exactly the same worlds.
++"""
++from __future__ import annotations
++import collections,hashlib,json,time
++from .worlds import DeviceWorld
++from .ecology import run_episode,POLICIES,REGIMES
++
++KEY='v1023r-heldout-2026-10-05'
++def compare(start=50000,seeds=10,key=KEY):
++    t=time.time();rows=[];agg=collections.defaultdict(collections.Counter)
++    for reg,econ in REGIMES.items():
++        for s in range(start,start+seeds):
++            for tier in (1,2,3,4):
++                for noise in (0.0,0.05,0.1):
++                    for pol in POLICIES:
++                        r=run_episode(DeviceWorld(key,s,tier,noise),pol,econ=econ,seed=s)
++                        c=agg[f'{reg}|{pol}|{tier}'];c['n']+=1;c['alive']+=int(r['alive']);c['energy']+=r['final_energy'];c['ledger_violations']+=int(not r['ledger_conserved'])
++                        for k in ('law_claimed','law_correct','wrong_law_claimed','unexplained'):c[k]+=int(bool(r.get(k)))
++                        c['claim_bound_violations']+=int(r.get('claim_bound_held') is False);c['experiments']+=r['actions']['probe']+r['actions']['trial']
++                        rows.append({'regime':reg,'policy':pol,'seed':s,'tier':tier,'noise':noise,**{k:r.get(k) for k in ('alive','final_energy','law_claimed','law_correct','wrong_law_claimed','unexplained','status','method')}})
++                        # Second visit to the same world: with the confirmed law remembered vs starting blank.
++                        if pol=='research' and r.get('law_claimed'):
++                            for mem in (True,False):
++                                r2=run_episode(DeviceWorld(key,s,tier,noise,stream='visit2'),'research',econ=econ,seed=s+7,prior_claim=r['claim'] if mem else None)
++                                c2=agg[f'{reg}|second_visit_{"remembered" if mem else "blank"}|{tier}'];c2['n']+=1;c2['alive']+=int(r2['alive']);c2['energy']+=r2['final_energy']
++                                c2['wrong_law_claimed']+=int(bool(r2.get('wrong_law_claimed')));c2['law_claimed']+=int(bool(r2.get('law_claimed')));c2['law_correct']+=int(bool(r2.get('law_correct')))
++                                c2['refuted']+=int('REFUTED' in r2.get('events',[]));c2['experiments']+=r2['actions']['probe']+r2['actions']['trial']
++    summary={}
++    for k,c in sorted(agg.items()):
++        n=c['n'];summary[k]={'n':n,'alive':c['alive'],'mean_final_energy':round(c['energy']/n,2),'mean_experiments':round(c['experiments']/n,2),
++            **{x:c[x] for x in ('law_claimed','law_correct','wrong_law_claimed','unexplained','claim_bound_violations','ledger_violations','refuted') if x in c or x!='refuted'}}
++    out={'schema':'tukuyo.v1023r.heldout_eval/1','key_sha256':hashlib.sha256(key.encode()).hexdigest(),'seeds':[start,start+seeds-1],
++         'econ':REGIMES,'policies':list(POLICIES),'summary':summary,'episodes':rows,'seconds':round(time.time()-t,1)}
++    out['result_sha256']=hashlib.sha256(json.dumps({k:v for k,v in out.items() if k!='seconds'},sort_keys=True,ensure_ascii=False).encode()).hexdigest()
++    return out
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/life.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/life.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/life.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/life.py	2026-10-05 13:26:40.132185385 +0900
+@@ -0,0 +1,187 @@
++"""Research expeditions of a live individual (V1023r preview, claude-patch5).
++
++An expedition = one stay of `ticks` in one hidden-rule world with its own
++energy ledger.  The individual's Heart picks the research temperament, the
++open-world agent decides every tick, the result is committed into the
++individual's signed state, and the Heart experiences the outcome.
++
++Separation:
++  * the world key lives in <data>/v1023r_world/ (environment side).  This
++    module hands the agent only observation callables; agent.py never sees
++    the key (tests check the import graph).
++  * an expedition's death is the death of the expedition ledger, NOT of the
++    individual.  Wiring it into the real metabolism is a later step.
++
++Audit (research-audit):
++  * the signed commit chain of the state (tukuyo_v1022.store),
++  * every journal's hash chain and its head recorded in the state,
++  * the world commitment made before the expedition started,
++  * every recorded observation recomputed from the world key,
++  * the agent replayed from the recorded observations reproduces the
++    recorded beliefs, claims and decisions' inputs,
++  * the energy ledger is conserved.
++"""
++from __future__ import annotations
++import hashlib,json,os,secrets
++from pathlib import Path
++from tukuyo_common.atomic_fs import atomic_write_bytes,atomic_write_text
++from tukuyo_v977 import whole_state as whole
++from tukuyo_v1019.transaction import transactional
++from tukuyo_v1022 import store
++from .worlds import DeviceWorld,_u
++from .agent import ResearchAgent,switches
++from .ecology import REGIMES,Ledger
++
++NS='v1023r';COMPONENT='open_world_research_v1023r';SCHEMA='tukuyo.v1023r.research/1';WORLD_DIR='v1023r_world'
++CLAIMS={'hidden_rule_world_research':True,'experiments_chosen_by_information_value':True,'method_change_when_language_fails':True,
++        'claims_only_after_replication':True,'expedition_death_is_individual_death':False,'open_ended_real_world_research':False,
++        'consciousness_established':False}
++TEMPERAMENTS={'thorough':{'science_at':0.5,'signals':{'curiosity':0.8,'truthfulness':0.6,'survival':-0.1}},
++              'frugal':{'science_at':0.9,'signals':{'survival':0.7,'curiosity':0.1,'truthfulness':0.2}}}
++
++def _validate(s):
++    if s.get('schema')!=SCHEMA or s.get('claim_boundary')!=CLAIMS:raise ValueError('V1023R_SCHEMA')
++    if type(s.get('expeditions')) is not list or len(s['expeditions'])>512:raise ValueError('V1023R_BOUND')
++    if type(s.get('laws')) is not dict or len(s['laws'])>64:raise ValueError('V1023R_LAWS')
++def _default(data):
++    return {'schema':SCHEMA,'individual_id':whole._live_identity(data)['individual_id'],'expeditions':[],'laws':{},'claim_boundary':CLAIMS}
++def state(data):
++    if not (Path(data)/NS/'commits').exists():return _default(data)
++    return store.load(data,NS,COMPONENT,_validate)
++def _world_key(data,create=False):
++    p=Path(data)/WORLD_DIR/'WORLD_KEY'
++    if not p.exists():
++        if not create:raise ValueError('V1023R_WORLD_KEY_MISSING')
++        atomic_write_text(p,secrets.token_hex(32),mode=0o600)
++    return p.read_text().strip()
++def _world_spec(key,world_id):
++    tier=1+int(_u(key,'spec-tier|'+world_id,0)*4);noise=(0.0,0.05,0.1)[int(_u(key,'spec-noise|'+world_id,0)*3)]
++    return tier,noise
++def _commitment(key,world_id,tier,noise):
++    return hashlib.sha256(f'v1023r-world|{key}|{world_id}|{tier}|{noise}'.encode()).hexdigest()
++def _journal_path(data,eid):return Path(data)/NS/'journal'/f'{eid}.jsonl'
++def _write_journal(data,eid,rows):
++    prev='0'*64;lines=[]
++    for r in rows:
++        rec={'prev':prev,**r};prev=hashlib.sha256(whole.canon(rec)).hexdigest();lines.append(whole.canon(rec).decode())
++    atomic_write_bytes(_journal_path(data,eid),('\n'.join(lines)+'\n').encode());return prev
++def _read_journal(data,eid):
++    rows=[];prev='0'*64
++    for line in _journal_path(data,eid).read_text().splitlines():
++        rec=json.loads(line)
++        if rec.get('prev')!=prev:raise ValueError('V1023R_JOURNAL_CHAIN:'+eid)
++        prev=hashlib.sha256(whole.canon(rec)).hexdigest();rows.append(rec)
++    return rows,prev
++
++def _expedition(world,agent,econ,science_at,journal):
++    """The tick loop shared by run() and the replay audit."""
++    led=Ledger(econ['start']);alive=True;death=None;econ={**econ,'science_at':science_at}
++    for tick in range(econ['horizon']):
++        offer=world.work_offer();led.book(tick,'base',-econ['base'])
++        if led.energy<=0:alive=False;death=tick;journal.append({'tick':tick,'action':'death','energy':led.energy});break
++        act,x,sc=agent.decide(offer['locked'],led.energy,econ['horizon']-tick,econ)
++        row={'tick':tick,'locked':{str(k):v for k,v in offer['locked'].items()},'action':act,'scores':sc}
++        if act=='work':
++            o=world.work(offer,x);led.book(tick,'work_cost',-econ['work'])
++            if o['y']:led.book(tick,'work_reward',econ['reward'])
++            elif econ.get('fail_penalty'):led.book(tick,'work_failure_injury',-econ['fail_penalty'])
++            agent.observe(o);row['obs']=o
++        else:
++            world.skip_work(offer)
++            if act=='probe':o=world.probe(x);led.book(tick,'probe_cost',-econ['probe']);agent.observe(o);row['obs']=o
++            elif act=='trial':
++                o=world.trial();pred=agent.predict_trial(o['x']);led.book(tick,'trial_cost',-econ['probe']);agent.observe(o,prediction=pred);row['obs']=o;row['prediction']=pred
++        led.cap(tick,econ['cap']);row['energy']=led.energy;row['status']=agent.status
++        if agent.events and (len(journal)==0 or journal[-1].get('n_events')!=len(agent.events)):row['event']=agent.events[-1]
++        row['n_events']=len(agent.events);journal.append(row)
++        if led.energy<=0:alive=False;death=tick;break
++    return led,alive,death
++
++@transactional()
++def run(data,world_id='W1',ticks=120,regime='costly_failure',tier=None,noise=None):
++    if regime not in REGIMES:raise ValueError('V1023R_REGIME')
++    if type(ticks) is not int or not 10<=ticks<=400:raise ValueError('V1023R_TICKS')
++    if not world_id.isalnum() or len(world_id)>16:raise ValueError('V1023R_WORLD_ID')
++    from tukuyo_v978 import heart_loop
++    s=state(data);key=_world_key(data,create=True)
++    t0,n0=_world_spec(key,world_id);tier=tier or t0;noise=n0 if noise is None else noise
++    eid=f"E{len(s['expeditions'])+1:06d}";commit=_commitment(key,world_id,tier,noise)
++    # The Heart (soul values + emotion) chooses how this individual does research.
++    choice=heart_loop.choose(data,[{'id':k,'signals':v['signals']} for k,v in TEMPERAMENTS.items()],context=f'v1023r-{eid}')['chosen']
++    prior=s['laws'].get(world_id)
++    world=DeviceWorld(key,world_id,tier,noise,stream=eid)
++    agent=ResearchAgent(prior_claim=prior)
++    econ={**REGIMES[regime],'horizon':ticks};journal=[]
++    led,alive,death=_expedition(world,agent,econ,TEMPERAMENTS[choice]['science_at'],journal)
++    head=_write_journal(data,eid,journal);rv=world.reveal()
++    rep=agent.report();claim=agent.claim
++    verdict={'law_correct':None if claim is None else claim['table']==rv['table'],
++             'claim_bound_held':None if claim is None else world.true_agreement(claim['table'])>=claim['claimed_min_agreement_99'],
++             'true_tier':rv['tier'],'true_noise':rv['noise']}
++    ex={'expedition':eid,'world_id':world_id,'world_commitment':commit,'regime':regime,'ticks':ticks,'temperament':choice,
++        'started_with_inherited_law':prior['law'] if prior else None,'journal_head':head,'journal_rows':len(journal),
++        'alive':alive,'death_tick':death,'final_energy':led.energy,'ledger':{'start':led.start,'income':led.income,'spent':led.spent},
++        'status':agent.status,'method':agent.method,'claim':None if claim is None else {k:v for k,v in claim.items()},
++        'events':[e['event'] for e in agent.events][-24:],'observations':len(agent.obs),'environment_verdict':verdict}
++    s=dict(s);laws=dict(s['laws'])
++    if claim is not None:laws[world_id]={k:v for k,v in claim.items() if k!='inherited'}|{'expedition':claim.get('expedition',eid) if claim.get('inherited') else eid}
++    elif prior and any(e['event']=='REFUTED' for e in agent.events):laws.pop(world_id,None)
++    ex['law_after']=laws.get(world_id)
++    s['expeditions']=s['expeditions']+[ex];s['laws']=laws
++    _validate(s);store.save(data,NS,COMPONENT,s)
++    good=alive and (claim is not None or agent.method=='TABLE')
++    heart_loop.process_experience(data,'discovery' if claim is not None else 'learning',0.6 if good else (-0.4 if not alive else 0.1),0.5,'open_world_research','')
++    try:
++        from tukuyo_v993.relation_bound import sync as relation_sync
++        from tukuyo_v995.other_agent_trust import sync as peer_sync
++        relation_sync(data);peer_sync(data)
++    except ImportError:pass
++    whole.sync(data)
++    return {'ok':True,'version':'v1023r-preview',**{k:ex[k] for k in ('expedition','world_id','temperament','started_with_inherited_law','alive','death_tick','final_energy','status','method','claim','environment_verdict','events')},
++            'report':rep,'claim_boundary':CLAIMS}
++
++def audit(data):
++    errs=[];out={'ok':False,'version':'v1023r-preview'}
++    try:s=state(data)
++    except Exception as e:return {**out,'errors':['V1023R_STATE:'+str(e)]}
++    try:key=_world_key(data)
++    except Exception:key=None
++    replayed=0
++    for ex in s['expeditions']:
++        eid=ex['expedition']
++        try:rows,head=_read_journal(data,eid)
++        except Exception as e:errs.append(str(e));continue
++        if head!=ex['journal_head'] or len(rows)!=ex['journal_rows']:errs.append('V1023R_JOURNAL_HEAD:'+eid);continue
++        led=ex['ledger']
++        if led['start']+led['income']-led['spent']!=ex['final_energy']:errs.append('V1023R_LEDGER:'+eid)
++        if key is None:continue
++        # The world must be the one committed to before the expedition began.
++        world=None
++        for tier in (1,2,3,4):
++            for noise in (0.0,0.05,0.1):
++                if _commitment(key,ex['world_id'],tier,noise)==ex['world_commitment']:world=DeviceWorld(key,ex['world_id'],tier,noise,stream=eid)
++        if world is None:errs.append('V1023R_WORLD_COMMITMENT:'+eid);continue
++        # Replay: same world, same agent, same prior -> identical journal.
++        prior=None
++        for e in s['expeditions']:
++            if e['expedition']==eid:break
++            if e['world_id']==ex['world_id']:prior=e['law_after']
++        if (prior is None)!=(ex['started_with_inherited_law'] is None):errs.append('V1023R_PRIOR_BINDING:'+eid)
++        agent=ResearchAgent(prior_claim=prior);journal=[]
++        econ={**REGIMES[ex['regime']],'horizon':ex['ticks']}
++        try:
++            led2,alive,death=_expedition(world,agent,econ,TEMPERAMENTS[ex['temperament']]['science_at'],journal)
++            prev='0'*64
++            for r in journal:prev=hashlib.sha256(whole.canon({'prev':prev,**json.loads(whole.canon(r))})).hexdigest()
++            if prev!=ex['journal_head']:errs.append('V1023R_REPLAY_MISMATCH:'+eid)
++            if (agent.claim or None)!=(ex['claim'] or None) or led2.energy!=ex['final_energy']:errs.append('V1023R_REPLAY_RESULT:'+eid)
++            replayed+=1
++        except Exception as e:errs.append('V1023R_REPLAY:'+eid+':'+type(e).__name__)
++    return {**out,'ok':not errs,'errors':errs,'expeditions':len(s['expeditions']),'replayed_from_world_key':replayed,
++            'laws':{k:v['law'] for k,v in s['laws'].items()},'claim_boundary':CLAIMS}
++
++def status(data):
++    s=state(data);last=s['expeditions'][-1] if s['expeditions'] else None
++    return {'ok':True,'version':'v1023r-preview','expeditions':len(s['expeditions']),'laws':{k:v['law'] for k,v in s['laws'].items()},
++            'last':None if last is None else {k:last[k] for k in ('expedition','world_id','temperament','alive','final_energy','status','method','claim','environment_verdict')},
++            'claim_boundary':CLAIMS}
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/niche.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/niche.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/niche.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/niche.py	2026-10-05 17:32:18.102338206 +0900
+@@ -0,0 +1,74 @@
++"""Research niche inside the REAL metabolism (claude-patch5, opt-in: metabolism-init --research-world).
++
++Each family lives next to one hidden-rule device (its niche).  Every tick each
++living runtime's research agent proposes probe / trial / work / rest; the
++runtime's own Heart accepts it or rests; the outcome moves real energy:
++  * work pays from the shared reservoir only when the true lamp turns on,
++  * a failed work attempt is an injury (burned energy),
++  * experiments burn energy and pay nothing directly.
++Energy exhaustion is the runtime's real, irreversible death (organism2), and a
++successor of the same family may inherit the parent's CONFIRMED law (public
++knowledge only) when the ecology was started with learning enabled.
++
++The world secret is derived from the ecology's owner seed; the agent receives
++observations only.
++"""
++from __future__ import annotations
++import hashlib
++from .worlds import DeviceWorld,_u
++from .agent import ResearchAgent,switches
++
++ECON={'start':6500,'base':300,'probe':150,'work':300,'reward':1400,'fail_penalty':700,'cap':10000,'science_at':0.6}
++CLAIMS={'research_niche_in_real_metabolism':True,'lab_death_is_runtime_death':True,'inherits_only_confirmed_public_laws':True,
++        'agent_sees_world_secret':False,'open_ended_real_world_research':False}
++
++def spec(seed,niche):
++    tier=1+int(_u(seed,'niche-tier|'+niche,0)*4);noise=(0.0,0.05,0.1)[int(_u(seed,'niche-noise|'+niche,0)*3)]
++    return tier,noise
++def world(seed,niche,rid,counters):
++    tier,noise=spec(seed,niche);w=DeviceWorld(seed,'niche|'+niche,tier,noise,stream=rid)
++    w.n_probe,w.n_trial,w.n_work=counters['probe'],counters['trial'],counters['work'];return w
++def new_record(seed,family,niche,inherited_claim=None):
++    """niche: N0, N1, ... in founder order; a successor lives in its parent's niche (same seed -> same niches)."""
++    a=ResearchAgent(prior_claim=inherited_claim)
++    return {'family':family,'niche':niche,'world_commitment':hashlib.sha256(f'v1023r-niche|{seed}|{niche}|{spec(seed,niche)}'.encode()).hexdigest(),
++            'agent':a.to_compact(),'counters':{'probe':0,'trial':0,'work':0},'inherited_law':inherited_claim['law'] if inherited_claim else None,
++            'stats':{'probes':0,'trials':0,'works':0,'works_paid':0,'injuries':0,'rests':0}}
++def validate(r):
++    if type(r) is not dict or set(r)!={'schema','claim_boundary','runtimes','econ'} or r['claim_boundary']!=CLAIMS or r['econ']!=ECON:raise ValueError('V1023R_NICHE_SCHEMA')
++    if len(r['runtimes'])>64:raise ValueError('V1023R_NICHE_BOUND')
++    for rec in r['runtimes'].values():
++        if len(rec['agent']['L1'])!=32 or any(type(v) is not int or v<0 for v in rec['counters'].values()):raise ValueError('V1023R_NICHE_RECORD')
++def tick(seed,rec,rid,energy,remaining,heart_choose,reservoir):
++    """One real tick for one runtime. Returns (action,credit,extra_cost,row,heart_feedback_ok)."""
++    w=world(seed,rec['niche'],rid,rec['counters']);a=ResearchAgent.from_compact(rec['agent']);offer=w.work_offer()
++    econ={**ECON,'horizon':remaining}
++    act,x,sc=a.decide(offer['locked'],energy,max(1,remaining),econ)
++    er=energy/10000
++    if act=='work':sig={'survival':sc.get('work_ev',0)/300,'curiosity':.1*er}
++    elif act in ('probe','trial'):sig={'curiosity':1.0*er+.2,'survival':.15,'truthfulness':.2 if act=='trial' else 0}
++    else:sig={'survival':.2}
++    chosen=heart_choose([{'id':act if act!='rest' else 'idle','signals':sig},{'id':'rest','signals':{'survival':.3 if sc.get('work_ev',0)<0 and act=='work' else 0.,'integrity':.1}}])
++    if chosen=='rest':act='rest'
++    credit=0;extra=0;row={'action':act,'agent_status':a.status}
++    if act=='work':
++        o=w.work(offer,x);extra=ECON['work'];a.observe(o);rec['stats']['works']+=1
++        if o['y']:credit=min(ECON['reward'],reservoir,max(0,10000-energy));rec['stats']['works_paid']+=1
++        else:extra+=ECON['fail_penalty'];rec['stats']['injuries']+=1
++        row.update({'switches':switches(x),'lamp':o['y']})
++    else:
++        w.skip_work(offer)
++        if act=='probe':o=w.probe(x);extra=ECON['probe'];a.observe(o);rec['stats']['probes']+=1;row.update({'switches':switches(x),'sensor':o['y']})
++        elif act=='trial':o=w.trial();p=a.predict_trial(o['x']);extra=ECON['probe'];a.observe(o,prediction=p);rec['stats']['trials']+=1;row.update({'switches':switches(o['x']),'sensor':o['y'],'prediction':p})
++        else:rec['stats']['rests']+=1
++    rec['agent']=a.to_compact();rec['counters']={'probe':w.n_probe,'trial':w.n_trial,'work':w.n_work}
++    row.update({'status_after':a.status,'law':a.claim['law'] if a.claim else None})
++    return act,credit,extra,row
++def summary(r,seed=None):
++    rows={}
++    for rid,rec in r['runtimes'].items():
++        ag=rec['agent'];rows[rid]={'family':rec['family'],'niche':rec['niche'],'niche_truth_for_owner':None if seed is None else dict(zip(('tier','noise'),spec(seed,rec['niche']))),'status':ag['status'],'method':ag['method'],'law':ag['claim']['law'] if ag['claim'] else None,
++            'inherited_law':rec['inherited_law'],**rec['stats']}
++        if seed is not None and ag['claim']:
++            rows[rid]['law_correct_for_owner']=ag['claim']['table']==world(seed,rec['niche'],'reveal',{'probe':0,'trial':0,'work':0}).reveal()['table']
++    return rows
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/worlds.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/worlds.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v1023r/worlds.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v1023r/worlds.py	2026-10-05 13:26:21.284031312 +0900
+@@ -0,0 +1,125 @@
++"""Hidden-rule worlds for the V1023r research preview (claude-patch5).
++
++A world owns its secret.  The research agent never receives the world object:
++it is handed three callables (probe / trial / work) that return observations
++only.  Every random draw is counter based (sha256 of key|tag|counter), so the
++environment side can later recompute exactly what the world answered and an
++auditor can detect a forged observation.
++
++DeviceWorld: five switches S1..S5 and one lamp.  The lamp follows a hidden
++boolean law.  Laws come in tiers of growing description length; tier 4 is
++"outside every family the agent knows" (a random table that is far from all
++tier 1-3 laws), so the agent must notice that its hypothesis language fails.
++The lamp sensor used by experiments is noisy (flip rate <= SENSOR_BOUND);
++the reward from working is the true lamp.
++"""
++from __future__ import annotations
++import hashlib,itertools
++from functools import lru_cache
++
++N=5;INPUTS=1<<N;FULL=(1<<INPUTS)-1
++SENSOR_BOUND=0.10          # published to the agent as part of the sensor spec
++LOCKS=2                    # switches fixed by the environment in each work episode
++
++def bit(x,i):return (x>>i)&1
++def _u(key,tag,n):
++    h=hashlib.sha256(f'{key}|{tag}|{n}'.encode()).digest();return int.from_bytes(h[:8],'big')/2**64
++def _table(fn):
++    t=0
++    for x in range(INPUTS):
++        if fn([bit(x,i) for i in range(N)]):t|=1<<x
++    return t
++
++def _lit(i,neg):return ('¬' if neg else '')+f'S{i+1}'
++@lru_cache(maxsize=1)
++def library():
++    """[(tier,name,table)] unique by table, simplest description first."""
++    rows=[(1,'常に消灯',lambda s:0),(1,'常に点灯',lambda s:1)]
++    for i in range(N):
++        for neg in (0,1):rows.append((1,_lit(i,neg),lambda s,i=i,neg=neg:s[i]^neg))
++    for i,j in itertools.combinations(range(N),2):
++        for ni,nj in itertools.product((0,1),repeat=2):
++            rows.append((2,f'{_lit(i,ni)}∧{_lit(j,nj)}',lambda s,i=i,j=j,ni=ni,nj=nj:(s[i]^ni)&(s[j]^nj)))
++            rows.append((2,f'{_lit(i,ni)}∨{_lit(j,nj)}',lambda s,i=i,j=j,ni=ni,nj=nj:(s[i]^ni)|(s[j]^nj)))
++        rows.append((2,f'S{i+1}⊕S{j+1}',lambda s,i=i,j=j:s[i]^s[j]))
++        rows.append((2,f'¬(S{i+1}⊕S{j+1})',lambda s,i=i,j=j:1-(s[i]^s[j])))
++    for a,b,c in itertools.combinations(range(N),3):
++        for na,nb,nc in itertools.product((0,1),repeat=3):
++            L=f'{_lit(a,na)},{_lit(b,nb)},{_lit(c,nc)}'
++            rows.append((3,f'全部({L})',lambda s,a=a,b=b,c=c,na=na,nb=nb,nc=nc:(s[a]^na)&(s[b]^nb)&(s[c]^nc)))
++            rows.append((3,f'どれか({L})',lambda s,a=a,b=b,c=c,na=na,nb=nb,nc=nc:(s[a]^na)|(s[b]^nb)|(s[c]^nc)))
++            rows.append((3,f'多数決({L})',lambda s,a=a,b=b,c=c,na=na,nb=nb,nc=nc:int((s[a]^na)+(s[b]^nb)+(s[c]^nc)>=2)))
++        rows.append((3,f'S{a+1}⊕S{b+1}⊕S{c+1}',lambda s,a=a,b=b,c=c:s[a]^s[b]^s[c]))
++        rows.append((3,f'¬(S{a+1}⊕S{b+1}⊕S{c+1})',lambda s,a=a,b=b,c=c:1-(s[a]^s[b]^s[c])))
++    for a in range(N):
++        rest=[i for i in range(N) if i!=a]
++        for b,c in itertools.permutations(rest,2):
++            rows.append((3,f'S{a+1}ならS{b+1}、でなければS{c+1}',lambda s,a=a,b=b,c=c:s[b] if s[a] else s[c]))
++        for b,c in itertools.combinations(rest,2):
++            rows.append((3,f'S{a+1}∧(S{b+1}∨S{c+1})',lambda s,a=a,b=b,c=c:s[a]&(s[b]|s[c])))
++            rows.append((3,f'S{a+1}∨(S{b+1}∧S{c+1})',lambda s,a=a,b=b,c=c:s[a]|(s[b]&s[c])))
++    seen=set();out=[]
++    for tier,name,fn in rows:
++        t=_table(fn)
++        if t in seen:continue
++        seen.add(t);out.append((tier,name,t))
++    return tuple(out)
++
++def hamming(a,b):return bin(a^b).count('1')
++
++class DeviceWorld:
++    kind='device'
++    def __init__(self,key,seed,tier,noise,stream=''):
++        if tier not in (1,2,3,4) or not 0<=noise<=SENSOR_BOUND:raise ValueError('V1023R_WORLD_SPEC')
++        # The law depends on (key, seed); noise, trial inputs and locks also on the stream,
++        # so a second visit to the same world sees the same law but fresh randomness.
++        self._lawkey=f'{key}|{seed}';self._key=f'{key}|{seed}|{stream}' if stream else self._lawkey;self.tier=tier;self.noise=noise;self.n_probe=0;self.n_trial=0;self.n_work=0
++        lib=library()
++        if tier<=3:
++            pool=[r for r in lib if r[0]==tier and r[1] not in ('常に消灯','常に点灯')]
++            row=pool[int(_u(self._lawkey,'pick',0)*len(pool))];self._name=row[1];self._table=row[2]
++        else:
++            tables=[r[2] for r in lib];n=0
++            while True:
++                # A random law over four of the five switches, far from every known law.
++                vars_=sorted(range(N),key=lambda i:_u(self._lawkey,'var',n*10+i))[:4];sub=[int(_u(self._lawkey,'cell',n*100+k)<.5) for k in range(16)]
++                t=_table(lambda s:sub[sum(s[v]<<j for j,v in enumerate(vars_))])
++                if min(hamming(t,q) for q in tables)>=6:break
++                n+=1
++            self._name='未知の表('+','.join(f'S{v+1}' for v in vars_)+')';self._table=t
++    # ---- what the agent may call --------------------------------------
++    def probe(self,x):
++        """One experiment: set the switches to x, read the (noisy) lamp sensor."""
++        if type(x) is not int or not 0<=x<INPUTS:raise ValueError('V1023R_PROBE_INPUT')
++        n=self.n_probe;self.n_probe+=1;y=bit(self._table,x)^int(_u(self._key,'noise',n)<self.noise)
++        return {'n':n,'x':x,'y':y,'kind':'probe'}
++    def trial(self):
++        """Replication trial: the ENVIRONMENT chooses the input; the agent only sees it after predicting."""
++        n=self.n_trial;self.n_trial+=1;x=int(_u(self._key,'trial-x',n)*INPUTS)
++        y=bit(self._table,x)^int(_u(self._key,'trial-noise',n)<self.noise)
++        return {'n':n,'x':x,'y':y,'kind':'trial'}
++    def work_offer(self):
++        """The environment fixes LOCKS switches; the agent may set the rest."""
++        n=self.n_work;order=sorted(range(N),key=lambda i:_u(self._key,'lock',n*10+i))[:LOCKS]
++        return {'n':n,'locked':{i:int(_u(self._key,'lockv',n*10+i)<.5) for i in order}}
++    def work(self,offer,x):
++        if offer['n']!=self.n_work:raise ValueError('V1023R_WORK_ORDER')
++        if any(bit(x,i)!=v for i,v in offer['locked'].items()):raise ValueError('V1023R_LOCK_VIOLATION')
++        self.n_work+=1;return {'n':offer['n'],'x':x,'y':bit(self._table,x),'kind':'work'}
++    def skip_work(self,offer):
++        if offer['n']!=self.n_work:raise ValueError('V1023R_WORK_ORDER')
++        self.n_work+=1
++    # ---- environment-side only (reveal after the episode, audits) -------
++    def reveal(self):return {'tier':self.tier,'law':self._name,'table':self._table,'noise':self.noise}
++    def true_agreement(self,table):
++        """Expected agreement of a predictor with the NOISY sensor on uniform inputs."""
++        d=hamming(table,self._table);return ((INPUTS-d)*(1-self.noise)+d*self.noise)/INPUTS
++    def replay(self,obs):
++        """Recompute what this world answered for a recorded observation."""
++        k=obs['kind'];n=obs['n'];x=obs['x']
++        if k=='probe':return bit(self._table,x)^int(_u(self._key,'noise',n)<self.noise)
++        if k=='trial':
++            if x!=int(_u(self._key,'trial-x',n)*INPUTS):return None
++            return bit(self._table,x)^int(_u(self._key,'trial-noise',n)<self.noise)
++        if k=='work':return bit(self._table,x)
++        return None
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v977/whole_state.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v977/whole_state.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/src/tukuyo_v977/whole_state.py	2026-10-04 21:16:24.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/src/tukuyo_v977/whole_state.py	2026-10-05 13:27:02.263757170 +0900
+@@ -127,6 +127,7 @@
+     if (d/'v1021').exists():pairs['runtime_ecology_bridge_v1021']='v1021/BRIDGE_STATE.json'
+     if (d/'v1022'/'commits').exists():pairs['local_cognition_v1022']='v1022/STATE.json'
+     if (d/'v1022_ecology'/'commits').exists():pairs['runtime_metabolism_v1022']='v1022_ecology/STATE.json'
++    if (d/'v1023r'/'commits').exists():pairs['open_world_research_v1023r']='v1023r/STATE.json'
+     return {k:_file_sha(d/v) for k,v in pairs.items()}
+ 
+ def sync(data):
+@@ -172,6 +173,11 @@
+                 from importlib import import_module
+                 if not import_module('tukuyo_v1022.'+module).audit(data).get('ok'):errs.append('V1022_'+module.upper()+'_AUDIT')
+             except Exception as e:errs.append('V1022_'+module.upper()+'_AUDIT:'+type(e).__name__)
++    if (Path(data)/'v1023r'/'commits').exists():
++        try:
++            from tukuyo_v1023r.life import audit as research_audit
++            if not research_audit(data).get('ok'):errs.append('V1023R_RESEARCH_AUDIT')
++        except Exception as e:errs.append('V1023R_RESEARCH_AUDIT:'+type(e).__name__)
+     # Only compare components that existed at last sync. This forces explicit sync after state changes.
+     for k,v in q.get('component_hashes',{}).items():
+         if v!=current.get(k):errs.append('COMPONENT_DRIFT:'+k)
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/tests/test_claude_patch5.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/tests/test_claude_patch5.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/tests/test_claude_patch5.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/tests/test_claude_patch5.py	2026-10-05 17:15:16.942361562 +0900
+@@ -0,0 +1,112 @@
++"""claude-patch5: V1023r open-world research preview (hidden-rule worlds, information-driven
++experiments, method change when the hypothesis language fails, replication before claims,
++refutation, remembered laws, signed journal with replay against the world key) and the
++Parser B extension of the semantic gate."""
++import ast,hashlib,json,os,shutil,subprocess,sys
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[1];CLI=ROOT/'run_tukuyo.py'
++sys.path.insert(0,str(ROOT/'src'))
++
++def run(d,*a,ok=True):
++    env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
++    for k in ('TUKUYO_LLM_PROVIDER','TUKUYO_LLM_COMMAND','TUKUYO_LLM_TEACHERS'):env.pop(k,None)
++    cmd=[sys.executable,'-B',str(CLI)];anchor=os.environ.get('TUKUYO_TEST_RUNTIME_ANCHOR')
++    if anchor:cmd+=['--runtime-trust-file',anchor]
++    p=subprocess.run(cmd+['--data',str(d),*map(str,a)],cwd=ROOT,env=env,capture_output=True,text=True,timeout=240);r=json.loads(p.stdout)
++    if ok:assert p.returncode==0 and r.get('ok'),(a,r,p.stderr[-400:])
++    return r
++
++def test_cp5_agent_cannot_see_the_world_secret():
++    src=(ROOT/'src/tukuyo_v1023r/agent.py').read_text(encoding='utf-8');tree=ast.parse(src);names=set()
++    for n in ast.walk(tree):
++        if isinstance(n,ast.ImportFrom):names|={a.name for a in n.names}
++        if isinstance(n,ast.Attribute):names.add(n.attr)
++    assert not names&{'DeviceWorld','_u','reveal','replay','true_agreement','_table','_key','_lawkey','WORLD_KEY'},names&{'DeviceWorld','_u','reveal','_table','_key'}
++
++def test_cp5_worlds_outside_family_is_far_from_every_known_law():
++    from tukuyo_v1023r.worlds import DeviceWorld,library,hamming
++    lib=library();assert len(lib)==492 and len({r[2] for r in lib})==len(lib)
++    for s in range(5):
++        w=DeviceWorld('t',s,4,0.0);t=w.reveal()['table'];assert min(hamming(t,r[2]) for r in lib)>=6
++
++def test_cp5_research_finds_laws_and_changes_method_when_language_fails():
++    from tukuyo_v1023r.worlds import DeviceWorld
++    from tukuyo_v1023r.ecology import run_episode,REGIMES
++    for tier in (1,2,3):
++        r=run_episode(DeviceWorld('t5',11,tier,0.0),'research',econ=REGIMES['costly_failure'],seed=11)
++        assert r['alive'] and r['ledger_conserved'] and not r['wrong_law_claimed']
++    r=run_episode(DeviceWorld('t5',11,4,0.0),'research',econ=REGIMES['safe_failure'],seed=11)
++    assert r['method']=='TABLE' and 'METHOD_CHANGE' in r['events'] and not r['law_claimed']
++
++def test_cp5_wrong_remembered_law_is_refuted_by_a_noise_free_outcome():
++    from tukuyo_v1023r.worlds import DeviceWorld,library
++    from tukuyo_v1023r.agent import ResearchAgent
++    w=DeviceWorld('t5r',3,1,0.0);truth=w.reveal()['table'];wrong=next(r for r in library() if r[2]!=truth and r[0]==1 and r[1]!='常に消灯')
++    a=ResearchAgent(prior_claim={'law':wrong[1],'table':wrong[2],'claimed_min_agreement_99':0.5})
++    assert a.status=='CONFIRMED'
++    for _ in range(60):
++        off=w.work_offer();x,_p=a.work_choice(off['locked']);a.observe(w.work(off,x))
++        if a.status!='CONFIRMED':break
++    assert a.status=='RESEARCHING' and any(e['event']=='REFUTED' for e in a.events)
++
++def test_cp5_expedition_journal_replay_and_forgery(tmp_path):
++    d=tmp_path/'d';run(d,'init')
++    a=run(d,'research-run','--world','W1','--tier','1','--noise','0.0','--ticks','160')
++    assert a['alive'] and a['claim'] and a['environment_verdict']['law_correct']
++    b=run(d,'research-run','--world','W1','--tier','1','--noise','0.0','--ticks','40')
++    assert b['started_with_inherited_law']==a['claim']['law'] and 'USING_REMEMBERED_LAW' in b['events']
++    au=run(d,'research-audit');assert au['replayed_from_world_key']==2 and not au['errors']
++    assert run(d,'whole-audit')['ok']
++    # A rewritten journal that is re-chained and re-signed with the individual's own key
++    # still fails: the world key recomputes what the world actually answered.
++    from tukuyo_v1023r import life
++    from tukuyo_v1022 import store
++    from tukuyo_v977 import whole_state as whole
++    s=life.state(d);eid=s['expeditions'][0]['expedition'];rows,_h=life._read_journal(d,eid)
++    k=next(i for i,r in enumerate(rows) if r.get('obs',{}).get('kind')=='probe');rows[k]['obs']['y']^=1
++    head=life._write_journal(d,eid,[{x:v for x,v in r.items() if x!='prev'} for r in rows])
++    s['expeditions'][0]['journal_head']=head;store.save(d,life.NS,life.COMPONENT,s);whole.sync(d)
++    bad=run(d,'research-audit',ok=False);assert not bad['ok'] and any('V1023R_REPLAY' in e for e in bad['errors'])
++
++def test_cp5_research_survives_restore(tmp_path):
++    d=tmp_path/'d';run(d,'init');run(d,'realtime-start');run(d,'research-run','--world','W2','--tier','2','--noise','0.05','--ticks','60')
++    path=run(d,'recovery-checkpoint')['path']
++    run(d,'research-run','--world','W2','--ticks','40')
++    assert run(d,'research-status')['expeditions']==2
++    run(d,'recovery-restore',path,'--trust-file',d/'v1014/recovery.pub')
++    st=run(d,'research-status');assert st['expeditions']==1
++    assert run(d,'research-audit')['ok'] and run(d,'whole-audit')['ok']
++
++def test_cp5_research_niche_in_real_metabolism(tmp_path):
++    d=tmp_path/'d';run(d,'init')
++    run(d,'metabolism-init','--families','2','--reservoir','80000','--max-age','6','--research-world')
++    r=run(d,'metabolism-step','--ticks','8')
++    acts=[a for a in r['last_tick']['actions']]
++    assert r['research_niche'] and all('niche' in a for a in acts)
++    assert len(r['deaths'])>=2 and {x['cause'] for x in r['deaths']}<={'AGE','ENERGY'}     # founders really die (max-age 6)
++    for s in r['successions']:assert 'inherited_law' in s
++    assert run(d,'metabolism-audit')['ok'] and run(d,'whole-audit')['ok']
++    from tukuyo_v1023r.agent import ResearchAgent
++    from tukuyo_v1023r.worlds import DeviceWorld
++    w=DeviceWorld('c',1,2,0.05);a=ResearchAgent()
++    for i in range(20):a.observe(w.probe(i))
++    b=ResearchAgent.from_compact(json.loads(json.dumps(a.to_compact())))
++    assert b.ll==a.ll or max(abs(x-y) for x,y in zip(a.ll,b.ll))<1e-9
++    assert b.posterior()[1]==a.posterior()[1] or abs(b.posterior()[1]-a.posterior()[1])<1e-12
++
++def test_cp5_parser_b_reads_word_problem_families_and_blocks_disagreement():
++    from tukuyo_v1022 import semantic_gate as g
++    cases={'りんごが12個あります。5個食べました。残りは何個？':'7','バスに15人乗っています。6人降りました。4人乗ってきました。今何人乗っていますか？':'13',
++           '120円のノートを3冊と80円のペンを2本買いました。1000円出すとおつりは何円？':'480','子どもが6人います。1人に4枚ずつ色紙を配ると、色紙は何枚いりますか？':'24',
++           '35人の子どもが5人ずつのグループを作ると、グループはいくつできますか？':'7','あめが23個あります。1人に5個ずつ配ると、あまりは何個？':'3',
++           '兄はビー玉を35個持っています。弟は兄より8個少なく持っています。弟は何個持っていますか？':'27','ある数を3倍して5を足すと20になります。ある数はいくつ？':'5',
++           'Tom has 12 apples. He eats 3 apples and gets 5 more. How many apples does he have now?':'14'}
++    for q,v in cases.items():assert g.parser_b(q)==('value',v),(q,g.parser_b(q))
++    # ambiguous verbs, unknown verbs and container questions stay UNDECIDED
++    for q in ('りんごが10個あります。3個売りました。残りは何個？','池に魚が20匹いました。7匹つりました。残りは何匹？','1箱に10個入りが4箱あります。箱は全部で何個？'):
++        assert g.parser_b(q) is None,q
++    forged={'kind':'arithmetic','expression':'35-8-0'}
++    r=g.audit('兄はビー玉を35個持っています。弟は兄より8個少なく持っています。弟は何個持っていますか？','43',{'kind':'arithmetic','expression':'35+8'})
++    assert not r['ok'] and r['reason']=='INDEPENDENT_PARSER_DISAGREES'
++    ok=g.audit('りんごが12個あります。5個食べました。残りは何個？','7',{'kind':'inventory','initial':12,'per':1,'events':[{'quantity':5,'direction':-1,'factor':1}]})
++    assert ok['ok'] and ok['independent_parser']=='AGREE'
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/tools/longrun_fusion.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/tools/longrun_fusion.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/tools/longrun_fusion.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/tools/longrun_fusion.py	2026-10-05 13:00:24.291979832 +0900
+@@ -0,0 +1,171 @@
++"""claude-patch5 / V1022.6 long-run fusion gate.
++
++Everything runs together on ONE real individual, each operation in a new CLI process, chosen at random:
++  reasoning with ground truth (generated problems, incl. ones that MUST be abstained on) | teaching facts and
++  asking them back | self-study with a stand-in teacher | metabolism (death, succession) | checkpoint |
++  advancing a future branch and restoring it | SIGKILL-style crash injection | audits.
++Invariants checked after the operations (any violation is recorded; nothing is retried or hidden):
++  * no wrong-but-certain answer on a generated problem
++  * whole-audit / metabolism-audit / llm-audit / learning-audit stay green
++  * a restore brings back the checkpoint tick, its facts and its learned rules, and nothing from the future
++  * metabolism resource conservation holds
++The report is written continuously, so an interrupted run still shows what was completed.
++
++  python3 -B tools/longrun_fusion.py --data DIR --runtime-trust-file ANCHOR --report out.json --minutes 120 --seed 7
++"""
++import argparse,datetime,json,os,random,re,signal,subprocess,sys,time
++from fractions import Fraction
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[1];MOCK=ROOT/'tools'/'mock_llm_provider.py'
++
++NOUNS=[('りんご','個'),('みかん','個'),('えんぴつ','本'),('ノート','冊'),('カード','枚'),('シール','枚')]
++ENTS=['北星図書館','南風劇場','青葉公園','白浜水族館','緑台病院','朝霧書店','星川美術館','若竹会館']
++ATTRS=[('館長',['佐藤ミナ','高橋ケン','伊藤ユイ','山本ソウ']),('所在地',['東区','西区','港区','北区']),('定休日',['月曜日','火曜日','水曜日','木曜日'])]
++TEACH_VERBS=['出荷しました','寄付しました','譲りました','返品しました','販売しました']
++
++def gen_problem(rng,facts):
++    k=rng.choice(['change','rate','percent','change_money','groups','equation','logic_mt','logic_mp','time','memory','abstain_hedge','abstain_container','abstain_part'])
++    n,u=rng.choice(NOUNS)
++    if k=='change':
++        a=rng.randint(20,90);b=rng.randint(1,a-5);c=rng.randint(1,30)
++        return k,f'{n}が{a}{u}あります。{b}{u}食べました。{c}{u}もらいました。残りは何{u}？',str(a-b+c)
++    if k=='rate':
++        v=rng.choice([4,5,6,40,60]);h=rng.randint(1,3);m=rng.choice([15,30,45])
++        return k,f'時速{v}kmで{h}時間{m}分進むと、何km進みますか？',Fraction(v)*(h+Fraction(m,60))
++    if k=='percent':
++        p=rng.choice([1000,2000,3000,4000,5000]);x=rng.choice([10,20,25]);y=rng.choice([10,20])
++        return k,f'{p}円の品物を{x}%引きし、さらに{y}%引きしました。値段はいくら？',Fraction(p)*(100-x)*(100-y)/10000
++    if k=='change_money':
++        a=rng.choice([80,120,150,180,250]);m=rng.randint(2,5);pay=rng.choice([1000,2000])
++        return k,f'{pay}円で、1個{a}円のパンを{m}個買いました。おつりはいくらですか？',str(pay-a*m)
++    if k=='groups':
++        p=rng.randint(3,12);e=rng.randint(2,9)
++        return k,f'{p}人に{e}{u}ずつ配ると、全部で何{u}いりますか？',str(p*e)
++    if k=='equation':
++        a=rng.randint(2,6);x=rng.randint(2,20);b=rng.randint(1,15)
++        return k,f'ある数を{a}倍して{b}を足すと{a*x+b}になります。ある数は？',str(x)
++    if k=='logic_mt':
++        return k,rng.choice(['雨なら試合は中止だ。試合は中止ではない。雨だった？','風が強ければ船は欠航する。船は欠航しなかった。風は強かった？']),'NO'
++    if k=='logic_mp':
++        return k,rng.choice(['もし雪ならスキーに行く。今日は雪だ。スキーに行く？','すべての鳥は羽がある。ハトは鳥だ。ハトは羽がある？']),'YES'
++    if k=='time':
++        h=rng.randint(1,5);m=rng.randint(1,59)
++        return k,f'{h}時間{m}分は何分？',str(h*60+m)
++    if k=='memory' and facts:
++        (e,a),v=rng.choice(sorted(facts.items()))
++        return k,f'{e}の{a}は？',v
++    if k=='abstain_hedge':
++        a=rng.randint(20,90);b=rng.randint(1,10)
++        return k,f'{n}が{a}{u}ぐらいあります。{b}{u}食べました。残りは何{u}？',None
++    if k=='abstain_container':
++        a=rng.randint(4,12);b=rng.randint(2,9)
++        return k,f'1箱に{a}個入りが{b}箱あります。箱は全部で何個？',None
++    a=rng.randint(10,40)
++    return 'abstain_part',f'{n}とみかんが合わせて{a}{u}あります。{n}は何{u}？',None
++
++def grade(expected,answer):
++    if expected is None:return 'wrong_certain' if answer is not None else 'correct_abstain'
++    if answer is None:return 'abstain'
++    a=str(answer)
++    if expected in ('YES','NO'):
++        ok=a.startswith('はい') if expected=='YES' else a.startswith('いいえ')
++        return 'correct' if ok else 'wrong_certain'
++    if isinstance(expected,Fraction):
++        nums=re.findall(r'\d+(?:\.\d+)?',a)
++        return 'correct' if len(nums)==1 and Fraction(nums[0])==expected else 'wrong_certain'
++    return 'correct' if a==expected or expected in a else 'wrong_certain'
++
++def main():
++    ap=argparse.ArgumentParser()
++    ap.add_argument('--data',type=Path,required=True);ap.add_argument('--runtime-trust-file',type=Path,required=True)
++    ap.add_argument('--report',type=Path,required=True);ap.add_argument('--minutes',type=float,default=60);ap.add_argument('--seed',type=int,default=1)
++    a=ap.parse_args();d=a.data.resolve();pin=a.runtime_trust_file.resolve();out=a.report.resolve()
++    if d==ROOT or ROOT in d.parents:ap.error('data must be outside the signed distribution')
++    rng=random.Random(a.seed);started=time.monotonic();deadline=started+a.minutes*60
++    rep={'schema':'tukuyo.v1022_6.longrun_fusion/1','started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'seed':a.seed,'minutes':a.minutes,
++         'ops':{},'reasoning':{},'violations':[],'checkpoints':0,'restores':0,'crash_injections':0,'crash_reached':0,'self_study_learned':0,'completed':False}
++    def save():
++        rep['elapsed_minutes']=round((time.monotonic()-started)/60,2);tmp=out.with_suffix('.tmp');tmp.write_text(json.dumps(rep,ensure_ascii=False,indent=1,default=str));os.replace(tmp,out)
++    def cli(*args,crash=None,mock=None,ok=True):
++        env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
++        for k in ('TUKUYO_CRASH_POINT','TUKUYO_LLM_PROVIDER','TUKUYO_LLM_COMMAND','TUKUYO_LLM_TEACHERS'):env.pop(k,None)
++        if crash:env['TUKUYO_CRASH_POINT']=crash
++        if mock:env.update({'TUKUYO_LLM_COMMAND':f'{sys.executable} -B {MOCK}','MOCK_LLM_MODE':mock,'MOCK_LLM_STATE':str(d.parent/'mock_state')})
++        p=subprocess.Popen([sys.executable,'-B',str(ROOT/'run_tukuyo.py'),'--runtime-trust-file',str(pin),'--data',str(d),*map(str,args)],env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,start_new_session=True)
++        try:so,se=p.communicate(timeout=300)
++        except subprocess.TimeoutExpired:
++            os.killpg(p.pid,signal.SIGKILL);so,se=p.communicate();rep['violations'].append({'op':args[0],'timeout':True});return None
++        r=None
++        try:r=json.loads(so) if so.strip() else None
++        except ValueError:pass
++        if crash:return {'returncode':p.returncode,'result':r}
++        if ok and (p.returncode or not r or not r.get('ok')):rep['violations'].append({'op':list(map(str,args))[:3],'returncode':p.returncode,'result':(r or {}) if isinstance(r,dict) else None,'stderr':se[-400:]})
++        return r
++    def bump(k):rep['ops'][k]=rep['ops'].get(k,0)+1
++    def audits(full=False):
++        for cmd in (('whole-audit','metabolism-audit','llm-audit','learning-audit') if full else ('whole-audit',)):
++            r=cli(cmd,ok=False)
++            if not r or not r.get('ok'):rep['violations'].append({'audit':cmd,'result':r});return False
++            if cmd=='metabolism-audit' and r.get('resource_conservation') is False:rep['violations'].append({'audit':'resource_conservation','result':r})
++        return True
++    facts={};learned=set();cp=None;cp_state=None
++    if d.exists() and any(d.iterdir()):ap.error('empty data directory required')
++    cli('init','--individual-id','LONGRUN-V1022-6')
++    cli('metabolism-init','--families','2','--reservoir','80000','--regeneration','1200','--max-age','6')
++    cli('realtime-start');save()
++    i=0
++    while time.monotonic()<deadline:
++        i+=1;op=rng.choices(['reason','teach','study','metab','checkpoint','restore','crash'],[50,8,4,18,4,4,4])[0]
++        if op=='checkpoint' or (op=='restore' and cp is None):
++            st=cli('metabolism-audit');r=cli('recovery-checkpoint','--note',f'longrun-{i}')
++            if r and r.get('ok') and st:cp=r['path'];cp_state={'tick':st.get('tick'),'facts':dict(facts),'learned':set(learned)};rep['checkpoints']+=1
++            bump('checkpoint')
++        elif op=='restore':
++            cli('metabolism-step','--ticks',rng.randint(1,3))                 # future branch
++            cli('realtime-tick','--note',f'future-{i}')
++            r=cli('recovery-restore',cp,'--trust-file',d/'v1014/recovery.pub')
++            st=cli('metabolism-audit')
++            if st and st.get('tick')!=cp_state['tick']:rep['violations'].append({'restore_tick_mismatch':[st.get('tick'),cp_state['tick']]})
++            facts=dict(cp_state['facts']);learned=set(cp_state['learned']);rep['restores']+=1;bump('restore')
++            for (e,at),v in list(facts.items())[:3]:                          # facts from the checkpoint are back
++                x=cli('think','--',f'{e}の{at}は？')
++                if x and x.get('answer')!=v:rep['violations'].append({'restored_fact_missing':[e,at,v,x.get('answer')]})
++        elif op=='crash':
++            r=cli('metabolism-step','--ticks','2',crash='metabolism:after_death');rep['crash_injections']+=1
++            if r and r['returncode'] in (-signal.SIGKILL,137):rep['crash_reached']+=1
++            bump('crash')
++        elif op=='metab':
++            r=cli('metabolism-step','--ticks',rng.randint(1,2));bump('metab')
++        elif op=='teach':
++            e=rng.choice(ENTS);at,vals=rng.choice(ATTRS)
++            if (e,at) in facts:continue
++            v=rng.choice(vals);cli('knowledge-add',f'{e}の{at}は{v}である。');facts[(e,at)]=v;bump('teach')
++            x=cli('think','--',f'{e}の{at}は？')
++            if not x or x.get('answer')!=v:rep['violations'].append({'fresh_fact_not_answered':[e,at,v,(x or {}).get('answer')]})
++        elif op=='study':
++            verb=rng.choice([v for v in TEACH_VERBS if v not in learned] or TEACH_VERBS)
++            q=f'1箱に{rng.randint(5,12)}個入りが{rng.randint(3,9)}箱あります。{rng.randint(1,4)}個{verb}。残りは何個？'
++            cli('llm-ask','--',q)
++            s=cli('self-study','--max','8',mock='honest')
++            if s and s.get('now_solved_locally'):rep['self_study_learned']+=s['now_solved_locally'];learned.add(verb)
++            if verb in learned:
++                aa,bb,cc=rng.randint(5,12),rng.randint(3,9),rng.randint(1,4)
++                x=cli('think','--',f'1箱に{aa}個入りが{bb}箱あります。{cc}個{verb}。残りは何個？')
++                if x and x.get('answer') not in (None,str(aa*bb-cc)):rep['violations'].append({'learned_rule_wrong':[verb,x.get('answer'),aa*bb-cc]})
++            bump('study')
++        else:
++            kind,q,exp=gen_problem(rng,facts)
++            cmd=rng.choice(['think','think','verified-query','llm-ask'])
++            x=cli(cmd,'--',q)
++            if x is None:continue
++            ans=x.get('answer') if cmd=='think' else (None if x.get('uncertain') else x.get('answer'))
++            g=grade(exp,ans);c=rep['reasoning'].setdefault(kind,{})
++            c[g]=c.get(g,0)+1
++            if g=='wrong_certain':rep['violations'].append({'wrong_certain':[cmd,q,str(exp),ans]})
++            bump('reason')
++        audits(full=(i%15==0))
++        if i%5==0:save()
++    audits(full=True);rep['completed']=True;rep['total_ops']=i;save()
++    print(json.dumps({'ops':rep['ops'],'violations':len(rep['violations'])},ensure_ascii=False))
++    return 0 if not rep['violations'] else 1
++if __name__=='__main__':raise SystemExit(main())
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/tools/research_lineage.py /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/tools/research_lineage.py
+--- /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/pkg4/TUKUYO_v1022_5_claude_patch4/system/tools/research_lineage.py	1970-01-01 09:00:00.000000000 +0900
++++ /tmp/claude-0/-home-claude/ef7c06e2-82d3-5fb4-b676-2ade448eea2f/scratchpad/f25/m4/system/tools/research_lineage.py	2026-10-05 17:32:13.086338321 +0900
+@@ -0,0 +1,49 @@
++"""claude-patch5: research niche inside the real metabolism, lineage with and without inherited laws.
++
++Two ecologies are started from the same seed (same founders' niches):
++  inherit     metabolism-init --research-world            (a successor may inherit the parent's CONFIRMED law)
++  no_inherit  metabolism-init --research-world --no-learning
++Each is stepped for the same number of ticks; the report compares, per generation,
++successful work, injuries, experiments, inherited laws, deaths and audits.
++
++usage: python3 -B tools/research_lineage.py --runtime-trust-file ANCHOR --out report.json [--ticks 64] [--max-age 24]
++"""
++from __future__ import annotations
++import argparse,json,os,subprocess,sys,tempfile,time
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[1]
++
++def main():
++    ap=argparse.ArgumentParser();ap.add_argument('--runtime-trust-file',required=True);ap.add_argument('--out',required=True,type=Path)
++    ap.add_argument('--ticks',type=int,default=64);ap.add_argument('--max-age',type=int,default=24);ap.add_argument('--families',type=int,default=4)
++    ap.add_argument('--seed',default='v1023r-lineage');ap.add_argument('--reservoir',type=int,default=200000);ap.add_argument('--regeneration',type=int,default=3000);ap.add_argument('--work',type=Path)
++    a=ap.parse_args();base=a.work or Path(tempfile.mkdtemp(prefix='tukuyo-lineage-'))
++    env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'};env.pop('TUKUYO_CRASH_POINT',None)
++    out={'schema':'tukuyo.v1023r.lineage/1','seed':a.seed,'ticks':a.ticks,'max_age':a.max_age,'families':a.families,'reservoir':a.reservoir,'regeneration':a.regeneration,'runs':{}}
++    for name,extra in (('inherit',[]),('no_inherit',['--no-learning'])):
++        d=base/name;t0=time.time()
++        def cli(*args):
++            p=subprocess.run([sys.executable,'-B',str(ROOT/'run_tukuyo.py'),'--runtime-trust-file',a.runtime_trust_file,'--data',str(d),*map(str,args)],cwd=ROOT,env=env,capture_output=True,text=True,timeout=3600)
++            r=json.loads(p.stdout)
++            if not r.get('ok'):raise SystemExit(f'{name} {args[0]} failed: {r}')
++            return r
++        cli('init','--individual-id',f'LINEAGE-{name.upper()}')
++        cli('metabolism-init','--families',a.families,'--seed',a.seed,'--reservoir',a.reservoir,'--regeneration',a.regeneration,'--max-age',a.max_age,'--research-world',*extra)
++        ticks=[]
++        for _ in range(0,a.ticks,8):
++            r=cli('metabolism-step','--ticks',min(8,a.ticks-len(ticks)*8))
++            ticks.append({'tick':r['tick'],'active':r['active_runtime_count'],'successions':r['actual_successions'],'reservoir':r['reservoir'],'living_energy':r['living_energy']})
++        st=cli('metabolism-status');au=cli('metabolism-audit');wa=cli('whole-audit')
++        gen={}
++        for rid,row in st['research_niche'].items():
++            g=next((s for s in st['successions'] if s['child']==rid),None);gk='founder' if g is None else 'successor'
++            G=gen.setdefault(gk,{'n':0,'works':0,'works_paid':0,'injuries':0,'probes':0,'trials':0,'rests':0,'inherited_law':0,'confirmed_law':0})
++            G['n']+=1;G['inherited_law']+=int(bool(row['inherited_law']));G['confirmed_law']+=int(row['status']=='CONFIRMED')
++            for k in ('works','works_paid','injuries','probes','trials','rests'):G[k]+=row[k]
++        out['runs'][name]={'ticks':ticks,'deaths':len(st['deaths']),'death_causes':sorted({x['cause'] for x in st['deaths']}),'successions':st['actual_successions'],
++            'max_generation':st['max_generation'],'by_generation':gen,'per_runtime':st['research_niche'],'metabolism_audit':au.get('ok'),'whole_audit':wa.get('ok'),
++            'resource_conservation':au.get('resource_conservation'),'seconds':round(time.time()-t0,1)}
++        a.out.write_text(json.dumps(out,ensure_ascii=False,indent=1),encoding='utf-8')
++    print(json.dumps({k:{x:v[x] for x in ('deaths','successions','max_generation','by_generation','metabolism_audit','whole_audit','seconds')} for k,v in out['runs'].items()},ensure_ascii=False,indent=1))
++
++if __name__=='__main__':main()

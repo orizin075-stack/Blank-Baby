@@ -1,0 +1,18 @@
+{
+  "capabilities": {
+    "external_anchor_rollback_guard": true,
+    "restart_recovery_harness": true,
+    "signed_full_state_recovery_checkpoint": true,
+    "staged_recovery_before_commit": true,
+    "tampered_checkpoint_rejection": true
+  },
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "literal_life_established": false
+  },
+  "parent": "v1013",
+  "version": "v1014"
+}

@@ -1,0 +1,73 @@
+{
+  "claim_boundary": {
+    "autonomous_external_action": false,
+    "bounded_internal_plan_execution": true,
+    "bounded_long_horizon_planning": true,
+    "consciousness_established": false,
+    "empirical_strategy_adaptation": true,
+    "general_l5": false,
+    "general_l6": false,
+    "independent_third_party_reproduction": "PENDING",
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "open_ended_goal_invention": false,
+    "outcome_history_changes_future_plan_order": true,
+    "self_modifying_code": false,
+    "thirty_day_wallclock_continuity_established": false
+  },
+  "fresh_e2e": {
+    "audits": {
+      "execution": true,
+      "plan": true,
+      "strategy": true,
+      "whole": true
+    },
+    "individual_id": "V988-FRESH",
+    "integrity_phase": {
+      "adapted_first_action": "HOMEOSTASIS_ASSESS",
+      "execution_success_rate": 1.0,
+      "initial_first_action": "WHOLE_AUDIT",
+      "learned_preference": [
+        "HOMEOSTASIS_ASSESS",
+        "WHOLE_AUDIT",
+        "PURPOSE_REEVALUATE"
+      ],
+      "purpose": "PRESERVE_INTEGRITY"
+    },
+    "knowledge_phase": {
+      "adapted_first_action": "EVIDENCE_REFLECT",
+      "execution_success_rate": 1.0,
+      "initial_first_action": "WHOLE_AUDIT",
+      "learned_preference": [
+        "EVIDENCE_REFLECT",
+        "WHOLE_AUDIT",
+        "PURPOSE_REEVALUATE"
+      ],
+      "purpose": "SEEK_KNOWLEDGE"
+    },
+    "top_status_version": "v988",
+    "version": "v988"
+  },
+  "parent": "v985",
+  "schema": "tukuyo.v988.fresh_audit/1",
+  "syntax": {
+    "errors": 0,
+    "python_files": 445
+  },
+  "tests": {
+    "new_v986_v988": {
+      "failed": 0,
+      "passed": 3
+    },
+    "root_runtime_suite": {
+      "execution": "split by test file/node to avoid environment wall-time",
+      "failed": 0,
+      "passed": 149
+    },
+    "v954_security": {
+      "failed": 0,
+      "passed": 10
+    }
+  },
+  "version": "v988"
+}

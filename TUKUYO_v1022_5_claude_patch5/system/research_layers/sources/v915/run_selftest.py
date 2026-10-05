@@ -1,0 +1,2 @@
+import json,subprocess,sys
+p=subprocess.run([sys.executable,'tools/reproduce_v915.py'],capture_output=True,text=True);r=json.loads(p.stdout);ok=p.returncode==0 and r['full_strictly_beats_each_single'];print(json.dumps({'ok':ok,'full':r['full']['correct_total'],'base':r['base']['correct_total'],'single_best':max(r[k]['correct_total'] for k in ('threshold','precedence','audit')),'seeds':5},sort_keys=True));raise SystemExit(0 if ok else 1)

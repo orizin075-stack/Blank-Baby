@@ -1,0 +1,731 @@
+{
+  "teacher": "planning",
+  "regenerate": true,
+  "provenance": "regenerate: 消失前の会話記録から同じ意図で再生成。完全一致は保証しない。計画入力と正解情報を分離。",
+  "examples": [
+    {
+      "id": "planning_followup1_001",
+      "question": "すべてのAはBです。すべてのBはCです。xはAです。xはCですか？",
+      "expected_answer": "はい",
+      "explanation": "xはA→B→C。",
+      "domain": "transitivity",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_followup1_002",
+      "question": "AはBより大きい。BはCより大きい。AはCより大きいですか？",
+      "expected_answer": "はい",
+      "explanation": "A>B>CなのでA>C。",
+      "domain": "transitivity",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_followup1_003",
+      "question": "すべてのDはEです。すべてのEはFです。yはDです。yはFですか？",
+      "expected_answer": "はい",
+      "explanation": "yはD→E→F。",
+      "domain": "transitivity",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_followup1_004",
+      "question": "すべてのAはBです。xはBです。xはAですか？",
+      "expected_answer": null,
+      "explanation": "A⊆Bの逆は不明。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_005",
+      "question": "すべてのAはCです。すべてのBはCです。xはAです。xはBですか？",
+      "expected_answer": null,
+      "explanation": "AとBの共通上位がCでも相互包含は不明。",
+      "domain": "transitivity",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_006",
+      "question": "AはBより大きい。CはBより大きい。AはCより大きいですか？",
+      "expected_answer": null,
+      "explanation": "(A,B,C)=(3,1,2)なら真、(2,1,3)なら偽。",
+      "domain": "transitivity",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_007",
+      "question": "AはBより大きい。BはCより大きい。AはCより小さいですか？",
+      "expected_answer": "いいえ",
+      "explanation": "A>CとA<Cは両立しない。",
+      "domain": "transitivity",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_followup1_008",
+      "question": "すべてのAはBです。xはBではありません。xはAですか？",
+      "expected_answer": "いいえ",
+      "explanation": "AならBなのでBでないxはAでない。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_009",
+      "question": "AならBです。Aです。Bですか？",
+      "expected_answer": "はい",
+      "explanation": "AからBを導く。",
+      "domain": "necessary_sufficient",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_followup1_010",
+      "question": "AであるためにはBが必要です。Bです。Aですか？",
+      "expected_answer": null,
+      "explanation": "必要条件Bの成立だけではAは導けない。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_011",
+      "question": "AならBです。Aではありません。Bですか？",
+      "expected_answer": null,
+      "explanation": "前件否定から後件の真偽は決まらない。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_012",
+      "question": "Aであるための必要十分条件はBです。Bです。Aですか？",
+      "expected_answer": "はい",
+      "explanation": "B→Aも成立するのでA。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_013",
+      "question": "SからGへ移動します。使用できる行動はdirect:S→G（費用9）、to_a:S→A（費用2）、to_goal:A→G（費用3）だけです。最小の合計費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "5",
+      "explanation": "A経由2+3=5。費用を尋ねられたら5、行動列ならto_a、to_goal。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "direct",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 9
+          },
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "to_goal",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 3
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "to_a",
+        "to_goal"
+      ]
+    },
+    {
+      "id": "planning_followup1_014",
+      "question": "SからGへ移動します。使用できる行動はdirect:S→G（費用9）、to_a:S→A（費用2）、to_goal:A→G（費用3）だけです。合計費用が最小になる行動列は何ですか？ 行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"to_a\",\"to_goal\"]",
+      "explanation": "A経由2+3=5。費用を尋ねられたら5、行動列ならto_a、to_goal。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "direct",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 9
+          },
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "to_goal",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 3
+          }
+        ]
+      },
+      "answer_kind": "action_sequence",
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "to_a",
+        "to_goal"
+      ]
+    },
+    {
+      "id": "planning_followup1_015",
+      "question": "鍵なし（key=0）、扉が閉じた状態（door=0）から、扉を開けたいです。get_keyは鍵なし・扉閉のとき鍵を得る行動で費用2。openは鍵あり・扉閉のとき扉を開く行動で費用3。quick_openは扉閉なら鍵なしでも扉を開く行動で費用8。ほかの行動はありません。最小の合計費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "5",
+      "explanation": "get_key、openで費用2+3=5。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "key": 0,
+          "door": 0
+        },
+        "goal": {
+          "door": 1
+        },
+        "actions": [
+          {
+            "id": "get_key",
+            "pre": {
+              "key": 0,
+              "door": 0
+            },
+            "set": {
+              "key": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "open",
+            "pre": {
+              "key": 1,
+              "door": 0
+            },
+            "set": {
+              "door": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "quick_open",
+            "pre": {
+              "door": 0
+            },
+            "set": {
+              "door": 1
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "get_key",
+        "open"
+      ]
+    },
+    {
+      "id": "planning_followup1_016",
+      "question": "鍵なし（key=0）、扉が閉じた状態（door=0）から、扉を開けたいです。get_keyは鍵なし・扉閉のとき鍵を得る行動で費用2。openは鍵あり・扉閉のとき扉を開く行動で費用3。quick_openは扉閉なら鍵なしでも扉を開く行動で費用8。ほかの行動はありません。合計費用が最小になる行動列は何ですか？ 行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"get_key\",\"open\"]",
+      "explanation": "get_key、openで費用2+3=5。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "key": 0,
+          "door": 0
+        },
+        "goal": {
+          "door": 1
+        },
+        "actions": [
+          {
+            "id": "get_key",
+            "pre": {
+              "key": 0,
+              "door": 0
+            },
+            "set": {
+              "key": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "open",
+            "pre": {
+              "key": 1,
+              "door": 0
+            },
+            "set": {
+              "door": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "quick_open",
+            "pre": {
+              "door": 0
+            },
+            "set": {
+              "door": 1
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "answer_kind": "action_sequence",
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "get_key",
+        "open"
+      ]
+    },
+    {
+      "id": "planning_followup1_017",
+      "question": "SからGへ移動します。使用できる行動はdead_end:S→D（費用1）、to_a:S→A（費用4）、a_to_b:A→B（費用1）、b_to_goal:B→G（費用1）、direct:S→G（費用8）だけです。Dから出る行動はありません。最小の合計費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "6",
+      "explanation": "D経由は到達不能。A,B経由4+1+1=6。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "dead_end",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "D"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "a_to_b",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "B"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "b_to_goal",
+            "pre": {
+              "place": "B"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "direct",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 6,
+      "optimal_actions": [
+        "to_a",
+        "a_to_b",
+        "b_to_goal"
+      ]
+    },
+    {
+      "id": "planning_followup1_018",
+      "question": "SからGへ移動します。使用できる行動はdead_end:S→D（費用1）、to_a:S→A（費用4）、a_to_b:A→B（費用1）、b_to_goal:B→G（費用1）、direct:S→G（費用8）だけです。Dから出る行動はありません。合計費用が最小になる行動列は何ですか？ 行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"to_a\",\"a_to_b\",\"b_to_goal\"]",
+      "explanation": "D経由は到達不能。A,B経由4+1+1=6。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "dead_end",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "D"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "a_to_b",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "B"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "b_to_goal",
+            "pre": {
+              "place": "B"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "direct",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "answer_kind": "action_sequence",
+      "optimal_cost": 6,
+      "optimal_actions": [
+        "to_a",
+        "a_to_b",
+        "b_to_goal"
+      ]
+    },
+    {
+      "id": "planning_followup1_019",
+      "question": "在庫qty=0から、ちょうどqty=4にします。在庫iから1増やす行動add_one_at_iは費用3、2増やす行動add_two_at_iは費用4です。行動idのiは現在の在庫の整数です。在庫が4を超える行動は使用できず、減らす行動はありません。最小の合計費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "8",
+      "explanation": "2増2回で4+4=8。1増4回は12。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "qty": 0
+        },
+        "goal": {
+          "qty": 4
+        },
+        "actions": [
+          {
+            "id": "add_one_at_0",
+            "pre": {
+              "qty": 0
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_two_at_0",
+            "pre": {
+              "qty": 0
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "add_one_at_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_two_at_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "add_one_at_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_two_at_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "add_one_at_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 3
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "add_two_at_0",
+        "add_two_at_2"
+      ]
+    },
+    {
+      "id": "planning_followup1_020",
+      "question": "在庫qty=0から、ちょうどqty=4にします。在庫iから1増やす行動add_one_at_iは費用3、2増やす行動add_two_at_iは費用4です。行動idのiは現在の在庫の整数です。在庫が4を超える行動は使用できず、減らす行動はありません。合計費用が最小になる行動列は何ですか？ 行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"add_two_at_0\",\"add_two_at_2\"]",
+      "explanation": "2増2回で4+4=8。1増4回は12。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "qty": 0
+        },
+        "goal": {
+          "qty": 4
+        },
+        "actions": [
+          {
+            "id": "add_one_at_0",
+            "pre": {
+              "qty": 0
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_two_at_0",
+            "pre": {
+              "qty": 0
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "add_one_at_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_two_at_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "add_one_at_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_two_at_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "add_one_at_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 3
+          }
+        ]
+      },
+      "answer_kind": "action_sequence",
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "add_two_at_0",
+        "add_two_at_2"
+      ]
+    },
+    {
+      "id": "planning_followup1_021",
+      "question": "x=4です。まず2を足します。その時点のxが5より大きければ3倍し、そうでなければ1を足します。最後に4を引きます。最終的なxを整数だけで答えてください。",
+      "expected_answer": "14",
+      "explanation": "4+2=6、6×3=18、18−4=14。",
+      "domain": "conditional",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_022",
+      "question": "時刻0にAとBを同時に始めます。Aの所要時間は3、Bは5です。両方が終わってから、所要時間2のCを始めます。Cの最早終了時刻を整数だけで答えてください。",
+      "expected_answer": "7",
+      "explanation": "max(3,5)+2=7。",
+      "domain": "temporal",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_023",
+      "question": "A、B、Cから異なる候補をちょうど2つ選びます。予算は8です。Aは費用3・得点5、Bは費用5・得点9、Cは費用6・得点10です。予算内で得点を最大にする組合せをA+Bの形式で答えてください。",
+      "expected_answer": "A+B",
+      "explanation": "AB費用8、AC9、BC11なのでAB。",
+      "domain": "constrained_choice",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_followup1_024",
+      "question": "ボタンを押した後に音が鳴る例が何度も観測されました。他の条件や、ボタンを押さない場合は調べていません。ボタンを押すことが音の原因ですか？情報だけで決定できなければ不明と答えてください。",
+      "expected_answer": null,
+      "explanation": "時間的順序と共起だけでは原因は決定できない。",
+      "domain": "causality",
+      "difficulty": 2
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# TUKUYO v963
+v962では、外部昇格済みのpublic capabilityだけを別individualへ継承する。autobiography、private memory、local keys、resource stateはschemaで拒否する。
+v963は第三者再現用のfresh-process runnerと契約を追加する。ただし今回こちらで行うのは内部fresh-process analogであり、独立第三者による実再現そのものではない。`third_party_reproduction=PENDING`を維持する。

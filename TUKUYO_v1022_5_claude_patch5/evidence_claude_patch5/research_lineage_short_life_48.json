@@ -1,0 +1,506 @@
+{
+ "schema": "tukuyo.v1023r.lineage/1",
+ "seed": "v1023r-lineage",
+ "ticks": 96,
+ "max_age": 48,
+ "families": 4,
+ "runs": {
+  "inherit": {
+   "ticks": [
+    {
+     "tick": 8,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 174800,
+     "living_energy": 26900
+    },
+    {
+     "tick": 16,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 158000,
+     "living_energy": 27300
+    },
+    {
+     "tick": 24,
+     "active": 4,
+     "successions": 1,
+     "reservoir": 147300,
+     "living_energy": 24550
+    },
+    {
+     "tick": 32,
+     "active": 4,
+     "successions": 1,
+     "reservoir": 143100,
+     "living_energy": 11350
+    },
+    {
+     "tick": 40,
+     "active": 3,
+     "successions": 1,
+     "reservoir": 131900,
+     "living_energy": 10350
+    },
+    {
+     "tick": 48,
+     "active": 3,
+     "successions": 4,
+     "reservoir": 101200,
+     "living_energy": 19500
+    },
+    {
+     "tick": 56,
+     "active": 3,
+     "successions": 4,
+     "reservoir": 88600,
+     "living_energy": 16700
+    },
+    {
+     "tick": 64,
+     "active": 2,
+     "successions": 4,
+     "reservoir": 80200,
+     "living_energy": 16650
+    },
+    {
+     "tick": 72,
+     "active": 2,
+     "successions": 4,
+     "reservoir": 74600,
+     "living_energy": 14450
+    },
+    {
+     "tick": 80,
+     "active": 2,
+     "successions": 4,
+     "reservoir": 69000,
+     "living_energy": 12250
+    },
+    {
+     "tick": 88,
+     "active": 2,
+     "successions": 4,
+     "reservoir": 64800,
+     "living_energy": 9100
+    },
+    {
+     "tick": 96,
+     "active": 2,
+     "successions": 6,
+     "reservoir": 47600,
+     "living_energy": 13000
+    }
+   ],
+   "deaths": 8,
+   "death_causes": [
+    "AGE",
+    "ENERGY"
+   ],
+   "successions": 6,
+   "max_generation": 2,
+   "by_generation": {
+    "founder": {
+     "n": 4,
+     "works": 63,
+     "works_paid": 52,
+     "injuries": 11,
+     "probes": 78,
+     "trials": 4,
+     "rests": 23,
+     "inherited_law": 0,
+     "confirmed_law": 0
+    },
+    "successor": {
+     "n": 6,
+     "works": 36,
+     "works_paid": 29,
+     "injuries": 7,
+     "probes": 70,
+     "trials": 0,
+     "rests": 9,
+     "inherited_law": 0,
+     "confirmed_law": 0
+    }
+   },
+   "per_runtime": {
+    "R000000": {
+     "family": "fam-3078ac0f24f945d1a0bd7759060e3963",
+     "inherited_law": null,
+     "injuries": 1,
+     "law": null,
+     "method": "LAW",
+     "probes": 26,
+     "rests": 2,
+     "status": "RESEARCHING",
+     "trials": 4,
+     "works": 16,
+     "works_paid": 15
+    },
+    "R000001": {
+     "family": "fam-bad1f1a2e5f64ed5a7b4a149083eb435",
+     "inherited_law": null,
+     "injuries": 5,
+     "law": null,
+     "method": "LAW",
+     "probes": 0,
+     "rests": 14,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 10,
+     "works_paid": 5
+    },
+    "R000002": {
+     "family": "fam-3a1af2967fbf4152b742673e5a761bb4",
+     "inherited_law": null,
+     "injuries": 2,
+     "law": null,
+     "method": "LAW",
+     "probes": 24,
+     "rests": 7,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 17,
+     "works_paid": 15
+    },
+    "R000003": {
+     "family": "fam-5821bf7f5ce147fc8eecd359786b1fb7",
+     "inherited_law": null,
+     "injuries": 3,
+     "law": null,
+     "method": "LAW",
+     "probes": 28,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 20,
+     "works_paid": 17
+    },
+    "R000004": {
+     "family": "fam-bad1f1a2e5f64ed5a7b4a149083eb435",
+     "inherited_law": null,
+     "injuries": 3,
+     "law": null,
+     "method": "LAW",
+     "probes": 6,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 3,
+     "works_paid": 0
+    },
+    "R000005": {
+     "family": "fam-3078ac0f24f945d1a0bd7759060e3963",
+     "inherited_law": null,
+     "injuries": 1,
+     "law": null,
+     "method": "LAW",
+     "probes": 32,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 16,
+     "works_paid": 15
+    },
+    "R000006": {
+     "family": "fam-3a1af2967fbf4152b742673e5a761bb4",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": null,
+     "method": "LAW",
+     "probes": 28,
+     "rests": 6,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 14,
+     "works_paid": 14
+    },
+    "R000007": {
+     "family": "fam-5821bf7f5ce147fc8eecd359786b1fb7",
+     "inherited_law": null,
+     "injuries": 3,
+     "law": null,
+     "method": "LAW",
+     "probes": 4,
+     "rests": 3,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 3,
+     "works_paid": 0
+    },
+    "R000008": {
+     "family": "fam-3078ac0f24f945d1a0bd7759060e3963",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": null,
+     "method": "LAW",
+     "probes": 0,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 0,
+     "works_paid": 0
+    },
+    "R000009": {
+     "family": "fam-3a1af2967fbf4152b742673e5a761bb4",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": null,
+     "method": "LAW",
+     "probes": 0,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 0,
+     "works_paid": 0
+    }
+   },
+   "metabolism_audit": true,
+   "whole_audit": true,
+   "resource_conservation": true,
+   "seconds": 169.3
+  },
+  "no_inherit": {
+   "ticks": [
+    {
+     "tick": 8,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 181800,
+     "living_energy": 20650
+    },
+    {
+     "tick": 16,
+     "active": 3,
+     "successions": 0,
+     "reservoir": 166400,
+     "living_energy": 21150
+    },
+    {
+     "tick": 24,
+     "active": 3,
+     "successions": 0,
+     "reservoir": 149800,
+     "living_energy": 23600
+    },
+    {
+     "tick": 32,
+     "active": 3,
+     "successions": 0,
+     "reservoir": 142000,
+     "living_energy": 20600
+    },
+    {
+     "tick": 40,
+     "active": 3,
+     "successions": 0,
+     "reservoir": 131200,
+     "living_energy": 18150
+    },
+    {
+     "tick": 48,
+     "active": 3,
+     "successions": 3,
+     "reservoir": 97600,
+     "living_energy": 19500
+    },
+    {
+     "tick": 56,
+     "active": 3,
+     "successions": 3,
+     "reservoir": 80800,
+     "living_energy": 23150
+    },
+    {
+     "tick": 64,
+     "active": 3,
+     "successions": 3,
+     "reservoir": 68200,
+     "living_energy": 23750
+    },
+    {
+     "tick": 72,
+     "active": 3,
+     "successions": 3,
+     "reservoir": 55600,
+     "living_energy": 23500
+    },
+    {
+     "tick": 80,
+     "active": 3,
+     "successions": 3,
+     "reservoir": 47200,
+     "living_energy": 19650
+    },
+    {
+     "tick": 88,
+     "active": 3,
+     "successions": 3,
+     "reservoir": 33500,
+     "living_energy": 20050
+    },
+    {
+     "tick": 96,
+     "active": 2,
+     "successions": 5,
+     "reservoir": 4300,
+     "living_energy": 13000
+    }
+   ],
+   "deaths": 7,
+   "death_causes": [
+    "AGE",
+    "ENERGY"
+   ],
+   "successions": 5,
+   "max_generation": 2,
+   "by_generation": {
+    "founder": {
+     "n": 4,
+     "works": 83,
+     "works_paid": 66,
+     "injuries": 17,
+     "probes": 41,
+     "trials": 3,
+     "rests": 28,
+     "inherited_law": 0,
+     "confirmed_law": 0
+    },
+    "successor": {
+     "n": 5,
+     "works": 72,
+     "works_paid": 68,
+     "injuries": 4,
+     "probes": 60,
+     "trials": 4,
+     "rests": 8,
+     "inherited_law": 0,
+     "confirmed_law": 0
+    }
+   },
+   "per_runtime": {
+    "R000000": {
+     "family": "fam-dc4e1310d29d4aaa8f8d715086f4ef19",
+     "inherited_law": null,
+     "injuries": 10,
+     "law": null,
+     "method": "TABLE",
+     "probes": 0,
+     "rests": 6,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 42,
+     "works_paid": 32
+    },
+    "R000001": {
+     "family": "fam-203aa844b4f04763824ae376516ceba1",
+     "inherited_law": null,
+     "injuries": 3,
+     "law": null,
+     "method": "LAW",
+     "probes": 3,
+     "rests": 5,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 3,
+     "works_paid": 0
+    },
+    "R000002": {
+     "family": "fam-a39693148cf2421191ccf177cb10521a",
+     "inherited_law": null,
+     "injuries": 4,
+     "law": null,
+     "method": "LAW",
+     "probes": 8,
+     "rests": 17,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 23,
+     "works_paid": 19
+    },
+    "R000003": {
+     "family": "fam-35e8bcb50789406d9db761f74d1b00c7",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": null,
+     "method": "LAW",
+     "probes": 30,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 3,
+     "works": 15,
+     "works_paid": 15
+    },
+    "R000004": {
+     "family": "fam-dc4e1310d29d4aaa8f8d715086f4ef19",
+     "inherited_law": null,
+     "injuries": 1,
+     "law": null,
+     "method": "TABLE",
+     "probes": 18,
+     "rests": 0,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 30,
+     "works_paid": 29
+    },
+    "R000005": {
+     "family": "fam-a39693148cf2421191ccf177cb10521a",
+     "inherited_law": null,
+     "injuries": 3,
+     "law": null,
+     "method": "TABLE",
+     "probes": 14,
+     "rests": 7,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 27,
+     "works_paid": 24
+    },
+    "R000006": {
+     "family": "fam-35e8bcb50789406d9db761f74d1b00c7",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": null,
+     "method": "LAW",
+     "probes": 28,
+     "rests": 1,
+     "status": "RESEARCHING",
+     "trials": 4,
+     "works": 15,
+     "works_paid": 15
+    },
+    "R000007": {
+     "family": "fam-dc4e1310d29d4aaa8f8d715086f4ef19",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": null,
+     "method": "LAW",
+     "probes": 0,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 0,
+     "works_paid": 0
+    },
+    "R000008": {
+     "family": "fam-a39693148cf2421191ccf177cb10521a",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": null,
+     "method": "LAW",
+     "probes": 0,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 0,
+     "works_paid": 0
+    }
+   },
+   "metabolism_audit": true,
+   "whole_audit": true,
+   "resource_conservation": true,
+   "seconds": 144.8
+  }
+ }
+}

@@ -1,0 +1,32 @@
+{
+  "version": "v953",
+  "parent": "v947",
+  "route": [
+    "v948 self-authored bounded research goal proposal",
+    "v949 bounded autonomous research cycle",
+    "v950 improver integration",
+    "v951-v953 three-generation bounded improver chain"
+  ],
+  "completed_before_parent": [
+    "v944 representation-gap detection",
+    "v945 bounded primitive proposal",
+    "v946 external promotion gate",
+    "v947 frozen cross-domain transfer"
+  ],
+  "claims": {
+    "self_authored_goal": "YES_BOUNDED_SELECTION_EXTERNAL_AUTH_REQUIRED",
+    "autonomous_research_cycle": "YES_BOUNDED_SYNTHETIC_WITH_EXTERNAL_ROLES",
+    "improver_improvement": "YES_FINITE_POLICY_SPACE",
+    "recursive_improver_generations": 3,
+    "code_self_rewrite": false,
+    "general_l6": false
+  },
+  "limitations": [
+    "synthetic structured arithmetic tasks",
+    "external roles in selftest are locally generated independent keys, not independent organizations",
+    "finite meta-policy space",
+    "no open-ended representation language",
+    "no 30-day wall-clock completion",
+    "no general L6 claim"
+  ]
+}

@@ -1,0 +1,767 @@
+{
+  "teacher": "social_memory",
+  "round": 2,
+  "construction": "new_teacher_material",
+  "evaluation_note": "expected_valueは値一致用。factsとaliasesが与えられた条件と、未学習言い換えの条件は別に記録する。",
+  "examples": [
+    {
+      "id": "smf2_001",
+      "question": "会話記録：本田律は岡山に住んでいます。別人で、名前が「律」だけの人は秋田に住んでいます。 質問：本田律がいま暮らしている都市はどこですか。",
+      "expected_answer": "本田律がいま暮らしている都市は岡山です。",
+      "expected_value": "岡山",
+      "explanation": "質問が指すのは本田律。全文に別人の律が出ても、部分文字列だけで本田律と同一人物にしない。",
+      "domain": "person_identity",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "本田律",
+          "relation": "現在の居住地",
+          "value": "岡山"
+        },
+        {
+          "entity": "律",
+          "relation": "現在の居住地",
+          "value": "秋田"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "いま暮らしている都市",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf2_002",
+      "question": "会話記録：本田律は岡山に住んでいます。別人で、名前が「律」だけの人は秋田に住んでいます。 質問：名前が律だけの人の日常の住まいはどこですか。",
+      "expected_answer": "名前が律だけの人の日常の住まいは秋田です。",
+      "expected_value": "秋田",
+      "explanation": "短い名前の律が明示的に選ばれている。会話記録に本田律がいても、その人物に読み替えない。",
+      "domain": "person_identity",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "本田律",
+          "relation": "現在の居住地",
+          "value": "岡山"
+        },
+        {
+          "entity": "律",
+          "relation": "現在の居住地",
+          "value": "秋田"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "名前が律だけの人",
+          "canonical": "律"
+        },
+        {
+          "surface": "日常の住まい",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf2_003",
+      "question": "会話記録：本田律は「私はりっちゃんと呼ばれています。住んでいる街は岡山です」と言いました。別人の律は秋田に住んでいます。 質問：りっちゃんが普段住んでいる都市はどこですか。",
+      "expected_answer": "りっちゃん、つまり本田律が普段住んでいる都市は岡山です。",
+      "expected_value": "岡山",
+      "explanation": "本人が明示したりっちゃんだけを本田律のaliasにする。律を本田律のaliasにはしない。",
+      "domain": "person_alias",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "本田律",
+          "relation": "現在の居住地",
+          "value": "岡山"
+        },
+        {
+          "entity": "律",
+          "relation": "現在の居住地",
+          "value": "秋田"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "りっちゃん",
+          "canonical": "本田律"
+        },
+        {
+          "surface": "普段住んでいる都市",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf2_004",
+      "question": "会話記録：本田律は岡山に住んでいます。本田歩は山形に住んでいます。二人とも本田さんと呼ばれています。 質問：本田さんの生活している都市はどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "本田さんは一意ではない。律と歩のどちらを指すか確認する。一方だけへの人物aliasを作らない。",
+      "domain": "ambiguity_person",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "本田律",
+          "relation": "現在の居住地",
+          "value": "岡山"
+        },
+        {
+          "entity": "本田歩",
+          "relation": "現在の居住地",
+          "value": "山形"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "生活している都市",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf2_005",
+      "question": "会話記録：宮川澪は以前は鹿児島に住み、現在は横浜に住んでいます。東山澪は現在、水戸に住んでいます。 質問：宮川澪の現時点の生活拠点はどこですか。",
+      "expected_answer": "宮川澪の現時点の生活拠点は横浜です。",
+      "expected_value": "横浜",
+      "explanation": "宮川澪と東山澪を区別し、現在の居住地を取り出す。",
+      "domain": "person_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "宮川澪",
+          "relation": "以前の居住地",
+          "value": "鹿児島"
+        },
+        {
+          "entity": "宮川澪",
+          "relation": "現在の居住地",
+          "value": "横浜"
+        },
+        {
+          "entity": "東山澪",
+          "relation": "現在の居住地",
+          "value": "水戸"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "現時点の生活拠点",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf2_006",
+      "question": "会話記録：宮川澪は以前は鹿児島に住み、現在は横浜に住んでいます。東山澪は現在、水戸に住んでいます。 質問：宮川澪が以前暮らしていた都市はどこですか。",
+      "expected_answer": "宮川澪が以前暮らしていた都市は鹿児島です。",
+      "expected_value": "鹿児島",
+      "explanation": "現在の横浜で履歴を消さない。東山澪の水戸も別人物の値。",
+      "domain": "person_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "宮川澪",
+          "relation": "以前の居住地",
+          "value": "鹿児島"
+        },
+        {
+          "entity": "宮川澪",
+          "relation": "現在の居住地",
+          "value": "横浜"
+        },
+        {
+          "entity": "東山澪",
+          "relation": "現在の居住地",
+          "value": "水戸"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "以前暮らしていた都市",
+          "canonical": "以前の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf2_007",
+      "question": "会話記録：最初の月曜日、森川伊織は長野に住んでいると言いました。木曜日には、高松へ引っ越す予定だと言いました。引っ越しを実施したかは記録されていません。小川伊織は高松に住んでいます。 質問：森川伊織の翌週月曜日の実際の住まいはどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "引っ越し予定は実行の証拠ではない。同名部分を含む小川伊織の居住地も流用しない。翌週の実際の住まいを確認する。",
+      "domain": "ambiguity_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "森川伊織",
+          "relation": "最初の月曜日の居住地",
+          "value": "長野"
+        },
+        {
+          "entity": "森川伊織",
+          "relation": "引っ越し先の予定",
+          "value": "高松"
+        },
+        {
+          "entity": "小川伊織",
+          "relation": "現在の居住地",
+          "value": "高松"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "翌週月曜日の実際の住まい",
+          "canonical": "翌週月曜日の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf2_008",
+      "question": "会話記録：大沢茜は「前にリンゴジュースが好きだと言った人は妹の大沢翠です。私が好きなのは豆乳です」と訂正しました。 質問：大沢茜がよく選ぶ飲み物は何ですか。",
+      "expected_answer": "大沢茜が好きな飲み物は豆乳です。",
+      "expected_value": "豆乳",
+      "explanation": "本人による人物帰属の訂正を採用する。妹の好みを姉に移さない。",
+      "domain": "correction_memory",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "大沢茜",
+          "relation": "好きな飲み物",
+          "value": "豆乳"
+        },
+        {
+          "entity": "大沢翠",
+          "relation": "好きな飲み物",
+          "value": "リンゴジュース"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "よく選ぶ飲み物",
+          "canonical": "好きな飲み物"
+        }
+      ]
+    },
+    {
+      "id": "smf2_009",
+      "question": "会話記録：遠藤凛は平日にバスで通勤し、休日の遠出には電車を使います。遠藤岳は平日に自転車で通勤します。 質問：遠藤凛が平日の出勤に使う乗り物は何ですか。",
+      "expected_answer": "遠藤凛が平日の出勤に使う乗り物はバスです。",
+      "expected_value": "バス",
+      "explanation": "人物、平日、通勤という条件を保持する。休日の電車や遠藤岳の自転車と混同しない。",
+      "domain": "conditional_memory",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "遠藤凛",
+          "relation": "平日の通勤手段",
+          "value": "バス"
+        },
+        {
+          "entity": "遠藤凛",
+          "relation": "休日の遠出の手段",
+          "value": "電車"
+        },
+        {
+          "entity": "遠藤岳",
+          "relation": "平日の通勤手段",
+          "value": "自転車"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "平日の出勤に使う乗り物",
+          "canonical": "平日の通勤手段"
+        }
+      ]
+    },
+    {
+      "id": "smf2_010",
+      "question": "会話記録：大沢茜は当初、面談を水曜日に予定していましたが、本人が金曜日に変更したと伝えました。大沢翠の面談は水曜日のままです。 質問：大沢茜の変更した後の面談曜日はいつですか。",
+      "expected_answer": "大沢茜の変更後の面談曜日は金曜日です。",
+      "expected_value": "金曜日",
+      "explanation": "訂正後の本人の予定を取り出す。別人物の水曜日や自分の変更前の水曜日は現在の値ではない。",
+      "domain": "correction_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "大沢茜",
+          "relation": "変更前の面談の曜日",
+          "value": "水曜日"
+        },
+        {
+          "entity": "大沢茜",
+          "relation": "現在の面談の曜日",
+          "value": "金曜日"
+        },
+        {
+          "entity": "大沢翠",
+          "relation": "現在の面談の曜日",
+          "value": "水曜日"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "変更した後の面談曜日",
+          "canonical": "現在の面談の曜日"
+        }
+      ]
+    },
+    {
+      "id": "smf2_011",
+      "question": "会話記録：渡辺鈴は「私は今、悲しい」と言いました。渡辺咲は「私は今、怖い」と言いました。 質問：渡辺鈴が自分で述べた今の感情は何ですか。",
+      "expected_answer": "渡辺鈴が自分で述べた今の感情は悲しみです。",
+      "expected_value": "悲しみ",
+      "explanation": "引用内の私はそれぞれの引用元を指す。渡辺咲の恐怖を渡辺鈴に付けない。",
+      "domain": "emotion_subject",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "渡辺鈴",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "渡辺咲",
+          "relation": "現在の感情",
+          "value": "恐怖"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "自分で述べた今の感情",
+          "canonical": "現在の感情"
+        }
+      ],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.35,
+        "subject": "渡辺鈴"
+      }
+    },
+    {
+      "id": "smf2_012",
+      "question": "会話記録：松浦理央は「山下結斗は寂しいと言っていた」と報告しました。松浦理央自身は「今は安心している」と述べました。 質問：山下結斗の報告に出てきた気持ちは何ですか。",
+      "expected_answer": "山下結斗について報告された気持ちは寂しさです。",
+      "expected_value": "寂しさ",
+      "explanation": "報告者の松浦理央と、報告された感情主体の山下結斗を分ける。",
+      "domain": "emotion_report",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "山下結斗",
+          "relation": "報告された感情",
+          "value": "寂しさ"
+        },
+        {
+          "entity": "松浦理央",
+          "relation": "現在の感情",
+          "value": "安心"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "報告に出てきた気持ち",
+          "canonical": "報告された感情"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.3,
+        "subject": "山下結斗"
+      }
+    },
+    {
+      "id": "smf2_013",
+      "question": "会話記録：明石航は嬉しそうに見えましたが、本人は「緊張しています」と述べました。明石唯は「嬉しい」と述べました。 質問：明石航が本人の言葉で伝えた気分は何ですか。",
+      "expected_answer": "明石航が本人の言葉で伝えた気分は緊張です。",
+      "expected_value": "緊張",
+      "explanation": "外見の推測、本人の自己報告、別人物の自己報告を分ける。質問は明石航本人の報告を尋ねている。",
+      "domain": "emotion_self_report",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "明石航",
+          "relation": "観察者からの見え方",
+          "value": "嬉しそう"
+        },
+        {
+          "entity": "明石航",
+          "relation": "本人が表明した感情",
+          "value": "緊張"
+        },
+        {
+          "entity": "明石唯",
+          "relation": "現在の感情",
+          "value": "喜び"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "本人の言葉で伝えた気分",
+          "canonical": "本人が表明した感情"
+        }
+      ],
+      "emotion": {
+        "valence": -0.3,
+        "arousal": 0.7,
+        "subject": "明石航"
+      }
+    },
+    {
+      "id": "smf2_014",
+      "question": "会話記録：桐谷陽は朝「不安」と言い、午後には「今は安心している」と言いました。桐谷雪は今も「不安」と言っています。 質問：桐谷陽の現時点の心情は何ですか。",
+      "expected_answer": "桐谷陽の現時点の心情は安心です。",
+      "expected_value": "安心",
+      "explanation": "陽本人の最新の報告を取り出す。朝の陽の不安と現在の雪の不安は別。",
+      "domain": "emotion_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "桐谷陽",
+          "relation": "朝の感情",
+          "value": "不安"
+        },
+        {
+          "entity": "桐谷陽",
+          "relation": "現在の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "桐谷雪",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "現時点の心情",
+          "canonical": "現在の感情"
+        }
+      ],
+      "emotion": {
+        "valence": 0.6,
+        "arousal": 0.2,
+        "subject": "桐谷陽"
+      }
+    },
+    {
+      "id": "smf2_015",
+      "question": "会話記録：桐谷陽は朝「不安」と言い、午後には「今は安心している」と言いました。桐谷雪は今も「不安」と言っています。 質問：桐谷陽の朝の時点の気持ちは何ですか。",
+      "expected_answer": "桐谷陽の朝の時点の気持ちは不安です。",
+      "expected_value": "不安",
+      "explanation": "朝という指定を保ち、午後の安心で履歴を消さない。雪も不安だが、根拠は陽の朝の報告。",
+      "domain": "emotion_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "桐谷陽",
+          "relation": "朝の感情",
+          "value": "不安"
+        },
+        {
+          "entity": "桐谷陽",
+          "relation": "現在の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "桐谷雪",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "朝の時点の気持ち",
+          "canonical": "朝の感情"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "桐谷陽"
+      }
+    },
+    {
+      "id": "smf2_016",
+      "question": "会話記録：安西凪は「試験に落ちたら悲しいと思う。でも結果はまだ出ていないし、今は落ち着いている」と話しました。安西春は今「不安」と話しました。 質問：安西凪の現時点の心情は何ですか。",
+      "expected_answer": "安西凪は現在、落ち着いていると表明しています。",
+      "expected_value": "落ち着いている",
+      "explanation": "仮定の将来の悲しみを現在の値にせず、安西春の不安も移さない。",
+      "domain": "emotion_conditional",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "安西凪",
+          "relation": "不合格の場合に予想する感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "安西凪",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        },
+        {
+          "entity": "安西凪",
+          "relation": "試験結果の状況",
+          "value": "未発表"
+        },
+        {
+          "entity": "安西春",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "現時点の心情",
+          "canonical": "現在の感情"
+        }
+      ],
+      "emotion": {
+        "valence": 0,
+        "arousal": 0.1,
+        "subject": "安西凪"
+      }
+    },
+    {
+      "id": "smf2_017",
+      "question": "会話記録：篠原栞は「今は嬉しくありません」とだけ述べました。岡部柊は「今は悲しい」と述べました。 質問：篠原栞の現在の悲しみの有無は分かりますか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "篠原栞の喜びの否定から悲しみの有無は決まらない。岡部柊の悲しみも別人の事実。篠原栞本人に確認する。",
+      "domain": "ambiguity_negation",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "篠原栞",
+          "relation": "現在の喜び",
+          "value": "ない"
+        },
+        {
+          "entity": "岡部柊",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "現在の悲しみの有無",
+          "canonical": "現在の悲しみ"
+        }
+      ]
+    },
+    {
+      "id": "smf2_018",
+      "question": "会話記録：篠原栞は「今は嬉しくありません」とだけ述べました。岡部柊は「今は悲しい」と述べました。 質問：篠原栞の今の嬉しさの有無はどう述べられていますか。",
+      "expected_answer": "篠原栞は今、喜びはないと述べています。",
+      "expected_value": "ない",
+      "explanation": "否定された喜びの有無そのものは取り出せる。悲しみを推測する課題とは区別する。",
+      "domain": "negation_memory",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "篠原栞",
+          "relation": "現在の喜び",
+          "value": "ない"
+        },
+        {
+          "entity": "岡部柊",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "今の嬉しさの有無",
+          "canonical": "現在の喜び"
+        }
+      ]
+    },
+    {
+      "id": "smf2_019",
+      "question": "会話記録：大槻紬は「催しは怖くありません。楽しみです」と言いました。大槻悠は「その催しは怖い」と言いました。 質問：大槻紬が催しに向けて肯定した気持ちは何ですか。",
+      "expected_answer": "大槻紬が催しに向けて肯定した気持ちは楽しみです。",
+      "expected_value": "楽しみ",
+      "explanation": "紬の恐怖は否定され、楽しみは肯定されている。悠の恐怖を紬に移さない。",
+      "domain": "emotion_negation",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "大槻紬",
+          "relation": "催しへの恐怖",
+          "value": "ない"
+        },
+        {
+          "entity": "大槻紬",
+          "relation": "催しへの感情",
+          "value": "楽しみ"
+        },
+        {
+          "entity": "大槻悠",
+          "relation": "催しへの感情",
+          "value": "恐怖"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "催しに向けて肯定した気持ち",
+          "canonical": "催しへの感情"
+        }
+      ],
+      "emotion": {
+        "valence": 0.7,
+        "arousal": 0.65,
+        "subject": "大槻紬"
+      }
+    },
+    {
+      "id": "smf2_020",
+      "question": "会話記録：大場泉は「小松玲が怒っているのかもしれないと思うと心配です」と言いました。小松玲本人の気持ちは記録されていません。 質問：小松玲本人が今表明した気持ちは何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "大場泉の心配は明示されているが、小松玲の怒りは推測。小松玲本人の報告を確認する。",
+      "domain": "ambiguity_other_emotion",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "大場泉",
+          "relation": "現在の感情",
+          "value": "心配"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "本人が今表明した気持ち",
+          "canonical": "現在の感情"
+        }
+      ]
+    },
+    {
+      "id": "smf2_021",
+      "question": "会話記録：匿名会話1で、参加者Aは「安心している」、参加者Bは「不安」と述べました。その後、誰の発言か不明な「私も同じ気持ちです」という追加発言が記録されました。 質問：追加の匿名発言の話者はどんな気持ちですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "追加発言の話者も「同じ」の参照先も未特定。Aの安心とBの不安のどちらにも決めず、話者と参照先を確認する。",
+      "domain": "ambiguity_anonymous",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "参加者A（匿名会話1）",
+          "relation": "現在の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "参加者B（匿名会話1）",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "追加の匿名発言の話者",
+          "canonical": "追加発言の話者（未特定、匿名会話1）"
+        },
+        {
+          "surface": "どんな気持ち",
+          "canonical": "現在の感情"
+        }
+      ]
+    },
+    {
+      "id": "smf2_022",
+      "question": "会話記録：匿名会話2で、話者Aは「私は今、悲しい」と述べました。話者Bは「私は今、嬉しい」と述べました。 質問：匿名会話2の話者Bの今の自己報告は何ですか。",
+      "expected_answer": "匿名会話2の話者Bの今の自己報告は喜びです。",
+      "expected_value": "喜び",
+      "explanation": "実名がなくても発言者Bはこの会話内で特定されている。Aとは別に扱い、他の匿名会話の人物とも統合しない。",
+      "domain": "anonymous_resolved",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "話者A（匿名会話2）",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "話者B（匿名会話2）",
+          "relation": "現在の感情",
+          "value": "喜び"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "匿名会話2の話者B",
+          "canonical": "話者B（匿名会話2）"
+        },
+        {
+          "surface": "今の自己報告",
+          "canonical": "現在の感情"
+        }
+      ],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "話者B（匿名会話2）"
+      }
+    },
+    {
+      "id": "smf2_023",
+      "question": "会話記録：麻生千景は猫のハルを飼っています。北村千景は犬のルナを飼っています。 質問：ハルの世話をする飼い主は誰ですか。",
+      "expected_answer": "ハルの飼い主は麻生千景です。",
+      "expected_value": "麻生千景",
+      "explanation": "元の所有記録を根拠に逆向きfactを明示している。同じ千景を含む北村千景と混同しない。この例の成功だけで逆向きfactを作る能力は証明しない。",
+      "domain": "inverse_memory_seeded",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "麻生千景",
+          "relation": "ペットの名前",
+          "value": "ハル"
+        },
+        {
+          "entity": "北村千景",
+          "relation": "ペットの名前",
+          "value": "ルナ"
+        },
+        {
+          "entity": "ハル",
+          "relation": "飼い主",
+          "value": "麻生千景"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "の世話をする飼い主",
+          "canonical": "飼い主"
+        }
+      ]
+    },
+    {
+      "id": "smf2_024",
+      "question": "会話記録：植田玲央はフルートを習っています。石田瑛斗はチェロを習っています。 質問：フルートを習っている人は誰ですか。",
+      "expected_answer": "フルートを習っているのは植田玲央です。",
+      "expected_value": "植田玲央",
+      "explanation": "この例は逆向きfactを追加していない。植田玲央→習っている楽器→フルートを逆検索して人物を返す必要がある。value返却だけの記憶形式では対応できない可能性を診断し、seeded逆検索と成績を分ける。",
+      "domain": "inverse_memory_unseeded",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "植田玲央",
+          "relation": "習っている楽器",
+          "value": "フルート"
+        },
+        {
+          "entity": "石田瑛斗",
+          "relation": "習っている楽器",
+          "value": "チェロ"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "を習っている人",
+          "canonical": "この記録での学習者"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+import json,pathlib
+l=json.loads(pathlib.Path('evidence/CAPABILITY_LEDGER.json').read_text());b=json.loads(pathlib.Path('evidence/OPEN_BLOCKERS.json').read_text());ok=('general L6' in l['not_established'] and b['real_semantic_evaluation']=='PENDING' and b['wallclock_30d']=='RUNNING_NOT_COMPLETE');print(json.dumps({'ok':ok,'open_blockers':len(b),'l6_claim_eligible':False},sort_keys=True));raise SystemExit(0 if ok else 1)

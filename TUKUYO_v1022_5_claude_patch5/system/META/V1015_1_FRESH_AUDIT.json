@@ -1,0 +1,39 @@
+{
+  "schema": "tukuyo.v1015_1.fresh_audit/1",
+  "version": "v1015.1",
+  "parent": "v1015",
+  "fixes": {
+    "evidence_authenticity": "self-reported duration/audit flags are non-authoritative; raw realtime signatures, event chains, witness request bindings, external witness signatures and cadence are recomputed",
+    "semantic_paraphrase_closure": "particle-safe entity extraction + 全部で/合計で target recognition + generic remaining-role guard + additional consumption paraphrases",
+    "public_status": "top-level status/system-status release version v1015.1"
+  },
+  "fresh_results": {
+    "synthetic_24h_json": "REJECTED",
+    "synthetic_route_eligibility": false,
+    "authentic_short_bundle": "PASS_FORMAL_DURATION_BUT_24H_FALSE",
+    "semantic_natural_apple": "3_confidence_0.97_independent",
+    "semantic_pack_remaining": "21_independent",
+    "focused_regression": "36/36 PASS",
+    "groups": {
+      "v1015_1": 2,
+      "v1015": 6,
+      "v1014_4": 9,
+      "v1014_2": 4,
+      "v1014_1": 5,
+      "v1013": 3,
+      "v1012_1": 7
+    }
+  },
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "full_historical_suite_current_release": "NOT_RERUN_TO_COMPLETION",
+    "third_party_reproduction": "PENDING",
+    "external_H4": "PENDING",
+    "general_l5": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "consciousness_established": false
+  }
+}

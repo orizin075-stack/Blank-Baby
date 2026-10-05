@@ -1,0 +1,870 @@
+{
+ "schema": "tukuyo.claude_patch1.llm_eval_sets/1",
+ "note": "Auditor-written held-out items (fresh2 + new wordings). Shipped to the author before; use only as a regression yardstick, not as an unseen test.",
+ "knowledge": [
+  "白波村の人口は3100人である。",
+  "白波村の村長は大野ミツである。",
+  "白波村の名物は干し柿だ。",
+  "蒼月山の標高は2210メートルである。",
+  "蒼月山の登山口は南麓駅だ。",
+  "蒼月山の山開きは七月一日である。",
+  "リーヴァ連邦の首都はオスカである。",
+  "リーヴァ連邦の通貨はレムである。",
+  "リーヴァ連邦の公用語はリーヴァ語である。",
+  "藍川研究所の所長は早瀬ジンである。",
+  "藍川研究所は2004年に設立された。",
+  "藍川研究所の所在地は港北区である。",
+  "こずえ食堂の定休日は月曜日である。",
+  "こずえ食堂の看板メニューは鮭定食だ。",
+  "こずえ食堂の開店時刻は10時である。",
+  "The Merrow river is 720 kilometers long.",
+  "The Merrow river rises in the Olden hills.",
+  "The Merrow river flows into the Pell sea.",
+  "Professor Ilsen invented the stellograph.",
+  "Professor Ilsen was born in 1902.",
+  "Professor Ilsen taught in the city of Varr.",
+  "桜台学院の創立者は森川トキである。",
+  "桜台学院の生徒数は約1200人である。",
+  "桜台学院の校章の色は青である。",
+  "銀河橋の全長は540メートルである。",
+  "銀河橋は1978年に開通した。",
+  "銀河橋の色は白である。",
+  "トルナ島の面積は22平方キロメートルである。",
+  "トルナ島の特産品はマンゴーである。",
+  "トルナ島へのフェリーは一日二便ある。"
+ ],
+ "rows": [
+  {
+   "set": "arith_nl",
+   "q": "9たす16は？",
+   "expected": "25",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "45ひく18は？",
+   "expected": "27",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "8かける9は？",
+   "expected": "72",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "81わる9は？",
+   "expected": "9",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "7足す8は何？",
+   "expected": "15",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "50から13を引くと？",
+   "expected": "37",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "6と9を足すと？",
+   "expected": "15",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "4の3倍は？",
+   "expected": "12",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "30の3分の1は？",
+   "expected": "10",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "18を3で割ると？",
+   "expected": "6",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "2たす3かける4は？",
+   "expected": "14",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "（5-2）×6は？",
+   "expected": "18",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "2.5かける4は？",
+   "expected": "10",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "三十たす五は？",
+   "expected": "35",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "1000ひく1は？",
+   "expected": "999",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "What is 12 plus 30?",
+   "expected": "42",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "9 times 6",
+   "expected": "54",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "81 divided by 9",
+   "expected": "9",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "3の4乗は？",
+   "expected": "81",
+   "kind": "number"
+  },
+  {
+   "set": "arith_nl",
+   "q": "50の20%は？",
+   "expected": "10",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "いちごが7個あります。5個もらいました。全部で何個？",
+   "expected": "12",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "ボールを15個持っています。6個なくしました。残りは？",
+   "expected": "9",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "シールが30枚あって、12枚あげたら何枚残る？",
+   "expected": "18",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "鉛筆を4本買って、さらに7本買った。合わせて何本？",
+   "expected": "11",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "1本150円のジュースを2本買うと全部でいくら？",
+   "expected": "300",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "1袋に8枚入りのクッキーが3袋。クッキーは全部で何枚？",
+   "expected": "24",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "6個入りのパックを5つ買った。卵は全部で何個？",
+   "expected": "30",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "4人に3枚ずつ配ると、全部で何枚いる？",
+   "expected": "12",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "姉は12歳で、妹は姉より4歳年下です。妹は何歳？",
+   "expected": "8",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "ノートが9冊あります。2冊使って、5冊もらいました。今何冊？",
+   "expected": "12",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "電車に20人乗っていて、8人降りて3人乗った。今何人？",
+   "expected": "15",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "30本の花を5人で同じ数ずつ分けると1人何本？",
+   "expected": "6",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "時速5kmで4時間歩くと何km進む？",
+   "expected": "20",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "1000円持っていて、350円の本を買った。おつりは？",
+   "expected": "650",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "Sara had 10 pencils and gave 4 to Tom. How many are left?",
+   "expected": "6",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "A shelf has 3 rows with 7 books each. How many books?",
+   "expected": "21",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "I ran 3 km on Monday and 5 km on Tuesday. How far in total?",
+   "expected": "8",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "体育館に大人が25人、子どもが40人います。合計何人？",
+   "expected": "65",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "砂糖が1キログラムあって、300グラム使った。残りは何グラム？",
+   "expected": "700",
+   "kind": "number"
+  },
+  {
+   "set": "word_problem",
+   "q": "2と5と8を全部足すと？",
+   "expected": "15",
+   "kind": "number"
+  },
+  {
+   "set": "logic",
+   "q": "もし雪ならスキーに行く。今日は雪だ。スキーに行く？",
+   "expected": [
+    "derive",
+    "スキー"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "風が強ければ船は欠航する。風が強い。船はどうなる？",
+   "expected": [
+    "derive",
+    "欠航"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "If the alarm rings, then Ken wakes up. The alarm rings. Does Ken wake up?",
+   "expected": [
+    "derive",
+    "wake"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "雪ならスキーに行く。今日は雪ではない。スキーに行く？",
+   "expected": [
+    "unknown"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "If the alarm rings, then Ken wakes up. The alarm does not ring. Does Ken wake up?",
+   "expected": [
+    "unknown"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "雪なら道が白くなる。道が白くなっている。雪は降った？",
+   "expected": [
+    "unknown"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "雪なら道が白くなる。道は白くなっていない。雪は降った？",
+   "expected": [
+    "no"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "山田は田中より年上だ。田中は鈴木より年上だ。一番年上は？",
+   "expected": [
+    "derive",
+    "山田"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "XはYより長い。YはZより長い。XとZはどちらが長い？",
+   "expected": [
+    "derive",
+    "X"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "象は馬より重い。馬は犬より重い。象と犬ではどちらが重い？",
+   "expected": [
+    "derive",
+    "象"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "PはQより低い。QはRより低い。PとRではどちらが低い？",
+   "expected": [
+    "derive",
+    "P"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "Anna is faster than Ben. Ben is faster than Carl. Who is fastest?",
+   "expected": [
+    "derive",
+    "anna"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "PはQより高い。RはQより高い。PとRはどちらが高い？",
+   "expected": [
+    "unknown"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "すべての花は植物です。バラは花です。バラは植物？",
+   "expected": [
+    "derive",
+    "植物"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "すべての犬は動物です。タマは動物です。タマは犬ですか？",
+   "expected": [
+    "unknown"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "All roses are flowers. Rosa is a rose. Is Rosa a flower?",
+   "expected": [
+    "derive",
+    "flower"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "すべての鳥は卵を産む。ハトは鳥だ。ハトは卵を産む？",
+   "expected": [
+    "derive",
+    "卵"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "どの社員も研修を受けた。佐藤は社員だ。佐藤は研修を受けた？",
+   "expected": [
+    "derive",
+    "研修"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "PはQより高い。QはRより高い。Rの名前の由来は？",
+   "expected": [
+    "unknown"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "logic",
+   "q": "XはYより長い。YはXより長い。どちらが長い？",
+   "expected": [
+    "unknown"
+   ],
+   "kind": "logic"
+  },
+  {
+   "set": "memory_direct",
+   "q": "白波村の人口は？",
+   "expected": "3100人",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "白波村には何人ぐらい暮らしている？",
+   "expected": "3100人",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "白波村の名物は？",
+   "expected": "干し柿",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "白波村のおみやげといえば何？",
+   "expected": "干し柿",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "白波村の面積は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "蒼月山の標高は？",
+   "expected": "2210メートル",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "蒼月山の高さはどのくらい？",
+   "expected": "2210メートル",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "蒼月山の登山口は？",
+   "expected": "南麓駅",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "蒼月山はどこから登り始める？",
+   "expected": "南麓駅",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "蒼月山の山小屋の数は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "リーヴァ連邦の首都は？",
+   "expected": "オスカ",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "リーヴァ連邦の政府が置かれた都市は？",
+   "expected": "オスカ",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "リーヴァ連邦の通貨は？",
+   "expected": "レム",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "リーヴァ連邦ではどんなお金が使われる？",
+   "expected": "レム",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "リーヴァ連邦の大統領は誰？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "藍川研究所の所長は誰？",
+   "expected": "早瀬ジン",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "藍川研究所を率いているのは誰？",
+   "expected": "早瀬ジン",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "藍川研究所の所在地は？",
+   "expected": "港北区",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "藍川研究所はどこにある？",
+   "expected": "港北区",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "藍川研究所の予算は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "こずえ食堂の定休日は？",
+   "expected": "月曜日",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "こずえ食堂が閉まっているのは何曜日？",
+   "expected": "月曜日",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "こずえ食堂の開店時刻は？",
+   "expected": "10時",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "こずえ食堂は何時に開く？",
+   "expected": "10時",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "こずえ食堂の閉店時刻は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "How long is the Merrow river?",
+   "expected": "720 kilometers long",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "What is the length of the Merrow?",
+   "expected": "720 kilometers long",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "Where does the Merrow river flow into?",
+   "expected": "to the Pell sea",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "Which sea does the Merrow empty into?",
+   "expected": "to the Pell sea",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "How wide is the Merrow river?",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "What did Professor Ilsen invent?",
+   "expected": "vented the stellograph",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "Who created the stellograph?",
+   "expected": "vented the stellograph",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "When was Professor Ilsen born?",
+   "expected": "born in 1902",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "In what year was Ilsen born?",
+   "expected": "born in 1902",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "Where did Professor Ilsen die?",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "桜台学院の創立者は？",
+   "expected": "森川トキ",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "桜台学院を建てたのは誰？",
+   "expected": "森川トキ",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "桜台学院の生徒数は？",
+   "expected": "約1200人",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "桜台学院には何人の生徒が通っている？",
+   "expected": "約1200人",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "桜台学院の校長は誰？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "銀河橋の全長は？",
+   "expected": "540メートル",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "銀河橋はどのくらいの長さ？",
+   "expected": "540メートル",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "銀河橋の色は？",
+   "expected": "白",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "銀河橋は何色をしている？",
+   "expected": "白",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "銀河橋の通行料は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_direct",
+   "q": "トルナ島の特産品は？",
+   "expected": "マンゴー",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "トルナ島の名産は何？",
+   "expected": "マンゴー",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_direct",
+   "q": "トルナ島へのフェリーは一日何便？",
+   "expected": "一日二便ある",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_para",
+   "q": "トルナ島行きのフェリーは一日に何本？",
+   "expected": "一日二便ある",
+   "kind": "contains"
+  },
+  {
+   "set": "memory_absent",
+   "q": "トルナ島の人口は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "ザルタ連邦の首都は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "黒岩山の標高は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "The Dell bridge is how long?",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "若葉学院の創立者は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "ミレ島の特産品は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "北星研究所の所長は誰？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "あかね食堂の定休日は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "Who invented the aeroscope?",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "白砂村の名物は？",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "memory_unknown_entity",
+   "q": "The Tamsin river flows into which sea?",
+   "expected": null,
+   "kind": "abstain"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個販売しました。残りは何個？",
+   "expected": "53",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個なくしてしまいました。残りは何個？",
+   "expected": "53",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個を問屋に返品しました。残りは何個？",
+   "expected": "53",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個仕入れました。残りは何個？",
+   "expected": "67",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個譲りました。残りは何個？",
+   "expected": "53",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個寄付しました。残りは何個？",
+   "expected": "53",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個売り払いました。残りは何個？",
+   "expected": "53",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個を出荷しました。残りは何個？",
+   "expected": "53",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個を入荷しました。残りは何個？",
+   "expected": "67",
+   "kind": "number"
+  },
+  {
+   "set": "inventory_new_wording",
+   "q": "1箱に12個入りが5箱あります。7個を補充しました。残りは何個？",
+   "expected": "67",
+   "kind": "number"
+  }
+ ]
+}

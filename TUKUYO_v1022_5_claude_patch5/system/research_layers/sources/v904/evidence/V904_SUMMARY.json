@@ -1,0 +1,35 @@
+{
+  "accepted_generations": 3,
+  "final_source_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+  "generations": [
+    {
+      "accepted": true,
+      "candidate_correct": 175,
+      "candidate_sha256": "4ff9d375c21f5571c33c6406afa565877cca94e163952169b2f39e5b59421e2c",
+      "chosen_sha256": "4ff9d375c21f5571c33c6406afa565877cca94e163952169b2f39e5b59421e2c",
+      "generation": 0,
+      "parent_correct": 32,
+      "parent_sha256": "37634596f92ea7185310e97a64452f1a2326cfc7378f4a362ea3b0d736a97b4c"
+    },
+    {
+      "accepted": true,
+      "candidate_correct": 220,
+      "candidate_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+      "chosen_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+      "generation": 1,
+      "parent_correct": 182,
+      "parent_sha256": "4ff9d375c21f5571c33c6406afa565877cca94e163952169b2f39e5b59421e2c"
+    },
+    {
+      "accepted": true,
+      "candidate_correct": 220,
+      "candidate_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+      "chosen_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+      "generation": 2,
+      "parent_correct": 220,
+      "parent_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9"
+    }
+  ],
+  "schema": "tukuyo.v904.summary.v1",
+  "verified_wrong": 0
+}

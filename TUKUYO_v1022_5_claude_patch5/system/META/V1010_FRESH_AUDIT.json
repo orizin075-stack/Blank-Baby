@@ -1,0 +1,57 @@
+{
+  "claim_boundary": {
+    "24h_wallclock_continuity_established": false,
+    "full_replay_still_required_for_strong_temporal_audit": true,
+    "general_l5": false,
+    "general_l6": false,
+    "general_language_understanding": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "open_ended_self_modification": false,
+    "standalone_gpt4_equivalent": false
+  },
+  "fresh_capability": {
+    "conversation_after_ingest_whole_audit": "PASS",
+    "natural_math_12_times_9": "108",
+    "natural_math_3_plus_4": "7",
+    "relation_examples": {
+      "Alice betrayed me": "Alice",
+      "I was helped by Bob": "Bob",
+      "ついに謎が解けた": ""
+    },
+    "unknown_memory_question": "ABSTAINED",
+    "unknown_question_confidence": 0.12,
+    "unknown_question_uncertain": true,
+    "verified_math_confidence": 1.0,
+    "verified_math_uncertain": false
+  },
+  "parent": "v1009",
+  "performance": {
+    "conversation_ingest_at_1000_events_ms": 112.211,
+    "conversation_ingest_at_1000_whole_audit": "PASS",
+    "conversation_ingest_first_ms": 12.889,
+    "knowledge_20000_benchmark": "NOT_COMPLETED_ENVIRONMENT_45S_LIMIT",
+    "knowledge_3000_add_total_s": 4.341,
+    "knowledge_add_1000_ms": 1.152,
+    "knowledge_add_100_ms": 0.599,
+    "knowledge_add_1_ms": 4.226,
+    "knowledge_add_3000_ms": 2.189,
+    "knowledge_search_3000_ms": 49.857
+  },
+  "release_notes": {
+    "language": "bounded Japanese natural-language arithmetic, stronger negation scope, safer Japanese relation extraction and English-name relation patterns",
+    "retrieval": "append-only JSONL source plus SQLite derived inverted index, answerability gate, coverage and top-margin diagnostics",
+    "temporal_identity": "normal sync is incremental append from validated checkpoint; explicit audit retains full deterministic replay",
+    "verifier": "calculator recomputation and retrieval-support calibration; unsupported agreement cannot produce high confidence",
+    "whole_state": "conversation ingest automatically syncs unified state after dependent heart/soul/semantic/peer updates"
+  },
+  "schema": "tukuyo.v1010.final_delivery_audit/1",
+  "tests": {
+    "full_historical_suite": "NOT_RERUN",
+    "related_total": "20/20 PASS",
+    "v1000_v1008": "8/8 PASS",
+    "v1009_v989": "7/7 PASS",
+    "v1010": "5/5 PASS"
+  },
+  "version": "v1010"
+}

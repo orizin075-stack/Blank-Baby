@@ -1,0 +1,57 @@
+{
+  "claim_boundary": {
+    "30_day_wallclock_continuity_established": false,
+    "consciousness_established": false,
+    "full_runtime_fork_divergence_tested": false,
+    "general_l5": false,
+    "general_l6": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "open_ended_evolution_established": false
+  },
+  "fresh_e2e": {
+    "continuity_audit": "PASS",
+    "fork_audit": "PASS",
+    "homeostasis_audit": "PASS",
+    "individual_id": "V983-FRESH",
+    "ticks_observed": 100,
+    "whole_audit": "PASS"
+  },
+  "new_layers": {
+    "v981": {
+      "choice_diverged": true,
+      "common_origin": true,
+      "full_runtime_fork": false,
+      "functional_deep_self_fork_divergence": true,
+      "parent_soul_unchanged": true,
+      "state_diverged": true,
+      "tamper_detected_by_fork_and_whole_audit": true
+    },
+    "v982": {
+      "checkpoint_tamper_detected": true,
+      "external_integrity_anchor": true,
+      "external_time_anchor": false,
+      "long_wallclock_proven": false,
+      "separate_process_resume": true,
+      "signed_checkpoint_chain": true
+    },
+    "v983": {
+      "direct_motor_override": false,
+      "functional_homeostasis": true,
+      "nominal_intent": "OBSERVE_AND_LEARN",
+      "post_100_tick_intent": "PRIORITIZE_MAINTENANCE",
+      "real_organism_inputs": true
+    }
+  },
+  "parent": "v980",
+  "regression": {
+    "post_hardening_impacted_tests_fail": 0,
+    "post_hardening_impacted_tests_pass": 12,
+    "pre_hardening_full_suite_fail": 0,
+    "pre_hardening_full_suite_pass": 144,
+    "v954_security_tests_fail": 0,
+    "v954_security_tests_pass": 10
+  },
+  "schema": "tukuyo.v983.fresh_audit/1",
+  "version": "v983"
+}

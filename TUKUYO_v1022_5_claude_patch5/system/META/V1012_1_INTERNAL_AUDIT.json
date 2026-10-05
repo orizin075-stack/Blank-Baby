@@ -1,0 +1,49 @@
+{
+  "claim_boundary": {
+    "24h_wallclock": false,
+    "72h_wallclock": false,
+    "7day_wallclock": false,
+    "consciousness": false,
+    "full_historical_suite_rerun": false,
+    "general_l5": false,
+    "literal_life": false,
+    "literal_soul": false
+  },
+  "fixes": {
+    "affirming_consequent": "NOT_IMPLEMENTED_ABSTAINS",
+    "contradiction": "ABSTAINS",
+    "conversation_semantic_journal_audit_paths": "FIXED_TO_JSONL_HEADS_AND_WHOLE_AUDIT",
+    "empty_to_created_checkpoint_append": "SUPPORTED",
+    "grounded_nonrelation_event_social_cache_stale": "FIXED_IN_HEART_EXPERIENCE_PATH",
+    "memory_checkpoint_paths": "FIXED_REAL_PATHS_PLUS_HEART",
+    "negated_antecedent_soundness": "FIXED_ABSTAIN",
+    "pycache_ergonomics": "START_WRAPPERS_SET_PYTHONDONTWRITEBYTECODE; STRICT_GUARD_RETAINED",
+    "unit_mismatch_and_unimplemented_conversion": "ABSTAINS",
+    "unrelated_conversation_social_cache_stale": "FIXED_BY_ALWAYS_INCREMENTAL_SYNC",
+    "verified_query_core_reasoning": "CONNECTED_AND_RECOMPUTED",
+    "working_memory_checkpoint_is_consumed": "YES_BY_COGNITION_STATE_CONTEXT"
+  },
+  "legacy_command_preservation": {
+    "v1008_missing": 0,
+    "v1009_missing": 0,
+    "v999_missing": 0
+  },
+  "parent": "v1012",
+  "regression": {
+    "v1000_v1003": "4/4 PASS",
+    "v1004_v1008": "4/4 PASS",
+    "v1009_v1010": "8/8 PASS",
+    "v1011_v1012": "5/5 PASS",
+    "v1012_1": "7/7 PASS",
+    "v977_v978": "8/8 PASS",
+    "v979_v980": "1/1 PASS",
+    "v981_v983": "3 PASS displayed before runner wall-time",
+    "v984_v985": "2/2 PASS",
+    "v986_v988": "3/3 PASS",
+    "v989": "4/4 PASS",
+    "v993_v995": "7/7 PASS",
+    "v996_v999": "5/5 PASS"
+  },
+  "schema": "tukuyo.v1012_1.internal_release_audit/1",
+  "version": "v1012.1"
+}

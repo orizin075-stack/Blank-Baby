@@ -1,0 +1,20 @@
+{
+  "payload": {
+    "claim_boundary": "Establishes hash-chain sequencing and tamper evidence only; no external timestamp or independent evaluator is claimed.",
+    "critical_sha256": {
+      "STATUS.json": "e6fde652f8b7209107835979bdac79df6e4e6cdddff453fd84c600aee2b73119",
+      "evidence/CANDIDATE_FREEZE.json": "00c4d02d81de72147ceec162bd60df218935646704dee47697dcf822289d7c11",
+      "evidence/HOLDOUT_COMMITMENT.json": "3fa5be1505714e3d2f25609614c4ba37ae5f6fbdd6a7881ac389f1f0c05969e8",
+      "evidence/HOLDOUT_REVEAL.json": "ec4022204fd8231754344037b4289979878e430e243ea301af95cf061cbb2e6c",
+      "run_selftest.py": "361a1a1e8ea1299bb85261999851274d329ba36ca1570d0f31c3a05ae4f9043f",
+      "tukuyo_v922/seal.py": "abdb589cfd1abeee313c46aac3ce862560f15d465cf860a0f49767eac32a0fbb"
+    },
+    "package_manifest_sha256": "bf90f5addefb2191f6b4ebfba897de7e3c31174e9304defa4129225117add70c",
+    "parent_sha256": "537db76fdc11d63d7f47d50dc2f5cf4c1da55f73d4c1bdbdba50b1f535aa942f",
+    "release_authority_public_key_b64": "LbW661bwkVnbHZR5jHsVRUxvFFygHfiYr/cyb759TZE=",
+    "schema": "tukuyo.release_manifest_receipt.v4",
+    "trust_epoch": "TUKUYO-2026-09-22-E4",
+    "version": "v922"
+  },
+  "signature_b64": "hcq32CNYHnZY5eaV3tTM4gGgYAj+sIwxEuik20vOvp0rUN1XnHAvWcF4bz3j4H+vhbEIfyE/Wann8PCUqOUeDQ=="
+}

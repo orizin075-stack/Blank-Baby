@@ -1,0 +1,19 @@
+{
+  "payload": {
+    "claim_boundary": "Continuity snapshot only; 30-day completion and external time anchoring are not claimed.",
+    "critical_sha256": {
+      "STATUS.json": "b12e9ab028a3fd3b1073bbf4b14de269da338e351059bc9186c990560bbf3146",
+      "evidence/INHERITED_WALLCLOCK30_START.json": "b0bf91552a49e6d204e93f62390782da78c197bc0d8a2e13364104e5b4e64041",
+      "evidence/WALLCLOCK30_SNAPSHOT.json": "a833dd2dc05310b8cb89abdc9088f05dfd61f73e35ff32d075d8359e196eb517",
+      "run_selftest.py": "0eae9ab055a4bfae4f20080892c05476b1844ec0eaa882af7b1161f3ddc1ae5f",
+      "tukuyo_v929/wallclock.py": "89ce5610e333732d3fa06cce400b45b9ee0d7387433f2c4fd2d366ff54617325"
+    },
+    "package_manifest_sha256": "89d08099f5f6631a5ced9959da1f505098ad3af2f41ff308bc821ebfcf53b812",
+    "parent_sha256": "4f35ddd1781c32fbf2bc69aa2b0098dac1933d4081254da7d64fb3aa9d64a0b8",
+    "release_authority_public_key_b64": "LbW661bwkVnbHZR5jHsVRUxvFFygHfiYr/cyb759TZE=",
+    "schema": "tukuyo.release_manifest_receipt.v4",
+    "trust_epoch": "TUKUYO-2026-09-22-E4",
+    "version": "v929"
+  },
+  "signature_b64": "66k8BqcU863Z9O+aJZmcK8xYGQUL/UMyPwdpoLLH9e1/pSm29c0Q8PwfbHLO/agQRED6JAll5PTcVzcJU6QRAQ=="
+}

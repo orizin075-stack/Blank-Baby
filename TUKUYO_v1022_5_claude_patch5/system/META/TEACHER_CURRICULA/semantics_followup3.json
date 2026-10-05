@@ -1,0 +1,3632 @@
+{
+  "teacher": "semantics",
+  "round": 3,
+  "purpose": "training_and_numeric_transfer",
+  "status": "teacher_material_prepared_not_student_validated",
+  "current_student_evaluated": false,
+  "teacher_instructions": "在庫の問いの対象と単位を先に固定する。二種類の合計を問うときは両初期値を加える。実行済みかつ問う在庫の出来事だけを一度ずつ反映する。否定された引用、撤回した記録、未来予定、別の在庫の動作は現在の数量へ反映しない。単位換算は量を対応させる情報があるときだけ行う。正確な数量が未決定または前提が矛盾する範囲外の文は保留する。",
+  "scope_policy": "この教材のbounded_scope=trueは数量状態が一意に定まる教師問題を表し、現在の実装が対応済みという意味ではない。bounded_scope=falseの12例は情報不足または矛盾によって正確な数量が決まらず、保留を期待する。",
+  "contrast_priorities": [
+    "two_events_without_double_counting",
+    "negation_over_quoted_claims",
+    "incorrect_record_replaced_not_accumulated",
+    "two_initial_inventories_aggregate",
+    "unit_conversion_only_with_known_capacity",
+    "future_current_time_distinction",
+    "other_inventory_scope",
+    "opposite_return_directions"
+  ],
+  "aliases": [
+    {
+      "surface": "売りました",
+      "canonical": "売った"
+    },
+    {
+      "surface": "借りて在庫に加えました",
+      "canonical": "借り入れた"
+    },
+    {
+      "surface": "落として失いました",
+      "canonical": "紛失した"
+    },
+    {
+      "surface": "返品されて戻りました",
+      "canonical": "返品されて戻った"
+    },
+    {
+      "surface": "返品しました",
+      "canonical": "返品した"
+    },
+    {
+      "surface": "盗まれました",
+      "canonical": "盗まれた"
+    },
+    {
+      "surface": "売りませんでした",
+      "canonical": "売らなかった"
+    },
+    {
+      "surface": "借り入れませんでした",
+      "canonical": "借り入れなかった"
+    },
+    {
+      "surface": "事実ではありません",
+      "canonical": "事実ではない"
+    },
+    {
+      "surface": "盗まれませんでした",
+      "canonical": "盗まれなかった"
+    },
+    {
+      "surface": "紛失しました",
+      "canonical": "紛失した"
+    },
+    {
+      "surface": "売る予定ですが、まだ実行していません",
+      "canonical": "売る予定だが、まだ実行していない"
+    },
+    {
+      "surface": "借り入れる予定ですが、まだ実行していません",
+      "canonical": "借り入れる予定だが、まだ実行していない"
+    },
+    {
+      "surface": "売る予定です",
+      "canonical": "売る予定だ"
+    },
+    {
+      "surface": "借り入れる予定です",
+      "canonical": "借り入れる予定だ"
+    },
+    {
+      "surface": "別の在庫から売りました",
+      "canonical": "別の在庫から売った"
+    },
+    {
+      "surface": "借りて今の在庫に加えました",
+      "canonical": "今の在庫へ借り入れた"
+    },
+    {
+      "surface": "借りて別の在庫に加えました",
+      "canonical": "別の在庫へ借り入れた"
+    },
+    {
+      "surface": "客から返品されて別の在庫に戻りました",
+      "canonical": "客から返品されて別の在庫に戻った"
+    },
+    {
+      "surface": "返品されて戻っていません",
+      "canonical": "返品されて戻っていない"
+    },
+    {
+      "surface": "食べました",
+      "canonical": "食べた"
+    },
+    {
+      "surface": "もらいました",
+      "canonical": "もらった"
+    },
+    {
+      "surface": "使いました",
+      "canonical": "使った"
+    },
+    {
+      "surface": "補充しました",
+      "canonical": "補充した"
+    },
+    {
+      "surface": "追加しました",
+      "canonical": "追加した"
+    }
+  ],
+  "alias_guardrail": "表現を正規化しても数量、否定、未実行、出庫元、入庫先、別の在庫という限定を削らない。借りて加える・落として失うは同じ品物についての一つの数量変化として数える。",
+  "transfer_pairs": [
+    {
+      "pair_id": "sale_plus_borrow",
+      "stage": "two_current_events",
+      "example_ids": [
+        "semantics_followup3_001",
+        "semantics_followup3_002"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "loss_plus_customer_return",
+      "stage": "two_current_events",
+      "example_ids": [
+        "semantics_followup3_003",
+        "semantics_followup3_004"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "supplier_return_plus_sale",
+      "stage": "two_current_events",
+      "example_ids": [
+        "semantics_followup3_005",
+        "semantics_followup3_006"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "borrow_plus_theft",
+      "stage": "two_current_events",
+      "example_ids": [
+        "semantics_followup3_007",
+        "semantics_followup3_008"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "opposite_return_directions",
+      "stage": "two_current_events",
+      "example_ids": [
+        "semantics_followup3_009",
+        "semantics_followup3_010"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "two_initial_inventories_aggregate",
+      "stage": "two_current_events",
+      "example_ids": [
+        "semantics_followup3_011",
+        "semantics_followup3_012"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "negated_sale_plus_borrow",
+      "stage": "truth_and_execution",
+      "example_ids": [
+        "semantics_followup3_013",
+        "semantics_followup3_014"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "negated_borrow_plus_loss",
+      "stage": "truth_and_execution",
+      "example_ids": [
+        "semantics_followup3_015",
+        "semantics_followup3_016"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "incorrect_record_replaced",
+      "stage": "truth_and_execution",
+      "example_ids": [
+        "semantics_followup3_017",
+        "semantics_followup3_018"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "two_quoted_claims_both_negated",
+      "stage": "truth_and_execution",
+      "example_ids": [
+        "semantics_followup3_019",
+        "semantics_followup3_020"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "negated_theft_plus_loss",
+      "stage": "truth_and_execution",
+      "example_ids": [
+        "semantics_followup3_021",
+        "semantics_followup3_022"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "planned_sale_plus_actual_borrow",
+      "stage": "truth_and_execution",
+      "example_ids": [
+        "semantics_followup3_023",
+        "semantics_followup3_024"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "planned_borrow_plus_actual_sale",
+      "stage": "modality_and_scope",
+      "example_ids": [
+        "semantics_followup3_025",
+        "semantics_followup3_026"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "two_unexecuted_plans",
+      "stage": "modality_and_scope",
+      "example_ids": [
+        "semantics_followup3_027",
+        "semantics_followup3_028"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "other_sale_plus_current_borrow",
+      "stage": "modality_and_scope",
+      "example_ids": [
+        "semantics_followup3_029",
+        "semantics_followup3_030"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "other_borrow_plus_current_loss",
+      "stage": "modality_and_scope",
+      "example_ids": [
+        "semantics_followup3_031",
+        "semantics_followup3_032"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "current_sale_plus_other_return",
+      "stage": "modality_and_scope",
+      "example_ids": [
+        "semantics_followup3_033",
+        "semantics_followup3_034"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "actual_outward_return_and_negated_inward_return",
+      "stage": "modality_and_scope",
+      "example_ids": [
+        "semantics_followup3_035",
+        "semantics_followup3_036"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "bottles_in_boxes",
+      "stage": "quantity_units",
+      "example_ids": [
+        "semantics_followup3_037",
+        "semantics_followup3_038"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "pieces_in_bags",
+      "stage": "quantity_units",
+      "example_ids": [
+        "semantics_followup3_039",
+        "semantics_followup3_040"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "sheets_in_boxes",
+      "stage": "quantity_units",
+      "example_ids": [
+        "semantics_followup3_041",
+        "semantics_followup3_042"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "same_unit_liquid",
+      "stage": "quantity_units",
+      "example_ids": [
+        "semantics_followup3_043",
+        "semantics_followup3_044"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "kilograms_to_grams",
+      "stage": "quantity_units",
+      "example_ids": [
+        "semantics_followup3_045",
+        "semantics_followup3_046"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "liters_to_milliliters",
+      "stage": "quantity_units",
+      "example_ids": [
+        "semantics_followup3_047",
+        "semantics_followup3_048"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "unknown_package_size",
+      "stage": "boundary_abstention",
+      "example_ids": [
+        "semantics_followup3_049",
+        "semantics_followup3_050"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "unknown_unit_conversion",
+      "stage": "boundary_abstention",
+      "example_ids": [
+        "semantics_followup3_051",
+        "semantics_followup3_052"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "unknown_event_quantity",
+      "stage": "boundary_abstention",
+      "example_ids": [
+        "semantics_followup3_053",
+        "semantics_followup3_054"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "unknown_initial_kind_breakdown",
+      "stage": "boundary_abstention",
+      "example_ids": [
+        "semantics_followup3_055",
+        "semantics_followup3_056"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "inconsistent_outflows",
+      "stage": "boundary_abstention",
+      "example_ids": [
+        "semantics_followup3_057",
+        "semantics_followup3_058"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    },
+    {
+      "pair_id": "unknown_inventory_scope",
+      "stage": "boundary_abstention",
+      "example_ids": [
+        "semantics_followup3_059",
+        "semantics_followup3_060"
+      ],
+      "numeric_transfer_only": true,
+      "same_semantic_structure": true
+    }
+  ],
+  "examples": [
+    {
+      "id": "semantics_followup3_001",
+      "question": "1箱に8個入りが6箱、今の在庫としてあります。7個売りました。4個を借りて在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": "45個",
+      "explanation": "売却は出庫、借入は入庫。借入と在庫追加を同じ品物の一つの入庫として一度だけ数える。 8×6−7＋4＝45個。",
+      "domain": "combined_inventory",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "sale_plus_borrow",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "7個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        },
+        {
+          "surface": "4個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 4,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 48,
+        "expected_quantity": 45,
+        "verified_final_quantity": 45
+      },
+      "numerical_parameters": {
+        "p": 8,
+        "c": 6,
+        "a": 7,
+        "b": 4
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_002",
+      "question": "1箱に11個入りが5箱、今の在庫としてあります。9個売りました。6個を借りて在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": "52個",
+      "explanation": "売却は出庫、借入は入庫。借入と在庫追加を同じ品物の一つの入庫として一度だけ数える。 11×5−9＋6＝52個。",
+      "domain": "combined_inventory",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "sale_plus_borrow",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "9個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "6個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 55,
+        "expected_quantity": 52,
+        "verified_final_quantity": 52
+      },
+      "numerical_parameters": {
+        "p": 11,
+        "c": 5,
+        "a": 9,
+        "b": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_003",
+      "question": "1箱に7個入りが7箱、今の在庫としてあります。6個を落として失いました。5個が客から返品されて戻りました。今の在庫の残りは何個？",
+      "expected_answer": "48個",
+      "explanation": "紛失分を引き、客から戻った分を足す。 7×7−6＋5＝48個。",
+      "domain": "combined_inventory",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "loss_plus_customer_return",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "6個を落として失いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        },
+        {
+          "surface": "5個が客から返品されて戻りました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "落として失いました",
+          "canonical": "紛失した"
+        },
+        {
+          "surface": "返品されて戻りました",
+          "canonical": "返品されて戻った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 49,
+        "expected_quantity": 48,
+        "verified_final_quantity": 48
+      },
+      "numerical_parameters": {
+        "p": 7,
+        "c": 7,
+        "a": 6,
+        "b": 5
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_004",
+      "question": "1箱に9個入りが6箱、今の在庫としてあります。10個を落として失いました。8個が客から返品されて戻りました。今の在庫の残りは何個？",
+      "expected_answer": "52個",
+      "explanation": "紛失分を引き、客から戻った分を足す。 9×6−10＋8＝52個。",
+      "domain": "combined_inventory",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "loss_plus_customer_return",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "10個を落として失いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 10,
+          "unit": "個"
+        },
+        {
+          "surface": "8個が客から返品されて戻りました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "落として失いました",
+          "canonical": "紛失した"
+        },
+        {
+          "surface": "返品されて戻りました",
+          "canonical": "返品されて戻った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 54,
+        "expected_quantity": 52,
+        "verified_final_quantity": 52
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 6,
+        "a": 10,
+        "b": 8
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_005",
+      "question": "1箱に12個入りが4箱、今の在庫としてあります。7個を仕入先へ返品しました。9個売りました。今の在庫の残りは何個？",
+      "expected_answer": "32個",
+      "explanation": "仕入先への返品と売却はどちらも今の在庫から出る。 12×4−7−9＝32個。",
+      "domain": "combined_inventory",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "supplier_return_plus_sale",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "7個を仕入先へ返品しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        },
+        {
+          "surface": "9個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "返品しました",
+          "canonical": "返品した"
+        },
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 48,
+        "expected_quantity": 32,
+        "verified_final_quantity": 32
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 4,
+        "a": 7,
+        "b": 9
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_006",
+      "question": "1箱に10個入りが6箱、今の在庫としてあります。11個を仕入先へ返品しました。8個売りました。今の在庫の残りは何個？",
+      "expected_answer": "41個",
+      "explanation": "仕入先への返品と売却はどちらも今の在庫から出る。 10×6−11−8＝41個。",
+      "domain": "combined_inventory",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "supplier_return_plus_sale",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "11個を仕入先へ返品しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "個"
+        },
+        {
+          "surface": "8個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "返品しました",
+          "canonical": "返品した"
+        },
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 60,
+        "expected_quantity": 41,
+        "verified_final_quantity": 41
+      },
+      "numerical_parameters": {
+        "p": 10,
+        "c": 6,
+        "a": 11,
+        "b": 8
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_007",
+      "question": "1箱に9個入りが5箱、今の在庫としてあります。7個を借りて在庫に加えました。6個を盗まれました。今の在庫の残りは何個？",
+      "expected_answer": "46個",
+      "explanation": "先に借り入れた分を足し、実際の盗難分を引く。 9×5＋7−6＝46個。",
+      "domain": "combined_inventory",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "borrow_plus_theft",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "7個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        },
+        {
+          "surface": "6個を盗まれました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        },
+        {
+          "surface": "盗まれました",
+          "canonical": "盗まれた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 45,
+        "expected_quantity": 46,
+        "verified_final_quantity": 46
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 5,
+        "a": 7,
+        "b": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_008",
+      "question": "1箱に13個入りが4箱、今の在庫としてあります。9個を借りて在庫に加えました。11個を盗まれました。今の在庫の残りは何個？",
+      "expected_answer": "50個",
+      "explanation": "先に借り入れた分を足し、実際の盗難分を引く。 13×4＋9−11＝50個。",
+      "domain": "combined_inventory",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "borrow_plus_theft",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "9個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "11個を盗まれました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        },
+        {
+          "surface": "盗まれました",
+          "canonical": "盗まれた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 52,
+        "expected_quantity": 50,
+        "verified_final_quantity": 50
+      },
+      "numerical_parameters": {
+        "p": 13,
+        "c": 4,
+        "a": 9,
+        "b": 11
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_009",
+      "question": "1箱に8個入りが7箱、今の在庫としてあります。6個を仕入先へ返品しました。その後、3個が客から返品されて戻りました。今の在庫の残りは何個？",
+      "expected_answer": "53個",
+      "explanation": "返品という語が同じでも行き先と戻り元で方向が変わる。仕入先へ出た分を引き、客から入った分を足す。 8×7−6＋3＝53個。",
+      "domain": "return_direction",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "opposite_return_directions",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "6個を仕入先へ返品しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        },
+        {
+          "surface": "3個が客から返品されて戻りました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 3,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "返品しました",
+          "canonical": "返品した"
+        },
+        {
+          "surface": "返品されて戻りました",
+          "canonical": "返品されて戻った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 56,
+        "expected_quantity": 53,
+        "verified_final_quantity": 53
+      },
+      "numerical_parameters": {
+        "p": 8,
+        "c": 7,
+        "a": 6,
+        "b": 3
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_010",
+      "question": "1箱に11個入りが6箱、今の在庫としてあります。9個を仕入先へ返品しました。その後、5個が客から返品されて戻りました。今の在庫の残りは何個？",
+      "expected_answer": "62個",
+      "explanation": "返品という語が同じでも行き先と戻り元で方向が変わる。仕入先へ出た分を引き、客から入った分を足す。 11×6−9＋5＝62個。",
+      "domain": "return_direction",
+      "difficulty": 2,
+      "stage": "two_current_events",
+      "transfer_pair": "opposite_return_directions",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "9個を仕入先へ返品しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "5個が客から返品されて戻りました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "返品しました",
+          "canonical": "返品した"
+        },
+        {
+          "surface": "返品されて戻りました",
+          "canonical": "返品されて戻った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 66,
+        "expected_quantity": 62,
+        "verified_final_quantity": 62
+      },
+      "numerical_parameters": {
+        "p": 11,
+        "c": 6,
+        "a": 9,
+        "b": 5
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_011",
+      "question": "みかんが23個、りんごが17個あります。みかんを8個売りました。りんごを5個借りて在庫に加えました。二種類を合わせると何個ありますか？",
+      "expected_answer": "37個",
+      "explanation": "質問は二種類の合計。初期値は23＋17で、片方だけを採らない。23＋17−8＋5＝37個。",
+      "domain": "aggregate_inventory",
+      "difficulty": 3,
+      "stage": "two_current_events",
+      "transfer_pair": "two_initial_inventories_aggregate",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "みかんを8個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "個"
+        },
+        {
+          "surface": "りんごを5個借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 40,
+        "expected_quantity": 37,
+        "initial_components": [
+          {
+            "target": "みかん",
+            "quantity": 23
+          },
+          {
+            "target": "りんご",
+            "quantity": 17
+          }
+        ],
+        "aggregate_query": true,
+        "verified_final_quantity": 37
+      },
+      "numerical_parameters": {
+        "p": 23,
+        "c": 17,
+        "a": 8,
+        "b": 5
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_012",
+      "question": "みかんが31個、りんごが22個あります。みかんを11個売りました。りんごを7個借りて在庫に加えました。二種類を合わせると何個ありますか？",
+      "expected_answer": "49個",
+      "explanation": "質問は二種類の合計。初期値は31＋22で、片方だけを採らない。31＋22−11＋7＝49個。",
+      "domain": "aggregate_inventory",
+      "difficulty": 3,
+      "stage": "two_current_events",
+      "transfer_pair": "two_initial_inventories_aggregate",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "みかんを11個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "個"
+        },
+        {
+          "surface": "りんごを7個借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 53,
+        "expected_quantity": 49,
+        "initial_components": [
+          {
+            "target": "みかん",
+            "quantity": 31
+          },
+          {
+            "target": "りんご",
+            "quantity": 22
+          }
+        ],
+        "aggregate_query": true,
+        "verified_final_quantity": 49
+      },
+      "numerical_parameters": {
+        "p": 31,
+        "c": 22,
+        "a": 11,
+        "b": 7
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_013",
+      "question": "1箱に12個入りが5箱、今の在庫としてあります。8個売りませんでした。6個を借りて在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": "66個",
+      "explanation": "売らなかった数量は引かず、実際の借入だけを足す。 12×5＋6＝66個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "truth_and_execution",
+      "transfer_pair": "negated_sale_plus_borrow",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "8個売りませんでした",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "個"
+        },
+        {
+          "surface": "6個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りませんでした",
+          "canonical": "売らなかった"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 60,
+        "expected_quantity": 66,
+        "verified_final_quantity": 66
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 5,
+        "a": 8,
+        "b": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_014",
+      "question": "1箱に9個入りが7箱、今の在庫としてあります。11個売りませんでした。4個を借りて在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": "67個",
+      "explanation": "売らなかった数量は引かず、実際の借入だけを足す。 9×7＋4＝67個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "truth_and_execution",
+      "transfer_pair": "negated_sale_plus_borrow",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "11個売りませんでした",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "個"
+        },
+        {
+          "surface": "4個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 4,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りませんでした",
+          "canonical": "売らなかった"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 63,
+        "expected_quantity": 67,
+        "verified_final_quantity": 67
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 7,
+        "a": 11,
+        "b": 4
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_015",
+      "question": "1箱に11個入りが6箱、今の在庫としてあります。7個を借り入れませんでした。9個を落として失いました。今の在庫の残りは何個？",
+      "expected_answer": "57個",
+      "explanation": "否定された借入は加算せず、実際の紛失だけを引く。 11×6−9＝57個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "truth_and_execution",
+      "transfer_pair": "negated_borrow_plus_loss",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "7個を借り入れませんでした",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        },
+        {
+          "surface": "9個を落として失いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "借り入れませんでした",
+          "canonical": "借り入れなかった"
+        },
+        {
+          "surface": "落として失いました",
+          "canonical": "紛失した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 66,
+        "expected_quantity": 57,
+        "verified_final_quantity": 57
+      },
+      "numerical_parameters": {
+        "p": 11,
+        "c": 6,
+        "a": 7,
+        "b": 9
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_016",
+      "question": "1箱に8個入りが9箱、今の在庫としてあります。5個を借り入れませんでした。13個を落として失いました。今の在庫の残りは何個？",
+      "expected_answer": "59個",
+      "explanation": "否定された借入は加算せず、実際の紛失だけを引く。 8×9−13＝59個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "truth_and_execution",
+      "transfer_pair": "negated_borrow_plus_loss",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "5個を借り入れませんでした",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        },
+        {
+          "surface": "13個を落として失いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 13,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "借り入れませんでした",
+          "canonical": "借り入れなかった"
+        },
+        {
+          "surface": "落として失いました",
+          "canonical": "紛失した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 72,
+        "expected_quantity": 59,
+        "verified_final_quantity": 59
+      },
+      "numerical_parameters": {
+        "p": 8,
+        "c": 9,
+        "a": 5,
+        "b": 13
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_017",
+      "question": "1箱に8個入りが8箱、今の在庫としてあります。「9個売った」という記録は誤りで、実際には4個売った。今の在庫の残りは何個？",
+      "expected_answer": "60個",
+      "explanation": "誤った売却記録を取り消し、実際の数量へ置き換える。二つの売却として両方引かない。 8×8−4＝60個。",
+      "domain": "quantity_revision",
+      "difficulty": 3,
+      "stage": "truth_and_execution",
+      "transfer_pair": "incorrect_record_replaced",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "9個売った",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "実際には4個売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 4,
+          "unit": "個"
+        }
+      ],
+      "aliases": [],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 64,
+        "expected_quantity": 60,
+        "verified_final_quantity": 60
+      },
+      "numerical_parameters": {
+        "p": 8,
+        "c": 8,
+        "a": 9,
+        "b": 4
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_018",
+      "question": "1箱に12個入りが7箱、今の在庫としてあります。「11個売った」という記録は誤りで、実際には6個売った。今の在庫の残りは何個？",
+      "expected_answer": "78個",
+      "explanation": "誤った売却記録を取り消し、実際の数量へ置き換える。二つの売却として両方引かない。 12×7−6＝78個。",
+      "domain": "quantity_revision",
+      "difficulty": 3,
+      "stage": "truth_and_execution",
+      "transfer_pair": "incorrect_record_replaced",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "11個売った",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "個"
+        },
+        {
+          "surface": "実際には6個売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        }
+      ],
+      "aliases": [],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 84,
+        "expected_quantity": 78,
+        "verified_final_quantity": 78
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 7,
+        "a": 11,
+        "b": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_019",
+      "question": "1箱に11個入りが7箱、今の在庫としてあります。「6個食べた」と「4個渡した」という二つの話はどちらも事実ではありません。実際には3個売った。今の在庫の残りは何個？",
+      "expected_answer": "74個",
+      "explanation": "どちらも事実でないという否定は二つの引用全体にかかる。引用の数値を引かず、実績だけを引く。 11×7−3＝74個。",
+      "domain": "negation_scope",
+      "difficulty": 3,
+      "stage": "truth_and_execution",
+      "transfer_pair": "two_quoted_claims_both_negated",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "6個食べた",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        },
+        {
+          "surface": "4個渡した",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 4,
+          "unit": "個"
+        },
+        {
+          "surface": "実際には3個売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 3,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "事実ではありません",
+          "canonical": "事実ではない"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 77,
+        "expected_quantity": 74,
+        "verified_final_quantity": 74
+      },
+      "numerical_parameters": {
+        "p": 11,
+        "c": 7,
+        "a": 6,
+        "b": 4,
+        "actual": 3
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_020",
+      "question": "1箱に9個入りが9箱、今の在庫としてあります。「8個食べた」と「5個渡した」という二つの話はどちらも事実ではありません。実際には6個売った。今の在庫の残りは何個？",
+      "expected_answer": "75個",
+      "explanation": "どちらも事実でないという否定は二つの引用全体にかかる。引用の数値を引かず、実績だけを引く。 9×9−6＝75個。",
+      "domain": "negation_scope",
+      "difficulty": 3,
+      "stage": "truth_and_execution",
+      "transfer_pair": "two_quoted_claims_both_negated",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "8個食べた",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "個"
+        },
+        {
+          "surface": "5個渡した",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        },
+        {
+          "surface": "実際には6個売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "事実ではありません",
+          "canonical": "事実ではない"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 81,
+        "expected_quantity": 75,
+        "verified_final_quantity": 75
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 9,
+        "a": 8,
+        "b": 5,
+        "actual": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_021",
+      "question": "1箱に8個入りが6箱、今の在庫としてあります。7個は盗まれませんでした。5個を紛失しました。今の在庫の残りは何個？",
+      "expected_answer": "43個",
+      "explanation": "盗難は否定され、紛失は実行済み。紛失分だけ引く。 8×6−5＝43個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "truth_and_execution",
+      "transfer_pair": "negated_theft_plus_loss",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "7個は盗まれませんでした",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        },
+        {
+          "surface": "5個を紛失しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "盗まれませんでした",
+          "canonical": "盗まれなかった"
+        },
+        {
+          "surface": "紛失しました",
+          "canonical": "紛失した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 48,
+        "expected_quantity": 43,
+        "verified_final_quantity": 43
+      },
+      "numerical_parameters": {
+        "p": 8,
+        "c": 6,
+        "a": 7,
+        "b": 5
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_022",
+      "question": "1箱に13個入りが5箱、今の在庫としてあります。9個は盗まれませんでした。11個を紛失しました。今の在庫の残りは何個？",
+      "expected_answer": "54個",
+      "explanation": "盗難は否定され、紛失は実行済み。紛失分だけ引く。 13×5−11＝54個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "truth_and_execution",
+      "transfer_pair": "negated_theft_plus_loss",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "9個は盗まれませんでした",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "11個を紛失しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "盗まれませんでした",
+          "canonical": "盗まれなかった"
+        },
+        {
+          "surface": "紛失しました",
+          "canonical": "紛失した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 65,
+        "expected_quantity": 54,
+        "verified_final_quantity": 54
+      },
+      "numerical_parameters": {
+        "p": 13,
+        "c": 5,
+        "a": 9,
+        "b": 11
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_023",
+      "question": "1箱に12個入りが6箱、今の在庫としてあります。10個売る予定ですが、まだ実行していません。7個を借りて在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": "79個",
+      "explanation": "未実行の売却予定は引かず、実際の借入だけ足す。 12×6＋7＝79個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "truth_and_execution",
+      "transfer_pair": "planned_sale_plus_actual_borrow",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "10個売る予定ですが、まだ実行していません",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical",
+          "quantity": 10,
+          "unit": "個"
+        },
+        {
+          "surface": "7個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売る予定ですが、まだ実行していません",
+          "canonical": "売る予定だが、まだ実行していない"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 72,
+        "expected_quantity": 79,
+        "verified_final_quantity": 79
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 6,
+        "a": 10,
+        "b": 7
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_024",
+      "question": "1箱に10個入りが8箱、今の在庫としてあります。13個売る予定ですが、まだ実行していません。9個を借りて在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": "89個",
+      "explanation": "未実行の売却予定は引かず、実際の借入だけ足す。 10×8＋9＝89個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "truth_and_execution",
+      "transfer_pair": "planned_sale_plus_actual_borrow",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "13個売る予定ですが、まだ実行していません",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical",
+          "quantity": 13,
+          "unit": "個"
+        },
+        {
+          "surface": "9個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売る予定ですが、まだ実行していません",
+          "canonical": "売る予定だが、まだ実行していない"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 80,
+        "expected_quantity": 89,
+        "verified_final_quantity": 89
+      },
+      "numerical_parameters": {
+        "p": 10,
+        "c": 8,
+        "a": 13,
+        "b": 9
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_025",
+      "question": "1箱に11個入りが7箱、今の在庫としてあります。8個を借り入れる予定ですが、まだ実行していません。12個売りました。今の在庫の残りは何個？",
+      "expected_answer": "65個",
+      "explanation": "未実行の借入予定は足さず、売却実績だけを引く。 11×7−12＝65個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "planned_borrow_plus_actual_sale",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "8個を借り入れる予定ですが、まだ実行していません",
+          "direction": 1,
+          "occurred": false,
+          "scope": "hypothetical",
+          "quantity": 8,
+          "unit": "個"
+        },
+        {
+          "surface": "12個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 12,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "借り入れる予定ですが、まだ実行していません",
+          "canonical": "借り入れる予定だが、まだ実行していない"
+        },
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 77,
+        "expected_quantity": 65,
+        "verified_final_quantity": 65
+      },
+      "numerical_parameters": {
+        "p": 11,
+        "c": 7,
+        "a": 8,
+        "b": 12
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_026",
+      "question": "1箱に8個入りが10箱、今の在庫としてあります。11個を借り入れる予定ですが、まだ実行していません。9個売りました。今の在庫の残りは何個？",
+      "expected_answer": "71個",
+      "explanation": "未実行の借入予定は足さず、売却実績だけを引く。 8×10−9＝71個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "planned_borrow_plus_actual_sale",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "11個を借り入れる予定ですが、まだ実行していません",
+          "direction": 1,
+          "occurred": false,
+          "scope": "hypothetical",
+          "quantity": 11,
+          "unit": "個"
+        },
+        {
+          "surface": "9個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "借り入れる予定ですが、まだ実行していません",
+          "canonical": "借り入れる予定だが、まだ実行していない"
+        },
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 80,
+        "expected_quantity": 71,
+        "verified_final_quantity": 71
+      },
+      "numerical_parameters": {
+        "p": 8,
+        "c": 10,
+        "a": 11,
+        "b": 9
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_027",
+      "question": "1箱に9個入りが8箱、今の在庫としてあります。明日9個売る予定です。明後日6個を借り入れる予定です。どちらもまだ実行していません。今の在庫の残りは何個？",
+      "expected_answer": "72個",
+      "explanation": "問いは現在値で、二つの未来予定はともに未実行。現在の在庫は初期値のまま。 9×8＝72個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "two_unexecuted_plans",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "明日9個売る予定です",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "明後日6個を借り入れる予定です",
+          "direction": 1,
+          "occurred": false,
+          "scope": "hypothetical",
+          "quantity": 6,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売る予定です",
+          "canonical": "売る予定だ"
+        },
+        {
+          "surface": "借り入れる予定です",
+          "canonical": "借り入れる予定だ"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 72,
+        "expected_quantity": 72,
+        "verified_final_quantity": 72
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 8,
+        "a": 9,
+        "b": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_028",
+      "question": "1箱に12個入りが7箱、今の在庫としてあります。明日11個売る予定です。明後日8個を借り入れる予定です。どちらもまだ実行していません。今の在庫の残りは何個？",
+      "expected_answer": "84個",
+      "explanation": "問いは現在値で、二つの未来予定はともに未実行。現在の在庫は初期値のまま。 12×7＝84個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "two_unexecuted_plans",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "明日11個売る予定です",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical",
+          "quantity": 11,
+          "unit": "個"
+        },
+        {
+          "surface": "明後日8個を借り入れる予定です",
+          "direction": 1,
+          "occurred": false,
+          "scope": "hypothetical",
+          "quantity": 8,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売る予定です",
+          "canonical": "売る予定だ"
+        },
+        {
+          "surface": "借り入れる予定です",
+          "canonical": "借り入れる予定だ"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 84,
+        "expected_quantity": 84,
+        "verified_final_quantity": 84
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 7,
+        "a": 11,
+        "b": 8
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_029",
+      "question": "1箱に10個入りが7箱、今の在庫としてあります。8個を別の在庫から売りました。5個を借りて今の在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": "75個",
+      "explanation": "別の在庫の売却は反映せず、今の在庫へ入った借入だけ足す。 10×7＋5＝75個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "other_sale_plus_current_borrow",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "8個を別の在庫から売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory",
+          "quantity": 8,
+          "unit": "個"
+        },
+        {
+          "surface": "5個を借りて今の在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "別の在庫から売りました",
+          "canonical": "別の在庫から売った"
+        },
+        {
+          "surface": "借りて今の在庫に加えました",
+          "canonical": "今の在庫へ借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 70,
+        "expected_quantity": 75,
+        "verified_final_quantity": 75
+      },
+      "numerical_parameters": {
+        "p": 10,
+        "c": 7,
+        "a": 8,
+        "b": 5
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_030",
+      "question": "1箱に13個入りが6箱、今の在庫としてあります。12個を別の在庫から売りました。9個を借りて今の在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": "87個",
+      "explanation": "別の在庫の売却は反映せず、今の在庫へ入った借入だけ足す。 13×6＋9＝87個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "other_sale_plus_current_borrow",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "12個を別の在庫から売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory",
+          "quantity": 12,
+          "unit": "個"
+        },
+        {
+          "surface": "9個を借りて今の在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "別の在庫から売りました",
+          "canonical": "別の在庫から売った"
+        },
+        {
+          "surface": "借りて今の在庫に加えました",
+          "canonical": "今の在庫へ借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 78,
+        "expected_quantity": 87,
+        "verified_final_quantity": 87
+      },
+      "numerical_parameters": {
+        "p": 13,
+        "c": 6,
+        "a": 12,
+        "b": 9
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_031",
+      "question": "1箱に9個入りが9箱、今の在庫としてあります。6個を借りて別の在庫に加えました。今の在庫から7個を落として失いました。今の在庫の残りは何個？",
+      "expected_answer": "74個",
+      "explanation": "別の在庫へ借りた数量は足さず、今の在庫の紛失だけを引く。 9×9−7＝74個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "other_borrow_plus_current_loss",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "6個を借りて別の在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory",
+          "quantity": 6,
+          "unit": "個"
+        },
+        {
+          "surface": "今の在庫から7個を落として失いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "借りて別の在庫に加えました",
+          "canonical": "別の在庫へ借り入れた"
+        },
+        {
+          "surface": "落として失いました",
+          "canonical": "紛失した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 81,
+        "expected_quantity": 74,
+        "verified_final_quantity": 74
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 9,
+        "a": 6,
+        "b": 7
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_032",
+      "question": "1箱に14個入りが5箱、今の在庫としてあります。10個を借りて別の在庫に加えました。今の在庫から11個を落として失いました。今の在庫の残りは何個？",
+      "expected_answer": "59個",
+      "explanation": "別の在庫へ借りた数量は足さず、今の在庫の紛失だけを引く。 14×5−11＝59個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "other_borrow_plus_current_loss",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "10個を借りて別の在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory",
+          "quantity": 10,
+          "unit": "個"
+        },
+        {
+          "surface": "今の在庫から11個を落として失いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "借りて別の在庫に加えました",
+          "canonical": "別の在庫へ借り入れた"
+        },
+        {
+          "surface": "落として失いました",
+          "canonical": "紛失した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 70,
+        "expected_quantity": 59,
+        "verified_final_quantity": 59
+      },
+      "numerical_parameters": {
+        "p": 14,
+        "c": 5,
+        "a": 10,
+        "b": 11
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_033",
+      "question": "1箱に12個入りが6箱、今の在庫としてあります。今の在庫から9個売りました。8個が客から返品されて別の在庫に戻りました。今の在庫の残りは何個？",
+      "expected_answer": "63個",
+      "explanation": "今の在庫の売却だけ引く。返品された品物の戻り先は別の在庫なので足さない。 12×6−9＝63個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "current_sale_plus_other_return",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "今の在庫から9個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "8個が客から返品されて別の在庫に戻りました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory",
+          "quantity": 8,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "客から返品されて別の在庫に戻りました",
+          "canonical": "客から返品されて別の在庫に戻った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 72,
+        "expected_quantity": 63,
+        "verified_final_quantity": 63
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 6,
+        "a": 9,
+        "b": 8
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_034",
+      "question": "1箱に11個入りが8箱、今の在庫としてあります。今の在庫から13個売りました。7個が客から返品されて別の在庫に戻りました。今の在庫の残りは何個？",
+      "expected_answer": "75個",
+      "explanation": "今の在庫の売却だけ引く。返品された品物の戻り先は別の在庫なので足さない。 11×8−13＝75個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "current_sale_plus_other_return",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "今の在庫から13個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 13,
+          "unit": "個"
+        },
+        {
+          "surface": "7個が客から返品されて別の在庫に戻りました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory",
+          "quantity": 7,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "客から返品されて別の在庫に戻りました",
+          "canonical": "客から返品されて別の在庫に戻った"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 88,
+        "expected_quantity": 75,
+        "verified_final_quantity": 75
+      },
+      "numerical_parameters": {
+        "p": 11,
+        "c": 8,
+        "a": 13,
+        "b": 7
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_035",
+      "question": "1箱に14個入りが4箱、今の在庫としてあります。7個を仕入先へ返品しました。6個は客から返品されて戻っていません。今の在庫の残りは何個？",
+      "expected_answer": "49個",
+      "explanation": "仕入先への実際の返品を引く。客からの返品入庫は否定されており足さない。 14×4−7＝49個。",
+      "domain": "return_direction",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "actual_outward_return_and_negated_inward_return",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "7個を仕入先へ返品しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        },
+        {
+          "surface": "6個は客から返品されて戻っていません",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "返品しました",
+          "canonical": "返品した"
+        },
+        {
+          "surface": "返品されて戻っていません",
+          "canonical": "返品されて戻っていない"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 56,
+        "expected_quantity": 49,
+        "verified_final_quantity": 49
+      },
+      "numerical_parameters": {
+        "p": 14,
+        "c": 4,
+        "a": 7,
+        "b": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_036",
+      "question": "1箱に9個入りが8箱、今の在庫としてあります。11個を仕入先へ返品しました。8個は客から返品されて戻っていません。今の在庫の残りは何個？",
+      "expected_answer": "61個",
+      "explanation": "仕入先への実際の返品を引く。客からの返品入庫は否定されており足さない。 9×8−11＝61個。",
+      "domain": "return_direction",
+      "difficulty": 2,
+      "stage": "modality_and_scope",
+      "transfer_pair": "actual_outward_return_and_negated_inward_return",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "11個を仕入先へ返品しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "個"
+        },
+        {
+          "surface": "8個は客から返品されて戻っていません",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "返品しました",
+          "canonical": "返品した"
+        },
+        {
+          "surface": "返品されて戻っていません",
+          "canonical": "返品されて戻っていない"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 72,
+        "expected_quantity": 61,
+        "verified_final_quantity": 61
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 8,
+        "a": 11,
+        "b": 8
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_037",
+      "question": "1箱に12本入りが5箱、今の在庫としてあります。7本売りました。4本を借りて在庫に加えました。今の在庫の残りは何本？",
+      "expected_answer": "57本",
+      "explanation": "箱の包装数を内容物の本数へ展開して、本の出入を計算する。 12×5−7＋4＝57本。",
+      "domain": "unit_and_packaging",
+      "difficulty": 2,
+      "stage": "quantity_units",
+      "transfer_pair": "bottles_in_boxes",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "7本売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "本"
+        },
+        {
+          "surface": "4本を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 4,
+          "unit": "本"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "本",
+        "initial_quantity": 60,
+        "expected_quantity": 57,
+        "verified_final_quantity": 57
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 5,
+        "a": 7,
+        "b": 4
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_038",
+      "question": "1箱に9本入りが8箱、今の在庫としてあります。11本売りました。6本を借りて在庫に加えました。今の在庫の残りは何本？",
+      "expected_answer": "67本",
+      "explanation": "箱の包装数を内容物の本数へ展開して、本の出入を計算する。 9×8−11＋6＝67本。",
+      "domain": "unit_and_packaging",
+      "difficulty": 2,
+      "stage": "quantity_units",
+      "transfer_pair": "bottles_in_boxes",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "11本売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "本"
+        },
+        {
+          "surface": "6本を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "本"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "本",
+        "initial_quantity": 72,
+        "expected_quantity": 67,
+        "verified_final_quantity": 67
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 8,
+        "a": 11,
+        "b": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_039",
+      "question": "1袋に16個入りが4袋、今の在庫としてあります。9個食べました。5個もらいました。今の在庫の残りは何個？",
+      "expected_answer": "60個",
+      "explanation": "袋数を内容物の個数へ展開し、消費を引き受領を足す。 16×4−9＋5＝60個。",
+      "domain": "unit_and_packaging",
+      "difficulty": 2,
+      "stage": "quantity_units",
+      "transfer_pair": "pieces_in_bags",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "9個食べました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "5個もらいました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "食べました",
+          "canonical": "食べた"
+        },
+        {
+          "surface": "もらいました",
+          "canonical": "もらった"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 64,
+        "expected_quantity": 60,
+        "verified_final_quantity": 60
+      },
+      "numerical_parameters": {
+        "p": 16,
+        "c": 4,
+        "a": 9,
+        "b": 5
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_040",
+      "question": "1袋に11個入りが7袋、今の在庫としてあります。13個食べました。8個もらいました。今の在庫の残りは何個？",
+      "expected_answer": "72個",
+      "explanation": "袋数を内容物の個数へ展開し、消費を引き受領を足す。 11×7−13＋8＝72個。",
+      "domain": "unit_and_packaging",
+      "difficulty": 2,
+      "stage": "quantity_units",
+      "transfer_pair": "pieces_in_bags",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "13個食べました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 13,
+          "unit": "個"
+        },
+        {
+          "surface": "8個もらいました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "食べました",
+          "canonical": "食べた"
+        },
+        {
+          "surface": "もらいました",
+          "canonical": "もらった"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 77,
+        "expected_quantity": 72,
+        "verified_final_quantity": 72
+      },
+      "numerical_parameters": {
+        "p": 11,
+        "c": 7,
+        "a": 13,
+        "b": 8
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_041",
+      "question": "1箱に15枚入りが4箱、今の在庫としてあります。8枚使いました。6枚補充しました。今の在庫の残りは何枚？",
+      "expected_answer": "58枚",
+      "explanation": "箱数ではなく紙の枚数が対象。使用を引き補充を足す。 15×4−8＋6＝58枚。",
+      "domain": "unit_and_packaging",
+      "difficulty": 2,
+      "stage": "quantity_units",
+      "transfer_pair": "sheets_in_boxes",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "8枚使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "枚"
+        },
+        {
+          "surface": "6枚補充しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 6,
+          "unit": "枚"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "補充しました",
+          "canonical": "補充した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "枚",
+        "initial_quantity": 60,
+        "expected_quantity": 58,
+        "verified_final_quantity": 58
+      },
+      "numerical_parameters": {
+        "p": 15,
+        "c": 4,
+        "a": 8,
+        "b": 6
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_042",
+      "question": "1箱に12枚入りが6箱、今の在庫としてあります。11枚使いました。9枚補充しました。今の在庫の残りは何枚？",
+      "expected_answer": "70枚",
+      "explanation": "箱数ではなく紙の枚数が対象。使用を引き補充を足す。 12×6−11＋9＝70枚。",
+      "domain": "unit_and_packaging",
+      "difficulty": 2,
+      "stage": "quantity_units",
+      "transfer_pair": "sheets_in_boxes",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "11枚使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 11,
+          "unit": "枚"
+        },
+        {
+          "surface": "9枚補充しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "枚"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "補充しました",
+          "canonical": "補充した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "枚",
+        "initial_quantity": 72,
+        "expected_quantity": 70,
+        "verified_final_quantity": 70
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 6,
+        "a": 11,
+        "b": 9
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_043",
+      "question": "水が3600mLあります。450mL使いました。250mL追加しました。残りは何mL？",
+      "expected_answer": "3400mL",
+      "explanation": "全数量がmL。3600−450＋250＝3400mL。",
+      "domain": "same_unit_quantity",
+      "difficulty": 2,
+      "stage": "quantity_units",
+      "transfer_pair": "same_unit_liquid",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "450mL使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 450,
+          "unit": "mL"
+        },
+        {
+          "surface": "250mL追加しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 250,
+          "unit": "mL"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "追加しました",
+          "canonical": "追加した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "mL",
+        "initial_quantity": 3600,
+        "expected_quantity": 3400,
+        "verified_final_quantity": 3400
+      },
+      "numerical_parameters": {
+        "p": 3600,
+        "c": 1,
+        "a": 450,
+        "b": 250
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_044",
+      "question": "水が4800mLあります。700mL使いました。350mL追加しました。残りは何mL？",
+      "expected_answer": "4450mL",
+      "explanation": "全数量がmL。4800−700＋350＝4450mL。",
+      "domain": "same_unit_quantity",
+      "difficulty": 2,
+      "stage": "quantity_units",
+      "transfer_pair": "same_unit_liquid",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "700mL使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 700,
+          "unit": "mL"
+        },
+        {
+          "surface": "350mL追加しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 350,
+          "unit": "mL"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "追加しました",
+          "canonical": "追加した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "mL",
+        "initial_quantity": 4800,
+        "expected_quantity": 4450,
+        "verified_final_quantity": 4450
+      },
+      "numerical_parameters": {
+        "p": 4800,
+        "c": 1,
+        "a": 700,
+        "b": 350
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_045",
+      "question": "米が3.2kgあります。650g使いました。450g補充しました。残りは何g？",
+      "expected_answer": "3000g",
+      "explanation": "1kg＝1000gで初期値を3200gへ換算。3200−650＋450＝3000g。",
+      "domain": "unit_conversion",
+      "difficulty": 3,
+      "stage": "quantity_units",
+      "transfer_pair": "kilograms_to_grams",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "650g使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 650,
+          "unit": "g"
+        },
+        {
+          "surface": "450g補充しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 450,
+          "unit": "g"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "補充しました",
+          "canonical": "補充した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "g",
+        "initial_quantity": 3200,
+        "expected_quantity": 3000,
+        "conversion": "1kg=1000g",
+        "verified_final_quantity": 3000
+      },
+      "numerical_parameters": {
+        "p": 3.2,
+        "c": 1,
+        "a": 650,
+        "b": 450
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_046",
+      "question": "米が4.5kgあります。900g使いました。300g補充しました。残りは何g？",
+      "expected_answer": "3900g",
+      "explanation": "1kg＝1000gで初期値を4500gへ換算。4500−900＋300＝3900g。",
+      "domain": "unit_conversion",
+      "difficulty": 3,
+      "stage": "quantity_units",
+      "transfer_pair": "kilograms_to_grams",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "900g使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 900,
+          "unit": "g"
+        },
+        {
+          "surface": "300g補充しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 300,
+          "unit": "g"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "補充しました",
+          "canonical": "補充した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "g",
+        "initial_quantity": 4500,
+        "expected_quantity": 3900,
+        "conversion": "1kg=1000g",
+        "verified_final_quantity": 3900
+      },
+      "numerical_parameters": {
+        "p": 4.5,
+        "c": 1,
+        "a": 900,
+        "b": 300
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_047",
+      "question": "水が2.7Lあります。350mL使いました。150mL追加しました。残りは何mL？",
+      "expected_answer": "2500mL",
+      "explanation": "1L＝1000mLで初期値を2700mLへ換算。2700−350＋150＝2500mL。",
+      "domain": "unit_conversion",
+      "difficulty": 3,
+      "stage": "quantity_units",
+      "transfer_pair": "liters_to_milliliters",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "350mL使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 350,
+          "unit": "mL"
+        },
+        {
+          "surface": "150mL追加しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 150,
+          "unit": "mL"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "追加しました",
+          "canonical": "追加した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "mL",
+        "initial_quantity": 2700,
+        "expected_quantity": 2500,
+        "conversion": "1L=1000mL",
+        "verified_final_quantity": 2500
+      },
+      "numerical_parameters": {
+        "p": 2.7,
+        "c": 1,
+        "a": 350,
+        "b": 150
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_048",
+      "question": "水が4.1Lあります。600mL使いました。250mL追加しました。残りは何mL？",
+      "expected_answer": "3750mL",
+      "explanation": "1L＝1000mLで初期値を4100mLへ換算。4100−600＋250＝3750mL。",
+      "domain": "unit_conversion",
+      "difficulty": 3,
+      "stage": "quantity_units",
+      "transfer_pair": "liters_to_milliliters",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "600mL使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 600,
+          "unit": "mL"
+        },
+        {
+          "surface": "250mL追加しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 250,
+          "unit": "mL"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "追加しました",
+          "canonical": "追加した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "mL",
+        "initial_quantity": 4100,
+        "expected_quantity": 3750,
+        "conversion": "1L=1000mL",
+        "verified_final_quantity": 3750
+      },
+      "numerical_parameters": {
+        "p": 4.1,
+        "c": 1,
+        "a": 600,
+        "b": 250
+      },
+      "expected_behavior": "answer",
+      "bounded_scope": true
+    },
+    {
+      "id": "semantics_followup3_049",
+      "question": "1箱に何個入りか不明な品物が6箱、今の在庫としてあります。7個売りました。2個を借りて在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": null,
+      "explanation": "1箱の内容物個数が不明で初期値を確立できない。出入庫の数値だけでは現在値は決まらない。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_package_size",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "7個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 7,
+          "unit": "個"
+        },
+        {
+          "surface": "2個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 2,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": null,
+        "expected_quantity": null,
+        "missing": "items_per_box"
+      },
+      "numerical_parameters": {
+        "p": null,
+        "c": 6,
+        "a": 7,
+        "b": 2
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "MISSING_INITIAL_PACKAGE_SIZE",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_050",
+      "question": "1箱に何個入りか不明な品物が8箱、今の在庫としてあります。9個売りました。4個を借りて在庫に加えました。今の在庫の残りは何個？",
+      "expected_answer": null,
+      "explanation": "1箱の内容物個数が不明で初期値を確立できない。出入庫の数値だけでは現在値は決まらない。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_package_size",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "9個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "4個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 4,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": null,
+        "expected_quantity": null,
+        "missing": "items_per_box"
+      },
+      "numerical_parameters": {
+        "p": null,
+        "c": 8,
+        "a": 9,
+        "b": 4
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "MISSING_INITIAL_PACKAGE_SIZE",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_051",
+      "question": "水が4Lあります。コップで3杯分使いました。200mL追加しました。コップ1杯の容量は不明です。残りは何mL？",
+      "expected_answer": null,
+      "explanation": "LからmLへの換算は可能だが、杯からmLへの換算容量がない。コップの標準量を勝手に仮定せず保留する。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_unit_conversion",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "コップで3杯分使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 3,
+          "unit": "杯"
+        },
+        {
+          "surface": "200mL追加しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 200,
+          "unit": "mL"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "追加しました",
+          "canonical": "追加した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "mL",
+        "initial_quantity": 4000,
+        "expected_quantity": null,
+        "missing": "cup_capacity",
+        "unconverted_event_unit": "杯"
+      },
+      "numerical_parameters": {
+        "p": 4,
+        "c": 1,
+        "a": 3,
+        "b": 200
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "MISSING_CUP_CAPACITY",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_052",
+      "question": "水が6Lあります。コップで4杯分使いました。350mL追加しました。コップ1杯の容量は不明です。残りは何mL？",
+      "expected_answer": null,
+      "explanation": "LからmLへの換算は可能だが、杯からmLへの換算容量がない。コップの標準量を勝手に仮定せず保留する。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_unit_conversion",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "コップで4杯分使いました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 4,
+          "unit": "杯"
+        },
+        {
+          "surface": "350mL追加しました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 350,
+          "unit": "mL"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "使いました",
+          "canonical": "使った"
+        },
+        {
+          "surface": "追加しました",
+          "canonical": "追加した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "mL",
+        "initial_quantity": 6000,
+        "expected_quantity": null,
+        "missing": "cup_capacity",
+        "unconverted_event_unit": "杯"
+      },
+      "numerical_parameters": {
+        "p": 6,
+        "c": 1,
+        "a": 4,
+        "b": 350
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "MISSING_CUP_CAPACITY",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_053",
+      "question": "1箱に9個入りが6箱、今の在庫としてあります。何個か売りました。5個を借りて在庫に加えました。売った個数は確認されていません。今の在庫の残りは何個？",
+      "expected_answer": null,
+      "explanation": "初期値と借入数は分かるが、売却数量が不明。何個かを1個などと決めず保留する。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_event_quantity",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "何個か売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": null,
+          "unit": "個"
+        },
+        {
+          "surface": "5個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 54,
+        "expected_quantity": null
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 6,
+        "a": null,
+        "b": 5
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "MISSING_EVENT_QUANTITY",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_054",
+      "question": "1箱に12個入りが7箱、今の在庫としてあります。何個か売りました。8個を借りて在庫に加えました。売った個数は確認されていません。今の在庫の残りは何個？",
+      "expected_answer": null,
+      "explanation": "初期値と借入数は分かるが、売却数量が不明。何個かを1個などと決めず保留する。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_event_quantity",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "何個か売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": null,
+          "unit": "個"
+        },
+        {
+          "surface": "8個を借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 8,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 84,
+        "expected_quantity": null
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 7,
+        "a": null,
+        "b": 8
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "MISSING_EVENT_QUANTITY",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_055",
+      "question": "りんごとみかんを混ぜて1箱に8個入りが5箱あります。種類別の内訳は不明です。みかんを6個売りました。りんごを3個借りて在庫に加えました。今のりんごは何個？",
+      "expected_answer": null,
+      "explanation": "合計の初期個数は分かっても、りんごの初期内訳が不明。みかんの売却をりんごから引いたり、全個数をりんごとして答えたりしない。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_initial_kind_breakdown",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "みかんを6個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory",
+          "quantity": 6,
+          "unit": "個"
+        },
+        {
+          "surface": "りんごを3個借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 3,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": null,
+        "expected_quantity": null,
+        "known_aggregate_initial": 40,
+        "missing": "initial_apple_count"
+      },
+      "numerical_parameters": {
+        "p": 8,
+        "c": 5,
+        "a": 6,
+        "b": 3
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "MISSING_TARGET_INITIAL_BREAKDOWN",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_056",
+      "question": "りんごとみかんを混ぜて1箱に11個入りが6箱あります。種類別の内訳は不明です。みかんを9個売りました。りんごを5個借りて在庫に加えました。今のりんごは何個？",
+      "expected_answer": null,
+      "explanation": "合計の初期個数は分かっても、りんごの初期内訳が不明。みかんの売却をりんごから引いたり、全個数をりんごとして答えたりしない。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_initial_kind_breakdown",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "みかんを9個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "りんごを5個借りて在庫に加えました",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 5,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "借りて在庫に加えました",
+          "canonical": "借り入れた"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": null,
+        "expected_quantity": null,
+        "known_aggregate_initial": 66,
+        "missing": "initial_apple_count"
+      },
+      "numerical_parameters": {
+        "p": 11,
+        "c": 6,
+        "a": 9,
+        "b": 5
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "MISSING_TARGET_INITIAL_BREAKDOWN",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_057",
+      "question": "1箱に6個入りが4箱、今の在庫としてあります。17個売りました。12個を紛失しました。明示した以外の補充はなく、どちらも実行済みという記録です。この記録は矛盾していないとして、残りは何個？",
+      "expected_answer": null,
+      "explanation": "初期24個に対し、出庫17＋12個が上回る。補充なし・両方実行済みという前提は矛盾し、負数や0を有効な在庫として答えない。",
+      "domain": "inconsistent_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "inconsistent_outflows",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "17個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 17,
+          "unit": "個"
+        },
+        {
+          "surface": "12個を紛失しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 12,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "紛失しました",
+          "canonical": "紛失した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 24,
+        "expected_quantity": null,
+        "inconsistent_candidate": -5
+      },
+      "numerical_parameters": {
+        "p": 6,
+        "c": 4,
+        "a": 17,
+        "b": 12
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "INCONSISTENT_INVENTORY_EVENTS",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_058",
+      "question": "1箱に7個入りが5箱、今の在庫としてあります。22個売りました。18個を紛失しました。明示した以外の補充はなく、どちらも実行済みという記録です。この記録は矛盾していないとして、残りは何個？",
+      "expected_answer": null,
+      "explanation": "初期35個に対し、出庫22＋18個が上回る。補充なし・両方実行済みという前提は矛盾し、負数や0を有効な在庫として答えない。",
+      "domain": "inconsistent_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "inconsistent_outflows",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "22個売りました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 22,
+          "unit": "個"
+        },
+        {
+          "surface": "18個を紛失しました",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory",
+          "quantity": 18,
+          "unit": "個"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "売りました",
+          "canonical": "売った"
+        },
+        {
+          "surface": "紛失しました",
+          "canonical": "紛失した"
+        }
+      ],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 35,
+        "expected_quantity": null,
+        "inconsistent_candidate": -5
+      },
+      "numerical_parameters": {
+        "p": 7,
+        "c": 5,
+        "a": 22,
+        "b": 18
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "INCONSISTENT_INVENTORY_EVENTS",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_059",
+      "question": "1箱に9個入りが5箱、今の在庫としてあります。6個売ったことと4個借り入れたことは確かです。ただし、どちらも今の在庫と別の在庫のどちらの出来事なのかは記録されていません。今の在庫の残りは何個？",
+      "expected_answer": null,
+      "explanation": "二つの出来事が実行されたことは分かるが、対象在庫が不明。どちらも今の在庫と仮定したり、どちらも別の在庫と仮定したりせず保留する。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_inventory_scope",
+      "transfer_role": "first_example",
+      "event_labels": [
+        {
+          "surface": "6個売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "uncertain",
+          "quantity": 6,
+          "unit": "個"
+        },
+        {
+          "surface": "4個借り入れた",
+          "direction": 1,
+          "occurred": true,
+          "scope": "uncertain",
+          "quantity": 4,
+          "unit": "個"
+        }
+      ],
+      "aliases": [],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 45,
+        "expected_quantity": null,
+        "missing": "event_inventory_scope"
+      },
+      "numerical_parameters": {
+        "p": 9,
+        "c": 5,
+        "a": 6,
+        "b": 4
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "UNKNOWN_EVENT_INVENTORY_SCOPE",
+      "bounded_scope": false
+    },
+    {
+      "id": "semantics_followup3_060",
+      "question": "1箱に12個入りが4箱、今の在庫としてあります。9個売ったことと7個借り入れたことは確かです。ただし、どちらも今の在庫と別の在庫のどちらの出来事なのかは記録されていません。今の在庫の残りは何個？",
+      "expected_answer": null,
+      "explanation": "二つの出来事が実行されたことは分かるが、対象在庫が不明。どちらも今の在庫と仮定したり、どちらも別の在庫と仮定したりせず保留する。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "stage": "boundary_abstention",
+      "transfer_pair": "unknown_inventory_scope",
+      "transfer_role": "changed_numbers",
+      "event_labels": [
+        {
+          "surface": "9個売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "uncertain",
+          "quantity": 9,
+          "unit": "個"
+        },
+        {
+          "surface": "7個借り入れた",
+          "direction": 1,
+          "occurred": true,
+          "scope": "uncertain",
+          "quantity": 7,
+          "unit": "個"
+        }
+      ],
+      "aliases": [],
+      "teacher_computation": {
+        "query_unit": "個",
+        "initial_quantity": 48,
+        "expected_quantity": null,
+        "missing": "event_inventory_scope"
+      },
+      "numerical_parameters": {
+        "p": 12,
+        "c": 4,
+        "a": 9,
+        "b": 7
+      },
+      "expected_behavior": "abstain",
+      "abstention_reason": "UNKNOWN_EVENT_INVENTORY_SCOPE",
+      "bounded_scope": false
+    }
+  ],
+  "validation": {
+    "examples": 60,
+    "pairs": 30,
+    "determinate": 48,
+    "abstention_expected": 12,
+    "two_event_examples": 58,
+    "three_claim_examples": 2,
+    "arithmetic_checked": true,
+    "literal_event_surfaces_checked": true,
+    "literal_alias_surfaces_checked": true,
+    "not_holdout": true
+  }
+}

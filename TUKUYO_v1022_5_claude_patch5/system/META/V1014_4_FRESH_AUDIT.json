@@ -1,0 +1,59 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "external_H4": "PENDING",
+    "formal_continuity_requires_tick_gap_and_external_witness_gap_checks": true,
+    "full_historical_suite_rerun": false,
+    "general_l5": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "third_party_reproduction": "PENDING"
+  },
+  "created_utc_ns": 1790605327389827004,
+  "fresh_tests": {
+    "focused_total": "30/30 PASS",
+    "full_selftest": "NOT COMPLETED; runner exceeded environment wall-time, no full-suite count claimed",
+    "intermediate_witness_positive": "PASS",
+    "large_derived_index_checkpoint": "PASS (35 MiB derived index excluded)",
+    "v1012_1": "7/7 PASS",
+    "v1013": "3/3 PASS",
+    "v1014": "3/3 PASS",
+    "v1014_1": "5/5 PASS",
+    "v1014_2": "4/4 PASS",
+    "v1014_3": "3/3 PASS",
+    "v1014_4_new": "5/5 PASS"
+  },
+  "parent": "v1014.3",
+  "performance": {
+    "around_300_last10_median_ms": 9.572741,
+    "claim": "no history-count-proportional growth observed through 600 steps in this benchmark",
+    "first10_median_ms": 8.9614465,
+    "last10_at_600_median_ms": 10.0327675,
+    "mode": "same-process campaign step benchmark; excludes CLI startup/release verification",
+    "step_100_ms": 8.635867,
+    "step_1_ms": 16.728036,
+    "step_300_ms": 13.676223,
+    "step_600_ms": 12.516588,
+    "steps_301_600_median_ms": 9.2278575,
+    "steps_measured": 600
+  },
+  "repair_scope": {
+    "actual_restart_observation_counting": true,
+    "checkpoint_failure_propagates_to_campaign_audit": true,
+    "continuous_tick_gap_gate": true,
+    "conversation_atomic_rollback": true,
+    "derived_search_index_excluded_from_recovery_snapshot": true,
+    "incremental_continuity_head_validation": true,
+    "incremental_realtime_head_validation": true,
+    "legacy_aggregate_audit_fail_closed": true,
+    "pack_quantity_surface_expanded": true,
+    "periodic_external_witness_receipts": true,
+    "question_clauses_excluded_from_bounded_logic_premises": true,
+    "soul_event_first_materialization": true
+  },
+  "schema": "tukuyo.v1014_4.fresh_audit/1",
+  "version": "v1014.4"
+}

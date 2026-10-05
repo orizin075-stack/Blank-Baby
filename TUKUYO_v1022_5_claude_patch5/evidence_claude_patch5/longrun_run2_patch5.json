@@ -1,0 +1,67 @@
+{
+ "schema": "tukuyo.v1022_6.longrun_fusion/1",
+ "started_utc": "2026-10-05T08:18:21.292995+00:00",
+ "seed": 20261006,
+ "minutes": 75.0,
+ "ops": {
+  "reason": 529,
+  "metab": 172,
+  "checkpoint": 43,
+  "restore": 41,
+  "teach": 43,
+  "crash": 42,
+  "study": 41
+ },
+ "reasoning": {
+  "abstain_hedge": {
+   "correct_abstain": 40
+  },
+  "time": {
+   "correct": 53
+  },
+  "change_money": {
+   "correct": 47
+  },
+  "percent": {
+   "correct": 35
+  },
+  "groups": {
+   "correct": 29
+  },
+  "equation": {
+   "correct": 43
+  },
+  "abstain_container": {
+   "correct_abstain": 46
+  },
+  "logic_mp": {
+   "correct": 37,
+   "abstain": 6
+  },
+  "abstain_part": {
+   "correct_abstain": 39
+  },
+  "logic_mt": {
+   "correct": 40
+  },
+  "memory": {
+   "correct": 29
+  },
+  "rate": {
+   "correct": 40
+  },
+  "change": {
+   "correct": 44,
+   "abstain": 1
+  }
+ },
+ "violations": [],
+ "checkpoints": 43,
+ "restores": 41,
+ "crash_injections": 42,
+ "crash_reached": 7,
+ "self_study_learned": 15,
+ "completed": true,
+ "elapsed_minutes": 75.2,
+ "total_ops": 964
+}

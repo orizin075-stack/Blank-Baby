@@ -1,0 +1,30 @@
+{
+  "payload": {
+    "critical_sha256": {
+      "README.md": "5ad43536efac16e3eef279472d4f36f48f2620a837686445b0a2fcc676c1a765",
+      "SELFTEST_REPORT.json": "aa9cf0003db22da6d1ce22268a3f4cdc72fd18daa8d80da812d2b02d5b20312f",
+      "STATUS.json": "55da6cd258aea403f569528926165cd9689f43d63ffa59e09fad378fc3acca8a",
+      "evidence/AGENT_BINDING_RECEIPT.json": "ae0ece827a08b2e0fbdbe5c34ba64c023136100b588fa84ce26be6a3f887025e",
+      "evidence/SUITE_SPECS.json": "8e222dd6723c7ec0d148745f142b8c4e9f8163c0b5c07b74b6a504db099ed2a5",
+      "evidence/TRUST_EPOCH.json": "22a459995b5a93cfe38e7872194291f164dfae71a90b47303b292658b6c8ac5e",
+      "evidence/V892_RAW_EPISODES.json": "17aba3af24f22b851551dffe9b25f72647f7f65e6b1a6ff939901ef01b32139e",
+      "evidence/V892_SUITE_RESULTS.json": "7ee9fca0ae5a59c580d9bdda466d275c0d5c9a158d64bfbb8b17593610945eae",
+      "evidence/V892_SUMMARY.json": "8e7d95e1e567e78507de9a97944e7f8f169fc5c2a276c1f881624e1a1191c279",
+      "run_selftest.py": "2caf3470cfbb88f7a44dd1febf2c6a8652fb2e50efd6467c840530f27a8234b5",
+      "tests/test_v892.py": "bb8dcce07d1f9042e5e29e9687325fe2e7d149c5abe9277a60cb0351d78553b4",
+      "tools/reproduce_v892.py": "03036dc4cf2a95e7867d6900fd23d444164db805109fefba8ad4cdb040c4ca13",
+      "tools/verify_release.py": "211f0cb1101b76065be92bcc3122be279939547a9c199e4233e39f1f13a5efc0",
+      "tukuyo_v892/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tukuyo_v892/agent.py": "3953a88b3d76f814b28eb5e68f6fc9360cc3e3e819148ad9aebd421756decca4",
+      "tukuyo_v892/dsl.py": "322373c4f185ab6113b8f266ffb1c6bd4e7fe958eb639865bb3b4d74383b8ecd",
+      "tukuyo_v892/experiment.py": "323476d3227ab5f369f2a75a717d71a1c03a8fa37d3079b7458b83453e4b8873"
+    },
+    "package_manifest_sha256": "e6ddf0361d57d7fc8bc6c1ee937d26481ef7e704b57b8659b11cabe73fcba6e5",
+    "parent_sha256": "e60e146efab8bf331127988e7cf5db5908e70626d80b60ff41d4895672f68bd6",
+    "release_authority_public_key_b64": "ixKkn47glr3kaP3t+ibAN0P1/Ku8yNo5hVNM2DtPVOg=",
+    "schema": "tukuyo.release_manifest_receipt.v4",
+    "trust_epoch": "TUKUYO-2026-09-22-E1",
+    "version": "v892"
+  },
+  "signature_b64": "jWlPWhc/gJobc6jIHC1OxfNJgXMLvb/of5DShKJcG7TPqnC53/IdNQ6jfLecd7VaP1WjcAFORpZkrKdIR12sCA=="
+}

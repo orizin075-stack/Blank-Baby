@@ -1,0 +1,71 @@
+{
+  "claim_boundary": {
+    "bounded_full_runtime_fork_divergence_tested": true,
+    "consciousness_established": false,
+    "evidence_bounded_narrative_self_model": true,
+    "experience_to_meaning_to_purpose_loop": true,
+    "external_time_anchor": false,
+    "general_l5": false,
+    "general_l6": false,
+    "independent_third_party_reproduction": "PENDING",
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "open_ended_evolution_established": false,
+    "open_ended_goal_invention": false,
+    "persistent_parallel_agents_established": false,
+    "thirty_day_wallclock_continuity_established": false
+  },
+  "fresh_e2e": {
+    "fork_audit": "PASS",
+    "fork_checks": {
+      "both_whole_audits_pass": true,
+      "choice_diverged": true,
+      "common_origin_snapshot": true,
+      "heart_state_diverged": true,
+      "homeostasis_intent_diverged": true,
+      "organism_state_diverged": true,
+      "separate_processes_executed": true,
+      "soul_state_diverged": true,
+      "whole_state_diverged": true
+    },
+    "full_runtime_fork_assay": "PASS",
+    "individual_id": "V985-FRESH",
+    "purpose_after_adverse_history_and_100_ticks": "PRESERVE_INTEGRITY",
+    "purpose_audit": "PASS",
+    "purpose_initial": "SEEK_KNOWLEDGE",
+    "purpose_revision_count": 1,
+    "top_status_version": "v985",
+    "whole_audit": "PASS"
+  },
+  "parent": "v983",
+  "schema": "tukuyo.v985.fresh_audit/1",
+  "static_checks": {
+    "python_files_parsed": 438,
+    "startup_critical_python_files": 157,
+    "syntax_errors": []
+  },
+  "tests": {
+    "legacy_v939_v983": {
+      "execution": "split by test file / individual test where required by environment wall-time",
+      "failed": 0,
+      "passed": 144
+    },
+    "new_v984_v985": {
+      "failed": 0,
+      "passed": 2
+    },
+    "total": {
+      "failed": 0,
+      "passed": 146
+    },
+    "v954_security": {
+      "failed": 0,
+      "passed": 10
+    },
+    "v967_integration_after_status_unification": {
+      "failed": 0,
+      "passed": 4
+    }
+  },
+  "version": "v985"
+}

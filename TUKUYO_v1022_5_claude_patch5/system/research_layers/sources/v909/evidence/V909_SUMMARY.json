@@ -1,0 +1,40 @@
+{
+  "evaluation_calls": 11,
+  "final_source_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+  "gain_per_eval_call": 23.454545454545453,
+  "generations": [
+    {
+      "accepted": true,
+      "best_candidate_correct": 242,
+      "candidate_count": 2,
+      "chosen_sha256": "4ff9d375c21f5571c33c6406afa565877cca94e163952169b2f39e5b59421e2c",
+      "generation": 0,
+      "parent_correct": 42,
+      "parent_sha256": "37634596f92ea7185310e97a64452f1a2326cfc7378f4a362ea3b0d736a97b4c",
+      "seed": 90910
+    },
+    {
+      "accepted": true,
+      "best_candidate_correct": 300,
+      "candidate_count": 3,
+      "chosen_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+      "generation": 1,
+      "parent_correct": 248,
+      "parent_sha256": "4ff9d375c21f5571c33c6406afa565877cca94e163952169b2f39e5b59421e2c",
+      "seed": 90911
+    },
+    {
+      "accepted": true,
+      "best_candidate_correct": 300,
+      "candidate_count": 3,
+      "chosen_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+      "generation": 2,
+      "parent_correct": 300,
+      "parent_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+      "seed": 90912
+    }
+  ],
+  "net_correct_gain": 258,
+  "schema": "tukuyo.v909.summary.v1",
+  "verified_wrong": 0
+}

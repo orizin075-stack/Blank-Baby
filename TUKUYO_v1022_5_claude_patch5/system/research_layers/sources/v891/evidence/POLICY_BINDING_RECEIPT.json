@@ -1,0 +1,14 @@
+{
+  "payload": {
+    "artifact_bindings": {
+      "tools/reproduce_v891.py": "0d6ade9279551d9d7b5397baaf15656c42e250d14bd8dfcd9992acf3d321b768",
+      "tukuyo_v891/dsl.py": "322373c4f185ab6113b8f266ffb1c6bd4e7fe958eb639865bb3b4d74383b8ecd",
+      "tukuyo_v891/experiment.py": "23f040ef37881ceb9c6ebac9b63fe836ca2c9443d5897ccc85b88cdfeb3ea6b3"
+    },
+    "rule": "SIGNED_PAYLOAD_MUST_BIND_EXECUTED_IMPLEMENTATION",
+    "schema": "tukuyo.policy_binding.v2",
+    "signer": "release",
+    "version": "v891"
+  },
+  "signature_b64": "WR3FPaeYUCwUFTz8S34JHUHWRv+LwQ3KiEJvDpsZcsEt6397bKMCIkPWjG47Vyb1T3oKpRDbFbY0IfrhrKB9BA=="
+}

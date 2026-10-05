@@ -1,0 +1,1439 @@
+{
+  "teacher": "semantics",
+  "regeneration": {
+    "status": "regenerate",
+    "source": "visible_conversation_after_workspace_loss",
+    "exact_match_to_lost_files_claimed": false,
+    "student_after_regeneration_evaluated": false,
+    "note": "消失した教師教材を会話に残る内容から同じ意図で再生成した。旧ファイルとの完全一致は保証しない。復旧後の学生には全教材を再適用し、新しい応答で再評価する。"
+  },
+  "examples": [
+    {
+      "id": "semantics_001",
+      "question": "皿にクッキーが17個あった。5個食べ、4個を友達に渡し、その後6個もらった。いま手元に何個ある？",
+      "expected_answer": "14個",
+      "explanation": "食べた5個と渡した4個を引き、もらった6個を足す。17−5−4＋6＝14個。",
+      "domain": "quantity",
+      "difficulty": 1,
+      "event_labels": [
+        {
+          "surface": "5個食べ",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "4個を友達に渡し",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "6個もらった",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_002",
+      "question": "鉛筆が42本あった。12本配り、9本貸した。その貸した鉛筆のうち4本が返ってきて、さらに7本買った。いま手元にある鉛筆は何本？",
+      "expected_answer": "32本",
+      "explanation": "貸した9本も手元から離れ、戻った4本だけを加える。42−12−9＋4＋7＝32本。",
+      "domain": "quantity",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "12本配り",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "9本貸した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "4本が返ってきて",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "7本買った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_003",
+      "question": "印刷用紙が80枚あった。午前に23枚、午後に17枚使い、未使用の紙を9枚追加した。残りは何枚？",
+      "expected_answer": "49枚",
+      "explanation": "使用数を両方引き、追加を足す。80−23−17＋9＝49枚。",
+      "domain": "quantity",
+      "difficulty": 1,
+      "event_labels": [
+        {
+          "surface": "午前に23枚、午後に17枚使い",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "未使用の紙を9枚追加した",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_004",
+      "question": "財布に6,350円入っていた。1,280円の本と570円の飲み物を買い、あとで現金2,000円を受け取った。財布の現金はいくら？",
+      "expected_answer": "6500円",
+      "explanation": "二つの現金支出を引き、受け取った現金を足す。6350−1280−570＋2000＝6500円。",
+      "domain": "quantity",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "1,280円の本と570円の飲み物を買い",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "現金2,000円を受け取った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_005",
+      "question": "倉庫にボールが36個あった。11個を体育館へ出し、そのうち3個が倉庫に戻った。その後8個を別の学校へ送った。倉庫に残るのは何個？",
+      "expected_answer": "20個",
+      "explanation": "戻った3個は出した11個の一部。36−11＋3−8＝20個。",
+      "domain": "quantity",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "11個を体育館へ出し",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "3個が倉庫に戻った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "8個を別の学校へ送った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_006",
+      "question": "箱の中の積み木を7個取り出し、あとで2個戻した。最初に入っていた個数は記録されていない。いま箱の中に何個ある？",
+      "expected_answer": null,
+      "explanation": "変化は−5個だが初期個数が不明なので現在値は決まらない。",
+      "domain": "insufficient_information",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "7個取り出し",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "2個戻した",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_007",
+      "question": "水が1.8Lあった。350mL飲み、料理に450mL使った。残りの水は何mL？",
+      "expected_answer": "1000mL",
+      "explanation": "1.8L＝1800mL。1800−350−450＝1000mL。",
+      "domain": "unit_conversion",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "350mL飲み",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "料理に450mL使った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_008",
+      "question": "米を2.4kg持っていた。650g炊き、別の袋から180g追加した。残っている米は何g？",
+      "expected_answer": "1930g",
+      "explanation": "2.4kg＝2400g。2400−650＋180＝1930g。",
+      "domain": "unit_conversion",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "650g炊き",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "別の袋から180g追加した",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_009",
+      "question": "長さ3m20cmのリボンから、85cmと1m15cmの部分を切り取って渡した。手元に残るリボンの長さは何cm？",
+      "expected_answer": "120cm",
+      "explanation": "cmにそろえて320−85−115＝120cm。二つの部分は手元から出た。",
+      "domain": "unit_conversion",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "85cmと1m15cmの部分を切り取って渡した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_010",
+      "question": "練習できる時間は2時間15分だった。準備に35分、基礎練習に48分使った。ほかに時間を使っていないとすると、残りは何分？",
+      "expected_answer": "52分",
+      "explanation": "2時間15分＝135分。135−35−48＝52分。",
+      "domain": "unit_conversion",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "準備に35分、基礎練習に48分使った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_011",
+      "question": "1本につき1.25L入っているジュースが4本ある。合計750mL飲んだ。全てのボトルに残っているジュースを合わせると何mL？",
+      "expected_answer": "4250mL",
+      "explanation": "初期液量は1250mL×4＝5000mL。5000−750＝4250mL。本数と液量を混同しない。",
+      "domain": "unit_conversion",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "合計750mL飲んだ",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_012",
+      "question": "牛乳が2Lあった。同じ大きさのコップで3杯分を飲んだが、コップ1杯の容量は分からない。残りの牛乳は何mL？",
+      "expected_answer": null,
+      "explanation": "初期液量は2000mLだが、3杯をmLへ換算する容量が不明。",
+      "domain": "insufficient_information",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "同じ大きさのコップで3杯分を飲んだ",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_013",
+      "question": "1箱8個入りのまんじゅうが5箱と、ばらのまんじゅうが3個あった。合わせて11個食べた。残りのまんじゅうは全部で何個？",
+      "expected_answer": "32個",
+      "explanation": "初期値は5×8＋3＝43個。43−11＝32個。",
+      "domain": "packaging",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "合わせて11個食べた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_014",
+      "question": "1袋6個入りの飴が4袋あった。2袋の封を開けたが、飴は一つも取り出していない。飴は全部で何個ある？",
+      "expected_answer": "24個",
+      "explanation": "開封は飴の個数を変えない。4×6＝24個。",
+      "domain": "packaging",
+      "difficulty": 1,
+      "event_labels": [
+        {
+          "surface": "2袋の封を開けた",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "飴は一つも取り出していない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_015",
+      "question": "1パック5個入りのおにぎりが7パックあった。2パックをそのまま渡し、残りから3個食べた。手元のおにぎりは何個？",
+      "expected_answer": "22個",
+      "explanation": "渡した2パックは10個。7×5−2×5−3＝22個。",
+      "domain": "packaging",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "2パックをそのまま渡し",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "残りから3個食べた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_016",
+      "question": "1箱12個入りのチョコレートが3箱あった。1箱だけ開けて、その箱から5個食べた。未開封の箱は何箱残っている？",
+      "expected_answer": "2箱",
+      "explanation": "対象は未開封の箱数。3箱のうち1箱を開けたので2箱。内容物5個を箱数から引かない。",
+      "domain": "packaging",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "1箱だけ開けて",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "その箱から5個食べた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_017",
+      "question": "卵が10個ずつ入ったトレーが6枚あった。一つのトレーから4個使い、別のトレーの卵10個を全部使った。卵は何個残っている？",
+      "expected_answer": "46個",
+      "explanation": "初期60個から別々の4個と10個を引く。60−4−10＝46個。",
+      "domain": "packaging",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "一つのトレーから4個使い",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "別のトレーの卵10個を全部使った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_018",
+      "question": "中身が同数の箱が3箱と、ばらのせんべいが4枚ある。1箱に何枚入っているかは書かれていない。せんべいは全部で何枚？",
+      "expected_answer": null,
+      "explanation": "1箱の枚数をnとすると3n＋4枚。nが不明なので具体的な枚数は決まらない。",
+      "domain": "insufficient_information",
+      "difficulty": 2,
+      "event_labels": []
+    },
+    {
+      "id": "semantics_019",
+      "question": "りんごが9個あった。2個を洗って、全部を同じ皿に戻した。りんごは食べていない。いま何個ある？",
+      "expected_answer": "9個",
+      "explanation": "洗って戻すことは消費ではない。食べてもいないので9個のまま。",
+      "domain": "non_consumption",
+      "difficulty": 1,
+      "event_labels": [
+        {
+          "surface": "2個を洗って",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "全部を同じ皿に戻した",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "りんごは食べていない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_020",
+      "question": "飲料のボトルが18本あった。5本を冷蔵庫に入れ、3本のふたを開けた。そのうち1本の中身だけを全部飲み、ほかは飲んでいない。中身が残っているボトルは何本？",
+      "expected_answer": "17本",
+      "explanation": "冷蔵・開栓だけでは中身はなくならない。飲み切った1本だけを引いて18−1＝17本。",
+      "domain": "non_consumption",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "5本を冷蔵庫に入れ",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "3本のふたを開けた",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "そのうち1本の中身だけを全部飲み",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "ほかは飲んでいない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_021",
+      "question": "ビスケットが24枚ある。全部を数え直し、4枚の写真を撮り、6枚の向きを変えた。食べたり渡したりはしていない。手元には何枚ある？",
+      "expected_answer": "24枚",
+      "explanation": "数え直し・撮影・向きの変更は個数を変えない。消費や移転がないので24枚。",
+      "domain": "non_consumption",
+      "difficulty": 1,
+      "event_labels": [
+        {
+          "surface": "全部を数え直し",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "4枚の写真を撮り",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "6枚の向きを変えた",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "食べたり渡したりはしていない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_022",
+      "question": "自宅の棚に本が27冊あった。11冊を自宅の机に移し、その11冊のうち4冊を友達に貸した。自宅に残っている本は全部で何冊？",
+      "expected_answer": "23冊",
+      "explanation": "自宅内の移動は自宅全体の冊数を変えない。友達へ出た4冊だけを引いて27−4＝23冊。",
+      "domain": "non_consumption",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "11冊を自宅の机に移し",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "その11冊のうち4冊を友達に貸した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_023",
+      "question": "部屋に椅子が15脚ある。6脚を並べ替え、2脚の脚が壊れたが、椅子はどれも部屋から出していない。壊れた椅子も数えると、部屋の椅子は何脚？",
+      "expected_answer": "15脚",
+      "explanation": "対象は使用可能な椅子ではなく部屋にある全ての椅子。故障や並べ替えで消えていないので15脚。",
+      "domain": "non_consumption",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "6脚を並べ替え",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "2脚の脚が壊れた",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "椅子はどれも部屋から出していない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_024",
+      "question": "箱にチョコレートが20個あった。6個を友達に見せてから全て箱に戻し、そのあと何個かを友達に渡した。渡した個数は記録がない。箱に残るのは何個？",
+      "expected_answer": null,
+      "explanation": "見せて戻した段階では20個だが、その後の実際の出庫数量が不明なので残数は決まらない。",
+      "domain": "insufficient_information",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "6個を友達に見せて",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "全て箱に戻し",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "何個かを友達に渡した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_025",
+      "question": "飴が16個あった。「4個食べた」「3個渡した」という二つの話はどちらも事実ではない。実際には5個だけ食べた。残りは何個？",
+      "expected_answer": "11個",
+      "explanation": "否定された4個と3個は引かず、実際の5個だけを引く。16−5＝11個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "4個食べた",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "3個渡した",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "実際には5個だけ食べた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_026",
+      "question": "鉛筆が21本あった。6本捨てるつもりだったが、その予定は取りやめた。実際に捨てたのは2本だけ。残りは何本？",
+      "expected_answer": "19本",
+      "explanation": "取りやめた6本の廃棄は未実行。21−2＝19本。",
+      "domain": "negation",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "6本捨てるつもりだった",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        },
+        {
+          "surface": "その予定は取りやめた",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "実際に捨てたのは2本だけ",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_027",
+      "question": "端末に写真が12枚保存されていた。3枚を削除しようとしたが、確認画面でキャンセルした。あとで別の2枚の削除を完了した。保存されている写真は何枚？",
+      "expected_answer": "10枚",
+      "explanation": "キャンセルした3枚は残る。削除完了した2枚だけを引いて12−2＝10枚。",
+      "domain": "negation",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "3枚を削除しようとした",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        },
+        {
+          "surface": "確認画面でキャンセルした",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "別の2枚の削除を完了した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_028",
+      "question": "みかんが28個あった。9個は配らなかった。実際に配ったのは7個で、その後は増減していない。残りは何個？",
+      "expected_answer": "21個",
+      "explanation": "配らなかった9個は残数の一部。実際の配布7個だけを引いて28−7＝21個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "9個は配らなかった",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "実際に配ったのは7個",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "その後は増減していない",
+          "direction": 0,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_029",
+      "question": "財布に現金9,200円あった。1,300円を支払った。500円は返金されていない。500円分のクーポンは受け取ったが、現金ではない。財布の現金はいくら？",
+      "expected_answer": "7900円",
+      "explanation": "返金は未発生、クーポンは現金ではない。実際の現金支出だけを引いて9200−1300＝7900円。",
+      "domain": "negation",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "1,300円を支払った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "500円は返金されていない",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "500円分のクーポンは受け取った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_030",
+      "question": "りんごが10個あった。何個か食べたことは確かだが、3個食べたわけではない。ほかに個数の情報はない。残りは何個？",
+      "expected_answer": null,
+      "explanation": "食べた数量は3個でないとしか分からず複数の可能性がある。10−3とはできない。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "何個か食べたことは確か",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "3個食べたわけではない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_031",
+      "question": "最初に卵が30個あったと伝えられたが、その報告は訂正され、正しい最初の数は26個だった。その後8個使った。残りは何個？",
+      "expected_answer": "18個",
+      "explanation": "初期値を訂正後の26個へ置き換えて26−8＝18個。30個と26個を足さない。",
+      "domain": "quantity_revision",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "その報告は訂正され、正しい最初の数は26個だった",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "その後8個使った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_032",
+      "question": "パンが14個あった。6個買い足した。「4個渡した」という記録は誤りで、実際には1個だけ渡した。残りは何個？",
+      "expected_answer": "19個",
+      "explanation": "誤った4個の記録を1個で置き換える。14＋6−1＝19個。",
+      "domain": "quantity_revision",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "6個買い足した",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "4個渡した",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "実際には1個だけ渡した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_033",
+      "question": "カードが45枚あった。12枚売り、7枚買ったので計算上は40枚と記録した。しかし最後に実物を数え直すと39枚だった。いま実際に持っているカードは何枚？",
+      "expected_answer": "39枚",
+      "explanation": "途中の計算は40枚だが、現在の実物については最新の確認値39枚を答える。差の原因は不明。",
+      "domain": "quantity_revision",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "12枚売り",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "7枚買った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "最後に実物を数え直すと39枚だった",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_034",
+      "question": "列車に38人乗っていた。次の駅で12人乗り、9人降りたという報告があったが、降りた人数は11人に訂正された。その駅を出た時点で何人乗っている？",
+      "expected_answer": "39人",
+      "explanation": "降車数は訂正後の11人だけ。38＋12−11＝39人。9人を重ねて引かない。",
+      "domain": "quantity_revision",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "12人乗り",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "9人降りた",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "降りた人数は11人に訂正された",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_035",
+      "question": "棚にフォルダーが53冊あった。17冊を棚から出した。4冊戻したと言ったが、数え間違いで、正しくは6冊戻した。その後は動かしていない。棚には何冊ある？",
+      "expected_answer": "42冊",
+      "explanation": "戻した数は6冊に訂正されている。53−17＋6＝42冊。",
+      "domain": "quantity_revision",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "17冊を棚から出した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "4冊戻した",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "正しくは6冊戻した",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "その後は動かしていない",
+          "direction": 0,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_036",
+      "question": "部品の在庫は12個と書かれていたが、点検で8個に訂正された。その後、個数を記録せずに部品を追加した。現在の在庫は何個？",
+      "expected_answer": null,
+      "explanation": "点検時の8個は分かるがその後の追加数量が不明。訂正前の12個を追加分としない。",
+      "domain": "insufficient_information",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "点検で8個に訂正された",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "個数を記録せずに部品を追加した",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_037",
+      "question": "りんごが18個、梨が11個あった。梨を4個食べ、りんごを3個買った。りんごは何個ある？",
+      "expected_answer": "21個",
+      "explanation": "対象はりんご。梨の消費は引かず18＋3＝21個。",
+      "domain": "target_switch",
+      "difficulty": 1,
+      "event_labels": [
+        {
+          "surface": "梨を4個食べ",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory"
+        },
+        {
+          "surface": "りんごを3個買った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_038",
+      "question": "赤いビー玉が22個、青いビー玉が13個あった。赤を5個渡し、青を7個受け取った。赤いビー玉は何個残った？",
+      "expected_answer": "17個",
+      "explanation": "赤だけを追跡し22−5＝17個。青の受取りは足さない。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "赤を5個渡し",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "青を7個受け取った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_039",
+      "question": "貯金箱に4,500円、財布に1,800円あった。財布から貯金箱へ700円移し、その後、貯金箱から1,000円出して支払った。貯金箱には何円残っている？",
+      "expected_answer": "4200円",
+      "explanation": "貯金箱の視点では700円入って1000円出る。4500＋700−1000＝4200円。",
+      "domain": "target_switch",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "財布から貯金箱へ700円移し",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "貯金箱から1,000円出して支払った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_040",
+      "question": "みかんが15個、りんごが8個あった。みかんを6個渡し、りんごを2個食べた。二種類の果物を合わせると何個残っている？",
+      "expected_answer": "15個",
+      "explanation": "今回は両種類を合計し15＋8−6−2＝15個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "みかんを6個渡し",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "りんごを2個食べた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_041",
+      "question": "A4の紙が60枚、A3の紙が25枚あった。A3を10枚使い、A4を12枚補充し、A4を7枚捨てた。A4の紙は何枚ある？",
+      "expected_answer": "65枚",
+      "explanation": "A4の増減だけを反映し60＋12−7＝65枚。A3の使用は引かない。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "A3を10枚使い",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory"
+        },
+        {
+          "surface": "A4を12枚補充し",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "A4を7枚捨てた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_042",
+      "question": "りんごとみかんを合わせて24個持っている。みかんを5個渡した。最初の種類別の個数は分からない。いま持っているりんごは何個？",
+      "expected_answer": null,
+      "explanation": "みかんの配布はりんごを減らさないが、りんごの初期内訳が不明なので現在値も不明。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "みかんを5個渡した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_043",
+      "question": "私は飴を18個、あなたは9個持っていた。私はあなたに4個渡し、あなたはその後2個食べた。いま私が持っている飴は何個？",
+      "expected_answer": "14個",
+      "explanation": "私は渡した4個だけを引いて18−4＝14個。あなたの消費2個は別の在庫。",
+      "domain": "perspective",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "私はあなたに4個渡し",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "あなたはその後2個食べた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_044",
+      "question": "太郎はカードを25枚、花子は14枚持っていた。太郎から花子へ6枚渡り、そのうち3枚を花子が太郎に返した。花子は何枚持っている？",
+      "expected_answer": "17枚",
+      "explanation": "花子には6枚入り3枚出る。14＋6−3＝17枚。太郎の25枚は花子の初期値ではない。",
+      "domain": "perspective",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "太郎から花子へ6枚渡り",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "そのうち3枚を花子が太郎に返した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_045",
+      "question": "私の財布には3,000円、あなたの財布には5,000円あった。あなたが私に800円渡し、私があなたに200円返した。私の財布には何円ある？",
+      "expected_answer": "3600円",
+      "explanation": "私には800円入り200円出る。3000＋800−200＝3600円。",
+      "domain": "perspective",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "あなたが私に800円渡し",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "私があなたに200円返した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_046",
+      "question": "姉は本を11冊、弟は16冊持っていた。姉は3冊買い、弟は姉に5冊貸した。その後、姉は借りた本のうち2冊を弟に返した。いま弟の手元には何冊ある？",
+      "expected_answer": "13冊",
+      "explanation": "姉の購入は別の在庫。弟は5冊出して2冊受け取る。16−5＋2＝13冊。",
+      "domain": "perspective",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "姉は3冊買い",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory"
+        },
+        {
+          "surface": "弟は姉に5冊貸した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "姉は借りた本のうち2冊を弟に返した",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_047",
+      "question": "私は消しゴムを13個、友人は7個持っていた。私は友人から2個もらい、そのもらったうちの1個を別の人に渡した。いま私の手元には何個ある？",
+      "expected_answer": "14個",
+      "explanation": "私は13＋2−1＝14個。友人の初期7個を足さない。",
+      "domain": "perspective",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "私は友人から2個もらい",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "そのもらったうちの1個を別の人に渡した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_048",
+      "question": "私と友人で合わせてビー玉を20個持っていた。それぞれの個数は分からない。友人が私に3個渡した。いま私は何個持っている？",
+      "expected_answer": null,
+      "explanation": "合計は変わらず20個だが、私の初期個数が不明なので私個人の現在値は決まらない。",
+      "domain": "insufficient_information",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "友人が私に3個渡した",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_049",
+      "question": "朝、パンが20個あった。昼に6個食べた。夜には4個食べる予定だが、いまは夕方で、昼以降はまだ食べていない。現時点で何個残っている？",
+      "expected_answer": "14個",
+      "explanation": "昼の6個だけが既遂。夜の予定は未実行。20−6＝14個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "昼に6個食べた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "夜には4個食べる予定",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        },
+        {
+          "surface": "昼以降はまだ食べていない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_050",
+      "question": "現在、現金を6,400円持っている。明日1,500円の本を買い、翌日に900円受け取る予定だ。現時点の現金はいくら？",
+      "expected_answer": "6400円",
+      "explanation": "6400円は現在値。将来の予定を現在へ反映しない。",
+      "domain": "completed_and_planned",
+      "difficulty": 1,
+      "event_labels": [
+        {
+          "surface": "明日1,500円の本を買い",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        },
+        {
+          "surface": "翌日に900円受け取る予定",
+          "direction": 1,
+          "occurred": false,
+          "scope": "hypothetical"
+        }
+      ]
+    },
+    {
+      "id": "semantics_051",
+      "question": "引換券が41枚あった。11枚配る予定だったが、今日実際に配ったのは9枚だった。明日5枚受け取る予定で、まだ受け取っていない。いま手元には何枚ある？",
+      "expected_answer": "32枚",
+      "explanation": "予定11枚でなく実績9枚を引く。明日の5枚もまだ足さない。41−9＝32枚。",
+      "domain": "completed_and_planned",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "11枚配る予定だった",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        },
+        {
+          "surface": "今日実際に配ったのは9枚だった",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "明日5枚受け取る予定",
+          "direction": 1,
+          "occurred": false,
+          "scope": "hypothetical"
+        },
+        {
+          "surface": "まだ受け取っていない",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_052",
+      "question": "朝、牛乳が2Lあった。正午に300mL使った。夕食で500mL使うつもりだが、現在は14時で、まだ夕食の調理はしていない。現在の残りは何mL？",
+      "expected_answer": "1700mL",
+      "explanation": "初期2000mLから正午の300mLだけを引く。夕食の予定は未実行。2000−300＝1700mL。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "正午に300mL使った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "夕食で500mL使うつもり",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        },
+        {
+          "surface": "まだ夕食の調理はしていない",
+          "direction": 0,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_053",
+      "question": "水のボトルが12本ある。これから3本渡し、さらに別の2本を飲み切る。両方を実行し、ほかに増減がなければ、中身があるボトルは何本残る？",
+      "expected_answer": "7本",
+      "explanation": "問いは両予定を実行した後の条件付きの値。別の本なので12−3−2＝7本。現在値の問いとは異なる。",
+      "domain": "completed_and_planned",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "これから3本渡し",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        },
+        {
+          "surface": "さらに別の2本を飲み切る",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        }
+      ]
+    },
+    {
+      "id": "semantics_054",
+      "question": "明日の会に14人参加する予定だった。そのうち何人かが欠席すると連絡したが、欠席人数はまだ集計されていない。追加の参加者はいないとして、参加する予定の人数は何人？",
+      "expected_answer": null,
+      "explanation": "14人から欠席予定者を引く必要があるがその人数が不明。最終の参加予定人数は決まらない。",
+      "domain": "insufficient_information",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "何人かが欠席すると連絡した",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        }
+      ]
+    },
+    {
+      "id": "semantics_055",
+      "question": "クッキーが9個あった。「1個も食べなかった」わけではなく、実際には2個食べた。残りは何個？",
+      "expected_answer": "7個",
+      "explanation": "否定がさらに否定され、実績2個が明示されている。9−2＝7個。二重に引かない。",
+      "domain": "double_negation",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "1個も食べなかった",
+          "direction": -1,
+          "occurred": false,
+          "scope": "uncertain"
+        },
+        {
+          "surface": "実際には2個食べた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_056",
+      "question": "鉛筆は最初10本あった。「1本も残らなかった」という話は誤りで、実際には3本だけ残った。いま残っている鉛筆は何本？",
+      "expected_answer": "3本",
+      "explanation": "残数ゼロという話は誤りで、現在の残数3本が明示されている。10−3を計算する問題ではない。",
+      "domain": "double_negation",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "1本も残らなかった",
+          "direction": 0,
+          "occurred": false,
+          "scope": "uncertain"
+        },
+        {
+          "surface": "実際には3本だけ残った",
+          "direction": 0,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_057",
+      "question": "カードが18枚あった。捨てなかったカードは4枚だけで、残りの14枚は捨てた。ほかにカードの増減はない。手元に残っているのは何枚？",
+      "expected_answer": "4枚",
+      "explanation": "捨てなかった4枚が残数。18−14＝4枚。否定された動作の4枚を引かない。",
+      "domain": "negation",
+      "difficulty": 2,
+      "event_labels": [
+        {
+          "surface": "捨てなかったカードは4枚だけ",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "残りの14枚は捨てた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        },
+        {
+          "surface": "ほかにカードの増減はない",
+          "direction": 0,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_058",
+      "question": "会の対象者は12人だった。「12人全員が欠席した」わけではない、とだけ分かっている。遅刻も途中参加もなく、各人は出席か欠席のどちらかだった。出席したのは何人？",
+      "expected_answer": null,
+      "explanation": "全員欠席でないので少なくとも1人は出席したが、1〜12人の可能性があり正確な人数は不明。",
+      "domain": "double_negation",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "12人全員が欠席した",
+          "direction": -1,
+          "occurred": false,
+          "scope": "uncertain"
+        }
+      ]
+    },
+    {
+      "id": "semantics_059",
+      "question": "ジュースが8本あった。「誰も1本も飲まなかった」わけではない。実際に飲み切られたのは3本で、ほかのボトルには中身が残っている。中身があるボトルは何本？",
+      "expected_answer": "5本",
+      "explanation": "二重否定だけで量を決めず、明示された実績3本を引く。8−3＝5本。",
+      "domain": "double_negation",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "誰も1本も飲まなかった",
+          "direction": -1,
+          "occurred": false,
+          "scope": "uncertain"
+        },
+        {
+          "surface": "実際に飲み切られたのは3本",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ]
+    },
+    {
+      "id": "semantics_060",
+      "question": "りんごが11個あった。「食べていない」とは言えないが、食べた個数は確認されていない。それ以外にりんごの増減はない。残りは何個？",
+      "expected_answer": null,
+      "explanation": "食べたことは示唆されるが量がない。1個と決めたり、11個のままとしたりはできない。",
+      "domain": "double_negation",
+      "difficulty": 3,
+      "event_labels": [
+        {
+          "surface": "食べていない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "uncertain"
+        },
+        {
+          "surface": "食べた個数は確認されていない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "uncertain"
+        },
+        {
+          "surface": "それ以外にりんごの増減はない",
+          "direction": 0,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ]
+    }
+  ]
+}

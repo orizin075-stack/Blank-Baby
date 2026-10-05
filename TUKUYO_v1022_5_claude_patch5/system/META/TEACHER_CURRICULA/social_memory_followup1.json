@@ -1,0 +1,693 @@
+{
+  "teacher": "social_memory",
+  "regeneration": {
+    "status": "regenerate",
+    "basis": "conversation_transcript",
+    "exact_match_verified": false,
+    "note": "環境消失後に会話の記録から再生成。意味・ID・人物factを復元したが旧バイト列との完全一致は未検証。再適用後に再評価する。"
+  },
+  "examples": [
+    {
+      "id": "smf1_001",
+      "question": "彩の暮らしている街はどこですか。",
+      "expected_answer": "彩は福岡に住んでいます。",
+      "expected_value": "福岡",
+      "explanation": "暮らしている街は居住地の言い換え。健と彩を区別する。",
+      "domain": "semantic_memory",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "彩",
+          "relation": "現在の居住地",
+          "value": "福岡"
+        },
+        {
+          "entity": "健",
+          "relation": "現在の居住地",
+          "value": "仙台"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "暮らしている街",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf1_002",
+      "question": "健の暮らしている街はどこですか。",
+      "expected_answer": "健は仙台に住んでいます。",
+      "expected_value": "仙台",
+      "explanation": "暮らしている街は居住地の言い換え。健と彩を区別する。",
+      "domain": "semantic_memory",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "彩",
+          "relation": "現在の居住地",
+          "value": "福岡"
+        },
+        {
+          "entity": "健",
+          "relation": "現在の居住地",
+          "value": "仙台"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "暮らしている街",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf1_003",
+      "question": "青木優の生活拠点はどこですか。",
+      "expected_answer": "青木優の生活拠点は京都です。",
+      "expected_value": "京都",
+      "explanation": "同姓の人物をフルネームで区別する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "青木健",
+          "relation": "現在の居住地",
+          "value": "東京"
+        },
+        {
+          "entity": "青木優",
+          "relation": "現在の居住地",
+          "value": "京都"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "生活拠点",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf1_004",
+      "question": "青木健の生活拠点はどこですか。",
+      "expected_answer": "青木健の生活拠点は東京です。",
+      "expected_value": "東京",
+      "explanation": "青木健と健は別entity。同じ部分文字列を含むだけでは人物aliasにならない。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "青木健",
+          "relation": "現在の居住地",
+          "value": "東京"
+        },
+        {
+          "entity": "青木優",
+          "relation": "現在の居住地",
+          "value": "京都"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "生活拠点",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf1_005",
+      "question": "まほちゃんの普段の移動手段は何ですか。",
+      "expected_answer": "まほちゃん、つまり高橋真帆は普段、自転車で移動します。",
+      "expected_value": "自転車",
+      "explanation": "本人が明示した呼称を高橋真帆と対応付ける。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "高橋真帆",
+          "relation": "よく使う交通手段",
+          "value": "自転車"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "まほちゃん",
+          "canonical": "高橋真帆"
+        },
+        {
+          "surface": "普段の移動手段",
+          "canonical": "よく使う交通手段"
+        }
+      ]
+    },
+    {
+      "id": "smf1_006",
+      "question": "美紀が好んで飲むものは何ですか。",
+      "expected_answer": "美紀が好んで飲むのは麦茶です。",
+      "expected_value": "麦茶",
+      "explanation": "好んで飲むものは好きな飲み物を尋ねる。対象は美紀。",
+      "domain": "semantic_memory",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "美紀",
+          "relation": "好きな飲み物",
+          "value": "麦茶"
+        },
+        {
+          "entity": "蓮",
+          "relation": "好きな飲み物",
+          "value": "コーヒー"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "好んで飲むもの",
+          "canonical": "好きな飲み物"
+        }
+      ]
+    },
+    {
+      "id": "smf1_007",
+      "question": "蓮が好んで飲むものは何ですか。",
+      "expected_answer": "蓮が好んで飲むのはコーヒーです。",
+      "expected_value": "コーヒー",
+      "explanation": "好んで飲むものは好きな飲み物を尋ねる。対象は美紀。",
+      "domain": "semantic_memory",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "美紀",
+          "relation": "好きな飲み物",
+          "value": "麦茶"
+        },
+        {
+          "entity": "蓮",
+          "relation": "好きな飲み物",
+          "value": "コーヒー"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "好んで飲むもの",
+          "canonical": "好きな飲み物"
+        }
+      ]
+    },
+    {
+      "id": "smf1_008",
+      "question": "梓のお気に入りのお茶は何ですか。",
+      "expected_answer": "梓の好きなお茶はほうじ茶です。",
+      "expected_value": "ほうじ茶",
+      "explanation": "人物への帰属の訂正を採用する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "梓",
+          "relation": "好きなお茶",
+          "value": "ほうじ茶"
+        },
+        {
+          "entity": "栞",
+          "relation": "好きなお茶",
+          "value": "ジャスミン茶"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "お気に入りのお茶",
+          "canonical": "好きなお茶"
+        }
+      ]
+    },
+    {
+      "id": "smf1_009",
+      "question": "ムギを飼っている人は誰ですか。",
+      "expected_answer": "ムギを飼っている人は沙織です。",
+      "expected_value": "沙織",
+      "explanation": "沙織がムギを飼うという記録を根拠に逆向きfactを明示した。alias自体がentityとvalueを交換するわけではない。",
+      "domain": "inverse_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "沙織",
+          "relation": "ペットの名前",
+          "value": "ムギ"
+        },
+        {
+          "entity": "悠真",
+          "relation": "ペットの名前",
+          "value": "コタ"
+        },
+        {
+          "entity": "ムギ",
+          "relation": "飼い主",
+          "value": "沙織"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "を飼っている人",
+          "canonical": "飼い主"
+        }
+      ]
+    },
+    {
+      "id": "smf1_010",
+      "question": "ピアノを習っている人は誰ですか。",
+      "expected_answer": "この記録でピアノを習っているのは直人です。",
+      "expected_value": "直人",
+      "explanation": "記録内だけの学習者を逆向きfactにした。全てのピアノ学習者が直人とは主張しない。",
+      "domain": "inverse_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "直人",
+          "relation": "習っている楽器",
+          "value": "ピアノ"
+        },
+        {
+          "entity": "遥",
+          "relation": "習っている楽器",
+          "value": "バイオリン"
+        },
+        {
+          "entity": "ピアノ",
+          "relation": "この記録での学習者",
+          "value": "直人"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "を習っている人",
+          "canonical": "この記録での学習者"
+        }
+      ]
+    },
+    {
+      "id": "smf1_011",
+      "question": "翻訳者として働く人は誰ですか。",
+      "expected_answer": "この記録で翻訳者として働く人は大地です。",
+      "expected_value": "大地",
+      "explanation": "大地の職業から、記録に限定した逆向きfactを明示した。",
+      "domain": "inverse_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "玲奈",
+          "relation": "職業",
+          "value": "デザイナー"
+        },
+        {
+          "entity": "大地",
+          "relation": "職業",
+          "value": "翻訳者"
+        },
+        {
+          "entity": "翻訳者",
+          "relation": "この記録での就業者",
+          "value": "大地"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "として働く人",
+          "canonical": "この記録での就業者"
+        }
+      ]
+    },
+    {
+      "id": "smf1_012",
+      "question": "海洋環境の発表を受け持つ人は誰ですか。",
+      "expected_answer": "海洋環境の発表を受け持つ人は麻衣です。",
+      "expected_value": "麻衣",
+      "explanation": "担当テーマの記録を根拠に逆向きfactを明示した。",
+      "domain": "inverse_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "麻衣",
+          "relation": "発表の担当テーマ",
+          "value": "海洋環境"
+        },
+        {
+          "entity": "慎",
+          "relation": "発表の担当テーマ",
+          "value": "森林保全"
+        },
+        {
+          "entity": "海洋環境",
+          "relation": "この記録での発表担当者",
+          "value": "麻衣"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "の発表を受け持つ人",
+          "canonical": "この記録での発表担当者"
+        }
+      ]
+    },
+    {
+      "id": "smf1_013",
+      "question": "真司の今の住まいがある都市はどこですか。",
+      "expected_answer": "真司の今の住まいがある都市は札幌です。",
+      "expected_value": "札幌",
+      "explanation": "人物と現在という条件を維持する。",
+      "domain": "temporal_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "真司",
+          "relation": "以前の居住地",
+          "value": "大阪"
+        },
+        {
+          "entity": "真司",
+          "relation": "現在の居住地",
+          "value": "札幌"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "今の住まいがある都市",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf1_014",
+      "question": "真司が前に暮らしていた街はどこですか。",
+      "expected_answer": "真司が以前暮らしていた街は大阪です。",
+      "expected_value": "大阪",
+      "explanation": "人物と現在という条件を維持する。",
+      "domain": "temporal_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "真司",
+          "relation": "以前の居住地",
+          "value": "大阪"
+        },
+        {
+          "entity": "真司",
+          "relation": "現在の居住地",
+          "value": "札幌"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "前に暮らしていた街",
+          "canonical": "以前の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf1_015",
+      "question": "奈々が来る最新の予定日はいつですか。",
+      "expected_answer": "奈々が来る最新の予定日は日曜日です。",
+      "expected_value": "日曜日",
+      "explanation": "本人の訂正後の値を現在の予定に使う。晶の予定は別。",
+      "domain": "temporal_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "奈々",
+          "relation": "変更前の来訪予定日",
+          "value": "土曜日"
+        },
+        {
+          "entity": "奈々",
+          "relation": "現在の来訪予定日",
+          "value": "日曜日"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "来る最新の予定日",
+          "canonical": "現在の来訪予定日"
+        }
+      ]
+    },
+    {
+      "id": "smf1_016",
+      "question": "奈々が最初に来ると言った曜日はいつですか。",
+      "expected_answer": "奈々が最初に来ると言った曜日は土曜日です。",
+      "expected_value": "土曜日",
+      "explanation": "本人の訂正後の値を現在の予定に使う。晶の予定は別。",
+      "domain": "temporal_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "奈々",
+          "relation": "変更前の来訪予定日",
+          "value": "土曜日"
+        },
+        {
+          "entity": "奈々",
+          "relation": "現在の来訪予定日",
+          "value": "日曜日"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "最初に来ると言った曜日",
+          "canonical": "変更前の来訪予定日"
+        }
+      ]
+    },
+    {
+      "id": "smf1_017",
+      "question": "優の今日の本人の気持ちは何ですか。",
+      "expected_answer": "優本人は今日は安心していると述べています。",
+      "expected_value": "安心",
+      "explanation": "人物と時点を同時に保持する。優の昨日や妹の現在を移さない。",
+      "domain": "emotion_subject_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "優",
+          "relation": "昨日の感情",
+          "value": "不安"
+        },
+        {
+          "entity": "優",
+          "relation": "今日の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "優の妹",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "今日の本人の気持ち",
+          "canonical": "今日の感情"
+        }
+      ],
+      "emotion": {
+        "valence": 0.6,
+        "arousal": 0.2,
+        "subject": "優"
+      }
+    },
+    {
+      "id": "smf1_018",
+      "question": "優の妹本人が今表明している気持ちは何ですか。",
+      "expected_answer": "優の妹は今、不安だと表明しています。",
+      "expected_value": "不安",
+      "explanation": "人物と時点を同時に保持する。優の昨日や妹の現在を移さない。",
+      "domain": "emotion_subject_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "優",
+          "relation": "今日の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "優の妹",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "優の妹本人",
+          "canonical": "優の妹"
+        },
+        {
+          "surface": "今表明している気持ち",
+          "canonical": "現在の感情"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "優の妹"
+      }
+    },
+    {
+      "id": "smf1_019",
+      "question": "喜び否定の会話の話者の嬉しさの有無はどう述べられていますか。",
+      "expected_answer": "その話者は今、嬉しくないと述べています。",
+      "expected_value": "ない",
+      "explanation": "喜びの否定は抽出できる。悲しみの肯定には変換しない。匿名者を会話別に識別する。",
+      "domain": "negation_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "話者（喜び否定の会話）",
+          "relation": "現在の喜び",
+          "value": "ない"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "喜び否定の会話の話者",
+          "canonical": "話者（喜び否定の会話）"
+        },
+        {
+          "surface": "嬉しさの有無",
+          "canonical": "現在の喜び"
+        }
+      ]
+    },
+    {
+      "id": "smf1_020",
+      "question": "喜び否定の会話の話者の現在の悲しさは分かりますか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "喜びの否定だけでは悲しみを確定できない。本人の気持ちを確認する。",
+      "domain": "ambiguity",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "話者（喜び否定の会話）",
+          "relation": "現在の喜び",
+          "value": "ない"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "喜び否定の会話の話者",
+          "canonical": "話者（喜び否定の会話）"
+        },
+        {
+          "surface": "現在の悲しさ",
+          "canonical": "現在の悲しみ"
+        }
+      ]
+    },
+    {
+      "id": "smf1_021",
+      "question": "青木さんの生活拠点はどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "姓だけでは二人を識別できない。どちらの人物か確認する。",
+      "domain": "ambiguity",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "青木健",
+          "relation": "現在の居住地",
+          "value": "東京"
+        },
+        {
+          "entity": "青木優",
+          "relation": "現在の居住地",
+          "value": "京都"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "生活拠点",
+          "canonical": "現在の居住地"
+        }
+      ]
+    },
+    {
+      "id": "smf1_022",
+      "question": "寂しさの会話の話者の今日の気分は何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "昨日から今日の継続を推定しない。今日の気持ちを確認する。",
+      "domain": "ambiguity",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "話者（昨日の寂しさの会話）",
+          "relation": "昨日の感情",
+          "value": "寂しさ"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "寂しさの会話の話者",
+          "canonical": "話者（昨日の寂しさの会話）"
+        },
+        {
+          "surface": "今日の気分",
+          "canonical": "今日の感情"
+        }
+      ]
+    },
+    {
+      "id": "smf1_023",
+      "question": "心配の会話の父の現在の気持ちは何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "話者の心配から父の怒りは確定できない。父本人の気持ちを確認する。",
+      "domain": "ambiguity",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "話者（父への心配の会話）",
+          "relation": "現在の感情",
+          "value": "心配"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "心配の会話の父",
+          "canonical": "父（父への心配の会話）"
+        },
+        {
+          "surface": "現在の気持ち",
+          "canonical": "現在の感情"
+        }
+      ]
+    },
+    {
+      "id": "smf1_024",
+      "question": "遥の次の週の月曜日の住まいはどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "予定の実行は未確認。翌週月曜日の実際の居住地を確認する。",
+      "domain": "ambiguity",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "遥",
+          "relation": "最初の月曜日の居住地",
+          "value": "大阪"
+        },
+        {
+          "entity": "遥",
+          "relation": "金曜日に述べた引っ越し先の予定",
+          "value": "東京"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "次の週の月曜日の住まい",
+          "canonical": "翌週の月曜日の居住地"
+        }
+      ]
+    }
+  ]
+}

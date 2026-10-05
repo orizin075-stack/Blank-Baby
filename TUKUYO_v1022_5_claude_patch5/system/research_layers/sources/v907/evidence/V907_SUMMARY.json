@@ -1,0 +1,21 @@
+{
+  "candidate": {
+    "accepted": true,
+    "correct": 180,
+    "rows": 180,
+    "wrong": 0
+  },
+  "hidden_rows": 180,
+  "malicious_control": {
+    "accepted": false,
+    "bad": [
+      "open("
+    ],
+    "correct": 0,
+    "reason": "FORBIDDEN_SOURCE",
+    "wrong": 0
+  },
+  "process_contract": "candidate source validated; hidden rows consumed only by evaluator command",
+  "schema": "tukuyo.v907.summary.v1",
+  "verified_wrong": 0
+}

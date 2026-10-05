@@ -1,0 +1,41 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "external_time_proof": false,
+    "fault_points_are_bounded_injections_not_exhaustive_all_instruction_positions": true,
+    "hardware_powerloss_durability_proven": false
+  },
+  "fault_injection": {
+    "atomic_target_mid_temp": "PASS",
+    "checkpoint_after_checkpoint_before_latest": "PASS",
+    "realtime_after_event_before_head_state": "PASS",
+    "restore_mid_commit_resume": "PASS",
+    "total": "4/4 PASS"
+  },
+  "knowledge_search_synthetic_10000": {
+    "candidate_count": 1,
+    "candidate_strategy": "SELECTIVE_UNION",
+    "max_ms": 8.058038,
+    "median_ms": 6.502439,
+    "min_ms": 6.225822,
+    "top_correct": true
+  },
+  "parent": "v1014.1",
+  "schema": "tukuyo.v1014_2.fresh_audit/1",
+  "selected_regression": {
+    "total": "43/43 PASS",
+    "v1000_v1003": "4/4",
+    "v1004_v1008": "4/4",
+    "v1009": "3/3",
+    "v1010": "5/5",
+    "v1011": "2/2",
+    "v1012": "3/3",
+    "v1012_1": "7/7",
+    "v1013": "3/3",
+    "v1014": "3/3",
+    "v1014_1": "5/5",
+    "v1014_2": "4/4"
+  },
+  "version": "v1014.2"
+}

@@ -1,0 +1,69 @@
+{
+  "constant": {
+    "correct": 1081,
+    "mutations": [
+      "decoy_swap",
+      "decoy_raise_threshold",
+      "decoy_overaudit"
+    ],
+    "sha256": "872999a9e550051e1310858f393ccc77c147a695aa06dd00b784150300a580e6",
+    "wrong": 1319
+  },
+  "evidence": {
+    "correct": 2331,
+    "mutations": [
+      "add_audit",
+      "lower_threshold",
+      "repr_priority"
+    ],
+    "sha256": "c6ce537a009ebaa9a49bfc286bcfd81b7f80884d08810a2ab7238524be1d059b",
+    "wrong": 69
+  },
+  "random30": {
+    "max": 2337,
+    "median": 1354,
+    "min": 276,
+    "scores": [
+      1534,
+      1234,
+      1534,
+      1534,
+      1226,
+      1234,
+      1654,
+      297,
+      2337,
+      1654,
+      2337,
+      1354,
+      1534,
+      1205,
+      1654,
+      276,
+      1155,
+      746,
+      1368,
+      1121,
+      1354,
+      1423,
+      1205,
+      1573,
+      1368,
+      297,
+      2337,
+      1234,
+      276,
+      1234
+    ]
+  },
+  "reverse": {
+    "correct": 295,
+    "mutations": [
+      "decoy_swap",
+      "repr_priority",
+      "decoy_raise_threshold"
+    ],
+    "sha256": "eff9339574864d8df06ce6a4103ad8deb4bf92e5b6a17ae0e6b891e6e2c24b73",
+    "wrong": 2105
+  }
+}

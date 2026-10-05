@@ -1,0 +1,96 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "30day_restart_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "canonical_H3_rerun": false,
+    "consciousness_established": false,
+    "external_H4": "PENDING",
+    "general_l5": false,
+    "general_l6": false,
+    "literal_life_established": false,
+    "restore_commit_mid_crash_tested": false,
+    "third_party_reproduction": "PENDING",
+    "write_in_progress_crash_atomicity_tested": false
+  },
+  "parent": "v1014",
+  "repairs": {
+    "knowledge_search_scaling": {
+      "benchmark_boundary": "prebuilt equivalent sqlite index, same synthetic text shape; not a general corpus benchmark and not an ingestion benchmark",
+      "status": "IMPROVED_SYNTHETIC",
+      "strategy": "selective rare-token candidate union; bounded common-token candidate cap; batch doc/posting fetch",
+      "synthetic_results": [
+        {
+          "candidate_count": 1,
+          "median_ms": 0.69,
+          "records": 100,
+          "top_correct": true
+        },
+        {
+          "candidate_count": 1,
+          "median_ms": 1.252,
+          "records": 1000,
+          "top_correct": true
+        },
+        {
+          "candidate_count": 1,
+          "median_ms": 6.746,
+          "records": 10000,
+          "top_correct": true
+        }
+      ]
+    },
+    "recovery_signer_continuity": {
+      "first_checkpoint_restore_recheckpoint_old_pin": "PASS",
+      "legacy_v1014_checkpoint_without_recovery_pub_migration": "PASS",
+      "mechanism": "key established before snapshot; missing public half re-derived from private half; no silent one-sided rotation",
+      "status": "PASS"
+    },
+    "stdlib_selftest_tmp_path": {
+      "pytest_required_for_tmp_path": false,
+      "status": "PASS",
+      "v1000_v1003": "4/4"
+    },
+    "verified_semantics": {
+      "guards": [
+        "query_role",
+        "entity_target",
+        "exactness",
+        "unit_dimension",
+        "event_consumption"
+      ],
+      "independent_from_answer_core": true,
+      "original_10_case_diagnostic": "PASS_EXPECTED_HANDLING",
+      "status": "PASS_BOUNDED_DIAGNOSTIC"
+    },
+    "whole_state_after_verified_query": {
+      "status": "PASS",
+      "verified_query_then_realtime_start": "PASS",
+      "verified_query_then_whole_audit": "PASS"
+    }
+  },
+  "same_session_cli_comparison": {
+    "boundary": "absolute latency differs from the user fresh benchmark environment; comparison only within this same current session",
+    "v1014_1_verified_query_median_ms": 804.61,
+    "v1014_1_whole_after_verified": "PASS",
+    "v1014_verified_query_median_ms": 798.1,
+    "v1014_whole_after_verified": "FAIL COMPONENT_DRIFT:verified_reasoning_v1005"
+  },
+  "schema": "tukuyo.v1014_1.fresh_internal_audit/1",
+  "selected_regression": {
+    "full_historical_suite": "NOT_RERUN",
+    "total": "39/39 PASS",
+    "v1000_v1003": "4/4 PASS",
+    "v1004_v1008": "4/4 PASS",
+    "v1009": "3/3 PASS",
+    "v1010": "5/5 PASS",
+    "v1011": "2/2 PASS",
+    "v1012": "3/3 PASS",
+    "v1012_1": "7/7 PASS",
+    "v1013": "3/3 PASS",
+    "v1014": "3/3 PASS",
+    "v1014_1_new": "5/5 PASS"
+  },
+  "version": "v1014.1"
+}

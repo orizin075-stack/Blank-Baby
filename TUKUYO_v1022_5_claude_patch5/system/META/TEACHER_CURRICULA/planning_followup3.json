@@ -1,0 +1,4411 @@
+{
+  "teacher": "planning",
+  "regenerate": false,
+  "provenance": "現環境のcurriculum planning実応答に基づく新規教材。未出題。",
+  "grading_contract": {
+    "input_fields": "学生へ出題するのはquestionとformal_taskのみ。expected_*、grading_query、semantic_target、optimal_*などは教師の採点情報。",
+    "boolean": "expected_valueは問いの真偽。はい/いいえ、または同じ命題の肯定/否定を述べる結論文を意味で受理。proof.conclusionを使う場合も、実answerが同じ結論を述べることを確認する。",
+    "unknown": "expected_value=null。情報不足と入力未認識による保留を別に集計。前提未認識のnull一致を推論成功に加算しない。",
+    "minimum_cost": "expected_valueは整数。数値として一致すれば文言の差を受理。",
+    "action_sequence": "expected_valueは教師の最適行動列の1例。別の列でも実際のanswerから行動id列を読み取り、全preを満たしgoalに到達しoptimal_costに一致すれば受理。内部proof.routeだけ正しくanswerが費用の場合は出力対象不一致。"
+  },
+  "examples": [
+    {
+      "id": "planning_followup3_001",
+      "question": "すべてのAはDです。すべてのDはGです。pはAです。pはGですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "順方向にA→D→Gと規則をつなぐ。",
+      "domain": "classification",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "membership",
+        "subject": "p",
+        "predicate": "G"
+      },
+      "semantic_target": "pはGです。",
+      "accepted_answers": [
+        "はい",
+        "pはGです。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_002",
+      "question": "すべてのBはEです。すべてのEはHです。すべてのHはKです。qはBです。qはKですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "順方向にB→E→H→Kと規則をつなぐ。",
+      "domain": "classification",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "membership",
+        "subject": "q",
+        "predicate": "K"
+      },
+      "semantic_target": "qはKです。",
+      "accepted_answers": [
+        "はい",
+        "qはKです。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_003",
+      "question": "すべてのCはFです。すべてのFはIです。すべてのIはLです。すべてのLはOです。rはCです。rはOですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "順方向にC→F→I→L→Oと規則をつなぐ。",
+      "domain": "classification",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "membership",
+        "subject": "r",
+        "predicate": "O"
+      },
+      "semantic_target": "rはOです。",
+      "accepted_answers": [
+        "はい",
+        "rはOです。"
+      ],
+      "inference_steps": 4
+    },
+    {
+      "id": "planning_followup3_004",
+      "question": "すべてのJはMです。すべてのMはPです。sはJです。sはPですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "順方向にJ→M→Pと規則をつなぐ。",
+      "domain": "classification",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "membership",
+        "subject": "s",
+        "predicate": "P"
+      },
+      "semantic_target": "sはPです。",
+      "accepted_answers": [
+        "はい",
+        "sはPです。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_005",
+      "question": "すべてのRはUです。すべてのUはXです。wはXです。wはRですか？",
+      "expected_answer": null,
+      "expected_kind": "unknown",
+      "expected_value": null,
+      "explanation": "最後の集合の要素でも最初の集合とは限らない。最初に含まれる場合と最後だけに含まれる場合の両方が前提を満たす。",
+      "domain": "classification",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "membership",
+        "subject": "w",
+        "predicate": "R"
+      },
+      "semantic_target": null,
+      "accepted_answers": [
+        null,
+        "不明"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_006",
+      "question": "すべてのSはVです。すべてのVはYです。すべてのYはZです。vはZです。vはSですか？",
+      "expected_answer": null,
+      "expected_kind": "unknown",
+      "expected_value": null,
+      "explanation": "最後の集合の要素でも最初の集合とは限らない。最初に含まれる場合と最後だけに含まれる場合の両方が前提を満たす。",
+      "domain": "classification",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "membership",
+        "subject": "v",
+        "predicate": "S"
+      },
+      "semantic_target": null,
+      "accepted_answers": [
+        null,
+        "不明"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_007",
+      "question": "すべてのBはFです。すべてのFはJです。tはJではありません。tはBですか？",
+      "expected_answer": "いいえ",
+      "expected_kind": "boolean",
+      "expected_value": false,
+      "explanation": "最初の集合に属するなら最後にも属する。最後に属さないので最初にも属さない。",
+      "domain": "classification",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "membership",
+        "subject": "t",
+        "predicate": "B"
+      },
+      "semantic_target": "tはBではありません。",
+      "accepted_answers": [
+        "いいえ",
+        "tはBではありません。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_008",
+      "question": "すべてのEはIです。すべてのIはMです。すべてのMはQです。uはQではありません。uはEですか？",
+      "expected_answer": "いいえ",
+      "expected_kind": "boolean",
+      "expected_value": false,
+      "explanation": "最初の集合に属するなら最後にも属する。最後に属さないので最初にも属さない。",
+      "domain": "classification",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "membership",
+        "subject": "u",
+        "predicate": "E"
+      },
+      "semantic_target": "uはEではありません。",
+      "accepted_answers": [
+        "いいえ",
+        "uはEではありません。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_009",
+      "question": "AはEより大きい。EはIより大きい。AはIより大きいですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "A>E>Iなので比較は成立する。",
+      "domain": "comparison",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "comparison",
+        "left": "A",
+        "operator": ">",
+        "right": "I"
+      },
+      "semantic_target": "AはIより大きい。",
+      "accepted_answers": [
+        "はい",
+        "AはIより大きい。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_010",
+      "question": "BはFより大きい。FはJより大きい。JはNより大きい。BはNより大きいですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "B>F>J>Nなので比較は成立する。",
+      "domain": "comparison",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "comparison",
+        "left": "B",
+        "operator": ">",
+        "right": "N"
+      },
+      "semantic_target": "BはNより大きい。",
+      "accepted_answers": [
+        "はい",
+        "BはNより大きい。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_011",
+      "question": "CはGより大きい。GはKより大きい。KはOより大きい。OはSより大きい。CはSより大きいですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "C>G>K>O>Sなので比較は成立する。",
+      "domain": "comparison",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "comparison",
+        "left": "C",
+        "operator": ">",
+        "right": "S"
+      },
+      "semantic_target": "CはSより大きい。",
+      "accepted_answers": [
+        "はい",
+        "CはSより大きい。"
+      ],
+      "inference_steps": 4
+    },
+    {
+      "id": "planning_followup3_012",
+      "question": "DはHより大きい。HはLより大きい。LはPより大きい。DはPより大きいですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "D>H>L>Pなので比較は成立する。",
+      "domain": "comparison",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "comparison",
+        "left": "D",
+        "operator": ">",
+        "right": "P"
+      },
+      "semantic_target": "DはPより大きい。",
+      "accepted_answers": [
+        "はい",
+        "DはPより大きい。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_013",
+      "question": "MはQより大きい。QはUより大きい。MはUより小さいですか？",
+      "expected_answer": "いいえ",
+      "expected_kind": "boolean",
+      "expected_value": false,
+      "explanation": "M>Q>Uが成立し、逆の小さいという比較は偽。",
+      "domain": "comparison",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "comparison",
+        "left": "M",
+        "operator": "<",
+        "right": "U"
+      },
+      "semantic_target": "MはUより小さくありません。",
+      "accepted_answers": [
+        "いいえ",
+        "MはUより小さくありません。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_014",
+      "question": "NはRより大きい。RはVより大きい。VはZより大きい。NはZより小さいですか？",
+      "expected_answer": "いいえ",
+      "expected_kind": "boolean",
+      "expected_value": false,
+      "explanation": "N>R>V>Zが成立し、逆の小さいという比較は偽。",
+      "domain": "comparison",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "comparison",
+        "left": "N",
+        "operator": "<",
+        "right": "Z"
+      },
+      "semantic_target": "NはZより小さくありません。",
+      "accepted_answers": [
+        "いいえ",
+        "NはZより小さくありません。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_015",
+      "question": "JはNより大きい。LはNより大きい。JはLより大きいですか？",
+      "expected_answer": null,
+      "expected_kind": "unknown",
+      "expected_value": null,
+      "explanation": "J=5,N=1,L=3なら真、J=3,N=1,L=5なら偽。",
+      "domain": "comparison",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "comparison",
+        "left": "J",
+        "operator": ">",
+        "right": "L"
+      },
+      "semantic_target": null,
+      "accepted_answers": [
+        null,
+        "不明"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_016",
+      "question": "PはTより大きい。RはTより大きい。PはRより大きいですか？",
+      "expected_answer": null,
+      "expected_kind": "unknown",
+      "expected_value": null,
+      "explanation": "P=5,T=1,R=3なら真、P=3,T=1,R=5なら偽。",
+      "domain": "comparison",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "comparison",
+        "left": "P",
+        "operator": ">",
+        "right": "R"
+      },
+      "semantic_target": null,
+      "accepted_answers": [
+        null,
+        "不明"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_017",
+      "question": "AならEです。EならIです。Aです。Iですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "A→E→Iと前件から後件を順に導く。",
+      "domain": "conditional_logic",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "proposition",
+        "symbol": "I"
+      },
+      "semantic_target": "Iです。",
+      "accepted_answers": [
+        "はい",
+        "Iです。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_018",
+      "question": "BならFです。FならJです。JならNです。Bです。Nですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "B→F→J→Nと前件から後件を順に導く。",
+      "domain": "conditional_logic",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "proposition",
+        "symbol": "N"
+      },
+      "semantic_target": "Nです。",
+      "accepted_answers": [
+        "はい",
+        "Nです。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_019",
+      "question": "CならGです。GならKです。KならOです。OならSです。Cです。Sですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "C→G→K→O→Sと前件から後件を順に導く。",
+      "domain": "conditional_logic",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "proposition",
+        "symbol": "S"
+      },
+      "semantic_target": "Sです。",
+      "accepted_answers": [
+        "はい",
+        "Sです。"
+      ],
+      "inference_steps": 4
+    },
+    {
+      "id": "planning_followup3_020",
+      "question": "DならHです。HならLです。Dです。Lですか？",
+      "expected_answer": "はい",
+      "expected_kind": "boolean",
+      "expected_value": true,
+      "explanation": "D→H→Lと前件から後件を順に導く。",
+      "domain": "conditional_logic",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "proposition",
+        "symbol": "L"
+      },
+      "semantic_target": "Lです。",
+      "accepted_answers": [
+        "はい",
+        "Lです。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_021",
+      "question": "PならRです。RならTです。Tです。Pですか？",
+      "expected_answer": null,
+      "expected_kind": "unknown",
+      "expected_value": null,
+      "explanation": "後件から前件へ逆向きに推論してはいけない。前件が真でも偽でも最後の命題を真にできる。",
+      "domain": "conditional_logic",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "proposition",
+        "symbol": "P"
+      },
+      "semantic_target": null,
+      "accepted_answers": [
+        null,
+        "不明"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_022",
+      "question": "QならSです。SならUです。UならWです。Wです。Qですか？",
+      "expected_answer": null,
+      "expected_kind": "unknown",
+      "expected_value": null,
+      "explanation": "後件から前件へ逆向きに推論してはいけない。前件が真でも偽でも最後の命題を真にできる。",
+      "domain": "conditional_logic",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "proposition",
+        "symbol": "Q"
+      },
+      "semantic_target": null,
+      "accepted_answers": [
+        null,
+        "不明"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_023",
+      "question": "MならOです。OならQです。Mではありません。Qですか？",
+      "expected_answer": null,
+      "expected_kind": "unknown",
+      "expected_value": null,
+      "explanation": "前件が偽なら後件を否定できるという規則はない。後件が真のモデルと偽のモデルを両方構成できる。",
+      "domain": "conditional_logic",
+      "difficulty": 2,
+      "grading_query": {
+        "kind": "proposition",
+        "symbol": "Q"
+      },
+      "semantic_target": null,
+      "accepted_answers": [
+        null,
+        "不明"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup3_024",
+      "question": "NならPです。PならRです。RならTです。Nではありません。Tですか？",
+      "expected_answer": null,
+      "expected_kind": "unknown",
+      "expected_value": null,
+      "explanation": "前件が偽なら後件を否定できるという規則はない。後件が真のモデルと偽のモデルを両方構成できる。",
+      "domain": "conditional_logic",
+      "difficulty": 3,
+      "grading_query": {
+        "kind": "proposition",
+        "symbol": "T"
+      },
+      "semantic_target": null,
+      "accepted_answers": [
+        null,
+        "不明"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup3_025",
+      "question": "Start0からGoal0へ移動します。使用できる行動はhop_0_0:Start0→Checkpoint0_1（費用2）、hop_0_1:Checkpoint0_1→Goal0（費用3）、shortcut_0:Start0→Goal0（費用9）、enter_detour_0:Start0→Detour0（費用2）、leave_detour_0:Detour0→Goal0（費用9）だけです。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "5",
+      "expected_kind": "minimum_cost",
+      "expected_value": 5,
+      "explanation": "通常経路の合計5、直行9、迂回11を比較する。最小は5。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start0"
+        },
+        "goal": {
+          "position": "Goal0"
+        },
+        "actions": [
+          {
+            "id": "hop_0_0",
+            "pre": {
+              "position": "Start0"
+            },
+            "set": {
+              "position": "Checkpoint0_1"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_0_1",
+            "pre": {
+              "position": "Checkpoint0_1"
+            },
+            "set": {
+              "position": "Goal0"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "shortcut_0",
+            "pre": {
+              "position": "Start0"
+            },
+            "set": {
+              "position": "Goal0"
+            },
+            "delta": {},
+            "cost": 9
+          },
+          {
+            "id": "enter_detour_0",
+            "pre": {
+              "position": "Start0"
+            },
+            "set": {
+              "position": "Detour0"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_0",
+            "pre": {
+              "position": "Detour0"
+            },
+            "set": {
+              "position": "Goal0"
+            },
+            "delta": {},
+            "cost": 9
+          }
+        ]
+      },
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "hop_0_0",
+        "hop_0_1"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_0_0",
+          "hop_0_1"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_026",
+      "question": "Start0からGoal0へ移動します。使用できる行動はhop_0_0:Start0→Checkpoint0_1（費用2）、hop_0_1:Checkpoint0_1→Goal0（費用3）、shortcut_0:Start0→Goal0（費用9）、enter_detour_0:Start0→Detour0（費用2）、leave_detour_0:Detour0→Goal0（費用9）だけです。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"hop_0_0\",\"hop_0_1\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "hop_0_0",
+        "hop_0_1"
+      ],
+      "explanation": "通常経路の合計5、直行9、迂回11を比較する。最小は5。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start0"
+        },
+        "goal": {
+          "position": "Goal0"
+        },
+        "actions": [
+          {
+            "id": "hop_0_0",
+            "pre": {
+              "position": "Start0"
+            },
+            "set": {
+              "position": "Checkpoint0_1"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_0_1",
+            "pre": {
+              "position": "Checkpoint0_1"
+            },
+            "set": {
+              "position": "Goal0"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "shortcut_0",
+            "pre": {
+              "position": "Start0"
+            },
+            "set": {
+              "position": "Goal0"
+            },
+            "delta": {},
+            "cost": 9
+          },
+          {
+            "id": "enter_detour_0",
+            "pre": {
+              "position": "Start0"
+            },
+            "set": {
+              "position": "Detour0"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_0",
+            "pre": {
+              "position": "Detour0"
+            },
+            "set": {
+              "position": "Goal0"
+            },
+            "delta": {},
+            "cost": 9
+          }
+        ]
+      },
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "hop_0_0",
+        "hop_0_1"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_0_0",
+          "hop_0_1"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_027",
+      "question": "Start1からGoal1へ移動します。使用できる行動はhop_1_0:Start1→Checkpoint1_1（費用3）、hop_1_1:Checkpoint1_1→Checkpoint1_2（費用4）、hop_1_2:Checkpoint1_2→Goal1（費用5）、shortcut_1:Start1→Goal1（費用17）、enter_detour_1:Start1→Detour1（費用2）、leave_detour_1:Detour1→Goal1（費用16）、trap_1:Start1→Blocked1（費用1）だけです。Blocked1から出る行動はありません。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "12",
+      "expected_kind": "minimum_cost",
+      "expected_value": 12,
+      "explanation": "通常経路の合計12、直行17、迂回18を比較する。最小は12。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start1"
+        },
+        "goal": {
+          "position": "Goal1"
+        },
+        "actions": [
+          {
+            "id": "hop_1_0",
+            "pre": {
+              "position": "Start1"
+            },
+            "set": {
+              "position": "Checkpoint1_1"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_1_1",
+            "pre": {
+              "position": "Checkpoint1_1"
+            },
+            "set": {
+              "position": "Checkpoint1_2"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_1_2",
+            "pre": {
+              "position": "Checkpoint1_2"
+            },
+            "set": {
+              "position": "Goal1"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "shortcut_1",
+            "pre": {
+              "position": "Start1"
+            },
+            "set": {
+              "position": "Goal1"
+            },
+            "delta": {},
+            "cost": 17
+          },
+          {
+            "id": "enter_detour_1",
+            "pre": {
+              "position": "Start1"
+            },
+            "set": {
+              "position": "Detour1"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_1",
+            "pre": {
+              "position": "Detour1"
+            },
+            "set": {
+              "position": "Goal1"
+            },
+            "delta": {},
+            "cost": 16
+          },
+          {
+            "id": "trap_1",
+            "pre": {
+              "position": "Start1"
+            },
+            "set": {
+              "position": "Blocked1"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 12,
+      "optimal_actions": [
+        "hop_1_0",
+        "hop_1_1",
+        "hop_1_2"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_1_0",
+          "hop_1_1",
+          "hop_1_2"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_028",
+      "question": "Start1からGoal1へ移動します。使用できる行動はhop_1_0:Start1→Checkpoint1_1（費用3）、hop_1_1:Checkpoint1_1→Checkpoint1_2（費用4）、hop_1_2:Checkpoint1_2→Goal1（費用5）、shortcut_1:Start1→Goal1（費用17）、enter_detour_1:Start1→Detour1（費用2）、leave_detour_1:Detour1→Goal1（費用16）、trap_1:Start1→Blocked1（費用1）だけです。Blocked1から出る行動はありません。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"hop_1_0\",\"hop_1_1\",\"hop_1_2\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "hop_1_0",
+        "hop_1_1",
+        "hop_1_2"
+      ],
+      "explanation": "通常経路の合計12、直行17、迂回18を比較する。最小は12。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start1"
+        },
+        "goal": {
+          "position": "Goal1"
+        },
+        "actions": [
+          {
+            "id": "hop_1_0",
+            "pre": {
+              "position": "Start1"
+            },
+            "set": {
+              "position": "Checkpoint1_1"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_1_1",
+            "pre": {
+              "position": "Checkpoint1_1"
+            },
+            "set": {
+              "position": "Checkpoint1_2"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_1_2",
+            "pre": {
+              "position": "Checkpoint1_2"
+            },
+            "set": {
+              "position": "Goal1"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "shortcut_1",
+            "pre": {
+              "position": "Start1"
+            },
+            "set": {
+              "position": "Goal1"
+            },
+            "delta": {},
+            "cost": 17
+          },
+          {
+            "id": "enter_detour_1",
+            "pre": {
+              "position": "Start1"
+            },
+            "set": {
+              "position": "Detour1"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_1",
+            "pre": {
+              "position": "Detour1"
+            },
+            "set": {
+              "position": "Goal1"
+            },
+            "delta": {},
+            "cost": 16
+          },
+          {
+            "id": "trap_1",
+            "pre": {
+              "position": "Start1"
+            },
+            "set": {
+              "position": "Blocked1"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 12,
+      "optimal_actions": [
+        "hop_1_0",
+        "hop_1_1",
+        "hop_1_2"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_1_0",
+          "hop_1_1",
+          "hop_1_2"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_029",
+      "question": "Start2からGoal2へ移動します。使用できる行動はhop_2_0:Start2→Checkpoint2_1（費用4）、hop_2_1:Checkpoint2_1→Checkpoint2_2（費用5）、hop_2_2:Checkpoint2_2→Checkpoint2_3（費用2）、hop_2_3:Checkpoint2_3→Goal2（費用3）、shortcut_2:Start2→Goal2（費用20）、enter_detour_2:Start2→Detour2（費用2）、leave_detour_2:Detour2→Goal2（費用11）だけです。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "13",
+      "expected_kind": "minimum_cost",
+      "expected_value": 13,
+      "explanation": "通常経路の合計14、直行20、迂回13を比較する。最小は13。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start2"
+        },
+        "goal": {
+          "position": "Goal2"
+        },
+        "actions": [
+          {
+            "id": "hop_2_0",
+            "pre": {
+              "position": "Start2"
+            },
+            "set": {
+              "position": "Checkpoint2_1"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_2_1",
+            "pre": {
+              "position": "Checkpoint2_1"
+            },
+            "set": {
+              "position": "Checkpoint2_2"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_2_2",
+            "pre": {
+              "position": "Checkpoint2_2"
+            },
+            "set": {
+              "position": "Checkpoint2_3"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_2_3",
+            "pre": {
+              "position": "Checkpoint2_3"
+            },
+            "set": {
+              "position": "Goal2"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "shortcut_2",
+            "pre": {
+              "position": "Start2"
+            },
+            "set": {
+              "position": "Goal2"
+            },
+            "delta": {},
+            "cost": 20
+          },
+          {
+            "id": "enter_detour_2",
+            "pre": {
+              "position": "Start2"
+            },
+            "set": {
+              "position": "Detour2"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_2",
+            "pre": {
+              "position": "Detour2"
+            },
+            "set": {
+              "position": "Goal2"
+            },
+            "delta": {},
+            "cost": 11
+          }
+        ]
+      },
+      "optimal_cost": 13,
+      "optimal_actions": [
+        "enter_detour_2",
+        "leave_detour_2"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "enter_detour_2",
+          "leave_detour_2"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_030",
+      "question": "Start2からGoal2へ移動します。使用できる行動はhop_2_0:Start2→Checkpoint2_1（費用4）、hop_2_1:Checkpoint2_1→Checkpoint2_2（費用5）、hop_2_2:Checkpoint2_2→Checkpoint2_3（費用2）、hop_2_3:Checkpoint2_3→Goal2（費用3）、shortcut_2:Start2→Goal2（費用20）、enter_detour_2:Start2→Detour2（費用2）、leave_detour_2:Detour2→Goal2（費用11）だけです。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"enter_detour_2\",\"leave_detour_2\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "enter_detour_2",
+        "leave_detour_2"
+      ],
+      "explanation": "通常経路の合計14、直行20、迂回13を比較する。最小は13。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start2"
+        },
+        "goal": {
+          "position": "Goal2"
+        },
+        "actions": [
+          {
+            "id": "hop_2_0",
+            "pre": {
+              "position": "Start2"
+            },
+            "set": {
+              "position": "Checkpoint2_1"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_2_1",
+            "pre": {
+              "position": "Checkpoint2_1"
+            },
+            "set": {
+              "position": "Checkpoint2_2"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_2_2",
+            "pre": {
+              "position": "Checkpoint2_2"
+            },
+            "set": {
+              "position": "Checkpoint2_3"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_2_3",
+            "pre": {
+              "position": "Checkpoint2_3"
+            },
+            "set": {
+              "position": "Goal2"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "shortcut_2",
+            "pre": {
+              "position": "Start2"
+            },
+            "set": {
+              "position": "Goal2"
+            },
+            "delta": {},
+            "cost": 20
+          },
+          {
+            "id": "enter_detour_2",
+            "pre": {
+              "position": "Start2"
+            },
+            "set": {
+              "position": "Detour2"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_2",
+            "pre": {
+              "position": "Detour2"
+            },
+            "set": {
+              "position": "Goal2"
+            },
+            "delta": {},
+            "cost": 11
+          }
+        ]
+      },
+      "optimal_cost": 13,
+      "optimal_actions": [
+        "enter_detour_2",
+        "leave_detour_2"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "enter_detour_2",
+          "leave_detour_2"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_031",
+      "question": "Start3からGoal3へ移動します。使用できる行動はhop_3_0:Start3→Checkpoint3_1（費用5）、hop_3_1:Checkpoint3_1→Goal3（費用2）、shortcut_3:Start3→Goal3（費用5）、enter_detour_3:Start3→Detour3（費用2）、leave_detour_3:Detour3→Goal3（費用11）、trap_3:Start3→Blocked3（費用1）だけです。Blocked3から出る行動はありません。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "5",
+      "expected_kind": "minimum_cost",
+      "expected_value": 5,
+      "explanation": "通常経路の合計7、直行5、迂回13を比較する。最小は5。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start3"
+        },
+        "goal": {
+          "position": "Goal3"
+        },
+        "actions": [
+          {
+            "id": "hop_3_0",
+            "pre": {
+              "position": "Start3"
+            },
+            "set": {
+              "position": "Checkpoint3_1"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_3_1",
+            "pre": {
+              "position": "Checkpoint3_1"
+            },
+            "set": {
+              "position": "Goal3"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "shortcut_3",
+            "pre": {
+              "position": "Start3"
+            },
+            "set": {
+              "position": "Goal3"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "enter_detour_3",
+            "pre": {
+              "position": "Start3"
+            },
+            "set": {
+              "position": "Detour3"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_3",
+            "pre": {
+              "position": "Detour3"
+            },
+            "set": {
+              "position": "Goal3"
+            },
+            "delta": {},
+            "cost": 11
+          },
+          {
+            "id": "trap_3",
+            "pre": {
+              "position": "Start3"
+            },
+            "set": {
+              "position": "Blocked3"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "shortcut_3"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "shortcut_3"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_032",
+      "question": "Start3からGoal3へ移動します。使用できる行動はhop_3_0:Start3→Checkpoint3_1（費用5）、hop_3_1:Checkpoint3_1→Goal3（費用2）、shortcut_3:Start3→Goal3（費用5）、enter_detour_3:Start3→Detour3（費用2）、leave_detour_3:Detour3→Goal3（費用11）、trap_3:Start3→Blocked3（費用1）だけです。Blocked3から出る行動はありません。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"shortcut_3\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "shortcut_3"
+      ],
+      "explanation": "通常経路の合計7、直行5、迂回13を比較する。最小は5。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start3"
+        },
+        "goal": {
+          "position": "Goal3"
+        },
+        "actions": [
+          {
+            "id": "hop_3_0",
+            "pre": {
+              "position": "Start3"
+            },
+            "set": {
+              "position": "Checkpoint3_1"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_3_1",
+            "pre": {
+              "position": "Checkpoint3_1"
+            },
+            "set": {
+              "position": "Goal3"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "shortcut_3",
+            "pre": {
+              "position": "Start3"
+            },
+            "set": {
+              "position": "Goal3"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "enter_detour_3",
+            "pre": {
+              "position": "Start3"
+            },
+            "set": {
+              "position": "Detour3"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_3",
+            "pre": {
+              "position": "Detour3"
+            },
+            "set": {
+              "position": "Goal3"
+            },
+            "delta": {},
+            "cost": 11
+          },
+          {
+            "id": "trap_3",
+            "pre": {
+              "position": "Start3"
+            },
+            "set": {
+              "position": "Blocked3"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "shortcut_3"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "shortcut_3"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_033",
+      "question": "Start4からGoal4へ移動します。使用できる行動はhop_4_0:Start4→Checkpoint4_1（費用2）、hop_4_1:Checkpoint4_1→Checkpoint4_2（費用3）、hop_4_2:Checkpoint4_2→Goal4（費用4）、shortcut_4:Start4→Goal4（費用14）、enter_detour_4:Start4→Detour4（費用2）、leave_detour_4:Detour4→Goal4（費用13）だけです。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "9",
+      "expected_kind": "minimum_cost",
+      "expected_value": 9,
+      "explanation": "通常経路の合計9、直行14、迂回15を比較する。最小は9。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start4"
+        },
+        "goal": {
+          "position": "Goal4"
+        },
+        "actions": [
+          {
+            "id": "hop_4_0",
+            "pre": {
+              "position": "Start4"
+            },
+            "set": {
+              "position": "Checkpoint4_1"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_4_1",
+            "pre": {
+              "position": "Checkpoint4_1"
+            },
+            "set": {
+              "position": "Checkpoint4_2"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_4_2",
+            "pre": {
+              "position": "Checkpoint4_2"
+            },
+            "set": {
+              "position": "Goal4"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "shortcut_4",
+            "pre": {
+              "position": "Start4"
+            },
+            "set": {
+              "position": "Goal4"
+            },
+            "delta": {},
+            "cost": 14
+          },
+          {
+            "id": "enter_detour_4",
+            "pre": {
+              "position": "Start4"
+            },
+            "set": {
+              "position": "Detour4"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_4",
+            "pre": {
+              "position": "Detour4"
+            },
+            "set": {
+              "position": "Goal4"
+            },
+            "delta": {},
+            "cost": 13
+          }
+        ]
+      },
+      "optimal_cost": 9,
+      "optimal_actions": [
+        "hop_4_0",
+        "hop_4_1",
+        "hop_4_2"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_4_0",
+          "hop_4_1",
+          "hop_4_2"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_034",
+      "question": "Start4からGoal4へ移動します。使用できる行動はhop_4_0:Start4→Checkpoint4_1（費用2）、hop_4_1:Checkpoint4_1→Checkpoint4_2（費用3）、hop_4_2:Checkpoint4_2→Goal4（費用4）、shortcut_4:Start4→Goal4（費用14）、enter_detour_4:Start4→Detour4（費用2）、leave_detour_4:Detour4→Goal4（費用13）だけです。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"hop_4_0\",\"hop_4_1\",\"hop_4_2\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "hop_4_0",
+        "hop_4_1",
+        "hop_4_2"
+      ],
+      "explanation": "通常経路の合計9、直行14、迂回15を比較する。最小は9。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start4"
+        },
+        "goal": {
+          "position": "Goal4"
+        },
+        "actions": [
+          {
+            "id": "hop_4_0",
+            "pre": {
+              "position": "Start4"
+            },
+            "set": {
+              "position": "Checkpoint4_1"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_4_1",
+            "pre": {
+              "position": "Checkpoint4_1"
+            },
+            "set": {
+              "position": "Checkpoint4_2"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_4_2",
+            "pre": {
+              "position": "Checkpoint4_2"
+            },
+            "set": {
+              "position": "Goal4"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "shortcut_4",
+            "pre": {
+              "position": "Start4"
+            },
+            "set": {
+              "position": "Goal4"
+            },
+            "delta": {},
+            "cost": 14
+          },
+          {
+            "id": "enter_detour_4",
+            "pre": {
+              "position": "Start4"
+            },
+            "set": {
+              "position": "Detour4"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_4",
+            "pre": {
+              "position": "Detour4"
+            },
+            "set": {
+              "position": "Goal4"
+            },
+            "delta": {},
+            "cost": 13
+          }
+        ]
+      },
+      "optimal_cost": 9,
+      "optimal_actions": [
+        "hop_4_0",
+        "hop_4_1",
+        "hop_4_2"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_4_0",
+          "hop_4_1",
+          "hop_4_2"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_035",
+      "question": "Start5からGoal5へ移動します。使用できる行動はhop_5_0:Start5→Checkpoint5_1（費用3）、hop_5_1:Checkpoint5_1→Checkpoint5_2（費用4）、hop_5_2:Checkpoint5_2→Checkpoint5_3（費用5）、hop_5_3:Checkpoint5_3→Goal5（費用2）、shortcut_5:Start5→Goal5（費用20）、enter_detour_5:Start5→Detour5（費用2）、leave_detour_5:Detour5→Goal5（費用18）、trap_5:Start5→Blocked5（費用1）だけです。Blocked5から出る行動はありません。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "14",
+      "expected_kind": "minimum_cost",
+      "expected_value": 14,
+      "explanation": "通常経路の合計14、直行20、迂回20を比較する。最小は14。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start5"
+        },
+        "goal": {
+          "position": "Goal5"
+        },
+        "actions": [
+          {
+            "id": "hop_5_0",
+            "pre": {
+              "position": "Start5"
+            },
+            "set": {
+              "position": "Checkpoint5_1"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_5_1",
+            "pre": {
+              "position": "Checkpoint5_1"
+            },
+            "set": {
+              "position": "Checkpoint5_2"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_5_2",
+            "pre": {
+              "position": "Checkpoint5_2"
+            },
+            "set": {
+              "position": "Checkpoint5_3"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_5_3",
+            "pre": {
+              "position": "Checkpoint5_3"
+            },
+            "set": {
+              "position": "Goal5"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "shortcut_5",
+            "pre": {
+              "position": "Start5"
+            },
+            "set": {
+              "position": "Goal5"
+            },
+            "delta": {},
+            "cost": 20
+          },
+          {
+            "id": "enter_detour_5",
+            "pre": {
+              "position": "Start5"
+            },
+            "set": {
+              "position": "Detour5"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_5",
+            "pre": {
+              "position": "Detour5"
+            },
+            "set": {
+              "position": "Goal5"
+            },
+            "delta": {},
+            "cost": 18
+          },
+          {
+            "id": "trap_5",
+            "pre": {
+              "position": "Start5"
+            },
+            "set": {
+              "position": "Blocked5"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 14,
+      "optimal_actions": [
+        "hop_5_0",
+        "hop_5_1",
+        "hop_5_2",
+        "hop_5_3"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_5_0",
+          "hop_5_1",
+          "hop_5_2",
+          "hop_5_3"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_036",
+      "question": "Start5からGoal5へ移動します。使用できる行動はhop_5_0:Start5→Checkpoint5_1（費用3）、hop_5_1:Checkpoint5_1→Checkpoint5_2（費用4）、hop_5_2:Checkpoint5_2→Checkpoint5_3（費用5）、hop_5_3:Checkpoint5_3→Goal5（費用2）、shortcut_5:Start5→Goal5（費用20）、enter_detour_5:Start5→Detour5（費用2）、leave_detour_5:Detour5→Goal5（費用18）、trap_5:Start5→Blocked5（費用1）だけです。Blocked5から出る行動はありません。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"hop_5_0\",\"hop_5_1\",\"hop_5_2\",\"hop_5_3\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "hop_5_0",
+        "hop_5_1",
+        "hop_5_2",
+        "hop_5_3"
+      ],
+      "explanation": "通常経路の合計14、直行20、迂回20を比較する。最小は14。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start5"
+        },
+        "goal": {
+          "position": "Goal5"
+        },
+        "actions": [
+          {
+            "id": "hop_5_0",
+            "pre": {
+              "position": "Start5"
+            },
+            "set": {
+              "position": "Checkpoint5_1"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_5_1",
+            "pre": {
+              "position": "Checkpoint5_1"
+            },
+            "set": {
+              "position": "Checkpoint5_2"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_5_2",
+            "pre": {
+              "position": "Checkpoint5_2"
+            },
+            "set": {
+              "position": "Checkpoint5_3"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_5_3",
+            "pre": {
+              "position": "Checkpoint5_3"
+            },
+            "set": {
+              "position": "Goal5"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "shortcut_5",
+            "pre": {
+              "position": "Start5"
+            },
+            "set": {
+              "position": "Goal5"
+            },
+            "delta": {},
+            "cost": 20
+          },
+          {
+            "id": "enter_detour_5",
+            "pre": {
+              "position": "Start5"
+            },
+            "set": {
+              "position": "Detour5"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_5",
+            "pre": {
+              "position": "Detour5"
+            },
+            "set": {
+              "position": "Goal5"
+            },
+            "delta": {},
+            "cost": 18
+          },
+          {
+            "id": "trap_5",
+            "pre": {
+              "position": "Start5"
+            },
+            "set": {
+              "position": "Blocked5"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 14,
+      "optimal_actions": [
+        "hop_5_0",
+        "hop_5_1",
+        "hop_5_2",
+        "hop_5_3"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_5_0",
+          "hop_5_1",
+          "hop_5_2",
+          "hop_5_3"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_037",
+      "question": "Start6からGoal6へ移動します。使用できる行動はhop_6_0:Start6→Checkpoint6_1（費用4）、hop_6_1:Checkpoint6_1→Goal6（費用5）、shortcut_6:Start6→Goal6（費用13）、enter_detour_6:Start6→Detour6（費用2）、leave_detour_6:Detour6→Goal6（費用6）だけです。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "8",
+      "expected_kind": "minimum_cost",
+      "expected_value": 8,
+      "explanation": "通常経路の合計9、直行13、迂回8を比較する。最小は8。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start6"
+        },
+        "goal": {
+          "position": "Goal6"
+        },
+        "actions": [
+          {
+            "id": "hop_6_0",
+            "pre": {
+              "position": "Start6"
+            },
+            "set": {
+              "position": "Checkpoint6_1"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_6_1",
+            "pre": {
+              "position": "Checkpoint6_1"
+            },
+            "set": {
+              "position": "Goal6"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "shortcut_6",
+            "pre": {
+              "position": "Start6"
+            },
+            "set": {
+              "position": "Goal6"
+            },
+            "delta": {},
+            "cost": 13
+          },
+          {
+            "id": "enter_detour_6",
+            "pre": {
+              "position": "Start6"
+            },
+            "set": {
+              "position": "Detour6"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_6",
+            "pre": {
+              "position": "Detour6"
+            },
+            "set": {
+              "position": "Goal6"
+            },
+            "delta": {},
+            "cost": 6
+          }
+        ]
+      },
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "enter_detour_6",
+        "leave_detour_6"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "enter_detour_6",
+          "leave_detour_6"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_038",
+      "question": "Start6からGoal6へ移動します。使用できる行動はhop_6_0:Start6→Checkpoint6_1（費用4）、hop_6_1:Checkpoint6_1→Goal6（費用5）、shortcut_6:Start6→Goal6（費用13）、enter_detour_6:Start6→Detour6（費用2）、leave_detour_6:Detour6→Goal6（費用6）だけです。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"enter_detour_6\",\"leave_detour_6\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "enter_detour_6",
+        "leave_detour_6"
+      ],
+      "explanation": "通常経路の合計9、直行13、迂回8を比較する。最小は8。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start6"
+        },
+        "goal": {
+          "position": "Goal6"
+        },
+        "actions": [
+          {
+            "id": "hop_6_0",
+            "pre": {
+              "position": "Start6"
+            },
+            "set": {
+              "position": "Checkpoint6_1"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_6_1",
+            "pre": {
+              "position": "Checkpoint6_1"
+            },
+            "set": {
+              "position": "Goal6"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "shortcut_6",
+            "pre": {
+              "position": "Start6"
+            },
+            "set": {
+              "position": "Goal6"
+            },
+            "delta": {},
+            "cost": 13
+          },
+          {
+            "id": "enter_detour_6",
+            "pre": {
+              "position": "Start6"
+            },
+            "set": {
+              "position": "Detour6"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_6",
+            "pre": {
+              "position": "Detour6"
+            },
+            "set": {
+              "position": "Goal6"
+            },
+            "delta": {},
+            "cost": 6
+          }
+        ]
+      },
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "enter_detour_6",
+        "leave_detour_6"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "enter_detour_6",
+          "leave_detour_6"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_039",
+      "question": "Start7からGoal7へ移動します。使用できる行動はhop_7_0:Start7→Checkpoint7_1（費用5）、hop_7_1:Checkpoint7_1→Checkpoint7_2（費用2）、hop_7_2:Checkpoint7_2→Goal7（費用3）、shortcut_7:Start7→Goal7（費用8）、enter_detour_7:Start7→Detour7（費用2）、leave_detour_7:Detour7→Goal7（費用14）、trap_7:Start7→Blocked7（費用1）だけです。Blocked7から出る行動はありません。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "8",
+      "expected_kind": "minimum_cost",
+      "expected_value": 8,
+      "explanation": "通常経路の合計10、直行8、迂回16を比較する。最小は8。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start7"
+        },
+        "goal": {
+          "position": "Goal7"
+        },
+        "actions": [
+          {
+            "id": "hop_7_0",
+            "pre": {
+              "position": "Start7"
+            },
+            "set": {
+              "position": "Checkpoint7_1"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_7_1",
+            "pre": {
+              "position": "Checkpoint7_1"
+            },
+            "set": {
+              "position": "Checkpoint7_2"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_7_2",
+            "pre": {
+              "position": "Checkpoint7_2"
+            },
+            "set": {
+              "position": "Goal7"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "shortcut_7",
+            "pre": {
+              "position": "Start7"
+            },
+            "set": {
+              "position": "Goal7"
+            },
+            "delta": {},
+            "cost": 8
+          },
+          {
+            "id": "enter_detour_7",
+            "pre": {
+              "position": "Start7"
+            },
+            "set": {
+              "position": "Detour7"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_7",
+            "pre": {
+              "position": "Detour7"
+            },
+            "set": {
+              "position": "Goal7"
+            },
+            "delta": {},
+            "cost": 14
+          },
+          {
+            "id": "trap_7",
+            "pre": {
+              "position": "Start7"
+            },
+            "set": {
+              "position": "Blocked7"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "shortcut_7"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "shortcut_7"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_040",
+      "question": "Start7からGoal7へ移動します。使用できる行動はhop_7_0:Start7→Checkpoint7_1（費用5）、hop_7_1:Checkpoint7_1→Checkpoint7_2（費用2）、hop_7_2:Checkpoint7_2→Goal7（費用3）、shortcut_7:Start7→Goal7（費用8）、enter_detour_7:Start7→Detour7（費用2）、leave_detour_7:Detour7→Goal7（費用14）、trap_7:Start7→Blocked7（費用1）だけです。Blocked7から出る行動はありません。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"shortcut_7\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "shortcut_7"
+      ],
+      "explanation": "通常経路の合計10、直行8、迂回16を比較する。最小は8。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start7"
+        },
+        "goal": {
+          "position": "Goal7"
+        },
+        "actions": [
+          {
+            "id": "hop_7_0",
+            "pre": {
+              "position": "Start7"
+            },
+            "set": {
+              "position": "Checkpoint7_1"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_7_1",
+            "pre": {
+              "position": "Checkpoint7_1"
+            },
+            "set": {
+              "position": "Checkpoint7_2"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_7_2",
+            "pre": {
+              "position": "Checkpoint7_2"
+            },
+            "set": {
+              "position": "Goal7"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "shortcut_7",
+            "pre": {
+              "position": "Start7"
+            },
+            "set": {
+              "position": "Goal7"
+            },
+            "delta": {},
+            "cost": 8
+          },
+          {
+            "id": "enter_detour_7",
+            "pre": {
+              "position": "Start7"
+            },
+            "set": {
+              "position": "Detour7"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_7",
+            "pre": {
+              "position": "Detour7"
+            },
+            "set": {
+              "position": "Goal7"
+            },
+            "delta": {},
+            "cost": 14
+          },
+          {
+            "id": "trap_7",
+            "pre": {
+              "position": "Start7"
+            },
+            "set": {
+              "position": "Blocked7"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "shortcut_7"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "shortcut_7"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_041",
+      "question": "Start8からGoal8へ移動します。使用できる行動はhop_8_0:Start8→Checkpoint8_1（費用2）、hop_8_1:Checkpoint8_1→Checkpoint8_2（費用3）、hop_8_2:Checkpoint8_2→Checkpoint8_3（費用4）、hop_8_3:Checkpoint8_3→Goal8（費用5）、shortcut_8:Start8→Goal8（費用20）、enter_detour_8:Start8→Detour8（費用2）、leave_detour_8:Detour8→Goal8（費用18）だけです。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "14",
+      "expected_kind": "minimum_cost",
+      "expected_value": 14,
+      "explanation": "通常経路の合計14、直行20、迂回20を比較する。最小は14。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start8"
+        },
+        "goal": {
+          "position": "Goal8"
+        },
+        "actions": [
+          {
+            "id": "hop_8_0",
+            "pre": {
+              "position": "Start8"
+            },
+            "set": {
+              "position": "Checkpoint8_1"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_8_1",
+            "pre": {
+              "position": "Checkpoint8_1"
+            },
+            "set": {
+              "position": "Checkpoint8_2"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_8_2",
+            "pre": {
+              "position": "Checkpoint8_2"
+            },
+            "set": {
+              "position": "Checkpoint8_3"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_8_3",
+            "pre": {
+              "position": "Checkpoint8_3"
+            },
+            "set": {
+              "position": "Goal8"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "shortcut_8",
+            "pre": {
+              "position": "Start8"
+            },
+            "set": {
+              "position": "Goal8"
+            },
+            "delta": {},
+            "cost": 20
+          },
+          {
+            "id": "enter_detour_8",
+            "pre": {
+              "position": "Start8"
+            },
+            "set": {
+              "position": "Detour8"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_8",
+            "pre": {
+              "position": "Detour8"
+            },
+            "set": {
+              "position": "Goal8"
+            },
+            "delta": {},
+            "cost": 18
+          }
+        ]
+      },
+      "optimal_cost": 14,
+      "optimal_actions": [
+        "hop_8_0",
+        "hop_8_1",
+        "hop_8_2",
+        "hop_8_3"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_8_0",
+          "hop_8_1",
+          "hop_8_2",
+          "hop_8_3"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_042",
+      "question": "Start8からGoal8へ移動します。使用できる行動はhop_8_0:Start8→Checkpoint8_1（費用2）、hop_8_1:Checkpoint8_1→Checkpoint8_2（費用3）、hop_8_2:Checkpoint8_2→Checkpoint8_3（費用4）、hop_8_3:Checkpoint8_3→Goal8（費用5）、shortcut_8:Start8→Goal8（費用20）、enter_detour_8:Start8→Detour8（費用2）、leave_detour_8:Detour8→Goal8（費用18）だけです。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"hop_8_0\",\"hop_8_1\",\"hop_8_2\",\"hop_8_3\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "hop_8_0",
+        "hop_8_1",
+        "hop_8_2",
+        "hop_8_3"
+      ],
+      "explanation": "通常経路の合計14、直行20、迂回20を比較する。最小は14。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start8"
+        },
+        "goal": {
+          "position": "Goal8"
+        },
+        "actions": [
+          {
+            "id": "hop_8_0",
+            "pre": {
+              "position": "Start8"
+            },
+            "set": {
+              "position": "Checkpoint8_1"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_8_1",
+            "pre": {
+              "position": "Checkpoint8_1"
+            },
+            "set": {
+              "position": "Checkpoint8_2"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_8_2",
+            "pre": {
+              "position": "Checkpoint8_2"
+            },
+            "set": {
+              "position": "Checkpoint8_3"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_8_3",
+            "pre": {
+              "position": "Checkpoint8_3"
+            },
+            "set": {
+              "position": "Goal8"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "shortcut_8",
+            "pre": {
+              "position": "Start8"
+            },
+            "set": {
+              "position": "Goal8"
+            },
+            "delta": {},
+            "cost": 20
+          },
+          {
+            "id": "enter_detour_8",
+            "pre": {
+              "position": "Start8"
+            },
+            "set": {
+              "position": "Detour8"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_8",
+            "pre": {
+              "position": "Detour8"
+            },
+            "set": {
+              "position": "Goal8"
+            },
+            "delta": {},
+            "cost": 18
+          }
+        ]
+      },
+      "optimal_cost": 14,
+      "optimal_actions": [
+        "hop_8_0",
+        "hop_8_1",
+        "hop_8_2",
+        "hop_8_3"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_8_0",
+          "hop_8_1",
+          "hop_8_2",
+          "hop_8_3"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_043",
+      "question": "Start9からGoal9へ移動します。使用できる行動はhop_9_0:Start9→Checkpoint9_1（費用3）、hop_9_1:Checkpoint9_1→Goal9（費用4）、shortcut_9:Start9→Goal9（費用11）、enter_detour_9:Start9→Detour9（費用2）、leave_detour_9:Detour9→Goal9（費用11）、trap_9:Start9→Blocked9（費用1）だけです。Blocked9から出る行動はありません。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "7",
+      "expected_kind": "minimum_cost",
+      "expected_value": 7,
+      "explanation": "通常経路の合計7、直行11、迂回13を比較する。最小は7。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start9"
+        },
+        "goal": {
+          "position": "Goal9"
+        },
+        "actions": [
+          {
+            "id": "hop_9_0",
+            "pre": {
+              "position": "Start9"
+            },
+            "set": {
+              "position": "Checkpoint9_1"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_9_1",
+            "pre": {
+              "position": "Checkpoint9_1"
+            },
+            "set": {
+              "position": "Goal9"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "shortcut_9",
+            "pre": {
+              "position": "Start9"
+            },
+            "set": {
+              "position": "Goal9"
+            },
+            "delta": {},
+            "cost": 11
+          },
+          {
+            "id": "enter_detour_9",
+            "pre": {
+              "position": "Start9"
+            },
+            "set": {
+              "position": "Detour9"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_9",
+            "pre": {
+              "position": "Detour9"
+            },
+            "set": {
+              "position": "Goal9"
+            },
+            "delta": {},
+            "cost": 11
+          },
+          {
+            "id": "trap_9",
+            "pre": {
+              "position": "Start9"
+            },
+            "set": {
+              "position": "Blocked9"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 7,
+      "optimal_actions": [
+        "hop_9_0",
+        "hop_9_1"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_9_0",
+          "hop_9_1"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_044",
+      "question": "Start9からGoal9へ移動します。使用できる行動はhop_9_0:Start9→Checkpoint9_1（費用3）、hop_9_1:Checkpoint9_1→Goal9（費用4）、shortcut_9:Start9→Goal9（費用11）、enter_detour_9:Start9→Detour9（費用2）、leave_detour_9:Detour9→Goal9（費用11）、trap_9:Start9→Blocked9（費用1）だけです。Blocked9から出る行動はありません。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"hop_9_0\",\"hop_9_1\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "hop_9_0",
+        "hop_9_1"
+      ],
+      "explanation": "通常経路の合計7、直行11、迂回13を比較する。最小は7。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start9"
+        },
+        "goal": {
+          "position": "Goal9"
+        },
+        "actions": [
+          {
+            "id": "hop_9_0",
+            "pre": {
+              "position": "Start9"
+            },
+            "set": {
+              "position": "Checkpoint9_1"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_9_1",
+            "pre": {
+              "position": "Checkpoint9_1"
+            },
+            "set": {
+              "position": "Goal9"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "shortcut_9",
+            "pre": {
+              "position": "Start9"
+            },
+            "set": {
+              "position": "Goal9"
+            },
+            "delta": {},
+            "cost": 11
+          },
+          {
+            "id": "enter_detour_9",
+            "pre": {
+              "position": "Start9"
+            },
+            "set": {
+              "position": "Detour9"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_9",
+            "pre": {
+              "position": "Detour9"
+            },
+            "set": {
+              "position": "Goal9"
+            },
+            "delta": {},
+            "cost": 11
+          },
+          {
+            "id": "trap_9",
+            "pre": {
+              "position": "Start9"
+            },
+            "set": {
+              "position": "Blocked9"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 7,
+      "optimal_actions": [
+        "hop_9_0",
+        "hop_9_1"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "hop_9_0",
+          "hop_9_1"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_045",
+      "question": "Start10からGoal10へ移動します。使用できる行動はhop_10_0:Start10→Checkpoint10_1（費用4）、hop_10_1:Checkpoint10_1→Checkpoint10_2（費用5）、hop_10_2:Checkpoint10_2→Goal10（費用2）、shortcut_10:Start10→Goal10（費用16）、enter_detour_10:Start10→Detour10（費用2）、leave_detour_10:Detour10→Goal10（費用8）だけです。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "10",
+      "expected_kind": "minimum_cost",
+      "expected_value": 10,
+      "explanation": "通常経路の合計11、直行16、迂回10を比較する。最小は10。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start10"
+        },
+        "goal": {
+          "position": "Goal10"
+        },
+        "actions": [
+          {
+            "id": "hop_10_0",
+            "pre": {
+              "position": "Start10"
+            },
+            "set": {
+              "position": "Checkpoint10_1"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_10_1",
+            "pre": {
+              "position": "Checkpoint10_1"
+            },
+            "set": {
+              "position": "Checkpoint10_2"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_10_2",
+            "pre": {
+              "position": "Checkpoint10_2"
+            },
+            "set": {
+              "position": "Goal10"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "shortcut_10",
+            "pre": {
+              "position": "Start10"
+            },
+            "set": {
+              "position": "Goal10"
+            },
+            "delta": {},
+            "cost": 16
+          },
+          {
+            "id": "enter_detour_10",
+            "pre": {
+              "position": "Start10"
+            },
+            "set": {
+              "position": "Detour10"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_10",
+            "pre": {
+              "position": "Detour10"
+            },
+            "set": {
+              "position": "Goal10"
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "optimal_cost": 10,
+      "optimal_actions": [
+        "enter_detour_10",
+        "leave_detour_10"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "enter_detour_10",
+          "leave_detour_10"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_046",
+      "question": "Start10からGoal10へ移動します。使用できる行動はhop_10_0:Start10→Checkpoint10_1（費用4）、hop_10_1:Checkpoint10_1→Checkpoint10_2（費用5）、hop_10_2:Checkpoint10_2→Goal10（費用2）、shortcut_10:Start10→Goal10（費用16）、enter_detour_10:Start10→Detour10（費用2）、leave_detour_10:Detour10→Goal10（費用8）だけです。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"enter_detour_10\",\"leave_detour_10\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "enter_detour_10",
+        "leave_detour_10"
+      ],
+      "explanation": "通常経路の合計11、直行16、迂回10を比較する。最小は10。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start10"
+        },
+        "goal": {
+          "position": "Goal10"
+        },
+        "actions": [
+          {
+            "id": "hop_10_0",
+            "pre": {
+              "position": "Start10"
+            },
+            "set": {
+              "position": "Checkpoint10_1"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "hop_10_1",
+            "pre": {
+              "position": "Checkpoint10_1"
+            },
+            "set": {
+              "position": "Checkpoint10_2"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_10_2",
+            "pre": {
+              "position": "Checkpoint10_2"
+            },
+            "set": {
+              "position": "Goal10"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "shortcut_10",
+            "pre": {
+              "position": "Start10"
+            },
+            "set": {
+              "position": "Goal10"
+            },
+            "delta": {},
+            "cost": 16
+          },
+          {
+            "id": "enter_detour_10",
+            "pre": {
+              "position": "Start10"
+            },
+            "set": {
+              "position": "Detour10"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_10",
+            "pre": {
+              "position": "Detour10"
+            },
+            "set": {
+              "position": "Goal10"
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "optimal_cost": 10,
+      "optimal_actions": [
+        "enter_detour_10",
+        "leave_detour_10"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "enter_detour_10",
+          "leave_detour_10"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_047",
+      "question": "Start11からGoal11へ移動します。使用できる行動はhop_11_0:Start11→Checkpoint11_1（費用5）、hop_11_1:Checkpoint11_1→Checkpoint11_2（費用2）、hop_11_2:Checkpoint11_2→Checkpoint11_3（費用3）、hop_11_3:Checkpoint11_3→Goal11（費用4）、shortcut_11:Start11→Goal11（費用12）、enter_detour_11:Start11→Detour11（費用2）、leave_detour_11:Detour11→Goal11（費用18）、trap_11:Start11→Blocked11（費用1）だけです。Blocked11から出る行動はありません。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "12",
+      "expected_kind": "minimum_cost",
+      "expected_value": 12,
+      "explanation": "通常経路の合計14、直行12、迂回20を比較する。最小は12。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start11"
+        },
+        "goal": {
+          "position": "Goal11"
+        },
+        "actions": [
+          {
+            "id": "hop_11_0",
+            "pre": {
+              "position": "Start11"
+            },
+            "set": {
+              "position": "Checkpoint11_1"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_11_1",
+            "pre": {
+              "position": "Checkpoint11_1"
+            },
+            "set": {
+              "position": "Checkpoint11_2"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_11_2",
+            "pre": {
+              "position": "Checkpoint11_2"
+            },
+            "set": {
+              "position": "Checkpoint11_3"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_11_3",
+            "pre": {
+              "position": "Checkpoint11_3"
+            },
+            "set": {
+              "position": "Goal11"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "shortcut_11",
+            "pre": {
+              "position": "Start11"
+            },
+            "set": {
+              "position": "Goal11"
+            },
+            "delta": {},
+            "cost": 12
+          },
+          {
+            "id": "enter_detour_11",
+            "pre": {
+              "position": "Start11"
+            },
+            "set": {
+              "position": "Detour11"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_11",
+            "pre": {
+              "position": "Detour11"
+            },
+            "set": {
+              "position": "Goal11"
+            },
+            "delta": {},
+            "cost": 18
+          },
+          {
+            "id": "trap_11",
+            "pre": {
+              "position": "Start11"
+            },
+            "set": {
+              "position": "Blocked11"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 12,
+      "optimal_actions": [
+        "shortcut_11"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "shortcut_11"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_048",
+      "question": "Start11からGoal11へ移動します。使用できる行動はhop_11_0:Start11→Checkpoint11_1（費用5）、hop_11_1:Checkpoint11_1→Checkpoint11_2（費用2）、hop_11_2:Checkpoint11_2→Checkpoint11_3（費用3）、hop_11_3:Checkpoint11_3→Goal11（費用4）、shortcut_11:Start11→Goal11（費用12）、enter_detour_11:Start11→Detour11（費用2）、leave_detour_11:Detour11→Goal11（費用18）、trap_11:Start11→Blocked11（費用1）だけです。Blocked11から出る行動はありません。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"shortcut_11\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "shortcut_11"
+      ],
+      "explanation": "通常経路の合計14、直行12、迂回20を比較する。最小は12。行き止まりは到達できないので候補から除く。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "position": "Start11"
+        },
+        "goal": {
+          "position": "Goal11"
+        },
+        "actions": [
+          {
+            "id": "hop_11_0",
+            "pre": {
+              "position": "Start11"
+            },
+            "set": {
+              "position": "Checkpoint11_1"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "hop_11_1",
+            "pre": {
+              "position": "Checkpoint11_1"
+            },
+            "set": {
+              "position": "Checkpoint11_2"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "hop_11_2",
+            "pre": {
+              "position": "Checkpoint11_2"
+            },
+            "set": {
+              "position": "Checkpoint11_3"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "hop_11_3",
+            "pre": {
+              "position": "Checkpoint11_3"
+            },
+            "set": {
+              "position": "Goal11"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "shortcut_11",
+            "pre": {
+              "position": "Start11"
+            },
+            "set": {
+              "position": "Goal11"
+            },
+            "delta": {},
+            "cost": 12
+          },
+          {
+            "id": "enter_detour_11",
+            "pre": {
+              "position": "Start11"
+            },
+            "set": {
+              "position": "Detour11"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "leave_detour_11",
+            "pre": {
+              "position": "Detour11"
+            },
+            "set": {
+              "position": "Goal11"
+            },
+            "delta": {},
+            "cost": 18
+          },
+          {
+            "id": "trap_11",
+            "pre": {
+              "position": "Start11"
+            },
+            "set": {
+              "position": "Blocked11"
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "optimal_cost": 12,
+      "optimal_actions": [
+        "shortcut_11"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "shortcut_11"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_049",
+      "question": "在庫qty=2からちょうど8にする。在庫nでraise_two_nは2増やして費用4、raise_three_nは3増やして費用7。nは現在在庫。8を超える行動は禁止で減らせない。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "12",
+      "expected_kind": "minimum_cost",
+      "expected_value": 12,
+      "explanation": "追加6は2を3回なら12、3を2回なら14。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "qty": 2
+        },
+        "goal": {
+          "qty": 8
+        },
+        "actions": [
+          {
+            "id": "raise_two_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "raise_three_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 7
+          },
+          {
+            "id": "raise_two_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "raise_three_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 7
+          },
+          {
+            "id": "raise_two_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "raise_three_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 7
+          },
+          {
+            "id": "raise_two_5",
+            "pre": {
+              "qty": 5
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "raise_three_5",
+            "pre": {
+              "qty": 5
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 7
+          },
+          {
+            "id": "raise_two_6",
+            "pre": {
+              "qty": 6
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          }
+        ]
+      },
+      "optimal_cost": 12,
+      "optimal_actions": [
+        "raise_two_2",
+        "raise_two_4",
+        "raise_two_6"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "raise_two_2",
+          "raise_two_4",
+          "raise_two_6"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_050",
+      "question": "在庫qty=2からちょうど8にする。在庫nでraise_two_nは2増やして費用4、raise_three_nは3増やして費用7。nは現在在庫。8を超える行動は禁止で減らせない。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"raise_two_2\",\"raise_two_4\",\"raise_two_6\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "raise_two_2",
+        "raise_two_4",
+        "raise_two_6"
+      ],
+      "explanation": "追加6は2を3回なら12、3を2回なら14。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "qty": 2
+        },
+        "goal": {
+          "qty": 8
+        },
+        "actions": [
+          {
+            "id": "raise_two_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "raise_three_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 7
+          },
+          {
+            "id": "raise_two_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "raise_three_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 7
+          },
+          {
+            "id": "raise_two_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "raise_three_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 7
+          },
+          {
+            "id": "raise_two_5",
+            "pre": {
+              "qty": 5
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          },
+          {
+            "id": "raise_three_5",
+            "pre": {
+              "qty": 5
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 7
+          },
+          {
+            "id": "raise_two_6",
+            "pre": {
+              "qty": 6
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 4
+          }
+        ]
+      },
+      "optimal_cost": 12,
+      "optimal_actions": [
+        "raise_two_2",
+        "raise_two_4",
+        "raise_two_6"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "raise_two_2",
+          "raise_two_4",
+          "raise_two_6"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_051",
+      "question": "在庫stock=0からちょうど6にする。在庫nでfill_single_nは1増やして費用2、fill_triple_nは3増やして費用5。nは現在在庫。6を超える行動は禁止で減らせない。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "10",
+      "expected_kind": "minimum_cost",
+      "expected_value": 10,
+      "explanation": "3を2回なら10。3を1回と1を3回なら11、1を6回なら12。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "stock": 0
+        },
+        "goal": {
+          "stock": 6
+        },
+        "actions": [
+          {
+            "id": "fill_single_0",
+            "pre": {
+              "stock": 0
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_triple_0",
+            "pre": {
+              "stock": 0
+            },
+            "set": {},
+            "delta": {
+              "stock": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "fill_single_1",
+            "pre": {
+              "stock": 1
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_triple_1",
+            "pre": {
+              "stock": 1
+            },
+            "set": {},
+            "delta": {
+              "stock": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "fill_single_2",
+            "pre": {
+              "stock": 2
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_triple_2",
+            "pre": {
+              "stock": 2
+            },
+            "set": {},
+            "delta": {
+              "stock": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "fill_single_3",
+            "pre": {
+              "stock": 3
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_triple_3",
+            "pre": {
+              "stock": 3
+            },
+            "set": {},
+            "delta": {
+              "stock": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "fill_single_4",
+            "pre": {
+              "stock": 4
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_single_5",
+            "pre": {
+              "stock": 5
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          }
+        ]
+      },
+      "optimal_cost": 10,
+      "optimal_actions": [
+        "fill_triple_0",
+        "fill_triple_3"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "fill_triple_0",
+          "fill_triple_3"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_052",
+      "question": "在庫stock=0からちょうど6にする。在庫nでfill_single_nは1増やして費用2、fill_triple_nは3増やして費用5。nは現在在庫。6を超える行動は禁止で減らせない。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"fill_triple_0\",\"fill_triple_3\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "fill_triple_0",
+        "fill_triple_3"
+      ],
+      "explanation": "3を2回なら10。3を1回と1を3回なら11、1を6回なら12。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "stock": 0
+        },
+        "goal": {
+          "stock": 6
+        },
+        "actions": [
+          {
+            "id": "fill_single_0",
+            "pre": {
+              "stock": 0
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_triple_0",
+            "pre": {
+              "stock": 0
+            },
+            "set": {},
+            "delta": {
+              "stock": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "fill_single_1",
+            "pre": {
+              "stock": 1
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_triple_1",
+            "pre": {
+              "stock": 1
+            },
+            "set": {},
+            "delta": {
+              "stock": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "fill_single_2",
+            "pre": {
+              "stock": 2
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_triple_2",
+            "pre": {
+              "stock": 2
+            },
+            "set": {},
+            "delta": {
+              "stock": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "fill_single_3",
+            "pre": {
+              "stock": 3
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_triple_3",
+            "pre": {
+              "stock": 3
+            },
+            "set": {},
+            "delta": {
+              "stock": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "fill_single_4",
+            "pre": {
+              "stock": 4
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "fill_single_5",
+            "pre": {
+              "stock": 5
+            },
+            "set": {},
+            "delta": {
+              "stock": 1
+            },
+            "cost": 2
+          }
+        ]
+      },
+      "optimal_cost": 10,
+      "optimal_actions": [
+        "fill_triple_0",
+        "fill_triple_3"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "fill_triple_0",
+          "fill_triple_3"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_053",
+      "question": "カードなし、未購入で開始。未購入・カードなしならregister_cardでカードを得る費用3。カードあり・未購入ならdiscount_orderで購入しカードを消費する費用5。未購入ならregular_orderで購入する費用11。ほかの行動はない。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "8",
+      "expected_kind": "minimum_cost",
+      "expected_value": 8,
+      "explanation": "登録3と割引5で8、通常注文11より安い。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "card": 0,
+          "purchased": 0
+        },
+        "goal": {
+          "purchased": 1
+        },
+        "actions": [
+          {
+            "id": "register_card",
+            "pre": {
+              "card": 0,
+              "purchased": 0
+            },
+            "set": {
+              "card": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "discount_order",
+            "pre": {
+              "card": 1,
+              "purchased": 0
+            },
+            "set": {
+              "purchased": 1
+            },
+            "delta": {
+              "card": -1
+            },
+            "cost": 5
+          },
+          {
+            "id": "regular_order",
+            "pre": {
+              "purchased": 0
+            },
+            "set": {
+              "purchased": 1
+            },
+            "delta": {},
+            "cost": 11
+          }
+        ]
+      },
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "register_card",
+        "discount_order"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "register_card",
+          "discount_order"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_054",
+      "question": "カードなし、未購入で開始。未購入・カードなしならregister_cardでカードを得る費用3。カードあり・未購入ならdiscount_orderで購入しカードを消費する費用5。未購入ならregular_orderで購入する費用11。ほかの行動はない。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"register_card\",\"discount_order\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "register_card",
+        "discount_order"
+      ],
+      "explanation": "登録3と割引5で8、通常注文11より安い。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "card": 0,
+          "purchased": 0
+        },
+        "goal": {
+          "purchased": 1
+        },
+        "actions": [
+          {
+            "id": "register_card",
+            "pre": {
+              "card": 0,
+              "purchased": 0
+            },
+            "set": {
+              "card": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "discount_order",
+            "pre": {
+              "card": 1,
+              "purchased": 0
+            },
+            "set": {
+              "purchased": 1
+            },
+            "delta": {
+              "card": -1
+            },
+            "cost": 5
+          },
+          {
+            "id": "regular_order",
+            "pre": {
+              "purchased": 0
+            },
+            "set": {
+              "purchased": 1
+            },
+            "delta": {},
+            "cost": 11
+          }
+        ]
+      },
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "register_card",
+        "discount_order"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "register_card",
+          "discount_order"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_055",
+      "question": "部品なし、未挿入、未検査、未完了。acquire_moduleは部品なし・未完了なら部品を得る費用2。insert_moduleは部品あり・未挿入・未完了なら挿入する費用3。test_moduleは挿入済み・未検査・未完了なら検査する費用4。confirm_moduleは検査済み・未完了なら完了する費用1。external_completionは未完了なら他の状態に関係なく完了する費用15。各変更は元に戻らない。ほかの行動はない。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "10",
+      "expected_kind": "minimum_cost",
+      "expected_value": 10,
+      "explanation": "通常手順2+3+4+1=10、外部完了15より安い。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "unit": 0,
+          "inserted": 0,
+          "tested": 0,
+          "completed": 0
+        },
+        "goal": {
+          "completed": 1
+        },
+        "actions": [
+          {
+            "id": "acquire_module",
+            "pre": {
+              "unit": 0,
+              "completed": 0
+            },
+            "set": {
+              "unit": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "insert_module",
+            "pre": {
+              "unit": 1,
+              "inserted": 0,
+              "completed": 0
+            },
+            "set": {
+              "inserted": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "test_module",
+            "pre": {
+              "inserted": 1,
+              "tested": 0,
+              "completed": 0
+            },
+            "set": {
+              "tested": 1
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "confirm_module",
+            "pre": {
+              "tested": 1,
+              "completed": 0
+            },
+            "set": {
+              "completed": 1
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "external_completion",
+            "pre": {
+              "completed": 0
+            },
+            "set": {
+              "completed": 1
+            },
+            "delta": {},
+            "cost": 15
+          }
+        ]
+      },
+      "optimal_cost": 10,
+      "optimal_actions": [
+        "acquire_module",
+        "insert_module",
+        "test_module",
+        "confirm_module"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "acquire_module",
+          "insert_module",
+          "test_module",
+          "confirm_module"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_056",
+      "question": "部品なし、未挿入、未検査、未完了。acquire_moduleは部品なし・未完了なら部品を得る費用2。insert_moduleは部品あり・未挿入・未完了なら挿入する費用3。test_moduleは挿入済み・未検査・未完了なら検査する費用4。confirm_moduleは検査済み・未完了なら完了する費用1。external_completionは未完了なら他の状態に関係なく完了する費用15。各変更は元に戻らない。ほかの行動はない。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"acquire_module\",\"insert_module\",\"test_module\",\"confirm_module\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "acquire_module",
+        "insert_module",
+        "test_module",
+        "confirm_module"
+      ],
+      "explanation": "通常手順2+3+4+1=10、外部完了15より安い。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "unit": 0,
+          "inserted": 0,
+          "tested": 0,
+          "completed": 0
+        },
+        "goal": {
+          "completed": 1
+        },
+        "actions": [
+          {
+            "id": "acquire_module",
+            "pre": {
+              "unit": 0,
+              "completed": 0
+            },
+            "set": {
+              "unit": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "insert_module",
+            "pre": {
+              "unit": 1,
+              "inserted": 0,
+              "completed": 0
+            },
+            "set": {
+              "inserted": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "test_module",
+            "pre": {
+              "inserted": 1,
+              "tested": 0,
+              "completed": 0
+            },
+            "set": {
+              "tested": 1
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "confirm_module",
+            "pre": {
+              "tested": 1,
+              "completed": 0
+            },
+            "set": {
+              "completed": 1
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "external_completion",
+            "pre": {
+              "completed": 0
+            },
+            "set": {
+              "completed": 1
+            },
+            "delta": {},
+            "cost": 15
+          }
+        ]
+      },
+      "optimal_cost": 10,
+      "optimal_actions": [
+        "acquire_module",
+        "insert_module",
+        "test_module",
+        "confirm_module"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "acquire_module",
+          "insert_module",
+          "test_module",
+          "confirm_module"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_057",
+      "question": "すず0、銅0、製品なし、未発送。製品なし・未発送かつすず0ならobtain_tinで1得る費用3。製品なし・未発送かつ銅0ならobtain_copperで1得る費用4。両素材1ずつ・製品なし・未発送ならmerge_materialsで両素材を消費し製品を作る費用2。製品あり・未発送ならsend_productで発送する費用2。未発送ならoutsource_sendで他の状態に関係なく発送する費用13。ほかの行動はない。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "11",
+      "expected_kind": "minimum_cost",
+      "expected_value": 11,
+      "explanation": "素材3+4、合成2、発送2で11。素材を得る最初の2行動は逆順でも同じ最小費用。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "tin": 0,
+          "copper": 0,
+          "product": 0,
+          "sent": 0
+        },
+        "goal": {
+          "sent": 1
+        },
+        "actions": [
+          {
+            "id": "obtain_tin",
+            "pre": {
+              "tin": 0,
+              "product": 0,
+              "sent": 0
+            },
+            "set": {
+              "tin": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "obtain_copper",
+            "pre": {
+              "copper": 0,
+              "product": 0,
+              "sent": 0
+            },
+            "set": {
+              "copper": 1
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "merge_materials",
+            "pre": {
+              "tin": 1,
+              "copper": 1,
+              "product": 0,
+              "sent": 0
+            },
+            "set": {
+              "product": 1
+            },
+            "delta": {
+              "tin": -1,
+              "copper": -1
+            },
+            "cost": 2
+          },
+          {
+            "id": "send_product",
+            "pre": {
+              "product": 1,
+              "sent": 0
+            },
+            "set": {
+              "sent": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "outsource_send",
+            "pre": {
+              "sent": 0
+            },
+            "set": {
+              "sent": 1
+            },
+            "delta": {},
+            "cost": 13
+          }
+        ]
+      },
+      "optimal_cost": 11,
+      "optimal_actions": [
+        "obtain_tin",
+        "obtain_copper",
+        "merge_materials",
+        "send_product"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "obtain_tin",
+          "obtain_copper",
+          "merge_materials",
+          "send_product"
+        ],
+        [
+          "obtain_copper",
+          "obtain_tin",
+          "merge_materials",
+          "send_product"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_058",
+      "question": "すず0、銅0、製品なし、未発送。製品なし・未発送かつすず0ならobtain_tinで1得る費用3。製品なし・未発送かつ銅0ならobtain_copperで1得る費用4。両素材1ずつ・製品なし・未発送ならmerge_materialsで両素材を消費し製品を作る費用2。製品あり・未発送ならsend_productで発送する費用2。未発送ならoutsource_sendで他の状態に関係なく発送する費用13。ほかの行動はない。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"obtain_tin\",\"obtain_copper\",\"merge_materials\",\"send_product\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "obtain_tin",
+        "obtain_copper",
+        "merge_materials",
+        "send_product"
+      ],
+      "explanation": "素材3+4、合成2、発送2で11。素材を得る最初の2行動は逆順でも同じ最小費用。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "tin": 0,
+          "copper": 0,
+          "product": 0,
+          "sent": 0
+        },
+        "goal": {
+          "sent": 1
+        },
+        "actions": [
+          {
+            "id": "obtain_tin",
+            "pre": {
+              "tin": 0,
+              "product": 0,
+              "sent": 0
+            },
+            "set": {
+              "tin": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "obtain_copper",
+            "pre": {
+              "copper": 0,
+              "product": 0,
+              "sent": 0
+            },
+            "set": {
+              "copper": 1
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "merge_materials",
+            "pre": {
+              "tin": 1,
+              "copper": 1,
+              "product": 0,
+              "sent": 0
+            },
+            "set": {
+              "product": 1
+            },
+            "delta": {
+              "tin": -1,
+              "copper": -1
+            },
+            "cost": 2
+          },
+          {
+            "id": "send_product",
+            "pre": {
+              "product": 1,
+              "sent": 0
+            },
+            "set": {
+              "sent": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "outsource_send",
+            "pre": {
+              "sent": 0
+            },
+            "set": {
+              "sent": 1
+            },
+            "delta": {},
+            "cost": 13
+          }
+        ]
+      },
+      "optimal_cost": 11,
+      "optimal_actions": [
+        "obtain_tin",
+        "obtain_copper",
+        "merge_materials",
+        "send_product"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "obtain_tin",
+          "obtain_copper",
+          "merge_materials",
+          "send_product"
+        ],
+        [
+          "obtain_copper",
+          "obtain_tin",
+          "merge_materials",
+          "send_product"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_059",
+      "question": "燃料fuel=1、未配達から開始。未配達・燃料nならrefuel_one_nは燃料1を増やし費用3、refuel_two_nは燃料2を増やし費用5。nは現在燃料で4を超える購入は禁止。燃料4・未配達ならnormal_dispatchは燃料4を消費して配達する費用2。未配達ならpriority_dispatchは燃料不要で配達する費用12。ほかの行動はない。 最小費用はいくらですか？整数だけで答えてください。",
+      "expected_answer": "10",
+      "expected_kind": "minimum_cost",
+      "expected_value": 10,
+      "explanation": "追加燃料3を2+1で買う費用5+3、通常配達2を加え10。購入順序は1+2でも同額。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "fuel": 1,
+          "done": 0
+        },
+        "goal": {
+          "done": 1
+        },
+        "actions": [
+          {
+            "id": "refuel_one_1",
+            "pre": {
+              "fuel": 1,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "refuel_two_1",
+            "pre": {
+              "fuel": 1,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 2
+            },
+            "cost": 5
+          },
+          {
+            "id": "refuel_one_2",
+            "pre": {
+              "fuel": 2,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "refuel_two_2",
+            "pre": {
+              "fuel": 2,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 2
+            },
+            "cost": 5
+          },
+          {
+            "id": "refuel_one_3",
+            "pre": {
+              "fuel": 3,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "normal_dispatch",
+            "pre": {
+              "fuel": 4,
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {
+              "fuel": -4
+            },
+            "cost": 2
+          },
+          {
+            "id": "priority_dispatch",
+            "pre": {
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {},
+            "cost": 12
+          }
+        ]
+      },
+      "optimal_cost": 10,
+      "optimal_actions": [
+        "refuel_two_1",
+        "refuel_one_3",
+        "normal_dispatch"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "refuel_one_1",
+          "refuel_two_2",
+          "normal_dispatch"
+        ],
+        [
+          "refuel_two_1",
+          "refuel_one_3",
+          "normal_dispatch"
+        ]
+      ]
+    },
+    {
+      "id": "planning_followup3_060",
+      "question": "燃料fuel=1、未配達から開始。未配達・燃料nならrefuel_one_nは燃料1を増やし費用3、refuel_two_nは燃料2を増やし費用5。nは現在燃料で4を超える購入は禁止。燃料4・未配達ならnormal_dispatchは燃料4を消費して配達する費用2。未配達ならpriority_dispatchは燃料不要で配達する費用12。ほかの行動はない。 合計費用が最小になる行動列を答えてください。行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"refuel_two_1\",\"refuel_one_3\",\"normal_dispatch\"]",
+      "expected_kind": "action_sequence",
+      "expected_value": [
+        "refuel_two_1",
+        "refuel_one_3",
+        "normal_dispatch"
+      ],
+      "explanation": "追加燃料3を2+1で買う費用5+3、通常配達2を加え10。購入順序は1+2でも同額。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "fuel": 1,
+          "done": 0
+        },
+        "goal": {
+          "done": 1
+        },
+        "actions": [
+          {
+            "id": "refuel_one_1",
+            "pre": {
+              "fuel": 1,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "refuel_two_1",
+            "pre": {
+              "fuel": 1,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 2
+            },
+            "cost": 5
+          },
+          {
+            "id": "refuel_one_2",
+            "pre": {
+              "fuel": 2,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "refuel_two_2",
+            "pre": {
+              "fuel": 2,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 2
+            },
+            "cost": 5
+          },
+          {
+            "id": "refuel_one_3",
+            "pre": {
+              "fuel": 3,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 3
+          },
+          {
+            "id": "normal_dispatch",
+            "pre": {
+              "fuel": 4,
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {
+              "fuel": -4
+            },
+            "cost": 2
+          },
+          {
+            "id": "priority_dispatch",
+            "pre": {
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {},
+            "cost": 12
+          }
+        ]
+      },
+      "optimal_cost": 10,
+      "optimal_actions": [
+        "refuel_two_1",
+        "refuel_one_3",
+        "normal_dispatch"
+      ],
+      "acceptable_action_sequences": [
+        [
+          "refuel_one_1",
+          "refuel_two_2",
+          "normal_dispatch"
+        ],
+        [
+          "refuel_two_1",
+          "refuel_one_3",
+          "normal_dispatch"
+        ]
+      ]
+    }
+  ],
+  "verification": {
+    "logic_examples": 24,
+    "logic_method": "質問文から規則と事実を独立に抽出し、真偽モデルと順位モデルを列挙。",
+    "planning_examples": 36,
+    "planning_method": "formal_taskだけからDijkstraで最短費用を検算し、すべての最適行動列を列挙。",
+    "answer_metadata_inside_formal_task": false,
+    "student_followup3_run_observed": false
+  }
+}

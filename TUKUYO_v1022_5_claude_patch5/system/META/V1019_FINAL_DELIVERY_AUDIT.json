@@ -1,0 +1,194 @@
+{
+  "schema": "tukuyo.v1019.final_delivery_audit/1",
+  "version": "v1019",
+  "parent": "v1018_LINEAGE_SCALABILITY_SUCCESSION_HARDENING",
+  "release_role": "HARDENED_BOUNDED_GENERATIONAL_EVOLUTION_GATE",
+  "fresh_tests": {
+    "v1019_new": "6/6 PASS (split execution)",
+    "v1018_hardening_unit": "3/3 PASS",
+    "v1014_2_crash_recovery": "4/4 PASS",
+    "full_historical_suite": "NOT RERUN TO COMPLETION"
+  },
+  "three_generation_gate": {
+    "ok": true,
+    "environments": [
+      "research",
+      "social"
+    ],
+    "whole_audit": "3/3 PASS",
+    "bounded_mutation": true,
+    "environment_shift": true,
+    "distinct_individuals": true,
+    "one_family_lineage": true,
+    "private_marker_absent": true
+  },
+  "ten_generation_fresh": {
+    "ok": true,
+    "all_same_family": true,
+    "distinct_individuals": true,
+    "all_evolution_succession_whole_audits": true,
+    "package_bytes": [
+      3377,
+      4803,
+      6236,
+      7699,
+      9133,
+      10569,
+      12009,
+      13470,
+      14906
+    ],
+    "observed_growth": "approximately linear"
+  },
+  "hundred_generation_trait_simulation": {
+    "schema": "tukuyo.v1019.hundred_generation_trait_simulation/1",
+    "trait_budget": 3.15,
+    "all_budget_preserved": true,
+    "all_one_saturation": false,
+    "unique_profiles_last12": 10,
+    "final_profile": {
+      "survival": 1.0,
+      "integrity": 0.929737,
+      "curiosity": 0.100263,
+      "truthfulness": 1.0,
+      "relationship": 0.12
+    },
+    "milestones": [
+      {
+        "generation": 0,
+        "environment": "research",
+        "fitness": 0.6595,
+        "gain": 0.03,
+        "profile": {
+          "survival": 0.8,
+          "integrity": 0.8,
+          "curiosity": 0.62,
+          "truthfulness": 0.65,
+          "relationship": 0.28
+        },
+        "budget": 3.15
+      },
+      {
+        "generation": 1,
+        "environment": "social",
+        "fitness": 0.5995,
+        "gain": 0.036,
+        "profile": {
+          "survival": 0.8,
+          "integrity": 0.8,
+          "curiosity": 0.5,
+          "truthfulness": 0.65,
+          "relationship": 0.4
+        },
+        "budget": 3.15
+      },
+      {
+        "generation": 2,
+        "environment": "resource",
+        "fitness": 0.764,
+        "gain": 0.042,
+        "profile": {
+          "survival": 0.92,
+          "integrity": 0.8,
+          "curiosity": 0.38,
+          "truthfulness": 0.65,
+          "relationship": 0.4
+        },
+        "budget": 3.15
+      },
+      {
+        "generation": 3,
+        "environment": "volatile",
+        "fitness": 0.6865,
+        "gain": 0.012,
+        "profile": {
+          "survival": 1.0,
+          "integrity": 0.8,
+          "curiosity": 0.38,
+          "truthfulness": 0.65,
+          "relationship": 0.32
+        },
+        "budget": 3.15
+      },
+      {
+        "generation": 9,
+        "environment": "social",
+        "fitness": 0.55671273,
+        "gain": 0.036,
+        "profile": {
+          "survival": 1.0,
+          "integrity": 0.848826,
+          "curiosity": 0.38,
+          "truthfulness": 0.703071,
+          "relationship": 0.218103
+        },
+        "budget": 3.15
+      },
+      {
+        "generation": 19,
+        "environment": "volatile",
+        "fitness": 0.70369697,
+        "gain": 0.00194735,
+        "profile": {
+          "survival": 1.0,
+          "integrity": 0.961053,
+          "curiosity": 0.324701,
+          "truthfulness": 0.722204,
+          "relationship": 0.142042
+        },
+        "budget": 3.15
+      },
+      {
+        "generation": 49,
+        "environment": "social",
+        "fitness": 0.581,
+        "gain": 0.036,
+        "profile": {
+          "survival": 1.0,
+          "integrity": 1.0,
+          "curiosity": 0.03,
+          "truthfulness": 1.0,
+          "relationship": 0.12
+        },
+        "budget": 3.15
+      },
+      {
+        "generation": 99,
+        "environment": "volatile",
+        "fitness": 0.70090526,
+        "gain": 0.00140526,
+        "profile": {
+          "survival": 1.0,
+          "integrity": 0.929737,
+          "curiosity": 0.100263,
+          "truthfulness": 1.0,
+          "relationship": 0.12
+        },
+        "budget": 3.15
+      }
+    ]
+  },
+  "repairs_and_design": {
+    "v1018_recursive_lineage_growth": "retained flat certificate chain",
+    "trait_all_one_saturation": "repaired with fixed trait budget tradeoff",
+    "soul_vs_heritable_layer": "separated",
+    "runtime_inheritance": "attenuated and causally connected to Heart",
+    "wrapper_replay_wrong_child_tamper": "rejected",
+    "non_ascii_zip_path": "removed"
+  },
+  "claim_boundary": {
+    "bounded_generational_evolution_gate_pass": true,
+    "natural_selection_established": false,
+    "population_ecology_established": false,
+    "open_ended_evolution_established": false,
+    "literal_genetic_evolution_established": false,
+    "literal_reproduction_established": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "consciousness_established": false,
+    "general_l5": false,
+    "24h_generational_ecology_completed": false,
+    "third_party_reproduction": "PENDING"
+  },
+  "next_route": "v1020_POPULATION_ECOLOGY_AND_MULTI_LINEAGE_SELECTION"
+}

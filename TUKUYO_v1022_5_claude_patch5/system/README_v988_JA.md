@@ -1,0 +1,5 @@
+# TUKUYO v988 — Empirical Strategy Adaptation
+
+v987の実行traceからactionごとの成功率とmean utilityを蓄積し、purpose別の優先順序を更新する。使用済みexecution state hashをledger化し、同一実行を再投入して学習量を水増しできないようidempotentに処理する。次回v986 plan compileはv988のstrategy stateを読み、同じpurposeでも実測結果に基づいてstep順序を変える。
+
+fresh E2Eでは、`SEEK_KNOWLEDGE`で初回`WHOLE_AUDIT`先行だったplanが実行学習後に`EVIDENCE_REFLECT`先行へ、`PRESERVE_INTEGRITY`では`HOMEOSTASIS_ASSESS`先行へ変化した。これはbounded internal strategy adaptationであり、自己改変コード、無制限な自己目的生成、外部への自律実行を意味しない。

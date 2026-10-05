@@ -1,0 +1,62 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "electronic_life_gate_complete": false,
+    "external_H4": "PENDING",
+    "full_historical_suite_rerun_to_completion": false,
+    "functional_living_continuity_gate_pass": true,
+    "general_l5": false,
+    "general_l6": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "third_party_reproduction": false
+  },
+  "crash_cases": {
+    "episode_kill_after_experience": "PASS_RECOVERED_AS_INTERRUPTED_HISTORY",
+    "kill_after_living_event_file": "PASS_HEAD_REPAIRED_NO_DUPLICATE"
+  },
+  "fresh_validation": {
+    "electronic_life_gate": "PENDING",
+    "focused_regression_total": "40/40 PASS",
+    "functional_living_continuity_gate": "PASS",
+    "gate_assay": "PASS 5 episodes",
+    "living_audit": "PASS",
+    "new_tests": "6/6 PASS",
+    "release_verify_before_final_meta": "1197/1197 PASS",
+    "v1014_3_to_v1012_1": "25/25 PASS",
+    "v1014_4": "9/9 PASS",
+    "v1015_new": "6/6 PASS",
+    "whole_audit": "PASS"
+  },
+  "integration_repairs_during_development": [
+    "renamed v1015 living audit CLI to avoid v1008 compatibility collision",
+    "initialized v1015 living state before final Whole State seal",
+    "startup recovery is pre-init no-op until canonical identity exists",
+    "expected SIGKILL test helper accepts empty stdout"
+  ],
+  "parent": "v1014.4",
+  "parent_critical_rechecks": {
+    "v1012_1_conversation_whole_integrity": "PASS",
+    "v1013_external_witness_pair": "PASS",
+    "v1014_1_recovery_signer_continuity": "PASS",
+    "v1014_2_realtime_event_crash_recovery": "PASS",
+    "v1014_3_external_witness_gate": "PASS",
+    "v1014_4_conversation_crash_auto_rollback": "PASS",
+    "v1014_4_gap_is_not_continuity": "PASS",
+    "v1014_external_anchor_rollback_guard": "PASS"
+  },
+  "parent_focused_regression": {
+    "v1012_1": "7/7 PASS",
+    "v1013": "3/3 PASS",
+    "v1014": "3/3 PASS",
+    "v1014_1": "5/5 PASS",
+    "v1014_2": "4/4 PASS",
+    "v1014_3": "3/3 PASS",
+    "v1014_4": "9/9 PASS"
+  },
+  "schema": "tukuyo.v1015.fresh_internal_audit/1",
+  "version": "v1015"
+}

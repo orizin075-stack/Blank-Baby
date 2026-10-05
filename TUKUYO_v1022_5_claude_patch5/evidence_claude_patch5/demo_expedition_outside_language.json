@@ -1,0 +1,70 @@
+{
+  "alive": true,
+  "claim": null,
+  "claim_boundary": {
+    "claims_only_after_replication": true,
+    "consciousness_established": false,
+    "expedition_death_is_individual_death": false,
+    "experiments_chosen_by_information_value": true,
+    "hidden_rule_world_research": true,
+    "method_change_when_language_fails": true,
+    "open_ended_real_world_research": false
+  },
+  "death_tick": null,
+  "environment_verdict": {
+    "claim_bound_held": null,
+    "law_correct": null,
+    "true_noise": 0.05,
+    "true_tier": 4
+  },
+  "events": [
+    "METHOD_CHANGE"
+  ],
+  "expedition": "E000001",
+  "final_energy": 200,
+  "method": "TABLE",
+  "ok": true,
+  "release_revision": "v1022.5-fusion",
+  "report": {
+    "claim": null,
+    "events": [
+      {
+        "at_observation": 58,
+        "counterexamples": [
+          "S1=0,S2=0,S3=0,S4=1,S5=0",
+          "S1=0,S2=0,S3=1,S4=1,S5=0"
+        ],
+        "event": "METHOD_CHANGE",
+        "p_outside": 0.991,
+        "to": "TABLE"
+      }
+    ],
+    "hypotheses": [
+      {
+        "law": "多数決(¬S1,¬S2,S4)",
+        "posterior": 0.0,
+        "tier": 3
+      }
+    ],
+    "method": "TABLE",
+    "next_experiment": {
+      "expected_bits": 0.0,
+      "switches": "S1=0,S2=0,S3=0,S4=0,S5=0"
+    },
+    "next_step": "表で働きながら、確かでない入力を調べる",
+    "observations": 124,
+    "p_outside_language": 1.0,
+    "status": "UNEXPLAINED",
+    "tier": 3,
+    "unknowns": [
+      "どの法則か（有力候補 0 個、手持ちの言葉の外にある確率 1.00）",
+      "センサーの誤り率（上限 10% と仮定）",
+      "手持ちの法則の型では説明できない。入力ごとの表で覚えている"
+    ]
+  },
+  "started_with_inherited_law": null,
+  "status": "UNEXPLAINED",
+  "temperament": "frugal",
+  "version": "v1023r-preview",
+  "world_id": "W7"
+}

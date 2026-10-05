@@ -1,0 +1,1129 @@
+{
+ "schema": "tukuyo.v1023r.lineage/1",
+ "seed": "v1023r-lineage",
+ "ticks": 256,
+ "max_age": 80,
+ "families": 4,
+ "reservoir": 200000,
+ "regeneration": 3000,
+ "runs": {
+  "inherit": {
+   "ticks": [
+    {
+     "tick": 8,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 203000,
+     "living_energy": 26850
+    },
+    {
+     "tick": 16,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 207400,
+     "living_energy": 30550
+    },
+    {
+     "tick": 24,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 217400,
+     "living_energy": 28100
+    },
+    {
+     "tick": 32,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 231600,
+     "living_energy": 22600
+    },
+    {
+     "tick": 40,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 237000,
+     "living_energy": 25000
+    },
+    {
+     "tick": 48,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 242200,
+     "living_energy": 26150
+    },
+    {
+     "tick": 56,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 249600,
+     "living_energy": 25500
+    },
+    {
+     "tick": 64,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 249800,
+     "living_energy": 29350
+    },
+    {
+     "tick": 72,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 253950,
+     "living_energy": 28800
+    },
+    {
+     "tick": 80,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 229750,
+     "living_energy": 26000
+    },
+    {
+     "tick": 88,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 228050,
+     "living_energy": 30350
+    },
+    {
+     "tick": 96,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 232950,
+     "living_energy": 30400
+    },
+    {
+     "tick": 104,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 235350,
+     "living_energy": 34350
+    },
+    {
+     "tick": 112,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 241650,
+     "living_energy": 34800
+    },
+    {
+     "tick": 120,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 247300,
+     "living_energy": 36050
+    },
+    {
+     "tick": 128,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 251200,
+     "living_energy": 36750
+    },
+    {
+     "tick": 136,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 254650,
+     "living_energy": 37600
+    },
+    {
+     "tick": 144,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 259950,
+     "living_energy": 37300
+    },
+    {
+     "tick": 152,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 264350,
+     "living_energy": 37600
+    },
+    {
+     "tick": 160,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 244950,
+     "living_energy": 26000
+    },
+    {
+     "tick": 168,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 243250,
+     "living_energy": 32050
+    },
+    {
+     "tick": 176,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 250150,
+     "living_energy": 32500
+    },
+    {
+     "tick": 184,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 256150,
+     "living_energy": 33850
+    },
+    {
+     "tick": 192,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 262150,
+     "living_energy": 34600
+    },
+    {
+     "tick": 200,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 266850,
+     "living_energy": 36500
+    },
+    {
+     "tick": 208,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 271000,
+     "living_energy": 37600
+    },
+    {
+     "tick": 216,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 277000,
+     "living_energy": 37000
+    },
+    {
+     "tick": 224,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 281400,
+     "living_energy": 37600
+    },
+    {
+     "tick": 232,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 286800,
+     "living_energy": 37600
+    },
+    {
+     "tick": 240,
+     "active": 4,
+     "successions": 12,
+     "reservoir": 267100,
+     "living_energy": 26000
+    },
+    {
+     "tick": 248,
+     "active": 4,
+     "successions": 12,
+     "reservoir": 266000,
+     "living_energy": 31750
+    },
+    {
+     "tick": 256,
+     "active": 4,
+     "successions": 12,
+     "reservoir": 272300,
+     "living_energy": 32250
+    }
+   ],
+   "deaths": 12,
+   "death_causes": [
+    "AGE"
+   ],
+   "successions": 12,
+   "max_generation": 3,
+   "by_generation": {
+    "founder": {
+     "n": 4,
+     "works": 185,
+     "works_paid": 171,
+     "injuries": 14,
+     "probes": 91,
+     "trials": 20,
+     "rests": 24,
+     "inherited_law": 0,
+     "confirmed_law": 2
+    },
+    "successor": {
+     "n": 12,
+     "works": 566,
+     "works_paid": 542,
+     "injuries": 24,
+     "probes": 56,
+     "trials": 0,
+     "rests": 82,
+     "inherited_law": 6,
+     "confirmed_law": 6
+    }
+   },
+   "per_runtime": {
+    "R000000": {
+     "family": "fam-bbdcb751fe7c4770978b08ecf20a2fdf",
+     "inherited_law": null,
+     "injuries": 9,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N0",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 14,
+     "rests": 10,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 56,
+     "works_paid": 47
+    },
+    "R000001": {
+     "family": "fam-efdccbc4626d4d80a7761577873ea79c",
+     "inherited_law": null,
+     "injuries": 4,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N1",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 14,
+     "rests": 4,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 62,
+     "works_paid": 58
+    },
+    "R000002": {
+     "family": "fam-8ad1b8e31a7c49769a36ed305052e1a1",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": "S2∨S3",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N2",
+     "niche_truth_for_owner": {
+      "noise": 0.0,
+      "tier": 2
+     },
+     "probes": 29,
+     "rests": 2,
+     "status": "CONFIRMED",
+     "trials": 10,
+     "works": 39,
+     "works_paid": 39
+    },
+    "R000003": {
+     "family": "fam-745f564b1a9545eca23bcd8286e67e0b",
+     "inherited_law": null,
+     "injuries": 1,
+     "law": "S1",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N3",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 1
+     },
+     "probes": 34,
+     "rests": 8,
+     "status": "CONFIRMED",
+     "trials": 10,
+     "works": 28,
+     "works_paid": 27
+    },
+    "R000004": {
+     "family": "fam-bbdcb751fe7c4770978b08ecf20a2fdf",
+     "inherited_law": null,
+     "injuries": 8,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N0",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 11,
+     "rests": 13,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 56,
+     "works_paid": 48
+    },
+    "R000005": {
+     "family": "fam-efdccbc4626d4d80a7761577873ea79c",
+     "inherited_law": null,
+     "injuries": 7,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N1",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 5,
+     "rests": 10,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 65,
+     "works_paid": 58
+    },
+    "R000006": {
+     "family": "fam-8ad1b8e31a7c49769a36ed305052e1a1",
+     "inherited_law": "S2∨S3",
+     "injuries": 0,
+     "law": "S2∨S3",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N2",
+     "niche_truth_for_owner": {
+      "noise": 0.0,
+      "tier": 2
+     },
+     "probes": 0,
+     "rests": 2,
+     "status": "CONFIRMED",
+     "trials": 0,
+     "works": 78,
+     "works_paid": 78
+    },
+    "R000007": {
+     "family": "fam-745f564b1a9545eca23bcd8286e67e0b",
+     "inherited_law": "S1",
+     "injuries": 0,
+     "law": "S1",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N3",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 1
+     },
+     "probes": 0,
+     "rests": 16,
+     "status": "CONFIRMED",
+     "trials": 0,
+     "works": 64,
+     "works_paid": 64
+    },
+    "R000008": {
+     "family": "fam-bbdcb751fe7c4770978b08ecf20a2fdf",
+     "inherited_law": null,
+     "injuries": 4,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N0",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 13,
+     "rests": 13,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 54,
+     "works_paid": 50
+    },
+    "R000009": {
+     "family": "fam-efdccbc4626d4d80a7761577873ea79c",
+     "inherited_law": null,
+     "injuries": 1,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N1",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 18,
+     "rests": 0,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 62,
+     "works_paid": 61
+    },
+    "R000010": {
+     "family": "fam-8ad1b8e31a7c49769a36ed305052e1a1",
+     "inherited_law": "S2∨S3",
+     "injuries": 0,
+     "law": "S2∨S3",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N2",
+     "niche_truth_for_owner": {
+      "noise": 0.0,
+      "tier": 2
+     },
+     "probes": 0,
+     "rests": 6,
+     "status": "CONFIRMED",
+     "trials": 0,
+     "works": 74,
+     "works_paid": 74
+    },
+    "R000011": {
+     "family": "fam-745f564b1a9545eca23bcd8286e67e0b",
+     "inherited_law": "S1",
+     "injuries": 0,
+     "law": "S1",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N3",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 1
+     },
+     "probes": 0,
+     "rests": 11,
+     "status": "CONFIRMED",
+     "trials": 0,
+     "works": 69,
+     "works_paid": 69
+    },
+    "R000012": {
+     "family": "fam-bbdcb751fe7c4770978b08ecf20a2fdf",
+     "inherited_law": null,
+     "injuries": 2,
+     "law": null,
+     "method": "LAW",
+     "niche": "N0",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 3,
+     "rests": 5,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 8,
+     "works_paid": 6
+    },
+    "R000013": {
+     "family": "fam-efdccbc4626d4d80a7761577873ea79c",
+     "inherited_law": null,
+     "injuries": 2,
+     "law": null,
+     "method": "LAW",
+     "niche": "N1",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 6,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 10,
+     "works_paid": 8
+    },
+    "R000014": {
+     "family": "fam-8ad1b8e31a7c49769a36ed305052e1a1",
+     "inherited_law": "S2∨S3",
+     "injuries": 0,
+     "law": "S2∨S3",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N2",
+     "niche_truth_for_owner": {
+      "noise": 0.0,
+      "tier": 2
+     },
+     "probes": 0,
+     "rests": 1,
+     "status": "CONFIRMED",
+     "trials": 0,
+     "works": 15,
+     "works_paid": 15
+    },
+    "R000015": {
+     "family": "fam-745f564b1a9545eca23bcd8286e67e0b",
+     "inherited_law": "S1",
+     "injuries": 0,
+     "law": "S1",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N3",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 1
+     },
+     "probes": 0,
+     "rests": 5,
+     "status": "CONFIRMED",
+     "trials": 0,
+     "works": 11,
+     "works_paid": 11
+    }
+   },
+   "metabolism_audit": true,
+   "whole_audit": true,
+   "resource_conservation": true,
+   "seconds": 219.9
+  },
+  "no_inherit": {
+   "ticks": [
+    {
+     "tick": 8,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 203000,
+     "living_energy": 26850
+    },
+    {
+     "tick": 16,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 207400,
+     "living_energy": 30550
+    },
+    {
+     "tick": 24,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 217400,
+     "living_energy": 28100
+    },
+    {
+     "tick": 32,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 231600,
+     "living_energy": 22600
+    },
+    {
+     "tick": 40,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 237000,
+     "living_energy": 25000
+    },
+    {
+     "tick": 48,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 242200,
+     "living_energy": 26150
+    },
+    {
+     "tick": 56,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 249600,
+     "living_energy": 25500
+    },
+    {
+     "tick": 64,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 249800,
+     "living_energy": 29350
+    },
+    {
+     "tick": 72,
+     "active": 4,
+     "successions": 0,
+     "reservoir": 253950,
+     "living_energy": 28800
+    },
+    {
+     "tick": 80,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 229750,
+     "living_energy": 26000
+    },
+    {
+     "tick": 88,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 231350,
+     "living_energy": 27650
+    },
+    {
+     "tick": 96,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 237150,
+     "living_energy": 27850
+    },
+    {
+     "tick": 104,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 244350,
+     "living_energy": 28350
+    },
+    {
+     "tick": 112,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 257150,
+     "living_energy": 24100
+    },
+    {
+     "tick": 120,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 265100,
+     "living_energy": 24550
+    },
+    {
+     "tick": 128,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 271000,
+     "living_energy": 24450
+    },
+    {
+     "tick": 136,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 275350,
+     "living_energy": 25600
+    },
+    {
+     "tick": 144,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 277850,
+     "living_energy": 28550
+    },
+    {
+     "tick": 152,
+     "active": 4,
+     "successions": 4,
+     "reservoir": 278500,
+     "living_energy": 32900
+    },
+    {
+     "tick": 160,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 255400,
+     "living_energy": 26000
+    },
+    {
+     "tick": 168,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 255600,
+     "living_energy": 29600
+    },
+    {
+     "tick": 176,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 264200,
+     "living_energy": 29700
+    },
+    {
+     "tick": 184,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 275600,
+     "living_energy": 27450
+    },
+    {
+     "tick": 192,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 289800,
+     "living_energy": 22250
+    },
+    {
+     "tick": 200,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 294500,
+     "living_energy": 24900
+    },
+    {
+     "tick": 208,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 300150,
+     "living_energy": 26000
+    },
+    {
+     "tick": 216,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 307550,
+     "living_energy": 25200
+    },
+    {
+     "tick": 224,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 307250,
+     "living_energy": 30650
+    },
+    {
+     "tick": 232,
+     "active": 4,
+     "successions": 8,
+     "reservoir": 312500,
+     "living_energy": 31250
+    },
+    {
+     "tick": 240,
+     "active": 4,
+     "successions": 12,
+     "reservoir": 292000,
+     "living_energy": 26000
+    },
+    {
+     "tick": 248,
+     "active": 4,
+     "successions": 12,
+     "reservoir": 292200,
+     "living_energy": 28750
+    },
+    {
+     "tick": 256,
+     "active": 4,
+     "successions": 12,
+     "reservoir": 299400,
+     "living_energy": 29400
+    }
+   ],
+   "deaths": 12,
+   "death_causes": [
+    "AGE"
+   ],
+   "successions": 12,
+   "max_generation": 3,
+   "by_generation": {
+    "founder": {
+     "n": 4,
+     "works": 185,
+     "works_paid": 171,
+     "injuries": 14,
+     "probes": 91,
+     "trials": 20,
+     "rests": 24,
+     "inherited_law": 0,
+     "confirmed_law": 2
+    },
+    "successor": {
+     "n": 12,
+     "works": 407,
+     "works_paid": 380,
+     "injuries": 27,
+     "probes": 198,
+     "trials": 40,
+     "rests": 59,
+     "inherited_law": 0,
+     "confirmed_law": 4
+    }
+   },
+   "per_runtime": {
+    "R000000": {
+     "family": "fam-70558f0a1750432a9c7d517b7f214f31",
+     "inherited_law": null,
+     "injuries": 9,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N0",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 14,
+     "rests": 10,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 56,
+     "works_paid": 47
+    },
+    "R000001": {
+     "family": "fam-cc1bbf8575f74ccba6109513316dfb34",
+     "inherited_law": null,
+     "injuries": 4,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N1",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 14,
+     "rests": 4,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 62,
+     "works_paid": 58
+    },
+    "R000002": {
+     "family": "fam-e031955356f54f089f50135fd44f5466",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": "S2∨S3",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N2",
+     "niche_truth_for_owner": {
+      "noise": 0.0,
+      "tier": 2
+     },
+     "probes": 29,
+     "rests": 2,
+     "status": "CONFIRMED",
+     "trials": 10,
+     "works": 39,
+     "works_paid": 39
+    },
+    "R000003": {
+     "family": "fam-feac203e8173447d9ac8140c1f41a376",
+     "inherited_law": null,
+     "injuries": 1,
+     "law": "S1",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N3",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 1
+     },
+     "probes": 34,
+     "rests": 8,
+     "status": "CONFIRMED",
+     "trials": 10,
+     "works": 28,
+     "works_paid": 27
+    },
+    "R000004": {
+     "family": "fam-70558f0a1750432a9c7d517b7f214f31",
+     "inherited_law": null,
+     "injuries": 8,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N0",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 11,
+     "rests": 13,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 56,
+     "works_paid": 48
+    },
+    "R000005": {
+     "family": "fam-cc1bbf8575f74ccba6109513316dfb34",
+     "inherited_law": null,
+     "injuries": 7,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N1",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 5,
+     "rests": 10,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 65,
+     "works_paid": 58
+    },
+    "R000006": {
+     "family": "fam-e031955356f54f089f50135fd44f5466",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": "S2∨S3",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N2",
+     "niche_truth_for_owner": {
+      "noise": 0.0,
+      "tier": 2
+     },
+     "probes": 31,
+     "rests": 0,
+     "status": "CONFIRMED",
+     "trials": 10,
+     "works": 39,
+     "works_paid": 39
+    },
+    "R000007": {
+     "family": "fam-feac203e8173447d9ac8140c1f41a376",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": "S1",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N3",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 1
+     },
+     "probes": 34,
+     "rests": 7,
+     "status": "CONFIRMED",
+     "trials": 10,
+     "works": 29,
+     "works_paid": 29
+    },
+    "R000008": {
+     "family": "fam-70558f0a1750432a9c7d517b7f214f31",
+     "inherited_law": null,
+     "injuries": 4,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N0",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 13,
+     "rests": 13,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 54,
+     "works_paid": 50
+    },
+    "R000009": {
+     "family": "fam-cc1bbf8575f74ccba6109513316dfb34",
+     "inherited_law": null,
+     "injuries": 1,
+     "law": null,
+     "method": "TABLE",
+     "niche": "N1",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 18,
+     "rests": 0,
+     "status": "UNEXPLAINED",
+     "trials": 0,
+     "works": 62,
+     "works_paid": 61
+    },
+    "R000010": {
+     "family": "fam-e031955356f54f089f50135fd44f5466",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": "S2∨S3",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N2",
+     "niche_truth_for_owner": {
+      "noise": 0.0,
+      "tier": 2
+     },
+     "probes": 29,
+     "rests": 2,
+     "status": "CONFIRMED",
+     "trials": 10,
+     "works": 39,
+     "works_paid": 39
+    },
+    "R000011": {
+     "family": "fam-feac203e8173447d9ac8140c1f41a376",
+     "inherited_law": null,
+     "injuries": 1,
+     "law": "S1",
+     "law_correct_for_owner": true,
+     "method": "LAW",
+     "niche": "N3",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 1
+     },
+     "probes": 35,
+     "rests": 7,
+     "status": "CONFIRMED",
+     "trials": 10,
+     "works": 28,
+     "works_paid": 27
+    },
+    "R000012": {
+     "family": "fam-70558f0a1750432a9c7d517b7f214f31",
+     "inherited_law": null,
+     "injuries": 2,
+     "law": null,
+     "method": "LAW",
+     "niche": "N0",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 3,
+     "rests": 5,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 8,
+     "works_paid": 6
+    },
+    "R000013": {
+     "family": "fam-cc1bbf8575f74ccba6109513316dfb34",
+     "inherited_law": null,
+     "injuries": 2,
+     "law": null,
+     "method": "LAW",
+     "niche": "N1",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 4
+     },
+     "probes": 6,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 10,
+     "works_paid": 8
+    },
+    "R000014": {
+     "family": "fam-e031955356f54f089f50135fd44f5466",
+     "inherited_law": null,
+     "injuries": 0,
+     "law": null,
+     "method": "LAW",
+     "niche": "N2",
+     "niche_truth_for_owner": {
+      "noise": 0.0,
+      "tier": 2
+     },
+     "probes": 9,
+     "rests": 0,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 7,
+     "works_paid": 7
+    },
+    "R000015": {
+     "family": "fam-feac203e8173447d9ac8140c1f41a376",
+     "inherited_law": null,
+     "injuries": 2,
+     "law": null,
+     "method": "LAW",
+     "niche": "N3",
+     "niche_truth_for_owner": {
+      "noise": 0.05,
+      "tier": 1
+     },
+     "probes": 4,
+     "rests": 2,
+     "status": "RESEARCHING",
+     "trials": 0,
+     "works": 10,
+     "works_paid": 8
+    }
+   },
+   "metabolism_audit": true,
+   "whole_audit": true,
+   "resource_conservation": true,
+   "seconds": 277.6
+  }
+ }
+}

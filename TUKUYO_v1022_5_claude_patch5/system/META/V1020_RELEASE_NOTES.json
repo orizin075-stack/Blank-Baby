@@ -1,0 +1,22 @@
+{
+  "base": "v1019.1",
+  "claims": {
+    "general_l5": false,
+    "model_children_are_actual_succession_individuals": false,
+    "natural_selection_established": false,
+    "open_ended_evolution_established": false,
+    "resource_budget_accounted": true,
+    "source_runtime_death_caused_by_model": false
+  },
+  "compatibility": "Existing subprotocol versions preserved; release_revision and distribution version v1020",
+  "known_limitation": "Intermittent stale materialization observed in initial multi-process orchestration; root cause unconfirmed. Canonical campaign uses in-process CLI mutations and distinct-process read-only audits.",
+  "new_commands": [
+    "population-init",
+    "population-join",
+    "population-step",
+    "population-status",
+    "population-audit"
+  ],
+  "scope": "bounded population ecology model",
+  "version": "v1020"
+}

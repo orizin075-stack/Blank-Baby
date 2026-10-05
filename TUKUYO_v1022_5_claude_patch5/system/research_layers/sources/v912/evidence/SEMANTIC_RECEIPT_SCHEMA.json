@@ -1,0 +1,21 @@
+{
+  "canonical_track_sha256": [
+    "37fa9e81f4ee8eb41e27075c1f404791c99b7c3c021972a565ba2b7ce27ac95e",
+    "92659b241c50d6075f795b040596d497a11e3ee172080f4a945af5247a61089f"
+  ],
+  "required_payload_fields": [
+    "schema",
+    "track_sha256",
+    "rows",
+    "baseline_impl_sha256",
+    "candidate_impl_sha256",
+    "baseline_correct",
+    "candidate_correct",
+    "baseline_wrong",
+    "candidate_wrong",
+    "result_rows_sha256",
+    "evaluator_id",
+    "self_authored"
+  ],
+  "schema": "tukuyo.external_semantic_evaluation_receipt.v2"
+}

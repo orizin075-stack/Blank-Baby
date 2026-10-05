@@ -1,0 +1,23 @@
+{
+  "items": [
+    {
+      "claim": "verified_wrong=0",
+      "reason": "old metric counted only invalid outputs; semantic mismatches were omitted",
+      "replacement": "v921+",
+      "versions": "v913-v916"
+    },
+    {
+      "claim": "hidden evaluator",
+      "reason": "process separation did not prove temporal hiddenness after evaluator and seed were shipped",
+      "replacement": "sealed holdout terminology v922+",
+      "version": "v914"
+    },
+    {
+      "claim": "strong general AST meta-improvement interpretation",
+      "reason": "fixed patch grammar directly mirrored the evaluator truth structure",
+      "replacement": "bounded data-derived source-synthesis interpretation v923+",
+      "versions": "v913-v916"
+    }
+  ],
+  "schema": "tukuyo.deprecated_claims.v2"
+}

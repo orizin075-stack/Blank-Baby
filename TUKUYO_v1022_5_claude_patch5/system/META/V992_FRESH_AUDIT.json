@@ -1,0 +1,79 @@
+{
+  "claim_boundary": {
+    "closed_simulation_only": true,
+    "consciousness": false,
+    "cross_domain_generalization": false,
+    "literal_life": false,
+    "literal_soul": false,
+    "real_world_generalization": false,
+    "self_derived_valence": true,
+    "within_family_holdout_transfer": true
+  },
+  "closed_environment_audit": "PASS",
+  "fresh_individual": "V992-FRESH",
+  "grounded_organism_audit": "PASS",
+  "holdout": {
+    "cases": 4,
+    "summary": [
+      {
+        "baseline_score": 3.380782,
+        "learned_better": true,
+        "learned_score": 3.717718,
+        "profile": "HOLDOUT_A",
+        "seed": 99201
+      },
+      {
+        "baseline_score": 3.229669,
+        "learned_better": true,
+        "learned_score": 3.69505,
+        "profile": "HOLDOUT_A",
+        "seed": 99202
+      },
+      {
+        "baseline_score": 3.062897,
+        "learned_better": true,
+        "learned_score": 3.64296,
+        "profile": "HOLDOUT_B",
+        "seed": 99211
+      },
+      {
+        "baseline_score": 3.088,
+        "learned_better": true,
+        "learned_score": 3.646725,
+        "profile": "HOLDOUT_B",
+        "seed": 99212
+      }
+    ],
+    "wins": 4
+  },
+  "last_grounded_evaluation": {
+    "derived_importance": 1,
+    "derived_valence": 0.939082,
+    "formula": "burden_before-burden_after + .90*progress + .75*goal + .08*information + .08*resource - .45*hazard",
+    "grounded_utility": 0.988699,
+    "heart_kind": "discovery",
+    "homeostatic_delta": 0.008699,
+    "meaning": "GOAL_ATTAINMENT",
+    "needs_after": {
+      "energy_deficit": 0.12,
+      "fatigue": 0.5,
+      "integrity_deficit": 0.346277,
+      "reserve_deficit": 0,
+      "threat": 0.331406,
+      "uncertainty": 0
+    },
+    "needs_before": {
+      "energy_deficit": 0.07,
+      "fatigue": 0.4375,
+      "integrity_deficit": 0.346277,
+      "reserve_deficit": 0,
+      "threat": 0.460286,
+      "uncertainty": 0.05
+    },
+    "observed_environment_delta": 0.0,
+    "task_delta": 0.98
+  },
+  "schema": "tukuyo.v992.fresh_audit/1",
+  "version": "v992",
+  "whole_audit": "PASS"
+}

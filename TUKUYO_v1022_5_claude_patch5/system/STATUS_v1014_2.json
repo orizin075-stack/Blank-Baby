@@ -1,0 +1,45 @@
+{
+  "capabilities": {
+    "atomic_target_replace": true,
+    "bounded_indexed_retrieval": true,
+    "checkpoint_commit_wal": true,
+    "independent_semantic_verifier": true,
+    "orphan_atomic_temp_cleanup": true,
+    "realtime_pending_event_repair": true,
+    "recovery_signer_continuity": true,
+    "restore_commit_resume": true,
+    "verified_query_pending_mutation_recovery": true
+  },
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "arbitrary_instruction_power_loss_proven": false,
+    "consciousness_established": false,
+    "external_H4": "PENDING",
+    "general_l5": false,
+    "general_l6": false,
+    "hardware_powerloss_durability_proven": false,
+    "literal_life_established": false,
+    "third_party_reproduction": "PENDING"
+  },
+  "fresh_fault_injection": {
+    "fault_points": [
+      "verified_result:mid_tmp",
+      "checkpoint:after_checkpoint",
+      "restore:mid_commit",
+      "realtime:after_event"
+    ],
+    "new_tests": "4/4 PASS",
+    "selected_regression": "43/43 PASS"
+  },
+  "parent": "v1014.1",
+  "performance": {
+    "candidate_count": 1,
+    "candidate_strategy": "SELECTIVE_UNION",
+    "general_corpus_claim": false,
+    "knowledge_10000_synthetic_median_ms": 6.502439
+  },
+  "release_role": "ATOMIC_CRASH_RECOVERY_REPAIR",
+  "version": "v1014.2"
+}

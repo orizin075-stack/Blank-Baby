@@ -1,0 +1,50 @@
+{
+  "schema": "tukuyo.next_route/1",
+  "base_version": "v1009",
+  "route": [
+    {
+      "version": "v1010",
+      "name": "24h_continuity_harness",
+      "gate": "24h + multiple restart + zero identity-chain break"
+    },
+    {
+      "version": "v1011",
+      "name": "72h_controlled_restart_recovery",
+      "gate": "clean/abrupt restart + unsigned-state injection blocked"
+    },
+    {
+      "version": "v1012",
+      "name": "7d_memory_compaction_continuity",
+      "gate": "selective forgetting with deep-self preservation"
+    },
+    {
+      "version": "v1013",
+      "name": "multi_agent_society",
+      "gate": "self/other separation + peer history + no state leakage"
+    },
+    {
+      "version": "v1014",
+      "name": "three_generation_successor_lineage",
+      "gate": "parent != successor != grandchild + lineage integrity"
+    },
+    {
+      "version": "v1015",
+      "name": "electronic_life_gate",
+      "gate": "single fresh integrated life/identity/mortality/social/cognition audit"
+    }
+  ],
+  "post_route": [
+    "v1016_unknown_world_research",
+    "v1017_safe_self_rewrite",
+    "v1018_recursive_improver",
+    "v1019_third_party_reproduction",
+    "v1020_general_l5_candidate"
+  ],
+  "claim_boundary": {
+    "consciousness_established": false,
+    "literal_soul_established": false,
+    "literal_biological_life": false,
+    "general_l5": false
+  },
+  "superseded_note": "v1010 repurposed as Long-Life Cognitive Repair after independent performance/capability audit; real-time continuity moves to v1011+"
+}

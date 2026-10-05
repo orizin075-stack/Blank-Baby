@@ -1,0 +1,1357 @@
+{
+  "teacher": "planning",
+  "regenerate": true,
+  "provenance": "regenerate: 消失前の会話記録から同じ意図で再生成。完全一致は保証しない。計画入力と正解情報を分離。",
+  "examples": [
+    {
+      "id": "planning_001",
+      "question": "Aの高さはBより低く、Bの高さはCより低い。Aの高さはCより低いですか？",
+      "expected_answer": "はい",
+      "explanation": "A<B<CからA<C。",
+      "domain": "transitivity",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_002",
+      "question": "AはBより前、BはCより前、CはDより前に実行される。最初は何ですか？",
+      "expected_answer": "A",
+      "explanation": "順序はA、B、C、D。",
+      "domain": "transitivity",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_003",
+      "question": "すべてのRはSです。すべてのSはTです。xはRです。xはTですか？",
+      "expected_answer": "はい",
+      "explanation": "R⊆S⊆Tとx∈Rからx∈T。",
+      "domain": "transitivity",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_004",
+      "question": "AはBより大きい。BはCより大きい。AはCより小さいですか？",
+      "expected_answer": "いいえ",
+      "explanation": "A>B>CからA>CでありA<Cではない。",
+      "domain": "transitivity",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_005",
+      "question": "AとBは直接つながり、BとCも直接つながる。AとCが直接つながるかは決定できますか？決定できなければ不明と答えてください。",
+      "expected_answer": null,
+      "explanation": "経路はあるがAとCの直接接続は不明。",
+      "domain": "transitivity",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_006",
+      "question": "すべてのRはSです。すべてのTもSです。すべてのRはTですか？",
+      "expected_answer": null,
+      "explanation": "RとTは共通の上位集合Sを持つだけで、相互の包含は不明。",
+      "domain": "transitivity",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_007",
+      "question": "xはyより軽く、yはzより軽く、zはwより軽い。最も軽いものは何ですか？",
+      "expected_answer": "x",
+      "explanation": "x<y<z<wなのでx。",
+      "domain": "transitivity",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_008",
+      "question": "x≥y、y≥zが分かっている。x<zが成立することはありますか？",
+      "expected_answer": "いいえ",
+      "explanation": "x≥zが導かれる。",
+      "domain": "transitivity",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_009",
+      "question": "n=7です。n≥5なら赤、そうでなければ青を選ぶ。色は何ですか？",
+      "expected_answer": "赤",
+      "explanation": "7≥5は真。",
+      "domain": "conditional",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_010",
+      "question": "n=4です。偶数ならnを2で割り、奇数なら3n+1にする。結果を整数だけで答えてください。",
+      "expected_answer": "2",
+      "explanation": "4は偶数なので4÷2=2。",
+      "domain": "conditional",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_011",
+      "question": "x=3です。2を足す。その時点でx≥5なら2倍し、そうでなければ1を足す。最後に1を引く。結果を整数だけで答えてください。",
+      "expected_answer": "9",
+      "explanation": "3+2=5、5×2=10、10−1=9。",
+      "domain": "conditional",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_012",
+      "question": "x=8です。3を引く。その時点でx<4なら10を足し、そうでなければ2倍する。結果を整数だけで答えてください。",
+      "expected_answer": "10",
+      "explanation": "8−3=5、5≥4なので5×2=10。",
+      "domain": "conditional",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_013",
+      "question": "x=2です。3倍してから4を足す。その時点でx≥10なら5を引き、そうでなければ5を足す。結果を整数だけで答えてください。",
+      "expected_answer": "5",
+      "explanation": "2×3=6、6+4=10、10−5=5。",
+      "domain": "conditional",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_014",
+      "question": "n=15です。3で割り切れれば3で割り、そうでなければ1を足す。その後のnが奇数なら2を足し、偶数なら2を引く。最後に2倍する。結果を整数だけで答えてください。",
+      "expected_answer": "14",
+      "explanation": "15÷3=5、5+2=7、7×2=14。",
+      "domain": "conditional",
+      "difficulty": 3
+    },
+    {
+      "id": "planning_015",
+      "question": "Aは真、Bは偽。AかつBなら緑、そうでなくAまたはBなら黄、それ以外なら黒。選ぶ色は何ですか？",
+      "expected_answer": "黄",
+      "explanation": "連言は偽、選言は真なので黄。",
+      "domain": "conditional",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_016",
+      "question": "n=0です。n<0なら負、そうでなくn=0なら零、それ以外なら正。分類は何ですか？",
+      "expected_answer": "零",
+      "explanation": "n<0は偽、n=0は真。",
+      "domain": "conditional",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_017",
+      "question": "部屋に入れる人は必ずバッジを持つ。xはバッジを持たない。xは部屋に入れますか？",
+      "expected_answer": "いいえ",
+      "explanation": "必要条件のバッジが欠ける。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_018",
+      "question": "部屋に入れる人は必ずバッジを持つ。xはバッジを持つ。xは部屋に入れますか？",
+      "expected_answer": null,
+      "explanation": "バッジは必要条件だけであり十分とは限らない。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_019",
+      "question": "鍵Kがあれば箱は開く。箱が開いている。鍵Kがあったかは決定できますか？",
+      "expected_answer": null,
+      "explanation": "K→開くの逆は導けない。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_020",
+      "question": "鍵Kがあれば箱は開く。鍵Kがある。箱は開きますか？",
+      "expected_answer": "はい",
+      "explanation": "Kから開くを導く。",
+      "domain": "necessary_sufficient",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_021",
+      "question": "入場可能と券が有効は必要十分の関係。xの券は無効。xは入場できますか？",
+      "expected_answer": "いいえ",
+      "explanation": "入場可能なら券は有効なので、無効なら入場できない。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_022",
+      "question": "AならBです。Aではありません。Bですか？",
+      "expected_answer": null,
+      "explanation": "前件の否定から後件の真偽は決まらない。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_023",
+      "question": "合格にはCとDの両方が必要。xはCを満たすがDを満たさない。xは合格できますか？",
+      "expected_answer": "いいえ",
+      "explanation": "Dという必要条件が欠ける。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_024",
+      "question": "Sが作動する必要十分条件はPかつQ。PもQも成立している。Sは作動しますか？",
+      "expected_answer": "はい",
+      "explanation": "PかつQは作動の十分条件でもある。",
+      "domain": "necessary_sufficient",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_025",
+      "question": "赤いラベルの箱の平均得点10、青いラベルは6。中身やラベルの付け方は不明。赤に変えると得点が上がると決定できますか？",
+      "expected_answer": null,
+      "explanation": "観測差だけでは交絡や選別を除けず因果効果は不明。",
+      "domain": "causality",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_026",
+      "question": "スイッチを入れた後に温度が上がった。他の出来事は不明。スイッチが温度上昇の原因だと決定できますか？",
+      "expected_answer": null,
+      "explanation": "時間的先行だけでは因果関係を確定できない。",
+      "domain": "causality",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_027",
+      "question": "この世界では雨が降ると必ず床がぬれ、雨以外にぬらす原因はない。今は雨が降っている。床をぬらす原因は何ですか？",
+      "expected_answer": "雨",
+      "explanation": "雨が唯一の原因で、現在成立している。",
+      "domain": "causality",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_028",
+      "question": "得点は基本値4に、レバーが入のときだけ3を加える。ほかを変えず切から入にすると何点増えますか？整数だけで答えてください。",
+      "expected_answer": "3",
+      "explanation": "切は4、入は7なので差は3。",
+      "domain": "causality",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_029",
+      "question": "雨か散水機の少なくとも一方が動くと庭がぬれ、どちらも動かなければぬれない。庭はぬれている。雨が降っていたか決定できますか？",
+      "expected_answer": null,
+      "explanation": "散水機だけでもぬれるので雨の有無は不明。",
+      "domain": "causality",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_030",
+      "question": "Hが入ならW=2、切ならW=0、M=3×W。他の入力はない。Hを切から入にするとMはいくつ増えますか？整数だけで答えてください。",
+      "expected_answer": "6",
+      "explanation": "Mは0から6になる。",
+      "domain": "causality",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_031",
+      "question": "室温が高いと警告灯がつく。警告灯は室温に影響しない。室温は高く他に室温を変える操作はない。警告灯だけを強制的に消すと室温はどうなりますか？",
+      "expected_answer": "高いまま",
+      "explanation": "結果である灯を操作しても原因の室温は変化しない。",
+      "domain": "causality",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_032",
+      "question": "処置群の平均得点12、非処置群は8。処置前の得点と群の選び方は不明。処置自体が4点上昇させたと決定できますか？",
+      "expected_answer": null,
+      "explanation": "群間差が処置前の差か因果効果かは不明。",
+      "domain": "causality",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_033",
+      "question": "SからGに行く。direct:S→Gは7、to_a:S→Aは2、a_to_goal:A→Gは3。他の行動はない。最小合計費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "5",
+      "explanation": "A経由2+3=5、直接7。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "direct",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 7
+          },
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "a_to_goal",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 3
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "to_a",
+        "a_to_goal"
+      ]
+    },
+    {
+      "id": "planning_034",
+      "question": "未完成Sから完成Gにする。get_a:S→Aは4、finish_a:A→Gは2、get_b:S→Bは1、finish_b:B→Gは8。他の行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "6",
+      "explanation": "A経由6、B経由9。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "get_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "finish_a",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "get_b",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "B"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "finish_b",
+            "pre": {
+              "place": "B"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 6,
+      "optimal_actions": [
+        "get_a",
+        "finish_a"
+      ]
+    },
+    {
+      "id": "planning_035",
+      "question": "SからGに進む。to_a:S→Aは1、a_to_b:A→Bは2、b_to_goal:B→Gは3、to_c:S→Cは4、c_to_goal:C→Gは4。他の行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "6",
+      "explanation": "A,B経由1+2+3=6、C経由8。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "a_to_b",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "B"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "b_to_goal",
+            "pre": {
+              "place": "B"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "to_c",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "C"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "c_to_goal",
+            "pre": {
+              "place": "C"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 4
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 6,
+      "optimal_actions": [
+        "to_a",
+        "a_to_b",
+        "b_to_goal"
+      ]
+    },
+    {
+      "id": "planning_036",
+      "question": "SからGに行く。to_a:S→Aは3、a_to_goal:A→Gは6、to_b:S→Bは5、b_to_goal:B→Gは2、direct:S→Gは10。他の行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "7",
+      "explanation": "A経由9、B経由7、直接10。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "a_to_goal",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 6
+          },
+          {
+            "id": "to_b",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "B"
+            },
+            "delta": {},
+            "cost": 5
+          },
+          {
+            "id": "b_to_goal",
+            "pre": {
+              "place": "B"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "direct",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 10
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 7,
+      "optimal_actions": [
+        "to_b",
+        "b_to_goal"
+      ]
+    },
+    {
+      "id": "planning_037",
+      "question": "在庫0からちょうど5にする。1増やす費用2、2増やす費用3。繰り返せるが5を超える購入は禁止。減らす行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "8",
+      "explanation": "2増を2回、1増を1回で3+3+2=8。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "qty": 0
+        },
+        "goal": {
+          "qty": 5
+        },
+        "actions": [
+          {
+            "id": "add_one_at_0",
+            "pre": {
+              "qty": 0
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "add_two_at_0",
+            "pre": {
+              "qty": 0
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_one_at_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "add_two_at_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_one_at_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "add_two_at_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_one_at_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "add_two_at_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "add_one_at_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 1
+            },
+            "cost": 2
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "add_two_at_0",
+        "add_two_at_2",
+        "add_one_at_4"
+      ]
+    },
+    {
+      "id": "planning_038",
+      "question": "鍵なし、扉閉、未配達から開始。鍵を買う費用2、鍵ありなら開扉費用1、扉が開けば配達費用4。特急配達は扉や鍵に関係なく費用10。ほかの行動はない。配達完了の最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "7",
+      "explanation": "鍵購入、開扉、配達で2+1+4=7。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "key": 0,
+          "door": 0,
+          "delivered": 0
+        },
+        "goal": {
+          "delivered": 1
+        },
+        "actions": [
+          {
+            "id": "buy_key",
+            "pre": {
+              "key": 0,
+              "door": 0,
+              "delivered": 0
+            },
+            "set": {
+              "key": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "open_door",
+            "pre": {
+              "key": 1,
+              "door": 0
+            },
+            "set": {
+              "door": 1
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "deliver",
+            "pre": {
+              "door": 1,
+              "delivered": 0
+            },
+            "set": {
+              "delivered": 1
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "express",
+            "pre": {
+              "delivered": 0
+            },
+            "set": {
+              "delivered": 1
+            },
+            "delta": {},
+            "cost": 10
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 7,
+      "optimal_actions": [
+        "buy_key",
+        "open_door",
+        "deliver"
+      ]
+    },
+    {
+      "id": "planning_039",
+      "question": "赤も青も未配達。未配達の赤だけを届ける費用2、青だけは3、両方未配達ならまとめて届ける費用8。状態は元に戻らない。両方配達の最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "5",
+      "explanation": "別々に届ける費用2+3=5で、順序は任意。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "red": 0,
+          "blue": 0
+        },
+        "goal": {
+          "red": 1,
+          "blue": 1
+        },
+        "actions": [
+          {
+            "id": "deliver_red",
+            "pre": {
+              "red": 0
+            },
+            "set": {
+              "red": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "deliver_blue",
+            "pre": {
+              "blue": 0
+            },
+            "set": {
+              "blue": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "deliver_both",
+            "pre": {
+              "red": 0,
+              "blue": 0
+            },
+            "set": {
+              "red": 1,
+              "blue": 1
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "deliver_red",
+        "deliver_blue"
+      ]
+    },
+    {
+      "id": "planning_040",
+      "question": "燃料0、未配達。燃料1購入は費用2、燃料2購入は3。燃料3を超える購入は禁止。燃料3なら費用1で通常配達して燃料3を消費。燃料不要の特急配達は9。ほかの行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "6",
+      "explanation": "燃料購入3+2と配達1で6。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "fuel": 0,
+          "done": 0
+        },
+        "goal": {
+          "done": 1
+        },
+        "actions": [
+          {
+            "id": "buy_one_at_0",
+            "pre": {
+              "fuel": 0,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "buy_two_at_0",
+            "pre": {
+              "fuel": 0,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "buy_one_at_1",
+            "pre": {
+              "fuel": 1,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "buy_two_at_1",
+            "pre": {
+              "fuel": 1,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "buy_one_at_2",
+            "pre": {
+              "fuel": 2,
+              "done": 0
+            },
+            "set": {},
+            "delta": {
+              "fuel": 1
+            },
+            "cost": 2
+          },
+          {
+            "id": "normal_delivery",
+            "pre": {
+              "fuel": 3,
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {
+              "fuel": -3
+            },
+            "cost": 1
+          },
+          {
+            "id": "express_delivery",
+            "pre": {
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {},
+            "cost": 9
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 6,
+      "optimal_actions": [
+        "buy_two_at_0",
+        "buy_one_at_2",
+        "normal_delivery"
+      ]
+    },
+    {
+      "id": "planning_041",
+      "question": "SからGに行く。to_a:S→Aは2、a_to_b:A→Bは2、b_to_goal:B→Gは2、a_to_goal:A→Gは7、to_c:S→Cは1、c_to_goal:C→Gは8。他の行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "6",
+      "explanation": "A,B経由6。他の到達経路は9。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "a_to_b",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "B"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "b_to_goal",
+            "pre": {
+              "place": "B"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "a_to_goal",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 7
+          },
+          {
+            "id": "to_c",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "C"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "c_to_goal",
+            "pre": {
+              "place": "C"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 6,
+      "optimal_actions": [
+        "to_a",
+        "a_to_b",
+        "b_to_goal"
+      ]
+    },
+    {
+      "id": "planning_042",
+      "question": "鉱石0、木材0、道具なし、建築未完了。所持数0なら鉱石1購入は費用2、木材1購入は1。道具なしなら両素材を各1消費して道具を作る費用2、道具を直接買う費用6。道具があれば建築完了費用1で道具は残る。ほかの行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "6",
+      "explanation": "素材2+1、作成2、建築1で6。購入道具なら7。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "ore": 0,
+          "wood": 0,
+          "tool": 0,
+          "built": 0
+        },
+        "goal": {
+          "built": 1
+        },
+        "actions": [
+          {
+            "id": "buy_ore",
+            "pre": {
+              "ore": 0
+            },
+            "set": {
+              "ore": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "buy_wood",
+            "pre": {
+              "wood": 0
+            },
+            "set": {
+              "wood": 1
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "craft_tool",
+            "pre": {
+              "ore": 1,
+              "wood": 1,
+              "tool": 0
+            },
+            "set": {
+              "tool": 1
+            },
+            "delta": {
+              "ore": -1,
+              "wood": -1
+            },
+            "cost": 2
+          },
+          {
+            "id": "buy_tool",
+            "pre": {
+              "tool": 0
+            },
+            "set": {
+              "tool": 1
+            },
+            "delta": {},
+            "cost": 6
+          },
+          {
+            "id": "build",
+            "pre": {
+              "tool": 1,
+              "built": 0
+            },
+            "set": {
+              "built": 1
+            },
+            "delta": {},
+            "cost": 1
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 6,
+      "optimal_actions": [
+        "buy_ore",
+        "buy_wood",
+        "craft_tool",
+        "build"
+      ]
+    },
+    {
+      "id": "planning_043",
+      "question": "SからGに行く。dead_end:S→Dは1、to_a:S→Aは3、a_to_goal:A→Gは2、direct:S→Gは8。Dから出る行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "5",
+      "explanation": "D経由は到達不能。A経由5。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "place": "S"
+        },
+        "goal": {
+          "place": "G"
+        },
+        "actions": [
+          {
+            "id": "dead_end",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "D"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "to_a",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "A"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "a_to_goal",
+            "pre": {
+              "place": "A"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "direct",
+            "pre": {
+              "place": "S"
+            },
+            "set": {
+              "place": "G"
+            },
+            "delta": {},
+            "cost": 8
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 5,
+      "optimal_actions": [
+        "to_a",
+        "a_to_goal"
+      ]
+    },
+    {
+      "id": "planning_044",
+      "question": "クーポンなし、商品未購入。通常購入の費用8。未購入かつクーポンなしなら費用2で1枚取得。クーポンがあれば費用4で購入でき、クーポンを消費する。ほかの行動はない。最小費用はいくらですか？ 最小費用の整数だけで答えてください。",
+      "expected_answer": "6",
+      "explanation": "クーポン2と割引購入4で6。",
+      "domain": "planning",
+      "difficulty": 2,
+      "formal_task": {
+        "initial": {
+          "coupon": 0,
+          "bought": 0
+        },
+        "goal": {
+          "bought": 1
+        },
+        "actions": [
+          {
+            "id": "get_coupon",
+            "pre": {
+              "coupon": 0,
+              "bought": 0
+            },
+            "set": {
+              "coupon": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "buy_regular",
+            "pre": {
+              "bought": 0
+            },
+            "set": {
+              "bought": 1
+            },
+            "delta": {},
+            "cost": 8
+          },
+          {
+            "id": "buy_discount",
+            "pre": {
+              "coupon": 1,
+              "bought": 0
+            },
+            "set": {
+              "bought": 1
+            },
+            "delta": {
+              "coupon": -1
+            },
+            "cost": 4
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 6,
+      "optimal_actions": [
+        "get_coupon",
+        "buy_discount"
+      ]
+    },
+    {
+      "id": "planning_045",
+      "question": "09:10に20分のAを開始。完了後5分待ち、15分のBを行う。Bの終了時刻をHH:MMで答えてください。",
+      "expected_answer": "09:50",
+      "explanation": "09:10+20+5+15分=09:50。",
+      "domain": "temporal",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_046",
+      "question": "08:35から作業15分、移動10分、作業20分、片付け5分を順に行う。待ち時間はない。終了時刻をHH:MMで答えてください。",
+      "expected_answer": "09:25",
+      "explanation": "合計50分、08:35+50分=09:25。",
+      "domain": "temporal",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_047",
+      "question": "時刻0にAとBを同時開始。Aは4、Bは7。両方完了後に所要時間3のCを開始。Cの最早終了時刻を整数だけで答えてください。",
+      "expected_answer": "10",
+      "explanation": "max(4,7)+3=10。",
+      "domain": "temporal",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_048",
+      "question": "Aの後にB、Bの後にC、Cの後にDを行う。最後は何ですか？",
+      "expected_answer": "D",
+      "explanation": "A→B→C→DなのでD。",
+      "domain": "temporal",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_049",
+      "question": "AはBより前、CはDより前。それ以外の順序制約はない。BとCのどちらが先か決定できますか？",
+      "expected_answer": null,
+      "explanation": "別々の制約で相互順序は不明。",
+      "domain": "temporal",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_050",
+      "question": "時刻0から準備3、移動4。時刻8までに到着が必要。準備と移動の間だけに待てる。最大待ち時間を整数だけで答えてください。",
+      "expected_answer": "1",
+      "explanation": "8−(3+4)=1。",
+      "domain": "temporal",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_051",
+      "question": "時刻2に所要時間3のAを開始。完了後2待ち、所要時間4のBを始める。B終了時刻を整数だけで答えてください。",
+      "expected_answer": "11",
+      "explanation": "2+3+2+4=11。",
+      "domain": "temporal",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_052",
+      "question": "機械は同時に1作業だけ可能。Aは時刻0から開始可能で時間3、Bは時刻2から開始可能で時間2。A完了後にBを行う。Bの最早終了時刻を整数だけで答えてください。",
+      "expected_answer": "5",
+      "explanation": "A完了3、B開始max(3,2)=3、終了5。",
+      "domain": "temporal",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_053",
+      "question": "1候補を選ぶ。予算10。Aは費用6・得点7、Bは費用4・得点5、Cは費用7・得点8。予算内で得点最大の候補名は？",
+      "expected_answer": "C",
+      "explanation": "全候補が予算内でCの得点8が最大。",
+      "domain": "constrained_choice",
+      "difficulty": 1
+    },
+    {
+      "id": "planning_054",
+      "question": "異なる2候補を選ぶ。予算9。Aは費用4・得点5、Bは費用5・得点7、Cは費用6・得点8。得点最大の組合せをA+B形式で答えてください。",
+      "expected_answer": "A+B",
+      "explanation": "AB費用9、AC10、BC11なのでABだけ実行可能。",
+      "domain": "constrained_choice",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_055",
+      "question": "時間6以下で費用最小の経路を選ぶ。Aは時間5・費用8、Bは時間7・費用3、Cは時間6・費用6。経路名は？",
+      "expected_answer": "C",
+      "explanation": "Bは時間超過。AとCではCが安い。",
+      "domain": "constrained_choice",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_056",
+      "question": "1候補を選ぶ。費用8以下、重さ5以下。Aは費用8・重さ4・得点10、Bは費用7・重さ6・得点12、Cは費用6・重さ5・得点9。得点最大の候補名は？",
+      "expected_answer": "A",
+      "explanation": "Bは重さ超過。Aの得点10がCの9より大きい。",
+      "domain": "constrained_choice",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_057",
+      "question": "3個入りの箱は費用4、5個入りの箱は費用7。各箱を0個以上の整数個買える。少なくとも7個そろえる最小費用を整数だけで答えてください。",
+      "expected_answer": "11",
+      "explanation": "3個箱1と5個箱1で8個・11。3個箱3は12、5個箱2は14。",
+      "domain": "constrained_choice",
+      "difficulty": 3
+    },
+    {
+      "id": "planning_058",
+      "question": "AかBを1つ選んで得点を最大にする。予算4、各費用4。Bの得点8、Aは不明。最適候補を決定できますか？",
+      "expected_answer": null,
+      "explanation": "Aの得点が8より大きいか小さいか不明。",
+      "domain": "constrained_choice",
+      "difficulty": 2
+    },
+    {
+      "id": "planning_059",
+      "question": "x,yは0から3の整数でx+y=3。費用3x+2yは7以下。得点5x+3yを最大にするx,yをx=整数,y=整数形式で答えてください。",
+      "expected_answer": "x=1,y=2",
+      "explanation": "実行可能な(0,3)は得点9、(1,2)は11。他は費用超過。",
+      "domain": "constrained_choice",
+      "difficulty": 3
+    },
+    {
+      "id": "planning_060",
+      "question": "異なる2候補を選び必ずBを含める。予算6。Aは費用2・得点3、Bは費用3・得点5、Cは費用4・得点6。最適組合せをA+B形式で答えてください。",
+      "expected_answer": "A+B",
+      "explanation": "AB費用5、BC費用7なのでAB。",
+      "domain": "constrained_choice",
+      "difficulty": 2
+    }
+  ]
+}

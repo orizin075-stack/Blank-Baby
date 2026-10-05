@@ -1,0 +1,42 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "external_H4": "PENDING",
+    "full_historical_suite_current_release": "NOT_RERUN_TO_COMPLETION",
+    "general_l5": false,
+    "human_third_party_reproduction": "PENDING",
+    "internal_independent_process_reproduction": "PASS",
+    "literal_life_established": false,
+    "literal_soul_established": false
+  },
+  "focused_regression": {
+    "total": "56/56 PASS",
+    "v1012_1": "7/7 PASS",
+    "v1013": "3/3 PASS",
+    "v1014": "3/3 PASS",
+    "v1014_1": "5/5 PASS",
+    "v1014_2": "4/4 PASS",
+    "v1014_3": "3/3 PASS",
+    "v1014_4": "9/9 PASS",
+    "v1015": "6/6 PASS",
+    "v1015_1": "2/2 PASS",
+    "v1015_2": "4/4 PASS",
+    "v1015_3": "5/5 PASS",
+    "v1015_4": "5/5 PASS"
+  },
+  "generated_utc_ns": 1790659682702901028,
+  "new_controls": {
+    "failure_to_success_forgery": "REJECTED",
+    "portable_failure_bundle": "PASS",
+    "portable_success_bundle": "PASS",
+    "release_tamper_rejection": "PASS",
+    "standalone_verifier_imports_tukuyo_modules": false,
+    "standalone_verifier_without_data_root": "PASS",
+    "witness_swap_rejection": "PASS"
+  },
+  "schema": "tukuyo.v1015_4.fresh_audit/1",
+  "version": "v1015.4"
+}

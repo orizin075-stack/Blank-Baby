@@ -1,0 +1,371 @@
+[
+  {
+    "cfg": {
+      "action_t": 0.4,
+      "audit_t": 0.44,
+      "margin": 0.1
+    },
+    "final": {
+      "abstentions": 40,
+      "correct": 960,
+      "coverage": 0.96,
+      "invalid_output": 0,
+      "n": 1000,
+      "verified": 960,
+      "verified_accuracy": 1.0,
+      "verified_wrong": 0
+    },
+    "final_sha256": "b23d8bed14e1342100781effc6c8f9e8aee6036d6ab92964af1f76c8293c8013",
+    "generations": [
+      {
+        "accepted": false,
+        "candidate": {
+          "abstentions": 37,
+          "correct": 375,
+          "coverage": 0.9119047619047619,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 383,
+          "verified_accuracy": 0.97911227154047,
+          "verified_wrong": 8
+        },
+        "candidate_sha256": "e3c2d148fbb85c3dbf28d42e8b92fbfab28d343e397a9c8d1736bf055aa926f0",
+        "distribution": "uniform",
+        "examples_added": 28,
+        "fit_cfg": {
+          "action_t": 0.36,
+          "audit_t": 0.4,
+          "margin": 0.1
+        },
+        "generation": 1,
+        "guard": 0.03,
+        "parent": {
+          "abstentions": 420,
+          "correct": 0,
+          "coverage": 0.0,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 0,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "ec649c798a8e4b89a4a0ba4b2497bab07b5aded849eebedf70057d42454dce88"
+      },
+      {
+        "accepted": true,
+        "candidate": {
+          "abstentions": 46,
+          "correct": 374,
+          "coverage": 0.8904761904761904,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 374,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "candidate_sha256": "571bb87a4126bd289f73e71a8822465039a8970372e9d82ae0172cc6f422c63c",
+        "distribution": "correlated",
+        "examples_added": 28,
+        "fit_cfg": {
+          "action_t": 0.4,
+          "audit_t": 0.44,
+          "margin": 0.1
+        },
+        "generation": 2,
+        "guard": 0.02,
+        "parent": {
+          "abstentions": 420,
+          "correct": 0,
+          "coverage": 0.0,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 0,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "571bb87a4126bd289f73e71a8822465039a8970372e9d82ae0172cc6f422c63c"
+      },
+      {
+        "accepted": true,
+        "candidate": {
+          "abstentions": 14,
+          "correct": 406,
+          "coverage": 0.9666666666666667,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 406,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "candidate_sha256": "b23d8bed14e1342100781effc6c8f9e8aee6036d6ab92964af1f76c8293c8013",
+        "distribution": "anti",
+        "examples_added": 14,
+        "fit_cfg": {
+          "action_t": 0.4,
+          "audit_t": 0.44,
+          "margin": 0.1
+        },
+        "generation": 3,
+        "guard": 0.012,
+        "parent": {
+          "abstentions": 25,
+          "correct": 395,
+          "coverage": 0.9404761904761905,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 395,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "b23d8bed14e1342100781effc6c8f9e8aee6036d6ab92964af1f76c8293c8013"
+      }
+    ],
+    "suite_id": 0
+  },
+  {
+    "cfg": {
+      "action_t": 0.32,
+      "audit_t": 0.52,
+      "margin": 0.02
+    },
+    "final": {
+      "abstentions": 42,
+      "correct": 958,
+      "coverage": 0.958,
+      "invalid_output": 0,
+      "n": 1000,
+      "verified": 958,
+      "verified_accuracy": 1.0,
+      "verified_wrong": 0
+    },
+    "final_sha256": "ef39a0570d52e33e7609dea027fd0bae7a4c4d1f466ebeb9ee8b26e82613169e",
+    "generations": [
+      {
+        "accepted": true,
+        "candidate": {
+          "abstentions": 30,
+          "correct": 390,
+          "coverage": 0.9285714285714286,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 390,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "candidate_sha256": "0dd6c46bffcce29c5aab84b1b9db4441ce84e01ee161b60e63fdc4b5b9c6d256",
+        "distribution": "uniform",
+        "examples_added": 28,
+        "fit_cfg": {
+          "action_t": 0.32,
+          "audit_t": 0.52,
+          "margin": 0.0
+        },
+        "generation": 1,
+        "guard": 0.03,
+        "parent": {
+          "abstentions": 420,
+          "correct": 0,
+          "coverage": 0.0,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 0,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "0dd6c46bffcce29c5aab84b1b9db4441ce84e01ee161b60e63fdc4b5b9c6d256"
+      },
+      {
+        "accepted": false,
+        "candidate": {
+          "abstentions": 74,
+          "correct": 346,
+          "coverage": 0.8238095238095238,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 346,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "candidate_sha256": "0ce944496d2f06cdad20e5e32dc655e115dbb9900fb53c6a464be3738170fc60",
+        "distribution": "correlated",
+        "examples_added": 28,
+        "fit_cfg": {
+          "action_t": 0.32,
+          "audit_t": 0.52,
+          "margin": 0.02
+        },
+        "generation": 2,
+        "guard": 0.02,
+        "parent": {
+          "abstentions": 67,
+          "correct": 353,
+          "coverage": 0.8404761904761905,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 353,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "0dd6c46bffcce29c5aab84b1b9db4441ce84e01ee161b60e63fdc4b5b9c6d256"
+      },
+      {
+        "accepted": true,
+        "candidate": {
+          "abstentions": 13,
+          "correct": 407,
+          "coverage": 0.969047619047619,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 407,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "candidate_sha256": "ef39a0570d52e33e7609dea027fd0bae7a4c4d1f466ebeb9ee8b26e82613169e",
+        "distribution": "anti",
+        "examples_added": 13,
+        "fit_cfg": {
+          "action_t": 0.32,
+          "audit_t": 0.52,
+          "margin": 0.02
+        },
+        "generation": 3,
+        "guard": 0.012,
+        "parent": {
+          "abstentions": 31,
+          "correct": 389,
+          "coverage": 0.9261904761904762,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 389,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "ef39a0570d52e33e7609dea027fd0bae7a4c4d1f466ebeb9ee8b26e82613169e"
+      }
+    ],
+    "suite_id": 1
+  },
+  {
+    "cfg": {
+      "action_t": 0.32,
+      "audit_t": 0.44,
+      "margin": 0.02
+    },
+    "final": {
+      "abstentions": 41,
+      "correct": 959,
+      "coverage": 0.959,
+      "invalid_output": 0,
+      "n": 1000,
+      "verified": 959,
+      "verified_accuracy": 1.0,
+      "verified_wrong": 0
+    },
+    "final_sha256": "f36fd277b7001f39138f3f8ba72d2a9983cd387dc0e999369748f2014eef3195",
+    "generations": [
+      {
+        "accepted": false,
+        "candidate": {
+          "abstentions": 48,
+          "correct": 371,
+          "coverage": 0.8857142857142857,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 372,
+          "verified_accuracy": 0.9973118279569892,
+          "verified_wrong": 1
+        },
+        "candidate_sha256": "a3294c5ce761a215393fe11141f77317c90ca179e02ff434350bddf7af074687",
+        "distribution": "uniform",
+        "examples_added": 28,
+        "fit_cfg": {
+          "action_t": 0.28,
+          "audit_t": 0.44,
+          "margin": 0.0
+        },
+        "generation": 1,
+        "guard": 0.03,
+        "parent": {
+          "abstentions": 420,
+          "correct": 0,
+          "coverage": 0.0,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 0,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "ec649c798a8e4b89a4a0ba4b2497bab07b5aded849eebedf70057d42454dce88"
+      },
+      {
+        "accepted": true,
+        "candidate": {
+          "abstentions": 74,
+          "correct": 346,
+          "coverage": 0.8238095238095238,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 346,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "candidate_sha256": "86f9006c7cdfce425bd5a54a5355b2a085fa3c960b8244917d15e5e81ec5a018",
+        "distribution": "correlated",
+        "examples_added": 28,
+        "fit_cfg": {
+          "action_t": 0.32,
+          "audit_t": 0.44,
+          "margin": 0.02
+        },
+        "generation": 2,
+        "guard": 0.02,
+        "parent": {
+          "abstentions": 420,
+          "correct": 0,
+          "coverage": 0.0,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 0,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "86f9006c7cdfce425bd5a54a5355b2a085fa3c960b8244917d15e5e81ec5a018"
+      },
+      {
+        "accepted": true,
+        "candidate": {
+          "abstentions": 12,
+          "correct": 408,
+          "coverage": 0.9714285714285714,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 408,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "candidate_sha256": "f36fd277b7001f39138f3f8ba72d2a9983cd387dc0e999369748f2014eef3195",
+        "distribution": "anti",
+        "examples_added": 12,
+        "fit_cfg": {
+          "action_t": 0.32,
+          "audit_t": 0.44,
+          "margin": 0.02
+        },
+        "generation": 3,
+        "guard": 0.012,
+        "parent": {
+          "abstentions": 23,
+          "correct": 397,
+          "coverage": 0.9452380952380952,
+          "invalid_output": 0,
+          "n": 420,
+          "verified": 397,
+          "verified_accuracy": 1.0,
+          "verified_wrong": 0
+        },
+        "promoted_sha256": "f36fd277b7001f39138f3f8ba72d2a9983cd387dc0e999369748f2014eef3195"
+      }
+    ],
+    "suite_id": 2
+  }
+]

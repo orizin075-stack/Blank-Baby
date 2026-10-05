@@ -1,0 +1,11 @@
+V843_LAYER_SHA256='0568dc1970b08e3b213d9daabcd64e56b981993f070ddf9a456ddfc86410988c'
+V843_COMPLETE_SHA256='be4c8d38b5b296e278f059d994d574ebe26aa2bd54ada243f30ea91ce53ad4df'
+ZERO='0'*64
+SCHEMA_REG='tukuyo.v844.lineage_registry/1'
+SCHEMA_BUNDLE='tukuyo.v844.public_capability_bundle/1'
+SCHEMA_INTENT='tukuyo.v844.reproduction_intent/1'
+SCHEMA_ACCEPT='tukuyo.v844.child_acceptance/1'
+SCHEMA_MUT='tukuyo.v844.mutation_receipt/1'
+SCHEMA_CERT='tukuyo.v844.birth_certificate/1'
+SCHEMA_CHILD='tukuyo.v844.child_lineage_state/1'
+SCHEMA_WAL='tukuyo.v844.birth_wal/1'

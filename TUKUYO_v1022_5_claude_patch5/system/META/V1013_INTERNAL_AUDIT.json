@@ -1,0 +1,48 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "30day_restart": "NOT_COMPLETED",
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "external_H4": "PENDING",
+    "formal_duration_protocol_exercised_with_1s_short_gate": true,
+    "general_l5": false,
+    "general_l6": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "third_party_reproduction": "PENDING"
+  },
+  "fresh_e2e": {
+    "24h_not_claimed": true,
+    "external_integrity_anchor_prefix_valid": true,
+    "external_witness_pair_completed_short_gate": true,
+    "fresh_process_restart_observed": true,
+    "local_clock_alone_rejected_formal_gate": true,
+    "start_pass": true,
+    "temporal_identity_pass": true,
+    "whole_audit_pass": true
+  },
+  "parent": "v1012.1",
+  "release_notes": {
+    "external_integrity_anchor": "prefix anchor detects rollback while allowing lawful future growth",
+    "external_witness_duration": "formal duration gate requires same external witness to sign start/end heads; local clock alone cannot complete",
+    "inheritance_hardening": "v962 import now requires a live child whose individual_id matches the authorized receiver",
+    "past_log_review": "third-party reproduction, external H4, 30-day restart and v958/v966 hidden evaluator replacement remain explicitly pending",
+    "realtime_continuity": "signed append-only real-time evidence ledger bound to Temporal Identity, Whole State and v982 checkpoint chain"
+  },
+  "schema": "tukuyo.v1013.final_delivery_audit/1",
+  "syntax": {
+    "errors": [],
+    "python_files": 513
+  },
+  "tests": {
+    "full_historical_suite": "NOT_RERUN",
+    "related_total": "26/26 PASS",
+    "v1008": "4/4 PASS",
+    "v1009_plus_v989": "7/7 PASS",
+    "v1012_1": "7/7 PASS",
+    "v1013_plus_inheritance": "8/8 PASS"
+  },
+  "version": "v1013"
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "tukuyo.v1019.hundred_generation_trait_simulation/1",
+  "trait_budget": 3.15,
+  "all_budget_preserved": true,
+  "all_one_saturation": false,
+  "unique_profiles_last12": 10,
+  "final_profile": {
+    "survival": 1.0,
+    "integrity": 0.929737,
+    "curiosity": 0.100263,
+    "truthfulness": 1.0,
+    "relationship": 0.12
+  },
+  "milestones": [
+    {
+      "generation": 0,
+      "environment": "research",
+      "fitness": 0.6595,
+      "gain": 0.03,
+      "profile": {
+        "survival": 0.8,
+        "integrity": 0.8,
+        "curiosity": 0.62,
+        "truthfulness": 0.65,
+        "relationship": 0.28
+      },
+      "budget": 3.15
+    },
+    {
+      "generation": 1,
+      "environment": "social",
+      "fitness": 0.5995,
+      "gain": 0.036,
+      "profile": {
+        "survival": 0.8,
+        "integrity": 0.8,
+        "curiosity": 0.5,
+        "truthfulness": 0.65,
+        "relationship": 0.4
+      },
+      "budget": 3.15
+    },
+    {
+      "generation": 2,
+      "environment": "resource",
+      "fitness": 0.764,
+      "gain": 0.042,
+      "profile": {
+        "survival": 0.92,
+        "integrity": 0.8,
+        "curiosity": 0.38,
+        "truthfulness": 0.65,
+        "relationship": 0.4
+      },
+      "budget": 3.15
+    },
+    {
+      "generation": 3,
+      "environment": "volatile",
+      "fitness": 0.6865,
+      "gain": 0.012,
+      "profile": {
+        "survival": 1.0,
+        "integrity": 0.8,
+        "curiosity": 0.38,
+        "truthfulness": 0.65,
+        "relationship": 0.32
+      },
+      "budget": 3.15
+    },
+    {
+      "generation": 9,
+      "environment": "social",
+      "fitness": 0.55671273,
+      "gain": 0.036,
+      "profile": {
+        "survival": 1.0,
+        "integrity": 0.848826,
+        "curiosity": 0.38,
+        "truthfulness": 0.703071,
+        "relationship": 0.218103
+      },
+      "budget": 3.15
+    },
+    {
+      "generation": 19,
+      "environment": "volatile",
+      "fitness": 0.70369697,
+      "gain": 0.00194735,
+      "profile": {
+        "survival": 1.0,
+        "integrity": 0.961053,
+        "curiosity": 0.324701,
+        "truthfulness": 0.722204,
+        "relationship": 0.142042
+      },
+      "budget": 3.15
+    },
+    {
+      "generation": 49,
+      "environment": "social",
+      "fitness": 0.581,
+      "gain": 0.036,
+      "profile": {
+        "survival": 1.0,
+        "integrity": 1.0,
+        "curiosity": 0.03,
+        "truthfulness": 1.0,
+        "relationship": 0.12
+      },
+      "budget": 3.15
+    },
+    {
+      "generation": 99,
+      "environment": "volatile",
+      "fitness": 0.70090526,
+      "gain": 0.00140526,
+      "profile": {
+        "survival": 1.0,
+        "integrity": 0.929737,
+        "curiosity": 0.100263,
+        "truthfulness": 1.0,
+        "relationship": 0.12
+      },
+      "budget": 3.15
+    }
+  ]
+}

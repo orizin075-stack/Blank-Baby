@@ -1,0 +1,57 @@
+{
+  "schema": "tukuyo.v1018.fresh_audit/1",
+  "version": "v1018",
+  "parent": "v1017",
+  "scope": "lineage scalability and succession hardening",
+  "fresh_results": {
+    "v1018_unit_regressions": "3/3 PASS",
+    "v1014_2_crash_restore_regression": "4/4 PASS",
+    "three_generation_gate": "PASS",
+    "whole_audit_parent_child_grandchild": "3/3 PASS",
+    "conversation_random_kill_sample": "5/5 PASS",
+    "child_public_key_binding_rejection": "PASS",
+    "successor_package_replay_rejection": "PASS",
+    "irreversible_death_reinit_rejection": "PASS",
+    "basic_addition_regression": "PASS: 3+2=5",
+    "container_consumption_regression": "PASS: 8x4 minus 3 boxes = 8",
+    "inherited_value_live_decision": "PASS: grandchild curiosity 0.511408 used directly in heart score",
+    "private_marker_absent_from_successor_packages": true
+  },
+  "lineage_scaling": {
+    "proof_model": "flat signed certificate chain",
+    "package_bytes_generation_10": 12518,
+    "package_bytes_generation_100": 122771,
+    "package_bytes_generation_1000": 1231574,
+    "bytes_per_generation_at_1000": 1231.6,
+    "synthetic_build_1000_seconds": 0.1652,
+    "synthetic_verify_1000_seconds": 0.1695,
+    "observed_complexity": "linear in retained certificate count; recursive ancestor-package embedding removed"
+  },
+  "fresh_three_generation_package_bytes": [1832, 3279],
+  "repairs": [
+    "basic Japanese quantity regression no longer swallowed by entity-target ambiguity",
+    "container-count consumption is converted to content-unit remainder",
+    "organism2 init refuses irreversible-death reset and is idempotent while alive",
+    "lost succession private key is not silently regenerated",
+    "successor package is bound to the intended child's succession public key",
+    "successor package import is one-time/replay rejected",
+    "issued successor packages are covered by succession audit",
+    "inherited value profile participates in heart option scoring and goal derivation",
+    "v1018 private succession key is preserved during staged recovery validation",
+    "zero-byte src/tukuyo_v1017_succession.tmp removed",
+    "v1018 succession state added to Whole-State component hashing"
+  ],
+  "claim_boundary": {
+    "full_historical_suite_current_release": "NOT_RERUN_TO_COMPLETION",
+    "historical_tests_collected": 269,
+    "24h_generational_ecology_completed": false,
+    "1000_generation_full_agent_run_completed": false,
+    "generational_evolution_established": false,
+    "literal_reproduction_established": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "consciousness_established": false,
+    "general_l5": false
+  },
+  "next_route": "v1019_GENERATIONAL_EVOLUTION"
+}

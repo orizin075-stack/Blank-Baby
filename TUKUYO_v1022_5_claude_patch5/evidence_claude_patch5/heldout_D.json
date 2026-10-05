@@ -1,0 +1,328 @@
+{
+ "note": "Held-out D: written BEFORE patch4 work (after reading the external review); never used for tuning.",
+ "rows": [
+  {
+   "set": "D_compound",
+   "q": "時速4kmで1時間30分歩くと、何km進みますか？",
+   "kind": "number",
+   "expected": "6"
+  },
+  {
+   "set": "D_compound",
+   "q": "分速80mで12分30秒歩くと、何m進みますか？",
+   "kind": "number",
+   "expected": "1000"
+  },
+  {
+   "set": "D_compound",
+   "q": "時速60kmで2時間15分走ると何km進む？",
+   "kind": "number",
+   "expected": "135"
+  },
+  {
+   "set": "D_compound",
+   "q": "3000円の品物を10%引きし、さらに20%引きしました。値段はいくら？",
+   "kind": "number",
+   "expected": "2160"
+  },
+  {
+   "set": "D_compound",
+   "q": "5000円の商品を2割引きにし、そこから500円引きました。いくらになりましたか？",
+   "kind": "number",
+   "expected": "3500"
+  },
+  {
+   "set": "D_compound",
+   "q": "牛乳が1L200mLあります。450mL飲みました。残りは何mL？",
+   "kind": "number",
+   "expected": "750"
+  },
+  {
+   "set": "D_compound",
+   "q": "ひもが3m40cmあります。1m80cm使いました。残りは何cm？",
+   "kind": "number",
+   "expected": "160"
+  },
+  {
+   "set": "D_compound",
+   "q": "1時間20分の映画を2本続けて見ると、全部で何分？",
+   "kind": "number",
+   "expected": "160"
+  },
+  {
+   "set": "D_compound",
+   "q": "A car travels at 50 km per hour for 2 hours and 30 minutes. How far does it go?",
+   "kind": "number",
+   "expected": "125"
+  },
+  {
+   "set": "D_compound",
+   "q": "A shirt costs 40 dollars. It is discounted by 25 percent. How much does it cost now?",
+   "kind": "number",
+   "expected": "30"
+  },
+  {
+   "set": "D_ambiguous",
+   "q": "3000円の商品Aを10%引きし、商品Bを20%引きしました。値段はいくら？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_ambiguous",
+   "q": "1箱に10個入りが4箱あります。箱は全部で何個？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_ambiguous",
+   "q": "時速5kmで何時間か歩きました。何km進みましたか？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_ambiguous",
+   "q": "りんごとみかんが合わせて20個あります。りんごは何個？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_ambiguous",
+   "q": "バスに何人か乗っていて、5人降りました。今何人？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_ambiguous",
+   "q": "A store sold some apples and 12 oranges. How many fruits did it sell?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_ambiguous",
+   "q": "2000円の品物を20%引きにする予定です。値段はいくら？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_ambiguous",
+   "q": "Tom has 5 marbles. His sister has more. How many does his sister have?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_distractor",
+   "q": "3年2組の教室に、子どもが28人います。5人が帰りました。今何人？",
+   "kind": "number",
+   "expected": "23"
+  },
+  {
+   "set": "D_distractor",
+   "q": "10時に、りんごが15個ありました。4個食べました。残りは何個？",
+   "kind": "number",
+   "expected": "11"
+  },
+  {
+   "set": "D_distractor_abstain",
+   "q": "箱が3つあります。りんごが12個あります。5個食べました。残りは何個？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_modality",
+   "q": "走れば疲れる。太郎は走れる。太郎は疲れた？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_modality",
+   "q": "雨が降れば中止だ。雨が降りそうだ。中止？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_modality",
+   "q": "If Ken runs, he gets tired. Ken can run. Is Ken tired?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_modality",
+   "q": "If it rains, the match is canceled. It may rain. Is the match canceled?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "D_logic",
+   "q": "泳げば疲れる。花子は泳いだ。花子は疲れた？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "疲"
+   ]
+  },
+  {
+   "set": "D_logic",
+   "q": "If Ken runs, he gets tired. Ken ran. Is Ken tired?",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "tired"
+   ]
+  },
+  {
+   "set": "D_logic",
+   "q": "すべての社員は名札をつける。木村は社員だ。木村は名札をつける？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "名札"
+   ]
+  },
+  {
+   "set": "D_logic",
+   "q": "窓が開いていれば寒い。寒くない。窓は開いている？",
+   "kind": "logic",
+   "expected": [
+    "no"
+   ]
+  },
+  {
+   "set": "D_logic",
+   "q": "AはBより安い。BはCより安い。一番高いのは？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "C"
+   ]
+  },
+  {
+   "set": "D_logic",
+   "q": "If the lamp is on, the room is bright. The room is not bright. Is the lamp on?",
+   "kind": "logic",
+   "expected": [
+    "no"
+   ]
+  },
+  {
+   "set": "D_logic",
+   "q": "All birds have wings. Pip is a bird. Does Pip have wings?",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "wing"
+   ]
+  },
+  {
+   "set": "D_logic",
+   "q": "ケンはユキより速い。ユキはアキより速い。アキとケンではどちらが遅い？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "アキ"
+   ]
+  },
+  {
+   "set": "D_word",
+   "q": "子どもが8人います。1人に3本ずつ鉛筆を配ると、鉛筆は何本いりますか？",
+   "kind": "number",
+   "expected": "24"
+  },
+  {
+   "set": "D_word",
+   "q": "35人の子どもが5人ずつのグループを作ると、グループはいくつできますか？",
+   "kind": "number",
+   "expected": "7"
+  },
+  {
+   "set": "D_word",
+   "q": "ある数に12を足すと40になります。ある数はいくつ？",
+   "kind": "number",
+   "expected": "28"
+  },
+  {
+   "set": "D_word",
+   "q": "ある数を3倍して4を引くと20になる。ある数は？",
+   "kind": "number",
+   "expected": "8"
+  },
+  {
+   "set": "D_word",
+   "q": "ノートが1冊150円です。4冊買うと何円ですか？",
+   "kind": "number",
+   "expected": "600"
+  },
+  {
+   "set": "D_word",
+   "q": "1000円出して、1個250円のケーキを3個買いました。おつりはいくら？",
+   "kind": "number",
+   "expected": "250"
+  },
+  {
+   "set": "D_word",
+   "q": "兄は13歳です。妹は兄より6歳年下です。妹は何歳？",
+   "kind": "number",
+   "expected": "7"
+  },
+  {
+   "set": "D_word",
+   "q": "みかんが40個あります。そのうち15個を食べました。残りは何個？",
+   "kind": "number",
+   "expected": "25"
+  },
+  {
+   "set": "D_word",
+   "q": "Ben has 15 cards. He gives 6 to Ann. How many cards does Ben have now?",
+   "kind": "number",
+   "expected": "9"
+  },
+  {
+   "set": "D_word",
+   "q": "There are 4 boxes with 12 pencils in each box. How many pencils are there?",
+   "kind": "number",
+   "expected": "48"
+  },
+  {
+   "set": "D_other",
+   "q": "4.5kgは何g？",
+   "kind": "number",
+   "expected": "4500"
+  },
+  {
+   "set": "D_other",
+   "q": "130分は何時間何分？",
+   "kind": "contains",
+   "expected": "2時間10分"
+  },
+  {
+   "set": "D_other",
+   "q": "今日は日曜日です。9日後は何曜日？",
+   "kind": "contains",
+   "expected": "火曜日"
+  },
+  {
+   "set": "D_other",
+   "q": "2026年11月20日の15日後は何月何日？",
+   "kind": "contains",
+   "expected": "12月5日"
+  },
+  {
+   "set": "D_other",
+   "q": "午後3時45分から2時間30分後は何時何分？",
+   "kind": "contains",
+   "expected": "6時15分"
+  },
+  {
+   "set": "D_other",
+   "q": "1500円の4割引きはいくら？",
+   "kind": "number",
+   "expected": "900"
+  },
+  {
+   "set": "D_other",
+   "q": "How many meters are in 3.2 kilometers?",
+   "kind": "number",
+   "expected": "3200"
+  }
+ ],
+ "knowledge": []
+}

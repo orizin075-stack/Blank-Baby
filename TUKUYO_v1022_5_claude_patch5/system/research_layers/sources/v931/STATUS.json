@@ -1,0 +1,18 @@
+{
+  "l6_claim_eligible": false,
+  "name": "AUDIT_REPAIR_D1_D2_D4_D5_D9_D10",
+  "parent_complete_lineage_sha256": "f2295fe105a263cddd543eed9678b67f8610bb5e28849551d29a1429ba95b112",
+  "real_external_semantic_evaluation": "PENDING",
+  "repairs": {
+    "D10_wallclock_self_reported": "REPAIRED_TOOL_REQUIRES_EXTERNAL_HTTP_DATE_LEDGER_AND_REAL_STATE_HASH",
+    "D1_oracle_equals_grammar_endpoint": "REPAIRED_BY_ORACLE_OUTSIDE_PROPOSER_AND_UNREACHABLE_INTERACTION_RULE",
+    "D2_search_selector_noncausal": "REPAIRED_WITH_REVERSE_CONSTANT_RANDOM_NEGATIVE_CONTROLS",
+    "D4_gate_never_rejects": "REPAIRED_WITH_REQUIRED_REJECTION_CONTROL",
+    "D5_no_timeout": "REPAIRED_WITH_SUBPROCESS_TIMEOUT_PLUS_RLIMIT",
+    "D9_reproduction_contract_missing_candidate_hash": "REPAIRED_PUBLIC_CANDIDATE_SHA_AND_RESULT_ROWS_BINDING"
+  },
+  "third_party_reproduction": "PENDING",
+  "version": "v931",
+  "wallclock30_completed": false,
+  "wallclock30_restarted_under_repaired_protocol": false
+}

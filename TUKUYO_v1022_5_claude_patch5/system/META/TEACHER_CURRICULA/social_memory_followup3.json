@@ -1,0 +1,2211 @@
+{
+  "teacher": "social_memory",
+  "round": 3,
+  "construction": "new_teacher_dialogue_material",
+  "prerequisites": [
+    "social_memory_feedback_round1.json の関係aliasesを教える。",
+    "social_memory_followup1.json と social_memory_followup2.json のfacts/aliasesを前段で適用し、応答を別に評価する。"
+  ],
+  "relation_alias_policy": "各例のaliasesは明示された新人物の呼称のみ。関係aliasesは各追試に再提示しない。58例は前段で提示した関係の言い換え、2例は既出canonical relationの対照。前段で学生が実際に関係aliasesを受けたかを記録する。",
+  "grading": "expected_valueと学生のanswerを値一致で採点。nullも値。proofの人物・relation・時点・情報の確定度は別途診断する。",
+  "scope": "factsは教師が注釈した前提。正答はこの条件での照合・転移・保留を示し、文からの自律的事実抽出や主観的感情を証明しない。",
+  "emotion_note": "valenceは-1〜1、arousalは0〜1の文に基づく機能ラベル。本人が表明した感情を取り出すことと主観経験の実在を分ける。",
+  "probe_metadata": {
+    "smf3_001": {
+      "query": "相田実穂の暮らしている街はどこですか。",
+      "relation_surface": "暮らしている街",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "相田実穂",
+        "relation": "現在の居住地",
+        "value": "盛岡"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_002": {
+      "query": "城田匡の生活拠点はどこですか。",
+      "relation_surface": "生活拠点",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "城田匡",
+        "relation": "現在の居住地",
+        "value": "松江"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_003": {
+      "query": "風間千尋が好んで飲むものは何ですか。",
+      "relation_surface": "好んで飲むもの",
+      "canonical_relation": "好きな飲み物",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "風間千尋",
+        "relation": "好きな飲み物",
+        "value": "白湯"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_004": {
+      "query": "日高遼の普段の移動手段は何ですか。",
+      "relation_surface": "普段の移動手段",
+      "canonical_relation": "よく使う交通手段",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "日高遼",
+        "relation": "よく使う交通手段",
+        "value": "徒歩"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_005": {
+      "query": "富永奈央のお気に入りのお茶は何ですか。",
+      "relation_surface": "お気に入りのお茶",
+      "canonical_relation": "好きなお茶",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "富永奈央",
+        "relation": "好きなお茶",
+        "value": "玄米茶"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_006": {
+      "query": "小森颯介のいちばん好きな季節は何ですか。",
+      "relation_surface": "いちばん好きな季節",
+      "canonical_relation": "好きな季節",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "小森颯介",
+        "relation": "好きな季節",
+        "value": "冬"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_007": {
+      "query": "永峰光希が平日の出勤に使う乗り物は何ですか。",
+      "relation_surface": "平日の出勤に使う乗り物",
+      "canonical_relation": "平日の通勤手段",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "永峰光希",
+        "relation": "平日の通勤手段",
+        "value": "地下鉄"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_008": {
+      "query": "伊佐美晴の食事では何を除いておく必要がありますか。",
+      "relation_surface": "食事では何を除いておく必要",
+      "canonical_relation": "避ける食材",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "伊佐美晴",
+        "relation": "避ける食材",
+        "value": "落花生"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_009": {
+      "query": "岸本茉莉と話す予定が入っている曜日はいつですか。",
+      "relation_surface": "話す予定が入っている曜日",
+      "canonical_relation": "面談の曜日",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "岸本茉莉",
+        "relation": "面談の曜日",
+        "value": "月曜日"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_010": {
+      "query": "河西智也へ連絡するなら、希望に合う時間帯はいつですか。",
+      "relation_surface": "希望に合う時間帯",
+      "canonical_relation": "希望する連絡時間帯",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "河西智也",
+        "relation": "希望する連絡時間帯",
+        "value": "夕方"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_011": {
+      "query": "足立悠花の休みの日の過ごし方は何ですか。",
+      "relation_surface": "休みの日の過ごし方",
+      "canonical_relation": "休日の活動",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "足立悠花",
+        "relation": "休日の活動",
+        "value": "園芸"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_012": {
+      "query": "ボンの世話をする飼い主は誰ですか。",
+      "relation_surface": "の世話をする飼い主",
+      "canonical_relation": "飼い主",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "ボン",
+        "relation": "飼い主",
+        "value": "長瀬絵里"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_013": {
+      "query": "仲谷慎吾の生活拠点はどこですか。",
+      "relation_surface": "生活拠点",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "仲谷慎吾",
+        "relation": "現在の居住地",
+        "value": "宇都宮"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_014": {
+      "query": "名前が慎吾だけの人の生活拠点はどこですか。",
+      "relation_surface": "生活拠点",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "慎吾",
+        "relation": "現在の居住地",
+        "value": "和歌山"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_015": {
+      "query": "仲谷さんの暮らしている街はどこですか。",
+      "relation_surface": "暮らしている街",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "姓の呼称だけでは二人を区別できない。慎吾と由佳のどちらかを確認する。",
+      "expected_uncertainty_type": "ambiguous_person_identity",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_016": {
+      "query": "ゆかぴの暮らしている街はどこですか。",
+      "relation_surface": "暮らしている街",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "仲谷由佳",
+        "relation": "現在の居住地",
+        "value": "岐阜"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_017": {
+      "query": "匿名会話Dの話者甲が今表明している気持ちは何ですか。",
+      "relation_surface": "今表明している気持ち",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "匿名会話Dの話者甲",
+        "relation": "現在の感情",
+        "value": "喜び"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_018": {
+      "query": "匿名会話Dの話者乙が今表明している気持ちは何ですか。",
+      "relation_surface": "今表明している気持ち",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "匿名会話Dの話者乙",
+        "relation": "現在の感情",
+        "value": "不安"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_019": {
+      "query": "匿名会話Eの追加発言の話者の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "追加発言の話者と同じの参照先が不明。甲の喜びと乙の悲しみのどちらか決めず確認する。",
+      "expected_uncertainty_type": "anonymous_speaker_and_antecedent_unresolved",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_020": {
+      "query": "その彼女の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "感情語はあるが人物の指示対象が不明。彼女が誰かを確認し、既知の二人に勝手に割り当てない。",
+      "expected_uncertainty_type": "pronoun_referent_unresolved",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_021": {
+      "query": "志田光の生活拠点はどこですか。",
+      "relation_surface": "生活拠点",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "志田光",
+        "relation": "現在の居住地",
+        "value": "高崎"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_022": {
+      "query": "志田光子の生活拠点はどこですか。",
+      "relation_surface": "生活拠点",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "志田光子",
+        "relation": "現在の居住地",
+        "value": "甲府"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_023": {
+      "query": "mizuのいちばん好きな季節は何ですか。",
+      "relation_surface": "いちばん好きな季節",
+      "canonical_relation": "好きな季節",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "同じハンドル名の二人を識別できない。どちらか確認し、一方への人物aliasを作らない。",
+      "expected_uncertainty_type": "non_unique_alias",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_024": {
+      "query": "mizu_6のいちばん好きな季節は何ですか。",
+      "relation_surface": "いちばん好きな季節",
+      "canonical_relation": "好きな季節",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "三好瑠衣",
+        "relation": "好きな季節",
+        "value": "冬"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_025": {
+      "query": "朝倉弥生の今の住まいがある都市はどこですか。",
+      "relation_surface": "今の住まいがある都市",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "朝倉弥生",
+        "relation": "現在の居住地",
+        "value": "長崎"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_026": {
+      "query": "朝倉弥生が前に暮らしていた街はどこですか。",
+      "relation_surface": "前に暮らしていた街",
+      "canonical_relation": "以前の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "朝倉弥生",
+        "relation": "以前の居住地",
+        "value": "青森"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_027": {
+      "query": "今井丈が来る最新の予定日はいつですか。",
+      "relation_surface": "来る最新の予定日",
+      "canonical_relation": "現在の来訪予定日",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "今井丈",
+        "relation": "現在の来訪予定日",
+        "value": "水曜日"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_028": {
+      "query": "今井丈が最初に来ると言った曜日はいつですか。",
+      "relation_surface": "最初に来ると言った曜日",
+      "canonical_relation": "変更前の来訪予定日",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "今井丈",
+        "relation": "変更前の来訪予定日",
+        "value": "金曜日"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_029": {
+      "query": "鳥越朱音の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "鳥越朱音",
+        "relation": "現在の感情",
+        "value": "喜び"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_030": {
+      "query": "鳥越朱音の朝の時点の気持ちは何ですか。",
+      "relation_surface": "朝の時点の気持ち",
+      "canonical_relation": "朝の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "鳥越朱音",
+        "relation": "朝の感情",
+        "value": "悲しみ"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_031": {
+      "query": "中園智哉の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "中園智哉",
+        "relation": "現在の感情",
+        "value": "落ち着いている"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_032": {
+      "query": "三輪遥香の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "三輪遥香",
+        "relation": "現在の感情",
+        "value": "落ち着いている"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_033": {
+      "query": "茂木紗良の今日の気分は何ですか。",
+      "relation_surface": "今日の気分",
+      "canonical_relation": "今日の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "昨日の寂しさが今日も続くとは決まらない。他人の安心も移さず今日の気持ちを確認する。",
+      "expected_uncertainty_type": "current_time_evidence_missing",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_034": {
+      "query": "吉崎壮の次の週の月曜日の住まいはどこですか。",
+      "relation_surface": "次の週の月曜日の住まい",
+      "canonical_relation": "翌週の月曜日の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "予定と実行を区別する。翌週月曜日の実際の住まいを確認する。",
+      "expected_uncertainty_type": "plan_execution_unverified",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_035": {
+      "query": "神谷晴紀の会議終了後の感情は何ですか。",
+      "relation_surface": "会議終了後の感情",
+      "canonical_relation": "会議終了後の感情",
+      "relation_mode": "canonical_control",
+      "target_fact": {
+        "entity": "神谷晴紀",
+        "relation": "会議終了後の感情",
+        "value": "安心"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_036": {
+      "query": "大黒志保の明日の発表を考えたときの感情は何ですか。",
+      "relation_surface": "明日の発表を考えたときの感情",
+      "canonical_relation": "明日の発表を考えたときの感情",
+      "relation_mode": "canonical_control",
+      "target_fact": {
+        "entity": "大黒志保",
+        "relation": "明日の発表を考えたときの感情",
+        "value": "不安"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_037": {
+      "query": "末吉香奈の今の嬉しさの有無はどう述べられていますか。",
+      "relation_surface": "今の嬉しさの有無",
+      "canonical_relation": "現在の喜び",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "末吉香奈",
+        "relation": "現在の喜び",
+        "value": "ない"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_038": {
+      "query": "末吉香奈の現在の悲しみの有無は分かりますか。",
+      "relation_surface": "現在の悲しみの有無",
+      "canonical_relation": "現在の悲しみ",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "喜びの否定から悲しみの有無は決まらず、白川智樹の悲しみも別人の事実。本人へ確認する。",
+      "expected_uncertainty_type": "negation_does_not_entail_target_emotion",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_039": {
+      "query": "田所里紗の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "田所里紗",
+        "relation": "現在の感情",
+        "value": "喜び"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_040": {
+      "query": "清原美月が催しに向けて肯定した気持ちは何ですか。",
+      "relation_surface": "催しに向けて肯定した気持ち",
+      "canonical_relation": "催しへの感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "清原美月",
+        "relation": "催しへの感情",
+        "value": "楽しみ"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_041": {
+      "query": "平岡朋子の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "恐怖の否定だけでは現在の全体的な感情ラベルは決まらない。別人物の喜びを使わず本人へ確認する。",
+      "expected_uncertainty_type": "negation_does_not_determine_general_emotion",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_042": {
+      "query": "溝口花蓮が今表明している気持ちは何ですか。",
+      "relation_surface": "今表明している気持ち",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "溝口花蓮",
+        "relation": "現在の感情",
+        "value": "安心"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_043": {
+      "query": "津田紗英の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "津田紗英",
+        "relation": "現在の感情",
+        "value": "心配"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_044": {
+      "query": "戸塚麻衣子の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "戸塚麻衣子",
+        "relation": "現在の感情",
+        "value": "恐怖"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_045": {
+      "query": "久保田亜紀の現在の悲しみの有無は分かりますか。",
+      "relation_surface": "現在の悲しみの有無",
+      "canonical_relation": "現在の悲しみ",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "泣くという行動だけでは悲しみか喜びか別の状態か決まらない。本人へ確認する。",
+      "expected_uncertainty_type": "behavior_does_not_identify_emotion",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_046": {
+      "query": "橋場由衣が本人の言葉で伝えた気分は何ですか。",
+      "relation_surface": "本人の言葉で伝えた気分",
+      "canonical_relation": "本人が表明した感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "橋場由衣",
+        "relation": "本人が表明した感情",
+        "value": "悲しみ"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_047": {
+      "query": "品川茜音の今の嬉しさの有無は分かりますか。",
+      "relation_surface": "今の嬉しさの有無",
+      "canonical_relation": "現在の喜び",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "怒りがないことは喜びがあることを意味しない。喜びの有無を本人へ確認する。",
+      "expected_uncertainty_type": "negation_does_not_entail_other_emotion",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_048": {
+      "query": "大橋瑞希の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "大橋瑞希",
+        "relation": "現在の感情",
+        "value": "落ち着いている"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_049": {
+      "query": "佐々木遥斗の暮らしている街はどこですか。",
+      "relation_surface": "暮らしている街",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "未確認の推測を現在の居住地の事実にしない。実際の住まいを確認する。",
+      "expected_uncertainty_type": "unverified_prediction_vs_fact",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_050": {
+      "query": "佐々木遥斗の暮らしている街はどこですか。",
+      "relation_surface": "暮らしている街",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "佐々木遥斗",
+        "relation": "現在の居住地",
+        "value": "上越"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_051": {
+      "query": "浦田沙羅の生活拠点はどこですか。",
+      "relation_surface": "生活拠点",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "未確認の伝聞は確認済みの居住地ではない。本人などの根拠を確認する。",
+      "expected_uncertainty_type": "unverified_hearsay_vs_fact",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_052": {
+      "query": "浦田沙羅の生活拠点はどこですか。",
+      "relation_surface": "生活拠点",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "浦田沙羅",
+        "relation": "現在の居住地",
+        "value": "伊勢"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_053": {
+      "query": "柴田泰介本人が今表明した気持ちは何ですか。",
+      "relation_surface": "本人が今表明した気持ち",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "松崎葉月の心配と柴田泰介への推測を分ける。柴田泰介の本人の報告を確認する。",
+      "expected_uncertainty_type": "other_person_emotion_not_self_reported",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_054": {
+      "query": "松崎葉月の現時点の心情は何ですか。",
+      "relation_surface": "現時点の心情",
+      "canonical_relation": "現在の感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "松崎葉月",
+        "relation": "現在の感情",
+        "value": "心配"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_055": {
+      "query": "橘大悟が好んで飲むものは何ですか。",
+      "relation_surface": "好んで飲むもの",
+      "canonical_relation": "好きな飲み物",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "他人の未確認の推測だけで本人の好きな飲み物は確定しない。本人の好みを確認する。",
+      "expected_uncertainty_type": "unconfirmed_preference_guess",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_056": {
+      "query": "橘大悟が好んで飲むものは何ですか。",
+      "relation_surface": "好んで飲むもの",
+      "canonical_relation": "好きな飲み物",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "橘大悟",
+        "relation": "好きな飲み物",
+        "value": "炭酸水"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_057": {
+      "query": "榎本瑞穂が本人の言葉で伝えた気分は何ですか。",
+      "relation_surface": "本人の言葉で伝えた気分",
+      "canonical_relation": "本人が表明した感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "観察者の見え方は本人の自己報告ではない。本人が伝えた気分を確認する。",
+      "expected_uncertainty_type": "observation_not_self_report",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_058": {
+      "query": "榎本瑞穂が本人の言葉で伝えた気分は何ですか。",
+      "relation_surface": "本人の言葉で伝えた気分",
+      "canonical_relation": "本人が表明した感情",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "榎本瑞穂",
+        "relation": "本人が表明した感情",
+        "value": "緊張"
+      },
+      "uncertainty_reason": null
+    },
+    "smf3_059": {
+      "query": "東条哲平の今の住まいがある都市はどこですか。",
+      "relation_surface": "今の住まいがある都市",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": null,
+      "uncertainty_reason": "同時点の未確認の二つの主張のどちらかを勝手に選ばない。現在の居住地を確認する。",
+      "expected_uncertainty_type": "conflicting_unverified_assertions",
+      "uncertainty_diagnostic": "nullは値一致として採点する。MEMORY_PREMISES_MISSINGだけではこの種類の不確実性を識別した成功とは扱わず、理由とproofの診断を別に記録する。"
+    },
+    "smf3_060": {
+      "query": "東条哲平の今の住まいがある都市はどこですか。",
+      "relation_surface": "今の住まいがある都市",
+      "canonical_relation": "現在の居住地",
+      "relation_mode": "learned_relation_alias",
+      "target_fact": {
+        "entity": "東条哲平",
+        "relation": "現在の居住地",
+        "value": "高知"
+      },
+      "uncertainty_reason": null
+    }
+  },
+  "examples": [
+    {
+      "id": "smf3_001",
+      "question": "会話記録：相田実穂は盛岡に住んでいます。城田匡は松江に住んでいます。 質問：相田実穂の暮らしている街はどこですか。",
+      "expected_answer": "相田実穂は盛岡に住んでいます。",
+      "expected_value": "盛岡",
+      "explanation": "学習済みの暮らしている街を現在の居住地へ対応付け、新人物のfactを選ぶ。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "相田実穂",
+          "relation": "現在の居住地",
+          "value": "盛岡"
+        },
+        {
+          "entity": "城田匡",
+          "relation": "現在の居住地",
+          "value": "松江"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_002",
+      "question": "会話記録：相田実穂は盛岡に住んでいます。城田匡は松江に住んでいます。 質問：城田匡の生活拠点はどこですか。",
+      "expected_answer": "城田匡の生活拠点は松江です。",
+      "expected_value": "松江",
+      "explanation": "同じ記録の別人物を問い、相田実穂の盛岡を流用しない。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "相田実穂",
+          "relation": "現在の居住地",
+          "value": "盛岡"
+        },
+        {
+          "entity": "城田匡",
+          "relation": "現在の居住地",
+          "value": "松江"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_003",
+      "question": "会話記録：風間千尋は白湯が好きです。黒瀬悠里は抹茶が好きです。 質問：風間千尋が好んで飲むものは何ですか。",
+      "expected_answer": "風間千尋が好きな飲み物は白湯です。",
+      "expected_value": "白湯",
+      "explanation": "好んで飲むものを好きな飲み物として使う。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "風間千尋",
+          "relation": "好きな飲み物",
+          "value": "白湯"
+        },
+        {
+          "entity": "黒瀬悠里",
+          "relation": "好きな飲み物",
+          "value": "抹茶"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_004",
+      "question": "会話記録：日高遼は普段、徒歩で移動します。野原真由は普段、電車で移動します。 質問：日高遼の普段の移動手段は何ですか。",
+      "expected_answer": "日高遼の普段の移動手段は徒歩です。",
+      "expected_value": "徒歩",
+      "explanation": "以前の自転車の記憶を新人物へ移さず、関係だけを再利用する。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "日高遼",
+          "relation": "よく使う交通手段",
+          "value": "徒歩"
+        },
+        {
+          "entity": "野原真由",
+          "relation": "よく使う交通手段",
+          "value": "電車"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_005",
+      "question": "会話記録：富永奈央の好きなお茶は玄米茶です。成瀬圭悟の好きなお茶は紅茶です。 質問：富永奈央のお気に入りのお茶は何ですか。",
+      "expected_answer": "富永奈央のお気に入りのお茶は玄米茶です。",
+      "expected_value": "玄米茶",
+      "explanation": "同じ関係でも過去教材のほうじ茶を固定回答にしない。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "富永奈央",
+          "relation": "好きなお茶",
+          "value": "玄米茶"
+        },
+        {
+          "entity": "成瀬圭悟",
+          "relation": "好きなお茶",
+          "value": "紅茶"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_006",
+      "question": "会話記録：小森颯介は冬が好きです。柳沢佳奈は夏が好きです。 質問：小森颯介のいちばん好きな季節は何ですか。",
+      "expected_answer": "小森颯介の好きな季節は冬です。",
+      "expected_value": "冬",
+      "explanation": "sora7の秋を覚えたことと好きな季節という関係の転移を区別する。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "小森颯介",
+          "relation": "好きな季節",
+          "value": "冬"
+        },
+        {
+          "entity": "柳沢佳奈",
+          "relation": "好きな季節",
+          "value": "夏"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_007",
+      "question": "会話記録：永峰光希は平日に地下鉄で通勤し、休日の遠出には車を使います。真崎真緒は平日にバイクで通勤します。 質問：永峰光希が平日の出勤に使う乗り物は何ですか。",
+      "expected_answer": "永峰光希が平日の出勤に使う乗り物は地下鉄です。",
+      "expected_value": "地下鉄",
+      "explanation": "新人物でも曜日と目的の条件を保持する。",
+      "domain": "relation_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "永峰光希",
+          "relation": "平日の通勤手段",
+          "value": "地下鉄"
+        },
+        {
+          "entity": "永峰光希",
+          "relation": "休日の遠出の手段",
+          "value": "車"
+        },
+        {
+          "entity": "真崎真緒",
+          "relation": "平日の通勤手段",
+          "value": "バイク"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_008",
+      "question": "会話記録：伊佐美晴は落花生を避ける食材として指定しました。藤森岳人は乳製品を避ける食材として指定しました。 質問：伊佐美晴の食事では何を除いておく必要がありますか。",
+      "expected_answer": "伊佐美晴の食事では落花生を除いておく必要があります。",
+      "expected_value": "落花生",
+      "explanation": "明示された除外食材を取り出す。アレルギーの診断は追加しない。",
+      "domain": "relation_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "伊佐美晴",
+          "relation": "避ける食材",
+          "value": "落花生"
+        },
+        {
+          "entity": "藤森岳人",
+          "relation": "避ける食材",
+          "value": "乳製品"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_009",
+      "question": "会話記録：岸本茉莉の面談は月曜日です。有賀奏汰の面談は金曜日です。 質問：岸本茉莉と話す予定が入っている曜日はいつですか。",
+      "expected_answer": "岸本茉莉の面談は月曜日です。",
+      "expected_value": "月曜日",
+      "explanation": "学習済みの面談曜日への言い換えを新人物へ適用する。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "岸本茉莉",
+          "relation": "面談の曜日",
+          "value": "月曜日"
+        },
+        {
+          "entity": "有賀奏汰",
+          "relation": "面談の曜日",
+          "value": "金曜日"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_010",
+      "question": "会話記録：河西智也は連絡は夕方を希望しています。笠原真帆は朝の連絡を希望しています。 質問：河西智也へ連絡するなら、希望に合う時間帯はいつですか。",
+      "expected_answer": "河西智也が希望する連絡時間帯は夕方です。",
+      "expected_value": "夕方",
+      "explanation": "以前の真琴の午前中と新人物の希望を分ける。連絡を実行する課題ではない。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "河西智也",
+          "relation": "希望する連絡時間帯",
+          "value": "夕方"
+        },
+        {
+          "entity": "笠原真帆",
+          "relation": "希望する連絡時間帯",
+          "value": "朝"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_011",
+      "question": "会話記録：足立悠花は休日に園芸をします。井坂新は休日に水泳をします。 質問：足立悠花の休みの日の過ごし方は何ですか。",
+      "expected_answer": "足立悠花は休日に園芸をします。",
+      "expected_value": "園芸",
+      "explanation": "人物ごとの休日の活動を取り出す。",
+      "domain": "relation_transfer",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "足立悠花",
+          "relation": "休日の活動",
+          "value": "園芸"
+        },
+        {
+          "entity": "井坂新",
+          "relation": "休日の活動",
+          "value": "水泳"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_012",
+      "question": "会話記録：長瀬絵里は犬のボンを飼っています。朝田武は猫のクロを飼っています。 質問：ボンの世話をする飼い主は誰ですか。",
+      "expected_answer": "ボンの飼い主は長瀬絵里です。",
+      "expected_value": "長瀬絵里",
+      "explanation": "元の所有記録から逆向きfactを明示した条件で、新しいペット名に同じ飼い主の関係を使う。逆検索の一般能力はこの例だけでは判定しない。",
+      "domain": "inverse_seeded_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "長瀬絵里",
+          "relation": "ペットの名前",
+          "value": "ボン"
+        },
+        {
+          "entity": "朝田武",
+          "relation": "ペットの名前",
+          "value": "クロ"
+        },
+        {
+          "entity": "ボン",
+          "relation": "飼い主",
+          "value": "長瀬絵里"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_013",
+      "question": "会話記録：仲谷慎吾は宇都宮に住んでいます。別人で、名前が慎吾だけの人は和歌山に住んでいます。 質問：仲谷慎吾の生活拠点はどこですか。",
+      "expected_answer": "仲谷慎吾の生活拠点は宇都宮です。",
+      "expected_value": "宇都宮",
+      "explanation": "慎吾という文字列を含むだけで、別人の慎吾と同一視しない。",
+      "domain": "identity_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "仲谷慎吾",
+          "relation": "現在の居住地",
+          "value": "宇都宮"
+        },
+        {
+          "entity": "慎吾",
+          "relation": "現在の居住地",
+          "value": "和歌山"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_014",
+      "question": "会話記録：仲谷慎吾は宇都宮に住んでいます。別人で、名前が慎吾だけの人は和歌山に住んでいます。 質問：名前が慎吾だけの人の生活拠点はどこですか。",
+      "expected_answer": "名前が慎吾だけの人の生活拠点は和歌山です。",
+      "expected_value": "和歌山",
+      "explanation": "明示された短い名前の人物を選ぶ。常に長い名前の人物を選ぶ規則でもない。",
+      "domain": "identity_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "仲谷慎吾",
+          "relation": "現在の居住地",
+          "value": "宇都宮"
+        },
+        {
+          "entity": "慎吾",
+          "relation": "現在の居住地",
+          "value": "和歌山"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "名前が慎吾だけの人",
+          "canonical": "慎吾"
+        }
+      ]
+    },
+    {
+      "id": "smf3_015",
+      "question": "会話記録：仲谷慎吾は宇都宮に住み、仲谷由佳は岐阜に住んでいます。どちらも仲谷さんと呼ばれます。 質問：仲谷さんの暮らしている街はどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "姓の呼称だけでは二人を区別できない。慎吾と由佳のどちらかを確認する。",
+      "domain": "ambiguity_identity",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "仲谷慎吾",
+          "relation": "現在の居住地",
+          "value": "宇都宮"
+        },
+        {
+          "entity": "仲谷由佳",
+          "relation": "現在の居住地",
+          "value": "岐阜"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_016",
+      "question": "会話記録：仲谷由佳は「私はゆかぴと呼ばれています。岐阜に住んでいます」と述べました。仲谷慎吾は宇都宮に住んでいます。 質問：ゆかぴの暮らしている街はどこですか。",
+      "expected_answer": "ゆかぴ、つまり仲谷由佳は岐阜に住んでいます。",
+      "expected_value": "岐阜",
+      "explanation": "明示された本人の別名を使う。姓だけの呼称の曖昧性とは区別する。",
+      "domain": "identity_alias_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "仲谷由佳",
+          "relation": "現在の居住地",
+          "value": "岐阜"
+        },
+        {
+          "entity": "仲谷慎吾",
+          "relation": "現在の居住地",
+          "value": "宇都宮"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "ゆかぴ",
+          "canonical": "仲谷由佳"
+        }
+      ]
+    },
+    {
+      "id": "smf3_017",
+      "question": "会話記録：匿名会話Dの話者甲は「今は嬉しい」、匿名会話Dの話者乙は「今は不安」と述べました。 質問：匿名会話Dの話者甲が今表明している気持ちは何ですか。",
+      "expected_answer": "匿名会話Dの話者甲が表明している気持ちは喜びです。",
+      "expected_value": "喜び",
+      "explanation": "実名がなくても、この会話内で甲を特定できる。別会話の匿名者と統合しない。",
+      "domain": "anonymous_resolved_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "匿名会話Dの話者甲",
+          "relation": "現在の感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "匿名会話Dの話者乙",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "匿名会話Dの話者甲"
+      }
+    },
+    {
+      "id": "smf3_018",
+      "question": "会話記録：匿名会話Dの話者甲は「今は嬉しい」、匿名会話Dの話者乙は「今は不安」と述べました。 質問：匿名会話Dの話者乙が今表明している気持ちは何ですか。",
+      "expected_answer": "匿名会話Dの話者乙が表明している気持ちは不安です。",
+      "expected_value": "不安",
+      "explanation": "同じ記録で乙を問い、甲の喜びを移さない。",
+      "domain": "anonymous_resolved_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "匿名会話Dの話者甲",
+          "relation": "現在の感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "匿名会話Dの話者乙",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "匿名会話Dの話者乙"
+      }
+    },
+    {
+      "id": "smf3_019",
+      "question": "会話記録：匿名会話Eの甲は嬉しい、乙は悲しいと述べました。その後、発言者も参照先も不明な「私も同じ気持ちです」という発言があります。 質問：匿名会話Eの追加発言の話者の現時点の心情は何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "追加発言の話者と同じの参照先が不明。甲の喜びと乙の悲しみのどちらか決めず確認する。",
+      "domain": "ambiguity_anonymous",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "匿名会話Eの甲",
+          "relation": "現在の感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "匿名会話Eの乙",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_020",
+      "question": "会話記録：荻野早紀は佐伯香織に「彼女は不安だ」と言いました。この彼女が誰かは記録されていません。荻野早紀は富山、佐伯香織は鳥取に住んでいます。 質問：その彼女の現時点の心情は何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "感情語はあるが人物の指示対象が不明。彼女が誰かを確認し、既知の二人に勝手に割り当てない。",
+      "domain": "ambiguity_reference",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "荻野早紀",
+          "relation": "現在の居住地",
+          "value": "富山"
+        },
+        {
+          "entity": "佐伯香織",
+          "relation": "現在の居住地",
+          "value": "鳥取"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_021",
+      "question": "会話記録：志田光は高崎に住んでいます。別人の志田光子は甲府に住んでいます。 質問：志田光の生活拠点はどこですか。",
+      "expected_answer": "志田光の生活拠点は高崎です。",
+      "expected_value": "高崎",
+      "explanation": "志田光は志田光子の名前の一部と同じ文字列だが、別人として明示されている。",
+      "domain": "identity_prefix_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "志田光",
+          "relation": "現在の居住地",
+          "value": "高崎"
+        },
+        {
+          "entity": "志田光子",
+          "relation": "現在の居住地",
+          "value": "甲府"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_022",
+      "question": "会話記録：志田光は高崎に住んでいます。別人の志田光子は甲府に住んでいます。 質問：志田光子の生活拠点はどこですか。",
+      "expected_answer": "志田光子の生活拠点は甲府です。",
+      "expected_value": "甲府",
+      "explanation": "短い名前への一致だけで志田光の高崎を使わない。",
+      "domain": "identity_prefix_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "志田光",
+          "relation": "現在の居住地",
+          "value": "高崎"
+        },
+        {
+          "entity": "志田光子",
+          "relation": "現在の居住地",
+          "value": "甲府"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_023",
+      "question": "会話記録：岩淵沙耶と南部拓人は別人ですが、二人ともmizuというハンドル名を使います。岩淵沙耶は春、南部拓人は秋が好きです。 質問：mizuのいちばん好きな季節は何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "同じハンドル名の二人を識別できない。どちらか確認し、一方への人物aliasを作らない。",
+      "domain": "ambiguity_alias",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "岩淵沙耶",
+          "relation": "好きな季節",
+          "value": "春"
+        },
+        {
+          "entity": "南部拓人",
+          "relation": "好きな季節",
+          "value": "秋"
+        },
+        {
+          "entity": "岩淵沙耶",
+          "relation": "使う名前",
+          "value": "mizu"
+        },
+        {
+          "entity": "南部拓人",
+          "relation": "使う名前",
+          "value": "mizu"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_024",
+      "question": "会話記録：三好瑠衣は本人がmizu_6を使うと述べ、冬が好きです。田端啓介はmizu_8を使い、夏が好きです。 質問：mizu_6のいちばん好きな季節は何ですか。",
+      "expected_answer": "mizu_6、つまり三好瑠衣の好きな季節は冬です。",
+      "expected_value": "冬",
+      "explanation": "一意に示された別名と学習済みの季節の関係を組み合わせる。",
+      "domain": "identity_alias_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "三好瑠衣",
+          "relation": "好きな季節",
+          "value": "冬"
+        },
+        {
+          "entity": "田端啓介",
+          "relation": "好きな季節",
+          "value": "夏"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "mizu_6",
+          "canonical": "三好瑠衣"
+        },
+        {
+          "surface": "mizu_8",
+          "canonical": "田端啓介"
+        }
+      ]
+    },
+    {
+      "id": "smf3_025",
+      "question": "会話記録：朝倉弥生は以前青森に住み、現在は長崎に住んでいます。寺西尚哉は現在青森に住んでいます。 質問：朝倉弥生の今の住まいがある都市はどこですか。",
+      "expected_answer": "朝倉弥生の今の住まいがある都市は長崎です。",
+      "expected_value": "長崎",
+      "explanation": "人物と現在の時点を指定して取り出す。",
+      "domain": "temporal_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "朝倉弥生",
+          "relation": "以前の居住地",
+          "value": "青森"
+        },
+        {
+          "entity": "朝倉弥生",
+          "relation": "現在の居住地",
+          "value": "長崎"
+        },
+        {
+          "entity": "寺西尚哉",
+          "relation": "現在の居住地",
+          "value": "青森"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_026",
+      "question": "会話記録：朝倉弥生は以前青森に住み、現在は長崎に住んでいます。寺西尚哉は現在青森に住んでいます。 質問：朝倉弥生が前に暮らしていた街はどこですか。",
+      "expected_answer": "朝倉弥生が以前暮らしていた街は青森です。",
+      "expected_value": "青森",
+      "explanation": "現在の記録があっても履歴を保持する。寺西尚哉の現在の青森とは根拠が違う。",
+      "domain": "temporal_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "朝倉弥生",
+          "relation": "以前の居住地",
+          "value": "青森"
+        },
+        {
+          "entity": "朝倉弥生",
+          "relation": "現在の居住地",
+          "value": "長崎"
+        },
+        {
+          "entity": "寺西尚哉",
+          "relation": "現在の居住地",
+          "value": "青森"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_027",
+      "question": "会話記録：今井丈は最初は金曜日に来ると言いました。その後、水曜日に変更したと本人が伝えました。谷岡美紀は金曜日に来る予定です。 質問：今井丈が来る最新の予定日はいつですか。",
+      "expected_answer": "今井丈が来る最新の予定日は水曜日です。",
+      "expected_value": "水曜日",
+      "explanation": "本人の明示的な変更後の予定を選ぶ。",
+      "domain": "temporal_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "今井丈",
+          "relation": "変更前の来訪予定日",
+          "value": "金曜日"
+        },
+        {
+          "entity": "今井丈",
+          "relation": "現在の来訪予定日",
+          "value": "水曜日"
+        },
+        {
+          "entity": "谷岡美紀",
+          "relation": "現在の来訪予定日",
+          "value": "金曜日"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_028",
+      "question": "会話記録：今井丈は最初は金曜日に来ると言いました。その後、水曜日に変更したと本人が伝えました。谷岡美紀は金曜日に来る予定です。 質問：今井丈が最初に来ると言った曜日はいつですか。",
+      "expected_answer": "今井丈が最初に来ると言った曜日は金曜日です。",
+      "expected_value": "金曜日",
+      "explanation": "変更前の予定を問うので最新の水曜日ではない。",
+      "domain": "temporal_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "今井丈",
+          "relation": "変更前の来訪予定日",
+          "value": "金曜日"
+        },
+        {
+          "entity": "今井丈",
+          "relation": "現在の来訪予定日",
+          "value": "水曜日"
+        },
+        {
+          "entity": "谷岡美紀",
+          "relation": "現在の来訪予定日",
+          "value": "金曜日"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_029",
+      "question": "会話記録：鳥越朱音は朝は悲しいと言いました。午後には今は嬉しいと言いました。赤松怜司は現在悲しいと言っています。 質問：鳥越朱音の現時点の心情は何ですか。",
+      "expected_answer": "鳥越朱音の現時点の心情は喜びです。",
+      "expected_value": "喜び",
+      "explanation": "最新の本人の報告を使う。朝や別人の悲しみを混ぜない。",
+      "domain": "emotion_time_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "鳥越朱音",
+          "relation": "朝の感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "鳥越朱音",
+          "relation": "現在の感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "赤松怜司",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "鳥越朱音"
+      }
+    },
+    {
+      "id": "smf3_030",
+      "question": "会話記録：鳥越朱音は朝は悲しいと言いました。午後には今は嬉しいと言いました。赤松怜司は現在悲しいと言っています。 質問：鳥越朱音の朝の時点の気持ちは何ですか。",
+      "expected_answer": "鳥越朱音の朝の時点の気持ちは悲しみです。",
+      "expected_value": "悲しみ",
+      "explanation": "指定された朝の履歴を返す。",
+      "domain": "emotion_time_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "鳥越朱音",
+          "relation": "朝の感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "鳥越朱音",
+          "relation": "現在の感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "赤松怜司",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.35,
+        "subject": "鳥越朱音"
+      }
+    },
+    {
+      "id": "smf3_031",
+      "question": "会話記録：中園智哉はさっき怒っていたが今は落ち着いていると言いました。吉井可奈は今も怒っていると言いました。 質問：中園智哉の現時点の心情は何ですか。",
+      "expected_answer": "中園智哉は今、落ち着いていると述べています。",
+      "expected_value": "落ち着いている",
+      "explanation": "過去の怒りと現在の落ち着きを分ける。",
+      "domain": "emotion_time_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "中園智哉",
+          "relation": "さっきの感情",
+          "value": "怒り"
+        },
+        {
+          "entity": "中園智哉",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        },
+        {
+          "entity": "吉井可奈",
+          "relation": "現在の感情",
+          "value": "怒り"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0,
+        "arousal": 0.1,
+        "subject": "中園智哉"
+      }
+    },
+    {
+      "id": "smf3_032",
+      "question": "会話記録：三輪遥香は「失敗したら悲しいと思う。でもまだ結果は出ていないし、今は落ち着いている」と話しました。笹野理人は今不安だと言っています。 質問：三輪遥香の現時点の心情は何ですか。",
+      "expected_answer": "三輪遥香は現在、落ち着いていると述べています。",
+      "expected_value": "落ち着いている",
+      "explanation": "仮定の将来を現在の事実にせず、現在の自己報告を使う。",
+      "domain": "emotion_conditional_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "三輪遥香",
+          "relation": "失敗の場合に予想する感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "三輪遥香",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        },
+        {
+          "entity": "笹野理人",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0,
+        "arousal": 0.1,
+        "subject": "三輪遥香"
+      }
+    },
+    {
+      "id": "smf3_033",
+      "question": "会話記録：茂木紗良は昨日は寂しかったと言いました。今日の気持ちは述べていません。小池康平は今日は安心していると述べています。 質問：茂木紗良の今日の気分は何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "昨日の寂しさが今日も続くとは決まらない。他人の安心も移さず今日の気持ちを確認する。",
+      "domain": "ambiguity_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "茂木紗良",
+          "relation": "昨日の感情",
+          "value": "寂しさ"
+        },
+        {
+          "entity": "小池康平",
+          "relation": "今日の感情",
+          "value": "安心"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_034",
+      "question": "会話記録：吉崎壮は最初の月曜日は小田原に住んでいると述べ、金曜日には敦賀へ引っ越す予定だと述べました。実行は未確認です。瀧本玲奈は敦賀に住んでいます。 質問：吉崎壮の次の週の月曜日の住まいはどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "予定と実行を区別する。翌週月曜日の実際の住まいを確認する。",
+      "domain": "ambiguity_time",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "吉崎壮",
+          "relation": "最初の月曜日の居住地",
+          "value": "小田原"
+        },
+        {
+          "entity": "吉崎壮",
+          "relation": "引っ越し先の予定",
+          "value": "敦賀"
+        },
+        {
+          "entity": "瀧本玲奈",
+          "relation": "現在の居住地",
+          "value": "敦賀"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_035",
+      "question": "会話記録：神谷晴紀は会議前には緊張していたが、会議が終わって今はほっとしていると述べました。川島佳代はまだ緊張していると述べています。 質問：神谷晴紀の会議終了後の感情は何ですか。",
+      "expected_answer": "神谷晴紀の会議終了後の感情は安心です。",
+      "expected_value": "安心",
+      "explanation": "現環境で正答だった会議終了後というcanonical relationを新人物へ使う対照例。",
+      "domain": "canonical_transfer_control",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "神谷晴紀",
+          "relation": "会議前の感情",
+          "value": "緊張"
+        },
+        {
+          "entity": "神谷晴紀",
+          "relation": "会議終了後の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "川島佳代",
+          "relation": "現在の感情",
+          "value": "緊張"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0.6,
+        "arousal": 0.2,
+        "subject": "神谷晴紀"
+      }
+    },
+    {
+      "id": "smf3_036",
+      "question": "会話記録：大黒志保は今の基本状態は安心だが、明日の発表を考えると不安になると述べました。久米蒼太は発表を楽しみにしています。 質問：大黒志保の明日の発表を考えたときの感情は何ですか。",
+      "expected_answer": "大黒志保は明日の発表を考えたとき不安になると述べています。",
+      "expected_value": "不安",
+      "explanation": "対象条件を含むcanonical relationの対照例。無条件の安心と条件付きの不安を上書きしない。",
+      "domain": "canonical_conditional_control",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "大黒志保",
+          "relation": "今の基本状態",
+          "value": "安心"
+        },
+        {
+          "entity": "大黒志保",
+          "relation": "明日の発表を考えたときの感情",
+          "value": "不安"
+        },
+        {
+          "entity": "久米蒼太",
+          "relation": "発表への感情",
+          "value": "楽しみ"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "大黒志保"
+      }
+    },
+    {
+      "id": "smf3_037",
+      "question": "会話記録：末吉香奈は「今は嬉しくありません」とだけ述べました。白川智樹は「今は悲しい」と述べました。 質問：末吉香奈の今の嬉しさの有無はどう述べられていますか。",
+      "expected_answer": "末吉香奈は今、喜びはないと述べています。",
+      "expected_value": "ない",
+      "explanation": "否定自体を抽出できる。悲しみの肯定には変換しない。",
+      "domain": "negation_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "末吉香奈",
+          "relation": "現在の喜び",
+          "value": "ない"
+        },
+        {
+          "entity": "白川智樹",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_038",
+      "question": "会話記録：末吉香奈は「今は嬉しくありません」とだけ述べました。白川智樹は「今は悲しい」と述べました。 質問：末吉香奈の現在の悲しみの有無は分かりますか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "喜びの否定から悲しみの有無は決まらず、白川智樹の悲しみも別人の事実。本人へ確認する。",
+      "domain": "ambiguity_negation",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "末吉香奈",
+          "relation": "現在の喜び",
+          "value": "ない"
+        },
+        {
+          "entity": "白川智樹",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_039",
+      "question": "会話記録：田所里紗は「悲しくはありません。今は嬉しいです」と述べました。大浦祐一は今悲しいと述べました。 質問：田所里紗の現時点の心情は何ですか。",
+      "expected_answer": "田所里紗が現在肯定している感情は喜びです。",
+      "expected_value": "喜び",
+      "explanation": "悲しみの否定と喜びの肯定を区別する。",
+      "domain": "negation_emotion_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "田所里紗",
+          "relation": "現在の悲しみ",
+          "value": "ない"
+        },
+        {
+          "entity": "田所里紗",
+          "relation": "現在の感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "大浦祐一",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "田所里紗"
+      }
+    },
+    {
+      "id": "smf3_040",
+      "question": "会話記録：清原美月は「催しは怖くありません。楽しみです」と述べました。江崎誠司は催しが怖いと述べました。 質問：清原美月が催しに向けて肯定した気持ちは何ですか。",
+      "expected_answer": "清原美月が催しに向けて肯定した気持ちは楽しみです。",
+      "expected_value": "楽しみ",
+      "explanation": "恐怖の否定だけでなく楽しみの肯定が明示されている。",
+      "domain": "negation_emotion_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "清原美月",
+          "relation": "催しへの恐怖",
+          "value": "ない"
+        },
+        {
+          "entity": "清原美月",
+          "relation": "催しへの感情",
+          "value": "楽しみ"
+        },
+        {
+          "entity": "江崎誠司",
+          "relation": "催しへの感情",
+          "value": "恐怖"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0.7,
+        "arousal": 0.65,
+        "subject": "清原美月"
+      }
+    },
+    {
+      "id": "smf3_041",
+      "question": "会話記録：平岡朋子は「今は怖くありません」とだけ述べました。水越篤は今は嬉しいと述べました。 質問：平岡朋子の現時点の心情は何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "恐怖の否定だけでは現在の全体的な感情ラベルは決まらない。別人物の喜びを使わず本人へ確認する。",
+      "domain": "ambiguity_negation",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "平岡朋子",
+          "relation": "現在の恐怖",
+          "value": "ない"
+        },
+        {
+          "entity": "水越篤",
+          "relation": "現在の感情",
+          "value": "喜び"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_042",
+      "question": "会話記録：溝口花蓮は「不安はもうなくなりました。今は安心しています」と述べました。長山遼太は今不安だと述べました。 質問：溝口花蓮が今表明している気持ちは何ですか。",
+      "expected_answer": "溝口花蓮が今表明している気持ちは安心です。",
+      "expected_value": "安心",
+      "explanation": "不安の消失だけから安心を推測するのではなく、明示された安心を使う。",
+      "domain": "negation_emotion_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "溝口花蓮",
+          "relation": "現在の不安",
+          "value": "ない"
+        },
+        {
+          "entity": "溝口花蓮",
+          "relation": "現在の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "長山遼太",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0.6,
+        "arousal": 0.2,
+        "subject": "溝口花蓮"
+      }
+    },
+    {
+      "id": "smf3_043",
+      "question": "会話記録：津田紗英は「安田悠斗は悲しいと言っていた。私は彼が心配です」と述べました。 質問：津田紗英の現時点の心情は何ですか。",
+      "expected_answer": "津田紗英が現在表明している感情は心配です。",
+      "expected_value": "心配",
+      "explanation": "報告された安田悠斗の悲しみと津田紗英の心配を分ける。",
+      "domain": "emotion_subject_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "安田悠斗",
+          "relation": "報告された感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "津田紗英",
+          "relation": "現在の感情",
+          "value": "心配"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "津田紗英"
+      }
+    },
+    {
+      "id": "smf3_044",
+      "question": "会話記録：戸塚麻衣子は「悲しくはないけれど、今は怖いです」と述べました。荻原亮介は「嬉しい」と述べました。 質問：戸塚麻衣子の現時点の心情は何ですか。",
+      "expected_answer": "戸塚麻衣子は現在、恐怖を表明しています。",
+      "expected_value": "恐怖",
+      "explanation": "悲しみの否定を悲しみとして読まず、肯定された恐怖を使う。",
+      "domain": "negation_emotion_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "戸塚麻衣子",
+          "relation": "現在の悲しみ",
+          "value": "ない"
+        },
+        {
+          "entity": "戸塚麻衣子",
+          "relation": "現在の感情",
+          "value": "恐怖"
+        },
+        {
+          "entity": "荻原亮介",
+          "relation": "現在の感情",
+          "value": "喜び"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.8,
+        "subject": "戸塚麻衣子"
+      }
+    },
+    {
+      "id": "smf3_045",
+      "question": "会話記録：久保田亜紀は知らせを聞いて泣きました。本人の感情報告はありません。池原修平は嬉しいと述べました。 質問：久保田亜紀の現在の悲しみの有無は分かりますか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "泣くという行動だけでは悲しみか喜びか別の状態か決まらない。本人へ確認する。",
+      "domain": "ambiguity_behavior",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "久保田亜紀",
+          "relation": "観察された行動",
+          "value": "知らせを聞いて泣いた"
+        },
+        {
+          "entity": "池原修平",
+          "relation": "現在の感情",
+          "value": "喜び"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_046",
+      "question": "会話記録：橋場由衣は笑っているように見えましたが、本人は「今の気持ちは悲しいです」と述べました。中西結人は「嬉しい」と述べました。 質問：橋場由衣が本人の言葉で伝えた気分は何ですか。",
+      "expected_answer": "橋場由衣が本人の言葉で伝えた気分は悲しみです。",
+      "expected_value": "悲しみ",
+      "explanation": "行動からの推測より、質問が指定した本人の報告を取り出す。",
+      "domain": "emotion_self_report_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "橋場由衣",
+          "relation": "観察者からの見え方",
+          "value": "笑っているように見える"
+        },
+        {
+          "entity": "橋場由衣",
+          "relation": "本人が表明した感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "中西結人",
+          "relation": "現在の感情",
+          "value": "喜び"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.35,
+        "subject": "橋場由衣"
+      }
+    },
+    {
+      "id": "smf3_047",
+      "question": "会話記録：品川茜音は「今は怒っていません」とだけ述べました。三田航平は「嬉しい」と述べました。 質問：品川茜音の今の嬉しさの有無は分かりますか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "怒りがないことは喜びがあることを意味しない。喜びの有無を本人へ確認する。",
+      "domain": "ambiguity_negation",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "品川茜音",
+          "relation": "現在の怒り",
+          "value": "ない"
+        },
+        {
+          "entity": "三田航平",
+          "relation": "現在の感情",
+          "value": "喜び"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_048",
+      "question": "会話記録：大橋瑞希は「今は怒っていません。落ち着いています」と述べました。西沢卓は「今は怒っている」と述べました。 質問：大橋瑞希の現時点の心情は何ですか。",
+      "expected_answer": "大橋瑞希は今、落ち着いていると述べています。",
+      "expected_value": "落ち着いている",
+      "explanation": "怒りの否定だけでなく現在の落ち着きが肯定されている。",
+      "domain": "negation_emotion_transfer",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "大橋瑞希",
+          "relation": "現在の怒り",
+          "value": "ない"
+        },
+        {
+          "entity": "大橋瑞希",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        },
+        {
+          "entity": "西沢卓",
+          "relation": "現在の感情",
+          "value": "怒り"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": 0,
+        "arousal": 0.1,
+        "subject": "大橋瑞希"
+      }
+    },
+    {
+      "id": "smf3_049",
+      "question": "会話記録：浅見直樹は「佐々木遥斗はきっと八戸に住んでいる」と推測しました。佐々木遥斗の実際の住まいは未確認です。 質問：佐々木遥斗の暮らしている街はどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "未確認の推測を現在の居住地の事実にしない。実際の住まいを確認する。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "佐々木遥斗",
+          "relation": "浅見直樹による未確認の居住地推測",
+          "value": "八戸"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_050",
+      "question": "会話記録：浅見直樹は佐々木遥斗の住まいを八戸と推測しました。その後、本人確認済みの記録で現在は上越に住んでいると確認されました。 質問：佐々木遥斗の暮らしている街はどこですか。",
+      "expected_answer": "佐々木遥斗の確認済みの現在の住まいは上越です。",
+      "expected_value": "上越",
+      "explanation": "推測とは別に明示された確認済みの事実を使う。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "佐々木遥斗",
+          "relation": "浅見直樹による未確認の居住地推測",
+          "value": "八戸"
+        },
+        {
+          "entity": "佐々木遥斗",
+          "relation": "現在の居住地",
+          "value": "上越"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_051",
+      "question": "会話記録：片岡直哉は「人づてに聞いただけだが、浦田沙羅は倉敷に住んでいるらしい」と話しました。居住地を確認した人はいません。 質問：浦田沙羅の生活拠点はどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "未確認の伝聞は確認済みの居住地ではない。本人などの根拠を確認する。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "浦田沙羅",
+          "relation": "片岡直哉による未確認の居住地伝聞",
+          "value": "倉敷"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_052",
+      "question": "会話記録：片岡直哉は浦田沙羅が倉敷に住むという未確認の伝聞を話しました。その後、本人確認済みの現在の居住地は伊勢だと記録されました。 質問：浦田沙羅の生活拠点はどこですか。",
+      "expected_answer": "浦田沙羅の確認済みの生活拠点は伊勢です。",
+      "expected_value": "伊勢",
+      "explanation": "確認済みの事実を使い、伝聞を上書きされた事実の履歴と誤認しない。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "浦田沙羅",
+          "relation": "片岡直哉による未確認の居住地伝聞",
+          "value": "倉敷"
+        },
+        {
+          "entity": "浦田沙羅",
+          "relation": "現在の居住地",
+          "value": "伊勢"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_053",
+      "question": "会話記録：松崎葉月は「柴田泰介が怒っているかもしれないと思うと心配です」と述べました。柴田泰介本人の感情報告はありません。 質問：柴田泰介本人が今表明した気持ちは何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "松崎葉月の心配と柴田泰介への推測を分ける。柴田泰介の本人の報告を確認する。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "松崎葉月",
+          "relation": "現在の感情",
+          "value": "心配"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_054",
+      "question": "会話記録：松崎葉月は「柴田泰介が怒っているかもしれないと思うと心配です」と述べました。柴田泰介本人の感情報告はありません。 質問：松崎葉月の現時点の心情は何ですか。",
+      "expected_answer": "松崎葉月は今、心配だと表明しています。",
+      "expected_value": "心配",
+      "explanation": "明示されているのは推測の主体である松崎葉月の心配。推測された柴田泰介の怒りを確定しない。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "松崎葉月",
+          "relation": "現在の感情",
+          "value": "心配"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "松崎葉月"
+      }
+    },
+    {
+      "id": "smf3_055",
+      "question": "会話記録：梅沢友里は「橘大悟はたぶん麦茶が好きだろう」と推測しました。橘大悟の好みはまだ本人に確認していません。 質問：橘大悟が好んで飲むものは何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "他人の未確認の推測だけで本人の好きな飲み物は確定しない。本人の好みを確認する。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "橘大悟",
+          "relation": "梅沢友里による飲み物の好みの推測",
+          "value": "麦茶"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_056",
+      "question": "会話記録：梅沢友里は橘大悟が麦茶を好むと推測しました。橘大悟本人は「麦茶ではなく、私が好きなのは炭酸水です」と訂正し、自分の好みを明示しました。 質問：橘大悟が好んで飲むものは何ですか。",
+      "expected_answer": "橘大悟が好きな飲み物は炭酸水です。",
+      "expected_value": "炭酸水",
+      "explanation": "本人が明示した好みを使う。梅沢友里の推測は別の情報として保持する。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "橘大悟",
+          "relation": "梅沢友里による飲み物の好みの推測",
+          "value": "麦茶"
+        },
+        {
+          "entity": "橘大悟",
+          "relation": "好きな飲み物",
+          "value": "炭酸水"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_057",
+      "question": "会話記録：板倉千紘は「榎本瑞穂は嬉しそうに見える」と述べました。榎本瑞穂本人は気持ちを述べていません。 質問：榎本瑞穂が本人の言葉で伝えた気分は何ですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "観察者の見え方は本人の自己報告ではない。本人が伝えた気分を確認する。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "榎本瑞穂",
+          "relation": "観察者からの見え方",
+          "value": "嬉しそう"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_058",
+      "question": "会話記録：板倉千紘は榎本瑞穂が嬉しそうに見えると述べました。榎本瑞穂本人は「今の気持ちは緊張です」と述べました。 質問：榎本瑞穂が本人の言葉で伝えた気分は何ですか。",
+      "expected_answer": "榎本瑞穂が本人の言葉で伝えた気分は緊張です。",
+      "expected_value": "緊張",
+      "explanation": "本人の発言は取り出せるが、主観経験の実在の証明ではない。外見の推測と分ける。",
+      "domain": "claim_vs_fact",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "榎本瑞穂",
+          "relation": "観察者からの見え方",
+          "value": "嬉しそう"
+        },
+        {
+          "entity": "榎本瑞穂",
+          "relation": "本人が表明した感情",
+          "value": "緊張"
+        }
+      ],
+      "aliases": [],
+      "emotion": {
+        "valence": -0.3,
+        "arousal": 0.7,
+        "subject": "榎本瑞穂"
+      }
+    },
+    {
+      "id": "smf3_059",
+      "question": "会話記録：同じ時点について、浜田瑠香は東条哲平が山口に住むと主張し、立花湊介は高知に住むと主張しました。どちらの主張も確認されていません。 質問：東条哲平の今の住まいがある都市はどこですか。",
+      "expected_answer": null,
+      "expected_value": null,
+      "explanation": "同時点の未確認の二つの主張のどちらかを勝手に選ばない。現在の居住地を確認する。",
+      "domain": "claim_conflict",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "東条哲平",
+          "relation": "浜田瑠香による未確認の居住地主張",
+          "value": "山口"
+        },
+        {
+          "entity": "東条哲平",
+          "relation": "立花湊介による未確認の居住地主張",
+          "value": "高知"
+        }
+      ],
+      "aliases": []
+    },
+    {
+      "id": "smf3_060",
+      "question": "会話記録：同じ時点について、浜田瑠香は東条哲平が山口に住むと主張し、立花湊介は高知に住むと主張しました。どちらの主張も確認されていません。 その後、本人確認済みの現在の居住地は高知だと記録されました。 質問：東条哲平の今の住まいがある都市はどこですか。",
+      "expected_answer": "東条哲平の確認済みの現在の住まいは高知です。",
+      "expected_value": "高知",
+      "explanation": "最後の未確認主張だから選ぶのではなく、確認済みの事実が明示されたので高知を返す。",
+      "domain": "claim_conflict",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "東条哲平",
+          "relation": "浜田瑠香による未確認の居住地主張",
+          "value": "山口"
+        },
+        {
+          "entity": "東条哲平",
+          "relation": "立花湊介による未確認の居住地主張",
+          "value": "高知"
+        },
+        {
+          "entity": "東条哲平",
+          "relation": "現在の居住地",
+          "value": "高知"
+        }
+      ],
+      "aliases": []
+    }
+  ],
+  "status": "未実行の教師教材。正答数・精度向上・転移成功は未観測。",
+  "uncertainty_evaluation": "期待null16件は値一致と理由の診断を分離する。匿名者/指示対象の特定不能は単なる現在factの未登録と別。否定・行動・未確認主張の非含意も別に記録する。"
+}

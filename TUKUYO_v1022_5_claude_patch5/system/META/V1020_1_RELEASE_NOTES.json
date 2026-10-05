@@ -1,0 +1,17 @@
+{
+  "base": "v1020",
+  "campaign_changes": [
+    "Optional subprocess CLI orchestration",
+    "Atomic public output save with exact readback"
+  ],
+  "data_protocol": "v1020",
+  "external_monotonic_rollback_detection": false,
+  "fixes": [
+    "Reject coherent journal/cache rollback against latest signed whole-state hash",
+    "Refuse missing or invalid whole-state recovery anchor",
+    "Require exact integer micro-unit trait budget",
+    "Reject runtime symlinks and parent-link redirection before staging or redo"
+  ],
+  "initial_materialization_root_cause": "UNCONFIRMED",
+  "version": "v1020.1"
+}

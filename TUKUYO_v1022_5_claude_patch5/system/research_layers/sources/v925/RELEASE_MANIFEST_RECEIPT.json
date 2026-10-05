@@ -1,0 +1,18 @@
+{
+  "payload": {
+    "claim_boundary": "Establishes bounded Python-AST allowlisting against included adversarial controls; does not claim a hardened OS sandbox.",
+    "critical_sha256": {
+      "STATUS.json": "3bc8c0f4a7c630741946447e6cfb3816137f45fa2d3666e46f7dac47cf12ec21",
+      "evidence/ADVERSARIAL_SECURITY.json": "55f17b44ce7f55b1430ab047b26fc8b118bdb17a089a71d68da3ee2470c5976c",
+      "run_selftest.py": "b230b58e3896fed28eaee399c9f1776bd15105f552c2d223b8bc3055404968d5",
+      "tukuyo_v925/security.py": "956bf5e4e532ee3622353e246261b168d80139f71dc5a60389133e33ce40be0e"
+    },
+    "package_manifest_sha256": "fb8a70650b50fdadb06af2aaaa493d87c6083c552725bb58307da40912b21cdd",
+    "parent_sha256": "fc4e2c4df802b7a60714ceac30b11f14508539263c1bdd1ccacf3a582375426a",
+    "release_authority_public_key_b64": "LbW661bwkVnbHZR5jHsVRUxvFFygHfiYr/cyb759TZE=",
+    "schema": "tukuyo.release_manifest_receipt.v4",
+    "trust_epoch": "TUKUYO-2026-09-22-E4",
+    "version": "v925"
+  },
+  "signature_b64": "GxSJSQ1bBsbyhXjCvXcho3zQYJL2NUU0GhdqP23pyr1QX9/GT/THP+7NnQptsD3uXxCzTsg4T7jcubMukrcJBQ=="
+}

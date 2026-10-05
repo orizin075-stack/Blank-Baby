@@ -1,0 +1,222 @@
+{
+ "note": "Held-out E: written BEFORE the Parser-B expansion of patch5; never used for tuning.",
+ "rows": [
+  {
+   "set": "E_change",
+   "q": "図書室に本が120冊あります。35冊借りられ、18冊返ってきました。今何冊？",
+   "kind": "number",
+   "expected": "103"
+  },
+  {
+   "set": "E_change",
+   "q": "バスに31人乗っています。停留所で9人降りて、4人乗りました。今何人？",
+   "kind": "number",
+   "expected": "26"
+  },
+  {
+   "set": "E_change",
+   "q": "貯金箱に850円あります。300円入れて、200円使いました。いくらになりましたか？",
+   "kind": "number",
+   "expected": "950"
+  },
+  {
+   "set": "E_change",
+   "q": "ジュースが1L500mLあります。350mL飲み、さらに400mL飲みました。残りは何mL？",
+   "kind": "number",
+   "expected": "750"
+  },
+  {
+   "set": "E_change",
+   "q": "Emma had 24 stickers. She gave 7 to Liam and got 5 from Noah. How many stickers does she have now?",
+   "kind": "number",
+   "expected": "22"
+  },
+  {
+   "set": "E_price",
+   "q": "1個65円のあめを8個買うと、代金はいくらですか？",
+   "kind": "number",
+   "expected": "520"
+  },
+  {
+   "set": "E_price",
+   "q": "1冊240円のノートを3冊と、1本90円のペンを4本買いました。代金は全部でいくら？",
+   "kind": "number",
+   "expected": "1080"
+  },
+  {
+   "set": "E_price",
+   "q": "1000円で、1個180円のパンを4個買いました。おつりはいくらですか？",
+   "kind": "number",
+   "expected": "280"
+  },
+  {
+   "set": "E_price",
+   "q": "500円玉を1枚出して、1本130円のジュースを3本買いました。おつりは？",
+   "kind": "number",
+   "expected": "110"
+  },
+  {
+   "set": "E_price",
+   "q": "Pens cost 3 dollars each. How much do 7 pens cost?",
+   "kind": "number",
+   "expected": "21"
+  },
+  {
+   "set": "E_groups",
+   "q": "9人に6枚ずつ折り紙を配ります。折り紙は全部で何枚いりますか？",
+   "kind": "number",
+   "expected": "54"
+  },
+  {
+   "set": "E_groups",
+   "q": "1パックに8個入りの卵が7パックあります。卵は全部で何個？",
+   "kind": "number",
+   "expected": "56"
+  },
+  {
+   "set": "E_groups",
+   "q": "84本の鉛筆を7人で同じ数ずつ分けると、1人何本ですか？",
+   "kind": "number",
+   "expected": "12"
+  },
+  {
+   "set": "E_groups",
+   "q": "96個のあめを1袋に8個ずつ入れると、何袋できますか？",
+   "kind": "number",
+   "expected": "12"
+  },
+  {
+   "set": "E_groups",
+   "q": "There are 6 rows of chairs with 9 chairs in each row. How many chairs are there?",
+   "kind": "number",
+   "expected": "54"
+  },
+  {
+   "set": "E_groups",
+   "q": "72 apples are shared equally among 9 baskets. How many apples are in each basket?",
+   "kind": "number",
+   "expected": "8"
+  },
+  {
+   "set": "E_compare",
+   "q": "父は38歳です。子どもは父より29歳年下です。子どもは何歳？",
+   "kind": "number",
+   "expected": "9"
+  },
+  {
+   "set": "E_compare",
+   "q": "赤いテープは85cmです。青いテープは赤いテープより27cm長いです。青いテープは何cm？",
+   "kind": "number",
+   "expected": "112"
+  },
+  {
+   "set": "E_compare",
+   "q": "Kate is 11 years old. Her mother is 26 years older than Kate. How old is her mother?",
+   "kind": "number",
+   "expected": "37"
+  },
+  {
+   "set": "E_compare",
+   "q": "白い石が46個、黒い石が29個あります。白い石は黒い石より何個多い？",
+   "kind": "number",
+   "expected": "17"
+  },
+  {
+   "set": "E_equation",
+   "q": "ある数に15を足すと42になります。ある数はいくつですか？",
+   "kind": "number",
+   "expected": "27"
+  },
+  {
+   "set": "E_equation",
+   "q": "ある数から9を引くと34になります。ある数は？",
+   "kind": "number",
+   "expected": "43"
+  },
+  {
+   "set": "E_equation",
+   "q": "ある数を4倍して6を足すと50になります。ある数は？",
+   "kind": "number",
+   "expected": "11"
+  },
+  {
+   "set": "E_equation",
+   "q": "ある数を5でわって3を引くと4になります。ある数は？",
+   "kind": "number",
+   "expected": "35"
+  },
+  {
+   "set": "E_rate",
+   "q": "時速40kmで3時間15分走ると、何km進みますか？",
+   "kind": "number",
+   "expected": "130"
+  },
+  {
+   "set": "E_rate",
+   "q": "分速70mで歩くと、14分で何m進みますか？",
+   "kind": "number",
+   "expected": "980"
+  },
+  {
+   "set": "E_rate",
+   "q": "時速5kmで歩くと、15km進むのに何時間かかりますか？",
+   "kind": "number",
+   "expected": "3"
+  },
+  {
+   "set": "E_rate",
+   "q": "4000円の品物を15%引きにし、さらに10%引きにしました。値段はいくら？",
+   "kind": "number",
+   "expected": "3060"
+  },
+  {
+   "set": "E_abstain",
+   "q": "2000円の品物Aを10%引きし、品物Bを30%引きしました。値段はいくら？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "E_abstain",
+   "q": "教室に何人かいます。そのうち12人が帰りました。残りは何人？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "E_abstain",
+   "q": "1袋に10個入りが5袋あります。袋は全部で何個？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "E_abstain",
+   "q": "りんごとなしが合わせて30個あります。なしは何個？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "E_abstain",
+   "q": "Sam has some coins. He finds 6 more. How many coins does he have?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "E_abstain",
+   "q": "明日、20個のクッキーを焼いて8個配る予定です。何個残りますか？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "E_abstain",
+   "q": "15時に、みかんが30個ありました。7個食べました。残りは何個？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "E_abstain",
+   "q": "時速4kmで何分か歩きました。何km進みましたか？",
+   "kind": "abstain",
+   "expected": null
+  }
+ ],
+ "knowledge": []
+}

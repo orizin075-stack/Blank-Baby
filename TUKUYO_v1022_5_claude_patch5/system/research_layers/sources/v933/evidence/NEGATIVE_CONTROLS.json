@@ -1,0 +1,27 @@
+{
+  "label_corruption_proxies": [
+    {
+      "holdout_correct": 1535,
+      "rule": {
+        "action": "audit",
+        "t1": 0.25851499254391347,
+        "t2": 0.05186656014959713,
+        "x": "ambiguous_failure",
+        "y": "representation_failure",
+        "z": "consistency_failure"
+      }
+    },
+    {
+      "holdout_correct": 1532,
+      "rule": {
+        "action": "audit",
+        "t1": 0.22676658718357862,
+        "t2": 0.06781272156445503,
+        "x": "representation_failure",
+        "y": "consistency_failure",
+        "z": "ambiguous_failure"
+      }
+    }
+  ],
+  "real_candidate_correct": 2393
+}

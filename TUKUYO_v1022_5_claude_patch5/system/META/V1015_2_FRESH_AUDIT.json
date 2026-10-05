@@ -1,0 +1,61 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "external_H4": "PENDING",
+    "full_historical_suite_current_release": "NOT_RERUN_TO_COMPLETION",
+    "general_l5": false,
+    "literal_life_established": false,
+    "literal_soul_established": false,
+    "third_party_reproduction": "PENDING"
+  },
+  "focused_regression": {
+    "total": "46/46 PASS",
+    "v1012_1": "7/7 PASS",
+    "v1013": "3/3 PASS",
+    "v1014": "3/3 PASS",
+    "v1014_1": "5/5 PASS",
+    "v1014_2": "4/4 PASS",
+    "v1014_3": "3/3 PASS",
+    "v1014_4": "9/9 PASS",
+    "v1015": "6/6 PASS",
+    "v1015_1": "2/2 PASS",
+    "v1015_2": "4/4 PASS"
+  },
+  "generated_utc_ns": 1790650974053910673,
+  "negative_controls": {
+    "pump_before_start_witness": "WAITING_START_WITNESS",
+    "self_reported_endurance_flags_not_authoritative": true,
+    "short_protocol_not_promoted_to_24h": true,
+    "witness_private_key_inside_data_root": "REJECTED",
+    "witness_trust_rotation": "REJECTED"
+  },
+  "schema": "tukuyo.v1015_2.fresh_audit/1",
+  "short_protocol": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "authenticated_bundle_audit": "PASS",
+    "campaign_steps": 2,
+    "distinct_process_instances": 3,
+    "execution_audit": "PASS",
+    "external_witness_elapsed_seconds": 11.036597463,
+    "formal_duration_complete": true,
+    "living_episodes": 2,
+    "phase": "PROTOCOL_COMPLETE",
+    "profile": "24h",
+    "pumps": 2,
+    "target_seconds": 5,
+    "tick_seconds": 10,
+    "witness_realtime_seqs": [
+      1,
+      2,
+      3
+    ],
+    "witness_receipts_accepted": 3,
+    "witness_receipts_in_authenticated_bundle": 3
+  },
+  "version": "v1015.2"
+}

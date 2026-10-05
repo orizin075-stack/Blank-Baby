@@ -1,0 +1,16 @@
+{
+  "l6_claim_eligible": false,
+  "name": "EVIDENCE_INTEGRITY_REPAIR",
+  "parent_v931_zip_sha256": "1a33435ecdb50d2a5c596bddc114bc232840544d4796c705fd10c6131a7f3132",
+  "real_external_semantic_evaluation": "PENDING",
+  "repairs": {
+    "cache_artifact": "REJECT",
+    "holdout_preimage": "VERIFIABLE",
+    "receipt_rows": "ROW_LEVEL_BOUND",
+    "symlink_artifact": "REJECT",
+    "wallclock_forks": "REAL_PATHS_AND_FRESH_PROBE_REQUIRED"
+  },
+  "third_party_reproduction": "PENDING",
+  "version": "v932",
+  "wallclock30": "NOT_INITIALIZED"
+}

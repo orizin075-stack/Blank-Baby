@@ -1,0 +1,890 @@
+[
+  {
+    "accepted": 3,
+    "cycles": [
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.8019739712709764,
+        "before": 0.7733443481370778,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 2
+        },
+        "cycle": 0,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.054355709948302036,
+          "representation_failure": 0.19451849253559422
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7764975872783334,
+        "before": 0.6906818663371086,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 3
+        },
+        "cycle": 1,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.05024892237392251,
+          "representation_failure": 0.42326288376489896
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.6735011947132232,
+        "before": 0.5976968603085518,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "cycle": 2,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.3019984070490357,
+          "representation_failure": 0.38321733761868565
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 3
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "hold",
+        "after": 0.8117331719265933,
+        "before": 0.8117331719265933,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "cycle": 3,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.1176891040978755,
+          "representation_failure": 0.35858842028304416
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "hold",
+        "after": 0.8534350551034019,
+        "before": 0.8534350551034019,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "cycle": 4,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.06208659319546417,
+          "representation_failure": 0.35896287654566134
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "verified_wrong": 0
+      }
+    ],
+    "suite_id": "V900-S0"
+  },
+  {
+    "accepted": 5,
+    "cycles": [
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.5534928874792511,
+        "before": 0.4961746793568867,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 1
+        },
+        "cycle": 0,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.3092728324894582,
+          "representation_failure": 0.30916092836802633
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.8196715291260571,
+        "before": 0.813102453664911,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "cycle": 1,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.09438063990330142,
+          "representation_failure": 0.10627630184458448
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.6532773549289147,
+        "before": 0.5679522597248942,
+        "candidate": {
+          "probe_budget": 3,
+          "proposal_budget": 2
+        },
+        "cycle": 2,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.42130038081608195,
+          "representation_failure": 0.2827950997341297
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.7054488852111421,
+        "before": 0.6234450944955158,
+        "candidate": {
+          "probe_budget": 4,
+          "proposal_budget": 2
+        },
+        "cycle": 3,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.40801516286250555,
+          "representation_failure": 0.34910222957771586
+        },
+        "parent": {
+          "probe_budget": 3,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7840660116660447,
+        "before": 0.7281320233320895,
+        "candidate": {
+          "probe_budget": 4,
+          "proposal_budget": 3
+        },
+        "cycle": 4,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.24604269746529,
+          "representation_failure": 0.3037359533358211
+        },
+        "parent": {
+          "probe_budget": 4,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      }
+    ],
+    "suite_id": "V900-S1"
+  },
+  {
+    "accepted": 5,
+    "cycles": [
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.501045741894852,
+        "before": 0.41137609576714157,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 1
+        },
+        "cycle": 0,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.43867858451084185,
+          "representation_failure": 0.2928199544663027
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.6101187643721854,
+        "before": 0.5456194493201765,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "cycle": 1,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.2817652110475939,
+          "representation_failure": 0.33799726020803533
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7487092235541898,
+        "before": 0.6885630535297393,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 3
+        },
+        "cycle": 2,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.14228921284271925,
+          "representation_failure": 0.32058468009780205
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7113880928317565,
+        "before": 0.6373144082304818,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 4
+        },
+        "cycle": 3,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.337223814336487,
+          "representation_failure": 0.37629473840509914
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 3
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.8009008697858309,
+        "before": 0.7618017395716618,
+        "candidate": {
+          "probe_budget": 3,
+          "proposal_budget": 4
+        },
+        "cycle": 4,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.23639652085667662,
+          "representation_failure": 0.22812349035454016
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 4
+        },
+        "verified_wrong": 0
+      }
+    ],
+    "suite_id": "V900-S2"
+  },
+  {
+    "accepted": 3,
+    "cycles": [
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.6651311791611629,
+        "before": 0.5832308780923864,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 2
+        },
+        "cycle": 0,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.09475762493504579,
+          "representation_failure": 0.40760120427510566
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.6508034581068256,
+        "before": 0.5782151024561053,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 3
+        },
+        "cycle": 1,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.2354775816566057,
+          "representation_failure": 0.37035342260288084
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7481851107964973,
+        "before": 0.708673035219156,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "cycle": 2,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.2024198522713369,
+          "representation_failure": 0.2380483023093649
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 3
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "hold",
+        "after": 0.6578997659261577,
+        "before": 0.6578997659261577,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "cycle": 3,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.32280031209845644,
+          "representation_failure": 0.39276364611567083
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "hold",
+        "after": 0.8167714218870953,
+        "before": 0.8167714218870953,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "cycle": 4,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.11097143748387293,
+          "representation_failure": 0.35267746094081626
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 4
+        },
+        "verified_wrong": 0
+      }
+    ],
+    "suite_id": "V900-S3"
+  },
+  {
+    "accepted": 4,
+    "cycles": [
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.5312882523812121,
+        "before": 0.4560240231857293,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 1
+        },
+        "cycle": 0,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.38105691678193127,
+          "representation_failure": 0.29091105230376296
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7136596069245097,
+        "before": 0.655703427238157,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "cycle": 1,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.10085606740557003,
+          "representation_failure": 0.3118247187454106
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7248566392559218,
+        "before": 0.6495293370906218,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 3
+        },
+        "cycle": 2,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.159632117157556,
+          "representation_failure": 0.38130920866120044
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.77940774425549,
+        "before": 0.7292337556165853,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 4
+        },
+        "cycle": 3,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.20118451148902017,
+          "representation_failure": 0.2806959545556185
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 3
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "hold",
+        "after": 0.8070411993551044,
+        "before": 0.8070411993551044,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 4
+        },
+        "cycle": 4,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.14591760128979103,
+          "representation_failure": 0.26248658997672253
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 4
+        },
+        "verified_wrong": 0
+      }
+    ],
+    "suite_id": "V900-S4"
+  },
+  {
+    "accepted": 5,
+    "cycles": [
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.5625051402498589,
+        "before": 0.4926721911208402,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 1
+        },
+        "cycle": 0,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.3593317965160746,
+          "representation_failure": 0.26377194865613846
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.6856820684207968,
+        "before": 0.6192527666333316,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "cycle": 1,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.12291865600854544,
+          "representation_failure": 0.345717207149861
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7322209117418859,
+        "before": 0.6626953908709787,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 3
+        },
+        "cycle": 2,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.15650713477441386,
+          "representation_failure": 0.3581020834836289
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.7880220237494114,
+        "before": 0.7476142387425123,
+        "candidate": {
+          "probe_budget": 3,
+          "proposal_budget": 3
+        },
+        "cycle": 3,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.24163114002759628,
+          "representation_failure": 0.12628076497475826
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 3
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.8000867965110817,
+        "before": 0.7507462732086478,
+        "candidate": {
+          "probe_budget": 3,
+          "proposal_budget": 4
+        },
+        "cycle": 4,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.23965281395567317,
+          "representation_failure": 0.2773620932097356
+        },
+        "parent": {
+          "probe_budget": 3,
+          "proposal_budget": 3
+        },
+        "verified_wrong": 0
+      }
+    ],
+    "suite_id": "V900-S5"
+  },
+  {
+    "accepted": 5,
+    "cycles": [
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.6493044923341642,
+        "before": 0.5733173322984024,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 2
+        },
+        "cycle": 0,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.13162825012574964,
+          "representation_failure": 0.3839486401430471
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.7077700321615995,
+        "before": 0.6682515772147666,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "cycle": 1,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.2380738197873315,
+          "representation_failure": 0.18638611588946963
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.6824382856169692,
+        "before": 0.6064863356110348,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 3
+        },
+        "cycle": 2,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.24321952875419273,
+          "representation_failure": 0.38380780002373777
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.8331910873606784,
+        "before": 0.7887499901467537,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 4
+        },
+        "cycle": 3,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.09361782527864336,
+          "representation_failure": 0.2577643888556988
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 3
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.7690961626264248,
+        "before": 0.6981923252528496,
+        "candidate": {
+          "probe_budget": 3,
+          "proposal_budget": 4
+        },
+        "cycle": 4,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.3636153494943008,
+          "representation_failure": 0.31831739385131624
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 4
+        },
+        "verified_wrong": 0
+      }
+    ],
+    "suite_id": "V900-S6"
+  },
+  {
+    "accepted": 5,
+    "cycles": [
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.5289804801843443,
+        "before": 0.44521401500289837,
+        "candidate": {
+          "probe_budget": 1,
+          "proposal_budget": 2
+        },
+        "cycle": 0,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.27131545260368534,
+          "representation_failure": 0.41506586072578355
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 1
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.6184754275295427,
+        "before": 0.5436050591970187,
+        "candidate": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "cycle": 1,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.37948147333009546,
+          "representation_failure": 0.22356767161081914
+        },
+        "parent": {
+          "probe_budget": 1,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_probe",
+        "after": 0.7755962139488017,
+        "before": 0.7057176494631395,
+        "candidate": {
+          "probe_budget": 3,
+          "proposal_budget": 2
+        },
+        "cycle": 2,
+        "detected_bottleneck": "ambiguity",
+        "metrics": {
+          "ambiguous_failure": 0.35951425794264896,
+          "representation_failure": 0.06905044313107211
+        },
+        "parent": {
+          "probe_budget": 2,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.7893006360339105,
+        "before": 0.7583442797211555,
+        "candidate": {
+          "probe_budget": 3,
+          "proposal_budget": 3
+        },
+        "cycle": 3,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.15897203061333764,
+          "representation_failure": 0.20382542525102032
+        },
+        "parent": {
+          "probe_budget": 3,
+          "proposal_budget": 2
+        },
+        "verified_wrong": 0
+      },
+      {
+        "accepted": true,
+        "action": "increase_proposal",
+        "after": 0.800000262315199,
+        "before": 0.7293859376974919,
+        "candidate": {
+          "probe_budget": 3,
+          "proposal_budget": 4
+        },
+        "cycle": 4,
+        "detected_bottleneck": "representation",
+        "metrics": {
+          "ambiguous_failure": 0.23999895073920363,
+          "representation_failure": 0.3624572984708284
+        },
+        "parent": {
+          "probe_budget": 3,
+          "proposal_budget": 3
+        },
+        "verified_wrong": 0
+      }
+    ],
+    "suite_id": "V900-S7"
+  }
+]

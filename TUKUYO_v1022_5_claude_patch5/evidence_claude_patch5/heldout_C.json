@@ -1,0 +1,625 @@
+{
+ "note": "Held-out C: written AFTER patch3 was implemented; no code change is made in response to it except disclosed safety fixes.",
+ "rows": [
+  {
+   "set": "C_word",
+   "q": "本だなに本が45冊あります。12冊借りられて、7冊返ってきました。今何冊ありますか？",
+   "kind": "number",
+   "expected": "40"
+  },
+  {
+   "set": "C_word",
+   "q": "子どもが6人います。1人に4枚ずつ色紙を配ると、色紙は何枚いりますか？",
+   "kind": "number",
+   "expected": "24"
+  },
+  {
+   "set": "C_word",
+   "q": "1本80円の鉛筆を3本と、1個120円の消しゴムを2個買いました。代金はいくらですか？",
+   "kind": "number",
+   "expected": "480"
+  },
+  {
+   "set": "C_word",
+   "q": "5000円で、1冊1200円の本を2冊買いました。おつりはいくらですか？",
+   "kind": "number",
+   "expected": "2600"
+  },
+  {
+   "set": "C_word",
+   "q": "兄は14歳です。弟は兄より5歳年下です。弟は何歳ですか？",
+   "kind": "number",
+   "expected": "9"
+  },
+  {
+   "set": "C_word",
+   "q": "姉はシールを40枚持っています。妹は姉より15枚少なく持っています。妹は何枚持っていますか？",
+   "kind": "number",
+   "expected": "25"
+  },
+  {
+   "set": "C_word",
+   "q": "1日に20分ずつ練習すると、7日で何分練習しますか？",
+   "kind": "number",
+   "expected": "140"
+  },
+  {
+   "set": "C_word",
+   "q": "時速45kmで2時間走ると、何km進みますか？",
+   "kind": "number",
+   "expected": "90"
+  },
+  {
+   "set": "C_word",
+   "q": "分速60mで歩くと、900m進むのに何分かかりますか？",
+   "kind": "number",
+   "expected": "15"
+  },
+  {
+   "set": "C_word",
+   "q": "72個のみかんを8人で同じ数ずつ分けると、1人何個になりますか？",
+   "kind": "number",
+   "expected": "9"
+  },
+  {
+   "set": "C_word",
+   "q": "56本の花を7本ずつたばにすると、花たばはいくつできますか？",
+   "kind": "number",
+   "expected": "8"
+  },
+  {
+   "set": "C_word",
+   "q": "ある数から8を引くと15になりました。ある数はいくつですか？",
+   "kind": "number",
+   "expected": "23"
+  },
+  {
+   "set": "C_word",
+   "q": "ある数を6でわると7になりました。ある数は？",
+   "kind": "number",
+   "expected": "42"
+  },
+  {
+   "set": "C_word",
+   "q": "ある数に5をかけて3を足すと38になります。ある数を求めましょう。",
+   "kind": "number",
+   "expected": "7"
+  },
+  {
+   "set": "C_word",
+   "q": "公園に鳩が32羽いました。そのうち14羽が飛んでいきました。残りは何羽ですか？",
+   "kind": "number",
+   "expected": "18"
+  },
+  {
+   "set": "C_word",
+   "q": "教室に36人います。めがねをかけている人は9人です。めがねをかけていない人は何人ですか？",
+   "kind": "number",
+   "expected": "27"
+  },
+  {
+   "set": "C_word",
+   "q": "赤いビー玉が25個、青いビー玉が17個あります。ちがいは何個ですか？",
+   "kind": "number",
+   "expected": "8"
+  },
+  {
+   "set": "C_word",
+   "q": "1箱に12本入りの鉛筆が5箱あります。鉛筆は全部で何本ありますか？",
+   "kind": "number",
+   "expected": "60"
+  },
+  {
+   "set": "C_word",
+   "q": "毎日3ページずつ日記を書くと、2週間で何ページになりますか？",
+   "kind": "number",
+   "expected": "42"
+  },
+  {
+   "set": "C_word",
+   "q": "300円持っています。1個90円のパンを2個買うと、残りはいくらですか？",
+   "kind": "number",
+   "expected": "120"
+  },
+  {
+   "set": "C_word",
+   "q": "Tom has 12 apples. He buys 8 more. How many apples does he have now?",
+   "kind": "number",
+   "expected": "20"
+  },
+  {
+   "set": "C_word",
+   "q": "A box holds 6 eggs. How many eggs are in 7 boxes?",
+   "kind": "number",
+   "expected": "42"
+  },
+  {
+   "set": "C_word",
+   "q": "Sara is 9 years old. Her brother is 4 years older than her. How old is her brother?",
+   "kind": "number",
+   "expected": "13"
+  },
+  {
+   "set": "C_word",
+   "q": "A bus had 28 passengers. 9 got off and 5 got on. How many passengers are on the bus now?",
+   "kind": "number",
+   "expected": "24"
+  },
+  {
+   "set": "C_word",
+   "q": "There are 5 bags with 9 marbles in each bag. How many marbles are there in all?",
+   "kind": "number",
+   "expected": "45"
+  },
+  {
+   "set": "C_word",
+   "q": "Jake ran 4 km on Saturday and 6 km on Sunday. How far did he run in total?",
+   "kind": "number",
+   "expected": "10"
+  },
+  {
+   "set": "C_word",
+   "q": "A ribbon is 50 cm long. Amy cuts off 18 cm. How long is the ribbon now?",
+   "kind": "number",
+   "expected": "32"
+  },
+  {
+   "set": "C_word",
+   "q": "36 cookies are shared equally among 4 children. How many cookies does each child get?",
+   "kind": "number",
+   "expected": "9"
+  },
+  {
+   "set": "C_word_abstain",
+   "q": "かごにりんごが何個か入っています。5個取り出しました。残りは何個？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_word_abstain",
+   "q": "3人で何枚かのカードを分けました。1人何枚？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_word_abstain",
+   "q": "お店にパンがたくさんあります。20個売れました。残りは？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_word_abstain",
+   "q": "A jar has about 50 candies. Tim eats 8. How many are left?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_word_abstain",
+   "q": "40人のうち何人かが帰りました。残りは何人？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_word_abstain",
+   "q": "来週、12冊の本を3冊ずつ読む予定です。何週間かかりますか？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_logic",
+   "q": "窓を開けると風が入る。風が入っていない。窓を開けた？",
+   "kind": "logic",
+   "expected": [
+    "no"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "もし明日晴れたら公園に行く。明日は晴れた。公園に行く？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "公園"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "練習すれば上手になる。上手になった。練習した？",
+   "kind": "logic",
+   "expected": [
+    "unknown"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "すべての鳥は羽がある。ペンギンは鳥だ。ペンギンは羽がある？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "羽"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "すべての学生は学生証を持っている。田中は学生証を持っていない。田中は学生？",
+   "kind": "logic",
+   "expected": [
+    "no"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "紅茶かコーヒーのどちらかを飲む。紅茶は飲まない。コーヒーを飲む？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "コーヒー"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "山は丘より高い。丘は家より高い。家と山ではどちらが高い？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "山"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "兄は姉より背が高い。姉は妹より背が高い。一番背が低いのは誰？",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "妹"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "AはBより重い。CはBより重い。AとCではどちらが重い？",
+   "kind": "logic",
+   "expected": [
+    "unknown"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "赤い箱は青い箱より大きい。青い箱は赤い箱より大きい。どちらが大きい？",
+   "kind": "logic",
+   "expected": [
+    "unknown"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "If the store is open, Lily buys milk. The store is open. Does Lily buy milk?",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "milk"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "If it snows, school is closed. School is not closed. Did it snow?",
+   "kind": "logic",
+   "expected": [
+    "no"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "All dogs are mammals. Rex is a dog. Is Rex a mammal?",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "mammal"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "No reptiles have fur. A lizard is a reptile. Does a lizard have fur?",
+   "kind": "logic",
+   "expected": [
+    "no"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "Either Kim or Joe is the winner. Kim is not the winner. Is Joe the winner?",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "joe"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "Mia is younger than Zoe. Zoe is younger than Ava. Who is oldest?",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "ava"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "Max is faster than Leo. Kai is faster than Leo. Is Max faster than Kai?",
+   "kind": "logic",
+   "expected": [
+    "unknown"
+   ]
+  },
+  {
+   "set": "C_logic",
+   "q": "If Sam studies, he passes. Sam studies. Does Sam pass?",
+   "kind": "logic",
+   "expected": [
+    "derive",
+    "pass"
+   ]
+  },
+  {
+   "set": "C_logic_abstain",
+   "q": "雨の日はたいてい道が混む。今日は雨だ。道は混む？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_logic_abstain",
+   "q": "Most cats like fish. Tama is a cat. Does Tama like fish?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_logic_abstain",
+   "q": "晴れたら出かけるかもしれない。晴れた。出かける？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_memory",
+   "q": "若葉図書館の館長は？",
+   "kind": "contains",
+   "expected": "森川ナオ"
+  },
+  {
+   "set": "C_memory",
+   "q": "若葉図書館はどこにある？",
+   "kind": "contains",
+   "expected": "東町"
+  },
+  {
+   "set": "C_memory",
+   "q": "若葉図書館はいつ開館した？",
+   "kind": "contains",
+   "expected": "1979年"
+  },
+  {
+   "set": "C_memory_multihop",
+   "q": "若葉図書館の館長の出身地は？",
+   "kind": "contains",
+   "expected": "金沢"
+  },
+  {
+   "set": "C_memory",
+   "q": "若葉図書館の休みは何曜日？",
+   "kind": "contains",
+   "expected": "水曜日"
+  },
+  {
+   "set": "C_memory",
+   "q": "銀河劇場には何人入れる？",
+   "kind": "contains",
+   "expected": "800人"
+  },
+  {
+   "set": "C_memory_multihop",
+   "q": "銀河劇場の最寄り駅はいつ開業した？",
+   "kind": "contains",
+   "expected": "1950年"
+  },
+  {
+   "set": "C_memory",
+   "q": "朝日商店の名産は？",
+   "kind": "contains",
+   "expected": "焼きそば"
+  },
+  {
+   "set": "C_memory",
+   "q": "白峰山の高さは？",
+   "kind": "contains",
+   "expected": "1520メートル"
+  },
+  {
+   "set": "C_memory",
+   "q": "How long is the Kestrel bridge?",
+   "kind": "contains",
+   "expected": "1200 meters"
+  },
+  {
+   "set": "C_memory",
+   "q": "When was the Kestrel bridge opened?",
+   "kind": "contains",
+   "expected": "1975"
+  },
+  {
+   "set": "C_memory",
+   "q": "Who designed the Kestrel bridge?",
+   "kind": "contains",
+   "expected": "Doyle"
+  },
+  {
+   "set": "C_memory_multihop",
+   "q": "Where was the engineer who designed the Kestrel bridge born?",
+   "kind": "contains",
+   "expected": "Leeds"
+  },
+  {
+   "set": "C_memory_abstain",
+   "q": "若葉図書館の副館長は？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_memory_abstain",
+   "q": "銀河劇場の所在地は？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_memory_abstain",
+   "q": "白峰山の山頂の気温は？",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_memory_abstain",
+   "q": "How wide is the Kestrel bridge?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_memory_abstain",
+   "q": "Who designed the Falcon tower?",
+   "kind": "abstain",
+   "expected": null
+  },
+  {
+   "set": "C_other",
+   "q": "2.5kmは何mですか？",
+   "kind": "number",
+   "expected": "2500"
+  },
+  {
+   "set": "C_other",
+   "q": "4時間30分は何分？",
+   "kind": "number",
+   "expected": "270"
+  },
+  {
+   "set": "C_other",
+   "q": "200分は何時間何分？",
+   "kind": "contains",
+   "expected": "3時間20分"
+  },
+  {
+   "set": "C_other",
+   "q": "3500gは何kg？",
+   "kind": "number",
+   "expected": "3.5"
+  },
+  {
+   "set": "C_other",
+   "q": "1.5Lは何mL？",
+   "kind": "number",
+   "expected": "1500"
+  },
+  {
+   "set": "C_other",
+   "q": "今日は水曜日です。15日後は何曜日ですか？",
+   "kind": "contains",
+   "expected": "木曜日"
+  },
+  {
+   "set": "C_other",
+   "q": "2026年12月25日の10日後は何月何日？",
+   "kind": "contains",
+   "expected": "1月4日"
+  },
+  {
+   "set": "C_other",
+   "q": "午前11時20分から1時間50分後は何時何分？",
+   "kind": "contains",
+   "expected": "1時10分"
+  },
+  {
+   "set": "C_other",
+   "q": "8000円の25%引きはいくら？",
+   "kind": "number",
+   "expected": "6000"
+  },
+  {
+   "set": "C_other",
+   "q": "1200円の3割増しはいくら？",
+   "kind": "number",
+   "expected": "1560"
+  },
+  {
+   "set": "C_other",
+   "q": "3ダースは何個？",
+   "kind": "number",
+   "expected": "36"
+  },
+  {
+   "set": "C_other",
+   "q": "How many centimeters are in 4 meters?",
+   "kind": "number",
+   "expected": "400"
+  },
+  {
+   "set": "C_other",
+   "q": "2027年1月1日は何曜日？",
+   "kind": "contains",
+   "expected": "金曜日"
+  },
+  {
+   "set": "C_other",
+   "q": "5時間は何秒？",
+   "kind": "number",
+   "expected": "18000"
+  },
+  {
+   "set": "C_untargeted",
+   "q": "3人の点数は70点、80点、90点です。平均は何点？",
+   "kind": "number",
+   "expected": "80"
+  },
+  {
+   "set": "C_untargeted",
+   "q": "12と18の最小公倍数は？",
+   "kind": "number",
+   "expected": "36"
+  },
+  {
+   "set": "C_untargeted",
+   "q": "たて5cm、よこ8cmの長方形の面積は何平方センチメートル？",
+   "kind": "number",
+   "expected": "40"
+  },
+  {
+   "set": "C_untargeted",
+   "q": "2, 4, 6, 8の次の数は？",
+   "kind": "number",
+   "expected": "10"
+  },
+  {
+   "set": "C_untargeted",
+   "q": "60人の4分の1は何人？",
+   "kind": "number",
+   "expected": "15"
+  },
+  {
+   "set": "C_untargeted",
+   "q": "300円の本と500円のノートを買った。合計はいくら？",
+   "kind": "number",
+   "expected": "800"
+  }
+ ],
+ "knowledge": [
+  "若葉図書館の館長は森川ナオである。",
+  "若葉図書館の所在地は東町である。",
+  "若葉図書館は1979年に開館した。",
+  "森川ナオの出身地は金沢である。",
+  "若葉図書館の休館日は水曜日である。",
+  "銀河劇場の定員は800人である。",
+  "銀河劇場の最寄り駅は港駅である。",
+  "港駅は1950年に開業した。",
+  "朝日商店の名物は焼きそばだ。",
+  "白峰山の標高は1520メートルである。",
+  "The Kestrel bridge is 1200 meters long.",
+  "The Kestrel bridge was opened in 1975.",
+  "Engineer Doyle designed the Kestrel bridge.",
+  "Engineer Doyle was born in Leeds."
+ ]
+}

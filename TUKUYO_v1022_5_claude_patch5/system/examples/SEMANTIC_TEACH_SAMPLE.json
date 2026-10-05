@@ -1,0 +1,12 @@
+{
+  "surface": "とけあわせる",
+  "training": [
+    {"a": 2, "b": 2, "expected": 4},
+    {"a": 2, "b": 3, "expected": 5}
+  ],
+  "holdout": [
+    {"a": 5, "b": 7, "expected": 12},
+    {"a": -3, "b": 9, "expected": 6},
+    {"a": 8, "b": -2, "expected": 6}
+  ]
+}

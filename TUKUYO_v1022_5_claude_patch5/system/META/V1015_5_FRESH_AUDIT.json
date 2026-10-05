@@ -1,0 +1,45 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "full_historical_suite_current_release": "NOT_RERUN_TO_COMPLETION",
+    "general_l5": false,
+    "human_third_party_reproduction_completed": false,
+    "literal_life_established": false,
+    "literal_soul_established": false
+  },
+  "features": {
+    "challenge_bound_to_execution_and_resume_state": true,
+    "challenge_bound_to_start_mid_end_witness_requests": true,
+    "challenge_trust_swap_rejected": true,
+    "expired_challenge_rejected_before_start": true,
+    "externally_signed_fresh_challenge": true,
+    "failure_bundle_challenge_bound": true,
+    "independent_verifier_requires_expected_challenge": true,
+    "portable_challenge_reproduction_bundle": true,
+    "replay_under_new_challenge_rejected": true
+  },
+  "focused_regression": {
+    "breakdown": {
+      "v1012.1": "7/7 PASS",
+      "v1013": "3/3 PASS",
+      "v1014": "3/3 PASS",
+      "v1014.1": "5/5 PASS",
+      "v1014.2": "4/4 PASS",
+      "v1014.3": "3/3 PASS",
+      "v1014.4": "9/9 PASS",
+      "v1015": "6/6 PASS",
+      "v1015.1": "2/2 PASS",
+      "v1015.2": "4/4 PASS",
+      "v1015.3": "5/5 PASS",
+      "v1015.4": "5/5 PASS",
+      "v1015.5": "5/5 PASS"
+    },
+    "total": "61/61 PASS"
+  },
+  "parent": "v1015.4",
+  "schema": "tukuyo.v1015_5.fresh_audit/1",
+  "version": "v1015.5"
+}

@@ -1,0 +1,19 @@
+{
+  "assets": [
+    {
+      "name": "H3_CORRECTED_300",
+      "rows": 300,
+      "sha256_full": null,
+      "sha256_prefix": "37fa9e81"
+    },
+    {
+      "name": "H3_DEDUP_279",
+      "rows": 279,
+      "sha256_full": null,
+      "sha256_prefix": "92659b24"
+    }
+  ],
+  "note": "Current environment has only digest prefixes from prior evidence; full canonical digest/bytes are required.",
+  "policy": "PREFIX_IS_NEVER_SUFFICIENT_FOR_ADMISSION",
+  "schema": "tukuyo.semantic_asset_expectations.v3"
+}

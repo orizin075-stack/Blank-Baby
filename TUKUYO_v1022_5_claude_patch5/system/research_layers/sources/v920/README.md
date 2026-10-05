@@ -1,0 +1,2 @@
+# TUKUYO v920 — Hardened Pre-L6 Research Checkpoint
+Consolidates v911–v919. The internal chain now includes exact semantic asset admission, external receipt rules, bounded AST patch synthesis, hidden-process evaluation, ablation, multi-generation source improvement, and a started 30-day continuity clock. The package deliberately keeps real semantic improvement, independent third-party reproduction, authority continuity, and 30-day completion as open blockers. L6 is not claimed.

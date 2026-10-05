@@ -1,0 +1,25 @@
+{
+  "bugs": [
+    {
+      "affected": [
+        "v913",
+        "v914",
+        "v915",
+        "v916"
+      ],
+      "correct_definition": "predicted action != evaluator truth",
+      "id": "SEMANTIC_WRONG_MISDEFINED",
+      "old_definition": "output not in allowed action set",
+      "status": "FIXED_IN_V921"
+    },
+    {
+      "affected": [
+        "v914"
+      ],
+      "finding": "Evaluator source and seed were shipped in final ZIP; process-separated does not establish external temporal hiddenness.",
+      "id": "HIDDEN_NAMING_OVERCLAIM",
+      "status": "RENAMED_TO_SEALED_HOLDOUT_PROTOCOL"
+    }
+  ],
+  "schema": "tukuyo.bug_ledger.v1"
+}

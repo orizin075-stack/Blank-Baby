@@ -1,0 +1,859 @@
+{
+  "teacher": "semantics",
+  "round": 1,
+  "purpose": "training_and_numeric_transfer",
+  "scaffold": "1箱にP個入りがC箱、今の在庫としてあります。Q個（出来事）。今の在庫の残りは何個？",
+  "teacher_instructions": "包装記述を出来事の直前の初期値として読む。同じ種類の品物で、明示した以外の増減はない。問うのは箱数ではなく内容物の個数。directionは対象在庫へ適用されるときの潜在的な出入方向、occurredは実行の有無、scopeは問う在庫との関係。単純な現在値の問いでは、実行済みでcurrent_inventoryの出来事だけを初期値に反映する。",
+  "transfer_pairs": [
+    {
+      "pair_id": "sell_actual",
+      "stage": "affirmative_transfer",
+      "event_pattern": "Q個売った",
+      "example_ids": [
+        "semantics_followup1_001",
+        "semantics_followup1_002"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "return_to_supplier",
+      "stage": "affirmative_transfer",
+      "event_pattern": "Q個を仕入先へ返品した",
+      "example_ids": [
+        "semantics_followup1_003",
+        "semantics_followup1_004"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "return_from_customer",
+      "stage": "affirmative_transfer",
+      "event_pattern": "Q個が客から返品されて戻った",
+      "example_ids": [
+        "semantics_followup1_005",
+        "semantics_followup1_006"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "loss_actual",
+      "stage": "affirmative_transfer",
+      "event_pattern": "Q個を紛失した",
+      "example_ids": [
+        "semantics_followup1_007",
+        "semantics_followup1_008"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "theft_actual",
+      "stage": "affirmative_transfer",
+      "event_pattern": "Q個を盗まれた",
+      "example_ids": [
+        "semantics_followup1_009",
+        "semantics_followup1_010"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "borrow_actual",
+      "stage": "affirmative_transfer",
+      "event_pattern": "Q個を借り入れた",
+      "example_ids": [
+        "semantics_followup1_011",
+        "semantics_followup1_012"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "sell_negated",
+      "stage": "negation",
+      "event_pattern": "Q個売らなかった",
+      "example_ids": [
+        "semantics_followup1_013",
+        "semantics_followup1_014"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "borrow_negated",
+      "stage": "negation",
+      "event_pattern": "Q個を借り入れなかった",
+      "example_ids": [
+        "semantics_followup1_015",
+        "semantics_followup1_016"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "sell_planned",
+      "stage": "not_executed",
+      "event_pattern": "Q個売る予定だが、まだ実行していない",
+      "example_ids": [
+        "semantics_followup1_017",
+        "semantics_followup1_018"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "borrow_planned",
+      "stage": "not_executed",
+      "event_pattern": "Q個を借り入れる予定だが、まだ実行していない",
+      "example_ids": [
+        "semantics_followup1_019",
+        "semantics_followup1_020"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "sell_other_inventory",
+      "stage": "other_inventory",
+      "event_pattern": "Q個を別の在庫から売った",
+      "example_ids": [
+        "semantics_followup1_021",
+        "semantics_followup1_022"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    },
+    {
+      "pair_id": "borrow_other_inventory",
+      "stage": "other_inventory",
+      "event_pattern": "Q個を別の在庫へ借り入れた",
+      "example_ids": [
+        "semantics_followup1_023",
+        "semantics_followup1_024"
+      ],
+      "varying_fields": [
+        "items_per_box",
+        "box_count",
+        "event_quantity"
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "id": "semantics_followup1_001",
+      "question": "1箱に6個入りが4箱、今の在庫としてあります。5個売った。今の在庫の残りは何個？",
+      "expected_answer": "19個",
+      "explanation": "売却した品物は今の在庫から出るので、売った個数を引く。 6×4−5＝19個。",
+      "domain": "sale",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "sell_actual",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個売った",
+      "event_labels": [
+        {
+          "surface": "5個売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 6,
+        "box_count": 4,
+        "initial_items": 24,
+        "event_quantity": 5,
+        "applied_delta": -5,
+        "final_items": 19
+      }
+    },
+    {
+      "id": "semantics_followup1_002",
+      "question": "1箱に9個入りが3箱、今の在庫としてあります。7個売った。今の在庫の残りは何個？",
+      "expected_answer": "20個",
+      "explanation": "売却した品物は今の在庫から出るので、売った個数を引く。 9×3−7＝20個。",
+      "domain": "sale",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "sell_actual",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個売った",
+      "event_labels": [
+        {
+          "surface": "7個売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 9,
+        "box_count": 3,
+        "initial_items": 27,
+        "event_quantity": 7,
+        "applied_delta": -7,
+        "final_items": 20
+      }
+    },
+    {
+      "id": "semantics_followup1_003",
+      "question": "1箱に8個入りが4箱、今の在庫としてあります。6個を仕入先へ返品した。今の在庫の残りは何個？",
+      "expected_answer": "26個",
+      "explanation": "仕入先へ返品すると今の在庫から品物が出る。返品した個数を引く。 8×4−6＝26個。",
+      "domain": "return_outflow",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "return_to_supplier",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個を仕入先へ返品した",
+      "event_labels": [
+        {
+          "surface": "6個を仕入先へ返品した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 8,
+        "box_count": 4,
+        "initial_items": 32,
+        "event_quantity": 6,
+        "applied_delta": -6,
+        "final_items": 26
+      }
+    },
+    {
+      "id": "semantics_followup1_004",
+      "question": "1箱に5個入りが7箱、今の在庫としてあります。4個を仕入先へ返品した。今の在庫の残りは何個？",
+      "expected_answer": "31個",
+      "explanation": "仕入先へ返品すると今の在庫から品物が出る。返品した個数を引く。 5×7−4＝31個。",
+      "domain": "return_outflow",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "return_to_supplier",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個を仕入先へ返品した",
+      "event_labels": [
+        {
+          "surface": "4個を仕入先へ返品した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 5,
+        "box_count": 7,
+        "initial_items": 35,
+        "event_quantity": 4,
+        "applied_delta": -4,
+        "final_items": 31
+      }
+    },
+    {
+      "id": "semantics_followup1_005",
+      "question": "1箱に7個入りが3箱、今の在庫としてあります。4個が客から返品されて戻った。今の在庫の残りは何個？",
+      "expected_answer": "25個",
+      "explanation": "客から返品されて戻った品物は今の在庫へ入る。戻った個数を足す。「返品」の語だけで減算と決めない。 7×3＋4＝25個。",
+      "domain": "return_inflow",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "return_from_customer",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個が客から返品されて戻った",
+      "event_labels": [
+        {
+          "surface": "4個が客から返品されて戻った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 7,
+        "box_count": 3,
+        "initial_items": 21,
+        "event_quantity": 4,
+        "applied_delta": 4,
+        "final_items": 25
+      }
+    },
+    {
+      "id": "semantics_followup1_006",
+      "question": "1箱に4個入りが6箱、今の在庫としてあります。9個が客から返品されて戻った。今の在庫の残りは何個？",
+      "expected_answer": "33個",
+      "explanation": "客から返品されて戻った品物は今の在庫へ入る。戻った個数を足す。「返品」の語だけで減算と決めない。 4×6＋9＝33個。",
+      "domain": "return_inflow",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "return_from_customer",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個が客から返品されて戻った",
+      "event_labels": [
+        {
+          "surface": "9個が客から返品されて戻った",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 4,
+        "box_count": 6,
+        "initial_items": 24,
+        "event_quantity": 9,
+        "applied_delta": 9,
+        "final_items": 33
+      }
+    },
+    {
+      "id": "semantics_followup1_007",
+      "question": "1箱に11個入りが2箱、今の在庫としてあります。3個を紛失した。今の在庫の残りは何個？",
+      "expected_answer": "19個",
+      "explanation": "紛失した品物は現在の手元にないので、紛失数を引く。 11×2−3＝19個。",
+      "domain": "loss",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "loss_actual",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個を紛失した",
+      "event_labels": [
+        {
+          "surface": "3個を紛失した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 11,
+        "box_count": 2,
+        "initial_items": 22,
+        "event_quantity": 3,
+        "applied_delta": -3,
+        "final_items": 19
+      }
+    },
+    {
+      "id": "semantics_followup1_008",
+      "question": "1箱に6個入りが5箱、今の在庫としてあります。8個を紛失した。今の在庫の残りは何個？",
+      "expected_answer": "22個",
+      "explanation": "紛失した品物は現在の手元にないので、紛失数を引く。 6×5−8＝22個。",
+      "domain": "loss",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "loss_actual",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個を紛失した",
+      "event_labels": [
+        {
+          "surface": "8個を紛失した",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 6,
+        "box_count": 5,
+        "initial_items": 30,
+        "event_quantity": 8,
+        "applied_delta": -8,
+        "final_items": 22
+      }
+    },
+    {
+      "id": "semantics_followup1_009",
+      "question": "1箱に8個入りが5箱、今の在庫としてあります。7個を盗まれた。今の在庫の残りは何個？",
+      "expected_answer": "33個",
+      "explanation": "盗まれた品物は今の在庫から離れる。盗難数を引く。 8×5−7＝33個。",
+      "domain": "theft",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "theft_actual",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個を盗まれた",
+      "event_labels": [
+        {
+          "surface": "7個を盗まれた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 8,
+        "box_count": 5,
+        "initial_items": 40,
+        "event_quantity": 7,
+        "applied_delta": -7,
+        "final_items": 33
+      }
+    },
+    {
+      "id": "semantics_followup1_010",
+      "question": "1箱に13個入りが3箱、今の在庫としてあります。4個を盗まれた。今の在庫の残りは何個？",
+      "expected_answer": "35個",
+      "explanation": "盗まれた品物は今の在庫から離れる。盗難数を引く。 13×3−4＝35個。",
+      "domain": "theft",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "theft_actual",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個を盗まれた",
+      "event_labels": [
+        {
+          "surface": "4個を盗まれた",
+          "direction": -1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 13,
+        "box_count": 3,
+        "initial_items": 39,
+        "event_quantity": 4,
+        "applied_delta": -4,
+        "final_items": 35
+      }
+    },
+    {
+      "id": "semantics_followup1_011",
+      "question": "1箱に5個入りが4箱、今の在庫としてあります。6個を借り入れた。今の在庫の残りは何個？",
+      "expected_answer": "26個",
+      "explanation": "借り入れた品物は今の手元へ入る。所有権ではなく現在の在庫を尋ねているので借入数を足す。 5×4＋6＝26個。",
+      "domain": "borrowing",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "borrow_actual",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個を借り入れた",
+      "event_labels": [
+        {
+          "surface": "6個を借り入れた",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 5,
+        "box_count": 4,
+        "initial_items": 20,
+        "event_quantity": 6,
+        "applied_delta": 6,
+        "final_items": 26
+      }
+    },
+    {
+      "id": "semantics_followup1_012",
+      "question": "1箱に9個入りが2箱、今の在庫としてあります。5個を借り入れた。今の在庫の残りは何個？",
+      "expected_answer": "23個",
+      "explanation": "借り入れた品物は今の手元へ入る。所有権ではなく現在の在庫を尋ねているので借入数を足す。 9×2＋5＝23個。",
+      "domain": "borrowing",
+      "difficulty": 1,
+      "stage": "affirmative_transfer",
+      "transfer_pair": "borrow_actual",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個を借り入れた",
+      "event_labels": [
+        {
+          "surface": "5個を借り入れた",
+          "direction": 1,
+          "occurred": true,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 9,
+        "box_count": 2,
+        "initial_items": 18,
+        "event_quantity": 5,
+        "applied_delta": 5,
+        "final_items": 23
+      }
+    },
+    {
+      "id": "semantics_followup1_013",
+      "question": "1箱に4個入りが7箱、今の在庫としてあります。6個売らなかった。今の在庫の残りは何個？",
+      "expected_answer": "28個",
+      "explanation": "売却は発生していない。売却の出庫方向と実行の有無を区別し、減算しない。 4×7＝28個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "negation",
+      "transfer_pair": "sell_negated",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個売らなかった",
+      "event_labels": [
+        {
+          "surface": "6個売らなかった",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 4,
+        "box_count": 7,
+        "initial_items": 28,
+        "event_quantity": 6,
+        "applied_delta": 0,
+        "final_items": 28
+      }
+    },
+    {
+      "id": "semantics_followup1_014",
+      "question": "1箱に12個入りが3箱、今の在庫としてあります。9個売らなかった。今の在庫の残りは何個？",
+      "expected_answer": "36個",
+      "explanation": "売却は発生していない。売却の出庫方向と実行の有無を区別し、減算しない。 12×3＝36個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "negation",
+      "transfer_pair": "sell_negated",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個売らなかった",
+      "event_labels": [
+        {
+          "surface": "9個売らなかった",
+          "direction": -1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 12,
+        "box_count": 3,
+        "initial_items": 36,
+        "event_quantity": 9,
+        "applied_delta": 0,
+        "final_items": 36
+      }
+    },
+    {
+      "id": "semantics_followup1_015",
+      "question": "1箱に7個入りが4箱、今の在庫としてあります。3個を借り入れなかった。今の在庫の残りは何個？",
+      "expected_answer": "28個",
+      "explanation": "借入は発生していない。入庫方向の動作でも未発生なので個数を足さない。 7×4＝28個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "negation",
+      "transfer_pair": "borrow_negated",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個を借り入れなかった",
+      "event_labels": [
+        {
+          "surface": "3個を借り入れなかった",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 7,
+        "box_count": 4,
+        "initial_items": 28,
+        "event_quantity": 3,
+        "applied_delta": 0,
+        "final_items": 28
+      }
+    },
+    {
+      "id": "semantics_followup1_016",
+      "question": "1箱に5個入りが8箱、今の在庫としてあります。11個を借り入れなかった。今の在庫の残りは何個？",
+      "expected_answer": "40個",
+      "explanation": "借入は発生していない。入庫方向の動作でも未発生なので個数を足さない。 5×8＝40個。",
+      "domain": "negation",
+      "difficulty": 2,
+      "stage": "negation",
+      "transfer_pair": "borrow_negated",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個を借り入れなかった",
+      "event_labels": [
+        {
+          "surface": "11個を借り入れなかった",
+          "direction": 1,
+          "occurred": false,
+          "scope": "current_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 5,
+        "box_count": 8,
+        "initial_items": 40,
+        "event_quantity": 11,
+        "applied_delta": 0,
+        "final_items": 40
+      }
+    },
+    {
+      "id": "semantics_followup1_017",
+      "question": "1箱に9個入りが4箱、今の在庫としてあります。10個売る予定だが、まだ実行していない。今の在庫の残りは何個？",
+      "expected_answer": "36個",
+      "explanation": "予定の売却は現時点で未実行。現在の在庫を問うので予定数を引かない。 9×4＝36個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "not_executed",
+      "transfer_pair": "sell_planned",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個売る予定だが、まだ実行していない",
+      "event_labels": [
+        {
+          "surface": "10個売る予定だが、まだ実行していない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 9,
+        "box_count": 4,
+        "initial_items": 36,
+        "event_quantity": 10,
+        "applied_delta": 0,
+        "final_items": 36
+      }
+    },
+    {
+      "id": "semantics_followup1_018",
+      "question": "1箱に6個入りが7箱、今の在庫としてあります。11個売る予定だが、まだ実行していない。今の在庫の残りは何個？",
+      "expected_answer": "42個",
+      "explanation": "予定の売却は現時点で未実行。現在の在庫を問うので予定数を引かない。 6×7＝42個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "not_executed",
+      "transfer_pair": "sell_planned",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個売る予定だが、まだ実行していない",
+      "event_labels": [
+        {
+          "surface": "11個売る予定だが、まだ実行していない",
+          "direction": -1,
+          "occurred": false,
+          "scope": "hypothetical"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 6,
+        "box_count": 7,
+        "initial_items": 42,
+        "event_quantity": 11,
+        "applied_delta": 0,
+        "final_items": 42
+      }
+    },
+    {
+      "id": "semantics_followup1_019",
+      "question": "1箱に8個入りが3箱、今の在庫としてあります。5個を借り入れる予定だが、まだ実行していない。今の在庫の残りは何個？",
+      "expected_answer": "24個",
+      "explanation": "予定の借入は現時点で未実行。現在の在庫を問うので予定数を足さない。 8×3＝24個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "not_executed",
+      "transfer_pair": "borrow_planned",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個を借り入れる予定だが、まだ実行していない",
+      "event_labels": [
+        {
+          "surface": "5個を借り入れる予定だが、まだ実行していない",
+          "direction": 1,
+          "occurred": false,
+          "scope": "hypothetical"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 8,
+        "box_count": 3,
+        "initial_items": 24,
+        "event_quantity": 5,
+        "applied_delta": 0,
+        "final_items": 24
+      }
+    },
+    {
+      "id": "semantics_followup1_020",
+      "question": "1箱に10個入りが5箱、今の在庫としてあります。9個を借り入れる予定だが、まだ実行していない。今の在庫の残りは何個？",
+      "expected_answer": "50個",
+      "explanation": "予定の借入は現時点で未実行。現在の在庫を問うので予定数を足さない。 10×5＝50個。",
+      "domain": "completed_and_planned",
+      "difficulty": 2,
+      "stage": "not_executed",
+      "transfer_pair": "borrow_planned",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個を借り入れる予定だが、まだ実行していない",
+      "event_labels": [
+        {
+          "surface": "9個を借り入れる予定だが、まだ実行していない",
+          "direction": 1,
+          "occurred": false,
+          "scope": "hypothetical"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 10,
+        "box_count": 5,
+        "initial_items": 50,
+        "event_quantity": 9,
+        "applied_delta": 0,
+        "final_items": 50
+      }
+    },
+    {
+      "id": "semantics_followup1_021",
+      "question": "1箱に7個入りが5箱、今の在庫としてあります。8個を別の在庫から売った。今の在庫の残りは何個？",
+      "expected_answer": "35個",
+      "explanation": "実行済みの売却でも出庫元は別の在庫。今の在庫の数量は変わらない。 7×5＝35個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "other_inventory",
+      "transfer_pair": "sell_other_inventory",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個を別の在庫から売った",
+      "event_labels": [
+        {
+          "surface": "8個を別の在庫から売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 7,
+        "box_count": 5,
+        "initial_items": 35,
+        "event_quantity": 8,
+        "applied_delta": 0,
+        "final_items": 35
+      }
+    },
+    {
+      "id": "semantics_followup1_022",
+      "question": "1箱に12個入りが4箱、今の在庫としてあります。11個を別の在庫から売った。今の在庫の残りは何個？",
+      "expected_answer": "48個",
+      "explanation": "実行済みの売却でも出庫元は別の在庫。今の在庫の数量は変わらない。 12×4＝48個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "other_inventory",
+      "transfer_pair": "sell_other_inventory",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個を別の在庫から売った",
+      "event_labels": [
+        {
+          "surface": "11個を別の在庫から売った",
+          "direction": -1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 12,
+        "box_count": 4,
+        "initial_items": 48,
+        "event_quantity": 11,
+        "applied_delta": 0,
+        "final_items": 48
+      }
+    },
+    {
+      "id": "semantics_followup1_023",
+      "question": "1箱に6個入りが8箱、今の在庫としてあります。5個を別の在庫へ借り入れた。今の在庫の残りは何個？",
+      "expected_answer": "48個",
+      "explanation": "実行済みの借入でも入庫先は別の在庫。今の在庫の数量には足さない。 6×8＝48個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "other_inventory",
+      "transfer_pair": "borrow_other_inventory",
+      "transfer_role": "first_example",
+      "event_pattern": "Q個を別の在庫へ借り入れた",
+      "event_labels": [
+        {
+          "surface": "5個を別の在庫へ借り入れた",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 6,
+        "box_count": 8,
+        "initial_items": 48,
+        "event_quantity": 5,
+        "applied_delta": 0,
+        "final_items": 48
+      }
+    },
+    {
+      "id": "semantics_followup1_024",
+      "question": "1箱に9個入りが5箱、今の在庫としてあります。4個を別の在庫へ借り入れた。今の在庫の残りは何個？",
+      "expected_answer": "45個",
+      "explanation": "実行済みの借入でも入庫先は別の在庫。今の在庫の数量には足さない。 9×5＝45個。",
+      "domain": "target_switch",
+      "difficulty": 2,
+      "stage": "other_inventory",
+      "transfer_pair": "borrow_other_inventory",
+      "transfer_role": "changed_numbers",
+      "event_pattern": "Q個を別の在庫へ借り入れた",
+      "event_labels": [
+        {
+          "surface": "4個を別の在庫へ借り入れた",
+          "direction": 1,
+          "occurred": true,
+          "scope": "other_inventory"
+        }
+      ],
+      "teacher_computation": {
+        "items_per_box": 9,
+        "box_count": 5,
+        "initial_items": 45,
+        "event_quantity": 4,
+        "applied_delta": 0,
+        "final_items": 45
+      }
+    }
+  ],
+  "status": "teacher_material_prepared_not_student_validated",
+  "regeneration": {
+    "status": "regenerate",
+    "source": "visible_conversation_after_workspace_loss",
+    "exact_match_to_lost_files_claimed": false,
+    "student_after_regeneration_evaluated": false,
+    "note": "同じ意図で復旧した学習教材。旧ファイルとの完全一致は保証しない。復旧後の学生へ再適用して新しい応答で評価する。"
+  }
+}

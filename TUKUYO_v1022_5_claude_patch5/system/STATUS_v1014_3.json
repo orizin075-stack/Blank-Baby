@@ -1,0 +1,24 @@
+{
+  "version":"v1014.3",
+  "parent":"v1014.2",
+  "release_role":"LONG_RUN_CONTINUITY_CAMPAIGN_HARNESS",
+  "capabilities":{
+    "resumable_24h_72h_7d_campaign":true,
+    "external_witness_pair_gate":true,
+    "fresh_process_restart_tracking":true,
+    "periodic_recovery_checkpointing":true,
+    "startup_crash_recovery_receipt_capture":true,
+    "resource_sampling":true,
+    "campaign_evidence_bundle":true
+  },
+  "claim_boundary":{
+    "24h_completed":false,
+    "72h_completed":false,
+    "7day_completed":false,
+    "short_gate_only_before_real_elapsed_run":true,
+    "literal_life_established":false,
+    "consciousness_established":false,
+    "external_H4":"PENDING",
+    "third_party_reproduction":"PENDING"
+  }
+}

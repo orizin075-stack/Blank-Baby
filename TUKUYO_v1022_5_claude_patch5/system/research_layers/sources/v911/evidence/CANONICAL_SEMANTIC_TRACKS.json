@@ -1,0 +1,22 @@
+{
+  "legacy_mislabeled_h3": "REJECT",
+  "schema": "tukuyo.semantic_track_registry.v2",
+  "tracks": {
+    "H3_CORRECTED": {
+      "distinct_texts": 279,
+      "families": 20,
+      "must_abstain": 30,
+      "rows": 300,
+      "sha256": "37fa9e81f4ee8eb41e27075c1f404791c99b7c3c021972a565ba2b7ce27ac95e",
+      "status": "CANONICAL_CORRECTED_WITH_DUPLICATES"
+    },
+    "H3_DEDUP": {
+      "distinct_texts": 279,
+      "families": 20,
+      "must_abstain": 28,
+      "rows": 279,
+      "sha256": "92659b241c50d6075f795b040596d497a11e3ee172080f4a945af5247a61089f",
+      "status": "CANONICAL_DEDUP"
+    }
+  }
+}

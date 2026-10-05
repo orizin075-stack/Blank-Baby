@@ -1,0 +1,22 @@
+{
+  "controls": [
+    {
+      "expected": "BLOCK",
+      "name": "mutate_implementation",
+      "observed": "BLOCK"
+    },
+    {
+      "expected": "BLOCK",
+      "name": "remove_binding",
+      "observed": "BLOCK"
+    },
+    {
+      "expected": "BLOCK",
+      "name": "claim_unbound_artifact",
+      "observed": "BLOCK"
+    }
+  ],
+  "passed": 3,
+  "schema": "tukuyo.v901.negative_controls.v1",
+  "total": 3
+}

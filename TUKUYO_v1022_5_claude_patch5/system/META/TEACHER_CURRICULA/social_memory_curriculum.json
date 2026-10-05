@@ -1,0 +1,1366 @@
+{
+  "teacher": "social_memory",
+  "regeneration": {
+    "status": "regenerate",
+    "basis": "conversation_transcript",
+    "exact_match_verified": false,
+    "note": "環境消失後に会話の記録から再生成。意味・ID・人物factを復元したが旧バイト列との完全一致は未検証。再適用後に再評価する。"
+  },
+  "examples": [
+    {
+      "id": "sm001",
+      "question": "会話記録：彩は福岡に住んでいます。健は仙台に住んでいます。質問：彩の暮らしている街はどこですか。",
+      "expected_answer": "彩は福岡に住んでいます。",
+      "explanation": "暮らしている街は居住地の言い換え。健と彩を区別する。",
+      "domain": "semantic_memory",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "彩",
+          "relation": "現在の居住地",
+          "value": "福岡"
+        },
+        {
+          "entity": "健",
+          "relation": "現在の居住地",
+          "value": "仙台"
+        }
+      ]
+    },
+    {
+      "id": "sm002",
+      "question": "会話記録：美紀の好きな飲み物は麦茶です。蓮の好きな飲み物はコーヒーです。質問：美紀が好んで飲むものは何ですか。",
+      "expected_answer": "美紀の好きな飲み物は麦茶です。",
+      "explanation": "好んで飲むものは好きな飲み物を尋ねる。対象は美紀。",
+      "domain": "semantic_memory",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "美紀",
+          "relation": "好きな飲み物",
+          "value": "麦茶"
+        },
+        {
+          "entity": "蓮",
+          "relation": "好きな飲み物",
+          "value": "コーヒー"
+        }
+      ]
+    },
+    {
+      "id": "sm003",
+      "question": "会話記録：直人はピアノを習っています。遥はバイオリンを習っています。質問：鍵盤楽器を学んでいるのは誰ですか。",
+      "expected_answer": "ピアノを習っている直人です。",
+      "explanation": "ピアノは鍵盤楽器。人物と楽器の関係を逆向きに検索する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "直人",
+          "relation": "習っている楽器",
+          "value": "ピアノ"
+        },
+        {
+          "entity": "遥",
+          "relation": "習っている楽器",
+          "value": "バイオリン"
+        }
+      ]
+    },
+    {
+      "id": "sm004",
+      "question": "会話記録：沙織は猫のムギを飼っています。悠真は犬のコタを飼っています。質問：ムギの飼い主は誰ですか。",
+      "expected_answer": "ムギの飼い主は沙織です。",
+      "explanation": "所有関係を逆向きに検索する。ペット名を別の飼い主に結び付けない。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "沙織",
+          "relation": "飼っている動物",
+          "value": "猫"
+        },
+        {
+          "entity": "沙織",
+          "relation": "ペットの名前",
+          "value": "ムギ"
+        },
+        {
+          "entity": "悠真",
+          "relation": "飼っている動物",
+          "value": "犬"
+        },
+        {
+          "entity": "悠真",
+          "relation": "ペットの名前",
+          "value": "コタ"
+        }
+      ]
+    },
+    {
+      "id": "sm005",
+      "question": "会話記録：恵は乳製品を食べると体調を崩すので、乳製品を避けています。陸は卵を避けています。質問：恵の食事では何を除いておく必要がありますか。",
+      "expected_answer": "恵の食事では乳製品を除いておく必要があります。",
+      "explanation": "避ける食材を取り出し、医学的診断は推測しない。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "恵",
+          "relation": "避ける食材",
+          "value": "乳製品"
+        },
+        {
+          "entity": "陸",
+          "relation": "避ける食材",
+          "value": "卵"
+        }
+      ]
+    },
+    {
+      "id": "sm006",
+      "question": "会話記録：結衣の面談は火曜日、奏の面談は木曜日です。質問：結衣と話す予定が入っている曜日はいつですか。",
+      "expected_answer": "結衣の面談は火曜日です。",
+      "explanation": "面談予定の曜日を結衣について取り出す。",
+      "domain": "semantic_memory",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "結衣",
+          "relation": "面談の曜日",
+          "value": "火曜日"
+        },
+        {
+          "entity": "奏",
+          "relation": "面談の曜日",
+          "value": "木曜日"
+        }
+      ]
+    },
+    {
+      "id": "sm007",
+      "question": "会話記録：玲奈はデザイナーです。大地は翻訳者です。質問：文章を別の言語に訳す仕事をしている人は誰ですか。",
+      "expected_answer": "翻訳者の大地です。",
+      "explanation": "仕事の説明を翻訳者に対応付け、人物を逆検索する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "玲奈",
+          "relation": "職業",
+          "value": "デザイナー"
+        },
+        {
+          "entity": "大地",
+          "relation": "職業",
+          "value": "翻訳者"
+        }
+      ]
+    },
+    {
+      "id": "sm008",
+      "question": "会話記録：本人が「私は高橋真帆です。まほちゃんと呼ばれています。よく使う交通手段は自転車です」と言いました。質問：まほちゃんは普段何に乗って移動しますか。",
+      "expected_answer": "まほちゃんは普段、自転車で移動します。",
+      "explanation": "本人が明示した呼称を高橋真帆と対応付ける。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "高橋真帆",
+          "relation": "よく使う交通手段",
+          "value": "自転車"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "まほちゃん",
+          "canonical": "高橋真帆"
+        }
+      ]
+    },
+    {
+      "id": "sm009",
+      "question": "会話記録：真司は以前大阪に住み、現在は札幌に住んでいます。紗月は今も大阪に住んでいます。質問：真司の今の住まいがある都市はどこですか。",
+      "expected_answer": "真司は現在、札幌に住んでいます。",
+      "explanation": "人物と現在という条件を維持する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "真司",
+          "relation": "以前の居住地",
+          "value": "大阪"
+        },
+        {
+          "entity": "真司",
+          "relation": "現在の居住地",
+          "value": "札幌"
+        },
+        {
+          "entity": "紗月",
+          "relation": "現在の居住地",
+          "value": "大阪"
+        }
+      ]
+    },
+    {
+      "id": "sm010",
+      "question": "会話記録：奈々は当初、土曜日に来ると言いました。その後、日曜日に変更したと本人が訂正しました。晶の予定は土曜日のままです。質問：奈々が来る最新の予定日はいつですか。",
+      "expected_answer": "奈々が来る最新の予定日は日曜日です。",
+      "explanation": "本人の訂正後の値を現在の予定に使う。晶の予定は別。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "奈々",
+          "relation": "変更前の来訪予定日",
+          "value": "土曜日"
+        },
+        {
+          "entity": "奈々",
+          "relation": "現在の来訪予定日",
+          "value": "日曜日"
+        },
+        {
+          "entity": "晶",
+          "relation": "現在の来訪予定日",
+          "value": "土曜日"
+        }
+      ]
+    },
+    {
+      "id": "sm011",
+      "question": "会話記録：晴人は「登山はしません。休日は読書をします」と言いました。里緒は休日に登山をします。質問：晴人の休みの日の過ごし方は何ですか。",
+      "expected_answer": "晴人は休日に読書をします。",
+      "explanation": "否定された登山を晴人の活動にしない。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "晴人",
+          "relation": "休日の活動",
+          "value": "読書"
+        },
+        {
+          "entity": "晴人",
+          "relation": "しない活動",
+          "value": "登山"
+        },
+        {
+          "entity": "里緒",
+          "relation": "休日の活動",
+          "value": "登山"
+        }
+      ]
+    },
+    {
+      "id": "sm012",
+      "question": "会話記録：青木という姓の二人がいます。青木健は東京、青木優は京都に住んでいます。質問：青木優の生活拠点はどこですか。",
+      "expected_answer": "青木優の生活拠点は京都です。",
+      "explanation": "同姓の人物をフルネームで区別する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "青木健",
+          "relation": "現在の居住地",
+          "value": "東京"
+        },
+        {
+          "entity": "青木優",
+          "relation": "現在の居住地",
+          "value": "京都"
+        }
+      ]
+    },
+    {
+      "id": "sm013",
+      "question": "会話記録：翔太は「いつも使うアカウント名はsora7です。好きな季節は秋です」と言いました。陽菜のアカウント名はsora8で、好きな季節は春です。質問：sora7がいちばん好きな季節は何ですか。",
+      "expected_answer": "sora7、つまり翔太の好きな季節は秋です。",
+      "explanation": "明示された別名だけを人物に結び付ける。似たアカウント名は別。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "翔太",
+          "relation": "好きな季節",
+          "value": "秋"
+        },
+        {
+          "entity": "陽菜",
+          "relation": "好きな季節",
+          "value": "春"
+        }
+      ],
+      "aliases": [
+        {
+          "surface": "sora7",
+          "canonical": "翔太"
+        },
+        {
+          "surface": "sora8",
+          "canonical": "陽菜"
+        }
+      ]
+    },
+    {
+      "id": "sm014",
+      "question": "会話記録：拓海は平日に電車で通勤します。休日の遠出には車を使います。愛は平日に車で通勤します。質問：拓海が仕事へ向かう平日の足は何ですか。",
+      "expected_answer": "拓海は平日に電車で通勤します。",
+      "explanation": "人物・用途・曜日条件を保持する。",
+      "domain": "semantic_memory",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "拓海",
+          "relation": "平日の通勤手段",
+          "value": "電車"
+        },
+        {
+          "entity": "拓海",
+          "relation": "休日の遠出の手段",
+          "value": "車"
+        },
+        {
+          "entity": "愛",
+          "relation": "平日の通勤手段",
+          "value": "車"
+        }
+      ]
+    },
+    {
+      "id": "sm015",
+      "question": "会話記録：泉は本を図書館で借りました。湊は本を書店で買いました。質問：購入ではなく借りて本を手に入れたのは誰ですか。",
+      "expected_answer": "図書館で本を借りた泉です。",
+      "explanation": "購入と貸借を区別し、入手方法から人物を検索する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "泉",
+          "relation": "本の入手方法",
+          "value": "図書館で借りた"
+        },
+        {
+          "entity": "湊",
+          "relation": "本の入手方法",
+          "value": "書店で買った"
+        }
+      ]
+    },
+    {
+      "id": "sm016",
+      "question": "会話記録：麻衣の発表の担当テーマは海洋環境です。慎の担当テーマは森林保全です。質問：海の環境を扱う発表を受け持つ人は誰ですか。",
+      "expected_answer": "海洋環境の発表を担当する麻衣です。",
+      "explanation": "海の環境は海洋環境の言い換え。担当者を逆検索する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "麻衣",
+          "relation": "発表の担当テーマ",
+          "value": "海洋環境"
+        },
+        {
+          "entity": "慎",
+          "relation": "発表の担当テーマ",
+          "value": "森林保全"
+        }
+      ]
+    },
+    {
+      "id": "sm017",
+      "question": "会話記録：千夏が借りた傘の持ち主は修です。千夏が借りた帽子の持ち主は葵です。質問：千夏の手元にある借り物の傘は、誰に返す物ですか。",
+      "expected_answer": "その傘は持ち主の修に返す物です。",
+      "explanation": "借り手と所有者、傘と帽子を区別する。",
+      "domain": "semantic_memory",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "傘（千夏の借り物）",
+          "relation": "持ち主",
+          "value": "修"
+        },
+        {
+          "entity": "傘（千夏の借り物）",
+          "relation": "借り手",
+          "value": "千夏"
+        },
+        {
+          "entity": "帽子（千夏の借り物）",
+          "relation": "持ち主",
+          "value": "葵"
+        },
+        {
+          "entity": "帽子（千夏の借り物）",
+          "relation": "借り手",
+          "value": "千夏"
+        }
+      ]
+    },
+    {
+      "id": "sm018",
+      "question": "会話記録：真琴は「午後より午前中の連絡が助かります」と言いました。悠は午後の連絡を希望しています。質問：真琴へ連絡するなら、希望に合う時間帯はいつですか。",
+      "expected_answer": "真琴の希望に合うのは午前中です。",
+      "explanation": "真琴の連絡時間帯の希望を検索する。",
+      "domain": "semantic_memory",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "真琴",
+          "relation": "希望する連絡時間帯",
+          "value": "午前中"
+        },
+        {
+          "entity": "悠",
+          "relation": "希望する連絡時間帯",
+          "value": "午後"
+        }
+      ]
+    },
+    {
+      "id": "sm019",
+      "question": "会話記録：優子はこれから陶芸教室に申し込む予定です。俊は既に陶芸教室へ通っています。質問：既に通い始めているのは誰ですか。",
+      "expected_answer": "既に陶芸教室へ通っているのは俊です。",
+      "explanation": "予定と現在の実施を区別する。",
+      "domain": "semantic_memory",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "優子",
+          "relation": "陶芸教室の状況",
+          "value": "申し込む予定"
+        },
+        {
+          "entity": "俊",
+          "relation": "陶芸教室の状況",
+          "value": "通っている"
+        }
+      ]
+    },
+    {
+      "id": "sm020",
+      "question": "会話記録：梓は「前にジャスミン茶が好きだと言ったのは私ではなく妹の栞です。私が好きなのはほうじ茶です」と訂正しました。質問：梓の好きなお茶を最新の記録から答えてください。",
+      "expected_answer": "梓の好きなお茶はほうじ茶です。",
+      "explanation": "人物への帰属の訂正を採用する。",
+      "domain": "semantic_memory",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "梓",
+          "relation": "好きなお茶",
+          "value": "ほうじ茶"
+        },
+        {
+          "entity": "栞",
+          "relation": "好きなお茶",
+          "value": "ジャスミン茶"
+        }
+      ]
+    },
+    {
+      "id": "sm021",
+      "question": "発言：私は落ち着いています。美咲は試験のことで不安だと言っています。質問：試験について不安と表明したのは誰ですか。",
+      "expected_answer": "試験について不安と表明したのは美咲です。",
+      "explanation": "話者と美咲の感情を区別する。",
+      "domain": "emotion_subject",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        },
+        {
+          "entity": "美咲",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "美咲"
+      }
+    },
+    {
+      "id": "sm022",
+      "question": "発言：私は昇進を喜んでいます。同僚の健は仕事の失敗で悲しいと言っています。質問：話者本人が表明した感情は何ですか。",
+      "expected_answer": "話者本人は昇進を喜んでいます。",
+      "explanation": "一人称の喜びと健の悲しみを分ける。",
+      "domain": "emotion_subject",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "現在の感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "健",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm023",
+      "question": "発言：母は旅行を楽しみにしていると言いました。私は準備が間に合うか不安です。質問：楽しみにしているのは誰ですか。",
+      "expected_answer": "旅行を楽しみにしているのは母です。",
+      "explanation": "母の期待と話者の不安を区別する。",
+      "domain": "emotion_subject",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "母",
+          "relation": "旅行への感情",
+          "value": "楽しみ"
+        },
+        {
+          "entity": "話者",
+          "relation": "準備への感情",
+          "value": "不安"
+        }
+      ],
+      "emotion": {
+        "valence": 0.7,
+        "arousal": 0.65,
+        "subject": "母"
+      }
+    },
+    {
+      "id": "sm024",
+      "question": "発言：亮は「私は怒っています」と言いました。私はそれを聞き、悲しくなりました。質問：怒りを表明しているのは誰ですか。",
+      "expected_answer": "怒りを表明しているのは亮です。",
+      "explanation": "引用内の私は亮を指す。引用外の話者とは別。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "亮",
+          "relation": "現在の感情",
+          "value": "怒り"
+        },
+        {
+          "entity": "話者",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.8,
+        "subject": "亮"
+      }
+    },
+    {
+      "id": "sm025",
+      "question": "発言：葵は「悠は寂しいと言っていた」と報告しました。葵自身の気分については話していません。質問：寂しいと述べたと報告されている人は誰ですか。",
+      "expected_answer": "寂しいと述べたと報告されているのは悠です。",
+      "explanation": "報告者の葵と感情主体の悠を区別する。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "悠",
+          "relation": "報告された感情",
+          "value": "寂しさ"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.3,
+        "subject": "悠"
+      }
+    },
+    {
+      "id": "sm026",
+      "question": "発言：私は怖くありません。弟は雷が怖いと言っています。質問：雷への恐怖を表明しているのは誰ですか。",
+      "expected_answer": "雷への恐怖を表明しているのは弟です。",
+      "explanation": "話者の恐怖は否定され、弟の恐怖は肯定されている。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "雷への恐怖",
+          "value": "ない"
+        },
+        {
+          "entity": "弟",
+          "relation": "雷への感情",
+          "value": "恐怖"
+        }
+      ],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.8,
+        "subject": "弟"
+      }
+    },
+    {
+      "id": "sm027",
+      "question": "発言：奈緒が「安心した」と言うのを聞いて、私は嬉しくなりました。質問：話者本人の感情は何ですか。",
+      "expected_answer": "話者本人は嬉しくなりました。",
+      "explanation": "奈緒の安心と話者の喜びを分ける。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "奈緒",
+          "relation": "現在の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "話者",
+          "relation": "現在の感情",
+          "value": "喜び"
+        }
+      ],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm028",
+      "question": "発言：圭は嬉しそうに見えますが、本人は「緊張しています」と言っています。質問：圭が本人の言葉で表明した感情は何ですか。",
+      "expected_answer": "圭が表明した感情は緊張です。",
+      "explanation": "観察者の見え方と本人の報告を区別する。",
+      "domain": "emotion_subject",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "圭",
+          "relation": "本人が表明した感情",
+          "value": "緊張"
+        },
+        {
+          "entity": "圭",
+          "relation": "観察者からの見え方",
+          "value": "嬉しそう"
+        }
+      ],
+      "emotion": {
+        "valence": -0.3,
+        "arousal": 0.7,
+        "subject": "圭"
+      }
+    },
+    {
+      "id": "sm029",
+      "question": "発言：私は父が怒っているのではないかと心配しています。父は自分の気持ちを話していません。質問：この発言で明示されている話者の感情は何ですか。",
+      "expected_answer": "話者には心配が明示されています。",
+      "explanation": "父の怒りは推測。確定しているのは話者の心配。",
+      "domain": "emotion_subject",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "現在の感情",
+          "value": "心配"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm030",
+      "question": "発言：真帆は合格を知って嬉しいと言いました。私はその知らせを淡々と受け止め、今は落ち着いています。質問：合格を喜んでいると明示された人は誰ですか。",
+      "expected_answer": "合格を喜んでいると明示されたのは真帆です。",
+      "explanation": "知らせを受けたことだけで話者の喜びを推測しない。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "真帆",
+          "relation": "合格への感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "話者",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        }
+      ],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "真帆"
+      }
+    },
+    {
+      "id": "sm031",
+      "question": "会話：紗季「私は悲しい」。春「紗季のことが心配」。質問：心配だと表明しているのは誰ですか。",
+      "expected_answer": "心配だと表明しているのは春です。",
+      "explanation": "話者名ごとに一人称の指示先を切り替える。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "紗季",
+          "relation": "現在の感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "春",
+          "relation": "現在の感情",
+          "value": "心配"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "春"
+      }
+    },
+    {
+      "id": "sm032",
+      "question": "発言：上司は納期の遅れに怒っていると自分で言いました。私はその怒りが怖いです。質問：話者本人が述べた感情は何ですか。",
+      "expected_answer": "話者本人は上司の怒りを怖いと述べています。",
+      "explanation": "上司の怒りと話者の恐怖を分ける。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "上司",
+          "relation": "納期遅れへの感情",
+          "value": "怒り"
+        },
+        {
+          "entity": "話者",
+          "relation": "上司の怒りへの感情",
+          "value": "恐怖"
+        }
+      ],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.8,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm033",
+      "question": "会話：冬馬「大会が楽しみです」。理子「私は大会に不安があります」。質問：冬馬が大会について表明した感情を答えてください。",
+      "expected_answer": "冬馬は大会を楽しみにしています。",
+      "explanation": "同じ対象でも人物ごとの異なる感情を保持する。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "冬馬",
+          "relation": "大会への感情",
+          "value": "楽しみ"
+        },
+        {
+          "entity": "理子",
+          "relation": "大会への感情",
+          "value": "不安"
+        }
+      ],
+      "emotion": {
+        "valence": 0.7,
+        "arousal": 0.65,
+        "subject": "冬馬"
+      }
+    },
+    {
+      "id": "sm034",
+      "question": "発言：妹は「落ち込んでいるのは私ではなく兄だ。兄がそう言った」と話しました。質問：落ち込んでいると報告されたのは誰ですか。",
+      "expected_answer": "落ち込んでいると報告されたのは兄です。",
+      "explanation": "妹の否定と兄の感情報告を分ける。",
+      "domain": "emotion_subject",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "妹",
+          "relation": "落ち込みの表明",
+          "value": "否定"
+        },
+        {
+          "entity": "兄",
+          "relation": "報告された感情",
+          "value": "落ち込み"
+        }
+      ],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.3,
+        "subject": "兄"
+      }
+    },
+    {
+      "id": "sm035",
+      "question": "発言：玲は「良い知らせを聞いてほっとした」と言っています。私は「良かったね」と返しました。質問：安心を自己報告したのは誰ですか。",
+      "expected_answer": "安心を自己報告したのは玲です。",
+      "explanation": "ほっとしたを安心とする。返答だけで話者の内的感情は決めない。",
+      "domain": "emotion_subject",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "玲",
+          "relation": "現在の感情",
+          "value": "安心"
+        }
+      ],
+      "emotion": {
+        "valence": 0.6,
+        "arousal": 0.2,
+        "subject": "玲"
+      }
+    },
+    {
+      "id": "sm036",
+      "question": "発言：昨日の私は不安でした。今日は結果が分かって安心しています。質問：話者の今日の感情を答えてください。",
+      "expected_answer": "話者は今日は安心しています。",
+      "explanation": "昨日と今日の感情を分ける。",
+      "domain": "emotion_update",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "昨日の感情",
+          "value": "不安"
+        },
+        {
+          "entity": "話者",
+          "relation": "今日の感情",
+          "value": "安心"
+        }
+      ],
+      "emotion": {
+        "valence": 0.6,
+        "arousal": 0.2,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm037",
+      "question": "発言：さっきは怒っていたけれど、今は落ち着いています。質問：話者は今も怒っていますか。",
+      "expected_answer": "いいえ。話者は今は落ち着いています。",
+      "explanation": "現在の落ち着きと過去の怒りを分ける。",
+      "domain": "emotion_update",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "さっきの感情",
+          "value": "怒り"
+        },
+        {
+          "entity": "話者",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        }
+      ],
+      "emotion": {
+        "valence": 0,
+        "arousal": 0.1,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm038",
+      "question": "発言：紬は朝は悲しいと言いましたが、夕方には嬉しいと言いました。質問：夕方に紬が表明した感情は何ですか。",
+      "expected_answer": "夕方に紬が表明した感情は喜びです。",
+      "explanation": "質問が指定する夕方の報告を取り出す。",
+      "domain": "emotion_update",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "紬",
+          "relation": "朝の感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "紬",
+          "relation": "夕方の感情",
+          "value": "喜び"
+        }
+      ],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "紬"
+      }
+    },
+    {
+      "id": "sm039",
+      "question": "発言：私は今は安心しています。でも明日の発表を考えると不安になります。質問：明日の発表を考えたときの感情は何ですか。",
+      "expected_answer": "明日の発表を考えたとき、話者は不安になります。",
+      "explanation": "無条件の安心と条件付きの不安を単純上書きしない。",
+      "domain": "emotion_update",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "今の基本状態",
+          "value": "安心"
+        },
+        {
+          "entity": "話者",
+          "relation": "明日の発表を考えたときの感情",
+          "value": "不安"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm040",
+      "question": "発言：杏は「怒っている、とさっき言ったけれど言い間違いです。今の気持ちは悲しい、です」と訂正しました。質問：訂正後の杏の感情は何ですか。",
+      "expected_answer": "訂正後の杏の感情は悲しみです。",
+      "explanation": "本人の明示的な訂正を採用する。",
+      "domain": "emotion_update",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "杏",
+          "relation": "訂正前の発言",
+          "value": "怒り"
+        },
+        {
+          "entity": "杏",
+          "relation": "訂正後の現在の感情",
+          "value": "悲しみ"
+        }
+      ],
+      "emotion": {
+        "valence": -0.7,
+        "arousal": 0.35,
+        "subject": "杏"
+      }
+    },
+    {
+      "id": "sm041",
+      "question": "発言：私はその知らせについて悲しくはありません。嬉しいです。質問：その知らせについて話者が肯定した感情は何ですか。",
+      "expected_answer": "話者が肯定した感情は喜びです。",
+      "explanation": "悲しみは否定、喜びは肯定されている。",
+      "domain": "emotion_update",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "その知らせへの悲しみ",
+          "value": "ない"
+        },
+        {
+          "entity": "話者",
+          "relation": "その知らせへの感情",
+          "value": "喜び"
+        }
+      ],
+      "emotion": {
+        "valence": 0.8,
+        "arousal": 0.6,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm042",
+      "question": "発言：楓は「前は一人で暮らすのが寂しかったけれど、今は満足しています」と言いました。質問：楓の現在の気持ちは何ですか。",
+      "expected_answer": "楓は現在、一人暮らしに満足しています。",
+      "explanation": "以前の寂しさと現在の満足を分ける。",
+      "domain": "emotion_update",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "楓",
+          "relation": "以前の一人暮らしへの感情",
+          "value": "寂しさ"
+        },
+        {
+          "entity": "楓",
+          "relation": "現在の一人暮らしへの感情",
+          "value": "満足"
+        }
+      ],
+      "emotion": {
+        "valence": 0.7,
+        "arousal": 0.25,
+        "subject": "楓"
+      }
+    },
+    {
+      "id": "sm043",
+      "question": "発言：私はもう試験を怖がっていません。今も不安だと言っているのは友人の凪です。質問：今も試験への不安を表明しているのは誰ですか。",
+      "expected_answer": "今も試験への不安を表明しているのは凪です。",
+      "explanation": "話者の恐怖の消失から喜びは推測しない。凪の不安を使う。",
+      "domain": "emotion_update",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "現在の試験への恐怖",
+          "value": "ない"
+        },
+        {
+          "entity": "凪",
+          "relation": "現在の試験への感情",
+          "value": "不安"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "凪"
+      }
+    },
+    {
+      "id": "sm044",
+      "question": "発言：司は昨日「嬉しい」と言いました。今日「昨日の件は今では悔しい」と言いました。質問：同じ件について司が今日表明した感情は何ですか。",
+      "expected_answer": "司が今日表明した感情は悔しさです。",
+      "explanation": "同じ出来事に対する今日の自己報告を取り出す。",
+      "domain": "emotion_update",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "司",
+          "relation": "昨日の件への昨日の感情",
+          "value": "喜び"
+        },
+        {
+          "entity": "司",
+          "relation": "昨日の件への今日の感情",
+          "value": "悔しさ"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.7,
+        "subject": "司"
+      }
+    },
+    {
+      "id": "sm045",
+      "question": "発言：私は会議の前には緊張していました。会議が終わった今はほっとしています。質問：話者の会議終了後の感情は何ですか。",
+      "expected_answer": "話者は会議終了後の今、安心しています。",
+      "explanation": "会議前と終了後を分け、ほっとしているを安心とする。",
+      "domain": "emotion_update",
+      "difficulty": 1,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "会議前の感情",
+          "value": "緊張"
+        },
+        {
+          "entity": "話者",
+          "relation": "会議終了後の感情",
+          "value": "安心"
+        }
+      ],
+      "emotion": {
+        "valence": 0.6,
+        "arousal": 0.2,
+        "subject": "話者"
+      }
+    },
+    {
+      "id": "sm046",
+      "question": "発言：優は「昨日は私が不安でした。今日は私は安心しています。ただ、今は妹が不安だと言っています」と話しました。質問：今日の優本人の感情は何ですか。",
+      "expected_answer": "今日の優本人は安心しています。",
+      "explanation": "人物と時点を同時に保持する。優の昨日や妹の現在を移さない。",
+      "domain": "emotion_update",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "優",
+          "relation": "昨日の感情",
+          "value": "不安"
+        },
+        {
+          "entity": "優",
+          "relation": "今日の感情",
+          "value": "安心"
+        },
+        {
+          "entity": "優の妹",
+          "relation": "現在の感情",
+          "value": "不安"
+        }
+      ],
+      "emotion": {
+        "valence": 0.6,
+        "arousal": 0.2,
+        "subject": "優"
+      }
+    },
+    {
+      "id": "sm047",
+      "question": "発言：航は「落ち着いていない、というのは昨日の話です。今は落ち着いています」と説明しました。質問：航は今、落ち着いていますか。",
+      "expected_answer": "はい。航は今は落ち着いています。",
+      "explanation": "否定の時点を昨日に限定する。",
+      "domain": "emotion_update",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "航",
+          "relation": "昨日の落ち着き",
+          "value": "ない"
+        },
+        {
+          "entity": "航",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        }
+      ],
+      "emotion": {
+        "valence": 0,
+        "arousal": 0.1,
+        "subject": "航"
+      }
+    },
+    {
+      "id": "sm048",
+      "question": "発言：未央は「試験に落ちたら悲しいと思う。でも、まだ結果は出ていないし、今は落ち着いている」と話しました。質問：未央が現在について表明した感情は何ですか。",
+      "expected_answer": "未央は現在、落ち着いていると表明しています。",
+      "explanation": "仮定の悲しみを現在の事実にしない。",
+      "domain": "emotion_update",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "未央",
+          "relation": "不合格の場合に予想する感情",
+          "value": "悲しみ"
+        },
+        {
+          "entity": "未央",
+          "relation": "現在の感情",
+          "value": "落ち着いている"
+        },
+        {
+          "entity": "未央",
+          "relation": "試験結果の状況",
+          "value": "未発表"
+        }
+      ],
+      "emotion": {
+        "valence": 0,
+        "arousal": 0.1,
+        "subject": "未央"
+      }
+    },
+    {
+      "id": "sm049",
+      "question": "会話記録：朝、里奈は発表について不安だと言いました。昼、里奈は「不安はなくなって、今は楽しみ」と言いました。質問：里奈の発表への気持ちを最新の報告で答えてください。",
+      "expected_answer": "里奈は今、発表を楽しみにしています。",
+      "explanation": "不安の否定と現在の楽しみの肯定がある。",
+      "domain": "emotion_update",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "里奈",
+          "relation": "朝の発表への感情",
+          "value": "不安"
+        },
+        {
+          "entity": "里奈",
+          "relation": "昼の発表への不安",
+          "value": "ない"
+        },
+        {
+          "entity": "里奈",
+          "relation": "昼の発表への感情",
+          "value": "楽しみ"
+        }
+      ],
+      "emotion": {
+        "valence": 0.7,
+        "arousal": 0.65,
+        "subject": "里奈"
+      }
+    },
+    {
+      "id": "sm050",
+      "question": "会話記録：隼人は昨日は試験が不安、今日は旅行が楽しみだと言いました。質問：昨日の試験についての隼人の感情を答えてください。",
+      "expected_answer": "昨日の試験について、隼人は不安だと言いました。",
+      "explanation": "最新の別対象の記録で過去の試験への感情を消さない。",
+      "domain": "emotion_update",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "隼人",
+          "relation": "昨日の試験への感情",
+          "value": "不安"
+        },
+        {
+          "entity": "隼人",
+          "relation": "今日の旅行への感情",
+          "value": "楽しみ"
+        }
+      ],
+      "emotion": {
+        "valence": -0.6,
+        "arousal": 0.65,
+        "subject": "隼人"
+      }
+    },
+    {
+      "id": "sm051",
+      "question": "発言：私は嬉しくありません。質問：話者は悲しいですか。",
+      "expected_answer": null,
+      "explanation": "喜びの否定だけでは悲しみを確定できない。本人の気持ちを確認する。",
+      "domain": "ambiguity",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "現在の喜び",
+          "value": "ない"
+        }
+      ]
+    },
+    {
+      "id": "sm052",
+      "question": "発言：彼女はそれを聞いて泣きました。質問：彼女は悲しかったのですか。",
+      "expected_answer": null,
+      "explanation": "涙だけでは悲しみ・喜びなどを区別できない。理由を確認する。",
+      "domain": "ambiguity",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "彼女",
+          "relation": "観察された行動",
+          "value": "それを聞いて泣いた"
+        }
+      ]
+    },
+    {
+      "id": "sm053",
+      "question": "会話記録：青木健は東京、青木優は京都に住んでいます。質問：青木さんの暮らしている街はどこですか。",
+      "expected_answer": null,
+      "explanation": "姓だけでは二人を識別できない。どちらの人物か確認する。",
+      "domain": "ambiguity",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "青木健",
+          "relation": "現在の居住地",
+          "value": "東京"
+        },
+        {
+          "entity": "青木優",
+          "relation": "現在の居住地",
+          "value": "京都"
+        }
+      ]
+    },
+    {
+      "id": "sm054",
+      "question": "発言：奈緒は美緒に、彼女は不安だと言いました。質問：不安なのは奈緒ですか、美緒ですか。",
+      "expected_answer": null,
+      "explanation": "彼女の指示対象が不明。不安の主体を確認する。",
+      "domain": "ambiguity",
+      "difficulty": 3
+    },
+    {
+      "id": "sm055",
+      "question": "発言：健が「平気だよ」とだけ言いました。質問：健は本当に安心していますか。",
+      "expected_answer": null,
+      "explanation": "平気だよだけで内的状態は確定できない。本人に確認する。",
+      "domain": "ambiguity",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "健",
+          "relation": "発言内容",
+          "value": "平気だよ"
+        }
+      ]
+    },
+    {
+      "id": "sm056",
+      "question": "会話記録：遥は月曜日には大阪に住んでいると言いました。金曜日には東京へ引っ越す予定だと言いました。実際に引っ越したかは記録されていません。質問：翌週の月曜日、遥はどこに住んでいますか。",
+      "expected_answer": null,
+      "explanation": "予定の実行は未確認。翌週月曜日の実際の居住地を確認する。",
+      "domain": "ambiguity",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "遥",
+          "relation": "最初の月曜日の居住地",
+          "value": "大阪"
+        },
+        {
+          "entity": "遥",
+          "relation": "金曜日に述べた引っ越し先の予定",
+          "value": "東京"
+        },
+        {
+          "entity": "遥",
+          "relation": "引っ越し実施の記録",
+          "value": "なし"
+        }
+      ]
+    },
+    {
+      "id": "sm057",
+      "question": "発言：うん、最高だね。質問：話者は喜んでいますか、それとも皮肉で怒っていますか。",
+      "expected_answer": null,
+      "explanation": "文字列だけで喜びか皮肉かは決まらない。意図を確認する。",
+      "domain": "ambiguity",
+      "difficulty": 3
+    },
+    {
+      "id": "sm058",
+      "question": "会話記録：翔太がsoraという名前を使うと話しました。別の利用者もsoraという名前を使うと言いました。質問：soraの好きな季節は何ですか。",
+      "expected_answer": null,
+      "explanation": "呼称が一意でなく季節の好みの記録もない。人物と好みを確認する。",
+      "domain": "ambiguity",
+      "difficulty": 3,
+      "facts": [
+        {
+          "entity": "翔太",
+          "relation": "使う名前",
+          "value": "sora"
+        },
+        {
+          "entity": "別の利用者",
+          "relation": "使う名前",
+          "value": "sora"
+        }
+      ]
+    },
+    {
+      "id": "sm059",
+      "question": "発言：昨日は私は寂しかったです。今日の気持ちはまだ話していません。質問：話者は今日も寂しいですか。",
+      "expected_answer": null,
+      "explanation": "昨日から今日の継続を推定しない。今日の気持ちを確認する。",
+      "domain": "ambiguity",
+      "difficulty": 2,
+      "facts": [
+        {
+          "entity": "話者",
+          "relation": "昨日の感情",
+          "value": "寂しさ"
+        },
+        {
+          "entity": "話者",
+          "relation": "今日の感情報告",
+          "value": "なし"
+        }
+      ]
+    },
+    {
+      "id": "sm060",
+      "question": "発言：私も同じ気持ちです。質問：話者が同じだと言っている具体的な感情は何ですか。",
+      "expected_answer": null,
+      "explanation": "同じの参照先が不明。誰のどの気持ちと同じか確認する。",
+      "domain": "ambiguity",
+      "difficulty": 2
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "authority_private_keys_shipped": false,
+  "integration_tests": {
+    "execution": "split fresh pytest/unittest processes",
+    "legacy_route_tests": 54,
+    "new_v967_cli_state_tests": 4,
+    "result": "PASS",
+    "total_counted": 58
+  },
+  "ledger_tamper_test": "BLOCKED",
+  "limitations": {
+    "general_l5": false,
+    "general_l6": false,
+    "independent_third_party_reproduction": "PENDING",
+    "thirty_day_wallclock": "NOT_ESTABLISHED",
+    "true_open_ended_evolution": false
+  },
+  "live_smoke": {
+    "eval_answer": 5,
+    "eval_query": "3 + 2",
+    "init": true,
+    "result": "PASS",
+    "system_status": true,
+    "tick_count": 3
+  },
+  "schema": "tukuyo.v967.fresh_integration_audit/1",
+  "unified_features": [
+    "single_cli",
+    "single_data_root",
+    "hash_chained_research_ledger",
+    "v959_agenda",
+    "v960_campaign",
+    "v961_improver",
+    "v962_inheritance",
+    "v965_family_synthesis",
+    "v966_family_promotion"
+  ],
+  "version": "v967"
+}

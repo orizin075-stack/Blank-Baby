@@ -1,0 +1,35 @@
+[
+  {
+    "accepted": true,
+    "candidate_correct": 718,
+    "candidate_sha256": "f7d48835f1d4a0bf256ea5b3996dd33342ae7fe9c940c4411aad0d0f7dff3822",
+    "candidate_wrong": 182,
+    "generation": 1,
+    "mutation": "add_audit",
+    "parent_correct": 391,
+    "parent_sha256": "e09b8ae926a9e165aaab28c8a9b1ed5b0d2ad072222f152769f7f4151ce70cd3",
+    "parent_wrong": 509
+  },
+  {
+    "accepted": true,
+    "candidate_correct": 804,
+    "candidate_sha256": "d160fe045b21fa93104e7bc0021cda71e750bb98fab6f22b96ebdd8e66808409",
+    "candidate_wrong": 96,
+    "generation": 2,
+    "mutation": "lower_threshold",
+    "parent_correct": 726,
+    "parent_sha256": "f7d48835f1d4a0bf256ea5b3996dd33342ae7fe9c940c4411aad0d0f7dff3822",
+    "parent_wrong": 174
+  },
+  {
+    "accepted": true,
+    "candidate_correct": 872,
+    "candidate_sha256": "c6ce537a009ebaa9a49bfc286bcfd81b7f80884d08810a2ab7238524be1d059b",
+    "candidate_wrong": 28,
+    "generation": 3,
+    "mutation": "repr_priority",
+    "parent_correct": 795,
+    "parent_sha256": "d160fe045b21fa93104e7bc0021cda71e750bb98fab6f22b96ebdd8e66808409",
+    "parent_wrong": 105
+  }
+]

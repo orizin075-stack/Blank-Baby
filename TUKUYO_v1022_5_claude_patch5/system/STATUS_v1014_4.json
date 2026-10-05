@@ -1,0 +1,30 @@
+{
+  "claim_boundary": {
+    "24h_completed": false,
+    "72h_completed": false,
+    "7day_completed": false,
+    "consciousness_established": false,
+    "general_l5": false,
+    "literal_life_established": false
+  },
+  "features": {
+    "campaign_incremental_head_validation": true,
+    "campaign_step_append_only_o1_path": true,
+    "checkpoint_failure_fails_campaign_audit": true,
+    "content_addressed_delta_recovery": true,
+    "content_addressed_delta_recovery_snapshot": true,
+    "conversation_crash_transaction": true,
+    "conversation_transaction_journal_truncation_repair": true,
+    "independent_bounded_logic_verifier": true,
+    "lower_bound_exactness_guard": true,
+    "package_quantity_surface_generalized": true,
+    "periodic_external_witness_receipts": true,
+    "realtime_append_only_journal": true,
+    "rebuildable_search_index_excluded_from_snapshot": true,
+    "soul_event_first": true,
+    "tick_gap_audit": true
+  },
+  "role": "CONTINUOUS_WITNESS_SOUL_ATOMICITY_SCALABLE_CAMPAIGN",
+  "schema": "tukuyo.v1014_4.status/1",
+  "version": "v1014.4"
+}

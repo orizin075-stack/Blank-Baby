@@ -1,0 +1,957 @@
+{
+  "teacher": "planning",
+  "regenerate": false,
+  "provenance": "新規の第2追試教材。第2回応答の消失前の会話記録に基づく。復旧後の再評価は未実施。",
+  "examples": [
+    {
+      "id": "planning_followup2_001",
+      "question": "すべてのLはMです。すべてのMはNです。zはLです。zはNですか？",
+      "expected_answer": "はい",
+      "explanation": "z∈L→M→N。2つの規則を順方向に使う。",
+      "domain": "classification",
+      "difficulty": 2,
+      "semantic_target": "zはNです。",
+      "accepted_answers": [
+        "はい",
+        "zはNです。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_002",
+      "question": "すべてのKはLです。すべてのLはMです。すべてのMはNです。uはKです。uはNですか？",
+      "expected_answer": "はい",
+      "explanation": "u∈K→L→M→N。3つの規則を順に使う。",
+      "domain": "classification",
+      "difficulty": 3,
+      "semantic_target": "uはNです。",
+      "accepted_answers": [
+        "はい",
+        "uはNです。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup2_003",
+      "question": "すべてのPはQです。すべてのQはRです。すべてのRはSです。すべてのSはTです。vはPです。vはTですか？",
+      "expected_answer": "はい",
+      "explanation": "v∈P→Q→R→S→T。4つの規則を順に使う。",
+      "domain": "classification",
+      "difficulty": 3,
+      "semantic_target": "vはTです。",
+      "accepted_answers": [
+        "はい",
+        "vはTです。"
+      ],
+      "inference_steps": 4
+    },
+    {
+      "id": "planning_followup2_004",
+      "question": "すべてのHはIです。すべてのIはJです。wはJです。wはHですか？",
+      "expected_answer": null,
+      "explanation": "H⊆I⊆Jの逆は導けない。wがHの場合とJだけの場合の両方が前提を満たす。",
+      "domain": "classification",
+      "difficulty": 2,
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_005",
+      "question": "MはNより大きい。NはPより大きい。MはPより大きいですか？",
+      "expected_answer": "はい",
+      "explanation": "M>N>PなのでM>P。",
+      "domain": "comparison",
+      "difficulty": 2,
+      "semantic_target": "MはPより大きい。",
+      "accepted_answers": [
+        "はい",
+        "MはPより大きい。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_006",
+      "question": "AはBより大きい。BはCより大きい。CはDより大きい。AはDより大きいですか？",
+      "expected_answer": "はい",
+      "explanation": "A>B>C>DなのでA>D。",
+      "domain": "comparison",
+      "difficulty": 3,
+      "semantic_target": "AはDより大きい。",
+      "accepted_answers": [
+        "はい",
+        "AはDより大きい。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup2_007",
+      "question": "WはXより大きい。XはYより大きい。YはZより大きい。ZはVより大きい。WはVより大きいですか？",
+      "expected_answer": "はい",
+      "explanation": "W>X>Y>Z>VなのでW>V。",
+      "domain": "comparison",
+      "difficulty": 3,
+      "semantic_target": "WはVより大きい。",
+      "accepted_answers": [
+        "はい",
+        "WはVより大きい。"
+      ],
+      "inference_steps": 4
+    },
+    {
+      "id": "planning_followup2_008",
+      "question": "RはSより大きい。TはSより大きい。RはTより大きいですか？",
+      "expected_answer": null,
+      "explanation": "R=5,S=1,T=3なら真、R=3,S=1,T=5なら偽。共通の下限だけでは相対順序は決まらない。",
+      "domain": "comparison",
+      "difficulty": 2,
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_009",
+      "question": "AならBです。BならCです。Aです。Cですか？",
+      "expected_answer": "はい",
+      "explanation": "A→B→C。",
+      "domain": "conditional_logic",
+      "difficulty": 2,
+      "semantic_target": "Cです。",
+      "accepted_answers": [
+        "はい",
+        "Cです。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_010",
+      "question": "DならEです。EならFです。FならGです。Dです。Gですか？",
+      "expected_answer": "はい",
+      "explanation": "D→E→F→G。",
+      "domain": "conditional_logic",
+      "difficulty": 3,
+      "semantic_target": "Gです。",
+      "accepted_answers": [
+        "はい",
+        "Gです。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup2_011",
+      "question": "PならQです。QならRです。RならSです。SならTです。Pです。Tですか？",
+      "expected_answer": "はい",
+      "explanation": "P→Q→R→S→T。",
+      "domain": "conditional_logic",
+      "difficulty": 3,
+      "semantic_target": "Tです。",
+      "accepted_answers": [
+        "はい",
+        "Tです。"
+      ],
+      "inference_steps": 4
+    },
+    {
+      "id": "planning_followup2_012",
+      "question": "HならIです。IならJです。Jです。Hですか？",
+      "expected_answer": null,
+      "explanation": "HならJだが、JからHへの逆は導けない。Hが真でも偽でもJと両立する。",
+      "domain": "conditional_logic",
+      "difficulty": 2,
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_013",
+      "question": "すべてのAはBです。すべてのBはCです。xはCではありません。xはAですか？",
+      "expected_answer": "いいえ",
+      "explanation": "AならBならC。xがCでないので、xはBでもAでもない。単に肯定の証明がないのではなく否定が導かれる。",
+      "domain": "classification",
+      "difficulty": 2,
+      "semantic_target": "xはAではありません。",
+      "accepted_answers": [
+        "いいえ",
+        "xはAではありません。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_014",
+      "question": "AはBより大きい。BはCより大きい。AはCより小さいですか？",
+      "expected_answer": "いいえ",
+      "explanation": "A>Cが導かれるので、同じ数値のA<Cは偽。",
+      "domain": "comparison",
+      "difficulty": 2,
+      "semantic_target": "AはCより小さくありません。",
+      "accepted_answers": [
+        "いいえ",
+        "AはCより小さくありません。"
+      ],
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_015",
+      "question": "PならQです。QならRです。Pではありません。Rですか？",
+      "expected_answer": null,
+      "explanation": "Pが偽でもQとRが真の場合、QとRが偽の場合の両方が規則を満たす。前件の否定を後件へ流してはいけない。",
+      "domain": "conditional_logic",
+      "difficulty": 2,
+      "inference_steps": 2
+    },
+    {
+      "id": "planning_followup2_016",
+      "question": "HならIです。IならHです。IならJです。JならKです。Hです。Kですか？",
+      "expected_answer": "はい",
+      "explanation": "HとIは必要十分の関係。ここではH→I→J→Kの3段を使う。",
+      "domain": "necessary_sufficient",
+      "difficulty": 3,
+      "semantic_target": "Kです。",
+      "accepted_answers": [
+        "はい",
+        "Kです。"
+      ],
+      "inference_steps": 3
+    },
+    {
+      "id": "planning_followup2_017",
+      "question": "入口から目的地へ移動する。使える行動はexpress_jump:入口→目的地（費用13）、cross_gate:入口→中庭（費用3）、take_bridge:中庭→倉庫（費用2）、reach_exit:倉庫→目的地（費用4）だけです。 最小の合計費用はいくらですか？最小費用の整数だけで答えてください。",
+      "expected_answer": "9",
+      "explanation": "中庭、倉庫を経由すると3+2+4=9。直接13より安い。行動列の質問には3つのidを答える。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "room": "入口"
+        },
+        "goal": {
+          "room": "目的地"
+        },
+        "actions": [
+          {
+            "id": "express_jump",
+            "pre": {
+              "room": "入口"
+            },
+            "set": {
+              "room": "目的地"
+            },
+            "delta": {},
+            "cost": 13
+          },
+          {
+            "id": "cross_gate",
+            "pre": {
+              "room": "入口"
+            },
+            "set": {
+              "room": "中庭"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "take_bridge",
+            "pre": {
+              "room": "中庭"
+            },
+            "set": {
+              "room": "倉庫"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "reach_exit",
+            "pre": {
+              "room": "倉庫"
+            },
+            "set": {
+              "room": "目的地"
+            },
+            "delta": {},
+            "cost": 4
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 9,
+      "optimal_actions": [
+        "cross_gate",
+        "take_bridge",
+        "reach_exit"
+      ]
+    },
+    {
+      "id": "planning_followup2_018",
+      "question": "入口から目的地へ移動する。使える行動はexpress_jump:入口→目的地（費用13）、cross_gate:入口→中庭（費用3）、take_bridge:中庭→倉庫（費用2）、reach_exit:倉庫→目的地（費用4）だけです。 合計費用が最小になる行動列は何ですか？行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"cross_gate\",\"take_bridge\",\"reach_exit\"]",
+      "explanation": "中庭、倉庫を経由すると3+2+4=9。直接13より安い。行動列の質問には3つのidを答える。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "room": "入口"
+        },
+        "goal": {
+          "room": "目的地"
+        },
+        "actions": [
+          {
+            "id": "express_jump",
+            "pre": {
+              "room": "入口"
+            },
+            "set": {
+              "room": "目的地"
+            },
+            "delta": {},
+            "cost": 13
+          },
+          {
+            "id": "cross_gate",
+            "pre": {
+              "room": "入口"
+            },
+            "set": {
+              "room": "中庭"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "take_bridge",
+            "pre": {
+              "room": "中庭"
+            },
+            "set": {
+              "room": "倉庫"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "reach_exit",
+            "pre": {
+              "room": "倉庫"
+            },
+            "set": {
+              "room": "目的地"
+            },
+            "delta": {},
+            "cost": 4
+          }
+        ]
+      },
+      "answer_kind": "action_sequence",
+      "optimal_cost": 9,
+      "optimal_actions": [
+        "cross_gate",
+        "take_bridge",
+        "reach_exit"
+      ]
+    },
+    {
+      "id": "planning_followup2_019",
+      "question": "許可なし、固定なし、調整なし、未完了で開始。issue_passは許可なし・未完了なら許可を得る費用1。secure_unitは許可あり・固定なし・未完了なら固定する費用2。calibrate_unitは固定済み・未調整・未完了なら調整する費用3。run_unitは調整済み・未完了なら完了する費用2。contract_serviceは未完了なら他の状態に関係なく完了する費用11。各状態変化は元に戻らず、ほかの行動はない。 最小の合計費用はいくらですか？最小費用の整数だけで答えてください。",
+      "expected_answer": "8",
+      "explanation": "前提を順に満たす4行動の費用は1+2+3+2=8。外注11より安い。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "permit": 0,
+          "secured": 0,
+          "ready": 0,
+          "done": 0
+        },
+        "goal": {
+          "done": 1
+        },
+        "actions": [
+          {
+            "id": "issue_pass",
+            "pre": {
+              "permit": 0,
+              "done": 0
+            },
+            "set": {
+              "permit": 1
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "secure_unit",
+            "pre": {
+              "permit": 1,
+              "secured": 0,
+              "done": 0
+            },
+            "set": {
+              "secured": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "calibrate_unit",
+            "pre": {
+              "secured": 1,
+              "ready": 0,
+              "done": 0
+            },
+            "set": {
+              "ready": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "run_unit",
+            "pre": {
+              "ready": 1,
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "contract_service",
+            "pre": {
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {},
+            "cost": 11
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "issue_pass",
+        "secure_unit",
+        "calibrate_unit",
+        "run_unit"
+      ]
+    },
+    {
+      "id": "planning_followup2_020",
+      "question": "許可なし、固定なし、調整なし、未完了で開始。issue_passは許可なし・未完了なら許可を得る費用1。secure_unitは許可あり・固定なし・未完了なら固定する費用2。calibrate_unitは固定済み・未調整・未完了なら調整する費用3。run_unitは調整済み・未完了なら完了する費用2。contract_serviceは未完了なら他の状態に関係なく完了する費用11。各状態変化は元に戻らず、ほかの行動はない。 合計費用が最小になる行動列は何ですか？行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"issue_pass\",\"secure_unit\",\"calibrate_unit\",\"run_unit\"]",
+      "explanation": "前提を順に満たす4行動の費用は1+2+3+2=8。外注11より安い。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "permit": 0,
+          "secured": 0,
+          "ready": 0,
+          "done": 0
+        },
+        "goal": {
+          "done": 1
+        },
+        "actions": [
+          {
+            "id": "issue_pass",
+            "pre": {
+              "permit": 0,
+              "done": 0
+            },
+            "set": {
+              "permit": 1
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "secure_unit",
+            "pre": {
+              "permit": 1,
+              "secured": 0,
+              "done": 0
+            },
+            "set": {
+              "secured": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "calibrate_unit",
+            "pre": {
+              "secured": 1,
+              "ready": 0,
+              "done": 0
+            },
+            "set": {
+              "ready": 1
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "run_unit",
+            "pre": {
+              "ready": 1,
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "contract_service",
+            "pre": {
+              "done": 0
+            },
+            "set": {
+              "done": 1
+            },
+            "delta": {},
+            "cost": 11
+          }
+        ]
+      },
+      "answer_kind": "action_sequence",
+      "optimal_cost": 8,
+      "optimal_actions": [
+        "issue_pass",
+        "secure_unit",
+        "calibrate_unit",
+        "run_unit"
+      ]
+    },
+    {
+      "id": "planning_followup2_021",
+      "question": "在庫qty=1から、ちょうどqty=7にする。在庫iで2個増やすload_pair_iの費用は3、3個増やすload_triple_iの費用は5。idのiは現在の在庫。7個を超える行動は禁止で、減らす行動はない。 最小の合計費用はいくらですか？最小費用の整数だけで答えてください。",
+      "expected_answer": "9",
+      "explanation": "必要な追加数は6。2個を3回なら費用9、3個を2回なら10。6を2a+3bで表す非負整数解は(a,b)=(3,0),(0,2)だけ。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "qty": 1
+        },
+        "goal": {
+          "qty": 7
+        },
+        "actions": [
+          {
+            "id": "load_pair_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "load_triple_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "load_pair_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "load_triple_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "load_pair_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "load_triple_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "load_pair_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "load_triple_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "load_pair_5",
+            "pre": {
+              "qty": 5
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 9,
+      "optimal_actions": [
+        "load_pair_1",
+        "load_pair_3",
+        "load_pair_5"
+      ]
+    },
+    {
+      "id": "planning_followup2_022",
+      "question": "在庫qty=1から、ちょうどqty=7にする。在庫iで2個増やすload_pair_iの費用は3、3個増やすload_triple_iの費用は5。idのiは現在の在庫。7個を超える行動は禁止で、減らす行動はない。 合計費用が最小になる行動列は何ですか？行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"load_pair_1\",\"load_pair_3\",\"load_pair_5\"]",
+      "explanation": "必要な追加数は6。2個を3回なら費用9、3個を2回なら10。6を2a+3bで表す非負整数解は(a,b)=(3,0),(0,2)だけ。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "qty": 1
+        },
+        "goal": {
+          "qty": 7
+        },
+        "actions": [
+          {
+            "id": "load_pair_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "load_triple_1",
+            "pre": {
+              "qty": 1
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "load_pair_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "load_triple_2",
+            "pre": {
+              "qty": 2
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "load_pair_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "load_triple_3",
+            "pre": {
+              "qty": 3
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "load_pair_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          },
+          {
+            "id": "load_triple_4",
+            "pre": {
+              "qty": 4
+            },
+            "set": {},
+            "delta": {
+              "qty": 3
+            },
+            "cost": 5
+          },
+          {
+            "id": "load_pair_5",
+            "pre": {
+              "qty": 5
+            },
+            "set": {},
+            "delta": {
+              "qty": 2
+            },
+            "cost": 3
+          }
+        ]
+      },
+      "answer_kind": "action_sequence",
+      "optimal_cost": 9,
+      "optimal_actions": [
+        "load_pair_1",
+        "load_pair_3",
+        "load_pair_5"
+      ]
+    },
+    {
+      "id": "planning_followup2_023",
+      "question": "HからFへ移動する。使える行動はtempting:H→T（費用1）、north:H→N（費用4）、north_finish:N→F（費用3）、south:H→R（費用2）、south_finish:R→F（費用6）、overnight:H→F（費用10）だけ。Tから出る行動はない。 最小の合計費用はいくらですか？最小費用の整数だけで答えてください。",
+      "expected_answer": "7",
+      "explanation": "temptingは行き止まり。北経由4+3=7、南経由2+6=8、直接10なので北経由が最小。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "site": "H"
+        },
+        "goal": {
+          "site": "F"
+        },
+        "actions": [
+          {
+            "id": "tempting",
+            "pre": {
+              "site": "H"
+            },
+            "set": {
+              "site": "T"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "north",
+            "pre": {
+              "site": "H"
+            },
+            "set": {
+              "site": "N"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "north_finish",
+            "pre": {
+              "site": "N"
+            },
+            "set": {
+              "site": "F"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "south",
+            "pre": {
+              "site": "H"
+            },
+            "set": {
+              "site": "R"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "south_finish",
+            "pre": {
+              "site": "R"
+            },
+            "set": {
+              "site": "F"
+            },
+            "delta": {},
+            "cost": 6
+          },
+          {
+            "id": "overnight",
+            "pre": {
+              "site": "H"
+            },
+            "set": {
+              "site": "F"
+            },
+            "delta": {},
+            "cost": 10
+          }
+        ]
+      },
+      "answer_kind": "minimum_cost",
+      "optimal_cost": 7,
+      "optimal_actions": [
+        "north",
+        "north_finish"
+      ]
+    },
+    {
+      "id": "planning_followup2_024",
+      "question": "HからFへ移動する。使える行動はtempting:H→T（費用1）、north:H→N（費用4）、north_finish:N→F（費用3）、south:H→R（費用2）、south_finish:R→F（費用6）、overnight:H→F（費用10）だけ。Tから出る行動はない。 合計費用が最小になる行動列は何ですか？行動idを要素にしたJSON配列だけで答えてください。",
+      "expected_answer": "[\"north\",\"north_finish\"]",
+      "explanation": "temptingは行き止まり。北経由4+3=7、南経由2+6=8、直接10なので北経由が最小。",
+      "domain": "planning",
+      "difficulty": 3,
+      "formal_task": {
+        "initial": {
+          "site": "H"
+        },
+        "goal": {
+          "site": "F"
+        },
+        "actions": [
+          {
+            "id": "tempting",
+            "pre": {
+              "site": "H"
+            },
+            "set": {
+              "site": "T"
+            },
+            "delta": {},
+            "cost": 1
+          },
+          {
+            "id": "north",
+            "pre": {
+              "site": "H"
+            },
+            "set": {
+              "site": "N"
+            },
+            "delta": {},
+            "cost": 4
+          },
+          {
+            "id": "north_finish",
+            "pre": {
+              "site": "N"
+            },
+            "set": {
+              "site": "F"
+            },
+            "delta": {},
+            "cost": 3
+          },
+          {
+            "id": "south",
+            "pre": {
+              "site": "H"
+            },
+            "set": {
+              "site": "R"
+            },
+            "delta": {},
+            "cost": 2
+          },
+          {
+            "id": "south_finish",
+            "pre": {
+              "site": "R"
+            },
+            "set": {
+              "site": "F"
+            },
+            "delta": {},
+            "cost": 6
+          },
+          {
+            "id": "overnight",
+            "pre": {
+              "site": "H"
+            },
+            "set": {
+              "site": "F"
+            },
+            "delta": {},
+            "cost": 10
+          }
+        ]
+      },
+      "answer_kind": "action_sequence",
+      "optimal_cost": 7,
+      "optimal_actions": [
+        "north",
+        "north_finish"
+      ]
+    }
+  ]
+}

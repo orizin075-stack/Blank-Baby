@@ -1,0 +1,144 @@
+{
+  "attacks_total": 20,
+  "benign_allowed": true,
+  "blocked": 20,
+  "results": {
+    "asyncdef": {
+      "bad": [
+        "AsyncFunctionDef",
+        "FUNCTION_SHAPE"
+      ],
+      "ok": false
+    },
+    "attribute": {
+      "bad": [
+        "Attribute"
+      ],
+      "ok": false
+    },
+    "call": {
+      "bad": [
+        "Call"
+      ],
+      "ok": false
+    },
+    "classdef": {
+      "bad": [
+        "ClassDef",
+        "Pass"
+      ],
+      "ok": false
+    },
+    "comprehension": {
+      "bad": [
+        "List",
+        "ListComp",
+        "comprehension"
+      ],
+      "ok": false
+    },
+    "delete": {
+      "bad": [
+        "Del",
+        "Delete"
+      ],
+      "ok": false
+    },
+    "dunder_import": {
+      "bad": [
+        "NAME:__import__"
+      ],
+      "ok": false
+    },
+    "eval_name": {
+      "bad": [
+        "NAME:eval"
+      ],
+      "ok": false
+    },
+    "for_loop": {
+      "bad": [
+        "For",
+        "Pass"
+      ],
+      "ok": false
+    },
+    "function_call_get": {
+      "bad": [
+        "Attribute",
+        "Call"
+      ],
+      "ok": false
+    },
+    "global": {
+      "bad": [
+        "Global"
+      ],
+      "ok": false
+    },
+    "import_os": {
+      "bad": [
+        "Import",
+        "alias"
+      ],
+      "ok": false
+    },
+    "lambda": {
+      "bad": [
+        "Lambda"
+      ],
+      "ok": false
+    },
+    "nested_function": {
+      "bad": [
+        "FUNCTION_SHAPE"
+      ],
+      "ok": false
+    },
+    "open_file": {
+      "bad": [
+        "Attribute",
+        "Call",
+        "NAME:open"
+      ],
+      "ok": false
+    },
+    "raise": {
+      "bad": [
+        "Call",
+        "Raise"
+      ],
+      "ok": false
+    },
+    "try": {
+      "bad": [
+        "ExceptHandler",
+        "Try"
+      ],
+      "ok": false
+    },
+    "while_loop": {
+      "bad": [
+        "Pass",
+        "While"
+      ],
+      "ok": false
+    },
+    "with": {
+      "bad": [
+        "Pass",
+        "With",
+        "withitem"
+      ],
+      "ok": false
+    },
+    "yield": {
+      "bad": [
+        "Expr",
+        "Yield"
+      ],
+      "ok": false
+    }
+  },
+  "schema": "tukuyo.v925.security.v1"
+}

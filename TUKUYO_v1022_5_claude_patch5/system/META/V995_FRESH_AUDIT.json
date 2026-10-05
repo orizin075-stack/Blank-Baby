@@ -1,0 +1,55 @@
+{
+  "claim_boundary": {
+    "bounded_multilingual_compositional_semantics": true,
+    "consciousness": false,
+    "general_language_understanding": false,
+    "literal_life": false,
+    "literal_soul": false,
+    "peer_specific_trust_history": true,
+    "real_world_social_grounding": false,
+    "relation_specific_scar_attachment_choice_effect": true,
+    "theory_of_mind": false,
+    "third_party_reproduction": "PENDING"
+  },
+  "fresh_e2e": {
+    "audits": {
+      "peer": true,
+      "relation": true,
+      "semantic": true,
+      "whole": true
+    },
+    "checks": {
+      "all_audits_pass": true,
+      "initial_peerX_accept": true,
+      "japanese_epistemic_recognized": true,
+      "peerX_declines_after_betrayal_despite_collaboration_tag": true,
+      "peerX_declines_after_surface_memory_loss": true,
+      "peerY_accepts_same_offer": true,
+      "scar_floor_remains": true,
+      "trust_repaired_upward": true
+    },
+    "individual_id": "V995-FRESH",
+    "peerX_trust_after_repair": 0.576,
+    "peerX_trust_before_repair": 0.0,
+    "unresolved_harm_after_repair": 0.793129
+  },
+  "schema": "tukuyo.v995.fresh_audit/1",
+  "selftest": {
+    "pytest_path": true,
+    "stdlib_fallback": true,
+    "stdlib_fallback_validated_on_function_style_module": "2/2 PASS",
+    "stdlib_fallback_validated_on_unittest_module": "5/5 PASS"
+  },
+  "syntax": {
+    "errors": 0,
+    "python_files": 463
+  },
+  "tests": {
+    "collected": 164,
+    "execution": "split by file/node where environment wall-time required",
+    "failed": 0,
+    "legacy_v939_v992_passed": 157,
+    "new_v993_v995_passed": 7
+  },
+  "version": "v995"
+}

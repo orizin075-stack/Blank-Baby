@@ -1,0 +1,10 @@
+V840_LAYER_SHA256='e069bf874d75f681a4fdae95cf263407309c6fa84ee56b398ff7be9136322c13'
+V840_COMPLETE_SHA256='2bd6ffd2a7e46438b1e86039fb24a66361b2d31a6d538de8451993f5c7c3e531'
+SCHEMA_PACKET='tukuyo.v841.public_packet/1'
+SCHEMA_ACK='tukuyo.v841.public_ack/1'
+SOCIAL_WAL='pending_social_tx.json'
+PRIVATE_FORBIDDEN_KEYS={
+ 'autobiography','autobiographical','episodic','relationships','relationship','private','private_notes',
+ 'affect','commitments','self_model','working_memory','working','authority_receipts','runtime_authority_private_key',
+ 'secret','secrets','password','token','private_key'
+}

@@ -1,0 +1,123 @@
+{
+  "alive": true,
+  "claim": {
+    "claimed_min_agreement_99": 0.2971,
+    "inputs_checked": 32,
+    "law": "どれか(¬S2,¬S3,S4)",
+    "posterior": 0.9999,
+    "replication": {
+      "errors": 3,
+      "trials": 10
+    },
+    "table": 4282384191,
+    "tier": 3
+  },
+  "claim_boundary": {
+    "claims_only_after_replication": true,
+    "consciousness_established": false,
+    "expedition_death_is_individual_death": false,
+    "experiments_chosen_by_information_value": true,
+    "hidden_rule_world_research": true,
+    "method_change_when_language_fails": true,
+    "open_ended_real_world_research": false
+  },
+  "death_tick": null,
+  "environment_verdict": {
+    "claim_bound_held": true,
+    "law_correct": true,
+    "true_noise": 0.1,
+    "true_tier": 3
+  },
+  "events": [
+    "REPLICATION_STARTED",
+    "CONFIRMATION_ABANDONED",
+    "REPLICATION_STARTED",
+    "ANOMALY_RETEST",
+    "CONFIRMED"
+  ],
+  "expedition": "E000002",
+  "final_energy": 200,
+  "method": "LAW",
+  "ok": true,
+  "release_revision": "v1022.5-fusion",
+  "report": {
+    "claim": {
+      "claimed_min_agreement_99": 0.2971,
+      "inputs_checked": 32,
+      "law": "どれか(¬S2,¬S3,S4)",
+      "posterior": 0.9999,
+      "replication": {
+        "errors": 3,
+        "trials": 10
+      },
+      "tier": 3
+    },
+    "events": [
+      {
+        "at_observation": 67,
+        "event": "REPLICATION_STARTED",
+        "law": "どれか(¬S2,¬S3,S4)"
+      },
+      {
+        "at_observation": 68,
+        "event": "CONFIRMATION_ABANDONED",
+        "law": "どれか(¬S2,¬S3,S4)",
+        "reason": "belief fell below threshold"
+      },
+      {
+        "at_observation": 70,
+        "event": "REPLICATION_STARTED",
+        "law": "どれか(¬S2,¬S3,S4)"
+      },
+      {
+        "at_observation": 93,
+        "event": "ANOMALY_RETEST",
+        "inputs": [
+          "S1=0,S2=1,S3=0,S4=1,S5=1",
+          "S1=0,S2=0,S3=0,S4=0,S5=0",
+          "S1=0,S2=1,S3=1,S4=0,S5=1"
+        ],
+        "law": "どれか(¬S2,¬S3,S4)"
+      },
+      {
+        "at_observation": 102,
+        "errors": 3,
+        "event": "CONFIRMED",
+        "law": "どれか(¬S2,¬S3,S4)",
+        "trials": 10
+      }
+    ],
+    "hypotheses": [
+      {
+        "law": "どれか(¬S2,¬S3,S4)",
+        "posterior": 0.9999,
+        "tier": 3
+      },
+      {
+        "law": "常に点灯",
+        "posterior": 0.0,
+        "tier": 1
+      },
+      {
+        "law": "どれか(¬S3,S4,¬S5)",
+        "posterior": 0.0,
+        "tier": 3
+      }
+    ],
+    "method": "LAW",
+    "next_experiment": null,
+    "next_step": "法則を使って働く。働いた結果が法則と食い違えば撤回する",
+    "observations": 152,
+    "p_outside_language": 0.0,
+    "status": "CONFIRMED",
+    "tier": 3,
+    "unknowns": [
+      "センサーの誤り率（上限 10% と仮定）"
+    ]
+  },
+  "started_with_inherited_law": null,
+  "status": "CONFIRMED",
+  "temperament": "frugal",
+  "version": "v1023r-preview",
+  "world_id": "W3"
+}

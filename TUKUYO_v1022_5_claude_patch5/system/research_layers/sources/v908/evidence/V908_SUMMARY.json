@@ -1,0 +1,30 @@
+{
+  "candidates": [
+    {
+      "name": "hold",
+      "source_sha256": "37634596f92ea7185310e97a64452f1a2326cfc7378f4a362ea3b0d736a97b4c",
+      "train_correct": 67
+    },
+    {
+      "name": "amb",
+      "source_sha256": "131bd7623df27db02c76d251e3bee15c4da9a59a234a5f5fa3b6f970e86f2628",
+      "train_correct": 396
+    },
+    {
+      "name": "joint",
+      "source_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+      "train_correct": 720
+    }
+  ],
+  "heldout_correct": 240,
+  "heldout_family": "anti_correlated",
+  "heldout_total": 240,
+  "schema": "tukuyo.v908.summary.v1",
+  "selected": {
+    "name": "joint",
+    "source_sha256": "125ecf5151c451704e607054dd3019ecf952c02b53b7ed5318e758d6a789f5b9",
+    "train_correct": 720
+  },
+  "training_families": 3,
+  "verified_wrong": 0
+}
