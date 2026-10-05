@@ -33,5 +33,15 @@ def explain(res):
             return '依存する値を順に検算: '+'、'.join(f'{s["variable"]} = {s["value"]}' for s in p['steps'])+'。'
         if k=='hypothesis':return f'提示例に一致する有限候補が1つに定まり、入力{p["target_x"]}で{a}となりました。'
         if k in ('plan','plan_cost'):return '許容された探索範囲で、費用の安い順に調べ、目標へ届く経路を選び検算しました。'
+        if k=='situation':
+            # claude-patch6: say what was asked, then how the story's model gives it
+            who=lambda t:'' if not t or t[0] in ('*','わたし') else f'{t[0]}の'
+            role=p.get('role');t=p.get('target') or []
+            head={'remain':'今の数を聞いているので、','total':'全員分を合わせた数を聞いているので、','initial':'はじめの数を聞いているので、',
+                  'before':f'「{t[0] if t else ""}」の前の数を聞いているので、','event':'出来事そのものの数を聞いているので、',
+                  'received':f'{t[0] if t else ""}が受け取った数を聞いているので、','holding':f'{who(t)}今の数を聞いているので、'}.get(role,'')
+            return f'{head}{p["expression"]} = {a}。'
+        if k=='mathprob':
+            return f'{p.get("label") or ""}{": " if p.get("label") else ""}{p["expression"]} = {a}。'
     except (KeyError,IndexError,TypeError):return None
     return None

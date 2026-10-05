@@ -245,6 +245,8 @@ B_DEC=('降り','おり','下車','飲み','飲ん','のみ','のん','食べ','
 B_INC=('もらい','もらっ','貰い','貰っ','買い','買っ','かい','かっ','増え','ふえ','拾い','拾っ','ひろい','ひろっ','追加し','足し','たし','来まし','来た','きまし','きた','入れ','いれ','加わ','くわわ','作り','作っ','つくり','つくっ',
        '咲い','咲き','さい','さき','生まれ','うまれ','届い','とどい','集め','あつめ','見つけ','みつけ','借り','かり','乗ってき','のってき','やってき','増やし','ふやし')
 B_AMBIG=('売っ','売り','売る','返品','仕入','貸し','貸す','かし','返し','返す','預け','あずけ','払っ','はらっ','交換','両替','借りて','かりて')
+B_INC6=('飛んでき','とんでき','飛んで来','やって来','入ってき','入って来','はいってき','戻ってき','もどってき','返ってき','かえってき','帰ってき','乗ってきま')   # claude-patch6
+B_DEC6=('借りられ','かりられ','持っていかれ','もっていかれ','食べられ','たべられ','取られ','とられ')   # passive: taken from the holder
 def _b_sentences(s):
     return [x.strip() for x in re.split(r'[。．!！?？\n]+',s) if x.strip()]
 def _b_question(sents):
@@ -270,8 +272,10 @@ def _b_change(s,toks):
         if any(a in tail for a in B_AMBIG):return None
         core=re.sub(r'^(?:[\s、]|[をがはにへ](?![らりるれろいう]))*(?:さらに|また|あとから|後から|その後|そのあと|新しく|あたらしく)?(?:[\s、]|[をがはにへ](?![らりるれろいう]))*','',tail)
         core=re.sub(r'^[^\s、。]{1,6}?を','',core) if not core.startswith(B_DEC+B_INC) else core
-        dec=core.startswith(B_DEC);inc=core.startswith(B_INC)
-        if bool(dec)==bool(inc):return None
+        # claude-patch6: the longest matching stem decides (飛んできました is 飛んでき+, not 飛んで-)
+        dl=max((len(x) for x in B_DEC+B_DEC6 if core.startswith(x)),default=0);il=max((len(x) for x in B_INC+B_INC6 if core.startswith(x)),default=0)
+        if dl==il:return None
+        dec=dl>il
         total+=Fraction(ev[1])*(-1 if dec else 1);used+=1
     if used<2 or used!=_b_numcount(toks) or total<0:return None
     return _fmt(total)
@@ -417,12 +421,160 @@ def _b_en_change(s,toks):
     if used<2 or used!=_b_numcount(toks) or total<0:return None
     return _fmt(total)
 
+# ---- claude-patch6: Parser B reads WHAT is asked before reading any value.
+# patch5's change readers added up every gain and loss for 「…あげたのは何個？」 and 「妹は何個持っていますか？」,
+# so they "independently" agreed with the producer's wrong remainder. These readers are again written only
+# for this file: own question-role patterns, own stock / event splitter, own stems.
+B_STATE=r'(?:あり|あっ|ある|い(?:ます|まし|る|た|て)|持って|もって|入って|はいって|咲いて|さいて|乗って|のって|泳いで|およいで|すわって|座って|飼って)'
+B_GIVE=('あげ','渡し','わたし','配っ','配り','くばっ','くばり','プレゼント')
+def _b_qrole(q):
+    if re.search(r'はじめ|初め|最初|もともと|元々|もとは|\bat first\b|\bin the beginning\b|\bto (?:begin|start) with\b|\boriginally\b',q,re.I):return 'initial'
+    if re.search(r'(?:る|う|く|す|つ|む|ぶ|ぐ|ぬ)前(?:は|に)',q):return 'before'
+    if re.search(r'(?:た|だ)(?:の|数)(?:は|が)',q) and not re.search(r'(?:てい|でい|ってい)たの',q):return 'event'
+    m=re.search(r'何\s*'+CNT+r'\s*([^\d、。？?]{1,8}?)(?:まし)?たか',q)
+    if m and not re.match(r'(?:あり|い|持ってい|もってい|乗ってい|のってい|入ってい|残ってい|にな|あっ)',m[1]):return 'event'
+    if not re.search(r'\b(?:have|has|had)\b',q,re.I) and (re.search(r'\b(?:did|does|do)\s+\w+\s+(?:give|eat|use|spend|get|receive|buy|find|win|make|read)\b',q,re.I)
+            or re.search(r'\bhow many\s+(?:\w+\s+)?(?:flew away|left|came|arrived|got off|got on|went home|ran away)\b',q,re.I)):return 'event'
+    return 'remain'
+
+def _b_stem(v):
+    k=re.match(r'[一-鿿]+',v);base=k.group() if k else v[:2]
+    if re.search(r'(?:て|で)(?:き|来)',v):return base+'+'          # 飛んできた
+    if re.search(r'(?:て|で)(?:いっ|いき|行)',v):return base+'-'    # 飛んでいった
+    return base
+
+def _b_story(s):
+    """first sentence = the stock (one amount + a being/holding verb); every later amount = an event with its
+    own verb text and the words right before it. None unless every number of the body is read."""
+    sents=_b_sentences(s);q=_b_question(sents)
+    if q is None or q!=sents[-1] or len(sents)<2:return None
+    body=sents[:-1]
+    m=re.search(r'(\d+(?:\.\d+)?)\s*('+CNT+r')\s*(?:の[^\d、。]{0,6})?\s*(?:が|を|は)?'+B_STATE,body[0])
+    if not m or len(_b_nums(body[0]))!=1:return None
+    head=body[0][:m.start()]
+    noun=re.search(r'([^\d、。はがをに]{1,8})(?:が|を|は)\s*$',head);owner=re.match(r'^([^\d、。]{1,8}?)(?:は|には|に)',head)
+    events=[];text='。'.join(body[1:])
+    for ev in re.finditer(r'([^\d。、]{0,10})(\d+(?:\.\d+)?)\s*('+CNT+r')([^\d、。]*)',text):
+        if ev[3]!=m[2]:return None
+        verb=re.sub(r'^(?:[をがは]|さらに|また)+','',ev[4].strip())
+        events.append({'n':Fraction(ev[2]),'pre':ev[1],'verb':verb})
+    for i in range(len(events)-2,-1,-1):           # 「兄に15枚、弟に10枚あげました」: a listed amount takes the next verb
+        if not events[i]['verb']:events[i]['verb']=events[i+1]['verb']
+    if 1+len(events)!=len(_b_nums(' '.join(body))):return None
+    return {'q':q,'stock':Fraction(m[1]),'unit':m[2],'noun':noun[1] if noun else None,'owner':owner[1] if owner else None,'events':events}
+
+def _b_roles(s,toks):
+    """initial / before / event / received. The value of these never depends on whether a verb adds or removes."""
+    if HEDGE.search(s) or re.search(r'ません|なかっ|ない[^ぶ]|ずつ|倍|%|割|より|ちがい|違い|差',s):return None
+    st=_b_story(s)
+    if not st:return None
+    q=st['q'];role=_b_qrole(q)
+    if _b_numcount(toks)!=1+len(st['events']):return None
+    if role=='initial':
+        who=re.search(r'([^\d、。はが]{1,8})(?:は|が)\s*何',q)
+        if who and who[1] not in (st['noun'] or '',st['owner'] or '') and not re.search(r'はじめ|最初|初め',who[1]):return None
+        return _fmt(st['stock'])
+    if role=='before':
+        bm=re.search(r'([^\d、。]{1,5}?)(?:る|う|く|す|つ|む|ぶ|ぐ|ぬ)前',q)
+        if not bm or not st['events'] or _b_stem(st['events'][0]['verb'])!=_b_stem(bm[1]):return None
+        return _fmt(st['stock'])
+    if role!='event':return None
+    nm=re.search(r'(?:([^\d、。]{1,6}?)に)?([^\d、。に]{1,8}?)(?:た|だ)(?:の|数)(?:は|が)',q)
+    if nm:
+        stem=_b_stem(nm[2]);hits=[e for e in st['events'] if _b_stem(e['verb'])==stem]
+        if nm[1]:hits=[e for e in hits if (nm[1]+'に') in e['pre']]
+    else:
+        am=re.search(r'(?:([^\d、。はが]{1,8})(?:は|が))?\s*何\s*'+CNT+r'\s*([^\d、。？?]{1,8}?)(?:まし)?たか',q)
+        if not am:return None
+        if am[1] and am[2].startswith(('もらい','もらっ','受け取')):
+            hits=[e for e in st['events'] if (am[1]+'に') in e['pre'] and e['verb'].startswith(B_GIVE)]
+        else:
+            if am[1] and am[1] not in (st['owner'] or '',):return None
+            hits=[e for e in st['events'] if _b_stem(e['verb'])==_b_stem(am[2])]
+    if not hits:return None
+    return _fmt(sum(e['n'] for e in hits))
+
+def _b_change_role_ok(s):
+    """a gains/losses total is only the answer to a plain 'how many now' question about the stock itself"""
+    st=_b_story(s)
+    if not st:return True                       # not this shape; the change reader decides on its own
+    if _b_qrole(st['q'])!='remain':return False
+    who=re.search(r'^(?:今|いま|現在)?([^\d、。何]{1,8}?)(?:は|が|には)(?!じめ)',st['q'])
+    if who and who[1] not in (st['noun'] or '',st['owner'] or '') and not re.match(r'残り|のこり|全部|ぜんぶ|合わせて|あわせて',who[1]):return False
+    for e in st['events']:
+        named=re.search(r'([^\d、。はがをにでから]{1,8})(?:を|が)\s*$',e['pre'])
+        if named and st['noun'] and named[1]!=st['noun']:return False
+    return True
+
+EN_GIVE=r'(?:gave|gives|give|handed|hands)'
+def _b_en_roles(s,toks):
+    if HEDGE.search(s) or re.search(r"\b(?:not|never)\b|n't\b",s,re.I):return None
+    sents=[x.strip() for x in re.split(r'(?<=[.?!])\s+',s.strip()) if x.strip()]
+    if len(sents)<2:return None
+    q=sents[-1];role=_b_qrole(q);body=' '.join(sents[:-1])
+    st=re.match(r'\s*([A-Z][a-z]+|There)\s+(?:has|had|have|are|were)\s+(\d+)\s+([a-z]+)',sents[0])
+    if not st or len(_b_nums(body))!=_b_numcount(toks):return None
+    if role=='initial':
+        w=re.search(r'\b(?:did|does)\s+([A-Za-z]+)\s+have\b',q)
+        if not w or w[1].lower()!=st[1].lower():return None
+        return _fmt(Fraction(st[2]))
+    if role!='event':return None
+    ev=_b_en_events(sents[1:-1])
+    if ev is None or 1+len(ev)!=len(_b_nums(body)):return None
+    g=re.search(r'\b(?:did|does)\s+\w+\s+'+EN_GIVE+r'\b(?:\s+(?:away|\w+))?(?:\s+to\s+(\w+))?\s*\??$',q,re.I)
+    if g:
+        hits=[n for n,v,to in ev if re.fullmatch(EN_GIVE,v,re.I) and (not g[1] or (to or '').lower()==g[1].lower())]
+        return _fmt(sum(hits)) if hits else None
+    lv=re.search(r'\bhow many\s+(?:\w+\s+)?(flew away|left|came|arrived|got off|got on|went home|ran away)\b',q,re.I)
+    if lv:
+        hits=[n for n,v,to in ev if v.lower()==lv[1].lower()]
+        return _fmt(sum(hits)) if hits else None
+    v=re.search(r'\b(?:did|does)\s+\w+\s+(eat|use|spend|get|receive|buy|find|win|make|read)\b',q,re.I)
+    if v:
+        forms={'eat':'ate|eats','use':'used|uses','spend':'spent|spends','get':'got|gets','receive':'received|receives','buy':'bought|buys','find':'found|finds',
+               'win':'won|wins','make':'made|makes','read':'read|reads'}[v[1].lower()]
+        hits=[n for n,vv,to in ev if re.fullmatch(forms,vv,re.I)]
+        return _fmt(sum(hits)) if hits else None
+    return None
+
+EN_EVENT_VERBS=r'gave|gives|handed|hands|ate|eats|used|uses|spent|spends|got|gets|received|receives|bought|buys|found|finds|won|wins|made|makes|read|reads|drank|drinks|broke|breaks|collected|collects|picked|picks'
+EN_SUBJ_VERBS=r'flew away|left|came|arrived|got off|got on|went home|ran away'
+def _b_en_events(sents):
+    """(amount, verb, recipient) for every amount after the first sentence. A verb governs the amounts after it
+    in its sentence until another verb (「gave 8 to Joe and 5 to Amy」); 「6 children got off」 puts the verb after."""
+    out=[]
+    for x in sents:
+        verb=None
+        for t in re.finditer(r'\b('+EN_EVENT_VERBS+r')\b|(\d+)(?:\s+more)?(?:\s+([a-z]+))?(?:\s+('+EN_SUBJ_VERBS+r')\b)?([^\d]*)',x,re.I):
+            if t[1]:verb=t[1];continue
+            if t[4]:out.append((Fraction(t[2]),t[4],None));continue
+            if verb is None:return None
+            to=re.match(r'\s*(?:\w+\s+)?to\s+(\w+)',(t[3] and ' '+t[3] or '')+t[5]) if re.fullmatch(EN_GIVE,verb,re.I) else None
+            out.append((Fraction(t[2]),verb,to[1] if to else None))
+    return out
+
+def _b_en_change_role_ok(s):
+    sents=[x.strip() for x in re.split(r'(?<=[.?!])\s+',s.strip()) if x.strip()]
+    if len(sents)<2:return True
+    q=sents[-1];st=re.match(r'\s*([A-Z][a-z]+)\s+(?:has|had|have)\b',sents[0])
+    if _b_qrole(q)!='remain':return False
+    w=re.search(r'\b(?:does|did|do)\s+([A-Za-z]+)\s+have\b',q)
+    if w and st and w[1].lower() not in (st[1].lower(),'he','she','they'):return False
+    if w and not st and w[1].lower() not in ('he','she','they'):return False
+    return True
+
 def parser_b(q):
     s=normalize(q);toks=tokens(q)
     try:
         cal=_b_calendar(s)
         if cal:return cal
+        ja=bool(re.search(r'[぀-ヿ一-鿿]',s))
+        for f in (_b_roles,_b_en_roles):
+            v=f(s,toks)
+            if v is not None:return ('value',v)
         for f in (_b_rate,_b_price,_b_conversion,_b_unit_price,_b_groups,_b_compare,_b_equation,_b_change,_b_en_change):
+            if f is _b_change and not _b_change_role_ok(s):continue
+            if f is _b_en_change and (ja or not _b_en_change_role_ok(s)):continue
             v=f(s,toks)
             if v is not None:return ('value',v)
     except (ValueError,ZeroDivisionError,OverflowError):return None
@@ -447,7 +599,7 @@ def _agree(b,answer):
     return False
 
 # ------------------------------------------------------------------ the gate
-QUANT_KINDS={'arithmetic','deliberation','meta_derivation','hypothesis','inventory','qtime'}
+QUANT_KINDS={'arithmetic','deliberation','meta_derivation','hypothesis','inventory','qtime','situation','mathprob'}
 def audit(query,answer,proof):
     if not isinstance(proof,dict) or proof.get('kind') not in QUANT_KINDS:return {'ok':True,'applied':False}
     toks=tokens(query);P=_proof_numbers(proof)

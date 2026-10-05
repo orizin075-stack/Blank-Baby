@@ -339,6 +339,10 @@ def _en(t):
         return None
     # change / combine
     if not re.search(r'how (?:many|much|far)',q):return None
+    # claude-patch6: 「Lucy has 14 marbles. Tom has 9 marbles. Lucy gives Tom 4…」 is two stocks, not one running total
+    # (patch5 answered 19); the situation model reads such stories
+    owners={m[1] for m in re.finditer(r'\b([a-z]+) (?:has|had|have|owns|owned) \d',body)}-{'he','she','they','it','i','you','we'}
+    if len(owners)>1:return None
     combine=bool(re.search(r'in total|altogether|in all|total|combined',q));left=bool(re.search(r'\bleft\b|\bnow\b|\bremain',q))
     if not (combine or left):return None
     events=[];
@@ -349,8 +353,12 @@ def _en(t):
         if re.match(r' (?:more )?(?:\w+ )?(?:left|went home|went away|got off|flew away|ran away)\b',post):k=-1
         elif re.match(r' (?:more )?(?:\w+ )?(?:came|arrived|joined|got on|came in)\b',post):k=1
         elif re.search(r'\b(?:'+MINUS_EN+r')(?: \w+)? $',pre) or re.search(r'\b(?:'+MINUS_EN+r') $',pre):k=-1
-        elif re.search(r'\b(?:'+PLUS_EN+r')(?: \w+)? $',pre) or re.search(r'\b(?:has|had|have|there are|there were|is|are|was|were|ran|walked|read|swam|drove|rode|saw|wrote|counted)(?: \w+)? $',pre) or re.search(r'\band $',pre):
+        elif re.search(r'\b(?:'+PLUS_EN+r')(?: \w+)? $',pre) or re.search(r'\b(?:has|had|have|there are|there were|is|are|was|were|ran|walked|read|swam|drove|rode|saw|wrote|counted)(?: \w+)? $',pre):
             k=1 if re.search(r'\b(?:'+PLUS_EN+r')(?: \w+)? $',pre) else 0
+        elif re.search(r'\band $',pre):
+            # claude-patch6: 「gave 8 stamps to Joe and 5 stamps to Amy」 - an amount after "and" with no verb of its own
+            # shares the previous verb (patch5 added the 5 and answered 27 for 17)
+            k=events[-1][1] if events else 0
         else:return None
         events.append((x,k))
     if not events or (events[0][1]<0):return None

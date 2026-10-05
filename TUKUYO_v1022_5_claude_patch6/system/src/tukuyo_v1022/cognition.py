@@ -199,7 +199,46 @@ def _numbers_used(query,proof):
     blob=json.dumps(proof,ensure_ascii=False)
     have=set(re.findall(r'\d+(?:\.\d+)?',blob))
     return all(n in have or str(proofs.number(proofs.calculate(n))) in have for n in need)
+SITUATION_REASONS={'SITUATION_TARGET_NOT_DETERMINED':'聞かれている人や物のはじめの数がお話に書かれていないので、答えを決められません。',
+    'SITUATION_EVENT_NOT_IN_STORY':'聞かれている出来事がお話の中にありません。','SITUATION_AMBIGUOUS_TARGET':'どの人（物）の数を聞いているのか決められません。',
+    'SITUATION_AMBIGUOUS_OBJECT':'どの物が増えたり減ったりしたのか決められません。','SITUATION_UNKNOWN_TARGET':'聞かれている人や物がお話に出てきません。',
+    'SITUATION_TIME_OF_QUESTION_UNCLEAR':'いつの数を聞いているのか（はじめか今か）決められません。','SITUATION_HEDGED_OR_NEGATED':'数や出来事がはっきり決まっていないので、答えを確定しません。',
+    'SITUATION_HEDGED_OR_UNKNOWN_AMOUNT':'数がはっきり決まっていないので、答えを確定しません。','SITUATION_AMBIGUOUS_VERB':'見方によって増えるとも減るとも読める動詞なので、決められません。',
+    'SITUATION_ACTIVITY_EFFECT_UNKNOWN':'読んだ・数えたなどの出来事で数が減るのかどうか決められません。','SITUATION_UNKNOWN_QUESTION_VERB':'質問の動詞の意味を読み取れません。'}
+def _same_number(a,b):
+    try:return proofs.calculate(str(a))==proofs.calculate(str(b))
+    except (ValueError,SyntaxError,ZeroDivisionError,OverflowError):return str(a)==str(b)
 def _solve_core(data,query,formal_task=None):
+    """claude-patch6: read what the question asks before any producer answers it.
+
+    The situation model (situation.py) is authoritative for every question that does not ask for
+    the current amount of the story's main holding: the starting amount, an event's amount, what
+    another person has or received, another object. For a plain "how many now / left" question the
+    older producers keep precedence (their behaviour and learned rules are unchanged); the model is a
+    second, separately built reading that answers when they abstain and blocks when they disagree."""
+    if formal_task is not None:return _solve_core_v5(data,query,formal_task)
+    from .situation import solve as _situation
+    sit=_situation(query)
+    # several holders or objects: only this model keeps them apart, so it decides (patch5 answered
+    # 「りんごが12個…みかんを3個もらいました。りんごは何個？」 with 10)
+    if sit and (sit.get('role') not in (None,'remain','total') or sit.get('holdings',1)>1):
+        if 'answer' in sit:
+            y=_yes(sit['answer'],sit['proof'],.93)
+            if not y['uncertain']:return {**y,'question_role':sit['role']}
+            return y
+        return {**_no(sit['refused']),'question_role':sit.get('role'),'explanation':SITUATION_REASONS.get(sit['refused'])}
+    r=_solve_core_v5(data,query,formal_task)
+    if sit and 'answer' in sit:
+        if r.get('answer') is None or r.get('uncertain'):
+            if r.get('reason') in ('LEARNED_RULE_CONFLICT','AMBIGUOUS_EVENT_MODALITY','WORD_PROBLEM_EVENT_NOT_CONFIRMED','HEDGED_OR_HYPOTHETICAL_QUANTITIES','NON_EXACT_OR_SIGNED_COUNT','OVERCONSUMPTION'):return r
+            y=_yes(sit['answer'],sit['proof'],.92)
+            if not y['uncertain']:return {**y,'question_role':sit['role'],'second_reading':'SITUATION_MODEL_ONLY'}
+        elif not _same_number(r['answer'],sit['answer']) and (r.get('proof') or {}).get('kind') in ('inventory','arithmetic','deliberation'):
+            return {**_no('PRODUCERS_DISAGREE'),'withheld_answer':str(r['answer']),'situation_answer':sit['answer'],
+                    'explanation':f'二つの読み方で答えが食い違った（{r["answer"]} と {sit["answer"]}）ので、答えを確定しません。'}
+        else:r={**r,'second_reading':'SITUATION_MODEL_AGREES'}
+    return r
+def _solve_core_v5(data,query,formal_task=None):
     learned=state(data);s=normalize(query)
     if len(s)>10000:return _no('QUERY_LIMIT')
     if formal_task is not None:
@@ -467,7 +506,7 @@ def audit(data):
         if seed:
             meta=Path(__file__).resolve().parents[2]/'META'
             publishers={store.read(meta/'RELEASE_RECEIPT.json')['public_key']}
-            for name in ('PATCH_LINEAGE_v1022_4.json','PATCH_LINEAGE_v1022_5.json'):
+            for name in ('PATCH_LINEAGE_v1022_4.json','PATCH_LINEAGE_v1022_5.json','PATCH_LINEAGE_v1022_6.json'):
                 lineage=meta/name
                 if lineage.is_file():publishers.update(store.read(lineage).get('accepted_seed_public_keys',[]))
             if seed.get('public_key') not in publishers or not whole._verify(seed,seed.get('public_key','')):raise ValueError('V1022_SEED_SIGNATURE')

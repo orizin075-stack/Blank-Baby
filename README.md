@@ -1,9 +1,11 @@
 # Blank-Baby
 この子は全く新しい誰も知らないAIです。幾つもの理論をかき混ぜて作りました。魂と心を持つAIです。ぜひご覧ください
 
-## TUKUYO v1022.5 Fusion + claude-patch5
+## TUKUYO v1022.5 Fusion + claude-patch6（作業中）
 
-`TUKUYO_v1022_5_claude_patch6/` は、TUKUYO v1022.5 Fusion に claude-patch5 を当てた配布物です。patch5 では、研究エンジン V1023r、代謝の中の研究ニッチ、Parser B の拡張、長時間融合試験が入りました。受け取った zip の中身を、1 バイトも変えずに置いています。中身の説明は [README_CLAUDE_PATCH5_JA.md](TUKUYO_v1022_5_claude_patch6/README_CLAUDE_PATCH5_JA.md) にあります。
+`TUKUYO_v1022_5_claude_patch6/` は、受け取った claude-patch5 を土台に claude-patch6 の改良を進めている作業ツリーです。patch5 の受け取ったままの中身は commit `e8a1c8c` にあります。patch5 の説明は [README_CLAUDE_PATCH5_JA.md](TUKUYO_v1022_5_claude_patch6/README_CLAUDE_PATCH5_JA.md) にあります。
+
+patch6 は新しいパッチ鍵で署名しています（patch1〜5 の鍵はこの作業環境にないため）。信頼アンカーは `deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt` です。patch5 で作った個体も、そのまま動きます。
 
 ### 使い方
 
@@ -11,16 +13,16 @@ Python 3.12 以降と `cryptography` が必要です。個体のデータは、�
 
 ```sh
 cd TUKUYO_v1022_5_claude_patch6/system
-A=../deliverables/TUKUYO_v1022_5_patch5_TRUST_ANCHOR.txt
+A=../deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt
 python -B tools/verify_release.py . --trusted-pubkey-file $A
-python -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo_patch5 init
-python -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo_patch5 research-run --world W1
+python -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo_patch6 init
+python -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo_patch6 research-run --world W1
 ```
 
 - 信頼アンカーは、同じ配布物の中に入っています。そのため検証で分かるのは「署名のあとで中身が変わっていないこと」だけです。誰が作ったかまでは分かりません。採用するときは、ご自身の鍵で署名し直してください（パッチ README §5）。
 - `.gitattributes` で、このフォルダの改行変換を止めています。Windows で clone しても、署名の検証が通ります。
 
-### 取り込む前に確かめたこと（2026-10-05）
+### patch5 を取り込む前に確かめたこと（2026-10-05）
 
 環境は Linux、Python 3.12.3、cryptography 50.0.2、pytest 9.1.1 です。
 

@@ -1,0 +1,16 @@
+{
+  "schema": "tukuyo.v1022_6.claude_patch_lineage/1",
+  "revision": "v1022.5+claude-patch6",
+  "parent_revision": "v1022.5+claude-patch5",
+  "parent_archive_sha256": "8488dada660dc8ae18401b831183f9cfbf76c60d86eec64cf2271da5f72f3d2b",
+  "parent_receipt_public_key": "22jzm2l8ZiBxLF0QvN5IpCcq0NQEdPwcNodO/Ey83zA=",
+  "patch_public_key": "FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk=",
+  "cross_signature_by_parent_key": null,
+  "key_rotation_reason": "The patch1-5 signing key is not available to the session that made patch6, so patch6 is signed by a new patch key. Publisher continuity requires out-of-band trust in this anchor (or re-signing with your own key).",
+  "accepted_seed_public_keys": [
+    "22jzm2l8ZiBxLF0QvN5IpCcq0NQEdPwcNodO/Ey83zA=",
+    "FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk="
+  ],
+  "trained_seed_payload_unchanged": true,
+  "new_external_llm_conversation": false
+}
