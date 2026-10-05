@@ -103,7 +103,8 @@ VERBS_JA=[
 ]
 STATE_JA=(r'(?:あります|ある|あり|ありました|あった|あって|います|いる|いて|いました|いた|持って(?:い|お)|もって(?:い|お)|乗って(?:い|お)|のって(?:い|お)|'
           r'入って(?:い|お)|はいって(?:い|お)|咲いて(?:い)|さいて(?:い)|残って(?:い)|のこって(?:い)|飼って(?:い)|並んで(?:い)|泳いで(?:い)|座って(?:い)|すわって(?:い)|'
-          r'集まって(?:い)|貯まって(?:い)|たまって(?:い)|置いて(?:あ)|しまって(?:あ)|生えて(?:い))')
+          r'集まって(?:い)|貯まって(?:い)|たまって(?:い)|置いて(?:あ)|しまって(?:あ)|生えて(?:い)|'
+          r'遊んで(?:い)|あそんで(?:い)|待って(?:い)|休んで(?:い)|立って(?:い)|止まって(?:い)|とまって(?:い)|働いて(?:い))')
 HEDGE_JA=re.compile(r'予定|つもり|かもしれ|らしい|そうです|だろう|と言|と聞|明日|来週|夢|想像|もし|なら(?!ん|べ)|ぐらい|くらい|ほど|程度|約|およそ|だいたい|大体|ほぼ|以上|以下|未満|少なくとも|最大|最低|高々|せいぜい|'
                     r'[〜~～]|または|もしくは|不明|かどうか|(?:何(?:個|人|本|枚|冊|匹|羽|台|円|頭|つ|杯|回|足)|いくつ|いくら)か(?![？?。]|$)|たくさん|少し|すこし|数(?:個|人|本|枚|冊|匹|羽)')
 NEG_JA=re.compile(r'ません|なかった|(?<!少)ない(?!よう)|なくて|ずに|ないで')
@@ -191,12 +192,15 @@ def _ja_mentions(sents):
             out.append(it)
     return out
 
+NOT_PLACE={'すで','本当','ほんとう','つい','それぞれ','一度','いちど','同時','どうじ','特','とく','実','じつ','次','つぎ','最後','最初','初め','はじめ','全部','ぜんぶ','みんな','一緒','いっしょ','全体','合計'}
 ADVERB_JA=r'(?:さらに|すぐに|次に|最後に|最初に|はじめに|初めに|一緒に|いっしょに|新たに|あらたに|ほかに|他に|全部で|みんなで|また|そして|それから|その後|そのあと|あとから|後から|今度は|続けて|つづけて)'
 def _ja_holder_object(it,kind):
     pre=it['pre'];other=None
     pre2=re.sub(r'^[^、。\d]{1,8}?は(?!じめ)','',pre)
     pre2=re.sub(r'(?:^|(?<=[、]))'+ADVERB_JA+r'[、]?','',pre2)
-    loc=re.match(r'^(?:[^、。\d]{0,6}?、)?([^、。\d]{1,8}?)(?:の中|の上)?(?:には|に|では|の中には)(?=.)',pre2) if kind=='state' else None
+    # 「教室に子どもが30人」 and also 「電車に42人」 (the place right before the amount)
+    loc=re.match(r'^(?:[^、。\d]{0,6}?、)?([^、。\d]{1,8}?)(?:の中|の上)?(?:には|に|では|で|の中には)(?=.|$)',pre2) if kind=='state' else None
+    if loc and (_name(loc[1]) in TIME_WORDS or _name(loc[1]) in NOT_PLACE):loc=None
     obj=re.search(r'([^、。\dにで]{1,10}?)(?:が|を|は)$',pre2)
     if kind!='state':
         g=re.search(r'([^、。\d]{1,8}?)(?:に|へ)(?:[^、。\d]{1,10}?を)?$',pre2);f=re.search(r'([^、。\d]{1,8}?)から(?:[^、。\d]{1,10}?を)?$',pre2)
@@ -278,6 +282,7 @@ def _ja_query(model,unit,q,query,ctx=None):
     def done(r,v,expr,target):return _answer(r,v,expr,model,target,query,au,scale)
     def verb_hits(text):
         k,cls,vb=_match_verb(text)
+        if k is None:k,cls,vb=_match_verb(re.sub(r'^[^、。\d]{1,6}?(?:で|に|から)','',text))      # 「駅で降りた」
         if k in (None,'AMBIG'):return []
         return [e for e in model.events if _lemma(e['verb'])==_lemma(vb) and e['lex']==k]
     # the holding the question is about
@@ -386,7 +391,7 @@ def _en(text):
     m=re.match(r'(?i)how (?:many|much)(?:\s+\w+)?\s+(?:does|did|do)\s+([A-Za-z]+)',q)
     if role=='holding' and m and sents[0].split()[0].lower()==m[1].lower():role='remain'
     if re.search(r"\b(?:not|never|no)\b|n't\b",low):return None
-    if re.search(r'\b(?:each|every|per|times|twice|half|percent|average|more than|fewer than|less than|older|younger|taller than|shorter than|as many|rows?|bags? of|boxes? of)\b|%',low):return None
+    if re.search(r'\b(?:each|every|per|times|twice|half|percent|average|than|older|younger|taller|shorter|as many|as much|rows?|bags? of|boxes? of)\b|%',low):return None
     try:
         if re.search(r'\b(?:some|several|a few|many of|about|around|approximately|maybe|might|will|plans?|if|probably)\b',low):_refuse('SITUATION_HEDGED_OR_UNKNOWN_AMOUNT')
         if re.search(r'\b(?:'+AMBIG_EN+r')\b',low):_refuse('SITUATION_AMBIGUOUS_VERB')
@@ -517,7 +522,9 @@ def _en_query(model,names,q,query):
         target=ks[0];when=re.sub(r'^(?:have|has|had)\b','',tail)
         if not re.match(r'(?:have|has|had)\b',tail):_refuse('SITUATION_UNKNOWN_QUESTION_VERB')
     else:
-        if not re.match(r'(?:there|left)\b',rest):_refuse('SITUATION_UNKNOWN_QUESTION_VERB')
+        pl=re.match(r'(?:in|on|at) (?:the |a |an |his |her |their )?[a-z]+\b\s*(.*)$',rest)
+        if pl and len(model.order)==1:rest=pl[1] or ''          # 「how many students are in the class now」: the only holding is the place
+        elif not re.match(r'(?:there|left)\b',rest):_refuse('SITUATION_UNKNOWN_QUESTION_VERB')
         target=model.main;when=rest
     if role=='initial':
         v=model.initial.get(target);return done('initial',v,_fmt(v) if v is not None else '',target)

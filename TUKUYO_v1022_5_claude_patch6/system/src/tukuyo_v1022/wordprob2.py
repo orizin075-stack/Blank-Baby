@@ -114,9 +114,26 @@ def en_times(s):
     k=Fraction(m[1]) if m[1] else Fraction(MULT[m[2]])
     base=[x for x in nums if not (m[1] and x.start()==m.start(1))]
     if len(base)!=1:return None
-    v=k*Fraction(base[0].group())
+    # claude-patch6: who has k times as many, who is compared against, whose amount is given, who is asked.
+    # 「Ann has 30. Ann has 3 times as many as Kim. How many does Kim have?」 is 30/3, not 3*30.
+    name=r"([a-z]+)(?:'s)?"
+    subj=re.search(name+r' (?:has|have|had|owns|collected|picked|made|read|scored) (?:exactly )?'+re.escape(m.group())+r'\b(?: (?!as\b)\w+)?(?: as (?!many)'+name+r')?',s)
+    own=re.search(name+r' (?:has|have|had|owns|collected|picked|made|read|scored) '+re.escape(base[0].group())+r'\b',s)
+    ask=re.search(r'how many \w+ (?:does|do|did|will) '+name+r' ',s)
+    ctx=re.search(r'\b(?:and|but) '+re.escape(m.group())+r' (?:on|in|at|during) ([a-z]+)\b',s)
+    if ctx and not subj:
+        # 「Lisa read 12 pages on Monday and twice as many on Tuesday. How many pages did she read on Tuesday?」
+        q=s[s.rfind('how many'):]
+        if not re.search(r'\b(?:on|in|at|during) '+re.escape(ctx[1])+r'\b',q) or re.search(re.escape(base[0].group())+r' \w+ (?:on|in|at|during) '+re.escape(ctx[1])+r'\b',s):return None
+        v=k*Fraction(base[0].group())
+        return {'expression':f'{_f(k)}*{base[0].group()}','value':v,'schema':'times_as_many','unit':'','trace':[m.span(),base[0].span()]} if v.denominator==1 else None
+    if not (subj and own and ask) or ask[1] in ('he','she','they','it'):return None
+    who,than,owner,asked=subj[1],subj[2],own[1],ask[1]
+    if asked==who and owner!=who and (than is None or than==owner):v=k*Fraction(base[0].group());expr=f'{_f(k)}*{base[0].group()}'
+    elif than is not None and asked==than and owner==who:v=Fraction(base[0].group())/k;expr=f'{base[0].group()}/{_f(k)}'
+    else:return None
     if v.denominator!=1:return None
-    return {'expression':f'{_f(k)}*{base[0].group()}','value':v,'schema':'times_as_many','unit':'','trace':[m.span(),base[0].span()]}
+    return {'expression':expr,'value':v,'schema':'times_as_many','unit':'','trace':[m.span(),base[0].span()]}
 
 def en_prices(s):
     prices={}

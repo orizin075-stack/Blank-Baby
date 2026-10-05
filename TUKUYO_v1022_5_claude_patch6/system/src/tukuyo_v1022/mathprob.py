@@ -56,7 +56,7 @@ COUNTABLE=('個','人','本','枚','冊','台','匹','羽','頭','脚','着','�
 def _ja_average(t,q,query):
     if '平均' not in q:return None
     head=t[:len(t)-len(q)] if t.endswith(q) else t
-    vals=list(re.finditer(NUM+r'\s*('+COUNTER+r')(?!\d)',head))
+    vals=list(re.finditer(NUM+r'\s*('+COUNTER+r'|度)(?!\d)',head))
     cnt=re.search(NUM+r'\s*(回|人|日間|日|週|か月|チーム|試合|教科|本|冊|個|匹|頭)(?:の|で|間で|間の|に)',head)
     used=[m.span(1) for m in vals]
     if cnt and cnt.span(1) in used:used.remove(cnt.span(1));vals=[m for m in vals if m.span(1)!=cnt.span(1)]
@@ -67,7 +67,7 @@ def _ja_average(t,q,query):
     if cnt:
         _need(Fraction(cnt[1])==len(vals));used.append(cnt.span(1))
     _need(_all_read(t,used))
-    u=vals[0][2];asked=re.search(r'何\s*('+COUNTER+r')',q)
+    u=vals[0][2];asked=re.search(r'何\s*('+COUNTER+r'|度)',q)
     if asked:_need(asked[1]==u)
     s=sum(Fraction(m[1]) for m in vals);n=len(vals)
     return _out('average','合計÷個数','('+'+'.join(m[1] for m in vals)+f')/{n}',s/n,u,[Fraction(m[1]) for m in vals]+([Fraction(cnt[1])] if cnt else [])+extra,query,whole=False)
@@ -122,7 +122,7 @@ def _sequence(t,q,query):
     return _out('sequence','同じ数ずつかける',f'{_fmt(v[-1])}*{_fmt(rr)}',v[-1]*rr,'',v,query)
 
 def _ja_part_of(t,q,query):
-    m=re.search(NUM+r'\s*('+COUNTER+r')?\s*の\s*'+NUM+r'\s*分の\s*'+NUM+r'\s*(?:は|って)?\s*何\s*('+COUNTER+r')?',t)
+    m=re.search(NUM+r'\s*('+COUNTER+r')?\s*の\s*(?:[^、。\d]{1,8}?の\s*)?'+NUM+r'\s*分の\s*'+NUM+r'\s*(?:は|って)?\s*何\s*('+COUNTER+r')?',t)
     if m:
         _need(_all_read(t,[m.span(1),m.span(3),m.span(4)]) and (not m[2] or not m[5] or m[2]==m[5]))
         n,d,k=Fraction(m[1]),Fraction(m[3]),Fraction(m[4]);_need(d!=0)
@@ -134,10 +134,23 @@ def _ja_part_of(t,q,query):
         _need(a and a[1]==m[2] and _all_read(t,[m.span(1),m.span(3)]))
         n,p=Fraction(m[1]),Fraction(m[3])
         return _out('part_of','全体×割合',f'{m[1]}*{m[3]}/100',n*p/100,m[2],[n,p],query,whole=m[2] in COUNTABLE)
+    # 「45人のクラスで、そのうち3分の1が自転車で通学しています。自転車で通学しているのは何人？」
+    m=re.search(NUM+r'\s*('+COUNTER+r')の(?:学級|クラス|学年|グループ|チーム|集まり|[^、。\d]{1,6}?)?(?:で|が|は)?[、,]?\s*(?:そのうち|その)\s*(?:'+NUM+r'\s*分の\s*'+NUM+r'|'+NUM+r'\s*(?:%|パーセント))\s*(?:が|は)\s*([^。\d]{2,20}?)[。]',t)
+    if m:
+        stem=re.sub(r'(?:ています|ていました|でいます|でいました|います|いました|です|でした|ます|ました)$','',m[6])
+        _need(len(stem)>=2 and not re.search(r'ない|ません',q))
+        a=re.search(re.escape(stem[:max(2,len(stem)-1)])+r'[^、。\d]{0,6}?(?:の|人|もの)?(?:は|が)\s*何\s*('+COUNTER+r')',q)
+        _need(a and a[1]==m[2])
+        n=Fraction(m[1])
+        if m[3]:
+            d,k=Fraction(m[3]),Fraction(m[4]);_need(d!=0 and _all_read(t,[m.span(1),m.span(3),m.span(4)]))
+            return _out('part_of','全体×分子÷分母',f'{m[1]}*{m[4]}/{m[3]}',n*k/d,m[2],[n,d,k],query,whole=m[2] in COUNTABLE)
+        p=Fraction(m[5]);_need(_all_read(t,[m.span(1),m.span(5)]))
+        return _out('part_of','全体×割合',f'{m[1]}*{m[5]}/100',n*p/100,m[2],[n,p],query,whole=m[2] in COUNTABLE)
     return None
 
 def _ja_division(t,q,query):
-    m=re.search(NUM+r'\s*('+COUNTER+r')(?:の[^、。\d]{1,10}?)?\s*(?:を|が)\s*(?:1\s*(人|台|つ|個|箱|袋|脚|列|組|回|日))?\s*(?:に|で|あたり)?\s*'+NUM+r'\s*\2\s*ずつ',t)
+    m=re.search(NUM+r'\s*('+COUNTER+r')(?:の[^、。\d]{1,10}?)?\s*(?:を|が)\s*(?:1\s*(人|台|つ|個|箱|袋|脚|列|組|回|日)(?:の[^、。\d]{1,6}?)?)?\s*(?:に|で|あたり)?\s*'+NUM+r'\s*\2\s*ずつ',t)
     if not m:
         m2=re.search(NUM+r'\s*(人)(?:の[^、。\d]{1,10}?)?\s*(?:が|を)\s*1\s*(台|つ|脚|列|組|艘|そう)\s*(?:の[^、。\d]{1,6}?)?\s*(?:に|で)\s*'+NUM+r'\s*人\s*ずつ',t)
         if not m2:return None
@@ -149,15 +162,15 @@ def _ja_division(t,q,query):
         used=[m.span(1),m.span(4)]+([(one.start(),one.start()+1)] if one else [])
         unit=m[3]
     _need(k>0 and n.denominator==1 and k.denominator==1 and _all_read(t,used))
-    q_=int(n)//int(k);r=int(n)%int(k)
+    q_=int(n)//int(k);r=int(n)%int(k);g=[n,k]+([Fraction(1)] if len(used)>2 else [])
     if re.search(r'あまり|余り|のこり|残り',q) and re.search(r'何\s*(?:'+COUNTER+r')',q) and not re.search(r'何(?:人|台|つ|組|回|日)\s*(?:に|分|で|できて|配れて)',q):
-        return _out('remainder','わり算のあまり',f'{_fmt(n)}%{_fmt(k)}',r,'',[n,k],query)
-    if re.search(r'全員|全部|みんな|すべて|残らず',t) and re.search(r'何\s*(?:台|つ|脚|列|組|回|日|箱|袋|艘|そう)\s*(?:いり|要り|必要|あれば|用意)',q) or re.search(r'何\s*(?:台|脚|艘)\s*(?:いり|要り|必要)',q):
+        return _out('remainder','わり算のあまり',f'{_fmt(n)}%{_fmt(k)}',r,'',g,query)
+    if re.search(r'全員|全部|みんな|すべて|残らず',t) and re.search(r'(?:何\s*(?:台|つ|脚|列|組|回|日|箱|袋|艘|そう)|いくつ)\s*(?:いり|要り|必要|あれば|用意)',q) or re.search(r'何\s*(?:台|脚|艘)\s*(?:いり|要り|必要)',q):
         v=-(-int(n)//int(k))
-        return _out('ceil_division','わり算の答えを切り上げ（あまった分にも1つ要る）',f'ceil({_fmt(n)}/{_fmt(k)})',v,'',[n,k],query)
+        return _out('ceil_division','わり算の答えを切り上げ（あまった分にも1つ要る）',f'ceil({_fmt(n)}/{_fmt(k)})',v,'',g,query)
     if re.search(r'(?:いくつ|何\s*(?:'+COUNTER+r'))\s*(?:に|へ|で)?\s*(?:でき|作れ|つくれ|配れ|分けられ|入れられ)',q) or re.search(r'グループ|たば|束|組|班|袋|箱|皿',q) and re.search(r'いくつ|何',q):
         _need(r==0 or re.search(r'でき|作れ|つくれ|配れ',q))
-        return _out('floor_division','わり算（あまりは数えない）',f'{_fmt(n)}//{_fmt(k)}',q_,'',[n,k],query)
+        return _out('floor_division','わり算（あまりは数えない）',f'{_fmt(n)}//{_fmt(k)}',q_,'',g,query)
     return None
 
 def _ja_inverse_group(t,q,query):
@@ -255,15 +268,20 @@ def _ja_budget(t,q,query):
 def _ja_unit_price_pay(t,q,query):
     if not re.search(r'おつり|お釣り',q):return None
     pay=re.search(NUM+r'\s*円\s*(玉|札)\s*(?:を)?\s*'+NUM+r'\s*枚\s*(?:出し|出して|で|使っ|払)',t)
-    if not pay:return None
+    if pay:paid=Fraction(pay[1])*Fraction(pay[3]);used=[pay.span(1),pay.span(3)];given=[Fraction(pay[1]),Fraction(pay[3])];pexpr=f'{pay[1]}*{pay[3]}'
+    else:
+        # one bill or coin (「1000円札を出しました」「1000円札で」)
+        pay=re.search(NUM+r'\s*円\s*(?:札|玉)\s*(?:を\s*(?:出し|出して|払|渡し)|で)',t)
+        if not pay:return None
+        paid=Fraction(pay[1]);used=[pay.span(1)];given=[paid];pexpr=pay[1]
     items=list(re.finditer(r'1\s*(個|本|冊|枚|つ)\s*'+NUM+r'\s*円の\s*[^、。\d]{1,10}?を\s*'+NUM+r'\s*(?:\1|つ)',t))
+    if not items and len(used)==1:return None          # one bill and plain prices: _ja_prices reads it
     _need(items)
-    used=[pay.span(1),pay.span(3)];expr=[];total=Fraction(0);given=[Fraction(pay[1]),Fraction(pay[3])]
+    expr=[];total=Fraction(0)
     for it in items:
         used+=[(it.start(),it.start()+1),it.span(2),it.span(3)];expr.append(f'{it[2]}*{it[3]}');total+=Fraction(it[2])*Fraction(it[3]);given+=[Fraction(1),Fraction(it[2]),Fraction(it[3])]
     _need(_all_read(t,used))
-    paid=Fraction(pay[1])*Fraction(pay[3])
-    return _out('price_change','出した額−代金',f'{pay[1]}*{pay[3]}-('+'+'.join(expr)+')',paid-total,'円',given,query)
+    return _out('price_change','出した額−代金',f'{pexpr}-('+'+'.join(expr)+')',paid-total,'円',given,query)
 
 def _ja_duration(t,q,query):
     m=re.search(r'(?:(\d+)\s*時間)?\s*(?:(\d+)\s*分)?の\s*([^、。\d]{1,10}?)を\s*(\d+)\s*(本|回|つ|試合)\s*(?:続けて|つづけて)?\s*(?:見る|みる|する|聞く|きく)と',t)
@@ -273,6 +291,51 @@ def _ja_duration(t,q,query):
     _need(_all_read(t,used))
     mins=Fraction(m[1] or 0)*60+Fraction(m[2] or 0);n=Fraction(m[4])
     return _out('duration_x_count','1つ分の時間×数',f'({_fmt(mins)})*{m[4]}',mins*n,'分',[Fraction(m[1] or 0),Fraction(m[2] or 0),n],query)
+
+def _ja_ratio(t,q,query):
+    """「ひもAは48cm、ひもBは16cmです。ひもAはひもBの何倍の長さですか？」 -> 48/16"""
+    m=re.search(r'^([^、。\d]{1,10}?)(?:の[^、。\d]{1,6}?)?(?:は|が)\s*([^、。\d]{1,10}?)(?:の[^、。\d]{1,6}?)?の\s*何倍',q)
+    if not m:return None
+    def val(name):return re.search(r'(?:^|[、。])'+re.escape(name)+r'(?:の[^、。\d]{1,6}?)?(?:は|が)\s*'+NUM+r'\s*('+COUNTER+r')',t)
+    a,b=val(m[1]),val(m[2])
+    _need(a and b and a[2]==b[2] and m[1]!=m[2] and _all_read(t,[a.span(1),b.span(1)]))
+    x,y=Fraction(a[1]),Fraction(b[1]);_need(y!=0)
+    return _out('ratio','くらべる量÷もとにする量',f'{a[1]}/{b[1]}',x/y,'',[x,y],query,whole=False)
+
+def _ja_per_one(t,q,query):
+    """「3個で210円のみかんがあります。1個の値段はいくらですか？」 -> 210/3"""
+    m=re.search(NUM+r'\s*(個|本|冊|枚|つ|袋|箱|束|皿)\s*で\s*'+NUM+r'\s*(円)',t)
+    if not m:return None
+    one=re.search(r'1\s*'+re.escape(m[2])+r'\s*(?:の|あたり|あたりの|分の)?\s*(?:値段|ねだん|代金|お金)?\s*(?:は|が)?\s*(?:いくら|何\s*円)',q)
+    _need(one)
+    o=len(t)-len(q)+one.start();_need(_all_read(t,[m.span(1),m.span(3),(o,o+1)]))
+    n,v=Fraction(m[1]),Fraction(m[3]);_need(n!=0)
+    return _out('per_one','全体の値段÷個数',f'{m[3]}/{m[1]}',v/n,'円',[n,v,Fraction(1)],query)
+
+def _ja_rows_formed(t,q,query):
+    """「1列に7人ずつ並ぶと、6列できました。全部で何人いますか？」 -> 7*6"""
+    m=re.search(r'1\s*(列|組|班|チーム|グループ|袋|箱|皿|たば|束|台)\s*(?:に|あたり|で)?\s*'+NUM+r'\s*(人|個|本|枚|冊|匹|羽|頭)\s*ずつ[^。]*?(?:と|たら|ところ)[、,]?\s*'+NUM+r'\s*\1\s*(?:でき|になり|になっ|作れ|つくれ)',t)
+    if not m:return None
+    a=re.search(r'何\s*('+COUNTER+r')',q)
+    _need(a and a[1]==m[3] and re.search(r'全部で|ぜんぶで|みんなで|合わせて|あわせて|全員で|いますか|ありますか',q))
+    _need(_all_read(t,[(m.start(),m.start()+1),m.span(2),m.span(4)]))
+    k,n=Fraction(m[2]),Fraction(m[4])
+    return _out('each_x_groups','1つ分×いくつ分',f'{m[2]}*{m[4]}',k*n,m[3],[Fraction(1),k,n],query)
+
+SPEED_T={'時速':'時間','分速':'分','秒速':'秒'}
+def _ja_speed(t,q,query):
+    """「2時間で90km走る車の時速は何kmですか？」 -> 90/2"""
+    a=re.search(r'(時速|分速|秒速)\s*(?:は)?\s*何\s*(km|m)',q)
+    if not a:return None
+    m=re.search(NUM+r'\s*(時間|分|秒)\s*(?:で|に)\s*'+NUM+r'\s*(km|m)\s*(?:を)?\s*(?:走|進|歩|泳|飛|移動)',t)
+    if m:tv,tu,dv,du,used=m[1],m[2],m[3],m[4],[m.span(1),m.span(3)]
+    else:
+        m=re.search(NUM+r'\s*(km|m)\s*(?:の道のり)?\s*を\s*'+NUM+r'\s*(時間|分|秒)\s*で\s*(?:走|進|歩|泳|飛|移動)',t)
+        if not m:return None
+        dv,du,tv,tu,used=m[1],m[2],m[3],m[4],[m.span(1),m.span(3)]
+    _need(SPEED_T[a[1]]==tu and du==a[2] and _all_read(t,used) and not re.search(r'時速|分速|秒速',t[:len(t)-len(q)]))
+    d,h=Fraction(dv),Fraction(tv);_need(h!=0)
+    return _out('speed','道のり÷時間',f'{dv}/{tv}',d/h,du,[d,h],query,whole=False)
 
 # ------------------------------------------------------------------ English families
 def _en_average(s,query):
@@ -337,6 +400,51 @@ def _en_prices(s,query):
         return _out('discount','price*(100-percent)/100',f'{m[2]}*(100-{m[4]})/100',p*(100-d)/100,m[3],[p,d],query,whole=False)
     return None
 
+def _en_budget(s,query):
+    """you have 20 dollars. you buy 3 books for 5 dollars each. how much money is left?"""
+    m=re.search(r'\b(?:you|i|[a-z]+) (?:have|has|had) (\d+(?:\.\d+)?) (dollars?|cents?|yen)\. (?:you|i|he|she|[a-z]+) (?:buys?|bought) (\d+) ([a-z]+) (?:for|at) (\d+(?:\.\d+)?) (dollars?|cents?|yen) each\. how much (?:money )?(?:is|was|will be) left\b',s)
+    if not m:return None
+    _need(m[2].rstrip('s')==m[6].rstrip('s') and _all_read(s,[m.span(1),m.span(3),m.span(5)]))
+    a,n,c=Fraction(m[1]),Fraction(m[3]),Fraction(m[5])
+    return _out('budget','money-count*price',f'{m[1]}-{m[3]}*{m[5]}',a-n*c,m[2],[a,n,c],query,whole=False)
+
+def _en_teams(s,query):
+    """there are 45 students. they form teams of 5. how many teams are there?"""
+    m=re.search(r'there are (\d+) ([a-z]+)\. (?:they|the \2) (?:form|make|are put into|are divided into|split into|are split into) (teams|groups|rows|lines|pairs) of (\d+)(?: each)?\. how many \3 (?:are there|can they (?:form|make)|will there be|do they (?:form|make))\b',s)
+    if not m:return None
+    _need(_all_read(s,[m.span(1),m.span(4)]))
+    n,k=Fraction(m[1]),Fraction(m[4]);_need(k!=0 and (n/k).denominator==1)
+    return _out('equal_groups','total/size',f'{m[1]}/{m[4]}',n/k,m[3],[n,k],query)
+
+def _en_compare(s,query):
+    """tom has 18 cards. jim has 7 more cards than tom. how many cards does jim have? (and the other direction)"""
+    m=re.search(r'\b([a-z]+) (?:has|have|had) (\d+(?:\.\d+)?) (more|fewer|less) (?:([a-z]+) )?than ([a-z]+)\b',s)
+    if not m:return None
+    own=[x for x in re.finditer(r'\b([a-z]+) (?:has|have|had) (\d+(?:\.\d+)?) ([a-z]+)\b',s) if x.start()!=m.start()]
+    ask=re.search(r'how many ([a-z]+) (?:does|do|did) ([a-z]+) (?:have|has|had)\b',s)
+    _need(len(own)==1 and ask and _all_read(s,[m.span(2),own[0].span(2)]))
+    nouns={x.rstrip('s') for x in (m[4],own[0][3],ask[1]) if x}
+    _need(len(nouns)==1)
+    who,than,owner,asked=m[1],m[5],own[0][1],ask[2]
+    _need(asked not in ('he','she','they','it') and who!=than)
+    d,b=Fraction(m[2]),Fraction(own[0][2]);sign=1 if m[3]=='more' else -1
+    if asked==who and owner==than:v=b+sign*d;expr=f'{own[0][2]}{"+" if sign>0 else "-"}{m[2]}'
+    elif asked==than and owner==who:v=b-sign*d;expr=f'{own[0][2]}{"-" if sign>0 else "+"}{m[2]}'
+    else:raise _No()
+    return _out('compare','base +/- difference',expr,v,'',[b,d],query)
+
+def _en_number(s,query):
+    """i think of a number. if i add 9, i get 30. what is the number?"""
+    if not re.search(r'\b(?:i|you|she|he|[a-z]+) (?:think|thinks|thought) of a number\b',s) or not re.search(r'what (?:is|was) (?:the|my|her|his) number\b',s):return None
+    m=re.search(r'if (?:i|you|she|he|we) (add|subtract|take away|multiply it by|multiply by|divide it by|divide by) (\d+)(?:,| to it| from it)?,? (?:i|you|she|he|we) get (\d+)\b',s)
+    _need(m and _all_read(s,[m.span(2),m.span(3)]))
+    k,r=Fraction(m[2]),Fraction(m[3]);op=m[1]
+    if op=='add':return _out('number_puzzle','result-added',f'{m[3]}-{m[2]}',r-k,'',[k,r],query)
+    if op in ('subtract','take away'):return _out('number_puzzle','result+subtracted',f'{m[3]}+{m[2]}',r+k,'',[k,r],query)
+    _need(k!=0)
+    if op.startswith('multiply'):return _out('number_puzzle','result/multiplier',f'{m[3]}/{m[2]}',r/k,'',[k,r],query)
+    return _out('number_puzzle','result*divisor',f'{m[3]}*{m[2]}',r*k,'',[k,r],query)
+
 def _en_speed(s,query):
     m=re.search(r'travels (\d+(?:\.\d+)?) (km|miles|kilometers|meters) in (\d+(?:\.\d+)?) (hours?|minutes?)\. what is (?:its|the|her|his) (?:average )?speed',s)
     if not m:return None
@@ -345,9 +453,9 @@ def _en_speed(s,query):
     return _out('speed','distance/time',f'{m[1]}/{m[3]}',d/h,f'{m[2]} per {m[4].rstrip("s")}',[d,h],query,whole=False)
 
 # ------------------------------------------------------------------ entry
-JA_FAMILIES=(_ja_lcm_gcd,_ja_average,_ja_shape,_ja_part_of,_ja_inverse_group,_ja_each_groups,_ja_division,_ja_per_period,_ja_complement,_ja_difference,_ja_times,
-             _ja_budget,_ja_unit_price_pay,_ja_prices,_ja_duration)
-EN_FAMILIES=(_en_lcm_gcd,_en_average,_en_shape,_en_groups,_en_prices,_en_speed)
+JA_FAMILIES=(_ja_lcm_gcd,_ja_average,_ja_shape,_ja_part_of,_ja_inverse_group,_ja_each_groups,_ja_rows_formed,_ja_division,_ja_per_period,_ja_complement,_ja_difference,
+             _ja_ratio,_ja_times,_ja_speed,_ja_per_one,_ja_budget,_ja_unit_price_pay,_ja_prices,_ja_duration)
+EN_FAMILIES=(_en_lcm_gcd,_en_average,_en_shape,_en_groups,_en_teams,_en_prices,_en_budget,_en_speed,_en_compare,_en_number)
 
 def solve(query):
     try:

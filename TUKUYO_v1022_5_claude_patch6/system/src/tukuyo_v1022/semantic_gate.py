@@ -53,8 +53,20 @@ def _dim(u):
         if u in t:return d
     return None
 
+EN_TENS={'twenty':20,'thirty':30,'forty':40,'fifty':50,'sixty':60,'seventy':70,'eighty':80,'ninety':90}
+EN_SMALL={'two':2,'three':3,'four':4,'five':5,'six':6,'seven':7,'eight':8,'nine':9,'ten':10,'eleven':11,'twelve':12,'thirteen':13,
+          'fourteen':14,'fifteen':15,'sixteen':16,'seventeen':17,'eighteen':18,'nineteen':19}
+EN_UNITS={'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,'seven':7,'eight':8,'nine':9}
+def _en_number_words(s):
+    """claude-patch6: 「Ten students」「twenty-four pens」 are amounts too, so a proof that ignores them is not covered
+    ('one' alone stays a word: one day, one of them)"""
+    def f(m):
+        a=m[1].lower();return str(EN_TENS[a]+EN_UNITS[m[2].lower()] if m[2] else EN_TENS.get(a) or EN_SMALL[a])
+    return re.sub(r'\b('+'|'.join(list(EN_TENS)+list(EN_SMALL))+r')(?:-('+'|'.join(EN_UNITS)+r'))?\b(?=\s+[A-Za-z])',
+                  lambda m:f(m) if not (m[2] and m[1].lower() not in EN_TENS) else m.group(),s,flags=re.I)
 def normalize(q):
     s=unicodedata.normalize('NFKC',str(q)).replace('平方センチメートル','平方cm').replace('平方メートル','平方m')
+    s=_en_number_words(s)
     s=re.sub(r'(cm|mm|km|m)2(?![\d])',r'平方\1',s)          # claude-patch6: cm² is a unit with an exponent
     for a,b in WORD_UNITS:s=s.replace(a,b)
     s=re.sub(r'[〇零一二三四五六七八九十百千万]+(?=\s*(?:個|枚|本|冊|台|人|円|匹|頭|羽|杯|回|点|粒|袋|箱|束|歳|才|つ|日|時間|分|秒|年|月|週間|割|ページ|km|m|cm|kg|g|L))',

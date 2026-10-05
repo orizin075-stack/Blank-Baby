@@ -77,6 +77,36 @@ def test_cp6_new_families_answer_with_replayable_proofs_or_refuse(tmp_path):
     assert proofs.check(p,'120') and not proofs.check(p,'240')
     assert not proofs.check({**p,'expression':'lcm(8,12,20)*2'},'120') and not proofs.check({**p,'answer':'240'},'240')
 
+def test_cp6_more_families_directions_and_number_words(tmp_path):
+    d=tmp_path/'d';run(d,'init','--individual-id','CP6-C')
+    _solve_all(d,{
+        '電車に42人乗っていました。駅で15人降りて、9人乗りました。電車には今何人乗っていますか？':'36',
+        '電車に42人乗っていました。駅で15人降りて、9人乗りました。駅で降りたのは何人ですか？':'15',
+        '体育館に子どもが45人集まっていました。12人帰りました。体育館には今何人いますか？':'33',
+        'A class has 28 students. 4 more students join, then 6 students leave. How many students are in the class now?':'26',
+        '赤いテープは60cm、青いテープは15cmです。赤いテープの長さは青いテープの長さの何倍ですか？':'4',
+        '5本で400円のえんぴつがあります。1本の値段はいくらですか？':'80',
+        '1列に8人ずつ並ぶと、5列できました。全部で何人いますか？':'40',
+        '3時間で150km走る車の時速は何kmですか？':'50',
+        '30人のクラスで、そのうち5分の2が犬を飼っています。犬を飼っているのは何人ですか？':'12',
+        '1個90円のパンを4個買って、1000円札を出しました。おつりはいくらですか？':'640',
+        '73本の花を1つの花びんに8本ずつ入れます。全部入れるには、花びんはいくつ必要ですか？':'10',
+        'You have 50 dollars. You buy 4 shirts for 9 dollars each. How much money is left?':'14',
+        'There are 32 children. They form groups of 4. How many groups are there?':'8',
+        'I think of a number. If I divide it by 4, I get 9. What is the number?':'36',
+        # who is compared with whom decides the direction (patch5 answered 90 here)
+        'Ann has 30 beads. Ann has 3 times as many beads as Kim. How many beads does Kim have?':'10',
+        'Kim has 10 beads. Ann has 3 times as many beads as Kim. How many beads does Ann have?':'30',
+        'Lisa read 12 pages on Monday and twice as many on Tuesday. How many pages did she read on Tuesday?':'24',
+        'Paul has 16 stickers. Paul has 9 fewer stickers than Mary. How many stickers does Mary have?':'25',
+        # traps: not exact, not affordable, not divisible, wrong unit, an amount spelled out in words (patch5 answered 3)
+        'ひもAは48cm、ひもBは16cmです。ひもBはひもAの何倍の長さですか？':None,
+        '3個で200円のみかんがあります。1個の値段はいくらですか？':None,
+        'You have 30 dollars. You buy 4 shirts for 9 dollars each. How much money is left?':None,
+        'There are 34 children. They form groups of 4. How many groups are there?':None,
+        '3時間で150km走る車の分速は何mですか？':None,
+        'Ten students were in the library. 3 more students came. How many students are in the library now?':None})
+
 PATCH5_FINGERPRINT='7840bbdd62fe73a2bca55c6adf52e6cd886ff7fc8ecb058ba83f4df4c81aa3f3'   # patch5 agent, devkey seed 1000, 72 episodes
 def test_cp6_invention_off_reproduces_patch5_bit_for_bit():
     from tukuyo_v1023r.worlds import DeviceWorld
