@@ -281,6 +281,8 @@ def parser():
     rb=sub.add_parser('runtime-ecology-step');rb.add_argument('environment',choices=('resource','research','social','volatile'));rb.add_argument('--ticks',type=int,default=1)
     sub.add_parser('runtime-ecology-status');sub.add_parser('runtime-ecology-audit');sub.add_parser('runtime-ecology-recover-cache')
     c=sub.add_parser('think');c.add_argument('query');c.add_argument('--formal-task',type=Path)
+    c.add_argument('--engine',choices=('gen4','v1022'),default='gen4',help='gen4: problems with numbers also go through generation 4 (v1022: the v1022 core alone)')
+    c.add_argument('--llm',choices=('auto','on','off'),default='auto',help='gen4: Claude as a reader when TUKUYO_ANTHROPIC_API_KEY is set (auto)')
     c=sub.add_parser('llm-ask');c.add_argument('query');c.add_argument('--no-local-first',action='store_true')
     c=sub.add_parser('llm-teach');c.add_argument('questions',type=Path)
     sub.add_parser('llm-status');sub.add_parser('llm-audit')
@@ -733,7 +735,12 @@ def _main(argv=None):
             elif args.cmd in ('think','dialogue-learn','learning-status','learning-audit'):
                 _require_live(data)
                 from tukuyo_v1022 import cognition as local
-                if args.cmd=='think':res=local.solve(data,args.query,json.loads(args.formal_task.read_text()) if args.formal_task else None)
+                if args.cmd=='think':
+                    ft=json.loads(args.formal_task.read_text()) if args.formal_task else None
+                    res=local.solve(data,args.query,ft)
+                    if ft is None and args.engine=='gen4':
+                        from tukuyo_g4 import api as g4_api
+                        res=g4_api.think(data,args.query,res,llm=args.llm)
                 elif args.cmd=='dialogue-learn':res=local.learn(data,json.loads(args.bundle.read_text()),args.teacher)
                 else:res=local.audit(data)
             elif args.cmd in ('metabolism-init','metabolism-step','metabolism-status','metabolism-audit'):

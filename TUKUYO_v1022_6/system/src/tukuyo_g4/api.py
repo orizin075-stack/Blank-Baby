@@ -49,12 +49,17 @@ def _v1022(data,text):
         r=cognition.solve(str(data),text)
     except Exception as e:  # noqa: BLE001 - the older core must never break the generation-4 entry point
         return {'route':'v1022','ok':False,'reason':'V1022:'+type(e).__name__}
+    return v1022_reading(r)
+
+def v1022_reading(r):
+    """a result of the v1022 core (cognition.solve) as a reading"""
     if r.get('uncertain') or r.get('answer') is None:return {'route':'v1022','ok':False,'reason':'V1022:'+str(r.get('reason'))}
     try:v=Fraction(str(r['answer']).replace(',',''))
     except (ValueError,ZeroDivisionError):return {'route':'v1022','ok':False,'reason':'V1022:NOT_A_NUMBER'}
     return {'route':'v1022','ok':True,'value':fmt(v),'answer':v,'unit':None,'proof_kind':(r.get('proof') or {}).get('kind')}
 
-def solve(text,llm='auto',data=None,learn=True):
+def solve(text,llm='auto',data=None,learn=True,v1022=None):
+    """v1022: a reading of the v1022 core made by the caller (think); it then replaces the core's own call"""
     readings=[];tukuyo_ok=False
     store=None
     if data is not None:
@@ -65,8 +70,9 @@ def solve(text,llm='auto',data=None,learn=True):
         if t:
             spec=instantiate(t,text)
             if spec:readings.append(evaluate(spec,'learned'));tukuyo_ok|=readings[-1]['ok']
+    if v1022 is not None:readings.append(v1022);tukuyo_ok|=v1022['ok']
     if JA.search(text):
-        if data is not None:readings.append(_v1022(data,text));tukuyo_ok|=readings[-1]['ok']
+        if data is not None and v1022 is None:readings.append(_v1022(data,text));tukuyo_ok|=readings[-1]['ok']
     else:
         own=_own(text)
         if own is not None:
@@ -98,6 +104,53 @@ def solve(text,llm='auto',data=None,learn=True):
         try:res['learned']=store.add(llms[0]['spec'],prov)
         except ValueError:res['learned']=None
     return res
+
+# ----------------------------------------------------------------------------- think
+def v1022_story(base):
+    """is this answer of the v1022 core a story reading (its proof names a story schema: combine, change_sequence, ...)?
+    Expressions ('12*(5+4)') and the formula families (mathprob: average, area, gcd/lcm ...) are not"""
+    return bool((base.get('proof') or {}).get('schema'))
+
+def _explain(g):
+    sp=g.get('spec') or {}
+    facts='、'.join(f"{f['eq']}（{f['span']}）" if f.get('span') else f"{f['eq']}（{f.get('known')}）" for f in sp.get('facts',[]))
+    return f"第4世代の読み（{g['route']}）：{facts}。答え：{sp.get('ask')} = {g['value']}" if sp else None
+
+def think(data,text,base,llm='auto',learn=True):
+    """`think` with generation 4. base is the v1022 core's result for the same text (cognition.solve).
+      * no number in the text, or an answer that is not a number (logic, memory): base, unchanged
+      * Japanese: the v1022 reading is one reading among the others (Claude's, when it is configured)
+      * English: generation 4 reads the problem. The v1022 core's English story readings (v1022_story) were right 20
+        times and wrong 9 times on third-party problems (ASDiv dev), so they neither answer nor block an answer: such
+        an answer is reported as withheld. Its expressions and formula families count as a reading
+    The result keeps the v1022 shape (answer, uncertain, reason, proof, explanation) and adds 'gen4'."""
+    from . import numbers as N
+    if not N.find(text):return base
+    a=base.get('answer')
+    if a is not None and not base.get('uncertain'):
+        try:Fraction(str(a).replace(',',''))
+        except (ValueError,ZeroDivisionError):return base
+    v=v1022_reading(base)
+    ja=bool(JA.search(text))
+    use=v if (ja or not v['ok'] or not v1022_story(base)) else None
+    if not ja and v['ok'] and use is None:ignored={'route':'v1022','value':v['value'],'proof_kind':v.get('proof_kind'),'story':True,'used':False}
+    else:ignored=None
+    r=solve(text,llm=llm,data=data,learn=learn,v1022=use if v['ok'] or ja else None)
+    info={'route':r['route'],'reason':r['reason'],'learned':r.get('learned'),
+          'readings':[{k:x.get(k) for k in ('route','ok','value','reason','proof_kind','llm') if x.get(k) is not None} for x in r['readings']]+([ignored] if ignored else [])}
+    if r['answer'] is None:
+        out={'ok':True,'answer':None,'confidence':0.,'uncertain':True,'recognized':base.get('recognized',True),'proof':None,'gen4':info,
+             'reason':r['reason'] if r['reason'] not in ('NO_VERIFIED_READING','NOT_READ') or not ignored else 'V1022_STORY_READING_UNCONFIRMED'}
+        if ignored:out['withheld_answer']=ignored['value'];out['explanation']=f"v1022 の読みは {ignored['value']} でしたが、英語の物語の読みは第4世代の読みで確かめられないので、答えを確定しません。"
+        elif r.get('withheld'):out['withheld_answer']=r['withheld']
+        elif base.get('answer') is None:return {**base,'gen4':info}
+        return out
+    if v['ok'] and use is not None and v['answer']==Fraction(r['value']):return {**base,'gen4':info}
+    g=next((x for x in r['readings'] if x.get('ok') and x.get('spec')),None)
+    return {'ok':True,'answer':r['answer'],'confidence':.9,'uncertain':False,'recognized':True,'reason':None,'unit':r.get('unit'),
+            'proof':{'kind':'g4_reading','spec':g['spec'],'values':g['values']} if g else None,
+            'verification_evidence':{'mode':'G4_EXACT_SOLVE_AND_SEPARATE_CHECK','route':r['route']},
+            'explanation':_explain(g) if g else None,'gen4':info}
 
 def ask(text,llm='auto',data=None,learn=True):
     """any question: a problem with numbers goes through solve(); anything else is answered by Claude when it is

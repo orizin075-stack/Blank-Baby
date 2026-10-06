@@ -214,8 +214,15 @@ def ask(data,query,local_first=True,mode='qa'):
     if local_first:
         from tukuyo_v1022 import cognition
         local=cognition.solve(data,query)
+        # generation 4: problems with numbers are also read and checked by generation 4 (see tukuyo_g4.api.think)
+        try:
+            from tukuyo_g4 import api as g4_api
+            local=g4_api.think(data,query,local)
+        except Exception as e:  # noqa: BLE001 - generation 4 must never break llm-ask; the error is shown
+            local={**local,'gen4_error':type(e).__name__+':'+str(e)[:200]}
         if local.get('recognized') and not local.get('uncertain'):
             out={'ok':True,'version':'v1022.5+claude-patch4','source':'local-proof','status':'verified','answer':local['answer'],'confidence':local['confidence'],'uncertain':False,'proof':local.get('proof'),'explanation':local.get('explanation')}
+            if local.get('gen4'):out['gen4']=local['gen4']
             _append_log(data,{'schema':SCHEMA,'utc_ns':time.time_ns(),'query':query,'source':'local-proof','status':'verified','answer':str(local['answer'])})
             return out
         meta=_determinate_meta(local)

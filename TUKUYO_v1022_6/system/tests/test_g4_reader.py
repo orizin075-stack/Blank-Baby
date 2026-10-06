@@ -42,6 +42,11 @@ READ=[
  ('There are 30 students. They form teams of 5. How many teams are there?','6'),
  ('Max ran 3 miles on Monday and twice as many on Wednesday. How many miles did he run on Wednesday?','6'),
  ('Max ran 3 miles on Monday and twice as many on Wednesday. How many miles did he run in all?','9'),
+ # a he/she that could stand for two people is read as the latest subject only when no other reading gives
+ # another answer: here the other reading cannot be answered at all
+ ('Mike had 34 peaches. He gave Tom 10 peaches. How many peaches does he have now?','24'),
+ ('Cara had 50 beads. She gave 12 beads to Dan and 8 beads to Eve. How many beads does she have left?','30'),
+ ('An apple costs 3 dollars and a pear costs 4 dollars. How much do 2 apples and 5 pears cost?','26'),
  # questions that are not stories (forms_en)
  ('What is the greatest common divisor of 36 and 48?','12'),
  ('Find the LCM of 3, 4 and 5.','60'),
@@ -70,6 +75,12 @@ ABSTAIN=[
  'There are 30 students. They form teams of 4. How many teams are there?',
  'What is the greatest common factor of 0 and 5?',
  'A car travels 120 miles in 2 hours. What is its speed in km per hour?',
+ # two readings of a he/she give two answers: no reading (TUKUYO does not know genders)
+ 'Charlie has 31 more snowballs than Lucy. She has 50 snowballs. How many snowballs does Charlie have?',
+ 'Ann has 5 more pens than Ben. He has 12 pens. How many pens does Ann have?',
+ 'Tom has 10 apples. Sue has some apples. He gives her 4 apples. How many apples does she have now?',
+ # an amount stated as before the events, after them in the text
+ 'Tom gave Sue 4 apples. She had 10 apples before. How many apples does she have now?',
  # a rate and a count of two different holders
  'A car travels at 50 miles per hour. A bus travels for 3 hours. How far does the car travel?',
  'Tom reads 20 pages per day. Ann reads for 4 days. How many pages does Tom read?',

@@ -117,6 +117,10 @@ COMPARATIVE=V('more|fewer|less|older|younger|taller|shorter|longer|heavier|light
 
 class NoRead(Exception):pass
 def no(reason):raise NoRead(reason)
+class Ambiguous(Exception):
+    """a pronoun that may stand for more than one person named before it"""
+    def __init__(s,pos,pronoun,cands,topic):super().__init__('PRONOUN_AMBIGUOUS');s.pos=pos;s.pronoun=pronoun;s.cands=cands;s.topic=topic
+HE=('he','him','his','himself');SHE=('she','her','hers','herself')
 
 # ----------------------------------------------------------------------------- tokens
 ABBR=re.compile(r'(?:\bMrs?|\bMs|\bDr|\bSt|\bJr|\bSr|\bvs|\betc|\bft|\bin|\blbs?|\boz|\bNo)\.$')
@@ -201,7 +205,10 @@ class Frame(dict):
 class Story:
     def __init__(s,t):
         s.t=t;s.nums=N.find(t);s.frames=[];s.people=[];s.last_owner=None;s.last_noun=None;s.noun_of={};s.vague=[];s.seen_nouns=[];s.last_thing=None;s.last_adj=()
-        s.subj_hist=[]   # the people who were the subjects of clauses, in order
+        s.subj_hist=[]   # (position, person): the people who were the subjects of clauses, in order
+        s.forced={}      # pronoun position -> person, for one reading among several (see read)
+        s.resolved=[]    # (position, pronoun, person) for every he/she/him/her read
+        s.first_pos={}   # where each person is first named: a pronoun can only stand for someone named before it
         s.text_low=t.lower()
     # ---- names and pronouns
     def is_name(s,tk,first=False):
@@ -210,14 +217,16 @@ class Story:
         if w in CAP_STOP or w.lower() in NOT_NOUN or w.lower() in KIN:return False
         if w.lower() in GROUPS|UNITS or sing(w.lower()) in s.seen_nouns:return False
         return True
-    def person(s,w):
+    def person(s,w,pos=None):
         w=w[:-2] if w.lower().endswith("'s") else w
         if w not in s.people:s.people.append(w)
+        if pos is not None and pos<s.first_pos.get(w,len(s.t)+1):s.first_pos[w]=pos
         return w
-    def resolve(s,p,exclude=None):
+    def resolve(s,p,exclude=None,at=None):
         """the person a pronoun stands for. TUKUYO does not guess anyone's gender: with two or more people, he/she/him/her
-        is read only when one person is left after removing the clause's own subject (exclude), or when the story keeps
-        to one subject (all subjects so far, or the last two, are the same person); otherwise there is no reading"""
+        is read only when one person is left after removing the clause's own subject (exclude); otherwise there is no
+        reading. ('Charlie has 31 more snowballs than Lucy. She has 50 snowballs.' was read with She = Charlie, the
+        subject so far, and answered 50; 'Tom gave Sue 4 apples. She had 10 apples before.' likewise.)"""
         p=p.lower()
         if p in ('i','me','my','we','us','our','you','your'):return {'me':'i','my':'i','us':'we','our':'we','your':'you'}.get(p,p)
         if p in ('they','them','their'):
@@ -225,28 +234,34 @@ class Story:
             return 'they'
         if p in ('it','its'):return s.last_thing or 'it'
         if not s.people:return s.last_owner if s.last_owner and s.last_owner not in ('there',) else (p if p in ('he','she') else 'they')
-        cands=[x for x in s.people if x!=exclude]
-        if len(cands)==1:return cands[0]
+        cands=[x for x in s.people if x!=exclude and (at is None or s.first_pos.get(x,-1)<at)]
         if not cands:no('PRONOUN')
-        hist=[x for x in s.subj_hist if x in cands]
-        if hist and (len(set(hist))==1 or (len(hist)>=2 and hist[-1]==hist[-2])):return hist[-1]
-        no('PRONOUN_AMBIGUOUS')
+        if len(cands)==1:who=cands[0]
+        elif at is None:no('PRONOUN_AMBIGUOUS')
+        elif at in s.forced:
+            who=s.forced[at]
+            if who not in cands:no('PRONOUN_FORCED')
+        else:
+            topic=next((x for q,x in reversed(s.subj_hist) if q<at and x in cands),None)
+            raise Ambiguous(at,p,cands,topic)
+        if at is not None and (at,p,who) not in s.resolved:s.resolved.append((at,p,who))
+        return who
     def holder(s,toks,exclude=None):
         """a holder named by a short phrase: Tom / he / Tom's mom / his sister / the store"""
         ws=[x for x in toks if x.kind=='word']
         if not ws:return None
         for i,x in enumerate(ws):
-            if x.low in ('he','she','i','we','you','they','it','him','them','me','us'):return s.resolve(x.low,exclude if x.low in ('him','them','me','us') else None)
-            if x.low=='her' and (i+1==len(ws) or ws[i+1].low in NOT_NOUN):return s.resolve('her',exclude)
+            if x.low in ('he','she','i','we','you','they','it','him','them','me','us'):return s.resolve(x.low,exclude if x.low in ('him','them','me','us') else None,at=x.s)
+            if x.low=='her' and (i+1==len(ws) or ws[i+1].low in NOT_NOUN):return s.resolve('her',exclude,at=x.s)
             if x.low in ('his','her','their','my','our','your') and i+1<len(ws):
                 rest=[y.low for y in ws[i+1:] if y.low not in DET and y.low not in MODS]
-                if rest:return s.resolve(x.low)+"'s "+sing(rest[-1])
+                if rest:return s.resolve(x.low,at=x.s)+"'s "+sing(rest[-1])
             if s.is_name(x):
                 if x.low.endswith("'s"):
                     rest=[y.low for y in ws[i+1:] if y.low not in DET]
-                    if rest:return s.person(x.w)+"'s "+sing(rest[-1])
-                    return s.person(x.w)
-                return s.person(x.w)
+                    if rest:return s.person(x.w,x.s)+"'s "+sing(rest[-1])
+                    return s.person(x.w,x.s)
+                return s.person(x.w,x.s)
         nouns=[x for x in ws if x.low not in NOT_NOUN and x.low not in MODS]
         return sing(nouns[-1].low) if nouns else None
     # ---- noun phrases
@@ -345,9 +360,9 @@ class Story:
         if first_v is not None and csubj is None and not any(x.kind=='num' for x in toks[:first_v]):csubj=subj
         for i,x in enumerate(toks):
             if i and toks[i-1].kind=='num':continue
-            if s.is_name(x) and (x.w[:-2] if x.low.endswith("'s") else x.w) not in s.people:s.person(x.w)
+            if s.is_name(x):s.person(x.w,x.s)
         if csubj and csubj not in ('there','it','they','i','we','you') and "'" not in csubj:s.last_owner=csubj
-        if csubj in s.people:s.subj_hist.append(csubj)
+        if csubj in s.people:s.subj_hist.append((toks[0].s,csubj))
         if csubj and csubj not in ('there','it','they','i','we','you') and (csubj not in s.people):s.last_thing=csubj
         intent=any(m=='intent' for _,m in vs)
         nidx=[k for k,x in enumerate(toks) if x.kind=='num']
@@ -570,7 +585,7 @@ class Story:
             if x.low in ('did','does','do','has','have','had','is','are','was','were','and','but','in','on','at','for','to'):break
             cut.append(x)
         if not cut:return None
-        if len(cut)==1 and cut[0].low in ('he','she','him','her','they','them'):return s.resolve(cut[0].low)
+        if len(cut)==1 and cut[0].low in ('he','she','him','her','they','them'):return s.resolve(cut[0].low,at=cut[0].s)
         return s.holder(cut)
     def _obj_before(s,toks,k):
         ws=[x for x in toks[:k] if x.kind=='word' and x.low not in ('for','at','a','an','the')]
@@ -658,14 +673,14 @@ def parse_question(st,a,b):
         if x.kind!='word' or x.low=='how':continue
         if x.low in ('his','her','their') :
             nxt=[y for y in toks if y.s>x.s and y.kind=='word'][:2]
-            if nxt and nxt[0].low in KIN:owner=st.resolve(x.low)+"'s "+sing(nxt[0].low);break
+            if nxt and nxt[0].low in KIN:owner=st.resolve(x.low,at=x.s)+"'s "+sing(nxt[0].low);break
             continue
-        if x.low in ('he','she','they','him','them'):owner=st.resolve(x.low);break
+        if x.low in ('he','she','they','him','them'):owner=st.resolve(x.low,at=x.s);break
         if st.is_name(x) and sing(x.low)!=ask.noun:
             if x.low.endswith("'s"):
                 nxt=[y for y in toks if y.s>x.s and y.kind=='word'][:1]
-                if nxt and nxt[0].low in KIN:owner=st.person(x.w)+"'s "+sing(nxt[0].low);break
-            owner=st.person(x.w);break
+                if nxt and nxt[0].low in KIN:owner=st.person(x.w,x.s)+"'s "+sing(nxt[0].low);break
+            owner=st.person(x.w,x.s);break
         if x.low in ('i','we','you'):owner=x.low;break
     ask['owner']=owner
     tm=re.search(r'\bthan\s+(?:the\s+|his\s+|her\s+|their\s+)?(\w+)(?:\s+(\w+))?',low)
@@ -677,7 +692,7 @@ def parse_question(st,a,b):
         elif w in KIN and tm.group(0).split()[1] in ('his','her','their'):ask['than']=st.resolve(tm.group(0).split()[1])+"'s "+sing(w)
         else:ask['than']=sing(w)
     qn=[x for x in toks if st.is_name(x) and sing(x.low)!=ask.noun]
-    if len(qn)>=2 and re.search(r'\band\b',low):ask['owners']=[st.person(x.w) for x in qn]
+    if len(qn)>=2 and re.search(r'\band\b',low):ask['owners']=[st.person(x.w,x.s) for x in qn]
     ask['have']=bool(re.search(r'\b(?:have|has|had)\b',low))
     pm=re.search(r'\b(?:in|on|at|inside) (?:the |a |an |his |her |their |my |our )?(\w+(?: \w+)?)\s*(?:now|left|altogether|in all|\?|$)',low)
     if pm:
@@ -798,6 +813,8 @@ def timeline(p,owner,noun,adj=(),unit=None):
                 start=cur
             else:
                 if f.m is None:no('UNKNOWN_LATER_STATE')
+                # 'She had 10 apples before.' after the giving: a stated amount from before the events, not after them
+                if re.search(r'\b(?:before|at first|originally|initially|in the beginning|to begin with|at the start|earlier)\b',f.span.lower()):no('STATE_BEFORE_EVENTS')
                 if any(g.kind=='state' and g.owner==owner and g.noun==noun and g.span==f.span and g is not f for g in fs[:fs.index(f)]):no('LIST_OF_KINDS')
                 v=bm(f,f'{owner}_{noun}_stated');p.rel(f'{cur} = {v}',f.span)
             f['_q']=cur;continue
@@ -1378,6 +1395,24 @@ def schema_gcd_lcm(st,ask):
         r=p.new('least_common','item');p.rel(f'{r} = {expr}',ask.text);return p,r,ask.noun or 'item'
     return None
 
+def schema_price_total(st,ask):
+    """'An apple costs 3 dollars and a pear costs 4 dollars. How much do 2 apples and 5 pears cost?' -> 2 x 3 + 5 x 4"""
+    if not (ask.much or ask.noun in ('dollar','cent')) or ask.kind!='amount' or ask.residue or ask.rest or st.vague:return None
+    prices=[f for f in st.frames if f.kind=='price' or (f.kind=='rate' and f.noun in ('dollar','cent'))]
+    if len(prices)<2 or any(f.kind in ('compare','times','intent','unknown','be','bare') for f in st.frames):return None
+    items=[f.item if f.kind=='price' else f.per for f in prices]
+    if None in items or len(set(items))!=len(items) or len({f.noun for f in prices})!=1:return None
+    money=prices[0].noun;counts={}
+    for x in [f for f in st.frames if f.m is not None and f not in prices]+list(ask.qframes):
+        it=next((i for i in items if x.noun==i or (x.noun and x.noun.endswith(i))),None)
+        if it is None or it in counts:return None
+        counts[it]=x
+    if set(counts)!=set(items):return None
+    p=Plan(st,'price_total');parts=[]
+    for f,i in zip(prices,items):
+        pq=p.bind(f,f'price_per_{i}',f'{money}/{i}',integer=False);cq=p.bind(counts[i],f'{i}s',i);parts.append(f'{cq} * {pq}')
+    t=p.new('cost',money,integer=False);p.rel(f"{t} = {' + '.join(parts)}",ask.text);return p,t,money
+
 def schema_spend_left(st,ask):
     """'You have 50 dollars. You buy 4 shirts for 9 dollars each. How much money is left?' -> 50 - 4 x 9"""
     if not (ask.much or ask.noun in ('dollar','cent')) or ask.kind!='amount' or ask.when!='now' or ask.qframes or ask.residue or st.vague:return None
@@ -1423,15 +1458,59 @@ def schema_times_slot(st,ask):
     return None
 
 SCHEMAS=[schema_gcd_lcm,schema_change,schema_compare_things,schema_holding,schema_compare,schema_diff,schema_category,schema_groups,schema_share,schema_price,schema_need,
-         schema_spend_left,schema_times_slot]
+         schema_spend_left,schema_times_slot,schema_price_total]
 
 # ----------------------------------------------------------------------------- read
 def read(text):
-    try:return _read(text)
+    try:return _read_pronouns(text)
     except NoRead as e:return {'spec':None,'reason':'EN:'+str(e)}
 
-def _read(text):
-    st=Story(text);t=text
+def _consistent(resolved):
+    """one person is never both he and she"""
+    kind={}
+    for _,p,who in resolved:
+        k='he' if p in HE else ('she' if p in SHE else None)
+        if k is None:continue
+        if kind.setdefault(who,k)!=k:return False
+    return True
+
+def _read_pronouns(text,limit=32):
+    """TUKUYO does not know genders. When a he/she may stand for more than one person, the text is read with each
+    pronoun standing for the latest subject before it (the topic, as people read), and with every other choice; the
+    topic reading is kept only when no other choice that never calls one person both he and she also passes the
+    solver and the checker with a different answer. Otherwise there is no reading."""
+    from .solve import solve as _solve
+    from .check import check as _check
+    queue=[{}];done=[];tried=0;ambiguous=False
+    while queue:
+        forced=queue.pop(0);tried+=1
+        if tried>limit:no('PRONOUN_TOO_MANY_CHOICES')
+        try:done.append((forced,_read(text,forced)))
+        except Ambiguous as a:
+            ambiguous=True
+            for c in a.cands:queue.append({**forced,a.pos:c,('topic',a.pos):a.topic})
+        except NoRead as e:done.append((forced,e))
+    if not ambiguous:
+        r=done[0][1]
+        if isinstance(r,NoRead):raise r
+        return r
+    def answer(r):
+        if isinstance(r,NoRead) or not _consistent(r['pronouns']):return None
+        s=_solve(r['spec'])
+        if not s.get('ok') or not _check(r['spec'],s['values'])['ok']:return None
+        return s['answer']
+    topic=[(f,r) for f,r in done if all(f[k]==f.get(('topic',k)) for k in f if not isinstance(k,tuple))]
+    if len(topic)!=1:no('PRONOUN_AMBIGUOUS')
+    ta=answer(topic[0][1])
+    if ta is None:no('PRONOUN_AMBIGUOUS')
+    for f,r in done:
+        x=answer(r)
+        if x is not None and x!=ta:no('PRONOUN_AMBIGUOUS:'+','.join(sorted({str(ta),str(x)})))
+    r=topic[0][1];r['spec']['pronouns']=[{'pronoun':p,'person':who} for _,p,who in sorted(r['pronouns'])]
+    return r
+
+def _read(text,forced=None):
+    st=Story(text);t=text;st.forced=forced or {}
     sents=sentences(t)
     if not sents:no('NO_SENTENCES')
     qi=[i for i,(a,b) in enumerate(sents) if '?' in t[a:b] or re.match(r'\s*(?:How|Find|What)\b',t[a:b])]
@@ -1468,7 +1547,7 @@ def _read(text):
             s=_solve(r['spec'])
             vals.add(s.get('answer') if s.get('ok') else ('fail',s.get('reason')))
         if len(vals)!=1:no('SCHEMAS_DISAGREE')
-    return results[0]
+    return {**results[0],'pronouns':list(st.resolved)}
 
 def finish(st,p,target,noun,ask):
     unused=[]
