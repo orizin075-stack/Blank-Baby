@@ -1,10 +1,26 @@
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/META/KNOWN_GAPS.json patch6/system/META/KNOWN_GAPS.json
+--- patch5/system/META/KNOWN_GAPS.json	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/META/KNOWN_GAPS.json	2026-10-06 00:00:00.000000000 +0000
+@@ -50,6 +50,12 @@
+   "v1022_3_meta_reasoning": "BOUNDED EQUATION/DEPENDENCY GRAPH ONLY; GENERAL NATURAL LANGUAGE PROBLEM DECOMPOSITION NOT ESTABLISHED",
+   "v1022_3_persistent_strategy_learning": "NOT YET STORED IN LIFELONG/CULTURAL MEMORY; CURRENTLY EXPLICIT SCHEMA EXTRACTION/APPLICATION API",
+   "v1022_3_strategy_transfer": "SAME SYMBOLIC ROLE NAMES REQUIRED; AUTOMATIC SEMANTIC ROLE MAPPING NOT ESTABLISHED",
++  "v1022_6_24h_fusion": "NOT_COMPLETED",
++  "v1022_6_4h_longrun_gate": "NOT_COMPLETED; INTERRUPTED_AT_126.93_MIN_BY_A_CLOUD_VM_STOP_WHILE_THE_SESSION_WAS_IDLE; 1384_OPS_0_WRONG_CERTAIN_0_VIOLATIONS_UP_TO_THE_STOP; ALL_AUDITS_PASS_AFTER_THE_STOP",
++  "v1022_6_law_invention": "FIXED_GRAMMAR_14906_LAWS_WRITTEN_BY_PATCH_AUTHOR; ONE_DEVICE_WORLD; NEW_KINDS_OF_LAWS_NOT_INVENTED",
++  "v1022_6_parser_b": "SEPARATE_CODE_SAME_AUTHOR_AS_PRODUCERS",
++  "v1022_6_publisher_key": "NEW_PATCH_KEY_WITHOUT_PARENT_CROSS_SIGNATURE; OWNER_RESIGN_RECOMMENDED",
++  "v1022_6_question_reading": "FINITE_JA_EN_TEMPLATES; UNREAD_FORMS_ABSTAIN; HELDOUT_F_T_WRITTEN_BY_SAME_AUTHOR_AS_CODE",
+   "v839_original_full_zip": "NOT_RECOVERED",
+   "v891_v935": "EXACT_PER_VERSION_ARCHIVES_SHA_CHECKED_AND_SOURCE_EXTRACTED_NOT_ACTIVE_AS_SINGLE_POLICY",
+   "v941_runtime": "EXACT_FLAT_SOURCE_WITH_ADAPTED_DEPENDENCY_LOADERS",
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/META/PATCH_LINEAGE_v1022_6.json patch6/system/META/PATCH_LINEAGE_v1022_6.json
 --- patch5/system/META/PATCH_LINEAGE_v1022_6.json	1970-01-01 00:00:00.000000000 +0000
-+++ patch6/system/META/PATCH_LINEAGE_v1022_6.json	2026-10-05 13:42:47.791161001 +0000
-@@ -0,0 +1,16 @@
++++ patch6/system/META/PATCH_LINEAGE_v1022_6.json	2026-10-06 00:00:00.000000000 +0000
+@@ -0,0 +1,17 @@
 +{
 +  "schema": "tukuyo.v1022_6.claude_patch_lineage/1",
-+  "revision": "v1022.5+claude-patch6",
++  "revision": "v1022.6",
 +  "parent_revision": "v1022.5+claude-patch5",
 +  "parent_archive_sha256": "8488dada660dc8ae18401b831183f9cfbf76c60d86eec64cf2271da5f72f3d2b",
 +  "parent_receipt_public_key": "22jzm2l8ZiBxLF0QvN5IpCcq0NQEdPwcNodO/Ey83zA=",
@@ -16,11 +32,12 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
 +    "FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk="
 +  ],
 +  "trained_seed_payload_unchanged": true,
-+  "new_external_llm_conversation": false
++  "new_external_llm_conversation": false,
++  "content": "v1022.5-fusion + claude-patch3, claude-patch4, claude-patch5 (signed by the parent receipt key) + claude-patch6"
 +}
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/README_CLAUDE_PATCH6_JA.md patch6/system/README_CLAUDE_PATCH6_JA.md
 --- patch5/system/README_CLAUDE_PATCH6_JA.md	1970-01-01 00:00:00.000000000 +0000
-+++ patch6/system/README_CLAUDE_PATCH6_JA.md	2026-10-05 15:35:40.160532014 +0000
++++ patch6/system/README_CLAUDE_PATCH6_JA.md	2026-10-06 00:00:00.000000000 +0000
 @@ -0,0 +1,371 @@
 +# TUKUYO v1022.5 Fusion + claude-patch6（聞かれたことを読み、法則を組み立てる）
 +
@@ -360,15 +377,15 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
 +## 8. 使い方
 +
 +- **署名の鍵を新しくしました。** patch1〜5 の鍵は、patch6 を作った作業環境にありませんでした。そのため patch6 は新しいパッチ鍵で署名しています。古い鍵による相互署名はありません。
-+  - 信頼アンカー：`deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt`（`FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk=`）
++  - 信頼アンカー：`deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt`（`FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk=`）
 +  - 来歴：`system/META/PATCH_LINEAGE_v1022_6.json`（親の archive の sha256、親の鍵、鍵を変えた理由）
 +  - 学習済みの種（TRAINED_SKILLS）の中身は変えていません。署名だけ新しい鍵です。古い鍵の署名も受け付けます。
 +- アンカーは配布物の中にあるので、検証で分かるのは「署名のあとで中身が変わっていないこと」だけです。採用する場合は、ご自身の鍵で署名し直してください。
-+- patch5 の個体は、そのまま動きます（§7）。
++- patch5 の個体は、そのまま動きます（§7）。ただし代謝（`metabolism-init`）を動かしている個体は、署名の鍵が変わったので、`runtime-trust-rebind --previous-trust-file 古いアンカー` で子の実行に使うアンカーを 1 回付け替えます（付け替えるまでは安全側に止まります。v1022.6 の README §4）。
 +
 +```bash
-+cd TUKUYO_v1022_5_claude_patch6/system
-+A=../deliverables/TUKUYO_v1022_5_patch6_TRUST_ANCHOR.txt
++cd TUKUYO_v1022_6/system
++A=../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
 +python3 -B tools/verify_release.py . --trusted-pubkey-file $A
 +python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo init
 +python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo think -- '電車に42人乗っていました。駅で15人降りて、9人乗りました。駅で降りたのは何人ですか？'
@@ -393,10 +410,193 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
 +- センサーの誤り率の上限（10%）は、今も子に教えてあります。
 +- 本物の LLM での効果は、今回も測っていません。
 +- 長時間試験は 30 分です。24 時間の試験は、まだ実施していません。
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/README_V1022_6_JA.md patch6/system/README_V1022_6_JA.md
+--- patch5/system/README_V1022_6_JA.md	1970-01-01 00:00:00.000000000 +0000
++++ patch6/system/README_V1022_6_JA.md	2026-10-06 00:00:00.000000000 +0000
+@@ -0,0 +1,118 @@
++# TUKUYO v1022.6（V1022.5 Fusion ＋ claude-patch3〜6）
++
++V1022.5 Fusion に claude-patch3〜6 を積み重ねたものを、**1 つの版**としてまとめました。改良の中身は各パッチの README に書いてあります。この README は、版として使う・採用する・以前の版から移るための説明です。
++
++- 版の名前（`release_revision`）は **v1022.6** です。CLI は、署名した受領書（`META/RELEASE_RECEIPT.json`）に書かれた版の名前を、毎回の出力に載せます。そのため、ご自身の鍵で `--revision v1022.6` として署名し直せば、コードを変えずにその名前が出ます。
++- 分類は **EXPERIMENTAL**（実験版）です。V1022.5 Fusion と同じです。
++- 版の状態は `STATUS_V1022_6.json`、まだ足りないことは `META/KNOWN_GAPS.json` にあります。
++
++## 0. この版でできること
++
++| | できること | どのパッチ |
++|---|---|---|
++| 文章題 | 質問が何を聞いているか（残り・はじめ・あげた数・相手の数・別の物・合計）を読んでから答える。読み切れなければ答えない | patch6 |
++| 問題の型 | 平均・面積・最小公倍数・数列・割合・あまりと切り上げ・何倍・速さ・1 個の値段・おつりなど。どの答えにも、再計算できる証明が付く | patch3・patch6 |
++| 独立の裏付け | 作る側とコードを分けた読み取り器（Parser B）と、数の網羅・役割の監査が、確定の前に答えを確かめる | patch4〜6 |
++| 論理・記憶 | 論理の強化（patch3）、「できる」「される」を出来事と数えない（patch4）、時の言葉・主語のない規則（patch6）、多段の記憶（patch3）と言い換え（patch6） | patch3・patch4・patch6 |
++| 研究 | 隠れた法則の世界で、情報量で実験を選び、確かめてから法則を主張する。手持ちの言葉で説明できなければ表に切り替え、文法から新しい法則を組み立てて試す | patch5・patch6 |
++| 本物の代謝の中の研究 | 家系ごとの装置。確定した法則だけを後継ぎに渡す（使うかは選べる） | patch5 |
++| 長時間融合試験 | 推論・教示・自習・代謝・checkpoint・復元・停止注入をランダムに混ぜて回す試験 | patch5（この版では 2 時間 7 分まで。§1） |
++
++## 1. 版としての確認
++
++| 確認 | 結果 |
++|---|---|
++| 署名と manifest（`verify_release.py`） | 合格（1367 ファイル） |
++| 全体テスト | **432/432 合格**（30 分）。patch5 までの 421 件、patch6 の 10 件、版の確認の 1 件（`evidence_v1022_6/selftest_v1022_6.txt`） |
++| V1022.6 の長時間融合試験（4 時間の予定） | **完走していません。** 2 時間 7 分のところで、作業環境（クラウドの仮想マシン）が止まって中断しました。そこまでの 1,384 操作（推論 796 問）で、**確信を持った誤り 0、監査の違反 0** でした（`evidence_v1022_6/longrun_v1022_6_gate_note.json`） |
++| 予定外の停止のあと | 止まった個体をそのまま調べると、`whole-audit`・代謝の監査（資源の保存を含む）・学習の監査・LLM の監査がすべて合格し、代謝もそのまま続けられました。停止注入ではなく、本当の停止です |
++| 未見 F・T（作る前に固定し、1 回だけ回した） | T 38/38、F 72/79、確信を持った誤り 0（どちらも、開発用の問題と同じ私が書いた点に注意。patch6 README §6.1） |
++| 研究（新しい鍵の未見世界、1 回だけ） | 新しい法則を 36 個組み立てて確定、誤った主張 0。発明を止めると patch5 の同梱の結果と 480/480 同じ |
++| 採用の予行（自分の鍵での署名・patch5 の個体・代謝の付け替え） | すべて合格（`evidence_v1022_6/adoption_rehearsal.log`） |
++| リリース zip | 根のフォルダが 1 つ、構造の検査に合格、中の `system/` の署名も合格。作り直しても同じ zip |
++
++- 長時間試験で答えなかった 19 問は、`verified-query`（慎重な検査を足した経路）です。同じ形の問題は patch5 の `verified-query` も答えません。`think` と `llm-ask` は、同じ問題に正しく答えます。答えてはいけない問題 178 問は、すべて答えませんでした。
++- 4 時間を完走させるには、作業環境が止まらない状態で 4 時間動かし続ける必要があります。クラウドの作業環境は、何も実行していない間に止まることがあります。手元の機械なら、次のコマンドで同じ試験を回せます。
++
++  ```bash
++  python3 -B system/tools/longrun_fusion.py --data ./longrun_individual --runtime-trust-file deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt --report longrun.json --minutes 240 --seed 20261008
++  ```
++
++## 2. 始め方
++
++Python 3.12 以降と `cryptography` が必要です。個体のデータは、配布フォルダの外に置いてください。
++
++```bash
++cd TUKUYO_v1022_6/system
++A=../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
++python3 -B tools/verify_release.py . --trusted-pubkey-file $A
++python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo init
++python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo think -- 'りんごが12個あります。妹に5個あげました。あげたのは何個？'
++python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo research-run --world W1
++python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo whole-audit
++```
++
++全体テストは次のとおりです（約 30 分）。
++
++```bash
++TUKUYO_TEST_RUNTIME_ANCHOR=$(pwd)/../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt python3 -B -m pytest -q tests -p no:cacheprovider
++```
++
++## 3. 採用する（ご自身の鍵で署名する）
++
++同梱のアンカーは、配布物の中にあります。そのため検証で分かるのは「署名のあとで中身が変わっていないこと」だけで、誰が作ったかまでは分かりません。また、patch1〜5 の鍵による相互署名もありません。この版を正式に採用するときは、**ご自身の鍵で署名し直して**ください。
++
++```bash
++cd TUKUYO_v1022_6
++# 1. 鍵を作る（秘密鍵は配布物の外に置き、配らない）
++python3 -B system/tools/claude_patch_sign.py keygen --out-dir ~/tukuyo_publisher_key
++# 2. 版の名前を付けて署名する（manifest・受領書・学習済みの種を、この鍵で署名し直す）
++python3 -B system/tools/claude_patch_sign.py sign system --private-key ~/tukuyo_publisher_key/patch_signing.key --revision v1022.6
++# 3. 公開鍵をアンカーにして、検証する
++cp ~/tukuyo_publisher_key/patch_signing.pub deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
++python3 -B system/tools/verify_release.py system --trusted-pubkey-file deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
++```
++
++- 署名し直すと、元のアンカーでは検証が通らなくなります（`TRUST_ROOT_MISMATCH`）。これは正しい動きです。
++- 新しく作る個体も、以前の版の個体も、学習済みの種の署名の確認が通ります（今の受領書の鍵と、これまでの鍵を記録した `META/PATCH_LINEAGE_v1022_*.json` の鍵を受け付けます）。
++- この手順を、使い捨ての鍵で最初から最後まで試した記録が `evidence_v1022_6/adoption_rehearsal.log` です（台本は `adoption_rehearsal.sh`）。
++
++## 4. 以前の版から移る
++
++| 個体 | すること |
++|---|---|
++| 新しい個体 | 何もいりません |
++| patch5 で作った個体 | そのまま使えます（`whole-audit`・`research-audit`・記憶・推論まで確認）。patch3・patch4・V1022.5 Fusion の個体も、同じ鍵で署名された種なので同じ扱いのはずですが、確かめたのは patch5 の個体です |
++| **代謝（`metabolism-init`）を動かしている個体** | 署名の鍵が変わったので、子の実行に使う信頼アンカーを **1 回だけ明示的に付け替えます**。付け替える前は、子の実行が `EXTERNAL_RUNTIME_TRUST_MISMATCH` で止まります（安全側に止まる） |
++
++```bash
++python3 -B system/run_tukuyo.py --runtime-trust-file NEW_ANCHOR --data D runtime-trust-rebind --previous-trust-file OLD_ANCHOR
++```
++
++- patch5 で記録した研究の探索は、そのまま再生して照合できます（発明なしで記録された探索は、発明なしで再生します）。
++- 研究の状態の主張の境界は、次に保存するときに v1022.6 のものに変わります。
++
++## 5. リリース zip
++
++- `evidence_v1022_6/build_release_zip.py` で作ります。根のフォルダは 1 つ（`TUKUYO_v1022_6/`）、項目は名前順、時刻と権限は固定、キャッシュは入れません。同じ木からは同じ zip ができます（同じ zlib の場合）。
++- 作ったあとに、`system/tools/strict_zip_preflight.py`（根が 1 つ、危険なパスなし、リンクなし、CRC）と、zip の中の `system/` の署名の検証を自動で行います。
++- この版の zip は `TUKUYO_v1022_6.zip` です。zip の中にその zip 自身のハッシュは書けないので、大きさと sha256 は、リポジトリの README に書いてあります。
++
++## 6. 版の中身
++
++- **土台**：V1022.5 Fusion（V1022.4 の復元・停止復旧・子個体監査 ＋ claude-patch2 の文章題・論理・記憶・複数教師・自習）
++- **claude-patch3**：数量・時間・暦・割合、多段の記憶、論理の強化、教える対話
++- **claude-patch4**：意味の関門（数の網羅・役割の監査・作る側と別に書いた Parser B）
++- **claude-patch5**：V1023r 研究プレビュー（隠れた法則の世界・実験の選び方・方法の切り替え・再現試験・反証・記憶）、本物の代謝の中の研究ニッチ、長時間融合試験、Parser B の拡張
++- **claude-patch6**：質問の役割を読む場面モデル、問題の型と証明、patch5 の確信を持った誤りの修正、英語の数詞、論理と記憶の言い換え、文法から法則を組み立てる研究、研究エンジンの高速化、長時間試験の厳密な採点
++- **v1022.6 として**：CLI の版の名前を署名した受領書から読む、`STATUS_V1022_6.json`、`META/KNOWN_GAPS.json` の追記、版の確認テスト（`tests/test_v1022_6.py`）、採用の予行、決まった形のリリース zip
++- patch5 からの差分は `claude_patch6_vs_patch5.diff` にあります。
++
++## 7. 限界
++
++- 長時間融合試験は、この版では 2 時間 7 分までです（4 時間の予定が、作業環境の停止で中断）。24 時間の運転も、まだ実施していません。
++- 文章の読み取りは、今も有限の型です。読めないときは答えません。
++- 未見の評価（F・T）も、開発用の問題も、Parser B の新しい読み取り器も、作る側と同じ私が書きました。F・T の多くは開発用の問題と同じ型です。別の人が書いた問題での評価は、まだありません。
++- 研究の文法と段 5 の世界は、私が設計しました。子が新しい種類の法則を作るわけではありません。世界も 1 種類です。
++- 署名の鍵は、patch6 で新しくしたパッチ鍵です。以前の鍵による相互署名はありません。発行者の連続性は、配布物の外での信頼（またはご自身の鍵での署名）に頼ります。
++- 本物の LLM での効果は測っていません。一般知能・自己コード改変・意識・文字どおりの生命の成立は主張しません。
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/STATUS_V1022_6.json patch6/system/STATUS_V1022_6.json
+--- patch5/system/STATUS_V1022_6.json	1970-01-01 00:00:00.000000000 +0000
++++ patch6/system/STATUS_V1022_6.json	2026-10-06 00:00:00.000000000 +0000
+@@ -0,0 +1,39 @@
++{
++ "release_revision": "v1022.6",
++ "classification": "EXPERIMENTAL",
++ "base": "v1022.5-fusion",
++ "incoming": [
++  "claude-patch3",
++  "claude-patch4",
++  "claude-patch5",
++  "claude-patch6"
++ ],
++ "content": "V1022.5 Fusion with claude-patch3 to claude-patch6: question-role reading (situation model), replayable proofs for new word-problem families, a separately written Parser B, logic and memory paraphrases, the V1023r open-world research preview with law invention inside a fixed grammar, and the V1022.6 long-run fusion test",
++ "preserves_v1022_5_fusion": true,
++ "runtime_llm_required": false,
++ "question_role_reading": true,
++ "replayable_proofs_for_word_problem_families": true,
++ "independent_parser_b_written_by_same_author": true,
++ "open_world_research_preview_v1023r": true,
++ "law_invention_inside_fixed_grammar": true,
++ "invents_new_kinds_of_laws": false,
++ "longrun_fusion_4h_completed": false,
++ "24h_completed": false,
++ "real_external_ai_teacher_campaign_completed": false,
++ "heldout_sets_written_by_same_author_as_code": true,
++ "third_party_heldout_evaluation": false,
++ "publisher_key": "FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk=",
++ "publisher_continuity_requires_out_of_band_trust": true,
++ "general_intelligence_established": false,
++ "self_code_modification": false,
++ "consciousness_established": false,
++ "longrun_fusion_longest_run": {
++  "minutes": 126.93,
++  "operations": 1384,
++  "reasoning_questions": 796,
++  "wrong_certain": 0,
++  "audit_violations": 0,
++  "ended_by": "environment VM stop while the session was idle, not a TUKUYO failure"
++ },
++ "survived_unplanned_vm_stop_with_audits_passing": true
++}
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/run_tukuyo.py patch6/system/run_tukuyo.py
---- patch5/system/run_tukuyo.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/run_tukuyo.py	2026-10-05 14:17:00.684606226 +0000
-@@ -282,9 +282,9 @@
+--- patch5/system/run_tukuyo.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/run_tukuyo.py	2026-10-06 00:00:00.000000000 +0000
+@@ -37,8 +37,16 @@
+     s['ok']=bool(s.get('ok',True) and guard['runtime_guard_installed'] and guard['builtin_spec_ok'] and (not migration_trust or guard['migration'].get('ok',False)))
+     return s
+ 
++RELEASE_REVISION_FALLBACK='v1022.6'
++def release_revision():
++    """the release revision recorded in the signed receipt (the startup guard verifies that receipt against the
++    external trust anchor); a re-sign with --revision changes what the CLI reports without touching code"""
++    try:
++        v=json.loads((Path(__file__).resolve().parent/'META'/'RELEASE_RECEIPT.json').read_text(encoding='utf-8'))['payload']['release_revision']
++        return v if isinstance(v,str) and v and len(v)<=64 else RELEASE_REVISION_FALLBACK
++    except Exception:return RELEASE_REVISION_FALLBACK
+ def output(obj):
+-    if isinstance(obj,dict):obj['release_revision']='v1022.5-fusion'
++    if isinstance(obj,dict):obj['release_revision']=release_revision()
+     print(json.dumps(obj,ensure_ascii=False,sort_keys=True,indent=2,default=str))
+ 
+ def _require_live(data):
+@@ -282,9 +290,9 @@
      c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true');c.add_argument('--research-world',action='store_true',help='claude-patch5: each family lives next to a hidden-rule device; income only from understanding it')
      c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
      sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
@@ -408,7 +608,7 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
      c=sub.add_parser('runtime-trust-rebind');c.add_argument('--previous-trust-file',type=Path,required=True)
      cr=sub.add_parser('cap-request');cr.add_argument('surface');cr.add_argument('--out',type=Path,required=True)
      ci=sub.add_parser('cap-install');ci.add_argument('request',type=Path);ci.add_argument('receipt',type=Path)
-@@ -739,7 +739,7 @@
+@@ -739,7 +747,7 @@
                  else:res=research_life.audit(data)
              elif args.cmd=='research-ecology':
                  from tukuyo_v1023r.evaluate import compare
@@ -418,8 +618,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
                  res={k:v for k,v in res.items() if k!='episodes'}
              elif args.cmd=='verified-query':
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/cognition.py patch6/system/src/tukuyo_v1022/cognition.py
---- patch5/system/src/tukuyo_v1022/cognition.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/cognition.py	2026-10-05 13:53:52.968721345 +0000
+--- patch5/system/src/tukuyo_v1022/cognition.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1022/cognition.py	2026-10-06 00:00:00.000000000 +0000
 @@ -199,7 +199,73 @@
      blob=json.dumps(proof,ensure_ascii=False)
      have=set(re.findall(r'\d+(?:\.\d+)?',blob))
@@ -504,8 +704,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
                  if lineage.is_file():publishers.update(store.read(lineage).get('accepted_seed_public_keys',[]))
              if seed.get('public_key') not in publishers or not whole._verify(seed,seed.get('public_key','')):raise ValueError('V1022_SEED_SIGNATURE')
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/explain.py patch6/system/src/tukuyo_v1022/explain.py
---- patch5/system/src/tukuyo_v1022/explain.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/explain.py	2026-10-05 13:33:26.751127651 +0000
+--- patch5/system/src/tukuyo_v1022/explain.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1022/explain.py	2026-10-06 00:00:00.000000000 +0000
 @@ -33,5 +33,15 @@
              return '依存する値を順に検算: '+'、'.join(f'{s["variable"]} = {s["value"]}' for s in p['steps'])+'。'
          if k=='hypothesis':return f'提示例に一致する有限候補が1つに定まり、入力{p["target_x"]}で{a}となりました。'
@@ -523,8 +723,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
      except (KeyError,IndexError,TypeError):return None
      return None
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/kqa.py patch6/system/src/tukuyo_v1022/kqa.py
---- patch5/system/src/tukuyo_v1022/kqa.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/kqa.py	2026-10-05 13:58:25.283087548 +0000
+--- patch5/system/src/tukuyo_v1022/kqa.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1022/kqa.py	2026-10-06 00:00:00.000000000 +0000
 @@ -21,7 +21,10 @@
       {'通貨','お金'},{'公用語','言語','言葉'},{'色','カラー'},{'面積','広さ'},{'生徒数','生徒の数'},{'社員数','従業員数','社員の数','従業員の数'},
       {'誕生日','生まれた日'},{'出身地','生まれた場所','故郷','ふるさと','出身'},{'電話番号','電話'},{'重さ','重量','体重'},{'深さ','水深'},
@@ -568,8 +768,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
      if len(qw)<2:return None
      hits=[r for r in recs if qw<=set(_en_words(r['text'])) and len(set(_en_words(r['text']))-qw)>=1]
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/logic2.py patch6/system/src/tukuyo_v1022/logic2.py
---- patch5/system/src/tukuyo_v1022/logic2.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/logic2.py	2026-10-05 13:57:15.311302931 +0000
+--- patch5/system/src/tukuyo_v1022/logic2.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1022/logic2.py	2026-10-06 00:00:00.000000000 +0000
 @@ -17,7 +17,9 @@
  GUARD=re.compile(r'ことが多|ことも多|場合が多|ことが少な|相関|原因|かもしれ|だろう|らしい|多分|たぶん|おそらく|恐らく|可能性|ほとんど|たいてい|大抵|一部|いくつか|ことがある|場合がある|場合もある|時々|ときどき|しばしば|でしょう|と思う|と言|と聞|夢|想像|嘘|うそ|だけ|のみ|しか|以外|例えば|たとえば|もしかし|'
                   r'\bprobabl|\bmaybe\b|\bmight\b|\bmay\b|\bsome\b|\bmost\b|\busually\b|\boften\b|\bsometimes\b|\bonly\b|\bunless\b|\bexcept\b|\bsaid\b|\bheard\b|\bdream|\bperhaps\b|\blikely\b',re.I)
@@ -621,7 +821,7 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
      for cl in clauses+[[x,y] for x,y in dclauses]:
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/mathprob.py patch6/system/src/tukuyo_v1022/mathprob.py
 --- patch5/system/src/tukuyo_v1022/mathprob.py	1970-01-01 00:00:00.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/mathprob.py	2026-10-05 14:58:08.045430266 +0000
++++ patch6/system/src/tukuyo_v1022/mathprob.py	2026-10-06 00:00:00.000000000 +0000
 @@ -0,0 +1,527 @@
 +"""claude-patch6: more problem families (Japanese + simple English), same rules as wordprob.py.
 +
@@ -1151,8 +1351,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
 +    try:return _fmt(evaluate(p['expression']))==str(answer)
 +    except (ValueError,SyntaxError,ZeroDivisionError,OverflowError):return False
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/proofs.py patch6/system/src/tukuyo_v1022/proofs.py
---- patch5/system/src/tukuyo_v1022/proofs.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/proofs.py	2026-10-05 13:49:04.227183377 +0000
+--- patch5/system/src/tukuyo_v1022/proofs.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1022/proofs.py	2026-10-06 00:00:00.000000000 +0000
 @@ -242,6 +242,13 @@
          if p['kind']=='qtime':
              from .qtime import check as _check_qtime
@@ -1168,8 +1368,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
              from .kqa import check as check_knowledge
              return check_knowledge(p,answer)
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/semantic_gate.py patch6/system/src/tukuyo_v1022/semantic_gate.py
---- patch5/system/src/tukuyo_v1022/semantic_gate.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/semantic_gate.py	2026-10-05 14:47:15.583292899 +0000
+--- patch5/system/src/tukuyo_v1022/semantic_gate.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1022/semantic_gate.py	2026-10-06 00:00:00.000000000 +0000
 @@ -53,8 +53,21 @@
          if u in t:return d
      return None
@@ -1576,7 +1776,7 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
      toks=tokens(query);P=_proof_numbers(proof)
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/situation.py patch6/system/src/tukuyo_v1022/situation.py
 --- patch5/system/src/tukuyo_v1022/situation.py	1970-01-01 00:00:00.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/situation.py	2026-10-05 14:45:12.281400109 +0000
++++ patch6/system/src/tukuyo_v1022/situation.py	2026-10-06 00:00:00.000000000 +0000
 @@ -0,0 +1,555 @@
 +"""claude-patch6: a situation model for quantity stories (Japanese + simple English).
 +
@@ -2134,8 +2334,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
 +    p=r['proof']
 +    return all(p.get(k)==proof.get(k) for k in ('role','target','expression','answer','events','initial','unit')) and r['answer']==str(answer)
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/wordprob.py patch6/system/src/tukuyo_v1022/wordprob.py
---- patch5/system/src/tukuyo_v1022/wordprob.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/wordprob.py	2026-10-05 13:51:41.052841060 +0000
+--- patch5/system/src/tukuyo_v1022/wordprob.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1022/wordprob.py	2026-10-06 00:00:00.000000000 +0000
 @@ -265,7 +265,7 @@
      if NONOCCURRENCE.search(t) and QTY.search(t):
          return {'refused':'WORD_PROBLEM_EVENT_NOT_CONFIRMED'}
@@ -2171,8 +2371,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
          events.append((x,k))
      if not events or (events[0][1]<0):return None
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1022/wordprob2.py patch6/system/src/tukuyo_v1022/wordprob2.py
---- patch5/system/src/tukuyo_v1022/wordprob2.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1022/wordprob2.py	2026-10-05 14:45:46.911385643 +0000
+--- patch5/system/src/tukuyo_v1022/wordprob2.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1022/wordprob2.py	2026-10-06 00:00:00.000000000 +0000
 @@ -114,9 +114,26 @@
      k=Fraction(m[1]) if m[1] else Fraction(MULT[m[2]])
      base=[x for x in nums if not (m[1] and x.start()==m.start(1))]
@@ -2203,8 +2403,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
  def en_prices(s):
      prices={}
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1023r/agent.py patch6/system/src/tukuyo_v1023r/agent.py
---- patch5/system/src/tukuyo_v1023r/agent.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1023r/agent.py	2026-10-05 14:23:17.784366412 +0000
+--- patch5/system/src/tukuyo_v1023r/agent.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1023r/agent.py	2026-10-06 00:00:00.000000000 +0000
 @@ -49,14 +49,22 @@
      return lo
  def switches(x):return ','.join(f'S{i+1}={bit(x,i)}' for i in range(N))
@@ -2552,8 +2752,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
 +                'events':self.events[-6:],'claim':None if self.claim is None else {k:v for k,v in self.claim.items() if k!='table'},'next_step':step,
 +                **({'invented_hypotheses':len(self.ext)} if self.ext else {})}
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1023r/ecology.py patch6/system/src/tukuyo_v1023r/ecology.py
---- patch5/system/src/tukuyo_v1023r/ecology.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1023r/ecology.py	2026-10-05 14:16:18.469346871 +0000
+--- patch5/system/src/tukuyo_v1023r/ecology.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1023r/ecology.py	2026-10-06 00:00:00.000000000 +0000
 @@ -34,8 +34,9 @@
      def check(self):
          return self.start+self.income-self.spent==self.energy and sum(a for _,_,a in self.rows)==self.energy-self.start
@@ -2574,8 +2774,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
          res['report']=rep
      return res
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1023r/evaluate.py patch6/system/src/tukuyo_v1023r/evaluate.py
---- patch5/system/src/tukuyo_v1023r/evaluate.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1023r/evaluate.py	2026-10-05 14:17:00.683429563 +0000
+--- patch5/system/src/tukuyo_v1023r/evaluate.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1023r/evaluate.py	2026-10-06 00:00:00.000000000 +0000
 @@ -1,8 +1,10 @@
 -"""Held-out evaluation for the V1023r research preview (claude-patch5).
 +"""Held-out evaluation for the V1023r research preview (claude-patch5, extended in claude-patch6).
@@ -2629,7 +2829,7 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
      return out
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1023r/invent.py patch6/system/src/tukuyo_v1023r/invent.py
 --- patch5/system/src/tukuyo_v1023r/invent.py	1970-01-01 00:00:00.000000000 +0000
-+++ patch6/system/src/tukuyo_v1023r/invent.py	2026-10-05 14:21:01.498638813 +0000
++++ patch6/system/src/tukuyo_v1023r/invent.py	2026-10-06 00:00:00.000000000 +0000
 @@ -0,0 +1,137 @@
 +"""claude-patch6: law invention for the V1023r research agent.
 +
@@ -2769,8 +2969,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
 +    m=max(v);return m+math.log(sum(math.exp(s-m) for s in v))
 +def log_mass(L1,L0,exclude=()):return log_mass_from(scores(L1,L0),exclude)
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1023r/life.py patch6/system/src/tukuyo_v1023r/life.py
---- patch5/system/src/tukuyo_v1023r/life.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1023r/life.py	2026-10-05 14:16:30.088052691 +0000
+--- patch5/system/src/tukuyo_v1023r/life.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1023r/life.py	2026-10-06 00:00:00.000000000 +0000
 @@ -33,14 +33,17 @@
  from .ecology import REGIMES,Ledger
  
@@ -2823,8 +3023,8 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
          try:
              led2,alive,death=_expedition(world,agent,econ,TEMPERAMENTS[ex['temperament']]['science_at'],journal)
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/src/tukuyo_v1023r/worlds.py patch6/system/src/tukuyo_v1023r/worlds.py
---- patch5/system/src/tukuyo_v1023r/worlds.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/src/tukuyo_v1023r/worlds.py	2026-10-05 14:16:18.468659626 +0000
+--- patch5/system/src/tukuyo_v1023r/worlds.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/src/tukuyo_v1023r/worlds.py	2026-10-06 00:00:00.000000000 +0000
 @@ -10,6 +10,9 @@
  boolean law.  Laws come in tiers of growing description length; tier 4 is
  "outside every family the agent knows" (a random table that is far from all
@@ -2872,7 +3072,7 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
          """One experiment: set the switches to x, read the (noisy) lamp sensor."""
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/tests/test_claude_patch6.py patch6/system/tests/test_claude_patch6.py
 --- patch5/system/tests/test_claude_patch6.py	1970-01-01 00:00:00.000000000 +0000
-+++ patch6/system/tests/test_claude_patch6.py	2026-10-05 15:00:00.155436362 +0000
++++ patch6/system/tests/test_claude_patch6.py	2026-10-06 00:00:00.000000000 +0000
 @@ -0,0 +1,192 @@
 +"""claude-patch6: read what the question asks (situation model: holders, events and the question's role),
 +new problem families with replayable proofs (mathprob), another person's stock is out of scope, and law
@@ -3066,9 +3266,35 @@ diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TR
 +    assert life.state(d)['claim_boundary']==life.CLAIMS and life.state(d)['expeditions'][1]['law_invention'] is True
 +    au=run(d,'research-audit');assert au['ok'] and au['replayed_from_world_key']==2
 +    assert run(d,'whole-audit')['ok']
+diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/tests/test_v1022_6.py patch6/system/tests/test_v1022_6.py
+--- patch5/system/tests/test_v1022_6.py	1970-01-01 00:00:00.000000000 +0000
++++ patch6/system/tests/test_v1022_6.py	2026-10-06 00:00:00.000000000 +0000
+@@ -0,0 +1,22 @@
++"""v1022.6 release identity: the CLI reports the revision recorded in the signed release receipt (so a re-sign
++with --revision relabels the release without code changes), the version status file keeps its claim
++boundaries, and the lineage keeps every earlier seed key acceptable for existing individuals."""
++import json,os,subprocess,sys
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[1];CLI=ROOT/'run_tukuyo.py'
++
++def test_v1022_6_release_identity(tmp_path):
++    env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
++    for k in ('TUKUYO_LLM_PROVIDER','TUKUYO_LLM_COMMAND','TUKUYO_LLM_TEACHERS'):env.pop(k,None)
++    cmd=[sys.executable,'-B',str(CLI)];anchor=os.environ.get('TUKUYO_TEST_RUNTIME_ANCHOR')
++    if anchor:cmd+=['--runtime-trust-file',anchor]
++    p=subprocess.run(cmd+['--data',str(tmp_path/'d'),'init'],cwd=ROOT,env=env,capture_output=True,text=True,timeout=240);r=json.loads(p.stdout)
++    receipt=json.loads((ROOT/'META/RELEASE_RECEIPT.json').read_text(encoding='utf-8'))
++    assert r['ok'] and r['release_revision']==receipt['payload']['release_revision'],(r.get('release_revision'),receipt['payload'])
++    assert r['release_revision'].startswith('v1022.6')
++    st=json.loads((ROOT/'STATUS_V1022_6.json').read_text(encoding='utf-8'))
++    assert st['release_revision']=='v1022.6' and st['base']=='v1022.5-fusion' and st['runtime_llm_required'] is False
++    assert not any(st[k] for k in ('invents_new_kinds_of_laws','24h_completed','general_intelligence_established','self_code_modification',
++                                   'consciousness_established','third_party_heldout_evaluation'))
++    lin=json.loads((ROOT/'META/PATCH_LINEAGE_v1022_6.json').read_text(encoding='utf-8'))
++    assert {'22jzm2l8ZiBxLF0QvN5IpCcq0NQEdPwcNodO/Ey83zA=','FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk='}<=set(lin['accepted_seed_public_keys'])
 diff -ruN -x __pycache__ -x RELEASE_MANIFEST.json -x RELEASE_RECEIPT.json -x 'TRAINED_SKILLS*.json' patch5/system/tools/longrun_fusion.py patch6/system/tools/longrun_fusion.py
---- patch5/system/tools/longrun_fusion.py	2026-10-05 09:56:48.000000000 +0000
-+++ patch6/system/tools/longrun_fusion.py	2026-10-05 15:04:21.816538940 +0000
+--- patch5/system/tools/longrun_fusion.py	2026-10-06 00:00:00.000000000 +0000
++++ patch6/system/tools/longrun_fusion.py	2026-10-06 00:00:00.000000000 +0000
 @@ -70,9 +70,10 @@
      if expected in ('YES','NO'):
          ok=a.startswith('はい') if expected=='YES' else a.startswith('いいえ')

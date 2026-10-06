@@ -1,0 +1,41 @@
+{
+ "schema": "tukuyo.v1022_6.longrun_gate_note/1",
+ "command": "tools/longrun_fusion.py --minutes 240 --seed 20261008 (signed v1022.6 copy; src/tests/tools identical to the release)",
+ "started_utc": "2026-10-05T23:29:01Z",
+ "last_report_utc": "2026-10-06T01:35:57Z",
+ "elapsed_minutes_at_last_report": 126.93,
+ "completed": false,
+ "why_not_completed": "the cloud VM running the session was stopped while the session was idle (about 01:36 UTC) and restarted at 01:59:35 UTC; every process was killed, the disk was kept. Not a failure of TUKUYO: the run had 0 violations up to the stop.",
+ "ops": {
+  "reason": 796,
+  "crash": 68,
+  "metab": 278,
+  "study": 59,
+  "checkpoint": 64,
+  "restore": 68,
+  "teach": 51
+ },
+ "operations_total": 1384,
+ "reasoning_questions": 796,
+ "reasoning_correct": 599,
+ "reasoning_correct_abstain": 178,
+ "reasoning_missed": 19,
+ "reasoning_wrong_certain": 0,
+ "violations": 0,
+ "checkpoints": 64,
+ "restores": 68,
+ "crash_injections": 68,
+ "crash_reached": 7,
+ "missed_note": "the misses are verified-query, which also declines these two forms in patch5 (checked on both versions: 「りんごが40個あります。12個食べました。7個もらいました。残りは何個？」 and the もし…なら logic question); think and llm-ask answer them",
+ "after_the_unplanned_stop": {
+  "whole-audit": true,
+  "metabolism-audit": true,
+  "resource_conservation": true,
+  "learning-audit": true,
+  "llm-audit": true,
+  "metabolism-step_resumed": true,
+  "tick_after_resume": 229,
+  "think_after_resume": "5 (correct)",
+  "whole-audit_after_resume": true
+ }
+}

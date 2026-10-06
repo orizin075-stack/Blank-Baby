@@ -1,9 +1,9 @@
-# adoption_rehearsal.sh run on 2026-10-05T23:30:48Z: release = signed v1022.6 copy, patch5 = the original patch5 tree (anchor 22jzm2...)
+# adoption_rehearsal.sh run on 2026-10-06T02:10:05Z: release = the final signed v1022.6 tree, patch5 = the original patch5 tree (anchor 22jzm2...)
 == 1 publisher key (keep the private half outside the release)
-keygen: {'ok': True, 'public_key': 'E0fz/rv2q18GGFZoiUABEfrKm1lk35uJgSKXV/zrOzY='}
+keygen: {'ok': True, 'public_key': 'IRtGXIA0uZFTC79ZabuiClCSESRR3r3AVviKQMGIifk='}
 == 2 sign the release as v1022.6, write the anchor, verify
-sign: {'ok': True, 'files': 1366, 'release_revision': 'v1022.6'}
-verify: {'ok': True, 'verified_files': 1366}
+sign: {'ok': True, 'files': 1367, 'release_revision': 'v1022.6'}
+verify: {'ok': True, 'verified_files': 1367}
 verify_with_the_old_anchor: {'ok': False, 'bad': ['RELEASE_SIGNATURE', 'TRUST_ROOT_MISMATCH']}
 == 3 a new individual
 init: {'ok': True, 'release_revision': 'v1022.6'}

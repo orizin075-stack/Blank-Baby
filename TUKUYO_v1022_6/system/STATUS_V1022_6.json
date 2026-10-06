@@ -17,7 +17,7 @@
  "open_world_research_preview_v1023r": true,
  "law_invention_inside_fixed_grammar": true,
  "invents_new_kinds_of_laws": false,
- "longrun_fusion_4h_completed": null,
+ "longrun_fusion_4h_completed": false,
  "24h_completed": false,
  "real_external_ai_teacher_campaign_completed": false,
  "heldout_sets_written_by_same_author_as_code": true,
@@ -26,5 +26,14 @@
  "publisher_continuity_requires_out_of_band_trust": true,
  "general_intelligence_established": false,
  "self_code_modification": false,
- "consciousness_established": false
+ "consciousness_established": false,
+ "longrun_fusion_longest_run": {
+  "minutes": 126.93,
+  "operations": 1384,
+  "reasoning_questions": 796,
+  "wrong_certain": 0,
+  "audit_violations": 0,
+  "ended_by": "environment VM stop while the session was idle, not a TUKUYO failure"
+ },
+ "survived_unplanned_vm_stop_with_audits_passing": true
 }
