@@ -76,14 +76,14 @@ GAIN=V('put|puts|placed|places|stored|stores|got|gets|get|received|receives|rece
        'purchased|purchases|purchase|harvested|harvests|harvest|obtained|acquired|inherited|adopted|raised|produced|built|builds|build|sewed|knitted',
        'planted|plants|plant|cooked|cooks|cook|prepared|prepares|prepare|brought|brings|bring|ordered|orders|order|printed|prints|print',
        'gained|gains|gain|borrowed|borrows|borrow|grabbed|grabs|recovered|stocked|stocks|fried|grilled|crafted|created|creates|create|drew|draws|draw|painted|paints|paint|wrote|writes|write|cut|cuts|took|takes')
-LOSE=V('ate|eats|eat|used|uses|use|spent|spends|spend|lost|loses|lose|sold|sells|sell|broke|breaks|break|drank|drinks|drink|popped|pops|pop',
+LOSE=V('ate|eats|eat|used|uses|use|spent|spends|spend|lost|loses|lose|sold|sells|sell|broke|breaks|break|drank|drinks|drink|popped|pops|pop|returned|returns|return',
        'donated|donates|donate|lent|lends|lend|paid|pays|pay|mailed|mails|mail|sent|sends|send|shipped|ships|ship',
        'discarded|discards|discard|removed|removes|remove|burned|burns|burn|deleted|deletes|delete|destroyed|destroys|destroy|spilled|spills|spill',
        'threw|throws|throw|tossed|tosses|toss|dropped|drops|drop|gave|gives|give|handed|hands|hand|passed|passes|pass|traded|trades|trade|shared|shares|share',
        'cracked|ruined|tore|ripped|melted|wasted|recycled|consumed|consumes|consume|served|serves|serve|fed|feeds|feed|distributed|distributes|distribute|delivered|delivers|deliver')
 TRANSFER=V('gave|gives|give|handed|hands|hand|passed|passes|pass|sent|sends|send|mailed|mails|mail|lent|lends|lend|donated|donates|donate|shared|shares|share',
            'fed|feeds|feed|served|serves|serve|distributed|distributes|distribute|delivered|delivers|deliver|paid|pays|pay|sold|sells|sell')
-JOIN=V('joined|joins|join|came|comes|come|arrived|arrives|arrive|boarded|boards|board|entered|enters|enter|landed|lands|land|hatched|attended|enrolled|returned')
+JOIN=V('joined|joins|join|came|comes|come|arrived|arrives|arrive|boarded|boards|board|entered|enters|enter|landed|lands|land|hatched|attended|enrolled')
 LEAVE=V('left|leaves|leave|quit|quits|departed|departs|depart|escaped|died|flew|ran|swam|walked|went|dropped|fell|go|goes')
 OTHER_VERBS=V('is|are|was|were|playing|eating|sitting|standing|waiting|swimming|flying|running|walking|sleeping|working|living|growing|go|goes|went|came|come|play|plays|sit|sits|stand|stands|live|lives|decided|wanted|began|started|tried|helped|needed|got|became|stayed|remained')
 ACT=V('read|reads|saw|sees|see|counted|counts|count|solved|solves|solve|played|plays|play|ran|runs|run|walked|walks|walk',
@@ -92,7 +92,7 @@ ACT=V('read|reads|saw|sees|see|counted|counts|count|solved|solves|solve|played|p
       'completed|completes|complete|spotted|spots|spot|cleaned|cleans|clean|washed|washes|wash|fixed|fixes|fix|recorded|records|record',
       'climbed|climbs|climb|kicked|kicks|kick|hit|hits|did|does|do|finished|finishes|finish|blew|blows|blow|inflated|filled|fills|fill|ironed|folded|watered|waters|water')
 COST=V('cost|costs|costed|priced|charges|charged|charge|worth')
-INTENT=V('wants|want|wanted|needs|need|needed|plans|plan|planned|hopes|hope|hoped|wishes|wish|wished|tries|try|tried|likes|like|would|will|going|should|must|can|could|may|might')
+INTENT=V('wants|want|wanted|needs|need|needed|plans|plan|planned|hopes|hope|hoped|wishes|wish|wished|tries|try|tried|likes|like|would|will|going|should|must')
 PRON={'he','she','they','him','her','them','it','i','we','you','me','us','his','their','its','my','our','your','hers','theirs'}
 DET=V('the|a|an|his|her|their|its|my|our|your|this|that|these|those|some|each|every|all|both|any|another|other|one|several|many|few|most|no')
 PREP=V('of|for|in|on|at|to|from|with|by|per|into|onto|than|about|after|before|during|over|under|around|between|among|through|across|off|out|up|down|away|back|along|inside|outside|near|behind|until|since|without|apiece|within')
@@ -109,7 +109,7 @@ CAP_STOP=V('There|Then|How|What|The|A|An|On|In|At|After|Later|Next|Today|Yesterd
            'January|February|March|April|May|June|July|August|September|October|November|December|Mr|Mrs|Ms|Dr|Find|Of|For|To|From|With|But|And|So|All|Both',
            'Last|During|Before|Since|Because|Also|Another|Most|Many|Several|Its|My|Our|Your|Why|Where|Which|Who|At|By|As|Altogether|Together|Total|Halloween|Christmas',
            'Easter|Thanksgiving|Valentine|Day|Street|Avenue|Road|Lake|River|Mountain|Park|School|Store|Team|Club|Center|Palace|Tower|Towers|Building|State|City|Island|Ocean|Sea|Bay|Christmas|English|Spanish|French|Chinese|Japanese|American')
-PERSONS=V('friend|student|child|kid|person|people|guest|player|member|worker|boy|girl|classmate|cousin|neighbor|teammate|grandchild|son|daughter|camper|customer|visitor|teacher|team|family|class|group')
+PERSONS=V('friend|student|child|kid|person|people|guest|player|member|worker|boy|girl|classmate|cousin|neighbor|teammate|grandchild|son|daughter|camper|customer|visitor|teacher|team|family|class|group|niece|nephew|brother|sister|grandson|granddaughter|pupil|athlete|employee|kid|adult|man|woman|baby|scout|soldier|dancer|singer|runner|swimmer|player|guest')
 KIN=V('mom|mother|dad|father|sister|brother|aunt|uncle|grandma|grandmother|grandpa|grandfather|friend|friends|cousin|cousins|teacher|son|daughter|parents|wife|husband|neighbor|neighbors|boss|coach|classmate|classmates|family|parent|sisters|brothers|kids|children')
 COLORS=V('red|blue|green|yellow|white|black|pink|purple|orange|brown|gray|grey|gold|silver')
 COMPARATIVE=V('more|fewer|less|older|younger|taller|shorter|longer|heavier|lighter|cheaper|bigger|smaller|farther|further|higher|lower|faster|slower|wider|narrower|deeper')
@@ -180,6 +180,16 @@ def fam(v):
         if v in f:return f[0]
     return v
 
+def lemma(w):
+    """verb stem for -ing / -ed forms: selling->sell, getting->get, baking->bake"""
+    w=w.lower()
+    for suf in ('ing','ed'):
+        if w.endswith(suf) and len(w)>len(suf)+2:
+            b=w[:-len(suf)]
+            if len(b)>2 and b[-1]==b[-2] and b[-1] not in 'lsz':return b[:-1]
+            return b
+    return w
+
 def lit(v):
     v=Fraction(v);return str(v.numerator) if v.denominator==1 else f'{v.numerator}/{v.denominator}'
 
@@ -205,7 +215,9 @@ class Story:
     def resolve(s,p):
         p=p.lower()
         if p in ('i','me','my','we','us','our','you','your'):return {'me':'i','my':'i','us':'we','our':'we','your':'you'}.get(p,p)
-        if p in ('they','them','their'):return 'they'
+        if p in ('they','them','their'):
+            if not s.people and s.last_owner and s.last_owner not in ('there',):return s.last_owner
+            return 'they'
         if p in ('it','its'):return 'it'
         if len(s.people)==1:return s.people[0]
         if s.last_owner:return s.last_owner          # the subject of the latest clause
@@ -292,6 +304,7 @@ class Story:
         out=[]
         for k,x in enumerate(toks):
             if x.kind!='word':continue
+            if k+1<len(toks) and toks[k+1].low in ('room','rooms','area','shop','store','table','line','station','box','bag','hall') and k>0 and toks[k-1].low in DET:continue
             if x.low in INTENT and not (x.low=='can' and k+1<len(toks) and toks[k+1].kind=='word' and False):
                 out.append((k,'intent'));continue
             if verbish(x.low) or x.low in BE or x.low in V('decided|began|started|went|became|weighs|weighed|measures|measured|takes|took'):
@@ -319,18 +332,19 @@ class Story:
         total_words=bool(re.search(r'\b(?:a total of|in total|total of|in all|altogether|all together|together|combined)\b',span.lower()))
         if not nidx:
             # numberless events about something countable: "had some balloons", "watered the equal amount of trees"
-            for k,mood in vs:
-                v=toks[k].low
-                if mood=='intent':continue
-                some=next((q for q in range(k+1,len(toks)) if toks[q].low in ('some','several','a few','many')),None)
-                np=s.np_after(toks,some if some is not None else k)
-                if np['noun'] is None or np['noun'] in UNITS:continue
-                if some is not None and (v in HAVE or v in GAIN|LOSE|JOIN|LEAVE):
-                    kind='state' if v in HAVE else 'change'
-                    s.frames.append(Frame(kind=kind,m=None,noun=np['noun'],adj=np['adj'],owner=csubj or subj,verb=v,sign=+1 if v in GAIN|JOIN else -1,span=span,other=None))
-                    s.last_noun=np['noun'];continue
-                if v in GAIN|LOSE|ACT|TRANSFER|JOIN|LEAVE:
-                    s.vague.append(Frame(noun=np['noun'],of=np['of'],verb=v,owner=csubj or subj,span=span))
+            for k,x in enumerate(toks):
+                if x.kind=='word' and x.low.endswith('ing') and k+1<len(toks) and toks[k+1].low=='some':
+                    base={'eating':'ate','using':'used','selling':'sold','giving':'gave','spending':'spent','losing':'lost','buying':'bought','finding':'found','picking':'picked','getting':'got','receiving':'received','baking':'baked','making':'made'}.get(x.low)
+                    if base:
+                        np=s.np_after(toks,k+1);noun=np['noun'] or s.noun_of.get(csubj or subj) or s.last_noun
+                        if noun:
+                            s.frames.append(Frame(kind='change',m=None,noun=noun,adj=(),owner=csubj or subj or s.last_owner,verb=base,sign=+1 if base in GAIN else -1,span=span,other=None,implicit=np['noun'] is None))
+                            return csubj or subj
+            somes=[q for q,x in enumerate(toks) if x.low in ('some','several')]
+            made=0
+            for q in somes[:1]:
+                before_n=len(s.frames);s.mention(toks,q,vs,csubj or subj,span,total_words,unknown=True);made+=len(s.frames)-before_n
+            if made:return csubj or subj
             for k,mood in vs:
                 if mood is None and toks[k].low in GAIN|LOSE|TRANSFER|JOIN|LEAVE:
                     for x in toks:
@@ -356,8 +370,8 @@ class Story:
         if not seg or any(x.kind=='num' for x in seg):return default
         h=s.holder(seg)
         return h or default
-    def mention(s,toks,k,vs,csubj,span,total_words):
-        m=toks[k].num
+    def mention(s,toks,k,vs,csubj,span,total_words,unknown=False):
+        m=None if unknown else toks[k].num
         before=[x.low for x in toks[:k] if x.kind=='word']
         prev=before[-1] if before else ''
         money=k>0 and toks[k-1].kind=='money'
@@ -373,10 +387,13 @@ class Story:
         verb=toks[vpos].low if vpos is not None else None
         own=s.subject_of(toks,vs,vpos,csubj) if vpos is not None else csubj
         # 'one' as a determiner or pronoun ("one neighbor brought", "the first one") is not an amount
-        if m.raw.lower() in ('one',) and (vpos is None or prev in DET|V('first|second|third|last|which|each|every')|{'the'} or np['noun'] is None):return
+        if m is not None and m.raw.lower() in ('one',) and (vpos is None or prev in DET|V('first|second|third|last|which|each|every')|{'the'} or np['noun'] is None):return
         f=Frame(m=m,noun=noun,adj=adj,of=np['of'],ofadj=np.get('ofadj',()),owner=own,verb=verb,mood=mood,span=span,before=before,after=after,
-                total=total_words,cmp=np['cmp'],money=money,raw=m.raw)
-        if noun is None:
+                total=total_words,cmp=np['cmp'],money=money,raw=m.raw if m is not None else 'some')
+        if noun is None and after[:1]==['of']:
+            ofn=[w for w in after[1:5] if w not in DET and w not in ('her','his','their','my','our','your')]
+            if ofn and ofn[0] not in ('them','those','these','it') and ofn[0] not in NOT_NOUN:f['noun']=sing(ofn[0]);noun=f['noun']
+        if f.noun is None:
             if after[:2] in (['of','them'],['of','those'],['of','these']):f['noun']=s.last_noun
             elif own in s.noun_of:f['noun']=s.noun_of[own]
             elif s.last_noun:f['noun']=s.last_noun
@@ -392,13 +409,18 @@ class Story:
             other=s._after_word(toks,endi,'than')
             f.update(kind='compare',sign=+1 if cw in ('more','older','taller','longer','heavier','bigger','farther','further','higher','faster','wider','deeper') else -1,other=other,cword=cw)
             s.frames.append(f);return
-        if m.raw.lower() in ('twice','double','triple','thrice','half') and after[:1]==['as'] or after[:1]==['times'] or prev in ('times',) or (noun=='time' and after[:1] in (['as'],['more'],['longer'])):
+        if m is not None and m.raw.lower() in ('twice','double','triple','thrice','half') and after[:1]==['as'] or after[:1]==['times'] or prev in ('times',) or (noun=='time' and after[:1] in (['as'],['more'],['longer'])):
             other=None
             if 'as' in after:
                 idx=[i for i,w in enumerate(after) if w=='as']
                 if len(idx)>=2:other=s._after_word(toks,endi,'as',nth=2)
             elif 'than' in after:other=s._after_word(toks,endi,'than')
             f.update(kind='times',other=other);s.frames.append(f);return
+        # rates: "(sold) in packages of 6" (the number counts the things in one package)
+        if prev=='of' and len(before)>=2 and sing(before[-2]) in GROUPS and (len(before)<3 or before[-3] in ('in','of','into','by')) or (prev=='of' and len(before)>=2 and sing(before[-2]) in GROUPS and verb in V('come|comes|came|sold|sell|sells|packed|bought|purchased')):
+            content=s.holder([x for x in toks[:vpos] if x.kind=='word']) if vpos is not None else None
+            if content and content not in PRON and content not in s.people:
+                f.update(kind='rate',noun=content,per=sing(before[-2]),implicit=False);s.frames.append(f);return
         # rates
         r=re.match(r'(?:\w+\s+){0,2}?(?:in|on|for|to|into|inside|with|from)\s+(?:each|every)\s+(?:one\s+of\s+)?(?:the\s+|his\s+|her\s+|their\s+)?(\w+)|(?:\w+\s+){0,1}?per\s+(\w+)|(?:\w+\s+){0,1}?(?:each|every)\s+(\w+)|(each|apiece)\b|(?:\w+\s+){0,1}?an?\s+(day|week|month|year|hour|minute|second|night|game|book|box|bag)\b',win)
         if r:
@@ -406,9 +428,12 @@ class Story:
             g=None if g in ('each','apiece') else sing(g)
             f.update(kind='rate',per=g);s.frames.append(f);return
         bk=[i for i,w in enumerate(before) if w in ('each','every')]
-        if bk and (len(before)-bk[-1])<=5:
+        if bk and ((len(before)-bk[-1])<=8 or (bk[-1]==0 and not any(x.kind=='num' for x in toks[:k]))):
             ph=[]
-            for w in before[bk[-1]+1:]:
+            seg=before[bk[-1]+1:]
+            if seg[:2]==['of','the'] or seg[:2]==['of','his'] or seg[:2]==['of','her'] or seg[:2]==['of','their']:seg=seg[2:]
+            elif seg[:1]==['of']:seg=seg[1:]
+            for w in seg:
                 if w in NOT_NOUN or w in MODS or verbish(w) or w in OTHER_VERBS or w in ('composed','made','filled','consists','will','can'):break
                 ph.append(w)
             grp=sing(ph[-1]) if ph else None
@@ -423,6 +448,18 @@ class Story:
             vafter=vafters[0] if vafters else None
             if len([v for v in vafters if v in JOIN|LEAVE|LOSE|GAIN|OTHER_VERBS and v not in BE])>1:
                 f.update(kind='bare');s.frames.append(f);return
+            ws_after=[x.low for x in toks[k+1:] if x.kind=='word']
+            pas=next((i for i,w in enumerate(ws_after[:-1]) if w in ('were','was','are','is','got') and ws_after[i+1] in LOSE|GAIN|V('taken|eaten|added|thrown|given')),None)
+            if pas is not None:
+                pv=ws_after[pas+1]
+                minus=pv in LOSE|V('taken|eaten|thrown|given') and not (pv in ('added','put','placed'))
+                place=None
+                for i,w in enumerate(ws_after):
+                    if w in ('from','to','into','in','on','onto') and i+1<len(ws_after):
+                        rest=[x for x in ws_after[i+1:] if x not in DET]
+                        if rest:place=sing(rest[0]);break
+                f.update(kind='change',sign=-1 if minus else +1,verb=pv,owner=place or s._holder_of(f.noun),other=None,subjnum=True,passive=True);s.frames.append(f);return
+            if vafter in ('returned','returns','return','came back'):vafter='came'
             if vafter in JOIN|LEAVE|V('died|broke|melted|popped|fell|escaped|wilted|burst|sank|hatched') and vafter not in BE|HAVE:
                 sign=+1 if vafter in JOIN|GAIN else -1
                 place=s._place(toks) or s._holder_of(f.noun)
@@ -450,10 +487,12 @@ class Story:
         if verb in LEAVE and verb not in ('left',):f.update(kind='change',sign=-1);s.frames.append(f);return
         if verb=='left' and 'left' not in after[:1]:f.update(kind='change',sign=-1);s.frames.append(f);return
         if verb in LOSE:f.update(kind='change',sign=-1);s.frames.append(f);return
-        if after[:2] in (['of','them'],['of','those'],['of','these'],['of','it']) and verb in GAIN and verb not in LOSE:
+        if after[:2] in (['of','them'],['of','those'],['of','these'],['of','it']) and verb not in LOSE and verb not in TRANSFER:
             f.update(kind='bare');s.frames.append(f);return
-        if verb in V('put|puts|placed|places|stored|stores') and not any(g.owner==own and g.noun==f.noun for g in s.frames):
-            f.update(kind='state');s.frames.append(f);return
+        if verb in V('put|puts|placed|places|stored|stores'):
+            if not any(g.owner==own and g.noun==f.noun for g in s.frames):f.update(kind='state')
+            else:f.update(kind='bare')
+            s.frames.append(f);return
         if verb in GAIN:
             frm=None
             if 'from' in after[:4]:frm=s._after_word(toks,endi,'from')
@@ -595,9 +634,13 @@ def parse_question(st,a,b):
          'originally|beginning|end|still|then|after|that|have|has|had|do|does|did|is|are|was|were|will|would|can|could|be|been|get|got|on|by|for|from',
          'both|each|every|per|one|his|her|their|its|my|our|your|them|they|he|she|it|i|we|you|him|me|us|money|cash|initially|remain|remaining|need',
          'needs|needed|this|time|number|amount|buy|cost|costs|spend|spent|pay|paid|away|out|up|back|off|home|what|find|value|sum|total|make|made',
-         'end|ended|up|together|altogether|so|far|right|over|does|dollars|dollar|cents|cent|money|worth|price|change|earn|earned|save|saved|owe')
-    bodyw=set(re.findall(r"[a-z]+",body));bodyfam={fam(w) for w in bodyw}
-    res=[w for w in re.findall(r"[a-z]+(?:'[a-z]+)?",low) if w not in ok and w not in bodyw and sing(w) not in {sing(x) for x in bodyw} and fam(w) not in bodyfam and not any(x.low==w and st.is_name(x) for x in toks)]
+         'end|ended|up|together|altogether|so|far|right|over|does|dollars|dollar|cents|cent|money|worth|price|change|earn|earned|save|saved|owe',
+         'totaled|totalled|total|can|could|may|might|able|already|also|currently|now|anymore|any|more|just|exactly|old|tall|long|high|deep|heavy|wide|big|is|be')
+    bodyw=set(re.findall(r"[a-z]+",body));bodyfam={fam(w) for w in bodyw}|{fam(lemma(w)) for w in bodyw}|{lemma(w) for w in bodyw}|{lemma(w)+'e' for w in bodyw}
+    res=[w for w in re.findall(r"[a-z]+(?:'[a-z]+)?",low) if w not in ok and w not in bodyw and sing(w) not in {sing(x) for x in bodyw} and fam(w) not in bodyfam
+         and lemma(w) not in bodyfam and fam(lemma(w)) not in bodyfam and (lemma(w)+'e') not in bodyfam and not any(x.low==w and st.is_name(x) for x in toks)]
+    nounw={ask.noun,ask.of}|set(ask.adj or ())|set(ask.ofadj or ())
+    res=[w for w in res if sing(w) not in nounw and w not in nounw]
     if res:ask['residue']=res
     # numbers in the question: "in 3 days", "do 8 bees have", "to have 43 cats", "2 ice cream cones cost"
     for k,x in enumerate(toks):
@@ -610,7 +653,7 @@ def parse_question(st,a,b):
 # ----------------------------------------------------------------------------- plans
 class Plan:
     def __init__(s,st,name):
-        s.st=st;s.name=name;s.qs={};s.facts=[];s.used=set();s.money=None;s.cpd=None
+        s.st=st;s.name=name;s.qs={};s.facts=[];s.used=set();s.money=None;s.cpd=None;s.gain_start=False
     def to_money(s,q,frm,to,span):
         if frm==to:return q
         if s.cpd is None:
@@ -672,7 +715,11 @@ def timeline(p,owner,noun,adj=(),unit=None):
                 if f.m is None:no('UNKNOWN_LATER_STATE')
                 v=bm(f,f'{owner}_{noun}_stated');p.rel(f'{cur} = {v}',f.span)
             f['_q']=cur;continue
-        if cur is None:no('CHANGE_BEFORE_STATE')
+        if cur is None:
+            if mine and f.sign>0 and not f.passive and f.other is None and f.kind=='change' and fam(f.verb) not in ('get','receive','join','come','arrive'):
+                start=cur=bm(f,f'{fam(f.verb)}_{noun}') if f.m is not None else p.new(f'{fam(f.verb)}_{noun}',unit,about='unknown start')
+                f['_q']=cur;p.gain_start=True;continue
+            no('CHANGE_BEFORE_STATE')
         sign=f.sign if mine else -f.sign
         d=bm(f,f'{fam(f.verb)}_{noun}') if f.m is not None else p.new(f'{fam(f.verb)}_{noun}',unit,about='unknown change')
         f['_q']=d
@@ -681,7 +728,9 @@ def timeline(p,owner,noun,adj=(),unit=None):
     return start,cur
 
 def has_holding(st,owner,noun,adj=()):
-    return any(f.kind=='state' and f.owner==owner and f.noun==noun and _adj_ok(f.adj,adj) for f in st.frames)
+    if any(f.kind=='state' and f.owner==owner and f.noun==noun and _adj_ok(f.adj,adj) for f in st.frames):return True
+    first=next((f for f in st.frames if f.kind in ('state','change') and f.noun==noun and (f.owner==owner or f.other==owner) and _adj_ok(f.adj,adj)),None)
+    return bool(first and first.kind=='change' and first.owner==owner and first.sign>0 and not first.passive and first.other is None and fam(first.verb) not in ('get','receive','join','come','arrive'))
 
 def events(st,verb,noun,adj,owner):
     v=fam(verb)
@@ -692,7 +741,7 @@ MEASURE={'long':'second|minute|hour|day|week|month|year|inch|foot|yard|mile|mete
          'tall':'inch|foot|yard|meter|centimeter|story','high':'inch|foot|yard|meter|centimeter|mile','deep':'inch|foot|yard|meter|centimeter','old':'year|month|week|day',
          'heavy':'pound|ounce|gram|kilogram|ton','wide':'inch|foot|yard|meter|centimeter','big':'square'}
 def asked_noun(st,ask):
-    if ask.measure:
+    if ask.measure and ask.measure!='big':
         ok=set(MEASURE[ask.measure].split('|'))
         cand={f.noun for f in st.frames if f.m is not None and f.noun in ok}
         return next(iter(cand)) if len(cand)==1 else None
@@ -703,6 +752,11 @@ def asked_noun(st,ask):
         cand={f.noun for f in st.frames if f.noun and f.kind in ('state','change','act') and (ask.owner is None or f.owner==ask.owner)}
         if len(cand)==1:noun=next(iter(cand))
     if noun=='money':noun='dollar'
+    if noun and not any(f.noun==noun for f in st.frames):
+        mem=members(noun)
+        if mem and mem!='*':
+            held={f.noun for f in st.frames if f.m is not None and f.noun in mem}
+            if len(held)==1 and all(f.noun in held or f.noun in ('dollar','cent') for f in st.frames if f.m is not None):noun=next(iter(held))
     return noun
 
 # ---- schema: holding --------------------------------------------------------
@@ -778,6 +832,7 @@ def schema_holding(st,ask):
             t=p.new(f'total_{noun}',noun);p.rel(f"{t} = {' + '.join(names)}",ask.text);return p,t,noun
         return None
     start,cur=timeline(p,owner,noun,adj)
+    if p.gain_start and ask.when=='initial' and not ask.verb:return None
     return p,(start if ask.when=='initial' else cur),noun
 
 # ---- schema: compare --------------------------------------------------------
@@ -947,30 +1002,32 @@ def schema_share(st,ask):
     noun=asked_noun(st,ask)
     if noun is None:return None
     fr=[f for f in st.frames if f.m is not None]
-    if any(f.kind in ('price','compare','times','intent','unknown','be') for f in st.frames):return None
+    if any(f.kind in ('price','compare','times','unknown','be') for f in st.frames):return None
     p=Plan(st,'share')
     low=ask.low
     # "how many will each get" / "how many in each box": total of noun, number of groups
     if ask.kind=='each':
         mg=re.search(r'\b(?:each|every|per)\s+(?:of\s+)?(?:the\s+|his\s+|her\s+|their\s+)?(\w+)',low)
-        g=sing(mg.group(1)) if mg and mg.group(1) not in ('one','person','other') else None
-        tots=[f for f in fr if f.kind in ('state','change') and f.noun==noun]
-        grp=[f for f in fr if f not in tots and f.kind in ('state','change','bare') and (g is None or f.noun==g or (f.noun and g and f.noun.endswith(g)) or f.noun in KIN)]
+        g=sing(mg.group(1)) if mg and mg.group(1) not in ('one','other') else None
+        people=g in ('person','people','one') or g in PERSONS
+        tots=[f for f in fr if f.kind in ('state','change','intent') and f.noun==noun]
+        grp=[f for f in fr if f not in tots and f.kind in ('state','change','bare','intent','act') and f.noun and
+             ((g and (f.noun==g or f.noun.endswith(g))) or (people and f.noun in PERSONS))]
         qg=[x for x in ask.qframes if g and x.noun==g]
         if len(tots)!=1:return None
         if qg and not grp:cnt=qg[0]
         elif len(grp)==1 and not ask.qframes:cnt=grp[0]
         else:return None
         if len(fr)+len(ask.qframes)!=2:return None
-        if not re.search(r'\b(?:equal|equally|evenly|same|each|every|per|divided|split|shared|share|among)\b',(st.t).lower()):return None
+        if not re.search(r'\b(?:equal|equally|evenly|same|each|every|per|divided|split|shared|share|among|organized|group|groups)\b',(st.t).lower()):return None
         tq=p.bind(tots[0],f'{noun}_total',noun);gq=p.bind(cnt,'groups',cnt.noun or 'group')
         per=p.new(f'{noun}_per_group',f'{noun}/{cnt.noun or "group"}',integer=False)
         p.rel(f'{tq} = {per} * {gq}',ask.text)
-        if not re.search(r'\b(?:left|remain|remaining|over|full)\b',low):
-            p.qs[per]['integer']=True
-            return p,per,noun
-        return None
+        if re.search(r'\b(?:left|remain|remaining|over|full)\b',low):return None
+        p.qs[per]['integer']=noun not in UNITS and noun not in ('dollar','cent')
+        return p,per,noun
     # "how many boxes / days / trips": total of the content, rate per group
+    if any(f.kind=='intent' for f in st.frames):return None
     rates=[f for f in fr if f.kind=='rate']
     if len(rates)==1 and ask.kind=='amount':
         r=rates[0];g=r.per
@@ -983,32 +1040,41 @@ def schema_share(st,ask):
         tq=p.bind(tot,f'{content}_total',content);rq=p.bind(r,f'{content}_per_{noun}',f'{content}/{noun}',integer=False)
         exact=p.new(f'{noun}_exact',noun,integer=False);p.rel(f'{exact} = {tq} / {rq}',r.span)
         if re.search(r'\b(?:left|left over|remain|remaining)\b',low):return None
-        if re.search(r'\b(?:need|needed|needs|required|enough|all of|to hold all|to finish|to pack all|to carry all)\b',low):
+        if re.search(r'\b(?:need|needed|needs|required|enough|all of|to hold all|to finish|to pack all|to carry all|take|use)\b',low):
             n=p.new(noun,noun);p.rel(f'{n} = ceil({exact})',ask.text);return p,n,noun
-        if re.search(r'\b(?:full|complete|completely|whole|can he|can she|can they|can i|can we|could)\b',low):
+        if re.search(r'\b(?:full|complete|completely|whole|can he|can she|can they|can i|can we|could|can you)\b',low):
             n=p.new(noun,noun);p.rel(f'{n} = floor({exact})',ask.text);return p,n,noun
         p.qs[exact]['integer']=True;return p,exact,noun
     return None
 
 # ---- schema: price ------------------------------------------------------------
 def schema_price(st,ask):
-    prices=[f for f in st.frames if f.kind=='price' or (f.kind=='rate' and f.noun=='dollar')]
-    if not prices:return None
-    if any(f.kind in ('compare','times','intent','unknown','be') for f in st.frames):return None
-    if not ask.much and ask.noun not in ('dollar','cent'):return None
+    prices=[f for f in st.frames if f.kind=='price' or (f.kind=='rate' and f.noun in ('dollar','cent'))]
+    if len(prices)!=1:return None
+    if any(f.kind in ('compare','times','intent','unknown','be','bare') for f in st.frames):return None
     p=Plan(st,'price');fr=[f for f in st.frames if f.m is not None]
+    pr=prices[0];item=pr.item if pr.kind=='price' else (pr.per or pr.item)
+    money=pr.noun if pr.noun in ('dollar','cent') else 'dollar'
     low=ask.low
-    # total cost = sum of count x price for each priced item
-    if len(prices)==1 and ask.kind=='amount':
-        pr=prices[0];item=pr.item if pr.kind=='price' else (pr.per or pr.item)
+    if (ask.much or ask.noun in ('dollar','cent')) and ask.kind=='amount':
+        # total cost = number x price
         cnts=[f for f in fr if f is not pr and f.noun not in ('dollar','cent') and (item is None or f.noun==item or (f.noun and item and f.noun.endswith(item)))]
-        qc=[x for x in ask.qframes if item is None or x.noun==item]
+        qc=[x for x in ask.qframes if item is None or x.noun==item or (x.noun and item and x.noun.endswith(item))]
         if len(cnts)+len(qc)!=1 or len(fr)+len(ask.qframes)!=2:return None
         c=cnts[0] if cnts else qc[0]
         unit_item=item or c.noun or 'item'
-        pq=p.bind(pr,f'price_per_{unit_item}',f'dollar/{unit_item}',integer=False)
+        pq=p.bind(pr,f'price_per_{unit_item}',f'{money}/{unit_item}',integer=False)
         cq=p.bind(c,f'{unit_item}s',unit_item)
-        t=p.new('cost','dollar',integer=False);p.rel(f'{t} = {cq} * {pq}',pr.span);return p,t,'dollar'
+        t=p.new('cost',money,integer=False);p.rel(f'{t} = {cq} * {pq}',pr.span);return p,t,money
+    noun=asked_noun(st,ask)
+    if noun and item and (noun==item or noun.endswith(item) or item.endswith(noun)) and ask.kind=='amount' and re.search(r'\b(?:can|could|afford|buy|purchase|get)\b',low):
+        # how many things a budget buys: floor(money / price)
+        budget=[f for f in fr if f is not pr and f.noun==money]
+        qb=[x for x in ask.qframes if x.noun==money or (x.m and st.t[max(0,x.m.start-1):x.m.start]=='$')]
+        if len(budget)+len(qb)!=1 or len(fr)+len(ask.qframes)!=2:return None
+        bq=p.bind(budget[0] if budget else qb[0],'budget',money,integer=False)
+        pq=p.bind(pr,f'price_per_{item}',f'{money}/{item}',integer=False)
+        n=p.new(f'{item}s',item);p.rel(f'{n} = floor({bq} / {pq})',ask.text);return p,n,noun
     return None
 
 # ---- schema: need ----------------------------------------------------------------
@@ -1124,11 +1190,12 @@ def _irrelevant(st,f,noun,ask,linked):
         # an event may stay out only when its thing is held by someone in a stated amount and is not the asked thing
         if not any(g.kind=='state' and g.noun==f.noun and g.m is not None for g in st.frames):return None
     if any(g.kind in ('rate','price','compare','times') for g in st.frames):return None
-    if re.search(r'\b(?:each|every|per|apiece|equal|equally|evenly|share|shared|divide|divided|split|rest|remaining|others?|total|in all|altogether|together)\b',st.t.lower()):return None
+    for sp in {g.span for g in st.frames}|{ask.text}:
+        if f.noun in {sing(w) for w in re.findall(r"[a-z]+",sp.lower())} and re.search(r'\b(?:each|every|per|apiece|equal|equally|evenly|share|shared|shares|divide|divided|split|rest|remaining|others?|total|in all|altogether|together|times|than)\b',sp.lower()):return None
     if f.noun in linked:return None
     if f.noun==noun:
         # the same thing, but a different kind that the question excludes (salty vs sweet cookies)
         if ask.adj and f.adj and not set(f.adj)&set(ask.adj) and (f.owner==ask.owner or ask.owner is None):return f'{" ".join(f.adj)} {f.noun}, the question asks about {" ".join(ask.adj)} {noun}'
         return None
-    if re.search(r'\b'+re.escape(f.noun)+r's?\b',ask.low):return None
+    if f.noun in {sing(w) for w in re.findall(r"[a-z]+",ask.low)}:return None
     return f'about {f.noun}, not about {noun}'
