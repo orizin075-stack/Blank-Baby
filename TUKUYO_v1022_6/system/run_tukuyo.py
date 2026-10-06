@@ -290,6 +290,10 @@ def parser():
     c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true');c.add_argument('--research-world',action='store_true',help='claude-patch5: each family lives next to a hidden-rule device; income only from understanding it')
     c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
     sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
+    c=sub.add_parser('g4-solve',help='generation 4: read a problem into the formal problem language, solve it exactly, commit only verified readings that agree');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto');c.add_argument('--no-learn',action='store_true')
+    c=sub.add_parser('g4-ask',help='generation 4: a problem is solved and checked; any other question is answered by Claude (if configured), marked unverified');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto')
+    c=sub.add_parser('g4-learned',help='generation 4: readings learned from verified examples')
+    c=sub.add_parser('g4-audit',help='generation 4: every learned reading must reproduce its own example')
     c=sub.add_parser('research-run',help='claude-patch5 V1023r preview: one research expedition into a hidden-rule world');c.add_argument('--world',default='W1');c.add_argument('--ticks',type=int,default=120);c.add_argument('--regime',choices=('costly_failure','safe_failure'),default='costly_failure');c.add_argument('--tier',type=int,choices=(1,2,3,4,5));c.add_argument('--noise',type=float,choices=(0.0,0.05,0.1))
     sub.add_parser('research-status');sub.add_parser('research-audit')
     c=sub.add_parser('research-ecology',help='Compare research / random experiments / trial-and-error / naive / oracle on fresh worlds; writes only --out');c.add_argument('--seeds',type=int,default=10);c.add_argument('--start',type=int,default=50000);c.add_argument('--key');c.add_argument('--out',type=Path)
@@ -739,6 +743,15 @@ def _main(argv=None):
                 elif args.cmd=='metabolism-step':res=metabolism.step(data,args.ticks)
                 elif args.cmd=='metabolism-status':res=metabolism.status(data)
                 else:res=metabolism.audit(data)
+            elif args.cmd in ('g4-solve','g4-ask','g4-learned','g4-audit'):
+                _require_live(data)
+                from tukuyo_g4 import api as g4_api,learn as g4_learn
+                if args.cmd=='g4-solve':res={'ok':True,'version':'gen4',**g4_api.solve(args.query,llm=args.llm,data=data,learn=not args.no_learn)}
+                elif args.cmd=='g4-ask':res={'ok':True,'version':'gen4',**g4_api.ask(args.query,llm=args.llm,data=data)}
+                elif args.cmd=='g4-learned':
+                    o=g4_learn.Store(Path(data)/'g4').load()
+                    res={'ok':True,'templates':[{'id':k,'example':v.get('example'),'seen':v.get('seen'),'conflicts':v.get('conflicts',0),'provenance':v.get('provenance')} for k,v in sorted(o['templates'].items())]}
+                else:res=g4_learn.Store(Path(data)/'g4').audit()
             elif args.cmd in ('research-run','research-status','research-audit'):
                 if args.cmd=='research-run':_require_live(data)
                 from tukuyo_v1023r import life as research_life

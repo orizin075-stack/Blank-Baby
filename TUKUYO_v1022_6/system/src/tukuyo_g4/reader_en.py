@@ -250,6 +250,7 @@ class Story:
             if w in ('extra','additional') and not words:j+=1;continue
             if w in NOT_NOUN-MODS or w in INTENT or (s.is_name(toks[j]) and (words or j!=i+1)):break
             if not words and (w in OTHER_VERBS or (verbish(w) and not w.endswith('s'))):break
+            if words and w in V('long|tall|high|deep|wide|old|heavy|thick|away|apart|ago|later|earlier|older|younger|taller|shorter|longer|wider|deeper|heavier|lighter|tall'):break
             if words and (verbish(w) or w in BE|HAVE or w in OTHER_VERBS or (w.endswith('ed') and w not in ('red','colored','coloured','striped','spotted','dotted','painted','frosted','salted','dried','frozen'))):break
             words.append(w);j+=1
             if w.endswith("'s"):break
@@ -346,6 +347,7 @@ class Story:
                 before_n=len(s.frames);s.mention(toks,q,vs,csubj or subj,span,total_words,unknown=True);made+=len(s.frames)-before_n
             if made:return csubj or subj
             for k,mood in vs:
+                if toks[k].low=='left':continue
                 if mood is None and toks[k].low in GAIN|LOSE|TRANSFER|JOIN|LEAVE:
                     for x in toks:
                         if x.kind=='word' and x.low not in NOT_NOUN and x.low not in MODS and not s.is_name(x) and not verbish(x.low) and x.low not in OTHER_VERBS:
@@ -382,7 +384,8 @@ class Story:
             noun='dollar'
         elif noun in ('buck',):noun='dollar'
         endi=np['ofend'] or np['end']
-        after=[x.low for x in toks[endi:] if x.kind=='word']
+        nxt_num=next((q for q in range(endi,len(toks)) if toks[q].kind=='num'),len(toks))
+        after=[x.low for x in toks[endi:nxt_num] if x.kind=='word']
         vpos,mood=s.verb_for(toks,vs,k)
         verb=toks[vpos].low if vpos is not None else None
         own=s.subject_of(toks,vs,vpos,csubj) if vpos is not None else csubj
@@ -635,7 +638,8 @@ def parse_question(st,a,b):
          'both|each|every|per|one|his|her|their|its|my|our|your|them|they|he|she|it|i|we|you|him|me|us|money|cash|initially|remain|remaining|need',
          'needs|needed|this|time|number|amount|buy|cost|costs|spend|spent|pay|paid|away|out|up|back|off|home|what|find|value|sum|total|make|made',
          'end|ended|up|together|altogether|so|far|right|over|does|dollars|dollar|cents|cent|money|worth|price|change|earn|earned|save|saved|owe',
-         'totaled|totalled|total|can|could|may|might|able|already|also|currently|now|anymore|any|more|just|exactly|old|tall|long|high|deep|heavy|wide|big|is|be')
+         'totaled|totalled|total|can|could|may|might|able|already|also|currently|now|anymore|any|more|just|exactly|old|tall|long|high|deep|heavy|wide|big|is|be',
+         'greatest|least|largest|smallest|most|fewest|possible|number|amount')
     bodyw=set(re.findall(r"[a-z]+",body));bodyfam={fam(w) for w in bodyw}|{fam(lemma(w)) for w in bodyw}|{lemma(w) for w in bodyw}|{lemma(w)+'e' for w in bodyw}
     res=[w for w in re.findall(r"[a-z]+(?:'[a-z]+)?",low) if w not in ok and w not in bodyw and sing(w) not in {sing(x) for x in bodyw} and fam(w) not in bodyfam
          and lemma(w) not in bodyfam and fam(lemma(w)) not in bodyfam and (lemma(w)+'e') not in bodyfam and not any(x.low==w and st.is_name(x) for x in toks)]
@@ -1100,6 +1104,8 @@ def schema_gcd_lcm(st,ask):
     nums=[n for n in st.nums if not N.optional(n) or n.value!=1]
     if len(nums)<2 or len(nums)>4 or ask.qframes or len(fr)!=len(nums):return None
     if any(n.value.denominator!=1 or n.kind not in ('digits','word') for n in nums):return None
+    units=[f.noun in UNITS for f in fr]
+    if any(units) and (not all(units) or len({f.noun for f in fr})>1):return None
     g=ask.extreme in ('greatest','largest') or re.search(r'\bgreatest\b|\blargest\b|\bmost\b',low)
     l=ask.extreme in ('least','smallest','lowest') or re.search(r'\bleast\b|\bsmallest\b|\bfewest\b',low)
     p=Plan(st,'gcd_lcm')
