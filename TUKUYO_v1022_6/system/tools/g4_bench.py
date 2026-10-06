@@ -3,7 +3,7 @@
 
   g4_bench.py fetch DATA_DIR                      download the sets below and check their pinned sha256
   g4_bench.py sizes DATA_DIR                      items per set and split
-  g4_bench.py run DATA_DIR --system v1022|g4 --split dev [--set mgsm_ja|asdiv|svamp] [--out OUT.json] [--show N]
+  g4_bench.py run DATA_DIR --system v1022|g4 --split dev [--set mgsm_ja|asdiv|svamp] [--limit N] [--out OUT.json] [--show N]
   g4_bench.py run DATA_DIR --system ... --split test --locked-test-run REASON --log LOG.jsonl
 
 The problem files are not shipped with TUKUYO (licences below); fetch downloads them and refuses a file whose
@@ -11,7 +11,8 @@ sha256 differs from the pinned one. Splits are fixed by a hash of the item id, s
   * mgsm_ja (250, Japanese, human translation of GSM8K problems): half dev, half test
   * asdiv (2305, English, grades 1-6): half dev, half test; items whose answer is not one number are left out
   * svamp (1000, English, variations of simple problems): test only
-Development may look at dev items one by one. The test split is locked: a test run needs --locked-test-run and
+Development may look at dev items one by one; --limit N takes a fixed sample of N dev items per set (the same
+sample on every run, spread over the whole set) for a cheap trial with Claude. The test split is locked: a test run needs --locked-test-run and
 --log, prints and logs counts only (no item text, no per-item results), and every test run is appended to the
 log, so how often the test split was used stays on record.
 """
@@ -94,7 +95,13 @@ def solver(system,work):
         if data is None and OPTS['learn']:raise SystemExit(f'--learn keeps templates in the individual: create it first (run_tukuyo.py --data {d} init)')
         def ask(text):
             r=api.solve(text,llm=OPTS['llm'],data=data,learn=OPTS['learn'])
-            return {'answer':r.get('answer'),'why':r.get('reason'),'route':r.get('route')}
+            u=collections.Counter()
+            for x in r.get('readings') or []:
+                l=x.get('llm') or {}
+                if not l.get('usage'):continue
+                u['replayed_calls' if l.get('replayed') else 'calls']+=1
+                if not l.get('replayed'):u.update({k:v for k,v in l['usage'].items() if isinstance(v,int)})
+            return {'answer':r.get('answer'),'why':r.get('reason'),'route':r.get('route'),'usage':dict(u)}
         return ask
     raise SystemExit('unknown system '+system)
 
@@ -109,19 +116,25 @@ def run(a):
     names=[a.set] if a.set else list(SETS)
     items=[it for n in names for it in load(a.data,n) if it['split']==a.split]
     if a.split=='test' and not (a.locked_test_run and a.log):raise SystemExit('the test split is locked: pass --locked-test-run REASON and --log LOG.jsonl')
+    if a.limit:
+        if a.split=='test':raise SystemExit('--limit is for dev runs only')
+        key=lambda it:hashlib.sha256(f'{SPLIT_SALT}:sample:{it["set"]}:{it["id"]}'.encode()).hexdigest()
+        items=[it for n in names for it in sorted((it for it in items if it['set']==n),key=key)[:a.limit]]
     OPTS.update(llm=a.llm,learn=a.learn)
     work=Path(a.work or Path(a.data)/'_work');ask=solver(a.system,work)
-    rows=[];t0=time.time()
+    rows=[];t0=time.time();usage=collections.Counter()
     for it in items:
         try:res=ask(it['text'])
         except Exception as e:res={'answer':None,'why':'ERROR:'+repr(e)[:160]}
+        usage.update(res.get('usage') or {})
         rows.append({'id':it['id'],'set':it['set'],'status':grade(it,res),'answer':res.get('answer'),'gold':str(it['gold']),'why':res.get('why'),'route':res.get('route')})
     agg={}
     for n in names:
         c=collections.Counter(r['status'] for r in rows if r['set']==n)
         agg[n]={'items':sum(c.values()),'correct':c['correct'],'wrong':c['wrong'],'abstain':c['abstain']}
     routes=collections.Counter(r['route'] for r in rows if r['route'])
-    summary={'system':a.system,'llm':a.llm,'learn':a.learn,'split':a.split,'sets':agg,'routes':dict(routes),'seconds':round(time.time()-t0,1),
+    summary={'system':a.system,'llm':a.llm,'learn':a.learn,'split':a.split,'limit':a.limit,'sets':agg,'routes':dict(routes),
+             'llm_usage':dict(usage),'seconds':round(time.time()-t0,1),
              'results_sha256':hashlib.sha256(json.dumps([[r['id'],r['status'],r['answer']] for r in rows],ensure_ascii=False).encode()).hexdigest()}
     if a.split=='test':
         rec={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'reason':a.locked_test_run,**summary}
@@ -141,6 +154,7 @@ def main():
     z=sub.add_parser('sizes');z.add_argument('data')
     r=sub.add_parser('run');r.add_argument('data');r.add_argument('--system',required=True);r.add_argument('--split',required=True,choices=['dev','test'])
     r.add_argument('--set',choices=list(SETS));r.add_argument('--out');r.add_argument('--show',type=int,default=0);r.add_argument('--work')
+    r.add_argument('--limit',type=int,default=0,help='dev only: a fixed sample of N items per set')
     r.add_argument('--locked-test-run');r.add_argument('--log')
     r.add_argument('--llm',choices=('off','auto','on'),default='off',help='g4: use Claude (needs TUKUYO_ANTHROPIC_API_KEY or TUKUYO_LLM_REPLAY)')
     r.add_argument('--learn',action='store_true',help='g4: keep readings that agreed with Claude as templates in the individual')

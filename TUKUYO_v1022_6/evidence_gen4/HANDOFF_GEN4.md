@@ -32,26 +32,38 @@
 
 ## 3. Claude での測定（新しいセッションで）
 
-1. クラウド環境の設定に、環境変数 `TUKUYO_ANTHROPIC_API_KEY` を入れます。この作業環境が自分で使う `ANTHROPIC_API_KEY` とは、別の名前にしてください。
+1. クラウド環境の設定に、環境変数 `TUKUYO_ANTHROPIC_API_KEY` を入れます。この作業環境が自分で使う `ANTHROPIC_API_KEY` とは、別の名前にしてください。キーをチャットに貼ってはいけません。
 2. `pip install anthropic`（または `uv pip install anthropic`）
-3. 問題集を取ってきます：`python3 -B system/tools/g4_bench.py fetch DATA`。sha256 を固定してあります。
-4. まず少数で試し、費用と精度を確かめます（下の目安を参照）。
+3. 問題集を取ってきます：`python3 -B tools/g4_bench.py fetch DATA`。sha256 を固定してあります。
+4. 生きた個体を作ります。日本語の v1022 の核と、学んだ型の置き場所に使います。
 
 ```bash
 cd TUKUYO_v1022_6/system
+python3 -B run_tukuyo.py --runtime-trust-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt --data WORK/v1022_individual init
+```
+
+5. まず少数で試します。`--limit 10` は、各問題集の dev から決まった 10 問を取ります（毎回同じ 10 問）。結果の `llm_usage` に、実際に使ったトークン数が出ます。ここから本当の費用を計算してください。
+
+```bash
 export TUKUYO_LLM_RECORD=$HOME/g4_llm_record.jsonl   # Claude の返事をすべて記録（あとで再生できる）
+python3 -B tools/g4_bench.py run DATA --system g4 --split dev --limit 10 --llm on --work WORK --out trial.json --show 10
+```
+
+6. 利用者が費用を承認したら、dev 全体を回します。`--learn` を付けると、Claude と一致した読みを型として覚えます。
+
+```bash
 python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --llm on --learn --work WORK --out mgsm_dev.json --show 10
 ```
 
-- `WORK/v1022_individual` は、生きた個体です。日本語の v1022 の核と、学んだ型の置き場所に使います。
-- 先に `python3 -B run_tukuyo.py --runtime-trust-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt --data WORK/v1022_individual init` を実行してください。
-- 記録したファイルを `TUKUYO_LLM_REPLAY` に指定すると、キーなしで同じ測定を再現できます。
+- 記録したファイルを `TUKUYO_LLM_REPLAY` に指定すると、キーなしで同じ測定を再現できます（費用はかかりません）。
+- Claude の読みの失敗の理由（`LLM_NOT_CONFIGURED`、`AUTHENTICATION`、`ANTHROPIC_PACKAGE_MISSING` など）は、`api.solve` の `readings` に出ます。
 
 ### 費用の目安（`llm.py` の既定のモデル、effort medium、指示文はキャッシュ）
 
 - 1 回の読みで、出力は約 2,000〜5,000 トークン（考える分を含む）です。1 問あたり 0.04〜0.10 ドルです。
 - TUKUYO が自分で読めない問題は、2 回読みます。1 問あたり 0.08〜0.20 ドルです。
-- MGSM の dev 139 問で約 11〜28 ドル、SVAMP のテスト 1,000 問で約 80〜200 ドルです。
+- 試し（`--limit 10`、20 問）で約 2〜4 ドル、MGSM の dev 139 問で約 11〜28 ドル、SVAMP のテスト 1,000 問で約 80〜200 ドルです。
+- これは見積もりです。試しの `llm_usage` から計算した本当の費用で、見積もりを直してください。
 - **実行する前に、どこまでやるか（費用）を利用者に確認すること。**
 
 ## 4. 鍵のかかったテストの扱い
