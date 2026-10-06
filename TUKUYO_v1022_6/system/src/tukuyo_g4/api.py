@@ -35,7 +35,7 @@ def solve(text,llm='auto'):
     readings=[]
     own=_own(text)
     if own is not None:
-        readings.append(evaluate(own,'own') if own.get('spec') else {'route':'own','ok':False,'reason':own.get('reason','OWN_UNREAD')})
+        readings.append(evaluate(own['spec'],'own') if own.get('spec') else {'route':'own','ok':False,'reason':own.get('reason','OWN_UNREAD')})
         own_ok=readings[-1]['ok']
     else:own_ok=False
     use_llm=llm=='on' or (llm=='auto' and L.available())
