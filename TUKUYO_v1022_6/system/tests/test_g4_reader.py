@@ -31,6 +31,25 @@ READ=[
  ('Ken has 34 dollars. How many more dollars does he need to have 50 dollars?','16'),
  ('Ann has 12 pens and 18 pencils. She wants to put them in identical groups with nothing left over. What is the greatest number of groups she can make?','6'),
  ('Joe ran 3 miles on Monday and 5 miles on Tuesday. How many miles did he run in all?','8'),
+ # exchanges between two people, and what was given to one of them
+ ('Mia has 20 stickers. Leo has 15 stickers. Mia gives Leo 6 stickers. How many stickers does Leo have now?','21'),
+ ('Mia has 20 stickers. Leo has 15 stickers. Mia gives Leo 6 stickers. How many stickers does Mia have now?','14'),
+ ('Ken had 30 stamps. He gave 8 stamps to Joe and 5 stamps to Amy. How many stamps did he give to Joe?','8'),
+ ('A class has 28 students. 4 more students join, then 6 students leave. How many students are in the class now?','26'),
+ # money left, groups of a size, 'twice as many' on another day
+ ('Sara has 40 dollars. She buys 3 books for 12 dollars each. How much money does she have left?','4'),
+ ('Sara has 40 dollars. Each book costs 12 dollars. She buys 3 books. How much money does she have left?','4'),
+ ('There are 30 students. They form teams of 5. How many teams are there?','6'),
+ ('Max ran 3 miles on Monday and twice as many on Wednesday. How many miles did he run on Wednesday?','6'),
+ ('Max ran 3 miles on Monday and twice as many on Wednesday. How many miles did he run in all?','9'),
+ # questions that are not stories (forms_en)
+ ('What is the greatest common divisor of 36 and 48?','12'),
+ ('Find the LCM of 3, 4 and 5.','60'),
+ ('A bike travels 36 km in 2 hours. What is its average speed?','18'),
+ ('A boat sails at 15 miles per hour. How many miles does it sail in 4 hours?','60'),
+ ('A snail moves at 2 meters per minute. How long does it take the snail to move 30 meters?','15'),
+ ('I think of a number. If I add 7 to it and then double it, I get 30. What is the number?','8'),
+ ('If I subtract 8 from a number, I get 15. What is the number?','23'),
 ]
 ABSTAIN=[
  'Nora had 30 shells. She gave some shells to her cousin. How many shells does she have left?',
@@ -43,6 +62,17 @@ ABSTAIN=[
  'Kate spent a total of $350 on her trip. She spent $125 on food and $135 on hotels. How much did she spend on other things?',
  'What is the capital of France?',
  'How many legs does a spider have?',
+ # he/she between two people: TUKUYO does not guess genders
+ 'Mia has 20 stickers. Leo has 15 stickers. She gives him 6 stickers. How many stickers does he have now?',
+ 'Mia has 20 stickers. Leo has 15 stickers. Mia gives Leo half of her stickers. How many stickers does Leo have now?',
+ 'Ken had 30 stamps. He gave 8 stamps to Joe and twice as many to Amy. How many stamps did he give to Amy?',
+ 'Sara has 30 dollars. She buys 3 books for 12 dollars each. How much money does she have left?',
+ 'There are 30 students. They form teams of 4. How many teams are there?',
+ 'What is the greatest common factor of 0 and 5?',
+ 'A car travels 120 miles in 2 hours. What is its speed in km per hour?',
+ # a rate and a count of two different holders
+ 'A car travels at 50 miles per hour. A bus travels for 3 hours. How far does the car travel?',
+ 'Tom reads 20 pages per day. Ann reads for 4 days. How many pages does Tom read?',
 ]
 
 def test_reads_these_problems():

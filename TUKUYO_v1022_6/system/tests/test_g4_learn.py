@@ -4,14 +4,16 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'src'))
 from tukuyo_g4 import llm,api,learn
 
-T='Twelve less than three times a number is 30. What is the number?'
+# a wording TUKUYO's own readers do not read, so that only the (recorded) Claude readings can answer it
+T='When three times a number is decreased by twelve, the result is 30. What is the number?'
 READING={'readable':True,'quantities':[
    {'name':'twelve','unit':'1','integer':False,'signed':False,'about':'twelve'},
    {'name':'factor','unit':'1','integer':False,'signed':False,'about':'three times'},
    {'name':'result','unit':'1','integer':False,'signed':False,'about':'the result'},
    {'name':'number','unit':'1','integer':False,'signed':False,'about':'the number'}],
- 'facts':[{'eq':'twelve = 12','span':'Twelve less','known':''},{'eq':'factor = 3','span':'three times','known':''},
-          {'eq':'result = 30','span':'is 30','known':''},{'eq':'factor * number - twelve = result','span':'Twelve less than three times a number is 30','known':''}],
+ 'facts':[{'eq':'twelve = 12','span':'decreased by twelve','known':''},{'eq':'factor = 3','span':'three times','known':''},
+          {'eq':'result = 30','span':'the result is 30','known':''},
+          {'eq':'factor * number - twelve = result','span':'When three times a number is decreased by twelve, the result is 30','known':''}],
  'ask':'number','answer_unit':'','unused':[]}
 
 def _replay(tmp_path,text,story,goal):
@@ -31,7 +33,7 @@ def test_agreeing_claude_readings_are_learned_and_reused_without_claude(tmp_path
     r2=api.solve(T.replace('30','45'),llm='off',data=data)
     assert (r2['answer'],r2['route'])==('19','learned'),r2
     # a different wording is not matched
-    assert api.solve('Twelve more than three times a number is 30. What is the number?',llm='off',data=data)['answer'] is None
+    assert api.solve('When three times a number is increased by twelve, the result is 30. What is the number?',llm='off',data=data)['answer'] is None
     st=learn.Store(data/'g4');a=st.audit();assert a['ok'] and a['templates']==1
 
 def test_a_template_never_commits_what_the_checker_refuses(tmp_path):

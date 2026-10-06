@@ -201,6 +201,7 @@ class Frame(dict):
 class Story:
     def __init__(s,t):
         s.t=t;s.nums=N.find(t);s.frames=[];s.people=[];s.last_owner=None;s.last_noun=None;s.noun_of={};s.vague=[];s.seen_nouns=[];s.last_thing=None;s.last_adj=()
+        s.subj_hist=[]   # the people who were the subjects of clauses, in order
         s.text_low=t.lower()
     # ---- names and pronouns
     def is_name(s,tk,first=False):
@@ -213,23 +214,30 @@ class Story:
         w=w[:-2] if w.lower().endswith("'s") else w
         if w not in s.people:s.people.append(w)
         return w
-    def resolve(s,p):
+    def resolve(s,p,exclude=None):
+        """the person a pronoun stands for. TUKUYO does not guess anyone's gender: with two or more people, he/she/him/her
+        is read only when one person is left after removing the clause's own subject (exclude), or when the story keeps
+        to one subject (all subjects so far, or the last two, are the same person); otherwise there is no reading"""
         p=p.lower()
         if p in ('i','me','my','we','us','our','you','your'):return {'me':'i','my':'i','us':'we','our':'we','your':'you'}.get(p,p)
         if p in ('they','them','their'):
             if not s.people and s.last_owner and s.last_owner not in ('there',):return s.last_owner
             return 'they'
         if p in ('it','its'):return s.last_thing or 'it'
-        if len(s.people)==1:return s.people[0]
-        if s.last_owner:return s.last_owner          # the subject of the latest clause
-        if not s.people:return p if p in ('he','she') else 'they'
-        no('PRONOUN')
-    def holder(s,toks):
+        if not s.people:return s.last_owner if s.last_owner and s.last_owner not in ('there',) else (p if p in ('he','she') else 'they')
+        cands=[x for x in s.people if x!=exclude]
+        if len(cands)==1:return cands[0]
+        if not cands:no('PRONOUN')
+        hist=[x for x in s.subj_hist if x in cands]
+        if hist and (len(set(hist))==1 or (len(hist)>=2 and hist[-1]==hist[-2])):return hist[-1]
+        no('PRONOUN_AMBIGUOUS')
+    def holder(s,toks,exclude=None):
         """a holder named by a short phrase: Tom / he / Tom's mom / his sister / the store"""
         ws=[x for x in toks if x.kind=='word']
         if not ws:return None
         for i,x in enumerate(ws):
-            if x.low in ('he','she','i','we','you','they','it','him','them','me','us'):return s.resolve(x.low)
+            if x.low in ('he','she','i','we','you','they','it','him','them','me','us'):return s.resolve(x.low,exclude if x.low in ('him','them','me','us') else None)
+            if x.low=='her' and (i+1==len(ws) or ws[i+1].low in NOT_NOUN):return s.resolve('her',exclude)
             if x.low in ('his','her','their','my','our','your') and i+1<len(ws):
                 rest=[y.low for y in ws[i+1:] if y.low not in DET and y.low not in MODS]
                 if rest:return s.resolve(x.low)+"'s "+sing(rest[-1])
@@ -273,6 +281,13 @@ class Story:
     def starts_clause(s,toks,k):
         """does a clause start at toks[k]? a subject (name, pronoun, determiner + noun) followed by a verb"""
         j=k;seen=0
+        if k<len(toks) and toks[k].kind=='num':
+            # "6 students leave": a number with its noun, then a verb of coming or going
+            for x in toks[k+1:k+5]:
+                if x.kind!='word':return False
+                if x.low in JOIN|LEAVE and x.low!='left':return True
+                if verbish(x.low) or x.low in BE|INTENT:return False
+            return False
         while j<len(toks) and seen<5:
             x=toks[j]
             if x.kind=='num':return False
@@ -332,6 +347,7 @@ class Story:
             if i and toks[i-1].kind=='num':continue
             if s.is_name(x) and (x.w[:-2] if x.low.endswith("'s") else x.w) not in s.people:s.person(x.w)
         if csubj and csubj not in ('there','it','they','i','we','you') and "'" not in csubj:s.last_owner=csubj
+        if csubj in s.people:s.subj_hist.append(csubj)
         if csubj and csubj not in ('there','it','they','i','we','you') and (csubj not in s.people):s.last_thing=csubj
         intent=any(m=='intent' for _,m in vs)
         nidx=[k for k,x in enumerate(toks) if x.kind=='num']
@@ -443,6 +459,13 @@ class Story:
             content=s.holder([x for x in toks[:vpos] if x.kind=='word']) if vpos is not None else None
             if content and content not in PRON and content not in s.people:
                 f.update(kind='rate',noun=content,per=sing(before[-2]),implicit=False);s.frames.append(f);return
+        # "They form groups of 4", "The children sit in teams of 5": the number counts the members of one group
+        if m is not None and prev=='of' and len(before)>=3 and sing(before[-2]) in GROUPS|{'team'} and before[-3] in V('form|forms|formed|make|makes|made|in|into'):
+            stop=next((i for i,x in enumerate(toks[:k]) if x.kind=='word' and x.low in V('form|forms|formed|make|makes|made|split|divided|arranged|organized|sit|sat|stand|stood|line|lined|are|were|get|got|go|went|work|worked|play|played|in|into')),None)
+            sw=[x for x in toks[:stop] if x.kind=='word'] if stop else []
+            content=s.last_noun if sw and sw[0].low in ('they','them') and len(sw)==1 else (s.holder(sw) if sw else None)
+            if content and content not in PRON and content not in s.people and content not in ('there',):
+                f.update(kind='rate',noun=content,per=sing(before[-2]),implicit=False);s.frames.append(f);return
         # rates
         r=re.match(r'(?:\w+\s+){0,2}?(?:in|on|for|to|into|inside|with|from)\s+(?:each|every)\s+(?:one\s+of\s+)?(?:the\s+|his\s+|her\s+|their\s+)?(\w+)|(?:\w+\s+){0,1}?per\s+(\w+)|(?:\w+\s+){0,1}?(?:each|every)\s+(\w+)|(each|apiece)\b|(?:\w+\s+){0,1}?an?\s+(day|week|month|year|hour|minute|second|night|game|book|box|bag)\b',win)
         if r:
@@ -510,10 +533,10 @@ class Story:
             ws=[x for x in toks[endi:] if x.kind=='word']
             for q,x in enumerate(ws[:6]):
                 if x.low in ('to','with') and q+1<len(ws):
-                    other=s.holder(ws[q+1:q+4]);break
+                    other=s.holder(ws[q+1:q+4],exclude=own);break
             if other is None and not away and vpos is not None:
                 io=[x for x in toks[vpos+1:k] if x.kind=='word' and x.low not in ('away','back','out')]
-                if io:other=s.holder(io)
+                if io:other=s.holder(io,exclude=own)
             f.update(kind='change',sign=-1,other=other,away=away);s.frames.append(f);return
         if verb in JOIN:f.update(kind='change',sign=+1);s.frames.append(f);return
         if verb in LEAVE and verb not in ('left',):f.update(kind='change',sign=-1);s.frames.append(f);return
@@ -666,6 +689,15 @@ def parse_question(st,a,b):
             if x.low=='left' and (ask.when=='now'):continue
             qv=x.low;break
     ask['verb']=qv
+    if qv in TRANSFER:
+        # the receiver named in the question: "did he give to Amy", "did she give Ben"
+        tw=[x for x in toks if x.kind=='word'];vi=next(i for i,x in enumerate(tw) if x.low==qv)
+        aft=tw[vi+1:vi+5]
+        if aft and aft[0].low in ('to','with') and len(aft)>1:ask['to']=st.holder(aft[1:3],exclude=owner)
+        elif aft and (st.is_name(aft[0]) or aft[0].low in ('him','her','them')):ask['to']=st.holder(aft[:1],exclude=owner)
+        else:
+            k2=next((i for i,x in enumerate(aft) if x.low in ('to','with')),None)
+            if k2 is not None and k2+1<len(aft):ask['to']=st.holder(aft[k2+1:k2+3],exclude=owner)
     if re.search(r'\b(?:other|others|rest|else|remainder)\b',low):ask['rest']=True
     body=st.t[:a].lower()
     ok=V('how|many|much|more|fewer|less|than|of|the|a|an|there|now|left|in|all|altogether|total|together|combined|at|first|to|start|begin|with',
@@ -696,6 +728,7 @@ def parse_question(st,a,b):
 class Plan:
     def __init__(s,st,name):
         s.st=st;s.name=name;s.qs={};s.facts=[];s.used=set();s.money=None;s.cpd=None;s.gain_start=False
+        s.skip={}   # numbers the question does not ask about: position -> why (set by a schema that reads the question exactly)
     def to_money(s,q,frm,to,span):
         if frm==to:return q
         if s.cpd is None:
@@ -835,8 +868,18 @@ def schema_holding(st,ask):
         return p,f['_q'],noun
     if ask.verb and fam(ask.verb) not in ('have','left'):
         hits=events(st,ask.verb,noun,adj,owner)
+        if ask.to:
+            hits=[f for f in hits if f.other==ask.to or (f.other is None and re.search(r'\bto\s+'+re.escape(ask.to.lower())+r'\b',f.span.lower()))]
+            if not hits:return None
         if not hits:return _between_states(st,ask,noun,adj,p)
         if any(f.total for f in hits):return None
+        if ask.to and not st.vague and all(f.m is not None for f in hits) and len({f.owner for f in hits})==1 \
+           and not any(re.search(r'\b(?:rest|remaining|remainder|half|twice|double|triple|times|each|every|per|equally|evenly|all|those|them|left|not|n\'t)\b',g.span.lower()) for g in fr):
+            # "How many stamps did he give to Amy?": only the giver's own stock and what the giver gave to other people
+            # may stay out of the answer
+            giver=hits[0].owner;others=[g for g in fr if g.m is not None and g not in hits]
+            if all(g.noun==noun and g.owner==giver and ((g.kind=='state' and not g.subjnum) or (g.kind=='change' and fam(g.verb)==fam(ask.verb) and g.other and g.other!=ask.to)) for g in others):
+                for g in others:p.skip[g.m.start]=f"not asked: the question asks how many {noun}s {giver} gave to {ask.to}"
         if ask.total or len(hits)>1:
             if any(f.m is None for f in hits):return None
             names=[p.bind(f,f'{fam(f.verb)}_{noun}',noun) for f in hits]
@@ -1104,6 +1147,15 @@ def operand(p,st,noun,owner=None,exclude=()):
     return None
 
 # ---- schema: groups (multiplication) -----------------------------------------
+NOBODY=(None,'there','they','it','we','you','i')
+def _same_agent(st,r,f):
+    """a rate and a count go together unless they belong to two different people, or to two holders doing the same thing
+    ('A car travels at 50 miles per hour. A bus travels for 3 hours'); a rate held by the group itself ('Each box has 6
+    pens') goes with anyone's boxes"""
+    if r.owner in NOBODY or r.owner==r.per or f.owner in NOBODY or f.owner==r.owner:return True
+    if r.owner in st.people and f.owner in st.people:return False
+    return not (r.verb and f.verb and fam(lemma(r.verb))==fam(lemma(f.verb)))
+
 def schema_groups(st,ask):
     if ask.kind not in ('amount',) or ask.cmp or ask.need or ask.residue or ask.rest:return None
     noun=asked_noun(st,ask)
@@ -1118,7 +1170,8 @@ def schema_groups(st,ask):
     g=r.per
     p=Plan(st,'groups')
     # the number of groups: a frame in the story, or a number in the question ("in 3 days", "do 8 bees have")
-    cands=[f for f in st.frames if f is not r and f.m is not None and f.kind in ('state','change','act') and g and f.noun==g]
+    cands=[f for f in st.frames if f is not r and f.m is not None and f.kind in ('state','change','act') and g and f.noun==g and _same_agent(st,r,f)]
+    if ask.owner in st.people and r.owner in st.people and ask.owner!=r.owner and r.verb not in BE|HAVE:return None
     qc=[x for x in ask.qframes if g and (x.noun==g or (x.noun and x.noun.endswith(g)))]
     conv=[(x,CONVERT[(x.noun,g)]) for x in ask.qframes if g and (x.noun,g) in CONVERT]
     if qc and not cands and len(ask.qframes)==1:
@@ -1203,7 +1256,8 @@ def schema_share(st,ask):
         r=rates[0];g=r.per
         if noun!=g and not (g is None and noun in GROUPS):return None
         content=r.noun
-        tots=[f for f in fr if f is not r and f.kind in ('state','change','act','bare') and f.noun in (content,r.of)]
+        tots=[f for f in fr if f is not r and f.kind in ('state','change','act','bare') and f.noun in (content,r.of) and _same_agent(st,r,f)]
+        if ask.owner in st.people and r.owner in st.people and ask.owner!=r.owner and r.verb not in BE|HAVE:return None
         qt=[x for x in ask.qframes if x.noun in (content,r.of)]
         if len(tots)+len(qt)==1 and len(fr)+len(ask.qframes)==2:
             tot=tots[0] if tots else qt[0]
@@ -1324,7 +1378,52 @@ def schema_gcd_lcm(st,ask):
         r=p.new('least_common','item');p.rel(f'{r} = {expr}',ask.text);return p,r,ask.noun or 'item'
     return None
 
-SCHEMAS=[schema_gcd_lcm,schema_change,schema_compare_things,schema_holding,schema_compare,schema_diff,schema_category,schema_groups,schema_share,schema_price,schema_need]
+def schema_spend_left(st,ask):
+    """'You have 50 dollars. You buy 4 shirts for 9 dollars each. How much money is left?' -> 50 - 4 x 9"""
+    if not (ask.much or ask.noun in ('dollar','cent')) or ask.kind!='amount' or ask.when!='now' or ask.qframes or ask.residue or st.vague:return None
+    fr=[f for f in st.frames if f.m is not None]
+    if len(fr)!=3 or any(f.kind in ('compare','times','intent','unknown','be','bare') for f in st.frames):return None
+    prices=[f for f in fr if (f.kind=='rate' and f.noun in ('dollar','cent')) or f.kind=='price']
+    budgets=[f for f in fr if f.kind=='state' and f.noun in ('dollar','cent') and not f.subjnum]
+    counts=[f for f in fr if f.kind=='change' and f.sign>0 and f.noun not in ('dollar','cent') and fam(f.verb)=='buy']
+    if len(prices)!=1 or len(budgets)!=1 or len(counts)!=1:return None
+    pr,b,c=prices[0],budgets[0],counts[0]
+    if pr.noun!=b.noun or b.owner!=c.owner or (ask.owner and ask.owner!=b.owner):return None
+    if not ((pr.kind=='rate' and ((pr.per is None and c.span==pr.span) or pr.per==c.noun)) or (pr.kind=='price' and pr.item==c.noun)):return None
+    money=b.noun;item=c.noun;p=Plan(st,'spend_left')
+    bq=p.bind(b,'money_at_first',money,integer=False);cq=p.bind(c,f'{item}s',item)
+    pq=p.bind(pr,f'price_per_{item}',f'{money}/{item}',integer=False)
+    left=p.new('money_left',money,integer=False);p.rel(f'{left} = {bq} - {cq} * {pq}',ask.text);return p,left,money
+
+SLOT=re.compile(r'\b(?:on|in|during|at)\s+(?:the\s+)?(monday|tuesday|wednesday|thursday|friday|saturday|sunday|morning|afternoon|evening|night|weekend|'
+                r'first day|second day|third day|first week|second week|january|february|march|april|may|june|july|august|september|october|november|december)\b')
+def _slot_after(st,f):
+    """the time named right after a frame's number: '12 pages on Monday', 'twice as many on Tuesday'"""
+    end=next((n.start for n in st.nums if n.start>f.m.end),len(st.t))
+    m=SLOT.search(re.split(r'[.?!;]',st.t[f.m.end:end].lower())[0]);return m.group(1) if m else None
+
+def schema_times_slot(st,ask):
+    """'Lisa read 12 pages on Monday and twice as many on Tuesday. How many pages did she read on Tuesday?'"""
+    if ask.kind!='amount' or ask.qframes or ask.residue or ask.rest or st.vague:return None
+    fr=[f for f in st.frames if f.m is not None]
+    ts=[f for f in fr if f.kind=='times' and f.other is None]
+    if len(ts)!=1 or len(fr)!=2:return None
+    t=ts[0];b=next(f for f in fr if f is not t)
+    if b.kind not in ('act','change','state') or b.m.start>t.m.start or b.noun!=t.noun or b.owner!=t.owner or fam(b.verb)!=fam(t.verb):return None
+    sb,stt=_slot_after(st,b),_slot_after(st,t)
+    if not sb or not stt or sb==stt:return None
+    noun=asked_noun(st,ask)
+    if noun!=t.noun or (ask.owner and ask.owner!=t.owner) or (ask.verb and fam(ask.verb)!=fam(t.verb)):return None
+    qm=SLOT.search(ask.low);qslot=qm.group(1) if qm else None
+    p=Plan(st,'times_slot');bq=p.bind(b,f'{noun}_{sb}'.replace(' ','_'),noun);kq=p.bind(t,'times','1',integer=False)
+    tq=p.new(f'{noun}_{stt}'.replace(' ','_'),noun);p.rel(f'{tq} = {kq} * {bq}',t.span)
+    if ask.total and not qslot:
+        tot=p.new(f'{noun}_total',noun);p.rel(f'{tot} = {bq} + {tq}',ask.text);return p,tot,noun
+    if qslot==stt and not ask.total:return p,tq,noun
+    return None
+
+SCHEMAS=[schema_gcd_lcm,schema_change,schema_compare_things,schema_holding,schema_compare,schema_diff,schema_category,schema_groups,schema_share,schema_price,schema_need,
+         schema_spend_left,schema_times_slot]
 
 # ----------------------------------------------------------------------------- read
 def read(text):
@@ -1376,6 +1475,7 @@ def finish(st,p,target,noun,ask):
     linked={x for f in st.frames for x in (f.per,f.of,f.other,f.item) if x}
     for f in st.frames:
         if f.m is None or f.m.start in p.used or N.optional(f.m):continue
+        if f.m.start in p.skip:unused.append({'raw':f.m.raw,'why':p.skip[f.m.start]});continue
         why=_irrelevant(st,f,noun,ask,linked)
         if why is None:no('UNUSED:'+f.kind+':'+f.m.raw)
         unused.append({'raw':f.m.raw,'why':why})
@@ -1389,6 +1489,19 @@ def finish(st,p,target,noun,ask):
           'answer_unit':noun or '','unused':unused,'reader':'tukuyo.g4.reader_en/3:'+p.name}
     return {'spec':spec}
 
+def _other_persons_stock(st,f,ask):
+    """another person's stock of the asked thing, when the question asks about one named person and everything that
+    passes between them is a stated number ('Lucy gives Tom 4 marbles. How many marbles does Tom have now?')"""
+    o,a=f.owner,ask.owner
+    if not (o and a and o!=a and o in st.people and a in st.people) or st.vague:return False
+    if ask.total or ask.owners or ask.than or ask.rest or ask.kind!='amount':return False
+    for g in st.frames:
+        if g is f or not (g.owner==o or g.other==o):continue
+        if g.m is None or g.m.kind in ('half','percent','jfrac'):return False
+        if g.kind not in ('state','change'):return False
+        if re.search(r'\b(?:half|all|rest|remaining|third|quarter|fourth|fifth|double|twice|triple|times|percent|fraction|each|every|equally|evenly|share|shared|split)\b',g.span.lower()):return False
+    return True
+
 def _irrelevant(st,f,noun,ask,linked):
     """why a number may stay out of the reading, or None"""
     if f.kind not in ('state','change','act') or f.implicit or f.noun is None:return None
@@ -1399,6 +1512,8 @@ def _irrelevant(st,f,noun,ask,linked):
     if any(g.kind in ('rate','price','compare','times') for g in st.frames):return None
     for sp in {g.span for g in st.frames}|{ask.text}:
         if f.noun in {sing(w) for w in re.findall(r"[a-z]+",sp.lower())} and re.search(r'\b(?:each|every|per|apiece|equal|equally|evenly|share|shared|shares|divide|divided|split|rest|remaining|others?|total|in all|altogether|together|times|than)\b',sp.lower()):return None
+    if f.noun==noun and f.kind=='state' and _other_persons_stock(st,f,ask):
+        return f"{f.owner}'s {noun}; the question asks about {ask.owner}'s, and every exchange between them is a stated amount"
     if f.noun in linked:return None
     if f.noun==noun:
         # the same thing, but a different kind that the question excludes (salty vs sweet cookies)
