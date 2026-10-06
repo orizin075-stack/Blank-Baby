@@ -449,6 +449,8 @@ class Story:
             g=next((x for x in r.groups() if x),None)
             g=None if g in ('each','apiece') else sing(g)
             f.update(kind='rate',per=g);s.frames.append(f);return
+        if 'everyday' in before or 'daily' in before or 'daily' in after[:2]:
+            f.update(kind='rate',per='day');s.frames.append(f);return
         bk=[i for i,w in enumerate(before) if w in ('each','every')]
         if bk and ((len(before)-bk[-1])<=8 or (bk[-1]==0 and not any(x.kind=='num' for x in toks[:k]))):
             ph=[]
@@ -685,6 +687,9 @@ def parse_question(st,a,b):
         np=st.np_after(toks,k)
         bw=[y.low for y in toks[:k] if y.kind=='word']
         ask['qframes'].append(Frame(m=x.num,noun=np['noun'],adj=np['adj'],of=np['of'],prev=bw[-1] if bw else '',prev2=bw[-2] if len(bw)>1 else '',span=q.strip()))
+    if ask.residue:
+        qn={x.noun for x in ask['qframes'] if x.noun}|{w for x in ask['qframes'] for w in (x.adj or ())}
+        ask['residue']=[w for w in ask.residue if sing(w) not in qn and w not in qn] or None
     return ask
 
 # ----------------------------------------------------------------------------- plans
@@ -1070,6 +1075,9 @@ class _View:
         s.__dict__.update(st.__dict__);s.frames=[r if (g.m is not None and r.m is not None and g.m.start==r.m.start) else g for g in st.frames]
 def _with(st,r):return _View(st,r)
 
+CONVERT={('week','day'):7,('day','hour'):24,('hour','minute'):60,('minute','second'):60,('year','month'):12,('year','week'):52,('year','day'):365,
+         ('foot','inch'):12,('yard','foot'):3,('meter','centimeter'):100,('kilometer','meter'):1000,('dollar','cent'):100,('pound','ounce'):16,('gallon','quart'):4}
+
 def rate_frames(st,ask):
     """explicit rates, and 'A bee has 6 legs' read as a rate when the story or the question counts bees"""
     out=[f for f in st.frames if f.kind=='rate']
@@ -1112,9 +1120,15 @@ def schema_groups(st,ask):
     # the number of groups: a frame in the story, or a number in the question ("in 3 days", "do 8 bees have")
     cands=[f for f in st.frames if f is not r and f.m is not None and f.kind in ('state','change','act') and g and f.noun==g]
     qc=[x for x in ask.qframes if g and (x.noun==g or (x.noun and x.noun.endswith(g)))]
+    conv=[(x,CONVERT[(x.noun,g)]) for x in ask.qframes if g and (x.noun,g) in CONVERT]
     if qc and not cands and len(ask.qframes)==1:
         cnt=qc[0]
         gq=p.bind(cnt,f'{g}s',g)
+    elif conv and not qc and not cands and len(ask.qframes)==1:
+        # "3 servings a day ... in one week": weeks x 7 days
+        x,k=conv[0];wq=p.bind(x,f'{x.noun}s',x.noun)
+        kq=p.new(f'{g}s_per_{x.noun}',f'{g}/{x.noun}');p.facts.append({'eq':f'{kq} = {k}','known':f'{k} {g}s in a {x.noun}'})
+        gq=p.new(f'{g}s',g);p.rel(f'{gq} = {wq} * {kq}',ask.text)
     elif len(cands)==1 and not ask.qframes:
         gq=p.bind(cands[0],f'{g}s',g)
     elif len(cands)>1 and not ask.qframes and g:

@@ -90,9 +90,10 @@ def solver(system,work):
         return ask
     if system=='g4':
         from tukuyo_g4 import api
-        d=Path(work)/'v1022_individual'
+        d=Path(work)/'v1022_individual';data=d if d.is_dir() else None
+        if data is None and OPTS['learn']:raise SystemExit(f'--learn keeps templates in the individual: create it first (run_tukuyo.py --data {d} init)')
         def ask(text):
-            r=api.solve(text,llm=OPTS['llm'],data=d if (d/'manifest.json').exists() or any(d.iterdir()) else None,learn=OPTS['learn'])
+            r=api.solve(text,llm=OPTS['llm'],data=data,learn=OPTS['learn'])
             return {'answer':r.get('answer'),'why':r.get('reason'),'route':r.get('route')}
         return ask
     raise SystemExit('unknown system '+system)

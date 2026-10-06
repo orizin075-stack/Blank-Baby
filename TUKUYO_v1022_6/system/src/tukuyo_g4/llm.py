@@ -9,7 +9,7 @@
 Configuration (environment; the key is never written anywhere):
   TUKUYO_ANTHROPIC_API_KEY   the API key (needs the `anthropic` package: pip install anthropic)
   TUKUYO_ANTHROPIC_BASE_URL  default https://api.anthropic.com. The host's own ANTHROPIC_* variables are never read.
-  TUKUYO_LLM_MODEL           default claude-opus-5-5
+  TUKUYO_LLM_MODEL           default MODEL_DEFAULT below
   TUKUYO_LLM_EFFORT          default medium (low | medium | high | xhigh | max)
   TUKUYO_LLM_RECORD          a JSONL file: every reply is appended (request hash, model, request id, text, usage)
   TUKUYO_LLM_REPLAY          a JSONL file written by TUKUYO_LLM_RECORD: requests are answered from it, offline
