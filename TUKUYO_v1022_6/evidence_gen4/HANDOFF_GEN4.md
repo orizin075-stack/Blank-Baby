@@ -93,3 +93,28 @@ python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --ll
 - 自前の読み取り器の範囲を広げる（英語）。日本語の FPL 読み取り器は、まだありません。日本語は v1022 の核を使っています。
 - Claude での dev の測定と、学習の効果の測定（キーが必要）。
 - 版の名前・README・署名・リリース zip（第4世代の版として）。
+
+## 6. 署名（新しいセッションで）
+
+- これまでの署名の秘密鍵は、リポジトリに入れていません。新しいセッションにはありません。
+- **測るだけなら、署名は要りません。** コミット済みの木は署名してあり、同梱のアンカーで検証できます。
+
+```bash
+cd TUKUYO_v1022_6/system
+python3 -B tools/verify_release.py . --trusted-pubkey-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
+```
+
+- `system/` の中を直すと、署名し直すまで CLI とテストが動きません（manifest が合わないため）。そのときは、そのセッションで新しい鍵を作って署名し直し、第4世代の開発用のアンカーを置きます。v1022.6 のアンカーは書き換えません。**秘密鍵はコミットしません**（セッションの scratchpad など、リポジトリの外に置く）。
+
+```bash
+cd TUKUYO_v1022_6
+K=リポジトリの外の場所/g4_key
+python3 -B system/tools/claude_patch_sign.py keygen --out-dir $K
+python3 -B system/tools/claude_patch_sign.py sign system --private-key $K/patch_signing.key --revision v1022.6+gen4-dev
+cp $K/patch_signing.pub deliverables/TUKUYO_GEN4_DEV_TRUST_ANCHOR.txt
+python3 -B system/tools/verify_release.py system --trusted-pubkey-file deliverables/TUKUYO_GEN4_DEV_TRUST_ANCHOR.txt
+# テストは TUKUYO_TEST_RUNTIME_ANCHOR=…/deliverables/TUKUYO_GEN4_DEV_TRUST_ANCHOR.txt で回す
+```
+
+- 鍵が変わると、代謝を動かしている個体は `runtime-trust-rebind --previous-trust-file 古いアンカー` を 1 回実行する必要があります（v1022.6 の README「採用と移行」と同じ）。
+- 第4世代の版を出すときは、版の名前で署名し、アンカーのファイル名も版の名前にします。正式に採用するときは、利用者ご自身の鍵で署名し直します（v1022.6 の README §3 と同じ手順）。
