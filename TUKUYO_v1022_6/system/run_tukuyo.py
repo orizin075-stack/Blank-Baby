@@ -293,7 +293,8 @@ def parser():
     c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
     sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
     c=sub.add_parser('g4-solve',help='generation 4: read a problem into the formal problem language, solve it exactly, commit only verified readings that agree');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto');c.add_argument('--no-learn',action='store_true')
-    c=sub.add_parser('g4-ask',help='generation 4: a problem is solved and checked; any other question is answered by Claude (if configured), marked unverified');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto')
+    c=sub.add_parser('g4-ask',help='generation 4: a problem is solved and checked; any other question is answered by the parents (Claude, ChatGPT, Gemini, as configured), marked unverified');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto')
+    c.add_argument('--voices',choices=('one','all'),default='one',help='one: the voice parent answers; all: every configured parent answers')
     c=sub.add_parser('g4-learned',help='generation 4: readings learned from verified examples')
     c=sub.add_parser('g4-audit',help='generation 4: every learned reading must reproduce its own example')
     c=sub.add_parser('research-run',help='claude-patch5 V1023r preview: one research expedition into a hidden-rule world');c.add_argument('--world',default='W1');c.add_argument('--ticks',type=int,default=120);c.add_argument('--regime',choices=('costly_failure','safe_failure'),default='costly_failure');c.add_argument('--tier',type=int,choices=(1,2,3,4,5));c.add_argument('--noise',type=float,choices=(0.0,0.05,0.1))
@@ -754,7 +755,7 @@ def _main(argv=None):
                 _require_live(data)
                 from tukuyo_g4 import api as g4_api,learn as g4_learn
                 if args.cmd=='g4-solve':res={'ok':True,'version':'gen4',**g4_api.solve(args.query,llm=args.llm,data=data,learn=not args.no_learn)}
-                elif args.cmd=='g4-ask':res={'ok':True,'version':'gen4',**g4_api.ask(args.query,llm=args.llm,data=data)}
+                elif args.cmd=='g4-ask':res={'ok':True,'version':'gen4',**g4_api.ask(args.query,llm=args.llm,data=data,voices=args.voices)}
                 elif args.cmd=='g4-learned':
                     o=g4_learn.Store(Path(data)/'g4').load()
                     res={'ok':True,'templates':[{'id':k,'example':v.get('example'),'seen':v.get('seen'),'conflicts':v.get('conflicts',0),'provenance':v.get('provenance')} for k,v in sorted(o['templates'].items())]}

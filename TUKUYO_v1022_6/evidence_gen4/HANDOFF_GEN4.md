@@ -1,22 +1,26 @@
 # TUKUYO 第4世代（開発中）— 引き継ぎメモ
 
-このメモは、第4世代の作業を別のセッションで続けるためのものです。特に、Claude の API キーを使う測定は、キーを入れたあとの**新しいセッション**でしかできません。
+このメモは、第4世代の作業を別のセッションで続けるためのものです。第4世代は、3 つの LLM（Claude・ChatGPT・Gemini）を親にして育つ子です。親の API キーを使う測定は、キーを入れたあとの**新しいセッション**でしかできません。
 
 ## 1. 第4世代の考え方
 
 - 問題を「式の言葉」（FPL, `src/tukuyo_g4/fpl.py`）に書き直し、厳密に解き（`solve.py`）、別に書いた検査（`check.py`）で確かめてから答えます。
 - 書き直す手段は 4 つあります。
   - 学んだ型（`learn.py`）
-  - TUKUYO 自身の読み取り器（英語、`reader_en.py`）
+  - TUKUYO 自身の読み取り器（英語、`reader_en.py` と `forms_en.py`）
   - v1022 の核（日本語）
-  - Claude（`llm.py`）
-- 答えを確定するのは、検査に通った読みが一致したときだけです（`api.py`）。Claude の読みが 1 つだけ通ったときは、答えを保留します。
-- Claude の 2 つの読みが一致して答えが確定したら、その読みを型として覚えます。同じ文で数だけが違う問題は、次から Claude なしで解けます。
+  - 親：Claude・ChatGPT・Gemini（`llm.py`）
+- 答えを確定するのは、検査に通った読みが一致したときだけです（`api.py`）。
+  - TUKUYO 自身の読みが通ったときは、最初の親 1 つに読ませて突き合わせます。
+  - TUKUYO が読めないときは、設定されている親がそれぞれ 1 回読みます。**別々の親の読みが 2 つ以上一致したとき**だけ答えます（route は `claude+gemini` など）。親が 1 つしかないときは、その親の 2 つの読み方（story・goal）が一致したときに答えます（`llm+llm`）。
+  - 1 つの親の読みだけが通ったときは、答えを保留します（`SINGLE_LLM_READING`）。読みが食い違えば答えません（`DISAGREE`）。
+- 親の読みが一致して答えが確定したら、その読みを型として覚えます（どの親が一致したかも記録）。同じ文で数だけが違う問題は、次から親なしで解けます。
+- 計算の問題でない問い（知識・会話）は、声の親（`TUKUYO_LLM_VOICE`、既定は最初の親）が答えます。`g4-ask --voices all` で、全部の親の答えと、一致しているか（`agree`）を見られます。どれも「確かめていない」答えです。
 - 自前の読み取り器は男女を知りません。2 人以上が出てくる he/she は、直前の主語として読んだうえで、ほかの読み方（同じ人を he とも she とも呼ばないもの）もすべて試します。別の答えになる読み方が 1 つでもあれば答えません。
 
 ## 2. 今の結果（2026-10-06）
 
-ASDiv の開発用 1,083 問（他の人が作った英語の文章題）、Claude なし：
+ASDiv の開発用 1,083 問（他の人が作った英語の文章題）、親（LLM）なし：
 
 | | 正解 | 誤り | 答えない |
 |---|---|---|---|
@@ -29,11 +33,11 @@ ASDiv の開発用 1,083 問（他の人が作った英語の文章題）、Clau
 `think` での第4世代の使い方（`api.think`）：
 
 - 数の出てこない問い（論理・記憶）と、答えが数でない問いは、これまでどおり v1022 の核が答えます。
-- 日本語の文章題：v1022 の核の読みは、読みの 1 つです。Claude が設定されていれば、Claude の読みと突き合わせます。
+- 日本語の文章題：v1022 の核の読みは、読みの 1 つです。親が設定されていれば、親の読みと突き合わせます。
 - 英語の文章題：第4世代が読みます。v1022 の核の英語の物語の読み（証明に `schema` があるもの）は、ASDiv で 20 回正しく 9 回誤ったので、答えにも反対にも使いません（第4世代で確かめられないときは `withheld_answer` として見せ、答えは確定しません）。式（`12*(5+4)`）と公式の問題（平均・面積・最大公約数など、`mathprob`）の答えは、読みの 1 つとして使います（ASDiv で 4 回とも正解）。
 - `llm-ask` も、最初の自前の答えを同じ `think` の決まりで出します。
-- `--engine v1022` で、v1022 の核だけの `think` に戻せます。`--llm off|auto|on` で Claude を使うかを決めます（既定は auto：`TUKUYO_ANTHROPIC_API_KEY` があるときだけ使う）。
-- テストは Claude を呼びません（`tests/conftest.py` が Claude の設定を外します）。
+- `--engine v1022` で、v1022 の核だけの `think` に戻せます。`--llm off|auto|on` で親を使うかを決めます（既定は auto：親のキーがあるときだけ使う）。
+- テストは親を呼びません（`tests/conftest.py` が親の設定を外します）。
 
 鍵のかかったテストでの v1022.6 の結果（1 回だけ回したもの。`locked_test_runs.jsonl` に記録）:
 
@@ -43,39 +47,48 @@ ASDiv の開発用 1,083 問（他の人が作った英語の文章題）、Clau
 | SVAMP（1,000 問） | 19 | 19 | 962 |
 | ASDiv（1,009 問） | 21 | 14 | 974 |
 
-## 3. Claude での測定（新しいセッションで）
+## 3. 親での測定（新しいセッションで）
 
-1. クラウド環境の設定に、環境変数 `TUKUYO_ANTHROPIC_API_KEY` を入れます。この作業環境が自分で使う `ANTHROPIC_API_KEY` とは、別の名前にしてください。キーをチャットに貼ってはいけません。
-2. `pip install anthropic`（または `uv pip install anthropic`）
-3. 問題集を取ってきます：`python3 -B tools/g4_bench.py fetch DATA`。sha256 を固定してあります。
-4. 生きた個体を作ります。日本語の v1022 の核と、学んだ型の置き場所に使います。
+1. クラウド環境の設定に、親のキーを入れます（Network secrets、古いアプリでは API credentials。なければ環境変数）。キーをチャットに貼ってはいけません。作業環境が自分で使う `ANTHROPIC_*` などとぶつからないよう、名前はこのとおりにします。
+
+| 親 | キー | モデル |
+|---|---|---|
+| Claude | `TUKUYO_ANTHROPIC_API_KEY` | `TUKUYO_LLM_MODEL`（既定は `llm.py` の `MODEL_DEFAULT`） |
+| ChatGPT | `TUKUYO_OPENAI_API_KEY` | `TUKUYO_OPENAI_MODEL`（**既定なし**） |
+| Gemini | `TUKUYO_GEMINI_API_KEY` | `TUKUYO_GEMINI_MODEL`（**既定なし**） |
+
+2. ChatGPT と Gemini のモデル名は、そのときの各社の文書で今のモデルを確かめ、セッションの中で `export` します（コードには既定を置いていません。名前がよく変わるため）。
+3. ネットワーク：2026-10-08 の時点で、この作業環境から `api.anthropic.com` と `generativelanguage.googleapis.com` には届き、**`api.openai.com` は環境のネットワークの決まりで止められていました**。ChatGPT を使うには、環境の設定の Network access で `api.openai.com` を Allowed domains に足すか、許す範囲を広げてもらいます。
+4. 道具を入れます：`pip install anthropic openai google-genai`（使う親の分だけでよい）。
+5. 問題集を取ってきます：`python3 -B tools/g4_bench.py fetch DATA`。sha256 を固定してあります。
+6. 生きた個体を作ります。日本語の v1022 の核と、学んだ型の置き場所に使います。
 
 ```bash
 cd TUKUYO_v1022_6/system
 python3 -B run_tukuyo.py --runtime-trust-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt --data WORK/v1022_individual init
 ```
 
-5. まず少数で試します。`--limit 10` は、各問題集の dev から決まった 10 問を取ります（毎回同じ 10 問）。結果の `llm_usage` に、実際に使ったトークン数が出ます。ここから本当の費用を計算してください。
+7. まず少数で試します。`--limit 10` は、各問題集の dev から決まった 10 問を取ります（毎回同じ 10 問）。結果の `llm_usage` に、親ごとの呼び出しの数とトークン数が出ます（`claude:calls`、`gemini:output_tokens` など）。ここから本当の費用を計算してください。
 
 ```bash
-export TUKUYO_LLM_RECORD=$HOME/g4_llm_record.jsonl   # Claude の返事をすべて記録（あとで再生できる）
+export TUKUYO_LLM_RECORD=$HOME/g4_llm_record.jsonl   # 親の返事をすべて記録（あとで再生できる）
 python3 -B tools/g4_bench.py run DATA --system g4 --split dev --limit 10 --llm on --work WORK --out trial.json --show 10
 ```
 
-6. 利用者が費用を承認したら、dev 全体を回します。`--learn` を付けると、Claude と一致した読みを型として覚えます。
+8. 利用者が費用を承認したら、dev 全体を回します。`--learn` を付けると、親の一致した読みを型として覚えます。親を絞るときは `TUKUYO_LLM_PARENTS=claude,gemini` のようにします。
 
 ```bash
 python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --llm on --learn --work WORK --out mgsm_dev.json --show 10
 ```
 
 - 記録したファイルを `TUKUYO_LLM_REPLAY` に指定すると、キーなしで同じ測定を再現できます（費用はかかりません）。
-- Claude の読みの失敗の理由（`LLM_NOT_CONFIGURED`、`AUTHENTICATION`、`ANTHROPIC_PACKAGE_MISSING` など）は、`api.solve` の `readings` に出ます。
+- 親の読みの失敗の理由（`LLM_NOT_CONFIGURED`、`MODEL_NOT_SET`、`PACKAGE_MISSING:openai`、`AUTHENTICATION`、`CONNECTION` など）は、`api.solve` の `readings` に出ます。
 
-### 費用の目安（`llm.py` の既定のモデル、effort medium、指示文はキャッシュ）
+### 費用の目安（Claude は `llm.py` の既定のモデル、effort medium、指示文はキャッシュ）
 
-- 1 回の読みで、出力は約 2,000〜5,000 トークン（考える分を含む）です。1 問あたり 0.04〜0.10 ドルです。
-- TUKUYO が自分で読めない問題は、2 回読みます。1 問あたり 0.08〜0.20 ドルです。
-- 試し（`--limit 10`、20 問）で約 2〜4 ドル、MGSM の dev 139 問で約 11〜28 ドル、SVAMP のテスト 1,000 問で約 80〜200 ドルです。
+- Claude の 1 回の読みで、出力は約 2,000〜5,000 トークン（考える分を含む）です。1 回あたり 0.04〜0.10 ドルです。
+- 親が 3 つあると、TUKUYO が自分で読めない問題は 1 問あたり 3 回読みます。ChatGPT と Gemini の値段はモデルによって違うので、ここでは見積もっていません。
+- 目安（Claude だけのとき）：試し（`--limit 10`、20 問）で約 2〜4 ドル、MGSM の dev 139 問で約 11〜28 ドル、SVAMP のテスト 1,000 問で約 80〜200 ドル。親が増えれば、そのぶん増えます。
 - これは見積もりです。試しの `llm_usage` から計算した本当の費用で、見積もりを直してください。
 - **実行する前に、どこまでやるか（費用）を利用者に確認すること。**
 
@@ -84,14 +97,14 @@ python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --ll
 - テスト（MGSM 111、SVAMP 1,000、ASDiv 1,009）は、`--locked-test-run 理由 --log evidence_gen4/locked_test_runs.jsonl` を付けたときだけ回ります。出力は件数だけです。
 - 第4世代の最終版で、**1 回だけ**回します。回す前の開発には dev だけを使います。
 - 最終の測定は 3 通り、それぞれ 1 回ずつ行います。
-  1. Claude なし（自前の読み取り器と v1022 の核）
-  2. Claude あり（`--llm on`）
-  3. dev で学んだあと、Claude なし（学習の効果）
+  1. 親なし（自前の読み取り器と v1022 の核）
+  2. 親あり（`--llm on`）
+  3. dev で学んだあと、親なし（学習の効果）
 
 ## 5. 残っている作業
 
 - 自前の読み取り器の範囲を広げる（英語）。日本語の FPL 読み取り器は、まだありません。日本語は v1022 の核を使っています。
-- Claude での dev の測定と、学習の効果の測定（キーが必要）。
+- 親での dev の測定と、学習の効果の測定（キーが必要）。親ごとの正確さと、親どうしの一致の割合も記録する。
 - 版の名前・README・署名・リリース zip（第4世代の版として）。
 
 ## 6. 署名（新しいセッションで）

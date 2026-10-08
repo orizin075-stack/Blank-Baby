@@ -99,8 +99,9 @@ def solver(system,work):
             for x in r.get('readings') or []:
                 l=x.get('llm') or {}
                 if not l.get('usage'):continue
-                u['replayed_calls' if l.get('replayed') else 'calls']+=1
-                if not l.get('replayed'):u.update({k:v for k,v in l['usage'].items() if isinstance(v,int)})
+                p=l.get('parent') or 'claude'
+                u[p+':'+('replayed_calls' if l.get('replayed') else 'calls')]+=1
+                if not l.get('replayed'):u.update({p+':'+k:v for k,v in l['usage'].items() if isinstance(v,int)})
             return {'answer':r.get('answer'),'why':r.get('reason'),'route':r.get('route'),'usage':dict(u)}
         return ask
     raise SystemExit('unknown system '+system)
@@ -156,8 +157,8 @@ def main():
     r.add_argument('--set',choices=list(SETS));r.add_argument('--out');r.add_argument('--show',type=int,default=0);r.add_argument('--work')
     r.add_argument('--limit',type=int,default=0,help='dev only: a fixed sample of N items per set')
     r.add_argument('--locked-test-run');r.add_argument('--log')
-    r.add_argument('--llm',choices=('off','auto','on'),default='off',help='g4: use Claude (needs TUKUYO_ANTHROPIC_API_KEY or TUKUYO_LLM_REPLAY)')
-    r.add_argument('--learn',action='store_true',help='g4: keep readings that agreed with Claude as templates in the individual')
+    r.add_argument('--llm',choices=('off','auto','on'),default='off',help='g4: use the parents (Claude, ChatGPT, Gemini; see tukuyo_g4/llm.py) or TUKUYO_LLM_REPLAY')
+    r.add_argument('--learn',action='store_true',help='g4: keep readings that agreed with a parent as templates in the individual')
     a=ap.parse_args()
     if a.cmd=='fetch':print(json.dumps(fetch(a.data),indent=1))
     elif a.cmd=='sizes':

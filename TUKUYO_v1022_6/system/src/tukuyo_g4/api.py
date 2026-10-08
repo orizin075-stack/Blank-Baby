@@ -1,6 +1,6 @@
 """generation 4: one entry point. Readings come from learned templates, TUKUYO's own reader, the v1022 core (Japanese)
-and, when it is configured, Claude; every FPL reading is solved exactly and checked by check.py; an answer is
-committed only by agreement.
+and, when they are configured, the parents (Claude, ChatGPT, Gemini: llm.py); every FPL reading is solved exactly and
+checked by check.py; an answer is committed only by agreement.
 
 solve(text, llm='auto'|'off'|'on', data=None, learn=True) ->
   {'answer': str|None, 'value', 'unit', 'route', 'reason', 'readings': [...], 'learned': template id or None}
@@ -8,15 +8,20 @@ Readings
   learned     a template learned from an earlier agreeing reading, read with this text's numbers (needs data)
   own         TUKUYO's own reader (English)
   v1022       the v1022 core with its own proof and semantic gate (Japanese only; needs data)
-  llm_story   Claude reading the text in story order        } only when Claude is configured; with a verified
-  llm_goal    Claude reading the text from the question     } own reading only llm_story runs, as a cross-check
+  llm_story, llm_goal     Claude reading the text in story order / from the question
+  llm_chatgpt_story       ChatGPT reading the text in story order
+  llm_gemini_story        Gemini reading the text in story order
+  Which parents read: with a verified TUKUYO reading, only the first parent, as a cross-check; otherwise every
+  parent reads once (story order), and when only one parent is configured it reads twice (story and goal).
 Commit rules (route)
   learned | own | v1022            a TUKUYO reading passed and no other reading disagrees
-  <tukuyo route>+llm               a TUKUYO reading and a Claude reading passed and agree
-  llm+llm                          no TUKUYO reading; Claude's two readings passed and agree
-Everything else abstains: no reading passed, readings disagree (DISAGREE), or one Claude reading passed alone
-(SINGLE_LLM_READING: the value is reported as withheld, never committed). When an answer was committed with a
-Claude reading in agreement and data is given, the reading is kept as a template (learn.py).
+  <tukuyo route>+llm               a TUKUYO reading and a parent's reading passed and agree
+  chatgpt+claude, claude+gemini …  no TUKUYO reading; readings of two or more different parents passed and agree
+  llm+llm                          no TUKUYO reading; the only configured parent's two readings passed and agree
+Everything else abstains: no reading passed, readings disagree (DISAGREE), or the readings that passed come from one
+parent while others were asked (SINGLE_LLM_READING: the value is reported as withheld, never committed). When an
+answer was committed with a parent's reading in agreement and data is given, the reading is kept as a template
+(learn.py), with the parents and models that agreed.
 """
 from __future__ import annotations
 import re,time
@@ -79,12 +84,17 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None):
             readings.append(evaluate(own['spec'],'own') if own.get('spec') else {'route':'own','ok':False,'reason':own.get('reason','OWN_UNREAD')})
             tukuyo_ok|=readings[-1]['ok']
     use_llm=llm=='on' or (llm=='auto' and L.available())
+    ps=(L.parents() or ['claude']) if use_llm else []
     if use_llm:
-        views=('story',) if tukuyo_ok else ('story','goal')
-        for v in views:
-            r=L.read(text,v)
-            readings.append(evaluate(r['spec'],'llm_'+v) if r['ok'] else {'route':'llm_'+v,'ok':False,'reason':'LLM:'+str(r.get('reason'))})
-            if r.get('reply'):readings[-1]['llm']={k:r['reply'].get(k) for k in ('model','request_id','usage','replayed')}
+        if tukuyo_ok:plan=[(ps[0],'story')]
+        elif len(ps)==1:plan=[(ps[0],'story'),(ps[0],'goal')]
+        else:plan=[(p,'story') for p in ps]
+        for parent,v in plan:
+            route='llm_'+v if parent=='claude' else f'llm_{parent}_{v}'
+            r=L.read(text,v,parent=parent)
+            readings.append(evaluate(r['spec'],route) if r['ok'] else {'route':route,'ok':False,'reason':'LLM:'+str(r.get('reason'))})
+            readings[-1]['parent']=parent
+            if r.get('reply'):readings[-1]['llm']={'parent':parent,**{k:r['reply'].get(k) for k in ('model','request_id','usage','replayed')}}
     good=[r for r in readings if r['ok']]
     out={'answer':None,'value':None,'unit':None,'route':None,'learned':None,
          'readings':[{k:v for k,v in r.items() if k not in ('answer',)} for r in readings]}
@@ -93,13 +103,15 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None):
     if len(vals)>1:return {**out,'reason':'DISAGREE:'+','.join(sorted(fmt(v) for v in vals))}
     mine=[r['route'] for r in good if not r['route'].startswith('llm')]
     llms=[r for r in good if r['route'].startswith('llm')]
+    fams=sorted({r.get('parent','claude') for r in llms})
     if mine:route='+'.join(dict.fromkeys(mine))+('+llm' if llms else '')
-    elif len(llms)>=2:route='llm+llm'
+    elif len(fams)>=2:route='+'.join(fams)
+    elif len(llms)>=2 and len(ps)==1:route='llm+llm'
     else:return {**out,'reason':'SINGLE_LLM_READING','withheld':good[0]['value']}
     g=next((r for r in good if r.get('spec')),good[0])
     res={**out,'answer':g['value'],'value':g['value'],'unit':g.get('unit'),'route':route,'reason':None}
     if learn and store is not None and llms and not any(r['route']=='learned' for r in good):
-        prov={'route':route,'models':sorted({str((r.get('llm') or {}).get('model')) for r in llms}),
+        prov={'route':route,'parents':fams,'models':sorted({str((r.get('llm') or {}).get('model')) for r in llms}),
               'request_ids':[(r.get('llm') or {}).get('request_id') for r in llms],'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}
         try:res['learned']=store.add(llms[0]['spec'],prov)
         except ValueError:res['learned']=None
@@ -152,15 +164,28 @@ def think(data,text,base,llm='auto',learn=True):
             'verification_evidence':{'mode':'G4_EXACT_SOLVE_AND_SEPARATE_CHECK','route':r['route']},
             'explanation':_explain(g) if g else None,'gen4':info}
 
-def ask(text,llm='auto',data=None,learn=True):
-    """any question: a problem with numbers goes through solve(); anything else is answered by Claude when it is
-    configured, marked unverified (TUKUYO does not check knowledge or conversation, it only labels it)"""
+def _same(a,b):
+    norm=lambda x:re.sub(r'[\s。、．，,.!！?？「」『』"\'()（）]','',str(x)).lower()
+    return norm(a)==norm(b)
+
+def ask(text,llm='auto',data=None,learn=True,voices='one'):
+    """any question: a problem with numbers goes through solve(); anything else is answered by the parents when they
+    are configured, marked unverified (TUKUYO does not check knowledge or conversation, it only labels it).
+    voices='one': the voice parent answers (llm.voice()); voices='all': every parent answers, the voice's answer comes
+    first, and 'agree' says whether the short answers are the same once spaces and punctuation are removed"""
     from . import numbers as N
     r=solve(text,llm=llm,data=data,learn=learn)
     if r['answer'] is not None or N.find(text):return {**r,'kind':'problem','verified':r['answer'] is not None}
     use_llm=llm=='on' or (llm=='auto' and L.available())
     if not use_llm:return {**r,'kind':'question','verified':False,'reason':'NOT_A_PROBLEM_AND_NO_LLM'}
-    a=L.answer(text)
-    if not a['ok']:return {**r,'kind':'question','verified':False,'reason':'LLM:'+str(a.get('reason'))}
-    return {'answer':a['answer'],'route':'llm_voice','kind':'question','verified':False,'source':'claude','model':a.get('model'),
-            'request_id':a.get('request_id'),'reason':None,'readings':r['readings']}
+    v=L.voice();who=[v]+[p for p in L.parents() if p!=v] if voices=='all' else [v]
+    got=[L.answer(text,parent=p) for p in who]
+    ok=[a for a in got if a['ok']]
+    if not ok:return {**r,'kind':'question','verified':False,'reason':'LLM:'+str(got[0].get('reason'))}
+    a=ok[0]
+    out={'answer':a['answer'],'route':'llm_voice','kind':'question','verified':False,'source':a.get('parent'),'model':a.get('model'),
+         'request_id':a.get('request_id'),'reason':None,'readings':r['readings']}
+    if voices=='all':
+        out['answers']=[{k:x.get(k) for k in ('parent','ok','answer','model','reason')} for x in got]
+        out['agree']=len(ok)>=2 and all(_same(x['answer'],a['answer']) for x in ok)
+    return out
