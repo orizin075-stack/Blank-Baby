@@ -1,0 +1,336 @@
+{
+ "utc": "2026-10-08T15:25:16Z",
+ "seed": 20261008,
+ "note": "no parent is called; dev splits only",
+ "fuzz": {
+  "texts": 4245,
+  "entry_points": [
+   "numbers",
+   "forms",
+   "reader",
+   "solve",
+   "ask",
+   "think"
+  ],
+  "crashes": 0,
+  "by_kind": {},
+  "examples": {},
+  "seconds": 70.4,
+  "seconds_total": 70.7
+ },
+ "specs": {
+  "readings": 6000,
+  "crashes": 0,
+  "by_kind": {},
+  "seconds": 3.2,
+  "seconds_total": 3.2
+ },
+ "mutate": {
+  "readings": 288,
+  "mutations": {
+   "number_not_in_text": {
+    "n": 288,
+    "caught": 288,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "span_not_in_text": {
+    "n": 288,
+    "caught": 288,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "number_in_relation": {
+    "n": 288,
+    "caught": 288,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "binding_dropped": {
+    "n": 288,
+    "caught": 288,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "unit_changed": {
+    "n": 288,
+    "caught": 288,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "contradiction_added": {
+    "n": 288,
+    "caught": 288,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "number_declared_unused": {
+    "n": 288,
+    "caught": 288,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "operator_changed": {
+    "n": 259,
+    "caught": 142,
+    "passed_same_answer": 1,
+    "passed_other_answer": 116,
+    "caught_pct": 54.8
+   },
+   "other_quantity_asked": {
+    "n": 288,
+    "caught": 0,
+    "passed_same_answer": 10,
+    "passed_other_answer": 278,
+    "caught_pct": 0.0
+   }
+  },
+  "seconds_total": 5.4
+ },
+ "parents": {
+  "items": 288,
+  "note": "simulated parents: wrong readings are operator or asked-quantity changes that pass the checker",
+  "grid": [
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "correct": 237,
+    "abstain": 48,
+    "wrong": 3,
+    "committed_wrong_pct": 1.0
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "correct": 237,
+    "abstain": 51,
+    "committed_wrong_pct": 0.0
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "correct": 232,
+    "abstain": 53,
+    "wrong": 3,
+    "committed_wrong_pct": 1.0
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "correct": 159,
+    "abstain": 120,
+    "wrong": 9,
+    "committed_wrong_pct": 3.1
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "correct": 158,
+    "abstain": 118,
+    "wrong": 12,
+    "committed_wrong_pct": 4.2
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "correct": 157,
+    "abstain": 108,
+    "wrong": 23,
+    "committed_wrong_pct": 8.0
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "abstain": 49,
+    "correct": 237,
+    "wrong": 2,
+    "committed_wrong_pct": 0.7
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "abstain": 41,
+    "correct": 244,
+    "wrong": 3,
+    "committed_wrong_pct": 1.0
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "abstain": 39,
+    "correct": 248,
+    "wrong": 1,
+    "committed_wrong_pct": 0.3
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "abstain": 128,
+    "correct": 152,
+    "wrong": 8,
+    "committed_wrong_pct": 2.8
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "abstain": 124,
+    "correct": 150,
+    "wrong": 14,
+    "committed_wrong_pct": 4.9
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "abstain": 111,
+    "correct": 147,
+    "wrong": 30,
+    "committed_wrong_pct": 10.4
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "abstain": 66,
+    "correct": 222,
+    "committed_wrong_pct": 0.0
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "abstain": 68,
+    "correct": 219,
+    "wrong": 1,
+    "committed_wrong_pct": 0.3
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "abstain": 68,
+    "correct": 219,
+    "wrong": 1,
+    "committed_wrong_pct": 0.3
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "abstain": 170,
+    "correct": 116,
+    "wrong": 2,
+    "committed_wrong_pct": 0.7
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "abstain": 176,
+    "correct": 111,
+    "wrong": 1,
+    "committed_wrong_pct": 0.3
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "abstain": 169,
+    "correct": 115,
+    "wrong": 4,
+    "committed_wrong_pct": 1.4
+   }
+  ],
+  "seconds_total": 25.3
+ },
+ "learn": {
+  "templates": 281,
+  "from_readings": 288,
+  "audit_ok": true,
+  "agree_with_own_reader": 561,
+  "template_abstains": 60,
+  "no_template": 15,
+  "template_only": 1,
+  "disagreements": [],
+  "seconds_total": 25.6
+ },
+ "accuracy": {
+  "asdiv": {
+   "items": 1083,
+   "g4_solve": {
+    "correct": 287,
+    "abstain": 795,
+    "wrong": 1
+   },
+   "v1022": {
+    "abstain": 1050,
+    "correct": 24,
+    "wrong": 9
+   },
+   "think": {
+    "correct": 290,
+    "abstain": 792,
+    "wrong": 1
+   },
+   "ms": {
+    "g4_solve": {
+     "median": 2.23,
+     "p95": 5.38
+    },
+    "v1022": {
+     "median": 5.32,
+     "p95": 8.75
+    },
+    "think": {
+     "median": 8.14,
+     "p95": 14.56
+    }
+   }
+  },
+  "mgsm_ja": {
+   "items": 139,
+   "g4_solve": {
+    "abstain": 139
+   },
+   "v1022": {
+    "abstain": 139
+   },
+   "think": {
+    "abstain": 139
+   },
+   "ms": {
+    "g4_solve": {
+     "median": 0.0,
+     "p95": 0.01
+    },
+    "v1022": {
+     "median": 4.67,
+     "p95": 6.81
+    },
+    "think": {
+     "median": 5.09,
+     "p95": 7.23
+    }
+   }
+  },
+  "seconds_total": 14.0
+ }
+}

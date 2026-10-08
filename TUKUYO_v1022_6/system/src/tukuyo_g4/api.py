@@ -40,10 +40,15 @@ def _own(text):
     return reader.read(text)
 
 def evaluate(spec,route):
-    """solve + check one reading"""
-    r=_solve(spec)
+    """solve + check one reading. A reading may come from outside, so a fault while solving or checking it is a failed
+    reading with its reason, never an exception"""
+    try:r=_solve(spec)
+    except (ArithmeticError,ValueError,KeyError,IndexError,TypeError,AttributeError,RecursionError) as e:
+        return {'route':route,'ok':False,'reason':'SOLVE:INTERNAL:'+type(e).__name__,'spec':spec}
     if not r['ok']:return {'route':route,'ok':False,'reason':'SOLVE:'+r['reason'],'spec':spec}
-    c=_check(spec,r['values'])
+    try:c=_check(spec,r['values'])
+    except (ArithmeticError,ValueError,KeyError,IndexError,TypeError,AttributeError,RecursionError) as e:
+        return {'route':route,'ok':False,'reason':'CHECK:INTERNAL:'+type(e).__name__,'spec':spec}
     if not c['ok']:return {'route':route,'ok':False,'reason':'CHECK:'+';'.join(c['failures'][:4]),'spec':spec,'value':fmt(r['answer'])}
     return {'route':route,'ok':True,'value':fmt(r['answer']),'answer':r['answer'],'unit':spec.get('answer_unit') or c['unit'],
             'spec':spec,'steps':r['steps'],'values':{k:fmt(v) for k,v in r['values'].items()}}

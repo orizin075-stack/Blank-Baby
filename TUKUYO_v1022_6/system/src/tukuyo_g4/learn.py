@@ -30,13 +30,15 @@ def skeleton(text):
     return ''.join(out).lower(),t,nums,{}
 
 def _slot_of(t,nums,span,value):
-    """the index of the text number inside one occurrence of span that has this value"""
+    """the index of the text number inside one occurrence of span that has this value; None when there is none, or when
+    two numbers of the span have this value (the template could not tell them apart: '2 grape and 2 banana popsicles')"""
     core=''.join(span.split())
     if not core:return None
     pat=r'\s*'.join(re.escape(c) for c in core)
     for m in re.finditer(pat,t):
-        for k,n in enumerate(nums):
-            if m.start()<=n.start and n.end<=m.end() and (n.value==value or (n.kind=='percent' and n.value/100==value)):return k
+        ks=[k for k,n in enumerate(nums) if m.start()<=n.start and n.end<=m.end() and (n.value==value or (n.kind=='percent' and n.value/100==value))]
+        if len(ks)==1:return ks[0]
+        if ks:return None
     return None
 
 def template(spec):
@@ -59,7 +61,7 @@ def template(spec):
     un=[]
     for u in spec.get('unused') or []:
         ks=[k for k,n in enumerate(nums) if n.raw==str(u.get('raw','')).strip()]
-        if not ks:return None
+        if len(ks)!=1:return None          # none, or two numbers written alike: the template could not tell which
         un.append({'slot':ks[0],'why':u.get('why','')})
     tpl['unused']=un
     return {'key':key,'names':len(names),'numbers':len(nums),'reading':tpl}

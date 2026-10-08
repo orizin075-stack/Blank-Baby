@@ -10,7 +10,8 @@ check(spec, values) -> {'ok', 'failures', 'answer', 'unit', 'covered', 'unused'}
              have the same unit (a bare number takes the unit it is combined with)
   grounding  every span occurs in the text; a binding's number is a number of the text inside its span; known
              constants are from KNOWN and say what they are; relations use no numbers but 0 1 100; every number
-             of the text is bound, optional (the value 1, ordinals) or declared unused with a reason
+             of the text is bound, optional (ordinals; the number 1 as the base of a rate: numbers.optional) or declared
+             unused with a reason
 """
 from __future__ import annotations
 import re
@@ -167,6 +168,14 @@ def check(spec,values):
     fails=[];out={'ok':False,'failures':fails}
     if not isinstance(spec,dict) or spec.get('schema')!=SCHEMA:fails.append('SCHEMA');return out
     text=spec.get('text') or ''
+    # written apart from fpl.py: an equation that is too long or too deeply nested is refused here too
+    for f in spec.get('facts') or []:
+        eq=str(f.get('eq','')) if isinstance(f,dict) else ''
+        if len(eq)>600 or len(re.findall(r'\d+(?:\.\d+)?|[A-Za-z_]\w*|\S',eq))>200:fails.append('EQUATION_TOO_LONG');return out
+        d=m=0
+        for c in eq:
+            d+=(c=='(')-(c==')');m=max(m,d)
+        if m>30:fails.append('EQUATION_TOO_DEEP');return out
     try:
         qmeta={q['name']:q for q in spec['quantities']}
         qs={n:parse_unit(q.get('unit')) for n,q in qmeta.items()}
@@ -229,7 +238,7 @@ def check(spec,values):
         if not m:fails.append('UNUSED_NOT_IN_TEXT:'+raw)
         unused.extend(m)
     for i,n in enumerate(nums):
-        if i in covered or i in unused or N.optional(n):continue
+        if i in covered or i in unused or N.optional(n,text):continue
         fails.append('NUMBER_NOT_ACCOUNTED:'+n.raw)
     ask=spec.get('ask')
     out.update({'ok':not fails,'answer':fmt(v[ask]) if ask in v else None,'unit':qmeta.get(ask,{}).get('unit',''),

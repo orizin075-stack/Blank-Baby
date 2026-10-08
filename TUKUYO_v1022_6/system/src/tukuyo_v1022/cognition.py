@@ -416,6 +416,7 @@ def _solve_core_v5(data,query,formal_task=None):
         if not y['uncertain']:return {**y,'explanation':'記憶「'+'」「'.join(x['text'] for x in k['records'])+'」より。'}
     return m
 def solve(data,query,formal_task=None):
+    if formal_task is None and not str(query or '').strip():return _no('EMPTY_QUERY',recognized=False)
     r=_solve_core(data,query,formal_task)
     # claude-patch4: final commit gate (separately written tokenizer/parser; see semantic_gate.py)
     if r.get('answer') is not None and not r.get('uncertain') and formal_task is None:

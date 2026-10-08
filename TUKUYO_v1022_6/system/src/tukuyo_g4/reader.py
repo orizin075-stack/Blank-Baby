@@ -12,4 +12,4 @@ def read(text):
         return reader_ja.read(text)
     from . import forms_en
     r=forms_en.read(text)
-    return r if r else reader_en.read(text)
+    return r if r and r.get('spec') else reader_en.read(text)

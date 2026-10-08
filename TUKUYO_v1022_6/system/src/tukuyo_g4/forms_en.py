@@ -41,11 +41,16 @@ class _Spec:
         m=re.match(r'\s*[A-Za-z]+',s.text[b:]);b=b+m.end() if m else b
         return s.text[a:b].strip()
     def done(s,ask,unit,form):
-        if any(k not in s.bound and not N.optional(n) for k,n in enumerate(s.nums)):return None
+        if any(k not in s.bound and not N.optional(n,s.text) for k,n in enumerate(s.nums)):return None
         return {'spec':{'schema':'tukuyo.g4.fpl/1','lang':'en','text':s.text,'quantities':list(s.q.values()),'facts':s.facts,
                         'ask':ask,'answer_unit':unit,'unused':[],'reader':FORM+':'+form}}
 
 def read(text):
+    try:return _read(text)
+    except (ArithmeticError,ValueError,KeyError,IndexError,TypeError,AttributeError) as e:
+        return {'spec':None,'reason':'FORMS:INTERNAL:'+type(e).__name__}
+
+def _read(text):
     nums=N.find(text)
     sents=sentences(text)
     if not sents or not nums:return None

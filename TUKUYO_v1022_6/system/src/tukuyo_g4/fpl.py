@@ -27,9 +27,13 @@ _TOK=re.compile(r'\s*(?:(\d+(?:\.\d+)?)|([A-Za-z_][A-Za-z0-9_]*)|(.))')
 
 class FPLError(ValueError):pass
 
+# a reading comes from outside (a parent may return anything): equations are short, or they are not read
+MAX_EQ_CHARS=600;MAX_TOKENS=200;MAX_DEPTH=30
+
 # ----------------------------------------------------------------------------- expressions
 def tokens(s):
     out=[];pos=0;s=s.strip()
+    if len(s)>MAX_EQ_CHARS:raise FPLError('TOO_LONG')
     while pos<len(s):
         m=_TOK.match(s,pos)
         if not m or m.end()==pos:break
@@ -38,10 +42,14 @@ def tokens(s):
         elif m.group(2):out.append(('v',m.group(2)))
         elif m.group(3) in '+-*/(),=':out.append(('o',m.group(3)))
         elif m.group(3).strip():raise FPLError('BAD_CHARACTER:'+m.group(3))
+        if len(out)>MAX_TOKENS:raise FPLError('TOO_MANY_TOKENS')
     return out
 
 class _P:
-    def __init__(s,toks):s.t=toks;s.i=0
+    def __init__(s,toks):s.t=toks;s.i=0;s.depth=0
+    def deeper(s):
+        s.depth+=1
+        if s.depth>MAX_DEPTH:raise FPLError('TOO_DEEP')
     def peek(s):return s.t[s.i] if s.i<len(s.t) else ('end',None)
     def take(s,kind=None,val=None):
         k,v=s.peek()
@@ -57,17 +65,17 @@ class _P:
         return a
     def factor(s):
         k,v=s.peek()
-        if (k,v)==('o','-'):s.take();return ('neg',s.factor())
-        if (k,v)==('o','+'):s.take();return s.factor()
-        if (k,v)==('o','('):s.take();a=s.expr();s.take('o',')');return a
+        if (k,v)==('o','-'):s.take();s.deeper();a=('neg',s.factor());s.depth-=1;return a
+        if (k,v)==('o','+'):s.take();s.deeper();a=s.factor();s.depth-=1;return a
+        if (k,v)==('o','('):s.take();s.deeper();a=s.expr();s.take('o',')');s.depth-=1;return a
         if k=='n':s.take();return ('n',v)
         if k=='v':
             s.take()
             if s.peek()==('o','('):
                 if v not in FUNCS:raise FPLError('UNKNOWN_FUNCTION:'+v)
-                s.take();args=[s.expr()]
+                s.take();s.deeper();args=[s.expr()]
                 while s.peek()==('o',','):s.take();args.append(s.expr())
-                s.take('o',')')
+                s.take('o',')');s.depth-=1
                 if len(args)!=FUNCS[v]:raise FPLError('ARITY:'+v)
                 return ('f',v,args)
             return ('v',v)

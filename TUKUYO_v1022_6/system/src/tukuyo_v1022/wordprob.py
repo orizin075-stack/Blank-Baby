@@ -301,6 +301,7 @@ def _en(t):
     if re.search(r'\bpercent|%|average|half|twice|times as|probability|area|remainder\b|\bleft over\b|\bmaybe\b|\bmight\b|\babout\b|\bapproximately\b|\bwill\b|\bplans?\b|\bif\b|\bsome\b|\bseveral\b|\ba few\b|\bmany of\b|\ba lot\b|\bmost\b|\bpart of\b',s):
         return {'refused':'HEDGED_OR_INEXACT_QUANTITIES'} if re.search(r'\d',s) and re.search(r'how (?:many|much|far|old|long)',s) else None
     sents=[x.strip() for x in re.split(r'(?<=[.?!])\s+',s) if x.strip()]
+    if not sents:return None          # gen4 measurement: an empty or blank query raised IndexError here
     q=sents[-1];body=' '.join(sents[:-1]) if len(sents)>1 else ''
     if not q.endswith('?') and not re.match(r'how|what',q):return None
     nums=list(re.finditer(r'\d+(?:\.\d+)?',s))

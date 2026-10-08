@@ -1243,6 +1243,7 @@ def schema_share(st,ask):
         if not re.search(r'\b(?:equal|equally|evenly|same|each|every|per|divided|split|shared|share|among|organized|group|groups)\b',(st.t).lower()):return None
         tq=p.bind(tots[0],f'{noun}_total',noun);gq=p.bind(cnt,'groups',cnt.noun or 'group')
         per=p.new(f'{noun}_per_group',f'{noun}/{cnt.noun or "group"}',integer=False)
+        if cnt.m and cnt.m.value==0:return None          # sharing among no one: no reading
         if tots[0].m and cnt.m and (tots[0].m.value/cnt.m.value).denominator!=1:
             if not re.search(r'\b(?:equal|equally|evenly)\b',st.t.lower()) or noun in UNITS or noun in ('dollar','cent'):return None
             p.rel(f'{per} = floor({tq} / {gq})',ask.text)
@@ -1464,6 +1465,9 @@ SCHEMAS=[schema_gcd_lcm,schema_change,schema_compare_things,schema_holding,schem
 def read(text):
     try:return _read_pronouns(text)
     except NoRead as e:return {'spec':None,'reason':'EN:'+str(e)}
+    except (ArithmeticError,ValueError,KeyError,IndexError,TypeError,AttributeError,RecursionError) as e:
+        # a fault of the reader is never an answer and never breaks the caller; the reason names it, so it is seen
+        return {'spec':None,'reason':'EN:INTERNAL:'+type(e).__name__}
 
 def _consistent(resolved):
     """one person is never both he and she"""
@@ -1553,16 +1557,16 @@ def finish(st,p,target,noun,ask):
     unused=[]
     linked={x for f in st.frames for x in (f.per,f.of,f.other,f.item) if x}
     for f in st.frames:
-        if f.m is None or f.m.start in p.used or N.optional(f.m):continue
+        if f.m is None or f.m.start in p.used or N.optional(f.m,st.t):continue
         if f.m.start in p.skip:unused.append({'raw':f.m.raw,'why':p.skip[f.m.start]});continue
         why=_irrelevant(st,f,noun,ask,linked)
         if why is None:no('UNUSED:'+f.kind+':'+f.m.raw)
         unused.append({'raw':f.m.raw,'why':why})
     for x in ask.qframes:
-        if x.m.start not in p.used and not N.optional(x.m):no('UNUSED_QUESTION_NUMBER:'+x.m.raw)
-    out_pos={f.m.start for f in st.frames if f.m is not None and f.m.start not in p.used and not N.optional(f.m)}
+        if x.m.start not in p.used and not N.optional(x.m,st.t):no('UNUSED_QUESTION_NUMBER:'+x.m.raw)
+    out_pos={f.m.start for f in st.frames if f.m is not None and f.m.start not in p.used and not N.optional(f.m,st.t)}
     for n in st.nums:
-        if n.start in p.used or N.optional(n) or n.start in out_pos:continue
+        if n.start in p.used or N.optional(n,st.t) or n.start in out_pos:continue
         no('UNREAD_NUMBER:'+n.raw)
     spec={'schema':'tukuyo.g4.fpl/1','lang':'en','text':st.t,'quantities':list(p.qs.values()),'facts':p.facts,'ask':target,
           'answer_unit':noun or '','unused':unused,'reader':'tukuyo.g4.reader_en/3:'+p.name}

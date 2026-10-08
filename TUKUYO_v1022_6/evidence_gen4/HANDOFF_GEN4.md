@@ -92,6 +92,10 @@ python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --ll
 - これは見積もりです。試しの `llm_usage` から計算した本当の費用で、見積もりを直してください。
 - **実行する前に、どこまでやるか（費用）を利用者に確認すること。**
 
+### 親を使わない計測
+
+`python3 -B tools/g4_measure.py DATA --work WORK --out report.json` で、壊れ方・検査器の強さ・親の決まりの模擬・学習・正確さと速さを測れます（親は呼ばない、費用 0、dev だけ）。2026-10-08 の結果は `MEASURE_2026-10-08.md`。
+
 ## 4. 鍵のかかったテストの扱い
 
 - テスト（MGSM 111、SVAMP 1,000、ASDiv 1,009）は、`--locked-test-run 理由 --log evidence_gen4/locked_test_runs.jsonl` を付けたときだけ回ります。出力は件数だけです。
