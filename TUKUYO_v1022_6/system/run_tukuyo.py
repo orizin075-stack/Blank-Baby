@@ -282,7 +282,8 @@ def parser():
     sub.add_parser('runtime-ecology-status');sub.add_parser('runtime-ecology-audit');sub.add_parser('runtime-ecology-recover-cache')
     c=sub.add_parser('think');c.add_argument('query');c.add_argument('--formal-task',type=Path)
     c.add_argument('--engine',choices=('gen4','v1022'),default='gen4',help='gen4: problems with numbers also go through generation 4 (v1022: the v1022 core alone)')
-    c.add_argument('--llm',choices=('auto','on','off'),default='auto',help='gen4: Claude as a reader when TUKUYO_ANTHROPIC_API_KEY is set (auto)')
+    c.add_argument('--llm',choices=('auto','on','off'),default='auto',help='gen4: the parents as readers when they are configured (auto)')
+    c.add_argument('--no-soul',action='store_true',help='gen4: do not pass what was learned on to the heart and the soul')
     c=sub.add_parser('llm-ask');c.add_argument('query');c.add_argument('--no-local-first',action='store_true')
     c=sub.add_parser('llm-teach');c.add_argument('questions',type=Path)
     sub.add_parser('llm-status');sub.add_parser('llm-audit')
@@ -293,8 +294,12 @@ def parser():
     c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
     sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
     c=sub.add_parser('g4-solve',help='generation 4: read a problem into the formal problem language, solve it exactly, commit only verified readings that agree');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto');c.add_argument('--no-learn',action='store_true')
+    c.add_argument('--no-soul',action='store_true')
     c=sub.add_parser('g4-ask',help='generation 4: a problem is solved and checked; any other question is answered by the parents (Claude, ChatGPT, Gemini, as configured), marked unverified');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto')
-    c.add_argument('--voices',choices=('one','all'),default='one',help='one: the voice parent answers; all: every configured parent answers')
+    c.add_argument('--voices',choices=('one','all'),default='one',help='one: the voice parent answers; all: every configured parent answers (an answer they agree on is remembered)')
+    c.add_argument('--no-soul',action='store_true')
+    sub.add_parser('g4-self',help='generation 4: how the child has grown - what it learned and from whom, its trust in its parents, its soul and heart')
+    sub.add_parser('g4-remembered',help='generation 4: answers its parents agreed on, remembered (not verified)')
     c=sub.add_parser('g4-learned',help='generation 4: readings learned from verified examples')
     c=sub.add_parser('g4-audit',help='generation 4: every learned reading must reproduce its own example')
     c=sub.add_parser('research-run',help='claude-patch5 V1023r preview: one research expedition into a hidden-rule world');c.add_argument('--world',default='W1');c.add_argument('--ticks',type=int,default=120);c.add_argument('--regime',choices=('costly_failure','safe_failure'),default='costly_failure');c.add_argument('--tier',type=int,choices=(1,2,3,4,5));c.add_argument('--noise',type=float,choices=(0.0,0.05,0.1))
@@ -740,8 +745,9 @@ def _main(argv=None):
                     ft=json.loads(args.formal_task.read_text()) if args.formal_task else None
                     res=local.solve(data,args.query,ft)
                     if ft is None and args.engine=='gen4':
-                        from tukuyo_g4 import api as g4_api
-                        res=g4_api.think(data,args.query,res,llm=args.llm)
+                        from tukuyo_g4 import api as g4_api,life as g4_life,llm as g4_llm
+                        res=g4_api.think(data,args.query,res,llm=args.llm,order=g4_life.trust_order(data,g4_llm.parents()))
+                        if not args.no_soul and res.get('gen4'):res['life']=g4_life.record(data,res)
                 elif args.cmd=='dialogue-learn':res=local.learn(data,json.loads(args.bundle.read_text()),args.teacher)
                 else:res=local.audit(data)
             elif args.cmd in ('metabolism-init','metabolism-step','metabolism-status','metabolism-audit'):
@@ -751,15 +757,26 @@ def _main(argv=None):
                 elif args.cmd=='metabolism-step':res=metabolism.step(data,args.ticks)
                 elif args.cmd=='metabolism-status':res=metabolism.status(data)
                 else:res=metabolism.audit(data)
-            elif args.cmd in ('g4-solve','g4-ask','g4-learned','g4-audit'):
+            elif args.cmd in ('g4-solve','g4-ask','g4-learned','g4-audit','g4-self','g4-remembered'):
                 _require_live(data)
-                from tukuyo_g4 import api as g4_api,learn as g4_learn
-                if args.cmd=='g4-solve':res={'ok':True,'version':'gen4',**g4_api.solve(args.query,llm=args.llm,data=data,learn=not args.no_learn)}
-                elif args.cmd=='g4-ask':res={'ok':True,'version':'gen4',**g4_api.ask(args.query,llm=args.llm,data=data,voices=args.voices)}
+                from tukuyo_g4 import api as g4_api,learn as g4_learn,life as g4_life,llm as g4_llm,memory as g4_memory
+                order=g4_life.trust_order(data,g4_llm.parents())
+                if args.cmd=='g4-solve':
+                    res={'ok':True,'version':'gen4',**g4_api.solve(args.query,llm=args.llm,data=data,learn=not args.no_learn,order=order)}
+                    if not args.no_soul:res['life']=g4_life.record(data,res)
+                elif args.cmd=='g4-ask':
+                    res={'ok':True,'version':'gen4',**g4_api.ask(args.query,llm=args.llm,data=data,voices=args.voices,order=order,persona=g4_life.persona(data))}
+                    if not args.no_soul:res['life']=g4_life.record(data,res)
+                elif args.cmd=='g4-self':res={'ok':True,'version':'gen4',**g4_life.self_report(data)}
+                elif args.cmd=='g4-remembered':
+                    o=g4_memory.Memory(data).load()
+                    res={'ok':True,'note':'answers two or more parents agreed on; not verified by TUKUYO','entries':[{'id':k,**v} for k,v in sorted(o['entries'].items())]}
                 elif args.cmd=='g4-learned':
                     o=g4_learn.Store(Path(data)/'g4').load()
                     res={'ok':True,'templates':[{'id':k,'example':v.get('example'),'seen':v.get('seen'),'conflicts':v.get('conflicts',0),'provenance':v.get('provenance')} for k,v in sorted(o['templates'].items())]}
-                else:res=g4_learn.Store(Path(data)/'g4').audit()
+                else:
+                    res=g4_learn.Store(Path(data)/'g4').audit();m=g4_memory.audit(data)
+                    res={**res,'ok':bool(res.get('ok')) and m['ok'],'remembered':m}
             elif args.cmd in ('research-run','research-status','research-audit'):
                 if args.cmd=='research-run':_require_live(data)
                 from tukuyo_v1023r import life as research_life

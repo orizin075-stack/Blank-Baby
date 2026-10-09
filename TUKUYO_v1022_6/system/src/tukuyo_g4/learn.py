@@ -109,9 +109,10 @@ class Store:
         body=json.dumps(o['templates'],ensure_ascii=False,sort_keys=True)
         o={'schema':SCHEMA,'templates':o['templates'],'sha256':hashlib.sha256(body.encode()).hexdigest()}
         tmp=s.path.with_suffix('.tmp');tmp.write_text(json.dumps(o,ensure_ascii=False,indent=1,sort_keys=True),encoding='utf-8');os.replace(tmp,s.path)
+    @staticmethod
+    def key_of(text):return hashlib.sha256(skeleton(text)[0].encode()).hexdigest()[:24]
     def find(s,text):
-        key=skeleton(text)[0];o=s.load()
-        return o['templates'].get(hashlib.sha256(key.encode()).hexdigest()[:24])
+        return s.load()['templates'].get(s.key_of(text))
     def add(s,spec,provenance):
         tpl=template(spec)
         if tpl is None:return None

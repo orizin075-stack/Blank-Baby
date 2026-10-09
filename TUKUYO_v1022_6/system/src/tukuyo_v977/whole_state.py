@@ -66,6 +66,9 @@ def _apply_experience_mutation(s,kind,valence,importance,theme='',relation=''):
         t=s['themes'].setdefault(theme,{'weight':0.0,'encounters':0});t['encounters']+=1;t['weight']=round(max(-2,min(2,t['weight']+v*imp*0.25)),6)
     if kind in ('discovery','learning'):
         s['core_values']['curiosity']=round(min(1.0,s['core_values']['curiosity']+max(0,v)*imp*0.03),6)
+    if kind=='honesty' and v>0:
+        # generation 4: an answer withheld because the readings did not agree, instead of a guess
+        s['core_values']['truthfulness']=round(min(1.0,s['core_values']['truthfulness']+v*imp*0.02),6)
     if kind in ('betrayal','harm') and imp>=0.6:
         sid=hashlib.sha256(f"{kind}:{theme}:{relation}:{s['update_seq']}".encode()).hexdigest()[:16]
         s['scars'].append({'scar_id':sid,'kind':kind,'theme':theme,'relation':relation,'strength':round(imp*abs(v),6)})

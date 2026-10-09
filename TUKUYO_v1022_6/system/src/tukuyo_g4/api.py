@@ -24,7 +24,7 @@ answer was committed with a parent's reading in agreement and data is given, the
 (learn.py), with the parents and models that agreed.
 """
 from __future__ import annotations
-import re,time
+import os,re,time
 from fractions import Fraction
 from pathlib import Path
 from . import llm as L
@@ -68,8 +68,9 @@ def v1022_reading(r):
     except (ValueError,ZeroDivisionError):return {'route':'v1022','ok':False,'reason':'V1022:NOT_A_NUMBER'}
     return {'route':'v1022','ok':True,'value':fmt(v),'answer':v,'unit':None,'proof_kind':(r.get('proof') or {}).get('kind')}
 
-def solve(text,llm='auto',data=None,learn=True,v1022=None):
-    """v1022: a reading of the v1022 core made by the caller (think); it then replaces the core's own call"""
+def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
+    """v1022: a reading of the v1022 core made by the caller (think); it then replaces the core's own call.
+    order: the parents in the order to ask them (life.trust_order: the child's trust), the configured ones only"""
     readings=[];tukuyo_ok=False
     store=None
     if data is not None:
@@ -79,7 +80,7 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None):
         except ValueError:t=None;readings.append({'route':'learned','ok':False,'reason':'LEARNED_STORE_SEAL'})
         if t:
             spec=instantiate(t,text)
-            if spec:readings.append(evaluate(spec,'learned'));tukuyo_ok|=readings[-1]['ok']
+            if spec:readings.append(evaluate(spec,'learned'));readings[-1]['template']=store.key_of(text);tukuyo_ok|=readings[-1]['ok']
     if v1022 is not None:readings.append(v1022);tukuyo_ok|=v1022['ok']
     if JA.search(text):
         if data is not None and v1022 is None:readings.append(_v1022(data,text));tukuyo_ok|=readings[-1]['ok']
@@ -90,6 +91,7 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None):
             tukuyo_ok|=readings[-1]['ok']
     use_llm=llm=='on' or (llm=='auto' and L.available())
     ps=(L.parents() or ['claude']) if use_llm else []
+    if order:ps=[p for p in order if p in ps]+[p for p in ps if p not in order]
     if use_llm:
         if tukuyo_ok:plan=[(ps[0],'story')]
         elif len(ps)==1:plan=[(ps[0],'story'),(ps[0],'goal')]
@@ -133,7 +135,7 @@ def _explain(g):
     facts='、'.join(f"{f['eq']}（{f['span']}）" if f.get('span') else f"{f['eq']}（{f.get('known')}）" for f in sp.get('facts',[]))
     return f"第4世代の読み（{g['route']}）：{facts}。答え：{sp.get('ask')} = {g['value']}" if sp else None
 
-def think(data,text,base,llm='auto',learn=True):
+def think(data,text,base,llm='auto',learn=True,order=None):
     """`think` with generation 4. base is the v1022 core's result for the same text (cognition.solve).
       * no number in the text, or an answer that is not a number (logic, memory): base, unchanged
       * Japanese: the v1022 reading is one reading among the others (Claude's, when it is configured)
@@ -152,15 +154,15 @@ def think(data,text,base,llm='auto',learn=True):
     use=v if (ja or not v['ok'] or not v1022_story(base)) else None
     if not ja and v['ok'] and use is None:ignored={'route':'v1022','value':v['value'],'proof_kind':v.get('proof_kind'),'story':True,'used':False}
     else:ignored=None
-    r=solve(text,llm=llm,data=data,learn=learn,v1022=use if v['ok'] or ja else None)
-    info={'route':r['route'],'reason':r['reason'],'learned':r.get('learned'),
-          'readings':[{k:x.get(k) for k in ('route','ok','value','reason','proof_kind','llm') if x.get(k) is not None} for x in r['readings']]+([ignored] if ignored else [])}
+    r=solve(text,llm=llm,data=data,learn=learn,v1022=use if v['ok'] or ja else None,order=order)
+    info={'route':r['route'],'reason':r['reason'],'learned':r.get('learned'),'value':r.get('value'),
+          'readings':[{k:x.get(k) for k in ('route','ok','value','reason','proof_kind','llm','parent','template') if x.get(k) is not None} for x in r['readings']]+([ignored] if ignored else [])}
     if r['answer'] is None:
         out={'ok':True,'answer':None,'confidence':0.,'uncertain':True,'recognized':base.get('recognized',True),'proof':None,'gen4':info,
              'reason':r['reason'] if r['reason'] not in ('NO_VERIFIED_READING','NOT_READ') or not ignored else 'V1022_STORY_READING_UNCONFIRMED'}
         if ignored:out['withheld_answer']=ignored['value'];out['explanation']=f"v1022 の読みは {ignored['value']} でしたが、英語の物語の読みは第4世代の読みで確かめられないので、答えを確定しません。"
         elif r.get('withheld'):out['withheld_answer']=r['withheld']
-        elif base.get('answer') is None:return {**base,'gen4':info}
+        elif base.get('answer') is None and not str(r['reason']).startswith('DISAGREE'):return {**base,'gen4':info}
         return out
     if v['ok'] and use is not None and v['answer']==Fraction(r['value']):return {**base,'gen4':info}
     g=next((x for x in r['readings'] if x.get('ok') and x.get('spec')),None)
@@ -173,18 +175,45 @@ def _same(a,b):
     norm=lambda x:re.sub(r'[\s。、．，,.!！?？「」『』"\'()（）]','',str(x)).lower()
     return norm(a)==norm(b)
 
-def ask(text,llm='auto',data=None,learn=True,voices='one'):
+NOT_PROBLEM_SHAPES=('EN:QUESTION_FORM','EN:NO_QUESTION','EN:NO_SENTENCES','EN:QUESTION_NOT_LAST')
+def _a_problem(r):
+    """was this text taken as a math problem? A reading was written (by TUKUYO or a parent); or the parents asked did
+    not all say it is not one; or, with no parent asked, TUKUYO's own reader found the shape of a problem ('How many
+    ...?'). 'Who won the World Cup in 2018?' has a number but is a question"""
+    rs=r.get('readings') or []
+    if any(x.get('spec') or x.get('ok') for x in rs):return True
+    llms=[x for x in rs if str(x.get('route','')).startswith('llm')]
+    if llms and any(str(x.get('reason'))!='LLM:LLM_NOT_CONFIGURED' for x in llms):
+        return any(str(x.get('reason'))!='LLM:NOT_READABLE' for x in llms)
+    own=[x for x in rs if x.get('route')=='own']
+    return not (own and all(str(x.get('reason')) in NOT_PROBLEM_SHAPES for x in own))
+
+def ask(text,llm='auto',data=None,learn=True,voices='one',order=None,persona='',remember=True):
     """any question: a problem with numbers goes through solve(); anything else is answered by the parents when they
     are configured, marked unverified (TUKUYO does not check knowledge or conversation, it only labels it).
-    voices='one': the voice parent answers (llm.voice()); voices='all': every parent answers, the voice's answer comes
-    first, and 'agree' says whether the short answers are the same once spaces and punctuation are removed"""
+    voices='one': the voice parent answers (TUKUYO_LLM_VOICE, else the first of order, else llm.voice()); voices='all':
+    every parent answers, the voice's answer comes first, and 'agree' says whether the short answers are the same once
+    spaces and punctuation are removed. With data, an answer that two or more parents agree on is remembered
+    (memory.py) and given again later without asking (route 'remembered', source 'parents_agreed', still unverified).
+    persona: who is speaking (life.persona), added to the parents' instructions"""
     from . import numbers as N
-    r=solve(text,llm=llm,data=data,learn=learn)
-    if r['answer'] is not None or N.find(text):return {**r,'kind':'problem','verified':r['answer'] is not None}
+    r=solve(text,llm=llm,data=data,learn=learn,order=order)
+    if r['answer'] is not None:return {**r,'kind':'problem','verified':True}
+    if N.find(text) and _a_problem(r):return {**r,'kind':'problem','verified':False}
+    if data is not None and text.strip():
+        from .memory import Memory
+        try:e=Memory(data).recall(text)
+        except ValueError:e=None
+        if e:return {'answer':e['answer'],'route':'remembered','kind':'question','verified':False,'source':'parents_agreed','parents':e['parents'],
+                     'models':e['models'],'since':e['utc'],'confirmed':e.get('confirmed',1),'reason':None,'readings':r['readings']}
     use_llm=llm=='on' or (llm=='auto' and L.available())
     if not use_llm:return {**r,'kind':'question','verified':False,'reason':'NOT_A_PROBLEM_AND_NO_LLM'}
-    v=L.voice();who=[v]+[p for p in L.parents() if p!=v] if voices=='all' else [v]
-    got=[L.answer(text,parent=p) for p in who]
+    ps=L.parents() or ['claude']
+    if order:ps=[p for p in order if p in ps]+[p for p in ps if p not in order]
+    env_voice=os.environ.get('TUKUYO_LLM_VOICE','').strip()
+    v=env_voice if env_voice in ps else ps[0]
+    who=[v]+[p for p in ps if p!=v] if voices=='all' else [v]
+    got=[L.answer(text,parent=p,persona=persona) for p in who]
     ok=[a for a in got if a['ok']]
     if not ok:return {**r,'kind':'question','verified':False,'reason':'LLM:'+str(got[0].get('reason'))}
     a=ok[0]
@@ -193,4 +222,8 @@ def ask(text,llm='auto',data=None,learn=True,voices='one'):
     if voices=='all':
         out['answers']=[{k:x.get(k) for k in ('parent','ok','answer','model','reason')} for x in got]
         out['agree']=len(ok)>=2 and all(_same(x['answer'],a['answer']) for x in ok)
+        if out['agree'] and remember and data is not None:
+            from .memory import Memory
+            try:out['remembered']=bool(Memory(data).remember(text,[{'parent':x['parent'],'model':x.get('model'),'answer':x['answer']} for x in ok]))
+            except ValueError:out['remembered']=False
     return out

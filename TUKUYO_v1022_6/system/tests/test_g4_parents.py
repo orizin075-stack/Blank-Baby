@@ -73,6 +73,22 @@ def test_every_parent_answers_a_question_that_is_not_a_problem(tmp_path,clean):
     m.setenv('TUKUYO_LLM_VOICE','gemini');r=api.ask(q,llm='on')
     assert (r['answer'],r['source'])==('Paris','gemini') and 'answers' not in r
 
+def test_a_question_with_a_number_reaches_the_voice_when_the_parents_say_it_is_no_problem(tmp_path,clean):
+    m=clean;q='Who won the World Cup in 2018?';no={'readable':False,'quantities':[],'facts':[],'ask':'','answer_unit':'','unused':[]};lines=[]
+    for parent in ('claude','gemini'):
+        h=llm.request_hash(llm._kind(parent,'read:story:'+llm.PROMPT_VERSION),llm.system_prompt('story'),'Text: '+q)
+        lines.append(json.dumps({'parent':parent,'hash':h,'ok':True,'text':json.dumps(no),'model':'fixture-'+parent}))
+        h=llm.request_hash(llm._kind(parent,'answer:2'),llm.ANSWER_SYSTEM,q)
+        lines.append(json.dumps({'parent':parent,'hash':h,'ok':True,'text':'France','model':'fixture-'+parent}))
+    rec=tmp_path/'r.jsonl';rec.write_text('\n'.join(lines)+'\n',encoding='utf-8');m.setenv('TUKUYO_LLM_REPLAY',str(rec))
+    r=api.ask(q,llm='on',voices='all',data=tmp_path/'d')
+    assert (r['kind'],r['answer'],r['agree'],r['remembered'])==('question','France',True,True)
+    m.delenv('TUKUYO_LLM_REPLAY');llm._replay_cache.clear()
+    r=api.ask(q,llm='off',data=tmp_path/'d');assert (r['answer'],r['route'],r['source'])==('France','remembered','parents_agreed')
+    # a math problem stays a problem, even when nothing reads it
+    r=api.ask('A garden has 12 rows and 5 columns of plants. How many plants are there in all?',llm='off')
+    assert r['kind']=='problem' and r['answer'] is None
+
 class _Fake:
     def __init__(s,reply):s.reply=reply;s.kw=None
     def __call__(s,**kw):s.kw=kw;return s.reply

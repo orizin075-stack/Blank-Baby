@@ -342,8 +342,9 @@ def voice():
     v=_env('TUKUYO_LLM_VOICE');ps=parents()
     return v if v in ps else (ps[0] if ps else 'claude')
 
-def answer(question,parent=None):
+def answer(question,parent=None,persona=''):
+    """persona: who is speaking (life.persona: from the soul), added to the instructions"""
     parent=parent or voice()
-    r=call('answer:2',ANSWER_SYSTEM,question,max_tokens=4000,parent=parent)
+    r=call('answer:2',ANSWER_SYSTEM+('\n\n'+persona if persona else ''),question,max_tokens=4000,parent=parent)
     if not r.get('ok'):return {'ok':False,'reason':r.get('reason'),'parent':parent}
     return {'ok':True,'answer':(r['text'] or '').strip(),'verified':False,'source':parent,'model':r.get('model'),'request_id':r.get('request_id'),'parent':parent}

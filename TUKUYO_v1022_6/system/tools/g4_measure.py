@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Measure generation 4 without calling any parent (no API key, no cost). Only the dev splits are used.
 
-  g4_measure.py DATA_DIR [--work WORK] [--only fuzz,specs,mutate,parents,learn,accuracy] [--out REPORT.json]
+  g4_measure.py DATA_DIR [--work WORK] [--only fuzz,specs,mutate,parents,learn,accuracy,life] [--out REPORT.json]
 
   fuzz      every entry point (numbers, forms, reader, solve, ask; with --work also the v1022 core and think) on the dev
             texts, 3000 mutated texts and odd inputs: nothing may raise
@@ -13,6 +13,7 @@
   learn     templates learned from verified readings, used on the same wording with other numbers: they must agree
             with the own reader or abstain
   accuracy  ASDiv and MGSM-ja dev: the v1022 core, generation 4 alone and think (needs --work), with latencies
+  life      the soul side (life.py: experiences; memory.py: remembered answers) on odd results and questions
 DATA_DIR is the folder written by g4_bench.py fetch. WORK holds a live individual (run_tukuyo.py --data WORK/v1022_individual init).
 """
 from __future__ import annotations
@@ -222,7 +223,27 @@ def m_accuracy(data,work,rnd):
                 'ms':{k:{'median':round(1000*statistics.median(v),2),'p95':round(1000*sorted(v)[max(0,int(.95*len(v))-1)],2)} for k,v in ts.items()}}
     return out
 
-MEASURES={'fuzz':m_fuzz,'specs':m_specs,'mutate':m_mutate,'parents':m_parents,'learn':m_learn,'accuracy':m_accuracy}
+def m_life(data,work,rnd):
+    """the soul side (life.py, memory.py) on 20,000 odd results and odd questions: nothing may raise"""
+    from tukuyo_g4 import life,memory
+    crash=collections.Counter();kinds=collections.Counter()
+    for _ in range(20000):
+        r={'answer':rnd.choice([None,'1','x',3]),'value':rnd.choice([None,'1','2']),'kind':rnd.choice(['problem','question',None]),
+           'reason':rnd.choice([None,'DISAGREE:1,2','SINGLE_LLM_READING','X']),'route':rnd.choice([None,'learned','own','claude+gemini']),
+           'learned':rnd.choice([None,'t']),'remembered':rnd.choice([True,False,None]),
+           'answers':rnd.choice([None,[],[{'parent':'claude','ok':True}],[{'ok':True}],[{'parent':None,'ok':True}]]),
+           'readings':rnd.choice([[],[{'route':'llm_story','ok':True,'value':'1','parent':'claude'}],[{'route':'llm_chatgpt_story','ok':False,'reason':'CHECK:X','parent':'chatgpt'}],
+                                 [{'route':'learned','ok':True,'template':'t1'}],[{'route':'llm_x','ok':True}],[{'route':None}],[{}]])}
+        if rnd.random()<0.3:r={'gen4':r,'answer':r['answer']}
+        try:kinds.update(k for k,*_ in life.experiences(r))
+        except Exception as e:crash['experiences:'+type(e).__name__]+=1  # noqa: BLE001
+    d=Path(tempfile.mkdtemp());m=memory.Memory(d)
+    for q,ans in [('','x'),('  ','x'),('a'*10000,'y'),('Q?',''),('Q?','z'*500),('What?','Paris'),('what','paris'),('What?','Lyon')]:
+        try:m.remember(q,[{'parent':'claude','answer':ans},{'parent':'gemini','answer':ans}]);m.recall(q)
+        except Exception as e:crash['memory:'+type(e).__name__]+=1  # noqa: BLE001
+    return {'results':20000,'crashes':sum(crash.values()),'by_kind':dict(crash),'experience_kinds':dict(kinds),'memory':memory.audit(d)}
+
+MEASURES={'fuzz':m_fuzz,'specs':m_specs,'mutate':m_mutate,'parents':m_parents,'learn':m_learn,'accuracy':m_accuracy,'life':m_life}
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('data');ap.add_argument('--work');ap.add_argument('--only');ap.add_argument('--out');ap.add_argument('--seed',type=int,default=20261008)
