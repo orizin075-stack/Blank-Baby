@@ -229,10 +229,11 @@ def life_story(data):
 def self_report(data,parents=('claude','chatgpt','gemini')):
     """how the child has grown: what it learned, from whom, how far it trusts each parent, and its soul and heart"""
     from tukuyo_v977.whole_state import load_soul
-    from tukuyo_v978.heart_loop import load as load_heart
+    from tukuyo_v978.heart_loop import load as load_heart,state_path as heart_state_path,_default as heart_default
     from .learn import Store
     from . import memory
-    s=load_soul(data);h=load_heart(data);refused={}
+    # a report only reads: a child that never felt anything has no heart file yet, and asking must not make one
+    s=load_soul(data);h=load_heart(data) if heart_state_path(data).exists() else heart_default(data);refused={}
     try:st=Store(Path(data)/'g4').load()['templates']
     except ValueError as e:st=None;refused['learned']=str(e)
     try:remembered=memory.Memory(data).load();remembered=sum(1 for e in remembered['entries'].values() if not e.get('contested'))

@@ -123,3 +123,9 @@ def test_the_unexperienced_control_has_no_experience(tmp_path,child):
     a=cli(d,'soul-continuity-assay',str(opts))
     # the control is this individual without its experience: judged by the temperament it was born with, not its own values
     assert a['ok'] and a['unexperienced_control_choice']=='STAY' and a['before_choice']==a['after_choice']=='EXPLORE',a
+
+
+def test_asking_a_new_child_about_itself_changes_nothing(tmp_path,child):
+    cli,rec,base=child;d=tmp_path/'new';shutil.copytree(base,d)
+    me=cli(d,'g4-self');assert me['ok'] and me['trust_in_parents']=={'claude':0.5,'chatgpt':0.5,'gemini':0.5}
+    assert not (d/'v978'/'HEART_STATE.json').exists() and cli(d,'whole-audit')['ok']
