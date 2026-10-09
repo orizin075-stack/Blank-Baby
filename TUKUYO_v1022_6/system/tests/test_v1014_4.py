@@ -84,3 +84,16 @@ def test_quantity_generalization_unseen_surfaces():
    x=run(d,'verified-query',q);assert x['answer']==ans and bool(x['uncertain'])==unc and x['confidence']>=.9,(q,x)
   x=run(d,'verified-query','最低3個と最低2個あります。正確な合計は？')
   assert x['uncertain'] and x['confidence']<=.2,x
+
+def test_heart_takes_in_what_the_soul_took_in_before_a_kill():
+ # a process killed between the soul and the heart: the next start lets the heart take the experience in
+ with tempfile.TemporaryDirectory() as td:
+  d=Path(td)/'d';run(d,'init','--individual-id','V10144-HEART');run(d,'heart-experience','discovery','0.8','0.6','--theme','first')
+  p=subprocess.run([sys.executable,'-B',str(RUN),'--data',str(d),'heart-experience','learning','0.7','0.5','--theme','second'],cwd=ROOT,capture_output=True,
+                   env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','PYTHONPATH':str(ROOT/'src'),'TUKUYO_CRASH_POINT':'heart:after_soul'})
+  assert p.returncode!=0 and (d/'v978/private/PENDING_FEELING.json').is_file()
+  a=run(d,'whole-audit');assert a['ok'],a
+  souls=[json.loads(x) for x in (d/'v977/SOUL_EVENTS.jsonl').read_text().splitlines()]
+  hearts=[json.loads(x) for x in (d/'v978/HEART_EVENTS.jsonl').read_text().splitlines() if 'EXPERIENCE_LOOP' in x]
+  assert [h['soul_event_sha256'] for h in hearts]==[e['event_sha256'] for e in souls] and hearts[-1]['theme']=='second'
+  assert run(d,'heart-audit')['ok'] and not (d/'v978/private/PENDING_FEELING.json').exists()

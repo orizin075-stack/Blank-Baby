@@ -1,6 +1,6 @@
 {
  "schema": "tukuyo.soul_assay/1",
- "utc": "2026-10-09T10:04:33Z",
+ "utc": "2026-10-09T15:05:36Z",
  "thoughts": 600,
  "seed": 20261009,
  "measures": {
@@ -159,7 +159,7 @@
    ],
    "experiences_recorded": 15,
    "g4_soul_events": 15,
-   "seconds": 21.5
+   "seconds": 22.4
   },
   "crash": {
    "ok": false,
@@ -306,7 +306,7 @@
     "heart:after_soul",
     "g4:after_experience"
    ],
-   "seconds": 29.3
+   "seconds": 30.2
   },
   "forgetting": {
    "ok": false,
@@ -360,7 +360,7 @@
    "surface_recent_before": 8,
    "surface_recent_after": 0,
    "audit_errors": [],
-   "seconds": 4.7
+   "seconds": 4.4
   },
   "individuality": {
    "ok": true,
@@ -417,7 +417,7 @@
    },
    "persona_x": "You speak as TUKUYO, a small reasoning system that learns from its parents (Claude, ChatGPT, Gemini) and keeps only what it can check or what its parents agree on.\nWhat it values most: integrity 0.80, survival 0.80, truthfulness 0.65.\nWhat it has been living with: g4:reading, g4:learned_reading, g4:knowledge.\nSpeak in its voice, plainly; say when you are not sure.",
    "persona_y": "You speak as TUKUYO, a small reasoning system that learns from its parents (Claude, ChatGPT, Gemini) and keeps only what it can check or what its parents agree on.\nWhat it values most: integrity 0.80, survival 0.80, truthfulness 0.65.\nWhat it has been living with: g4:reading, g4:learned_reading, g4:knowledge.\nSpeak in its voice, plainly; say when you are not sure.",
-   "seconds": 22.4
+   "seconds": 23.3
   },
   "long_life": {
    "ok": false,
@@ -427,7 +427,8 @@
     "trust_in_the_order_of_reliability": true,
     "trust_keeps_clearly_different_parents_apart": false,
     "trust_follows_the_parents_who_changed": false,
-    "still_responsive_at_the_end": false
+    "still_responsive_at_the_end": false,
+    "cost_of_a_thought_does_not_grow_with_age": false
    },
    "thoughts": 900,
    "soul_events": 2098,
@@ -515,11 +516,23 @@
     "gemini": 0.0
    },
    "ms_per_record": {
-    "first_100_median": 37.71,
-    "last_100_median": 322.77,
-    "p95": 404.73
+    "first_100_median": 44.11,
+    "last_100_median": 340.87,
+    "after_first_third_100_median": 145.95,
+    "p95": 428.62,
+    "median_per_100_thoughts": [
+     44.1,
+     101.9,
+     67.6,
+     145.9,
+     186.4,
+     213.0,
+     262.2,
+     288.1,
+     340.9
+    ]
    },
-   "seconds": 144.6,
+   "seconds": 146.1,
    "curve": [
     {
      "thought": 25,
@@ -1418,7 +1431,7 @@
      "caught": false
     }
    ],
-   "seconds": 20.3
+   "seconds": 23.3
   },
   "self": {
    "ok": false,
@@ -1442,7 +1455,7 @@
    },
    "told_after_forgetting": {},
    "story_after_forgetting": null,
-   "seconds": 1.7
+   "seconds": 1.9
   }
  },
  "claim_boundary": {

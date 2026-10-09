@@ -22,7 +22,11 @@ def _write(p,o):
 
 def root(data): return Path(data)/'v989'
 def state_path(data): return root(data)/'TEMPORAL_IDENTITY.json'
-def transitions_path(data): return root(data)/'SOUL_TRANSITIONS.json'
+# The transition chain is an append-only journal, one transition per line: a new experience appends a line, it does not
+# rewrite the history. Each transition names the one before it (previous_transition_sha256), so the head commits to all.
+def transitions_path(data): return root(data)/'SOUL_TRANSITIONS.jsonl'
+# Before 2026-10-09 the chain was one JSON object; it is still read until the next sync writes the journal.
+def legacy_transitions_path(data): return root(data)/'SOUL_TRANSITIONS.json'
 
 
 def _load_soul_events(data):
@@ -81,121 +85,111 @@ def _replay(data):
     return ident,origin_sha,current_sha,events,transitions,errors
 
 
-def _validated_existing_chain(data,ident,events,origin_sha):
-    """Return an append-safe prior chain or None. Full replay remains audit authority."""
-    sp,tp=state_path(data),transitions_path(data)
-    if not sp.exists() or not tp.exists(): return None
-    try:
-        old=_read(sp); chain=_read(tp)
-        oq=dict(old); oh=oq.pop('state_sha256',None)
-        cq=dict(chain); ch=cq.pop('chain_sha256',None)
-        if oh!=sha_obj(oq) or ch!=sha_obj(cq): return None
-        oi=old.get('origin_identity',{})
-        if oi.get('individual_id')!=ident['individual_id'] or oi.get('lineage_id')!=ident['lineage_id'] or oi.get('branch_id')!=ident['branch_id']: return None
-        if old.get('origin_soul_sha256')!=origin_sha or chain.get('origin_soul_sha256')!=origin_sha:return None
-        n=int(chain.get('transition_count',-1)); ts=chain.get('transitions',[])
-        if n!=len(ts) or n>len(events):return None
-        # Prefix is anchored by the old transition's source event hash. New events remain append-only.
-        if n:
-            if ts[-1].get('source_event_sha256')!=events[n-1].get('event_sha256'):return None
-            if ts[-1].get('to_soul_sha256')!=events[n-1].get('soul_sha256'):return None
-            if chain.get('head_transition_sha256')!=ts[-1].get('transition_sha256'):return None
-        elif chain.get('head_transition_sha256')!=ZERO:return None
-        return chain
-    except Exception:
-        return None
+def _stored(data):
+    """the stored transitions: (list, 'journal'|'legacy'|None, the legacy chain object or None); ValueError if unreadable"""
+    from tukuyo_common.journal import read_from_offset
+    tp=transitions_path(data);lp=legacy_transitions_path(data)
+    if tp.exists():return read_from_offset(tp,0)[0],'journal',None
+    if lp.exists():c=_read(lp);return list(c.get('transitions',[])),'legacy',c
+    return [],None,None
+
+
+def load_chain(data):
+    """the transition chain as one object, the way it was stored before the journal (v1009 and older readers use this);
+    chain_sha256 is computed as it always was, so it matches a chain stored the old way with the same transitions"""
+    ident=_live_identity(data);ts,_,_=_stored(data)
+    chain={'schema':TRANSITION_SCHEMA,'individual_id':ident['individual_id'],'lineage_id':ident['lineage_id'],'branch_id':ident['branch_id'],
+           'origin_soul_sha256':sha_obj(_default_soul(ident)),'transition_count':len(ts),'head_transition_sha256':ts[-1]['transition_sha256'] if ts else ZERO,
+           'transitions':ts}
+    chain['chain_sha256']=sha_obj(chain);return chain
 
 
 def _from_checkpoint(data,ident,origin_sha):
-    """(chain, unseen soul events, journal size) when the stored checkpoint extends from the journal bytes it was built
-    from: only the unseen suffix of the soul journal is read and verified, so one experience does not cost the whole
-    history. Any doubt -> None, and the full path below runs. audit() still replays the whole history."""
+    """(last state, last transition, unseen soul events, soul journal size) when the stored checkpoint extends from the
+    journal bytes it was built from: only the tail of each journal is read, and only the unseen soul events are
+    verified, so one experience does not cost the whole history. Any doubt -> None, and the full path runs instead.
+    audit() still replays the whole history."""
     from tukuyo_common.journal import read_from_offset,prefix_last_event
     sp,tp=state_path(data),transitions_path(data)
     if not sp.exists() or not tp.exists():return None
     try:
         old=_read(sp);oq=dict(old);oh=oq.pop('state_sha256',None)
-        if oh!=sha_obj(oq) or 'source_journal_size' not in old or 'transitions_file_sha256' not in old:return None
-        raw=tp.read_bytes()
-        if old['transitions_file_sha256']!=__import__('hashlib').sha256(raw).hexdigest():return None
-        chain=json.loads(raw);ts=chain.get('transitions',[]);n=len(ts)
-        if old.get('origin_identity')!=ident or old.get('origin_soul_sha256')!=origin_sha or chain.get('origin_soul_sha256')!=origin_sha:return None
-        if chain.get('individual_id')!=ident['individual_id'] or chain.get('lineage_id')!=ident['lineage_id'] or chain.get('branch_id')!=ident['branch_id']:return None
-        if int(chain.get('transition_count',-1))!=n or old.get('transition_count')!=n or old.get('source_soul_event_count')!=n:return None
-        head=ts[-1]['transition_sha256'] if n else ZERO
-        if chain.get('head_transition_sha256')!=head or old.get('transition_head_sha256')!=head:return None
+        if oh!=sha_obj(oq) or old.get('schema')!=SCHEMA or 'source_journal_size' not in old or 'transitions_journal_size' not in old:return None
+        if old.get('origin_identity')!=ident or old.get('origin_soul_sha256')!=origin_sha:return None
+        n=int(old['transition_count']);tsize=int(old['transitions_journal_size'])
+        if old.get('source_soul_event_count')!=n or tp.stat().st_size!=tsize:return None
+        last=prefix_last_event(tp,tsize) if tsize else None
+        if n:
+            if (not last or last.get('seq')!=n or last.get('transition_sha256')!=old.get('transition_head_sha256')
+                    or last.get('to_soul_sha256')!=old.get('current_soul_sha256') or last.get('individual_id')!=ident['individual_id']):return None
+        elif last is not None or old.get('transition_head_sha256')!=ZERO:return None
         jp=soul_event_path(data);off=int(old['source_journal_size']);edge=prefix_last_event(jp,off)
-        if n and (not edge or edge.get('seq')!=n or edge.get('event_sha256')!=ts[-1].get('source_event_sha256')
-                  or edge.get('soul_sha256')!=ts[-1].get('to_soul_sha256')):return None
+        if n and (not edge or edge.get('seq')!=n or edge.get('event_sha256')!=last.get('source_event_sha256')
+                  or edge.get('soul_sha256')!=last.get('to_soul_sha256')):return None
         if not n and edge is not None:return None
-        suffix,size=read_from_offset(jp,off);prev=ts[-1]['source_event_sha256'] if n else ZERO
+        suffix,size=read_from_offset(jp,off);prev=last['source_event_sha256'] if n else ZERO
         for i,e in enumerate(suffix,n+1):
             q=dict(e);got=q.pop('event_sha256',None)
             if e.get('seq')!=i or e.get('individual_id')!=ident['individual_id'] or e.get('prev_sha256')!=prev or got!=sha_obj(q):return None
             prev=got
-        return chain,suffix,size
+        return old,last,suffix,size
     except Exception:
         return None
 
 
+def _transition(ident,i,before,after,e,prev_transition):
+    t={'schema':'tukuyo.v989.soul_transition/1','seq':i,'individual_id':ident['individual_id'],
+       'lineage_id':ident['lineage_id'],'branch_id':ident['branch_id'],'from_soul_sha256':before,
+       'to_soul_sha256':after,'source_event_seq':i,'source_event_sha256':e.get('event_sha256'),
+       'kind':e.get('kind',''),'theme':e.get('theme',''),'relation':e.get('relation',''),
+       'previous_transition_sha256':prev_transition}
+    t['transition_sha256']=sha_obj(t);return t
+
+
 def sync_transitions(data):
-    from tukuyo_common.journal import read_from_offset
-    ident=_live_identity(data);origin_sha=sha_obj(_default_soul(ident));current=load_soul(data);current_sha=sha_obj(current)
-    fast=_from_checkpoint(data,ident,origin_sha)
+    import os
+    from tukuyo_common.journal import read_from_offset,_line
+    from tukuyo_common.atomic_fs import atomic_write_bytes,durable_unlink
+    ident=_live_identity(data);origin_sha=sha_obj(_default_soul(ident));current_sha=sha_obj(load_soul(data))
+    fast=_from_checkpoint(data,ident,origin_sha);tp=transitions_path(data)
     if fast is not None:
-        chain,todo,size=fast;transitions=list(chain['transitions']);first=len(transitions)+1;count=len(transitions)+len(todo)
+        old,last,todo,size=fast;n=int(old['transition_count']);new=[]
+        prev_transition=last['transition_sha256'] if last else ZERO;before=last['to_soul_sha256'] if last else origin_sha
+        # Append only the unseen suffix. Each canonical soul event already commits the resulting soul SHA.
+        for i,e in enumerate(todo,n+1):
+            t=_transition(ident,i,before,e.get('soul_sha256'),e,prev_transition);new.append(t);prev_transition=t['transition_sha256'];before=t['to_soul_sha256']
+        if current_sha!=before: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:ILLEGAL_STATE_JUMP')
+        if new:
+            with tp.open('ab') as f:
+                f.write(b''.join(_line(t).encode('utf-8') for t in new));f.flush();os.fsync(f.fileno())
+        count=n+len(new);head=prev_transition
     else:
-        _load_soul_events(data);events,size=read_from_offset(soul_event_path(data),0);count=len(events)
+        # Bootstrap, recovery and the move from the old one-object chain: a deterministic replay of the whole history.
+        _load_soul_events(data);events,size=read_from_offset(soul_event_path(data),0)
         event_errors=_verify_event_chain(events,ident)
         if event_errors: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:'+','.join(event_errors[:8]))
-        chain=_validated_existing_chain(data,ident,events,origin_sha)
-        if chain is None:
-            # Bootstrap/recovery path: expensive deterministic replay, used only when no trusted checkpoint exists.
-            ident,origin_sha,current_sha,events,transitions,errors=_replay(data)
-            if errors: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:'+','.join(errors[:8]))
-            todo=[];first=len(transitions)+1
-        else:
-            transitions=list(chain.get('transitions',[]));todo=events[len(transitions):];first=len(transitions)+1
-    if todo or fast is not None:
-        prev_transition=transitions[-1]['transition_sha256'] if transitions else ZERO
-        before=transitions[-1]['to_soul_sha256'] if transitions else origin_sha
-        # Append only the unseen suffix. Each canonical soul event already commits the resulting soul SHA.
-        for i,e in enumerate(todo,first):
-            after=e.get('soul_sha256')
-            t={'schema':'tukuyo.v989.soul_transition/1','seq':i,'individual_id':ident['individual_id'],
-               'lineage_id':ident['lineage_id'],'branch_id':ident['branch_id'],'from_soul_sha256':before,
-               'to_soul_sha256':after,'source_event_seq':i,'source_event_sha256':e.get('event_sha256'),
-               'kind':e.get('kind',''),'theme':e.get('theme',''),'relation':e.get('relation',''),
-               'previous_transition_sha256':prev_transition}
-            t['transition_sha256']=sha_obj(t); transitions.append(t);prev_transition=t['transition_sha256'];before=after
-        expected=transitions[-1]['to_soul_sha256'] if transitions else origin_sha
-        if current_sha!=expected: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:ILLEGAL_STATE_JUMP')
-    elif chain is not None:
-        expected=transitions[-1]['to_soul_sha256'] if transitions else origin_sha
-        if current_sha!=expected: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:ILLEGAL_STATE_JUMP')
-    old=_read(state_path(data)) if state_path(data).exists() else None
-    if old:
-        old_origin=old.get('origin_identity',{})
-        if old_origin.get('individual_id')!=ident['individual_id'] or old_origin.get('lineage_id')!=ident['lineage_id'] or old_origin.get('branch_id')!=ident['branch_id']:
-            raise ValueError('TEMPORAL_ORIGIN_IDENTITY_DRIFT')
-        if old.get('origin_soul_sha256')!=origin_sha: raise ValueError('TEMPORAL_ORIGIN_SOUL_DRIFT')
-    chain={'schema':TRANSITION_SCHEMA,'individual_id':ident['individual_id'],'lineage_id':ident['lineage_id'],'branch_id':ident['branch_id'],
-           'origin_soul_sha256':origin_sha,'transition_count':len(transitions),'head_transition_sha256':transitions[-1]['transition_sha256'] if transitions else ZERO,
-           'transitions':transitions}
-    chain['chain_sha256']=sha_obj(chain);raw=canon(chain)+b'\n'
-    from tukuyo_common.atomic_fs import atomic_write_bytes
-    atomic_write_bytes(transitions_path(data),raw)
+        ident,origin_sha,current_sha,events,transitions,errors=_replay(data)
+        if errors: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:'+','.join(errors[:8]))
+        old=_read(state_path(data)) if state_path(data).exists() else None
+        if old:
+            old_origin=old.get('origin_identity',{})
+            if old_origin.get('individual_id')!=ident['individual_id'] or old_origin.get('lineage_id')!=ident['lineage_id'] or old_origin.get('branch_id')!=ident['branch_id']:
+                raise ValueError('TEMPORAL_ORIGIN_IDENTITY_DRIFT')
+            if old.get('origin_soul_sha256')!=origin_sha: raise ValueError('TEMPORAL_ORIGIN_SOUL_DRIFT')
+        atomic_write_bytes(tp,b''.join(_line(t).encode('utf-8') for t in transitions))
+        if legacy_transitions_path(data).exists():durable_unlink(legacy_transitions_path(data))
+        count=len(transitions);head=transitions[-1]['transition_sha256'] if transitions else ZERO
     state={'schema':SCHEMA,'origin_identity':ident,'origin_soul_sha256':origin_sha,'current_soul_sha256':current_sha,
-           'transition_count':len(transitions),'transition_head_sha256':chain['head_transition_sha256'],'source_soul_event_count':count,
-           # where the next sync may start reading the journal, and the exact chain file it extends
-           'source_journal_size':size,'transitions_file_sha256':__import__('hashlib').sha256(raw).hexdigest(),
+           'transition_count':count,'transition_head_sha256':head,'source_soul_event_count':count,
+           # where the next sync may start reading the soul journal, and how long the transition journal it extends is
+           'source_journal_size':size,'transitions_journal_size':tp.stat().st_size,
            'checkpoint_mode':'INCREMENTAL_APPEND_WITH_FULL_REPLAY_AUDIT',
            'same_identity_rule':{'same_origin':True,'valid_transition_chain':True,'no_illegal_state_jump':True,'lineage_continuity':True},
            'claim_boundary':{'functional_temporal_self_identity':True,'identity_allows_lawful_soul_change':True,'causal_transition_chain_verified':True,
                              'incremental_sync_is_not_full_replay_audit':True,'literal_soul_established':False,'consciousness_established':False}}
     state['state_sha256']=sha_obj(state);_write(state_path(data),state)
-    return {'ok':True,'version':'v1010','same_identity':True,'transition_count':len(transitions),'origin_soul_sha256':origin_sha,
-            'current_soul_sha256':current_sha,'transition_head_sha256':chain['head_transition_sha256'],'checkpoint_mode':state['checkpoint_mode'],'claim_boundary':state['claim_boundary']}
+    return {'ok':True,'version':'v1010','same_identity':True,'transition_count':count,'origin_soul_sha256':origin_sha,
+            'current_soul_sha256':current_sha,'transition_head_sha256':head,'checkpoint_mode':state['checkpoint_mode'],'claim_boundary':state['claim_boundary']}
 
 
 def audit(data):
@@ -204,7 +198,7 @@ def audit(data):
         ident,origin_sha,current_sha,events,replayed,replay_errors=_replay(data);errs.extend(replay_errors)
         sp=state_path(data);tp=transitions_path(data)
         if not sp.exists(): errs.append('TEMPORAL_IDENTITY_STATE_MISSING')
-        if not tp.exists(): errs.append('TEMPORAL_TRANSITIONS_MISSING')
+        if not tp.exists() and not legacy_transitions_path(data).exists(): errs.append('TEMPORAL_TRANSITIONS_MISSING')
         if sp.exists():
             s=_read(sp);q=dict(s);got=q.pop('state_sha256',None)
             if s.get('schema')!=SCHEMA or got!=sha_obj(q): errs.append('TEMPORAL_IDENTITY_STATE_HASH')
@@ -215,16 +209,22 @@ def audit(data):
             if s.get('transition_count')!=len(replayed): errs.append('TEMPORAL_TRANSITION_COUNT')
             exp_head=replayed[-1]['transition_sha256'] if replayed else ZERO
             if s.get('transition_head_sha256')!=exp_head: errs.append('TEMPORAL_TRANSITION_HEAD')
-        if tp.exists():
-            c=_read(tp);z=dict(c);got=z.pop('chain_sha256',None)
-            if c.get('schema')!=TRANSITION_SCHEMA or got!=sha_obj(z): errs.append('TEMPORAL_CHAIN_HASH')
-            if c.get('individual_id')!=ident['individual_id'] or c.get('lineage_id')!=ident['lineage_id'] or c.get('branch_id')!=ident['branch_id']:
+        try:stored,kind,legacy=_stored(data)
+        except ValueError:stored,kind,legacy=None,'journal',None;errs.append('TEMPORAL_CHAIN_HASH')
+        if kind=='legacy':
+            z=dict(legacy);got=z.pop('chain_sha256',None)
+            if legacy.get('schema')!=TRANSITION_SCHEMA or got!=sha_obj(z): errs.append('TEMPORAL_CHAIN_HASH')
+            if legacy.get('origin_soul_sha256')!=origin_sha: errs.append('TEMPORAL_CHAIN_ORIGIN')
+            if legacy.get('transition_count')!=len(replayed): errs.append('TEMPORAL_CHAIN_COUNT')
+        if stored is not None and kind is not None:
+            if any(t.get('individual_id')!=ident['individual_id'] or t.get('lineage_id')!=ident['lineage_id'] or t.get('branch_id')!=ident['branch_id'] for t in stored):
                 errs.append('TEMPORAL_CHAIN_IDENTITY')
-            if c.get('origin_soul_sha256')!=origin_sha: errs.append('TEMPORAL_CHAIN_ORIGIN')
-            if c.get('transitions')!=replayed: errs.append('TEMPORAL_CHAIN_REPLAY')
-            if c.get('transition_count')!=len(replayed): errs.append('TEMPORAL_CHAIN_COUNT')
+            if stored!=replayed: errs.append('TEMPORAL_CHAIN_REPLAY')
+            if len(stored)!=len(replayed): errs.append('TEMPORAL_CHAIN_COUNT')
             exp_head=replayed[-1]['transition_sha256'] if replayed else ZERO
-            if c.get('head_transition_sha256')!=exp_head: errs.append('TEMPORAL_CHAIN_HEAD')
+            if (stored[-1]['transition_sha256'] if stored else ZERO)!=exp_head: errs.append('TEMPORAL_CHAIN_HEAD')
+        if kind=='journal' and sp.exists() and 'transitions_journal_size' in s and s['transitions_journal_size']!=tp.stat().st_size:
+            errs.append('TEMPORAL_CHAIN_SIZE')
     except Exception as exc:
         errs.append(type(exc).__name__+':'+str(exc))
         ident={'individual_id':None,'lineage_id':None,'branch_id':None};origin_sha=None;current_sha=None;replayed=[]
@@ -243,7 +243,7 @@ def audit(data):
 
 
 def status(data):
-    if not state_path(data).exists() or not transitions_path(data).exists():
+    if not state_path(data).exists() or not (transitions_path(data).exists() or legacy_transitions_path(data).exists()):
         return sync_transitions(data)
     a=audit(data)
     if not a['ok']: return a

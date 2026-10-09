@@ -35,8 +35,6 @@ def test_v1009_history_truncation_is_detected():
     with tempfile.TemporaryDirectory() as td:
         d=Path(td)/'d';run(d,'init','--individual-id','V1009-TAMPER')
         run(d,'long-life-assay','--cycles','0')
-        p=d/'v989'/'SOUL_TRANSITIONS.json';x=json.loads(p.read_text());x['transitions']=x['transitions'][:-1];x['transition_count']=len(x['transitions']);x['head_transition_sha256']=x['transitions'][-1]['transition_sha256'] if x['transitions'] else '0'*64
-        q=dict(x);q.pop('chain_sha256',None)
-        import hashlib
-        raw=json.dumps(q,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode();x['chain_sha256']=hashlib.sha256(raw).hexdigest();p.write_text(json.dumps(x),encoding='utf-8')
+        # the chain is an append-only journal (one transition per line): drop the last transition
+        p=d/'v989'/'SOUL_TRANSITIONS.jsonl';ls=p.read_text().splitlines();p.write_text(''.join(x+'\n' for x in ls[:-1]),encoding='utf-8')
         a=run(d,'long-life-audit',ok=False);assert not a['ok']

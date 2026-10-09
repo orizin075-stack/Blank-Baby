@@ -72,15 +72,52 @@ def _derive_goal(soul,h,data=None):
     goal=max(candidates,key=lambda k:(candidates[k],k))
     return {'goal':goal,'score':round(candidates[goal],6),'candidate_scores':{k:round(x,6) for k,x in candidates.items()}}
 
+PENDING_SCHEMA='tukuyo.v978.pending_feeling/1'
+def pending_path(data): return root(data)/'private'/'PENDING_FEELING.json'
+
 def process_experience(data,kind,valence,importance,theme='',relation='',law=1):
     from tukuyo_v1019.lifecycle import require_alive
     require_alive(data)
     valence=float(valence);importance=float(importance)
     if not -1<=valence<=1 or not 0<=importance<=1: raise ValueError('HEART_EXPERIENCE_RANGE')
+    from tukuyo_common.atomic_fs import maybe_crash,atomic_write_json,durable_unlink
+    from tukuyo_common.journal import last_event
+    from tukuyo_v977.whole_state import event_path
+    # Written ahead: if the process dies after the soul took the experience in and before the heart did, the next start
+    # lets the heart take it in (recover_pending), so heart and soul do not drift apart until some later experience.
+    last=last_event(event_path(data))
+    atomic_write_json(pending_path(data),{'schema':PENDING_SCHEMA,'individual_id':_live_identity(data)['individual_id'],
+        'soul_seq_before':int(last.get('seq',0)) if last else 0,'experience':[kind,valence,importance,theme,relation,law]})
     sr=soul_experience(data,kind,valence,importance,theme,relation,law)
-    from tukuyo_common.atomic_fs import maybe_crash
     maybe_crash('heart:after_soul')
-    return feel(data,kind,valence,importance,theme,relation,sr)
+    out=feel(data,kind,valence,importance,theme,relation,sr)
+    durable_unlink(pending_path(data))
+    return out
+
+def recover_pending(data):
+    """the next start after a process died inside process_experience: if the soul took the experience in and the heart
+    did not, the heart takes it in now; if the soul never did, nothing happened and the note is dropped"""
+    from tukuyo_common.atomic_fs import durable_unlink
+    from tukuyo_common.journal import load_events
+    from tukuyo_v977.whole_state import event_path
+    p=pending_path(data)
+    if not p.is_file():return None
+    try:
+        m=_read(p);kind,valence,importance,theme,relation,law=m['experience']
+        if m.get('schema')!=PENDING_SCHEMA or m.get('individual_id')!=_live_identity(data)['individual_id']:raise ValueError('HEART_PENDING_NOT_ITS_OWN')
+        after=[e for e in load_events(event_path(data)) if int(e.get('seq',0))>int(m.get('soul_seq_before',0))]
+    except Exception as e:  # noqa: BLE001 - an unreadable note must never stop the individual from starting
+        durable_unlink(p);return {'recovered':False,'reason':'HEART_PENDING_UNREADABLE:'+type(e).__name__}
+    if not after:durable_unlink(p);return {'recovered':False,'reason':'SOUL_NEVER_TOOK_IT_IN'}
+    e=after[0]
+    if len(after)!=1 or e.get('kind')!=kind or e.get('theme')!=theme or e.get('relation')!=relation or int(e.get('law',1))!=int(law):
+        durable_unlink(p);return {'recovered':False,'reason':'HEART_PENDING_MISMATCH'}
+    try:
+        if felt(data,e):durable_unlink(p);return {'recovered':False,'reason':'ALREADY_FELT'}
+        feel(data,kind,valence,importance,theme,relation,{'soul':load_soul(data),'event':e})
+    except Exception as x:  # noqa: BLE001 - a damaged heart is the audits' to report; it must not stop every start
+        durable_unlink(p);return {'recovered':False,'reason':'HEART_COULD_NOT_TAKE_IT_IN:'+type(x).__name__}
+    durable_unlink(p);return {'recovered':True,'action':'HEART_TOOK_IN_THE_LAST_EXPERIENCE'}
 
 def felt(data,soul_event):
     """has the heart taken in this soul event? (its state follows the soul it made, or a heart event names it)"""

@@ -1,6 +1,6 @@
 {
  "schema": "tukuyo.soul_assay/1",
- "utc": "2026-10-09T10:00:48Z",
+ "utc": "2026-10-09T15:02:48Z",
  "thoughts": 600,
  "seed": 20261009,
  "measures": {
@@ -159,7 +159,7 @@
    ],
    "experiences_recorded": 15,
    "g4_soul_events": 15,
-   "seconds": 20.6
+   "seconds": 23.4
   },
   "crash": {
    "ok": true,
@@ -347,7 +347,7 @@
     }
    ],
    "points_not_in_this_version": [],
-   "seconds": 39.1
+   "seconds": 43.6
   },
   "forgetting": {
    "ok": true,
@@ -458,7 +458,7 @@
    },
    "persona_x": "You speak as TUKUYO, a small reasoning system that learns from its parents (Claude, ChatGPT, Gemini) and keeps only what it can check or what its parents agree on.\nWhat it values most: integrity 0.80, survival 0.80, truthfulness 0.65.\nWhat it has been living with: g4:reading, g4:learned_reading, g4:knowledge.\nSpeak in its voice, plainly; say when you are not sure.",
    "persona_y": "You speak as TUKUYO, a small reasoning system that learns from its parents (Claude, ChatGPT, Gemini) and keeps only what it can check or what its parents agree on.\nWhat it values most: integrity 0.80, survival 0.80, truthfulness 0.65.\nWhat it has been living with: g4:reading, g4:learned_reading, g4:knowledge.\nSpeak in its voice, plainly; say when you are not sure.",
-   "seconds": 21.5
+   "seconds": 23.9
   },
   "long_life": {
    "ok": true,
@@ -468,7 +468,8 @@
     "trust_in_the_order_of_reliability": true,
     "trust_keeps_clearly_different_parents_apart": true,
     "trust_follows_the_parents_who_changed": true,
-    "still_responsive_at_the_end": true
+    "still_responsive_at_the_end": true,
+    "cost_of_a_thought_does_not_grow_with_age": true
    },
    "thoughts": 900,
    "soul_events": 2098,
@@ -543,11 +544,23 @@
     "gemini": 0.000467
    },
    "ms_per_record": {
-    "first_100_median": 57.3,
-    "last_100_median": 234.31,
-    "p95": 298.22
+    "first_100_median": 35.27,
+    "last_100_median": 71.05,
+    "after_first_third_100_median": 67.24,
+    "p95": 103.19,
+    "median_per_100_thoughts": [
+     35.3,
+     60.0,
+     37.8,
+     67.2,
+     63.8,
+     66.4,
+     61.9,
+     66.1,
+     71.0
+    ]
    },
-   "seconds": 115.6,
+   "seconds": 48.7,
    "curve": [
     {
      "thought": 25,
@@ -1448,7 +1461,7 @@
      "caught": true
     }
    ],
-   "seconds": 21.5
+   "seconds": 21.1
   },
   "self": {
    "ok": true,
@@ -1521,7 +1534,7 @@
      "It solved alone with something it had learned, the first time for that wording, once."
     ]
    },
-   "seconds": 1.8
+   "seconds": 2.0
   }
  },
  "claim_boundary": {

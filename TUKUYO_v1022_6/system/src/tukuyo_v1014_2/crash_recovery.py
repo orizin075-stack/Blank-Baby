@@ -28,6 +28,14 @@ def recover_startup(data):
         soul_changed=bool(sr.get('repaired'))
         if soul_changed:actions.append(sr.get('action') or 'SOUL_MATERIALIZED_FROM_EVENT_CHAIN')
     except Exception as e:errors.append('V1014_4_RECOVERY:'+type(e).__name__+':'+str(e))
+    # The heart takes in an experience the soul took in just before the process died (v978 written-ahead note).
+    if (data/'state'/'integration_state.json').is_file():
+        try:
+            from tukuyo_v978.heart_loop import recover_pending as heart_recover
+            hr=heart_recover(data)
+            if hr and hr.get('recovered'):actions.append(hr['action']);soul_changed=True
+            elif hr and str(hr.get('reason','')).startswith('HEART_COULD_NOT'):actions.append(hr['reason'])
+        except Exception as e:errors.append('V978_HEART_RECOVERY:'+type(e).__name__+':'+str(e))
     # A restore can leave the whole live tree inconsistent, so finish it first.
     try:
         from tukuyo_v1014.recovery import recover_incomplete_restore,recover_checkpoint_commit

@@ -6,7 +6,7 @@ from tukuyo_v978.heart_loop import process_experience, audit as heart_audit
 from tukuyo_v979.deep_core import consolidate, forget_surface_memory, load as load_deep, audit as deep_audit
 from tukuyo_v981.fork_divergence import run_assay as fork_assay, audit as fork_audit
 from tukuyo_v985.narrative_purpose import integrate as purpose_integrate, audit as purpose_audit
-from tukuyo_v989.temporal_identity import status as identity_status, audit as identity_audit, transitions_path
+from tukuyo_v989.temporal_identity import status as identity_status, audit as identity_audit, load_chain
 from tukuyo_v995.other_agent_trust import sync as peer_sync, audit as peer_audit
 from tukuyo_v1007.organism2 import init as organism_init, update as organism_update, load as organism_load, audit as organism_audit
 from tukuyo_v1008.whole_living_cognition import cycle as living_cycle, audit as living_audit
@@ -28,7 +28,7 @@ def receipt_path(data): return root(data)/'LONG_LIVED_IDENTITY_ASSAY.json'
 
 def _transition_snapshot(data):
     s=identity_status(data)
-    chain=_read(transitions_path(data))
+    chain=load_chain(data)
     return {
         'origin_soul_sha256':s['origin_soul_sha256'],
         'current_soul_sha256':s['current_soul_sha256'],
@@ -145,7 +145,7 @@ def audit(data):
         if ia.get('origin_soul_sha256')!=end.get('origin_soul_sha256'): errs.append('V1009_ORIGIN_DRIFT')
         if int(ia.get('transition_count',-1)) < int(end.get('transition_count',0)): errs.append('V1009_HISTORY_TRUNCATED')
         # The historical transition head must still exist in the current append-only chain.
-        chain=_read(transitions_path(data));heads={t.get('transition_sha256') for t in chain.get('transitions',[])}
+        chain=load_chain(data);heads={t.get('transition_sha256') for t in chain.get('transitions',[])}
         recorded=end.get('transition_head_sha256')
         if recorded!='0'*64 and recorded not in heads: errs.append('V1009_HISTORY_HEAD_MISSING')
         if not all(bool(v) for v in r.get('checks',{}).values()): errs.append('V1009_ASSAY_CHECK')

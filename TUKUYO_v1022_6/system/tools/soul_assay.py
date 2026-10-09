@@ -17,7 +17,8 @@ Every property is a set of checks, with the numbers behind them:
                  become the same: the soul follows a law, not chance
   long_life      a life of N thoughts with parents of different reliability, then N/2 more after two of them trade places:
                  values and trust must stay responsive (not pinned at a bound), keep the parents apart in the order of
-                 their reliability, follow the parents who changed; and the cost of one experience as the life grows.
+                 their reliability, follow the parents who changed; and after the first third of the life, recording a
+                 thought must not get slower (the last 100 thoughts at most 1.5 times the 100 after the first third).
                  The reliabilities (0.97, 0.85, 0.6) are far enough apart for the child's own observations to tell them
                  apart: it sees a parent's reading fail only when the checker refuses it while the others agree (a wrong
                  but valid reading makes the parents disagree, and then nobody is blamed). With 0.95 and 0.90 it would
@@ -289,7 +290,11 @@ def m_long_life(cli,work,ctx):
             'trust_keeps_clearly_different_parents_apart':gap[0]-gap[2]>=0.1,
             # the parent who became unreliable loses the lead and ends below both others; the one who improved rises above it
             'trust_follows_the_parents_who_changed':flip_at is not None and sorted(PARENTS,key=lambda p:-lt1[p])[-1]=='claude' and lt1['chatgpt']-lt1['claude']>=0.05,
-            'still_responsive_at_the_end':after['core_values']!=before['core_values'] and tr1['claude']!=tr0['claude']}
+            'still_responsive_at_the_end':after['core_values']!=before['core_values'] and tr1['claude']!=tr0['claude'],
+            # a soul that lives on must not slow down as it ages. Memories that keep only their latest entries (the heart's
+            # episodes, the peer histories) fill up early in life; after the first third, a thought must not get slower:
+            # the last 100 may cost at most 1.5 times the 100 that follow the first third
+            'cost_of_a_thought_does_not_grow_with_age':statistics.median(cost[-100:])<=1.5*statistics.median(cost[len(cost)//3:len(cost)//3+100])}
     return {'ok':all(checks.values()),'checks':checks,'thoughts':i,'soul_events':len(soul_events(d)),'committed':committed,'committed_wrong':wrong,
             'reliability':{'settled':rel0,'changed':rel1},'trust_late_settled':lt0,'trust_late_changed':lt1,'order_settled':settled['order'],
             'trust_end':end['trust'],'order_end':end['order'],'order_late_changed':sorted(PARENTS,key=lambda p:-lt1[p]),
@@ -298,7 +303,8 @@ def m_long_life(cli,work,ctx):
             'response_to_one_more_lesson':{k:round(after['core_values'][k]-before['core_values'][k],6) for k in s['core_values']},
             'trust_response_to_one_more_help':{p:round(tr1[p]-tr0[p],6) for p in PARENTS},
             'ms_per_record':{'first_100_median':round(statistics.median(cost[:100])*1000,2),'last_100_median':round(statistics.median(cost[-100:])*1000,2),
-                             'p95':round(q(cost,0.95)*1000,2)},'seconds':round(time.time()-t0,1),'curve':curve[::max(1,len(curve)//24)]}
+                             'after_first_third_100_median':round(statistics.median(cost[len(cost)//3:len(cost)//3+100])*1000,2),
+                             'p95':round(q(cost,0.95)*1000,2),'median_per_100_thoughts':[round(statistics.median(cost[a:a+100])*1000,1) for a in range(0,len(cost),100)]},'seconds':round(time.time()-t0,1),'curve':curve[::max(1,len(curve)//24)]}
 
 # ----------------------------------------------------------------------------- integrity
 def _reseal_learned(p,o):
