@@ -82,3 +82,9 @@ def test_the_child_learns_from_its_parents_with_its_soul(tmp_path):
     # every audit of the soul, the heart and the stores still passes
     for c in ('whole-audit','heart-audit','learning-audit','g4-audit'):assert cli(c,replay=False)['ok'],c
     assert cli('soul-consolidate',replay=False)['ok'] and cli('soul-deep-audit',replay=False)['ok']
+    # what it lived through is in its soul journal: forgetting the surface memory does not take it, nor its trust
+    me=cli('g4-self',replay=False);story=me['life_story']
+    assert story['experiences']['parent_error']==1 and story['from_parents']['chatgpt']=={'held':2,'failed':1}
+    assert cli('soul-forget-surface',replay=False)['ok'];after=cli('g4-self',replay=False)
+    assert after['life_story']==story and after['recent_g4_experiences']==[] and after['trust_in_parents']==me['trust_in_parents']
+    assert cli('whole-audit',replay=False)['ok']

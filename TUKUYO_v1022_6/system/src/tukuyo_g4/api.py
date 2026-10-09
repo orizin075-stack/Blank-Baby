@@ -77,7 +77,7 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
         from .learn import Store,instantiate
         store=Store(Path(data)/'g4')
         try:t=store.find(text)
-        except ValueError:t=None;readings.append({'route':'learned','ok':False,'reason':'LEARNED_STORE_SEAL'})
+        except ValueError as e:t=None;readings.append({'route':'learned','ok':False,'reason':str(e)})
         if t:
             spec=instantiate(t,text)
             if spec:readings.append(evaluate(spec,'learned'));readings[-1]['template']=store.key_of(text);tukuyo_ok|=readings[-1]['ok']
@@ -200,14 +200,15 @@ def ask(text,llm='auto',data=None,learn=True,voices='one',order=None,persona='',
     r=solve(text,llm=llm,data=data,learn=learn,order=order)
     if r['answer'] is not None:return {**r,'kind':'problem','verified':True}
     if N.find(text) and _a_problem(r):return {**r,'kind':'problem','verified':False}
+    refused={}
     if data is not None and text.strip():
         from .memory import Memory
         try:e=Memory(data).recall(text)
-        except ValueError:e=None
+        except ValueError as x:e=None;refused={'memory_refused':str(x)}        # a store that is not its own is not used
         if e:return {'answer':e['answer'],'route':'remembered','kind':'question','verified':False,'source':'parents_agreed','parents':e['parents'],
                      'models':e['models'],'since':e['utc'],'confirmed':e.get('confirmed',1),'reason':None,'readings':r['readings']}
     use_llm=llm=='on' or (llm=='auto' and L.available())
-    if not use_llm:return {**r,'kind':'question','verified':False,'reason':'NOT_A_PROBLEM_AND_NO_LLM'}
+    if not use_llm:return {**r,'kind':'question','verified':False,'reason':'NOT_A_PROBLEM_AND_NO_LLM',**refused}
     ps=L.parents() or ['claude']
     if order:ps=[p for p in order if p in ps]+[p for p in ps if p not in order]
     env_voice=os.environ.get('TUKUYO_LLM_VOICE','').strip()
@@ -218,7 +219,7 @@ def ask(text,llm='auto',data=None,learn=True,voices='one',order=None,persona='',
     if not ok:return {**r,'kind':'question','verified':False,'reason':'LLM:'+str(got[0].get('reason'))}
     a=ok[0]
     out={'answer':a['answer'],'route':'llm_voice','kind':'question','verified':False,'source':a.get('parent'),'model':a.get('model'),
-         'request_id':a.get('request_id'),'reason':None,'readings':r['readings']}
+         'request_id':a.get('request_id'),'reason':None,'readings':r['readings'],**refused}
     if voices=='all':
         out['answers']=[{k:x.get(k) for k in ('parent','ok','answer','model','reason')} for x in got]
         out['agree']=len(ok)>=2 and all(_same(x['answer'],a['answer']) for x in ok)

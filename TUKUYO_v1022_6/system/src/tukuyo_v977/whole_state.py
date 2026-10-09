@@ -44,9 +44,12 @@ def _live_identity(data):
 
 def _organism(data):return _read(Path(data)/'state'/'organism'/'organism_state.json')['payload']
 
+# The temperament every individual is born with: the values of a new soul, and where law 2 lets them settle back to.
+TEMPERAMENT={'survival':0.8,'integrity':0.8,'curiosity':0.5,'truthfulness':0.65,'relationship':0.4}
+
 def _default_soul(identity):
     return {'schema':'tukuyo.v977.soul_core/1','individual_id':identity['individual_id'],'update_seq':0,
-      'core_values':{'survival':0.8,'integrity':0.8,'curiosity':0.5,'truthfulness':0.65,'relationship':0.4},
+      'core_values':dict(TEMPERAMENT),
       'vows':[],'scars':[],'attachments':{},'aversions':{},'themes':{},'value_drift':{},
       'origin':'FUNCTIONAL_SOUL_MODEL_NOT_CONSCIOUSNESS_CLAIM'}
 
@@ -58,10 +61,62 @@ def load_soul(data):
     if x.get('schema')!='tukuyo.v977.soul_core/1' or x.get('individual_id')!=ident['individual_id']:raise ValueError('SOUL_IDENTITY_BINDING')
     return x
 
-def _apply_experience_mutation(s,kind,valence,importance,theme='',relation=''):
+# The soul laws. Each soul event records the law it was lived under (no field: law 1), so every history replays exactly.
+#   law 1  (v977) every step is linear and stops at its bound: a long life pins curiosity, truthfulness, attachments and
+#          themes at their bounds, and survival, integrity and relationship never move
+#   law 2  (generation 4) a step toward a bound shrinks as the value nears it, and with each experience every value
+#          settles a little back toward its temperament and every theme fades a little: what a value becomes reflects
+#          the mix of a whole life, not only its length, and it keeps answering to what happens next. Relationship
+#          follows the experiences with others; the soul keeps, for each one it learns from, how often what they gave
+#          held up and how often it failed, recent ones weighing more (TRUST_MEMORY)
+LAWS=(1,2)
+SETTLE=0.002        # law 2: how far each experience lets values settle back toward the temperament and themes fade
+VALUE_RATE=0.06     # law 2: curiosity and truthfulness (the same step as law 1 at the temperament)
+RELATION_RATE=0.02  # law 2: relationship, moved by every experience with another
+TRUST_MEMORY=0.99   # law 2: each new experience with someone keeps 99% of the weight of the earlier ones (about the last 100)
+
+def _toward(x,d,lo=0.0,hi=1.0):
+    # law 2: diminishing returns - a step toward a bound shrinks as the value nears it, so no value is ever pinned
+    return x+d*((hi-x) if d>=0 else (x-lo))/(hi-lo)
+
+def _law2(s,kind,v,imp,theme,relation):
+    cv=s['core_values']
+    for k,x0 in TEMPERAMENT.items():
+        if k in cv:cv[k]=x0+(cv[k]-x0)*(1-SETTLE)
+    for t in s['themes'].values():t['weight']=round(t['weight']*(1-SETTLE),6)
+    if theme:
+        t=s['themes'].setdefault(theme,{'weight':0.0,'encounters':0});t['encounters']+=1;t['weight']=round(_toward(t['weight'],v*imp*0.5,-2,2),6)
+    if kind in ('discovery','learning'):cv['curiosity']=_toward(cv['curiosity'],max(0,v)*imp*VALUE_RATE)
+    if kind=='honesty' and v>0:cv['truthfulness']=_toward(cv['truthfulness'],v*imp*VALUE_RATE)
+    if relation:
+        cv['relationship']=_toward(cv['relationship'],v*imp*RELATION_RATE)
+        a=s['attachments'].get(relation,0.0);s['attachments'][relation]=round(_toward(a,v*imp*0.2,-1,1),6)
+        if kind in ('parent_help','parent_error'):
+            r=s.setdefault('trust',{}).setdefault(relation,{'held':0.0,'failed':0.0})
+            r['held']=round(r['held']*TRUST_MEMORY+(kind=='parent_help'),6);r['failed']=round(r['failed']*TRUST_MEMORY+(kind=='parent_error'),6)
+    for k in cv:cv[k]=round(cv[k],6)
+    _marks(s,kind,v,imp,theme,relation)
+    return s
+
+def _marks(s,kind,v,imp,theme,relation):
+    # scars and vows stay for good, under either law
+    if kind in ('betrayal','harm') and imp>=0.6:
+        sid=hashlib.sha256(f"{kind}:{theme}:{relation}:{s['update_seq']}".encode()).hexdigest()[:16]
+        s['scars'].append({'scar_id':sid,'kind':kind,'theme':theme,'relation':relation,'strength':round(imp*abs(v),6)})
+    if kind=='vow' and imp>=0.5 and theme:
+        if theme not in [x['theme'] for x in s['vows']]:s['vows'].append({'theme':theme,'strength':round(imp,6)})
+
+def trust_record(s,relation):
+    # law 2: the share of what came from this one that held up, recent experiences weighing more; 0.5 for someone never met
+    r=(s.get('trust') or {}).get(relation)
+    return round((1+r['held'])/(2+r['held']+r['failed']),6) if r else 0.5
+
+def _apply_experience_mutation(s,kind,valence,importance,theme='',relation='',law=1):
     # Deterministic soul transition law retained for replay/audit by v989+.
     import copy
+    if law not in LAWS:raise ValueError('SOUL_LAW')
     s=copy.deepcopy(s);imp=float(importance);v=float(valence);s['update_seq']+=1
+    if law==2:return _law2(s,kind,v,imp,theme,relation)
     if theme:
         t=s['themes'].setdefault(theme,{'weight':0.0,'encounters':0});t['encounters']+=1;t['weight']=round(max(-2,min(2,t['weight']+v*imp*0.25)),6)
     if kind in ('discovery','learning'):
@@ -69,26 +124,25 @@ def _apply_experience_mutation(s,kind,valence,importance,theme='',relation=''):
     if kind=='honesty' and v>0:
         # generation 4: an answer withheld because the readings did not agree, instead of a guess
         s['core_values']['truthfulness']=round(min(1.0,s['core_values']['truthfulness']+v*imp*0.02),6)
-    if kind in ('betrayal','harm') and imp>=0.6:
-        sid=hashlib.sha256(f"{kind}:{theme}:{relation}:{s['update_seq']}".encode()).hexdigest()[:16]
-        s['scars'].append({'scar_id':sid,'kind':kind,'theme':theme,'relation':relation,'strength':round(imp*abs(v),6)})
-    if kind=='vow' and imp>=0.5 and theme:
-        if theme not in [x['theme'] for x in s['vows']]:s['vows'].append({'theme':theme,'strength':round(imp,6)})
+    _marks(s,kind,v,imp,theme,relation)
     if relation:
         a=s['attachments'].setdefault(relation,0.0);s['attachments'][relation]=round(max(-1,min(1,a+v*imp*0.1)),6)
     return s
 
-def experience(data,kind,valence,importance,theme='',relation=''):
+def experience(data,kind,valence,importance,theme='',relation='',law=1):
     from tukuyo_v1019.lifecycle import require_alive
     require_alive(data)
     if not (-1<=float(valence)<=1) or not (0<=float(importance)<=1):raise ValueError('EXPERIENCE_RANGE')
+    if law not in LAWS:raise ValueError('SOUL_LAW')
     s=load_soul(data);imp=float(importance);v=float(valence)
     before_sha=sha_obj(s)
-    new_s=_apply_experience_mutation(s,kind,v,imp,theme,relation)
+    new_s=_apply_experience_mutation(s,kind,v,imp,theme,relation,law)
     from tukuyo_common.journal import migrate_boxed_json,last_event,append_event
     ep=event_path(data);hp=event_head_path(data);migrate_boxed_json(legacy_event_path(data),ep,hp,'tukuyo.v1011.soul_event_head/1',sha_obj)
     last=last_event(ep);prev=last.get('event_sha256',ZERO) if last else ZERO;seq=int(last.get('seq',0))+1 if last else 1
-    e={'seq':seq,'individual_id':new_s['individual_id'],'kind':kind,'valence':v,'importance':imp,'theme':theme,'relation':relation,'prev_sha256':prev,'soul_sha256':sha_obj(new_s)};e['event_sha256']=sha_obj(e)
+    e={'seq':seq,'individual_id':new_s['individual_id'],'kind':kind,'valence':v,'importance':imp,'theme':theme,'relation':relation,'prev_sha256':prev,'soul_sha256':sha_obj(new_s)}
+    if law!=1:e['law']=law
+    e['event_sha256']=sha_obj(e)
     # v1014.4: canonical event first, then materialized soul. If process death occurs
     # between them, startup can deterministically rematerialize from the journal.
     append_event(ep,hp,e,'tukuyo.v1011.soul_event_head/1',sha_obj,new_s['individual_id'])
@@ -131,6 +185,8 @@ def _component_hashes(data):
     if (d/'v1022'/'commits').exists():pairs['local_cognition_v1022']='v1022/STATE.json'
     if (d/'v1022_ecology'/'commits').exists():pairs['runtime_metabolism_v1022']='v1022_ecology/STATE.json'
     if (d/'v1023r'/'commits').exists():pairs['open_world_research_v1023r']='v1023r/STATE.json'
+    # generation 4: what the child learned from its parents and the record of its life (tukuyo_g4.own)
+    if (d/'g4').exists():pairs.update({'g4_learned':'g4/learned.json','g4_remembered':'g4/remembered.json','g4_life':'g4/life.json'})
     return {k:_file_sha(d/v) for k,v in pairs.items()}
 
 def sync(data):

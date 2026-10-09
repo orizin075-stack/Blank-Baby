@@ -16,7 +16,8 @@ def _read(p):
 
 
 def _write(p,o):
-    p=Path(p);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(canon(o)+b'\n')
+    from tukuyo_common.atomic_fs import atomic_write_bytes
+    atomic_write_bytes(p,canon(o)+b'\n')
 
 
 def root(data): return Path(data)/'v989'
@@ -51,7 +52,7 @@ def _replay(data):
         try:
             soul=_apply_experience_mutation(
                 soul,e.get('kind',''),float(e.get('valence',0)),float(e.get('importance',0)),
-                e.get('theme',''),e.get('relation',''))
+                e.get('theme',''),e.get('relation',''),e.get('law',1))
         except Exception as exc:
             errors.append(f'REPLAY_EVENT:{i}:{type(exc).__name__}')
             break
@@ -105,28 +106,71 @@ def _validated_existing_chain(data,ident,events,origin_sha):
         return None
 
 
+def _from_checkpoint(data,ident,origin_sha):
+    """(chain, unseen soul events, journal size) when the stored checkpoint extends from the journal bytes it was built
+    from: only the unseen suffix of the soul journal is read and verified, so one experience does not cost the whole
+    history. Any doubt -> None, and the full path below runs. audit() still replays the whole history."""
+    from tukuyo_common.journal import read_from_offset,prefix_last_event
+    sp,tp=state_path(data),transitions_path(data)
+    if not sp.exists() or not tp.exists():return None
+    try:
+        old=_read(sp);oq=dict(old);oh=oq.pop('state_sha256',None)
+        if oh!=sha_obj(oq) or 'source_journal_size' not in old or 'transitions_file_sha256' not in old:return None
+        raw=tp.read_bytes()
+        if old['transitions_file_sha256']!=__import__('hashlib').sha256(raw).hexdigest():return None
+        chain=json.loads(raw);ts=chain.get('transitions',[]);n=len(ts)
+        if old.get('origin_identity')!=ident or old.get('origin_soul_sha256')!=origin_sha or chain.get('origin_soul_sha256')!=origin_sha:return None
+        if chain.get('individual_id')!=ident['individual_id'] or chain.get('lineage_id')!=ident['lineage_id'] or chain.get('branch_id')!=ident['branch_id']:return None
+        if int(chain.get('transition_count',-1))!=n or old.get('transition_count')!=n or old.get('source_soul_event_count')!=n:return None
+        head=ts[-1]['transition_sha256'] if n else ZERO
+        if chain.get('head_transition_sha256')!=head or old.get('transition_head_sha256')!=head:return None
+        jp=soul_event_path(data);off=int(old['source_journal_size']);edge=prefix_last_event(jp,off)
+        if n and (not edge or edge.get('seq')!=n or edge.get('event_sha256')!=ts[-1].get('source_event_sha256')
+                  or edge.get('soul_sha256')!=ts[-1].get('to_soul_sha256')):return None
+        if not n and edge is not None:return None
+        suffix,size=read_from_offset(jp,off);prev=ts[-1]['source_event_sha256'] if n else ZERO
+        for i,e in enumerate(suffix,n+1):
+            q=dict(e);got=q.pop('event_sha256',None)
+            if e.get('seq')!=i or e.get('individual_id')!=ident['individual_id'] or e.get('prev_sha256')!=prev or got!=sha_obj(q):return None
+            prev=got
+        return chain,suffix,size
+    except Exception:
+        return None
+
+
 def sync_transitions(data):
-    ident=_live_identity(data); box=_load_soul_events(data); events=box['events']
-    event_errors=_verify_event_chain(events,ident)
-    if event_errors: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:'+','.join(event_errors[:8]))
-    origin_sha=sha_obj(_default_soul(ident)); current=load_soul(data); current_sha=sha_obj(current)
-    chain=_validated_existing_chain(data,ident,events,origin_sha)
-    if chain is None:
-        # Bootstrap/recovery path: expensive deterministic replay, used only when no trusted checkpoint exists.
-        ident,origin_sha,current_sha,events,transitions,errors=_replay(data)
-        if errors: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:'+','.join(errors[:8]))
+    from tukuyo_common.journal import read_from_offset
+    ident=_live_identity(data);origin_sha=sha_obj(_default_soul(ident));current=load_soul(data);current_sha=sha_obj(current)
+    fast=_from_checkpoint(data,ident,origin_sha)
+    if fast is not None:
+        chain,todo,size=fast;transitions=list(chain['transitions']);first=len(transitions)+1;count=len(transitions)+len(todo)
     else:
-        transitions=list(chain.get('transitions',[])); prev_transition=chain.get('head_transition_sha256',ZERO)
+        _load_soul_events(data);events,size=read_from_offset(soul_event_path(data),0);count=len(events)
+        event_errors=_verify_event_chain(events,ident)
+        if event_errors: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:'+','.join(event_errors[:8]))
+        chain=_validated_existing_chain(data,ident,events,origin_sha)
+        if chain is None:
+            # Bootstrap/recovery path: expensive deterministic replay, used only when no trusted checkpoint exists.
+            ident,origin_sha,current_sha,events,transitions,errors=_replay(data)
+            if errors: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:'+','.join(errors[:8]))
+            todo=[];first=len(transitions)+1
+        else:
+            transitions=list(chain.get('transitions',[]));todo=events[len(transitions):];first=len(transitions)+1
+    if todo or fast is not None:
+        prev_transition=transitions[-1]['transition_sha256'] if transitions else ZERO
         before=transitions[-1]['to_soul_sha256'] if transitions else origin_sha
         # Append only the unseen suffix. Each canonical soul event already commits the resulting soul SHA.
-        for i in range(len(transitions),len(events)):
-            e=events[i]; after=e.get('soul_sha256')
-            t={'schema':'tukuyo.v989.soul_transition/1','seq':i+1,'individual_id':ident['individual_id'],
+        for i,e in enumerate(todo,first):
+            after=e.get('soul_sha256')
+            t={'schema':'tukuyo.v989.soul_transition/1','seq':i,'individual_id':ident['individual_id'],
                'lineage_id':ident['lineage_id'],'branch_id':ident['branch_id'],'from_soul_sha256':before,
-               'to_soul_sha256':after,'source_event_seq':i+1,'source_event_sha256':e.get('event_sha256'),
+               'to_soul_sha256':after,'source_event_seq':i,'source_event_sha256':e.get('event_sha256'),
                'kind':e.get('kind',''),'theme':e.get('theme',''),'relation':e.get('relation',''),
                'previous_transition_sha256':prev_transition}
             t['transition_sha256']=sha_obj(t); transitions.append(t);prev_transition=t['transition_sha256'];before=after
+        expected=transitions[-1]['to_soul_sha256'] if transitions else origin_sha
+        if current_sha!=expected: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:ILLEGAL_STATE_JUMP')
+    elif chain is not None:
         expected=transitions[-1]['to_soul_sha256'] if transitions else origin_sha
         if current_sha!=expected: raise ValueError('TEMPORAL_IDENTITY_PRECHECK:ILLEGAL_STATE_JUMP')
     old=_read(state_path(data)) if state_path(data).exists() else None
@@ -138,9 +182,13 @@ def sync_transitions(data):
     chain={'schema':TRANSITION_SCHEMA,'individual_id':ident['individual_id'],'lineage_id':ident['lineage_id'],'branch_id':ident['branch_id'],
            'origin_soul_sha256':origin_sha,'transition_count':len(transitions),'head_transition_sha256':transitions[-1]['transition_sha256'] if transitions else ZERO,
            'transitions':transitions}
-    chain['chain_sha256']=sha_obj(chain);_write(transitions_path(data),chain)
+    chain['chain_sha256']=sha_obj(chain);raw=canon(chain)+b'\n'
+    from tukuyo_common.atomic_fs import atomic_write_bytes
+    atomic_write_bytes(transitions_path(data),raw)
     state={'schema':SCHEMA,'origin_identity':ident,'origin_soul_sha256':origin_sha,'current_soul_sha256':current_sha,
-           'transition_count':len(transitions),'transition_head_sha256':chain['head_transition_sha256'],'source_soul_event_count':len(events),
+           'transition_count':len(transitions),'transition_head_sha256':chain['head_transition_sha256'],'source_soul_event_count':count,
+           # where the next sync may start reading the journal, and the exact chain file it extends
+           'source_journal_size':size,'transitions_file_sha256':__import__('hashlib').sha256(raw).hexdigest(),
            'checkpoint_mode':'INCREMENTAL_APPEND_WITH_FULL_REPLAY_AUDIT',
            'same_identity_rule':{'same_origin':True,'valid_transition_chain':True,'no_illegal_state_jump':True,'lineage_continuity':True},
            'claim_boundary':{'functional_temporal_self_identity':True,'identity_allows_lawful_soul_change':True,'causal_transition_chain_verified':True,

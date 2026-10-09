@@ -24,6 +24,10 @@ def consolidate(data):
           'vow_signature':vows,'scar_signature':scars,'attachment_signature':attachments,'theme_signature':themes,
           'soul_sha256':sha_obj(s),'consolidated_from_heart_seq':h['seq'],
           'claim_boundary':{'functional_deep_self':True,'memory_independence_testable':True,'consciousness_established':False}}
+    if s.get('trust'):
+        # soul law 2: whom it trusts, and how far, is part of the deep self
+        from tukuyo_v977.whole_state import trust_record
+        core['trust_signature']=sorted((k,trust_record(s,k)) for k in s['trust'])
     core['core_sha256']=sha_obj(core);_write(path(data),core);return {'ok':True,'version':'v979','deep_core':core}
 
 def forget_surface_memory(data):

@@ -8,7 +8,7 @@
 - 版の説明（始め方・採用のしかた・以前の版からの移り方）：[README_V1022_6_JA.md](TUKUYO_v1022_6/README_V1022_6_JA.md)
 - いちばん新しい改良（patch6）の説明：[README_CLAUDE_PATCH6_JA.md](TUKUYO_v1022_6/README_CLAUDE_PATCH6_JA.md)
 - 受け取ったままの patch5 は commit `e8a1c8c` にあります。patch5 を受け取ったときの確認（署名、全体テスト 421/421、同梱の結果の再現など）は commit `473eb0c` の README にあります。
-- 第4世代（開発中で、まだ版ではありません）の説明：[README_GEN4_DEV_JA.md](TUKUYO_v1022_6/README_GEN4_DEV_JA.md)。引き継ぎメモ：[HANDOFF_GEN4.md](TUKUYO_v1022_6/evidence_gen4/HANDOFF_GEN4.md)
+- 第4世代（開発中で、まだ版ではありません）の説明：[README_GEN4_DEV_JA.md](TUKUYO_v1022_6/README_GEN4_DEV_JA.md)。引き継ぎメモ：[HANDOFF_GEN4.md](TUKUYO_v1022_6/evidence_gen4/HANDOFF_GEN4.md)。魂らしさの試験：[SOUL_ASSAY_2026-10-09.md](TUKUYO_v1022_6/evidence_gen4/SOUL_ASSAY_2026-10-09.md)
 
 ### patch6 で変わったこと
 

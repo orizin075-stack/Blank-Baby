@@ -26,7 +26,7 @@ def recover_startup(data):
         if c.get('recovered'):actions.append('CONVERSATION_TXN_ROLLED_BACK')
         sr=repair_soul_materialization(data)
         soul_changed=bool(sr.get('repaired'))
-        if soul_changed:actions.append('SOUL_MATERIALIZED_FROM_EVENT_CHAIN')
+        if soul_changed:actions.append(sr.get('action') or 'SOUL_MATERIALIZED_FROM_EVENT_CHAIN')
     except Exception as e:errors.append('V1014_4_RECOVERY:'+type(e).__name__+':'+str(e))
     # A restore can leave the whole live tree inconsistent, so finish it first.
     try:
@@ -54,6 +54,17 @@ def recover_startup(data):
         living_changed=bool(lr.get('recovered'))
         if living_changed and lr.get('action'):actions.append(str(lr.get('action')))
     except Exception as e:errors.append('V1015_LIVING_RECOVERY:'+type(e).__name__+':'+str(e))
+    # generation 4 (after every other repair): finish a thought's episode the process did not, or sync stores it signed before it stopped
+    g4_changed=False
+    if (data/'g4').is_dir() and (data/'state'/'integration_state.json').is_file():
+        try:
+            from tukuyo_g4.life import recover as g4_recover
+            from tukuyo_g4.own import unsynced as g4_unsynced
+            r=g4_recover(data)
+            if r and r.get('recovered'):actions.append('G4_EPISODE_COMPLETED');g4_changed=True
+            elif r:actions.append('G4_EPISODE_SET_ASIDE:'+str(r.get('abandoned')))
+            if g4_unsynced(data):actions.append('G4_STORES_RESYNCED');g4_changed=True
+        except Exception as e:errors.append('G4_RECOVERY:'+type(e).__name__+':'+str(e))
     # A verified answer may have committed while unified state did not.
     m=mutation_marker(data)
     mutation_pending=False
@@ -63,7 +74,7 @@ def recover_startup(data):
             if obj.get('schema')!=MUTATION_SCHEMA:raise ValueError('PENDING_MUTATION_SCHEMA')
             mutation_pending=True
         except Exception as e:errors.append('PENDING_MUTATION:'+type(e).__name__+':'+str(e))
-    if (realtime_changed or mutation_pending or soul_changed or living_changed) and (data/'state'/'integration_state.json').is_file():
+    if (realtime_changed or mutation_pending or soul_changed or living_changed or g4_changed) and (data/'state'/'integration_state.json').is_file():
         try:
             from tukuyo_v977.whole_state import sync as whole_sync
             whole_sync(data);actions.append('WHOLE_STATE_RESYNC')

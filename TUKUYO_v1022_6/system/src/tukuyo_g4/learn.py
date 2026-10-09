@@ -15,7 +15,7 @@ from __future__ import annotations
 import copy,hashlib,json,os,re,time
 from fractions import Fraction
 from pathlib import Path
-from . import numbers as N
+from . import numbers as N,own
 from .fpl import fmt
 
 SCHEMA='tukuyo.g4.learned/1'
@@ -95,19 +95,23 @@ def instantiate(tpl,text):
     return spec
 
 class Store:
-    """learned templates of one individual: <dir>/learned.json, sealed with the sha256 of its body"""
+    """learned templates of one individual: <dir>/learned.json, sealed with the sha256 of its body; in an individual's g4
+    folder also signed by the individual and bound to it (own.py)"""
     def __init__(s,d):
-        s.dir=Path(d);s.path=s.dir/'learned.json'
+        s.dir=Path(d);s.path=s.dir/'learned.json';s.data=s.dir.parent if s.dir.name=='g4' else None
     def load(s):
         if not s.path.is_file():return {'schema':SCHEMA,'templates':{}}
         o=json.loads(s.path.read_text(encoding='utf-8'))
-        body=json.dumps(o.get('templates',{}),ensure_ascii=False,sort_keys=True)
-        if o.get('schema')!=SCHEMA or o.get('sha256')!=hashlib.sha256(body.encode()).hexdigest():raise ValueError('LEARNED_STORE_SEAL')
+        body=json.dumps(o.get('templates',{}),ensure_ascii=False,sort_keys=True);sha=hashlib.sha256(body.encode()).hexdigest()
+        if o.get('schema')!=SCHEMA or o.get('sha256')!=sha:raise ValueError('LEARNED_STORE_SEAL')
+        if s.data is not None:own.check(s.data,'learned',sha,o.get('signed'))
         return o
     def save(s,o):
         s.dir.mkdir(parents=True,exist_ok=True)
-        body=json.dumps(o['templates'],ensure_ascii=False,sort_keys=True)
-        o={'schema':SCHEMA,'templates':o['templates'],'sha256':hashlib.sha256(body.encode()).hexdigest()}
+        body=json.dumps(o['templates'],ensure_ascii=False,sort_keys=True);sha=hashlib.sha256(body.encode()).hexdigest()
+        o={'schema':SCHEMA,'templates':o['templates'],'sha256':sha}
+        sg=own.sign(s.data,'learned',sha) if s.data is not None else None
+        if sg:o['signed']=sg
         tmp=s.path.with_suffix('.tmp');tmp.write_text(json.dumps(o,ensure_ascii=False,indent=1,sort_keys=True),encoding='utf-8');os.replace(tmp,s.path)
     @staticmethod
     def key_of(text):return hashlib.sha256(skeleton(text)[0].encode()).hexdigest()[:24]

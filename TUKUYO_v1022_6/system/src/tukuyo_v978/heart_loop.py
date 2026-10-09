@@ -9,7 +9,8 @@ EVENT_SCHEMA='tukuyo.v978.heart_events/1'
 
 def _read(p): return json.loads(Path(p).read_text(encoding='utf-8'))
 def _write(p,o):
-    p=Path(p);p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(canon(o)+b'\n')
+    from tukuyo_common.atomic_fs import atomic_write_bytes
+    atomic_write_bytes(p,canon(o)+b'\n')   # a process killed while writing must not leave half a heart
 def root(data): return Path(data)/'v978'
 def state_path(data): return root(data)/'HEART_STATE.json'
 def events_path(data): return root(data)/'HEART_EVENTS.jsonl'
@@ -56,7 +57,7 @@ def _decision_core_values(data,soul):
     """
     try:
         from tukuyo_v1018.succession import effective_values
-        return effective_values(data)
+        return effective_values(data,native=soul['core_values'])
     except Exception:
         return dict(soul['core_values'])
 
@@ -71,12 +72,28 @@ def _derive_goal(soul,h,data=None):
     goal=max(candidates,key=lambda k:(candidates[k],k))
     return {'goal':goal,'score':round(candidates[goal],6),'candidate_scores':{k:round(x,6) for k,x in candidates.items()}}
 
-def process_experience(data,kind,valence,importance,theme='',relation=''):
+def process_experience(data,kind,valence,importance,theme='',relation='',law=1):
     from tukuyo_v1019.lifecycle import require_alive
     require_alive(data)
     valence=float(valence);importance=float(importance)
     if not -1<=valence<=1 or not 0<=importance<=1: raise ValueError('HEART_EXPERIENCE_RANGE')
-    sr=soul_experience(data,kind,valence,importance,theme,relation);soul=sr['soul'];h=load(data);h['seq']+=1
+    sr=soul_experience(data,kind,valence,importance,theme,relation,law)
+    from tukuyo_common.atomic_fs import maybe_crash
+    maybe_crash('heart:after_soul')
+    return feel(data,kind,valence,importance,theme,relation,sr)
+
+def felt(data,soul_event):
+    """has the heart taken in this soul event? (its state follows the soul it made, or a heart event names it)"""
+    from tukuyo_common.journal import load_events
+    if not state_path(data).exists():return False   # no heart yet: a new one would only seem to follow the soul
+    h=load(data)
+    if h.get('soul_sha256')==soul_event.get('soul_sha256'):return True
+    return any(e.get('soul_event_sha256')==soul_event.get('event_sha256') for e in load_events(events_path(data))[-256:])
+
+def feel(data,kind,valence,importance,theme,relation,sr):
+    """the heart's part of an experience whose soul event is written (sr: the soul's result, {'soul','event'})"""
+    valence=float(valence);importance=float(importance)
+    soul=sr['soul'];h=load(data);h['seq']+=1
     meaning=_meaning(kind,valence,importance,theme,relation)
     em=h['emotion'];alpha=0.15+0.35*importance
     em['valence']=round(max(-1,min(1,em['valence']*(1-alpha)+valence*alpha)),6)

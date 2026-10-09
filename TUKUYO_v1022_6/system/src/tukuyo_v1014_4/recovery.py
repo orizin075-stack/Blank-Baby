@@ -107,10 +107,10 @@ def repair_soul_materialization(data):
         try:current_sha=sha_obj(json.loads(sp.read_text(encoding='utf-8')))
         except Exception:pass
     # Normal startup is O(1): only replay the entire soul journal when the materialized core actually lags/diverges.
-    if current_sha==expected:return {'ok':True,'repaired':False}
+    if current_sha==expected:return _catch_up_derived(d,last)
     evs=load_events(ep);s=_default_soul(ident)
     for i,e in enumerate(evs,1):
-        s=_apply_experience_mutation(s,e.get('kind',''),float(e.get('valence',0)),float(e.get('importance',0)),e.get('theme',''),e.get('relation',''))
+        s=_apply_experience_mutation(s,e.get('kind',''),float(e.get('valence',0)),float(e.get('importance',0)),e.get('theme',''),e.get('relation',''),e.get('law',1))
         if sha_obj(s)!=e.get('soul_sha256'):raise ValueError('SOUL_REPLAY_MISMATCH:'+str(i))
     expected=sha_obj(s)
     atomic_write_bytes(sp,canon(s)+b'\n')
@@ -121,4 +121,31 @@ def repair_soul_materialization(data):
         # A stale temporal checkpoint may itself reject the repaired materialization;
         # full audit will rebuild/flag if the canonical event chain is invalid.
         pass
+    _sync_relations(d)
     return {'ok':True,'repaired':True,'action':'SOUL_MATERIALIZED_FROM_EVENT_CHAIN'}
+
+def _sync_relations(d):
+    # the relation and peer models are derived from the soul journal: bring them up to it as well
+    try:
+        from tukuyo_v993.relation_bound import sync as relation_sync
+        from tukuyo_v995.other_agent_trust import sync as peer_sync
+        relation_sync(d);peer_sync(d)
+    except Exception:
+        pass
+
+def _catch_up_derived(d,last):
+    """The soul is what its journal says, but the process stopped before the layers derived from the journal followed
+    (v989 temporal identity, v993/v995 relation models) - the soul file had been written, the rest had not. Bring them up
+    to the journal; the caller then syncs the whole state. Nothing is derived from anything but the canonical journal."""
+    if not last:return {'ok':True,'repaired':False}
+    tp=d/'v989'/'TEMPORAL_IDENTITY.json'
+    try:behind=tp.is_file() and int(json.loads(tp.read_text(encoding='utf-8')).get('source_soul_event_count',0))<int(last.get('seq',0))
+    except Exception:behind=False
+    if not behind:return {'ok':True,'repaired':False}
+    try:
+        from tukuyo_v989.temporal_identity import sync_transitions
+        sync_transitions(d)
+    except Exception:
+        return {'ok':True,'repaired':False}
+    _sync_relations(d)
+    return {'ok':True,'repaired':True,'action':'SOUL_DERIVED_STATE_CAUGHT_UP'}

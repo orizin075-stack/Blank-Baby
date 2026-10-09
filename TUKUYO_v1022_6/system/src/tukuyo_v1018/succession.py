@@ -198,8 +198,10 @@ def _fresh_child(data):
     if hp.is_file() and int(_read(hp).get('seq',0))!=0: reasons.append('HEART_HISTORY')
     return not reasons,reasons
 
-def effective_values(data,st=None):
-    st=st or ensure_state(data)[0];native=load_soul(data).get('core_values') or {}
+def effective_values(data,st=None,native=None):
+    # native: the values of the soul being judged (default: the live soul). A counterfactual soul (v980's control without
+    # this individual's experience) must be judged by its own values, not by the live ones
+    st=st or ensure_state(data)[0];native=native if native is not None else (load_soul(data).get('core_values') or {})
     if st.get('role')=='SUCCESSOR' and isinstance(st.get('inherited_value_profile'),dict):
         return {k:round(max(0,min(1,float(st['inherited_value_profile'].get(k,b))+float(native.get(k,b))-b)),6) for k,b in DEFAULT_VALUES.items()}
     return {k:round(float(native.get(k,b)),6) for k,b in DEFAULT_VALUES.items()}

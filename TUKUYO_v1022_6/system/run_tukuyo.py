@@ -722,7 +722,11 @@ def _main(argv=None):
             elif args.cmd in ('llm-ask','llm-teach','llm-status','llm-audit','self-study'):
                 _require_live(data)
                 from tukuyo_v1022_llm import bridge as llm_bridge,providers as llm_providers
-                if args.cmd=='llm-ask':res=llm_bridge.ask(data,args.query,local_first=not args.no_local_first)
+                if args.cmd=='llm-ask':
+                    res=llm_bridge.ask(data,args.query,local_first=not args.no_local_first)
+                    if (data/'g4').exists():
+                        from tukuyo_v977.whole_state import sync as whole_sync
+                        whole_sync(data)   # generation 4 may have learned while it read the question
                 elif args.cmd=='llm-teach':
                     from tukuyo_v1022_llm import teacher as llm_teacher
                     qs=json.loads(args.questions.read_text(encoding='utf-8'));qs=qs.get('questions',qs) if isinstance(qs,dict) else qs
@@ -748,6 +752,8 @@ def _main(argv=None):
                         from tukuyo_g4 import api as g4_api,life as g4_life,llm as g4_llm
                         res=g4_api.think(data,args.query,res,llm=args.llm,order=g4_life.trust_order(data,g4_llm.parents()))
                         if not args.no_soul and res.get('gen4'):res['life']=g4_life.record(data,res)
+                        from tukuyo_v977.whole_state import sync as whole_sync
+                        if (data/'g4').exists():whole_sync(data)   # what it learned is part of the whole state
                 elif args.cmd=='dialogue-learn':res=local.learn(data,json.loads(args.bundle.read_text()),args.teacher)
                 else:res=local.audit(data)
             elif args.cmd in ('metabolism-init','metabolism-step','metabolism-status','metabolism-audit'):
@@ -761,12 +767,15 @@ def _main(argv=None):
                 _require_live(data)
                 from tukuyo_g4 import api as g4_api,learn as g4_learn,life as g4_life,llm as g4_llm,memory as g4_memory
                 order=g4_life.trust_order(data,g4_llm.parents())
+                from tukuyo_v977.whole_state import sync as whole_sync
                 if args.cmd=='g4-solve':
                     res={'ok':True,'version':'gen4',**g4_api.solve(args.query,llm=args.llm,data=data,learn=not args.no_learn,order=order)}
                     if not args.no_soul:res['life']=g4_life.record(data,res)
+                    if (data/'g4').exists():whole_sync(data)   # what it learned is part of the whole state
                 elif args.cmd=='g4-ask':
                     res={'ok':True,'version':'gen4',**g4_api.ask(args.query,llm=args.llm,data=data,voices=args.voices,order=order,persona=g4_life.persona(data))}
                     if not args.no_soul:res['life']=g4_life.record(data,res)
+                    if (data/'g4').exists():whole_sync(data)
                 elif args.cmd=='g4-self':res={'ok':True,'version':'gen4',**g4_life.self_report(data)}
                 elif args.cmd=='g4-remembered':
                     o=g4_memory.Memory(data).load()
@@ -775,8 +784,14 @@ def _main(argv=None):
                     o=g4_learn.Store(Path(data)/'g4').load()
                     res={'ok':True,'templates':[{'id':k,'example':v.get('example'),'seen':v.get('seen'),'conflicts':v.get('conflicts',0),'provenance':v.get('provenance')} for k,v in sorted(o['templates'].items())]}
                 else:
-                    res=g4_learn.Store(Path(data)/'g4').audit();m=g4_memory.audit(data)
-                    res={**res,'ok':bool(res.get('ok')) and m['ok'],'remembered':m}
+                    try:res=g4_learn.Store(Path(data)/'g4').audit()
+                    except ValueError as e:res={'ok':False,'learned_refused':str(e)}
+                    m=g4_memory.audit(data)
+                    try:g4_life._life(data);lv={'ok':True}
+                    except ValueError as e:lv={'ok':False,'reason':str(e)}
+                    pend=(Path(data)/'g4'/'private'/'EPISODE.json').is_file();aside=(Path(data)/'g4'/'private'/'EPISODE.abandoned.json').is_file()
+                    res={**res,'ok':bool(res.get('ok')) and m['ok'] and lv['ok'] and not pend,'remembered':m,'life_record':lv,'episode_pending':pend,
+                         'episode_set_aside':aside}   # a thought whose experiences could not be finished (see the startup actions)
             elif args.cmd in ('research-run','research-status','research-audit'):
                 if args.cmd=='research-run':_require_live(data)
                 from tukuyo_v1023r import life as research_life

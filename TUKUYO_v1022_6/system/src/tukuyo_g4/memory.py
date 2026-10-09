@@ -4,11 +4,13 @@ A remembered answer is not verified. It says only that two or more different par
 this question; it is always shown that way (source 'parents_agreed', with the parents, the models and when). When
 parents later agree on a different answer, the entry is marked as contested and is no longer used.
 
-The store is g4/remembered.json in the individual, sealed with the sha256 of its entries: a changed file is refused.
+The store is g4/remembered.json in the individual, sealed with the sha256 of its entries and signed by the individual
+(own.py): a changed file, or one taken from another child, is refused.
 """
 from __future__ import annotations
 import hashlib,json,re,time
 from pathlib import Path
+from . import own
 
 SCHEMA='tukuyo.g4.remembered/1'
 MAX_ANSWER=80          # only short answers (a name, a number, a date) are remembered
@@ -16,15 +18,18 @@ MAX_ANSWER=80          # only short answers (a name, a number, a date) are remem
 def norm(x):return re.sub(r'[\s。、．，,.!！?？「」『』"\'()（）]','',str(x)).lower()
 
 class Memory:
-    def __init__(s,data):s.p=Path(data)/'g4'/'remembered.json'
+    def __init__(s,data):s.data=Path(data);s.p=s.data/'g4'/'remembered.json'
     def _seal(s,entries):return hashlib.sha256(json.dumps(entries,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
     def load(s):
         if not s.p.is_file():return {'schema':SCHEMA,'entries':{},'seal':s._seal({})}
-        o=json.loads(s.p.read_text(encoding='utf-8'))
-        if o.get('schema')!=SCHEMA or o.get('seal')!=s._seal(o.get('entries',{})):raise ValueError('REMEMBERED_STORE_SEAL')
+        o=json.loads(s.p.read_text(encoding='utf-8'));seal=s._seal(o.get('entries',{}))
+        if o.get('schema')!=SCHEMA or o.get('seal')!=seal:raise ValueError('REMEMBERED_STORE_SEAL')
+        own.check(s.data,'remembered',seal,o.get('signed'))
         return o
     def _save(s,o):
         o['seal']=s._seal(o['entries']);s.p.parent.mkdir(parents=True,exist_ok=True)
+        o.pop('signed',None);sg=own.sign(s.data,'remembered',o['seal'])
+        if sg:o['signed']=sg
         tmp=s.p.with_suffix('.tmp');tmp.write_text(json.dumps(o,ensure_ascii=False,sort_keys=True),encoding='utf-8');tmp.replace(s.p)
     @staticmethod
     def key(question):return hashlib.sha256(norm(question).encode()).hexdigest()[:24]
