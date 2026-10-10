@@ -1390,6 +1390,8 @@ def schema_gcd_lcm(st,ask):
         r=p.new('greatest_common','item');p.rel(f'{r} = {expr}',ask.text);return p,r,ask.noun or 'item'
     if l and (re.search(r'same number of|divisible by|multiple of|both',t)) and (re.search(r'packs? of|packages? of|comes? in|sold \w+ to a|divisible by|boxes of|bags of|multiple',t)):
         if ask.noun in ('package','pack','box','bag','packet','case'):return None
+        # 'the same number of boxes of each' is not as many of each thing
+        if re.search(r'\b(?:same|equal) (?:total )?number of (?:the )?(?:boxes|packs|packages|bags|packets|cases|sets|bundles|groups|containers|cartons|crates)\b',t):return None
         names=[p.bind(f,f'size_{i}','item') for i,f in enumerate(fr)]
         expr=names[0]
         for n in names[1:]:expr=f'lcm({expr}, {n})'

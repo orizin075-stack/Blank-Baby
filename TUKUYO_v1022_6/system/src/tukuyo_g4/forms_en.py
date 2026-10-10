@@ -27,13 +27,16 @@ def _skel(t,a,b,nums):
     return re.sub(r'\s+',' ',''.join(out)).strip().rstrip('.?!').strip()
 
 class _Spec:
-    def __init__(s,text,nums):s.text=text;s.nums=nums;s.q={};s.facts=[];s.bound=set()
+    def __init__(s,text,nums):s.text=text;s.nums=nums;s.q={};s.facts=[];s.bound=set();s.un=[]
     def qty(s,name,unit='1',integer=False,signed=False,about=''):
         s.q[name]={'name':name,'unit':unit,'integer':integer,'signed':signed,'about':about};return name
     def bind(s,name,k,unit='1',about=''):
         n=s.nums[k];s.qty(name,unit,n.value.denominator==1 and unit=='1',about=about)
         s.facts.append({'eq':f'{name} = {_lit(n.value)}','span':s.around(n)});s.bound.add(k);return name
     def rel(s,eq,a,b):s.facts.append({'eq':eq,'span':s.text[a:b].strip()})
+    def unused(s,k,why):
+        """a number word that is part of the wording, not an amount ('two numbers'), declared unused with the reason"""
+        s.un.append({'raw':s.nums[k].raw,'why':why});s.bound.add(k)
     def around(s,n):
         """the number with the word before it and the word after it"""
         a=n.start;b=n.end
@@ -43,7 +46,7 @@ class _Spec:
     def done(s,ask,unit,form):
         if any(k not in s.bound and not N.optional(n,s.text) for k,n in enumerate(s.nums)):return None
         return {'spec':{'schema':'tukuyo.g4.fpl/1','lang':'en','text':s.text,'quantities':list(s.q.values()),'facts':s.facts,
-                        'ask':ask,'answer_unit':unit,'unused':[],'reader':FORM+':'+form}}
+                        'ask':ask,'answer_unit':unit,'unused':s.un,'reader':FORM+':'+form}}
 
 def read(text):
     try:return _read(text)
@@ -58,7 +61,8 @@ def _read(text):
     for f in (_gcd_lcm,_motion,_number):
         r=f(text,nums,sents,sk)
         if r:return r
-    return None
+    from .forms_more_en import read as more
+    return more(text,nums,sents,sk)
 
 # ---- greatest common factor / least common multiple -------------------------------
 GL=re.compile(r"(?:what is|what's|find|determine|calculate|compute) the (greatest common factor|greatest common divisor|highest common factor|"

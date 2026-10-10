@@ -1,0 +1,126 @@
+{
+ "utc": "2026-10-10T13:29:25Z",
+ "seed": 20261008,
+ "note": "no parent is called; dev splits only",
+ "fuzz": {
+  "texts": 4245,
+  "entry_points": [
+   "numbers",
+   "forms",
+   "reader",
+   "solve",
+   "ask",
+   "think"
+  ],
+  "crashes": 0,
+  "by_kind": {},
+  "examples": {},
+  "seconds": 85.2,
+  "seconds_total": 85.4
+ },
+ "specs": {
+  "readings": 6000,
+  "crashes": 0,
+  "by_kind": {},
+  "seconds": 3.9,
+  "seconds_total": 3.9
+ },
+ "mutate": {
+  "readings": 369,
+  "mutations": {
+   "number_not_in_text": {
+    "n": 369,
+    "caught": 369,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "span_not_in_text": {
+    "n": 369,
+    "caught": 369,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "number_in_relation": {
+    "n": 369,
+    "caught": 369,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "binding_dropped": {
+    "n": 369,
+    "caught": 368,
+    "passed_same_answer": 1,
+    "passed_other_answer": 0,
+    "caught_pct": 99.7
+   },
+   "unit_changed": {
+    "n": 369,
+    "caught": 369,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "contradiction_added": {
+    "n": 369,
+    "caught": 369,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "number_declared_unused": {
+    "n": 369,
+    "caught": 347,
+    "passed_same_answer": 22,
+    "passed_other_answer": 0,
+    "caught_pct": 94.0
+   },
+   "operator_changed": {
+    "n": 327,
+    "caught": 179,
+    "passed_same_answer": 1,
+    "passed_other_answer": 147,
+    "caught_pct": 54.7
+   },
+   "other_quantity_asked": {
+    "n": 369,
+    "caught": 0,
+    "passed_same_answer": 18,
+    "passed_other_answer": 351,
+    "caught_pct": 0.0
+   }
+  },
+  "seconds_total": 9.8
+ },
+ "learn": {
+  "templates": 362,
+  "from_readings": 369,
+  "audit_ok": true,
+  "agree_with_own_reader": 704,
+  "template_abstains": 142,
+  "no_template": 15,
+  "template_only": 1,
+  "disagreements": [],
+  "seconds_total": 48.4
+ },
+ "life": {
+  "results": 20000,
+  "crashes": 0,
+  "by_kind": {},
+  "experience_kinds": {
+   "learning": 9198,
+   "parent_help": 1064,
+   "honesty": 1916,
+   "parent_error": 3204,
+   "discovery": 561
+  },
+  "memory": {
+   "ok": true,
+   "remembered": 1,
+   "contested": 1
+  },
+  "seconds_total": 0.4
+ }
+}
