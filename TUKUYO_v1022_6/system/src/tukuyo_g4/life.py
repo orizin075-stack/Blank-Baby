@@ -4,11 +4,16 @@ What happens while it thinks becomes experience, through the same path as `heart
 journal -> relations), so every existing audit still covers it:
   learning          it learned a reading or an answer because its parents agreed       curiosity grows
   parent_help       a parent's reading agreed with the committed answer                 trust in that parent grows
-  parent_error      a parent's reading failed the checker, or disagreed with an answer
-                    that other readings agreed on                                       trust in that parent falls
+  parent_error      a parent's reading failed the solver or the checker (answered or
+                    not), or disagreed with an answer that other readings agreed on      trust in that parent falls
   honesty           it withheld an answer (the readings disagreed, or one voice alone)  truthfulness grows
   discovery         it solved, by itself, with a template learned from its parents      curiosity grows
 Routine answers of its own reader leave no trace: only what teaches it something does.
+
+Looking back (hindsight.py): when it withheld because its parents' valid readings disagreed, nobody could be blamed. It
+keeps the disagreement, and when it later learns that wording from parents who agree, it answers the old text with what
+it learned: each parent who had been right gets parent_help, each who had been wrong parent_error (theme g4:hindsight),
+in the same episode as the learning.
 
 It lives under soul law 2 (v977 whole_state): growth slows near a bound and every value settles a little back toward
 its temperament with each experience, so what it becomes reflects the mix of its whole life and keeps answering to
@@ -111,11 +116,13 @@ def experiences(result):
     if answer is not None:
         for p in sorted({x['parent'] for x in parents_ok if str(x.get('value'))==value}):
             out.append(('parent_help',0.4,0.2,THEME+'reading',relation(p)))
-        for x in readings:
-            if not str(x.get('route','')).startswith('llm') or 'parent' not in x:continue
-            r=str(x.get('reason') or '')
-            if (not x.get('ok') and r.split(':')[0] in ('SOLVE','CHECK')) or (x.get('ok') and str(x.get('value'))!=value):
-                out.append(('parent_error',-0.3,0.2,THEME+'reading',relation(x['parent'])))
+    for x in readings:
+        if not str(x.get('route','')).startswith('llm') or 'parent' not in x:continue
+        r=str(x.get('reason') or '')
+        # a reading that fails the solver or the checker is its parent's mistake, whether or not the child answered;
+        # a valid reading with another answer is one only when the child answered (else nobody can tell who was wrong)
+        if (not x.get('ok') and r.split(':')[0] in ('SOLVE','CHECK')) or (answer is not None and x.get('ok') and str(x.get('value'))!=value):
+            out.append(('parent_error',-0.3,0.2,THEME+'reading',relation(x['parent'])))
     if answer is None and (reason.startswith('DISAGREE') or reason=='SINGLE_LLM_READING'):
         out.append(('honesty',0.5,0.3,THEME+'withheld',''))
     if route=='learned':
@@ -137,10 +144,27 @@ def _live(data,todo,start):
     for x in todo[start:]:
         process_experience(data,*x,law=LAW);maybe_crash('g4:after_experience')
 
-def _finish(data,life):
+def _finish(data,life,resolved=()):
     from tukuyo_common.atomic_fs import durable_unlink
     from tukuyo_v977.whole_state import sync
-    _save_life(data,life);sync(data);durable_unlink(_episode_path(data))
+    _save_life(data,life)
+    if resolved:
+        from .hindsight import Unresolved
+        Unresolved(data).drop(list(resolved))
+    sync(data);durable_unlink(_episode_path(data))
+
+def looking_back(data,result):
+    """when this result learned (or confirmed) a wording, the disagreements kept for that wording are answered with it:
+    (experiences, the ids of the disagreements resolved, what it found)"""
+    g=result.get('gen4') if isinstance(result.get('gen4'),dict) else result
+    key=g.get('learned') if isinstance(g,dict) else None
+    if not key or result.get('kind')=='question':return [],[],[]
+    from .hindsight import look_back
+    found=look_back(data,key);out=[]
+    for f in found:
+        for p,x in f['parents'].items():
+            out.append(('parent_help',0.4,0.2,THEME+'hindsight',relation(p)) if x['right'] else ('parent_error',-0.3,0.2,THEME+'hindsight',relation(p)))
+    return out,[f['id'] for f in found],found
 
 def record(data,result):
     """send the experiences of one result to the heart (which writes the soul); returns what was recorded, or
@@ -150,6 +174,7 @@ def record(data,result):
     recover(data)
     try:life=_life(data)
     except ValueError as e:return {'refused':str(e)}
+    back,resolved,_=looking_back(data,result);ex=ex+back
     todo=[]
     for kind,v,imp,theme,rel in ex:
         if rel.startswith('#first:'):
@@ -160,8 +185,9 @@ def record(data,result):
     if not todo:return []
     from tukuyo_common.atomic_fs import atomic_write_json
     p=_episode_path(data);p.parent.mkdir(parents=True,exist_ok=True)
-    atomic_write_json(p,{'schema':EPISODE,'individual_id':own.individual(data),'soul_seq_before':_soul_seq(data),'experiences':todo,'life_after':life})
-    _live(data,todo,0);_finish(data,life)
+    atomic_write_json(p,{'schema':EPISODE,'individual_id':own.individual(data),'soul_seq_before':_soul_seq(data),'experiences':todo,'life_after':life,
+                         'resolved':resolved})
+    _live(data,todo,0);_finish(data,life,resolved)
     return [{'kind':k,'theme':t,'relation':r} for k,_,_,t,r in todo]
 
 def recover(data):
@@ -196,7 +222,7 @@ def recover(data):
             from tukuyo_v993.relation_bound import sync as relation_sync
             from tukuyo_v995.other_agent_trust import sync as peer_sync
             sync_transitions(data);relation_sync(data);peer_sync(data)
-            _finish(data,m.get('life_after') or {'first_alone':[]})
+            _finish(data,m.get('life_after') or {'first_alone':[]},m.get('resolved') or [])
         except Exception as e:  # noqa: BLE001 - e.g. the individual is no longer alive: the episode stays unfinished, said so
             why='EPISODE_UNFINISHED:'+type(e).__name__+':'+str(e)[:120]
     if why:
@@ -209,10 +235,12 @@ def life_story(data):
     """what it lived through, from its soul journal (the canonical record: forgetting the surface memory does not touch it)"""
     from tukuyo_common.journal import load_events
     from tukuyo_v977.whole_state import event_path
-    kinds={};per={};first={};last={}
+    kinds={};per={};first={};last={};back={}
     for e in load_events(event_path(data)):
         if not str(e.get('theme','')).startswith(THEME):continue
         k=e['kind'];kinds[k]=kinds.get(k,0)+1;first.setdefault(k,e['seq']);last[k]=e['seq']
+        if e.get('theme')==THEME+'hindsight':
+            q=back.setdefault(str(e.get('relation','')).split(':',1)[-1],{'right':0,'wrong':0});q['right' if k=='parent_help' else 'wrong']+=1
         rel=str(e.get('relation') or '')
         if rel.startswith('parent:') and k in ('parent_help','parent_error'):
             q=per.setdefault(rel.split(':',1)[1],{'held':0,'failed':0});q['held' if k=='parent_help' else 'failed']+=1
@@ -224,7 +252,9 @@ def life_story(data):
         if per:lines.append('From each parent, what held up / what failed: '+', '.join(f"{p} {q['held']}/{q['failed']}" for p,q in sorted(per.items()))+'.')
         if kinds.get('honesty'):lines.append(f"It withheld an answer rather than guess {times(kinds['honesty'])}.")
         if kinds.get('discovery'):lines.append(f"It solved alone with something it had learned, the first time for that wording, {times(kinds['discovery'])}.")
-    return {'experiences':kinds,'from_parents':per,'first_seq':first,'last_seq':last,'told':lines}
+        if back:lines.append('Looking back on readings it could not judge at the time, once it had learned the wording, right / wrong: '
+                             +', '.join(f"{p} {q['right']}/{q['wrong']}" for p,q in sorted(back.items()))+'.')
+    return {'experiences':kinds,'from_parents':per,'looked_back':back,'first_seq':first,'last_seq':last,'told':lines}
 
 def self_report(data,parents=('claude','chatgpt','gemini')):
     """how the child has grown: what it learned, from whom, how far it trusts each parent, and its soul and heart"""
@@ -240,12 +270,15 @@ def self_report(data,parents=('claude','chatgpt','gemini')):
     except ValueError as e:remembered=None;refused['remembered']=str(e)
     try:alone=len(_life(data)['first_alone'])
     except ValueError as e:alone=None;refused['life']=str(e)
+    from .hindsight import Unresolved
+    try:waiting=len(Unresolved(data).load()['entries'])
+    except ValueError as e:waiting=None;refused['unresolved']=str(e)
     by=dict()
     for t in (st or {}).values():
         for p in (t.get('provenance') or {}).get('parents') or []:by[p]=by.get(p,0)+1
     mine=[m for m in h.get('episodic_meanings',[]) if str(m.get('theme','')).startswith(THEME)]
     out={'templates_learned':None if st is None else len(st),'templates_by_parent':by,'remembered_answers':remembered,
-         'solved_alone_first_times':alone,
+         'solved_alone_first_times':alone,'disagreements_to_look_back_on':waiting,
          'trust_in_parents':{p:round(trust(data,p),4) for p in parents},
          'bond_with_parents':{p:s.get('attachments',{}).get(relation(p),0.0) for p in parents},
          'soul':{'core_values':s.get('core_values'),'vows':s.get('vows'),'g4_themes':{k:v for k,v in s.get('themes',{}).items() if k.startswith(THEME)}},

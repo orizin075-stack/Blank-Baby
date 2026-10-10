@@ -107,14 +107,19 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
          'readings':[{k:v for k,v in r.items() if k not in ('answer',)} for r in readings]}
     if not good:return {**out,'reason':'NO_VERIFIED_READING' if readings else 'NOT_READ'}
     vals={r['answer'] for r in good}
-    if len(vals)>1:return {**out,'reason':'DISAGREE:'+','.join(sorted(fmt(v) for v in vals))}
+    if len(vals)>1:
+        reason='DISAGREE:'+','.join(sorted(fmt(v) for v in vals))
+        if store is not None:_keep_for_later(data,text,readings,reason)
+        return {**out,'reason':reason}
     mine=[r['route'] for r in good if not r['route'].startswith('llm')]
     llms=[r for r in good if r['route'].startswith('llm')]
     fams=sorted({r.get('parent','claude') for r in llms})
     if mine:route='+'.join(dict.fromkeys(mine))+('+llm' if llms else '')
     elif len(fams)>=2:route='+'.join(fams)
     elif len(llms)>=2 and len(ps)==1:route='llm+llm'
-    else:return {**out,'reason':'SINGLE_LLM_READING','withheld':good[0]['value']}
+    else:
+        if store is not None:_keep_for_later(data,text,readings,'SINGLE_LLM_READING')
+        return {**out,'reason':'SINGLE_LLM_READING','withheld':good[0]['value']}
     g=next((r for r in good if r.get('spec')),good[0])
     res={**out,'answer':g['value'],'value':g['value'],'unit':g.get('unit'),'route':route,'reason':None}
     if learn and store is not None and llms and not any(r['route']=='learned' for r in good):
@@ -123,6 +128,12 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
         try:res['learned']=store.add(llms[0]['spec'],prov)
         except ValueError:res['learned']=None
     return res
+
+def _keep_for_later(data,text,readings,reason):
+    """what each parent's reading answered when the child had to withhold: looked back on once it learns the wording"""
+    from .hindsight import keep
+    from .learn import Store
+    keep(data,text,Store.key_of(text),readings,reason)
 
 # ----------------------------------------------------------------------------- think
 def v1022_story(base):

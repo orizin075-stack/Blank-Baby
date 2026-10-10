@@ -3,7 +3,7 @@
 v989 temporal identity, v993 relations) as generation 4 lives through it. Offline: the parents are recorded replies; no
 API key, no cost.
 
-  soul_assay.py [--work DIR] [--out REPORT.json] [--only continuity,crash,forgetting,individuality,long_life,integrity,self]
+  soul_assay.py [--work DIR] [--out REPORT.json] [--only continuity,crash,forgetting,individuality,long_life,integrity,self,close_parents]
                 [--thoughts N] [--runtime-trust-file ANCHOR]
 
 Every property is a set of checks, with the numbers behind them:
@@ -26,6 +26,9 @@ Every property is a set of checks, with the numbers behind them:
   integrity      the soul, its journal and what it learned (templates, remembered answers, its life record) are changed by
                  hand, or taken from another child: each change must be refused, detected or undone
   self           after the surface memory is erased, the child can still give an account of what it lived through
+  close_parents  a model of what the child observes of parents whose reliabilities are close (0.95, 0.90, 0.70), run
+                 through the real soul law: how often its record orders them right, how many failed readings it sees and
+                 how far apart its record keeps them, with and without looking back (hindsight.py)
 A functional assay of a functional model: it says nothing about consciousness or feeling.
 """
 from __future__ import annotations
@@ -306,6 +309,68 @@ def m_long_life(cli,work,ctx):
                              'after_first_third_100_median':round(statistics.median(cost[len(cost)//3:len(cost)//3+100])*1000,2),
                              'p95':round(q(cost,0.95)*1000,2),'median_per_100_thoughts':[round(statistics.median(cost[a:a+100])*1000,1) for a in range(0,len(cost),100)]},'seconds':round(time.time()-t0,1),'curve':curve[::max(1,len(curve)//24)]}
 
+# ----------------------------------------------------------------------------- close parents
+def _close_life(rnd,rel,variant,n=600,k=60,rho=0.3):
+    """one life of n thoughts on k wordings, as the child can observe it, through the real soul law (law 2) and trust
+    record. variant 'at_once': only what it could judge at the time (before looking back existed); 'looking_back': also
+    a checker failure when it withheld, and the disagreements it kept, answered once it learned the wording.
+    A wording it has learned it reads itself, and only the parent it trusts most checks it (as api.solve plans it)."""
+    from tukuyo_v977 import whole_state as W
+    soul=W._default_soul({'individual_id':'model'});learned={};kept={};failed={p:0 for p in PARENTS}
+    def ev(kind,p,theme):
+        nonlocal soul
+        soul=W._apply_experience_mutation(soul,kind,*((0.4,0.2) if kind=='parent_help' else (-0.3,0.2)),theme,'parent:'+p,law=2)
+        if kind=='parent_error':failed[p]+=1
+    def reading(p):
+        if rnd.random()<rel[p]:return 'right'
+        if rnd.random()<0.5:return None                                   # fails the checker
+        return 'wrong:6' if rnd.random()<rho else 'wrong:%d'%rnd.randrange(10**6)
+    for _ in range(n):
+        w=rnd.randrange(k)
+        if w in learned:
+            tr={p:W.trust_record(soul,'parent:'+p) for p in PARENTS};p=min(PARENTS,key=lambda q:(-tr[q],PARENTS.index(q)));r=reading(p)
+            if r is None:ev('parent_error',p,'g4:reading')                # its own reading answers; the parent's failed the checker
+            elif r==learned[w]:ev('parent_help',p,'g4:reading')
+            continue                                                      # a valid other answer: withheld, and no new agreement will settle it
+        rs={p:reading(p) for p in PARENTS};good={p:r for p,r in rs.items() if r is not None}
+        if len(good)>=2 and len(set(good.values()))==1:                   # the parents agree: answered and learned
+            val=next(iter(good.values()))
+            for p in sorted(good):ev('parent_help',p,'g4:reading')
+            for p in sorted(rs):
+                if rs[p] is None:ev('parent_error',p,'g4:reading')
+            learned[w]=val
+            if variant=='looking_back':
+                for e in kept.pop(w,[]):
+                    for p in sorted(e):ev('parent_help' if e[p]==val else 'parent_error',p,'g4:hindsight')
+        elif variant=='looking_back':                                      # withheld
+            for p in sorted(rs):
+                if rs[p] is None:ev('parent_error',p,'g4:reading')
+            if good:kept.setdefault(w,[]).append(good)
+    return {p:W.trust_record(soul,'parent:'+p) for p in PARENTS},failed
+
+def m_close_parents(cli,work,ctx):
+    """can the child tell close parents apart (Claude 0.95, Gemini 0.90, ChatGPT 0.70)? Many model lives (_close_life),
+    the same seeds for both variants: how often its record ranks the close pair in the right order at the end, and how
+    many failed readings it gets to see. A model of what it observes, run through the real soul law"""
+    rel={'claude':0.95,'gemini':0.90,'chatgpt':0.70};lives=int(ctx.get('lives',300));res={}
+    for variant in ('at_once','looking_back'):
+        right=0;full=0;gaps=[];failed={p:[] for p in PARENTS}
+        for i in range(lives):
+            tr,fl=_close_life(random.Random(ctx.get('seed',20261010)+i),rel,variant)
+            right+=tr['claude']>tr['gemini'];full+=tr['claude']>tr['gemini']>tr['chatgpt'];gaps.append(tr['claude']-tr['gemini'])
+            for p in PARENTS:failed[p].append(fl[p])
+        res[variant]={'close_pair_in_order':round(right/lives,3),'all_three_in_order':round(full/lives,3),'mean_gap_claude_gemini':round(statistics.mean(gaps),4),
+                      'failed_readings_seen_per_life':{p:round(statistics.mean(failed[p]),1) for p in PARENTS}}
+    a,b=res['at_once'],res['looking_back'];seen=lambda r:sum(r['failed_readings_seen_per_life'].values())
+    # what looking back is for: the child sees more of its parents' failed readings, and its record keeps close parents
+    # further apart. How often the close pair ends in the right order is reported: with the most trusted parent checking
+    # what it has learned, the child already orders them right in most lives
+    checks={'close_parents_in_order_in_most_lives':b['close_pair_in_order']>=0.9,
+            'looking_back_sees_more_failed_readings':seen(b)>=1.5*seen(a),
+            'looking_back_keeps_close_parents_further_apart':b['mean_gap_claude_gemini']>=1.5*a['mean_gap_claude_gemini']}
+    return {'ok':all(checks.values()),'checks':checks,'lives':lives,'thoughts_per_life':600,'wordings':60,'reliability':rel,**res,
+            'note':'a model of what the child observes (readings drawn at these reliabilities), run through the real soul law and trust record'}
+
 # ----------------------------------------------------------------------------- integrity
 def _reseal_learned(p,o):
     body=json.dumps(o['templates'],ensure_ascii=False,sort_keys=True);o['sha256']=hashlib.sha256(body.encode()).hexdigest()
@@ -403,7 +468,7 @@ def m_self(cli,work,ctx):
     return {'ok':all(checks.values()),'checks':checks,'journal_experiences':kinds,'told_before':tb,'told_after_forgetting':ta,
             'story_after_forgetting':a.get('life_story')}
 
-MEASURES={'continuity':m_continuity,'crash':m_crash,'forgetting':m_forgetting,'individuality':m_individuality,'long_life':m_long_life,
+MEASURES={'continuity':m_continuity,'crash':m_crash,'forgetting':m_forgetting,'individuality':m_individuality,'long_life':m_long_life,'close_parents':m_close_parents,
           'integrity':m_integrity,'self':m_self}
 
 def main():

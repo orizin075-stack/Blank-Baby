@@ -108,8 +108,8 @@ python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --ll
 
 ## 5. 残っている作業
 
-- 魂（`SOUL_ASSAY_2026-10-09.md` の「残っていること」）：古い層（`heart-experience` など）の経験は法則 1 のままです。親の確かさが近いと、子は見分けられません（見える誤りが少なすぎる）。
-- 魂の仕組みのメモ：v989 の推移の鎖は追記だけの記録 `v989/SOUL_TRANSITIONS.jsonl` です（1 行 1 推移。前の形 `SOUL_TRANSITIONS.json` は、次の経験のときに移します。読むのは `load_chain`）。心の経験は先に `v978/private/PENDING_FEELING.json` に書き留め、魂が受け取って心が受け取る前に止まったら、次の起動で心が受け取ります（`heart_loop.recover_pending`）。
+- 魂（`SOUL_ASSAY_2026-10-09.md` の「残っていること」）：古い層（`heart-experience` など）の経験は法則 1 のままです。いちばん信頼する親だけが確かめ役になるので、ほかの親の記録は育ちにくい（模擬では、確かさの近い親の順番を 7% ほどの一生で取り違える。ときどき知らない親に聞く案は、模擬で 93→95% と小さな得）。
+- 魂の仕組みのメモ：v989 の推移の鎖は追記だけの記録 `v989/SOUL_TRANSITIONS.jsonl` です（1 行 1 推移。前の形 `SOUL_TRANSITIONS.json` は、次の経験のときに移します。読むのは `load_chain`）。心の経験は先に `v978/private/PENDING_FEELING.json` に書き留め、魂が受け取って心が受け取る前に止まったら、次の起動で心が受け取ります（`heart_loop.recover_pending`）。振り返り（`hindsight.py`）：親の読みが食い違って控えた問題を `g4/unresolved.json` に覚え、同じ形を学んだ（または確かめ直した）ときに、学んだ読みで昔の問題を解いて親ごとの当たり外れを入れます（`life.looking_back`、エピソードの一部）。検査に落ちた読みは、答えを控えたときも親の誤りです。
 
 - 自前の読み取り器の範囲を広げる（英語）。日本語の FPL 読み取り器は、まだありません。日本語は v1022 の核を使っています。
 - 親での dev の測定と、学習の効果の測定（キーが必要）。親ごとの正確さと、親どうしの一致の割合も記録する。

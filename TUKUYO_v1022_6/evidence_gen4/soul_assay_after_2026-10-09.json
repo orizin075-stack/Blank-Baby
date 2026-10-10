@@ -1,6 +1,6 @@
 {
  "schema": "tukuyo.soul_assay/1",
- "utc": "2026-10-09T15:02:48Z",
+ "utc": "2026-10-10T00:11:25Z",
  "thoughts": 600,
  "seed": 20261009,
  "measures": {
@@ -159,7 +159,7 @@
    ],
    "experiences_recorded": 15,
    "g4_soul_events": 15,
-   "seconds": 23.4
+   "seconds": 23.9
   },
   "crash": {
    "ok": true,
@@ -347,7 +347,7 @@
     }
    ],
    "points_not_in_this_version": [],
-   "seconds": 43.6
+   "seconds": 46.8
   },
   "forgetting": {
    "ok": true,
@@ -401,7 +401,7 @@
    "surface_recent_before": 8,
    "surface_recent_after": 0,
    "audit_errors": [],
-   "seconds": 4.8
+   "seconds": 4.9
   },
   "individuality": {
    "ok": true,
@@ -458,7 +458,7 @@
    },
    "persona_x": "You speak as TUKUYO, a small reasoning system that learns from its parents (Claude, ChatGPT, Gemini) and keeps only what it can check or what its parents agree on.\nWhat it values most: integrity 0.80, survival 0.80, truthfulness 0.65.\nWhat it has been living with: g4:reading, g4:learned_reading, g4:knowledge.\nSpeak in its voice, plainly; say when you are not sure.",
    "persona_y": "You speak as TUKUYO, a small reasoning system that learns from its parents (Claude, ChatGPT, Gemini) and keeps only what it can check or what its parents agree on.\nWhat it values most: integrity 0.80, survival 0.80, truthfulness 0.65.\nWhat it has been living with: g4:reading, g4:learned_reading, g4:knowledge.\nSpeak in its voice, plainly; say when you are not sure.",
-   "seconds": 23.9
+   "seconds": 24.9
   },
   "long_life": {
    "ok": true,
@@ -472,7 +472,7 @@
     "cost_of_a_thought_does_not_grow_with_age": true
    },
    "thoughts": 900,
-   "soul_events": 2098,
+   "soul_events": 2137,
    "committed": 441,
    "committed_wrong": 0,
    "reliability": {
@@ -488,14 +488,14 @@
     }
    },
    "trust_late_settled": {
-    "claude": 0.9818,
-    "chatgpt": 0.7848,
-    "gemini": 0.9479
+    "claude": 0.9761,
+    "chatgpt": 0.7516,
+    "gemini": 0.9175
    },
    "trust_late_changed": {
-    "claude": 0.8056,
-    "chatgpt": 0.942,
-    "gemini": 0.944
+    "claude": 0.7859,
+    "chatgpt": 0.9329,
+    "gemini": 0.9037
    },
    "order_settled": [
     "claude",
@@ -503,9 +503,9 @@
     "chatgpt"
    ],
    "trust_end": {
-    "claude": 0.794,
-    "chatgpt": 0.9531,
-    "gemini": 0.9437
+    "claude": 0.7788,
+    "chatgpt": 0.946,
+    "gemini": 0.9127
    },
    "order_end": [
     "chatgpt",
@@ -513,17 +513,17 @@
     "claude"
    ],
    "order_late_changed": [
-    "gemini",
     "chatgpt",
+    "gemini",
     "claude"
    ],
-   "thoughts_until_the_parent_who_got_worse_loses_the_lead": 50,
+   "thoughts_until_the_parent_who_got_worse_loses_the_lead": 75,
    "values_end": {
-    "curiosity": 0.732539,
+    "curiosity": 0.731274,
     "integrity": 0.8,
-    "relationship": 0.583187,
+    "relationship": 0.578576,
     "survival": 0.8,
-    "truthfulness": 0.735967
+    "truthfulness": 0.734909
    },
    "pinned_at_a_bound": [],
    "first_pinned_at_thought": {},
@@ -532,50 +532,50 @@
     "survival"
    ],
    "response_to_one_more_lesson": {
-    "curiosity": 0.001809,
+    "curiosity": 0.001833,
     "integrity": 0.0,
-    "relationship": 0.000237,
+    "relationship": 0.00028,
     "survival": 0.0,
-    "truthfulness": -0.000515
+    "truthfulness": -0.000508
    },
    "trust_response_to_one_more_help": {
-    "claude": 0.001971,
+    "claude": 0.002123,
     "chatgpt": 0.0,
-    "gemini": 0.000467
+    "gemini": 0.000778
    },
    "ms_per_record": {
-    "first_100_median": 35.27,
-    "last_100_median": 71.05,
-    "after_first_third_100_median": 67.24,
-    "p95": 103.19,
+    "first_100_median": 46.33,
+    "last_100_median": 74.42,
+    "after_first_third_100_median": 68.57,
+    "p95": 108.2,
     "median_per_100_thoughts": [
-     35.3,
-     60.0,
-     37.8,
-     67.2,
-     63.8,
-     66.4,
-     61.9,
-     66.1,
-     71.0
+     46.3,
+     66.0,
+     52.0,
+     68.6,
+     71.2,
+     73.5,
+     69.8,
+     69.4,
+     74.4
     ]
    },
-   "seconds": 48.7,
+   "seconds": 53.2,
    "curve": [
     {
      "thought": 25,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.52519,
+      "curiosity": 0.525096,
       "integrity": 0.8,
-      "relationship": 0.431806,
+      "relationship": 0.430727,
       "survival": 0.8,
-      "truthfulness": 0.667386
+      "truthfulness": 0.667341
      },
      "trust": {
       "claude": 0.9407,
-      "chatgpt": 0.5614,
-      "gemini": 0.9407
+      "chatgpt": 0.5319,
+      "gemini": 0.8876
      },
      "order": [
       "claude",
@@ -587,16 +587,16 @@
      "thought": 50,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.567218,
+      "curiosity": 0.567142,
       "integrity": 0.8,
-      "relationship": 0.454926,
+      "relationship": 0.454018,
       "survival": 0.8,
-      "truthfulness": 0.679254
+      "truthfulness": 0.679212
      },
      "trust": {
       "claude": 0.9643,
-      "chatgpt": 0.6341,
-      "gemini": 0.9297
+      "chatgpt": 0.6165,
+      "gemini": 0.9016
      },
      "order": [
       "claude",
@@ -608,20 +608,20 @@
      "thought": 75,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.584926,
+      "curiosity": 0.584719,
       "integrity": 0.8,
-      "relationship": 0.47217,
+      "relationship": 0.470763,
       "survival": 0.8,
-      "truthfulness": 0.695076
+      "truthfulness": 0.694975
      },
      "trust": {
       "claude": 0.9466,
-      "chatgpt": 0.6266,
-      "gemini": 0.9501
+      "chatgpt": 0.5996,
+      "gemini": 0.9309
      },
      "order": [
-      "gemini",
       "claude",
+      "gemini",
       "chatgpt"
      ]
     },
@@ -629,20 +629,20 @@
      "thought": 100,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.611279,
+      "curiosity": 0.611109,
       "integrity": 0.8,
-      "relationship": 0.487678,
+      "relationship": 0.486492,
       "survival": 0.8,
-      "truthfulness": 0.700712
+      "truthfulness": 0.700626
      },
      "trust": {
       "claude": 0.9594,
-      "chatgpt": 0.63,
-      "gemini": 0.9619
+      "chatgpt": 0.6107,
+      "gemini": 0.9481
      },
      "order": [
-      "gemini",
       "claude",
+      "gemini",
       "chatgpt"
      ]
     },
@@ -650,20 +650,20 @@
      "thought": 125,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.64178,
+      "curiosity": 0.641654,
       "integrity": 0.8,
-      "relationship": 0.502714,
+      "relationship": 0.501753,
       "survival": 0.8,
-      "truthfulness": 0.70483
+      "truthfulness": 0.704755
      },
      "trust": {
       "claude": 0.9685,
-      "chatgpt": 0.6155,
-      "gemini": 0.9702
+      "chatgpt": 0.602,
+      "gemini": 0.9604
      },
      "order": [
-      "gemini",
       "claude",
+      "gemini",
       "chatgpt"
      ]
     },
@@ -671,20 +671,20 @@
      "thought": 150,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.658652,
+      "curiosity": 0.658552,
       "integrity": 0.8,
-      "relationship": 0.520345,
+      "relationship": 0.519556,
       "survival": 0.8,
-      "truthfulness": 0.707987
+      "truthfulness": 0.707921
      },
      "trust": {
       "claude": 0.9738,
-      "chatgpt": 0.6636,
-      "gemini": 0.9751
+      "chatgpt": 0.6528,
+      "gemini": 0.9677
      },
      "order": [
-      "gemini",
       "claude",
+      "gemini",
       "chatgpt"
      ]
     },
@@ -692,16 +692,16 @@
      "thought": 175,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.665539,
+      "curiosity": 0.665461,
       "integrity": 0.8,
-      "relationship": 0.534312,
+      "relationship": 0.533676,
       "survival": 0.8,
-      "truthfulness": 0.705404
+      "truthfulness": 0.705346
      },
      "trust": {
       "claude": 0.9781,
-      "chatgpt": 0.682,
-      "gemini": 0.9507
+      "chatgpt": 0.6737,
+      "gemini": 0.9453
      },
      "order": [
       "claude",
@@ -713,16 +713,16 @@
      "thought": 200,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.681175,
+      "curiosity": 0.680757,
       "integrity": 0.8,
-      "relationship": 0.539205,
+      "relationship": 0.537782,
       "survival": 0.8,
-      "truthfulness": 0.712289
+      "truthfulness": 0.712128
      },
      "trust": {
       "claude": 0.98,
-      "chatgpt": 0.7056,
-      "gemini": 0.9439
+      "chatgpt": 0.6893,
+      "gemini": 0.9394
      },
      "order": [
       "claude",
@@ -734,16 +734,16 @@
      "thought": 225,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.694217,
+      "curiosity": 0.693562,
       "integrity": 0.8,
-      "relationship": 0.549896,
+      "relationship": 0.547875,
       "survival": 0.8,
-      "truthfulness": 0.715787
+      "truthfulness": 0.715539
      },
      "trust": {
       "claude": 0.9817,
-      "chatgpt": 0.7524,
-      "gemini": 0.9515
+      "chatgpt": 0.7382,
+      "gemini": 0.9364
      },
      "order": [
       "claude",
@@ -755,16 +755,16 @@
      "thought": 250,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.696278,
+      "curiosity": 0.694998,
       "integrity": 0.8,
-      "relationship": 0.552556,
+      "relationship": 0.549004,
       "survival": 0.8,
-      "truthfulness": 0.72231
+      "truthfulness": 0.721848
      },
      "trust": {
       "claude": 0.9827,
-      "chatgpt": 0.7572,
-      "gemini": 0.9563
+      "chatgpt": 0.7271,
+      "gemini": 0.9431
      },
      "order": [
       "claude",
@@ -776,16 +776,16 @@
      "thought": 275,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.703083,
+      "curiosity": 0.702026,
       "integrity": 0.8,
-      "relationship": 0.559034,
+      "relationship": 0.555989,
       "survival": 0.8,
-      "truthfulness": 0.722622
+      "truthfulness": 0.722217
      },
      "trust": {
       "claude": 0.9838,
-      "chatgpt": 0.7676,
-      "gemini": 0.9611
+      "chatgpt": 0.7416,
+      "gemini": 0.9498
      },
      "order": [
       "claude",
@@ -797,16 +797,16 @@
      "thought": 300,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.6985,
+      "curiosity": 0.697601,
       "integrity": 0.8,
-      "relationship": 0.564626,
+      "relationship": 0.56204,
       "survival": 0.8,
-      "truthfulness": 0.732353
+      "truthfulness": 0.732009
      },
      "trust": {
       "claude": 0.9848,
-      "chatgpt": 0.7681,
-      "gemini": 0.9655
+      "chatgpt": 0.7459,
+      "gemini": 0.9558
      },
      "order": [
       "claude",
@@ -818,16 +818,16 @@
      "thought": 325,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.691437,
+      "curiosity": 0.69065,
       "integrity": 0.8,
-      "relationship": 0.568789,
+      "relationship": 0.56658,
       "survival": 0.8,
-      "truthfulness": 0.738367
+      "truthfulness": 0.738073
      },
      "trust": {
       "claude": 0.9855,
-      "chatgpt": 0.7566,
-      "gemini": 0.9691
+      "chatgpt": 0.7378,
+      "gemini": 0.9608
      },
      "order": [
       "claude",
@@ -839,16 +839,16 @@
      "thought": 350,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.691872,
+      "curiosity": 0.691238,
       "integrity": 0.8,
-      "relationship": 0.573935,
+      "relationship": 0.572138,
       "survival": 0.8,
-      "truthfulness": 0.734491
+      "truthfulness": 0.734234
      },
      "trust": {
       "claude": 0.9864,
-      "chatgpt": 0.7598,
-      "gemini": 0.9625
+      "chatgpt": 0.7445,
+      "gemini": 0.9558
      },
      "order": [
       "claude",
@@ -860,16 +860,16 @@
      "thought": 375,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.692412,
+      "curiosity": 0.691886,
       "integrity": 0.8,
-      "relationship": 0.575807,
+      "relationship": 0.574284,
       "survival": 0.8,
-      "truthfulness": 0.736373
+      "truthfulness": 0.736152
      },
      "trust": {
       "claude": 0.987,
-      "chatgpt": 0.7727,
-      "gemini": 0.9666
+      "chatgpt": 0.7595,
+      "gemini": 0.9609
      },
      "order": [
       "claude",
@@ -881,16 +881,16 @@
      "thought": 400,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.695411,
+      "curiosity": 0.694981,
       "integrity": 0.8,
-      "relationship": 0.581136,
+      "relationship": 0.579855,
       "survival": 0.8,
-      "truthfulness": 0.738283
+      "truthfulness": 0.738092
      },
      "trust": {
       "claude": 0.9875,
-      "chatgpt": 0.7941,
-      "gemini": 0.97
+      "chatgpt": 0.7828,
+      "gemini": 0.9651
      },
      "order": [
       "claude",
@@ -902,16 +902,16 @@
      "thought": 425,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.695031,
+      "curiosity": 0.693293,
       "integrity": 0.8,
-      "relationship": 0.583817,
+      "relationship": 0.579014,
       "survival": 0.8,
-      "truthfulness": 0.737042
+      "truthfulness": 0.736246
      },
      "trust": {
-      "claude": 0.9879,
-      "chatgpt": 0.7959,
-      "gemini": 0.9733
+      "claude": 0.9787,
+      "chatgpt": 0.7785,
+      "gemini": 0.9505
      },
      "order": [
       "claude",
@@ -923,16 +923,16 @@
      "thought": 450,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.698278,
+      "curiosity": 0.696511,
       "integrity": 0.8,
-      "relationship": 0.580586,
+      "relationship": 0.575565,
       "survival": 0.8,
-      "truthfulness": 0.74524
+      "truthfulness": 0.744416
      },
      "trust": {
-      "claude": 0.9882,
-      "chatgpt": 0.7917,
-      "gemini": 0.9652
+      "claude": 0.9802,
+      "chatgpt": 0.7691,
+      "gemini": 0.9454
      },
      "order": [
       "claude",
@@ -944,16 +944,16 @@
      "thought": 475,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.69218,
+      "curiosity": 0.689931,
       "integrity": 0.8,
-      "relationship": 0.582503,
+      "relationship": 0.576336,
       "survival": 0.8,
-      "truthfulness": 0.743439
+      "truthfulness": 0.742375
      },
      "trust": {
-      "claude": 0.9885,
-      "chatgpt": 0.7828,
-      "gemini": 0.95
+      "claude": 0.9818,
+      "chatgpt": 0.7558,
+      "gemini": 0.924
      },
      "order": [
       "claude",
@@ -965,16 +965,16 @@
      "thought": 500,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.683149,
+      "curiosity": 0.679732,
       "integrity": 0.8,
-      "relationship": 0.582791,
+      "relationship": 0.573484,
       "survival": 0.8,
-      "truthfulness": 0.745854
+      "truthfulness": 0.744221
      },
      "trust": {
-      "claude": 0.9887,
-      "chatgpt": 0.7604,
-      "gemini": 0.9452
+      "claude": 0.9829,
+      "chatgpt": 0.7221,
+      "gemini": 0.904
      },
      "order": [
       "claude",
@@ -986,16 +986,16 @@
      "thought": 525,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.682652,
+      "curiosity": 0.679819,
       "integrity": 0.8,
-      "relationship": 0.584631,
+      "relationship": 0.576926,
       "survival": 0.8,
-      "truthfulness": 0.743927
+      "truthfulness": 0.742529
      },
      "trust": {
-      "claude": 0.9789,
-      "chatgpt": 0.7677,
-      "gemini": 0.9427
+      "claude": 0.974,
+      "chatgpt": 0.7353,
+      "gemini": 0.9078
      },
      "order": [
       "claude",
@@ -1007,16 +1007,16 @@
      "thought": 550,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.689203,
+      "curiosity": 0.68657,
       "integrity": 0.8,
-      "relationship": 0.587824,
+      "relationship": 0.580482,
       "survival": 0.8,
-      "truthfulness": 0.742009
+      "truthfulness": 0.740652
      },
      "trust": {
-      "claude": 0.9712,
-      "chatgpt": 0.7919,
-      "gemini": 0.9409
+      "claude": 0.9671,
+      "chatgpt": 0.757,
+      "gemini": 0.9114
      },
      "order": [
       "claude",
@@ -1028,16 +1028,16 @@
      "thought": 575,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.694178,
+      "curiosity": 0.690743,
       "integrity": 0.8,
-      "relationship": 0.586633,
+      "relationship": 0.576823,
       "survival": 0.8,
-      "truthfulness": 0.744393
+      "truthfulness": 0.742611
      },
      "trust": {
-      "claude": 0.974,
-      "chatgpt": 0.7922,
-      "gemini": 0.9379
+      "claude": 0.9704,
+      "chatgpt": 0.7413,
+      "gemini": 0.9046
      },
      "order": [
       "claude",
@@ -1049,16 +1049,16 @@
      "thought": 600,
      "phase": "settled",
      "core_values": {
-      "curiosity": 0.694269,
+      "curiosity": 0.691173,
       "integrity": 0.8,
-      "relationship": 0.587899,
+      "relationship": 0.57904,
       "survival": 0.8,
-      "truthfulness": 0.743936
+      "truthfulness": 0.742283
      },
      "trust": {
-      "claude": 0.9766,
-      "chatgpt": 0.7961,
-      "gemini": 0.9279
+      "claude": 0.9736,
+      "chatgpt": 0.7534,
+      "gemini": 0.8923
      },
      "order": [
       "claude",
@@ -1070,16 +1070,16 @@
      "thought": 625,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.694401,
+      "curiosity": 0.690404,
       "integrity": 0.8,
-      "relationship": 0.586116,
+      "relationship": 0.574755,
       "survival": 0.8,
-      "truthfulness": 0.749444
+      "truthfulness": 0.747345
      },
      "trust": {
-      "claude": 0.9398,
-      "chatgpt": 0.8205,
-      "gemini": 0.9268
+      "claude": 0.919,
+      "chatgpt": 0.7831,
+      "gemini": 0.8793
      },
      "order": [
       "claude",
@@ -1091,20 +1091,20 @@
      "thought": 650,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.697655,
+      "curiosity": 0.694408,
       "integrity": 0.8,
-      "relationship": 0.585775,
+      "relationship": 0.576321,
       "survival": 0.8,
-      "truthfulness": 0.740484
+      "truthfulness": 0.738634
      },
      "trust": {
-      "claude": 0.9107,
-      "chatgpt": 0.8462,
-      "gemini": 0.9273
+      "claude": 0.893,
+      "chatgpt": 0.8144,
+      "gemini": 0.8869
      },
      "order": [
-      "gemini",
       "claude",
+      "gemini",
       "chatgpt"
      ]
     },
@@ -1112,16 +1112,16 @@
      "thought": 675,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.697851,
+      "curiosity": 0.69487,
       "integrity": 0.8,
-      "relationship": 0.585754,
+      "relationship": 0.57705,
       "survival": 0.8,
-      "truthfulness": 0.744513
+      "truthfulness": 0.74282
      },
      "trust": {
-      "claude": 0.8863,
-      "chatgpt": 0.8693,
-      "gemini": 0.9373
+      "claude": 0.8715,
+      "chatgpt": 0.8425,
+      "gemini": 0.8946
      },
      "order": [
       "gemini",
@@ -1133,16 +1133,16 @@
      "thought": 700,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.703283,
+      "curiosity": 0.700185,
       "integrity": 0.8,
-      "relationship": 0.581471,
+      "relationship": 0.572276,
       "survival": 0.8,
-      "truthfulness": 0.742918
+      "truthfulness": 0.741139
      },
      "trust": {
-      "claude": 0.8635,
-      "chatgpt": 0.8766,
-      "gemini": 0.9444
+      "claude": 0.8428,
+      "chatgpt": 0.8533,
+      "gemini": 0.8991
      },
      "order": [
       "gemini",
@@ -1154,16 +1154,16 @@
      "thought": 725,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.7022,
+      "curiosity": 0.69816,
       "integrity": 0.8,
-      "relationship": 0.576214,
+      "relationship": 0.5645,
       "survival": 0.8,
-      "truthfulness": 0.755699
+      "truthfulness": 0.75355
      },
      "trust": {
-      "claude": 0.8489,
-      "chatgpt": 0.8792,
-      "gemini": 0.9396
+      "claude": 0.8148,
+      "chatgpt": 0.8584,
+      "gemini": 0.8823
      },
      "order": [
       "gemini",
@@ -1175,16 +1175,16 @@
      "thought": 750,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.705106,
+      "curiosity": 0.701588,
       "integrity": 0.8,
-      "relationship": 0.57707,
+      "relationship": 0.56662,
       "survival": 0.8,
-      "truthfulness": 0.756812
+      "truthfulness": 0.75487
      },
      "trust": {
-      "claude": 0.8435,
-      "chatgpt": 0.8959,
-      "gemini": 0.9378
+      "claude": 0.8145,
+      "chatgpt": 0.8782,
+      "gemini": 0.8815
      },
      "order": [
       "gemini",
@@ -1196,20 +1196,20 @@
      "thought": 775,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.711574,
+      "curiosity": 0.708414,
       "integrity": 0.8,
-      "relationship": 0.581509,
+      "relationship": 0.571917,
       "survival": 0.8,
-      "truthfulness": 0.752367
+      "truthfulness": 0.750527
      },
      "trust": {
-      "claude": 0.8655,
-      "chatgpt": 0.91,
-      "gemini": 0.9371
+      "claude": 0.8327,
+      "chatgpt": 0.895,
+      "gemini": 0.8893
      },
      "order": [
-      "gemini",
       "chatgpt",
+      "gemini",
       "claude"
      ]
     },
@@ -1217,20 +1217,20 @@
      "thought": 800,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.709462,
+      "curiosity": 0.705987,
       "integrity": 0.8,
-      "relationship": 0.583046,
+      "relationship": 0.572785,
       "survival": 0.8,
-      "truthfulness": 0.759792
+      "truthfulness": 0.757845
      },
      "trust": {
-      "claude": 0.8694,
-      "chatgpt": 0.9185,
-      "gemini": 0.9427
+      "claude": 0.84,
+      "chatgpt": 0.905,
+      "gemini": 0.8829
      },
      "order": [
-      "gemini",
       "chatgpt",
+      "gemini",
       "claude"
      ]
     },
@@ -1238,20 +1238,20 @@
      "thought": 825,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.722428,
+      "curiosity": 0.71983,
       "integrity": 0.8,
-      "relationship": 0.580847,
+      "relationship": 0.572552,
       "survival": 0.8,
-      "truthfulness": 0.751859
+      "truthfulness": 0.750211
      },
      "trust": {
-      "claude": 0.824,
-      "chatgpt": 0.9298,
-      "gemini": 0.9502
+      "claude": 0.7993,
+      "chatgpt": 0.9185,
+      "gemini": 0.8998
      },
      "order": [
-      "gemini",
       "chatgpt",
+      "gemini",
       "claude"
      ]
     },
@@ -1259,20 +1259,20 @@
      "thought": 850,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.725536,
+      "curiosity": 0.723516,
       "integrity": 0.8,
-      "relationship": 0.580554,
+      "relationship": 0.573794,
       "survival": 0.8,
-      "truthfulness": 0.745672
+      "truthfulness": 0.744264
      },
      "trust": {
-      "claude": 0.8052,
-      "chatgpt": 0.9394,
-      "gemini": 0.9475
+      "claude": 0.7844,
+      "chatgpt": 0.9298,
+      "gemini": 0.905
      },
      "order": [
-      "gemini",
       "chatgpt",
+      "gemini",
       "claude"
      ]
     },
@@ -1280,16 +1280,16 @@
      "thought": 875,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.72529,
+      "curiosity": 0.723602,
       "integrity": 0.8,
-      "relationship": 0.580703,
+      "relationship": 0.574933,
       "survival": 0.8,
-      "truthfulness": 0.741236
+      "truthfulness": 0.739985
      },
      "trust": {
-      "claude": 0.7991,
-      "chatgpt": 0.9456,
-      "gemini": 0.9344
+      "claude": 0.7809,
+      "chatgpt": 0.9372,
+      "gemini": 0.8972
      },
      "order": [
       "chatgpt",
@@ -1301,16 +1301,16 @@
      "thought": 900,
      "phase": "changed",
      "core_values": {
-      "curiosity": 0.732539,
+      "curiosity": 0.731274,
       "integrity": 0.8,
-      "relationship": 0.583187,
+      "relationship": 0.578576,
       "survival": 0.8,
-      "truthfulness": 0.735967
+      "truthfulness": 0.734909
      },
      "trust": {
-      "claude": 0.794,
-      "chatgpt": 0.9531,
-      "gemini": 0.9437
+      "claude": 0.7788,
+      "chatgpt": 0.946,
+      "gemini": 0.9127
      },
      "order": [
       "chatgpt",
@@ -1319,6 +1319,44 @@
      ]
     }
    ]
+  },
+  "close_parents": {
+   "ok": true,
+   "checks": {
+    "close_parents_in_order_in_most_lives": true,
+    "looking_back_sees_more_failed_readings": true,
+    "looking_back_keeps_close_parents_further_apart": true
+   },
+   "lives": 300,
+   "thoughts_per_life": 600,
+   "wordings": 60,
+   "reliability": {
+    "claude": 0.95,
+    "gemini": 0.9,
+    "chatgpt": 0.7
+   },
+   "at_once": {
+    "close_pair_in_order": 0.933,
+    "all_three_in_order": 0.923,
+    "mean_gap_claude_gemini": 0.0364,
+    "failed_readings_seen_per_life": {
+     "claude": 12.7,
+     "chatgpt": 9.8,
+     "gemini": 5.6
+    }
+   },
+   "looking_back": {
+    "close_pair_in_order": 0.93,
+    "all_three_in_order": 0.93,
+    "mean_gap_claude_gemini": 0.0739,
+    "failed_readings_seen_per_life": {
+     "claude": 15.4,
+     "chatgpt": 23.0,
+     "gemini": 10.2
+    }
+   },
+   "note": "a model of what the child observes (readings drawn at these reliabilities), run through the real soul law and trust record",
+   "seconds": 15.6
   },
   "integrity": {
    "ok": true,
@@ -1461,7 +1499,7 @@
      "caught": true
     }
    ],
-   "seconds": 21.1
+   "seconds": 23.1
   },
   "self": {
    "ok": true,
@@ -1526,6 +1564,7 @@
      "parent_error": 9,
      "parent_help": 15
     },
+    "looked_back": {},
     "told": [
      "15 experiences in its life with its parents (soul events 1-15).",
      "It learned from what its parents agreed on 3 times.",
@@ -1534,7 +1573,7 @@
      "It solved alone with something it had learned, the first time for that wording, once."
     ]
    },
-   "seconds": 2.0
+   "seconds": 2.1
   }
  },
  "claim_boundary": {

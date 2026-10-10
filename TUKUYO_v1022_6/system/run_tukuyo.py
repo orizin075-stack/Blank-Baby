@@ -789,8 +789,11 @@ def _main(argv=None):
                     m=g4_memory.audit(data)
                     try:g4_life._life(data);lv={'ok':True}
                     except ValueError as e:lv={'ok':False,'reason':str(e)}
+                    from tukuyo_g4.hindsight import Unresolved as g4_unresolved
+                    try:ur={'ok':True,'kept':len(g4_unresolved(data).load()['entries'])}
+                    except ValueError as e:ur={'ok':False,'reason':str(e)}
                     pend=(Path(data)/'g4'/'private'/'EPISODE.json').is_file();aside=(Path(data)/'g4'/'private'/'EPISODE.abandoned.json').is_file()
-                    res={**res,'ok':bool(res.get('ok')) and m['ok'] and lv['ok'] and not pend,'remembered':m,'life_record':lv,'episode_pending':pend,
+                    res={**res,'ok':bool(res.get('ok')) and m['ok'] and lv['ok'] and ur['ok'] and not pend,'remembered':m,'life_record':lv,'unresolved':ur,'episode_pending':pend,
                          'episode_set_aside':aside}   # a thought whose experiences could not be finished (see the startup actions)
             elif args.cmd in ('research-run','research-status','research-audit'):
                 if args.cmd=='research-run':_require_live(data)

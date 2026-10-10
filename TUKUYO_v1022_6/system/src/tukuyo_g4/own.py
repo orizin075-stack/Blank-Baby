@@ -1,7 +1,7 @@
 """generation 4: what the child learned is its own.
 
-Its stores - the readings it learned (g4/learned.json), the answers its parents agreed on (g4/remembered.json) and the
-record of its life (g4/life.json) - are signed with the individual's own key (the v977 whole-state key) and bound to its
+Its stores - the readings it learned (g4/learned.json), the answers its parents agreed on (g4/remembered.json), the
+record of its life (g4/life.json) and the disagreements it keeps to look back on (g4/unresolved.json) - are signed with the individual's own key (the v977 whole-state key) and bound to its
 id, and the whole state (v977 UNIFIED_STATE) records their hashes. A store changed by hand, or taken from another child,
 is refused when it is read, and whole-audit reports it.
 
@@ -14,7 +14,7 @@ import hashlib,json
 from pathlib import Path
 
 SCHEMA='tukuyo.g4.own/1'
-KINDS={'learned':'g4/learned.json','remembered':'g4/remembered.json','life':'g4/life.json'}
+KINDS={'learned':'g4/learned.json','remembered':'g4/remembered.json','life':'g4/life.json','unresolved':'g4/unresolved.json'}
 COMPONENTS={'g4_'+k:v for k,v in KINDS.items()}
 
 def body_sha(o):return hashlib.sha256(json.dumps(o,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
@@ -63,7 +63,7 @@ def check(data,kind,sha,signed):
 def body(kind,o):
     """the signed part of each store"""
     if kind=='learned':return o['templates']
-    if kind=='remembered':return o['entries']
+    if kind in ('remembered','unresolved'):return o['entries']
     return o['life'] if 'life' in o else {'first_alone':o.get('first_alone',[])}
 
 def unsynced(data):

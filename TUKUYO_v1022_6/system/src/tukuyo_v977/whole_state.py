@@ -186,7 +186,8 @@ def _component_hashes(data):
     if (d/'v1022_ecology'/'commits').exists():pairs['runtime_metabolism_v1022']='v1022_ecology/STATE.json'
     if (d/'v1023r'/'commits').exists():pairs['open_world_research_v1023r']='v1023r/STATE.json'
     # generation 4: what the child learned from its parents and the record of its life (tukuyo_g4.own)
-    if (d/'g4').exists():pairs.update({'g4_learned':'g4/learned.json','g4_remembered':'g4/remembered.json','g4_life':'g4/life.json'})
+    if (d/'g4').exists():pairs.update({'g4_learned':'g4/learned.json','g4_remembered':'g4/remembered.json','g4_life':'g4/life.json',
+                                       'g4_unresolved':'g4/unresolved.json'})
     return {k:_file_sha(d/v) for k,v in pairs.items()}
 
 def sync(data):

@@ -129,3 +129,36 @@ def test_asking_a_new_child_about_itself_changes_nothing(tmp_path,child):
     cli,rec,base=child;d=tmp_path/'new';shutil.copytree(base,d)
     me=cli(d,'g4-self');assert me['ok'] and me['trust_in_parents']=={'claude':0.5,'chatgpt':0.5,'gemini':0.5}
     assert not (d/'v978'/'HEART_STATE.json').exists() and cli(d,'whole-audit')['ok']
+
+def test_a_reading_that_fails_the_checker_is_a_mistake_even_when_the_child_withholds():
+    from tukuyo_g4 import life
+    r={'answer':None,'reason':'DISAGREE:12,8','readings':[{'route':'llm_claude_story','parent':'claude','ok':True,'value':'12'},
+       {'route':'llm_gemini_story','parent':'gemini','ok':True,'value':'8'},{'route':'llm_chatgpt_story','parent':'chatgpt','ok':False,'reason':'CHECK:SPAN_NOT_IN_TEXT:x'}]}
+    # who of claude and gemini was wrong nobody can tell yet; chatgpt's reading did not hold up at all
+    assert life.experiences(r)==[('parent_error',-0.3,0.2,'g4:reading','parent:chatgpt'),('honesty',0.5,0.3,'g4:withheld','')]
+
+def test_looking_back_tells_who_was_right(tmp_path):
+    # the parents disagree on a wording (claude 12, gemini 8): the child withholds and keeps the disagreement. Later two
+    # parents agree on the same wording with other numbers (17): it learns it, answers the old text with it (12) and
+    # looks back - claude had been right, gemini wrong - in the same episode as the learning, even across a kill
+    import test_g4_life as G
+    cli=_cli();T5b=G.T5.replace('30','45');R5b=json.loads(json.dumps(G.R5).replace('30','45'))
+    other5=json.loads(json.dumps(G.R5));other5['facts'][3]['eq']='three * number + six = result'
+    rec=tmp_path/'p.jsonl'
+    rec.write_text('\n'.join([_line('claude',G.T5,G.R5),_line('gemini',G.T5,other5),_line('claude',T5b,R5b),_line('chatgpt',T5b,R5b)])+'\n',encoding='utf-8')
+    d=tmp_path/'c';cli(d,'init','--individual-id','SOUL-LOOKBACK')
+    r=cli(d,'think','--',G.T5,replay=rec);assert r['answer'] is None and r['reason']=='DISAGREE:12,8'
+    assert cli(d,'g4-self')['disagreements_to_look_back_on']==1
+    k=tmp_path/'killed';shutil.copytree(d,k)
+    r=cli(d,'think','--',T5b,replay=rec);assert r['answer']=='17' and r['gen4']['learned']
+    assert [x for x in r['life'] if x['theme']=='g4:hindsight']==[{'kind':'parent_help','theme':'g4:hindsight','relation':'parent:claude'},
+                                                                 {'kind':'parent_error','theme':'g4:hindsight','relation':'parent:gemini'}]
+    me=cli(d,'g4-self');assert me['disagreements_to_look_back_on']==0
+    assert me['life_story']['looked_back']=={'claude':{'right':1,'wrong':0},'gemini':{'right':0,'wrong':1}}
+    assert me['trust_in_parents']['gemini']<0.5<me['trust_in_parents']['claude']
+    assert cli(d,'whole-audit')['ok'] and cli(d,'g4-audit')['ok']
+    # the same thought, killed after its first experience: the next start finishes it, looking back included, once
+    assert cli(k,'think','--',T5b,replay=rec,crash='g4:after_experience').get('rc')==-9
+    assert cli(k,'whole-audit')['ok']
+    assert [(e['kind'],e['theme'],e['relation']) for e in _g4_events(k)]==[(e['kind'],e['theme'],e['relation']) for e in _g4_events(d)]
+    assert cli(k,'g4-self')['disagreements_to_look_back_on']==0 and _felt(k)==[e['event_sha256'] for e in _g4_events(k)]
