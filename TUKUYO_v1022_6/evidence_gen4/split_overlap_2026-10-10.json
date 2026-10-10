@@ -1,0 +1,27 @@
+{
+ "split_overlap": {
+  "sets": {
+   "asdiv": {
+    "dev": 1083,
+    "test": 1009,
+    "test_with_a_dev_wording": 6
+   },
+   "svamp": {
+    "dev": 0,
+    "test": 1000,
+    "test_with_a_dev_wording": 0
+   },
+   "mgsm_ja": {
+    "dev": 139,
+    "test": 111,
+    "test_with_a_dev_wording": 0
+   }
+  },
+  "stores": {
+   "measurement_individuals": 20,
+   "templates": 38,
+   "from_a_test_problem": 0
+  },
+  "note": "counts only; no test problem is shown or sent anywhere"
+ }
+}

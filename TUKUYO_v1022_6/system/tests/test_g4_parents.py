@@ -30,6 +30,22 @@ def test_which_parents_are_configured(clean):
     m.setenv('TUKUYO_LLM_PARENTS','gemini,claude');assert llm.parents()==['claude','gemini']
     m.setenv('TUKUYO_LLM_VOICE','gemini');assert llm.voice()=='gemini'
 
+def test_readiness_says_what_is_missing_and_asks_no_parent_unless_live(tmp_path,clean):
+    m=clean;sent=[]
+    m.setattr(llm,'reachable',lambda p,timeout=10:'blocked' if p=='chatgpt' else 'ok')
+    m.setattr(llm,'installed',lambda p:True)
+    m.setattr(llm,'call',lambda *a,**k:sent.append(k.get('parent')) or {'ok':True,'model':'fixture','usage':{},'ms':1})
+    r=llm.readiness()['parents']
+    assert r['claude']['missing']==['key'] and r['chatgpt']['missing']==['key','model','network'] and r['gemini']['missing']==['key','model']
+    m.setenv('TUKUYO_GEMINI_API_KEY','secret-value-1234');m.setenv('TUKUYO_GEMINI_MODEL','m')
+    r=llm.readiness()
+    assert r['parents']['gemini']['ready'] and r['parents']['gemini']['key']=='set' and 'secret-value-1234' not in json.dumps(r)
+    assert not sent and r['paid_call_made'] is False                       # without live, nothing is sent
+    r=llm.readiness(live=True)
+    assert sent==['gemini'] and r['paid_call_made'] is True and r['parents']['gemini']['live']['ok']
+    rec=tmp_path/'replay.jsonl';rec.write_text('',encoding='utf-8');m.setenv('TUKUYO_LLM_REPLAY',str(rec))
+    assert llm.readiness(live=True)['paid_call_made'] is False            # a replayed call costs nothing
+
 def _replay(tmp_path,entries):
     """entries: (parent, text, reading or None) -> a replay file; None leaves that parent's reading out"""
     lines=[]

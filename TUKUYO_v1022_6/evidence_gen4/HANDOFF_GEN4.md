@@ -16,7 +16,7 @@
   - 1 つの親の読みだけが通ったときは、答えを保留します（`SINGLE_LLM_READING`）。読みが食い違えば答えません（`DISAGREE`）。
 - 親の読みが一致して答えが確定したら、その読みを型として覚えます（どの親が一致したかも記録）。同じ文で数だけが違う問題は、次から親なしで解けます。
 - 計算の問題でない問い（知識・会話）は、声の親（`TUKUYO_LLM_VOICE`、既定は最初の親）が答えます。`g4-ask --voices all` で、全部の親の答えと、一致しているか（`agree`）を見られます。どれも「確かめていない」答えです。
-- この子と魂（`life.py`・`memory.py`・`own.py`）：考えたことのうち学びになったこと（親から学んだ・親の誤り・正直に控えた・独りで解けた・知識を覚えた）を、心と魂に正式な経験として渡します。第4世代の経験は魂の法則 2（`tukuyo_v977/whole_state.py` の `_law2`）で入り、各経験の記録に `law: 2` が残ります（古い層は法則 1 のまま、どちらも記録からやり直せる）。親への信頼は、魂がその親ごとに持つ記録 `trust`（当たった読み・外れた読み、最近ほど重い）から計算し（`whole_state.trust_record`）、いちばん信頼する親が声になり、声には魂から作った人柄を渡します。2 つ以上の親が一致した短い答えは `g4/remembered.json` に覚えます（確かめた答えではない）。学んだもの 3 つ（型・答え・自分の記録）は個体の鍵で署名し、全体の状態にも記録します（`own.py`）。1 つの考えの経験は `g4/private/EPISODE.json` に先に書き、次の起動が残りを渡し終えます（`life.recover`、`tukuyo_v1014_2/crash_recovery.py`）。成長の記録は `g4-self`（`life_story` は魂の記録から）。魂らしさは `tools/soul_assay.py` で測ります（`SOUL_ASSAY_2026-10-09.md`）。親の本物の測定では、親ごとの信頼がどう育つかも記録すること。
+- この子と魂（`life.py`・`memory.py`・`own.py`）：考えたことのうち学びになったこと（親から学んだ・親の誤り・正直に控えた・独りで解けた・知識を覚えた）を、心と魂に正式な経験として渡します。第4世代の経験は魂の法則 2（`tukuyo_v977/whole_state.py` の `_law2`）で入り、各経験の記録に `law: 2` が残ります（古い層は法則 1 のまま、どちらも記録からやり直せる）。親への信頼は、魂がその親ごとに持つ記録 `trust`（当たった読み・外れた読み、最近ほど重い）から計算し（`whole_state.trust_record`）、いちばん信頼する親が声になり、声には魂から作った人柄を渡します。2 つ以上の親が一致した短い答えは `g4/remembered.json` に覚えます（確かめた答えではない）。学んだもの 3 つ（型・答え・自分の記録）は個体の鍵で署名し、全体の状態にも記録します（`own.py`）。1 つの考えの経験は `g4/private/EPISODE.json` に先に書き、次の起動が残りを渡し終えます（`life.recover`、`tukuyo_v1014_2/crash_recovery.py`）。成長の記録は `g4-self`（`life_story` は魂の記録から）。魂らしさは `tools/soul_assay.py` で測ります（`SOUL_ASSAY_2026-10-09.md`）。親の言葉が子を汚さないか（声・覚える答え・学んだ読みの隔離と教え直し・送るもの）は `tools/contamination_assay.py` で測ります（`CONTAMINATION_2026-10-10.md`、6 項目すべて合格）。親の本物の測定では、親ごとの信頼がどう育つかも記録すること。
 - 自前の読み取り器は男女を知りません。2 人以上が出てくる he/she は、直前の主語として読んだうえで、ほかの読み方（同じ人を he とも she とも呼ばないもの）もすべて試します。別の答えになる読み方が 1 つでもあれば答えません。
 
 ## 2. 今の結果（2026-10-10）
@@ -66,7 +66,7 @@ ASDiv の開発用 1,083 問（他の人が作った英語の文章題）、親�
 | Gemini | `TUKUYO_GEMINI_API_KEY` | `TUKUYO_GEMINI_MODEL`（**既定なし**） |
 
 2. ChatGPT と Gemini のモデル名は、そのときの各社の文書で今のモデルを確かめ、セッションの中で `export` します（コードには既定を置いていません。名前がよく変わるため）。
-3. ネットワーク：2026-10-08 の時点で、この作業環境から `api.anthropic.com` と `generativelanguage.googleapis.com` には届き、**`api.openai.com` は環境のネットワークの決まりで止められていました**。ChatGPT を使うには、環境の設定の Network access で `api.openai.com` を Allowed domains に足すか、許す範囲を広げてもらいます。
+3. ネットワーク：2026-10-08 と 2026-10-10 の時点で、この作業環境から `api.anthropic.com` と `generativelanguage.googleapis.com` には届き、**`api.openai.com` は環境のネットワークの決まりで止められていました**。ChatGPT を使うには、環境の設定の Network access で `api.openai.com` を Allowed domains に足すか、許す範囲を広げてもらいます。
 4. 道具を入れます：`pip install anthropic openai google-genai`（使う親の分だけでよい）。
 5. 問題集を取ってきます：`python3 -B tools/g4_bench.py fetch DATA`。sha256 を固定してあります。
 6. 生きた個体を作ります。日本語の v1022 の核と、学んだ型の置き場所に使います。
@@ -76,14 +76,20 @@ cd TUKUYO_v1022_6/system
 python3 -B run_tukuyo.py --runtime-trust-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt --data WORK/v1022_individual init
 ```
 
-7. まず少数で試します。`--limit 10` は、各問題集の dev から決まった 10 問を取ります（毎回同じ 10 問）。結果の `llm_usage` に、親ごとの呼び出しの数とトークン数が出ます（`claude:calls`、`gemini:output_tokens` など）。ここから本当の費用を計算してください。
+7. 親につながるかを確かめます。`g4-parents` は、親ごとにキーがあるか（中身は出さない）・モデル・道具・ネットワークを見て、`ready` と足りないもの（`missing`）を返します。どの親にも何も頼みません（ネットワークは、キーを付けずに各社の入口に届くかだけを見ます）。`--live` を付けると、準備のできた親ごとに 1 回だけ、短い有料の呼び出し（「OK」と返させる）をします。
+
+```bash
+python3 -B run_tukuyo.py --runtime-trust-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt --data WORK/v1022_individual g4-parents
+```
+
+8. まず少数で試します。`--limit 10` は、各問題集の dev から決まった 10 問を取ります（毎回同じ 10 問）。結果の `llm_usage` に、親ごとの呼び出しの数とトークン数が出ます（`claude:calls`、`gemini:output_tokens` など）。ここから本当の費用を計算してください。
 
 ```bash
 export TUKUYO_LLM_RECORD=$HOME/g4_llm_record.jsonl   # 親の返事をすべて記録（あとで再生できる）
 python3 -B tools/g4_bench.py run DATA --system g4 --split dev --limit 10 --llm on --work WORK --out trial.json --show 10
 ```
 
-8. 利用者が費用を承認したら、dev 全体を回します。`--learn` を付けると、親の一致した読みを型として覚えます。親を絞るときは `TUKUYO_LLM_PARENTS=claude,gemini` のようにします。
+9. 利用者が費用を承認したら、dev 全体を回します。`--learn` を付けると、親の一致した読みを型として覚えます。親を絞るときは `TUKUYO_LLM_PARENTS=claude,gemini` のようにします。
 
 ```bash
 python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --llm on --learn --work WORK --out mgsm_dev.json --show 10
@@ -99,6 +105,21 @@ python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --ll
 - 目安（Claude だけのとき）：試し（`--limit 10`、20 問）で約 2〜4 ドル、MGSM の dev 139 問で約 11〜28 ドル、SVAMP のテスト 1,000 問で約 80〜200 ドル。親が増えれば、そのぶん増えます。
 - これは見積もりです。試しの `llm_usage` から計算した本当の費用で、見積もりを直してください。
 - **実行する前に、どこまでやるか（費用）を利用者に確認すること。**
+
+### 親が問題集を覚えていないか（汚染の探針）
+
+`tools/g4_contamination_probe.py` で調べます（`CONTAMINATION_2026-10-10.md` §4）。親に送るのは dev の問題だけです。テストの問題は、どこにも表示も送信もしません。
+
+```bash
+python3 -B tools/g4_contamination_probe.py DATA --items 50                    # 何回呼ぶかを言うだけ（費用 0）
+python3 -B tools/g4_contamination_probe.py DATA --simulate                    # 探針自身の確認、作りものの親で（費用 0）
+python3 -B tools/g4_contamination_probe.py DATA --split-overlap --stores WORK/個体のデータ ...   # テストの漏れ、数だけ（費用 0）
+python3 -B tools/g4_contamination_probe.py DATA --items 50 --allow-paid --out probe.json      # 費用の了承のあとだけ
+```
+
+- 数を変えた問題での正しさの差（正確な二項検定）と、問題の前半からの続きの一致を、親ごとに出します（`signs_of_memory`）。
+- 50 組で、親 1 つあたり 150 回の呼び出しです（読み 100・続き 50）。読みは 1 回あたり入力が約 1,500〜2,000 トークンで、出力と値段はふつうの読みと同じです（上の目安）。Claude だけなら、読み 100 回で約 4〜10 ドルです。続きの呼び出しは、出力が 400 トークンまでです。
+- `--allow-paid` を付けない限り（または `TUKUYO_LLM_REPLAY` を指定しない限り）、どの親にも聞きません。
 
 ### 親を使わない計測
 
@@ -120,6 +141,8 @@ python3 -B tools/g4_bench.py run DATA --system g4 --split dev --set mgsm_ja --ll
 
 - 自前の読み取り器の範囲を広げる（英語）。日本語の FPL 読み取り器は、まだありません。日本語は v1022 の核を使っています。
 - 親での dev の測定と、学習の効果の測定（キーが必要）。親ごとの正確さと、親どうしの一致の割合も記録する。
+- 親での汚染の探針（`g4_contamination_probe.py --allow-paid`、キーと費用の了承が必要）。本物の親で、声の印（`voice`）がふつうの返事に付きすぎないか、覚えない答え（`not_remembered`）がどれくらいあるかも記録する。
+- 汚染の手当ての限り（`CONTAMINATION_2026-10-10.md` §5）：声と記憶の見分けは言葉の型による。親が全員そろって同じ間違いをすると、隔離も教え直しも起きない。
 - 版の名前・README・署名・リリース zip（第4世代の版として）。
 
 ## 6. 署名（新しいセッションで）

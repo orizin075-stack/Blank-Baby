@@ -9,7 +9,12 @@ any other, so a template can never commit an answer that the checker refuses.
   skeleton(text)          -> (key, ...)               the text with numbers as #0 #1 ...
   template(spec)          -> template | None          from a checked reading
   instantiate(t, text)    -> spec | None              the template read with the numbers of a new text
-  Store(dir)              learned templates of one individual (learned.json with a sha256 seal); add, find, audit
+  Store(dir)              learned templates of one individual (learned.json with a sha256 seal); add, find, contest, audit
+
+A template two parents taught can still be wrong in a way the checker cannot see. When two different parents later
+read the same wording to another answer (api.solve asks the other parents when the one asked disagrees with a template),
+the template is contested: it is kept, with who contested it, but it no longer reads a problem. Two parents who agree
+later may teach that wording again; the contested reading is kept in the new template's history ('replaced').
 """
 from __future__ import annotations
 import copy,hashlib,json,os,re,time
@@ -121,13 +126,26 @@ class Store:
         tpl=template(spec)
         if tpl is None:return None
         o=s.load();tid=hashlib.sha256(tpl['key'].encode()).hexdigest()[:24]
-        old=o['templates'].get(tid)
-        if old and json.dumps(old['reading'],sort_keys=True)!=json.dumps(tpl['reading'],sort_keys=True):
+        old=o['templates'].get(tid);same=old is not None and json.dumps(old['reading'],sort_keys=True)==json.dumps(tpl['reading'],sort_keys=True)
+        now=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())
+        if old and old.get('contested'):
+            # a contested wording is taught again only with another reading; the contested one goes to the history
+            if same:return None
+            hist=list(old.get('replaced') or [])+[{k:old.get(k) for k in ('reading','example','provenance','learned_utc','contested_by')}]
+            o['templates'][tid]={**tpl,'example':spec['text'],'provenance':provenance,'seen':1,'learned_utc':now,'replaced':hist}
+            s.save(o);return tid
+        if old and not same:
             old['conflicts']=old.get('conflicts',0)+1;s.save(o);return None
         if old:
             old['seen']=old.get('seen',1)+1;s.save(o);return tid
-        o['templates'][tid]={**tpl,'example':spec['text'],'provenance':provenance,'seen':1,'learned_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}
+        o['templates'][tid]={**tpl,'example':spec['text'],'provenance':provenance,'seen':1,'learned_utc':now}
         s.save(o);return tid
+    def contest(s,tid,by):
+        """two different parents read this wording to another answer: the template no longer reads a problem"""
+        o=s.load();t=o['templates'].get(tid)
+        if t is None:return False
+        t['contested']=True;t['contested_by']=list(t.get('contested_by') or [])+[{**by,'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}]
+        s.save(o);return True
     def audit(s):
         """every template must reproduce its own example: instantiate, solve, check"""
         from .solve import solve
@@ -138,4 +156,4 @@ class Store:
             r=solve(spec) if spec else {'ok':False}
             c=check(spec,r['values']) if r.get('ok') else {'ok':False}
             if not c.get('ok'):bad.append(tid)
-        return {'ok':not bad,'templates':len(o['templates']),'bad':bad}
+        return {'ok':not bad,'templates':len(o['templates']),'bad':bad,'contested':sorted(k for k,t in o['templates'].items() if t.get('contested'))}

@@ -9,6 +9,8 @@ TUKUYO generation 4 learns from three parents: Claude (Anthropic), ChatGPT (Open
                              independent readings (api.py).
   answer(question, parent)   for what is not a problem (knowledge, conversation): a parent's reply, always unverified.
   parents()                  the parents that can be asked now, in the order claude, chatgpt, gemini.
+  readiness(live)            for each parent: is its key set (never shown), which model, is its package installed, does
+                             the network reach its host; with live=True one short paid call to each parent that is ready.
 
 Configuration (environment; keys are never written anywhere, and the host's own ANTHROPIC_*, OPENAI_*, GEMINI_* and
 GOOGLE_* variables are never read):
@@ -164,7 +166,10 @@ as your own statement, not as something TUKUYO has checked."""
 # ----------------------------------------------------------------------------- transport
 PARENTS=('claude','chatgpt','gemini')
 KEY_ENV={'claude':'TUKUYO_ANTHROPIC_API_KEY','chatgpt':'TUKUYO_OPENAI_API_KEY','gemini':'TUKUYO_GEMINI_API_KEY'}
+MODEL_ENV={'claude':'TUKUYO_LLM_MODEL','chatgpt':'TUKUYO_OPENAI_MODEL','gemini':'TUKUYO_GEMINI_MODEL'}
 PACKAGE={'claude':'anthropic','chatgpt':'openai','gemini':'google-genai'}
+MODULE={'claude':'anthropic','chatgpt':'openai','gemini':'google.genai'}
+HOST={'claude':'https://api.anthropic.com','chatgpt':'https://api.openai.com','gemini':'https://generativelanguage.googleapis.com'}
 
 def _env(k):return os.environ.get(k,'').strip()
 
@@ -314,14 +319,51 @@ def call(kind,system,user,schema=None,max_tokens=16000,parent='claude'):
         return {**{k:r.get(k) for k in ('ok','text','model','request_id','usage','reason')},'hash':h,'replayed':True,'parent':parent}
     if not s['key']:return {'ok':False,'reason':'LLM_NOT_CONFIGURED','parent':parent}
     if not s['model']:return {'ok':False,'reason':'MODEL_NOT_SET','parent':parent}
-    try:__import__({'claude':'anthropic','chatgpt':'openai','gemini':'google.genai'}[parent])
-    except ImportError:return {'ok':False,'reason':'PACKAGE_MISSING:'+PACKAGE[parent],'parent':parent}
+    if not installed(parent):return {'ok':False,'reason':'PACKAGE_MISSING:'+PACKAGE[parent],'parent':parent}
     t=time.monotonic()
     out={**CALL[parent](s,system,user,schema,max_tokens),'ms':int((time.monotonic()-t)*1000),'hash':h,'parent':parent}
     if s['record']:
         with _lock,open(s['record'],'a',encoding='utf-8') as f:
             f.write(json.dumps({'parent':parent,'hash':h,'kind':_kind(parent,kind),**{k:out.get(k) for k in ('ok','reason','text','model','request_id','usage')}},ensure_ascii=False)+'\n')
     return out
+
+# ----------------------------------------------------------------------------- is it ready to ask its parents?
+def installed(parent):
+    try:__import__(MODULE[parent]);return True
+    except ImportError:return False
+
+def reachable(parent,timeout=10):
+    """does the network reach the parent's host? An HTTP answer of any status means yes; nothing is sent but a GET of the
+    root, without a key. 'blocked' when a proxy refuses the host (the environment's network policy)"""
+    import urllib.error,urllib.request
+    from urllib.parse import urlsplit
+    u=urlsplit((settings(parent).get('base_url') or HOST[parent]).rstrip('/'))
+    try:urllib.request.urlopen(urllib.request.Request(f'{u.scheme}://{u.netloc}/',method='GET'),timeout=timeout);return 'ok'
+    except urllib.error.HTTPError:return 'ok'
+    except urllib.error.URLError as e:
+        r=str(getattr(e,'reason',e))
+        return 'blocked' if ('403' in r or 'Tunnel' in r or 'Forbidden' in r) else 'unreachable:'+r[:120]
+    except Exception as e:  # noqa: BLE001 - a check, never a failure of the caller
+        return 'unreachable:'+type(e).__name__
+
+def readiness(live=False):
+    """what asking each parent needs, and whether it is there. live: one short paid call to each parent that is ready"""
+    out={}
+    for p in PARENTS:
+        s=settings(p)
+        pkg=installed(p)
+        r={'key_variable':KEY_ENV[p],'key':'set' if s['key'] else 'not set','model_variable':MODEL_ENV[p],
+           'model':s['model'] or None,'package':PACKAGE[p],'package_installed':pkg,'network':reachable(p)}
+        missing=[x for x,ok in (('key',s['key']),('model',bool(s['model'])),('package',pkg),('network',r['network']=='ok')) if not ok]
+        r['ready']=not missing;r['missing']=missing
+        if live and r['ready']:
+            c=call('ping:1','Reply with the single word OK.','OK?',max_tokens=256,parent=p)
+            r['live']={k:c.get(k) for k in ('ok','reason','model','usage','ms')}
+        out[p]=r
+    ps=parents();rp=_env('TUKUYO_LLM_REPLAY') or None
+    return {'parents':out,'used':ps,'voice':voice() if ps else None,'replay':rp,
+            'paid_call_made':bool(live and not rp and any(x['ready'] for x in out.values())),   # a replayed call costs nothing
+            'note':'keys are read from the environment only and never shown; without --live no request is sent to any parent'}
 
 # ----------------------------------------------------------------------------- uses
 def read(text,view='story',lang=None,parent='claude'):

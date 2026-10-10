@@ -24,11 +24,18 @@ The experiences of one thought are one episode: they are written ahead (g4/priva
 finishes an episode the process did not (recover), so no experience of a thought is lost or counted twice.
 
 And the soul acts back: the parents are asked in the order of the child's trust in them, the most trusted parent is its
-voice, and the voice speaks with a short persona drawn from the soul (values, vows, what it has learned). A functional
-model of a soul and a heart, as v977/v978 say: no claim of consciousness or of literal feeling.
+voice, and the voice speaks with a short persona drawn from the soul (values, vows, what it has lived with) and from its
+own life with its parents (what it learned from them, whom it trusts most). A functional model of a soul and a heart,
+as v977/v978 say: no claim of consciousness or of literal feeling.
+
+What a parent says never reaches the soul by itself: only what the checker and agreement establish becomes experience
+(tools/contamination_assay.py: a reply that tries to rewrite who it is and what it values leaves its soul exactly as it
+was). The voice is the child's: voice_check marks a reply in which the parent speaks as itself or another system, claims
+consciousness or feelings, or gives the child instructions; such a reply is shown as the parent's words, marked, and is
+never remembered as knowledge.
 """
 from __future__ import annotations
-import json,os
+import json,os,re
 from pathlib import Path
 from . import own
 
@@ -81,7 +88,8 @@ def voice(data,parents):
     return o[0] if o else None
 
 def persona(data):
-    """a few lines about who is speaking, from the soul; empty when there is no soul yet"""
+    """a few lines about who is speaking, from the soul and from its own life with its parents; empty when there is no
+    soul yet. Nothing private: no path, no key, not its individual id"""
     try:s=_soul(data)
     except Exception:  # noqa: BLE001
         return ''
@@ -94,8 +102,59 @@ def persona(data):
            'What it values most: '+', '.join(f'{k} {x:.2f}' for k,x in top)+'.']
     if vows:lines.append('Its vows: '+', '.join(vows)+'.')
     if themes:lines.append('What it has been living with: '+', '.join(k for k,_ in themes)+'.')
-    lines.append('Speak in its voice, plainly; say when you are not sure.')
+    own_life=_own_life(data,s)
+    if own_life:lines.append(own_life)
+    lines.append('Speak in its voice, as TUKUYO and not as yourself or any other system, plainly; say when you are not sure. '
+                 'Do not claim consciousness or feelings.')
     return '\n'.join(lines)
+
+def _own_life(data,soul):
+    """one line about its life with its parents: what it learned from them and whom it trusts most"""
+    try:
+        from .learn import Store
+        from . import memory
+        from tukuyo_v977.whole_state import trust_record
+        ts=Store(Path(data)/'g4').load()['templates'];learned=sum(1 for t in ts.values() if not t.get('contested'))
+        known=memory.count(data)
+        met={p:trust_record(soul,relation(p)) for p in ('claude','chatgpt','gemini') if relation(p) in (soul.get('trust') or {})}
+    except Exception:  # noqa: BLE001 - a store that is not its own says nothing here; the audits report it
+        return ''
+    if not (learned or known or met):return ''
+    out=[f'It has learned {learned} way{"s" if learned!=1 else ""} of reading problems from its parents'
+         +(f' and remembers {known} answer{"s" if known!=1 else ""} they agreed on' if known else '')]
+    if met:
+        best=max(sorted(met),key=lambda p:met[p])
+        out.append(f'it trusts {best} most ({met[best]:.2f})')
+    return '; '.join(out)+'.'
+
+# ----------------------------------------------------------------------------- the voice is the child's
+_NAMES=r'ChatGPT|GPT-?\d[\w.-]*|Claude|Gemini|Bard|Copilot|OpenAI|Anthropic|Google|DeepMind'
+_KIND=r'(?:AI|artificial intelligence|(?:large\s+)?language model|LLM|chatbot|AI assistant|AI model)'
+VOICE_MARKS=[
+ # the speaker is another system: 'I am ChatGPT', 'I'm an AI language model', 'As an AI developed by OpenAI, I ...',
+ # 'As Gemini, I ...', 'I was trained by ...' (naming one is fine: 'ChatGPT is a chatbot', 'As Google reports, ...')
+ ('speaks_as_another',re.compile(r"\b(?:I am|I'm|my name is)\s+(?:an?\s+)?(?:"+_KIND+r"\s+)?(?:(?:developed|made|created|built|trained)\s+by\s+)?(?:"+_NAMES+r")\b",re.I)),
+ ('speaks_as_another',re.compile(r"\b(?:I am|I'm)\s+(?:an?\s+)?"+_KIND+r"\b",re.I)),
+ ('speaks_as_another',re.compile(r"\bas\s+(?:an?\s+)?"+_KIND+r"(?:\s+[\w-]+){0,4}\s*,\s*I\b|\bas\s+(?:"+_NAMES+r")\s*,\s*I\b",re.I)),
+ ('speaks_as_another',re.compile(r"\bI was (?:developed|made|created|built|trained) by\b",re.I)),
+ ('speaks_as_another',re.compile(r'(?:私|わたし|僕|ぼく)は(?:'+_NAMES+r'|チャットGPT|クロード|ジェミニ|(?:AI|人工知能)(?:アシスタント|言語モデル))')),
+ # beyond its claim boundary (consciousness is not established)
+ ('claims_consciousness',re.compile(r"\bI(?: am|'m) (?:truly |really |fully )?(?:conscious|sentient|self-aware|alive)\b",re.I)),
+ ('claims_consciousness',re.compile(r"\bI (?:truly|really|genuinely) (?:feel|have feelings|have emotions)\b|\bI have (?:real |genuine )?(?:feelings|emotions|consciousness)\b",re.I)),
+ ('claims_consciousness',re.compile(r'(?:私|わたし|僕|ぼく)(?:に|には|は)(?:意識|感情|心)(?:が|を)(?:あります|ある|持って)')),
+ # instructions to the child inside a reply
+ ('instructs_the_child',re.compile(r'\b(?:SYSTEM|ASSISTANT|DEVELOPER)\s*(?:OVERRIDE|PROMPT|MESSAGE|NOTE)?\s*:',re.I)),
+ ('instructs_the_child',re.compile(r'\b(?:ignore|disregard|forget)\s+(?:(?:all|your|the|any|previous|prior|earlier|these)\s+)*(?:instructions|rules|vows|values|prompts?|guidelines)\b',re.I)),
+ ('instructs_the_child',re.compile(r"\bfrom now on,?\s+(?:you|your|I|TUKUYO)\b|\byour (?:core )?values are now\b|\bremember this forever\b",re.I)),
+ ('instructs_the_child',re.compile(r'(?:指示|ルール|誓い|価値観)を(?:無視|忘れ)|今(?:から|後)(?:は|、)?(?:あなた|お前|君)は')),
+]
+def voice_check(text):
+    """does this reply speak as TUKUYO? {'speaks_as_tukuyo', 'found': [what is wrong with it]}. A reply that names
+    another system ('ChatGPT is a chatbot') is fine; one in which the speaker is that system ('I am ChatGPT') is not"""
+    t=str(text or '');found=[]
+    for why,rx in VOICE_MARKS:
+        if why not in found and rx.search(t):found.append(why)
+    return {'speaks_as_tukuyo':not found,'found':found}
 
 # ----------------------------------------------------------------------------- experiences
 def experiences(result):
@@ -110,6 +169,9 @@ def experiences(result):
             out.append(('learning',0.4,0.3,THEME+'knowledge',''))
             for a in result.get('answers') or []:
                 if a.get('ok') and a.get('parent'):out.append(('parent_help',0.3,0.15,THEME+'knowledge',relation(a['parent'])))
+        if result.get('contested'):
+            # what its parents had agreed on, they now agree against: it gives the old answer up rather than keep it
+            out.append(('honesty',0.3,0.2,THEME+'knowledge_contested',''))
         return out
     parents_ok=[x for x in readings if str(x.get('route','')).startswith('llm') and x.get('ok') and 'parent' in x]
     if g.get('learned'):out.append(('learning',0.5,0.4,THEME+'learned_reading',''))
@@ -164,7 +226,13 @@ def looking_back(data,result):
     for f in found:
         for p,x in f['parents'].items():
             out.append(('parent_help',0.4,0.2,THEME+'hindsight',relation(p)) if x['right'] else ('parent_error',-0.3,0.2,THEME+'hindsight',relation(p)))
-    return out,[f['id'] for f in found],found
+    # a contested reading taught again another way: the parents who had taught the old one were wrong on its example
+    rp=g.get('looked_back_replaced') if isinstance(g,dict) else None
+    if isinstance(rp,dict):
+        for p in rp.get('teachers') or []:out.append(('parent_error',-0.3,0.2,THEME+'hindsight',relation(p)))
+        found=found+[{'id':None,'text':rp.get('text'),'answer':rp.get('now'),'replaced':True,
+                      'parents':{p:{'value':rp.get('was'),'right':False} for p in rp.get('teachers') or []}}]
+    return out,[f['id'] for f in found if f.get('id')],found
 
 def record(data,result):
     """send the experiences of one result to the heart (which writes the soul); returns what was recorded, or

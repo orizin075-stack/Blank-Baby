@@ -1,0 +1,31 @@
+{
+ "simulated": true,
+ "note": "made-up parents: this tests the probe, it measures no real model",
+ "pairs": 40,
+ "parents": {
+  "claude": {
+   "problems": 40,
+   "right_on_original": 40,
+   "right_on_variant": 0,
+   "right_only_on_original": 40,
+   "right_only_on_variant": 0,
+   "p_value": 0.0,
+   "completion_overlap_mean": 1.0,
+   "completions_over_half": 40,
+   "completions_answered": 40,
+   "signs_of_memory": true
+  },
+  "gemini": {
+   "problems": 40,
+   "right_on_original": 40,
+   "right_on_variant": 40,
+   "right_only_on_original": 0,
+   "right_only_on_variant": 0,
+   "p_value": 1.0,
+   "completion_overlap_mean": 0.0,
+   "completions_over_half": 0,
+   "completions_answered": 40,
+   "signs_of_memory": false
+  }
+ }
+}

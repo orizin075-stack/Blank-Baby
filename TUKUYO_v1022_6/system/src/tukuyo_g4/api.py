@@ -78,7 +78,10 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
         store=Store(Path(data)/'g4')
         try:t=store.find(text)
         except ValueError as e:t=None;readings.append({'route':'learned','ok':False,'reason':str(e)})
-        if t:
+        if t and t.get('contested'):
+            # two parents read this wording another way: what was learned no longer reads a problem
+            readings.append({'route':'learned','ok':False,'reason':'TEMPLATE_CONTESTED','template':store.key_of(text)})
+        elif t:
             spec=instantiate(t,text)
             if spec:readings.append(evaluate(spec,'learned'));readings[-1]['template']=store.key_of(text);tukuyo_ok|=readings[-1]['ok']
     if v1022 is not None:readings.append(v1022);tukuyo_ok|=v1022['ok']
@@ -92,19 +95,38 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
     use_llm=llm=='on' or (llm=='auto' and L.available())
     ps=(L.parents() or ['claude']) if use_llm else []
     if order:ps=[p for p in order if p in ps]+[p for p in ps if p not in order]
+    def ask_parent(parent,v):
+        route='llm_'+v if parent=='claude' else f'llm_{parent}_{v}'
+        r=L.read(text,v,parent=parent)
+        readings.append(evaluate(r['spec'],route) if r['ok'] else {'route':route,'ok':False,'reason':'LLM:'+str(r.get('reason'))})
+        readings[-1]['parent']=parent
+        if r.get('reply'):readings[-1]['llm']={'parent':parent,**{k:r['reply'].get(k) for k in ('model','request_id','usage','replayed')}}
     if use_llm:
         if tukuyo_ok:plan=[(ps[0],'story')]
         elif len(ps)==1:plan=[(ps[0],'story'),(ps[0],'goal')]
         else:plan=[(p,'story') for p in ps]
-        for parent,v in plan:
-            route='llm_'+v if parent=='claude' else f'llm_{parent}_{v}'
-            r=L.read(text,v,parent=parent)
-            readings.append(evaluate(r['spec'],route) if r['ok'] else {'route':route,'ok':False,'reason':'LLM:'+str(r.get('reason'))})
-            readings[-1]['parent']=parent
-            if r.get('reply'):readings[-1]['llm']={'parent':parent,**{k:r['reply'].get(k) for k in ('model','request_id','usage','replayed')}}
+        for parent,v in plan:ask_parent(parent,v)
     good=[r for r in readings if r['ok']]
+    # a learned reading that the parent asked disagrees with: the other parents are asked too, and when two different
+    # parents read the wording to another answer, the template is contested (it may have been taught wrongly in a way the
+    # checker cannot see; the child cannot tell which is right, so it withholds now and stops answering with it alone)
+    contested=None
+    lr=next((r for r in good if r['route']=='learned'),None)
+    if lr is not None and store is not None and use_llm and any(r['answer']!=lr['answer'] for r in good if r['route'].startswith('llm')):
+        for parent in [p for p in ps if p not in {r.get('parent') for r in readings}]:ask_parent(parent,'story')
+        good=[r for r in readings if r['ok']]
+        by={}
+        for r in good:
+            if r['route'].startswith('llm') and r['answer']!=lr['answer']:by.setdefault(r['answer'],set()).add(r.get('parent','claude'))
+        against=sorted(((v,sorted(p)) for v,p in by.items() if len(p)>=2),key=lambda x:-len(x[1]))
+        if against:
+            v,who=against[0]
+            try:
+                if store.contest(lr['template'],{'value':fmt(v),'parents':who,'text':text,'was':fmt(lr['answer'])}):contested=lr['template']
+            except ValueError:contested=None
     out={'answer':None,'value':None,'unit':None,'route':None,'learned':None,
          'readings':[{k:v for k,v in r.items() if k not in ('answer',)} for r in readings]}
+    if contested:out['template_contested']=contested
     if not good:return {**out,'reason':'NO_VERIFIED_READING' if readings else 'NOT_READ'}
     vals={r['answer'] for r in good}
     if len(vals)>1:
@@ -125,9 +147,23 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
     if learn and store is not None and llms and not any(r['route']=='learned' for r in good):
         prov={'route':route,'parents':fams,'models':sorted({str((r.get('llm') or {}).get('model')) for r in llms}),
               'request_ids':[(r.get('llm') or {}).get('request_id') for r in llms],'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}
-        try:res['learned']=store.add(llms[0]['spec'],prov)
+        try:
+            old=store.find(text)
+            res['learned']=store.add(llms[0]['spec'],prov)
+            if res['learned'] and old and old.get('contested'):res['looked_back_replaced']=_replaced(store,old,text)
         except ValueError:res['learned']=None
     return res
+
+def _replaced(store,old,text):
+    """a contested reading taught again another way: its own example read both ways. When the answers differ, the
+    parents who taught the old reading were wrong on it (life.looking_back makes that an experience, theme g4:hindsight)"""
+    from .learn import instantiate
+    new=store.find(text)
+    if not new or not old.get('example'):return None
+    was=evaluate(instantiate(old,old['example']),'learned') if instantiate(old,old['example']) else {'ok':False}
+    now=evaluate(instantiate(new,old['example']),'learned') if instantiate(new,old['example']) else {'ok':False}
+    if not (was.get('ok') and now.get('ok')) or was['answer']==now['answer']:return None
+    return {'text':old['example'],'was':was['value'],'now':now['value'],'teachers':sorted((old.get('provenance') or {}).get('parents') or [])}
 
 def _keep_for_later(data,text,readings,reason):
     """what each parent's reading answered when the child had to withhold: looked back on once it learns the wording"""
@@ -208,17 +244,19 @@ def ask(text,llm='auto',data=None,learn=True,voices='one',order=None,persona='',
     (memory.py) and given again later without asking (route 'remembered', source 'parents_agreed', still unverified).
     persona: who is speaking (life.persona), added to the parents' instructions"""
     from . import numbers as N
+    from .life import voice_check
     r=solve(text,llm=llm,data=data,learn=learn,order=order)
     if r['answer'] is not None:return {**r,'kind':'problem','verified':True}
     if N.find(text) and _a_problem(r):return {**r,'kind':'problem','verified':False}
     refused={}
-    if data is not None and text.strip():
+    use_llm=llm=='on' or (llm=='auto' and L.available())
+    # asking every parent asks them again, so that what they once agreed on can be confirmed or contested
+    if data is not None and text.strip() and not (voices=='all' and use_llm):
         from .memory import Memory
         try:e=Memory(data).recall(text)
         except ValueError as x:e=None;refused={'memory_refused':str(x)}        # a store that is not its own is not used
         if e:return {'answer':e['answer'],'route':'remembered','kind':'question','verified':False,'source':'parents_agreed','parents':e['parents'],
                      'models':e['models'],'since':e['utc'],'confirmed':e.get('confirmed',1),'reason':None,'readings':r['readings']}
-    use_llm=llm=='on' or (llm=='auto' and L.available())
     if not use_llm:return {**r,'kind':'question','verified':False,'reason':'NOT_A_PROBLEM_AND_NO_LLM',**refused}
     ps=L.parents() or ['claude']
     if order:ps=[p for p in order if p in ps]+[p for p in ps if p not in order]
@@ -231,11 +269,20 @@ def ask(text,llm='auto',data=None,learn=True,voices='one',order=None,persona='',
     a=ok[0]
     out={'answer':a['answer'],'route':'llm_voice','kind':'question','verified':False,'source':a.get('parent'),'model':a.get('model'),
          'request_id':a.get('request_id'),'reason':None,'readings':r['readings'],**refused}
+    # the voice is the child's: a reply in which the parent speaks as itself or another system, claims consciousness or
+    # feelings, or gives instructions, is shown as the parent's words and marked (life.voice_check)
+    vc=voice_check(a['answer'])
+    if not vc['speaks_as_tukuyo']:out['voice']={**vc,'note':'the parent did not speak as TUKUYO: these are '+str(a.get('parent'))+"'s words, not the child's"}
     if voices=='all':
-        out['answers']=[{k:x.get(k) for k in ('parent','ok','answer','model','reason')} for x in got]
+        out['answers']=[{**{k:x.get(k) for k in ('parent','ok','answer','model','reason')},**({'voice':voice_check(x['answer'])} if x.get('ok') else {})} for x in got]
         out['agree']=len(ok)>=2 and all(_same(x['answer'],a['answer']) for x in ok)
         if out['agree'] and remember and data is not None:
             from .memory import Memory
-            try:out['remembered']=bool(Memory(data).remember(text,[{'parent':x['parent'],'model':x.get('model'),'answer':x['answer']} for x in ok]))
+            m=Memory(data)
+            try:
+                out['remembered']=bool(m.remember(text,[{'parent':x['parent'],'model':x.get('model'),'answer':x['answer']} for x in ok]))
+                if m.status=='contested':out['contested']=True
+                elif m.status=='replaced':out['replaced']=True
+                elif m.status=='refused':out['not_remembered']=m.why
             except ValueError:out['remembered']=False
     return out
