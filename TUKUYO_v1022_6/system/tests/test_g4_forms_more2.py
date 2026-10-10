@@ -93,9 +93,12 @@ ABSTAIN=[
 ABSTAIN_GUARDS=[
  'Pens come in boxes of 12 and pencils in boxes of 18. Lisa bought the same number of boxes of each. What is the smallest number of pens she can buy?',
  'Mia swims every 4 days and runs every 6 days. She did both today. In how many days will she swim again?',
+ 'Mia swims every 4 days and runs every 6 days. She swam today. In how many days will she swim and run on the same day again?',
  'Sam visits the library every 8 days. Tom visits the library every 12 days. How many times will they both visit on the same day in 48 days?',
  'Lily is 31 years old. She is 7 years older than three times her son\'s age. How old will her son be in 5 years?',
  'Lily is 31 years old and has 2 cats. She is 7 years older than three times her son\'s age. How old is her son?',
+ # two people named before 'his': Tom (as people read) or Sam, with two answers; TUKUYO does not know genders
+ 'Tom is 40 years old. Sam is 10 years old. His age is 4 times the age of Max. How old is Max?',
  'A rectangle is 8 cm long and 5 cm wide. What is the area of a square with the same perimeter?',
  'A garden is 8 meters long and 5 meters wide. A path around it is 1 meter wide. What is the area of the garden?',
  'A rug is 6 feet long and 4 feet wide. What is the area of the rug in square inches?',

@@ -1,0 +1,108 @@
+{
+ "utc": "2026-10-10T13:46:24Z",
+ "seed": 20261008,
+ "note": "no parent is called; dev splits only",
+ "fuzz": {
+  "texts": 4245,
+  "entry_points": [
+   "numbers",
+   "forms",
+   "reader",
+   "solve",
+   "ask",
+   "think"
+  ],
+  "crashes": 0,
+  "by_kind": {},
+  "examples": {},
+  "seconds": 73.8,
+  "seconds_total": 74.0
+ },
+ "specs": {
+  "readings": 6000,
+  "crashes": 0,
+  "by_kind": {},
+  "seconds": 3.7,
+  "seconds_total": 3.7
+ },
+ "mutate": {
+  "readings": 380,
+  "mutations": {
+   "number_not_in_text": {
+    "n": 380,
+    "caught": 380,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "span_not_in_text": {
+    "n": 380,
+    "caught": 380,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "number_in_relation": {
+    "n": 380,
+    "caught": 380,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "binding_dropped": {
+    "n": 380,
+    "caught": 380,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "unit_changed": {
+    "n": 380,
+    "caught": 379,
+    "passed_same_answer": 1,
+    "passed_other_answer": 0,
+    "caught_pct": 99.7
+   },
+   "contradiction_added": {
+    "n": 380,
+    "caught": 380,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "number_declared_unused": {
+    "n": 380,
+    "caught": 361,
+    "passed_same_answer": 19,
+    "passed_other_answer": 0,
+    "caught_pct": 95.0
+   },
+   "operator_changed": {
+    "n": 338,
+    "caught": 172,
+    "passed_same_answer": 1,
+    "passed_other_answer": 165,
+    "caught_pct": 50.9
+   },
+   "other_quantity_asked": {
+    "n": 380,
+    "caught": 0,
+    "passed_same_answer": 8,
+    "passed_other_answer": 372,
+    "caught_pct": 0.0
+   }
+  },
+  "seconds_total": 8.2
+ },
+ "learn": {
+  "templates": 373,
+  "from_readings": 380,
+  "audit_ok": true,
+  "agree_with_own_reader": 708,
+  "template_abstains": 149,
+  "no_template": 15,
+  "template_only": 1,
+  "disagreements": [],
+  "seconds_total": 43.4
+ }
+}

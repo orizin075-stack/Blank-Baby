@@ -636,6 +636,8 @@ def parse_question(st,a,b):
         ask.update(much=True,kind='amount');rest=(am.group(1)+' '+am.group(2)).split();m=True
     if m is True:pass
     elif not m:
+        dm=re.search(r"\b(?:what is|what's|what was|find|calculate|determine)\s+the\s+difference\s+(?:between|of|in)\s+(.+)$",low)
+        if dm:return _difference_question(st,ask,toks,dm.group(1))
         m2=re.search(r'\b(?:what is|what was|what will be|find)\s+(?:the\s+)?(total|number|sum|cost|price|value|amount|difference|total number|total cost|total value)\s+of\s+(.*)$',low)
         if not m2:no('QUESTION_FORM')
         ask['much']=m2.group(1) in ('cost','price','value','total cost','total value')
@@ -737,6 +739,107 @@ def parse_question(st,a,b):
     if ask.residue:
         qn={x.noun for x in ask['qframes'] if x.noun}|{w for x in ask['qframes'] for w in (x.adj or ())}
         ask['residue']=[w for w in ask.residue if sing(w) not in qn and w not in qn] or None
+    return ask
+
+def _difference_side(st,toks,ws):
+    """one side of 'the difference between X and Y': (owner, adjectives, noun); the noun may be left to the other side
+    ('Omar's')"""
+    ws=[w for w in ws if w not in ('the','a','an')]
+    owner=None
+    if len(ws)>1 and ws[0] in ('mr','mrs','ms','miss','dr','mister') and ws[1].endswith("'s"):ws=ws[1:]
+    if ws and ws[0].endswith("'s"):
+        tk=next((x for x in toks if x.low==ws[0] and st.is_name(x)),None)
+        if tk is None:no('DIFFERENCE_OWNER')
+        owner=st.person(tk.w,tk.s);ws=ws[1:]
+    elif ws and ws[0] in ('my','our','your','his','her','their'):
+        tk=next(x for x in toks if x.low==ws[0])
+        who=st.resolve(ws[0],at=tk.s);ws=ws[1:]
+        if ws and ws[0].endswith("'s") and ws[0][:-2] in KIN:owner=who+"'s "+sing(ws[0][:-2]);ws=ws[1:]
+        else:owner=who
+    if any(w.endswith("'s") or w in NOT_NOUN or w=='#' for w in ws):no('DIFFERENCE_SIDE')
+    return owner,tuple(ws[:-1]),(sing(ws[-1]) if ws else None)
+
+WHEN_START=r'\b(?:before|in the beginning|at first|originally|at the start|initially|to begin with|to start with)\b'
+WHEN_END=r'\b(?:after|left|now|in the end|at the end|remaining|still)\b'
+def _time_side(st,x):
+    """('start', None) | ('end', None) | ('event', verb family) | None for one side of a difference question"""
+    if re.search(WHEN_START,x):return ('start',None)
+    verbs={fam(f.verb) for f in st.frames if f.kind=='change' and f.verb}
+    # 'the customers that left' is what happened; 'the number left' is what remains; when people leave in the story,
+    # a bare 'left' could be either
+    went=re.search(r'\b(?:that|who|which) left\b',x)
+    if re.search(WHEN_END,re.sub(r'\b(?:that|who|which) left\b','',x)):
+        if re.search(r'\bleft\b',x) and not went and fam('left') in verbs:return None
+        return ('end',None)
+    vs={fam(w) if fam(w) in verbs else fam(lemma(w)) for w in x.split() if fam(w) in verbs or fam(lemma(w)) in verbs}
+    return ('event',vs.pop()) if len(vs)==1 else None
+
+def _time_noun(st,x):
+    held={f.noun for f in st.frames if f.m is not None and f.kind in ('state','change')}
+    ws=[sing(w) for w in x.split()]
+    named=[w for w in ws if w in held]
+    if len(named)==1:return named[0]
+    return next(iter(held)) if len(held)==1 and not named else None
+
+def schema_diff_time(st,ask):
+    """the difference between one holding at two times, or between it and what happened to it"""
+    if ask.kind!='diff_time' or ask.qframes or ask.residue:return None
+    noun=ask.noun
+    if noun is None:return None
+    owners={f.owner for f in st.frames if f.noun==noun and f.kind in ('state','change') and f.m is not None}
+    if len(owners)!=1 or None in owners:return None
+    owner=owners.pop()
+    # both sides are about the one holder ('the number Leo has now' is not about Ana's marbles)
+    if any(n!=owner for n in ask.names or ()):return None
+    if any(f.m is not None and f.noun!=noun for f in st.frames):return None
+    # 'after buying' is the holding after that one event: with two events or more it could be a holding in between
+    if len([f for f in st.frames if f.kind=='change' and f.noun==noun])>1:return None
+    p=Plan(st,'diff_time')
+    sts=[f for f in st.frames if f.kind=='state' and f.noun==noun and f.m is not None]
+    if {sd[0] for sd in ask.sides}=={'start','end'} and len(sts)==2 and sts[0].span!=sts[1].span and \
+       not any(f.kind!='state' for f in st.frames if f.m is not None):
+        # 'A store had 15 chairs. After selling some, there were 3 left.': the holding stated before and after
+        start=p.bind(sts[0],f'{noun}_before',noun);last=p.bind(sts[1],f'{noun}_after',noun)
+    else:start,last=timeline(p,owner,noun)
+    def q(side):
+        kind,verb=side
+        if kind=='start':return start
+        if kind=='end':return last
+        fs=[f for f in st.frames if f.kind=='change' and f.noun==noun and fam(f.verb)==verb and f.get('_q')]
+        if len(fs)!=1:no('DIFFERENCE_EVENT')
+        return fs[0]['_q']
+    x,y=(q(sd) for sd in ask.sides)
+    if x is None or y is None or x==y:return None
+    t=p.new(f'difference_{noun}',noun);p.rel(f'{t} = abs({x} - {y})',ask.text)
+    return p,t,noun
+
+def _difference_question(st,ask,toks,phrase):
+    """'what is the difference between the number of Lena's stickers and Omar's stickers', 'between the number of red
+    pens and blue pens': two holdings the story gives, of the same kind of thing; the larger minus the smaller
+    (schema_diff with ask.absolute). Other questions about a difference are not read."""
+    if '#' in phrase.split():no('QUESTION_DIFFERENCE')
+    m=re.fullmatch(r"(?:the )?(?:numbers?|amounts?) of (.+?) and (?:the )?(?:(?:numbers?|amounts?) of )?(.+)",phrase) or \
+      re.fullmatch(r"(.+?) and (?:the )?(?:(?:numbers?|amounts?) of )?(.+)",phrase)
+    if not m:no('QUESTION_DIFFERENCE')
+    # 'before selling and after selling', 'the number she has now and the number she lost': one holding at two times,
+    # or a holding and what happened to it
+    times=[_time_side(st,x) for x in (m.group(1),m.group(2))]
+    if any(times):
+        if not all(times) or times[0]==times[1]:no('QUESTION_DIFFERENCE')
+        ask.update(kind='diff_time',sides=times,much=False,have=False,noun=_time_noun(st,m.group(1)),
+                   names={(x.w[:-2] if x.low.endswith("'s") else x.w) for x in toks if st.is_name(x)})
+        return ask
+    (oa,aa,na),(ob,ab,nb)=(_difference_side(st,toks,x.split()) for x in (m.group(1),m.group(2)))
+    na=na or nb;nb=nb or na
+    if not na or na!=nb:no('QUESTION_DIFFERENCE')
+    ask.update(kind='diff',cmp='more',absolute=True,much=False,noun=na,adj=aa,owner=oa,have=False)
+    if oa or ob:
+        if not (oa and ob) or oa==ob or aa!=ab:no('QUESTION_DIFFERENCE')
+        ask['than']=ob
+    else:
+        # two kinds of one thing: 'red pens and blue pens'
+        if len(aa)!=1 or len(ab)!=1 or aa==ab:no('QUESTION_DIFFERENCE')
+        ask['than_kind']=ab[0]
     return ask
 
 # ----------------------------------------------------------------------------- plans
@@ -1077,7 +1180,8 @@ def schema_diff(st,ask):
         x=amount(a);y=amount(b)
         if x is None or y is None:return None
     t=p.new(f'difference_{noun}',noun)
-    p.rel(f'{t} = {x} - {y}' if ask.cmp=='more' else f'{t} = {y} - {x}',ask.text)
+    if ask.absolute:p.rel(f'{t} = abs({x} - {y})',ask.text)
+    else:p.rel(f'{t} = {x} - {y}' if ask.cmp=='more' else f'{t} = {y} - {x}',ask.text)
     return p,t,noun
 
 # ---- schema: category total (pupils = girls + boys) ----------------------------
@@ -1461,7 +1565,7 @@ def schema_times_slot(st,ask):
     return None
 
 SCHEMAS=[schema_gcd_lcm,schema_change,schema_compare_things,schema_holding,schema_compare,schema_diff,schema_category,schema_groups,schema_share,schema_price,schema_need,
-         schema_spend_left,schema_times_slot,schema_price_total]
+         schema_spend_left,schema_times_slot,schema_price_total,schema_diff_time]
 
 # ----------------------------------------------------------------------------- read
 def read(text):

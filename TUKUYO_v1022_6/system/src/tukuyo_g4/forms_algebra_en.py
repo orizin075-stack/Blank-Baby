@@ -155,42 +155,77 @@ REL={'son','daughter','brother','sister','father','mother','cousin','friend','gr
 NOT_NAMES={'i','a','an','the','if','when','in','on','how','what','find','he','she','his','her','they','their','it','its','after','before',
            'today','now','this','that','there','then','years','year','ago','old','age','ages','and','but','so','some','one','two','three'}
 
+PRON={'he','she','him','his','her'}
+MALE={'he','him','his'}
+
 def _ages(text,nums,sents,sk):
     if len(sk)<2 or len(sk)>4 or not re.search(r'\byears? old\b|\bage\b|\bhow old\b',' '.join(sk)):return None
     caps={w.lower() for w in re.findall(r"\b([A-Z][a-z]+)(?:'s)?\b",text)}-NOT_NAMES
-    state={'last':None}
+    toks=[_toks(x) for x in sk]
+    base=lambda w:w[:-2] if w.endswith("'s") else w
+    # every he/she/his/her: the person it is read as (the subject of the latest sentence that named someone, as people
+    # read) and every person named before it. TUKUYO does not know genders (as in the story reader, reader_en): the
+    # reading is kept only when no other choice of person gives a different answer
+    prons=[];seen=[];last=None
+    for n,t in enumerate(toks):
+        for i,w in enumerate(t):
+            if base(w) in PRON:prons.append((n,i,base(w),last,list(seen)))
+            elif base(w) in caps and base(w) not in seen:seen.append(base(w))
+        for w in t:
+            if base(w) in PRON:break
+            if base(w) in caps:last=base(w);break
+    topic=[p[3] for p in prons]
+    if None in topic:return None
+    first=_age_reading(text,nums,sents,toks,caps,prons,topic)
+    ta=_answer(first)
+    if ta is None:return None
+    import itertools
+    for asg in itertools.islice(itertools.product(*[p[4] for p in prons]),0,33):
+        asg=list(asg)
+        if asg==topic:continue
+        # one person is not both he and she
+        if any(asg[x]==asg[y] and (prons[x][2] in MALE)!=(prons[y][2] in MALE) for x in range(len(asg)) for y in range(x)):continue
+        other=_answer(_age_reading(text,nums,sents,toks,caps,prons,asg))
+        if other is not None and other!=ta:return None
+    return first
+
+def _answer(r):
+    if not r:return None
+    from .solve import solve
+    from .check import check
+    got=solve(r['spec'])
+    return got['answer'] if got.get('ok') and check(r['spec'],got['values'])['ok'] else None
+
+def _age_reading(text,nums,sents,toks,caps,prons,asg):
+    """the reading with the k-th pronoun read as the person asg[k]"""
+    sk=[list(t) for t in toks]
+    for (n,i,b,_,_),who in zip(prons,asg):
+        nxt=sk[n][i+1] if i+1<len(sk[n]) else None
+        poss=b=='his' or (b=='her' and nxt is not None and (nxt in REL or nxt[:-2] in REL or nxt in ('age','present','current')))
+        sk[n][i]=who+"'s" if poss else who
     def person(ws):
         ws=[w[:-2] if w.endswith("'s") else w for w in ws]
         if len(ws)==1 and ws[0] in caps:return ws[0]
-        if len(ws)==1 and ws[0] in ('he','she','him','his','her'):return state['last']
-        if len(ws)==2 and ws[0] in ('his','her','their','the') and ws[1] in REL:return 'rel_'+ws[1]
+        if len(ws)==2 and ws[0] in ('their','the') and ws[1] in REL:return 'rel_'+ws[1]
         if len(ws)==2 and ws[0] in caps and ws[1] in REL:return 'rel_'+ws[1]
         return None
     def age_of(ws):
-        """the age of a person: 'his son's age', 'the age of Steven', 'her age', 'Vidya's present age', 'his son'"""
+        """the age of a person: 'Lily's son's age', 'the age of Steven', 'Vidya's present age', 'Lily's son'"""
         ws=list(ws)
         if ws[-2:-1] and ws[-1]=='age' and ws[-2] in ('present','current'):ws=ws[:-2]+['age']
-        if len(ws)==2 and ws==[ws[0],'age'] and ws[0] in ('his','her'):return state['last']
         if ws[-1:]==['age'] and len(ws)>=2 and ws[-2].endswith("'s"):return person(ws[:-1])
         if ws[:3]==['the','age','of']:return person(ws[3:])
         return person(ws)
     def atom(ws,i,j):
         p=age_of(ws);return ('x','age_'+p) if p else None
     eqs=[];asked=None
-    for n,x in enumerate(sk):
-        t=_toks(x);span=sents[n]
+    for n,t in enumerate(sk):
         if n==len(sk)-1:
             asked=_age_question(t,person)
             continue
         r=_age_sentence(t,nums,person,age_of,atom)
         if not r:return None
-        eqs.append([(a,b,span) for a,b in r])
-        # who 'he', 'she', 'his' or 'her' means next: the first person named in a sentence that names one before any
-        # pronoun ('Kate is 12 years old. His age is 4 times the age of Robbie.': 'his' is Kate)
-        for w in t:
-            b=w[:-2] if w.endswith("'s") else w
-            if b in ('he','she','his','her','him'):break
-            if b in caps:state['last']=b;break
+        eqs.append([(a,b,sents[n]) for a,b in r])
     if not asked or not eqs:return None
     people=set()
     for ch in eqs:

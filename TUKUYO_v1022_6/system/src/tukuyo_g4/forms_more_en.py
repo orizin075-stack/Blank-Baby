@@ -626,6 +626,8 @@ FUNCTION_W=r'(?:and|or|but|to|for|each|every|while|in|on|at|with|that|which|who|
 GROUP=re.compile(r'(?:(?P<item>[a-z][a-z-]*) (?:(?:were|are|was|is|come|comes|came) )?)?(?:in |into )?(?P<g>'+GROUP_W+r') of #(?P<k>\d+)'
                  r'(?: (?!'+FUNCTION_W+r')(?P<item2>[a-z][a-z-]*(?: (?!'+FUNCTION_W+r')[a-z][a-z-]*)?))?')
 SAME=re.compile(r'\b(?:same|equal|identical) (?:total )?(?:number|numbers|amount|amounts|quantity|quantities)\b|\bas many\b')
+# they happen together now: 'she did both today', 'they just rang together', 'at the same time'
+TOGETHER_NOW=re.compile(r"\bat the same time\b|\b(?:both|all three|all|together)\b.*\b(?:today|now|just)\b|\b(?:today|now|just)\b.*\b(?:both|all three|together)\b|\btoday's\b")
 Q_LEAST=re.compile(r"(?:what is|what's|find) the (?:smallest|least|minimum|fewest|lowest)(?: possible)?(?: total)? (?:number|amount) of (?P<rest>.+)")
 
 def _together(text,nums,sents,sk):
@@ -679,6 +681,9 @@ def _again(text,nums,sents,sk,q,body,every):
         mq=re.fullmatch(r'(?:.*? )?how many (?P<u>[a-z]+)\b.*',q)
         if not mq or TIME_U.get(mq.group('u'))!=u or not re.search(r'\bagain\b',q):return None
         if not re.search(r'\b(?:same|together|both|all three|all)\b',q):return None
+        # 'again' from when they last happened together: the text must say that this is now ('she swam today' alone
+        # leaves the day of the next run open)
+        if not any(TOGETHER_NOW.search(x) for x in body+[re.sub(r'\bagain\b.*','',q)]):return None
         form='lcm:again'
     s=_Spec(text,nums)
     names=[s.bind(f'every{i+1}',k,unit=u or '1',about='how often one of them happens') for i,k in enumerate(ks)]
