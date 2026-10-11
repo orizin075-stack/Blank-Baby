@@ -4,6 +4,8 @@ checked by check.py; an answer is committed only by agreement.
 
 solve(text, llm='auto'|'off'|'on', data=None, learn=True) ->
   {'answer': str|None, 'value', 'unit', 'route', 'reason', 'readings': [...], 'learned': template id or None}
+  (g4-solve adds 'voice': the child's own account of how it read the problem, how sure it is and why, or why it holds
+  back: voice.py; think puts it in 'gen4')
 Readings
   learned     a template learned from an earlier agreeing reading, read with this text's numbers (needs data)
   own         TUKUYO's own reader (English)
@@ -225,7 +227,8 @@ def think(data,text,base,llm='auto',learn=True,order=None):
     if not ja and v['ok'] and use is None:ignored={'route':'v1022','value':v['value'],'proof_kind':v.get('proof_kind'),'story':True,'used':False}
     else:ignored=None
     r=solve(text,llm=llm,data=data,learn=learn,v1022=use if v['ok'] or ja else None,order=order)
-    info={'route':r['route'],'reason':r['reason'],'learned':r.get('learned'),'value':r.get('value'),
+    from .voice import explain as _voice
+    info={'route':r['route'],'reason':r['reason'],'learned':r.get('learned'),'value':r.get('value'),'voice':_voice(text,r,data),
           'readings':[{k:x.get(k) for k in ('route','ok','value','reason','proof_kind','llm','parent','template') if x.get(k) is not None} for x in r['readings']]+([ignored] if ignored else [])}
     if r['answer'] is None:
         out={'ok':True,'answer':None,'confidence':0.,'uncertain':True,'recognized':base.get('recognized',True),'proof':None,'gen4':info,
@@ -239,7 +242,7 @@ def think(data,text,base,llm='auto',learn=True,order=None):
     return {'ok':True,'answer':r['answer'],'confidence':.9,'uncertain':False,'recognized':True,'reason':None,'unit':r.get('unit'),
             'proof':{'kind':'g4_reading','spec':g['spec'],'values':g['values']} if g else None,
             'verification_evidence':{'mode':'G4_EXACT_SOLVE_AND_SEPARATE_CHECK','route':r['route']},
-            'explanation':_explain(g) if g else None,'gen4':info}
+            'explanation':(info['voice'] or {}).get('said') or (_explain(g) if g else None),'gen4':info}
 
 def _same(a,b):
     norm=lambda x:re.sub(r'[\s。、．，,.!！?？「」『』"\'()（）]','',str(x)).lower()

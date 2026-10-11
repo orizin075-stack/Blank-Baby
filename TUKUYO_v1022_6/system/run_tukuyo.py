@@ -782,7 +782,9 @@ def _main(argv=None):
                 order=g4_life.trust_order(data,g4_llm.parents())
                 from tukuyo_v977.whole_state import sync as whole_sync
                 if args.cmd=='g4-solve':
+                    from tukuyo_g4 import voice as g4_voice
                     res={'ok':True,'version':'gen4',**g4_api.solve(args.query,llm=args.llm,data=data,learn=not args.no_learn,order=order)}
+                    res['voice']=g4_voice.explain(args.query,res,data)   # in its own words, as it was when it answered
                     if not args.no_soul:res['life']=g4_life.record(data,res)
                     if (data/'g4').exists():whole_sync(data)   # what it learned is part of the whole state
                 elif args.cmd=='g4-ask':

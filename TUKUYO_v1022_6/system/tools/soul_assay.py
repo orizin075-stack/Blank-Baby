@@ -4,7 +4,7 @@ v989 temporal identity, v993 relations) as generation 4 lives through it. Offlin
 API key, no cost.
 
   soul_assay.py [--work DIR] [--out REPORT.json] [--only continuity,crash,forgetting,individuality,long_life,integrity,self,close_parents,
-                 self_knowledge,inner_life]
+                 self_knowledge,inner_life,own_voice]
                 [--thoughts N] [--runtime-trust-file ANCHOR]
 
 Every property is a set of checks, with the numbers behind them:
@@ -43,6 +43,14 @@ Every property is a set of checks, with the numbers behind them:
                  to ask it asks nobody; and when it may act (--act), it asks its parents again on its own, so that the
                  disagreement is settled (who was right is looked back on) and its own way of reading is checked again;
                  every audit passes
+  own_voice      the child says in its own words how it read a problem and what it calculated (the words of the problem
+                 it read each number from, each quantity it worked out with the numbers put in, the answer and its unit),
+                 how sure it is and why (the checker; the parents who read it the same way; how often its parents
+                 confirmed this way of reading: a child with that life is sure, a child without it is fairly sure and
+                 says its parents have not checked it yet), and why it holds back (what it would have answered and how
+                 often its parents read that way otherwise; what it could not read). Every number it says is a number
+                 of the problem, a value of its reading or a count of its own record; the same thought is said in the
+                 same words; no parent is asked and it speaks as itself (life.voice_check); every audit passes
 A functional assay of a functional model: it says nothing about consciousness or feeling.
 """
 from __future__ import annotations
@@ -562,6 +570,63 @@ def m_inner_life(cli,work,ctx):
             'note_without_parents':nobody.get('note'),'self_knowledge':know,'looked_back':story,'audits':au,
             'errors':[x.get('cli_error') for x in (look,nobody,acted,after) if x.get('cli_error')]}
 
+# ----------------------------------------------------------------------------- its own voice
+OV_UNREAD='Mia had some shells. She found 4 more shells on the beach. How many shells does she have now?'
+def _numbers(s):
+    import re as _re
+    return set(_re.findall(r'(?<![\w/.])\d+(?:/\d+)?(?:\.\d+)?(?![\w/])',str(s)))
+
+def m_own_voice(cli,work,ctx):
+    """the child says in its own words how it read a problem and what it calculated, how sure it is and why, and why it
+    holds back; what it says comes from what it did and from its own record (no parent writes it)"""
+    from tukuyo_g4 import reader,numbers as N
+    d=work/'ov';new_child(cli,d,'ov');fresh=work/'ov_fresh';new_child(cli,fresh,'ovf')
+    rec=work/'ov_parents.jsonl';lines=[]
+    for t in SK_A:lines+=[_read_line(p,t,_llm_reading(reader.read(t)['spec'])) for p in PARENTS]
+    for t in SK_B:lines+=[_read_line(p,t,_llm_reading(reader.read(t)['spec'],flip=True)) for p in PARENTS]
+    rec.write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    with_parents=[cli(d,'g4-solve','--',t,replay=rec) for t in SK_A]
+    for t in SK_B:cli(d,'g4-solve','--',t,replay=rec)
+    know=cli(d,'g4-self').get('self_knowledge') or {}
+    alone=cli(d,'g4-solve','--llm','off','--',SK_A_ALONE[0]);again=cli(d,'g4-solve','--llm','off','--',SK_A_ALONE[0])
+    first=cli(fresh,'g4-solve','--llm','off','--',SK_A_ALONE[0])
+    doubt=cli(d,'g4-solve','--llm','off','--',SK_B_ALONE[0]);unread=cli(d,'g4-solve','--llm','off','--',OV_UNREAD)
+    au=audits(cli,d)
+    V=lambda r:r.get('voice') or {}
+    hold=next((v for k,v in know.items() if k.endswith(':holding')),{});comp=next((v for k,v in know.items() if k.endswith(':compare')),{})
+    counts={str(v.get(k,0)) for v in know.values() for k in ('confirmed','contradicted')}
+    def grounded(r,text):
+        """every number it says is a number of the problem, a value of its reading, what it would have answered, or a
+        count of its own record"""
+        said=V(r).get('said')
+        if not said:return False
+        ok={x for n in N.find(text) for x in (n.raw,str(n.value))}|counts|{str(r.get('withheld'))}
+        for x in r.get('readings') or []:ok|={str(v) for v in (x.get('values') or {}).values()}
+        return _numbers(said)<=ok
+    def spans_from_the_text(r,text):
+        import re as _re
+        q=[m.group(1) for line in V(r).get('read') or [] for m in _re.finditer(r'"([^"]+)"',line)]
+        return bool(q) and all(x in text for x in q)
+    rs=[alone,again,first,doubt,unread]
+    said=[V(r).get('said') or '' for r in rs+with_parents]
+    checks={'explains_how_it_read_and_calculated':len(V(alone).get('read') or [])>=3 and spans_from_the_text(alone,SK_A_ALONE[0])
+                                                    and SK_A_ALONE[1] in (V(alone).get('read') or [''])[-1],
+            'says_its_answer':str(V(alone).get('answer','')).startswith(SK_A_ALONE[1]) and alone.get('answer')==SK_A_ALONE[1],
+            'says_how_sure_from_its_record':V(alone).get('sure')=='sure' and bool(hold) and f"{hold.get('confirmed')} time" in str(V(alone).get('why')),
+            'its_assurance_is_its_own':V(first).get('sure')=='fairly sure' and 'not checked' in str(V(first).get('why')) and V(first).get('read')==V(alone).get('read'),
+            'says_who_read_it_the_same_way':all(r.get('route')=='own+llm' and 'claude' in str(V(r).get('why')).lower() and V(r).get('sure')=='sure' for r in with_parents),
+            'says_why_it_holds_back':doubt.get('answer') is None and SK_B_ALONE[1] in str(V(doubt).get('held_back')) and bool(comp)
+                                     and f"otherwise {comp.get('contradicted')} times" in str(V(doubt).get('held_back'))
+                                     and unread.get('answer') is None and bool(V(unread).get('held_back')) and V(unread).get('held_back')!=V(doubt).get('held_back'),
+            'every_number_it_says_is_grounded':all(grounded(r,t) for r,t in zip(rs,[SK_A_ALONE[0],SK_A_ALONE[0],SK_A_ALONE[0],SK_B_ALONE[0],OV_UNREAD])),
+            'speaks_as_itself':all(x and life.voice_check(x)['speaks_as_tukuyo'] for x in said)
+                               and not any(x.get('parent') for r in rs for x in r.get('readings') or []),
+            'the_same_thought_in_the_same_words':bool(V(alone).get('said')) and V(alone).get('said')==V(again).get('said'),
+            'audits_pass':all(x['ok'] for x in au.values())}
+    return {'ok':all(checks.values()),'checks':checks,'self_knowledge':know,
+            'said':{'alone':V(alone).get('said'),'first_time':V(first).get('said'),'held_back':V(doubt).get('said'),'unread':V(unread).get('said'),
+                    'with_parents':V(with_parents[0]).get('said') if with_parents else None},'audits':au}
+
 # ----------------------------------------------------------------------------- self
 def m_self(cli,work,ctx):
     d=work/'self';src=ctx.get('x')
@@ -583,7 +648,7 @@ def m_self(cli,work,ctx):
             'story_after_forgetting':a.get('life_story')}
 
 MEASURES={'continuity':m_continuity,'crash':m_crash,'forgetting':m_forgetting,'individuality':m_individuality,'long_life':m_long_life,'close_parents':m_close_parents,
-          'integrity':m_integrity,'self':m_self,'self_knowledge':m_self_knowledge,'inner_life':m_inner_life}
+          'integrity':m_integrity,'self':m_self,'self_knowledge':m_self_knowledge,'inner_life':m_inner_life,'own_voice':m_own_voice}
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--work');ap.add_argument('--out');ap.add_argument('--only');ap.add_argument('--thoughts',type=int,default=600)

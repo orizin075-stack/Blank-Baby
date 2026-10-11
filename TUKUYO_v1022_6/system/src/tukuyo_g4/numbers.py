@@ -67,12 +67,12 @@ ORD_DET={'the','his','her','its','their','my','your','our','every','each'}
 
 _ONE_BEFORE=re.compile(r'\b(?:per|every|each)\s*$',re.I)
 _ONE_AFTER_EN=[re.compile(r'^\s+of\b',re.I),
-               re.compile(r'^\s+[A-Za-z]+(?:\s+[A-Za-z]+)?\s+(?:costs?|weighs?|holds?|contains?|has|have|takes?|can\s+\w+)\s+[^.?!]*?\d',re.I)]
+               re.compile(r'^\s+[A-Za-z]+(?:\s+[A-Za-z]+)?(?:\s+of\s+[A-Za-z]+(?:\s+[A-Za-z]+)?)?\s+(?:costs?|weighs?|holds?|contains?|has|have|takes?|can\s+\w+)\s+[^.?!]*?\d',re.I)]
 _ONE_AFTER_JA=[re.compile(r'^[^\s\d。、，,．.!?？！]{0,3}(?:あたり|当たり|につき|ごとに|ごと|毎)'),
                re.compile(r'^[^\s\d。、，,．.!?？！]{1,3}(?:に|で)[^。！？!?]*?[0-9０-９一二三四五六七八九十百千万]')]
 def optional(n,text=None):
     """may a reading leave this number out? Ordinals ('the first half' too), and the number 1 as the base of a rate or a pronoun: '1個あたり',
-    '1日に8ページ', 'per 1 kg', 'one pack costs 11 dollars', 'one of them'. Any other 1 ('1 banana popsicle', 'one more
+    '1日に8ページ', 'per 1 kg', 'one pack costs 11 dollars', 'one bag of rice costs $3', 'one of them'. Any other 1 ('1 banana popsicle', 'one more
     cat') is an amount and must be bound or declared unused. Without the text, every 1 is taken as optional (the rule
     of earlier callers)"""
     if n.kind=='ordinal':return True
