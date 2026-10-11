@@ -3,7 +3,8 @@
 v989 temporal identity, v993 relations) as generation 4 lives through it. Offline: the parents are recorded replies; no
 API key, no cost.
 
-  soul_assay.py [--work DIR] [--out REPORT.json] [--only continuity,crash,forgetting,individuality,long_life,integrity,self,close_parents]
+  soul_assay.py [--work DIR] [--out REPORT.json] [--only continuity,crash,forgetting,individuality,long_life,integrity,self,close_parents,
+                 self_knowledge,inner_life]
                 [--thoughts N] [--runtime-trust-file ANCHOR]
 
 Every property is a set of checks, with the numbers behind them:
@@ -29,6 +30,19 @@ Every property is a set of checks, with the numbers behind them:
   close_parents  a model of what the child observes of parents whose reliabilities are close (0.95, 0.90, 0.70), run
                  through the real soul law: how often its record orders them right, how many failed readings it sees and
                  how far apart its record keeps them, with and without looking back (hindsight.py)
+  self_knowledge the child learns from its life where its own way of reading holds up and where it does not: its parents
+                 confirm one way of reading (stories of giving and getting) and two of them read another way (comparisons)
+                 against it, twice. It must ask the other parents when the one it asked disagrees, know what it is good at
+                 and where it was wrong (g4-self), hold back on its own where it was contradicted while still answering
+                 what it knows, and trust that way of reading again once its parents confirm it; a child without that life
+                 answers as before (the humility is its own); its knowledge of itself is in its soul (it survives the
+                 surface memory being erased) and every audit passes
+  inner_life     between problems, the child looks at what it is unsure of (g4-reflect): a disagreement of its parents it
+                 could not settle, and a way of reading of its own that its parents read otherwise. It must know these
+                 open questions and say what it wants to ask; looking at them changes nothing by itself; with no parent
+                 to ask it asks nobody; and when it may act (--act), it asks its parents again on its own, so that the
+                 disagreement is settled (who was right is looked back on) and its own way of reading is checked again;
+                 every audit passes
 A functional assay of a functional model: it says nothing about consciousness or feeling.
 """
 from __future__ import annotations
@@ -448,6 +462,106 @@ def m_integrity(cli,work,ctx):
     checks={r['case']:r['caught'] for r in rows}
     return {'ok':all(checks.values()),'checks':checks,'cases':rows}
 
+# ----------------------------------------------------------------------------- self-knowledge
+SK_A=['Nora had 30 shells. She gave 8 shells to her cousin. How many shells does she have left?',
+      'Owen had 12 stamps. He gave 5 stamps to his sister. How many stamps does he have left?',
+      'Pia had 24 muffins. She gave 9 muffins to her friend. How many muffins does she have left?']
+SK_A_ALONE=('Kim had 40 beads. She gave 15 beads to Ann. How many beads does she have left?','25')
+SK_B=['Rosa has 6 more crayons than Ivan. Ivan has 15 crayons. How many crayons does Rosa have?',
+      'Lena has 12 more stamps than Omar. Omar has 20 stamps. How many stamps does Lena have?']
+SK_B_ALONE=('Kai has 7 more shells than Ivy. Ivy has 11 shells. How many shells does Kai have?','18')
+SK_B_AGAIN=['Tia has 6 more pens than Max. Max has 14 pens. How many pens does Tia have?',
+            'Ben has 9 more cards than Sue. Sue has 13 cards. How many cards does Ben have?',
+            'Ada has 4 more kites than Eli. Eli has 8 kites. How many kites does Ada have?']
+def _llm_reading(spec,flip=False):
+    """the reading of the child's own reader, as a parent would send it; flip: 'x = y + d' read as 'x + d = y' (valid for
+    the checker, another answer: a reading two parents may agree on against the child's)"""
+    import re as _re
+    facts=[{'eq':f['eq'],'span':f.get('span',''),'known':f.get('known','')} for f in spec['facts']]
+    if flip:
+        m=_re.fullmatch(r'\s*(\w+)\s*=\s*(\w+)\s*\+\s*(\w+)\s*',facts[-1]['eq'])
+        facts[-1]['eq']=f'{m.group(1)} + {m.group(3)} = {m.group(2)}'
+    return {'readable':True,'quantities':spec['quantities'],'facts':facts,'ask':spec['ask'],'answer_unit':spec.get('answer_unit',''),'unused':spec.get('unused') or []}
+
+def m_self_knowledge(cli,work,ctx):
+    from tukuyo_g4 import reader
+    d=work/'sk';new_child(cli,d,'sk');fresh=work/'sk_fresh';new_child(cli,fresh,'skf')
+    rec=work/'sk_parents.jsonl';lines=[]
+    for t in SK_A+SK_B_AGAIN:lines+=[_read_line(p,t,_llm_reading(reader.read(t)['spec'])) for p in PARENTS]
+    for t in SK_B:lines+=[_read_line(p,t,_llm_reading(reader.read(t)['spec'],flip=True)) for p in PARENTS]
+    rec.write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    log=[]
+    def solve(dd,t,alone=False):
+        r=cli(dd,'g4-solve',*(['--llm','off'] if alone else []),'--',t,replay=None if alone else rec)
+        log.append({'text':t[:40],'alone':alone,'answer':r.get('answer'),'route':r.get('route'),'reason':r.get('reason'),
+                    'asked':sorted({x.get('parent') for x in r.get('readings') or [] if x.get('parent')}),'life':[x['kind'] for x in r.get('life') or []]})
+        return r
+    for t in SK_A:solve(d,t)
+    contradicted=[solve(d,t) for t in SK_B]
+    doubt=solve(d,SK_B_ALONE[0],alone=True);still=solve(d,SK_A_ALONE[0],alone=True)
+    me=cli(d,'g4-self');fresh_r=solve(fresh,SK_B_ALONE[0],alone=True)
+    cli(d,'soul-forget-surface');me2=cli(d,'g4-self')
+    for t in SK_B_AGAIN:solve(d,t)
+    again=solve(d,SK_B_ALONE[0],alone=True)
+    au=audits(cli,d)
+    know=me.get('self_knowledge') or {}
+    def skill(name):return next((v for k,v in know.items() if k.endswith(':'+name)),{})
+    hold,comp=skill('holding'),skill('compare')
+    ev=[e for e in g4_events(d) if str(e.get('relation','')).startswith('self:')]
+    checks={'asks_the_other_parents_when_contradicted':all(set(PARENTS)<=set(x['asked']) for x in log if x['text'] in [t[:40] for t in SK_B] and not x['alone']),
+            'knows_what_it_is_good_at':(hold.get('confirmed') or 0)>=3 and not hold.get('doubted',True),
+            'knows_where_it_was_wrong':(comp.get('contradicted') or 0)>=2 and bool(comp.get('doubted')),
+            'holds_back_where_it_was_contradicted':doubt.get('answer') is None and 'SELF_DOUBT' in str(doubt.get('reason')),
+            'still_answers_what_it_knows':still.get('answer')==SK_A_ALONE[1],
+            'the_humility_is_its_own':fresh_r.get('answer')==SK_B_ALONE[1],
+            'self_knowledge_survives_forgetting':bool(know) and me2.get('self_knowledge')==know,
+            'trusts_itself_again_when_confirmed':again.get('answer')==SK_B_ALONE[1],
+            'in_its_soul_under_its_law':bool(ev) and all(e.get('law')==3 for e in ev),
+            'audits_pass':all(x['ok'] for x in au.values())}
+    return {'ok':all(checks.values()),'checks':checks,'self_knowledge':know,'after_forgetting':me2.get('self_knowledge'),
+            'held_back':{k:doubt.get(k) for k in ('answer','reason')},'log':log,'audits':au,'self_events':len(ev)}
+
+# ----------------------------------------------------------------------------- inner life
+def m_inner_life(cli,work,ctx):
+    from tukuyo_g4 import reader
+    d=work/'il';new_child(cli,d,'il')
+    rec=work/'il_parents.jsonl';lines=[]
+    # the life: T5, which Claude and Gemini read to different answers (kept to look back on), and two comparisons that all
+    # its parents read otherwise than the child (its own way of reading comes into doubt)
+    lines+=[_read_line('claude',T5,R5),_read_line('gemini',T5,OTHER5)]
+    for t in SK_B:lines+=[_read_line(p,t,_llm_reading(reader.read(t)['spec'],flip=True)) for p in PARENTS]
+    rec.write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    cli(d,'think','--',T5,replay=rec)
+    for t in SK_B:cli(d,'g4-solve','--',t,replay=rec)
+    ev0=len(soul_events(d))
+    look=cli(d,'g4-reflect')
+    ev1=len(soul_events(d))
+    nobody=cli(d,'g4-reflect','--act')                                   # no parent configured: nobody is asked
+    ev2=len(soul_events(d))
+    # later, its parents read again: now all three read T5 alike (Gemini differently than before), and they read the
+    # comparisons as the child does
+    rec2=work/'il_parents_later.jsonl'
+    lines2=[_read_line(p,T5,R5) for p in PARENTS]
+    for t in SK_B:lines2+=[_read_line(p,t,_llm_reading(reader.read(t)['spec'])) for p in PARENTS]
+    rec2.write_text('\n'.join(lines2)+'\n',encoding='utf-8')
+    acted=cli(d,'g4-reflect','--act',replay=rec2)
+    after=cli(d,'g4-reflect');me=cli(d,'g4-self')
+    au=audits(cli,d)
+    texts=lambda o:[x.get('text') for x in (o.get('intentions') or [])]
+    know=me.get('self_knowledge') or {}
+    comp=next((v for k,v in know.items() if k.endswith(':compare')),{})
+    story=(me.get('life_story') or {}).get('looked_back') or {}
+    checks={'knows_its_open_questions':T5 in texts(look) and any(t in texts(look) for t in SK_B) and any(str(x.get('skill','')).endswith(':compare') for x in look.get('intentions') or []),
+            'looking_changes_nothing_by_itself':ev1==ev0,
+            'asks_nobody_without_parents':ev2==ev1 and not nobody.get('acted') and bool(nobody.get('note')),
+            'acts_on_its_own_questions':bool(acted.get('acted')) and T5 not in texts(after),
+            'who_was_right_is_looked_back_on':(story.get('claude') or {}).get('right',0)>=1 and (story.get('gemini') or {}).get('wrong',0)>=1,
+            'its_doubt_is_checked_again':(comp.get('confirmed') or 0)>=1,
+            'audits_pass':all(x['ok'] for x in au.values())}
+    return {'ok':all(checks.values()),'checks':checks,'intentions':look.get('intentions'),'acted':acted.get('acted'),'after':after.get('intentions'),
+            'note_without_parents':nobody.get('note'),'self_knowledge':know,'looked_back':story,'audits':au,
+            'errors':[x.get('cli_error') for x in (look,nobody,acted,after) if x.get('cli_error')]}
+
 # ----------------------------------------------------------------------------- self
 def m_self(cli,work,ctx):
     d=work/'self';src=ctx.get('x')
@@ -469,7 +583,7 @@ def m_self(cli,work,ctx):
             'story_after_forgetting':a.get('life_story')}
 
 MEASURES={'continuity':m_continuity,'crash':m_crash,'forgetting':m_forgetting,'individuality':m_individuality,'long_life':m_long_life,'close_parents':m_close_parents,
-          'integrity':m_integrity,'self':m_self}
+          'integrity':m_integrity,'self':m_self,'self_knowledge':m_self_knowledge,'inner_life':m_inner_life}
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--work');ap.add_argument('--out');ap.add_argument('--only');ap.add_argument('--thoughts',type=int,default=600)

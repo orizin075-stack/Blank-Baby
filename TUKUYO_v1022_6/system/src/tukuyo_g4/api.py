@@ -95,6 +95,17 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
     use_llm=llm=='on' or (llm=='auto' and L.available())
     ps=(L.parents() or ['claude']) if use_llm else []
     if order:ps=[p for p in order if p in ps]+[p for p in ps if p not in order]
+    # what it knows of itself: a way of reading its parents have read otherwise more often than they confirmed it is not
+    # enough alone (life.self_doubted, the soul's record, law 3). Its own reader and the v1022 core only: a learned
+    # template is judged one by one (contested, taught again), not as a way of reading
+    doubted=set()
+    if data is not None:
+        from .life import skill_of,self_doubted
+        for r in readings:
+            if r['ok'] and r['route']!='learned':
+                r['skill']=skill_of(r)
+                if self_doubted(data,r['skill']):r['doubted']=True;doubted.add(r['skill'])
+    if tukuyo_ok and all(r.get('doubted') for r in readings if r['ok']):tukuyo_ok=False
     def ask_parent(parent,v):
         route='llm_'+v if parent=='claude' else f'llm_{parent}_{v}'
         r=L.read(text,v,parent=parent)
@@ -107,26 +118,32 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
         else:plan=[(p,'story') for p in ps]
         for parent,v in plan:ask_parent(parent,v)
     good=[r for r in readings if r['ok']]
-    # a learned reading that the parent asked disagrees with: the other parents are asked too, and when two different
-    # parents read the wording to another answer, the template is contested (it may have been taught wrongly in a way the
-    # checker cannot see; the child cannot tell which is right, so it withholds now and stops answering with it alone)
-    contested=None
-    lr=next((r for r in good if r['route']=='learned'),None)
-    if lr is not None and store is not None and use_llm and any(r['answer']!=lr['answer'] for r in good if r['route'].startswith('llm')):
+    # a reading of its own (learned, its reader, the v1022 core) that the parent asked disagrees with: the other parents
+    # are asked too. When two different parents read the wording to another answer, a learned template is contested (it
+    # may have been taught wrongly in a way the checker cannot see; the child cannot tell which is right, so it withholds
+    # now and stops answering with it alone), and its own way of reading is marked as read otherwise (self_checks: the
+    # soul keeps the record, and life.self_doubted holds it back once it has been read otherwise more than confirmed)
+    contested=None;self_checks=[]
+    tk=[r for r in good if not r['route'].startswith('llm')]
+    if tk and use_llm and any(r['answer']!=x['answer'] for r in good if r['route'].startswith('llm') for x in tk):
         for parent in [p for p in ps if p not in {r.get('parent') for r in readings}]:ask_parent(parent,'story')
         good=[r for r in readings if r['ok']]
-        by={}
-        for r in good:
-            if r['route'].startswith('llm') and r['answer']!=lr['answer']:by.setdefault(r['answer'],set()).add(r.get('parent','claude'))
-        against=sorted(((v,sorted(p)) for v,p in by.items() if len(p)>=2),key=lambda x:-len(x[1]))
-        if against:
+        for x in tk:
+            by={}
+            for r in good:
+                if r['route'].startswith('llm') and r['answer']!=x['answer']:by.setdefault(r['answer'],set()).add(r.get('parent','claude'))
+            against=sorted(((v,sorted(p)) for v,p in by.items() if len(p)>=2),key=lambda q:-len(q[1]))
+            if not against:continue
             v,who=against[0]
-            try:
-                if store.contest(lr['template'],{'value':fmt(v),'parents':who,'text':text,'was':fmt(lr['answer'])}):contested=lr['template']
-            except ValueError:contested=None
+            if x['route']=='learned' and store is not None:
+                try:
+                    if store.contest(x['template'],{'value':fmt(v),'parents':who,'text':text,'was':fmt(x['answer'])}):contested=x['template']
+                except ValueError:contested=None
+            if data is not None and x.get('skill'):self_checks.append({'skill':x['skill'],'held':False,'was':fmt(x['answer']),'read_as':fmt(v),'by':who})
     out={'answer':None,'value':None,'unit':None,'route':None,'learned':None,
          'readings':[{k:v for k,v in r.items() if k not in ('answer',)} for r in readings]}
     if contested:out['template_contested']=contested
+    if self_checks:out['self_checks']=self_checks
     if not good:return {**out,'reason':'NO_VERIFIED_READING' if readings else 'NOT_READ'}
     vals={r['answer'] for r in good}
     if len(vals)>1:
@@ -136,6 +153,12 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
     mine=[r['route'] for r in good if not r['route'].startswith('llm')]
     llms=[r for r in good if r['route'].startswith('llm')]
     fams=sorted({r.get('parent','claude') for r in llms})
+    if mine and not llms and all(r.get('doubted') for r in good):
+        # its own reading is all there is, and its parents have read this kind of problem otherwise before: it holds back
+        return {**out,'reason':'SELF_DOUBT:'+','.join(sorted(doubted)),'withheld':good[0]['value']}
+    if mine and llms and data is not None:
+        # a parent read it the same way: its own way of reading held up
+        out['self_checks']=self_checks+[{'skill':r['skill'],'held':True} for r in good if not r['route'].startswith('llm') and r.get('skill')]
     if mine:route='+'.join(dict.fromkeys(mine))+('+llm' if llms else '')
     elif len(fams)>=2:route='+'.join(fams)
     elif len(llms)>=2 and len(ps)==1:route='llm+llm'

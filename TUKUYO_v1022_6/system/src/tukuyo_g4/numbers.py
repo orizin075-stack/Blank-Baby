@@ -71,11 +71,13 @@ _ONE_AFTER_EN=[re.compile(r'^\s+of\b',re.I),
 _ONE_AFTER_JA=[re.compile(r'^[^\s\d。、，,．.!?？！]{0,3}(?:あたり|当たり|につき|ごとに|ごと|毎)'),
                re.compile(r'^[^\s\d。、，,．.!?？！]{1,3}(?:に|で)[^。！？!?]*?[0-9０-９一二三四五六七八九十百千万]')]
 def optional(n,text=None):
-    """may a reading leave this number out? Ordinals, and the number 1 as the base of a rate or a pronoun: '1個あたり',
+    """may a reading leave this number out? Ordinals ('the first half' too), and the number 1 as the base of a rate or a pronoun: '1個あたり',
     '1日に8ページ', 'per 1 kg', 'one pack costs 11 dollars', 'one of them'. Any other 1 ('1 banana popsicle', 'one more
     cat') is an amount and must be bound or declared unused. Without the text, every 1 is taken as optional (the rule
     of earlier callers)"""
     if n.kind=='ordinal':return True
+    # 'In the first half of the game', 'the second half': a part of the time, not an amount
+    if text is not None and n.raw.lower()=='half' and re.search(r'\b(?:first|second|other|last|latter)\s*$',text[max(0,n.start-12):n.start],re.I):return True
     if n.value!=1:return False
     if text is None:return True
     before,after=text[max(0,n.start-12):n.start],text[n.end:n.end+60]

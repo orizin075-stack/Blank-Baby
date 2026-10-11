@@ -9,7 +9,8 @@ check(spec, values) -> {'ok', 'failures', 'answer', 'unit', 'covered', 'unused'}
   units      both sides of every fact, both operands of every + and -, and the arguments of min max mod gcd lcm
              have the same unit (a bare number takes the unit it is combined with)
   grounding  every span occurs in the text; a binding's number is a number of the text inside its span; known
-             constants are from KNOWN and say what they are; relations use no numbers but 0 1 100; every number
+             constants are from KNOWN and say what they are, or are one of the common facts of KNOWN_FACTS said exactly
+             that way ('a spider has 8 legs'); relations use no numbers but 0 1 100; every number
              of the text is bound, optional (ordinals; the number 1 as the base of a rate: numbers.optional) or declared
              unused with a reason
 """
@@ -17,7 +18,7 @@ from __future__ import annotations
 import re
 from fractions import Fraction
 from . import numbers as N
-from .fpl import KNOWN,RELATION_LITERALS,parse_unit,unit_str,fmt,SCHEMA
+from .fpl import KNOWN,KNOWN_FACTS,RELATION_LITERALS,parse_unit,unit_str,fmt,SCHEMA
 
 ARITY={'floor':1,'ceil':1,'abs':1,'min':2,'max':2,'gcd':2,'lcm':2,'mod':2}
 PREC={'+':1,'-':1,'*':2,'/':2,'u-':3}
@@ -217,7 +218,8 @@ def check(spec,values):
             if a[0]=='var' and b[0]=='num':bind=(a[1],b[1])
             elif a[0]=='var' and b[0]=='bin' and b[1]=='/' and b[2][0]=='num' and b[3][0]=='num' and b[3][1]!=0:bind=(a[1],b[2][1]/b[3][1])
         if bind and f.get('known') is not None:
-            if bind[1] not in KNOWN or not str(f.get('known')).strip():fails.append('KNOWN_CONSTANT:'+f['eq'])
+            said=str(f.get('known')).strip()
+            if not said or (bind[1] not in KNOWN and KNOWN_FACTS.get(said.lower())!=bind[1]):fails.append('KNOWN_CONSTANT:'+f['eq'])
             continue
         if bind:
             spots=_locate(text,f.get('span'))

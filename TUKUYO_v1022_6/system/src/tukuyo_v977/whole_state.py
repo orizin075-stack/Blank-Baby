@@ -69,7 +69,11 @@ def load_soul(data):
 #          the mix of a whole life, not only its length, and it keeps answering to what happens next. Relationship
 #          follows the experiences with others; the soul keeps, for each one it learns from, how often what they gave
 #          held up and how often it failed, recent ones weighing more (TRUST_MEMORY)
-LAWS=(1,2)
+#   law 3  (generation 4, fourth round) law 2, and what the child knows of itself: an experience whose relation is
+#          'self:<way of reading>' is one of its own readings that a parent confirmed (self_confirmed) or that two
+#          parents read another way (self_error). It moves the soul's record of that way of reading (held / failed,
+#          recent ones weighing more, as trust in a parent), and neither bonds nor relationship: it is not someone else
+LAWS=(1,2,3)
 SETTLE=0.002        # law 2: how far each experience lets values settle back toward the temperament and themes fade
 VALUE_RATE=0.06     # law 2: curiosity and truthfulness (the same step as law 1 at the temperament)
 RELATION_RATE=0.02  # law 2: relationship, moved by every experience with another
@@ -98,6 +102,20 @@ def _law2(s,kind,v,imp,theme,relation):
     _marks(s,kind,v,imp,theme,relation)
     return s
 
+def _law3(s,kind,v,imp,theme,relation):
+    if str(relation).startswith('self:'):
+        s=_law2(s,kind,v,imp,theme,'')
+        r=s.setdefault('self_trust',{}).setdefault(str(relation).split(':',1)[1],{'held':0.0,'failed':0.0})
+        r['held']=round(r['held']*TRUST_MEMORY+(kind=='self_confirmed'),6);r['failed']=round(r['failed']*TRUST_MEMORY+(kind=='self_error'),6)
+        return s
+    return _law2(s,kind,v,imp,theme,relation)
+
+def self_trust_record(s,skill):
+    # law 3: the share of the child's own readings of this kind that held up when a parent checked them, recent ones
+    # weighing more; 0.5 for a way of reading never checked
+    r=(s.get('self_trust') or {}).get(skill)
+    return round((1+r['held'])/(2+r['held']+r['failed']),6) if r else 0.5
+
 def _marks(s,kind,v,imp,theme,relation):
     # scars and vows stay for good, under either law
     if kind in ('betrayal','harm') and imp>=0.6:
@@ -117,6 +135,7 @@ def _apply_experience_mutation(s,kind,valence,importance,theme='',relation='',la
     if law not in LAWS:raise ValueError('SOUL_LAW')
     s=copy.deepcopy(s);imp=float(importance);v=float(valence);s['update_seq']+=1
     if law==2:return _law2(s,kind,v,imp,theme,relation)
+    if law==3:return _law3(s,kind,v,imp,theme,relation)
     if theme:
         t=s['themes'].setdefault(theme,{'weight':0.0,'encounters':0});t['encounters']+=1;t['weight']=round(max(-2,min(2,t['weight']+v*imp*0.25)),6)
     if kind in ('discovery','learning'):

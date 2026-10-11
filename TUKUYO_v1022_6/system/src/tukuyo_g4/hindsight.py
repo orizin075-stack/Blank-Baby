@@ -36,11 +36,13 @@ class Unresolved:
         tmp.write_text(json.dumps(o,ensure_ascii=False,sort_keys=True),encoding='utf-8');os.replace(tmp,s.p)
     @staticmethod
     def entry_id(text):return hashlib.sha256(' '.join(str(text).split()).encode()).hexdigest()[:24]
-    def keep(s,text,key,values,reason):
-        """values: {parent: the answer its reading gave}; the latest reading of a parent replaces its earlier one"""
+    def keep(s,text,key,values,reason,mine=None):
+        """values: {parent: the answer its reading gave}; the latest reading of a parent replaces its earlier one. mine: {its
+        own way of reading: the answer it gave} when a reading of its own disagreed with its parents"""
         if not values or not key:return None
         o=s.load();eid=s.entry_id(text);e=o['entries'].get(eid) or {'text':text,'key':key,'values':{}}
         e['values'].update({p:str(v) for p,v in values.items()});e['reason']=reason;e['seq']=int(o.get('next',1));o['next']=e['seq']+1
+        if mine:e['mine']={k:str(v) for k,v in mine.items()}
         o['entries'][eid]=e
         if len(o['entries'])>MAX:
             for k,_ in sorted(o['entries'].items(),key=lambda kv:kv[1].get('seq',0))[:len(o['entries'])-MAX]:del o['entries'][k]
@@ -55,8 +57,9 @@ class Unresolved:
 def keep(data,text,key,readings,reason):
     """api.solve: a disagreement (or a single voice) among its parents' valid readings, kept to look back on later"""
     values={r['parent']:r['value'] for r in readings if r.get('ok') and r.get('parent') and str(r.get('route','')).startswith('llm')}
+    mine={r['skill']:r['value'] for r in readings if r.get('ok') and r.get('skill') and not str(r.get('route','')).startswith('llm')}
     if data is None or not values:return None
-    try:return Unresolved(data).keep(text,key,values,reason)
+    try:return Unresolved(data).keep(text,key,values,reason,mine)
     except ValueError:return None          # a store that is not its own is not written to; the audits report it
 
 def look_back(data,key):

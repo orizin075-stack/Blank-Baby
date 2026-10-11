@@ -10,7 +10,8 @@ READ=[
  ('Owen had 12 stamps. His aunt gave him 9 more stamps. How many stamps does Owen have now?','21'),
  ('Pia baked 24 muffins. She ate 3 of them. How many muffins does she have now?','21'),
  ('There were 14 ducks on the pond. 9 more ducks landed on the pond. How many ducks are on the pond now?','23'),
- ('There were 40 people on the train. 15 people got off at the station. How many people are on the train now?',None),
+ # read since the fourth round: 'got off' leaves the train (before, it was left unanswered)
+ ('There were 40 people on the train. 15 people got off at the station. How many people are on the train now?','25'),
  ('Liam had some marbles. He found 7 more marbles. Now he has 20 marbles. How many marbles did Liam have at first?','13'),
  ('Ada had 50 stickers. She gave some stickers to Ben. Now she has 32 stickers. How many stickers did Ada give to Ben?','18'),
  ('Kim picked 18 apples in the morning and 25 apples in the afternoon. How many apples did Kim pick in all?','43'),

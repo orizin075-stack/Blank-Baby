@@ -302,6 +302,8 @@ def parser():
     sub.add_parser('g4-remembered',help='generation 4: answers its parents agreed on, remembered (not verified)')
     c=sub.add_parser('g4-learned',help='generation 4: readings learned from verified examples')
     c=sub.add_parser('g4-audit',help='generation 4: every learned reading must reproduce its own example')
+    c=sub.add_parser('g4-reflect',help='generation 4: what the child is unsure of (disagreements it could not settle, what was contested, its own ways of reading in doubt) and what it wants to ask its parents; with --act it asks them on its own (paid calls when parents are configured)')
+    c.add_argument('--act',action='store_true');c.add_argument('--limit',type=int,default=3)
     c=sub.add_parser('g4-parents',help='generation 4: is it ready to ask its parents - for each one its key (never shown), model, package and network, and the child\'s trust in it; no request to any parent without --live')
     c.add_argument('--live',action='store_true',help='one short paid call to each parent that is ready')
     c=sub.add_parser('research-run',help='claude-patch5 V1023r preview: one research expedition into a hidden-rule world');c.add_argument('--world',default='W1');c.add_argument('--ticks',type=int,default=120);c.add_argument('--regime',choices=('costly_failure','safe_failure'),default='costly_failure');c.add_argument('--tier',type=int,choices=(1,2,3,4,5));c.add_argument('--noise',type=float,choices=(0.0,0.05,0.1))
@@ -774,7 +776,7 @@ def _main(argv=None):
                     res['order_it_would_ask']=g4_life.trust_order(data,g4_llm.parents())
                 except Exception as e:  # noqa: BLE001 - readiness does not need a living individual
                     res['trust_in_parents']=None;res['individual']=type(e).__name__
-            elif args.cmd in ('g4-solve','g4-ask','g4-learned','g4-audit','g4-self','g4-remembered'):
+            elif args.cmd in ('g4-solve','g4-ask','g4-learned','g4-audit','g4-self','g4-remembered','g4-reflect'):
                 _require_live(data)
                 from tukuyo_g4 import api as g4_api,learn as g4_learn,life as g4_life,llm as g4_llm,memory as g4_memory
                 order=g4_life.trust_order(data,g4_llm.parents())
@@ -788,6 +790,9 @@ def _main(argv=None):
                     if not args.no_soul:res['life']=g4_life.record(data,res)
                     if (data/'g4').exists():whole_sync(data)
                 elif args.cmd=='g4-self':res={'ok':True,'version':'gen4',**g4_life.self_report(data)}
+                elif args.cmd=='g4-reflect':
+                    res={'ok':True,'version':'gen4',**g4_life.reflect(data,act=args.act,limit=args.limit,order=order)}
+                    if res.get('acted') and (data/'g4').exists():whole_sync(data)
                 elif args.cmd=='g4-remembered':
                     o=g4_memory.Memory(data).load()
                     res={'ok':True,'note':'answers two or more parents agreed on; not verified by TUKUYO','entries':[{'id':k,**v} for k,v in sorted(o['entries'].items())]}

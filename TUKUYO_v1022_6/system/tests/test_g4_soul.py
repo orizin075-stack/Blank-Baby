@@ -23,7 +23,22 @@ def test_law_1_is_unchanged():
     s=W._apply_experience_mutation(s,'honesty',0.5,0.3,'z','')
     assert s['core_values']['truthfulness']==0.653 and 'trust' not in s
     assert _apply(_soul(),300,'learning',0.5,0.4,'g4:x','',law=1)['core_values']['curiosity']==1.0   # pinned
-    with pytest.raises(ValueError,match='SOUL_LAW'):W._apply_experience_mutation(_soul(),'learning',0.5,0.4,'','',law=3)
+    with pytest.raises(ValueError,match='SOUL_LAW'):W._apply_experience_mutation(_soul(),'learning',0.5,0.4,'','',law=4)
+
+def test_law_3_is_law_2_and_what_it_knows_of_itself():
+    # law 3 lives every experience as law 2 does ...
+    a=W._apply_experience_mutation(_soul(),'parent_help',0.4,0.2,'g4:reading','parent:claude',law=2)
+    b=W._apply_experience_mutation(_soul(),'parent_help',0.4,0.2,'g4:reading','parent:claude',law=3)
+    assert a==b
+    # ... and keeps, for each of its own ways of reading, how it held up when its parents checked it (recent ones weighing
+    # more); that is not a bond with someone: neither attachments nor relationship move
+    s=_soul()
+    for k in ('self_error','self_error'):s=W._apply_experience_mutation(s,k,-0.3,0.3,'g4:self_knowledge','self:reader_en:compare',law=3)
+    assert s['self_trust']['reader_en:compare']=={'held':0.0,'failed':1.99} and W.self_trust_record(s,'reader_en:compare')<0.5
+    assert s['attachments']=={} and s['core_values']['relationship']==W.TEMPERAMENT['relationship'] and 'trust' not in s
+    for _ in range(3):s=W._apply_experience_mutation(s,'self_confirmed',0.2,0.15,'g4:self_knowledge','self:reader_en:compare',law=3)
+    r=s['self_trust']['reader_en:compare'];assert r['held']>r['failed'] and W.self_trust_record(s,'reader_en:compare')>0.5
+    assert W.self_trust_record(s,'reader_en:holding')==0.5                     # never checked
 
 def test_law_2_keeps_a_long_life_responsive():
     s=_apply(_soul(),3000,'learning',0.5,0.4,'g4:learned_reading','')

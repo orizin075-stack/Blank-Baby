@@ -21,6 +21,23 @@ from fractions import Fraction
 SCHEMA='tukuyo.g4.fpl/1'
 FUNCS={'floor':1,'ceil':1,'abs':1,'min':2,'max':2,'gcd':2,'lcm':2,'mod':2}
 KNOWN={Fraction(v) for v in (2,3,4,7,10,12,16,24,36,52,60,100,365,366,1000,1760,5280)}
+# common facts a known constant may also be, said exactly this way (any other value must be in KNOWN): how many legs,
+# eyes, ears or feet a living thing has, and how many wheels a vehicle has
+def _facts():
+    out={}
+    for n,things in ((4,'dog cat cow horse pig sheep goat frog lion tiger bear elephant mouse rabbit deer fox wolf zebra giraffe camel puppy kitten donkey'),
+                     (2,'chicken duck bird goose hen rooster turkey owl parrot penguin ostrich person boy girl man woman child kid'),
+                     (8,'spider'),(6,'insect ant bee bug beetle butterfly fly ladybug grasshopper cricket')):
+        for t in things.split():out[f"{'an' if t[0] in 'aeiou' else 'a'} {t} has {n} legs"]=n
+    for t in 'dog cat cow horse pig sheep goat lion tiger bear elephant mouse rabbit deer fox wolf zebra giraffe camel puppy kitten donkey person boy girl man woman child kid'.split():
+        a='an' if t[0] in 'aeiou' else 'a'
+        out[f'{a} {t} has 2 eyes']=2;out[f'{a} {t} has 2 ears']=2
+    for t in 'chicken duck bird goose hen rooster turkey owl parrot penguin ostrich person boy girl man woman child kid'.split():
+        out[f"{'an' if t[0] in 'aeiou' else 'a'} {t} has 2 feet"]=2
+    for t,n in (('bicycle',2),('bike',2),('tricycle',3),('car',4),('unicycle',1),('motorcycle',2)):
+        out[f"{'an' if t[0] in 'aeiou' else 'a'} {t} has {n} wheels"]=n
+    return {k:Fraction(v) for k,v in out.items()}
+KNOWN_FACTS=_facts()
 RELATION_LITERALS={Fraction(0),Fraction(1),Fraction(100)}
 NAME=re.compile(r'[A-Za-z_][A-Za-z0-9_]*\Z')
 _TOK=re.compile(r'\s*(?:(\d+(?:\.\d+)?)|([A-Za-z_][A-Za-z0-9_]*)|(.))')

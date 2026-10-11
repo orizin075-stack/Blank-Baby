@@ -91,6 +91,7 @@ def test_a_reading_taught_wrongly_is_quarantined_relearned_and_looked_back_on(tm
     # the parent asked disagrees: the others are asked, two of them read it the right way, the template is contested
     r3=solve('3',[_reading('claude',4,8,28),_reading('chatgpt',4,8,28),_reading('gemini',4,8,28,True)])(_text(4,8,28))
     assert r3['answer'] is None and r3['reason'].startswith('DISAGREE') and r3['template_contested']==r1['learned']
+    assert not r3.get('self_checks')        # a learned template is judged one by one, not as one of its own ways of reading
     assert {x.get('parent') for x in r3['readings'] if x.get('parent')}=={'claude','chatgpt','gemini'}
     r4=solve('4')(_text(6,6,30));assert r4['answer'] is None and any(x.get('reason')=='TEMPLATE_CONTESTED' for x in r4['readings'])
     # two parents who agree teach it again; the old reading is kept in its history, and its own example is read again

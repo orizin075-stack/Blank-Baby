@@ -1,0 +1,254 @@
+{
+ "schema": "tukuyo.soul_assay/1",
+ "note": "before the fourth round: self_knowledge measured on the tree of commit 554e605 with the round-4 reader changes (no soul changes); inner_life measured on the tree with self-knowledge but before g4-reflect existed",
+ "measures": {
+  "self_knowledge": {
+   "ok": false,
+   "checks": {
+    "asks_the_other_parents_when_contradicted": false,
+    "knows_what_it_is_good_at": false,
+    "knows_where_it_was_wrong": false,
+    "holds_back_where_it_was_contradicted": false,
+    "still_answers_what_it_knows": true,
+    "the_humility_is_its_own": true,
+    "self_knowledge_survives_forgetting": false,
+    "trusts_itself_again_when_confirmed": true,
+    "in_its_soul_under_its_law": false,
+    "audits_pass": true
+   },
+   "self_knowledge": {},
+   "after_forgetting": null,
+   "held_back": {
+    "answer": "18",
+    "reason": null
+   },
+   "log": [
+    {
+     "text": "Nora had 30 shells. She gave 8 shells to",
+     "alone": false,
+     "answer": "22",
+     "route": "own+llm",
+     "reason": null,
+     "asked": [
+      "claude"
+     ],
+     "life": [
+      "learning",
+      "parent_help"
+     ]
+    },
+    {
+     "text": "Owen had 12 stamps. He gave 5 stamps to ",
+     "alone": false,
+     "answer": "7",
+     "route": "own+llm",
+     "reason": null,
+     "asked": [
+      "claude"
+     ],
+     "life": [
+      "learning",
+      "parent_help"
+     ]
+    },
+    {
+     "text": "Pia had 24 muffins. She gave 9 muffins t",
+     "alone": false,
+     "answer": "15",
+     "route": "own+llm",
+     "reason": null,
+     "asked": [
+      "claude"
+     ],
+     "life": [
+      "learning",
+      "parent_help"
+     ]
+    },
+    {
+     "text": "Rosa has 6 more crayons than Ivan. Ivan ",
+     "alone": false,
+     "answer": null,
+     "route": null,
+     "reason": "DISAGREE:21,9",
+     "asked": [
+      "claude"
+     ],
+     "life": [
+      "honesty"
+     ]
+    },
+    {
+     "text": "Lena has 12 more stamps than Omar. Omar ",
+     "alone": false,
+     "answer": null,
+     "route": null,
+     "reason": "DISAGREE:32,8",
+     "asked": [
+      "claude"
+     ],
+     "life": [
+      "honesty"
+     ]
+    },
+    {
+     "text": "Kai has 7 more shells than Ivy. Ivy has ",
+     "alone": true,
+     "answer": "18",
+     "route": "own",
+     "reason": null,
+     "asked": [],
+     "life": []
+    },
+    {
+     "text": "Kim had 40 beads. She gave 15 beads to A",
+     "alone": true,
+     "answer": "25",
+     "route": "own",
+     "reason": null,
+     "asked": [],
+     "life": []
+    },
+    {
+     "text": "Kai has 7 more shells than Ivy. Ivy has ",
+     "alone": true,
+     "answer": "18",
+     "route": "own",
+     "reason": null,
+     "asked": [],
+     "life": []
+    },
+    {
+     "text": "Tia has 6 more pens than Max. Max has 14",
+     "alone": false,
+     "answer": "20",
+     "route": "own+llm",
+     "reason": null,
+     "asked": [
+      "claude"
+     ],
+     "life": [
+      "learning",
+      "parent_help"
+     ]
+    },
+    {
+     "text": "Ben has 9 more cards than Sue. Sue has 1",
+     "alone": false,
+     "answer": "22",
+     "route": "own+llm",
+     "reason": null,
+     "asked": [
+      "claude"
+     ],
+     "life": [
+      "learning",
+      "parent_help"
+     ]
+    },
+    {
+     "text": "Ada has 4 more kites than Eli. Eli has 8",
+     "alone": false,
+     "answer": "12",
+     "route": "own+llm",
+     "reason": null,
+     "asked": [
+      "claude"
+     ],
+     "life": [
+      "learning",
+      "parent_help"
+     ]
+    },
+    {
+     "text": "Kai has 7 more shells than Ivy. Ivy has ",
+     "alone": true,
+     "answer": "18",
+     "route": "own",
+     "reason": null,
+     "asked": [],
+     "life": []
+    }
+   ],
+   "audits": {
+    "whole-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "heart-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "soul-identity-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "g4-audit": {
+     "ok": true,
+     "errors": []
+    }
+   },
+   "self_events": 0,
+   "seconds": 16.1
+  },
+  "inner_life": {
+   "ok": false,
+   "checks": {
+    "knows_its_open_questions": false,
+    "looking_changes_nothing_by_itself": true,
+    "asks_nobody_without_parents": false,
+    "acts_on_its_own_questions": false,
+    "who_was_right_is_looked_back_on": false,
+    "its_doubt_is_checked_again": false,
+    "audits_pass": true
+   },
+   "intentions": null,
+   "acted": null,
+   "after": null,
+   "note_without_parents": null,
+   "self_knowledge": {
+    "reader_en:compare": {
+     "confirmed": 0,
+     "contradicted": 2,
+     "doubted": true,
+     "trust": 0.250627
+    }
+   },
+   "looked_back": {},
+   "audits": {
+    "whole-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "heart-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "soul-identity-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "g4-audit": {
+     "ok": true,
+     "errors": []
+    }
+   },
+   "errors": [
+    "ion-status', 'population-audit', 'runtime-ecology-init', 'runtime-ecology-step', 'runtime-ecology-status', 'runtime-ecology-audit', 'runtime-ecology-recover-cache', 'think', 'llm-ask', 'llm-teach', 'llm-status', 'llm-audit', 'self-study', 'dialogue-learn', 'learning-status', 'learning-audit', 'metabolism-init', 'metabolism-step', 'metabolism-status', 'metabolism-audit', 'g4-solve', 'g4-ask', 'g4-self', 'g4-remembered', 'g4-learned', 'g4-audit', 'g4-parents', 'research-run', 'research-status', 'research-audit', 'research-ecology', 'runtime-trust-rebind', 'cap-request', 'cap-install', 'social')\n",
+    "ion-status', 'population-audit', 'runtime-ecology-init', 'runtime-ecology-step', 'runtime-ecology-status', 'runtime-ecology-audit', 'runtime-ecology-recover-cache', 'think', 'llm-ask', 'llm-teach', 'llm-status', 'llm-audit', 'self-study', 'dialogue-learn', 'learning-status', 'learning-audit', 'metabolism-init', 'metabolism-step', 'metabolism-status', 'metabolism-audit', 'g4-solve', 'g4-ask', 'g4-self', 'g4-remembered', 'g4-learned', 'g4-audit', 'g4-parents', 'research-run', 'research-status', 'research-audit', 'research-ecology', 'runtime-trust-rebind', 'cap-request', 'cap-install', 'social')\n",
+    "ion-status', 'population-audit', 'runtime-ecology-init', 'runtime-ecology-step', 'runtime-ecology-status', 'runtime-ecology-audit', 'runtime-ecology-recover-cache', 'think', 'llm-ask', 'llm-teach', 'llm-status', 'llm-audit', 'self-study', 'dialogue-learn', 'learning-status', 'learning-audit', 'metabolism-init', 'metabolism-step', 'metabolism-status', 'metabolism-audit', 'g4-solve', 'g4-ask', 'g4-self', 'g4-remembered', 'g4-learned', 'g4-audit', 'g4-parents', 'research-run', 'research-status', 'research-audit', 'research-ecology', 'runtime-trust-rebind', 'cap-request', 'cap-install', 'social')\n",
+    "ion-status', 'population-audit', 'runtime-ecology-init', 'runtime-ecology-step', 'runtime-ecology-status', 'runtime-ecology-audit', 'runtime-ecology-recover-cache', 'think', 'llm-ask', 'llm-teach', 'llm-status', 'llm-audit', 'self-study', 'dialogue-learn', 'learning-status', 'learning-audit', 'metabolism-init', 'metabolism-step', 'metabolism-status', 'metabolism-audit', 'g4-solve', 'g4-ask', 'g4-self', 'g4-remembered', 'g4-learned', 'g4-audit', 'g4-parents', 'research-run', 'research-status', 'research-audit', 'research-ecology', 'runtime-trust-rebind', 'cap-request', 'cap-install', 'social')\n"
+   ],
+   "seconds": 7.1
+  }
+ },
+ "utc": [
+  "2026-10-11T06:32:32Z",
+  "2026-10-11T06:37:51Z"
+ ],
+ "claim_boundary": {
+  "functional_assay_of_a_functional_model": true,
+  "consciousness_established": false,
+  "literal_feeling_established": false
+ }
+}
