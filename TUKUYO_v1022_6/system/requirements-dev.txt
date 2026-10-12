@@ -1,1 +1,4 @@
 -r requirements.txt
+-r requirements-chatgpt.txt
+google-genai>=2,<3
+pytest-xdist>=3,<4

@@ -93,6 +93,27 @@ def _independent_crosscheck(query,local):
  An accepted local answer is re-read by the separately written v1014.1 verifier.
  Agreement adds independent evidence; a decided disagreement withholds the answer."""
  if local.get('uncertain') or local.get('answer') is None:return local
+ if (local.get('proof') or {}).get('kind')=='g4_reading':
+  from tukuyo_g4.proof import verify as verify_g4
+  valid=verify_g4(query,local['answer'],local['proof'])
+  if valid:return {**local,'verification_evidence':{**local.get('verification_evidence',{}),'independent':True,'independent_mode':'SEPARATE_FPL_ARITHMETIC_CHECK_CONDITIONAL_ON_TRANSLATION','complete_semantic_independence':False}}
+  return {**local,'answer':None,'confidence':0.,'uncertain':True,'reason':'G4_PROOF_REJECTED'}
+ if (local.get('proof') or {}).get('kind')=='linear_constraints':
+  from tukuyo_v1022.constraints_verify import verify as verify_constraints
+  cv=verify_constraints(query,str(local['answer']),local['proof'])
+  ev={**local.get('verification_evidence',{}),'independent':True,
+      'independent_mode':'SEPARATE_LEXICAL_INPUT_AND_DUAL_CERTIFICATE',
+      'independent_expected':cv.get('expected'),'constraint_check':cv}
+  if cv.get('decidable') and cv.get('supported'):return {**local,'verification_evidence':ev}
+  return {**local,'answer':None,'confidence':0.,'uncertain':True,'reason':'CONSTRAINT_INDEPENDENT_VERIFY_REJECTED','verification_evidence':ev}
+ from tukuyo_v1022.input_audit import inspect
+ coverage=inspect(query,str(local['answer']),local.get('proof'))
+ if coverage['recognized']:
+  ev={**local.get('verification_evidence',{}),'input_coverage':coverage,
+      'independent':True,'independent_mode':'SEPARATE_INPUT_GRAPH',
+      'independent_expected':coverage.get('expected'),'kind':coverage['kind']}
+  if coverage['ok']:return {**local,'verification_evidence':ev}
+  return {**local,'answer':None,'confidence':0.,'uncertain':True,'reason':coverage['reason'],'verification_evidence':ev}
  try:
   sv=verify_bounded_semantics(query,str(local['answer']));same_family=False
   if (not sv.get('recognized') or not sv.get('decidable')) and (local.get('proof') or {}).get('kind')=='deliberation':
@@ -117,6 +138,8 @@ def _independent_crosscheck(query,local):
 def solve(data,query,samples=3):
  from tukuyo_v1022.cognition import solve as local_solve
  local=local_solve(data,query)
+ from tukuyo_g4.api import think as g4_think
+ local=g4_think(data,query,local,llm='off')
  if local.get('recognized'):local=_independent_crosscheck(query,local)
  if local.get('recognized') and local.get('uncertain'):local=_second_opinion(query,local)
  if local.get('recognized'):

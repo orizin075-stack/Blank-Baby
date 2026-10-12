@@ -179,7 +179,14 @@ def assess_plan_robustness(t):
             'worst_extra_cost':max(extras) if extras else None,'all_single_action_failures_survivable':viable==len(route)}
 
 def check(p,answer):
+    if isinstance(p,dict) and p.get('kind')=='g4_reading':
+        from tukuyo_g4.proof import verify
+        return verify(p.get('source_query'),answer,p)
     try:
+        if p['kind']=='linear_constraints':
+            from .constraints_verify import verify as check_constraints
+            v=check_constraints(p.get('source_query'),answer,p)
+            return v.get('recognized') and v.get('decidable') and v.get('supported')
         if p['kind']=='arithmetic':
             if p.get('schema'):
                 from .wordprob import solve as parse_word_problem
@@ -187,8 +194,30 @@ def check(p,answer):
                 if not isinstance(source,str):return False
                 replay=parse_word_problem(source)
                 if not replay or replay.get('refused') or any(replay.get(k)!=p.get(k) for k in ('expression','schema','unit')):return False
-            return number(calculate(p['expression']))==str(answer)
+                if replay.get('semantic_graph') is not None and replay['semantic_graph']!=p.get('semantic_graph'):return False
+                if str(p['schema']).startswith('bounded_quantity_'):
+                    from .quantity_verify import inspect as independent_quantity
+                    binding=independent_quantity(source,answer,p)
+                    if not binding or not binding['ok']:return False
+            v=calculate(p['expression'])
+            if p.get('answer_format')=='exact_rational':
+                return bool(p.get('schema')) and str(v)==str(answer)
+            if p.get('answer_format') is not None:return False
+            return number(v)==str(answer)
         if p['kind']=='inventory':
+            if 'source_query' in p or 'independent_input_graph' in p:
+                from .semantic_coverage import inspect as independent_input
+                source=p.get('source_query')
+                if not isinstance(source,str):return False
+                binding=independent_input(source,answer)
+                g=binding.get('graph')
+                if not binding.get('recognized') or not binding['ok'] or g is None or g!=p.get('independent_input_graph'):return False
+                if len(g['events'])!=len(p['events']) or p.get('per')!=int(g['per']):return False
+                expected_initial=int(g['count']) if g['target_unit']==g['container_unit'] else int(g['count'])*int(g['per'])
+                if p['initial']!=expected_initial:return False
+                for given,event in zip(p['events'],g['events']):
+                    factor=1 if g['target_unit']==g['container_unit'] else int(event['factor'])
+                    if (given['quantity'],given['direction'],given['factor'])!=(int(event['quantity']),event['direction'],factor):return False
             n=p['initial'];per=p.get('per',1)
             if type(n) is not int or n<0 or type(per) is not int or per<1:return False
             for e in p['events']:

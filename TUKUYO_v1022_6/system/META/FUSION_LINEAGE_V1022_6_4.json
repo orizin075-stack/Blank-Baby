@@ -1,0 +1,16 @@
+{
+  "schema": "tukuyo.v1022.fusion.lineage/1",
+  "incoming_zip_sha256": "ba6281eb087dcaf009952093e26cf3db30148a8507fab671fe6d12be623ea60b",
+  "own_parent_zip_sha256": "eb737b1698f19f1e7d55c576ea90dfe561028445e9869a77924341fb20635f4b",
+  "incoming_receipt_public_key": "FZbc4ewE8BB6Br/RfDYneVhKNXt8MfRaEzocWoMlkyk=",
+  "publisher_key": "SNYPV94/EvF25kb0EIenCeBFQ1Nhvtpxs7KsIJMKo0I=",
+  "incoming_authorship_verified": false,
+  "incoming_integrity_with_bundled_anchor_verified": true,
+  "common_base": "v1022.5-fusion",
+  "historical_test_adaptations": {
+    "test_claude_patch1.py": "Blank student retains unknown-skill teacher-disagreement precondition (unchanged from our parent).",
+    "test_claude_patch2.py": "Same blank-student precondition (unchanged from our parent).",
+    "test_claude_patch4.py": "Unambiguous box-count query now answers 6 instead of refusing; content count 72 must remain rejected.",
+    "test_claude_patch5.py": "Parser B now decides an unambiguous container target as 4; ambiguous and unknown event predicates remain UNDECIDED."
+  }
+}

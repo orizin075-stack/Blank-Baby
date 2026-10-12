@@ -167,7 +167,7 @@ def _roles(q,answer):
 WEEK='月火水木金土日'
 def _num(x):return Fraction(x)
 def _fmt(v):
-    v=Fraction(v);return str(v.numerator) if v.denominator==1 else format(float(v),'.12g')
+    v=Fraction(v);return str(v)
 
 def _b_rate(s,toks):
     m=re.search(r'(時速|分速|秒速)\s*(\d+(?:\.\d+)?)\s*(km|m)',s)
@@ -586,6 +586,13 @@ def _b_counter(s,t):
 
 def _b_avg(s,toks):
     if not re.search(r'平均|\baverage\b|\bmean\b',s,re.I):return None
+    # Independently read the inverse-mean frame.  This parser deliberately does
+    # not call mathprob and requires the count, mean, known value and target.
+    missing=re.search(r'\b(?:mean|average)\s+of\s+(\d+)\s+[a-z]+\s+(?:is|was)\s+(\d+(?:\.\d+)?)\s*(cm|m|kg|g|points?|dollars?|km|years?|minutes?|pages?)?\s*[.]?\s*one\s+(?:of\s+the\s+)?(?:measurements?|values?|scores?|items?)\s+(?:is|was)\s+(\d+(?:\.\d+)?)\s*(cm|m|kg|g|points?|dollars?|km|years?|minutes?|pages?)?',s,re.I)
+    if missing and re.search(r'what\s+is\s+(?:the\s+)?other\s+(?:measurement|value|score|item)',s,re.I):
+        n=Fraction(missing[1]);mean=Fraction(missing[2]);known=Fraction(missing[4])
+        if n==2 and (missing[3] or '').lower()==(missing[5] or '').lower():return _fmt(mean*n-known)
+        return None
     v=_b_vals(toks);cnt=[t for t in v if re.match(r'\s*(?:回|人|日間|日|教科|試合|週|チーム|個|本|冊)\s*(?:の|で|間)',_b_after(s,t,5))]
     one=[t for t in v if t['value']==1 and re.match(r'\s*(?:日|人|回|試合|週)\s*(?:あたり|の)?\s*平均',_b_after(s,t,8))]
     vals=[t for t in v if t not in cnt and t not in one]
@@ -756,14 +763,51 @@ def _b_coins_and_items(s,toks):
     if starts-ones!=used-ones or r<0:return None
     return _fmt(r)
 
+def _b_sing(w):
+    w=w.lower()
+    if w.endswith('ies') and len(w)>4:return w[:-3]+'y'
+    if w.endswith('ves') and len(w)>4:return w[:-3]+'f'
+    if w.endswith(('xes','ches','shes','sses')):return w[:-2]
+    return w[:-1] if w.endswith('s') and not w.endswith('ss') else w
+
 def _b_groups_en(s,toks):
     v=_b_vals(toks)
     if len(v)!=2:return None
+    m=re.search(r'\bwith\s+(\d+)\s+(\w+)\s+(?:in|on)\s+each\s+(\w+)',s,re.I)
+    q=re.search(r'\bhow\s+many\s+(\w+)',s,re.I)
+    if m and q and _b_sing(q[1])==_b_sing(m[3])!=_b_sing(m[2]):
+        # asked for the containers ('how many bags', N things with K in each bag): N shared by K, whole or undecided.
+        # Before, every 'with K ... in each' was read as a product, and 42 pieces in bags of 7 became 294 bags
+        per=[t for t in v if t['span'][0]==m.start(1)];whole=[t for t in v if t['span'][0]!=m.start(1)]
+        if len(per)!=1 or len(whole)!=1 or not per[0]['value']:return None
+        n=whole[0]['value']/per[0]['value']
+        return _fmt(n) if n.denominator==1 else None
     if re.search(r'\bwith\s+\d+\s+\w+\s+(?:in|on)\s+each\b|\bholds?\s+\d+\b[^?]*\bin\s+\d+\b|\bcosts?\s+\d+(?:\.\d+)?\s+\w+\s+each\b',s,re.I):
         return _fmt(v[0]['value']*v[1]['value'])
     return None
 
 PB6=(_b_avg,_b_lcm,_b_next,_b_shape,_b_partof,_b_divide,_b_regroup,_b_other_part,_b_age,_b_speed,_b_daily,_b_coins_and_items,_b_groups_en)
+
+def _b_target_groups(s,toks):
+    """Full-question group readings; non-target quantities retain an explicit role.
+
+    A container count or recipient count does not use the contents in its
+    arithmetic, but the complete declaration still accounts for those tokens.
+    This parser shares no producer code and refuses any unmatched clause.
+    """
+    if HEDGE.search(s):return None
+    q=re.sub(r'\s+','',s)
+    m=re.fullmatch(r'1('+CONT+r')(?:に|あたり)?(\d+)個入り(?:が|の)?(\d+)\1(?:あります|ありました|ある)?[。,.]*\1(?:の数|の個数)?(?:は|が)?(?:全部で|合わせて|合計)?(?:何個|いくつ)?[?？。]*',q)
+    if m and len([t for t in toks if t['kind'] not in ('per_unit_one','label')])==2:
+        return m[3]
+    m=re.fullmatch(r'(\d+)\s+(\w+)\s+(?:with|of|that each have|each with)\s+(\d+)\s+(\w+)(?:\s+(?:each|in each|on each))?\.\s*how many\s+(\w+)\s+(?:in total|are there)\?',s,re.I)
+    if m and len(toks)==2:
+        if m[5].lower()==m[2].lower():return m[1]
+        if m[5].lower()==m[4].lower():return str(Fraction(m[1])*Fraction(m[3]))
+        return None
+    m=re.fullmatch(r'(\d+)\s+(\w+)\s+(?:are |were )?(?:shared|divided|split)\s+equally\s+(?:among|between|by)\s+(\d+)\s+(\w+)\.\s*how many\s+(\w+)\s+are there\?',s,re.I)
+    if m and len(toks)==2 and m[5].lower()==m[4].lower():return m[3]
+    return None
 
 def parser_b(q):
     s=normalize(q);toks=tokens(q)
@@ -771,7 +815,7 @@ def parser_b(q):
         cal=_b_calendar(s)
         if cal:return cal
         ja=bool(re.search(r'[぀-ヿ一-鿿]',s))
-        for f in (_b_roles,_b_en_roles)+PB6:
+        for f in (_b_target_groups,_b_roles,_b_en_roles)+PB6:
             v=f(s,toks)
             if v is not None:return ('value',v)
         for f in (_b_rate,_b_price,_b_conversion,_b_unit_price,_b_groups,_b_compare,_b_equation,_b_change,_b_en_change):
@@ -788,7 +832,10 @@ def _agree(b,answer):
     if kind=='value':
         nums=re.findall(r'\d+(?:\.\d+)?',a)
         if re.search(r'時間|[a-zA-Z]',v):return v in a
-        return bool(nums) and any(Fraction(n)==Fraction(v) for n in nums) and len(nums)==1
+        # Compare the whole signed decimal/rational surface, without rounding
+        # or accepting only one component of a fraction.
+        try:return Fraction(a)==Fraction(v)
+        except (ValueError,ZeroDivisionError):return False
     if kind=='date':
         m=re.search(r'(?:(\d{4})年)?(\d{1,2})月(\d{1,2})日',a)
         return bool(m) and int(m[2])==v.month and int(m[3])==v.day and (not m[1] or int(m[1])==v.year)
@@ -804,6 +851,13 @@ def _agree(b,answer):
 QUANT_KINDS={'arithmetic','deliberation','meta_derivation','hypothesis','inventory','qtime','situation','mathprob'}
 def audit(query,answer,proof):
     if not isinstance(proof,dict) or proof.get('kind') not in QUANT_KINDS:return {'ok':True,'applied':False}
+    if str(proof.get('schema','')).startswith('bounded_quantity_'):
+        from .quantity_verify import inspect as independent_quantity
+        bound=independent_quantity(query,answer,proof)
+        if not bound or not bound['ok']:
+            return {'ok':False,'applied':True,'reason':(bound or {}).get('reason','QUANTITY_INPUT_NOT_COVERED')}
+        return {'ok':True,'applied':True,'coverage':'ALL_QUANTITY_ROLES_AND_OPERATIONS_BOUND',
+                'independent_parser':'AGREE','tokens':bound['numeric_token_count']}
     toks=tokens(query);P=_proof_numbers(proof)
     groups={}
     for t in toks:
@@ -816,5 +870,12 @@ def audit(query,answer,proof):
     unexplained=[] if agreed else [t['text'] for t in toks if t['kind'] in ('date','clock') or not _explained(t,P,groups)]
     if unexplained:return {'ok':False,'applied':True,'reason':'UNCOVERED_NUMERIC_OR_OPERATION','unexplained':unexplained}
     role=_roles(query,answer)
+    if role=='HEDGED_QUANTITY' and proof.get('kind')=='inventory' and proof.get('source_query')==str(query):
+        # A fully covered unexecuted event is zero consumption, not an
+        # approximate amount. Reconstruct its whole input, never trust just a
+        # producer direction=0 or a word such as "planned".
+        from .semantic_coverage import inspect
+        scoped=inspect(query,answer,proof)
+        if scoped.get('ok') and scoped.get('graph')==proof.get('independent_input_graph') and any(e.get('role')=='not_executed' for e in scoped['graph']['events']):role=None
     if role:return {'ok':False,'applied':True,'reason':role}
     return {'ok':True,'applied':True,'coverage':'ALL_NUMERIC_TOKENS_EXPLAINED','independent_parser':'AGREE' if agreed else 'UNDECIDED','tokens':len(toks)}

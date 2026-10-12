@@ -1,0 +1,43 @@
+{
+  "schema": "tukuyo.v1022_7_2.fresh_test_report/1",
+  "release_revision": "v1022.7.2-grounded-sensor-challenge",
+  "full_suite": {
+    "passed": 802,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 347.61,
+    "distribution": "pytest-xdist loadscope, 4 workers"
+  },
+  "focused_regression": {
+    "passed": 59,
+    "failed": 0
+  },
+  "fresh_proof": {
+    "one_faulty_sensor_consensus": 10,
+    "two_of_three_collusion_consensus": 40,
+    "colluding_consensus_called_external_truth": false,
+    "successful_action_credit": 700,
+    "reservoir_delta": -700,
+    "living_energy_delta": 700,
+    "failed_action_credit": 0,
+    "stale_calibration_rejected_bytes_unchanged": true,
+    "forged_receipt_rejected_bytes_unchanged": true,
+    "independent_verifier": "PASS",
+    "actual_runtime_count": 6,
+    "actual_successions": 4,
+    "max_generation": 2,
+    "child_private_sensor_state_count": 0,
+    "whole_audit": "PASS",
+    "metabolism_audit": "PASS",
+    "grounded_sensor_audit": "PASS"
+  },
+  "not_proven": [
+    "external world truth",
+    "physical sensor correctness",
+    "real-world domain independence",
+    "two-of-three collusion resistance",
+    "literal soul or consciousness",
+    "24h, power-loss, cross-host or human third-party reproduction"
+  ]
+}

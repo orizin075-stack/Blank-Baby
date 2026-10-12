@@ -1,0 +1,38 @@
+{
+  "schema": "tukuyo.v1022_7_2.claim_ledger/1",
+  "release_revision": "v1022.7.2-grounded-sensor-challenge",
+  "verified": {
+    "cryptographic_device_authorship": true,
+    "calibration_authority_signature": true,
+    "typed_claim_context_and_unit_binding": true,
+    "bounded_calibration_validity": true,
+    "observation_nonce_and_logical_time": true,
+    "three_configured_sensor_domains": true,
+    "three_configured_calibration_domains": true,
+    "two_adapter_hashes": true,
+    "separate_action_verifier_key": true,
+    "signed_outcome_receipt": true,
+    "finite_metabolic_resource_conservation": true,
+    "whole_transaction_recovery_integration": true,
+    "successor_private_state_noninheritance": true
+  },
+  "not_verified": {
+    "external_world_truth": true,
+    "physical_sensor_correctness": true,
+    "real_world_domain_independence": true,
+    "two_of_three_collusion_resistance": true,
+    "literal_soul": true,
+    "consciousness": true,
+    "qualia": true,
+    "personhood": true,
+    "24h_operation": true,
+    "power_loss": true,
+    "cross_host_recovery": true,
+    "human_third_party_reproduction": true
+  },
+  "terminology": {
+    "CALIBRATED_SENSOR_CONSENSUS_ONLY": "authenticated configured calibrated-device agreement, never external truth",
+    "GROUNDED_ACTION_CONFIRMED": "a separately keyed configured verifier signed a successful bounded outcome",
+    "GROUNDED_ACTION_REFUTED": "the separately keyed configured verifier signed failure; no resource is credited"
+  }
+}

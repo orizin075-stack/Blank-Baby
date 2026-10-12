@@ -9,7 +9,7 @@ from tukuyo_g4 import api,llm,learn
 import test_g4_learn as L
 
 KEYS=('TUKUYO_ANTHROPIC_API_KEY','TUKUYO_OPENAI_API_KEY','TUKUYO_OPENAI_MODEL','TUKUYO_GEMINI_API_KEY','TUKUYO_GEMINI_MODEL',
-      'TUKUYO_LLM_PARENTS','TUKUYO_LLM_VOICE','TUKUYO_LLM_REPLAY','TUKUYO_LLM_RECORD')
+      'TUKUYO_LLM_PARENTS','TUKUYO_LLM_VOICE','TUKUYO_LLM_REPLAY','TUKUYO_LLM_RECORD','TUKUYO_CHATGPT_AUTH','TUKUYO_CHATGPT_CREDENTIAL_FILE')
 
 @pytest.fixture
 def clean(monkeypatch):
@@ -45,6 +45,11 @@ def test_readiness_says_what_is_missing_and_asks_no_parent_unless_live(tmp_path,
     assert sent==['gemini'] and r['paid_call_made'] is True and r['parents']['gemini']['live']['ok']
     rec=tmp_path/'replay.jsonl';rec.write_text('',encoding='utf-8');m.setenv('TUKUYO_LLM_REPLAY',str(rec))
     assert llm.readiness(live=True)['paid_call_made'] is False            # a replayed call costs nothing
+    # ChatGPT by its API key, or by the Continue with ChatGPT login (v1022.7.6): it says which, and what is missing
+    assert r['parents']['chatgpt']['auth_mode']=='api' and r['parents']['chatgpt']['key_variable']=='TUKUYO_OPENAI_API_KEY'
+    m.delenv('TUKUYO_LLM_REPLAY');m.setenv('TUKUYO_CHATGPT_AUTH','plan');m.setenv('TUKUYO_CHATGPT_CREDENTIAL_FILE',str(tmp_path/'none.json'))
+    c=llm.readiness()['parents']['chatgpt']
+    assert c['auth_mode']=='plan' and c['key_variable'].startswith('TUKUYO_CHATGPT_AUTH=plan') and 'key' in c['missing'] and not c['ready']
 
 def _replay(tmp_path,entries):
     """entries: (parent, text, reading or None) -> a replay file; None leaves that parent's reading out"""

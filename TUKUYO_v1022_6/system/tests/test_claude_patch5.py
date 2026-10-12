@@ -103,8 +103,10 @@ def test_cp5_parser_b_reads_word_problem_families_and_blocks_disagreement():
            'Tom has 12 apples. He eats 3 apples and gets 5 more. How many apples does he have now?':'14'}
     for q,v in cases.items():assert g.parser_b(q)==('value',v),(q,g.parser_b(q))
     # ambiguous verbs, unknown verbs and container questions stay UNDECIDED
-    for q in ('りんごが10個あります。3個売りました。残りは何個？','池に魚が20匹いました。7匹つりました。残りは何匹？','1箱に10個入りが4箱あります。箱は全部で何個？'):
+    for q in ('りんごが10個あります。3個売りました。残りは何個？','池に魚が20匹いました。7匹つりました。残りは何匹？'):
         assert g.parser_b(q) is None,q
+    # Fusion independently binds the explicitly requested container count.
+    assert g.parser_b('1箱に10個入りが4箱あります。箱は全部で何個？')==('value','4')
     forged={'kind':'arithmetic','expression':'35-8-0'}
     r=g.audit('兄はビー玉を35個持っています。弟は兄より8個少なく持っています。弟は何個持っていますか？','43',{'kind':'arithmetic','expression':'35+8'})
     assert not r['ok'] and r['reason']=='INDEPENDENT_PARSER_DISAGREES'

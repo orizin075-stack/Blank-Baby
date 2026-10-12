@@ -101,34 +101,56 @@ def test_a_thought_cut_short_is_finished_at_the_next_start(tmp_path,child):
         assert cli(d,'heart-audit')['ok'] and cli(d,'g4-audit')['ok'] and not (d/'g4'/'private'/'EPISODE.json').exists()
 
 def test_what_it_learned_is_its_own(tmp_path,child):
+    # in a live individual what it learned is a signed commit of its runtime (tukuyo_g4.runtime_store, taken from
+    # v1022.7.7): learned.json is a cache of the last commit, and its whole state records the head
     cli,rec,base=child;x=tmp_path/'x';shutil.copytree(base,x)
     assert cli(x,'think','--',L.T,replay=rec)['answer']=='14' and cli(x,'whole-audit')['ok']
-    o=json.loads((x/'g4'/'learned.json').read_text(encoding='utf-8'));assert o['signed']['payload']['individual_id']==own.individual(x)
+    head=json.loads(sorted((x/'g4'/'commits').glob('*.json'))[-1].read_text(encoding='utf-8'))
+    assert head['payload']['namespace']=='g4' and W._verify(head,W._key_paths(x)[1].read_text().strip())
+    o=json.loads((x/'g4'/'learned.json').read_text(encoding='utf-8'));assert o==head['payload']['state']['learned']
+    # changed by hand, its seal recomputed: it does not go on with it (every command refuses until it is put right), and
+    # its whole state is not rewritten
     y=tmp_path/'y';shutil.copytree(x,y)
-    # changed by hand, its seal recomputed: refused when read, and the whole state reports it
     for t in o['templates'].values():t['provenance']['parents']=['claude']
     o['sha256']=own.body_sha(o['templates']);(y/'g4'/'learned.json').write_text(json.dumps(o),encoding='utf-8')
-    me=cli(y,'g4-self');assert me['refused']['learned']=='LEARNED_NOT_ITS_OWN' and me['templates_learned'] is None
-    a=cli(y,'whole-audit');assert not a['ok'] and 'COMPONENT_DRIFT:g4_learned' in a['errors']
-    assert cli(y,'g4-solve','--llm','off','--',L.T.replace('30','45'))['answer'] is None         # not used
-    # taken from another child (another id, another key): refused as well
-    z=tmp_path/'z';cli(z,'init','--individual-id','SOUL-OTHER');(z/'g4').mkdir();shutil.copy(x/'g4'/'learned.json',z/'g4'/'learned.json')
-    assert cli(z,'g4-self')['refused']['learned']=='LEARNED_NOT_ITS_OWN'
+    w=W.state_path(y).read_bytes()
+    for a in (('g4-solve','--llm','off','--',L.T.replace('30','45')),('g4-self',),('whole-audit',)):
+        r=cli(y,*a);assert not r['ok'] and 'G4_LEARNING_CACHE_MISMATCH' in r['error'],(a,r)
+    assert W.state_path(y).read_bytes()==w
+    # taken from another child (another id, another key), with its commits or the cache alone: refused as well
+    for name,files in (('z1',('learned.json','STATE.json','commits')),('z2',('learned.json',))):
+        z=tmp_path/name;cli(z,'init','--individual-id','SOUL-OTHER');(z/'g4').mkdir()
+        for f in files:(shutil.copytree if (x/'g4'/f).is_dir() else shutil.copy)(x/'g4'/f,z/'g4'/f)
+        r=cli(z,'g4-self');assert not r['ok'] and r['error'].endswith(('V1022_COMMIT_SIGNATURE','G4_LEARNING_UNSIGNED_LEGACY')),(name,r)
     # its own, untouched: read, used, and every audit passes
     assert cli(x,'g4-solve','--llm','off','--',L.T.replace('30','45'))['answer']=='19' and cli(x,'whole-audit')['ok']
 
-def test_a_store_from_before_signing_is_taken_once(tmp_path,child):
+def test_a_store_from_an_earlier_version(tmp_path,child):
+    # signed with its own key by generation 4 before the runtime commits: read, used, and taken over by the next commit.
+    # Unsigned (written before stores were signed) or signed by another child: not taken. Before, an unsigned store its
+    # whole state had never recorded was read and then signed, so one put into an individual that had not used
+    # generation 4 yet was taken in; v1022.6.5 already refused it, and this keeps that
     cli,rec,base=child
-    from tukuyo_g4 import learn
-    def write(d,t):(d/'g4'/'learned.json').write_text(json.dumps({'schema':learn.SCHEMA,'templates':t,'sha256':own.body_sha(t)}),encoding='utf-8')
-    d=tmp_path/'old';shutil.copytree(base,d);(d/'g4').mkdir();st=learn.Store(d/'g4')
-    write(d,{});assert st.load()['templates']=={}                              # unsigned, never recorded: read
-    assert cli(d,'whole-sync')['ok'] and st.load()['templates']=={}            # recorded as it is: still read
-    write(d,{'k':{}})
-    with pytest.raises(ValueError,match='LEARNED_NOT_SIGNED'):st.load()        # changed after it was recorded: refused
-    e=tmp_path/'absent';shutil.copytree(base,e);(e/'g4').mkdir();assert cli(e,'whole-sync')['ok']
-    write(e,{})                                                                # recorded as absent, then appears unsigned
-    with pytest.raises(ValueError,match='LEARNED_NOT_SIGNED'):learn.Store(e/'g4').load()
+    from tukuyo_g4 import learn,runtime_store
+    x=tmp_path/'x';shutil.copytree(base,x);assert cli(x,'think','--',L.T,replay=rec)['answer']=='14'
+    tpl=runtime_store.load(x)['templates']
+    def legacy(d,signer):
+        """learned.json as generation 4 wrote it before the runtime commits; signer: whose own key signed it (None: unsigned)"""
+        sha=own.body_sha(tpl);o={'schema':learn.SCHEMA,'templates':tpl,'sha256':sha}
+        if signer is not None:o['signed']=own.sign(signer,'learned',sha)
+        (d/'g4').mkdir(exist_ok=True);(d/'g4'/'learned.json').write_text(json.dumps(o),encoding='utf-8')
+    old=tmp_path/'old';shutil.copytree(base,old);legacy(old,old)
+    assert runtime_store.load(old)['templates']==tpl
+    assert cli(old,'g4-solve','--llm','off','--',L.T.replace('30','45'))['answer']=='19' and cli(old,'whole-audit')['ok']
+    runtime_store.save(old,runtime_store.load(old))                          # the next commit takes it over
+    assert len(list((old/'g4'/'commits').glob('*.json')))==1 and runtime_store.load(old)['templates']==tpl
+    assert 'signed' not in json.loads((old/'g4'/'learned.json').read_text(encoding='utf-8'))
+    assert cli(old,'whole-audit')['ok'] and cli(old,'g4-solve','--llm','off','--',L.T.replace('30','45'))['answer']=='19'
+    other=tmp_path/'other';cli(other,'init','--individual-id','SOUL-OTHER')
+    for name,signer,why in (('unsigned',None,'G4_LEARNING_UNSIGNED_LEGACY'),('foreign',other,'LEARNED_NOT_ITS_OWN')):
+        d=tmp_path/name;shutil.copytree(base,d);legacy(d,signer)
+        with pytest.raises(ValueError,match=why):runtime_store.load(d)
+        r=cli(d,'g4-solve','--llm','off','--',L.T.replace('30','45'));assert not r['ok'] and r['error'].endswith(why),(name,r)
 
 def test_the_unexperienced_control_has_no_experience(tmp_path,child):
     cli,rec,base=child;d=tmp_path/'c';shutil.copytree(base,d)

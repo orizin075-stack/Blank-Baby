@@ -12,7 +12,7 @@ RECEIPT_SCHEMA='tukuyo.v1014.recovery_receipt/1'
 CHECKPOINT_TXN_SCHEMA='tukuyo.v1014_2.checkpoint_txn/1'
 RESTORE_TXN_SCHEMA='tukuyo.v1014_2.restore_txn/1'
 MAX_BYTES=32*1024*1024
-EXCLUDE_PARTS={'__pycache__','.pytest_cache','private','recovery_checkpoints','recovery_blobs','.lineage_transaction'}
+EXCLUDE_PARTS={'__pycache__','.pytest_cache','private','recovery_checkpoints','recovery_blobs','.lineage_transaction','.rsync-tmp'}
 # Private cryptographic material survives a checkpoint restore by design, but
 # transient transaction markers must not.  In particular this matters for
 # nested runtime trees whose startup recovery is not necessarily invoked before
@@ -210,7 +210,9 @@ def _retire_orphan_runtimes(data,tx):
    if p.is_dir() and rel not in keep:
     target=root(data)/'private'/'retired_runtimes'/tx['checkpoint_id']/forest/(p.name+'-'+uuid.uuid4().hex)
     target.parent.mkdir(parents=True,exist_ok=True)
-    os.replace(p,target);_fsync_dir(p.parent);_fsync_dir(target.parent)
+    try:os.replace(p,target)
+    except FileNotFoundError:continue
+    _fsync_dir(p.parent);_fsync_dir(target.parent)
     retired.append(rel)
  return retired
 
@@ -306,10 +308,85 @@ def _finish_swap(data,control,backup,stage_root,already_published=False):
  # record must not undo later legitimate changes to the same individual.
  body={'schema':'tukuyo.v1022_4.restore_completion/1','data_root':str(Path(data).absolute()),'control_sha256':_sha(_canon(control['body']))}
  _write(_completion_path(data,control),_sign_control(data,body))
+ frontier={'schema':'tukuyo.v1022_7_3.restore_frontier/1','data_root':str(Path(data).absolute()),
+           'checkpoint_id':control['body']['transaction']['checkpoint_id'],
+           'file_metadata':control['body']['transaction']['file_metadata']}
+ _write(root(data)/'private'/'RESTORE_FRONTIER.json',_sign_control(data,frontier))
  if not _completed_swap(data,control,control['public_key']):raise ValueError('RESTORE_COMPLETION_READBACK')
  durable_unlink(_swap_marker(data))
  shutil.rmtree(backup,ignore_errors=True);shutil.rmtree(stage_root,ignore_errors=True)
  return {'ok':True,'version':'v1014.2','recovered':True,'checkpoint_id':control['body']['transaction']['checkpoint_id'],'copied_files':len(control['body']['transaction']['files']),'directory_namespace_swap':True,'already_published_afterimage_verified':already_published}
+
+@_locked
+def enforce_restore_frontier(data):
+ """Enforce an authenticated rollback frontier until a legitimate head advances.
+
+ This is a defense against reappearing extra files, not a diagnosis of their
+ origin. Never rewrite changed checkpoint bytes or undo a later signed head.
+ Extra managed files are quarantined; private keys and pending redo survive.
+ """
+ data=Path(data).absolute();path=root(data)/'private'/'RESTORE_FRONTIER.json'
+ if not path.is_file():return {'ok':True,'active':False}
+ if path.is_symlink():raise ValueError('RESTORE_FRONTIER_SYMLINK')
+ control=json.loads(path.read_text());body=control.get('body',{})
+ pub=(root(data)/'recovery.pub').read_text().strip()
+ try:
+  if body.get('schema')!='tukuyo.v1022_7_3.restore_frontier/1' or control.get('public_key')!=pub:raise ValueError('binding')
+  Ed25519PublicKey.from_public_bytes(base64.b64decode(pub,validate=True)).verify(base64.b64decode(control['signature'],validate=True),_canon(body))
+ except Exception as exc:raise ValueError('RESTORE_FRONTIER_AUTHENTICATION') from exc
+ # A validation/staging copy has a different absolute root. Its frontier is
+ # historical context, never authority to operate on the original root.
+ if body['data_root']!=str(data):return {'ok':True,'active':False,'different_root':True}
+ if (data/'.lineage_transaction/PREPARED.json').is_file():return {'ok':True,'active':False,'prepared_redo_deferred':True}
+ metadata=body['file_metadata'];head=data/'v977/UNIFIED_STATE.json'
+ if not head.is_file() or _sha(head.read_bytes())!=metadata['v977/UNIFIED_STATE.json']['sha256']:
+  return {'ok':True,'active':False,'head_advanced':True}
+ from tukuyo_v1019.transaction import _reject_symlinks
+ _reject_symlinks(data)
+ for rel,m in metadata.items():
+  q=Path(rel)
+  if q.is_absolute() or '..' in q.parts or '\\' in rel or any(x in EXCLUDE_PARTS for x in q.parts):raise ValueError('RESTORE_FRONTIER_PATH')
+  p=data/q
+  if not p.is_file() or p.stat().st_size!=m['size'] or _sha(p.read_bytes())!=m['sha256']:
+   raise ValueError('RESTORE_FRONTIER_BYTE_DRIFT:'+rel)
+ extras=[]
+ for p in data.rglob('*'):
+  if p.is_file():
+   rel=p.relative_to(data)
+   if not any(x in EXCLUDE_PARTS for x in rel.parts) and rel.as_posix() not in metadata and rel.as_posix()!='v1014/LAST_RECOVERY_RECEIPT.json':
+    extras.append(rel.as_posix())
+ if len(extras)>4096:raise ValueError('RESTORE_FRONTIER_EXTRA_BOUND')
+ quarantined=[]
+ if extras:
+  bucket=root(data)/'private'/'restore_quarantine'/uuid.uuid4().hex
+  for rel in sorted(extras):
+   source=data/rel;target=bucket/rel;target.parent.mkdir(parents=True,exist_ok=True)
+   # External synchronizers can remove their pending extra between the scan
+   # and the move. Missing extras are already absent from the live projection.
+   # Changed checkpoint bytes still fail above; this never repairs them.
+   try: digest=_sha(source.read_bytes());os.replace(source,target)
+   except FileNotFoundError:continue
+   _fsync_dir(source.parent);_fsync_dir(target.parent)
+   quarantined.append({'path':rel,'sha256':digest})
+  receipt={'schema':'tukuyo.v1022_7_3.restore_quarantine/1','checkpoint_id':body['checkpoint_id'],'files':quarantined}
+  _write(bucket/'QUARANTINE_RECEIPT.json',_sign_control(data,receipt))
+  # Read back the live projection. Remaining extras cannot be silently used.
+  remaining=[p.relative_to(data).as_posix() for p in data.rglob('*') if p.is_file()
+      and not any(x in EXCLUDE_PARTS for x in p.relative_to(data).parts)
+      and p.relative_to(data).as_posix() not in metadata and p.relative_to(data).as_posix()!='v1014/LAST_RECOVERY_RECEIPT.json']
+  if remaining:raise ValueError('RESTORE_FRONTIER_EXTRA_REAPPEARED:'+','.join(remaining[:10]))
+ # A synchronized future may contain only directories, with no managed file
+ # to trigger the extras branch. Empty commits directories still influence
+ # legacy startup, and an unregistered child slot must never be reused.
+ retired=_retire_orphan_runtimes(data,{'files':list(metadata),'checkpoint_id':body['checkpoint_id']})
+ pruned=[]
+ for p in sorted(data.rglob('*'),key=lambda q:len(q.parts),reverse=True):
+  if p.is_dir() and not any(x in EXCLUDE_PARTS for x in p.relative_to(data).parts):
+   try:p.rmdir();pruned.append(p.relative_to(data).as_posix())
+   except OSError:pass
+ return {'ok':True,'active':True,'quarantined_files':quarantined,
+         'retired_future_runtimes':retired,'pruned_empty_directories':pruned,
+         'underlying_reappearance_cause_determined':False}
 
 def _resume_swap(data,control,inject=False):
  data=Path(data).absolute();body=control.get('body',{})

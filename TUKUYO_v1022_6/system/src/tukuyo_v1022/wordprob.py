@@ -66,6 +66,7 @@ def _ok(expr,value,schema,unit,trace):
 
 # ---------------------------------------------------------------- Japanese schemas
 def _ja_rate(t,q):
+    if len(re.findall(r'時速|分速|秒速',t))>1:return None
     m=re.search(r'(時速|分速|秒速)'+NUM+r'(km|m)',t)
     if m:
         per={'時速':'時間','分速':'分','秒速':'秒'}[m[1]];rate=Fraction(m[2]);ru=m[3];rest=t[:m.start()]+'#'*(m.end()-m.start())+t[m.end():]
@@ -80,14 +81,15 @@ def _ja_rate(t,q):
             return _ok(f'{m[2]}*{_fmt(tv)}'+('' if target==ru else f'*{_fmt(Fraction(DIM[ru][1])/DIM[target][1])}'),v,'rate_x_time',target,[m.span(),comp.span()])
         qs=[x for x in QTY.finditer(rest)]
         times=[x for x in qs if x[2] in ('時間','分','秒')];dists=[x for x in qs if x[2] in ('km','m','cm')]
-        if len(qs)!=1:return None
+        if len(qs)!=1 and not (len(times)==len(qs) and 1<=len(times)<=3 and len({x[2] for x in times})==len(times)):
+            return {'refused':'WORD_PROBLEM_NUMBER_COVERAGE'}
         a=re.search(r'何(km|m|時間|分|秒)|どれだけ進|どのくらい進|どれくらい進',q)
         if not a:return None
         if times and not dists:
             if a[1] not in ('km','m') and a[1] is not None:return None
             target=a[1] if a[1] in ('km','m') else ru
-            tv=_conv(Fraction(times[0][1]),times[0][2],per);v=_conv(rate*tv,ru,target)
-            return _ok(f'{m[2]}*{_fmt(tv)}'+('' if target==ru else f'*{_fmt(Fraction(DIM[ru][1])/DIM[target][1])}'),v,'rate_x_time',target,[(m.span()),times[0].span()])
+            tv=sum(_conv(Fraction(x[1]),x[2],per) for x in times);v=_conv(rate*tv,ru,target)
+            return _ok(f'{m[2]}*({_fmt(tv)})'+('' if target==ru else f'*{_fmt(Fraction(DIM[ru][1])/DIM[target][1])}'),v,'rate_x_time',target,[m.span(),*[x.span() for x in times]])
         if dists and a[1] in ('時間','分','秒'):
             dv=_conv(Fraction(dists[0][1]),dists[0][2],ru);tv=dv/rate;v=_conv(tv,per,a[1])
             return _ok(f'({_fmt(dv)}/{m[2]})'+('' if a[1]==per else f'*{_fmt(Fraction(DIM[per][1])/DIM[a[1]][1])}'),v,'distance_div_rate',a[1],[m.span(),dists[0].span()])
@@ -143,6 +145,8 @@ def _ja_groups(t,q):
 def _ja_share(t,q):
     m=re.search(NUM+r'\s*('+CNT+r')(?:の[^、。を]{1,10})?を'+NUM+r'\s*(人|つ|'+CNT+r')(?:で|に)(?:同じ数ずつ|等しく|均等に|同じように|同じだけ|同じ数に)?(?:分け|わけ|配)',t)
     if m and re.search(r'1\s*'+re.escape(m[4])+r'(?:あたり|分|に|は)*(?:何'+m[2]+r'|いくつ)',q):
+        if not re.search(r'同じ数ずつ|等しく|均等に|同じように|同じだけ|同じ数に',m[0]) or re.search(r'不均等|不平等|均等ではない',t):
+            return {'refused':'EQUAL_SHARING_NOT_ESTABLISHED'}
         n,k=Fraction(m[1]),Fraction(m[3])
         if k==0 or (n/k).denominator!=1 or not _covered(t,[m.span(),*[x.span() for x in re.finditer(r'1\s*'+re.escape(m[4]),t) if x.start()>=m.end()]]):return None
         spans=[m.span(),*[x.span() for x in re.finditer(r'1\s*'+re.escape(m[4]),t) if x.start()>=m.end()]]
@@ -280,6 +284,7 @@ def _ja(t):
             r=f(t,q)
         except (ValueError,ZeroDivisionError):return None
         if r:
+            if r.get('refused'):return r
             return r if _covered(t,r['trace']) else {'refused':'WORD_PROBLEM_NUMBER_COVERAGE'}
     try:return _ja_change(t,q,qpos)
     except (ValueError,ZeroDivisionError):return None
@@ -289,6 +294,7 @@ PLUS_EN=r'got|gets|received|receives|bought|buys|found|finds|picked|picks|collec
 MINUS_EN=r'gave|gives|ate|eats|used|uses|spent|spends|threw away|broke|drank|paid'
 def _en(t):
     s=t.lower().replace(',','');s=re.sub(r'\$\s*(\d)',r'\1 dollars ',s)
+    if re.search(r'[-−]\s*\d+(?:\.\d+)?\s+\w+',s):return {'refused':'NEGATIVE_COUNT_UNSUPPORTED'}
     if re.search(r"\b(?:not|never)\b|n't\b",s) and re.search(r'\d',s):
         return {'refused':'WORD_PROBLEM_EVENT_NOT_CONFIRMED'}
     # claude-patch3: schemas whose wording the hedge filter below would otherwise refuse
@@ -309,6 +315,9 @@ def _en(t):
     # equal groups: "3 rows with 7 books each", "4 bags of 6 apples"
     m=re.search(NUM+r' (\w+) (?:with|of|that each have|each with) '+NUM+r' (\w+)(?: each| in each| on each)?',full)
     if m and re.match(r'how many',q) and len(nums)==2 and not re.search(r'\b(?:'+MINUS_EN+'|'+PLUS_EN+r')\b',full):
+        target=re.search(r'how many (\w+)',q)
+        if not target or target[1] not in (m[2],m[4]):return {'refused':'QUERY_ENTITY_MISMATCH'}
+        if target[1]==m[2]:return _ok(m[1],Fraction(m[1]),'container_count',m[2],[m.span()])
         return _ok(f'{m[1]}*{m[3]}',Fraction(m[1])*Fraction(m[3]),'equal_groups',m[4],[m.span()])
     # rate: "5 km per hour for 4 hours" / "5 km an hour"
     m=re.search(NUM+r' (km|miles?|meters?) (?:per|an|a|each) (hour|minute)',full);n2=re.search(NUM+r' (hours?|minutes?)',full)
@@ -329,15 +338,19 @@ def _en(t):
         # word boundary: "brot-her is 4 years" must not be read as "her is 4 years" (patch2 bug)
         base=re.search(r'\b'+re.escape(ref)+r' is '+NUM+r' (years?|cm|kg|dollars?)',full)
         if base and len(nums)==2 and re.search(r'\b'+re.escape(rel[1])+r'\b',q):
+            if base[2].rstrip('s')!=rel[3].rstrip('s'):return {'refused':'UNIT_DIMENSION_MISMATCH'}
             sign=-1 if rel[4] in ('younger','shorter','less','lighter','cheaper') else 1
             return _ok(f'{base[1]}{"-" if sign<0 else "+"}{rel[2]}',Fraction(base[1])+sign*Fraction(rel[2]),'comparison',rel[3],[rel.span(),base.span()])
         return None
     # sharing: "12 cookies shared equally among 4 children. How many does each child get?"
     m=re.search(NUM+r' (\w+) (?:are |were )?(?:shared|divided|split) (?:equally )?(?:among|between|by) '+NUM+r' (\w+)',full)
     if m and re.search(r'\beach\b',q) and len(nums)==2:
+        if not re.search(r'\bequally\b',m[0]):return {'refused':'EQUAL_SHARING_NOT_ESTABLISHED'}
         n,k=Fraction(m[1]),Fraction(m[3])
         if k and (n/k).denominator==1:return _ok(f'{m[1]}/{m[3]}',n/k,'equal_sharing',m[2],[m.span()])
         return None
+    if m and re.search(r'how many '+re.escape(m[4]),q):
+        return _ok(m[3],Fraction(m[3]),'recipient_count',m[4],[m.span()])
     # change / combine
     if not re.search(r'how (?:many|much|far)',q):return None
     # claude-patch6: 「Lucy has 14 marbles. Tom has 9 marbles. Lucy gives Tom 4…」 is two stocks, not one running total
@@ -373,4 +386,10 @@ def _en(t):
 def solve(query):
     t=_norm(query)
     if len(t)>400:return None
+    from .quantity_chain import solve as chain_solve
+    chained=chain_solve(t)
+    if chained:return chained
+    from .quantity_graph import solve as quantity_solve
+    typed=quantity_solve(t)
+    if typed:return typed
     return _ja(t) if JA.search(t) else _en(t)

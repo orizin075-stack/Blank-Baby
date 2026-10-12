@@ -58,7 +58,8 @@ def test_cp2_own_knowledge_answers_and_conflicts():
 
 def test_cp2_multi_teacher_consensus():
     with tempfile.TemporaryDirectory() as td:
-        td=Path(td);d=td/'d';run(d,'init','--individual-id','CP2-D')
+        # Preserve the teacher-disagreement test's unknown-skill precondition.
+        td=Path(td);d=td/'d';run(d,'init','--individual-id','CP2-D','--blank-learning')
         q=['1箱に12個入りが5箱あります。7個販売しました。残りは何個？','1箱に12個入りが5箱あります。7個仕入れました。残りは何個？'];(td/'q.json').write_text(json.dumps({'questions':q},ensure_ascii=False),encoding='utf-8')
         mk=lambda m:{'provider':'command','command':f'{sys.executable} -B {MOCK} --mode={m}'}
         r=run(d,'llm-teach',td/'q.json',env_extra={'TUKUYO_LLM_TEACHERS':json.dumps([mk('honest'),mk('liar')])})

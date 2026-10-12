@@ -204,9 +204,18 @@ def _component_hashes(data):
     if (d/'v1022'/'commits').exists():pairs['local_cognition_v1022']='v1022/STATE.json'
     if (d/'v1022_ecology'/'commits').exists():pairs['runtime_metabolism_v1022']='v1022_ecology/STATE.json'
     if (d/'v1023r'/'commits').exists():pairs['open_world_research_v1023r']='v1023r/STATE.json'
-    # generation 4: what the child learned from its parents and the record of its life (tukuyo_g4.own)
+    # generation 4: what the child learned from its parents and the record of its life (tukuyo_g4.own); in a live
+    # runtime what it learned is also a signed, recovery-tracked commit chain (tukuyo_g4.runtime_store)
     if (d/'g4').exists():pairs.update({'g4_learned':'g4/learned.json','g4_remembered':'g4/remembered.json','g4_life':'g4/life.json',
                                        'g4_unresolved':'g4/unresolved.json','g4_unread':'g4/unread.json'})
+    if (d/'g4'/'commits').exists():pairs['g4_learning']='g4/STATE.json'
+    if (d/'chatgpt_chat'/'commits').exists():pairs['chatgpt_dialogue']='chatgpt_chat/STATE.json'
+    if (d/'clarification'/'commits').exists():pairs['clarification_dialogue']='clarification/STATE.json'
+    if (d/'soul_integrity'/'commits').exists():pairs['whole_soul_integrity']='soul_integrity/STATE.json'
+    if (d/'reflective_soul'/'commits').exists():pairs['whole_reflective_soul']='reflective_soul/STATE.json'
+    if (d/'evidence_bound_soul'/'commits').exists():pairs['whole_evidence_bound_soul']='evidence_bound_soul/STATE.json'
+    if (d/'semantic_truth'/'commits').exists():pairs['whole_semantic_truth']='semantic_truth/STATE.json'
+    if (d/'grounded_sensor'/'commits').exists():pairs['whole_grounded_sensor']='grounded_sensor/STATE.json'
     return {k:_file_sha(d/v) for k,v in pairs.items()}
 
 def _own_components(data,ch,before):
@@ -250,6 +259,33 @@ def quick_audit(data):
     return {'ok':not errs,'errors':errs,'individual_id':ident,'seq':q.get('seq'),'version':'v1014.4','quick':True}
 
 def audit(data):
+    """Check a stable signed projection, including late restore-frontier extras.
+
+    Application writers share the lock. External filesystem synchronization
+    may still race with it, so recheck the authenticated frontier after reads.
+    Retry is bounded; changed checkpoint bytes are never silently repaired.
+    """
+    from tukuyo_v1019.transaction import _writer_lock,ACTIVE
+    if ACTIVE.get():return _audit_once(data)
+    from tukuyo_v1014.recovery import enforce_restore_frontier
+    with _writer_lock(data):
+        for attempt in range(4):
+            try:
+                before=enforce_restore_frontier(data)
+                result=_audit_once(data)
+                after=enforce_restore_frontier(data)
+            except FileNotFoundError:
+                if attempt<3:continue
+                return {'ok':False,'version':'v977','errors':['RESTORE_READ_RACE_EXHAUSTED']}
+            except ValueError as exc:
+                return {'ok':False,'version':'v977','errors':[str(exc)]}
+            if after.get('quarantined_files') or after.get('retired_future_runtimes') or after.get('pruned_empty_directories'):continue
+            # A failed read on an active restored projection gets another
+            # complete audit. Non-frontier failures retain their normal result.
+            if result.get('ok') or not before.get('active'):return result
+        return {'ok':False,'version':'v977','errors':['RESTORE_AUDIT_RETRY_EXHAUSTED']}
+
+def _audit_once(data):
     ident=_live_identity(data);p=state_path(data)
     if not p.exists():return {'ok':False,'errors':['UNIFIED_STATE_MISSING']}
     env=_read(p);pub=_key_paths(data)[1].read_text().strip();errs=[]
@@ -269,6 +305,46 @@ def audit(data):
             from tukuyo_v1023r.life import audit as research_audit
             if not research_audit(data).get('ok'):errs.append('V1023R_RESEARCH_AUDIT')
         except Exception as e:errs.append('V1023R_RESEARCH_AUDIT:'+type(e).__name__)
+    if (Path(data)/'g4'/'commits').exists() or (Path(data)/'g4'/'learned.json').exists():
+        try:
+            from tukuyo_g4.runtime_store import audit as g4_audit
+            if not g4_audit(data).get('ok'):errs.append('G4_LEARNING_AUDIT')
+        except Exception as e:errs.append('G4_LEARNING_AUDIT:'+type(e).__name__)
+    if (Path(data)/'chatgpt_chat').exists() or 'chatgpt_dialogue' in q.get('component_hashes',{}):
+        try:
+            from tukuyo_g4.chatgpt_chat import audit as chat_audit
+            if not chat_audit(data).get('ok'):errs.append('CHATGPT_DIALOGUE_AUDIT')
+        except Exception as e:errs.append('CHATGPT_DIALOGUE_AUDIT:'+type(e).__name__)
+    if (Path(data)/'clarification').exists() or 'clarification_dialogue' in q.get('component_hashes',{}):
+        try:
+            from tukuyo_v1022.clarification import audit as clarification_audit
+            if not clarification_audit(data).get('ok'):errs.append('CLARIFICATION_AUDIT')
+        except Exception as e:errs.append('CLARIFICATION_AUDIT:'+type(e).__name__)
+    if (Path(data)/'soul_integrity').exists() or 'whole_soul_integrity' in q.get('component_hashes',{}):
+        try:
+            from tukuyo_v1022.soul_integrity import audit as soul_integrity_audit
+            if not soul_integrity_audit(data).get('ok'):errs.append('SOUL_INTEGRITY_AUDIT')
+        except Exception as e:errs.append('SOUL_INTEGRITY_AUDIT:'+type(e).__name__)
+    if (Path(data)/'reflective_soul').exists() or 'whole_reflective_soul' in q.get('component_hashes',{}):
+        try:
+            from tukuyo_v1022.reflective_soul import audit as reflective_soul_audit
+            if not reflective_soul_audit(data).get('ok'):errs.append('REFLECTIVE_SOUL_AUDIT')
+        except Exception as e:errs.append('REFLECTIVE_SOUL_AUDIT:'+type(e).__name__)
+    if (Path(data)/'evidence_bound_soul').exists() or 'whole_evidence_bound_soul' in q.get('component_hashes',{}):
+        try:
+            from tukuyo_v1022.evidence_bound_soul import audit as evidence_bound_soul_audit
+            if not evidence_bound_soul_audit(data).get('ok'):errs.append('EVIDENCE_BOUND_SOUL_AUDIT')
+        except Exception as e:errs.append('EVIDENCE_BOUND_SOUL_AUDIT:'+type(e).__name__)
+    if (Path(data)/'semantic_truth').exists() or 'whole_semantic_truth' in q.get('component_hashes',{}):
+        try:
+            from tukuyo_v1022.semantic_truth import audit as semantic_truth_audit
+            if not semantic_truth_audit(data).get('ok'):errs.append('SEMANTIC_TRUTH_AUDIT')
+        except Exception as e:errs.append('SEMANTIC_TRUTH_AUDIT:'+type(e).__name__)
+    if (Path(data)/'grounded_sensor').exists() or 'whole_grounded_sensor' in q.get('component_hashes',{}):
+        try:
+            from tukuyo_v1022.grounded_sensor import audit as grounded_sensor_audit
+            if not grounded_sensor_audit(data).get('ok'):errs.append('GROUNDED_SENSOR_AUDIT')
+        except Exception as e:errs.append('GROUNDED_SENSOR_AUDIT:'+type(e).__name__)
     # Only compare components that existed at last sync. This forces explicit sync after state changes.
     for k,v in q.get('component_hashes',{}).items():
         if v!=current.get(k):errs.append('COMPONENT_DRIFT:'+k)

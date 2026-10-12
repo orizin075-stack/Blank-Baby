@@ -1,0 +1,36 @@
+{
+  "schema": "tukuyo.v1022_7_1.claim_ledger/1",
+  "release_revision": "v1022.7.1-semantic-truth-challenge",
+  "verified": {
+    "cryptographic_authorship": true,
+    "typed_claim_binding": true,
+    "exact_unit_and_value_type_binding": true,
+    "three_configured_report_domains": true,
+    "precommitted_manifest_binding": true,
+    "oracle_report_role_key_separation": true,
+    "finite_manifest_entry_replay": true,
+    "bounded_benchmark_match_or_refutation": true,
+    "whole_transaction_recovery_integration": true,
+    "successor_private_state_noninheritance": true
+  },
+  "not_verified": {
+    "external_world_truth": true,
+    "real_world_domain_independence": true,
+    "sensor_correctness": true,
+    "benchmark_author_correctness": true,
+    "two_of_three_collusion_resistance": true,
+    "literal_soul": true,
+    "consciousness": true,
+    "qualia": true,
+    "personhood": true,
+    "24h_operation": true,
+    "power_loss": true,
+    "cross_host_recovery": true,
+    "independent_third_party_reproduction": true
+  },
+  "terminology": {
+    "CONFIGURED_CONSENSUS_ONLY": "authenticated configured agreement, never truth",
+    "BOUNDED_BENCHMARK_VERIFIED": "claim matches one entry in a precommitted finite manifest",
+    "BOUNDED_BENCHMARK_REFUTED": "claim conflicts with one entry in a precommitted finite manifest"
+  }
+}

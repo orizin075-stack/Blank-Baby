@@ -13,6 +13,9 @@ def save(data,ns,component,state):
     cached={'schema':'tukuyo.v1022.cache/1','state':state,'head':whole.sha_obj(env)}
     atomic_write_bytes(path(data,ns),whole.canon(cached)+b'\n');whole.sync(data);return cached
 def load(data,ns,component,validate):
+    if not ACTIVE.get():
+        from tukuyo_v1014.recovery import enforce_restore_frontier
+        enforce_restore_frontier(data)
     rows=sorted((Path(data)/ns/'commits').glob('*.json'))
     if not rows:raise ValueError('V1022_COMMIT_MISSING:'+ns)
     pub=whole._key_paths(data)[1].read_text().strip();prev=whole.ZERO

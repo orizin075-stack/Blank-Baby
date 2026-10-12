@@ -121,12 +121,12 @@ def _check(data,claims,mem_index):
 def _numbers_unbacked(answer,claims,query=''):
     """Numbers in the answer that no calc/local claim, cited memory or the question itself supplies
     -> arithmetic done 'in the head', which keeps the answer from counting as verified."""
-    num=r'(?<![\w.])\d+(?:\.\d+)?(?![\w.])';backed=set(re.findall(num,str(query)))
+    num=r'(?<![\d.])\d+(?:\.\d+)?(?![\d.])';backed=set(re.findall(num,str(query)))
     for c in claims if isinstance(claims,list) else []:
         if isinstance(c,dict) and c.get('type') in ('calc','local'):backed.add(str(c.get('value','')).strip())
         if isinstance(c,dict) and c.get('type')=='memory':backed|=set(re.findall(num,str(c.get('quote',''))))
-    nums=set(re.findall(r'(?<![\w.])\d+(?:\.\d+)?(?![\w.])',str(answer)))
-    return sorted(n for n in nums if n not in backed and len(n)>=3)
+    nums=set(re.findall(num,str(answer)))
+    return sorted(n for n in nums if n not in backed)
 
 FRAMING={'記憶','計算','結果','答','答え','合計','確認','検算','根拠','内蔵','質問','場合','前提','以上','全部','残','約','今','私','本当','可能','情報','説明','理由'}
 EN_FRAMING={'the','and','that','this','with','from','have','has','are','was','were','for','not','you','your','answer','memory','according','based','result','total','which','what','there','their','about','into','will','would','can'}
@@ -255,7 +255,10 @@ def ask(data,query,local_first=True,mode='qa'):
         support=_support_text(query,claims,checks)
         content_unbacked=sorted(t for t in _content_tokens(o.get('answer','')) if t not in support.lower() and t not in _content_tokens(support))
         st=_status(checkable,failed,external,bool(o.get('unknown')),unbacked,content_unbacked,relevant)
-        attempts.append({'round':step,'status':st,'checks':checks,'unbacked_numbers':unbacked,'unsupported_content':content_unbacked[:20],'relevant_checked_claims':relevant})
+        from .answer_grounding import check as ground_answer
+        grounding=ground_answer(data,query,o.get('answer',''),claims,mem_index)
+        if st in ('verified','partially_verified') and not grounding['ok']:st='unverified'
+        attempts.append({'round':step,'status':st,'checks':checks,'unbacked_numbers':unbacked,'unsupported_content':content_unbacked[:20],'relevant_checked_claims':relevant,'answer_grounding':grounding})
         if st!='rejected' or repaired:break
         repaired=True
     graded=[a for a in attempts if 'status' in a]

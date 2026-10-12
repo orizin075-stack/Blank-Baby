@@ -45,7 +45,9 @@ def test_cp1_answer_log_is_tamper_evident():
 
 def test_cp1_teacher_guards_and_offline_transfer():
     with tempfile.TemporaryDirectory() as td:
-        td=Path(td);d=td/'d';run(d,'init','--individual-id','CP1-D')
+        # The teaching guard needs genuinely unknown skills; a seeded student
+        # now transfers the purchase rule to 仕入れました before teaching.
+        td=Path(td);d=td/'d';run(d,'init','--individual-id','CP1-D','--blank-learning')
         q=['1箱に12個入りが5箱あります。7個販売しました。残りは何個？','1箱に12個入りが5箱あります。7個仕入れました。残りは何個？']
         (td/'q.json').write_text(json.dumps({'questions':q},ensure_ascii=False),encoding='utf-8')
         r=run(d,'llm-teach',td/'q.json',mode='inconsistent',state=td/'s1');assert r['summary']['learned']==0 and r['summary']['rejected']==2

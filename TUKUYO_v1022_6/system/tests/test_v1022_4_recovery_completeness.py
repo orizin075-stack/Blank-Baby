@@ -257,7 +257,7 @@ def test_verified_published_root_does_not_require_disposable_image(damage):
         result=recovery.recover_incomplete_restore(d)
         assert result['already_published_afterimage_verified']
         after=fingerprint(d);assert all(after[k]==v for k,v in before.items())
-        assert set(after)-set(before)=={recovery._completion_path(d,control).relative_to(d).as_posix()}
+        assert set(after)-set(before)=={recovery._completion_path(d,control).relative_to(d).as_posix(),'v1014/private/RESTORE_FRONTIER.json'}
         assert not recovery._swap_marker(d).exists() and not stage.exists()
         assert run(d,'whole-audit')[0]['ok']
 

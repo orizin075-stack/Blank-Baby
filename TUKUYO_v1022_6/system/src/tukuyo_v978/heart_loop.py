@@ -159,6 +159,36 @@ def feel(data,kind,valence,importance,theme,relation,sr):
         pass
     return {'ok':True,'version':'v978','meaning':meaning,'emotion':em,'self_model':h['self_model'],'active_goal':h['active_goal'],'event':ev}
 
+def sync_soul_reference(data, source_event):
+    """Link an explicit Soul-only event without reinterpreting its emotion.
+
+    Soul CLI and Heart CLI have distinct meanings. Keep the existing emotion,
+    value bias, goal and episodes while recording the new canonical reference.
+    This is called only after a normal authorized Soul event, never to conceal
+    an arbitrary edit or to rewrite earlier Heart events.
+    """
+    from tukuyo_v1019.lifecycle import require_alive
+    from tukuyo_common.journal import last_event
+    from tukuyo_v977.whole_state import event_path
+    require_alive(data)
+    soul=load_soul(data);latest=last_event(event_path(data))
+    if (source_event!=latest or latest.get('individual_id')!=soul['individual_id']
+            or latest.get('soul_sha256')!=sha_obj(soul)):
+        raise ValueError('HEART_SOUL_REFERENCE_SOURCE')
+    h=load(data)
+    if h['soul_sha256']==sha_obj(soul):return {'ok':True,'updated':False}
+    h['soul_sha256']=sha_obj(soul);h['seq']+=1
+    traits=h['self_model']['traits']
+    traits['curious']=round(min(1,soul['core_values']['curiosity']+h['value_bias'].get('curiosity',0)),6)
+    traits['truth_oriented']=soul['core_values']['truthfulness']
+    traits['integrity_oriented']=round(min(1,soul['core_values']['integrity']+h['value_bias'].get('integrity',0)),6)
+    h['self_model']['last_update_reason']='CANONICAL_SOUL_REFERENCE_SYNC'
+    _write(state_path(data),h)
+    ev=_append(data,{'individual_id':h['individual_id'],'type':'SOUL_REFERENCE_SYNC',
+        'soul_event_sha256':source_event['event_sha256'],'heart_sha256':sha_obj(h),
+        'emotion_reinterpreted':False})
+    return {'ok':True,'updated':True,'event':ev,'emotion_reinterpreted':False}
+
 def _score_option(data,soul,h,opt):
     sig=opt.get('signals',{});score=0.0;parts={}
     merged=dict(_decision_core_values(data,soul))
@@ -174,15 +204,22 @@ def _score_option(data,soul,h,opt):
         if vow.get('theme') and vow['theme'] in opt.get('themes',[]): score+=min(0.5,float(vow.get('strength',0))*0.25)
     return round(score,6),parts
 
-def choose(data,options,context=''):
+def choose(data,options,context='',adjustments=None,adjustment_label='external_bounded_adjustment'):
     from tukuyo_v1019.lifecycle import require_alive
     require_alive(data)
     if not isinstance(options,list) or len(options)<2: raise ValueError('HEART_OPTIONS_REQUIRED')
     ids=[o.get('id') for o in options]
     if any(not isinstance(x,str) or not x for x in ids) or len(set(ids))!=len(ids):raise ValueError('HEART_OPTION_IDS')
+    if adjustments is not None:
+        if not isinstance(adjustments,dict) or set(adjustments)!=set(ids):raise ValueError('HEART_ADJUSTMENT_IDS')
+        for v in adjustments.values():
+            if isinstance(v,bool) or not isinstance(v,(int,float)) or not -1.5<=float(v)<=1.5:raise ValueError('HEART_ADJUSTMENT_RANGE')
     soul=load_soul(data);h=load(data);scored=[]
     for o in options:
-        score,parts=_score_option(data,soul,h,o);scored.append({'id':o['id'],'score':score,'parts':parts})
+        score,parts=_score_option(data,soul,h,o)
+        if adjustments is not None:
+            delta=round(float(adjustments[o['id']]),6);parts[adjustment_label]=delta;score=round(score+delta,6)
+        scored.append({'id':o['id'],'score':score,'parts':parts})
     ranked=sorted(scored,key=lambda x:(x['score'],x['id']),reverse=True);chosen=ranked[0]
     h['seq']+=1;h['last_action']={'context':context,'chosen':chosen['id'],'scores':ranked};_write(state_path(data),h)
     ev=_append(data,{'individual_id':h['individual_id'],'type':'ACTION_SELECTION','context':context,'chosen':chosen['id'],'scores':ranked,'heart_sha256':sha_obj(h)})

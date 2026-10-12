@@ -31,7 +31,7 @@ from fractions import Fraction
 from pathlib import Path
 HERE=Path(__file__).resolve().parents[1];sys.path.insert(0,str(HERE/'src'));sys.path.insert(0,str(HERE/'tools'))
 from g4_bench import load,grade
-from tukuyo_g4 import api,growth,llm,reader,numbers as N
+from tukuyo_g4 import api,growth,learn,llm,reader,numbers as N
 
 READER_FILES=('reader.py','reader_en.py','numbers.py','forms_en.py','forms_more_en.py','forms_algebra_en.py')
 PARENTS=('claude','chatgpt','gemini')
@@ -194,22 +194,27 @@ def x_taught(ctx):
     rec.write_text('\n'.join(_line(par,p['original'],_reading(reader.read(p['original'])['spec'])) for p in pairs for par in PARENTS)+'\n',encoding='utf-8')
     taught=worker(work,[p['original'] for p in pairs],True,data=d,llm_mode='on',replay=rec,tag='taught_by_parents')
     alone=worker(work,[p['met'] for p in pairs],True,data=d,voice=True,tag='taught_alone')
-    kept=growth.Unread(d).load()['entries'];rows=[]
+    kept=growth.Unread(d).load()['entries'];rows=[];st=learn.Store(d/'g4')
     for p,m,t,a in zip(pairs,met,taught,alone):
         e=kept.get(growth.Unread.entry_id(p['met'])) or {}
+        # does the wording it learned read the problem it met? Since v1022.7.7+gen4 a template does not carry over to a
+        # text where a number it did not use changed (learn._transfer_guards): learned is then not the same as reads
+        tpl=st.find(p['met']) if t['learned'] else None
         rows.append({'id':p['id'],'kept':bool(e),'learned':bool(t['learned']),'answer_when_taught':t['answer'],
+                     'learned_wording_reads_it':bool(tpl and not tpl.get('contested') and learn.instantiate(tpl,p['met'])),
                      'noticed':bool(e.get('grown')),'grew_now':any(x.get('theme')=='g4:grew' for x in t['life'] or []) if isinstance(t['life'],list) else False,
                      'alone':a['answer'],'agrees':a['answer'] is not None and Fraction(a['answer'])==Fraction(p['this_version_reads_it_as']),
                      'says_before':bool(a['before']),'before':a['before']})
     n=lambda k:sum(1 for r in rows if r[k])
     au=audits(cli,d)
     checks={'keeps_what_it_met':n('kept')==len(rows)>0,
-            'notices_each_problem_a_wording_it_learned_reads':n('noticed')==n('learned')>0,
+            'notices_each_problem_a_wording_it_learned_reads':n('noticed')==n('learned_wording_reads_it')>0,
             'answers_them_alone':sum(1 for r in rows if r['alone'] is not None)==n('noticed'),
             'its_answers_agree_with_this_versions_reading':n('agrees')==n('noticed'),
             'says_it_could_not_read_them_before':all(str(r['before']).startswith('I could not read this problem alone when I met it before; now I can') for r in rows if r['alone'] is not None),
             'audits_pass':all(x['ok'] for x in au.values())}
-    return {'ok':all(checks.values()),'checks':checks,'pairs':len(rows),'kept':n('kept'),'learned':n('learned'),'noticed':n('noticed'),'answered_alone':sum(1 for r in rows if r['alone'] is not None),
+    return {'ok':all(checks.values()),'checks':checks,'pairs':len(rows),'kept':n('kept'),'learned':n('learned'),
+            'learned_wording_reads_it':n('learned_wording_reads_it'),'noticed':n('noticed'),'answered_alone':sum(1 for r in rows if r['alone'] is not None),
             'agrees_with_this_version':n('agrees'),'answered_but_disagrees':sum(1 for r in rows if r['alone'] is not None and not r['agrees']),
             'noticed_but_cannot_answer':sum(1 for r in rows if r['noticed'] and r['alone'] is None),
             'rows':rows,'audits':au,

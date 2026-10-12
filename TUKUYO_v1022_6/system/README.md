@@ -1,65 +1,71 @@
-# TUKUYO v1022 — Dialogue Learning / Actual Runtime Metabolism
+# TUKUYO V1022.7.7+gen4-r6 — 経験による魂と第4世代の統合（開発版）
 
-v1021から、局所的な対話学習と「実個体の課題成績→資源→エネルギー→死亡→実後継個体」の有限ループへ進めた版です。実行時のLLM接続は不要です。
+現在の版: `v1022.7.7+gen4-r6`。下の V1022.7.7（経験による魂）までの系統と、第4世代の第6回（3 つの LLM を親に育つ子。自分の読み取り器・魂の法則・自分の声・成長に気づく仕組み）を一つにした開発版です。どちらの機能も残し、ぶつかったところは開発用の問題で測ってから決めました。統合の記録は `../evidence_gen4/FUSION_V1022_7_7_2026-10-12.md`、第4世代の使い方は `../README_GEN4_DEV_JA.md` を参照してください。本物の LLM の親では、まだ測っていません。意識や文字どおりの魂を示すものではありません。
 
-## 今回入ったもの
+# TUKUYO V1022.7.7 Experiential Soul Experimental
 
-- 3人のAI教師役（数量意味・計画・人物記憶）との教材、学生の実応答、それを読んだ教師の追試。教師は同じモデル系列の別エージェントです。最終配布用個体には504例を適用しました。教材の正答をそのまま返すQA表ではなく、数値を抽象化したイベント規則、語彙の対応、出典付きの明示事実を学びます。
-- 算術、数量の保存、肯定の多段論理、条件・費用付きの形式計画を局所的に処理します。計画は最大24行動・4096探索ノード。別の証明検査器は計算・推論手順・計画の再実行を検査します。自然言語から前提への翻訳の正しさまでは証明しません。
-- 否定・予定・別在庫は実行済みの消費と区別します。数量範囲、単位不一致、未確認の報告、引用訂正、複数種類の在庫など、解釈できないものは保留します。学習の矛盾も保留理由になります。
-- 2〜8個の実ランタイムがHeartで課題を選び、正答で有限資源からエネルギーを受け取り、活動費を払います。エネルギーゼロで不可逆に死亡します。モデル個体の代用やINJURYによる強制死亡を使いません。
-- 死後継承の既存署名手順を保持します。出生時の6500単位も共有資源から払います。子には独立したidentity・Soul・Heart・鍵があります。遺伝形質は実個体の一本だけです。公開規則・語彙だけを文化として渡し、親の秘密鍵・私的事実・伝記は渡しません。
-- 子を含む復元用コピーへ既存の個体鍵を保ちます。チェックポイント自体には秘密鍵を入れません。復元にはその個体の保存済み秘密鍵が必要です。
+現在の版: `v1022.7.7-experiential-soul`。署名付きの反復経験を次の選択へ反映し、Soul経験と既存Heartの同期を強化しています。詳細・実験・未達は [README_V1022_7_7_EXPERIENTIAL_SOUL_JA.md](README_V1022_7_7_EXPERIENTIAL_SOUL_JA.md) を参照してください。7.6のLLM両接続方式を保持します。
 
-## 開始
+# TUKUYO V1022.7.6 — LLM Connectivity Experimental
 
-Python 3.12以降と `cryptography` を使います。データは配布ディレクトリの外に置いてください。
+ChatGPTログイン方式と専用APIキー方式を個別に診断し、接続設定と会話を結び付けます。APIキーの変更時にはクライアントを作り直し、ログインtokenの更新は複数プロセスで直列化します。プラン認証の失効と一時障害を区別し、支払方式を自動で切り替えません。
 
-```sh
-python -B tools/verify_release.py . --trusted-pubkey-file ../TUKUYO_v1022_TRUST_ANCHOR.txt
-python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_TRUST_ANCHOR.txt --data ../my_tukuyo init --individual-id MY-TUKUYO
-python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_TRUST_ANCHOR.txt --data ../my_tukuyo think '1箱に13個入りが7箱あります。5個売った。残りは何個？'
-python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_TRUST_ANCHOR.txt --data ../my_tukuyo learning-audit
+両方式で完了したResponsesだけを採用します。途中のstream、食い違う本文、refusal、未対応tool callは回答へ確定しません。外部教師の返答はunverifiedのままです。通信で止まった要求はnonceで結果不明として記録を閉じ、枠を消費したまま新しい問いへ進めます。利用枠不足では該当認証方式を個体内で停止し、利用者の明示的な操作で再開します。自動再送・利用枠の返還はしません。
+
+会話の再送文脈は標準16成功turn・48000文字、最大32turn・65536文字に制限し、含めたturnと省いたturnを報告します。詳しい使い方は `README_V1022_7_6_LLM_CONNECTIVITY_JA.md` を参照してください。実サービスへの接続成功は、mock試験からは主張しません。workspace出生付き復元の既知失敗、長時間運転、汎用知能の未達は継続します。
+
+# TUKUYO V1022.7.5 — Quantity Reasoning Experimental
+
+有限の数量問題で、操作順・単位・対象を一つの証明に束縛します。購入した箱の返品、販売と仕入れの連続、二つの容器間の移動、同額支払い、単一の未知数、混合体積、平均速度を扱います。別実装の字句解析と入力グラフで各数量の役割を再構築し、途中の在庫不足・単位違い・未実行の操作・対象不明を拒否します。
+
+販売・返品・仕入れの文型を追加しても、個体が持つ公開学習規則の2件以上の裏付けが必要です。空の学習個体へこれらの語彙を勝手に教えません。等額や単位などの形式的な前提は指定の文型から読むもので、自然言語一般の意味理解や外界の真実の証明ではありません。
+
+`think` / `verified-query` は通常の入口のままです。例: `1箱12個入りが4箱あります。5個売って7個仕入れました。残り何個？` は50、`2Lの水から250mLと0.5Lを使いました。残りは何mL？` は1250です。答えは整数・有限小数または厳密な分数を使い、丸めた値を厳密値として承認しません。
+
+V1022.7.4の否定・不明ガード、実個体と鍵の分離、有限代謝、出生、復元境界を維持します。独立な解析器でも意味の解釈が常に正しいとは保証しません。物理センサーの真実性、行為の因果性、観測energy課金、外部単調証人、24h、汎用言語、意識は未証明です。最新の測定は同版の検証報告を参照してください。以下は旧版の説明です。
+
+# TUKUYO V1022.7.4 — Semantic / Recovery Experimental
+
+否定の範囲や実行量が不明な数量問題を、すべての数値回答経路の前で保留します。「3個食べたわけではない」は「3個消費」でも「消費ゼロ」でもありません。素朴な在庫問題も独立した入力グラフと原文に束縛し、数量だけを使った計算証明から意味の正しさを推定しません。
+
+復元境界が有効な間、Whole監査は読み取り前後で署名済みのファイル集合を検査します。再出現した余分なファイルは証拠付きで隔離し、最大4回監査をやり直します。チェックポイントに含まれる正規ファイルの改変は修復せず拒否します。アプリのロックに従わない外部書き込みは排除できません。
+
+同一の型付き主張について新しい判断ルートを作って追加観測の予算をリセットする操作を拒否します。新規操作の受付を厳しくする変更で、旧履歴の監査形式は維持します。観測のenergy課金、外部物理的真実、行為の因果効果、全rootと鍵の巻き戻しを防ぐ外部単調証人は未実装です。
+
+未来個体の空ディレクトリだけが戻る場合も、復元境界の間は未登録個体を退避して空の管理ディレクトリを取り除きます。後継の作成直前にも未登録スロットの衝突を検出し、古い鍵・状態は署名付きのprivate archiveへ残して再利用しません。登録済みの実個体を置換する操作ではありません。
+
+旧機能と手順は以下に続きます。最新の試験結果は配布物と対になる検証報告を参照してください。
+
+# TUKUYO V1022.7.3 Evidence Decision Experimental
+
+現在版の入口は `README_V1022_7_3_EVIDENCE_DECISION_JA.md` です。観測の不一致を扱う三択判断、行動条件の事前記録、結果の再測定、報酬の証拠束縛を追加しました。前版で再現した証拠なしの資源移動、役割鍵の再利用、報酬による加齢を修正しました。成功の署名だけで資源を受け取る旧経路は拒否します。新規data root向けの実験版です。以下は前版の機能を説明する歴史節です。
+
+## 条件を補う会話
+
+```bash
+python -B run_tukuyo.py --runtime-trust-file /absolute/path/TRUST_ANCHOR.txt --data /absolute/path/individual init
+python -B run_tukuyo.py --runtime-trust-file /absolute/path/TRUST_ANCHOR.txt --data /absolute/path/individual clarify-start '制約: A+B=18。Aは何？'
+python -B run_tukuyo.py --runtime-trust-file /absolute/path/TRUST_ANCHOR.txt --data /absolute/path/individual clarify-add 'B=2*A'
+python -B run_tukuyo.py --runtime-trust-file /absolute/path/TRUST_ANCHOR.txt --data /absolute/path/individual clarify-status
+python -B run_tukuyo.py --runtime-trust-file /absolute/path/TRUST_ANCHOR.txt --data /absolute/path/individual clarify-audit
 ```
 
-新規initは署名済みの公開学習規則を導入します。`init --blank-learning` は同じコードで学習なしの対照個体を作ります。既存個体を初期化し直して学習を上書きしません。CLIの `release_revision` が今回の配布版で、下位モジュールの `version` には元の版番号が残ります。
+最初は答えを保留し、独立した条件を求めます。追加条件の後は同じ目標 A を解き直して 6 を返します。別プロセスでも会話を継続できます。追加条件は利用者が与える前提であり、外界で正しい事実だと認証したものではありません。回答の `verified` は、指定された有限の一次制約からの結論を別の字句解析器と証明検査で確認した意味です。
 
-`think QUERY --formal-task task.json` は `initial`・`goal`・`actions` の明示条件を使います。行動はid・前提pre・代入set・整数変化delta・正のcostです。任意のPythonコードや外部コマンドは実行しません。`core-reason`、`cognitive-query`、`verified-query` も認識できる問いはこの処理へ渡します。
+自然文は既存の限定された合計・平均・倍・差・単位の構文を利用できます。一般会話の意味理解ではありません。条件は1回1文、最大8回、16セッションです。元の目標を変える入力、非線形条件、矛盾、未証明の数量領域を拒否します。拒否した更新は元の会話へ反映しません。受理した条件・証明は署名付き commit と Whole State に束縛し、監査で再実行します。
 
-## 続けて教える
+保留する場合も、全条件を満たす二つの例で目標の値が異なることを別実装で検査します。`ambiguity_proof` は原文と単位に束縛した二つの例です。人数・個数が負になる例や条件を満たさない例は根拠にせず、検査できない場合は会話の更新を拒否します。
 
-```sh
-python -B tools/run_dialogue_school.py --runtime-trust-file ../TUKUYO_v1022_TRUST_ANCHOR.txt --data ../my_tukuyo --max-rounds 504
-```
+## 学んだ解法の統合
 
-これは同梱教材のオフライン再演です。新しいAIとの会話や、新しい知識の獲得を自動で主張しません。実際に複数AI教師を使う場合は `--inbox ../teacher_inbox --duration-seconds 3600` を指定し、各教師が学生のresponseを読んで新しいJSONをinboxへ置きます。JSONは `teacher` と `examples` を持ち、例には `question`・`expected_answer`・`explanation`、必要なら `aliases`・`facts`・`event_labels`・`formal_task` を置きます。数値を変えた2例以上が必要です。教師の事実や語彙注釈は監督情報であり、真偽を世界全体に照らして自動検証する機能はありません。
+同じ文章の数値違いから学ぶ仕組みを維持し、変数名・式の左右・項の順序が異なる同じ方法を統合します。多項式の正規化は次数4、128項などの上限があります。入力中の数値の役割、単位、整数・符号属性、目標、引用した原文が一致する範囲だけを対象にします。範囲外の式は従来の厳密な一致へ戻ります。任意のプログラムの等価判定や、一般的な言い換え学習ではありません。
 
-学習は1万例、規則512件、語彙512件、明示事実1024件までです。新しい認識回路や自分の実装コードを書き換える機能ではありません。
+年・順位など、式の入力として束縛していない数値は固定します。その数値を変えた文章は新しく読み直す必要があります。percent と通常の量を入れ替える転移も拒否します。旧署名付きテンプレートには自身の元例から同じ保守的な制限を導き、未署名データを承認しません。転移した問題は毎回、厳密な分数計算と別実装の FPL 検査を通します。
 
-## 実個体を運転する
+`chatgpt-study` は、異なる数値例2つ以上からの方法の統合にこの判定を利用します。教師が出す変数名の違いだけで学習に失敗するケースを減らします。同じ provider の2つの見方は独立した教師ではありません。数値スロットへの転移は、自然言語の翻訳が正しいことを完全には証明しません。
 
-```sh
-python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_TRUST_ANCHOR.txt --data ../my_tukuyo metabolism-init --families 4 --reservoir 160000 --regeneration 1600
-python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_TRUST_ANCHOR.txt --data ../my_tukuyo metabolism-step --ticks 8
-python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_TRUST_ANCHOR.txt --data ../my_tukuyo metabolism-audit
-```
+## ChatGPT 接続と境界
 
-資源は百分の一の整数単位です。`initial_total + regenerated = reservoir + living_energy + burned` を毎tick監査します。課題の外部正解で採点した結果を資源移転に使います。学生には正解を渡しません。課題環境は設計された有限の算術・数量領域です。世代選択も既存のbounded trait選択で、自然選択の成立を証明したものではありません。
+前版の専用認証、API key、署名付き対話、呼出し数の予約を保持しています。接続手順は `README_V1022_6_6_CHATGPT_JA.md` と `tools/chatgpt_connect.py` を参照してください。依存関係には認証側が直接使う httpx も明記しました。認証情報を個体のデータ・配布 ZIP・文化継承へ入れないでください。
 
-`--no-learning` と `--no-actions` はそれぞれ公開技能継承と行動を止める対照です。現在は最大512tick、累計64実個体、同時8実個体です。生存親の繁殖は未実装です。ownerとchildのCLIを直列化し、別経路からの子の更新はowner監査で検出します。
-
-```sh
-python -B tools/run_runtime_ecology.py --runtime-trust-file ../TUKUYO_v1022_TRUST_ANCHOR.txt --data ../my_tukuyo --duration-seconds 86400 --tick-seconds 300
-```
-
-実時間runnerを用意しました。短時間試験や加速tickを24時間運転の証拠に数えません。24時間完走、電源断、Windows/macOSは今回の合格主張に含めません。
-
-## 検証
-
-```sh
-TUKUYO_TEST_RUNTIME_ANCHOR=/absolute/path/TUKUYO_v1022_TRUST_ANCHOR.txt python -B run_selftest.py
-```
-
-今回の実測結果・失敗と修正・再現スクリプトは、別配布の検証レポートとEVIDENCE ZIPを参照してください。古いREADME/STATUSは歴代層の記録です。現行の主張はこのREADME、STATUS.json、ROUTE_V1022.mdを使ってください。
-
-汎用知能、自己コード改変、自然選択、開放的進化、主観的な意識・本物の魂や心の成立は主張しません。言い換えと情動を自由文全般で理解する機能もまだ限定的です。
+この版は EXPERIMENTAL です。実サービスへ接続した証拠、長時間の異種教師学習、24h、汎用知能、重み更新、自己コード改変、主観意識の成立はありません。合成の教師応答による試験は実 ChatGPT 学習ではありません。G4 の新しい学習型は公開文化継承へ未接続です。workspace 復元後の未来ファイル再出現の根本原因も未解決であり、今回の成功した限定試験から解決済みとはしません。

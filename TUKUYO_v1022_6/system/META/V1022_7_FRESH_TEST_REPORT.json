@@ -1,0 +1,47 @@
+{
+  "schema": "tukuyo.v1022_7.fresh_test_report/1",
+  "release_revision": "v1022.7-evidence-bound-soul",
+  "full_suite": {
+    "tests": 772,
+    "passed": 772,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 382.87,
+    "distribution": "pytest-xdist loadscope, 4 workers"
+  },
+  "focused": {
+    "v1022_7_plus_v1022_6_9_plus_release_identity_plus_research": "41/41 PASS",
+    "independent_research_tests": "12/12 PASS"
+  },
+  "fresh_adversarial_proof": {
+    "ok": true,
+    "unsigned_legacy_claim_called_corroborated": false,
+    "forged_signature_rejected_without_mutation": true,
+    "post_decision_registry_change_rejected_without_mutation": true,
+    "one_extreme_assessment_removed_by_median": true,
+    "distinct_witness_keys": 3,
+    "distinct_configured_trust_domains": 3,
+    "attestation_statuses": [
+      "AUTHENTICATED_SINGLE_SOURCE",
+      "MULTI_DOMAIN_LIMITED",
+      "MULTI_DOMAIN_ATTESTED"
+    ],
+    "independent_raw_verifier": "PASS: 21 commits, 3 authorities, 3 witnesses, 1 decision, 3 attestations",
+    "metabolism": "PASS: 2 families, 8 ticks, 6 runtimes, 4 actual successions, generation 2, wrong 0",
+    "whole_audit": true,
+    "runtime_children_with_private_evidence_state": 0
+  },
+  "claim_boundary": {
+    "cryptographic_authorship_verified": true,
+    "configured_domain_quorum_verified": true,
+    "real_world_domain_independence_verified": false,
+    "external_truth_verified": false,
+    "literal_soul_established": false,
+    "consciousness_established": false,
+    "personhood_established": false,
+    "third_party_reproduction_completed": false,
+    "24h_completed": false
+  },
+  "external_evidence": "JUnit XML, exact-final proof JSON, independent verifier JSON and replay script are distributed outside the signed release to avoid recursive manifest binding."
+}

@@ -148,7 +148,7 @@ def cannot_read(result):
     mine=_mine(g)
     if not mine or any(x.get('ok') for x in mine) or g.get('learned'):return None
     rs=[str(x.get('reason') or '') for x in mine]
-    if any(r=='TEMPLATE_CONTESTED' or r.endswith(('_STORE_SEAL','_NOT_ITS_OWN','_NOT_SIGNED')) for r in rs):return None
+    if any(r=='TEMPLATE_CONTESTED' or r.endswith(('_STORE_SEAL','_NOT_ITS_OWN','_NOT_SIGNED','_ROLLED_BACK')) for r in rs):return None
     if 'gen4' in result:
         from .api import _a_problem
         if not _a_problem(g):return None

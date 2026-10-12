@@ -5,19 +5,20 @@ TUKUYO generation 4 learns from three parents: Claude (Anthropic), ChatGPT (Open
   read(text, view, parent)   a parent writes the problem in the formal problem language (structured output against a
                              JSON schema). The caller solves the reading and check.py decides. Two views with their
                              own instructions and examples: 'story' reads in the order of the text, 'goal' starts from
-                             what is asked. Readings by two different parents that pass the checker and agree are two
-                             independent readings (api.py).
+                             what is asked. Provider agreement does not prove statistical independence or correct
+                             natural-language translation. The formal checker validates each supplied translation.
   answer(question, parent)   for what is not a problem (knowledge, conversation): a parent's reply, always unverified.
   parents()                  the parents that can be asked now, in the order claude, chatgpt, gemini.
   readiness(live)            for each parent: is its key set (never shown), which model, is its package installed, does
                              the network reach its host; with live=True one short paid call to each parent that is ready.
 
-Configuration (environment; keys are never written anywhere, and the host's own ANTHROPIC_*, OPENAI_*, GEMINI_* and
-GOOGLE_* variables are never read):
+Configuration (dedicated environment keys, or opt-in SIWC credentials outside individual data; the host's own
+ANTHROPIC_*, OPENAI_*, GEMINI_* and GOOGLE_* variables are never read):
   claude    TUKUYO_ANTHROPIC_API_KEY (package `anthropic`); TUKUYO_LLM_MODEL (default MODEL_DEFAULT below);
             TUKUYO_LLM_EFFORT (default medium); TUKUYO_ANTHROPIC_BASE_URL (default https://api.anthropic.com)
   chatgpt   TUKUYO_OPENAI_API_KEY (package `openai`); TUKUYO_OPENAI_MODEL (required: there is no default, choose a
             current model); TUKUYO_OPENAI_EFFORT (optional reasoning effort); TUKUYO_OPENAI_BASE_URL
+            TUKUYO_CHATGPT_AUTH=plan uses the dedicated Continue with ChatGPT credential file instead.
   gemini    TUKUYO_GEMINI_API_KEY (package `google-genai`); TUKUYO_GEMINI_MODEL (required, no default);
             TUKUYO_GEMINI_THINKING (optional thinking level: MINIMAL LOW MEDIUM HIGH); TUKUYO_GEMINI_BASE_URL
   TUKUYO_LLM_PARENTS   optional comma list that limits the parents used (e.g. "claude,gemini")
@@ -173,14 +174,28 @@ HOST={'claude':'https://api.anthropic.com','chatgpt':'https://api.openai.com','g
 
 def _env(k):return os.environ.get(k,'').strip()
 
-def settings(parent='claude'):
+def settings(parent='claude',auth_mode=None):
     s={'parent':parent,'key':bool(_env(KEY_ENV[parent])),'replay':_env('TUKUYO_LLM_REPLAY') or None,'record':_env('TUKUYO_LLM_RECORD') or None}
     if parent=='claude':
         s.update(model=_env('TUKUYO_LLM_MODEL') or MODEL_DEFAULT,effort=_env('TUKUYO_LLM_EFFORT') or EFFORT_DEFAULT,
                  base_url=_env('TUKUYO_ANTHROPIC_BASE_URL') or 'https://api.anthropic.com')
     elif parent=='chatgpt':
+        from . import chatgpt_auth as auth
+        selected=auth_mode or auth.mode()
+        if selected not in ('api','plan'):raise ValueError('CHATGPT_AUTH_MODE')
+        plan=auth.status() if selected=='plan' else {}
         s.update(model=_env('TUKUYO_OPENAI_MODEL') or None,effort=_env('TUKUYO_OPENAI_EFFORT') or None,
                  base_url=_env('TUKUYO_OPENAI_BASE_URL') or 'https://api.openai.com/v1')
+        s['auth_mode']=selected
+        if s['auth_mode']=='plan':s.update(key=plan.get('configured',False),model=s['model'] or plan.get('model'),base_url=auth.RESOURCE)
+        from urllib.parse import urlsplit
+        endpoint=urlsplit(s['base_url'])
+        if endpoint.scheme not in ('http','https') or not endpoint.hostname or endpoint.username or endpoint.password or endpoint.query or endpoint.fragment:
+            raise ValueError('CHATGPT_ENDPOINT_CONFIGURATION')
+        s['stream']=s['auth_mode']=='plan' or _env('TUKUYO_OPENAI_STREAM')=='1'
+        try:s['timeout']=float(_env('TUKUYO_OPENAI_TIMEOUT') or '90')
+        except ValueError:raise ValueError('CHATGPT_TIMEOUT_BOUND') from None
+        if not 5<=s['timeout']<=300:raise ValueError('CHATGPT_TIMEOUT_BOUND')
     elif parent=='gemini':
         s.update(model=_env('TUKUYO_GEMINI_MODEL') or None,thinking=(_env('TUKUYO_GEMINI_THINKING') or None),
                  base_url=_env('TUKUYO_GEMINI_BASE_URL') or None)
@@ -224,7 +239,24 @@ def _replayed(path,h):
     return _replay_cache[path].get(h) if h else None
 
 _clients={}
+from contextvars import ContextVar
+_request_settings=ContextVar('tukuyo_openai_request_settings',default=None)
 def _client(parent):
+    if parent=='chatgpt':
+        from . import chatgpt_auth as auth
+        import openai
+        s=_request_settings.get() or settings('chatgpt')
+        key=auth.credential(s['auth_mode'])
+        if not key:raise ValueError('CHATGPT_CONNECTION_REQUIRED')
+        # Legacy in-process test injection remains explicit. Production cache
+        # slots are scoped by auth route, endpoint, current credential and timeout.
+        if parent in _clients:return _clients[parent]
+        slot=(parent,s['auth_mode'],s['base_url'],hashlib.sha256(key.encode()).hexdigest(),s['timeout'])
+        if slot not in _clients:
+            slots=[x for x in _clients if isinstance(x,tuple) and x[0]=='chatgpt']
+            if len(slots)>=16:_clients.pop(slots[0])
+            _clients[slot]=openai.OpenAI(api_key=key,base_url=s['base_url'],max_retries=0,timeout=s['timeout'])
+        return _clients[slot]
     if parent not in _clients:
         s=settings(parent);key=os.environ[KEY_ENV[parent]].strip()
         if parent=='claude':
@@ -232,7 +264,7 @@ def _client(parent):
             _clients[parent]=anthropic.Anthropic(api_key=key,base_url=s['base_url'],max_retries=3,timeout=600.0)
         elif parent=='chatgpt':
             import openai
-            _clients[parent]=openai.OpenAI(api_key=key,base_url=s['base_url'],max_retries=3,timeout=600.0)
+            _clients[parent]=openai.OpenAI(api_key=key,base_url=s['base_url'],max_retries=0,timeout=90.0)
         else:
             from google import genai
             from google.genai import types
@@ -264,24 +296,38 @@ def _call_claude(s,system,user,schema,max_tokens):
 
 def _call_chatgpt(s,system,user,schema,max_tokens):
     import openai
+    from . import openai_transport as transport
+    selected=s.get('auth_mode','api')
+    if selected not in ('api','plan'):return transport.failure('CHATGPT_AUTH_MODE')
+    if type(max_tokens) is not int or not 1<=max_tokens<=65536:return transport.failure('CHATGPT_OUTPUT_BOUND')
     kw={'model':s['model'],'instructions':system,'input':user,'max_output_tokens':max_tokens,'store':False}
     if schema:kw['text']={'format':{'type':'json_schema','name':'tukuyo_reading','schema':schema,'strict':True}}
     if s.get('effort'):kw['reasoning']={'effort':s['effort']}
-    try:r=_client('chatgpt').responses.create(**kw)
-    except openai.AuthenticationError:return {'ok':False,'reason':'AUTHENTICATION'}
-    except openai.PermissionDeniedError:return {'ok':False,'reason':'PERMISSION_DENIED'}
-    except openai.NotFoundError:return {'ok':False,'reason':'MODEL_OR_ENDPOINT_NOT_FOUND'}
-    except openai.BadRequestError as e:return {'ok':False,'reason':'BAD_REQUEST:'+str(getattr(e,'message',e))[:300]}
-    except openai.RateLimitError:return {'ok':False,'reason':'RATE_LIMITED'}
-    except openai.APIStatusError as e:return {'ok':False,'reason':f'API_STATUS_{e.status_code}'}
-    except openai.APIConnectionError:return {'ok':False,'reason':'CONNECTION'}
-    u=r.usage
-    out={'ok':True,'text':r.output_text,'model':r.model,'request_id':r.id,
-         'usage':{'input_tokens':getattr(u,'input_tokens',None),'output_tokens':getattr(u,'output_tokens',None)} if u is not None else {}}
-    refused=[c for o in (r.output or []) if getattr(o,'type',None)=='message' for c in (o.content or []) if getattr(c,'type',None)=='refusal']
-    if refused:out={**out,'ok':False,'reason':'REFUSAL','text':''}
-    elif r.status!='completed':out={**out,'ok':False,'reason':'INCOMPLETE:'+str(getattr(r.incomplete_details,'reason',None) or r.status),'text':''}
-    return out
+    try:
+        if selected=='plan':
+            # The SIWC HTTP preview requires input arrays, streaming and no
+            # previous_response_id/max_output_tokens. No backend-api endpoint.
+            kw.pop('max_output_tokens');kw['stream']=True
+            if isinstance(user,str):kw['input']=[{'role':'user','content':user}]
+        elif s.get('stream'):kw['stream']=True
+        token=_request_settings.set(s)
+        try:client=_client('chatgpt')
+        finally:_request_settings.reset(token)
+        if kw.get('stream'):
+            with client.responses.create(**kw) as events:r,error=transport.stream_result(events)
+            if error:return error
+        else:r=client.responses.create(**kw)
+    except openai.APIStatusError as e:
+        reason={400:'BAD_REQUEST',401:'AUTHENTICATION',403:'PERMISSION_DENIED',404:'MODEL_OR_ENDPOINT_NOT_FOUND',429:'RATE_LIMITED'}.get(e.status_code,f'API_STATUS_{e.status_code}')
+        return transport.failure(reason,getattr(e,'code',None),e.status_code,getattr(getattr(e,'response',None),'headers',None),getattr(e,'param',None))
+    except openai.APITimeoutError:return transport.failure('TIMEOUT')
+    except openai.APIConnectionError:return transport.failure('CONNECTION')
+    except ValueError as e:
+        safe=str(e) if str(e) in ('CHATGPT_LOGIN_REQUIRED','CHATGPT_REFRESH_UNAVAILABLE','CHATGPT_REFRESH_FAILED','CHATGPT_REFRESH_INVALID_CLIENT') else 'CHATGPT_AUTH_CONFIGURATION'
+        return transport.failure(safe)
+    out=transport.completed_result(r)
+    return {**out,'transport':{'auth_mode':selected,'stream':bool(kw.get('stream')),'attempts':1,'completion_checked':bool(out['ok']),
+                            'requested_output_token_cap':None if selected=='plan' else max_tokens}}
 
 def _call_gemini(s,system,user,schema,max_tokens):
     import httpx
@@ -311,8 +357,8 @@ def _call_gemini(s,system,user,schema,max_tokens):
 
 CALL={'claude':_call_claude,'chatgpt':_call_chatgpt,'gemini':_call_gemini}
 
-def call(kind,system,user,schema=None,max_tokens=16000,parent='claude'):
-    s=settings(parent);h=request_hash(_kind(parent,kind),system,user)
+def call(kind,system,user,schema=None,max_tokens=16000,parent='claude',auth_mode=None):
+    s=settings(parent,auth_mode=auth_mode);h=request_hash(_kind(parent,kind),system,user)
     if s['replay']:
         r=_replayed(s['replay'],h)
         if r is None:return {'ok':False,'reason':'NOT_IN_REPLAY','hash':h,'parent':parent}
@@ -354,6 +400,10 @@ def readiness(live=False):
         pkg=installed(p)
         r={'key_variable':KEY_ENV[p],'key':'set' if s['key'] else 'not set','model_variable':MODEL_ENV[p],
            'model':s['model'] or None,'package':PACKAGE[p],'package_installed':pkg,'network':reachable(p)}
+        if p=='chatgpt':
+            # ChatGPT: a dedicated API key, or the Continue with ChatGPT login (TUKUYO_CHATGPT_AUTH=plan, v1022.6.6/7.6)
+            r['auth_mode']=s.get('auth_mode')
+            if s.get('auth_mode')=='plan':r['key_variable']='TUKUYO_CHATGPT_AUTH=plan (the Continue with ChatGPT login; chatgpt-status)'
         missing=[x for x,ok in (('key',s['key']),('model',bool(s['model'])),('package',pkg),('network',r['network']=='ok')) if not ok]
         r['ready']=not missing;r['missing']=missing
         if live and r['ready']:
@@ -369,6 +419,10 @@ def readiness(live=False):
 def read(text,view='story',lang=None,parent='claude'):
     """-> {'ok', 'spec' (FPL), 'reply': transport record} ; spec is None when the parent says the text is not readable"""
     r=call('read:'+view+':'+PROMPT_VERSION,system_prompt(view),'Text: '+text,schema=FPL_SCHEMA,parent=parent)
+    return read_reply(text,r,lang)
+
+def read_reply(text,r,lang=None):
+    """Decode a recorded or live teacher reading with the original input bound."""
     if not r.get('ok'):return {'ok':False,'reason':r.get('reason'),'reply':r}
     try:o=json.loads(r['text'])
     except (ValueError,TypeError):return {'ok':False,'reason':'NOT_JSON','reply':r}

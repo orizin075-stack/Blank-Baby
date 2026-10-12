@@ -55,6 +55,14 @@ def _validate(s):
     energy=sum(s['runtimes'][r]['energy'] for r in s['active'])
     if s['initial_total']+s['regenerated']!=s['reservoir']+s['burned']+energy:raise ValueError('V1022_RESOURCE_CONSERVATION')
     if any(s['runtimes'][r]['lifecycle']=='DEAD' for r in s['active']):raise ValueError('V1022_ACTIVE_DEAD')
+    rewards=s.get('grounded_rewards',[]);receipt_ids=[]
+    for i,row in enumerate(rewards,1):
+        if (row.get('seq')!=i or not re.fullmatch(r'R\d{6}',row.get('runtime',''))
+                or not re.fullmatch(r'[0-9a-f]{64}',row.get('receipt_sha256',''))
+                or type(row.get('requested')) is not int or type(row.get('paid')) is not int
+                or not 1<=row['paid']<=row['requested']<=1000):raise ValueError('V1022_GROUNDED_REWARD_ROW')
+        receipt_ids.append(row['receipt_sha256'])
+    if len(receipt_ids)!=len(set(receipt_ids)):raise ValueError('V1022_GROUNDED_RECEIPT_REPLAY')
     if 'research' in s:
         # claude-patch5 opt-in research niche (metabolism-init --research-world)
         from tukuyo_v1023r import niche
@@ -62,6 +70,13 @@ def _validate(s):
         if s['config'].get('research_world') is not True or not set(s['active'])<=set(s['research']['runtimes']):raise ValueError('V1023R_NICHE_BINDING')
 def preflight(d):
     s=store.load(d,NS,COMPONENT,_validate)
+    if s.get('grounded_rewards'):
+        from . import grounded_sensor
+        authorized={whole.sha_obj(r['receipt_envelope']):r for r in grounded_sensor.load(d)['outcomes'] if r['success'] and r['resource_credit']}
+        for reward in s['grounded_rewards']:
+            source=authorized.get(reward['receipt_sha256'])
+            if not source or source['runtime_id']!=reward['runtime'] or source['resource_credit']!=reward['requested']:
+                raise ValueError('V1022_GROUNDED_AUTHORIZATION_BINDING')
     for rid,row in s['runtimes'].items():
         if _snapshot(d,rid)!=row:raise ValueError('V1022_RUNTIME_DRIFT:'+rid)
     for k in ('succession_public_key','whole_public_key'):
@@ -74,6 +89,26 @@ def preflight(d):
 def _fresh(d,s):
     if len(s['runtimes'])>=64:raise ValueError('V1022_RUNTIME_LIMIT')
     rid=f"R{len(s['runtimes']):06d}";ident=whole._live_identity(d)['individual_id']+'-metabolic-'+rid
+    if rid in s['runtimes']:raise ValueError('V1022_FRESH_REGISTERED_SLOT')
+    p=child(d,rid)
+    if p.exists() or p.is_symlink():
+        # A late synchronized, unregistered future is not a fresh child. Keep
+        # every old byte (including keys) in a private signed archive, then
+        # create the new runtime without importing its identity or caches.
+        import os,uuid
+        from tukuyo_v1019.transaction import _reject_symlinks
+        from tukuyo_common.atomic_fs import _fsync_dir
+        if p.is_symlink() or not p.is_dir():raise ValueError('V1022_FRESH_SLOT_NOT_DIRECTORY')
+        _reject_symlinks(p)
+        files=sorted(q for q in p.rglob('*') if q.is_file())
+        if len(files)>4096:raise ValueError('V1022_FRESH_COLLISION_BOUND')
+        hashes={q.relative_to(p).as_posix():hashlib.sha256(q.read_bytes()).hexdigest() for q in files}
+        bucket=root(d)/'private'/'newborn_collision_archive'/(rid+'-'+uuid.uuid4().hex)
+        bucket.mkdir(parents=True,exist_ok=False)
+        os.replace(p,bucket/'runtime');_fsync_dir(p.parent);_fsync_dir(bucket)
+        receipt={'schema':'tukuyo.v1022_7_4.newborn_collision/1','runtime_id':rid,
+                 'registered_runtime_replaced':False,'file_sha256':hashes,'old_keys_reused':False}
+        atomic_write_bytes(bucket/'RECEIPT.json',whole.canon(whole._sign(d,receipt))+b'\n')
     _cli(d,rid,'init','--individual-id',ident,'--blank-learning');_cli(d,rid,'organism2-init')
     heart_loop.load(child(d,rid));heart_loop.audit(child(d,rid));whole.sync(child(d,rid));return rid,ident
 def _culture(source,target,tag):
@@ -186,13 +221,59 @@ def step(d,ticks=1):
         s['tick']=tick;s['last_tick']={'tick':tick,'regenerated':regen,'actions':rows};_validate(s)
         atomic_write_bytes(root(d)/'ticks'/f'{tick:06d}.json',whole.canon(s['last_tick'])+b'\n');store.save(d,NS,COMPONENT,s)
     return summary(s)
+
+@transactional()
+def grounded_reward(d,runtime_id,credit,receipt_sha256):
+    """Transfer a verifier-bound finite reward into one actual runtime.
+
+    The reward comes from the existing reservoir, so conservation is retained.
+    The measured action must already be committed in the enclosing transaction.
+    Receipt transfer does not advance age; metabolism.step owns elapsed ticks.
+    """
+    if not re.fullmatch(r'R\d{6}',runtime_id):raise ValueError('V1022_GROUNDED_RUNTIME_ID')
+    if type(credit) is not int or not 1<=credit<=1000:raise ValueError('V1022_GROUNDED_CREDIT')
+    if not re.fullmatch(r'[0-9a-f]{64}',receipt_sha256):raise ValueError('V1022_GROUNDED_RECEIPT')
+    from . import grounded_sensor,sensor_action
+    try:
+        evidence=grounded_sensor.load(d)
+        source=next(r for r in evidence['outcomes'] if whole.sha_obj(r['receipt_envelope'])==receipt_sha256)
+        if (not source['success'] or source['runtime_id']!=runtime_id or source['resource_credit']!=credit
+                or source['receipt_envelope']['payload']['schema']!=sensor_action.RECEIPT_SCHEMA):
+            raise ValueError('authorization')
+        intent=sensor_action.authorize(evidence,source['receipt_envelope']['payload'])
+    except (ValueError,KeyError,StopIteration) as exc:
+        raise ValueError('V1022_GROUNDED_AUTHORIZATION_REQUIRED') from exc
+    s=copy.deepcopy(preflight(d));rewards=s.setdefault('grounded_rewards',[])
+    if runtime_id not in s['active']:raise ValueError('V1022_GROUNDED_RUNTIME_INACTIVE')
+    if s['runtimes'][runtime_id]['whole_sha256']!=intent['runtime_head_sha256']:
+        raise ValueError('V1022_GROUNDED_RUNTIME_HEAD_CHANGED')
+    if any(row['receipt_sha256']==receipt_sha256 for row in rewards):raise ValueError('V1022_GROUNDED_RECEIPT_REPLAY')
+    p=child(d,runtime_id);before=s['runtimes'][runtime_id]['energy'];room=max(0,10000-before)
+    paid=min(credit,s['reservoir'],room)
+    if paid<=0:raise ValueError('V1022_GROUNDED_NO_RESOURCE_OR_CAPACITY')
+    s['reservoir']-=paid
+    m=organism2.resource_credit(p,paid,receipt_sha256);whole.sync(p)
+    s['runtimes'][runtime_id]=_snapshot(d,runtime_id)
+    row={'seq':len(rewards)+1,'runtime':runtime_id,'receipt_sha256':receipt_sha256,
+         'runtime_head_before_sha256':intent['runtime_head_sha256'],
+         'requested':credit,'paid':paid,'energy_before':before,
+         'energy_after':s['runtimes'][runtime_id]['energy'],'burn':m['burn'],'death_cause':m['death_cause']}
+    rewards.append(row)
+    if m['death_cause']:
+        s['active'].remove(runtime_id);s['deaths'].append({'runtime':runtime_id,'tick':s['tick'],'cause':m['death_cause'],'source':'grounded_reward'})
+        _successor(d,s,runtime_id,s['tick'])
+    _validate(s);store.save(d,NS,COMPONENT,s)
+    return {'ok':True,'version':'v1022.7.3','runtime':runtime_id,'requested':credit,'paid':paid,
+            'energy_before':before,'energy_after':s['runtimes'][runtime_id]['energy'],
+            'reservoir_after':s['reservoir'],'resource_conservation':True,'death_cause':m['death_cause']}
+
 def summary(s):
     total=lambda k:sum(p[k] for p in s['performance'].values())
     return {'ok':True,'version':'v1022','tick':s['tick'],'active_runtime_count':len(s['active']),'total_runtime_count':len(s['runtimes']),
         'actual_successions':len(s['successions']),'max_generation':max((r['generation'] for r in s['runtimes'].values()),default=0),
         'reservoir':s['reservoir'],'burned':s['burned'],'initial_total':s['initial_total'],'regenerated':s['regenerated'],
         'living_energy':sum(s['runtimes'][r]['energy'] for r in s['active']),**{k:total(k) for k in ('attempts','correct','wrong','abstained','hard_attempts','hard_correct')},
-        'deaths':s['deaths'],'successions':s['successions'],'last_tick':s['last_tick'],'claim_boundary':CLAIMS,
+        'deaths':s['deaths'],'successions':s['successions'],'grounded_rewards':s.get('grounded_rewards',[]),'last_tick':s['last_tick'],'claim_boundary':CLAIMS,
         **({'research_niche':__import__('tukuyo_v1023r.niche',fromlist=['summary']).summary(s['research'],s['seed']),'research_claim_boundary':s['research']['claim_boundary']} if 'research' in s else {})}
 def status(d):return summary(preflight(d))
 def audit(d):

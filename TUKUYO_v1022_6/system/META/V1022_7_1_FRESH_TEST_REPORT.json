@@ -1,0 +1,35 @@
+{
+  "schema": "tukuyo.v1022_7_1.fresh_test_report/1",
+  "release_revision": "v1022.7.1-semantic-truth-challenge",
+  "full_suite": {
+    "tests": 787,
+    "passed": 787,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 358.24,
+    "runner": "pytest-xdist loadscope, 4 workers"
+  },
+  "focused": "44/44 PASS",
+  "truth_negative_controls": {
+    "unanimous_false_reports_not_called_truth": true,
+    "precommitted_benchmark_refuted_false_consensus": true,
+    "wrong_unit_rejected_without_mutation": true,
+    "forged_oracle_receipt_rejected_without_mutation": true,
+    "posthoc_manifest_rejected_without_mutation": true,
+    "late_oracle_rejected_without_mutation": true
+  },
+  "independent_raw_verifier": "PASS",
+  "fresh_runtime": {
+    "families": 2,
+    "ticks": 8,
+    "total_runtime_count": 6,
+    "active_runtime_count": 2,
+    "actual_successions": 4,
+    "max_generation": 2,
+    "wrong": 0,
+    "child_private_semantic_truth_directories": 0,
+    "metabolism_audit": true,
+    "whole_audit": true
+  }
+}

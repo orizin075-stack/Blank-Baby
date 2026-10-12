@@ -179,6 +179,14 @@ def verify_bounded_semantics(query,answer):
     unrecognized so another evidence source may decide it.
     """
     s=_n(query);low=s.lower()
+    # Separate raw-surface guard: an uncertain quantity event cannot be
+    # approved by this legacy fallback, even if its subtraction matches.
+    count_context=bool(re.search(r'\d+\s*(?:個|枚|本|冊|台|人|箱|袋|円|時間|分|秒|km|kg|mL|L)',s))
+    undecided=('わけでは','わけじゃ','わけでも','とは限','とも限','ないとは','なくは',
+               '不明','不詳','未確認','未確定','不確か','分から','分かりません','わから','わかりません','断定でき','確かでは','確かじゃ')
+    scope_surface=re.sub(r'\d+(?:\.\d+)?\s*分から','',s)
+    if count_context and any(operator in scope_surface for operator in undecided):
+        return _result(recognized=True,decidable=False,reason='UNRESOLVED_EVENT_SCOPE',kind='EVENT_SCOPE_GUARD')
     lv=_logic_verify(s,answer)
     if lv is not None:return lv
 

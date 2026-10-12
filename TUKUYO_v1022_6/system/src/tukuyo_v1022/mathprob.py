@@ -338,6 +338,15 @@ def _ja_speed(t,q,query):
     return _out('speed','道のり÷時間',f'{dv}/{tv}',d/h,du,[d,h],query,whole=False)
 
 # ------------------------------------------------------------------ English families
+def _en_missing_average(s,query):
+    """Inverse mean with exactly one missing member; never reinterpret the count as a value."""
+    m=re.search(r'\b(?:the\s+)?(?:mean|average)\s+of\s+(\d+)\s+([a-z]+)\s+(?:is|was)\s+(\d+(?:\.\d+)?)\s*(cm|m|kg|g|points?|dollars?|km|years?|minutes?|pages?)?\s*[.]?\s*one\s+(?:of\s+the\s+)?(?:measurements?|values?|scores?|items?)\s+(?:is|was)\s+(\d+(?:\.\d+)?)\s*(cm|m|kg|g|points?|dollars?|km|years?|minutes?|pages?)?',s)
+    if not m:return None
+    count=Fraction(m[1]);mean=Fraction(m[3]);known=Fraction(m[5])
+    _need(count==2 and (m[4] or '')==(m[6] or '') and re.search(r'what\s+is\s+(?:the\s+)?other\s+(?:measurement|value|score|item)',s))
+    _need(_all_read(s,[m.span(1),m.span(3),m.span(5)]))
+    return _out('missing_average_member','mean*count-known',f'{m[3]}*{m[1]}-{m[5]}',mean*count-known,m[4] or '',[count,mean,known],query,whole=False)
+
 def _en_average(s,query):
     if not re.search(r'\baverage\b|\bmean\b',s):return None
     vals=list(re.finditer(r'(\d+(?:\.\d+)?)\s*(cm|m|kg|g|points?|dollars?|km|years?|minutes?|pages?)?(?=\s*(?:,|and\b|\.|$))',s))
@@ -455,7 +464,7 @@ def _en_speed(s,query):
 # ------------------------------------------------------------------ entry
 JA_FAMILIES=(_ja_lcm_gcd,_ja_average,_ja_shape,_ja_part_of,_ja_inverse_group,_ja_each_groups,_ja_rows_formed,_ja_division,_ja_per_period,_ja_complement,_ja_difference,
              _ja_ratio,_ja_times,_ja_speed,_ja_per_one,_ja_budget,_ja_unit_price_pay,_ja_prices,_ja_duration)
-EN_FAMILIES=(_en_lcm_gcd,_en_average,_en_shape,_en_groups,_en_teams,_en_prices,_en_budget,_en_speed,_en_compare,_en_number)
+EN_FAMILIES=(_en_lcm_gcd,_en_missing_average,_en_average,_en_shape,_en_groups,_en_teams,_en_prices,_en_budget,_en_speed,_en_compare,_en_number)
 
 def solve(query):
     try:

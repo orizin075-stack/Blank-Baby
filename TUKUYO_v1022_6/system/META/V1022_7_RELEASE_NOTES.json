@@ -1,0 +1,39 @@
+{
+  "schema": "tukuyo.v1022_7.release_notes/1",
+  "release_revision": "v1022.7-evidence-bound-soul",
+  "base": "v1022.6.9-reflective-soul",
+  "classification": "EXPERIMENTAL",
+  "counterexamples_reproduced": [
+    "two unsigned observer-id strings reached CORROBORATED in V1022.6.9",
+    "swapping caller-supplied effect annotations reversed the decision while integrity audits stayed green"
+  ],
+  "changes": [
+    "removed corroboration terminology from unsigned legacy outcome levels",
+    "added configured Ed25519 authorities and authority-signed witness certificates",
+    "required three distinct witness keys and three configured trust domains",
+    "bound signed assessments to option hash, context hash, all effects and evidence hash",
+    "added median aggregation and registry sealing",
+    "bound signed outcome attestations to evidence-bound decisions and chosen options",
+    "added an independent raw JSON evidence verifier",
+    "integrated Evidence-Bound Soul into Whole State, transactions, recovery and succession privacy"
+  ],
+  "claim_boundary": {
+    "cryptographic_authorship_verified": true,
+    "configured_domain_quorum_verified": true,
+    "real_world_domain_independence_verified": false,
+    "external_truth_verified": false,
+    "literal_soul_established": false,
+    "consciousness_established": false,
+    "personhood_established": false
+  },
+  "validation": {
+    "full_pytest": "772/772 PASS",
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 382.87,
+    "independent_research_tests": "12/12 PASS",
+    "fresh_adversarial_proof": "PASS",
+    "actual_runtime": "2 families, 8 ticks, 6 runtimes, generation 2, 4 actual successions"
+  }
+}

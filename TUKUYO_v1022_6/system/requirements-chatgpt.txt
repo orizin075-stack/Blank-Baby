@@ -1,0 +1,4 @@
+-r requirements.txt
+openai>=2,<4
+httpx>=0.27,<1
+PyJWT[crypto]>=2.10,<3

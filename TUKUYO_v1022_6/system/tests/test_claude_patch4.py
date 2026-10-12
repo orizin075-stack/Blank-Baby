@@ -46,9 +46,11 @@ def test_cp4_review_cases_end_to_end():
         r=think(d,'2000円の商品を20%引きし、さらに25%引きし、その後10%値上げしました。最終価格は？')
         assert r['answer']=='1320' and r['verification_evidence']['semantic_gate']['independent_parser']=='AGREE',r
         for q in ['2000円の商品Aを20%引きし、商品Bを25%引きし、その後10%値上げしました。最終価格は？',
-                  '1箱に12個入りが6箱あります。箱は全部で何個？','ペンとノートが合わせて18本あります。ペンは何本？',
+                  'ペンとノートが合わせて18本あります。ペンは何本？',
                   '9時に、みかんが20個ありました。6個食べました。残りは何個？','1500円の品物を3割引きにする予定です。値段はいくら？']:
             r=think(d,q);assert r['answer'] is None,(q,r)
+        # Fusion retains the separately checked, unambiguous container count.
+        assert think(d,'1箱に12個入りが6箱あります。箱は全部で何個？')['answer']=='6'
         assert think(d,'水が3Lあります。400mL使い、さらに1.5L使いました。残りは何mL？')['answer']=='1100'
         assert think(d,'お茶が2L300mLあります。800mL飲みました。残りは何mL？')['answer']=='1500'
         assert think(d,'3000円のかばんを2割引きにし、そこから200円引きました。いくらになりましたか？')['answer']=='2200'

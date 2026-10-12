@@ -1,0 +1,36 @@
+{
+  "schema": "tukuyo.v1022_7_1.release_notes/1",
+  "release_revision": "v1022.7.1-semantic-truth-challenge",
+  "base": "v1022.7-evidence-bound-soul",
+  "classification": "EXPERIMENTAL",
+  "counterexample": "three authenticated configured domains can sign the same false value; agreement alone is not truth",
+  "changes": [
+    "added strict typed claims with exact context, value-type and unit binding",
+    "kept signed report quorum at CONFIGURED_CONSENSUS_ONLY",
+    "added precommitted finite benchmark manifests",
+    "added role-separated signed oracle receipts",
+    "added challenge nonce, report, evidence, receipt and manifest replay resistance",
+    "added bounded verified/refuted statuses without external-truth overclaim",
+    "integrated semantic truth state into Whole State, transactions and recovery",
+    "added independent raw verifier and successor privacy regression",
+    "expanded development requirements so the complete suite runs without optional dependency skips"
+  ],
+  "validation": {
+    "full_pytest": "787/787 PASS",
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 358.24,
+    "focused": "44/44 PASS",
+    "fresh_adversarial_proof": "PASS",
+    "actual_runtime": "2 families, 8 ticks, 6 runtimes, generation 2, 4 actual successions"
+  },
+  "claim_boundary": {
+    "bounded_manifest_consistency_verified": true,
+    "external_truth_verified": false,
+    "real_world_domain_independence_verified": false,
+    "literal_soul_established": false,
+    "consciousness_established": false,
+    "personhood_established": false
+  }
+}

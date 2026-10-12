@@ -1,0 +1,37 @@
+{
+  "schema": "tukuyo.v1022_7_2.release_notes/1",
+  "release_revision": "v1022.7.2-grounded-sensor-challenge",
+  "base": "v1022.7.1-semantic-truth-challenge",
+  "classification": "EXPERIMENTAL",
+  "changes": [
+    "added signed calibration authorities and device certificates",
+    "added exact claim, context, type, unit, nonce and logical-time binding",
+    "required three sensor domains, three calibration domains and two adapter hashes",
+    "kept sensor agreement at CALIBRATED_SENSOR_CONSENSUS_ONLY",
+    "added separately keyed signed action outcome receipts",
+    "connected successful receipts to a conserved actual-runtime metabolic transfer",
+    "added replay, expiry, key-role and late-registry defenses",
+    "integrated grounded state into Whole State, transactions and recovery",
+    "added an independent raw verifier and successor privacy regressions"
+  ],
+  "claim_boundary": {
+    "bounded_signed_sensor_path_verified": true,
+    "bounded_action_to_energy_causality_verified": true,
+    "external_truth_verified": false,
+    "real_world_domain_independence_verified": false,
+    "literal_soul_established": false,
+    "consciousness_established": false,
+    "personhood_established": false
+  },
+  "validation": {
+    "full_pytest": "802/802 PASS",
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 347.61,
+    "focused": "59/59 PASS",
+    "fresh_grounded_proof": "PASS",
+    "actual_runtime": "2 families, 8 ticks, 6 runtimes, generation 2, 4 actual successions",
+    "resource_transfer": "reservoir -700, actual runtime living energy +700, conservation PASS"
+  }
+}

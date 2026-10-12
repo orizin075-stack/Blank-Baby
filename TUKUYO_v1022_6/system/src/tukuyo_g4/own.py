@@ -6,8 +6,19 @@ could not read alone (g4/unread.json) - are signed with the individual's own key
 id, and the whole state (v977 UNIFIED_STATE) records their hashes. A store changed by hand, or taken from another child,
 is refused when it is read, and whole-audit reports it.
 
-A store written before stores were signed is still read, as long as the whole state never recorded another version of
-it; the next save signs it. Outside a live individual (tools, tests) a store is sealed with its sha256 only, as before.
+Each signature also names the version of the store the whole state had recorded when it was written (base). A store
+the whole state did not record is taken only when it names the recorded one: written by this individual after it,
+before the whole state was synced (a stop between the two). An older version of its own store put back in place of the
+recorded one names an older base, and is refused like a store changed by hand (<KIND>_ROLLED_BACK); the next start does
+not take it in either (unsynced). The same idea as the signed commit chains of the v1022 runtime (tukuyo_v1022.store,
+tukuyo_g4.runtime_store), without a chain: one link back to the version the whole state holds.
+
+A store written before stores were signed (generation 4 of 2026-10-09, before this module) is read only when the whole
+state recorded that very file; the next save signs it. An unsigned store the whole state never recorded is not taken:
+before, one put into an individual that had not used generation 4 yet (its whole state had recorded nothing about it)
+was read and then signed, so remembered answers or a record of its life could be planted from outside (v1022.6.5 had
+already refused this for what it learned, runtime_store.py). Outside a live individual (tools, tests) a store is
+sealed with its sha256 only, as before.
 The key lives with the individual: this guards against changes made without it, not against someone who uses it.
 """
 from __future__ import annotations
@@ -29,11 +40,13 @@ def individual(data):
     except (OSError,ValueError,KeyError,TypeError):return None
 
 def sign(data,kind,sha):
-    """the signature for a store body of this individual, or None outside a live individual"""
+    """the signature for a store body of this individual, or None outside a live individual. It names the version of the
+    store the whole state recorded when it was written (base: its hash, None when recorded as absent or not at all)"""
     ident=individual(data)
     if ident is None:return None
     from tukuyo_v977.whole_state import _sign
-    return _sign(data,{'schema':SCHEMA,'kind':kind,'individual_id':ident,'sha256':sha})
+    rec=_recorded(data,kind)
+    return _sign(data,{'schema':SCHEMA,'kind':kind,'individual_id':ident,'sha256':sha,'base':None if rec is NOT_RECORDED else rec})
 
 NOT_RECORDED=object()
 def _recorded(data,kind):
@@ -47,19 +60,24 @@ def _file_sha(p):
     p=Path(p);return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
 
 def check(data,kind,sha,signed):
-    """raises ValueError (<KIND>_NOT_ITS_OWN, <KIND>_NOT_SIGNED) when this store of the individual in data is not its own"""
+    """raises ValueError (<KIND>_NOT_ITS_OWN, <KIND>_NOT_SIGNED, <KIND>_ROLLED_BACK) when this store of the individual in
+    data is not its own, or is an older version of it than the one the whole state recorded"""
     ident=individual(data)
     if ident is None:return
     if signed is None:
-        # unsigned: only the very file the whole state recorded, or one it never recorded anything about (before signing)
+        # unsigned (written before stores were signed): only the very file the whole state recorded
         rec=_recorded(data,kind)
-        if rec is not NOT_RECORDED and rec!=_file_sha(Path(data)/KINDS[kind]):raise ValueError(kind.upper()+'_NOT_SIGNED')
+        if rec is NOT_RECORDED or rec!=_file_sha(Path(data)/KINDS[kind]):raise ValueError(kind.upper()+'_NOT_SIGNED')
         return
     from tukuyo_v977.whole_state import _verify,_key_paths
     pub=_key_paths(data)[1];q=signed.get('payload') if isinstance(signed,dict) else None
     if (not pub.is_file() or not isinstance(q,dict) or not _verify(signed,pub.read_text().strip()) or q.get('schema')!=SCHEMA
             or q.get('kind')!=kind or q.get('individual_id')!=ident or q.get('sha256')!=sha):
         raise ValueError(kind.upper()+'_NOT_ITS_OWN')
+    # not the version the whole state recorded: only one written after it (it names it) is taken
+    rec=_recorded(data,kind)
+    if rec is not NOT_RECORDED and rec!=_file_sha(Path(data)/KINDS[kind]) and ('base' not in q or q['base']!=rec):
+        raise ValueError(kind.upper()+'_ROLLED_BACK')
 
 def not_its_own(data):
     """the components ('g4_learned', ...) whose store in this individual is not its own: refused when read (changed by

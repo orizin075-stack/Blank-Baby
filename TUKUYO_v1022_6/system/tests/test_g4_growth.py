@@ -8,6 +8,7 @@ import pytest
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'src'))
 from tukuyo_g4 import api,growth,llm,own,voice
 from tukuyo_g4.learn import Store
+from tukuyo_v977 import whole_state as W
 
 ENV=('TUKUYO_ANTHROPIC_API_KEY','TUKUYO_OPENAI_API_KEY','TUKUYO_GEMINI_API_KEY','TUKUYO_OPENAI_MODEL','TUKUYO_GEMINI_MODEL',
      'TUKUYO_LLM_PARENTS','TUKUYO_LLM_VOICE','TUKUYO_LLM_REPLAY','TUKUYO_LLM_RECORD')
@@ -172,7 +173,10 @@ def test_it_notices_its_own_reader_grew_and_tries_again_on_its_own(tmp_path,clea
 def test_its_record_of_growth_is_its_own(tmp_path,clean):
     cli=_cli();d=tmp_path/'d';cli(d,'init','--individual-id','GROWTH-MINE');o_=tmp_path/'o';cli(o_,'init','--individual-id','GROWTH-OTHER')
     rec=_write(tmp_path/'r.jsonl',[_line(p,T,R) for p in PARENTS])
-    for x in (d,o_):cli(x,'g4-solve','--llm','off','--',T2);cli(x,'g4-solve','--llm','off','--',SAM)
+    for x in (d,o_):
+        cli(x,'g4-solve','--llm','off','--',T2)
+        if x==d:older=(d/'g4'/'unread.json').read_bytes()                  # its own, signed: the one problem it had met
+        cli(x,'g4-solve','--llm','off','--',SAM)
     o=json.loads((d/'g4'/'unread.json').read_text(encoding='utf-8'));assert o['signed']['payload']['individual_id']==own.individual(d)
     # a thought killed while it notices its growth: the next start finishes it, once
     k=tmp_path/'killed';shutil.copytree(d,k)
@@ -183,28 +187,41 @@ def test_its_record_of_growth_is_its_own(tmp_path,clean):
     # it is kept in its soul and its own record: erasing the surface memory does not take it away
     before=cli(d,'g4-self');cli(d,'soul-forget-surface');after=cli(d,'g4-self')
     assert after['growth']==before['growth'] and after['life_story']['grew']==1
-    # changed by hand (every problem marked as read, the seal recomputed), or taken from another child: refused
-    for name,change in (('edited',lambda x:_mark_all_read(x)),('foreign',lambda x:shutil.copy(o_/'g4'/'unread.json',x/'g4'/'unread.json'))):
+    # changed by hand (every problem marked as read, the seal recomputed), taken from another child, or an older version
+    # of its own put back (signed by itself, but not the one its whole state recorded; before, the next start took it in
+    # and it forgot what it had met since): refused
+    for name,change,why in (('edited',lambda x:_mark_all_read(x),'UNREAD_NOT_ITS_OWN'),
+                            ('foreign',lambda x:shutil.copy(o_/'g4'/'unread.json',x/'g4'/'unread.json'),'UNREAD_NOT_ITS_OWN'),
+                            ('older',lambda x:(x/'g4'/'unread.json').write_bytes(older),'UNREAD_ROLLED_BACK')):
         x=tmp_path/name;shutil.copytree(d,x);change(x)
-        au=cli(x,'g4-audit');assert not au['ok'] and au['unread']['reason']=='UNREAD_NOT_ITS_OWN',name
-        me=cli(x,'g4-self');assert me['growth'] is None and me['refused']['unread']=='UNREAD_NOT_ITS_OWN',name
+        au=cli(x,'g4-audit');assert not au['ok'] and au['unread']['reason']==why,name
+        me=cli(x,'g4-self');assert me['growth'] is None and me['refused']['unread']==why,name
         # it still thinks; nothing is written to the store, and the whole state does not take it in
         b0=(x/'g4'/'unread.json').read_bytes()
         assert cli(x,'g4-solve','--llm','off','--',MIA)['answer'] is None and (x/'g4'/'unread.json').read_bytes()==b0
         assert cli(x,'whole-audit')['errors']==['COMPONENT_DRIFT:g4_unread'],name
 
 def test_the_whole_state_does_not_take_in_a_store_that_is_not_its_own(tmp_path,clean):
-    # before: a store changed by hand was reported until the next thought synced the whole state, which then took it in
+    # before: a store changed by hand was reported until the next thought synced the whole state, which then took it in.
+    # Its stores (here: the record of its life, changed to say it had already used alone what it learned) are refused
+    # when read, and the whole state keeps what it had recorded; what it learned is a signed commit of its runtime, and
+    # nothing goes on until that is put right
     cli=_cli();d=tmp_path/'d';cli(d,'init','--individual-id','GROWTH-WHOLE');rec=_write(tmp_path/'r.jsonl',[_line(p,T,R) for p in PARENTS])
     assert cli(d,'think','--',T,replay=rec)['answer']=='14'
-    p=d/'g4'/'learned.json';kept=p.read_bytes();o=json.loads(kept)
-    for t in o['templates'].values():t['provenance']['parents']=['claude']
-    o['sha256']=own.body_sha(o['templates']);p.write_text(json.dumps(o),encoding='utf-8')
-    assert cli(d,'whole-audit')['errors']==['COMPONENT_DRIFT:g4_learned']
+    tid=next(iter(json.loads((d/'g4'/'learned.json').read_text(encoding='utf-8'))['templates']))
+    p=d/'g4'/'life.json';kept=p.read_bytes();o=json.loads(kept);assert o['life']['first_alone']==[]
+    o['life']['first_alone']=[tid];o['sha256']=own.body_sha(o['life']);p.write_text(json.dumps(o),encoding='utf-8')
+    assert cli(d,'whole-audit')['errors']==['COMPONENT_DRIFT:g4_life']
     assert cli(d,'g4-solve','--llm','off','--',BIKE)['answer']=='150'                        # a thought, and the whole state is synced
-    assert cli(d,'whole-audit')['errors']==['COMPONENT_DRIFT:g4_learned'] and not cli(d,'g4-audit')['ok']
+    assert cli(d,'whole-audit')['errors']==['COMPONENT_DRIFT:g4_life'] and not cli(d,'g4-audit')['ok']
     p.write_bytes(kept)                                                                     # put right: the audits pass again
     assert cli(d,'whole-audit')['ok'] and cli(d,'g4-audit')['ok']
+    q=d/'g4'/'learned.json';kept=q.read_bytes();o=json.loads(kept)
+    for t in o['templates'].values():t['provenance']['parents']=['claude']
+    o['sha256']=own.body_sha(o['templates']);q.write_text(json.dumps(o),encoding='utf-8');w=W.state_path(d).read_bytes()
+    r=cli(d,'g4-solve','--llm','off','--',BIKE);assert not r['ok'] and r['error'].endswith('G4_LEARNING_CACHE_MISMATCH')
+    assert W.state_path(d).read_bytes()==w
+    q.write_bytes(kept);assert cli(d,'whole-audit')['ok'] and cli(d,'g4-audit')['ok']
 
 def _mark_all_read(x):
     p=x/'g4'/'unread.json';o=json.loads(p.read_text(encoding='utf-8'))

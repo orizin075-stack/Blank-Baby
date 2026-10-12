@@ -105,6 +105,7 @@ PREP=V('of|for|in|on|at|to|from|with|by|per|into|onto|than|about|after|before|du
 CONJ=V('and|or|but|then|so|because|if|when|while|though|although|which|who|that|where')
 QWORD=V('how|what|which|who|whom|whose|why|when|where|find')
 MODS=V('more|fewer|less|extra|additional|new|old|other|different|total|left|remaining|whole|full|empty|same|equal|small|large|big|little|whole|entire|own')
+KIND_MODS=V('new|old|small|large|big|little')   # dropped like the others, but they can tell one kind of a thing from another
 AUX=V('will|would|can|could|should|shall|may|might|must|does|did|do|has|have|had|is|are|was|were|been|be|to|not')
 NOT_NOUN=AUX|PRON|DET|PREP|CONJ|QWORD|HAVE|BE|V('more|fewer|less|left|now|then|total|all|altogether|together|each|every|per|times|as|much|many|same|equal|equally|only|just|also|already|still|again|later|today|yesterday|tomorrow|some|rest|remaining|first|last|next|there|here|out|away|up|down|back|in|on|off|over|twice|half|double|triple|evenly|exactly|about|around|almost|nearly|than|very|too|so')
 GROUPS=V('box|bag|pack|package|packet|bottle|can|jar|bunch|basket|case|carton|set|pair|row|column|group|team|shelf|tray|crate|container|plate|bowl|cup|stack|pile|roll|bundle|batch|load|page|book|sheet|bar|stick|loaf|dozen|section|table|car|bus|van|truck|boat|class|tank|bin|drawer|aisle|floor|level|layer|tier|vase|pot|cage|pen|room|building|house|tent|herd|flock|train|ship|plane|round|game|day|week|month|year|hour|minute|second|time|trip|lap|session|night|morning|tray|bucket|jug|pan|batch|serving|bouquet|wall|street|block|tree|branch|plant|garden|pizza|pie|cake|bucket|album|folder|binder|envelope|drawer|cabinet|truckload|cartload')
@@ -832,7 +833,15 @@ def parse_question(st,a,b):
     while i<len(rest) and rest[i] not in QSTOP and rest[i] not in PREP and rest[i]!='#' and not ((verbish(rest[i]) and not thing(rest[i])) or rest[i] in OTHER_VERBS or rest[i] in INTENT) \
           and (i==(1 if ask.cmp else 0) or not any(st.is_name(x) for x in toks if x.low==rest[i])):
         ws.append(rest[i]);i+=1
-    ws=[w for w in ws if w not in MODS]
+    raw,ws=ws,[w for w in ws if w not in MODS]
+    # 'How many small dogs does Sam have?' when the story tells of 3 big dogs and 2 small cats: a size or age word is
+    # dropped with the other modifiers, so the asked thing with it must be told in the story (the word right before it,
+    # or one word before that); else the question is about something the story does not count. Before, it answered 3
+    kinds=[w for w in raw if w in KIND_MODS]
+    if kinds and ws and sing(ws[-1]) not in UNITS:
+        told=re.findall(r"[a-z]+",st.t[:a].lower());noun=sing(ws[-1])
+        for k in kinds:
+            if not any(w==k and noun in {sing(x) for x in told[j+1:j+3]} for j,w in enumerate(told)):no('ASKED_KIND_NOT_TOLD')
     # 'how many inches long is the rope': the unit is the thing counted
     if len(ws)>=2 and ws[-1] in ('long','tall','high','deep','wide','thick','heavy','old','far') and sing(ws[-2]) in UNITS:ws=ws[:-1]
     if ws and ws[0] in ('money','cash'):ask['noun']='dollar'

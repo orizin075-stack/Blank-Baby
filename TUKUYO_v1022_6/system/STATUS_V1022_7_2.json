@@ -1,0 +1,19 @@
+{
+  "schema": "tukuyo.v1022_7_2.status/1",
+  "release_revision": "v1022.7.2-grounded-sensor-challenge",
+  "classification": "EXPERIMENTAL",
+  "base": "v1022.7.1-semantic-truth-challenge",
+  "signed_calibration_and_device_identity": true,
+  "minimum_sensor_keys": 3,
+  "minimum_sensor_domains": 3,
+  "minimum_calibration_domains": 3,
+  "minimum_adapter_implementations": 2,
+  "bounded_nonce_and_time": true,
+  "separate_action_verifier": true,
+  "finite_metabolic_resource_transfer": true,
+  "sensor_consensus_establishes_external_truth": false,
+  "real_world_independence_established": false,
+  "literal_soul_established": false,
+  "consciousness_established": false,
+  "24h_completed": false
+}

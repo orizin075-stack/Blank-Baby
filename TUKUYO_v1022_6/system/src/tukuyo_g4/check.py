@@ -3,8 +3,8 @@ shunting-yard parser and decides on its own whether a reading and its answer may
 
 check(spec, values) -> {'ok', 'failures', 'answer', 'unit', 'covered', 'unused'}
   equations  every fact holds exactly at the given values
-  unique     the Jacobian of the facts at the values has full column rank: one value for every quantity (for the
-             linear facts of word problems this is global uniqueness); floor ceil gcd lcm are locally constant
+  unique     exact affine constraints force variables globally; nonlinear functions are evaluated only after
+             their inputs are forced; a nonlinear Jacobian rank alone is never a uniqueness certificate
   sanity     integer quantities are whole; nothing is negative unless the quantity is declared signed
   units      both sides of every fact, both operands of every + and -, and the arguments of min max mod gcd lcm
              have the same unit (a bare number takes the unit it is combined with)
@@ -135,6 +135,54 @@ def _rank(m):
         rank+=1
     return rank
 
+def _poly(t,known):
+    """Independent bounded polynomial expansion; a denominator/function must be constant."""
+    k=t[0]
+    if k=='num':return {():t[1]} if t[1] else {}
+    if k=='var':return {():known[t[1]]} if t[1] in known else {(t[1],):Fraction(1)}
+    if k=='neg':return {m:-c for m,c in _poly(t[1],known).items()}
+    if k=='call':return {():_ev(t,known)}
+    a,b=_poly(t[2],known),_poly(t[3],known);op=t[1]
+    if op in '+-':
+        out=dict(a)
+        for m,c in b.items():out[m]=out.get(m,Fraction(0))+(c if op=='+' else -c)
+    elif op=='/':
+        if set(b)-{()} or not b.get(()):raise ValueError('NON_CONSTANT_DENOMINATOR')
+        out={m:c/b[()] for m,c in a.items()}
+    else:
+        if len(a)*len(b)>4096:raise ValueError('POLYNOMIAL_BOUND')
+        out={}
+        for m,c in a.items():
+            for n,d in b.items():
+                term=tuple(sorted(m+n))
+                if len(term)>8:raise ValueError('POLYNOMIAL_DEGREE_BOUND')
+                out[term]=out.get(term,Fraction(0))+c*d
+    return {m:c for m,c in out.items() if c}
+
+def _globally_forced(facts,names,values):
+    """Force quantities by exact affine constraints, then constant nonlinear evaluation.
+
+    Candidate values are substituted only after the variable is proven forced.
+    A full-rank Jacobian alone cannot certify a unique nonlinear root.
+    """
+    known={}
+    while len(known)<len(names):
+        remaining=[x for x in names if x not in known];rows=[]
+        for _,left,right in facts:
+            try:
+                a,b=_poly(left,known),_poly(right,known)
+                for m,c in b.items():a[m]=a.get(m,Fraction(0))-c
+                a={m:c for m,c in a.items() if c}
+                if any(len(m)>1 for m in a):continue
+                rows.append([a.get((x,),Fraction(0)) for x in remaining])
+            except (ValueError,KeyError,ZeroDivisionError):continue
+        rank=_rank(rows);forced=[]
+        for col,x in enumerate(remaining):
+            if rank>_rank([row[:col]+row[col+1:] for row in rows]):forced.append(x)
+        if not forced:return False
+        known.update({x:values[x] for x in forced})
+    return True
+
 def _unit(t,qs):
     """unit of an expression: a dict, or None for a bare number that takes the unit it is combined with"""
     k=t[0]
@@ -196,9 +244,7 @@ def check(spec,values):
         if v[n]<0 and not q.get('signed'):fails.append('NEGATIVE:'+n)
     # uniqueness
     try:
-        jac=[[_d(l,x,v)-_d(r,x,v) for x in names] for f,l,r in facts]
-        rk=_rank(jac)
-        if rk<len(names):fails.append(f'NOT_UNIQUE:rank {rk} of {len(names)}')
+        if not _globally_forced(facts,names,v):fails.append('NOT_UNIQUE:GLOBAL_FORCING_NOT_ESTABLISHED')
     except Exception as e:fails.append('JACOBIAN:'+type(e).__name__)  # noqa: BLE001
     # units
     for f,l,r in facts:

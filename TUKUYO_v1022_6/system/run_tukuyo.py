@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""TUKUYO v1022.5 fusion reasoning/recovery experimental CLI; requires Python 3.10+.
+"""TUKUYO v1022.7 evidence-bound Soul experimental CLI; tested on Python 3.12.
 
 Use --data to choose a permanent data root OUTSIDE the signed distribution.
 No unrestricted language model or unattended auto-promotion is implemented.
@@ -37,7 +37,7 @@ def v955_full_status(api,data,migration_trust=None):
     s['ok']=bool(s.get('ok',True) and guard['runtime_guard_installed'] and guard['builtin_spec_ok'] and (not migration_trust or guard['migration'].get('ok',False)))
     return s
 
-RELEASE_REVISION_FALLBACK='v1022.6'
+RELEASE_REVISION_FALLBACK='v1022.7-evidence-bound-soul'
 def release_revision():
     """the release revision recorded in the signed receipt (the startup guard verifies that receipt against the
     external trust anchor); a re-sign with --revision changes what the CLI reports without touching code"""
@@ -55,7 +55,7 @@ def _require_live(data):
 
 def chat(api,data,trust=None,migration_trust=None):
     br=api['bridge'];_require_live(data);v955_full_status(api,data,migration_trust)
-    print('TUKUYO v1022.5: bounded meta-reasoning + hardened lineage/ecology. /help for commands.')
+    print('TUKUYO v1022.6.6: fused Gen4 cognition + bounded research/lineage. /help for commands.')
     while True:
         try:raw=input('あなた > ').strip()
         except (KeyboardInterrupt,EOFError):print('\n終了');return
@@ -100,7 +100,7 @@ def chat(api,data,trust=None,migration_trust=None):
         except Exception as e:print('ERROR',type(e).__name__+':'+str(e))
 
 def parser():
-    p=argparse.ArgumentParser(description='TUKUYO v1022.5 bounded multi-route reasoning + recovery fusion experimental system')
+    p=argparse.ArgumentParser(description='TUKUYO v1022.7.7+gen4-r6: bounded experiential Soul with signed outcome learning and plan/API dialogue, fused with generation 4 (a child of three LLM parents)')
     p.add_argument('--data',type=Path,default=Path(os.environ.get('TUKUYO_DATA_DIR', str(Path.home()/'.tukuyo'/'v999_data'))))
     p.add_argument('--ep-trust-dir',type=Path,help='External pinned local/observer/evaluator/authority public keys. Required after epistemic init.')
     p.add_argument('--cap-trust-dir',type=Path,help='External pinned capability authority key. Required to resolve learned legacy capabilities.')
@@ -114,6 +114,7 @@ def parser():
     p.add_argument('--family-evaluator-trust-file',type=Path,help='External v966 family evaluator public key.')
     p.add_argument('--family-promotion-trust-file',type=Path,help='External v966 family promotion authority public key.')
     p.add_argument('--runtime-trust-file',type=Path,help='Externally supplied v967 runtime release public key for fresh-process reproduction.')
+    p.add_argument('--chatgpt-auth',choices=('api','plan'),help='OpenAI API key or dedicated Continue with ChatGPT credentials')
     sub=p.add_subparsers(dest='cmd',required=True)
     sub.add_parser('verify-origins')
     sub.add_parser('layers')
@@ -158,6 +159,32 @@ def parser():
     hf=sub.add_parser('heart-feedback');hf.add_argument('action_id');hf.add_argument('outcome_valence',type=float);hf.add_argument('importance',type=float);hf.add_argument('--theme',default='')
     sub.add_parser('heart-status');sub.add_parser('heart-audit')
     sub.add_parser('soul-consolidate');sub.add_parser('soul-deep-audit');sub.add_parser('soul-forget-surface')
+    sub.add_parser('soul-integrate');sd2=sub.add_parser('soul-deliberate');sd2.add_argument('options',type=Path);sd2.add_argument('--context',default='bounded_decision')
+    sub.add_parser('soul-integrity-status');sub.add_parser('soul-integrity-audit')
+    sub.add_parser('reflective-soul-integrate')
+    rd=sub.add_parser('reflective-soul-deliberate');rd.add_argument('options',type=Path);rd.add_argument('--context',default='reflective_decision')
+    rr=sub.add_parser('reflective-soul-outcome');rr.add_argument('decision_sha256');rr.add_argument('outcome',type=Path)
+    sub.add_parser('reflective-soul-status');sub.add_parser('reflective-soul-audit')
+    sub.add_parser('evidence-soul-integrate')
+    ea=sub.add_parser('evidence-soul-authority-add');ea.add_argument('authority',type=Path)
+    ew=sub.add_parser('evidence-soul-witness-add');ew.add_argument('certificate',type=Path)
+    ed=sub.add_parser('evidence-soul-deliberate');ed.add_argument('bundle',type=Path)
+    et=sub.add_parser('evidence-soul-attest');et.add_argument('attestation',type=Path)
+    sub.add_parser('evidence-soul-status');sub.add_parser('evidence-soul-audit')
+    sub.add_parser('semantic-truth-integrate')
+    sto=sub.add_parser('semantic-truth-oracle-add');sto.add_argument('oracle',type=Path)
+    strp=sub.add_parser('semantic-truth-report');strp.add_argument('bundle',type=Path)
+    stc=sub.add_parser('semantic-truth-challenge');stc.add_argument('bundle',type=Path)
+    sub.add_parser('semantic-truth-status');sub.add_parser('semantic-truth-audit')
+    sub.add_parser('grounded-sensor-integrate')
+    gsa=sub.add_parser('grounded-sensor-authority-add');gsa.add_argument('authority',type=Path)
+    gss=sub.add_parser('grounded-sensor-device-add');gss.add_argument('certificate',type=Path)
+    gsv=sub.add_parser('grounded-sensor-verifier-add');gsv.add_argument('verifier',type=Path)
+    gso=sub.add_parser('grounded-sensor-observe');gso.add_argument('bundle',type=Path)
+    gsr=sub.add_parser('grounded-sensor-outcome');gsr.add_argument('bundle',type=Path)
+    gsd=sub.add_parser('grounded-sensor-decide');gsd.add_argument('request',type=Path)
+    gsi=sub.add_parser('grounded-sensor-precommit');gsi.add_argument('request',type=Path)
+    sub.add_parser('grounded-sensor-status');sub.add_parser('grounded-sensor-audit')
     sc=sub.add_parser('soul-continuity-assay');sc.add_argument('options',type=Path);sc.add_argument('--context',default='continuity_assay')
     sub.add_parser('soul-fork-assay');sub.add_parser('soul-fork-audit')
     cc=sub.add_parser('continuity-checkpoint');cc.add_argument('--note',default='')
@@ -280,10 +307,13 @@ def parser():
     rb=sub.add_parser('runtime-ecology-init');rb.add_argument('--families',type=int,default=4);rb.add_argument('--seed',default='v1021');rb.add_argument('--regeneration',type=int,default=240000);rb.add_argument('--max-age',type=int,default=8)
     rb=sub.add_parser('runtime-ecology-step');rb.add_argument('environment',choices=('resource','research','social','volatile'));rb.add_argument('--ticks',type=int,default=1)
     sub.add_parser('runtime-ecology-status');sub.add_parser('runtime-ecology-audit');sub.add_parser('runtime-ecology-recover-cache')
-    c=sub.add_parser('think');c.add_argument('query');c.add_argument('--formal-task',type=Path)
+    c=sub.add_parser('think');c.add_argument('query');c.add_argument('--formal-task',type=Path);c.add_argument('--observation-options',type=Path);c.add_argument('--observations',type=Path);c.add_argument('--research-capabilities',type=Path);c.add_argument('--research-events',type=Path)
     c.add_argument('--engine',choices=('gen4','v1022'),default='gen4',help='gen4: problems with numbers also go through generation 4 (v1022: the v1022 core alone)')
-    c.add_argument('--llm',choices=('auto','on','off'),default='auto',help='gen4: the parents as readers when they are configured (auto)')
+    c.add_argument('--llm',choices=('auto','on','off'),default='auto',help='gen4: the parents (teachers) as readers when they are configured, or recorded replies (auto)')
     c.add_argument('--no-soul',action='store_true',help='gen4: do not pass what was learned on to the heart and the soul')
+    c=sub.add_parser('research-check');c.add_argument('packet',type=Path)
+    c=sub.add_parser('hypothesis-research');c.add_argument('task',type=Path);c.add_argument('--events',type=Path)
+    c=sub.add_parser('hypothesis-research-check');c.add_argument('packet',type=Path)
     c=sub.add_parser('llm-ask');c.add_argument('query');c.add_argument('--no-local-first',action='store_true')
     c=sub.add_parser('llm-teach');c.add_argument('questions',type=Path)
     sub.add_parser('llm-status');sub.add_parser('llm-audit')
@@ -306,6 +336,17 @@ def parser():
     c.add_argument('--act',action='store_true');c.add_argument('--limit',type=int,default=3)
     c=sub.add_parser('g4-parents',help='generation 4: is it ready to ask its parents - for each one its key (never shown), model, package and network, and the child\'s trust in it; no request to any parent without --live')
     c.add_argument('--live',action='store_true',help='one short paid call to each parent that is ready')
+    c=sub.add_parser('chatgpt-status',help='Connection configuration without network I/O');c.add_argument('--probe',action='store_true');c.add_argument('--both',action='store_true',help='Inspect plan and API independently; --probe explicitly calls both')
+    c=sub.add_parser('chatgpt-chat',help='Signed bounded multi-turn teacher dialogue; replies remain unverified');c.add_argument('query');c.add_argument('--session',default='main');c.add_argument('--max-calls',type=int,default=16)
+    c.add_argument('--context-turns',type=int,default=16);c.add_argument('--context-chars',type=int,default=48000)
+    sub.add_parser('chatgpt-audit',help='Audit signed dialogue and request reservations')
+    c=sub.add_parser('chatgpt-resolve-pending',help='Settle one interrupted reservation as unknown, without retry or refund');c.add_argument('--session',required=True);c.add_argument('--nonce',required=True)
+    c=sub.add_parser('chatgpt-resume-route',help='Explicitly resume a locally paused auth route after reviewing usage, no network call');c.add_argument('--auth-mode',choices=('api','plan'),required=True)
+    c=sub.add_parser('chatgpt-study',help='Learn only after two distinct numeric examples with checked readings');c.add_argument('bundle',type=Path);c.add_argument('--session',default='study');c.add_argument('--max-calls',type=int,default=32);c.add_argument('--force',action='store_true');c.add_argument('--dry-run',action='store_true')
+    c=sub.add_parser('clarify-start',help='Keep a bounded linear question and ask for missing premises');c.add_argument('query');c.add_argument('--session',default='main')
+    c=sub.add_parser('clarify-add',help='Add one user-supplied premise to the same goal; contradictions are rejected');c.add_argument('condition');c.add_argument('--session',default='main')
+    c=sub.add_parser('clarify-status',help='Resume the same signed clarification conversation');c.add_argument('--session',default='main')
+    sub.add_parser('clarify-audit',help='Replay all accepted conditions and independently check forced answers')
     c=sub.add_parser('research-run',help='claude-patch5 V1023r preview: one research expedition into a hidden-rule world');c.add_argument('--world',default='W1');c.add_argument('--ticks',type=int,default=120);c.add_argument('--regime',choices=('costly_failure','safe_failure'),default='costly_failure');c.add_argument('--tier',type=int,choices=(1,2,3,4,5));c.add_argument('--noise',type=float,choices=(0.0,0.05,0.1))
     sub.add_parser('research-status');sub.add_parser('research-audit')
     c=sub.add_parser('research-ecology',help='Compare research / random experiments / trial-and-error / naive / oracle on fresh worlds; writes only --out');c.add_argument('--seeds',type=int,default=10);c.add_argument('--start',type=int,default=50000);c.add_argument('--key');c.add_argument('--out',type=Path)
@@ -321,6 +362,7 @@ def parser():
 
 def _main(argv=None):
     args=parser().parse_args(argv)
+    if args.chatgpt_auth:os.environ['TUKUYO_CHATGPT_AUTH']=args.chatgpt_auth
     data=args.data.resolve()
     try:
         if args.cmd not in ('archive-list','archive-show'):
@@ -340,6 +382,8 @@ def _main(argv=None):
                 raise ValueError('V1021_EXTERNAL_RUNTIME_TRUST_REQUIRED')
             from tukuyo_v1019.transaction import recover as lineage_recover
             lineage_recover(data)
+            from tukuyo_v1014.recovery import enforce_restore_frontier
+            enforce_restore_frontier(data)
             from tukuyo_v1014_2.crash_recovery import recover_startup
             startup_recovery=recover_startup(data)
             if not startup_recovery.get('ok'):
@@ -366,6 +410,12 @@ def _main(argv=None):
                 if (data/'v1022_ecology/commits').exists():
                     from tukuyo_v1022.metabolism import preflight as metabolism_preflight
                     metabolism_preflight(data)
+                from tukuyo_g4.runtime_store import needs_preflight as g4_needs_preflight,load as g4_learning_state
+                if g4_needs_preflight(data):g4_learning_state(data)
+                from tukuyo_g4.chatgpt_chat import needs_preflight as chat_needs_preflight,load as chat_state
+                if chat_needs_preflight(data):chat_state(data)
+                from tukuyo_v1022.clarification import load as clarification_state,needs_preflight as clarification_needs_preflight
+                if clarification_needs_preflight(data):clarification_state(data)
                 if repaired and args.cmd!='runtime-ecology-recover-cache' and (data/'v977/UNIFIED_STATE.json').is_file():
                     from tukuyo_v977.whole_state import sync as _v1018_whole_sync
                     _v1018_whole_sync(data)
@@ -556,6 +606,9 @@ def _main(argv=None):
                 elif args.cmd=='whole-audit':res=whole_audit(data)
                 else:
                     res=soul_experience(data,args.kind,args.valence,args.importance,args.theme,args.relation)
+                    from tukuyo_v978 import heart_loop
+                    if heart_loop.state_path(data).is_file():
+                        res['heart_reference_update']=heart_loop.sync_soul_reference(data,res['event'])
                     from tukuyo_v993.relation_bound import sync as relation_sync
                     from tukuyo_v995.other_agent_trust import sync as peer_sync
                     relation_sync(data);peer_sync(data);whole_sync(data)
@@ -581,6 +634,54 @@ def _main(argv=None):
                 elif args.cmd=='soul-deep-audit':res=deep_audit(data)
                 elif args.cmd=='soul-forget-surface':res=forget_surface_memory(data);whole_sync(data)
                 else:res=continuity_run(data,json.loads(args.options.read_text(encoding='utf-8')),args.context);whole_sync(data)
+            elif args.cmd in ('soul-integrate','soul-deliberate','soul-integrity-status','soul-integrity-audit'):
+                _require_live(data)
+                from tukuyo_v1022.soul_integrity import integrate as soul_integrate,deliberate as soul_deliberate,status as soul_integrity_status,audit as soul_integrity_audit
+                if args.cmd=='soul-integrate':res=soul_integrate(data)
+                elif args.cmd=='soul-deliberate':res=soul_deliberate(data,json.loads(args.options.read_text(encoding='utf-8')),args.context)
+                elif args.cmd=='soul-integrity-status':res=soul_integrity_status(data)
+                else:res=soul_integrity_audit(data)
+            elif args.cmd in ('reflective-soul-integrate','reflective-soul-deliberate','reflective-soul-outcome','reflective-soul-status','reflective-soul-audit'):
+                _require_live(data)
+                from tukuyo_v1022.reflective_soul import integrate as reflective_integrate,deliberate as reflective_deliberate,reflect as reflective_outcome,status as reflective_status,audit as reflective_audit
+                if args.cmd=='reflective-soul-integrate':res=reflective_integrate(data)
+                elif args.cmd=='reflective-soul-deliberate':res=reflective_deliberate(data,json.loads(args.options.read_text(encoding='utf-8')),args.context)
+                elif args.cmd=='reflective-soul-outcome':res=reflective_outcome(data,args.decision_sha256,json.loads(args.outcome.read_text(encoding='utf-8')))
+                elif args.cmd=='reflective-soul-status':res=reflective_status(data)
+                else:res=reflective_audit(data)
+            elif args.cmd in ('evidence-soul-integrate','evidence-soul-authority-add','evidence-soul-witness-add','evidence-soul-deliberate','evidence-soul-attest','evidence-soul-status','evidence-soul-audit'):
+                _require_live(data)
+                from tukuyo_v1022.evidence_bound_soul import integrate as evidence_integrate,add_authority as evidence_authority,add_witness as evidence_witness,deliberate as evidence_deliberate,attest as evidence_attest,status as evidence_status,audit as evidence_audit
+                if args.cmd=='evidence-soul-integrate':res=evidence_integrate(data)
+                elif args.cmd=='evidence-soul-authority-add':res=evidence_authority(data,json.loads(args.authority.read_text(encoding='utf-8')))
+                elif args.cmd=='evidence-soul-witness-add':res=evidence_witness(data,json.loads(args.certificate.read_text(encoding='utf-8')))
+                elif args.cmd=='evidence-soul-deliberate':res=evidence_deliberate(data,json.loads(args.bundle.read_text(encoding='utf-8')))
+                elif args.cmd=='evidence-soul-attest':res=evidence_attest(data,json.loads(args.attestation.read_text(encoding='utf-8')))
+                elif args.cmd=='evidence-soul-status':res=evidence_status(data)
+                else:res=evidence_audit(data)
+            elif args.cmd in ('semantic-truth-integrate','semantic-truth-oracle-add','semantic-truth-report','semantic-truth-challenge','semantic-truth-status','semantic-truth-audit'):
+                _require_live(data)
+                from tukuyo_v1022.semantic_truth import integrate as truth_integrate,add_oracle as truth_oracle,submit_reports as truth_report,challenge as truth_challenge,status as truth_status,audit as truth_audit
+                if args.cmd=='semantic-truth-integrate':res=truth_integrate(data)
+                elif args.cmd=='semantic-truth-oracle-add':res=truth_oracle(data,json.loads(args.oracle.read_text(encoding='utf-8')))
+                elif args.cmd=='semantic-truth-report':res=truth_report(data,json.loads(args.bundle.read_text(encoding='utf-8')))
+                elif args.cmd=='semantic-truth-challenge':res=truth_challenge(data,json.loads(args.bundle.read_text(encoding='utf-8')))
+                elif args.cmd=='semantic-truth-status':res=truth_status(data)
+                else:res=truth_audit(data)
+            elif args.cmd in ('grounded-sensor-integrate','grounded-sensor-authority-add','grounded-sensor-device-add','grounded-sensor-verifier-add','grounded-sensor-observe','grounded-sensor-outcome','grounded-sensor-decide','grounded-sensor-precommit','grounded-sensor-status','grounded-sensor-audit'):
+                _require_live(data)
+                from tukuyo_v1022.grounded_sensor import integrate as sensor_integrate,add_authority as sensor_authority,add_sensor as sensor_device,add_verifier as sensor_verifier,observe as sensor_observe,apply_outcome as sensor_outcome,status as sensor_status,audit as sensor_audit
+                if args.cmd=='grounded-sensor-integrate':res=sensor_integrate(data)
+                elif args.cmd=='grounded-sensor-authority-add':res=sensor_authority(data,json.loads(args.authority.read_text(encoding='utf-8')))
+                elif args.cmd=='grounded-sensor-device-add':res=sensor_device(data,json.loads(args.certificate.read_text(encoding='utf-8')))
+                elif args.cmd=='grounded-sensor-verifier-add':res=sensor_verifier(data,json.loads(args.verifier.read_text(encoding='utf-8')))
+                elif args.cmd=='grounded-sensor-observe':res=sensor_observe(data,json.loads(args.bundle.read_text(encoding='utf-8')))
+                elif args.cmd=='grounded-sensor-outcome':res=sensor_outcome(data,json.loads(args.bundle.read_text(encoding='utf-8')))
+                elif args.cmd in ('grounded-sensor-decide','grounded-sensor-precommit'):
+                    from tukuyo_v1022.sensor_action import decide,precommit
+                    res=(decide if args.cmd=='grounded-sensor-decide' else precommit)(data,json.loads(args.request.read_text(encoding='utf-8')))
+                elif args.cmd=='grounded-sensor-status':res=sensor_status(data)
+                else:res=sensor_audit(data)
             elif args.cmd in ('soul-fork-assay','soul-fork-audit'):
                 _require_live(data)
                 from tukuyo_v981.fork_divergence import run_assay as fork_assay,audit as fork_audit
@@ -746,18 +847,41 @@ def _main(argv=None):
                     except llm_providers.LLMError as e:tch=['ERROR:'+str(e)]
                     res={'ok':True,'version':'v1022.5+claude-patch4','llm':llm_providers.public_config(),'teachers':tch,'log':llm_bridge.audit(data)}
                 else:res=llm_bridge.audit(data)
-            elif args.cmd in ('think','dialogue-learn','learning-status','learning-audit'):
+            elif args.cmd in ('think','research-check','hypothesis-research','hypothesis-research-check','dialogue-learn','learning-status','learning-audit'):
                 _require_live(data)
                 from tukuyo_v1022 import cognition as local
-                if args.cmd=='think':
-                    ft=json.loads(args.formal_task.read_text()) if args.formal_task else None
-                    res=local.solve(data,args.query,ft)
-                    if ft is None and args.engine=='gen4':
-                        from tukuyo_g4 import api as g4_api,life as g4_life,llm as g4_llm
-                        res=g4_api.think(data,args.query,res,llm=args.llm,order=g4_life.trust_order(data,g4_llm.parents()))
-                        if not args.no_soul and res.get('gen4'):res['life']=g4_life.record(data,res,args.query)
-                        from tukuyo_v977.whole_state import sync as whole_sync
-                        if (data/'g4').exists():whole_sync(data)   # what it learned is part of the whole state
+                if args.cmd=='hypothesis-research':
+                    from tukuyo_v1022.hypothesis_research import run as run_hypothesis_research
+                    res=run_hypothesis_research(json.loads(args.task.read_text()),json.loads(args.events.read_text()) if args.events else [])
+                elif args.cmd=='hypothesis-research-check':
+                    from tukuyo_v1022.hypothesis_research_verify import check as check_hypothesis_research
+                    res={'ok':True,'valid':check_hypothesis_research(json.loads(args.packet.read_text()))}
+                elif args.cmd=='research-check':
+                    from tukuyo_v1022.research_verify import check as research_check
+                    res={'ok':True,'valid':research_check(json.loads(args.packet.read_text()))}
+                elif args.cmd=='think':
+                    if args.research_events and not args.research_capabilities:raise ValueError('RESEARCH_CAPABILITIES_REQUIRED')
+                    if args.research_capabilities:
+                        if args.formal_task or args.observation_options or args.observations:raise ValueError('RESEARCH_TASK_EXCLUSIVE')
+                        from tukuyo_v1022 import active_research
+                        res=active_research.run(args.query,json.loads(args.research_capabilities.read_text()),json.loads(args.research_events.read_text()) if args.research_events else [])
+                    elif args.observation_options:
+                        if args.formal_task:raise ValueError('OBSERVATION_AND_ACTION_TASK_EXCLUSIVE')
+                        from tukuyo_v1022 import observation_reasoning as observations
+                        res=observations.plan(args.query,json.loads(args.observation_options.read_text()))
+                        if args.observations:
+                            if not res.get('proof'):raise ValueError('OBSERVATION_NO_VERIFIED_PLAN')
+                            res=observations.update(res['proof'],json.loads(args.observations.read_text()))
+                    else:
+                        if args.observations:raise ValueError('OBSERVATION_OPTIONS_REQUIRED')
+                        ft=json.loads(args.formal_task.read_text()) if args.formal_task else None
+                        res=local.solve(data,args.query,ft)
+                        if ft is None and args.engine=='gen4':
+                            from tukuyo_g4 import api as g4_api,life as g4_life,llm as g4_llm
+                            res=g4_api.think(data,args.query,res,llm=args.llm,order=g4_life.trust_order(data,g4_llm.parents()))
+                            if not args.no_soul and res.get('gen4'):res['life']=g4_life.record(data,res,args.query)
+                            from tukuyo_v977.whole_state import sync as whole_sync
+                            if (data/'g4').exists():whole_sync(data)   # what it learned is part of the whole state
                 elif args.cmd=='dialogue-learn':res=local.learn(data,json.loads(args.bundle.read_text()),args.teacher)
                 else:res=local.audit(data)
             elif args.cmd in ('metabolism-init','metabolism-step','metabolism-status','metabolism-audit'):
@@ -824,6 +948,25 @@ def _main(argv=None):
                 if args.cmd=='research-run':res=research_life.run(data,args.world,args.ticks,args.regime,args.tier,args.noise)
                 elif args.cmd=='research-status':res=research_life.status(data)
                 else:res=research_life.audit(data)
+            elif args.cmd in ('chatgpt-status','chatgpt-chat','chatgpt-audit','chatgpt-study','chatgpt-resolve-pending','chatgpt-resume-route'):
+                from tukuyo_g4 import chatgpt_chat as teacher_chat,chatgpt_study as teacher_study
+                if args.cmd=='chatgpt-status':res=teacher_chat.diagnose(args.probe,both=args.both)
+                elif args.cmd=='chatgpt-audit':res=teacher_chat.audit(data)
+                else:
+                    _require_live(data)
+                    if args.cmd=='chatgpt-resume-route':res=teacher_chat.resume_route(data,args.auth_mode)
+                    elif args.cmd=='chatgpt-resolve-pending':res=teacher_chat.resolve_pending(data,args.session,args.nonce)
+                    elif args.cmd=='chatgpt-chat':
+                        res=teacher_chat.turn(data,args.query,args.session,args.max_calls,context_turns=args.context_turns,context_chars=args.context_chars);res.pop('reply',None)
+                    else:
+                        bundle=json.loads(args.bundle.read_text());queries=bundle['queries'] if isinstance(bundle,dict) else bundle
+                        res=teacher_study.needs(data,queries) if args.dry_run else teacher_study.study(data,queries,args.session,args.max_calls,args.force)
+            elif args.cmd in ('clarify-start','clarify-add','clarify-status','clarify-audit'):
+                from tukuyo_v1022 import clarification
+                if args.cmd=='clarify-start':_require_live(data);res=clarification.start(data,args.query,args.session)
+                elif args.cmd=='clarify-add':_require_live(data);res=clarification.add(data,args.condition,args.session)
+                elif args.cmd=='clarify-status':res=clarification.status(data,args.session)
+                else:res=clarification.audit(data)
             elif args.cmd=='research-ecology':
                 from tukuyo_v1023r.evaluate import compare
                 res=compare(args.start,args.seeds,**({'key':args.key} if args.key else {}))

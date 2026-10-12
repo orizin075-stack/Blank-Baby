@@ -34,6 +34,55 @@ from .solve import solve as _solve
 from .check import check as _check
 from .fpl import fmt
 
+CLAIMS={'formal_proof_conditional_on_translation':True,
+        'complete_semantic_parser_independence':False,
+        'teacher_agreement_is_proof_of_meaning':False,
+        'same_provider_two_views_are_independent_teachers':False,
+        'live_templates_signed_and_recovery_tracked':True,
+        'standalone_template_checksum_is_authentication':False,
+        'new_real_external_teacher_campaign_completed':False}
+
+# what the input checks refuse for a kind of wording rather than for the reading: on ASDiv dev these three held back 34
+# right answers of the child's own reader and none of its wrong ones ('If he wants to give them to his 11 nieces, ...',
+# '... so each friend got the same amount', 'shared in the ratio 3:4'); with simulated parents the first two held back
+# right and wrong readings at about the rate they occur (the fusion measurement, tools/fusion_gates.py, 2026-10-12)
+NOT_FOR_OWN_READINGS=('EVENT_NOT_ESTABLISHED','EQUAL_SHARING_NOT_ESTABLISHED','UNCOVERED_NUMERIC_OR_OPERATION')
+
+def _input_coverage(text,answer,proof=None,mine=False):
+    """the separately written input checks of the v1022 core (v1022.5.2, the event-scope guard of v1022.7.4). A reading
+    that only parents gave goes through all of them. For an answer a reading of the child's own gives (its reader, a
+    learned wording, the v1022 core: mine=True) a refusal for one of NOT_FOR_OWN_READINGS is set aside (kept in
+    'set_aside'); every other check applies, the event-scope guard ('3個食べたわけではない') and an asked entity that is
+    not the one declared ('4 red balls and 6 blue apples ... red balls in total') among them"""
+    from tukuyo_v1022.input_audit import inspect
+    coverage=inspect(text,answer,proof)
+    # The older subset parser recognizes a narrow declaration grammar. A
+    # declined declaration is outside it; decided entity/overlap failures veto.
+    if coverage.get('reason')=='SUBSET_DECLARATION_UNSUPPORTED':
+        return {**coverage,'recognized':False,'ok':True,'reason':'OUTSIDE_INDEPENDENT_DECLARATION_GRAMMAR',
+                'previous_reason':'SUBSET_DECLARATION_UNSUPPORTED'}
+    if mine and not coverage.get('ok') and coverage.get('reason') in NOT_FOR_OWN_READINGS:
+        return {'recognized':False,'ok':True,'set_aside':coverage['reason']}
+    return coverage
+
+def _unit_words(u):
+    """the words of a simple answer unit, each in its singular ('pieces of candy' -> {piece, candy}, '$' -> {dollar});
+    None for no unit, a rate or another compound unit, or one without English words"""
+    u=str(u or '').strip().lower()
+    if not u or re.search(r'[/*^]|\bper\b',u):return None
+    from .reader_en import sing
+    u=u.replace('$',' dollar ').replace('¢',' cent ')
+    ws=frozenset({'usd':'dollar'}.get(w,sing(w)) for w in re.findall(r'[a-z]+',u) if w not in ('of','the','a','an'))
+    return ws or None
+
+def _different_things(a,b):
+    """do two answer units name clearly different things ('apple', 'orange')? A thing written two ways ('cookie' and
+    'cookies', '$' and 'dollars', 'pieces of candy' and 'candy'), a rate or a unit without English words is not taken as
+    a disagreement: before, units were compared as written, and parents who wrote 'cookies' did not agree with a reading
+    in 'cookie' (fpl.unit_base makes it 'cooky')"""
+    wa,wb=_unit_words(a),_unit_words(b)
+    return wa is not None and wb is not None and not (wa<=wb or wb<=wa)
+
 JA=re.compile(r'[぀-ヿ㐀-鿿]')
 
 def _own(text):
@@ -152,15 +201,15 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
         reason='DISAGREE:'+','.join(sorted(fmt(v) for v in vals))
         if store is not None:_keep_for_later(data,text,readings,reason)
         return {**out,'reason':reason}
+    # the same number of different things is not an agreement ('5 apples' and '5 oranges')
+    us=[r['unit'] for r in good if r.get('unit')]
+    if any(_different_things(a,b) for i,a in enumerate(us) for b in us[i+1:]):return {**out,'reason':'UNIT_DISAGREEMENT'}
     mine=[r['route'] for r in good if not r['route'].startswith('llm')]
     llms=[r for r in good if r['route'].startswith('llm')]
     fams=sorted({r.get('parent','claude') for r in llms})
     if mine and not llms and all(r.get('doubted') for r in good):
         # its own reading is all there is, and its parents have read this kind of problem otherwise before: it holds back
         return {**out,'reason':'SELF_DOUBT:'+','.join(sorted(doubted)),'withheld':good[0]['value']}
-    if mine and llms and data is not None:
-        # a parent read it the same way: its own way of reading held up
-        out['self_checks']=self_checks+[{'skill':r['skill'],'held':True} for r in good if not r['route'].startswith('llm') and r.get('skill')]
     if mine:route='+'.join(dict.fromkeys(mine))+('+llm' if llms else '')
     elif len(fams)>=2:route='+'.join(fams)
     elif len(llms)>=2 and len(ps)==1:route='llm+llm'
@@ -168,7 +217,17 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
         if store is not None:_keep_for_later(data,text,readings,'SINGLE_LLM_READING')
         return {**out,'reason':'SINGLE_LLM_READING','withheld':good[0]['value']}
     g=next((r for r in good if r.get('spec')),good[0])
-    res={**out,'answer':g['value'],'value':g['value'],'unit':g.get('unit'),'route':route,'reason':None}
+    # The v1022 reading has already passed its schema-specific input guards.
+    # Apply this extra graph to new FPL translations; a water/milk-only graph
+    # must not invalidate an independently checked situation about tea.
+    coverage=_input_coverage(text,g['value'],mine=bool(mine)) if g.get('spec') else {'recognized':False,'ok':True}
+    if coverage.get('recognized') and not coverage['ok']:
+        return {**out,'reason':coverage['reason'],'input_coverage':coverage,'withheld':g['value']}
+    if mine and llms and data is not None:
+        # a parent read it the same way, and the answer stands: its own way of reading held up
+        out['self_checks']=self_checks+[{'skill':r['skill'],'held':True} for r in good if not r['route'].startswith('llm') and r.get('skill')]
+    res={**out,'answer':g['value'],'value':g['value'],'unit':g.get('unit'),'route':route,'reason':None,'claim_boundary':CLAIMS}
+    if coverage.get('recognized'):res['input_coverage']=coverage
     if learn and store is not None and llms and not any(r['route']=='learned' for r in good):
         prov={'route':route,'parents':fams,'models':sorted({str((r.get('llm') or {}).get('model')) for r in llms}),
               'request_ids':[(r.get('llm') or {}).get('request_id') for r in llms],'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}
@@ -215,6 +274,13 @@ def think(data,text,base,llm='auto',learn=True,order=None):
         times and wrong 9 times on third-party problems (ASDiv dev), so they neither answer nor block an answer: such
         an answer is reported as withheld. Its expressions and formula families count as a reading
     The result keeps the v1022 shape (answer, uncertain, reason, proof, explanation) and adds 'gen4'."""
+    # A new reading must not rescue a refusal about unresolved event scope.
+    from tukuyo_v1022.semantic_coverage import quantity_scope
+    scope=quantity_scope(text)
+    if scope is not None:
+        return {**base,'ok':True,'answer':None,'confidence':0.,'uncertain':True,
+                'recognized':True,'reason':scope['reason'],'proof':None,
+                'verification_evidence':{'input_coverage':scope}}
     from . import numbers as N
     if not N.find(text):return base
     a=base.get('answer')
@@ -223,7 +289,14 @@ def think(data,text,base,llm='auto',learn=True,order=None):
         except (ValueError,ZeroDivisionError):return base
     v=v1022_reading(base)
     ja=bool(JA.search(text))
-    use=v if (ja or not v['ok'] or not v1022_story(base)) else None
+    # Our fused core has an independent target/quantity gate. Retain a story
+    # that this separate parser decides, rather than discarding every English story.
+    from tukuyo_v1022.semantic_gate import parser_b,_agree
+    b=parser_b(text)
+    separately_decided=b is not None and v['ok'] and _agree(b,v['value'])
+    coverage=_input_coverage(text,v['value'],base.get('proof')) if v['ok'] else {}
+    separately_decided|=bool(coverage.get('recognized') and coverage.get('ok'))
+    use=v if (ja or not v['ok'] or not v1022_story(base) or separately_decided) else None
     if not ja and v['ok'] and use is None:ignored={'route':'v1022','value':v['value'],'proof_kind':v.get('proof_kind'),'story':True,'used':False}
     else:ignored=None
     r=solve(text,llm=llm,data=data,learn=learn,v1022=use if v['ok'] or ja else None,order=order)
@@ -242,10 +315,18 @@ def think(data,text,base,llm='auto',learn=True,order=None):
         return out
     if v['ok'] and use is not None and v['answer']==Fraction(r['value']):return {**base,'gen4':info}
     g=next((x for x in r['readings'] if x.get('ok') and x.get('spec')),None)
+    # A newer route cannot overrule a decided independent reading of the same input.
+    from tukuyo_v1022.semantic_gate import parser_b,_agree
+    decided=parser_b(text)
+    if decided is not None and not _agree(decided,r['answer']):
+        # what it says is what it does: it holds back, and says why (voice.py)
+        info={**info,'voice':_voice(text,{**r,'answer':None,'reason':'G4_INDEPENDENT_INPUT_DISAGREEMENT','withheld':r['answer']},data)}
+        return {'ok':True,'answer':None,'confidence':0.,'uncertain':True,'recognized':True,
+                'proof':None,'reason':'G4_INDEPENDENT_INPUT_DISAGREEMENT','withheld_answer':r['answer'],'gen4':info}
     return {'ok':True,'answer':r['answer'],'confidence':.9,'uncertain':False,'recognized':True,'reason':None,'unit':r.get('unit'),
-            'proof':{'kind':'g4_reading','spec':g['spec'],'values':g['values']} if g else None,
-            'verification_evidence':{'mode':'G4_EXACT_SOLVE_AND_SEPARATE_CHECK','route':r['route']},
-            'explanation':(info['voice'] or {}).get('said') or (_explain(g) if g else None),'gen4':info}
+            'proof':{'kind':'g4_reading','source_query':text,'spec':g['spec'],'values':g['values']} if g else None,
+            'verification_evidence':{'mode':'G4_EXACT_SOLVE_AND_SEPARATE_CHECK','route':r['route'],**({'input_coverage':r['input_coverage']} if r.get('input_coverage') else {})},
+            'explanation':(info['voice'] or {}).get('said') or (_explain(g) if g else None),'gen4':info,'claim_boundary':CLAIMS}
 
 def _same(a,b):
     norm=lambda x:re.sub(r'[\s。、．，,.!！?？「」『』"\'()（）]','',str(x)).lower()

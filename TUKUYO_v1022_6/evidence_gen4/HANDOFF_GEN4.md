@@ -2,6 +2,18 @@
 
 このメモは、第4世代の作業を別のセッションで続けるためのものです。第4世代は、3 つの LLM（Claude・ChatGPT・Gemini）を親にして育つ子です。親の API キーを使う測定は、キーを入れたあとの**新しいセッション**でしかできません。
 
+## 0. v1022.7.7 との統合（2026-10-12、`v1022.7.7+gen4-r6`）
+
+`system/` は、渡された v1022.7.7（経験による魂の系統。v1022.6.5 でこちらの 2026-10-08 の版を取り込み、6.6〜7.7 まで進んだもの）と、第4世代の第6回（成長の実験まで）を一つにしたものです。何をどちらから取り、どこで何を決めたかは `FUSION_V1022_7_7_2026-10-12.md` にあります。続ける人が知っておくこと：
+
+- 学んだ読み方は、生きた個体では相手の署名つきコミットの鎖（`src/tukuyo_g4/runtime_store.py`、`g4/commits`・`g4/STATE.json`、部品名 `g4_learning`）に入ります。`g4/learned.json` はその写しです。手で書き換えると、どのコマンドも止まります（`G4_LEARNING_CACHE_MISMATCH`）。前の版で子が署名した `learned.json` は読み、次のコミットに引き継ぎます（`runtime_store._own_signed`）。署名のないものは受け取りません。
+- ほかの第4世代の記録（`own.py`）：署名に、書いたときに全体の状態が記録していた版（`base`）を入れます。古い版に戻されたものは `<KIND>_ROLLED_BACK` で断ります。署名のないものは、全体の状態がそのファイルを記録しているときだけ受け取ります。
+- 入力の関所（`src/tukuyo_g4/api.py` の `_input_coverage`）：親だけの読みには相手の関所（`tukuyo_v1022.input_audit`）をすべてかけます。自分の読みには、文の形で一律に断る 3 つ（`NOT_FOR_OWN_READINGS`）を脇に置いてかけます。測り直しは `python3 -B tools/fusion_gates.py DATA --work WORK`（費用 0）。
+- `think` は、parser B（`tukuyo_v1022.semantic_gate.parser_b`）が決めた答えと違うと控えます（相手の関所）。parser B の「K 個ずつ…何袋」の誤りは直しました（`_b_groups_en`）。parser B の誤りは `think` の正しい答えを止めるので、`fusion_gates.py` の `think` で見張ってください。
+- 読み取り器：問いに大きさ・新旧の言葉（big・small・new・old など、`KIND_MODS`）が付いた物は、話の中にその言い方がなければ読みません（`ASKED_KIND_NOT_TOLD`）。
+- 相手の試験の一部（ChatGPT のログイン）には `PyJWT[crypto]` が要ります（`system/requirements-chatgpt.txt`）。
+- 相手の経験による魂の実験は `python3 -B tools/v1022_7_7_soul_experiment.py --data FRESH --trust ANCHOR --out out.json` と、`python3 -B tools/v1022_7_7_experience_verifier.py --data FRESH` で、いつでもやり直せます（記録した結果だけ、費用 0）。
+
 ## 1. 第4世代の考え方
 
 - 問題を「式の言葉」（FPL, `src/tukuyo_g4/fpl.py`）に書き直し、厳密に解き（`solve.py`）、別に書いた検査（`check.py`）で確かめてから答えます。

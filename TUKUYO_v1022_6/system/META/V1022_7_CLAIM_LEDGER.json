@@ -1,0 +1,58 @@
+{
+  "schema": "tukuyo.v1022_7.claim_ledger/1",
+  "release_revision": "v1022.7-evidence-bound-soul",
+  "proof_assumptions": [
+    "Ed25519 private keys remain secret",
+    "SHA-256 collision resistance holds",
+    "the external release trust anchor is correct",
+    "the executed Python and cryptography implementations match the audited bytes"
+  ],
+  "claims": [
+    {
+      "id": "C1_APPEND_ONLY_INTEGRITY",
+      "status": "SUPPORTED_WITHIN_THREAT_MODEL",
+      "evidence": "signed namespace commit chain, Whole State binding, cache reconstruction, tamper and rollback tests"
+    },
+    {
+      "id": "C2_REGISTERED_KEY_AUTHORSHIP",
+      "status": "SUPPORTED_WITHIN_THREAT_MODEL",
+      "evidence": "authority certificate and witness attestation Ed25519 verification in runtime and independent verifier"
+    },
+    {
+      "id": "C3_CONFIGURED_THREE_DOMAIN_QUORUM",
+      "status": "SUPPORTED_AS_CONFIGURATION_FACT",
+      "evidence": "three distinct authority public keys, witness fingerprints and trust-domain strings are replayed"
+    },
+    {
+      "id": "C4_ONE_OF_THREE_EXTREME_TOLERANCE",
+      "status": "SUPPORTED_IF_TWO_VALUES_AGREE",
+      "evidence": "median aggregation; fresh attack inserts one inverted assessment and leaves the aggregate unchanged"
+    },
+    {
+      "id": "C5_REAL_WORLD_WITNESS_IDENTITY",
+      "status": "NOT_PROVEN",
+      "reason": "a controller can create multiple keys; cryptographic keys are not proof of persons, organizations or independent AIs"
+    },
+    {
+      "id": "C6_SOCIAL_OR_STATISTICAL_INDEPENDENCE",
+      "status": "NOT_PROVEN",
+      "reason": "configured trust-domain labels do not rule out common control, collusion or shared model errors"
+    },
+    {
+      "id": "C7_EXTERNAL_SEMANTIC_TRUTH",
+      "status": "NOT_PROVEN",
+      "reason": "signatures authenticate authorship and bytes, not sensor calibration or truth of the observation"
+    },
+    {
+      "id": "C8_FUNCTIONAL_REFLECTIVE_SOUL",
+      "status": "EMPIRICALLY_DEMONSTRATED_BOUNDED_MODEL",
+      "evidence": "value conflict, counterfactual choice, signed reappraisal, metabolism and succession run in one finite runtime"
+    },
+    {
+      "id": "C9_LITERAL_SOUL_CONSCIOUSNESS_PERSONHOOD",
+      "status": "NOT_ESTABLISHED",
+      "reason": "software-state and behavioral tests are not sufficient to prove metaphysical soul, subjective experience or personhood"
+    }
+  ]
+}
+

@@ -143,6 +143,7 @@ _EN_READ=[
  (r'NEGATIVE','my reading gave a negative amount, so I must have read it wrong','読みから負の量が出たので、読み違えたはずです'),
  (r'INCONSISTENT|UNDERDETERMINED','my reading did not fix the answer to one number','読みから答えがひとつに決まりませんでした'),
  (r'^CHECK:','the checker refused my reading','検査が読みを通しませんでした'),
+ (r'ASKED_KIND_NOT_TOLD','the question asks about a kind of thing (big or small, new or old) that the story does not tell of','問いが聞いている物（大きさや新しさのちがう物）が、話の中に出てきません'),
  (r'NO_SCHEMA|compose','I could not find a way of reading this story that I know and that uses every number in it','知っている読み方で、すべての数を使って読むことができませんでした'),
 ]
 def _cannot_read(reason,ja):
@@ -184,6 +185,18 @@ def _held_back(text,res,data,ja):
         who=next((PARENT_NAMES.get(x.get('parent'),x.get('parent')) for x in rs if x.get('ok') and x.get('parent')),'a parent')
         return (f'読めたのは {who} だけでした（{w}）。ひとりの声だけでは確かめたことになりません。') if ja else \
                (f'Only {who} could read it ({w}). One voice alone is not enough for me.')
+    # the separate checks of the fused core stopped an answer its readings agreed on (api.solve, api.think)
+    if reason in ('G4_INDEPENDENT_INPUT_DISAGREEMENT','INDEPENDENT_INPUT_DISAGREEMENT') or reason=='UNIT_DISAGREEMENT' or res.get('input_coverage'):
+        if reason=='UNIT_DISAGREEMENT':
+            what=('読みは同じ数でも、数えている物が違うので、答えません') if ja else 'my readings give the same number, but of different things, so I do not answer'
+        elif 'INDEPENDENT_INPUT_DISAGREEMENT' in reason:
+            what=('別に書かれたもう一つの読み方が、同じ言葉から別の答えを出したので、答えません') if ja else \
+                 'a second way of reading of mine, written separately, reads these words to another answer, so I do not answer'
+        else:
+            what=(f'言葉の中の数量を別に確かめると、読みと合わないので（{reason}）、答えません') if ja else \
+                 f'a separate check of the quantities in these words does not agree with my reading ({reason}), so I do not answer'
+        if ja:return (f'私の読みでは {w} ですが、' if w else '')+what+'。'
+        return (f'My reading says {w}, but ' if w else '')+what+'.' if w else what[0].upper()+what[1:]+'.'
     if any(x.get('reason')=='TEMPLATE_CONTESTED' for x in rs):
         return 'この言い回しで教わった読み方は、二人の親に別の読み方をされたので、もうひとりでは使いません。' if ja else \
                'What I learned for this wording was read otherwise by two of my parents, so I no longer use it alone.'

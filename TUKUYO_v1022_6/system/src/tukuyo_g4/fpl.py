@@ -132,11 +132,13 @@ def show(a):
 def fmt(v):
     v=Fraction(v)
     if v.denominator==1:return str(v.numerator)
-    d=v.denominator
-    while d%2==0:d//=2
-    while d%5==0:d//=5
-    if d==1:return format(v.numerator/v.denominator,'.12g') if len(str(v.denominator))<=12 else f'{v.numerator}/{v.denominator}'
-    return f'{v.numerator}/{v.denominator}'
+    d=v.denominator;twos=fives=0
+    while d%2==0:d//=2;twos+=1
+    while d%5==0:d//=5;fives+=1
+    if d!=1:return f'{v.numerator}/{v.denominator}'
+    places=max(twos,fives);scaled=abs(v.numerator)*(2**(places-twos))*(5**(places-fives))
+    digits=str(scaled).zfill(places+1)
+    return ('-' if v<0 else '')+digits[:-places]+'.'+digits[-places:]
 
 # ----------------------------------------------------------------------------- units
 def parse_unit(u):

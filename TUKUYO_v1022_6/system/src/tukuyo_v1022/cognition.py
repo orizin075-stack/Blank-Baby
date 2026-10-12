@@ -6,6 +6,7 @@ The system does not store a question-to-answer lookup table.
 """
 from __future__ import annotations
 import copy,json,re,time,unicodedata
+from fractions import Fraction
 from pathlib import Path
 from tukuyo_common.atomic_fs import atomic_write_bytes
 from tukuyo_v977 import whole_state as whole
@@ -45,6 +46,15 @@ def _yes(a,p,confidence=.9):
     if not proofs.check(p,a):return _no('PROOF_REJECTED')
     return {'ok':True,'answer':str(a),'confidence':confidence,'uncertain':False,'recognized':True,'proof':p,
             'verification_evidence':{'mode':'LOCAL_PROOF_CHECK','proof_checked':True,'premise_grounding':'BOUNDED_PARSER_OR_SUPERVISED_MEMORY'}}
+def _word_answer(w,confidence=.93):
+    value=w['value'];answer=proofs.number(value)
+    p={'kind':'arithmetic','expression':w['expression'],'from_words':True,'schema':w['schema'],'unit':w['unit'],'source_query':w['source_query']}
+    if w.get('semantic_graph') is not None:p['semantic_graph']=copy.deepcopy(w['semantic_graph'])
+    # Preserve exact finite decimals, but never present a rounded recurring
+    # decimal as an exact equality. The proof explicitly binds rational output.
+    if Fraction(answer)!=value:
+        answer=str(value);p['answer_format']='exact_rational'
+    return _yes(answer,p,confidence)
 def _template(s):
     s=re.sub(r'\d+\s*(?:'+UNITS+'|'+BOXES+')','<Q>',normalize(s))
     return re.sub(r'[\s。、,!?？！]','',s).replace('<Q>を','<Q>')
@@ -61,6 +71,9 @@ def package(s):
     return None
 def clauses(s):return [x.strip() for x in re.split(r'[。.!！?？、,]|(?:が|けれど|しかし)\s*(?=\d)',s) if x.strip()]
 def inventory(s,learned):
+    from .semantic_coverage import quantity_scope
+    scope=quantity_scope(s)
+    if scope is not None:return _no(scope['reason'])
     p=package(s)
     if p:
         initial=p['per']*p['count'];per=p['per'];unit=p['unit'];box=p['container'];tail=s[p['end']:]
@@ -76,14 +89,13 @@ def inventory(s,learned):
     if re.search(r'\d+\s*[〜~～-]\s*\d+|少なくとも|最大|最低|以上|以下|未満|高々|せいぜい|[-−]\s*\d+|\d+\.\d+\s*(?:'+UNITS+'|'+BOXES+')',s):return _no('NON_EXACT_OR_SIGNED_COUNT')
     # claude-patch1: approximate ("5個ぐらい", "約5個") and disjunctive ("3個か4個") counts are not exact either.
     if re.search(r'\d+\s*(?:'+UNITS+'|'+BOXES+r')?\s*(?:ぐらい|くらい|ほど|程度|前後|ちょっと)|(?:約|およそ|ほぼ|だいたい|大体)\s*\d|数\s*(?:'+UNITS+'|'+BOXES+r')|(?:何(?:'+UNITS+'|'+BOXES+r')|いくつ)か(?=\s*(?:を|が|は)?\s*[^\s?？。、])|\d+\s*(?:'+UNITS+'|'+BOXES+r')?\s*(?:か|または|もしくは|or)\s*\d',s):return _no('NON_EXACT_OR_SIGNED_COUNT')
-    asked=re.search(r'何('+UNITS+'|'+BOXES+'|円|kg|g|m|cm)',s)
-    if not asked:
-        # claude-patch1: "箱はいくつ？" / "袋の数は？" ask for the container count.
-        asked=re.search(r'('+BOXES+r')(?:は|の数は|の個数は)\s*(?:いくつ|何個|どれだけ)',s)
+    # The explicit container noun binds generic 何個 before the content counter.
+    asked=re.search(r'('+BOXES+r')(?:は|の数は|の個数は)\s*(?:全部で|合わせて|合計)?\s*(?:いくつ|何個|どれだけ|[?？])',s)
+    if not asked:asked=re.search(r'何('+UNITS+'|'+BOXES+'|円|kg|g|m|cm)',s)
     if asked and asked[1] not in (unit,box):return _no('QUERY_UNIT_MISMATCH')
     remaining=bool(re.search(r'残り|残数|残った|今の在庫|現在の在庫|何個にな',tail) or re.search(rf'\d+\s*({UNITS}|{BOXES})',tail))
     if not remaining:
-        if not re.search(r'何|いくつ|総数|合計|全部',tail):return _no('QUERY_ROLE_MISSING')
+        if not asked and not re.search(r'何|いくつ|総数|合計|全部',tail):return _no('QUERY_ROLE_MISSING')
         n=p['count'] if p and asked and asked[1]==box else initial
         return _yes(n,{'kind':'inventory','initial':n,'per':per,'events':[],**({'package_count':p['count']} if p else {})})
     events=[]
@@ -103,6 +115,12 @@ def inventory(s,learned):
         # first, so an alias such as 補充しました->補充した hid the learned rule. Try both forms.
         raw=_template(c)
         if r is None:r=learned['event_rules'].get(raw)
+        # Finite lexical transfer to an existing learned rule. This never
+        # manufactures support in a blank student, or changes event direction.
+        transfer={'<Q>補充した':'<Q>補充しました',
+                  '<Q>仕入れた':'<Q>買った','<Q>仕入れました':'<Q>買った',
+                  '<Q>返品されて戻りました':'<Q>が客から返品されて戻りました'}
+        if r is None and raw in transfer:r=learned['event_rules'].get(transfer[raw])
         if r is None:
             matches=[(k,r) for k,r in learned['event_rules'].items() if k.startswith('<Q>') and (t.endswith(k) or raw.endswith(k))]
             if matches:r=max(matches,key=lambda x:len(x[0]))[1]
@@ -221,8 +239,32 @@ def _solve_core(data,query,formal_task=None):
     older producers keep precedence (their behaviour and learned rules are unchanged); the model is a
     second, separately built reading that answers when they abstain and blocks when they disagree."""
     if formal_task is not None:return _solve_core_v5(data,query,formal_task)
+    # Finite ordered quantity tasks need every operation and target bound before
+    # older single-event or multi-holder readers can commit a partial answer.
+    from .wordprob import _norm as quantity_surface
+    from .quantity_chain import solve as quantity_words
+    chain=quantity_words(quantity_surface(query))
+    if chain and (str(chain.get('schema','')).startswith('bounded_quantity_') or
+                  str(chain.get('refused','')).startswith('QUANTITY_CHAIN_')):
+        if chain.get('refused'):return _no(chain['refused'])
+        learned=state(data);supports=[]
+        for need in chain.get('required_learning',[]):
+            candidates=[learned['event_rules'].get(k) for k in need['templates']]
+            if any(r and r.get('conflict') for r in candidates):return _no('LEARNED_RULE_CONFLICT')
+            accepted=[r for r in candidates if r and r['direction']==need['direction'] and len(r['support'])>=2]
+            if not accepted:return _no('QUANTITY_CHAIN_LEARNED_SKILL_MISSING')
+            supports.append({'rule_id':accepted[0]['id'],'support_count':len(accepted[0]['support'])})
+        r=_word_answer({**chain,'source_query':str(query)})
+        if not r['uncertain']:
+            r['verification_evidence']['learned_dependencies']=supports
+            r['explanation']='各数量の役割と操作順を確認し、単位をそろえて '+chain['expression']+' を計算しました。'
+        return r
     from .situation import solve as _situation
     sit=_situation(query)
+    # Package headers describe contents and containers with different counters.
+    # The dedicated inventory reader owns explicit container-target questions.
+    if package(normalize(query)) and re.search(r'('+BOXES+r')(?:は|の数は|の個数は)\s*(?:全部で|合わせて|合計)?\s*(?:いくつ|何個|どれだけ|[?？])',normalize(query)):
+        sit=None
     # several holders or objects: only this model keeps them apart, so it decides (patch5 answered
     # 「りんごが12個…みかんを3個もらいました。りんごは何個？」 with 10)
     if sit and (sit.get('role') not in (None,'remain','total') or sit.get('holdings',1)>1):
@@ -280,6 +322,16 @@ def _solve_core_v5(data,query,formal_task=None):
         proof={'kind':'plan_cost' if cost else 'plan','task':formal_task,'plan':p,
                'alternatives':alternatives,'robustness':robustness}
         return _yes(answer,proof,.95)
+    # Explicit simultaneous premises have different semantics from alternative
+    # meta definitions. Read every constraint before trying permissive routes.
+    from .constraints import solve as _constraints
+    cr=_constraints(query)
+    if cr is not None:
+        reasoning={k:cr[k] for k in ('reason','rank','free_variables','information_requests','counterexamples','conflict_equations','contradiction_certificate','refinement_evidence') if k in cr}
+        if cr.get('answer') is None:
+            return {**_no(cr['reason']),'constraint_reasoning':reasoning}
+        out=_yes(cr['answer'],cr['proof'],.95)
+        return {**out,'constraint_reasoning':reasoning,'explanation':cr['explanation']}
     # claude-patch3: exact unit / clock / weekday / calendar / percent questions (whole-question forms only)
     from .qtime import solve as _qtime
     qt=_qtime(query)
@@ -350,11 +402,11 @@ def _solve_core_v5(data,query,formal_task=None):
         from .deliberation_verify import verify as _verify_deliberation
         dv=_verify_deliberation(query,str(dr['answer']))
         if not (dv.get('recognized') and dv.get('decidable') and dv.get('supported')):return _no('DELIBERATION_SECONDARY_VERIFY_REJECTED')
-        if word_candidate and proofs.number(word_candidate['value'])!=str(dr['answer']):
+        if word_candidate and Fraction(str(dr['answer']))!=word_candidate['value']:
             # The legacy unit-price parser can ignore a second purchase. The
             # new schema checks every number before proposing its expression.
             w=word_candidate
-            out=_yes(proofs.number(w['value']),{'kind':'arithmetic','expression':w['expression'],'from_words':True,'schema':w['schema'],'unit':w['unit'],'source_query':str(query)},.93)
+            out=_word_answer({**w,'source_query':str(query)})
             out['fusion_resolution']={'basis':'COMPLETE_NUMBER_COVERAGE','discarded_partial_legacy_answer':str(dr['answer'])}
             return out
         # claude-patch3: every number in the question must be used by the derivation. v1022.5 answered
@@ -381,7 +433,7 @@ def _solve_core_v5(data,query,formal_task=None):
     w=word_candidate
     if w and w.get('refused'):return _no(w['refused'])
     if w:
-        y=_yes(proofs.number(w['value']),{'kind':'arithmetic','expression':w['expression'],'from_words':True,'schema':w['schema'],'unit':w['unit'],'source_query':str(query)},.93)
+        y=_word_answer({**w,'source_query':str(query)})
         if not y['uncertain']:return y
     r=logic(s)
     # claude-patch2: complete model checking for negation / contraposition / universals / order
@@ -417,7 +469,33 @@ def _solve_core_v5(data,query,formal_task=None):
     return m
 def solve(data,query,formal_task=None):
     if formal_task is None and not str(query or '').strip():return _no('EMPTY_QUERY',recognized=False)
+    if formal_task is None:
+        from .semantic_coverage import quantity_scope
+        scope=quantity_scope(query)
+        if scope is not None:return {**_no(scope['reason']),'verification_evidence':{'input_coverage':scope}}
     r=_solve_core(data,query,formal_task)
+    if r.get('answer') is not None and not r.get('uncertain') and formal_task is None:
+        if (r.get('proof') or {}).get('kind')=='linear_constraints':
+            from .constraints_verify import verify as independent_constraint_check
+            v=independent_constraint_check(query,r['answer'],r['proof'])
+            audit={'recognized':True,'ok':bool(v.get('decidable') and v.get('supported')),
+                   'reason':v.get('reason','CONSTRAINT_CERTIFICATE_VERIFIED'),'kind':'LINEAR_CONSTRAINTS',
+                   'expected':v.get('expected'),'graph':v.get('graph'),
+                   'all_premises_checked':v.get('all_premises_checked',False),
+                   'target_uniqueness_certified':v.get('target_uniqueness_certified',False),
+                   'parser_separate_from_producer':True,'complete_semantic_independence':False}
+        elif (r.get('proof') or {}).get('kind')=='situation':
+            audit={'recognized':False,'ok':True,'reason':'ROLE_AWARE_SITUATION_GATE_APPLIES','complete_semantic_independence':False}
+        else:
+            from .input_audit import inspect
+            audit=inspect(query,r['answer'],r.get('proof'))
+        if not audit['ok']:
+            return {**_no(audit['reason']), 'verification_evidence':{'input_coverage':audit}}
+        r={**r,'verification_evidence':{**r.get('verification_evidence',{}),'input_coverage':audit}}
+        if (r.get('proof') or {}).get('kind')=='inventory' and audit.get('ok') and audit.get('graph'):
+            p={**r['proof'],'source_query':str(query),'independent_input_graph':copy.deepcopy(audit['graph'])}
+            if not proofs.check(p,r['answer']):return _no('INVENTORY_SOURCE_BINDING_REJECTED')
+            r={**r,'proof':p}
     # claude-patch4: final commit gate (separately written tokenizer/parser; see semantic_gate.py)
     if r.get('answer') is not None and not r.get('uncertain') and formal_task is None:
         from .semantic_gate import audit as _semantic_audit

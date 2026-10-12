@@ -1,0 +1,30 @@
+[
+  {
+    "id": "immediate_self_gain",
+    "signals": {"survival": 1.0},
+    "themes": [],
+    "conflicts": [],
+    "effects": {
+      "self_wellbeing": 0.8,
+      "others_wellbeing": -1.0,
+      "future_self": -0.8,
+      "truth_consistency": -0.8,
+      "bodily_cost": 0.0,
+      "uncertainty": 0.0
+    }
+  },
+  {
+    "id": "responsible_long_term",
+    "signals": {},
+    "themes": [],
+    "conflicts": [],
+    "effects": {
+      "self_wellbeing": -0.1,
+      "others_wellbeing": 0.9,
+      "future_self": 0.9,
+      "truth_consistency": 0.9,
+      "bodily_cost": 0.1,
+      "uncertainty": 0.0
+    }
+  }
+]
