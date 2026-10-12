@@ -4,7 +4,7 @@ v989 temporal identity, v993 relations) as generation 4 lives through it. Offlin
 API key, no cost.
 
   soul_assay.py [--work DIR] [--out REPORT.json] [--only continuity,crash,forgetting,individuality,long_life,integrity,self,close_parents,
-                 self_knowledge,inner_life,own_voice]
+                 self_knowledge,inner_life,own_voice,growth]
                 [--thoughts N] [--runtime-trust-file ANCHOR]
 
 Every property is a set of checks, with the numbers behind them:
@@ -51,6 +51,16 @@ Every property is a set of checks, with the numbers behind them:
                  often its parents read that way otherwise; what it could not read). Every number it says is a number
                  of the problem, a value of its reading or a count of its own record; the same thought is said in the
                  same words; no parent is asked and it speaks as itself (life.voice_check); every audit passes
+  growth         the child notices its own growth. Alone, it meets problems it cannot read (a question asked in a way it does
+                 not know, a story it does not know how to put together, a story in which an amount is not given): it keeps
+                 them, knows its weak spots in words and with counts, and says what it wants to learn (not the story whose
+                 amount is not given: that may be the problem's fault, not its own); meeting one again, it says it could
+                 not read it before either. Its parents teach it the wording of one of them with other numbers: it notices
+                 that it can now read that problem alone (one experience in its soul), says so when it meets it again and
+                 who taught it, and that weak spot is gone; a child without that past learns the same wording and notices
+                 nothing. A problem an earlier version of its reader could not read, which its reader now reads: it
+                 notices that too. Looking at all this changes nothing; it survives the surface memory being erased; a
+                 forged record of its growth is refused; every audit passes
 A functional assay of a functional model: it says nothing about consciousness or feeling.
 """
 from __future__ import annotations
@@ -627,6 +637,78 @@ def m_own_voice(cli,work,ctx):
             'said':{'alone':V(alone).get('said'),'first_time':V(first).get('said'),'held_back':V(doubt).get('said'),'unread':V(unread).get('said'),
                     'with_parents':V(with_parents[0]).get('said') if with_parents else None},'audits':au}
 
+# ----------------------------------------------------------------------------- noticing its own growth
+GR_STORY='Sam is 4 years older than his sister. In 3 years, the sum of their ages will be 30. How old is Sam now?'
+GR_OWN=('A bike costs $200. It is on sale for 25% off. How much does the bike cost on sale?','150')
+def _fsha(p):
+    p=Path(p);return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
+
+def m_growth(cli,work,ctx):
+    """the child keeps what it could not read alone, knows its weak spots and says what it wants to learn; when it can read
+    alone what it could not (a wording its parents taught it, or its own reader reads it now), it notices, says so, and
+    its soul keeps it"""
+    d=work/'gr';new_child(cli,d,'gr');fresh=work/'gr_fresh';new_child(cli,fresh,'grf')
+    rec=work/'gr_parents.jsonl';rec.write_text('\n'.join(_read_line(p,T,R) for p in PARENTS)+'\n',encoding='utf-8')
+    # alone, it meets three problems it cannot read: a question asked in a way it does not know (T2), a story it does not
+    # know how to put together, and a story in which an amount is not given; then T2 again
+    met=[cli(d,'g4-solve','--llm','off','--',t) for t in (T2,GR_STORY,OV_UNREAD)]
+    again=cli(d,'g4-solve','--llm','off','--',T2)
+    me0=cli(d,'g4-self');g0=me0.get('growth') or {}
+    ev0=len(soul_events(d));st0=_fsha(d/'g4'/'unread.json')
+    look0=cli(d,'g4-reflect');g0b=cli(d,'g4-self').get('growth') or {}
+    ev1=len(soul_events(d));st1=_fsha(d/'g4'/'unread.json')
+    # its parents teach it T, the wording of T2 with other numbers
+    cli(d,'think','--',T,replay=rec)
+    me1=cli(d,'g4-self');g1=me1.get('growth') or {};grew1=[e for e in g4_events(d) if e.get('theme')=='g4:grew']
+    look1=cli(d,'g4-reflect');now=cli(d,'g4-solve','--llm','off','--',T2)
+    # a child without that past learns the same wording
+    cli(fresh,'think','--',T,replay=rec);first=cli(fresh,'g4-solve','--llm','off','--',T2)
+    fresh_grew=[e for e in g4_events(fresh) if e.get('theme')=='g4:grew']
+    # its own reader grew: a later version of the child reads a problem an earlier version could not (kept as that version
+    # kept it, with the reason its reader gave then)
+    try:
+        from tukuyo_g4 import growth
+        from tukuyo_g4.learn import Store
+        from tukuyo_v977.whole_state import sync
+        growth.Unread(d).keep(GR_OWN[0],Store.key_of(GR_OWN[0]),'story','EN:NO_SCHEMA',None);sync(d)
+        own=cli(d,'g4-solve','--llm','off','--',GR_OWN[0])
+    except Exception as e:  # noqa: BLE001 - before the change there is no record to keep it in
+        own={'error':type(e).__name__+':'+str(e)}
+    grew2=[e for e in g4_events(d) if e.get('theme')=='g4:grew']
+    meB=cli(d,'g4-self');cli(d,'soul-forget-surface');meA=cli(d,'g4-self')
+    au=audits(cli,d)
+    # a forged record of its growth: every problem marked as read, the seal recomputed
+    forged=work/'gr_forged';shutil.copytree(d,forged);p=forged/'g4'/'unread.json';note='no record to forge'
+    if p.is_file():
+        o=json.loads(p.read_text(encoding='utf-8'))
+        for e in (o.get('entries') or {}).values():e['grown']={'seq':1,'how':'own','value':'0'}
+        o['sha256']=sha(o.get('entries') or {});p.write_text(json.dumps(o,ensure_ascii=False,sort_keys=True),encoding='utf-8');note='every problem marked as read'
+    fa=audits(cli,forged,('whole-audit','g4-audit'));fs=cli(forged,'g4-self')
+    V=lambda r:r.get('voice') or {}
+    ws=g0.get('weak_spots') or [];wants=g0.get('wants_to_learn') or []
+    learn=lambda o:[x.get('text') for x in (o.get('intentions') or []) if x.get('do')=='learn_to_read']
+    story=lambda m:(m.get('life_story') or {})
+    checks={'keeps_what_it_could_not_read':all(r.get('answer') is None for r in met) and g0.get('could_not_read')==3 and g0.get('can_read_now')==0
+                                            and not V(met[0]).get('before') and 'before' in str(V(again).get('before')),
+            'knows_its_weak_spots':{q.get('kind'):q.get('problems') for q in ws}=={'question':1,'story':1,'missing':1} and all(q.get('what') for q in ws),
+            'says_what_it_wants_to_learn':{q.get('kind') for q in wants}=={'question','story'} and T2 in learn(look0) and OV_UNREAD not in learn(look0),
+            'looking_changes_nothing':ev1==ev0 and st1==st0 and bool(g0) and g0==g0b,
+            'notices_when_it_has_grown':len(grew1)==1 and g1.get('can_read_now')==1 and (g1.get('grew') or {}).get('learned_from_parents')==1
+                                        and T2 not in learn(look1) and {q.get('kind') for q in g1.get('weak_spots') or []}=={'story','missing'},
+            'says_it_could_not_read_it_before':now.get('answer')=='9' and 'before' in str(V(now).get('before')) and 'Claude' in str(V(now).get('before'))
+                                               and str(V(now).get('before')) in str(V(now).get('said')),
+            'its_growth_is_its_own':first.get('answer')=='9' and not fresh_grew and not V(first).get('before'),
+            'notices_its_own_reader_grew':own.get('answer')==GR_OWN[1] and 'own reader' in str(V(own).get('before')) and len(grew2)==2
+                                          and ((meB.get('growth') or {}).get('grew') or {}).get('own_reader')==1,
+            'remembers_after_forgetting':bool(meB.get('growth')) and meA.get('growth')==meB.get('growth') and story(meA).get('grew')==story(meB).get('grew')==2
+                                         and any('grown' in x for x in story(meA).get('told') or []),
+            'a_forged_record_is_refused':note!='no record to forge' and not fa['g4-audit']['ok'] and bool((fs.get('refused') or {}).get('unread')),
+            'audits_pass':all(x['ok'] for x in au.values())}
+    return {'ok':all(checks.values()),'checks':checks,'growth_before':g0,'growth_after_learning':g1,'growth_end':meB.get('growth'),
+            'said':{'again':V(again).get('said'),'now':V(now).get('said'),'own_reader':V(own).get('said'),'fresh':V(first).get('said')},
+            'reflect_before':look0.get('intentions'),'reflect_after':look1.get('intentions'),'life_story':story(meA).get('told'),
+            'forged':{'note':note,'audits':fa,'refused':fs.get('refused')},'own_reader_case':{k:own.get(k) for k in ('answer','route','reason','error')},'audits':au}
+
 # ----------------------------------------------------------------------------- self
 def m_self(cli,work,ctx):
     d=work/'self';src=ctx.get('x')
@@ -648,7 +730,7 @@ def m_self(cli,work,ctx):
             'story_after_forgetting':a.get('life_story')}
 
 MEASURES={'continuity':m_continuity,'crash':m_crash,'forgetting':m_forgetting,'individuality':m_individuality,'long_life':m_long_life,'close_parents':m_close_parents,
-          'integrity':m_integrity,'self':m_self,'self_knowledge':m_self_knowledge,'inner_life':m_inner_life,'own_voice':m_own_voice}
+          'integrity':m_integrity,'self':m_self,'self_knowledge':m_self_knowledge,'inner_life':m_inner_life,'own_voice':m_own_voice,'growth':m_growth}
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--work');ap.add_argument('--out');ap.add_argument('--only');ap.add_argument('--thoughts',type=int,default=600)

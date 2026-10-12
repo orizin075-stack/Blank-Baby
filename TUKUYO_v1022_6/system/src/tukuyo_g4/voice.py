@@ -12,6 +12,9 @@ explain(text, result, data=None) -> {'lang', 'read': [...], 'answer', 'sure', 'w
              record, law 3); a template learned from parents who agreed
   held_back  why it does not answer: what it could not read, readings that disagree, a way of reading its parents read
              otherwise more often than they confirmed it, one parent's voice alone
+  before     what it knows of having met the problem, or its wording, before without reading it alone: that it can
+             read it now and how (a wording its parents taught it, or its own reader reads it now), or that it could
+             not read it before either (growth.py, from its own record)
 Everything it says comes from what it did (the reading, the solver's steps, the checker) and from its own record; no
 parent writes it and nothing is sent anywhere. English problems are explained in English, Japanese ones in Japanese. It
 says nothing about consciousness or feeling."""
@@ -53,10 +56,29 @@ def _skill_words(skill,ja):
     if two:s+='（二段で考える）' if ja else ', thought in two steps'
     return s
 
-def _words(name):
+def _words(name,alias=None):
     """'kim_bead_2' -> 'kim bead (2)': the second of a holder's amounts, kept apart from the first"""
+    if alias and name in alias:return alias[name]
     m=re.fullmatch(r'(.+?)_(\d+)',str(name))
     return (m.group(1).replace('_',' ')+f' ({m.group(2)})') if m else str(name).replace('_',' ')
+
+_words_=_words
+def _aliases(sp):
+    """a reading learned from another problem keeps the names its parents gave the quantities there ('twelve' for the
+    12 of 'decreased by twelve'): with this problem's numbers such a name is said as the number it is read from here
+    ('eight')"""
+    from fractions import Fraction
+    from . import numbers as N
+    out={}
+    for f in sp.get('facts') or []:
+        m=re.fullmatch(r'\s*([A-Za-z_]\w*)\s*=\s*(-?\d+(?:/\d+)?)\s*',str(f.get('eq','')))
+        if not m or f.get('known') or not f.get('span'):continue
+        name,v=m.group(1),Fraction(m.group(2))
+        ns=N.find(name.replace('_',' '))
+        if len(ns)!=1 or ns[0].value==v or ns[0].kind=='ordinal':continue
+        here=[n.raw for n in N.find(str(f['span'])) if n.value==v]
+        out[name]=here[0] if here else m.group(2)
+    return out
 
 PARENT_NAMES={'claude':'Claude','chatgpt':'ChatGPT','gemini':'Gemini'}
 def _who(ps,ja):
@@ -74,11 +96,11 @@ def _unit(u,value=None):
     t=top if one else pl.get(top,top if top.endswith('s') or top in ('fish','sheep','deer') else (top[:-1]+'ies' if top.endswith('y') and top[-2:-1] not in 'aeiou' else top+'s'))
     return t+(' per '+per if per else '')
 
-def _fmt_expr(expr,values):
+def _fmt_expr(expr,values,alias=None):
     """an expression with the names put in (words) and with the numbers put in"""
     def sub(m):return values.get(m.group(0),m.group(0))
     nums=re.sub(r'[A-Za-z_]\w*',lambda m:m.group(0) if m.group(0) in ('floor','ceil','mod','min','max','gcd','lcm','abs') else sub(m),expr)
-    words=re.sub(r'[A-Za-z_]\w*',lambda m:m.group(0) if m.group(0) in ('floor','ceil','mod','min','max','gcd','lcm','abs') else _words(m.group(0)),expr)
+    words=re.sub(r'[A-Za-z_]\w*',lambda m:m.group(0) if m.group(0) in ('floor','ceil','mod','min','max','gcd','lcm','abs') else _words(m.group(0),alias),expr)
     def sym(s):
         s=re.sub(r'\bfloor\(([^()]*)\)',r'⌊\1⌋',s);s=re.sub(r'\bceil\(([^()]*)\)',r'⌈\1⌉',s)
         return s.replace(' * ',' × ').replace(' / ',' ÷ ')
@@ -87,7 +109,8 @@ def _fmt_expr(expr,values):
 def _reading_lines(g,ja):
     sp=g.get('spec') or {};facts=sp.get('facts') or [];values=g.get('values') or {}
     qs={q['name']:q for q in sp.get('quantities') or []}
-    out=[]
+    out=[];al=_aliases(sp)
+    def _words(name):return _words_(name,al)
     for st in g.get('steps') or []:
         if 'fact' not in st:
             names=', '.join(f"{_words(k)} = {v}" for k,v in (st.get('values') or {}).items())
@@ -99,10 +122,10 @@ def _reading_lines(g,ja):
         elif re.fullmatch(r'-?\d+(?:/\d+)?',rhs) and lhs==x and f.get('span'):
             out.append(f"「{f['span'].strip()}」から：{_words(x)} = {v}{(' '+u) if u and not ja else ''}" if ja else f"\"{f['span'].strip()}\": {_words(x)} = {v}{(' '+u) if u else ''}")
         elif lhs==x:
-            w,n=_fmt_expr(rhs,values)
+            w,n=_fmt_expr(rhs,values,al)
             out.append(f"{_words(x)} = {w} = {n} = {v}{(' '+u) if u and not ja else ''}")
         else:
-            w,n=_fmt_expr(eq,values)
+            w,n=_fmt_expr(eq,values,al)
             out.append(f"{w}（{n}）から：{_words(x)} = {v}" if ja else f"From {w} ({n}): {_words(x)} = {v}{(' '+u) if u else ''}")
     for x in sp.get('unused') or []:
         out.append(f"{x.get('raw')} は使いません：{x.get('why')}" if ja else f"I set aside {x.get('raw')}: {x.get('why')}")
@@ -236,10 +259,16 @@ def _explain(text,res,data):
     rs=res.get('readings') or []
     out={'lang':'ja' if ja else 'en','read':[],'answer':None,'sure':'not sure','why':'','held_back':None,
          'from':'自分の読みと解き方と記録から（親は書いていません）' if ja else 'from its own reading, solving and record; no parent wrote this'}
+    try:
+        from .growth import before
+        out['before']=before(data,text,res,ja)
+    except Exception:  # noqa: BLE001 - a record it cannot read says nothing here
+        out['before']=None
     if res.get('answer') is None:
         out['held_back']=_held_back(text,res,data,ja)
         out['why']=out['held_back']
         lines=['どのくらい確か：確かではない',out['held_back']] if ja else ['How sure I am: not sure.',out['held_back']]
+        if out['before']:lines.append(out['before'])
         out['said']='\n'.join(lines);return out
     ans=str(res['answer'])
     ok=[x for x in rs if x.get('ok') and str(x.get('value'))==ans]
@@ -261,5 +290,6 @@ def _explain(text,res,data):
     head=('読み方：' if not theirs else '親の読み方：') if ja else ('How I read it:' if not theirs else 'How my parents read it:')
     lines=(([head]+['・'+x for x in out['read']] if out['read'] else [])+[f"答え：{out['answer']}",f"どのくらい確か：{lv[out['sure']]}。{out['why']}"]) if ja else \
           (([head]+['- '+x for x in out['read']] if out['read'] else [])+[f"So the answer is {out['answer']}.",f"How sure I am: {out['sure']}. {out['why']}"])
+    if out['before']:lines.append(out['before'])
     out['said']='\n'.join(lines)
     return out

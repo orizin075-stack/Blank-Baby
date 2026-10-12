@@ -13,7 +13,8 @@
   learn     templates learned from verified readings, used on the same wording with other numbers: they must agree
             with the own reader or abstain
   accuracy  ASDiv and MGSM-ja dev: the v1022 core, generation 4 alone and think (needs --work), with latencies
-  life      the soul side (life.py: experiences; memory.py: remembered answers) on odd results and questions
+  life      the soul side (life.py: experiences; growth.py: what it could not read and what it can read now; memory.py:
+            remembered answers) on odd results and questions
 DATA_DIR is the folder written by g4_bench.py fetch. WORK holds a live individual (run_tukuyo.py --data WORK/v1022_individual init).
 """
 from __future__ import annotations
@@ -224,9 +225,12 @@ def m_accuracy(data,work,rnd):
     return out
 
 def m_life(data,work,rnd):
-    """the soul side (life.py, memory.py) on 20,000 odd results and odd questions: nothing may raise"""
-    from tukuyo_g4 import life,memory
+    """the soul side (life.py, growth.py, memory.py) on 20,000 odd results and odd questions: nothing may raise"""
+    from tukuyo_g4 import life,memory,growth
+    from tukuyo_g4.learn import Store
     crash=collections.Counter();kinds=collections.Counter()
+    gd=Path(tempfile.mkdtemp())          # a store of problems it could not read (outside an individual: sealed only)
+    growth.Unread(gd).keep('How many?',Store.key_of('How many?'),'story','EN:NO_SCHEMA',None)
     for _ in range(20000):
         r={'answer':rnd.choice([None,'1','x',3]),'value':rnd.choice([None,'1','2']),'kind':rnd.choice(['problem','question',None]),
            'reason':rnd.choice([None,'DISAGREE:1,2','SINGLE_LLM_READING','X']),'route':rnd.choice([None,'learned','own','claude+gemini']),
@@ -237,6 +241,8 @@ def m_life(data,work,rnd):
         if rnd.random()<0.3:r={'gen4':r,'answer':r['answer']}
         try:kinds.update(k for k,*_ in life.experiences(r))
         except Exception as e:crash['experiences:'+type(e).__name__]+=1  # noqa: BLE001
+        try:growth.cannot_read(r);growth.noticed(gd,r,'How many?');growth.before(gd,'How many?',r);growth.before(gd,'How many?',r,ja=True)
+        except Exception as e:crash['growth:'+type(e).__name__]+=1  # noqa: BLE001
     d=Path(tempfile.mkdtemp());m=memory.Memory(d)
     for q,ans in [('','x'),('  ','x'),('a'*10000,'y'),('Q?',''),('Q?','z'*500),('What?','Paris'),('what','paris'),('What?','Lyon')]:
         try:m.remember(q,[{'parent':'claude','answer':ans},{'parent':'gemini','answer':ans}]);m.recall(q)

@@ -1,0 +1,87 @@
+{
+ "schema": "tukuyo.soul_assay/1",
+ "utc": "2026-10-12T01:57:16Z",
+ "thoughts": 600,
+ "seed": 20261009,
+ "measures": {
+  "growth": {
+   "ok": false,
+   "checks": {
+    "keeps_what_it_could_not_read": false,
+    "knows_its_weak_spots": false,
+    "says_what_it_wants_to_learn": false,
+    "looking_changes_nothing": false,
+    "notices_when_it_has_grown": false,
+    "says_it_could_not_read_it_before": false,
+    "its_growth_is_its_own": true,
+    "notices_its_own_reader_grew": false,
+    "remembers_after_forgetting": false,
+    "a_forged_record_is_refused": false,
+    "audits_pass": true
+   },
+   "growth_before": {},
+   "growth_after_learning": {},
+   "growth_end": null,
+   "said": {
+    "again": "How sure I am: not sure.\nI do not answer: I could not tell what the question asks (I did not ask my parents).",
+    "now": "How I read it:\n- \"decreased by eight\": twelve = 8\n- \"four times\": factor = 4\n- \"the result is 28\": result = 28\n- From factor × number - twelve = result (4 × 9 - 8 = 28): number = 9\nSo the answer is 9.\nHow sure I am: sure. I read it the way ChatGPT, Claude and Gemini taught me when they agreed; the checker, a separate program, solved my reading again and found every number used or set aside for a reason, every fact true and the units in agreement.",
+    "own_reader": null,
+    "fresh": "How I read it:\n- \"decreased by eight\": twelve = 8\n- \"four times\": factor = 4\n- \"the result is 28\": result = 28\n- From factor × number - twelve = result (4 × 9 - 8 = 28): number = 9\nSo the answer is 9.\nHow sure I am: sure. I read it the way ChatGPT, Claude and Gemini taught me when they agreed; the checker, a separate program, solved my reading again and found every number used or set aside for a reason, every fact true and the units in agreement."
+   },
+   "reflect_before": [],
+   "reflect_after": [],
+   "life_story": [
+    "5 experiences in its life with its parents (soul events 1-5).",
+    "It learned from what its parents agreed on once.",
+    "From each parent, what held up / what failed: chatgpt 1/0, claude 1/0, gemini 1/0.",
+    "It solved alone with something it had learned, the first time for that wording, once."
+   ],
+   "forged": {
+    "note": "no record to forge",
+    "audits": {
+     "whole-audit": {
+      "ok": true,
+      "errors": []
+     },
+     "g4-audit": {
+      "ok": true,
+      "errors": []
+     }
+    },
+    "refused": null
+   },
+   "own_reader_case": {
+    "answer": null,
+    "route": null,
+    "reason": null,
+    "error": "ImportError:cannot import name 'growth' from 'tukuyo_g4' (<a signed copy of the tree before the change>/system/src/tukuyo_g4/__init__.py)"
+   },
+   "audits": {
+    "whole-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "heart-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "soul-identity-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "g4-audit": {
+     "ok": true,
+     "errors": []
+    }
+   },
+   "seconds": 16.5
+  }
+ },
+ "claim_boundary": {
+  "functional_assay_of_a_functional_model": true,
+  "consciousness_established": false,
+  "literal_feeling_established": false
+ },
+ "ok": false,
+ "cli_calls": 25
+}

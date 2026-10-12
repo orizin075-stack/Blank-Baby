@@ -8,7 +8,10 @@ journal -> relations), so every existing audit still covers it:
                     not), or disagreed with an answer that other readings agreed on      trust in that parent falls
   honesty           it withheld an answer (the readings disagreed, or one voice alone)  truthfulness grows
   discovery         it solved, by itself, with a template learned from its parents      curiosity grows
-Routine answers of its own reader leave no trace: only what teaches it something does.
+                    it noticed it can now read alone a problem it could not (growth.py:
+                    a wording its parents taught it, or its own reader reads it now)     curiosity grows
+Routine answers of its own reader leave no trace: only what teaches it something does. A problem it could not read
+alone is kept (growth.py, g4/unread.json): what it cannot read yet is what it knows of its weak spots.
 
 Looking back (hindsight.py): when it withheld because its parents' valid readings disagreed, nobody could be blamed. It
 keeps the disagreement, and when it later learns that wording from parents who agree, it answers the old text with what
@@ -258,13 +261,16 @@ def _live(data,todo,start,law=LAW):
     for x in todo[start:]:
         process_experience(data,*x,law=law);maybe_crash('g4:after_experience')
 
-def _finish(data,life,resolved=()):
+def _finish(data,life,resolved=(),grown=()):
     from tukuyo_common.atomic_fs import durable_unlink
     from tukuyo_v977.whole_state import sync
     _save_life(data,life)
     if resolved:
         from .hindsight import Unresolved
         Unresolved(data).drop(list(resolved))
+    if grown:
+        from .growth import grow
+        grow(data,list(grown))
     sync(data);durable_unlink(_episode_path(data))
 
 def looking_back(data,result):
@@ -286,15 +292,20 @@ def looking_back(data,result):
                       'parents':{p:{'value':rp.get('was'),'right':False} for p in rp.get('teachers') or []}}]
     return out,[f['id'] for f in found if f.get('id')],found
 
-def record(data,result):
+def record(data,result,text=None):
     """send the experiences of one result to the heart (which writes the soul); returns what was recorded, or
-    {'refused': reason} when its life record is not its own"""
+    {'refused': reason} when its life record is not its own. text: the problem; with it, a problem it could not read
+    alone is kept, and a problem it could not read before and reads alone now is noticed (growth.py)"""
+    from . import growth
     ex=experiences(result)
-    if not ex:return []
+    miss=growth.cannot_read(result) if text and data is not None else None
+    if not ex and not miss and not growth.may_notice(data,result,text):return []
     recover(data)
     try:life=_life(data)
     except ValueError as e:return {'refused':str(e)}
+    if miss:growth.keep(data,text,miss)
     back,resolved,_=looking_back(data,result);ex=ex+back
+    gx,grown=growth.noticed(data,result,text);ex=ex+gx
     todo=[]
     for kind,v,imp,theme,rel in ex:
         if rel.startswith('#first:'):
@@ -306,8 +317,8 @@ def record(data,result):
     from tukuyo_common.atomic_fs import atomic_write_json
     p=_episode_path(data);p.parent.mkdir(parents=True,exist_ok=True)
     atomic_write_json(p,{'schema':EPISODE,'individual_id':own.individual(data),'soul_seq_before':_soul_seq(data),'experiences':todo,'life_after':life,
-                         'resolved':resolved,'law':LAW})
-    _live(data,todo,0);_finish(data,life,resolved)
+                         'resolved':resolved,'grown':grown,'law':LAW})
+    _live(data,todo,0);_finish(data,life,resolved,grown)
     return [{'kind':k,'theme':t,'relation':r} for k,_,_,t,r in todo]
 
 def recover(data):
@@ -343,7 +354,7 @@ def recover(data):
             from tukuyo_v993.relation_bound import sync as relation_sync
             from tukuyo_v995.other_agent_trust import sync as peer_sync
             sync_transitions(data);relation_sync(data);peer_sync(data)
-            _finish(data,m.get('life_after') or {'first_alone':[]},m.get('resolved') or [])
+            _finish(data,m.get('life_after') or {'first_alone':[]},m.get('resolved') or [],m.get('grown') or [])
         except Exception as e:  # noqa: BLE001 - e.g. the individual is no longer alive: the episode stays unfinished, said so
             why='EPISODE_UNFINISHED:'+type(e).__name__+':'+str(e)[:120]
     if why:
@@ -355,14 +366,17 @@ def recover(data):
 def reflect(data,act=False,limit=3,order=None):
     """an inner life between problems. The child looks at what it is unsure of: disagreements of its parents it could not
     settle (hindsight, g4/unresolved.json), readings it learned that two parents later read another way (contested
-    templates), answers its parents agreed on and later agreed against (contested memories), and its own ways of reading
-    that its parents have read otherwise more often than they confirmed (self_knowledge). It says what it wants to ask
-    its parents, oldest first. Looking changes nothing. With act, and only when parents can be asked, it asks them about
-    the first `limit` of these on its own (a problem again with every parent, a question again with every parent); what
-    they answer is lived like any other thought (record), so a disagreement it now settles is looked back on"""
+    templates), answers its parents agreed on and later agreed against (contested memories), the problems it could not
+    read alone (growth.py: it reads them again alone, and says which it can read now and which it wants to learn), and
+    its own ways of reading that its parents have read otherwise more often than they confirmed (self_knowledge). It says
+    what it wants to do, oldest first. Looking changes nothing. With act, it first tries again alone what it can now read
+    (no parent is needed: what it notices is lived like any other thought); then, only when parents can be asked, it
+    asks them about the first `limit` of the rest on its own (a problem again with every parent, a question again with
+    every parent); what they answer is lived like any other thought (record), so a disagreement it now settles is looked
+    back on, and a wording it now learns is noticed as growth"""
     from .hindsight import Unresolved
     from .learn import Store
-    from . import memory
+    from . import memory,growth
     refused={};intents=[];seen=set()
     try:sk=self_knowledge(data)
     except Exception as e:  # noqa: BLE001 - a soul it cannot read: nothing to say about itself; the audits report it
@@ -390,29 +404,40 @@ def reflect(data,act=False,limit=3,order=None):
             if q.get('contested') and q.get('question') not in seen:
                 intents.append({'do':'ask_every_parent','text':q['question'],'why':'my parents agreed on an answer and later agreed on another'});seen.add(q['question'])
     except ValueError as e:refused['remembered']=str(e)
+    try:now,still,unread=growth.look(data)
+    except ValueError as e:now,still,unread=[],[],0;refused['unread']=str(e)
+    for x in now:
+        if x['text'] not in seen:intents.append({'do':'try_again_alone','text':x['text'],'why':'I could not read it alone when I met it; I can read it now'});seen.add(x['text'])
+    for x in still[:10]:
+        if x['text'] not in seen:intents.append({'do':'learn_to_read','text':x['text'],'why':'I could not read it alone: '+growth.WORDS.get(x['why'],growth.WORDS['other'])[0]});seen.add(x['text'])
     for k in doubted:
         if not any(x.get('skill')==k for x in intents):
             intents.append({'do':'check_my_reading','skill':k,'text':None,'why':'my parents have read this kind of problem otherwise more often than they confirmed it'})
     out={'ok':True,'open':{'disagreements':len(entries),'doubted_ways_of_reading':doubted,
-                           'contested':sum(1 for x in intents if x['why'].startswith(('two parents','my parents agreed')))},'intentions':intents}
+                           'contested':sum(1 for x in intents if x['why'].startswith(('two parents','my parents agreed'))),
+                           'could_not_read':unread,'can_read_now':len(now)},'intentions':intents}
     if refused:out['refused']=refused
     if not act:return out
     from . import llm as L,api
-    if not L.available():return {**out,'acted':[],'note':'NO_PARENT_TO_ASK: no parent is configured, so nobody was asked'}
+    tried=[]
+    for it in [x for x in intents if x['do']=='try_again_alone']:
+        r=api.solve(it['text'],llm='off',data=data,learn=False)
+        tried.append({'text':it['text'],'answer':r.get('answer'),'route':r.get('route'),'reason':r.get('reason'),'life':record(data,r,it['text'])})
+    if not L.available():return {**out,'tried_alone':tried,'acted':[],'note':'NO_PARENT_TO_ASK: no parent is configured, so nobody was asked'}
     acted=[]
-    for it in [x for x in intents if x.get('text')][:max(0,int(limit))]:
+    for it in [x for x in intents if x.get('text') and x['do']!='try_again_alone'][:max(0,int(limit))]:
         if it['do']=='ask_every_parent':r=api.ask(it['text'],llm='on',data=data,voices='all',order=order,persona=persona(data))
         else:r=api.solve(it['text'],llm='on',data=data,order=order)
-        acted.append({'text':it['text'],'answer':r.get('answer'),'route':r.get('route'),'reason':r.get('reason'),'life':record(data,r)})
+        acted.append({'text':it['text'],'answer':r.get('answer'),'route':r.get('route'),'reason':r.get('reason'),'life':record(data,r,it['text'])})
     if acted:record(data,{'kind':'reflection','asked_on_its_own':True})
-    return {**out,'acted':acted}
+    return {**out,'tried_alone':tried,'acted':acted}
 
 # ----------------------------------------------------------------------------- who it has become
 def life_story(data):
     """what it lived through, from its soul journal (the canonical record: forgetting the surface memory does not touch it)"""
     from tukuyo_common.journal import load_events
     from tukuyo_v977.whole_state import event_path
-    kinds={};per={};first={};last={};back={};mine={};doubt=0;asked=0
+    kinds={};per={};first={};last={};back={};mine={};doubt=0;asked=0;grew=0;alone=0
     for e in load_events(event_path(data)):
         if not str(e.get('theme','')).startswith(THEME):continue
         k=e['kind'];kinds[k]=kinds.get(k,0)+1;first.setdefault(k,e['seq']);last[k]=e['seq']
@@ -420,6 +445,8 @@ def life_story(data):
             q=mine.setdefault(str(e.get('relation','')).split(':',1)[-1],{'confirmed':0,'contradicted':0});q['confirmed' if k=='self_confirmed' else 'contradicted']+=1
         if e.get('theme')==THEME+'self_doubt':doubt+=1
         if e.get('theme')==THEME+'asked_on_its_own':asked+=1
+        if e.get('theme')==THEME+'grew':grew+=1
+        if e.get('theme')==THEME+'grew_alone':alone+=1
         if e.get('theme')==THEME+'hindsight':
             q=back.setdefault(str(e.get('relation','')).split(':',1)[-1],{'right':0,'wrong':0});q['right' if k=='parent_help' else 'wrong']+=1
         rel=str(e.get('relation') or '')
@@ -432,14 +459,15 @@ def life_story(data):
         if kinds.get('learning'):lines.append(f"It learned from what its parents agreed on {times(kinds['learning'])}.")
         if per:lines.append('From each parent, what held up / what failed: '+', '.join(f"{p} {q['held']}/{q['failed']}" for p,q in sorted(per.items()))+'.')
         if kinds.get('honesty'):lines.append(f"It withheld an answer rather than guess {times(kinds['honesty'])}.")
-        if kinds.get('discovery'):lines.append(f"It solved alone with something it had learned, the first time for that wording, {times(kinds['discovery'])}.")
+        if alone:lines.append(f"It solved alone with something it had learned, the first time for that wording, {times(alone)}.")
         if back:lines.append('Looking back on readings it could not judge at the time, once it had learned the wording, right / wrong: '
                              +', '.join(f"{p} {q['right']}/{q['wrong']}" for p,q in sorted(back.items()))+'.')
         if mine:lines.append('Its own ways of reading, as its parents checked them, confirmed / read another way: '
                              +', '.join(f"{k} {q['confirmed']}/{q['contradicted']}" for k,q in sorted(mine.items()))+'.')
         if kinds.get('honesty') and doubt:lines.append(f"It held back on its own where its parents had read it otherwise before {times(doubt)}.")
         if asked:lines.append(f"It went back to its parents with questions of its own {times(asked)}.")
-    return {'experiences':kinds,'from_parents':per,'looked_back':back,'own_readings':mine,'first_seq':first,'last_seq':last,'told':lines}
+        if grew:lines.append(f"It noticed it had grown {times(grew)}: it could read alone a problem it could not read alone before.")
+    return {'experiences':kinds,'from_parents':per,'looked_back':back,'own_readings':mine,'grew':grew,'first_seq':first,'last_seq':last,'told':lines}
 
 def self_report(data,parents=('claude','chatgpt','gemini')):
     """how the child has grown: what it learned, from whom, how far it trusts each parent, and its soul and heart"""
@@ -458,12 +486,15 @@ def self_report(data,parents=('claude','chatgpt','gemini')):
     from .hindsight import Unresolved
     try:waiting=len(Unresolved(data).load()['entries'])
     except ValueError as e:waiting=None;refused['unresolved']=str(e)
+    from . import growth
+    try:grown=growth.report(data)
+    except ValueError as e:grown=None;refused['unread']=str(e)
     by=dict()
     for t in (st or {}).values():
         for p in (t.get('provenance') or {}).get('parents') or []:by[p]=by.get(p,0)+1
     mine=[m for m in h.get('episodic_meanings',[]) if str(m.get('theme','')).startswith(THEME)]
     out={'templates_learned':None if st is None else len(st),'templates_by_parent':by,'remembered_answers':remembered,
-         'solved_alone_first_times':alone,'disagreements_to_look_back_on':waiting,
+         'solved_alone_first_times':alone,'disagreements_to_look_back_on':waiting,'growth':grown,
          'trust_in_parents':{p:round(trust(data,p),4) for p in parents},
          'bond_with_parents':{p:s.get('attachments',{}).get(relation(p),0.0) for p in parents},
          'soul':{'core_values':s.get('core_values'),'vows':s.get('vows'),'g4_themes':{k:v for k,v in s.get('themes',{}).items() if k.startswith(THEME)}},

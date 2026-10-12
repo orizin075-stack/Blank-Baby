@@ -206,17 +206,29 @@ def _component_hashes(data):
     if (d/'v1023r'/'commits').exists():pairs['open_world_research_v1023r']='v1023r/STATE.json'
     # generation 4: what the child learned from its parents and the record of its life (tukuyo_g4.own)
     if (d/'g4').exists():pairs.update({'g4_learned':'g4/learned.json','g4_remembered':'g4/remembered.json','g4_life':'g4/life.json',
-                                       'g4_unresolved':'g4/unresolved.json'})
+                                       'g4_unresolved':'g4/unresolved.json','g4_unread':'g4/unread.json'})
     return {k:_file_sha(d/v) for k,v in pairs.items()}
+
+def _own_components(data,ch,before):
+    # generation 4: a store its individual did not sign (changed by hand, or taken from another child) is not taken in.
+    # What was recorded before stays, or a mark that it is not its own, so the audits keep reporting it until it is put
+    # right (tukuyo_g4.own.not_its_own)
+    if not (Path(data)/'g4').exists():return ch
+    try:
+        from tukuyo_g4.own import not_its_own
+        bad=not_its_own(data)
+    except ImportError:return ch
+    for k in bad:ch[k]=before.get(k) or 'NOT_ITS_OWN'
+    return ch
 
 def sync(data):
     ident=_live_identity(data);soul=load_soul(data);org=_organism(data)
-    p=state_path(data);prev=ZERO;seq=1
+    p=state_path(data);prev=ZERO;seq=1;before={}
     if p.exists():
-        old=_read(p);prev=sha_obj(old);seq=int(old['payload']['seq'])+1
+        old=_read(p);prev=sha_obj(old);seq=int(old['payload']['seq'])+1;before=old['payload'].get('component_hashes') or {}
     payload={'schema':SCHEMA,'seq':seq,'identity':ident,'lifecycle':org['lifecycle'],'affect':org['affect'],'goals':org['goals'],
       'self_model_sha256':sha_obj(org['self_model']),'autobiography_sha256':sha_obj({'records':org['memory']['autobiographical'],'archive':org['memory']['autobiographical_archive']}),
-      'soul_core_sha256':sha_obj(soul),'component_hashes':_component_hashes(data),'previous_unified_state_sha256':prev,
+      'soul_core_sha256':sha_obj(soul),'component_hashes':_own_components(data,_component_hashes(data),before),'previous_unified_state_sha256':prev,
       'claim_boundary':{'functional_soul_model':True,'consciousness_established':False,'literal_soul_established':False,'general_l5':False,'general_l6':False}}
     env=_sign(data,payload);p.parent.mkdir(parents=True,exist_ok=True);atomic_write_bytes(p,canon(env)+b'\n');return env
 

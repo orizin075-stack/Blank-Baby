@@ -298,11 +298,11 @@ def parser():
     c=sub.add_parser('g4-ask',help='generation 4: a problem is solved and checked; any other question is answered by the parents (Claude, ChatGPT, Gemini, as configured), marked unverified');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto')
     c.add_argument('--voices',choices=('one','all'),default='one',help='one: the voice parent answers; all: every configured parent answers (an answer they agree on is remembered)')
     c.add_argument('--no-soul',action='store_true')
-    sub.add_parser('g4-self',help='generation 4: how the child has grown - what it learned and from whom, its trust in its parents, its soul and heart')
+    sub.add_parser('g4-self',help='generation 4: how the child has grown - what it learned and from whom, its trust in its parents, what it could not read alone and can read now, its weak spots and what it wants to learn, its soul and heart')
     sub.add_parser('g4-remembered',help='generation 4: answers its parents agreed on, remembered (not verified)')
     c=sub.add_parser('g4-learned',help='generation 4: readings learned from verified examples')
     c=sub.add_parser('g4-audit',help='generation 4: every learned reading must reproduce its own example')
-    c=sub.add_parser('g4-reflect',help='generation 4: what the child is unsure of (disagreements it could not settle, what was contested, its own ways of reading in doubt) and what it wants to ask its parents; with --act it asks them on its own (paid calls when parents are configured)')
+    c=sub.add_parser('g4-reflect',help='generation 4: what the child is unsure of (disagreements it could not settle, what was contested, problems it could not read alone, its own ways of reading in doubt) and what it wants to do about it; with --act it tries again alone what it can now read, and asks its parents on its own (paid calls when parents are configured)')
     c.add_argument('--act',action='store_true');c.add_argument('--limit',type=int,default=3)
     c=sub.add_parser('g4-parents',help='generation 4: is it ready to ask its parents - for each one its key (never shown), model, package and network, and the child\'s trust in it; no request to any parent without --live')
     c.add_argument('--live',action='store_true',help='one short paid call to each parent that is ready')
@@ -755,7 +755,7 @@ def _main(argv=None):
                     if ft is None and args.engine=='gen4':
                         from tukuyo_g4 import api as g4_api,life as g4_life,llm as g4_llm
                         res=g4_api.think(data,args.query,res,llm=args.llm,order=g4_life.trust_order(data,g4_llm.parents()))
-                        if not args.no_soul and res.get('gen4'):res['life']=g4_life.record(data,res)
+                        if not args.no_soul and res.get('gen4'):res['life']=g4_life.record(data,res,args.query)
                         from tukuyo_v977.whole_state import sync as whole_sync
                         if (data/'g4').exists():whole_sync(data)   # what it learned is part of the whole state
                 elif args.cmd=='dialogue-learn':res=local.learn(data,json.loads(args.bundle.read_text()),args.teacher)
@@ -785,16 +785,16 @@ def _main(argv=None):
                     from tukuyo_g4 import voice as g4_voice
                     res={'ok':True,'version':'gen4',**g4_api.solve(args.query,llm=args.llm,data=data,learn=not args.no_learn,order=order)}
                     res['voice']=g4_voice.explain(args.query,res,data)   # in its own words, as it was when it answered
-                    if not args.no_soul:res['life']=g4_life.record(data,res)
+                    if not args.no_soul:res['life']=g4_life.record(data,res,args.query)
                     if (data/'g4').exists():whole_sync(data)   # what it learned is part of the whole state
                 elif args.cmd=='g4-ask':
                     res={'ok':True,'version':'gen4',**g4_api.ask(args.query,llm=args.llm,data=data,voices=args.voices,order=order,persona=g4_life.persona(data))}
-                    if not args.no_soul:res['life']=g4_life.record(data,res)
+                    if not args.no_soul:res['life']=g4_life.record(data,res,args.query)
                     if (data/'g4').exists():whole_sync(data)
                 elif args.cmd=='g4-self':res={'ok':True,'version':'gen4',**g4_life.self_report(data)}
                 elif args.cmd=='g4-reflect':
                     res={'ok':True,'version':'gen4',**g4_life.reflect(data,act=args.act,limit=args.limit,order=order)}
-                    if res.get('acted') and (data/'g4').exists():whole_sync(data)
+                    if (res.get('acted') or res.get('tried_alone')) and (data/'g4').exists():whole_sync(data)
                 elif args.cmd=='g4-remembered':
                     o=g4_memory.Memory(data).load()
                     res={'ok':True,'note':'answers two or more parents agreed on; not verified by TUKUYO','entries':[{'id':k,**v} for k,v in sorted(o['entries'].items())]}
@@ -812,8 +812,11 @@ def _main(argv=None):
                     from tukuyo_g4.hindsight import Unresolved as g4_unresolved
                     try:ur={'ok':True,'kept':len(g4_unresolved(data).load()['entries'])}
                     except ValueError as e:ur={'ok':False,'reason':str(e)}
+                    from tukuyo_g4.growth import Unread as g4_unread
+                    try:un=g4_unread(data).load()['entries'];un={'ok':True,'kept':len(un),'grown':sum(1 for e in un.values() if e.get('grown'))}
+                    except ValueError as e:un={'ok':False,'reason':str(e)}
                     pend=(Path(data)/'g4'/'private'/'EPISODE.json').is_file();aside=(Path(data)/'g4'/'private'/'EPISODE.abandoned.json').is_file()
-                    res={**res,'ok':bool(res.get('ok')) and m['ok'] and lv['ok'] and ur['ok'] and not pend,'remembered':m,'life_record':lv,'unresolved':ur,'episode_pending':pend,
+                    res={**res,'ok':bool(res.get('ok')) and m['ok'] and lv['ok'] and ur['ok'] and un['ok'] and not pend,'remembered':m,'life_record':lv,'unresolved':ur,'unread':un,'episode_pending':pend,
                          'episode_set_aside':aside}   # a thought whose experiences could not be finished (see the startup actions)
             elif args.cmd in ('research-run','research-status','research-audit'):
                 if args.cmd=='research-run':_require_live(data)

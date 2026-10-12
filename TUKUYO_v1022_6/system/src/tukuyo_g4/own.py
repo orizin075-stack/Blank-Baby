@@ -1,7 +1,8 @@
 """generation 4: what the child learned is its own.
 
 Its stores - the readings it learned (g4/learned.json), the answers its parents agreed on (g4/remembered.json), the
-record of its life (g4/life.json) and the disagreements it keeps to look back on (g4/unresolved.json) - are signed with the individual's own key (the v977 whole-state key) and bound to its
+record of its life (g4/life.json), the disagreements it keeps to look back on (g4/unresolved.json) and the problems it
+could not read alone (g4/unread.json) - are signed with the individual's own key (the v977 whole-state key) and bound to its
 id, and the whole state (v977 UNIFIED_STATE) records their hashes. A store changed by hand, or taken from another child,
 is refused when it is read, and whole-audit reports it.
 
@@ -14,7 +15,7 @@ import hashlib,json
 from pathlib import Path
 
 SCHEMA='tukuyo.g4.own/1'
-KINDS={'learned':'g4/learned.json','remembered':'g4/remembered.json','life':'g4/life.json','unresolved':'g4/unresolved.json'}
+KINDS={'learned':'g4/learned.json','remembered':'g4/remembered.json','life':'g4/life.json','unresolved':'g4/unresolved.json','unread':'g4/unread.json'}
 COMPONENTS={'g4_'+k:v for k,v in KINDS.items()}
 
 def body_sha(o):return hashlib.sha256(json.dumps(o,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
@@ -60,10 +61,28 @@ def check(data,kind,sha,signed):
             or q.get('kind')!=kind or q.get('individual_id')!=ident or q.get('sha256')!=sha):
         raise ValueError(kind.upper()+'_NOT_ITS_OWN')
 
+def not_its_own(data):
+    """the components ('g4_learned', ...) whose store in this individual is not its own: refused when read (changed by
+    hand, or taken from another child). The whole state does not take them in (v977 whole_state.sync)"""
+    if individual(data) is None:return []
+    from .learn import Store
+    from .memory import Memory
+    from .life import _life
+    from .hindsight import Unresolved
+    from .growth import Unread
+    load={'learned':lambda:Store(Path(data)/'g4').load(),'remembered':lambda:Memory(data).load(),'life':lambda:_life(data),
+          'unresolved':lambda:Unresolved(data).load(),'unread':lambda:Unread(data).load()}
+    out=[]
+    for kind,rel in KINDS.items():
+        if not (Path(data)/rel).is_file():continue
+        try:load[kind]()
+        except (OSError,ValueError,KeyError,TypeError,AttributeError):out.append('g4_'+kind)
+    return out
+
 def body(kind,o):
     """the signed part of each store"""
     if kind=='learned':return o['templates']
-    if kind in ('remembered','unresolved'):return o['entries']
+    if kind in ('remembered','unresolved','unread'):return o['entries']
     return o['life'] if 'life' in o else {'first_alone':o.get('first_alone',[])}
 
 def unsynced(data):
