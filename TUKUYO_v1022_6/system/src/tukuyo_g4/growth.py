@@ -16,6 +16,11 @@ It notices that it has grown when it can read alone what it could not:
 A thought in which it notices is one experience (discovery, theme g4:grew) in the same episode; the problems are marked
 grown when the episode is finished (life._finish, and life.recover after a crash), so each is noticed once.
 
+A growth can be given up. When two of its parents later read a wording it learned otherwise (the learned reading is
+contested, learn.py), the problems it had come to read with that wording are open again ('contested': it does not read
+them alone now). When its parents teach the wording again and it can read them again, it notices that too; when the
+answer is not the one it had, it keeps what it had read before ('corrected_from') and says so.
+
 A problem only its older core read (Japanese) is kept only when it was given as a problem (g4-solve) or a parent read
 it as one: the older core cannot tell a problem from a question with a number in it.
 
@@ -31,7 +36,7 @@ from pathlib import Path
 from . import own
 
 SCHEMA='tukuyo.g4.unread/1'
-MAX=500                 # problems kept: the oldest it has since learned to read go first, then the oldest
+MAX=1000                # problems kept: the oldest it has since learned to read go first, then the oldest
 REREAD=50               # problems of one wording read again in one thought (the rest wait for the next one)
 GREW='g4:grew'
 JA=re.compile(r'[぀-ヿ㐀-鿿]')
@@ -50,6 +55,7 @@ KINDS=[
  ('story',r'^EN:',('stories I do not know how to put together yet','まだ組み立て方を知らない話')),
 ]
 WORDS={k:w for k,_,w in KINDS}
+WORDS['contested']=('wordings my parents taught me that two of them later read otherwise','教わったのに、あとで二人の親に別に読まれた言い回し')
 WORDS['other']=('problems I could not read in a way I can check','確かめられる読み方が見つからなかった問題')
 
 def kind_of(reason):
@@ -88,7 +94,7 @@ class Unread:
         """it could not read this problem alone (again); a problem it could read before and cannot now is open again"""
         o=s.load();eid=s.entry_id(text);n=int(o.get('next',1));o['next']=n+1
         e=o['entries'].get(eid) or {'text':' '.join(str(text).split()),'key':key,'lang':'ja' if JA.search(str(text)) else 'en','first':n,'met':0}
-        if e.get('grown'):e.pop('grown');e['lost']=n
+        if e.get('grown'):g=e.pop('grown');e['lost']={'seq':n,'why':'cannot_read_again','was':g.get('value')}
         e.update({'why':why,'reason':str(reason or '')[:160],'last':n,'met':int(e.get('met',0))+1})
         if parents is not None or 'parents' not in e:e['parents']=parents       # met alone: what its parents did before stays
         o['entries'][eid]=e;s._save(o);return eid
@@ -100,6 +106,19 @@ class Unread:
             e=o['entries'].get(eid)
             if e is None or e.get('grown'):continue
             e['grown']={'seq':n,'how':how,'value':str(value),**({'teachers':sorted(teachers)} if teachers else {})};changed=True
+            lo=e.get('lost') or {}
+            if lo.get('why')=='contested' and lo.get('was') is not None and str(lo['was'])!=str(value):
+                e['grown']['corrected_from']=str(lo['was'])                    # what it had read with the contested reading
+        if changed:o['next']=n+1;s._save(o)
+    def lose(s,ids):
+        """two parents read the wording these were read with otherwise: they are open again"""
+        if not ids:return
+        o=s.load();n=int(o.get('next',1));changed=False
+        for eid in ids:
+            e=o['entries'].get(eid)
+            if e is None or not e.get('grown'):continue
+            g=e.pop('grown');e['lost']={'seq':n,'why':'contested','was':g.get('value'),**({'teachers':g['teachers']} if g.get('teachers') else {})}
+            e['why']='contested';e['reason']='TEMPLATE_CONTESTED';changed=True
         if changed:o['next']=n+1;s._save(o)
 
 # ----------------------------------------------------------------------------- what a thought shows
@@ -207,6 +226,22 @@ def noticed(data,result,text=None):
     if not marks:return [],[]
     return [('discovery',0.4,0.25,GREW,'')],marks
 
+def lost(data,result):
+    """the problems it had come to read with a wording its parents now read otherwise (the reading was contested in this
+    thought): given up when the episode is finished"""
+    if data is None or not isinstance(result,dict):return []
+    g=_g(result);key=(g.get('template_contested') if isinstance(g,dict) else None) or result.get('template_contested')
+    if not key or not (Path(data)/'g4'/'unread.json').is_file():return []
+    try:es=Unread(data).load()['entries']
+    except ValueError:return []
+    return sorted(k for k,e in es.items() if e.get('key')==key and (e.get('grown') or {}).get('how')=='learned')
+
+def lose(data,ids):
+    """life._finish: give up the growth of these problems (a store that is not its own is left alone)"""
+    if not ids:return
+    try:Unread(data).lose(ids)
+    except ValueError:pass
+
 def grow(data,marks):
     """life._finish: mark the problems it now reads alone (a store that is not its own is left alone; the audits report it)"""
     if not marks:return
@@ -219,9 +254,10 @@ def _who(ps,ja):
     ns=[PARENT_NAMES.get(p,str(p)) for p in ps]
     return '、'.join(ns) if ja else (' and '.join(ns) if len(ns)<3 else ', '.join(ns[:-1])+' and '+ns[-1])
 
-def _how_words(how,teachers,ja):
+def _how_words(how,teachers,ja,again=False):
     if how=='learned':
         who=_who(teachers,ja) if teachers else ('親' if ja else 'my parents')
+        if again:return f'この言い回しを {who} から教わり直しました' if ja else f'I learned this wording again from {who}'
         return f'この言い回しを {who} から教わりました' if ja else f'I learned this wording from {who}'
     if how=='v1022':return 'いまは前の世代の考え方で解けます' if ja else 'my older core solves it now'
     return 'いまは自分の読み方で読めます' if ja else 'my own reader reads it now'
@@ -237,12 +273,19 @@ def before(data,text,result,ja=False):
     if result.get('answer') is not None:
         a=_answered_alone(result)
         if not a or not (e or same):return None
+        was=((e or {}).get('grown') or {}).get('corrected_from')
+        lo=(e or {}).get('lost') or {}
+        if was is None and e is not None and not e.get('grown') and lo.get('why')=='contested' and lo.get('was') not in (None,a[0]):was=lo['was']
+        if was is not None:
+            how=_how_words(_how(a[1]),_teachers(data,a[1]),ja,again=True)
+            return (f'前は、教わった読み方でこの問題を {was} と読んでいましたが、あとで二人の親がこの言い回しを別に読みました。いまは {a[0]} と読みます：{how}。' if ja else
+                    f'Before, what I had learned for this wording read this problem as {was}, and two of my parents later read the wording otherwise; now I read it as {a[0]}: {how}.')
         how=_how_words(_how(a[1]),_teachers(data,a[1]),ja)
         if e:return (f'前にこの問題に会ったときは、ひとりでは読めませんでした。いまは読めます：{how}。' if ja else
                      f'I could not read this problem alone when I met it before; now I can: {how}.')
         return (f'前に同じ言い回しの問題を、ひとりでは読めませんでした。いまは読めます：{how}。' if ja else
                 f'I could not read a problem worded like this alone before; now I can: {how}.')
-    if e and not e.get('grown') and not any(x.get('ok') for x in _mine(_g(result))):
+    if e and not e.get('grown') and e.get('why')!='contested' and not any(x.get('ok') for x in _mine(_g(result))):
         return '前に会ったときも、ひとりでは読めませんでした。' if ja else 'I could not read it alone when I met it before, either.'
     return None
 
@@ -260,31 +303,34 @@ def report(data):
         k=e.get('why') or 'other'
         q=spots.setdefault(k,{'kind':k,'what':WORDS.get(k,WORDS['other'])[0],'what_ja':WORDS.get(k,WORDS['other'])[1],'problems':0,'met':0,
                               'parents_read':0,'example':e['text'],'first':e.get('first',0)})
-        q['problems']+=1;q['met']+=int(e.get('met',1));q['parents_read']+=e.get('parents')=='agreed'
+        q['problems']+=1;q['met']+=int(e.get('met',1));q['parents_read']+=e.get('parents')=='agreed' or k=='contested'
     weak=sorted(spots.values(),key=lambda q:(-q['problems'],-q['met'],q['first']))
     # what it wants to learn: what its parents could read and it could not first; a story whose amount seemed not to be
     # given only when its parents read one
     wants=sorted([q for q in weak if q['kind']!='missing' or q['parents_read']],key=lambda q:(-q['parents_read'],-q['problems'],-q['met'],q['first']))[:3]
     for q in weak:q.pop('first',None)
     # said in its own words, as the voice says things (the life story is told about it)
-    told=[]
+    told=[];corrected=sum(1 for e in grown if e['grown'].get('corrected_from') is not None)
     def n_(k,w):return f"{k} {w}{'s' if k!=1 else ''}"
     if es:
         how=[f"{grew[k]} with {w}" for k,w in (('learned_from_parents','what my parents taught me'),('own_reader','my own reader'),('older_core','my older core')) if grew.get(k)]
         told.append(f"I could not read {n_(len(es),'problem')} alone when I met {'them' if len(es)!=1 else 'it'}; "
                     +((f"now I can read {len(grown)} of them alone" if len(es)!=1 else 'now I can read it alone')+f" ({', '.join(how)})." if grown else
                       ('I cannot read any of them alone yet.' if len(es)!=1 else 'I cannot read it alone yet.')))
+    if corrected:told.append(f"{n_(corrected,'problem')} I had first read with what I was taught, and two of my parents later read the wording otherwise; "
+                             f"they taught me again, and I read {'them' if corrected!=1 else 'it'} otherwise now.")
     if weak:told.append('Where I am weak: '+', '.join(f"{q['what']} ({n_(q['problems'],'problem')})" for q in weak)+'.')
     if wants:told.append('What I want to learn: '+'; '.join(f"{q['what']} (for example: \"{q['example']}\")" for q in wants)+'.')
-    return {'could_not_read':len(es),'cannot_read_yet':len(opened),'can_read_now':len(grown),'grew':grew,'weak_spots':weak,
+    return {'could_not_read':len(es),'cannot_read_yet':len(opened),'can_read_now':len(grown),'grew':grew,'corrected':corrected,'weak_spots':weak,
             'wants_to_learn':[{k:q[k] for k in ('kind','what','what_ja','problems','parents_read','example')} for q in wants],'told':told}
 
-def look(data,limit=100):
+def look(data,limit=None):
     """g4-reflect: the problems it could not read, read again alone (nothing is written): (open entries it can read now,
-    open entries it still cannot read and wants to learn), oldest first. ValueError when the record is not its own"""
+    open entries it still cannot read and wants to learn), oldest first; all of them (at most MAX), or the `limit` oldest.
+    ValueError when the record is not its own"""
     es=sorted(((k,e) for k,e in Unread(data).load()['entries'].items() if not e.get('grown')),key=lambda kv:kv[1].get('first',0))
     now,still=[],[]
-    for eid,e in es[:max(0,int(limit))]:
+    for eid,e in (es if limit is None else es[:max(0,int(limit))]):
         a=alone(data,e['text'])
         if a:now.append({'id':eid,'text':e['text'],'answer':a[0],'how':a[1]})
         elif e.get('why')!='missing' or e.get('parents')=='agreed':still.append({'id':eid,'text':e['text'],'why':e.get('why') or 'other'})

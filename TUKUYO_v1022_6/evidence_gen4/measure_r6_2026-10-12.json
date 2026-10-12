@@ -1,5 +1,5 @@
 {
- "utc": "2026-10-12T02:51:10Z",
+ "utc": "2026-10-12T12:59:08Z",
  "seed": 20261008,
  "note": "no parent is called; dev splits only",
  "fuzz": {
@@ -15,15 +15,15 @@
   "crashes": 0,
   "by_kind": {},
   "examples": {},
-  "seconds": 45.3,
-  "seconds_total": 45.4
+  "seconds": 59.5,
+  "seconds_total": 59.6
  },
  "specs": {
   "readings": 6000,
   "crashes": 0,
   "by_kind": {},
-  "seconds": 1.6,
-  "seconds_total": 1.6
+  "seconds": 2.4,
+  "seconds_total": 2.4
  },
  "mutate": {
   "readings": 504,
@@ -92,7 +92,7 @@
     "caught_pct": 0.0
    }
   },
-  "seconds_total": 5.9
+  "seconds_total": 7.7
  },
  "parents": {
   "items": 504,
@@ -259,7 +259,7 @@
     "committed_wrong_pct": 2.8
    }
   ],
-  "seconds_total": 28.9
+  "seconds_total": 39.5
  },
  "learn": {
   "templates": 488,
@@ -270,7 +270,7 @@
   "no_template": 38,
   "template_only": 1,
   "disagreements": [],
-  "seconds_total": 33.4
+  "seconds_total": 41.4
  },
  "accuracy": {
   "asdiv": {
@@ -292,16 +292,16 @@
    },
    "ms": {
     "g4_solve": {
-     "median": 1.65,
-     "p95": 3.84
+     "median": 2.22,
+     "p95": 4.89
     },
     "v1022": {
-     "median": 2.67,
-     "p95": 4.71
+     "median": 3.37,
+     "p95": 5.13
     },
     "think": {
-     "median": 4.67,
-     "p95": 9.01
+     "median": 5.98,
+     "p95": 9.79
     }
    }
   },
@@ -322,16 +322,16 @@
      "p95": 0.01
     },
     "v1022": {
-     "median": 3.59,
-     "p95": 5.45
+     "median": 4.85,
+     "p95": 6.29
     },
     "think": {
-     "median": 4.11,
-     "p95": 5.99
+     "median": 5.42,
+     "p95": 6.95
     }
    }
   },
-  "seconds_total": 8.8
+  "seconds_total": 11.2
  },
  "life": {
   "results": 20000,
@@ -349,6 +349,6 @@
    "remembered": 1,
    "contested": 1
   },
-  "seconds_total": 3.9
+  "seconds_total": 6.0
  }
 }

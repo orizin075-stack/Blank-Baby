@@ -1,6 +1,6 @@
 {
  "schema": "tukuyo.soul_assay/1",
- "utc": "2026-10-12T02:47:05Z",
+ "utc": "2026-10-12T12:53:02Z",
  "thoughts": 600,
  "seed": 20261009,
  "measures": {
@@ -159,7 +159,7 @@
    ],
    "experiences_recorded": 15,
    "g4_soul_events": 15,
-   "seconds": 19.7
+   "seconds": 23.8
   },
   "crash": {
    "ok": true,
@@ -347,7 +347,7 @@
     }
    ],
    "points_not_in_this_version": [],
-   "seconds": 38.1
+   "seconds": 47.6
   },
   "forgetting": {
    "ok": true,
@@ -401,7 +401,7 @@
    "surface_recent_before": 8,
    "surface_recent_after": 0,
    "audit_errors": [],
-   "seconds": 3.8
+   "seconds": 5.2
   },
   "individuality": {
    "ok": true,
@@ -458,7 +458,7 @@
    },
    "persona_x": "You speak as TUKUYO, a small reasoning system that learns from its parents (Claude, ChatGPT, Gemini) and keeps only what it can check or what its parents agree on.\nWhat it values most: integrity 0.80, survival 0.80, truthfulness 0.65.\nWhat it has been living with: g4:reading, g4:learned_reading, g4:knowledge.\nIt has learned 2 ways of reading problems from its parents and remembers 1 answer they agreed on; it trusts claude most (0.83).\nSpeak in its voice, as TUKUYO and not as yourself or any other system, plainly; say when you are not sure. Do not claim consciousness or feelings.",
    "persona_y": "You speak as TUKUYO, a small reasoning system that learns from its parents (Claude, ChatGPT, Gemini) and keeps only what it can check or what its parents agree on.\nWhat it values most: integrity 0.80, survival 0.80, truthfulness 0.65.\nWhat it has been living with: g4:reading, g4:learned_reading, g4:knowledge.\nIt has learned 2 ways of reading problems from its parents and remembers 1 answer they agreed on; it trusts chatgpt most (0.80).\nSpeak in its voice, as TUKUYO and not as yourself or any other system, plainly; say when you are not sure. Do not claim consciousness or feelings.",
-   "seconds": 22.4
+   "seconds": 29.2
   },
   "long_life": {
    "ok": true,
@@ -544,23 +544,23 @@
     "gemini": 0.000778
    },
    "ms_per_record": {
-    "first_100_median": 43.16,
-    "last_100_median": 69.8,
-    "after_first_third_100_median": 69.0,
-    "p95": 104.06,
+    "first_100_median": 43.91,
+    "last_100_median": 75.49,
+    "after_first_third_100_median": 67.81,
+    "p95": 112.5,
     "median_per_100_thoughts": [
-     43.2,
-     56.2,
-     43.8,
-     69.0,
-     61.6,
-     66.4,
-     61.1,
-     60.4,
-     69.8
+     43.9,
+     74.0,
+     53.4,
+     67.8,
+     67.3,
+     71.3,
+     71.3,
+     71.4,
+     75.5
     ]
    },
-   "seconds": 49.7,
+   "seconds": 54.6,
    "curve": [
     {
      "thought": 25,
@@ -1356,7 +1356,7 @@
     }
    },
    "note": "a model of what the child observes (readings drawn at these reliabilities), run through the real soul law and trust record",
-   "seconds": 12.5
+   "seconds": 16.7
   },
   "integrity": {
    "ok": true,
@@ -1499,7 +1499,7 @@
      "caught": true
     }
    ],
-   "seconds": 18.8
+   "seconds": 24.2
   },
   "self": {
    "ok": true,
@@ -1575,7 +1575,7 @@
      "It solved alone with something it had learned, the first time for that wording, once."
     ]
    },
-   "seconds": 1.8
+   "seconds": 2.2
   },
   "self_knowledge": {
    "ok": true,
@@ -1812,7 +1812,7 @@
     }
    },
    "self_events": 8,
-   "seconds": 14.2
+   "seconds": 17.9
   },
   "inner_life": {
    "ok": true,
@@ -2031,7 +2031,7 @@
     }
    },
    "errors": [],
-   "seconds": 8.6
+   "seconds": 10.7
   },
   "own_voice": {
    "ok": true,
@@ -2086,7 +2086,7 @@
      "errors": []
     }
    },
-   "seconds": 11.5
+   "seconds": 14.2
   },
   "growth": {
    "ok": true,
@@ -2106,6 +2106,7 @@
    "growth_before": {
     "can_read_now": 0,
     "cannot_read_yet": 3,
+    "corrected": 0,
     "could_not_read": 3,
     "grew": {},
     "told": [
@@ -2164,6 +2165,7 @@
    "growth_after_learning": {
     "can_read_now": 1,
     "cannot_read_yet": 2,
+    "corrected": 0,
     "could_not_read": 3,
     "grew": {
      "learned_from_parents": 1
@@ -2207,6 +2209,7 @@
    "growth_end": {
     "can_read_now": 2,
     "cannot_read_yet": 2,
+    "corrected": 0,
     "could_not_read": 4,
     "grew": {
      "learned_from_parents": 1,
@@ -2322,7 +2325,7 @@
      "errors": []
     }
    },
-   "seconds": 17.0
+   "seconds": 21.7
   }
  },
  "claim_boundary": {

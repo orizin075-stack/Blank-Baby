@@ -85,12 +85,29 @@ def test_what_it_keeps_of_a_problem(tmp_path,monkeypatch):
     u.grow([[a,'learned','9',['gemini','claude']]]);assert u.load()['entries'][a]['grown']=={'seq':3,'how':'learned','value':'9','teachers':['claude','gemini']}
     u.grow([[a,'own','9',[]]]);assert u.load()['entries'][a]['grown']['how']=='learned'                # noticed once
     u.keep(T2,k,'question','EN:QUESTION_FORM',None);e=u.load()['entries'][a]                         # it cannot read it again: open again
-    assert 'grown' not in e and e['lost']==4 and growth.report(tmp_path)['cannot_read_yet']==1
+    assert 'grown' not in e and e['lost']=={'seq':4,'why':'cannot_read_again','was':'9'} and growth.report(tmp_path)['cannot_read_yet']==1
+    u.grow([[a,'learned','5',['claude','gemini']]]);assert 'corrected_from' not in u.load()['entries'][a]['grown']
+    # two parents read the wording it learned otherwise: the growth is given up, and what it had read is kept
+    u.lose([a]);e=u.load()['entries'][a];r=growth.report(tmp_path)
+    assert 'grown' not in e and e['why']=='contested' and e['lost']=={'seq':6,'why':'contested','was':'5','teachers':['claude','gemini']}
+    assert (r['can_read_now'],r['cannot_read_yet'])==(0,1) and [q['kind'] for q in r['wants_to_learn']]==['contested']
+    # taught again: it reads it again, otherwise than before, and says so
+    u.grow([[a,'learned','9',['chatgpt','claude']]]);r=growth.report(tmp_path)
+    assert u.load()['entries'][a]['grown']['corrected_from']=='5' and r['corrected']==1 and 'two of my parents later read the wording otherwise' in ' '.join(r['told'])
+    said=growth.before(tmp_path,T2,{'answer':'9','value':'9','readings':[{'route':'learned','ok':True,'value':'9'}]})
+    assert said=='Before, what I had learned for this wording read this problem as 5, and two of my parents later read the wording otherwise; now I read it as 9: I learned this wording again from my parents.'
     # a bounded record: the oldest it has since learned to read go first, then the oldest
     monkeypatch.setattr(growth,'MAX',3)
     b=u.keep(SAM,Store.key_of(SAM),'story','EN:NO_SCHEMA',None);c=u.keep(MIA,Store.key_of(MIA),'missing','SOLVE:UNDERDETERMINED',None)
     u.grow([[c,'own','1',[]]]);u.keep(BIKE,Store.key_of(BIKE),'story','EN:NO_SCHEMA',None)
-    assert set(u.load()['entries'])=={a,b,u.entry_id(BIKE)}
+    assert set(u.load()['entries'])=={b,c,u.entry_id(BIKE)}
+
+def test_it_reads_again_every_problem_it_could_not_read(tmp_path):
+    # g4-reflect reads again all it keeps, not only the oldest (an experiment found a child that noticed 2 of 23)
+    u=growth.Unread(tmp_path)
+    for i in range(120):t=T2.replace('28',str(100+i));u.keep(t,Store.key_of(t),'question','EN:QUESTION_FORM',None)
+    u.keep(BIKE,Store.key_of(BIKE),'story','EN:NO_SCHEMA',None)
+    now,still,n=growth.look(tmp_path);assert n==121 and [x['text'] for x in now]==[BIKE] and len(still)==120
 
 def test_a_learned_reading_is_said_with_this_problems_numbers(tmp_path,clean):
     _write(tmp_path/'r.jsonl',[_line(p,T,R) for p in PARENTS]);clean.setenv('TUKUYO_LLM_REPLAY',str(tmp_path/'r.jsonl'));llm._replay_cache.clear()

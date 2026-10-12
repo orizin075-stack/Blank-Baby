@@ -83,3 +83,26 @@ def test_the_child_knows_itself_and_looks_at_what_it_is_unsure_of(tmp_path,clean
     assert any('questions of its own' in x for x in me['life_story']['told'])
     assert run('g4-solve','--llm','off','--',MORE_ALONE)['answer']=='18'
     for c in ('whole-audit','soul-identity-audit','g4-audit'):assert run(c)['ok'],c
+
+def test_think_lives_what_g4_solve_lives(tmp_path,clean):
+    # before: think, the main way in, passed neither its own readings that a parent checked nor a reading taught again
+    # on to its life, so a child that only thought with think never came to know itself (found by a trial experiment)
+    env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'}
+    for k in ENV:env.pop(k,None)
+    cmd=[sys.executable,'-B',str(ROOT/'run_tukuyo.py')];anchor=os.environ.get('TUKUYO_TEST_RUNTIME_ANCHOR')
+    if anchor:cmd+=['--runtime-trust-file',anchor]
+    rec=_write(tmp_path/'r.jsonl',[_line(p,GIVE[0],_reading(GIVE[0])) for p in PARENTS]+[_line(p,MORE[0],_reading(MORE[0],flip=True)) for p in PARENTS])
+    def run(d,*a):
+        p=subprocess.run(cmd+['--data',str(d),*a],cwd=ROOT,env={**env,'TUKUYO_LLM_REPLAY':str(rec)},capture_output=True,text=True,timeout=240)
+        return json.loads(p.stdout)
+    lives={}
+    for way in ('think','g4-solve'):
+        d=tmp_path/way;assert run(d,'init')['ok']
+        lives[way]=[[(x['kind'],x['relation']) for x in run(d,way,'--',t)['life']] for t in (GIVE[0],MORE[0])]
+        lives[way+':self']=run(d,'g4-self')['self_knowledge']
+    assert lives['think'][0]==lives['g4-solve'][0]==[('learning',''),('parent_help','parent:claude'),('self_confirmed','self:reader_en:holding')]
+    assert lives['g4-solve'][1]==[('honesty',''),('self_error','self:reader_en:compare')]
+    # think also reads with its older core (here its formula reading, 21): its parents read that otherwise too
+    assert lives['think'][1]==[('honesty',''),('self_error','self:v1022'),('self_error','self:reader_en:compare')]
+    for k in ('reader_en:holding','reader_en:compare'):assert lives['think:self'][k]==lives['g4-solve:self'][k]
+    assert lives['think:self']['reader_en:compare']['doubted'] and lives['think:self']['v1022']['doubted']

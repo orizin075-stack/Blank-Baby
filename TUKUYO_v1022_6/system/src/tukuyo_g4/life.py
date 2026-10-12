@@ -261,13 +261,16 @@ def _live(data,todo,start,law=LAW):
     for x in todo[start:]:
         process_experience(data,*x,law=law);maybe_crash('g4:after_experience')
 
-def _finish(data,life,resolved=(),grown=()):
+def _finish(data,life,resolved=(),grown=(),lost=()):
     from tukuyo_common.atomic_fs import durable_unlink
     from tukuyo_v977.whole_state import sync
     _save_life(data,life)
     if resolved:
         from .hindsight import Unresolved
         Unresolved(data).drop(list(resolved))
+    if lost:
+        from .growth import lose
+        lose(data,list(lost))
     if grown:
         from .growth import grow
         grow(data,list(grown))
@@ -306,6 +309,7 @@ def record(data,result,text=None):
     if miss:growth.keep(data,text,miss)
     back,resolved,_=looking_back(data,result);ex=ex+back
     gx,grown=growth.noticed(data,result,text);ex=ex+gx
+    lost=growth.lost(data,result)
     todo=[]
     for kind,v,imp,theme,rel in ex:
         if rel.startswith('#first:'):
@@ -317,8 +321,8 @@ def record(data,result,text=None):
     from tukuyo_common.atomic_fs import atomic_write_json
     p=_episode_path(data);p.parent.mkdir(parents=True,exist_ok=True)
     atomic_write_json(p,{'schema':EPISODE,'individual_id':own.individual(data),'soul_seq_before':_soul_seq(data),'experiences':todo,'life_after':life,
-                         'resolved':resolved,'grown':grown,'law':LAW})
-    _live(data,todo,0);_finish(data,life,resolved,grown)
+                         'resolved':resolved,'grown':grown,'lost':lost,'law':LAW})
+    _live(data,todo,0);_finish(data,life,resolved,grown,lost)
     return [{'kind':k,'theme':t,'relation':r} for k,_,_,t,r in todo]
 
 def recover(data):
@@ -354,7 +358,7 @@ def recover(data):
             from tukuyo_v993.relation_bound import sync as relation_sync
             from tukuyo_v995.other_agent_trust import sync as peer_sync
             sync_transitions(data);relation_sync(data);peer_sync(data)
-            _finish(data,m.get('life_after') or {'first_alone':[]},m.get('resolved') or [],m.get('grown') or [])
+            _finish(data,m.get('life_after') or {'first_alone':[]},m.get('resolved') or [],m.get('grown') or [],m.get('lost') or [])
         except Exception as e:  # noqa: BLE001 - e.g. the individual is no longer alive: the episode stays unfinished, said so
             why='EPISODE_UNFINISHED:'+type(e).__name__+':'+str(e)[:120]
     if why:

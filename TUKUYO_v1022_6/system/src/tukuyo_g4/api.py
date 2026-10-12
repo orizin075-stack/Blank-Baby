@@ -229,6 +229,9 @@ def think(data,text,base,llm='auto',learn=True,order=None):
     r=solve(text,llm=llm,data=data,learn=learn,v1022=use if v['ok'] or ja else None,order=order)
     from .voice import explain as _voice
     info={'route':r['route'],'reason':r['reason'],'learned':r.get('learned'),'value':r.get('value'),'voice':_voice(text,r,data),
+          # what the child lives from this thought (life.experiences, life.looking_back, growth.lost): a reading of its own
+          # its parents checked, a reading taught again, a learned reading two parents read otherwise
+          **{k:r[k] for k in ('self_checks','looked_back_replaced','template_contested') if r.get(k)},
           'readings':[{k:x.get(k) for k in ('route','ok','value','reason','proof_kind','llm','parent','template') if x.get(k) is not None} for x in r['readings']]+([ignored] if ignored else [])}
     if r['answer'] is None:
         out={'ok':True,'answer':None,'confidence':0.,'uncertain':True,'recognized':base.get('recognized',True),'proof':None,'gen4':info,
