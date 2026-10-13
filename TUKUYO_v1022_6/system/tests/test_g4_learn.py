@@ -62,7 +62,8 @@ def test_gen4_cli(tmp_path):
     r=cli('g4-solve','--','Nora had 30 shells. She gave 8 shells to her cousin. How many shells does she have left?')
     assert (r['answer'],r['route'])==('22','own'),r
     r=cli('g4-solve','--','りんごが12個あります。妹に5個あげました。残りは何個ですか？')
-    assert (r['answer'],r['route'])==('7','v1022'),r
+    # v1022.8.0: its own Japanese reader reads it too, and the two readings agree
+    assert (r['answer'],r['route'])==('7','v1022+own'),r
     r=cli('g4-ask','--','What is the capital of France?')
     assert r['answer'] is None and r['reason']=='NOT_A_PROBLEM_AND_NO_LLM'
     assert cli('g4-audit')['ok'] and cli('g4-learned')['templates']==[]

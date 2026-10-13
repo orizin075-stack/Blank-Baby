@@ -55,6 +55,12 @@ STATE=r'(?:あります|ありました|あった|います|いました|持っ�
       r'さいていました|咲いています|残っています|のこっています|います|でした|です|かっています|飼っています|あり)'
 
 
+MEASURES={'kg','g','t','km','m','cm','mm','L','mL','dL','時間','分','秒','日','週','か月','年','度'}
+def _whole(u):
+    """is a quantity in this unit counted one by one (people, cards, yen), so a share of it must be whole?"""
+    return u.split('/')[0] not in MEASURES
+
+
 class _B:
     """a reading under way: quantities, facts, numbers left out with a reason"""
     def __init__(s,text):s.text=text;s.q={};s.f=[];s.unused=[]
@@ -284,7 +290,7 @@ def _fraction(t,stm,q):
     if len(a)==1 and len(fm)==1 and not re.search(r'ずつ|より|倍',s) and a[0].c==au and re.search(r'のうち|その|の(?:半分|\d+分の\d+|\d+/\d+)',s) \
             and _asks_the_part(s[fm[0].end():],q):
         f,raw=_frac(fm[0]);sp=s
-        w=b.bind('whole',au,a[0].v,sp,integer=False);b.qty('part',au,False)
+        w=b.bind('whole',au,a[0].v,sp,integer=False);b.qty('part',au,_whole(au))
         if raw:
             fq=b.bind('share','1',f,sp,integer=False);b.rel('part',au,f'{w} * {fq}',sp,integer=False)
         else:
@@ -422,7 +428,7 @@ def _share(t,stm,q):
     m=re.search(rf'(\d+)\s*({CNT})の?[^。]*?を\s*(\d+)\s*人で(?:同じ数ずつ|等しく|同じ数に|同じように)?\s*分け',whole)
     if m and re.search(r'1\s*人(?:分|あたり|当たり)?(?:は|に|が)?\s*何|1\s*人(?:分|あたり)?\s*何',q) and _C[m.group(2)]==au:
         sp=m.group(0);n=b.bind('total',au,Fraction(m.group(1)),sp,integer=False);p=b.bind('people','人',Fraction(m.group(3)),sp,integer=False)
-        b.rel('each',f'{au}/人',f'{n} / {p}',q,integer=False);b.qty('each',f'{au}/人');return b.spec('each','share')
+        b.rel('each',f'{au}/人',f'{n} / {p}',q,integer=_whole(au));return b.spec('each','share')
     # クッキーが18まいあります。3まいのお皿に同じ数ずつのせると、1まいのお皿に何まい
     m=re.search(rf'(\d+)\s*({CNT})の\s*([^\s、。0-9]+?)に\s*(?:同じ数ずつ|等しく|同じ数に)\s*(?:のせ|乗せ|入れ|いれ|分け|わけ|配|くば|置|お)',whole)
     if m and au and re.search(rf'1\s*(?:{CNT})\s*の\s*{re.escape(m.group(3))}に?\s*(?:は)?\s*何',q):
@@ -431,7 +437,7 @@ def _share(t,stm,q):
         if len(tot)==1:
             gu=m.group(3)
             n=b.bind('total',au,tot[0].v,_span_of(whole,tot[0]),integer=False);g=b.bind('groups','皿' if 'さら' in gu or '皿' in gu else gu,Fraction(m.group(1)),m.group(0),integer=False)
-            b.rel('each',f"{au}/{'皿' if 'さら' in gu or '皿' in gu else gu}",f'{n} / {g}',q,integer=False);return b.spec('each','share')
+            b.rel('each',f"{au}/{'皿' if 'さら' in gu or '皿' in gu else gu}",f'{n} / {g}',q,integer=_whole(au));return b.spec('each','share')
     # N C を K C ずつ G に入れ…G は何 G | いくつ  /  I が N C あります。K C ずつ G に入れると、何 G
     m=re.search(rf'(\d+)\s*({CNT})\s*ずつ\s*([^\s、。]*?)(?:に|へ)\s*(?:入れ|いれ|分け|わけ|つめ|詰め|配る|くばる|配り|くばり|配ると|分ける)',whole)
     if m:
@@ -468,12 +474,12 @@ def _share(t,stm,q):
             tot=[x for x in _amts(rest,0) if x.c==c]
             if len(tot)==1 and len(_amts(whole,0))==(3 if m.group(1) else 2):
                 r=b.bind('rate',f'{c}/{per}',Fraction(m.group(2)),m.group(0),integer=False);n=b.bind('total',c,tot[0].v,_span_of(whole,tot[0]),integer=False)
-                b.rel('periods',per,f'{n} / {r}',q,integer=False);return b.spec('periods','share')
+                b.rel('periods',per,f'{n} / {r}',q,integer=True);return b.spec('periods','share')   # 7.5 days to finish is 8, not read
     # N C で P 円です。1 C 何円  /  N本入りのジュースがP円です。1本あたり何円
     m=re.search(rf'(\d+)\s*({CNT})(?:で|入りの[^。]*?が)\s*(\d+)\s*円です',s)
     if m and re.search(rf'1\s*({CNT})(?:あたり|当たり)?\s*(?:は)?\s*何円|1\s*({CNT})\s*(?:あたり|当たり)?\s*いくら',q):
         c=_C[m.group(2)];n=b.bind('count',c,Fraction(m.group(1)),m.group(0),integer=False);p=b.bind('price','円',Fraction(m.group(3)),m.group(0),integer=False)
-        b.rel('each',f'円/{c}',f'{p} / {n}',q,integer=False);return b.spec('each','share')
+        b.rel('each',f'円/{c}',f'{p} / {n}',q,integer=True);return b.spec('each','share')
     return None
 
 

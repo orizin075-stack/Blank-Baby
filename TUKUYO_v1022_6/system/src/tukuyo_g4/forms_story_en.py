@@ -41,6 +41,13 @@ PRON=r'(?:he|she|they|it|we|i|you)'
 SUBJ=rf"(?:(?:a|an|the) [a-z]+(?: [a-z]+)?|{NAMEW}|{PRON})"
 
 
+MEASURES={'liter','milliliter','kilogram','gram','meter','centimeter','kilometer','mile','foot','feet','inch','yard','hour','minute','second',
+          'dollar','cent','degree','pound','ounce','gallon','cup','day','week','month','year'}
+def whole(u):
+    """things counted one by one (marbles, people): a share of them must be whole ('a third of 40 marbles' is not read)"""
+    return u.split('/')[0] not in MEASURES
+
+
 def sing(w):
     w=w.strip()
     for a,b in (('ies','y'),('ches','ch'),('shes','sh'),('xes','x'),('sses','ss'),('oes','o')):
@@ -213,7 +220,7 @@ def _share_of(text,nums,sents,sk):
     xs=[v for k,v in q.groupdict().items() if k in ('X3','X4') and v]
     if not xs or sing(xs[0])!=X:return None
     s=_Spec(text,nums);w=s.bind('whole',_k(a,'w'),X);sh=s.bind('share',_k(b,'f'),'1')
-    s.qty('part',X);s.rel(f'part = {w} * {sh}',*sents[2]);return _done(s,'part',X,'share_of')
+    s.qty('part',X,whole(X));s.rel(f'part = {w} * {sh}',*sents[2]);return _done(s,'part',X,'share_of')
 
 
 # ---- what was gained ---------------------------------------------------------------------------

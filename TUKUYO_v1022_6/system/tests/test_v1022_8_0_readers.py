@@ -41,6 +41,8 @@ JA_HOLD = [
     'クラスに男の子が14人います。クラスは全部で何人ですか。',                             # one part of the whole
     '赤い花が8本あります。花は全部で何本ですか。',
     'バスで行けば6日、車ならその半分の日数です。行きはバス、帰りは車だと何日かかりますか。',  # half of one leg, not the whole
+    '24枚のカードを5人で同じ数ずつ分けると1人何枚？',                                     # cards are whole (it said 4.8)
+    '1日に20ページずつ読むと、150ページの本を読み終えるのに何日かかりますか。',              # 7.5 days to finish is 8
 ]
 
 
@@ -80,6 +82,7 @@ EN_HOLD = [
     'A train has 60 seats. Some seats are taken. How many seats are empty?',
     'Raj walked 4 kilometers every day for 6 weeks. How many kilometers did he walk?',
     'Sid had 8 stickers. He got some more and now has 15 stones. How many stickers did he get?',
+    'A jar has 40 marbles. A third of them are blue. How many blue marbles are there?',          # marbles are whole
 ]
 
 
