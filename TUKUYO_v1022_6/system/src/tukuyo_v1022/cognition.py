@@ -594,7 +594,7 @@ def learn(data,bundle,teacher=None):
     for r in records:atomic_write_bytes(Path(data)/NS/'dialogues'/f"{r['seq']:06d}.json",whole.canon(r)+b'\n')
     store.save(data,NS,COMPONENT,s)
     from tukuyo_v978.heart_loop import process_experience
-    process_experience(data,'learning',.15,.2,'teacher-dialogue',teacher);whole.sync(data)
+    process_experience(data,'learning',.15,.2,'teacher-dialogue',teacher,origin='teacher');whole.sync(data)
     responses=[{'id':e.get('id'),'question':e['question'],'result':solve(data,e['question'],e.get('formal_task'))} for e in examples]
     return {'ok':True,'version':'v1022','teacher':teacher,'rounds':s['rounds'],'new_rounds':len(records),
             'active_event_rules':sum(not r['conflict'] and len(r['support'])>=2 for r in s['event_rules'].values()),'aliases':len(s['aliases']),'facts':len(s['facts']),'responses':responses}

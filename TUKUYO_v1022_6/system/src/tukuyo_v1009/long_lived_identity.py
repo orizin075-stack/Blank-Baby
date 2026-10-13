@@ -52,10 +52,10 @@ def run_assay(data,cycles=1):
     start=_transition_snapshot(data)
 
     # Build a mixed autobiographical history: commitment, learning, rupture, and support.
-    process_experience(data,'vow',1.0,.90,'preserve_truth','')
-    process_experience(data,'discovery',1.0,.80,'unknown_domain','mentor-A')
-    process_experience(data,'betrayal',-1.0,.85,'trust_boundary','peer-stressor')
-    process_experience(data,'support',.75,.65,'repair_attempt','peer-support')
+    process_experience(data,'vow',1.0,.90,'preserve_truth','',origin='simulated')
+    process_experience(data,'discovery',1.0,.80,'unknown_domain','mentor-A',origin='simulated')
+    process_experience(data,'betrayal',-1.0,.85,'trust_boundary','peer-stressor',origin='simulated')
+    process_experience(data,'support',.75,.65,'repair_attempt','peer-support',origin='simulated')
     consolidate(data)
     purpose_integrate(data)
     peer_sync(data)
@@ -63,7 +63,7 @@ def run_assay(data,cycles=1):
     # Create a historical fork, then continue the parent. The origin must remain frozen
     # while lawful later soul transitions are still accepted as the same identity.
     f=fork_assay(data)
-    process_experience(data,'discovery',.9,.70,'post_fork_learning','mentor-A')
+    process_experience(data,'discovery',.9,.70,'post_fork_learning','mentor-A',origin='simulated')
 
     # Functional injury and recovery without death.
     organism_init(data)
@@ -77,7 +77,7 @@ def run_assay(data,cycles=1):
 
     # Remove surface episodic meaning after deep consolidation; continuity must remain.
     forgotten=forget_surface_memory(data)
-    process_experience(data,'learning',.8,.55,'after_memory_loss','')
+    process_experience(data,'learning',.8,.55,'after_memory_loss','',origin='simulated')
     peer_sync(data)
     whole_sync(data)
 

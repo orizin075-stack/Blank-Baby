@@ -259,7 +259,8 @@ def _live(data,todo,start,law=LAW):
     from tukuyo_v978.heart_loop import process_experience
     from tukuyo_common.atomic_fs import maybe_crash
     for x in todo[start:]:
-        process_experience(data,*x,law=law);maybe_crash('g4:after_experience')
+        # what its checker and agreement established (v1022.7.9: origin 'checked')
+        process_experience(data,*x,law=law,origin='checked');maybe_crash('g4:after_experience')
 
 def _finish(data,life,resolved=(),grown=(),lost=()):
     from tukuyo_common.atomic_fs import durable_unlink
@@ -507,5 +508,12 @@ def self_report(data,parents=('claude','chatgpt','gemini')):
          'self_knowledge':self_knowledge(data),
          'recent_g4_experiences':[{k:m.get(k) for k in ('kind','theme','relation','meaning')} for m in mine[-8:]],
          'claim_boundary':{'functional_soul_and_heart':True,'consciousness_established':False}}
+    # v1022.7.9: where its experiences came from - only the observed ones were confirmed from outside; what it was
+    # told, what it says of itself, what a teacher said and what happened in a simulation stay what they are
+    try:
+        from tukuyo_v1022.provenance import summary as provenance_summary,WORDS
+        pv=provenance_summary(data);out['where_its_experiences_came_from']={**pv,'words':{k:WORDS[k] for k in pv['origins']}}
+    except Exception as e:  # noqa: BLE001 - a report only reads; the audits report a damaged record
+        refused['provenance']=type(e).__name__
     if refused:out['refused']=refused
     return out

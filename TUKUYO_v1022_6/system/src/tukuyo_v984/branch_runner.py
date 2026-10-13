@@ -19,11 +19,11 @@ def run(data:Path,mode:str):
     # organism + heart histories. No parent data is mutated by this worker.
     if mode=='explore':
         for i in range(12):
-            process_experience(data,'discovery',1.0,1.0,f'unknown_domain_{i%3}','')
+            process_experience(data,'discovery',1.0,1.0,f'unknown_domain_{i%3}','',origin='simulated')
         ticks=3
     else:
         for i in range(6):
-            process_experience(data,'betrayal',-1.0,1.0,f'trust_boundary_{i%2}','peer')
+            process_experience(data,'betrayal',-1.0,1.0,f'trust_boundary_{i%2}','peer',origin='simulated')
         ticks=100
     with mounted() as api:
         api['bridge'].tick(api,data,ticks)

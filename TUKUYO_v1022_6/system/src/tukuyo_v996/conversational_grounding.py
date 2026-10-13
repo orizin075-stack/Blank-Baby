@@ -82,7 +82,7 @@ def ingest(data,text,relation=''):
     from tukuyo_v1014_4.recovery import begin_conversation,commit_conversation
     begin_conversation(data,text)
     ident=_live_identity(data);a=appraise(text,relation)
-    hr=process_experience(data,a['heart_kind'],a['derived_valence'],a['derived_importance'],a['theme'],a['relation'])
+    hr=process_experience(data,a['heart_kind'],a['derived_valence'],a['derived_importance'],a['theme'],a['relation'],origin='told')
     # Relation/peer caches are indexed over the canonical soul journal head, not only
     # relation-bearing rows. Advance them after every experience so an unrelated
     # conversation cannot leave their source count/head stale.

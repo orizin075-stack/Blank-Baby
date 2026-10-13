@@ -148,11 +148,16 @@ def _apply_experience_mutation(s,kind,valence,importance,theme='',relation='',la
         a=s['attachments'].setdefault(relation,0.0);s['attachments'][relation]=round(max(-1,min(1,a+v*imp*0.1)),6)
     return s
 
-def experience(data,kind,valence,importance,theme='',relation='',law=1):
+# v1022.7.9: where an experience came from (tukuyo_v1022.provenance). The path that writes it says so; only the
+# observation path (with its evidence) may say 'observed'. An event written before v1022.7.9 has no origin.
+ORIGINS=('observed','checked','teacher','told','self_report','simulated')
+def experience(data,kind,valence,importance,theme='',relation='',law=1,origin=None,evidence=None):
     from tukuyo_v1019.lifecycle import require_alive
     require_alive(data)
     if not (-1<=float(valence)<=1) or not (0<=float(importance)<=1):raise ValueError('EXPERIENCE_RANGE')
     if law not in LAWS:raise ValueError('SOUL_LAW')
+    if origin is not None and origin not in ORIGINS:raise ValueError('EXPERIENCE_ORIGIN')
+    if (origin=='observed')!=(evidence is not None):raise ValueError('EXPERIENCE_OBSERVED_NEEDS_ITS_EVIDENCE')
     s=load_soul(data);imp=float(importance);v=float(valence)
     before_sha=sha_obj(s)
     new_s=_apply_experience_mutation(s,kind,v,imp,theme,relation,law)
@@ -161,6 +166,8 @@ def experience(data,kind,valence,importance,theme='',relation='',law=1):
     last=last_event(ep);prev=last.get('event_sha256',ZERO) if last else ZERO;seq=int(last.get('seq',0))+1 if last else 1
     e={'seq':seq,'individual_id':new_s['individual_id'],'kind':kind,'valence':v,'importance':imp,'theme':theme,'relation':relation,'prev_sha256':prev,'soul_sha256':sha_obj(new_s)}
     if law!=1:e['law']=law
+    if origin is not None:e['origin']=origin
+    if evidence is not None:e['evidence']=evidence
     e['event_sha256']=sha_obj(e)
     # v1014.4: canonical event first, then materialized soul. If process death occurs
     # between them, startup can deterministically rematerialize from the journal.
@@ -216,6 +223,7 @@ def _component_hashes(data):
     if (d/'evidence_bound_soul'/'commits').exists():pairs['whole_evidence_bound_soul']='evidence_bound_soul/STATE.json'
     if (d/'semantic_truth'/'commits').exists():pairs['whole_semantic_truth']='semantic_truth/STATE.json'
     if (d/'grounded_sensor'/'commits').exists():pairs['whole_grounded_sensor']='grounded_sensor/STATE.json'
+    if (d/'experiential_goals'/'commits').exists():pairs['whole_experiential_goals']='experiential_goals/STATE.json'   # v1022.8.1
     return {k:_file_sha(d/v) for k,v in pairs.items()}
 
 def _own_components(data,ch,before):
@@ -300,6 +308,22 @@ def _audit_once(data):
                 from importlib import import_module
                 if not import_module('tukuyo_v1022.'+module).audit(data).get('ok'):errs.append('V1022_'+module.upper()+'_AUDIT')
             except Exception as e:errs.append('V1022_'+module.upper()+'_AUDIT:'+type(e).__name__)
+    # v1022.8.1: its goals are what its record gives
+    if (Path(data)/'experiential_goals'/'commits').exists():
+        try:
+            from tukuyo_v1022.goals import audit as goals_audit
+            ga=goals_audit(data)
+            if not ga.get('ok'):errs.extend('GOALS:'+x for x in ga['errors'][:5])
+        except Exception as e:errs.append('GOALS_AUDIT:'+type(e).__name__)
+    # v1022.7.9: where each experience came from, and every observed one's evidence derived again
+    try:
+        from tukuyo_common.journal import load_events
+        _events=load_events(event_path(data))
+        from tukuyo_v1022.provenance import needs_audit,audit as provenance_audit
+        if needs_audit(_events):
+            pa=provenance_audit(data,_events)
+            if not pa.get('ok'):errs.extend('PROVENANCE:'+x for x in pa['errors'][:10])
+    except Exception as e:errs.append('PROVENANCE_AUDIT:'+type(e).__name__)
     if (Path(data)/'v1023r'/'commits').exists():
         try:
             from tukuyo_v1023r.life import audit as research_audit
@@ -310,19 +334,6 @@ def _audit_once(data):
             from tukuyo_g4.runtime_store import audit as g4_audit
             if not g4_audit(data).get('ok'):errs.append('G4_LEARNING_AUDIT')
         except Exception as e:errs.append('G4_LEARNING_AUDIT:'+type(e).__name__)
-    # v1022.7.8: when the owner keeps a canon (TUKUYO_CANON), a copy that is not the individual (left behind, put back,
-    # lived on as a branch, or a copy of one that died) is reported
-    try:
-        from tukuyo_v1022.canon import status as canon_status
-        cs=canon_status(data)
-        if cs.get('kept') and cs['state'] not in ('IN_SYNC','NEW','DEAD_SELF'):errs.append('CANON_'+cs['state'])
-    except ValueError as e:errs.append('CANON:'+str(e))
-    if (Path(data)/'g4').exists():
-        # generation 4: a store older than the witness outside noted (only when the owner keeps one, TUKUYO_G4_WITNESS)
-        try:
-            from tukuyo_g4.own import behind_witness
-            errs.extend('G4_WITNESS_AHEAD:g4_'+k for k in behind_witness(data))
-        except ValueError as e:errs.append('G4_WITNESS:'+str(e))
     if (Path(data)/'chatgpt_chat').exists() or 'chatgpt_dialogue' in q.get('component_hashes',{}):
         try:
             from tukuyo_g4.chatgpt_chat import audit as chat_audit

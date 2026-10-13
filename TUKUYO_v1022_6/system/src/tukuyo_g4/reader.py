@@ -12,4 +12,10 @@ def read(text):
         return reader_ja.read(text)
     from . import forms_en
     r=forms_en.read(text)
-    return r if r and r.get('spec') else reader_en.read(text)
+    if r and r.get('spec'):return r
+    r=reader_en.read(text)
+    if r and r.get('spec'):return r
+    # v1022.8.0: everyday story forms the story reader leaves unread
+    from . import forms_story_en
+    f=forms_story_en.read(text)
+    return f if f and f.get('spec') else r

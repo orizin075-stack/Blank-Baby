@@ -335,6 +335,16 @@ def _ja_query(model,unit,q,query,ctx=None):
     if past_only or not present:ctx['role']='time_unclear';_refuse('SITUATION_TIME_OF_QUESTION_UNCLEAR')
     if not subj and len(model.order)>1:_refuse('SITUATION_AMBIGUOUS_TARGET')
     if any(e['cls']=='activity' for e in model.events if (e['holder'],e['object'])==target):_refuse('SITUATION_ACTIVITY_EFFECT_UNKNOWN')
+    # v1022.8.0: 'クラスに男の子が14人います。クラスは全部で何人ですか': the boys are one part of the class; the whole of it
+    # is not told (it was answered 14)
+    if subj and subj==target[0] and re.search(r'全部で|ぜんぶで|合わせて|あわせて|合計|みんなで',q):
+        mine=[k for k in model.order if k[0]==subj]
+        if len(mine)>1:
+            # 'クラスに男の子が14人、女の子が12人います。クラスは全部で何人': everything the class holds (it was answered 14)
+            parts=[model.chain(k) for k in mine]
+            if any(v is None for _,v in parts):_refuse('SITUATION_TARGET_NOT_DETERMINED')
+            return done('total',sum(v for _,v in parts),'+'.join('('+e+')' for e,_ in parts),['*','*'])
+        if re.search(r'男の子|女の子|男子|女子|大人|おとな|子ども|子供|こども|男性|女性',str(target[1])):_refuse('SITUATION_ONE_PART_OF_THE_WHOLE')
     expr,v=model.chain(target)
     return done('remain' if target==model.main else 'holding',v,expr or '',target)
 

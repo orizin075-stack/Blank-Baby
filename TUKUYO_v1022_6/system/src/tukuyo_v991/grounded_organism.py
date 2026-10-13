@@ -55,7 +55,7 @@ def step(data,action):
     if not env_state_path(data).is_file():raise ValueError('V991_ENV_REQUIRED')
     if not state_path(data).is_file():init(data)
     ident=_live_identity(data);s=_read(state_path(data));before=s['physiology'];er=env_act(data,action);after=apply_physiology(before,action,er['outcome']);ev=derive_evaluation(before,after,er['outcome'])
-    hr=process_experience(data,ev['heart_kind'],ev['derived_valence'],ev['derived_importance'],ev['meaning'].lower(),'')
+    hr=process_experience(data,ev['heart_kind'],ev['derived_valence'],ev['derived_importance'],ev['meaning'].lower(),'',origin='simulated')
     box=_read(events_path(data));prev=box['events'][-1]['event_sha256'] if box['events'] else ZERO
     e={'seq':len(box['events'])+1,'individual_id':ident['individual_id'],'action':action,'environment_event_sha256':er['event']['event_sha256'],
        'physiology_before':before,'physiology_after':after,'environment_outcome':er['outcome'],'evaluation':ev,'heart_event_sha256':hr['event']['event_sha256'],'prev_sha256':prev};e['event_sha256']=sha_obj(e);box['events'].append(e)

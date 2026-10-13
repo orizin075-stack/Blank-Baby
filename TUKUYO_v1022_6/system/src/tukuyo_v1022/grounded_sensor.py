@@ -401,6 +401,7 @@ def _public(state):
             'decision_history': copy.deepcopy(state['decisions']),
             'observation_statuses': {row['observation_sha256']: row['status'] for row in state['observations']},
             'outcome_statuses': {row['observation_sha256']: row['status'] for row in state['outcomes']},
+            'outcome_hashes': {row['observation_sha256']: row['outcome_sha256'] for row in state['outcomes']},
             'claim_boundary': copy.deepcopy(state['claim_boundary'])}
 
 
@@ -618,6 +619,7 @@ def apply_outcome(data, bundle):
         validate(state); store.save(data, NS, COMPONENT, state)
     return {'ok': True, 'version': 'v1022.7.3', 'status': row['status'], 'success': success,
             'resource_credit_requested': credit, 'metabolism_result': metabolism_result,
+            'outcome_sha256': row['outcome_sha256'],    # v1022.7.9: what experience-observed cites
             'external_truth_verified': False}
 
 

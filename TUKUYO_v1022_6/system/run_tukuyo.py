@@ -153,10 +153,19 @@ def parser():
     sub.add_parser('whole-sync')
     sub.add_parser('whole-status')
     sub.add_parser('whole-audit')
-    se=sub.add_parser('soul-experience');se.add_argument('kind');se.add_argument('valence',type=float);se.add_argument('importance',type=float);se.add_argument('--theme',default='');se.add_argument('--relation',default='')
-    he=sub.add_parser('heart-experience');he.add_argument('kind');he.add_argument('valence',type=float);he.add_argument('importance',type=float);he.add_argument('--theme',default='');he.add_argument('--relation',default='')
+    _origin_help='v1022.7.9: where it came from - told (default: someone says it happened), self_report, teacher or simulated. observed is only for experience-observed, checked only for its own checker'
+    se=sub.add_parser('soul-experience');se.add_argument('kind');se.add_argument('valence',type=float);se.add_argument('importance',type=float);se.add_argument('--theme',default='');se.add_argument('--relation',default='');se.add_argument('--origin',default='told',help=_origin_help)
+    he=sub.add_parser('heart-experience');he.add_argument('kind');he.add_argument('valence',type=float);he.add_argument('importance',type=float);he.add_argument('--theme',default='');he.add_argument('--relation',default='');he.add_argument('--origin',default='told',help=_origin_help)
+    c=sub.add_parser('experience-observed',help='v1022.7.9: take in one outcome of its own grounded sensors as an experience it observed (the evidence is checked again; the experience is derived from it)')
+    c.add_argument('outcome_sha256');c.add_argument('--importance',type=float,default=.5)
+    sub.add_parser('experience-provenance-status',help='v1022.7.9: where its experiences came from, and how many were confirmed from outside')
+    sub.add_parser('goal-form',help='v1022.8.1: form its goals from what it lived (its soul journal); what changed is kept with the experiences that did it')
+    c=sub.add_parser('goal-choose',help='v1022.8.1: its heart chooses among options (JSON list; an option may name a relation and themes), with its goals');c.add_argument('options',type=Path);c.add_argument('--context',default='');c.add_argument('--without-goals',action='store_true',help='the heart alone, for comparison')
+    c=sub.add_parser('goal-outcome',help='v1022.8.1: what came of the chosen option (valence -1..1), taken in as an experience; its goals are formed again');c.add_argument('valence',type=float);c.add_argument('--importance',type=float,default=.6);c.add_argument('--origin',default='told')
+    sub.add_parser('goal-status',help='v1022.8.1: its goals and their history');sub.add_parser('goal-audit',help='v1022.8.1: its goals formed again from its record and compared with the ledger')
+    sub.add_parser('experience-provenance-audit',help='v1022.7.9: every experience\'s origin, and every observed one\'s evidence derived again')
     hc=sub.add_parser('heart-choose');hc.add_argument('options',type=Path);hc.add_argument('--context',default='')
-    hf=sub.add_parser('heart-feedback');hf.add_argument('action_id');hf.add_argument('outcome_valence',type=float);hf.add_argument('importance',type=float);hf.add_argument('--theme',default='')
+    hf=sub.add_parser('heart-feedback');hf.add_argument('action_id');hf.add_argument('outcome_valence',type=float);hf.add_argument('importance',type=float);hf.add_argument('--theme',default='');hf.add_argument('--origin',default='told',help=_origin_help)
     sub.add_parser('heart-status');sub.add_parser('heart-audit')
     sub.add_parser('soul-consolidate');sub.add_parser('soul-deep-audit');sub.add_parser('soul-forget-surface')
     sub.add_parser('soul-integrate');sd2=sub.add_parser('soul-deliberate');sd2.add_argument('options',type=Path);sd2.add_argument('--context',default='bounded_decision')
@@ -321,7 +330,9 @@ def parser():
     c=sub.add_parser('dialogue-learn');c.add_argument('bundle',type=Path);c.add_argument('--teacher')
     sub.add_parser('learning-status');sub.add_parser('learning-audit')
     c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true');c.add_argument('--research-world',action='store_true',help='claude-patch5: each family lives next to a hidden-rule device; income only from understanding it')
+    c.add_argument('--max-ticks',type=int,default=512,help='v1022.7.9: a longer life for the ecology (up to 4096 ticks)');c.add_argument('--max-runtimes',type=int,default=64,help='v1022.7.9: more runtimes over its life (up to 256)')
     c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
+    c=sub.add_parser('metabolism-environment',help='v1022.7.9: change the environment from the next tick on (the reservoir regeneration)');c.add_argument('--regeneration',type=int,required=True)
     sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
     c=sub.add_parser('g4-solve',help='generation 4: read a problem into the formal problem language, solve it exactly, commit only verified readings that agree');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto');c.add_argument('--no-learn',action='store_true')
     c.add_argument('--no-soul',action='store_true')
@@ -611,9 +622,18 @@ def _main(argv=None):
                 from tukuyo_v977.whole_state import sync as whole_sync,status as whole_status,audit as whole_audit,experience as soul_experience
                 if args.cmd=='whole-sync':res={'ok':True,'unified_state':whole_sync(data)}
                 elif args.cmd=='whole-status':res=whole_status(data,v955_full_status(api,data,args.semantic_migration_trust_file))
-                elif args.cmd=='whole-audit':res=whole_audit(data)
+                elif args.cmd=='whole-audit':
+                    res=whole_audit(data)
+                    # outside the data directory (only when the owner keeps them): the canon (v1022.7.8) and the
+                    # generation-4 witness. Not in the whole state's own audit, which restores, transactions and the
+                    # ecology also run on copies of the individual
+                    from tukuyo_v1022.canon import outside_errors
+                    extra=outside_errors(data)
+                    if extra:res={**res,'ok':False,'errors':list(res.get('errors') or [])+extra}
                 else:
-                    res=soul_experience(data,args.kind,args.valence,args.importance,args.theme,args.relation)
+                    from tukuyo_v1022.provenance import CLAIMABLE
+                    if args.origin not in CLAIMABLE:raise ValueError('EXPERIENCE_ORIGIN_NOT_YOURS_TO_SAY:'+str(args.origin)[:32])
+                    res=soul_experience(data,args.kind,args.valence,args.importance,args.theme,args.relation,origin=args.origin)
                     from tukuyo_v978 import heart_loop
                     if heart_loop.state_path(data).is_file():
                         res['heart_reference_update']=heart_loop.sync_soul_reference(data,res['event'])
@@ -624,13 +644,16 @@ def _main(argv=None):
                 _require_live(data)
                 from tukuyo_v978.heart_loop import process_experience as heart_experience,choose as heart_choose,feedback as heart_feedback,status as heart_status,audit as heart_audit
                 from tukuyo_v977.whole_state import sync as whole_sync
+                if args.cmd in ('heart-experience','heart-feedback'):
+                    from tukuyo_v1022.provenance import CLAIMABLE
+                    if args.origin not in CLAIMABLE:raise ValueError('EXPERIENCE_ORIGIN_NOT_YOURS_TO_SAY:'+str(args.origin)[:32])
                 if args.cmd=='heart-experience':
-                    res=heart_experience(data,args.kind,args.valence,args.importance,args.theme,args.relation)
+                    res=heart_experience(data,args.kind,args.valence,args.importance,args.theme,args.relation,origin=args.origin)
                     from tukuyo_v993.relation_bound import sync as relation_sync
                     from tukuyo_v995.other_agent_trust import sync as peer_sync
                     relation_sync(data);peer_sync(data);whole_sync(data)
                 elif args.cmd=='heart-choose':res=heart_choose(data,json.loads(args.options.read_text(encoding='utf-8')),args.context);whole_sync(data)
-                elif args.cmd=='heart-feedback':res=heart_feedback(data,args.action_id,args.outcome_valence,args.importance,args.theme);whole_sync(data)
+                elif args.cmd=='heart-feedback':res=heart_feedback(data,args.action_id,args.outcome_valence,args.importance,args.theme,origin=args.origin);whole_sync(data)
                 elif args.cmd=='heart-status':res=heart_status(data)
                 else:res=heart_audit(data)
             elif args.cmd in ('soul-consolidate','soul-deep-audit','soul-forget-surface','soul-continuity-assay'):
@@ -892,13 +915,28 @@ def _main(argv=None):
                             if (data/'g4').exists():whole_sync(data)   # what it learned is part of the whole state
                 elif args.cmd=='dialogue-learn':res=local.learn(data,json.loads(args.bundle.read_text()),args.teacher)
                 else:res=local.audit(data)
-            elif args.cmd in ('metabolism-init','metabolism-step','metabolism-status','metabolism-audit'):
+            elif args.cmd in ('metabolism-init','metabolism-step','metabolism-status','metabolism-audit','metabolism-environment'):
                 _require_live(data)
                 from tukuyo_v1022 import metabolism
-                if args.cmd=='metabolism-init':res=metabolism.init(data,args.runtime_trust_file,args.families,args.seed,args.reservoir,args.regeneration,args.max_age,not args.no_learning,not args.no_actions,args.research_world)
+                if args.cmd=='metabolism-init':res=metabolism.init(data,args.runtime_trust_file,args.families,args.seed,args.reservoir,args.regeneration,args.max_age,not args.no_learning,not args.no_actions,args.research_world,args.max_ticks,args.max_runtimes)
                 elif args.cmd=='metabolism-step':res=metabolism.step(data,args.ticks)
+                elif args.cmd=='metabolism-environment':res=metabolism.environment(data,args.regeneration)
                 elif args.cmd=='metabolism-status':res=metabolism.status(data)
                 else:res=metabolism.audit(data)
+            elif args.cmd in ('goal-form','goal-choose','goal-outcome','goal-status','goal-audit'):
+                _require_live(data)
+                from tukuyo_v1022 import goals as v1022_goals
+                if args.cmd=='goal-form':res=v1022_goals.form_now(data)
+                elif args.cmd=='goal-choose':res=v1022_goals.choose(data,json.loads(args.options.read_text(encoding='utf-8')),args.context,not args.without_goals)
+                elif args.cmd=='goal-outcome':res=v1022_goals.outcome(data,args.valence,args.importance,args.origin)
+                elif args.cmd=='goal-status':res=v1022_goals.status(data)
+                else:res=v1022_goals.audit(data)
+            elif args.cmd in ('experience-observed','experience-provenance-status','experience-provenance-audit'):
+                _require_live(data)
+                from tukuyo_v1022 import provenance
+                if args.cmd=='experience-observed':res=provenance.observe_experience(data,args.outcome_sha256,args.importance)
+                elif args.cmd=='experience-provenance-status':res={'ok':True,'version':provenance.VERSION,**provenance.summary(data),'words':provenance.WORDS}
+                else:res=provenance.audit(data)
             elif args.cmd in ('identity-canon-status','identity-canon-audit','identity-canon-adopt'):
                 _require_live(data)
                 from tukuyo_v1022 import canon as v1022_canon

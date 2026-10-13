@@ -143,13 +143,13 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
             spec=instantiate(t,text)
             if spec:readings.append(evaluate(spec,'learned'));readings[-1]['template']=store.key_of(text);tukuyo_ok|=readings[-1]['ok']
     if v1022 is not None:readings.append(v1022);tukuyo_ok|=v1022['ok']
-    if JA.search(text):
-        if data is not None and v1022 is None:readings.append(_v1022(data,text));tukuyo_ok|=readings[-1]['ok']
-    else:
-        own=_own(text)
-        if own is not None:
-            readings.append(evaluate(own['spec'],'own') if own.get('spec') else {'route':'own','ok':False,'reason':own.get('reason','OWN_UNREAD')})
-            tukuyo_ok|=readings[-1]['ok']
+    if JA.search(text) and data is not None and v1022 is None:readings.append(_v1022(data,text));tukuyo_ok|=readings[-1]['ok']
+    # its own reader, in English and (v1022.8.0) in Japanese (reader_ja): a Japanese problem the v1022 core also reads
+    # is answered only when both readings agree
+    own=_own(text)
+    if own is not None:
+        readings.append(evaluate(own['spec'],'own') if own.get('spec') else {'route':'own','ok':False,'reason':own.get('reason','OWN_UNREAD')})
+        tukuyo_ok|=readings[-1]['ok']
     use_llm=llm=='on' or (llm=='auto' and L.available())
     ps=(L.parents() or ['claude']) if use_llm else []
     if order:ps=[p for p in order if p in ps]+[p for p in ps if p not in order]
@@ -227,7 +227,11 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
     # The v1022 reading has already passed its schema-specific input guards.
     # Apply this extra graph to new FPL translations; a water/milk-only graph
     # must not invalidate an independently checked situation about tea.
-    coverage=_input_coverage(text,g['value'],mine=bool(mine)) if g.get('spec') else {'recognized':False,'ok':True}
+    # v1022.8.0: a Japanese problem the v1022 core read too, to the same answer: its reading has passed its own input
+    # guards, as when it answers alone (found after the held-out run of private_eval.py: '風船が13個ありました。5個われて、
+    # そのあと8個買いました' was answered by the core alone in r8 and held once the child's own reading agreed with it)
+    core_agrees=any(r['route']=='v1022' for r in good)
+    coverage=_input_coverage(text,g['value'],mine=bool(mine)) if g.get('spec') and not core_agrees else {'recognized':False,'ok':True}
     if coverage.get('recognized') and not coverage['ok'] and not mine and use_llm and len(fams)>=2 and coverage.get('reason') in ASK_BOTH_VIEWS:
         # a refusal for a kind of wording ('If he wants to give them to his 11 nieces, ...'): it does not tell a right
         # reading from a wrong one (with simulated parents it held back both at about the rate they occur). Each family

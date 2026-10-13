@@ -75,7 +75,7 @@ def _derive_goal(soul,h,data=None):
 PENDING_SCHEMA='tukuyo.v978.pending_feeling/1'
 def pending_path(data): return root(data)/'private'/'PENDING_FEELING.json'
 
-def process_experience(data,kind,valence,importance,theme='',relation='',law=1):
+def process_experience(data,kind,valence,importance,theme='',relation='',law=1,origin=None,evidence=None):
     from tukuyo_v1019.lifecycle import require_alive
     require_alive(data)
     valence=float(valence);importance=float(importance)
@@ -88,7 +88,7 @@ def process_experience(data,kind,valence,importance,theme='',relation='',law=1):
     last=last_event(event_path(data))
     atomic_write_json(pending_path(data),{'schema':PENDING_SCHEMA,'individual_id':_live_identity(data)['individual_id'],
         'soul_seq_before':int(last.get('seq',0)) if last else 0,'experience':[kind,valence,importance,theme,relation,law]})
-    sr=soul_experience(data,kind,valence,importance,theme,relation,law)
+    sr=soul_experience(data,kind,valence,importance,theme,relation,law,origin,evidence)
     maybe_crash('heart:after_soul')
     out=feel(data,kind,valence,importance,theme,relation,sr)
     durable_unlink(pending_path(data))
@@ -225,12 +225,12 @@ def choose(data,options,context='',adjustments=None,adjustment_label='external_b
     ev=_append(data,{'individual_id':h['individual_id'],'type':'ACTION_SELECTION','context':context,'chosen':chosen['id'],'scores':ranked,'heart_sha256':sha_obj(h)})
     return {'ok':True,'version':'v978','chosen':chosen['id'],'scores':ranked,'active_goal':h.get('active_goal'),'event':ev}
 
-def feedback(data,action_id,outcome_valence,importance,theme=''):
+def feedback(data,action_id,outcome_valence,importance,theme='',origin=None):
     from tukuyo_v1019.lifecycle import require_alive
     require_alive(data)
     h=load(data)
     if not h.get('last_action') or h['last_action'].get('chosen')!=action_id: raise ValueError('HEART_FEEDBACK_ACTION_BINDING')
-    res=process_experience(data,'action_feedback',float(outcome_valence),float(importance),theme or action_id,'')
+    res=process_experience(data,'action_feedback',float(outcome_valence),float(importance),theme or action_id,'',origin=origin)
     h=load(data);h['last_feedback']={'action_id':action_id,'outcome_valence':float(outcome_valence),'importance':float(importance),'theme':theme};_write(state_path(data),h)
     return {'ok':True,'feedback':h['last_feedback'],'loop_result':res}
 

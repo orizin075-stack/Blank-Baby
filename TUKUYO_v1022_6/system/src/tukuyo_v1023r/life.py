@@ -134,7 +134,8 @@ def run(data,world_id='W1',ticks=120,regime='costly_failure',tier=None,noise=Non
     s['expeditions']=s['expeditions']+[ex];s['laws']=laws
     _validate(s);store.save(data,NS,COMPONENT,s)
     good=alive and (claim is not None or agent.method=='TABLE')
-    heart_loop.process_experience(data,'discovery' if claim is not None else 'learning',0.6 if good else (-0.4 if not alive else 0.1),0.5,'open_world_research','')
+    heart_loop.process_experience(data,'discovery' if claim is not None else 'learning',0.6 if good else (-0.4 if not alive else 0.1),0.5,'open_world_research','',
+                                  origin='simulated')   # a simulated world (v1022.7.9)
     try:
         from tukuyo_v993.relation_bound import sync as relation_sync
         from tukuyo_v995.other_agent_trust import sync as peer_sync

@@ -157,7 +157,7 @@ def episode(data,kind,valence,importance,theme='',relation='',query='',options=N
     if org.get('death_irreversible'):return {'ok':False,'version':'v1015','error':'ENTITY_DEAD'}
     spec={'kind':str(kind),'valence':float(valence),'importance':float(importance),'theme':str(theme),'relation':str(relation),'query':str(query),'note':str(note)[:240]}
     marker=_begin_marker(data,spec);intent_id=marker['intent_id'];process_instance_id=uuid.uuid4().hex
-    exp=process_experience(data,spec['kind'],spec['valence'],spec['importance'],spec['theme'],spec['relation'])
+    exp=process_experience(data,spec['kind'],spec['valence'],spec['importance'],spec['theme'],spec['relation'],origin='told')
     marker=_mark(data,marker,'EXPERIENCE_COMMITTED',{'meaning':exp.get('meaning')});maybe_crash('v1015:after_experience')
     purpose=purpose_integrate(data);marker=_mark(data,marker,'PURPOSE_COMMITTED',{'active_purpose':purpose.get('active_purpose')})
     relation_sync(data);peer_sync(data)

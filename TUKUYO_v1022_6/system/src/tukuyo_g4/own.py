@@ -111,6 +111,21 @@ def note_learned(data,commits):
 def check_learned(data,commits):
     if commits<witnessed(data).get('learned',0):raise ValueError('G4_LEARNING_ROLLED_BACK')
 
+def witness_reset(data):
+    """the owner said this copy is the individual (a backup put back: identity-canon-adopt --yes): the witness notes the
+    numbers of its stores as they are now, smaller ones included. Nothing when no witness is kept"""
+    f=_witness_file(data)
+    if f is None:return None
+    witnessed(data)                                   # a witness that is not this individual's is not overwritten
+    seqs={k:_seq_on_disk(data,k) for k in KINDS if k!='learned' and (Path(data)/KINDS[k]).is_file()}
+    n=len(list((Path(data)/'g4'/'commits').glob('*.json')))
+    if n:seqs['learned']=n
+    from tukuyo_v977.whole_state import _sign,canon
+    from tukuyo_common.atomic_fs import atomic_write_bytes
+    f.parent.mkdir(parents=True,exist_ok=True)
+    atomic_write_bytes(f,canon(_sign(data,{'schema':WITNESS_SCHEMA,'individual_id':individual(data),'seq':seqs}))+b'\n')
+    return seqs
+
 def behind_witness(data):
     """the stores older than the last write the witness outside noted (put back, or taken away), for whole-audit: when
     the whole data directory is put back, the whole state agrees with them and only the witness can tell. [] when no

@@ -697,10 +697,25 @@ def attest(data, envelope):
     }
 
 
+def observation_status_for(decision_sha256, rows):
+    """v1022.7.9: the same count as _status_for, of the witnesses who saw or were told by someone who saw - an
+    attestation of what the individual says of itself (self_report) is authored, never observed. The stored status
+    keeps its old meaning (authorship of the attestations); this one says whether anything outside was observed."""
+    outside = [row for row in rows if row['envelope']['payload']['source_kind'] in ('direct_observation', 'external_report')]
+    status = _status_for(decision_sha256, outside)
+    if status == 'AUTHENTICATED_LOW_CONFIDENCE' and any(
+            row['envelope']['payload']['decision_sha256'] == decision_sha256 for row in rows if row not in outside):
+        return 'SELF_REPORTED_ONLY'
+    return status.replace('ATTESTED', 'OBSERVED')
+
+
 def _public(state):
     statuses = {}
+    observed = {}
     for decision in state['decisions']:
         statuses[decision['decision_sha256']] = _status_for(
+            decision['decision_sha256'], state['attestations'])
+        observed[decision['decision_sha256']] = observation_status_for(
             decision['decision_sha256'], state['attestations'])
     return {
         'ok': True, 'version': 'v1022.7',
@@ -711,6 +726,7 @@ def _public(state):
         'decision_count': len(state['decisions']),
         'attestation_count': len(state['attestations']),
         'decision_statuses': statuses,
+        'decision_observation_statuses': observed,
         'experience_learning_decisions': sum('experience_learning' in d for d in state['decisions']),
         'last_experience_learning': copy.deepcopy(state['decisions'][-1].get('experience_learning')) if state['decisions'] else None,
         'authority_head_sha256': state['authority_head_sha256'],

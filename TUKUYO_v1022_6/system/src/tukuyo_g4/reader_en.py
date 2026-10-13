@@ -1299,7 +1299,11 @@ def asked_noun(st,ask):
         mem=members(noun)
         if mem and mem!='*':
             held={f.noun for f in st.frames if f.m is not None and f.noun in mem}
-            if len(held)==1 and all(f.noun in held or f.noun in ('dollar','cent') for f in st.frames if f.m is not None):noun=next(iter(held))
+            if len(held)==1 and all(f.noun in held or f.noun in ('dollar','cent') for f in st.frames if f.m is not None):
+                h=next(iter(held))
+                # v1022.8.0: another kind of the whole named without a number ('A class has 14 boys and some girls. How
+                # many students are in the class?'): the whole is not known, and the one kind counted is not it
+                if not any(m!=h and re.search(r'\b'+re.escape(m)+r'(?:s|es)?\b',st.t.lower()) for m in mem):noun=h
     return noun
 
 # ---- schema: holding --------------------------------------------------------
@@ -1598,6 +1602,8 @@ def schema_category(st,ask):
     fr=[f for f in st.frames if f.m is not None]
     if not fr or any(f.implicit or f.noun is None for f in fr):return None
     if mem!='*' and any(f.noun not in mem and not any(w in mem for w in (f.adj or ())) for f in fr):return None
+    # v1022.8.0: a kind of the whole named but not counted ('14 boys and some girls'): the whole is not known
+    if mem!='*' and any(m not in {f.noun for f in fr} and re.search(r'\b'+re.escape(m)+r'(?:s|es)?\b',st.t.lower()) for m in mem):return None
     if len({f.noun for f in fr})<1:return None
     owner=ask.owner;v=fam(ask.verb) if ask.verb else None
     if owner not in (None,'they') and any(f.owner not in (owner,) for f in fr):return None

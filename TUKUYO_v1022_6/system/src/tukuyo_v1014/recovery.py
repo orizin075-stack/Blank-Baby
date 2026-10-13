@@ -346,6 +346,10 @@ def enforce_restore_frontier(data):
  for rel,m in metadata.items():
   q=Path(rel)
   if q.is_absolute() or '..' in q.parts or '\\' in rel or any(x in EXCLUDE_PARTS for x in q.parts):raise ValueError('RESTORE_FRONTIER_PATH')
+  # A checkpoint taken after an earlier restore holds that restore's receipt. The restore that brings it back writes
+  # its own receipt over it, so the receipt is the one file the frontier never holds to the checkpoint's bytes
+  # (v1022.7.9: before, every command after such a restore failed here until the head advanced, which it could not).
+  if rel=='v1014/LAST_RECOVERY_RECEIPT.json':continue
   p=data/q
   if not p.is_file() or p.stat().st_size!=m['size'] or _sha(p.read_bytes())!=m['sha256']:
    raise ValueError('RESTORE_FRONTIER_BYTE_DRIFT:'+rel)

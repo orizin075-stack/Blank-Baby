@@ -7,13 +7,13 @@ carries everything in it.
 
 An owner who keeps a canon outside the data directory (TUKUYO_CANON: a directory, best on another disk or machine) has
 each command that may change the individual end with one signed line in it (a chain: each line names the line before),
-and the data directory keeps the line it wrote last (canon/CURSOR.json). The copy that holds the last line of the canon
+and the data directory keeps the line it wrote last (canon/private/CURSOR.json). The copy that holds the last line of the canon
 is the individual; it may change. Any other copy is refused before it changes anything:
 
   BEHIND     its last line is an earlier line of the canon and it has not changed since: a copy left behind, or a
              backup put back (a restore)
   BRANCH     it changed after its last line without the canon: it lived on as a copy of its own. A command run with the
-             canon leaves a mark in the data directory while it runs (canon/PENDING.json): a copy that stopped in the
+             canon leaves a mark in the data directory while it runs (canon/private/PENDING.json): a copy that stopped in the
              middle of a command is not a branch; one that changed with no canon and no mark is
   UNTRACKED  it never wrote a line of this canon (copied before the canon was kept, or its cursor was taken away)
   DEAD       the canon recorded the individual's death: no copy of it lives on
@@ -56,8 +56,12 @@ def canon_file(data):
     if d==root or root in d.parents:raise ValueError('CANON_INSIDE_DATA')
     return d/(hashlib.sha256(ident.encode()).hexdigest()[:24]+'.canon.jsonl')
 
-def cursor_path(data):return Path(data)/'canon'/'CURSOR.json'
-def pending_path(data):return Path(data)/'canon'/'PENDING.json'
+# in a 'private' directory: a recovery checkpoint does not hold them, and the restore frontier does not watch them (as the
+# individual's keys, they stay with the data directory across a restore; the roadmap round found the frontier refusing an
+# individual whose cursor had been written after a restore)
+def cursor_path(data):return Path(data)/'canon'/'private'/'CURSOR.json'
+def pending_path(data):return Path(data)/'canon'/'private'/'PENDING.json'
+def _old_cursor_path(data):return Path(data)/'canon'/'CURSOR.json'      # v1022.7.8+gen4-r8
 
 def _sha(o):
     from tukuyo_v977.whole_state import sha_obj
@@ -97,6 +101,7 @@ def _pub(data):
 
 def cursor(data):
     p=cursor_path(data)
+    if not p.is_file():p=_old_cursor_path(data)
     if not p.is_file():return None
     try:c=json.loads(p.read_text(encoding='utf-8'))
     except (OSError,ValueError):return None
@@ -120,16 +125,26 @@ def status(data,verify='last'):
     head,hh=ls[-1];out['head']={'n':head['payload']['n'],'kind':head['payload']['kind'],'utc':head['payload'].get('utc'),'line_sha256':hh}
     mine=c is not None and c.get('individual_id')==ident and c.get('line_sha256')==hh
     if any(e['payload']['kind']=='death' for e,_ in ls):return {**out,'state':'DEAD_SELF' if mine else 'DEAD'}
+    # an earlier line whose individual is what this copy is now: a copy left behind there, or put back to it (a restore)
+    def earlier(upto):
+        for e,_ in reversed(ls[:upto]):
+            if e['payload'].get('content_sha256')==now:return e
+        return None
     if mine:
         changed=now!=head['payload'].get('content_sha256');pend=_pending_mark(data)
         if changed and not (pend and pend.get('head_line_sha256')==hh):
+            back=earlier(len(ls)-1)
+            if back is not None:
+                return {**out,'state':'BEHIND','why':'it is what the individual was at an earlier line (put back)','its_last_line':back['payload']['n'],
+                        'lines_after_it':head['payload']['n']-back['payload']['n']}
             return {**out,'state':'BRANCH','why':'it changed after its last line, with no command of the canon running'}
         return {**out,'state':'IN_SYNC','changed_since_last_line':changed}
     if c is None or c.get('individual_id')!=ident:return {**out,'state':'UNTRACKED'}
-    at=next((e for e,h in ls if h==c.get('line_sha256')),None)
-    if at is None:return {**out,'state':'UNTRACKED','why':'its last line is not in this canon'}
-    return {**out,'state':'BEHIND' if now==at['payload'].get('content_sha256') else 'BRANCH','its_last_line':at['payload']['n'],
-            'lines_after_it':head['payload']['n']-at['payload']['n']}
+    k=next((i for i,(e,h) in enumerate(ls) if h==c.get('line_sha256')),None)
+    if k is None:return {**out,'state':'UNTRACKED','why':'its last line is not in this canon'}
+    at=ls[k][0];back=at if now==at['payload'].get('content_sha256') else earlier(k)
+    if back is None:return {**out,'state':'BRANCH','its_last_line':at['payload']['n'],'lines_after_it':head['payload']['n']-at['payload']['n']}
+    return {**out,'state':'BEHIND','its_last_line':back['payload']['n'],'lines_after_it':head['payload']['n']-back['payload']['n']}
 
 def _pending_mark(data):
     try:c=json.loads(pending_path(data).read_text(encoding='utf-8'))
@@ -184,6 +199,8 @@ def _append(data,f,ls,kind,**extra):
         h.write(b+'\n');h.flush();os.fsync(h.fileno())
     h2=_sha(env)
     atomic_write_bytes(cursor_path(data),_canon({'schema':CURSOR_SCHEMA,'individual_id':ident,'n':n,'line_sha256':h2})+b'\n')
+    try:_old_cursor_path(data).unlink()
+    except FileNotFoundError:pass
     return {'n':n,'kind':kind,'line_sha256':h2}
 
 def note(data,cmd):
@@ -219,7 +236,26 @@ def adopt(data,yes=False):
     with _Lock(f):
         ident=_identity(data);ls=_lines(f,(_pub(data),'last'),ident)
         r=_append(data,f,ls,kind,from_line=s.get('its_last_line'),was=s['state']);_clear(data)
-    return {'ok':True,'adopted':r,'was':s['state']}
+    # the generation-4 witness, when one is kept, follows the owner's choice (a restored copy's stores are older)
+    from tukuyo_g4.own import witness_reset
+    w=witness_reset(data)
+    return {'ok':True,'adopted':r,'was':s['state'],**({'g4_witness_reset':w} if w is not None else {})}
+
+def outside_errors(data):
+    """what the records kept outside the data directory say about this copy (for the whole-audit command): a copy that is
+    not the individual (CANON_BEHIND, CANON_BRANCH, CANON_UNTRACKED, CANON_DEAD), and generation-4 stores older than the
+    witness (G4_WITNESS_AHEAD). [] when none is kept"""
+    errs=[]
+    try:
+        cs=status(data)
+        if cs.get('kept') and cs['state'] not in ('IN_SYNC','NEW','DEAD_SELF'):errs.append('CANON_'+cs['state'])
+    except ValueError as e:errs.append('CANON:'+str(e))
+    if (Path(data)/'g4').exists():
+        try:
+            from tukuyo_g4.own import behind_witness
+            errs.extend('G4_WITNESS_AHEAD:g4_'+k for k in behind_witness(data))
+        except ValueError as e:errs.append('G4_WITNESS:'+str(e))
+    return errs
 
 def audit(data):
     """the whole chain: every line signed by this individual, numbered, each naming the one before; and this copy's place"""

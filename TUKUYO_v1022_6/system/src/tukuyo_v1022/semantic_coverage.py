@@ -175,6 +175,11 @@ def _colour_counts(s):
         if i+2>=len(words) or not words[i].isdigit() or words[i+1] not in colours or not words[i+2].isalpha():return fail('SUBSET_DECLARATION_UNSUPPORTED')
         nodes.append({'quantity':words[i],'attribute':words[i+1],'entity':words[i+2]});i+=3
         if i>=len(words):return fail('QUERY_ROLE_MISSING')
+        # v1022.8.0: where they are ('... 6 blue cars in a parking lot.') changes no count
+        if words[i] in ('in','at','on') and i+2<len(words) and words[i+1] in ('a','an','the'):
+            j=i+2
+            while j<len(words) and j<i+5 and words[j].isalpha():j+=1
+            if j<len(words) and words[j]=='.':i=j
         if words[i]=='.':i+=1;break
         if words[i] not in ('and',','):return fail('UNRESOLVED_SUBSET_RELATION')
         i+=1
@@ -184,7 +189,9 @@ def _colour_counts(s):
     if attribute:i+=1
     if i>=len(words):return fail('QUERY_ROLE_MISSING')
     entity=words[i];i+=1
-    if words[i:] not in (['in','total','?'],['are','there','?']):return fail('UNCOVERED_SUBSET_CLAUSE')
+    rest=words[i:]
+    place=len(rest) in (5,6) and rest[0]=='are' and rest[1] in ('in','at','on') and rest[2]=='the' and all(w.isalpha() for w in rest[3:-1]) and rest[-1]=='?'
+    if rest not in (['in','total','?'],['are','there','?']) and not place:return fail('UNCOVERED_SUBSET_CLAUSE')
     if not 1<=len(nodes)<=8 or len({x['attribute'] for x in nodes})!=len(nodes):return fail('SUBSET_OVERLAP_NOT_RESOLVED')
     if any(x['entity']!=entity for x in nodes) or attribute and attribute not in {x['attribute'] for x in nodes}:return fail('QUERY_ENTITY_MISMATCH')
     for x in nodes:x['role']='selected' if attribute is None or attribute==x['attribute'] else 'disjoint_other_attribute'

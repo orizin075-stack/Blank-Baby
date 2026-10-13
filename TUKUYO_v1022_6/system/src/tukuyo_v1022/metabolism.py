@@ -49,7 +49,11 @@ def _committed_snapshot(d,rid):
         'lifecycle':o['lifecycle'],'energy':int(round(o['energy']*100)),'profile':succession.effective_values(p),'learning_rounds':cognition.state(p)['rounds']}
 def _validate(s):
     if s.get('schema')!=SCHEMA or s.get('claim_boundary')!=CLAIMS:raise ValueError('V1022_METABOLISM_SCHEMA')
-    if type(s['tick']) is not int or not 0<=s['tick']<=512 or len(s['runtimes'])>64 or len(s['active'])>8:raise ValueError('V1022_METABOLISM_BOUND')
+    max_ticks,max_runtimes=bounds(s)
+    if type(s['tick']) is not int or not 0<=s['tick']<=max_ticks or len(s['runtimes'])>max_runtimes or len(s['active'])>8:raise ValueError('V1022_METABOLISM_BOUND')
+    changes=s.get('environment_changes',[])
+    if any(type(c.get('tick')) is not int or type(c.get('regeneration')) is not int or not 0<=c['regeneration']<=100000 for c in changes):raise ValueError('V1022_ENVIRONMENT_CHANGE')
+    if changes and changes[-1]['regeneration']!=s['config']['regeneration']:raise ValueError('V1022_ENVIRONMENT_BINDING')
     if any(type(s[k]) is not int or s[k]<0 for k in ('reservoir','burned','initial_total','regenerated')):raise ValueError('V1022_RESOURCE_TYPE')
     if not set(s['active'])<=set(s['runtimes']) or len(s['active'])!=len(set(s['active'])):raise ValueError('V1022_ACTIVE_BINDING')
     energy=sum(s['runtimes'][r]['energy'] for r in s['active'])
@@ -68,6 +72,13 @@ def _validate(s):
         from tukuyo_v1023r import niche
         niche.validate(s['research'])
         if s['config'].get('research_world') is not True or not set(s['active'])<=set(s['research']['runtimes']):raise ValueError('V1023R_NICHE_BINDING')
+# v1022.7.9: a long run (the roadmap's v1022.8.2 asks for 1,000 steps or more) chooses larger bounds at init. An
+# ecology made before keeps the old ones (512 ticks, 64 runtimes); the largest are 4096 ticks and 256 runtimes.
+TICK_BOUND,RUNTIME_BOUND=4096,256
+def bounds(s):
+    c=s['config'];t=c.get('max_ticks',512);r=c.get('max_runtimes',64)
+    if type(t) is not int or type(r) is not int or not 32<=t<=TICK_BOUND or not 8<=r<=RUNTIME_BOUND:raise ValueError('V1022_METABOLISM_BOUND_CONFIG')
+    return t,r
 def preflight(d):
     s=store.load(d,NS,COMPONENT,_validate)
     if s.get('grounded_rewards'):
@@ -87,7 +98,7 @@ def preflight(d):
             if p is None or p['public_key']!=s['runtimes'][e['parent']]['whole_public_key'] or p['payload']['source_individual_id']!=s['runtimes'][e['parent']]['individual_id']:raise ValueError('V1022_CULTURAL_PARENT_BINDING')
     return s
 def _fresh(d,s):
-    if len(s['runtimes'])>=64:raise ValueError('V1022_RUNTIME_LIMIT')
+    if len(s['runtimes'])>=bounds(s)[1]:raise ValueError('V1022_RUNTIME_LIMIT')
     rid=f"R{len(s['runtimes']):06d}";ident=whole._live_identity(d)['individual_id']+'-metabolic-'+rid
     if rid in s['runtimes']:raise ValueError('V1022_FRESH_REGISTERED_SLOT')
     p=child(d,rid)
@@ -120,17 +131,20 @@ def _culture(source,target,tag):
     proof=whole._sign(source,payload);s['inherited_public_learning'].append(proof);store.save(target,cognition.NS,cognition.COMPONENT,s);return whole.sha_obj(proof)
 def _performance():return {k:0 for k in ('attempts','correct','wrong','abstained','hard_attempts','hard_correct','simple_attempts','simple_correct')}
 @transactional()
-def init(d,trust_file,families=4,seed='v1022',reservoir=20000,regeneration=0,max_age=32,learning=True,actions=True,research_world=False):
+def init(d,trust_file,families=4,seed='v1022',reservoir=20000,regeneration=0,max_age=32,learning=True,actions=True,research_world=False,
+         max_ticks=512,max_runtimes=64):
     if root(d).exists():raise ValueError('V1022_METABOLISM_REINITIALIZATION')
     if type(families) is not int or not 2<=families<=8:raise ValueError('V1022_FAMILY_BOUND')
     if type(reservoir) is not int or not 0<=reservoir<=1000000 or type(regeneration) is not int or not 0<=regeneration<=100000:raise ValueError('V1022_RESOURCE_BOUND')
     if type(max_age) is not int or not 4<=max_age<=128:raise ValueError('V1022_AGE_BOUND')
+    if type(max_ticks) is not int or type(max_runtimes) is not int or not 32<=max_ticks<=TICK_BOUND or not 8<=max_runtimes<=RUNTIME_BOUND:raise ValueError('V1022_METABOLISM_BOUND_CONFIG')
     if trust_file is None:raise ValueError('V1022_EXTERNAL_RUNTIME_TRUST_REQUIRED')
     from tukuyo_v977.startup_guard import verify_distribution
     verify_distribution(Path(__file__).resolve().parents[2],trust_file)
     atomic_write_bytes(root(d)/'RUNTIME_TRUST.txt',Path(trust_file).read_bytes());atomic_write_text(root(d)/'private/delegation.token',secrets.token_hex(32),mode=0o600)
     s={'schema':SCHEMA,'tick':0,'seed':hashlib.sha256(str(seed).encode()).hexdigest(),'reservoir':reservoir,'burned':0,
-       'initial_total':reservoir+6500*families,'regenerated':0,'config':{'regeneration':regeneration,'max_age':max_age,'learning':bool(learning),'actions':bool(actions)},
+       'initial_total':reservoir+6500*families,'regenerated':0,'config':{'regeneration':regeneration,'max_age':max_age,'learning':bool(learning),'actions':bool(actions),
+                                                                        **({'max_ticks':max_ticks,'max_runtimes':max_runtimes} if (max_ticks,max_runtimes)!=(512,64) else {})},
        'runtimes':{},'active':[],'performance':{},'deaths':[],'successions':[],'last_tick':None,'claim_boundary':CLAIMS}
     if research_world:
         from tukuyo_v1023r import niche
@@ -149,7 +163,7 @@ def _task(s,rid,tick,hard):
     else:query=f'({per} * {count}) - {used}';answer=per*count-used
     return query,str(answer)
 def _successor(d,s,parent,tick):
-    if s['reservoir']<6500 or len(s['runtimes'])>=64 or s['performance'][parent]['correct']<2:return None
+    if s['reservoir']<6500 or len(s['runtimes'])>=bounds(s)[1] or s['performance'][parent]['correct']<2:return None
     rid,ident=_fresh(d,s);pp=root(d)/'packages'/f'{parent}.pub';cp=root(d)/'packages'/f'{rid}.pub';pkg=root(d)/'packages'/f'{parent}-{rid}.json'
     _cli(d,parent,'succession-pubkey-export','--out',pp);_cli(d,rid,'succession-pubkey-export','--out',cp)
     _cli(d,parent,'evolution-export',ident,'--out',pkg,'--child-public-key-file',cp);s['runtimes'][parent]=_snapshot(d,parent)
@@ -169,7 +183,7 @@ def _successor(d,s,parent,tick):
 def step(d,ticks=1):
     if type(ticks) is not int or not 1<=ticks<=32:raise ValueError('V1022_STEP_BOUND')
     s=copy.deepcopy(preflight(d))
-    if s['tick']+ticks>512:raise ValueError('V1022_TOTAL_TICK_BOUND')
+    if s['tick']+ticks>bounds(s)[0]:raise ValueError('V1022_TOTAL_TICK_BOUND')
     for _ in range(ticks):
         tick=s['tick']+1;regen=s['config']['regeneration'];s['reservoir']+=regen;s['regenerated']+=regen;rows=[]
         for rid in list(s['active']):
@@ -185,7 +199,7 @@ def step(d,ticks=1):
                 cost+=extra;s['reservoir']-=credit;correct=credit>0
                 if chosen=='work':perf['attempts']+=1;perf['correct']+=int(correct)
                 if hc.get('id') and hc['id']==chosen and chosen!='rest':
-                    heart_loop.feedback(p,hc['id'],max(-1.,min(1.,(credit-(cost-300))/600)),.2,'niche-energy-outcome')
+                    heart_loop.feedback(p,hc['id'],max(-1.,min(1.,(credit-(cost-300))/600)),.2,'niche-energy-outcome',origin='simulated')
             else:
               # claude-patch1: homeostatic choice. Options carry EXPECTED NET ENERGY from the last few
               # paid outcomes; energy above the satiety set-point is worth nothing, so a fed individual
@@ -211,7 +225,7 @@ def step(d,ticks=1):
                 # Valence = net energy relative to resting (rest burns the base 300 only).
                 net=credit-(cost-300)
                 # A probe overrides the heart's own choice, so it is not fed back as that choice's outcome.
-                if not probe:heart_loop.feedback(p,chosen,max(-1.,min(1.,net/600)),.2,'grounded-energy-outcome')
+                if not probe:heart_loop.feedback(p,chosen,max(-1.,min(1.,net/600)),.2,'grounded-energy-outcome',origin='simulated')
             age=organism2.load(p).get('metabolic_age',0)
             if energy+credit<=cost or age+1>=s['config']['max_age']:evolution.select(p,'resource',seed=f"{s['seed']}|{rid}|{tick}")
             m=organism2.metabolic_tick(p,credit,cost,s['config']['max_age']);s['burned']+=m['burn'];whole.sync(p);s['runtimes'][rid]=_snapshot(d,rid)
@@ -221,6 +235,16 @@ def step(d,ticks=1):
         s['tick']=tick;s['last_tick']={'tick':tick,'regenerated':regen,'actions':rows};_validate(s)
         atomic_write_bytes(root(d)/'ticks'/f'{tick:06d}.json',whole.canon(s['last_tick'])+b'\n');store.save(d,NS,COMPONENT,s)
     return summary(s)
+
+@transactional()
+def environment(d,regeneration):
+    """v1022.7.9: the environment changes from the next tick on (the regeneration of the shared reservoir), e.g. a
+    drought. The runtimes are not told; they meet it. Every change is kept with its tick."""
+    if type(regeneration) is not int or not 0<=regeneration<=100000:raise ValueError('V1022_RESOURCE_BOUND')
+    s=copy.deepcopy(preflight(d));before=s['config']['regeneration']
+    s.setdefault('environment_changes',[]).append({'tick':s['tick'],'from':before,'regeneration':regeneration})
+    s['config']['regeneration']=regeneration;_validate(s);store.save(d,NS,COMPONENT,s)
+    return {**summary(s),'environment_change':s['environment_changes'][-1]}
 
 @transactional()
 def grounded_reward(d,runtime_id,credit,receipt_sha256):
@@ -274,6 +298,8 @@ def summary(s):
         'reservoir':s['reservoir'],'burned':s['burned'],'initial_total':s['initial_total'],'regenerated':s['regenerated'],
         'living_energy':sum(s['runtimes'][r]['energy'] for r in s['active']),**{k:total(k) for k in ('attempts','correct','wrong','abstained','hard_attempts','hard_correct')},
         'deaths':s['deaths'],'successions':s['successions'],'grounded_rewards':s.get('grounded_rewards',[]),'last_tick':s['last_tick'],'claim_boundary':CLAIMS,
+        'bounds':dict(zip(('max_ticks','max_runtimes'),bounds(s))),
+        'alive':[{'runtime':r,'family':s['runtimes'][r]['family'],'generation':s['runtimes'][r]['generation'],'energy':s['runtimes'][r]['energy']} for r in s['active']],'regeneration':s['config']['regeneration'],'environment_changes':s.get('environment_changes',[]),
         **({'research_niche':__import__('tukuyo_v1023r.niche',fromlist=['summary']).summary(s['research'],s['seed']),'research_claim_boundary':s['research']['claim_boundary']} if 'research' in s else {})}
 def status(d):return summary(preflight(d))
 def audit(d):
