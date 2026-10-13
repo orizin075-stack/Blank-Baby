@@ -208,9 +208,9 @@
   "recovery_signer_continuity": "REPAIRED_NON_ROTATING_KEY_RECONCILIATION",
   "recovery_storage_mode": "CONTENT_ADDRESSED_DELTA_EXCLUDING_REBUILDABLE_INDEX",
   "relation_bound_scar_choice": true,
-  "release_revision": "v1022.7.8+gen4-r8",
+  "release_revision": "v1022.7.9+gen4-r9",
   "release_role": "GROUNDED_SENSOR_CHALLENGE_EXPERIMENTAL",
-  "release_version": "v1022.7.8+gen4-r8",
+  "release_version": "v1022.7.9+gen4-r9",
   "replay_resistance": "EXPECTED_EXTERNAL_CHALLENGE_REQUIRED",
   "replayable_word_problem_families": true,
   "report_consensus_establishes_truth": false,
@@ -417,6 +417,112 @@
     "validation_result_location": "../evidence_gen4/REVIEW_2026-10-13.md",
     "without_canon_behaviour_unchanged": true
   },
+  "v1022_7_9_gen4_r9": {
+    "classification": "the outside review's roadmap advanced together after v1022.7.8 (development); gates measured, not assumed",
+    "ecology_8_2": {
+      "environment_change_command": "metabolism-environment",
+      "living_parent_reproduction": false,
+      "relations": "opt-in --sharing: energy given to a hungry runtime and children raised together, each decided by the giver's heart (bonds, need, life left); total energy conserved",
+      "resource_exploration": false,
+      "results_with_sharing": "../evidence_gen4/ROADMAP_2026-10-13.md §4.2",
+      "run_1024_learning": {
+        "families_alive": 4,
+        "generations": 32,
+        "successions": 128,
+        "wrong": 0
+      },
+      "run_1024_no_learning": {
+        "families_alive": 4,
+        "generations": 32,
+        "hard_task_correct": 0
+      },
+      "scarce_no_sharing": {
+        "extinct_at_tick": 64
+      },
+      "severe_drought_no_sharing": {
+        "extinct_at_tick": 560
+      },
+      "tick_bound_chosen_at_init": "up to 4096 ticks, 256 runtimes (512/64 for an ecology made before)"
+    },
+    "experience_authenticity_7_9": {
+      "attacks": 19,
+      "attacks_promoted_to_externally_confirmed": 0,
+      "authorities_independent_of_owner_verified": false,
+      "external_truth_verified": false,
+      "externally_confirmed_requires": "grounded sensor outcome checked again; own keys never a witness",
+      "genuine_outcomes_confirmed": 2,
+      "origins": [
+        "observed",
+        "checked",
+        "teacher",
+        "told",
+        "self_report",
+        "simulated"
+      ]
+    },
+    "goals_8_1": {
+      "acts_differ": true,
+      "goals_change_an_act": true,
+      "module": "tukuyo_v1022/goals.py",
+      "revised_after_help": true,
+      "revised_by_outcome_of_own_act": true,
+      "same_start_goals_differ": true
+    },
+    "private_problems_8_0": {
+      "asdiv_dev_unchanged": {
+        "g4_solve": {
+          "correct": 503,
+          "wrong": 3
+        }
+      },
+      "english_improvement_on_held_out": false,
+      "fix_after_held_out_not_counted": "a reading the v1022 core agrees with is not held by the extra input check (one held-out problem)",
+      "held_out_en": {
+        "after": {
+          "held": 32,
+          "right": 28,
+          "wrong": 0
+        },
+        "before": {
+          "held": 32,
+          "right": 28,
+          "wrong": 0
+        },
+        "mcnemar_p": 1.0
+      },
+      "held_out_frozen_sha256": "9b82bf398a3165badf2d65585eab0ea794663646f917bea8efa95b8d56a64c85",
+      "held_out_ja": {
+        "after": {
+          "held": 19,
+          "right": 41,
+          "wrong": 0
+        },
+        "before": {
+          "held": 40,
+          "right": 20,
+          "wrong": 0
+        },
+        "mcnemar_p": 6e-06
+      },
+      "held_out_runs": "totals before, once after",
+      "japanese_reader": "tukuyo_g4/reader_ja.py",
+      "mgsm_ja_dev_wrong": 0
+    },
+    "real_parents_measured": false,
+    "restores_9_0": {
+      "broken_then_restored": 20,
+      "canon_chain_ok": true,
+      "cycles": 100,
+      "fixed": [
+        "a checkpoint taken after a restore made every later command fail (restore receipt vs frontier)",
+        "the canon cursor moved to canon/private (outside checkpoints)"
+      ],
+      "passed": 100,
+      "realtime_24h_72h_7d": "not run"
+    },
+    "validation_result_location": "../evidence_gen4/ROADMAP_2026-10-13.md",
+    "version_named_by_gate": "7.9 passed; 8.0 passed for Japanese only; 8.1 passed in its experiment; 8.2 in part; 9.0 restores only"
+  },
   "verified_query_independent_semantic_verifier": true,
   "verified_query_independent_semantic_verifier_scope": "DECLARED_BOUNDED_SCHEMAS",
   "verified_query_uses_core_reasoning": true,
@@ -424,7 +530,7 @@
   "verified_query_whole_state_sync": true,
   "verified_reasoning_confidence": true,
   "version": "v1022",
-  "version_compatibility_note": "Legacy module versions retained; release_version and CLI release_revision identify v1022.7.8+gen4-r8 (v1022.7.7-experiential-soul fused with generation 4; its limits measured and strengthened; an outside review of r7 answered: amounts not given, and one individual with one history)",
+  "version_compatibility_note": "Legacy module versions retained; release_version and CLI release_revision identify v1022.7.9+gen4-r9 (v1022.7.7-experiential-soul fused with generation 4; its limits measured and strengthened; an outside review of r7 answered; the rest of its roadmap advanced together: experience authenticity 7.9, new private problems 8.0, goals 8.1, ecology 8.2, restores 9.0)",
   "whole_living_cognition_cycle": true,
   "witness_certificate_signature_verification": true,
   "workspace_restore_failure": "V1022_CACHE_MISMATCH:v1022_ecology; future commits 10-13 retained/reappeared after restoring tick8",

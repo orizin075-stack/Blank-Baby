@@ -27,18 +27,20 @@ def main():
     ap.add_argument('--ticks',type=int,default=1000);ap.add_argument('--families',type=int,default=4);ap.add_argument('--regeneration',type=int,default=0)
     ap.add_argument('--reservoir',type=int,default=20000);ap.add_argument('--max-age',type=int,default=32);ap.add_argument('--no-learning',action='store_true')
     ap.add_argument('--step',type=int,default=32);ap.add_argument('--max-runtimes',type=int,default=64)
+    ap.add_argument('--sharing',action='store_true',help='v1022.8.2: runtimes may give energy to a hungry one and raise a child together')
     ap.add_argument('--change',action='append',default=[],metavar='TICK:REGENERATION',
                     help='change the environment at a tick (the reservoir regeneration from then on), e.g. 400:0 for a drought')
     ap.add_argument('--out');a=ap.parse_args()
     changes=sorted((int(x.split(':')[0]),int(x.split(':')[1])) for x in a.change)
     d=Path(a.work).resolve()/'ecology';d.parent.mkdir(parents=True,exist_ok=True)
-    rep={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'config':{**{k:getattr(a,k) for k in ('ticks','families','regeneration','reservoir','max_age','no_learning','step','max_runtimes')},
+    rep={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'config':{**{k:getattr(a,k) for k in ('ticks','families','regeneration','reservoir','max_age','no_learning','step','max_runtimes','sharing')},
                                                                            'changes':changes},'steps':[],'environment':[]}
     t0=time.time()
     r=run(a.runtime_trust_file,d,'init','--individual-id','ECOLOGY-OWNER')
     if not r.get('ok'):rep['stopped']='INIT:'+str(r.get('error'));print(rep['stopped']);return _out(a,rep)
     args=['metabolism-init','--families',a.families,'--reservoir',a.reservoir,'--regeneration',a.regeneration,'--max-age',a.max_age]+(['--no-learning'] if a.no_learning else [])
     if a.ticks>512 or a.max_runtimes!=64:args+=['--max-ticks',max(512,a.ticks),'--max-runtimes',a.max_runtimes]
+    if a.sharing:args+=['--sharing']
     r=run(a.runtime_trust_file,d,*args)
     if not r.get('ok'):rep['stopped']='METABOLISM_INIT:'+str(r.get('error'));print(rep['stopped']);return _out(a,rep)
     tick=0
@@ -53,6 +55,9 @@ def main():
         row={k:r.get(k) for k in ('tick','active_runtime_count','total_runtime_count','actual_successions','max_generation','reservoir','burned','regenerated',
                                   'living_energy','attempts','correct','wrong','abstained','hard_attempts','hard_correct','regeneration')}
         row['families_alive']=len({x['family'] for x in r.get('alive') or []})
+        row['relations']=r.get('relations') or None
+        row['raised_together']=sum(1 for x in r.get('successions') or [] if x.get('funded_by'))
+        row['starved']=sum(1 for x in r.get('deaths') or [] if x.get('cause')=='ENERGY')
         row['deaths']=len(r.get('deaths') or []);row['seconds']=round(time.time()-t0,1);rep['steps'].append(row)
         print(json.dumps(row),flush=True)
         if not r.get('active_runtime_count'):rep['stopped']='EXTINCT';break
@@ -63,6 +68,7 @@ def main():
     rep['result']={'ticks':last.get('tick',0),'alive_at_end':last.get('active_runtime_count',0),'families_alive_at_end':last.get('families_alive',0),
                    'runtimes':last.get('total_runtime_count',0),
                    'generations':last.get('max_generation',0),'successions':last.get('actual_successions',0),'deaths':last.get('deaths',0),
+                   'starved':last.get('starved',0),'raised_together':last.get('raised_together',0),'relations':last.get('relations'),
                    'stopped':rep.get('stopped'),'seconds':round(time.time()-t0,1)}
     print('result',json.dumps(rep['result']))
     return _out(a,rep)

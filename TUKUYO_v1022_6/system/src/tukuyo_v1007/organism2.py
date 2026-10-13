@@ -85,6 +85,22 @@ def resource_credit(data,credit,receipt_sha256):
  e['event_sha256']=sha_obj(e);box['events'].append(e);_write(state_path(data),q);_write(events_path(data),box)
  return {'ok':True,'state':q,'event':e,'burn':0,'death_cause':None}
 
+def resource_gift(data,amount,receipt_sha256):
+ """v1022.8.2: energy it gives to another runtime (the other one takes it in with resource_credit): no elapsed tick"""
+ import re
+ s=load(data)
+ if s['death_irreversible']:raise ValueError('ENTITY_DEAD:resource_gift')
+ if type(amount) is not int or not 1<=amount<=5000 or not re.fullmatch(r'[0-9a-f]{64}',receipt_sha256):raise ValueError('RESOURCE_GIFT_BOUNDS')
+ before=int(round(s['energy']*100));after=before-amount
+ if after<1:raise ValueError('RESOURCE_GIFT_WOULD_EMPTY')
+ q={k:v for k,v in s.items() if k!='state_sha256'};q['energy']=after/100;q['lifecycle']=_life(q);q['seq']=s['seq']+1;q['state_sha256']=sha_obj(q)
+ box=_read(events_path(data));prev=box['events'][-1]['event_sha256'] if box['events'] else ZERO
+ e={'seq':q['seq'],'event':'RESOURCE_GIFT','amount':0,'before_sha256':s['state_sha256'],'after_sha256':q['state_sha256'],'prev_sha256':prev,
+    'before_energy':before,'credit':0,'burn':0,'gift':amount,'after_energy':after,'cause':None,'receipt_sha256':receipt_sha256,
+    'age_before':s.get('metabolic_age',0),'age_after':q.get('metabolic_age',0)}
+ e['event_sha256']=sha_obj(e);box['events'].append(e);_write(state_path(data),q);_write(events_path(data),box)
+ return {'ok':True,'state':q,'event':e,'burn':0,'death_cause':None}
+
 def audit(data):
  if not state_path(data).exists():return {'ok':False,'version':'v1007','errors':['V1007_MISSING']}
  s=_read(state_path(data));errs=[];q=dict(s);h=q.pop('state_sha256',None)
@@ -97,6 +113,7 @@ def audit(data):
    if e.get('seq')!=i or e.get('prev_sha256')!=prev or h!=sha_obj(z):errs.append('V1007_EVENT_CHAIN');break
    if e.get('event') in ('METABOLIC_TICK','RESOURCE_CREDIT') and (e['before_energy']+e['credit']-e['burn']!=e['after_energy'] or min(e['before_energy'],e['credit'],e['burn'],e['after_energy'])<0):errs.append('V1022_METABOLIC_CONSERVATION')
    if e.get('event')=='RESOURCE_CREDIT' and (e['age_before']!=e['age_after'] or e['burn']!=0 or e['cause'] is not None):errs.append('RESOURCE_CREDIT_AGE')
+   if e.get('event')=='RESOURCE_GIFT' and (e['before_energy']-e['gift']!=e['after_energy'] or e['gift']<=0 or e['after_energy']<1 or e['age_before']!=e['age_after'] or e['cause'] is not None):errs.append('RESOURCE_GIFT_CONSERVATION')
    prev=h
  except Exception as exc:errs.append('V1007_EVENTS:'+type(exc).__name__)
  return {'ok':not errs,'version':'v1007','errors':errs,'lifecycle':s.get('lifecycle'),'needs':_needs(s),'claim_boundary':{'functional_mortality_model':True,'irreversible_death_within_identity':True,'literal_life_established':False}}

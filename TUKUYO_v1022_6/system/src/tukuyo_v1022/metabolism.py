@@ -132,7 +132,7 @@ def _culture(source,target,tag):
 def _performance():return {k:0 for k in ('attempts','correct','wrong','abstained','hard_attempts','hard_correct','simple_attempts','simple_correct')}
 @transactional()
 def init(d,trust_file,families=4,seed='v1022',reservoir=20000,regeneration=0,max_age=32,learning=True,actions=True,research_world=False,
-         max_ticks=512,max_runtimes=64):
+         max_ticks=512,max_runtimes=64,sharing=False):
     if root(d).exists():raise ValueError('V1022_METABOLISM_REINITIALIZATION')
     if type(families) is not int or not 2<=families<=8:raise ValueError('V1022_FAMILY_BOUND')
     if type(reservoir) is not int or not 0<=reservoir<=1000000 or type(regeneration) is not int or not 0<=regeneration<=100000:raise ValueError('V1022_RESOURCE_BOUND')
@@ -144,7 +144,8 @@ def init(d,trust_file,families=4,seed='v1022',reservoir=20000,regeneration=0,max
     atomic_write_bytes(root(d)/'RUNTIME_TRUST.txt',Path(trust_file).read_bytes());atomic_write_text(root(d)/'private/delegation.token',secrets.token_hex(32),mode=0o600)
     s={'schema':SCHEMA,'tick':0,'seed':hashlib.sha256(str(seed).encode()).hexdigest(),'reservoir':reservoir,'burned':0,
        'initial_total':reservoir+6500*families,'regenerated':0,'config':{'regeneration':regeneration,'max_age':max_age,'learning':bool(learning),'actions':bool(actions),
-                                                                        **({'max_ticks':max_ticks,'max_runtimes':max_runtimes} if (max_ticks,max_runtimes)!=(512,64) else {})},
+                                                                        **({'max_ticks':max_ticks,'max_runtimes':max_runtimes} if (max_ticks,max_runtimes)!=(512,64) else {}),
+                                                                        **({'sharing':True} if sharing else {})},
        'runtimes':{},'active':[],'performance':{},'deaths':[],'successions':[],'last_tick':None,'claim_boundary':CLAIMS}
     if research_world:
         from tukuyo_v1023r import niche
@@ -163,15 +164,25 @@ def _task(s,rid,tick,hard):
     else:query=f'({per} * {count}) - {used}';answer=per*count-used
     return query,str(answer)
 def _successor(d,s,parent,tick):
-    if s['reservoir']<6500 or len(s['runtimes'])>=bounds(s)[1] or s['performance'][parent]['correct']<2:return None
+    if len(s['runtimes'])>=bounds(s)[1] or s['performance'][parent]['correct']<2:return None
+    pledges={}
+    if s['reservoir']<6500:
+        # v1022.8.2: the commons cannot fund the child. With sharing on, the living are asked, each by its own heart,
+        # whether to give of its energy to raise the child of the one that died (its bond with that one weighs)
+        if not s['config'].get('sharing'):return None
+        pledges=_pledges(d,s,parent,tick,6500-s['reservoir'])
+        if sum(pledges.values())<6500-s['reservoir']:return None
     rid,ident=_fresh(d,s);pp=root(d)/'packages'/f'{parent}.pub';cp=root(d)/'packages'/f'{rid}.pub';pkg=root(d)/'packages'/f'{parent}-{rid}.json'
     _cli(d,parent,'succession-pubkey-export','--out',pp);_cli(d,rid,'succession-pubkey-export','--out',cp)
     _cli(d,parent,'evolution-export',ident,'--out',pkg,'--child-public-key-file',cp);s['runtimes'][parent]=_snapshot(d,parent)
     _cli(d,rid,'evolution-import',pkg,'--parent-trust-file',pp)
     cultural=_culture(child(d,parent),child(d,rid),'mortality-gated-public-skills') if s['config']['learning'] else None
-    s['reservoir']-=6500;s['runtimes'][rid]=_snapshot(d,rid);s['active'].append(rid);s['performance'][rid]=_performance()
+    from_commons=6500-sum(pledges.values());s['reservoir']-=from_commons
+    for giver,amount in pledges.items():_give(d,s,giver,rid,amount,{'tick':tick,'raised':rid,'for':parent},'raised-a-child',newborn=True)
+    s['runtimes'][rid]=_snapshot(d,rid);s['active'].append(rid);s['performance'][rid]=_performance()
     s['successions'].append({'tick':tick,'parent':parent,'child':rid,'package_sha256':hashlib.sha256(pkg.read_bytes()).hexdigest(),
-        'public_learning_commitment':cultural,'actual_inherited_profile':s['runtimes'][rid]['profile'],'funded_seed_energy':6500})
+        'public_learning_commitment':cultural,'actual_inherited_profile':s['runtimes'][rid]['profile'],'funded_seed_energy':6500,
+        **({'funded_by':{'commons':from_commons,'runtimes':pledges}} if pledges else {})})
     if 'research' in s:
         # Science is culture too: only a CONFIRMED law of the parent, and only when learning is on.
         from tukuyo_v1023r import niche
@@ -232,9 +243,68 @@ def step(d,ticks=1):
             rows.append({'runtime':rid,'action':chosen,'question':query,'answer':answer,'expected':expected,'correct':correct,'uncertain':uncertain,'credit':credit,'burn':m['burn'],'energy_after':s['runtimes'][rid]['energy'],**({'niche':niche_row} if niche_row else {})})
             if m['death_cause']:
                 s['active'].remove(rid);s['deaths'].append({'runtime':rid,'tick':tick,'cause':m['death_cause']});maybe_crash('metabolism:after_death');_successor(d,s,rid,tick)
-        s['tick']=tick;s['last_tick']={'tick':tick,'regenerated':regen,'actions':rows};_validate(s)
+        shared=_share(d,s,tick) if s['config'].get('sharing') else []
+        s['tick']=tick;s['last_tick']={'tick':tick,'regenerated':regen,'actions':rows,**({'shared':shared} if shared else {})};_validate(s)
         atomic_write_bytes(root(d)/'ticks'/f'{tick:06d}.json',whole.canon(s['last_tick'])+b'\n');store.save(d,NS,COMPONENT,s)
     return summary(s)
+
+# v1022.8.2 relations: energy given between runtimes, decided by the giver's heart, its bond with the other weighing
+HUNGRY,SATED,GIFT,KEEP_FLOOR=3000,7000,1000,4000
+def _bond(d,giver,other):
+    """what the giver's soul holds of the other runtime (its attachment, -1..1; 0 for one never met)"""
+    try:return float(whole.load_soul(child(d,giver)).get('attachments',{}).get('runtime:'+other,0.0))
+    except Exception:  # noqa: BLE001 - an unreadable soul gives no bond; the audits report it
+        return 0.0
+def _ask_heart(d,s,giver,other,context,cost,need):
+    """the giver's heart chooses: give (the other's need and its bond with the other pull; what it costs itself, less when
+    it has plenty, holds back) or keep. Its own values (inherited and lived) weigh both"""
+    b=_bond(d,giver,other);surplus=max(0.,min(1.,(s['runtimes'][giver]['energy']-SATED)/(10000-SATED)))
+    # what giving costs it weighs less the less of its own life is left (its energy will not serve it long)
+    left=_life_left(d,s,giver)
+    opts=[{'id':'give','signals':{'relationship':round(.3+.7*max(-1.,min(1.,b))+.6*need,6),'survival':round(-cost*(1-surplus)*left,6)}},
+          {'id':'keep','signals':{'survival':.25}}]
+    ok=heart_loop.choose(child(d,giver),opts,context=context)['chosen']=='give';whole.sync(child(d,giver))
+    return ok,b
+def _give(d,s,giver,taker,amount,what,theme,newborn=False):
+    """move energy from one runtime to another (the total stays), and each lives it: the taker was helped by the giver"""
+    receipt=hashlib.sha256(whole.canon({**what,'giver':giver,'taker':taker,'amount':amount})).hexdigest()
+    pg,pt=child(d,giver),child(d,taker)
+    organism2.resource_gift(pg,amount,receipt)
+    if not newborn:organism2.resource_credit(pt,amount,receipt)
+    heart_loop.process_experience(pt,'support',.8,.5,theme,'runtime:'+giver,origin='simulated')
+    heart_loop.process_experience(pg,'care',.3,.3,theme,'runtime:'+taker,origin='simulated')
+    whole.sync(pg);whole.sync(pt);s['runtimes'][giver]=_snapshot(d,giver)
+    if not newborn:s['runtimes'][taker]=_snapshot(d,taker)
+    rel=s.setdefault('relations',{'gifts':0,'energy_given':0,'returned':0,'refused':0,'raised':0,'pairs':{}})
+    pair=f'{giver}>{taker}';back=f'{taker}>{giver}'
+    rel['gifts']+=1;rel['energy_given']+=amount;rel['raised']+=int(newborn)
+    if back in rel['pairs']:rel['returned']+=1          # it gives back to one that gave to it
+    rel['pairs'][pair]=rel['pairs'].get(pair,0)+1
+    return receipt
+def _share(d,s,tick):
+    out=[];rel=s.setdefault('relations',{'gifts':0,'energy_given':0,'returned':0,'refused':0,'raised':0,'pairs':{}})
+    for taker in sorted([r for r in s['active'] if s['runtimes'][r]['energy']<HUNGRY],key=lambda r:s['runtimes'][r]['energy']):
+        givers=sorted([r for r in s['active'] if r!=taker and s['runtimes'][r]['energy']>=SATED],key=lambda r:(-s['runtimes'][r]['energy'],r))
+        if not givers:break
+        giver=givers[0];ok,b=_ask_heart(d,s,giver,taker,f'share-tick-{tick}',.1,1-s['runtimes'][taker]['energy']/HUNGRY)
+        if ok:_give(d,s,giver,taker,GIFT,{'tick':tick},'shared-energy');out.append({'giver':giver,'taker':taker,'amount':GIFT,'bond':round(b,4)})
+        else:
+            rel['refused']+=1;out.append({'giver':giver,'taker':taker,'amount':0,'bond':round(b,4)})
+            s['runtimes'][giver]=_snapshot(d,giver)
+    return out
+def _life_left(d,s,rid):
+    """the share of its life still ahead (1 newborn .. 0 at its last tick)"""
+    age=organism2.load(child(d,rid)).get('metabolic_age',0);m=s['config']['max_age']
+    return max(0.,min(1.,(m-age)/m))
+def _pledges(d,s,parent,tick,need):
+    out={}
+    for r in sorted([r for r in s['active'] if r!=parent],key=lambda r:(-s['runtimes'][r]['energy'],r)):
+        spare=s['runtimes'][r]['energy']-max(300,int(KEEP_FLOOR*_life_left(d,s,r)))
+        if spare<=0:continue
+        ok,_=_ask_heart(d,s,r,parent,f'raise-{parent}-tick-{tick}',.15,.5);s['runtimes'][r]=_snapshot(d,r)
+        if ok:out[r]=min(spare,2500,need-sum(out.values()))
+        if sum(out.values())>=need:break
+    return {k:v for k,v in out.items() if v>0}
 
 @transactional()
 def environment(d,regeneration):
@@ -299,7 +369,8 @@ def summary(s):
         'living_energy':sum(s['runtimes'][r]['energy'] for r in s['active']),**{k:total(k) for k in ('attempts','correct','wrong','abstained','hard_attempts','hard_correct')},
         'deaths':s['deaths'],'successions':s['successions'],'grounded_rewards':s.get('grounded_rewards',[]),'last_tick':s['last_tick'],'claim_boundary':CLAIMS,
         'bounds':dict(zip(('max_ticks','max_runtimes'),bounds(s))),
-        'alive':[{'runtime':r,'family':s['runtimes'][r]['family'],'generation':s['runtimes'][r]['generation'],'energy':s['runtimes'][r]['energy']} for r in s['active']],'regeneration':s['config']['regeneration'],'environment_changes':s.get('environment_changes',[]),
+        'alive':[{'runtime':r,'family':s['runtimes'][r]['family'],'generation':s['runtimes'][r]['generation'],'energy':s['runtimes'][r]['energy']} for r in s['active']],
+        'sharing':bool(s['config'].get('sharing')),'relations':{k:v for k,v in s.get('relations',{}).items() if k!='pairs'},'regeneration':s['config']['regeneration'],'environment_changes':s.get('environment_changes',[]),
         **({'research_niche':__import__('tukuyo_v1023r.niche',fromlist=['summary']).summary(s['research'],s['seed']),'research_claim_boundary':s['research']['claim_boundary']} if 'research' in s else {})}
 def status(d):return summary(preflight(d))
 def audit(d):

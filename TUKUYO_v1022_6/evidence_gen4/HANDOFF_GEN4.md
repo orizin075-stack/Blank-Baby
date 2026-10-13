@@ -15,6 +15,15 @@
 - 相手の経験による魂の実験は `python3 -B tools/v1022_7_7_soul_experiment.py --data FRESH --trust ANCHOR --out out.json` と、`python3 -B tools/v1022_7_7_experience_verifier.py --data FRESH` で、いつでもやり直せます（記録した結果だけ、費用 0）。
 - 統合した版の最後の確かめ（署名した写し、費用 0）：全体テスト 1031/1031、魂らしさ 12/12、汚染 6/6、成長の実験 3/3、親を使わない計測は例外 0・型の食い違い 0、ASDiv 開発用は `g4-solve` 501・`think` 502（誤りはどちらも 3）。結果は `evidence_gen4/*fusion_2026-10-12.json`。
 
+**道筋の残りを進めた版（2026-10-13、`v1022.7.9+gen4-r9`）。** 外部の検証が示した 7.9〜9.0 を同時に進めました（`ROADMAP_2026-10-13.md`）。続ける人が知っておくこと：
+
+- 経験の出どころ（`src/tukuyo_v1022/provenance.py`）：魂の出来事の `origin`（と実観測だけ `evidence`）は、書き込む道筋が決めます。新しく経験を書く道を足すときは、`process_experience(..., origin=...)` を必ず渡すこと（渡さなければ「出どころの記録なし」）。observed は `observe_experience` だけ、checked は第4世代の生活だけ。監査は `whole_state._audit_once` から呼ばれ、実観測の証拠を観測の記録から作り直して比べます。合格の実験は `tools/experience_authenticity_experiment.py`。
+- 目標（`src/tukuyo_v1022/goals.py`）：記録から決まりで作る。決まりを変えたら、台帳の監査（記録から作り直して比べる）が前の台帳を通さなくなるので、決まりの版を分けること。合格の実験は `tools/goal_formation_experiment.py`。
+- 日本語の読み手（`src/tukuyo_g4/reader_ja.py`）と英語の補助の形（`src/tukuyo_g4/forms_story_en.py`）：直すときは `tools/private_eval.py --set dev` と自分の確認用の問題で誤りを見ること。**本番用（`HELD_OUT_SHA256`）は今回 1 回使ったので、次に改善を測るときは新しい本番用を書くこと**。英語の補助の形は開発用の言い回しに合わせすぎで、本番用では効きませんでした。
+- 生態系（`src/tukuyo_v1022/metabolism.py`）：長さ・数の上限は作るときの設定（`bounds`）。`--sharing` の分け合いと共同の子育ては、心の選択で決め、エネルギーを移すだけ（`organism2.resource_gift` と `resource_credit`、全体の量は監査で確かめる）。家族が同じ時刻に生まれて死ぬこと、生きた個体が子を増やせないこと、資源を探す道がないことが、今の限界です。長い実験は `tools/ecology_long_run.py`（`--change TICK:REGEN` で環境を変える）。
+- 復元（`src/tukuyo_v1014/recovery.py`）：見張り（restore frontier）は、復元の受領書だけは点検点のバイトと比べません。正史の印は `canon/private/` にあり、点検点に入りません。100 回の試験は `tools/restore_cycles.py`。
+- 最後の確かめ（署名した写し、費用 0）：{{FINAL}}
+
 **外部の検証を受けた版（2026-10-13、`v1022.7.8+gen4-r8`）。** r7 への外部の検証の指摘のうち 2 つを直しました（`REVIEW_2026-10-13.md`）。続ける人が知っておくこと：
 
 - 読み取り器：量をぼかす言い方は `vague_amounts`（`reader_en.py`）で、`some` と同じ「数の分からない量」として読みます。数のない複数形を持つのは `_unknown_held`。前の数がない「N more」は `UNKNOWN_START`、時を指定した問いは `ASKED_TIME_NOT_READ`。直すときは `tools/review_probes.py`（開発用 44 問）で誤りを見て、隠し問題 48 問（凍結、`HELD_OUT_SHA256`）は直したあとにだけ回すこと。
