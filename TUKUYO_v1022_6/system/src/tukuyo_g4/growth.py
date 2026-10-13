@@ -73,7 +73,7 @@ class Unread:
     'met', 'grown': {'seq', 'how', 'value', 'teachers'} once it can read it alone}}"""
     def __init__(s,data):s.data=Path(data);s.p=s.data/'g4'/'unread.json'
     def load(s):
-        if not s.p.is_file():return {'schema':SCHEMA,'entries':{},'next':1}
+        if not s.p.is_file():own.absent(s.data,'unread');return {'schema':SCHEMA,'entries':{},'next':1}
         o=json.loads(s.p.read_text(encoding='utf-8'));sha=own.body_sha(o.get('entries',{}))
         if o.get('schema')!=SCHEMA or o.get('sha256')!=sha:raise ValueError('UNREAD_STORE_SEAL')
         own.check(s.data,'unread',sha,o.get('signed'))
@@ -87,7 +87,7 @@ class Unread:
         if sg:o['signed']=sg
         s.p.parent.mkdir(parents=True,exist_ok=True)
         from tukuyo_common.atomic_fs import atomic_write_text
-        atomic_write_text(s.p,json.dumps(o,ensure_ascii=False,sort_keys=True))
+        atomic_write_text(s.p,json.dumps(o,ensure_ascii=False,sort_keys=True));own.written(s.data,'unread')
     @staticmethod
     def entry_id(text):return hashlib.sha256(' '.join(str(text).split()).encode()).hexdigest()[:24]
     def keep(s,text,key,why,reason,parents):

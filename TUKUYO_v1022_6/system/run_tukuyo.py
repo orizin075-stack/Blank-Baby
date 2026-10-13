@@ -100,7 +100,7 @@ def chat(api,data,trust=None,migration_trust=None):
         except Exception as e:print('ERROR',type(e).__name__+':'+str(e))
 
 def parser():
-    p=argparse.ArgumentParser(description='TUKUYO v1022.7.7+gen4-r6: bounded experiential Soul with signed outcome learning and plan/API dialogue, fused with generation 4 (a child of three LLM parents)')
+    p=argparse.ArgumentParser(description='TUKUYO v1022.7.7+gen4-r7: bounded experiential Soul with signed outcome learning and plan/API dialogue, fused with generation 4 (a child of three LLM parents)')
     p.add_argument('--data',type=Path,default=Path(os.environ.get('TUKUYO_DATA_DIR', str(Path.home()/'.tukuyo'/'v999_data'))))
     p.add_argument('--ep-trust-dir',type=Path,help='External pinned local/observer/evaluator/authority public keys. Required after epistemic init.')
     p.add_argument('--cap-trust-dir',type=Path,help='External pinned capability authority key. Required to resolve learned legacy capabilities.')
@@ -334,6 +334,8 @@ def parser():
     c=sub.add_parser('g4-audit',help='generation 4: every learned reading must reproduce its own example')
     c=sub.add_parser('g4-reflect',help='generation 4: what the child is unsure of (disagreements it could not settle, what was contested, problems it could not read alone, its own ways of reading in doubt) and what it wants to do about it; with --act it tries again alone what it can now read, and asks its parents on its own (paid calls when parents are configured)')
     c.add_argument('--act',action='store_true');c.add_argument('--limit',type=int,default=3)
+    c=sub.add_parser('g4-adopt-legacy',help='generation 4: an individual from before stores were signed (2026-10-06 to 10-09): shows what its unsigned stores hold (learned readings, answers its parents agreed on, its life record); with --yes signs them as its own. Only if you know they came from this individual')
+    c.add_argument('--yes',action='store_true',help='sign them as its own')
     c=sub.add_parser('g4-parents',help='generation 4: is it ready to ask its parents - for each one its key (never shown), model, package and network, and the child\'s trust in it; no request to any parent without --live')
     c.add_argument('--live',action='store_true',help='one short paid call to each parent that is ready')
     c=sub.add_parser('chatgpt-status',help='Connection configuration without network I/O');c.add_argument('--probe',action='store_true');c.add_argument('--both',action='store_true',help='Inspect plan and API independently; --probe explicitly calls both')
@@ -411,7 +413,7 @@ def _main(argv=None):
                     from tukuyo_v1022.metabolism import preflight as metabolism_preflight
                     metabolism_preflight(data)
                 from tukuyo_g4.runtime_store import needs_preflight as g4_needs_preflight,load as g4_learning_state
-                if g4_needs_preflight(data):g4_learning_state(data)
+                if g4_needs_preflight(data) and args.cmd!='g4-adopt-legacy':g4_learning_state(data)
                 from tukuyo_g4.chatgpt_chat import needs_preflight as chat_needs_preflight,load as chat_state
                 if chat_needs_preflight(data):chat_state(data)
                 from tukuyo_v1022.clarification import load as clarification_state,needs_preflight as clarification_needs_preflight
@@ -891,6 +893,17 @@ def _main(argv=None):
                 elif args.cmd=='metabolism-step':res=metabolism.step(data,args.ticks)
                 elif args.cmd=='metabolism-status':res=metabolism.status(data)
                 else:res=metabolism.audit(data)
+            elif args.cmd=='g4-adopt-legacy':
+                _require_live(data)
+                from tukuyo_g4 import adopt as g4_adopt
+                seen=g4_adopt.look(data)
+                if not args.yes:
+                    res={'ok':True,'version':'gen4','would_adopt':seen,'adopted':None,
+                         'note':'nothing changed. With --yes these unsigned stores are signed as this individual\'s own: only if you know they came from it' if seen else 'no unsigned store to adopt'}
+                else:
+                    res={'ok':True,'version':'gen4','adopted':g4_adopt.adopt(data),'looked_at':seen}
+                    from tukuyo_v977.whole_state import sync as _g4_whole_sync
+                    _g4_whole_sync(data)
             elif args.cmd=='g4-parents':
                 from tukuyo_g4 import llm as g4_llm,life as g4_life
                 res={'ok':True,'version':'gen4',**g4_llm.readiness(live=args.live)}
@@ -1370,7 +1383,9 @@ def _main(argv=None):
             output(res)
             return 0 if res.get('ok',True) else 1
     except Exception as exc:
-        output({'ok':False,'error':'ENTITY_DEAD' if str(exc).startswith('ENTITY_DEAD:') else type(exc).__name__+':'+str(exc)})
+        out={'ok':False,'error':'ENTITY_DEAD' if str(exc).startswith('ENTITY_DEAD:') else type(exc).__name__+':'+str(exc)}
+        if 'UNSIGNED_LEGACY' in str(exc):out['advice']='g4-adopt-legacy shows the unsigned stores of a version from before stores were signed; --yes signs them as this individual\'s own (only if you know they came from it)'
+        output(out)
         return 1
 
 def main(argv=None):

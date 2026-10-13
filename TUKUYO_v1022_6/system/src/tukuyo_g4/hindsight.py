@@ -23,7 +23,7 @@ def _sha(o):return own.body_sha(o)
 class Unresolved:
     def __init__(s,data):s.data=Path(data);s.p=s.data/'g4'/'unresolved.json'
     def load(s):
-        if not s.p.is_file():return {'schema':SCHEMA,'entries':{},'next':1}
+        if not s.p.is_file():own.absent(s.data,'unresolved');return {'schema':SCHEMA,'entries':{},'next':1}
         o=json.loads(s.p.read_text(encoding='utf-8'));sha=_sha(o.get('entries',{}))
         if o.get('schema')!=SCHEMA or o.get('sha256')!=sha:raise ValueError('UNRESOLVED_STORE_SEAL')
         own.check(s.data,'unresolved',sha,o.get('signed'))
@@ -33,7 +33,7 @@ class Unresolved:
         sg=own.sign(s.data,'unresolved',o['sha256'])
         if sg:o['signed']=sg
         s.p.parent.mkdir(parents=True,exist_ok=True);tmp=s.p.with_suffix('.tmp')
-        tmp.write_text(json.dumps(o,ensure_ascii=False,sort_keys=True),encoding='utf-8');os.replace(tmp,s.p)
+        tmp.write_text(json.dumps(o,ensure_ascii=False,sort_keys=True),encoding='utf-8');os.replace(tmp,s.p);own.written(s.data,'unresolved')
     @staticmethod
     def entry_id(text):return hashlib.sha256(' '.join(str(text).split()).encode()).hexdigest()[:24]
     def keep(s,text,key,values,reason,mine=None):

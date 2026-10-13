@@ -423,8 +423,12 @@ def _b_equation(s,toks):
 
 EN_DEC=r'(?:ate|eats|eat|gave away|gives away|give away|lost|loses|lose|used|uses|use|broke|breaks|dropped|drops|spent|spends)'
 EN_INC=r'(?:got|gets|get|found|finds|find|received|receives|bought|buys|buy|picked|picks|collected|collects|was given|is given|won|wins|made|makes|baked|bakes)'
+# an event that did not happen, or may happen later: 'did not', 'is going to lose', 'might buy', 'wanted to eat'
+EN_UNDONE=r"\b(?:not|never)\b|n't\b|\b(?:will|would|might|may|could|going to|plans? to|planned to|wants? to|wanted to|hopes? to|thinks? about|thought about)\b"
 def _b_en_change(s,toks):
     if HEDGE.search(s) or re.search(r'\beach\b|\btimes\b|\btwice\b|\bper\b|\bmore than\b|\bfewer than\b|\bless than\b|\bsold\b|\bsells\b|\blent\b|\bborrowed\b|\$|dollars?|\bcents?\b',s,re.I):return None
+    # 'Max has 12 marbles. He is going to lose 5 marbles later. How many does Max have now?' was 7 (the fusion limits round)
+    if re.search(EN_UNDONE,s,re.I):return None
     if not re.search(r'how many[^.?]*\b(?:left|now|in all|altogether|in total|remain)',s,re.I):return None
     m=re.search(r'\b(?:has|had|have|there (?:are|were)|owns?|owned)\s+(\d+)\s+([a-z]+)',s,re.I)
     if not m:return None
@@ -772,17 +776,27 @@ def _b_sing(w):
 
 def _b_groups_en(s,toks):
     v=_b_vals(toks)
-    if len(v)!=2:return None
+    # 'Ben did not buy 6 boxes of pens with 4 pens in each box': nothing to multiply (it was 24, the fusion limits round)
+    if len(v)!=2 or re.search(r"\b(?:not|never)\b|n't\b",s,re.I):return None
     m=re.search(r'\bwith\s+(\d+)\s+(\w+)\s+(?:in|on)\s+each\s+(\w+)',s,re.I)
-    q=re.search(r'\bhow\s+many\s+(\w+)',s,re.I)
-    if m and q and _b_sing(q[1])==_b_sing(m[3])!=_b_sing(m[2]):
-        # asked for the containers ('how many bags', N things with K in each bag): N shared by K, whole or undecided.
-        # Before, every 'with K ... in each' was read as a product, and 42 pieces in bags of 7 became 294 bags
-        per=[t for t in v if t['span'][0]==m.start(1)];whole=[t for t in v if t['span'][0]!=m.start(1)]
-        if len(per)!=1 or len(whole)!=1 or not per[0]['value']:return None
-        n=whole[0]['value']/per[0]['value']
-        return _fmt(n) if n.denominator==1 else None
-    if re.search(r'\bwith\s+\d+\s+\w+\s+(?:in|on)\s+each\b|\bholds?\s+\d+\b[^?]*\bin\s+\d+\b|\bcosts?\s+\d+(?:\.\d+)?\s+\w+\s+each\b',s,re.I):
+    if m:
+        q=re.search(r'\bhow\s+many\s+(\w+)',s,re.I)
+        per=[t for t in v if t['span'][0]==m.start(1)];other=[t for t in v if t['span'][0]!=m.start(1)]
+        if not q or len(per)!=1 or len(other)!=1 or not per[0]['value']:return None
+        item,group,asked=_b_sing(m[2]),_b_sing(m[3]),_b_sing(q[1])
+        w=re.match(r'\s*([a-z]+)',s[other[0]['span'][1]:],re.I);of=_b_sing(w[1]) if w else None   # what the other number counts
+        if item==group:return None
+        if of==item:
+            # N things with K in each container: how many containers is N shared by K (whole, or not decided); how many
+            # things is N itself. Before, every 'with K ... in each' was a product: 42 pieces in bags of 7 were 294 bags,
+            # and 24 cookies on plates of 6 were 144 cookies
+            if asked==group:
+                n=other[0]['value']/per[0]['value'];return _fmt(n) if n.denominator==1 else None
+            return _fmt(other[0]['value']) if asked==item else None
+        if of==group and (asked==item or re.search(r'\bin all\b|\baltogether\b|\bin total\b',s,re.I)):
+            return _fmt(other[0]['value']*per[0]['value'])     # N containers with K things in each
+        return None
+    if re.search(r'\bholds?\s+\d+\b[^?]*\bin\s+\d+\b|\bcosts?\s+\d+(?:\.\d+)?\s+\w+\s+each\b',s,re.I):
         return _fmt(v[0]['value']*v[1]['value'])
     return None
 

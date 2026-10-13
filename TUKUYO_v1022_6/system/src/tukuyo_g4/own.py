@@ -13,6 +13,15 @@ recorded one names an older base, and is refused like a store changed by hand (<
 not take it in either (unsynced). The same idea as the signed commit chains of the v1022 runtime (tukuyo_v1022.store,
 tukuyo_g4.runtime_store), without a chain: one link back to the version the whole state holds.
 
+This leaves a window (the fusion limits round, evidence_gen4/LIMITS_2026-10-13.md §6): a store written twice before the
+whole state was synced may be put back to the first of the two writes, and nothing in the data directory can tell, as
+whoever puts files back can put the whole state back too. Each signature now carries a number (seq) that grows with
+every write of that store. An owner who keeps a witness outside the data directory (TUKUYO_G4_WITNESS, a directory: one
+file per individual, signed with its key) has the number of each store's last write noted there after the write; a store
+with a smaller number than the witness noted, or missing when the witness noted one, is refused (<KIND>_ROLLED_BACK). The
+witness is as safe as the place it is kept: on the same disk, a restore of the disk puts it back too. The last write before
+a stop, before the witness was told, is not covered (as if the stop had come before that write).
+
 A store written before stores were signed (generation 4 of 2026-10-09, before this module) is read only when the whole
 state recorded that very file; the next save signs it. An unsigned store the whole state never recorded is not taken:
 before, one put into an individual that had not used generation 4 yet (its whole state had recorded nothing about it)
@@ -22,14 +31,97 @@ sealed with its sha256 only, as before.
 The key lives with the individual: this guards against changes made without it, not against someone who uses it.
 """
 from __future__ import annotations
-import hashlib,json
+import hashlib,json,os
+from contextvars import ContextVar
 from pathlib import Path
 
-SCHEMA='tukuyo.g4.own/1'
+SCHEMA='tukuyo.g4.own/1';WITNESS_SCHEMA='tukuyo.g4.witness/1';WITNESS_ENV='TUKUYO_G4_WITNESS'
 KINDS={'learned':'g4/learned.json','remembered':'g4/remembered.json','life':'g4/life.json','unresolved':'g4/unresolved.json','unread':'g4/unread.json'}
 COMPONENTS={'g4_'+k:v for k,v in KINDS.items()}
 
 def body_sha(o):return hashlib.sha256(json.dumps(o,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
+
+# ----------------------------------------------------------------------------- the witness outside the data directory
+def _witness_file(data):
+    """the witness file of the live individual in data, or None when no witness is kept (TUKUYO_G4_WITNESS unset)"""
+    d=os.environ.get(WITNESS_ENV,'').strip()
+    if not d:return None
+    ident=individual(data)
+    if ident is None:return None
+    d=Path(d).resolve();root=Path(data).resolve()
+    if root.parent.name=='.lineage_transaction':root=root.parent.parent      # a transaction's working copy
+    if d==root or root in d.parents:raise ValueError('G4_WITNESS_INSIDE_DATA')
+    return d/(hashlib.sha256(ident.encode()).hexdigest()[:24]+'.witness.json')
+
+def witnessed(data):
+    """{kind: the number of the last write the witness noted}; {} when no witness is kept. ValueError when the witness
+    is not this individual's"""
+    f=_witness_file(data)
+    if f is None or not f.is_file():return {}
+    from tukuyo_v977.whole_state import _verify,_key_paths
+    try:env=json.loads(f.read_text(encoding='utf-8'));q=env['payload'];pub=_key_paths(data)[1].read_text().strip()
+    except (OSError,ValueError,KeyError,TypeError):raise ValueError('G4_WITNESS_NOT_ITS_OWN') from None
+    if (not isinstance(q,dict) or q.get('schema')!=WITNESS_SCHEMA or q.get('individual_id')!=individual(data) or not _verify(env,pub)
+            or not isinstance(q.get('seq'),dict)):raise ValueError('G4_WITNESS_NOT_ITS_OWN')
+    return {k:int(v) for k,v in q['seq'].items()}
+
+# inside a transaction (tukuyo_v1019.transaction) the stores are written to a working copy, which is applied to the live
+# data only at its end, or not at all: the witness is told only once it was applied (a witness ahead of the data would
+# refuse the data as rolled back)
+_PENDING=ContextVar('g4_witness_pending',default=None)
+def witness_begin():
+    _PENDING.set(None)
+def witness_after_apply(data):
+    p=_PENDING.get();_PENDING.set(None)
+    for kind,seq in (p or {}).items():_note(data,kind,seq,now=True)
+
+def _note(data,kind,seq,now=False):
+    """tell the witness that this store was written with this number (after the write)"""
+    f=_witness_file(data)
+    if f is None:return
+    from tukuyo_v1019.transaction import ACTIVE
+    if ACTIVE.get() and not now:
+        p=_PENDING.get()
+        if p is None:p={};_PENDING.set(p)
+        p[kind]=max(p.get(kind,0),seq);return
+    seqs=witnessed(data)
+    if seqs.get(kind,0)>=seq:return
+    seqs[kind]=seq
+    from tukuyo_v977.whole_state import _sign,canon
+    from tukuyo_common.atomic_fs import atomic_write_bytes
+    f.parent.mkdir(parents=True,exist_ok=True)
+    atomic_write_bytes(f,canon(_sign(data,{'schema':WITNESS_SCHEMA,'individual_id':individual(data),'seq':seqs}))+b'\n')
+
+def _seq_on_disk(data,kind):
+    try:return int(json.loads((Path(data)/KINDS[kind]).read_text(encoding='utf-8'))['signed']['payload'].get('seq') or 0)
+    except (OSError,ValueError,KeyError,TypeError,AttributeError):return 0
+
+def written(data,kind):
+    """after a store was written: the witness, if one is kept, notes the number of this write"""
+    if _witness_file(data) is not None:_note(data,kind,_seq_on_disk(data,kind))
+
+def absent(data,kind):
+    """a store that is not there: ValueError when the witness noted a write of it (it was taken away)"""
+    if witnessed(data).get(kind,0)>0:raise ValueError(kind.upper()+'_ROLLED_BACK')
+
+def note_learned(data,commits):
+    """what it learned lives in a chain of commits (runtime_store.py): the witness notes how many"""
+    if _witness_file(data) is not None:_note(data,'learned',commits)
+
+def check_learned(data,commits):
+    if commits<witnessed(data).get('learned',0):raise ValueError('G4_LEARNING_ROLLED_BACK')
+
+def behind_witness(data):
+    """the stores older than the last write the witness outside noted (put back, or taken away), for whole-audit: when
+    the whole data directory is put back, the whole state agrees with them and only the witness can tell. [] when no
+    witness is kept"""
+    seen=witnessed(data)
+    if not seen:return []
+    out=[]
+    for kind in KINDS:
+        n=len(list((Path(data)/'g4'/'commits').glob('*.json'))) if kind=='learned' else _seq_on_disk(data,kind)
+        if n<seen.get(kind,0):out.append(kind)
+    return out
 
 def individual(data):
     """the id of the live individual in data, or None"""
@@ -45,8 +137,8 @@ def sign(data,kind,sha):
     ident=individual(data)
     if ident is None:return None
     from tukuyo_v977.whole_state import _sign
-    rec=_recorded(data,kind)
-    return _sign(data,{'schema':SCHEMA,'kind':kind,'individual_id':ident,'sha256':sha,'base':None if rec is NOT_RECORDED else rec})
+    rec=_recorded(data,kind);seq=max(_seq_on_disk(data,kind),witnessed(data).get(kind,0))+1
+    return _sign(data,{'schema':SCHEMA,'kind':kind,'individual_id':ident,'sha256':sha,'base':None if rec is NOT_RECORDED else rec,'seq':seq})
 
 NOT_RECORDED=object()
 def _recorded(data,kind):
@@ -68,6 +160,7 @@ def check(data,kind,sha,signed):
         # unsigned (written before stores were signed): only the very file the whole state recorded
         rec=_recorded(data,kind)
         if rec is NOT_RECORDED or rec!=_file_sha(Path(data)/KINDS[kind]):raise ValueError(kind.upper()+'_NOT_SIGNED')
+        absent(data,kind)                                   # the witness noted a signed write after it
         return
     from tukuyo_v977.whole_state import _verify,_key_paths
     pub=_key_paths(data)[1];q=signed.get('payload') if isinstance(signed,dict) else None
@@ -78,6 +171,8 @@ def check(data,kind,sha,signed):
     rec=_recorded(data,kind)
     if rec is not NOT_RECORDED and rec!=_file_sha(Path(data)/KINDS[kind]) and ('base' not in q or q['base']!=rec):
         raise ValueError(kind.upper()+'_ROLLED_BACK')
+    # older than the last write the witness outside noted (only when one is kept)
+    if int(q.get('seq') or 0)<witnessed(data).get(kind,0):raise ValueError(kind.upper()+'_ROLLED_BACK')
 
 def not_its_own(data):
     """the components ('g4_learned', ...) whose store in this individual is not its own: refused when read (changed by

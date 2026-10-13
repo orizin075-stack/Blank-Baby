@@ -169,6 +169,8 @@ def transactional(out_parameter=None):
                     output=Path(bound.arguments[out_parameter]).resolve()
                     bound.arguments[out_parameter]=td/'output.json'
                 token=ACTIVE.set(True)
+                from tukuyo_g4.own import witness_begin,witness_after_apply
+                witness_begin()
                 try:
                     result=fn(*bound.args,**bound.kwargs)
                     from tukuyo_v1019.evolution import ensure_state
@@ -193,6 +195,7 @@ def transactional(out_parameter=None):
                     atomic_write_bytes(td/'PREPARED.json',canon(tx)+b'\n',mode=0o600)
                     maybe_crash('lineage:after_prepare')
                     _apply(data,tx)
+                    witness_after_apply(data)          # generation 4: the witness outside notes what was applied
                     if output is not None and isinstance(result,dict):result['package_file']=str(output)
                     return result
                 finally:

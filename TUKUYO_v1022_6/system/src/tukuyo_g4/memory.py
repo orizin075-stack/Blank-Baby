@@ -46,7 +46,7 @@ class Memory:
     def __init__(s,data):s.data=Path(data);s.p=s.data/'g4'/'remembered.json';s.status=None;s.why=None
     def _seal(s,entries):return hashlib.sha256(json.dumps(entries,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
     def load(s):
-        if not s.p.is_file():return {'schema':SCHEMA,'entries':{},'seal':s._seal({})}
+        if not s.p.is_file():own.absent(s.data,'remembered');return {'schema':SCHEMA,'entries':{},'seal':s._seal({})}
         o=json.loads(s.p.read_text(encoding='utf-8'));seal=s._seal(o.get('entries',{}))
         if o.get('schema')!=SCHEMA or o.get('seal')!=seal:raise ValueError('REMEMBERED_STORE_SEAL')
         own.check(s.data,'remembered',seal,o.get('signed'))
@@ -56,6 +56,7 @@ class Memory:
         o.pop('signed',None);sg=own.sign(s.data,'remembered',o['seal'])
         if sg:o['signed']=sg
         tmp=s.p.with_suffix('.tmp');tmp.write_text(json.dumps(o,ensure_ascii=False,sort_keys=True),encoding='utf-8');tmp.replace(s.p)
+        own.written(s.data,'remembered')
     @staticmethod
     def key(question):return hashlib.sha256(norm(question).encode()).hexdigest()[:24]
     def recall(s,question):

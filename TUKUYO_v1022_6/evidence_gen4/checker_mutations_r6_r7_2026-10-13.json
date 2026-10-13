@@ -1,0 +1,30 @@
+{
+ "note": "every operator change and every unit change of the 505 readings the r7 reader verifies on ASDiv dev, through the checker of r6 (commit e67b39a) and of r7: does the unit and quote change of the limits round let any more through",
+ "readings": 505,
+ "operator": {
+  "variants": 729,
+  "r6": {
+   "other": 340,
+   "caught": 385,
+   "same": 4
+  },
+  "r7": {
+   "other": 340,
+   "caught": 385,
+   "same": 4
+  },
+  "differ": 0
+ },
+ "unit": {
+  "variants": 1914,
+  "r6": {
+   "caught": 1907,
+   "same": 7
+  },
+  "r7": {
+   "caught": 1907,
+   "same": 7
+  },
+  "differ": 0
+ }
+}

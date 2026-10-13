@@ -98,14 +98,16 @@ AWAY=V('blew|flew|ran|rolled|floated|drifted|washed|swam|walked|wandered|hopped|
 LINKV=V('having|containing|holding|carrying|with|filled|stuffed')     # 'N boxes, each having M things'
 GONE=V('die|dies|died|break|breaks|melt|melts|pop|pops|fall|falls|escape|escapes|wilt|wilts|burst|bursts|sink|sinks|disappear|disappears|disappeared|rot|rots|rotted|spoil|spoils|spoiled')
 GOAL=V('calls|call|called|requires|require|required|needs|need|needed|asks|wants|want|wanted')
-INTENT=V('wants|want|wanted|needs|need|needed|plans|plan|planned|hopes|hope|hoped|wishes|wish|wished|tries|try|tried|likes|like|would|will|going|should|must')
+INTENT=V('wants|want|wanted|needs|need|needed|plans|plan|planned|hopes|hope|hoped|wishes|wish|wished|tries|try|tried|likes|like|would|will|going|should|must|might')
 PRON={'he','she','they','him','her','them','it','i','we','you','me','us','his','their','its','my','our','your','hers','theirs'}
 DET=V('the|a|an|his|her|their|its|my|our|your|this|that|these|those|some|each|every|all|both|any|another|other|one|several|many|few|most|no')
 PREP=V('of|for|in|on|at|to|from|with|by|per|into|onto|than|about|after|before|during|over|under|around|between|among|through|across|off|out|up|down|away|back|along|inside|outside|near|behind|until|since|without|apiece|within')
 CONJ=V('and|or|but|then|so|because|if|when|while|though|although|which|who|that|where')
 QWORD=V('how|what|which|who|whom|whose|why|when|where|find')
-MODS=V('more|fewer|less|extra|additional|new|old|other|different|total|left|remaining|whole|full|empty|same|equal|small|large|big|little|whole|entire|own')
-KIND_MODS=V('new|old|small|large|big|little')   # dropped like the others, but they can tell one kind of a thing from another
+MODS=V('more|fewer|less|extra|additional|other|different|total|left|remaining|whole|full|empty|same|equal|whole|entire|own')
+# size and age words tell one kind of a thing from another, as colours do ('7 big apples and 3 small apples'); they were
+# dropped with the words above until the fusion limits round. A question about one of them must find it in the story
+KIND_MODS=V('new|old|small|large|big|little')
 AUX=V('will|would|can|could|should|shall|may|might|must|does|did|do|has|have|had|is|are|was|were|been|be|to|not')
 NOT_NOUN=AUX|PRON|DET|PREP|CONJ|QWORD|HAVE|BE|V('more|fewer|less|left|now|then|total|all|altogether|together|each|every|per|times|as|much|many|same|equal|equally|only|just|also|already|still|again|later|today|yesterday|tomorrow|some|rest|remaining|first|last|next|there|here|out|away|up|down|back|in|on|off|over|twice|half|double|triple|evenly|exactly|about|around|almost|nearly|than|very|too|so')
 GROUPS=V('box|bag|pack|package|packet|bottle|can|jar|bunch|basket|case|carton|set|pair|row|column|group|team|shelf|tray|crate|container|plate|bowl|cup|stack|pile|roll|bundle|batch|load|page|book|sheet|bar|stick|loaf|dozen|section|table|car|bus|van|truck|boat|class|tank|bin|drawer|aisle|floor|level|layer|tier|vase|pot|cage|pen|room|building|house|tent|herd|flock|train|ship|plane|round|game|day|week|month|year|hour|minute|second|time|trip|lap|session|night|morning|tray|bucket|jug|pan|batch|serving|bouquet|wall|street|block|tree|branch|plant|garden|pizza|pie|cake|bucket|album|folder|binder|envelope|drawer|cabinet|truckload|cartload')
@@ -329,6 +331,10 @@ class Story:
         if m:
             s.body(a+m.start(2),a+m.end(2));s.body(a+m.start(1),a+m.end(1));return
         toks=tokens(s.t,a,b,s.nums)
+        # 'If Ann gave away 4 of her shells, she would have 11 shells left.', 'Sam would have 20 cards if he had 6 more.':
+        # neither part happened (a question's own 'If ...' is not cut here: it gives the problem's data)
+        seg=s.t[a:b];n0=len(s.frames)
+        unreal=bool(re.search(r'\bif\b',seg,re.I) and re.search(r'\b(?:would|might)\b',seg,re.I) and '?' not in seg)
         clauses=[];cur=[]
         for k,tk in enumerate(toks):
             nxt=toks[k+1].low if k+1<len(toks) else ''
@@ -348,6 +354,8 @@ class Story:
         if cur:clauses.append(cur)
         subj=None
         for c in clauses:subj=s.clause(c,subj)
+        if unreal:
+            for f in s.frames[n0:]:f['kind']='intent';f['unreal']=True
     def verbs(s,toks):
         """positions of the verbs of a clause, with their mood (None or 'intent')"""
         out=[]
@@ -367,6 +375,10 @@ class Story:
                 mood=None
                 if prev=='to' and not (k>=2 and toks[k-2].low in V('decided|went|began|started|managed|helped|came|got|wanted')):mood='intent'
                 if prev=='to' and k>=2 and toks[k-2].low in V('wanted|wants|want|needs|need|needed|plans|plan|hopes|hope|likes|like|tries|try|tried|going'):mood='intent'
+                # 'she would have 11 left', 'he might buy 4 more', 'would have bought': what may happen, not what did.
+                # Before, only 'would' itself was marked, and the verb after it was read as done
+                lead=[toks[j].low for j in range(max(0,k-3),k) if toks[j].low not in ('not','never','have','has','had','be','been','also','still','just','really','then')]
+                if lead and lead[-1] in ('would','might'):mood='intent'
                 out.append((k,mood))
         return out
     def clause(s,toks,subj):
@@ -389,6 +401,9 @@ class Story:
                 if n not in s.seen_nouns:s.seen_nouns.append(n)
         total_words=bool(re.search(r'\b(?:a total of|in total|total of|in all|altogether|all together|together|combined)\b',span.lower()))
         if not nidx:
+            if s.last_noun and re.search(r'\b(?:them|it|those|these)\s+back\b|\breturn(?:s|ed)?\s+(?:them|it|those|these)\b',span,re.I):
+                # 'She gave 5 shells to Ann, but Ann gave them back': things came back, with no number of their own
+                s.vague.append(Frame(noun=s.last_noun,verb='back',owner=csubj or subj,span=span))
             # numberless events about something countable: "had some balloons", "watered the equal amount of trees"
             for k,x in enumerate(toks):
                 if x.kind=='word' and x.low.endswith('ing') and k+1<len(toks) and toks[k+1].low=='some':
@@ -834,9 +849,9 @@ def parse_question(st,a,b):
           and (i==(1 if ask.cmp else 0) or not any(st.is_name(x) for x in toks if x.low==rest[i])):
         ws.append(rest[i]);i+=1
     raw,ws=ws,[w for w in ws if w not in MODS]
-    # 'How many small dogs does Sam have?' when the story tells of 3 big dogs and 2 small cats: a size or age word is
-    # dropped with the other modifiers, so the asked thing with it must be told in the story (the word right before it,
-    # or one word before that); else the question is about something the story does not count. Before, it answered 3
+    # 'How many small dogs does Sam have?' when the story tells of 3 big dogs and 2 small cats: the asked thing with its
+    # size or age word must be told in the story (the word right before it, or one word before that); else the question
+    # is about something the story does not count. Before, it answered 3
     kinds=[w for w in raw if w in KIND_MODS]
     if kinds and ws and sing(ws[-1]) not in UNITS:
         told=re.findall(r"[a-z]+",st.t[:a].lower());noun=sing(ws[-1])
@@ -2477,6 +2492,12 @@ def _read(text,forced=None):
             st.body(a+m2.end(),b);b=a+m2.start()
     if re.search(r'\bpattern\b|\bsequence\b|\bconsecutive\b',t,re.I):no('PATTERN')
     ask=parse_question(st,a,b)
+    # a story sentence that tells what would have happened ('If Ann gave away 4, she would have 11 left'): its numbers
+    # are not what happened, and nothing else may stand in for them
+    if any(f.get('unreal') for f in st.frames):no('UNREAL_EVENT')
+    # '30 candies were shared among 5 kids, but not equally. How many did each kid get?': one share is not known
+    if re.search(r'\bnot\s+(?:equally|evenly|fairly)\b|\bunequal(?:ly)?\b|\bunevenly\b',t,re.I) and \
+       (ask.kind=='each' or re.search(r'\b(?:each|get|got|gets|receive|received)\b',t[a:b],re.I)):no('NOT_SHARED_EQUALLY')
     _compound_amounts(st)
     # 'How many nails are there altogether in the 8 boxes?': the question points back to a number of the story
     ask['restated']=[]

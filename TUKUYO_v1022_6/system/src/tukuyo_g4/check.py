@@ -207,11 +207,15 @@ def _same(a,b):
     if a!=b:raise _UnitClash(unit_str(a)+' vs '+unit_str(b))
     return a
 
+SPAN_EDGES='.,;:!?"\'“”‘’「」『』。、'
 def _locate(text,span):
-    core=re.sub(r'\s+','',(span or '').translate(N._FW))
+    # a quote of the text, its words in the text's order. Spacing, letter case and the punctuation around it may differ:
+    # parents write '5 apples.' for '... 5 apples and ...', or begin a quote with a small letter (the fusion limits round:
+    # before, 482 of 505 readings quoted in small letters and 376 with a period added were refused)
+    core=re.sub(r'\s+','',(span or '').translate(N._FW)).strip(SPAN_EDGES)
     if not core:return []
     pat=r'\s*'.join(re.escape(ch) for ch in core)
-    return [(m.start(),m.end()) for m in re.finditer(pat,text.translate(N._FW))]
+    return [(m.start(),m.end()) for m in re.finditer(pat,text.translate(N._FW),re.I)]
 
 def check(spec,values):
     fails=[];out={'ok':False,'failures':fails}

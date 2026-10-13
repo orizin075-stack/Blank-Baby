@@ -1,0 +1,436 @@
+{
+ "before": {
+  "items": 505,
+  "settings": 18,
+  "note": "simulated parents: wrong readings are operator or asked-quantity changes that pass the checker",
+  "held_back_by_reason": {
+   "EQUAL_SHARING_NOT_ESTABLISHED|correct": 31,
+   "EQUAL_SHARING_NOT_ESTABLISHED|wrong": 1,
+   "EVENT_NOT_ESTABLISHED|correct": 366,
+   "EVENT_NOT_ESTABLISHED|wrong": 9,
+   "UNCOVERED_NUMERIC_OR_OPERATION|correct": 8,
+   "UNCOVERED_NUMERIC_OR_OPERATION|wrong": 2
+  },
+  "grid": [
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 95,
+     "correct->abstain": 29,
+     "correct->correct": 379,
+     "wrong->wrong": 2
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 96,
+     "correct->abstain": 27,
+     "correct->correct": 379,
+     "wrong->abstain": 1,
+     "wrong->wrong": 2
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 90,
+     "correct->abstain": 28,
+     "correct->correct": 380,
+     "wrong->wrong": 7
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 217,
+     "correct->abstain": 19,
+     "correct->correct": 256,
+     "wrong->wrong": 13
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 218,
+     "correct->abstain": 18,
+     "correct->correct": 246,
+     "wrong->wrong": 23
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 200,
+     "correct->abstain": 24,
+     "correct->correct": 240,
+     "wrong->abstain": 1,
+     "wrong->wrong": 40
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 81,
+     "correct->abstain": 29,
+     "correct->correct": 394,
+     "wrong->wrong": 1
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 87,
+     "correct->abstain": 26,
+     "correct->correct": 390,
+     "wrong->wrong": 2
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 74,
+     "correct->abstain": 31,
+     "correct->correct": 391,
+     "wrong->wrong": 9
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 218,
+     "correct->abstain": 22,
+     "correct->correct": 245,
+     "wrong->abstain": 2,
+     "wrong->wrong": 18
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 211,
+     "correct->abstain": 21,
+     "correct->correct": 244,
+     "wrong->abstain": 3,
+     "wrong->wrong": 26
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 197,
+     "correct->abstain": 13,
+     "correct->correct": 250,
+     "wrong->abstain": 2,
+     "wrong->wrong": 43
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 109,
+     "correct->abstain": 30,
+     "correct->correct": 366
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 132,
+     "correct->abstain": 27,
+     "correct->correct": 346
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 123,
+     "correct->abstain": 27,
+     "correct->correct": 354,
+     "wrong->wrong": 1
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 313,
+     "correct->abstain": 7,
+     "correct->correct": 182,
+     "wrong->wrong": 3
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 297,
+     "correct->abstain": 17,
+     "correct->correct": 186,
+     "wrong->wrong": 5
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 314,
+     "correct->abstain": 10,
+     "correct->correct": 167,
+     "wrong->abstain": 3,
+     "wrong->wrong": 11
+    }
+   }
+  ]
+ },
+ "after": {
+  "items": 505,
+  "settings": 18,
+  "note": "simulated parents: wrong readings are operator or asked-quantity changes that pass the checker",
+  "held_back_by_reason": {
+   "EQUAL_SHARING_NOT_ESTABLISHED|correct": 16,
+   "EQUAL_SHARING_NOT_ESTABLISHED|wrong": 1,
+   "EVENT_NOT_ESTABLISHED|correct": 187,
+   "EVENT_NOT_ESTABLISHED|wrong": 8,
+   "UNCOVERED_NUMERIC_OR_OPERATION|correct": 8,
+   "UNCOVERED_NUMERIC_OR_OPERATION|wrong": 2
+  },
+  "grid": [
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 95,
+     "correct->abstain": 29,
+     "correct->correct": 379,
+     "wrong->wrong": 2
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 96,
+     "correct->abstain": 27,
+     "correct->correct": 379,
+     "wrong->abstain": 1,
+     "wrong->wrong": 2
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 90,
+     "correct->abstain": 28,
+     "correct->correct": 380,
+     "wrong->wrong": 7
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 217,
+     "correct->abstain": 19,
+     "correct->correct": 256,
+     "wrong->wrong": 13
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 218,
+     "correct->abstain": 18,
+     "correct->correct": 246,
+     "wrong->wrong": 23
+    }
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 200,
+     "correct->abstain": 24,
+     "correct->correct": 240,
+     "wrong->abstain": 1,
+     "wrong->wrong": 40
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 81,
+     "correct->abstain": 7,
+     "correct->correct": 416,
+     "wrong->wrong": 1
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 87,
+     "correct->abstain": 3,
+     "correct->correct": 413,
+     "wrong->wrong": 2
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 74,
+     "correct->abstain": 4,
+     "correct->correct": 418,
+     "wrong->wrong": 9
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 218,
+     "correct->abstain": 7,
+     "correct->correct": 260,
+     "wrong->abstain": 1,
+     "wrong->wrong": 19
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 211,
+     "correct->abstain": 4,
+     "correct->correct": 261,
+     "wrong->abstain": 3,
+     "wrong->wrong": 26
+    }
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 197,
+     "correct->abstain": 6,
+     "correct->correct": 257,
+     "wrong->abstain": 2,
+     "wrong->wrong": 43
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 109,
+     "correct->abstain": 6,
+     "correct->correct": 390
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 132,
+     "correct->abstain": 6,
+     "correct->correct": 367
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 123,
+     "correct->abstain": 10,
+     "correct->correct": 371,
+     "wrong->wrong": 1
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 313,
+     "correct->abstain": 2,
+     "correct->correct": 187,
+     "wrong->wrong": 3
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 297,
+     "correct->abstain": 6,
+     "correct->correct": 197,
+     "wrong->wrong": 5
+    }
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "without_the_audit_to_with": {
+     "abstain->abstain": 314,
+     "correct->abstain": 5,
+     "correct->correct": 172,
+     "wrong->abstain": 3,
+     "wrong->wrong": 11
+    }
+   }
+  ]
+ }
+}

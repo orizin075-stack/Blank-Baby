@@ -28,7 +28,9 @@ def validate(state):
 
 def load(data):
     data=Path(data);p=data/NS/'learned.json'
+    from . import own
     if not (data/NS/'commits').exists():
+        own.check_learned(data,0)                       # the witness outside noted commits that are gone
         head=json.loads(whole.state_path(data).read_text())
         if COMPONENT in head.get('payload',{}).get('component_hashes',{}):raise ValueError('G4_LEARNING_HISTORY_MISSING')
         if p.exists():
@@ -37,6 +39,7 @@ def load(data):
             return legacy
         return {'schema':'tukuyo.g4.learned/1','templates':{}}
     state=store.load(data,NS,COMPONENT,validate);expected=state['learned']
+    own.check_learned(data,len(list((data/NS/'commits').glob('*.json'))))
     if p.exists():
         if json.loads(p.read_text())!=expected:raise ValueError('G4_LEARNING_CACHE_MISMATCH')
     else:atomic_write_bytes(p,whole.canon(expected)+b'\n')
@@ -61,6 +64,8 @@ def save(data,learned):
     state={'schema':SCHEMA,'learned':learned};validate(state)
     atomic_write_bytes(Path(data)/NS/'learned.json',whole.canon(learned)+b'\n')
     store.save(data,NS,COMPONENT,state)
+    from . import own
+    own.note_learned(data,len(list((Path(data)/NS/'commits').glob('*.json'))))
 
 def audit(data):
     from .learn import Store

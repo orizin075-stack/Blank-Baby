@@ -94,7 +94,7 @@ def _life_path(data):return Path(data)/'g4'/'life.json'
 def _life(data):
     """the record of its life ({'first_alone': [...]}); ValueError when the record is not its own"""
     p=_life_path(data)
-    if not p.is_file():return {'first_alone':[]}
+    if not p.is_file():own.absent(data,'life');return {'first_alone':[]}
     o=json.loads(p.read_text(encoding='utf-8'));b=own.body('life',o)
     if 'life' in o and (o.get('schema')!=LIFE or o.get('sha256')!=own.body_sha(b)):raise ValueError('LIFE_STORE_SEAL')
     own.check(data,'life',own.body_sha(b),o.get('signed'))
@@ -104,7 +104,7 @@ def _save_life(data,b):
     o={'schema':LIFE,'life':b,'sha256':sha};sg=own.sign(data,'life',sha)
     if sg:o['signed']=sg
     from tukuyo_common.atomic_fs import atomic_write_text
-    atomic_write_text(p,json.dumps(o,ensure_ascii=False,sort_keys=True))
+    atomic_write_text(p,json.dumps(o,ensure_ascii=False,sort_keys=True));own.written(data,'life')
 
 # ----------------------------------------------------------------------------- trust, voice, persona
 def _soul(data):

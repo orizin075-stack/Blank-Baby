@@ -1,0 +1,61 @@
+{
+ "utc": "2026-10-13T02:11:17Z",
+ "readings": 505,
+ "variants": {
+  "unit_plural": {
+   "changed": 449,
+   "checker": {
+    "same_answer": 504,
+    "refused": 1
+   },
+   "checker_refusals": {
+    "CHECK:UNITS:cost = ts * price_per_t:dollar vs dollar*ts/t": 1
+   },
+   "two_parents": {
+    "right": 469,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:SINGLE_LLM_READING": 1,
+    "abstain:UNIT_DISAGREEMENT": 1,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "unit_plural_english": {
+   "changed": 444,
+   "checker": {
+    "same_answer": 484,
+    "refused": 21
+   },
+   "checker_refusals": {
+    "CHECK:UNITS:person_total = sections * person_per_section:peo": 1,
+    "CHECK:UNITS:person_total = entrances * person_per_entrance:p": 1,
+    "CHECK:UNITS:branch_foot = birds * foots_per_bird:feet vs foo": 1,
+    "CHECK:UNITS:person_seat = seats * person_per_seat:people vs ": 1,
+    "CHECK:UNITS:shirts_exact = foot_asked / foot_per_shirt:shirt": 1,
+    "CHECK:UNITS:seat_exact = child_total / child_per_seat:seat v": 1
+   },
+   "two_parents": {
+    "right": 453,
+    "abstain:EVENT_NOT_ESTABLISHED": 26,
+    "abstain:SINGLE_LLM_READING": 21,
+    "abstain:UNIT_DISAGREEMENT": 1,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "answer_unit_empty": {
+   "changed": 449,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 29,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNIT_DISAGREEMENT": 1,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  }
+ }
+}

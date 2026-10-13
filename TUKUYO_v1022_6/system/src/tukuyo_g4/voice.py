@@ -143,6 +143,8 @@ _EN_READ=[
  (r'NEGATIVE','my reading gave a negative amount, so I must have read it wrong','読みから負の量が出たので、読み違えたはずです'),
  (r'INCONSISTENT|UNDERDETERMINED','my reading did not fix the answer to one number','読みから答えがひとつに決まりませんでした'),
  (r'^CHECK:','the checker refused my reading','検査が読みを通しませんでした'),
+ (r'UNREAL_EVENT','the story tells what would have happened, not what did','話は、実際に起きたことではなく、「もし…だったら」のことを言っています'),
+ (r'NOT_SHARED_EQUALLY','the story says the things were not shared equally, so one share is not known','等しく分けていないと書いてあるので、1 つ分の数は決まりません'),
  (r'ASKED_KIND_NOT_TOLD','the question asks about a kind of thing (big or small, new or old) that the story does not tell of','問いが聞いている物（大きさや新しさのちがう物）が、話の中に出てきません'),
  (r'NO_SCHEMA|compose','I could not find a way of reading this story that I know and that uses every number in it','知っている読み方で、すべての数を使って読むことができませんでした'),
 ]

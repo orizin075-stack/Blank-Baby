@@ -310,6 +310,12 @@ def _audit_once(data):
             from tukuyo_g4.runtime_store import audit as g4_audit
             if not g4_audit(data).get('ok'):errs.append('G4_LEARNING_AUDIT')
         except Exception as e:errs.append('G4_LEARNING_AUDIT:'+type(e).__name__)
+    if (Path(data)/'g4').exists():
+        # generation 4: a store older than the witness outside noted (only when the owner keeps one, TUKUYO_G4_WITNESS)
+        try:
+            from tukuyo_g4.own import behind_witness
+            errs.extend('G4_WITNESS_AHEAD:g4_'+k for k in behind_witness(data))
+        except ValueError as e:errs.append('G4_WITNESS:'+str(e))
     if (Path(data)/'chatgpt_chat').exists() or 'chatgpt_dialogue' in q.get('component_hashes',{}):
         try:
             from tukuyo_g4.chatgpt_chat import audit as chat_audit

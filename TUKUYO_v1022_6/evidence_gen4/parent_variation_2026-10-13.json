@@ -1,0 +1,171 @@
+{
+ "utc": "2026-10-13T02:31:58Z",
+ "readings": 505,
+ "variants": {
+  "unit_plural": {
+   "changed": 449,
+   "checker": {
+    "same_answer": 504,
+    "refused": 1
+   },
+   "checker_refusals": {
+    "CHECK:UNITS:cost = ts * price_per_t:dollar vs dollar*ts/t": 1
+   },
+   "two_parents": {
+    "right": 470,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:SINGLE_LLM_READING": 1,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "unit_plural_english": {
+   "changed": 444,
+   "checker": {
+    "same_answer": 504,
+    "refused": 1
+   },
+   "checker_refusals": {
+    "CHECK:UNITS:cost = ts * price_per_t:dollar vs dollar*ts/t": 1
+   },
+   "two_parents": {
+    "right": 470,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:SINGLE_LLM_READING": 1,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "unit_capitalized": {
+   "changed": 449,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "answer_unit_dollar_sign": {
+   "changed": 22,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "answer_unit_empty": {
+   "changed": 449,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 29,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNIT_DISAGREEMENT": 1,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "quantity_names": {
+   "changed": 505,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "span_lower_case": {
+   "changed": 482,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "span_trailing_period": {
+   "changed": 381,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "span_extra_spaces": {
+   "changed": 505,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "facts_shuffled": {
+   "changed": 504,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "numbers_as_decimals": {
+   "changed": 505,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "eq_without_spaces": {
+   "changed": 505,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  }
+ }
+}

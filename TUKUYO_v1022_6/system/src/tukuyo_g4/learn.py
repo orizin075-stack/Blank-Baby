@@ -86,9 +86,11 @@ def _transfer_guards(tpl):
     return roles,guards or []
 
 def _span_template(t,nums,span):
-    core=''.join(span.split())
+    from .check import SPAN_EDGES
+    core=''.join(span.split()).strip(SPAN_EDGES)          # found as the checker finds it (check._locate)
+    if not core:return None
     pat=r'\s*'.join(re.escape(c) for c in core)
-    m=re.search(pat,t)
+    m=re.search(pat,t,re.I)
     if not m:return None
     out=[];pos=m.start()
     for k,n in enumerate(nums):

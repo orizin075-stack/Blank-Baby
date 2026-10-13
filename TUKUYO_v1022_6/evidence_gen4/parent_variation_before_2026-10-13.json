@@ -1,0 +1,169 @@
+{
+ "utc": "2026-10-13T01:50:19Z",
+ "readings": 505,
+ "variants": {
+  "unit_plural": {
+   "changed": 449,
+   "checker": {
+    "same_answer": 503,
+    "refused": 2
+   },
+   "checker_refusals": {
+    "CHECK:UNITS:cost = ts * price_per_t:dollar vs dollar*ts/t": 1,
+    "CHECK:UNITS:cookie_per_group = floor(cookie_total / groups):": 1
+   },
+   "two_parents": {
+    "right": 468,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:SINGLE_LLM_READING": 2,
+    "abstain:UNIT_DISAGREEMENT": 1,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "unit_capitalized": {
+   "changed": 449,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "answer_unit_dollar_sign": {
+   "changed": 22,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "answer_unit_empty": {
+   "changed": 449,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 456,
+    "abstain:EVENT_NOT_ESTABLISHED": 17,
+    "abstain:UNIT_DISAGREEMENT": 28,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "quantity_names": {
+   "changed": 505,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "span_lower_case": {
+   "changed": 482,
+   "checker": {
+    "refused": 482,
+    "same_answer": 23
+   },
+   "checker_refusals": {
+    "CHECK:SPAN_NOT_IN_TEXT:first * ratio_second = second * ratio": 15,
+    "CHECK:SPAN_NOT_IN_TEXT:area = side1 * side2": 9,
+    "CHECK:SPAN_NOT_IN_TEXT:step = t2 - t1;SPAN_NOT_IN_TEXT:step ": 7,
+    "CHECK:SPAN_NOT_IN_TEXT:least = lcm(group1, group2)": 5,
+    "CHECK:SPAN_NOT_IN_TEXT:perimeter = side1 + side2 + side1 + s": 3,
+    "CHECK:SPAN_NOT_IN_TEXT:count_0 = 10;SPAN_NOT_IN_TEXT:count_1": 3
+   },
+   "two_parents": {
+    "abstain:SINGLE_LLM_READING": 482,
+    "right": 18,
+    "abstain:EVENT_NOT_ESTABLISHED": 5
+   }
+  },
+  "span_trailing_period": {
+   "changed": 381,
+   "checker": {
+    "same_answer": 129,
+    "refused": 376
+   },
+   "checker_refusals": {
+    "CHECK:SPAN_NOT_IN_TEXT:greatest_common = gcd(count_0, count_": 19,
+    "CHECK:SPAN_NOT_IN_TEXT:least_common = lcm(size_0, size_1)": 3,
+    "CHECK:SPAN_NOT_IN_TEXT:read_total = read_page + read_page_2": 2,
+    "CHECK:SPAN_NOT_IN_TEXT:pencil_per_group = floor(pencil_total": 2,
+    "CHECK:SPAN_NOT_IN_TEXT:basketball_total = 54;SPAN_NOT_IN_TEX": 2,
+    "CHECK:SPAN_NOT_IN_TEXT:apple_per_basket = 25;SPAN_NOT_IN_TEX": 2
+   },
+   "two_parents": {
+    "right": 129,
+    "abstain:SINGLE_LLM_READING": 376
+   }
+  },
+  "span_extra_spaces": {
+   "changed": 505,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "facts_shuffled": {
+   "changed": 504,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "numbers_as_decimals": {
+   "changed": 505,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "eq_without_spaces": {
+   "changed": 505,
+   "checker": {
+    "same_answer": 505
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 471,
+    "abstain:EVENT_NOT_ESTABLISHED": 30,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  }
+ }
+}

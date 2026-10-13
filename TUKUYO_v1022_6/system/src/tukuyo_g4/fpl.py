@@ -158,12 +158,37 @@ def parse_unit(u):
         if out[base]==0:del out[base]
     return out
 
+# words that end in -ie, so their plural is not -y + ies ('cookies' is not 'cooky': a reading in 'cookie' and one in
+# 'cookies' are the same unit; before the fusion limits round they clashed). Another word in -ie is taken as its -y
+# form, so it and its plural are one unit ('barbie', 'barbies')
+IE_WORDS=frozenset('cookie movie brownie pie tie zombie smoothie goalie selfie hoodie rookie calorie genie prairie birdie veggie lie die'.split())
+# plurals the rules below get wrong, and their singulars: a parent may name a unit in either number ('people' and
+# 'dollar/person', 'loaves' and 'loaf'); before the fusion limits round these were two units and the reading failed
+# the unit check. Written here, apart from the reader's own table (reader_en.IRREG): the checker does not use the reader
+UNIT_PLURALS={'people':'person','children':'child','men':'man','women':'woman','feet':'foot','teeth':'tooth','mice':'mouse','geese':'goose',
+              'oxen':'ox','dice':'die','leaves':'leaf','knives':'knife','wolves':'wolf','loaves':'loaf','shelves':'shelf','halves':'half',
+              'lives':'life','wives':'wife','calves':'calf','thieves':'thief','scarves':'scarf','hooves':'hoof','elves':'elf',
+              'potatoes':'potato','tomatoes':'tomato','heroes':'hero','mangoes':'mango','volcanoes':'volcano','echoes':'echo',
+              'dominoes':'domino','mosquitoes':'mosquito','torpedoes':'torpedo','buffaloes':'buffalo','tornadoes':'tornado',
+              'buses':'bus','gases':'gas','lenses':'lens','bonuses':'bonus','campuses':'campus','viruses':'virus','circuses':'circus',
+              'walruses':'walrus','octopuses':'octopus','cactuses':'cactus','cacti':'cactus','quizzes':'quiz','canvases':'canvas',
+              'atlases':'atlas','irises':'iris'}
+UNIT_SINGULARS=frozenset(UNIT_PLURALS.values())
+def unit_word(w):
+    """one word of a unit in its singular: 'people' -> person, 'loaves' -> loaf, 'cookies' -> cookie, 'barbies' -> barby"""
+    if w in UNIT_PLURALS:return UNIT_PLURALS[w]
+    if w in UNIT_SINGULARS or len(w)<=3:return w
+    if re.search(r'(sses|xes|ches|shes|zzes)$',w):return w[:-2]
+    if w.endswith('ies') and len(w)>4:return w[:-1] if w[:-1] in IE_WORDS else w[:-3]+'y'
+    if w.endswith('ie') and w not in IE_WORDS:return w[:-2]+'y'
+    if w.endswith('s') and not w.endswith('ss'):return w[:-1]
+    return w
 def unit_base(w):
+    """one name for a unit however it is written: number ('apples', 'people'), case, and each word of a unit of more than
+    one word ('pieces of candy' and 'piece of candy', 't-shirts' and 't-shirt')"""
     w=w.strip().lower()
-    if re.fullmatch(r'[a-z]+',w) and len(w)>3:
-        if re.search(r'(sses|xes|ches|shes)$',w):w=w[:-2]
-        elif w.endswith('ies') and len(w)>4:w=w[:-3]+'y'
-        elif w.endswith('s') and not w.endswith('ss'):w=w[:-1]
+    if re.fullmatch(r'[a-z]+',w):return unit_word(w)
+    if re.fullmatch(r'[a-z]+(?:[ -][a-z]+)+',w):return re.sub(r'[a-z]+',lambda m:unit_word(m.group(0)),w)
     return w
 
 def unit_str(d):

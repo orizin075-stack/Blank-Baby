@@ -32,7 +32,7 @@ from pathlib import Path
 from . import llm as L
 from .solve import solve as _solve
 from .check import check as _check
-from .fpl import fmt
+from .fpl import fmt,unit_word
 
 CLAIMS={'formal_proof_conditional_on_translation':True,
         'complete_semantic_parser_independence':False,
@@ -47,6 +47,10 @@ CLAIMS={'formal_proof_conditional_on_translation':True,
 # '... so each friend got the same amount', 'shared in the ratio 3:4'); with simulated parents the first two held back
 # right and wrong readings at about the rate they occur (the fusion measurement, tools/fusion_gates.py, 2026-10-12)
 NOT_FOR_OWN_READINGS=('EVENT_NOT_ESTABLISHED','EQUAL_SHARING_NOT_ESTABLISHED','UNCOVERED_NUMERIC_OR_OPERATION')
+# for a reading only parents gave, these two are not refusals but a reason to ask more: every family that agreed reads it
+# both ways (story, goal), and all must agree. With simulated parents that answered 194 of the 397 right answers they held
+# back, and 1 of the 10 wrong ones (tools/fusion_gates.py)
+ASK_BOTH_VIEWS=('EVENT_NOT_ESTABLISHED','EQUAL_SHARING_NOT_ESTABLISHED')
 
 def _input_coverage(text,answer,proof=None,mine=False):
     """the separately written input checks of the v1022 core (v1022.5.2, the event-scope guard of v1022.7.4). A reading
@@ -65,21 +69,24 @@ def _input_coverage(text,answer,proof=None,mine=False):
         return {'recognized':False,'ok':True,'set_aside':coverage['reason']}
     return coverage
 
+# words that name no kind of thing: a reading in 'item' and one in 'groups' do not disagree on what is counted (when a
+# parent leaves the answer unit out, its unit comes from its quantities and is often 'item')
+GENERIC_UNIT_WORDS=frozenset('item thing unit object that this these those it them one ones'.split())
 def _unit_words(u):
     """the words of a simple answer unit, each in its singular ('pieces of candy' -> {piece, candy}, '$' -> {dollar});
     None for no unit, a rate or another compound unit, or one without English words"""
     u=str(u or '').strip().lower()
     if not u or re.search(r'[/*^]|\bper\b',u):return None
-    from .reader_en import sing
     u=u.replace('$',' dollar ').replace('¢',' cent ')
-    ws=frozenset({'usd':'dollar'}.get(w,sing(w)) for w in re.findall(r'[a-z]+',u) if w not in ('of','the','a','an'))
+    ws=frozenset({'usd':'dollar'}.get(w,unit_word(w)) for w in re.findall(r'[a-z]+',u) if w not in ('of','the','a','an') and w not in GENERIC_UNIT_WORDS)-GENERIC_UNIT_WORDS
     return ws or None
 
 def _different_things(a,b):
     """do two answer units name clearly different things ('apple', 'orange')? A thing written two ways ('cookie' and
     'cookies', '$' and 'dollars', 'pieces of candy' and 'candy'), a rate or a unit without English words is not taken as
     a disagreement: before, units were compared as written, and parents who wrote 'cookies' did not agree with a reading
-    in 'cookie' (fpl.unit_base makes it 'cooky')"""
+    in 'cookie'. Each word is put in its singular by the checker's unit_word (the fusion limits round: the reader's
+    singular took 'barbies' for 'barby' and 'barbie' as it is)"""
     wa,wb=_unit_words(a),_unit_words(b)
     return wa is not None and wb is not None and not (wa<=wb or wb<=wa)
 
@@ -221,6 +228,17 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
     # Apply this extra graph to new FPL translations; a water/milk-only graph
     # must not invalidate an independently checked situation about tea.
     coverage=_input_coverage(text,g['value'],mine=bool(mine)) if g.get('spec') else {'recognized':False,'ok':True}
+    if coverage.get('recognized') and not coverage['ok'] and not mine and use_llm and len(fams)>=2 and coverage.get('reason') in ASK_BOTH_VIEWS:
+        # a refusal for a kind of wording ('If he wants to give them to his 11 nieces, ...'): it does not tell a right
+        # reading from a wrong one (with simulated parents it held back both at about the rate they occur). Each family
+        # that agreed reads it the other way too ('goal'); every reading must agree (the fusion limits round)
+        for parent in fams:
+            if not any(r.get('parent')==parent and r['route'].endswith('goal') for r in readings):ask_parent(parent,'goal')
+        both=[r for r in readings if r.get('parent') in fams]
+        if all(r['ok'] for r in both) and len({r['answer'] for r in both})==1 and len(both)>=2*len(fams):
+            coverage={'recognized':False,'ok':True,'set_aside':coverage['reason'],'confirmed_by_both_views':fams}
+        else:
+            out['readings']=[{k:v for k,v in r.items() if k not in ('answer',)} for r in readings]
     if coverage.get('recognized') and not coverage['ok']:
         return {**out,'reason':coverage['reason'],'input_coverage':coverage,'withheld':g['value']}
     if mine and llms and data is not None:
