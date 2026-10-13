@@ -13,6 +13,7 @@
 - 読み取り器：問いに大きさ・新旧の言葉（big・small・new・old など、`KIND_MODS`）が付いた物は、話の中にその言い方がなければ読みません（`ASKED_KIND_NOT_TOLD`）。
 - 相手の試験の一部（ChatGPT のログイン）には `PyJWT[crypto]` が要ります（`system/requirements-chatgpt.txt`）。
 - 相手の経験による魂の実験は `python3 -B tools/v1022_7_7_soul_experiment.py --data FRESH --trust ANCHOR --out out.json` と、`python3 -B tools/v1022_7_7_experience_verifier.py --data FRESH` で、いつでもやり直せます（記録した結果だけ、費用 0）。
+- 統合した版の最後の確かめ（署名した写し、費用 0）：全体テスト 1031/1031、魂らしさ 12/12、汚染 6/6、成長の実験 3/3、親を使わない計測は例外 0・型の食い違い 0、ASDiv 開発用は `g4-solve` 501・`think` 502（誤りはどちらも 3）。結果は `evidence_gen4/*fusion_2026-10-12.json`。
 
 ## 1. 第4世代の考え方
 
