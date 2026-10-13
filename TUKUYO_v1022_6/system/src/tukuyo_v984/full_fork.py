@@ -14,6 +14,8 @@ def report_path(data):return Path(data)/'v984'/'FULL_RUNTIME_FORK_ASSAY.json'
 
 def _run_worker(runtime_root,branch,mode):
     env=os.environ.copy();src=str(Path(runtime_root)/'src');env['PYTHONPATH']=src+(os.pathsep+env['PYTHONPATH'] if env.get('PYTHONPATH') else '')
+    # the branches are copies made for this assay: they must not take the individual's turn in its canon or its witness
+    for k in ('TUKUYO_CANON','TUKUYO_G4_WITNESS'):env.pop(k,None)
     p=subprocess.run([sys.executable,'-B','-m','tukuyo_v984.branch_runner','--data',str(branch),'--mode',mode],cwd=runtime_root,text=True,capture_output=True,env=env,timeout=120)
     if p.returncode!=0:raise RuntimeError('V984_BRANCH_PROCESS:'+mode+':'+(p.stdout+p.stderr)[-1200:])
     x=json.loads(p.stdout)

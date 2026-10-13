@@ -208,9 +208,9 @@
   "recovery_signer_continuity": "REPAIRED_NON_ROTATING_KEY_RECONCILIATION",
   "recovery_storage_mode": "CONTENT_ADDRESSED_DELTA_EXCLUDING_REBUILDABLE_INDEX",
   "relation_bound_scar_choice": true,
-  "release_revision": "v1022.7.7+gen4-r7",
+  "release_revision": "v1022.7.8+gen4-r8",
   "release_role": "GROUNDED_SENSOR_CHALLENGE_EXPERIMENTAL",
-  "release_version": "v1022.7.7+gen4-r7",
+  "release_version": "v1022.7.8+gen4-r8",
   "replay_resistance": "EXPECTED_EXTERNAL_CHALLENGE_REQUIRED",
   "replayable_word_problem_families": true,
   "report_consensus_establishes_truth": false,
@@ -369,6 +369,54 @@
     "unit_plurals_are_one_unit": true,
     "validation_result_location": "../evidence_gen4/LIMITS_2026-10-13.md"
   },
+  "v1022_7_8_gen4_r8": {
+    "asdiv_dev_answers_changed_from_r7": {
+      "lost_right": 0,
+      "new_right": 1,
+      "new_wrong": 0
+    },
+    "branch_refused_as_branch": true,
+    "canon_external_history": "opt-in TUKUYO_CANON (a directory outside the data directory); identity-canon-status, identity-canon-audit, identity-canon-adopt",
+    "canon_is_as_safe_as_its_location": true,
+    "classification": "an outside review of r7 answered: confident wrong answers on amounts not given, and one individual with one history (development)",
+    "copy_of_a_dead_individual_refused": true,
+    "copy_refused_as_behind": true,
+    "external_monotonic_witness_implemented": false,
+    "real_parents_measured": false,
+    "restore_needs_the_owner": true,
+    "review_example_fixed": "Anna has a few apples. She buys 4 more apples. How many apples now? (was 4, now no answer)",
+    "review_probes_dev": {
+      "after": {
+        "held": 31,
+        "right": 13,
+        "wrong": 0
+      },
+      "before": {
+        "held": 15,
+        "right": 12,
+        "wrong": 17
+      },
+      "probes": 44
+    },
+    "review_probes_held_out": {
+      "after": {
+        "held": 31,
+        "right": 17,
+        "wrong": 0
+      },
+      "before": {
+        "held": 18,
+        "right": 16,
+        "wrong": 14
+      },
+      "frozen_sha256": "7e07e251cb0b2f6d57cbfd1a99726b3381b488b474012df48eb3163d7f26d6f0",
+      "probes": 48,
+      "runs": "once before the fix (totals only) and once after"
+    },
+    "two_copies_at_once_one_lives_on": true,
+    "validation_result_location": "../evidence_gen4/REVIEW_2026-10-13.md",
+    "without_canon_behaviour_unchanged": true
+  },
   "verified_query_independent_semantic_verifier": true,
   "verified_query_independent_semantic_verifier_scope": "DECLARED_BOUNDED_SCHEMAS",
   "verified_query_uses_core_reasoning": true,
@@ -376,7 +424,7 @@
   "verified_query_whole_state_sync": true,
   "verified_reasoning_confidence": true,
   "version": "v1022",
-  "version_compatibility_note": "Legacy module versions retained; release_version and CLI release_revision identify v1022.7.7+gen4-r7 (v1022.7.7-experiential-soul fused with generation 4, then its limits measured and strengthened)",
+  "version_compatibility_note": "Legacy module versions retained; release_version and CLI release_revision identify v1022.7.8+gen4-r8 (v1022.7.7-experiential-soul fused with generation 4; its limits measured and strengthened; an outside review of r7 answered: amounts not given, and one individual with one history)",
   "whole_living_cognition_cycle": true,
   "witness_certificate_signature_verification": true,
   "workspace_restore_failure": "V1022_CACHE_MISMATCH:v1022_ecology; future commits 10-13 retained/reappeared after restoring tick8",

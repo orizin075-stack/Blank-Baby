@@ -100,7 +100,7 @@ def chat(api,data,trust=None,migration_trust=None):
         except Exception as e:print('ERROR',type(e).__name__+':'+str(e))
 
 def parser():
-    p=argparse.ArgumentParser(description='TUKUYO v1022.7.7+gen4-r7: bounded experiential Soul with signed outcome learning and plan/API dialogue, fused with generation 4 (a child of three LLM parents)')
+    p=argparse.ArgumentParser(description='TUKUYO v1022.7.8+gen4-r8: bounded experiential Soul with signed outcome learning and plan/API dialogue, fused with generation 4 (a child of three LLM parents); one individual, one history (TUKUYO_CANON)')
     p.add_argument('--data',type=Path,default=Path(os.environ.get('TUKUYO_DATA_DIR', str(Path.home()/'.tukuyo'/'v999_data'))))
     p.add_argument('--ep-trust-dir',type=Path,help='External pinned local/observer/evaluator/authority public keys. Required after epistemic init.')
     p.add_argument('--cap-trust-dir',type=Path,help='External pinned capability authority key. Required to resolve learned legacy capabilities.')
@@ -334,6 +334,9 @@ def parser():
     c=sub.add_parser('g4-audit',help='generation 4: every learned reading must reproduce its own example')
     c=sub.add_parser('g4-reflect',help='generation 4: what the child is unsure of (disagreements it could not settle, what was contested, problems it could not read alone, its own ways of reading in doubt) and what it wants to do about it; with --act it tries again alone what it can now read, and asks its parents on its own (paid calls when parents are configured)')
     c.add_argument('--act',action='store_true');c.add_argument('--limit',type=int,default=3)
+    sub.add_parser('identity-canon-status',help='v1022.7.8: with a canon kept outside the data directory (TUKUYO_CANON), is this copy the individual (it holds the last line), a copy left behind or put back, a branch, or a copy of one that died')
+    sub.add_parser('identity-canon-audit',help='v1022.7.8: every line of the canon signed by this individual and chained, and this copy\'s place in it')
+    c=sub.add_parser('identity-canon-adopt',help='v1022.7.8: the owner says this copy is the individual (a backup put back, or one of two copies that lived on); with --yes the canon records it and every other copy is refused');c.add_argument('--yes',action='store_true')
     c=sub.add_parser('g4-adopt-legacy',help='generation 4: an individual from before stores were signed (2026-10-06 to 10-09): shows what its unsigned stores hold (learned readings, answers its parents agreed on, its life record); with --yes signs them as its own. Only if you know they came from this individual')
     c.add_argument('--yes',action='store_true',help='sign them as its own')
     c=sub.add_parser('g4-parents',help='generation 4: is it ready to ask its parents - for each one its key (never shown), model, package and network, and the child\'s trust in it; no request to any parent without --live')
@@ -423,6 +426,9 @@ def _main(argv=None):
                     _v1018_whole_sync(data)
         from tukuyo_v1019.lifecycle import guard_command
         guard_command(data,args.cmd)
+        # v1022.7.8: when the owner keeps a canon (TUKUYO_CANON), only the copy that holds its last line may change
+        from tukuyo_v1022.canon import guard as canon_guard
+        canon_guard(data,args.cmd)
         if args.cmd in ('archive-list','archive-show'):
             idx=json.loads((ROOT/'RESEARCH_LAYER_INDEX.json').read_text(encoding='utf-8'))
             if args.cmd=='archive-list':output({'ok':True,'release_count':idx['release_count'],'versions':[x['version'] for x in idx['records']],'execution_mode':'ARCHIVAL_ISOLATED'});return 0
@@ -893,6 +899,12 @@ def _main(argv=None):
                 elif args.cmd=='metabolism-step':res=metabolism.step(data,args.ticks)
                 elif args.cmd=='metabolism-status':res=metabolism.status(data)
                 else:res=metabolism.audit(data)
+            elif args.cmd in ('identity-canon-status','identity-canon-audit','identity-canon-adopt'):
+                _require_live(data)
+                from tukuyo_v1022 import canon as v1022_canon
+                if args.cmd=='identity-canon-status':res={'ok':True,'version':'v1022.7.8',**v1022_canon.status(data)}
+                elif args.cmd=='identity-canon-audit':res={'version':'v1022.7.8',**v1022_canon.audit(data)}
+                else:res={'version':'v1022.7.8',**v1022_canon.adopt(data,args.yes)}
             elif args.cmd=='g4-adopt-legacy':
                 _require_live(data)
                 from tukuyo_g4 import adopt as g4_adopt
@@ -1380,6 +1392,12 @@ def _main(argv=None):
                     from tukuyo_v977.whole_state import sync as whole_sync
                     whole_sync(data)
                 else:raise ValueError('UNKNOWN_COMMAND')
+            if args.cmd!='identity-canon-adopt':
+                from tukuyo_v1022.canon import note as canon_note
+                try:
+                    line=canon_note(data,args.cmd)
+                    if line:res['canon_line']=line
+                except ValueError as e:res={**res,'ok':False,'error':'ValueError:'+str(e),'canon':'another copy of this individual wrote the canon while this one ran'}
             output(res)
             return 0 if res.get('ok',True) else 1
     except Exception as exc:

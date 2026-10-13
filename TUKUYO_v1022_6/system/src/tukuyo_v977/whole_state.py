@@ -310,6 +310,13 @@ def _audit_once(data):
             from tukuyo_g4.runtime_store import audit as g4_audit
             if not g4_audit(data).get('ok'):errs.append('G4_LEARNING_AUDIT')
         except Exception as e:errs.append('G4_LEARNING_AUDIT:'+type(e).__name__)
+    # v1022.7.8: when the owner keeps a canon (TUKUYO_CANON), a copy that is not the individual (left behind, put back,
+    # lived on as a branch, or a copy of one that died) is reported
+    try:
+        from tukuyo_v1022.canon import status as canon_status
+        cs=canon_status(data)
+        if cs.get('kept') and cs['state'] not in ('IN_SYNC','NEW','DEAD_SELF'):errs.append('CANON_'+cs['state'])
+    except ValueError as e:errs.append('CANON:'+str(e))
     if (Path(data)/'g4').exists():
         # generation 4: a store older than the witness outside noted (only when the owner keeps one, TUKUYO_G4_WITNESS)
         try:

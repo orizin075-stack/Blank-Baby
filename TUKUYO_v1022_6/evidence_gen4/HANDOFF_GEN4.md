@@ -15,6 +15,12 @@
 - 相手の経験による魂の実験は `python3 -B tools/v1022_7_7_soul_experiment.py --data FRESH --trust ANCHOR --out out.json` と、`python3 -B tools/v1022_7_7_experience_verifier.py --data FRESH` で、いつでもやり直せます（記録した結果だけ、費用 0）。
 - 統合した版の最後の確かめ（署名した写し、費用 0）：全体テスト 1031/1031、魂らしさ 12/12、汚染 6/6、成長の実験 3/3、親を使わない計測は例外 0・型の食い違い 0、ASDiv 開発用は `g4-solve` 501・`think` 502（誤りはどちらも 3）。結果は `evidence_gen4/*fusion_2026-10-12.json`。
 
+**外部の検証を受けた版（2026-10-13、`v1022.7.8+gen4-r8`）。** r7 への外部の検証の指摘のうち 2 つを直しました（`REVIEW_2026-10-13.md`）。続ける人が知っておくこと：
+
+- 読み取り器：量をぼかす言い方は `vague_amounts`（`reader_en.py`）で、`some` と同じ「数の分からない量」として読みます。数のない複数形を持つのは `_unknown_held`。前の数がない「N more」は `UNKNOWN_START`、時を指定した問いは `ASKED_TIME_NOT_READ`。直すときは `tools/review_probes.py`（開発用 44 問）で誤りを見て、隠し問題 48 問（凍結、`HELD_OUT_SHA256`）は直したあとにだけ回すこと。
+- v1022.7.8 正史（`src/tukuyo_v1022/canon.py`）：`TUKUYO_CANON` を置いたときだけ働く。`run_tukuyo.py` の `_main` で、コマンドの前に `guard`、後に `note`。全体の状態の監査（`whole_state._audit_once`）が `CANON_*` を報告。わざと写しを作る中の実験は、正史と証人を外して動かすこと（v984 で外した）。合格の条件の実験は `tools/identity_branch_experiment.py`。
+- 最後の確かめ（署名した写し、費用 0）：全体テスト 1044/1044、魂らしさ 12/12、汚染 6/6、成長の実験 3/3、親を使わない計測は例外 0・型の食い違い 0、ASDiv 開発用は `g4-solve` 503・`think` 504（誤りはどちらも 3）、試し問題は開発用・隠し問題とも誤り 0、個体の同一性の実験 11/11。結果は `evidence_gen4/*_r8_2026-10-13.json`。
+
 **限界を測って強めた版（2026-10-13、`v1022.7.7+gen4-r7`）。** 統合で残した限界を、測ってから強めました（`LIMITS_2026-10-13.md`）。続ける人が知っておくこと：
 
 - 自分で書いた試し問題 48 問（`tools/limits_probes.py`、答えてはいけない 8 問を含む）。前の版は 5 問に誤った答えを出していた（would・might・返した・等しくなく を読んでいなかった）。直したあと誤り 0。読み取り器を直したら、これで新しい誤りがないかを見てください。

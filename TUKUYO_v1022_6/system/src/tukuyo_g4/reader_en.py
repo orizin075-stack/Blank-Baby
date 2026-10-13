@@ -113,6 +113,32 @@ NOT_NOUN=AUX|PRON|DET|PREP|CONJ|QWORD|HAVE|BE|V('more|fewer|less|left|now|then|t
 GROUPS=V('box|bag|pack|package|packet|bottle|can|jar|bunch|basket|case|carton|set|pair|row|column|group|team|shelf|tray|crate|container|plate|bowl|cup|stack|pile|roll|bundle|batch|load|page|book|sheet|bar|stick|loaf|dozen|section|table|car|bus|van|truck|boat|class|tank|bin|drawer|aisle|floor|level|layer|tier|vase|pot|cage|pen|room|building|house|tent|herd|flock|train|ship|plane|round|game|day|week|month|year|hour|minute|second|time|trip|lap|session|night|morning|tray|bucket|jug|pan|batch|serving|bouquet|wall|street|block|tree|branch|plant|garden|pizza|pie|cake|bucket|album|folder|binder|envelope|drawer|cabinet|truckload|cartload')
 UNITS=V('mile|kilometer|meter|centimeter|millimeter|foot|inch|yard|pound|ounce|kilogram|gram|liter|milliliter|gallon|quart|pint|cup|hour|minute|second|day|week|month|year|dollar|cent|degree|point|ton|acre|lap')
 TIME_UNITS=V('second|minute|hour|day|week|month|year|night|morning|afternoon|evening|weekend')
+# words that say there is an amount without saying how much. Before the review round only 'some' and 'several' were read
+# as an amount not known (an outside review of r7: 'Anna has a few apples. She buys 4 more apples. How many apples now?'
+# was answered 4, as were 'a couple of', 'many', 'a lot of', 'a bag of ...' and a plural with no number)
+VAGUE_Q=V('some|several|many|numerous|few|various|countless')
+VAGUE_OF=V('lot|lots|plenty|number|handful|couple|pile|piles|stack|stacks|heap|heaps|dozens|hundreds|thousands|loads|tons|bit|amount|quantity')
+MASS=V('money|cash|water|milk|juice|flour|sugar|rice|sand|paint|oil|salt|butter|tea|coffee|soup|food|gas|fuel')
+_PRONOUN_OF=('them','those','these','it')
+def vague_amounts(toks):
+    """the positions at which an amount is said without a number: 'some apples', 'a few apples', 'many of them', 'a lot
+    of marbles' and 'a bag of oranges' (at 'of': the oranges in it are not counted), 'a little money'. Story.mention reads
+    the amount there as not known"""
+    out=[]
+    for q,x in enumerate(toks):
+        lw=x.low;nx=toks[q+1].low if q+1<len(toks) else '';prev=toks[q-1].low if q else ''
+        if prev in ('as','how','so','too') and lw in ('many','few'):continue      # 'twice as many apples as': a comparison
+        pron=q+2<len(toks) and nx=='of' and toks[q+2].low in _PRONOUN_OF
+        if lw in VAGUE_Q:out.append(q)
+        elif lw=='little' and prev=='a' and nx in MASS:out.append(q)
+        elif lw in VAGUE_OF and nx=='of':
+            # 'a number of books' is an amount not given; 'the number of houses' is the number itself
+            if lw in ('number','couple','bit','amount','quantity') and prev not in ('a','an','large','small','great','big','good'):continue
+            out.append(q if pron else q+1)
+        elif sing(lw) in GROUPS and nx=='of' and prev in ('a','an','one','the','his','her','their','its','my','our','your') \
+             and q+2<len(toks) and toks[q+2].kind=='word' and toks[q+2].low not in NOT_NOUN and sing(toks[q+2].low)!=toks[q+2].low:
+            out.append(q+1)                        # 'a bag of oranges' (not 'a bag of garbage', 'one pack of gum')
+    return out
 CAP_STOP=V('There|Then|How|What|The|A|An|On|In|At|After|Later|Next|Today|Yesterday|His|Her|Their|First|Finally|Now|He|She|They|It|If|Each|Every|Some|One',
            'Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|I|We|You|When|While|This|That|These|Those',
            'January|February|March|April|May|June|July|August|September|October|November|December|Mr|Mrs|Ms|Dr|Find|Of|For|To|From|With|But|And|So|All|Both',
@@ -413,13 +439,15 @@ class Story:
                         if noun:
                             s.frames.append(Frame(kind='change',m=None,noun=noun,adj=(),owner=csubj or subj or s.last_owner,verb=base,sign=+1 if base in GAIN else -1,span=span,other=None,implicit=np['noun'] is None))
                             return csubj or subj
-            somes=[q for q,x in enumerate(toks) if x.low in ('some','several')]
+            # 'some' and 'several' as before the review round; the other words only for an amount held, got, lost or given
+            somes=[q for q in vague_amounts(toks) if toks[q].low in ('some','several') or s._counted(toks,vs,q)]
             if not somes:
                 somes=[q for q,x in enumerate(toks) if x.low=='more' and q>0 and q+1<len(toks) and toks[q+1].kind=='word' and toks[q+1].low not in NOT_NOUN
-                       and any(toks[r].low in GAIN|LOSE|TRANSFER|JOIN for r in range(max(0,q-4),q))]
+                       and any(toks[r].low in GAIN|LOSE|TRANSFER|JOIN for r in range(max(0,q-4),q))][:1]
             made=0
-            for q in somes[:1]:
+            for q in somes:
                 before_n=len(s.frames);s.mention(toks,q,vs,csubj or subj,span,total_words,unknown=True);made+=len(s.frames)-before_n
+            if not made and s._unknown_held(toks,vs,csubj or subj,span):made=1
             if made:return csubj or subj
             for k,mood in vs:
                 if toks[k].low=='left':continue
@@ -439,9 +467,10 @@ class Story:
             for nn in TIME_UNITS:s.vague.append(Frame(noun=nn,verb=None,owner=csubj or subj,span=span))
         # 'but she already had some apples', 'and some money on rides': an amount the story does not give, in a clause
         # that gives others; it must not be read as none
-        for q,x in enumerate(toks):
-            if x.low=='few' and q>0 and toks[q-1].low=='a':pass               # 'a few apples'
-            elif x.low not in ('some','several') or (q+2<len(toks) and toks[q+1].low=='of' and toks[q+2].low in ('them','those','these','it')):continue
+        for q in vague_amounts(toks):
+            x=toks[q]
+            if x.low not in ('some','several','few') and not s._counted(toks,vs,q):continue
+            if q+2<len(toks) and toks[q+1].low=='of' and toks[q+2].low in _PRONOUN_OF:continue
             if q+1<len(toks) and toks[q+1].low=='more':continue     # 'found some more shells and now has 31': the event asked about
             np=s.np_after(toks,q)
             if np['noun'] in ('money','cash'):
@@ -476,6 +505,30 @@ class Story:
         for f in fs[:-1]:
             f['adj']=(f.noun,);f['noun']=last.noun;f['other']=None
         last['other']=None
+    def _counted(s,toks,vs,q):
+        """is the amount at q held, got, lost or given by what happened ('has a few apples', 'won many marbles') - not
+        wanted, planned ('wanted to find out the number of'), or after 'was able to'"""
+        vpos,mood=s.verb_for(toks,vs,q)
+        return vpos is not None and mood is None and toks[vpos].low in HAVE|GAIN|LOSE|TRANSFER|JOIN|LEAVE|BUY
+    def _unknown_held(s,toks,vs,csubj,span):
+        """'Sara has apples.', 'Kai has money.': an amount held, said with no number and no word for one - read as 'some'
+        (not known). Not 'Sam has a dog' (one), nor 'has to', 'has been'"""
+        for k,mood in vs:
+            if mood is not None or toks[k].low not in HAVE or k+1>=len(toks):continue
+            nx=toks[k+1]
+            if nx.kind!='word' or nx.low in NOT_NOUN or nx.low in ('to','been','got','no','none','nothing') or s.is_name(nx):continue
+            np=s.np_after(toks,k);w=np['noun']
+            if not w or w in NOT_NOUN or verbish(w):continue
+            last=toks[np['end']-1].low
+            if w in ('money','cash'):w='dollar'
+            elif sing(last)==last:continue                 # one thing ('lunch', 'a garden'), not an amount
+            own=s.subject_of(toks,vs,k,csubj)
+            s.frames.append(Frame(m=None,noun=w,adj=np['adj'],of=np['of'],ofadj=np.get('ofadj',()),owner=own,verb=toks[k].low,mood=None,span=span,
+                                  before=[x.low for x in toks[:k+1] if x.kind=='word'],after=[],total=False,cmp=None,money=False,raw='some',kind='state'))
+            s.last_noun=w;s.last_adj=np['adj']
+            if own:s.noun_of[own]=w
+            return True
+        return False
     def verb_for(s,toks,vs,k):
         left=[(p,m) for p,m in vs if p<k]
         plain=[(p,m) for p,m in left if not (p and toks[p-1].low=='to' and m=='intent' and any(q<p and mm is None for q,mm in left))]
@@ -505,6 +558,7 @@ class Story:
         money=k>0 and toks[k-1].kind=='money'
         np=s.np_after(toks,k)
         noun,adj=np['noun'],np['adj']
+        if unknown and noun in ('money','cash'):noun='dollar'          # 'Kai has some money. He earns 7 dollars.'
         # 'a 285-page book', 'a five-day trip': the number counts the unit after the hyphen, and the thing named after it
         # has that many of it
         if m is not None and not money and k+2<len(toks) and toks[k+1].w=='-' and toks[k+1].s==toks[k].e and toks[k+2].kind=='word' and toks[k+2].s==toks[k+1].e:
@@ -2472,6 +2526,13 @@ def _read_pronouns(text,limit=32):
     r=topic[0][1];r['spec']['pronouns']=[{'pronoun':p,'person':who} for _,p,who in sorted(r['pronouns'])]
     return r
 
+QTIME=re.compile(r'\b(?:on (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday)|yesterday|last (?:week|month|year|night)|'
+                 r'in the (?:morning|afternoon|evening)|this (?:morning|afternoon|evening)|at (?:noon|night)|(?:before|after) (?:lunch|dinner|breakfast|school))\b')
+def _says_before(st,f):
+    """'4 more apples', 'another 4 apples', '4 extra apples': there were some before this event"""
+    if f.cmp=='more' and 'than' not in (f.after or [])[:8]:return True
+    return bool(re.match(r'\s+(?:more|extra|additional)\b',st.t[f.m.end:f.m.end+16],re.I)) or st.t[max(0,f.m.start-9):f.m.start].lower().rstrip().endswith('another')
+
 def _read(text,forced=None):
     st=Story(text);t=text;st.forced=forced or {}
     sents=sentences(t)
@@ -2510,6 +2571,23 @@ def _read(text,forced=None):
             # 'A bag weighs 2 kg. Another bag weighs 900 g. ... the two bags': the two the story named
             ask['qframes'].remove(x);ask['restated'].append(Frame(dict(x,noun=x.noun)))
     if st.vague and any(v.noun in (ask.noun,ask.of) for v in st.vague):no('VAGUE_EVENT')
+    # 'Sara buys 4 more apples. How many apples does she have now?': 'more' (or 'another 4', '4 extra') says she had some
+    # before; when the story tells nothing of them, what she has now is not known (the review round)
+    if ask.kind=='amount' and ask.noun and not ask.cmp and (ask.have or ask.when=='now') and ask.when!='initial':
+        for f in st.frames:
+            if f.m is None or f.noun!=ask.noun or f.kind!='change' or not _says_before(st,f):continue
+            if ask.owner and f.owner and f.owner!=ask.owner:continue
+            if not any(g is not f and g.noun==ask.noun and (g.owner==f.owner or not g.owner or not f.owner) and (g.m is None or g.m.start<f.m.start)
+                       for g in st.frames):no('UNKNOWN_START')
+    # 'Ann had 10 apples on Monday. On Tuesday she ate 3. How many apples did she have on Monday?': the question names a
+    # time; only an amount the story gives at that time answers it (before, the amount at the end was given: 7)
+    tq=QTIME.findall(t[a:b].lower())
+    if tq and ask.kind=='amount' and ask.have and ask.when!='initial':
+        def told_then(f):return any(p in t[x:y].lower() for x,y in sents if x<=f.m.start<y for p in tq)
+        mine=[f for f in st.frames if f.m is not None and f.noun==ask.noun and (not ask.owner or f.owner in (ask.owner,None))]
+        hit=[f for f in mine if f.kind=='state' and told_then(f)]
+        if len(hit)==1 and hit[0] is min(mine,key=lambda f:f.m.start):ask['when']='initial'
+        else:no('ASKED_TIME_NOT_READ')
     # 'Leo had a box of crayons. Later he gave six to his sister.': a number with no thing of its own counts the thing the
     # question asks about, when the story names it before
     if ask.noun:
