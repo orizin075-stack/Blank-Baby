@@ -2346,6 +2346,16 @@ def _derive(c,r,noun,g,adj,**kw):
     m=N.Num(c.m.value*r.m.value,c.m.start,c.m.end,f'{c.m.raw} x {r.m.raw}','derived')
     return Frame(dict(c,m=m,noun=noun,adj=adj,of=None,ofadj=(),derive=(c,r,g),raw=m.raw,implicit=False,**kw))
 
+def _each_after(st,f,g=None):
+    """is the amount said to be in each group? By words after it ('9 apples in each box', '9 apples and 7 pears in each
+    box'), or by a group named before it that is not an earlier amount's ('Each box holds 6 eggs and 2 apples', 'there are
+    3 tables and each table has 4 chairs'). '5 boxes with 9 apples in each box and 7 loose apples': 'in each box' belongs
+    to the 9 apples, and the 7 apples are not in each box (round 10: it read 5 x 9 + 5 x 7)"""
+    a,end=next(((x,y) for x,y in sentences(st.t) if x<=f.m.start<y),(0,len(st.t)))
+    g=re.escape(g or f.generic)
+    if re.search(rf"\b(?:each|every|per|a|an)\s+(?:[a-z]+\s+)?{g}(?:e?s)?\b",st.t[f.m.end:end],re.I):return True
+    return not re.search(rf"\d[\d,.]*\s+(?:[a-z]+\s+){{0,3}}(?:in|on|at|inside|for)\s+(?:each|every)\s+(?:[a-z]+\s+)?{g}(?:e?s)?\b",st.t[a:f.m.start],re.I)
+
 PARTS={'leg':'legs','eye':'eyes','ear':'ears','foot':'feet','wheel':'wheels'}
 def _known_rates(st,ask):
     """the common facts a question about legs, eyes, ears, feet or wheels needs, for the things the story counts ('I see
@@ -2383,9 +2393,13 @@ def compose(st,ask=None):
     rates=[]
     for f in st.frames:
         if not ok(f):continue
-        if f.kind=='rate' and f.per and f.noun and f.noun not in ('dollar','cent') and f.noun!=f.per:rates.append((f,f,f.per,f.noun))
+        if f.kind=='rate' and f.per and f.noun and f.noun not in ('dollar','cent') and f.noun!=f.per:
+            if f.m.start>=0 and not _each_after(st,f,f.per):continue
+            # '9 apples and 7 pears in each box': is the 9 in each box too? Not decided, not composed (round 10: 44)
+            if f.m.start>=0 and re.search(r'\d[\d,.]*\s+(?:[a-z]+\s+){0,3}(?:and|or)\s+$',st.t[max(0,f.m.start-40):f.m.start],re.I):return None
+            rates.append((f,f,f.per,f.noun))
         elif f.kind=='state' and f.generic and f.noun and f.noun!=f.generic and f.noun not in ('dollar','cent') \
-             and any(g is not f and g.noun==f.generic and g.m is not None for g in st.frames):
+             and any(g is not f and g.noun==f.generic and g.m is not None for g in st.frames) and _each_after(st,f):
             rates.append((f,Frame(dict(f,kind='rate',per=f.generic,owner=None)),f.generic,f.noun))
     for r in _known_rates(st,ask):
         if not any(gg==r.per and cc==r.noun for _,_,gg,cc in rates):rates.append((r,r,r.per,r.noun))
@@ -2720,4 +2734,7 @@ def _irrelevant(st,f,noun,ask,linked):
         if ask.adj and f.adj and not set(f.adj)&set(ask.adj) and (f.owner==ask.owner or ask.owner is None):return f'{" ".join(f.adj)} {f.noun}, the question asks about {" ".join(ask.adj)} {noun}'
         return None
     if f.noun in {sing(w) for w in re.findall(r"[a-z]+",ask.low)}:return None
+    # 'storybooks' are books, 'blueberries' berries, 'goldfish' fish: not another thing (round 10: '45 picture books and
+    # 38 storybooks ... How many books altogether?' was read as 45)
+    if len(noun)>=3 and f.noun!=noun and (f.noun.endswith(noun) or noun.endswith(f.noun)):return None
     return f'about {f.noun}, not about {noun}'
