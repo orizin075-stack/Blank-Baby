@@ -55,10 +55,15 @@ def sing(w):
     return w[:-1] if w.endswith('s') and not w.endswith('ss') else w
 
 
+# a statement that says something did not happen ('A train never has 60 seats', 'She did not eat 3'): these forms do not
+# read it ('how many do not take the bus' is a question, and read)
+NOT_DONE=re.compile(r"\b(?:not|never|no longer)\b|n't\b",re.I)
+
 def read(text):
     try:
         nums=N.find(text);sents=sentences(text)
         if not sents or not nums:return None
+        if any(NOT_DONE.search(text[a:b]) for a,b in sents[:-1]):return None
         sk=[_skel(text,a,b,nums) for a,b in sents]
         for f in FORMS:
             r=f(text,nums,sents,sk)

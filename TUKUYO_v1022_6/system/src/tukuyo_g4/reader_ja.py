@@ -43,6 +43,17 @@ CNT='|'.join(sorted(map(re.escape,_C),key=len,reverse=True))
 AMT=re.compile(rf'(?<![\d./])(\d+(?:\.\d+)?)\s*({CNT})(?!の\d)(?![A-Za-z])(?!目)')   # '1回目' is an ordinal
 QWORD=re.compile(r'何|いくつ|いくら')
 UNKNOWN=re.compile(r'いくつか|いくらか|何(?:' + CNT + r')か|何人か|何こか|何個か|何枚か|何本か|何冊か|たくさん|いくらかの|少し|すこし')
+# an event the story does not say happened: not done (食べていません、歩きません、買わなかった、食べずに), only planned or
+# wished (予定、つもり、明日、もし…、食べたい), or only heard (と言いました); 少ない and 足りません are not denials, and the
+# もし of アルバイトもしています is not a supposition
+NOT_DONE=re.compile(r'(?<!少)(?<!すく)(?<!足り)(?<!たり)(?:ませんでした|ません|なかった|なくて|ないで|ずに|ない(?=[。、]|です|$|人|もの|ので|から|けれど|が|と))|'
+                    r'予定|つもり|明日|あした|来週|来月|来年|これから|(?:^|、)\s*もし|[きぎしちにびみりいえけげせてねべめれ]たい(?=[。、]|です|$|と|の)|'
+                    r'かもしれ|らしい|だろう|と言(?:い|っ|わ)|と聞')
+# the same asked of an event in the question (3こ食べなかったら、のこりは); a negated kind asked for (読んでいないページは) is read
+QNOT=re.compile(r'(?:^|、)\s*もし|予定|つもり|明日|あした|来週|なかったら|なければ|ないなら|ずに|かもしれ|と言(?:い|っ|わ)|(?<!足り)ません(?:でした)?か')
+# an amount not said exactly (3こぐらい、約20人、10こ以上、5〜6本)
+HEDGED=re.compile(r'ぐらい|くらい(?!の)|(?<!先)ほど|程度|約\s*\d|およそ|だいたい|大体|ほぼ|以上|以下|未満|少なくとも|最大|最低|せいぜい|たぶん|多分|'
+                  r'[〜~～]|または|もしくは|不明|かどうか')
 SENT=re.compile(r'[^。？?！!]+[。？?！!]?')
 MINUS=r'(?:食べ|たべ|使い|使っ|つかい|つかっ|あげ|上げ(?!て?い?ます?。?$)|売り|売れ|うり|うれ|なくし|無くし|落とし|おとし|とんでいき|とんで行|飛んでいき|飛んで行|' \
       r'飛んでいっ|とんでいっ|にげ|逃げ|降り|おり|われ|割れ|こわれ|壊れ|ぬき|抜き|出し|だし|配り|くばり|わたし|渡し|すて|捨て|へり|減り|へっ|減っ|' \
@@ -149,6 +160,9 @@ def read(text):
     if q is None:return {'spec':None,'reason':'JA:NO_QUESTION'}
     stm=sents[:-1]
     if _another_thing(stm,q):return {'spec':None,'reason':'JA:ASKS_ANOTHER_THING'}
+    if any(NOT_DONE.search(s) for s in stm):return {'spec':None,'reason':'JA:EVENT_NOT_SAID_AS_DONE'}
+    if any(HEDGED.search(s) for s in sents):return {'spec':None,'reason':'JA:AMOUNT_NOT_EXACT'}
+    if QNOT.search(q):return {'spec':None,'reason':'JA:EVENT_NOT_SAID_AS_DONE'}
     for form in (_convert,_geometry,_inverse,_unknown_guard,_fraction,_rate,_price,_share,_groups,_compare,_rest,_combine,_remaining):
         try:r=form(t,stm,q)
         except (ValueError,KeyError,IndexError,ZeroDivisionError):r=None
@@ -425,7 +439,7 @@ def _price(t,stm,q):
 def _share(t,stm,q):
     b=_B(t);s=''.join(stm);whole=s+q;au=_ask_unit(q)
     # N C の I を M 人で(同じ数ずつ|等しく)分け…1人(分は)?何 C
-    m=re.search(rf'(\d+)\s*({CNT})の?[^。]*?を\s*(\d+)\s*人で(?:同じ数ずつ|等しく|同じ数に|同じように)?\s*分け',whole)
+    m=re.search(rf'(\d+)\s*({CNT})の?[^。]*?を\s*(\d+)\s*人で(?:同じ数ずつ|等しく|同じ数に|同じように|同じだけ|均等に)\s*分け',whole)   # 分けました alone may not be equal
     if m and re.search(r'1\s*人(?:分|あたり|当たり)?(?:は|に|が)?\s*何|1\s*人(?:分|あたり)?\s*何',q) and _C[m.group(2)]==au:
         sp=m.group(0);n=b.bind('total',au,Fraction(m.group(1)),sp,integer=False);p=b.bind('people','人',Fraction(m.group(3)),sp,integer=False)
         b.rel('each',f'{au}/人',f'{n} / {p}',q,integer=_whole(au));return b.spec('each','share')

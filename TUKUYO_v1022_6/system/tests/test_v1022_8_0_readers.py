@@ -43,6 +43,17 @@ JA_HOLD = [
     'バスで行けば6日、車ならその半分の日数です。行きはバス、帰りは車だと何日かかりますか。',  # half of one leg, not the whole
     '24枚のカードを5人で同じ数ずつ分けると1人何枚？',                                     # cards are whole (it said 4.8)
     '1日に20ページずつ読むと、150ページの本を読み終えるのに何日かかりますか。',              # 7.5 days to finish is 8
+    # what the story does not say happened, or says only roughly (the full suite: it read these before)
+    '時速5kmで4時間歩きません。何km進む？',
+    'りんごが10個あります。3個食べていません。残りは何個？',
+    'りんごが10個あります。3個食べなかった。残りは何個？',
+    'りんごが10個あります。明日3個食べる予定です。残りは何個？',
+    '800円の商品を25%値引きする予定です。価格は何円？',
+    '30本のペンを5人で分けました。1人何本ですか？',                                         # not said to be equal
+    'りんごが10個あります。3個ぐらい食べました。残りは何個？',
+    'みかんが約20こあります。8こ食べました。のこりは何こですか。',
+    'りんごが10個あります。3個食べなかったら、残りは何個？',
+    'はとが30羽いました。9羽とんでいき、そのあと4羽もどってきました。今、何羽いませんか。',
 ]
 
 
@@ -83,6 +94,18 @@ EN_HOLD = [
     'Raj walked 4 kilometers every day for 6 weeks. How many kilometers did he walk?',
     'Sid had 8 stickers. He got some more and now has 15 stones. How many stickers did he get?',
     'A jar has 40 marbles. A third of them are blue. How many blue marbles are there?',          # marbles are whole
+    # amounts not said exactly, and a statement that something is not so
+    'Ava has about 5 boxes of pencils with 6 pencils in each box. She gives away 7 pencils. How many pencils are left?',
+    'Raj walked at least 4 kilometers every day for 6 days. How many kilometers did he walk?',
+    'Sid had more than 8 stickers. He got some more and now has 15 stickers. How many stickers did he get?',
+    'A tray has nearly 30 cups. A third of them are blue. How many blue cups are there?',
+    'A train never has 60 seats. 41 seats are taken. How many seats are empty?',
+]
+EN_EXACT = [   # 'more than' and 'less than' that are exact, and a question about what is not so
+    ('Nina has 12 dollars. Omar has 5 dollars more than Nina. How much money do they have together?', '29'),
+    ('12 less than five times a number is 48. What is the number?', '12'),
+    ('When 6 is added to 4 more than a number, the result is 30. What is the number?', '20'),
+    ('A club has 90 members. 35 of them play chess. How many members do not play chess?', '55'),
 ]
 
 
@@ -94,6 +117,11 @@ def test_english_story_forms(text, answer):
 @pytest.mark.parametrize('text', EN_HOLD)
 def test_english_story_forms_do_not_guess(text):
     assert own(text) is None
+
+
+@pytest.mark.parametrize('text,answer', EN_EXACT)
+def test_exact_comparisons_are_still_read(text, answer):
+    assert Fraction(own(text)) == Fraction(answer)
 
 
 def test_the_core_does_not_answer_a_whole_from_one_part(tmp_path):

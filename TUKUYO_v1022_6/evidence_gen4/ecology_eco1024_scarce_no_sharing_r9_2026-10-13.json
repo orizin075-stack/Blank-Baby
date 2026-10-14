@@ -1,0 +1,88 @@
+{
+ "utc": "2026-10-13T07:33:04Z",
+ "config": {
+  "ticks": 1024,
+  "families": 4,
+  "regeneration": 1500,
+  "reservoir": 40000,
+  "max_age": 32,
+  "no_learning": false,
+  "step": 32,
+  "max_runtimes": 256,
+  "changes": [
+   [
+    384,
+    0
+   ],
+   [
+    640,
+    1500
+   ]
+  ]
+ },
+ "steps": [
+  {
+   "tick": 32,
+   "active_runtime_count": 4,
+   "total_runtime_count": 8,
+   "actual_successions": 4,
+   "max_generation": 1,
+   "reservoir": 8400,
+   "burned": 79600,
+   "regenerated": 48000,
+   "living_energy": 26000,
+   "attempts": 51,
+   "correct": 51,
+   "wrong": 0,
+   "abstained": 0,
+   "hard_attempts": 46,
+   "hard_correct": 46,
+   "regeneration": 1500,
+   "families_alive": 4,
+   "deaths": 4,
+   "seconds": 39.0
+  },
+  {
+   "tick": 64,
+   "active_runtime_count": 0,
+   "total_runtime_count": 8,
+   "actual_successions": 4,
+   "max_generation": 1,
+   "reservoir": 2600,
+   "burned": 159400,
+   "regenerated": 96000,
+   "living_energy": 0,
+   "attempts": 112,
+   "correct": 112,
+   "wrong": 0,
+   "abstained": 0,
+   "hard_attempts": 81,
+   "hard_correct": 81,
+   "regeneration": 1500,
+   "families_alive": 0,
+   "deaths": 8,
+   "seconds": 50.3
+  }
+ ],
+ "environment": [],
+ "stopped": "EXTINCT",
+ "audit": {
+  "ok": true,
+  "errors": []
+ },
+ "owner_whole_audit": {
+  "ok": true,
+  "errors": []
+ },
+ "result": {
+  "ticks": 64,
+  "alive_at_end": 0,
+  "families_alive_at_end": 0,
+  "runtimes": 8,
+  "generations": 1,
+  "successions": 4,
+  "deaths": 8,
+  "stopped": "EXTINCT",
+  "seconds": 52.4
+ }
+}
