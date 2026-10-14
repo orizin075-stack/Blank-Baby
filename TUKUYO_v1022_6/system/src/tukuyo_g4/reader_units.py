@@ -45,7 +45,7 @@ def no(why):raise NoRead(why)
 class Amt:
     """one number of the text and what it is (or an amount a law made from others)"""
     __slots__=('k','v','raw','span','u','per','kind','role','op','tags','who','sent','inq','base','of','name','used','ref','start','verb','adjs',
-               'derived','order','zero','stuff','kept','pos','end','aux','subj','lead','src','dozen','more','noun','clause')
+               'derived','order','zero','stuff','kept','pos','end','aux','subj','lead','src','dozen','more','noun','clause','atags')
     def __init__(s,**kw):
         for x in s.__slots__:setattr(s,x,None)
         s.tags=frozenset();s.adjs=frozenset();s.used=False;s.ref=False;s.derived=False;s.zero=False;s.kept=False
@@ -80,6 +80,8 @@ class Spec:
         s.f.append({'eq':f'{a.name} = {fmt(a.v)}','span':a.span});return a.name
     def known(s,u,per,value,said):
         n=s.qty(f'{u}_per_{per}',f'{u}/{per}',True);s.f.append({'eq':f'{n} = {fmt(value)}','known':said});return n
+    def known_count(s,u,value,said):
+        n=s.qty(u,u,True);s.f.append({'eq':f'{n} = {fmt(value)}','known':said});return n
     def rel(s,u,expr,span,per=None,whole=None):
         n=s.qty(u or 'x',s._unit(u,per),s.whole(u) if whole is None and not per else bool(whole))
         s.f.append({'eq':f'{n} = {expr}','span':span});return n
@@ -104,7 +106,7 @@ def _holder(a):
 
 
 def _same_holder(r,c):
-    if r.src=='subject' or r.sent==c.sent or c.inq:return True
+    if r.src in ('subject','subject_each') or r.sent==c.sent or c.inq:return True
     a,b=_holder(r),_holder(c)
     return not (a and b and a!=b and a not in (c.subj or []) and b not in (r.subj or []))
 
@@ -138,7 +140,7 @@ def compose(text,lang,amts,tg,spec,ctx):
         if base.used:no('PART_BASE_USED')
         tags=a.tags or base.tags
         d=_d(spec,base.u,f'{a.name} * {base.name}',a.span,tags,[a],role='part')
-        base.ref=True;d.adjs=a.adjs;d.zero=False;d.order=a.order;d.kept=a.kept
+        base.ref=True;d.adjs=a.adjs;d.zero=False;d.order=a.order;d.kept=a.kept;d.atags=base.atags   # where the whole is, the part is
         if a.op=='off':d.tags=frozenset(tags)|{'discount','off'}
         pool.append(d);steps.append('part')
     # compare: an amount said against another
@@ -161,6 +163,14 @@ def compose(text,lang,amts,tg,spec,ctx):
         k,said=conv(a.u,b.u);n=spec.known(b.u,a.u,k,said)
         d=_d(spec,b.u,f'{a.name} * {n} + {b.name}',b.span,a.tags|b.tags,[a,b],role=b.role or 'state',whole=False)
         d.order=a.order;d.sent=a.sent;d.verb=b.verb;d.lead=a.lead;d.kept=b.kept;pool.append(d);steps.append('two_units')
+    # 'How many pages does she read in a week?' at 15 pages each night: the 7 nights of a week, known
+    pr=ctx.get('period')
+    if pr:
+        big,r=pr;small={'night':'day','morning':'day','evening':'day','afternoon':'day'}.get(r.per,r.per)
+        k,said=ctx['convert'](big,small)
+        n=spec.known_count(r.per,k,said)
+        pool.append(Amt(kind='count',u=r.per,name=n,derived=True,span=ctx['qspan'],order=10**6,sent=None,inq=True,tags=frozenset(),role='state'))
+        steps.append('known')
     # in N years, N years ago (4年後): every age then
     sh=[a for a in pool if a.kept in ('shift+','shift-')]
     if sh:
@@ -237,7 +247,7 @@ def compose(text,lang,amts,tg,spec,ctx):
             if k:
                 n=spec.known(tg.u,c.u,k[0],k[1])
                 d=_d(spec,tg.u,f'{c.name} * {n}',c.span,c.tags,[c],role=c.role if c.role in ('state','gain','loss','act','goal') else 'convert',whole=False)
-                d.order=c.order;d.adjs=c.adjs;d.kept=c.kept;d.verb=c.verb;d.more=c.more;d.lead=c.lead;d.sent=c.sent
+                d.order=c.order;d.adjs=c.adjs;d.kept=c.kept or 'converted';d.verb=c.verb;d.more=c.more;d.lead=c.lead;d.sent=c.sent
                 pool.append(d);steps.append('convert')
     return _whole(spec,tg,pool,steps,ctx)
 
@@ -259,6 +269,12 @@ def _names(sen):
     return en|ja
 
 
+def _full(a):return a.tags|(a.atags or frozenset())
+def _distinct_full(a,others):
+    """what tells a from the others, the words after it too ('on Monday')"""
+    return _full(a)-frozenset().union(*[_full(o) for o in others]) if others else _full(a)
+
+
 def _distinct(a,others):
     return a.tags-frozenset().union(*[o.tags for o in others]) if others else a.tags
 
@@ -266,6 +282,10 @@ def _distinct(a,others):
 def _whole(spec,tg,pool,steps,ctx):
     """the last law: the amounts of the asked unit, put together by the question"""
     cs=[a for a in pool if a.kind=='count' and not a.used]
+    if not [a for a in cs if a.u==tg.u]:
+        # the part named by its own noun: 'Owls made up one fourth of the 48 birds ... How many owls'
+        parts=[a for a in cs if a.role=='part' and tg.u in a.tags]
+        if len(parts)==1:tg.u=parts[0].u
     other=[a for a in cs if a.u!=tg.u and not a.ref]
     if other:
         # an amount of another kind of thing that no law and not the question needs ('Sam is 9 years old. He has 3
@@ -274,11 +294,13 @@ def _whole(spec,tg,pool,steps,ctx):
         near={tg.u,tg.per}|{x.u for x in pool if x.kind in ('rate','cmp')}|{x.per for x in pool if x.kind=='rate'}
         conv=ctx.get('convert')
         asked_sents={x.sent for x in pool if x.kind=='count' and x.u==tg.u and not x.derived}
+        # nor one beside an amount the laws used ('3 cars and 2 vans ... 4 people in each car')
+        asked_sents|={x.sent for x in pool if not x.derived and x not in other and x.kind in ('count','rate','cmp','frac')}
         if 'known' in steps:no('LEFT_OVER_AFTER_A_KNOWN_FACT')
         if tg.mode=='total' and any(x.u not in EN_MEASURE and x.u not in J_MEASURE for x in other):no('LEFT_OVER_IN_ALL')
         for a in other:
             if a.derived or a.inq or a.u in near or (conv and (conv(a.u,tg.u) or conv(tg.u,a.u))) or a.v==0 or \
-                    a.u in TIME or a.u in ('日','週','か月','年','時間','分','秒','回') or a.sent in asked_sents:
+                    (a.u in TIME and not (a.u=='year' and re.search(r'\byears?\s+old\b',a.clause or '',re.I))) or a.u in ('日','週','か月','年','時間','分','秒','回') or a.sent in asked_sents:
                 no('LEFT_OVER:'+','.join(sorted({str(x.u) for x in other})))
         if len({a.u for a in other})!=len(other):no('LEFT_OVER_SAME_KIND')
         for a in other:
@@ -294,6 +316,8 @@ def _whole(spec,tg,pool,steps,ctx):
     # geometry asked: area, perimeter
     if tg.geo:return _geometry(spec,tg,cs,steps,ctx)
     if mode=='unsure':no('HOW_MANY_MORE_OF_WHAT')
+    if mode=='total' and any((x.verb=='left' and x.role=='state') for x in cs if not x.derived):
+        no('TOTAL_OF_WHAT_WAS_AND_WHAT_IS_LEFT')
     if mode=='total':
         # a story that tells totals of its own ('The first and second bags contain a total of 11 apples'): its parts may overlap
         if any(re.search(r'\b(?:total|in all|altogether|together|combined)\b|合わせて|あわせて|全部で|合計',x.clause or x.span or '') for x in cs if not x.derived):
@@ -302,7 +326,7 @@ def _whole(spec,tg,pool,steps,ctx):
         if ht and len(cs)>=2:
             # 'how many car robots does Bob have in total': only what is Bob's
             mine=[a for a in cs if _distinct(a,[x for x in cs if x is not a])&ht]
-            if mine and all(x.ref or x.used or x.derived for x in cs if x not in mine) and not any(_distinct(x,mine)&ht for x in cs if x not in mine):cs=mine
+            if mine and all(x.ref or x.used or (x.derived and x.kept!='converted') for x in cs if x not in mine) and not any(_distinct(x,mine)&ht for x in cs if x not in mine):cs=mine
         if len(cs)<2:
             if len(cs)==1 and cs[0].derived:return _ask(spec,tg,cs[0],steps,ctx)
             no('TOTAL_OF_ONE')
@@ -366,7 +390,7 @@ def _whole(spec,tg,pool,steps,ctx):
         rest=[x for x in cs if x is not a]
         if tg.tags and rest:
             # the question names the one asked: what tells it from the others must be in the question, and nothing of theirs
-            mine=_distinct(a,rest);theirs=frozenset().union(*[_distinct(x,[a]) for x in rest])
+            mine=_distinct_full(a,rest);theirs=frozenset().union(*[_distinct_full(x,[a]) for x in rest])
             if theirs&tg.tags and not mine&tg.tags:no('ASKS_ANOTHER_HOLDER')
             if theirs&tg.tags and mine&tg.tags:no('ASKS_WHICH_HOLDER')
         return _ask(spec,tg,a,steps,ctx)
@@ -374,9 +398,9 @@ def _whole(spec,tg,pool,steps,ctx):
         pass
     # the question names one of several amounts: the one whose words it has, and not another's
     if len(cs)>=2 and tg.tags:
-        pick=[a for a in cs if _distinct(a,[x for x in cs if x is not a])&tg.tags]
-        if len(pick)==1 and pick[0].derived and all(x.ref or x.used or x.derived for x in cs if x is not pick[0]) and \
-                not any(_distinct(x,[pick[0]])&tg.tags for x in cs if x is not pick[0]):
+        pick=[a for a in cs if _distinct_full(a,[x for x in cs if x is not a])&tg.tags]
+        if len(pick)==1 and pick[0].derived and all(x.ref or x.used or (x.derived and x.kept!='converted') for x in cs if x is not pick[0]) and \
+                not any(_distinct_full(x,[pick[0]])&tg.tags for x in cs if x is not pick[0]):
             return _ask(spec,tg,pick[0],steps,ctx)
     no('NO_LAW_FOR_THE_QUESTION')
 
@@ -483,7 +507,7 @@ def _cu(w):
 
 # a verb said of an amount, and which way it changes a holding
 E_GAIN=(GAIN|JOIN|V('picked|added|hatched|born|arrived|received|got|gained|caught|found|bought|collected|earned|baked|made|grew|planted|saved'))-V('cut|cuts|took|takes|put|puts|make|makes|draw|drew|write|wrote|paint|painted')
-E_LOSS=(LOSE|TRANSFER|V('moved|eaten|given|taken|broken|thrown|lost|used|sold|spent|popped|removed|died|escaped|flew|left|gave|ate'))-V('share|shares|shared')
+E_LOSS=(LOSE|TRANSFER|V('moved|eaten|given|taken|broken|thrown|lost|used|sold|spent|popped|removed|died|escaped|flew|left|gave|ate|cuts|trims|trimmed|chops|chopped'))-V('share|shares|shared')
 E_STATE=HAVE|BE|V('weighs|weigh|weighed|measures|measured|costs|cost|holds|hold|contains|lasts|lasted|takes|take|took|fills|fill|filled')
 COMPAR={'less':'-','fewer':'-','more':'+','younger':'-','older':'+','shorter':'-','taller':'+','longer':'+','heavier':'+','lighter':'-',
         'cheaper':'-','smaller':'-','bigger':'+','larger':'+','higher':'+','lower':'-','faster':'+','slower':'-','farther':'+','further':'+',
@@ -541,13 +565,15 @@ def _read_en(text):
             items=len(re.findall(r'\b(?:a|an|one)\s+(?:\$\d[\d.,]*\s+)?[a-z]+',sen,re.I));prices=len(re.findall(r'\$\s*\d|\d[\d.,]*\s*(?:dollars?|cents?)\b',sen,re.I))
             if items>=2 and prices and items>prices:no('AN_ITEM_WITHOUT_PRICE')
     if len(set(re.findall(r'\b(triangle|square|rectangle|circle|pentagon|hexagon|cube|polygon)s?\b',text,re.I)))>1:no('TWO_SHAPES')
-    amts=[];order=0
+    amts=[];order=0;clock=[]
     for s in sents:
         skip=set()
         for i,t in enumerate(s.t):
             if t.kind!='num' or i in skip:continue
             n=t.num
             if n.kind=='ordinal' or N.optional(n,text) and not _one_is_base(s,i):continue
+            if re.match(r"\s*(?:o'clock|o’clock|a\.m\.|p\.m\.|am\b|pm\b)",text[n.end:n.end+8],re.I) or re.match(r':\d\d',text[n.end:n.end+3]):
+                clock.append(n.raw);continue
             a=_amount(text,s,i,sents);a.order=order;order+=1;a.inq=s is q;a.k=nums.index(n)
             amts.append(a)
             if a.dozen:
@@ -559,17 +585,28 @@ def _read_en(text):
     tg=_question_en(text,q,amts,sents)
     _resolve_en(text,amts,sents,tg)
     spec=Spec(text,'en',lambda u:(u or '') not in EN_MEASURE and '^' not in (u or ''))
+    for raw in clock:spec.unused.append({'raw':raw,'why':'a time of day, not an amount'})
+    # 'in a week' with a rate each night: what everyone knows of a week, a day, an hour, a year
+    pm=re.search(r"\b(?:in|during|over|for)\s+(?:a|an|one)\s+(week|day|hour|year|minute|month)\b",qt,re.I)
+    if pm and not any(a.inq and a.kind=='count' for a in amts):
+        big=pm.group(1).lower();rates=[a for a in amts if a.kind=='rate' and a.per]
+        per={'night':'day','morning':'day','evening':'day','afternoon':'day'}
+        if len(rates)==1 and _econv(big,per.get(rates[0].per,rates[0].per)):
+            ctx_period=(big,rates[0])
+        else:ctx_period=None
+    else:ctx_period=None
     ctx={'qspan':qt,'convert':_econv,'notadj':tg.notadj,'sents':[text[x.a:x.b] for x in sents],
          'equal':bool(re.search(r'\b(?:evenly|equally|equal|the same (?:number|amount))\b',text,re.I)),
          'qnames':[w for w in re.findall(r"(?<=[a-z,] )([A-Z][a-z]+)",qt) if w not in ('I',)]}
     # a question about what there is (are, is, have) after things came or went: what there is now
-    if tg.mode=='amount' and not tg.per and re.search(r"\b(?:are|is|does|do|has|have)\b",qt) and any(a.role in ('gain','loss') for a in amts if a.kind=='count'):
+    if tg.mode=='amount' and not tg.per and re.search(r"\bhow (?:many|much)\b[^?]*\b(?:are|is)\b(?! being)|\b(?:does|do)\b[^?]*\bhave\b|\bhas\b",qt,re.I) and \
+            any(a.role in ('gain','loss') for a in amts if a.kind=='count'):
         tg.mode='now'
     for shape in ('triangle','square','rectangle'):
         if re.search(r'\b'+shape+r's?\b',text,re.I):ctx['shape']=shape
     if tg.mode=='diff':ctx['diff_order']=tg.kind
     if tg.mode=='change':ctx['qsign']=tg.verb
-    ctx['fact']=_fact_en
+    ctx['fact']=_fact_en;ctx['period']=ctx_period
     if tg.u=='year':
         for a in amts:
             if a.inq and a.kind=='count' and a.u=='year':
@@ -621,10 +658,12 @@ def _np(s,i):
         if w in ('more','fewer','less') and not ws and j+1<len(s.t) and s.t[j+1].kind=='word' and s.t[j+1].low not in STOPW and not _verbish(s.t[j+1].low):j+=1;continue
         if w in ('ones','one') and ws:ws.append(w);j+=1;break
         nx=s.t[j+1].low if j+1<len(s.t) and s.t[j+1].kind=='word' else None
-        if not ws and re.search(r'(?:en|ed)$',w) and nx and (nx in ('ones','one') or (nx.endswith('s') and _sing(nx)!=nx)) and nx not in STOPW:ws.append(w);j+=1;continue
+        if not ws and re.search(r'(?:en|ed)$',w) and nx and (nx in ('ones','one') or (nx.endswith('s') and _sing(nx)!=nx and nx not in STOPW)):ws.append(w);j+=1;continue
         noun=w.endswith('s') and _sing(w)!=w and not w.endswith('ed')
         if w in STOPW or (_verbish(w) and w not in _EU and not noun) or (w.endswith('ly') and w not in ('family','jelly','belly','lily','fly','butterfly')):break
         ws.append(w);j+=1
+        # the phrase ends at its first plural ('5 friends split', '4 quart jars'): what follows is a verb or the rest
+        if noun and w not in ('pants','glasses','scissors','clothes','jeans','shorts'):break
     stuff=None
     if ws and j+1<len(s.t) and s.t[j].kind=='word' and s.t[j].low=='of' and s.t[j+1].kind=='word' and s.t[j+1].low not in STOPW:
         stuff=_sing(s.t[j+1].low);j+=2
@@ -690,6 +729,12 @@ def _amount(text,s,i,sents):
     a.verb=vb
     subj=_subject(s,i);a.subj=subj;a.lead=subj[0] if subj else None
     a.tags=_content(subj)|(_content([head]) if head and _cu(head) not in EN_MEASURE else frozenset())|adjs|(frozenset([stuff]) if stuff else frozenset())
+    # the words right after it ('340 tickets on Friday'): up to the next number, 'and', 'than' or a comma
+    seg=[]
+    for t2 in s.t[j:j+6]:
+        if t2.kind!='word' or t2.low in ('and','than','but','or','while'):break
+        seg.append(t2.low)
+    a.atags=frozenset(w for w in _content(seg) if not _verbish(w))       # only what a comparison points to
     # '3-foot board': a measure of the thing after it
     m=re.match(r'-([A-Za-z]+)',text[n.end:n.end+16])
     if m and _cu(m.group(1)) in EN_MEASURE:
@@ -704,6 +749,7 @@ def _amount(text,s,i,sents):
     elif head:
         a.u=_cu(head)
         if adjs&{'square','cubic'} and a.u in LENGTH:a.u=a.u+('^2' if 'square' in adjs else '^3')
+    if 'empty' in _words(s,max(0,i-4),i) or 'empty' in adjs:a.kept='container'
     # 'N of them', 'N of the cookies', 'N broken ones'
     if head in (None,'one','ones') or (head is None and after[:1]==['of']):
         if after[:1]==['of'] and len(after)>1:
@@ -714,7 +760,7 @@ def _amount(text,s,i,sents):
     # what the number is: a rate, a comparison, a part
     nxt=after
     if nxt[:1]==['per'] and len(nxt)>1:a.kind='rate';a.per=_cu(nxt[1])
-    elif nxt[:1] in (['a'],['an']) and len(nxt)>1 and nxt[1] not in STOPW and not _verbish(nxt[1]):a.kind='rate';a.per=_cu(nxt[1])
+    elif nxt[:1] in (['a'],['an']) and len(nxt)>1 and nxt[1] not in STOPW and not _verbish(nxt[1]) and j+1<len(s.t) and s.t[j+1].kind=='word':a.kind='rate';a.per=_cu(nxt[1])
     elif nxt[:2] in (['in','each'],['on','each'],['for','each'],['to','each'],['into','each'],['with','each']) and len(nxt)>2:
         if nxt[2]=='of':a.kind='rate';a.per='@each_of'
         else:a.kind='rate';a.per=_cu(nxt[2])
@@ -807,6 +853,9 @@ def _resolve_en(text,amts,sents,tg):
             a.per=nxt[0].u
         if a.kind=='rate' and a.per in ('@receiver','@each_subject'):
             cs=[b for b in amts if b.sent==a.sent and b is not a and b.kind=='count' and b.u!=a.u]
+            if not cs and a.per=='@receiver':
+                sw=[w for w in _subject(s,_tok_index(s,a)) if w not in EN_FUNC]
+                if sw and sw[-1].endswith('s') and _sing(sw[-1])!=sw[-1]:a.per=_cu(sw[-1]);a.src='subject_each';continue
             if len(cs)!=1:no('EACH_WHO')
             a.per=cs[0].u
     # the subject of a sentence 'A glass holds 250 milliliters', 'One foot is 12 inches', 'Adult tickets are $14'
@@ -847,7 +896,8 @@ def _resolve_en(text,amts,sents,tg):
             cs=[b for b in amts[:x]+amts[x+1:] if b.kind=='count' and (a.op in '*/' or b.u==a.u or a.u is None)]
             if how=='@than' and words:
                 ws=set(words)
-                m=[b for b in cs if b.tags&ws and not (b.tags&a.tags-ws)]
+                m=[b for b in cs if ws<=b.tags|(b.atags or frozenset())]
+                if len(m)>1:m=[b for b in m if not (b.tags&(a.tags-ws-m[0].tags.intersection(*[x.tags for x in m])))] or m
                 if not m and set(words)&{'he','him','she','her','they','them','it'}:m=[b for b in cs if b.order<a.order][-1:]
                 if len(m)!=1:
                     m2=[b for b in m if b.sent!=a.sent or b.order<a.order]
@@ -877,6 +927,11 @@ def _resolve_en(text,amts,sents,tg):
     _ratios(text,amts,sents)
     for a in amts:
         if a.kind=='count':a.role=_role_en(a)
+    # 'Adult train tickets are $14 ... 2 adults': the rate is per what the count counts
+    for r in amts:
+        if r.kind=='rate' and r.per and ' ' in r.per:
+            cs=[c for c in amts if c.kind=='count' and c is not r and _match_per(r.per,c)]
+            if len(cs)==1:r.per=cs[0].u
 
 
 INTENT_EN=re.compile(r"\b(?:plans?|planned|planning|wants?|wanted|hopes?|hoped|wish(?:es|ed)?|will|would|going to|tomorrow|tonight|next|might|may|"
@@ -1020,10 +1075,10 @@ def _question_en(text,q,amts,sents):
     elif re.search(r"\bhow (?:many|much) (?:more|fewer|less)\b[^?]*\bthan\b|\bhow much (?:older|younger|taller|shorter|longer|heavier|lighter|more expensive|cheaper)\b",low):tg.mode='diff'
     elif re.search(r"\b(?:left|remain|remaining)\b",low):tg.mode='left'
     elif re.search(r"\b(?:still|now|in the end|after both|after all)\b",low):tg.mode='now'
-    elif re.search(r"\b(?:total|in all|altogether|all together|together|combined|both|sum|in that week|over both|in all)\b",low):tg.mode='total'
+    elif re.search(r"\b(?:total|in all|altogether|all together|together|combined|both|sum|in that week|over both|in all|that day|that week|that month|that year|all day)\b",low):tg.mode='total'
     if re.search(r"\bhow (?:many|much) (?:more|fewer|less)\b",low) and tg.mode not in ('need','diff'):tg.mode='unsure'
     qv=next((w for w in re.findall(r"[a-z]+",asked) if w in E_LOSS or w in E_GAIN),None)
-    if tg.mode=='amount' and re.match(r"\s*how (?:many|much)\b",asked) and qv and sum(1 for a in amts if a.kind=='count' and not a.inq and a.verb and (a.verb in E_STATE or a.verb=='left'))>=2:
+    if tg.mode in ('amount','total','now') and re.match(r"\s*how (?:many|much)\b",asked) and qv and sum(1 for a in amts if a.kind=='count' and not a.inq and a.verb and (a.verb in E_STATE or a.verb=='left'))>=2:
         tg.mode='change';tg.verb='loss' if qv in E_LOSS else 'gain'
     return tg
 
@@ -1040,9 +1095,11 @@ J_CONV={('m','cm'):(100,'1 m = 100 cm'),('km','m'):(1000,'1 km = 1000 m'),('cm',
         ('kg','g'):(1000,'1 kg = 1000 g'),('L','mL'):(1000,'1 L = 1000 mL'),('L','dL'):(10,'1 L = 10 dL'),('dL','mL'):(100,'1 dL = 100 mL'),
         ('t','kg'):(1000,'1 t = 1000 kg'),('時間','分'):(60,'1時間 = 60分'),('分','秒'):(60,'1分 = 60秒'),('週','日'):(7,'1週間 = 7日'),
         ('年','か月'):(12,'1年 = 12か月'),('日','時間'):(24,'1日 = 24時間'),('ダース','個'):(12,'1ダース = 12個')}
-def _jconv(a,b):return J_CONV.get((a,b))
+def _jconv(a,b):
+    if a=='ダース' and b in J_GENERIC:return (12,'1ダース = 12')
+    return J_CONV.get((a,b))
 J_GAIN=re.compile(_J.PLUS)
-J_LOSS=re.compile(_J.MINUS+r'|うつり|移り|うつっ|移っ|出ていき|出て行')
+J_LOSS=re.compile(_J.MINUS+r'|うつり|移り|うつっ|移っ|出ていき|出て行|切り取り|きりとり|切りとり')
 J_LEFT=re.compile(r'のこ|残')
 J_HAVE=re.compile(r'持って|もって|ためて|貯めて|ためました|貯めました')
 J_CMP={'多':'+','少な':'-','若':'-','年上':'+','年下':'-','高':'+','低':'-','長':'+','短':'-','重':'+','軽':'-','安':'-','大き':'+','小さ':'-',
@@ -1053,6 +1110,7 @@ J_NOW=re.compile(r'今(?!日|週|月|年|度|回)|(?:^|、)\s*いま|なりま�
 J_NEED=re.compile(r'あと\s*何|あと\s*いくら|まだ\s*何|足りな|たりな|必要')
 J_DIFF=re.compile(r'(?:何|いくつ|いくら)[^。]*?(?:多い|少ない|多く|少なく|長い|短い|高い|安い|ちがい|違い)|差')
 J_FUNC=set('こと もの とき ところ ため よう それ これ その この あの 何 いくつ いくら 全部 ぜんぶ 合計 あと まだ 今 いま 1人 1つ'.split())
+J_KANA_FUNC=set('この その あの どの ここ そこ あと まだ もう また など だけ まで から より ので のに けど ても でも とき ころ ほど くらい ぐらい それ これ どれ みな みんな ぜんぶ'.split())
 # what is said of a holder (its weight, length, price), not a holder
 J_PROP=set('体重 重さ おもさ 長さ ながさ 高さ たかさ 身長 しんちょう ねだん 値段 代金 だいきん 時間 きょり 距離 道のり みちのり 面積 数 かず 点 年れい 年齢 量 速さ はやさ 全長 料金 運賃'.split())
 
@@ -1064,7 +1122,7 @@ def _jtags(s):
         w=m.group(1)
         w=re.sub(r'^(?:[ぁ-ん]{1,2})(?=[一-龯ァ-ヶー])','',w)
         w=re.sub(r'(?:入り|いり|だけ|用|たち)$','',w)
-        if w and w not in J_FUNC and w not in J_PROP and not re.fullmatch(r'[ぁ-ん]{1,2}',w) and not re.search(r'\d',w) and not w.startswith('何'):out.add(w)
+        if w and w not in J_FUNC and w not in J_PROP and w not in J_KANA_FUNC and not re.fullmatch(r'[ぁ-ん]',w) and not re.search(r'\d',w) and not w.startswith('何'):out.add(w)
     return frozenset(out)
 
 
@@ -1209,6 +1267,7 @@ def _jamount(s,si,n,nums,inq):
     if m and (one_ok or m.group(2) or m.group(3) or m.group(4)):
         g=m.group(1) or m.group(2) or m.group(3) or m.group(4)
         a.kind='rate';a.per=_JC.get(g,g)
+        if a.per in ('晩','夜','朝','夕方','ばん','よる','あさ') and m.group(3):a.per='日'       # 毎晩 9ページずつ: each day
         if m.group(1):a.base='@one'
         return a
     if re.match(r'\s*ずつ',s[e2:]):a.kind='rate';a.per='@each'
