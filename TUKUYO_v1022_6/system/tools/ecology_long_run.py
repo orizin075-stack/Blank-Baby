@@ -36,6 +36,7 @@ def main():
     ap.add_argument('--wild-regeneration',type=int,default=1200);ap.add_argument('--wild-cap',type=int,default=24000)
     ap.add_argument('--change',action='append',default=[],metavar='TICK:REGENERATION',
                     help='change the environment at a tick (the reservoir regeneration from then on), e.g. 400:0 for a drought')
+    ap.add_argument('--resume',action='store_true',help='go on with the ecology in WORK and the report in --out (after a restart)')
     ap.add_argument('--out');a=ap.parse_args()
     changes=sorted((int(x.split(':')[0]),int(x.split(':')[1])) for x in a.change)
     d=Path(a.work).resolve()/'ecology';d.parent.mkdir(parents=True,exist_ok=True)
@@ -44,6 +45,14 @@ def main():
                                                                            **({'wild_regeneration':a.wild_regeneration,'wild_cap':a.wild_cap} if a.explore else {}),
                                                                            'changes':[list(c) for c in changes]},'steps':[],'environment':[]}
     t0=time.time()
+    if a.resume and a.out and Path(a.out).is_file() and (d/'v1022_ecology').is_dir():
+        rep=json.loads(Path(a.out).read_text(encoding='utf-8'));rep.pop('stopped',None);rep.pop('result',None)
+        rep.setdefault('resumed',[]).append(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()))
+        st=run(a.runtime_trust_file,d,'metabolism-status')
+        if not st.get('ok'):rep['stopped']='RESUME:'+str(st.get('error'));print(rep['stopped']);return _out(a,rep)
+        done={e['asked_at'] for e in rep['environment'] if e.get('ok')};changes=[c for c in changes if c[0] not in done]
+        t0-=rep['steps'][-1]['seconds'] if rep['steps'] else 0
+        return _go(a,rep,d,st['tick'],changes,t0)
     r=run(a.runtime_trust_file,d,'init','--individual-id','ECOLOGY-OWNER')
     if not r.get('ok'):rep['stopped']='INIT:'+str(r.get('error'));print(rep['stopped']);return _out(a,rep)
     args=['metabolism-init','--families',a.families,'--reservoir',a.reservoir,'--regeneration',a.regeneration,'--max-age',a.max_age]+(['--no-learning'] if a.no_learning else [])
@@ -55,11 +64,13 @@ def main():
     if a.explore:args+=['--explore','--wild-regeneration',a.wild_regeneration,'--wild-cap',a.wild_cap]
     r=run(a.runtime_trust_file,d,*args)
     if not r.get('ok'):rep['stopped']='METABOLISM_INIT:'+str(r.get('error'));print(rep['stopped']);return _out(a,rep)
-    tick=0
+    return _go(a,rep,d,0,changes,t0)
+
+def _go(a,rep,d,tick,changes,t0):
     while tick<a.ticks:
         while changes and changes[0][0]<=tick:
             at,regen=changes.pop(0);r=run(a.runtime_trust_file,d,'metabolism-environment','--regeneration',regen)
-            rep['environment'].append({'asked_at':at,'tick':tick,'regeneration':regen,'ok':r.get('ok'),'error':r.get('error')});print('environment',rep['environment'][-1],flush=True)
+            rep['environment'].append({'asked_at':at,'tick':tick,'regeneration':regen,'ok':r.get('ok'),'error':r.get('error')});print('environment',rep['environment'][-1],flush=True);_out(a,rep)
         nxt=changes[0][0] if changes else a.ticks
         n=min(a.step,a.ticks-tick,max(1,nxt-tick));r=run(a.runtime_trust_file,d,'metabolism-step','--ticks',n)
         if not r.get('ok'):rep['stopped']='STEP:'+str(r.get('error'));break
@@ -83,7 +94,7 @@ def main():
         if a.stagger:row['unborn']=len(r.get('unborn') or [])
         if a.explore:row.update({k:r.get(k) for k in ('wild','found','explore_attempts','explore_correct','explore_paid')})
         row['seconds']=round(time.time()-t0,1);rep['steps'].append(row)
-        print(json.dumps(row),flush=True)
+        print(json.dumps(row),flush=True);_out(a,rep)
         if not r.get('active_runtime_count'):rep['stopped']='EXTINCT';break
     else:rep['stopped']='REACHED_TICKS'
     au=run(a.runtime_trust_file,d,'metabolism-audit');rep['audit']={'ok':au.get('ok'),'errors':au.get('errors')}
