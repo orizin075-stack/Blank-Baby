@@ -81,6 +81,9 @@ def test_what_a_runtime_learned_decides_how_well_the_wild_feeds_it(tmp_path, lea
     right = [a['question'] for t in ticks for a in t['actions'] if a['action'] == 'explore' and a['correct']]
     if not learning:
         assert all(any(w in q for w in BUILTIN) for q in right)
+    # who goes first to the wild turns each tick (it was always the oldest), and each kind of work tried has its tick
+    assert len({t['actions'][0]['runtime'] for t in ticks if len(t['actions']) == 2}) == 2
+    assert any(k.startswith('last_') for p in _state(d)['performance'].values() for k in p)
     assert C(d, 'metabolism-audit')['ok']
     bad = copy.deepcopy(_state(d)); bad['found'] += 100                 # energy found that the wild never had
     with pytest.raises(ValueError, match='WILD_BOUND|RESOURCE_CONSERVATION'):

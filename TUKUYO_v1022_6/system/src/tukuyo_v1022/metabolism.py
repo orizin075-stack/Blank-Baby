@@ -238,7 +238,10 @@ def step(d,ticks=1):
             # the wild grows back on its own (a drought of the commons does not reach it), up to what it can hold
             grow=min(explore['wild_regeneration'],explore['wild_cap']-s['wild']);s['wild']+=grow;s['wild_grown']+=grow
         joined=_join_founders(d,s,tick) if s.get('unborn') else []
-        for rid in list(s['active']):
+        order=list(s['active'])
+        # v1022.8.2 r10 (with --explore): who goes first to the wild and the commons turns each tick (it was always the oldest)
+        if explore and order:k=tick%len(order);order=order[k:]+order[:k]
+        for rid in order:
             p=child(d,rid);perf=s['performance'][rid];energy=s['runtimes'][rid]['energy']
             query=answer=expected=None;correct=uncertain=False;credit=0;cost=300;niche_row=None
             if 'research' in s:
@@ -257,7 +260,13 @@ def step(d,ticks=1):
               # paid outcomes; energy above the satiety set-point is worth nothing, so a fed individual
               # rests instead of burning the commons, and a hungry one works where it pays most.
               def p_paid(kind):
-                r=perf.get('recent_'+kind,[]);return (sum(r)+1)/(len(r)+2)
+                r=perf.get('recent_'+kind,[]);p=(sum(r)+1)/(len(r)+2)
+                if explore and r:
+                  # v1022.8.2 r10: what it has not tried for a while it is less sure of (the wild grows back, the commons
+                  # refills): its estimate goes back toward the even prior, half way in 8 ticks untried. Measured: without
+                  # this, the last two of a famine kept to an empty commons and starved while the wild grew back
+                  w=.5**((tick-perf.get('last_'+kind,tick))/8);p=w*p+(1-w)*.5
+                return p
               # v1022.8.2 r10: with reproduction on, an adult stores energy for a child (its satiety set-point rises to the full)
               # and with --bequest, one in the second half of its life stores energy for its successor
               m_age=s['config']['max_age'];a0=organism2.load(p).get('metabolic_age',0)
@@ -279,6 +288,7 @@ def step(d,ticks=1):
                 result=cognition.solve(p,query);answer=result['answer'];uncertain=result['uncertain'];correct=not uncertain and answer==expected
                 perf['attempts']+=1;perf['correct']+=int(correct);perf['abstained']+=int(uncertain);perf['wrong']+=int(not uncertain and not correct)
                 perf[chosen+'_attempts']=perf.get(chosen+'_attempts',0)+1;perf[chosen+'_correct']=perf.get(chosen+'_correct',0)+int(correct)
+                if explore:perf['last_'+chosen]=tick
                 cost+={'hard':200,'simple':100,'explore':EXPLORE_COST}[chosen]
                 if correct and chosen=='explore':
                     # it read the clue right and found the place: what it takes enters the ecology from the wild
