@@ -1413,6 +1413,9 @@ def _jquestion(q,amts,sents):
         if tg.u and re.fullmatch(r'(?:数|かず)',tg.u):tg.u=None
         if tg.u:tg.u=_JC.get(tg.u,tg.u)
     if not tg.u:no('ASKED_UNIT')
+    # '箱は全部で何個': the boxes are asked (counted with 個), not what is in them
+    mt=re.match(r'\s*([一-龯ァ-ヶーぁ-ん]{1,4})は',q)
+    if mt and mt.group(1) in _JC and _JC[mt.group(1)]!=tg.u and any(a.u==_JC[mt.group(1)] for a in amts):tg.u=_JC[mt.group(1)]
     if tg.u in ('m^2','cm^2','km^2'):tg.geo='area';tg.u=tg.u.split('^')[0]
     if re.search(r'まわりの長さ|周りの長さ|周の長さ',q):tg.geo='perimeter'
     tg.tags=_jtags(q)

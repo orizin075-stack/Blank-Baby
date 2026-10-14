@@ -23,11 +23,12 @@ def test_cp2_word_problems_with_coverage_and_explanations():
         good={'バスに12人乗っていて、5人降りて7人乗った。今何人？':'14','1冊120円のノートを3冊買うと全部でいくら？':'360','5人に4個ずつ配ると、全部で何個いる？':'20',
               '24枚のカードを6人で同じ数ずつ分けると1人何枚？':'4','兄は15歳で、弟は兄より3歳年下です。弟は何歳？':'12','分速80mで15分歩くと何m進む？':'1200',
               '水が2リットルあって、500ミリリットル飲んだ。残りは何ミリリットル？':'1500','500円持っていて、120円のパンを買った。おつりは？':'380',
-              'Tom had 9 apples and ate 2. How many are left?':'7'}
+              'Tom had 9 apples and ate 2. How many are left?':'7',
+              # round 11: the reader by what the amounts are reads なくした as lost (it was held for the teachers before)
+              'カードが20枚あって、6枚なくした。残りは何枚？':'14'}
         for q,a in good.items():
             r=think(d,q);assert r['answer']==a and not r['uncertain'] and r.get('explanation'),(q,r)
         for q in ['バスに12人乗っていて、5人降りた。運転手は3人いる。今何人？',   # distractor number -> coverage refuses
-                  'カードが20枚あって、6枚なくした。残りは何枚？',                 # context-dependent verb -> teacher domain
                   'りんごが10個あります。3個ぐらい食べました。残りは何個？','24枚のカードを5人で同じ数ずつ分けると1人何枚？']:
             assert think(d,q)['answer'] is None,q
         assert run(d,'whole-audit')['ok']
