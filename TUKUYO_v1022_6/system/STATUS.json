@@ -476,7 +476,11 @@
         }
       },
       "english_improvement_on_held_out": false,
-      "fix_after_held_out_not_counted": "a reading the v1022 core agrees with is not held by the extra input check (one held-out problem)",
+      "fix_after_held_out_not_counted": [
+        "a reading the v1022 core agrees with is not held by the extra input check (one held-out problem)",
+        "a share of things counted one by one is whole: 24 cards among 5 is not read as 4.8 (Japanese and English)",
+        "own readers do not read an event not said as done (歩きません, 食べていません, 明日…予定です), 分けました without 同じ数ずつ, or a hedged amount (3こぐらい, about 5 boxes, at least 8); found by the full suite"
+      ],
       "held_out_en": {
         "after": {
           "held": 32,
@@ -506,7 +510,14 @@
       },
       "held_out_runs": "totals before, once after",
       "japanese_reader": "tukuyo_g4/reader_ja.py",
-      "mgsm_ja_dev_wrong": 0
+      "mgsm_ja_dev_wrong": 0,
+      "held_out_after_was_measured_before_these_fixes": true,
+      "these_fixes_only_hold_back_readings": true,
+      "dev_readings_held_back_by_the_guards": {
+        "asdiv_dev_and_private_dev_en": 0,
+        "private_dev_ja": 0,
+        "mgsm_ja_dev": 0
+      }
     },
     "real_parents_measured": false,
     "restores_9_0": {
