@@ -67,6 +67,7 @@ JA = [
     ('自転車が6台あります。車輪は全部で何個ですか。', 12),
     ('ゆうたさんは7才、おばさんは31才です。5年後、2人の年れいの合計は何才ですか。', 48),
     ('はるかさんは毎晩9ページずつ本を読みます。7日間では何ページ読みますか。', 63),
+    ('1箱12個入りが4箱あります。5個売って7個仕入れました。残り何個？', 50),                     # each number its own verb
 ]
 
 
@@ -103,6 +104,9 @@ HOLD = [
     'About how many stickers does each of the 7 children get if 50 stickers are shared?',
     'There are 4 red balls and 6 blue balls. How many red balls in total?',             # one kind asked (found by the suite)
     '1箱に12個入りが6箱あります。箱は全部で何個？',                                         # the boxes asked (found by the suite)
+    '底辺が10cm、高さが6cmの三角形の面積は何cm²ですか？',                                    # a triangle is not a rectangle
+    '1箱に8個入りが4箱あります。別の人が別の在庫から3個食べました。残りは何個？',               # another stock
+    'ペンは1本80円です。ペンを3本と消しゴムを買いました。代金は何円ですか。',                   # an item without a price
     'たろうさんはりんごを5こ持っています。2こをはなこさんにあげました。はなこさんはりんごを何こ持っていますか。',
     '箱に6こずつたまごが入っています。4ふくろあります。たまごは全部で何こですか。',
     '30本のペンを5人で分けました。1人何本ですか。',

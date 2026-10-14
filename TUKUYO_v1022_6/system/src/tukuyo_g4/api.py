@@ -92,6 +92,15 @@ def _different_things(a,b):
 
 JA=re.compile(r'[぀-ヿ㐀-鿿]')
 
+def _event_words_learned(data):
+    """has this individual the v1022 core's event rules (installed with the seed, or learned)? No individual: yes"""
+    if data is None:return True
+    try:
+        from tukuyo_v1022 import cognition
+        return bool(cognition.state(data).get('event_rules'))
+    except Exception:  # noqa: BLE001 - a store it cannot read gives no knowledge of event words
+        return False
+
 def _own(text):
     try:from . import reader
     except ImportError:return None
@@ -157,6 +166,13 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
     # its own reader, in English and (v1022.8.0) in Japanese (reader_ja): a Japanese problem the v1022 core also reads
     # is answered only when both readings agree
     own=_own(text)
+    if own is not None and own.get('spec') and JA.search(text) and not _event_words_learned(data):
+        # round 11: an individual made blank (init --blank-learning) has not learned which way a Japanese event word goes
+        # (the v1022 core's event rules); the reader by units' laws of came and went need it (the core's tests:
+        # 'lexical transfer requires learned skill support')
+        rd=str(own['spec'].get('reader',''))
+        if rd.startswith('tukuyo.g4.reader_units/1:') and ('holding' in rd or 'change' in rd):
+            own={'spec':None,'reason':'UNITS:EVENT_WORDS_NOT_LEARNED'}
     if own is not None:
         readings.append(evaluate(own['spec'],'own') if own.get('spec') else {'route':'own','ok':False,'reason':own.get('reason','OWN_UNREAD')})
         tukuyo_ok|=readings[-1]['ok']

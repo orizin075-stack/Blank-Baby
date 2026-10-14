@@ -628,6 +628,7 @@ def _read_en(text):
     if ZERO_START.search(text):
         amts.append(Amt(kind='count',u=tg.u,zero=True,role='state',order=-1,tags=frozenset(),span=qt))
     if tg.geo=='area':
+        if re.search(r'\b(?:triangle|trapezoid|circle|parallelogram|rhombus)s?\b',text,re.I):no('AREA_OF_ANOTHER_SHAPE')
         for a in amts:spec.bind(a) if not a.zero else None
         live=[a for a in amts if a.kind=='count' and not a.zero]
         if len(live)!=2 or live[0].u!=live[1].u or live[0].u not in LENGTH or len(amts)!=2:no('AREA_NOT_TWO_SIDES')
@@ -1107,7 +1108,7 @@ def _jconv(a,b):
     if a=='ダース' and b in J_GENERIC:return (12,'1ダース = 12')
     return J_CONV.get((a,b))
 J_GAIN=re.compile(_J.PLUS)
-J_LOSS=re.compile(_J.MINUS+r'|うつり|移り|うつっ|移っ|出ていき|出て行|切り取り|きりとり|切りとり')
+J_LOSS=re.compile(_J.MINUS+r'|うつり|移り|うつっ|移っ|出ていき|出て行|切り取り|きりとり|切りとり|売っ|返品')
 J_LEFT=re.compile(r'のこ|残')
 J_HAVE=re.compile(r'持って|もって|ためて|貯めて|ためました|貯めました')
 J_CMP={'多':'+','少な':'-','若':'-','年上':'+','年下':'-','高':'+','低':'-','長':'+','短':'-','重':'+','軽':'-','安':'-','大き':'+','小さ':'-',
@@ -1130,6 +1131,8 @@ def _jtags(s):
         w=m.group(1)
         w=re.sub(r'^(?:[ぁ-ん]{1,2})(?=[一-龯ァ-ヶー])','',w)
         w=re.sub(r'(?:入り|いり|だけ|用|たち)$','',w)
+        # a word of two kana (なし, かご) only as a whole word, not the end of one ('貝がら' is not 貝 and がら)
+        if re.fullmatch(r'[ぁ-ん]{2}',w) and not (m.start()==0 or s[m.start()-1] in '、。はがをにでとのもへや '):continue
         if w and w not in J_FUNC and w not in J_PROP and w not in J_KANA_FUNC and not re.fullmatch(r'[ぁ-ん]',w) and not re.search(r'\d',w) and not w.startswith('何'):out.add(w)
     return frozenset(out)
 
@@ -1162,6 +1165,11 @@ def _read_ja(t,stm,q):
     if re.search(r'何\s*(?:'+JCNT+r')?\s*目|何番|何位|何時(?!間)|何曜|何月|何日目',q):no('ASKS_A_POSITION')
     if re.search(r'いちばん|一番|最も|もっとも|最大|最小|最低|最高|同じ|ひとしく|平均|およそ|約|四捨五入|切り上げ|切り捨て',q):no('QUESTION_NOT_FOR_THESE_LAWS')
     sents=stm+[q];amts=[];order=0;pos=0;starts=[];restate=[];frames=set()
+    # something bought with no amount or price beside what has one ('ペンを3本と消しゴムを買いました')
+    for x in stm:
+        if re.search(r'買|かい|かっ|注文|払',x) and (re.search(r'\d\s*(?:'+JCNT+r')\s*と\s*[^、。0-9]{1,8}?を',x) or
+                                              re.search(r'(?:^|[、をとは])[^、。0-9]{1,8}?と[^、。0-9]{0,8}?\d',x) and not re.search(r'\d[^、。]*と[^、。]*\d',x)):
+            no('AN_ITEM_WITHOUT_AMOUNT')
     for si,s in enumerate(sents):
         nums=N.find(s)
         for n in nums:
@@ -1184,6 +1192,12 @@ def _read_ja(t,stm,q):
             b.role='state';b.verb='to'
     tg=_jquestion(q,amts,sents);_FACT_Q['q']=q
     _jresolve(amts,sents,tg)
+    # a question about what there is (…ですか) after things came or went, and a start told: what there is now. The 1 of a
+    # rate ('1ぱい50円で') is no start
+    st=[a for a in amts if a.kind=='count' and not a.inq and a.role=='state' and a.kept!='base']
+    if tg.mode=='amount' and not tg.per and not any(a.inq for a in amts) and re.search(r'(?:ますか|ですか)[。？?]?$',q) and st and \
+            any(a.role in ('gain','loss') for a in amts if a.kind=='count' and not a.inq):
+        tg.mode='now'
     # '2人の年れいの合計': the two whose ages are told, said again
     if tg.u=='才':
         ages=[a for a in amts if a.u=='才' and not a.inq]
@@ -1207,6 +1221,7 @@ def _read_ja(t,stm,q):
     if re.search(r'誰も|だれも|何も|なにも|からっぽ|空っぽ|空で',''.join(stm)) and tg.mode in ('now','left'):
         amts.append(Amt(kind='count',u=tg.u,zero=True,role='state',order=-1,tags=frozenset(),span=q))
     if tg.geo=='area':
+        if re.search(r'三角形|台形|円|平行四辺形|ひし形',t):no('AREA_OF_ANOTHER_SHAPE')
         for a in amts:spec.bind(a)
         live=[a for a in amts if a.kind=='count']
         if len(live)!=2 or live[0].u!=live[1].u or len(amts)!=2:no('AREA_NOT_TWO_SIDES')
@@ -1225,7 +1240,10 @@ def _jamount(s,si,n,nums,inq):
     clause_a=max(s.rfind('、',0,n.start),-1)+1;clause_b=s.find('、',e2);clause_b=len(s) if clause_b<0 else clause_b
     clause=s[clause_a:clause_b];a.span=s[max(clause_a,n.start-8):min(len(s),e2+6)].strip('、。 ') or s
     before=s[clause_a:n.start];after=s[e2:clause_b]
-    if not re.search(r'[ぁ-ん]{2,}',after) and clause_b<len(s):after=s[e2:]       # a list: the verb at the end is said of each
+    listed=False
+    if not re.search(r'[ぁ-ん]{2,}',after) and clause_b<len(s):
+        # a list ('1つ目のバス停で9人、2つ目で14人乗りました'): the verb at its end, after its last number, is said of each
+        ld=list(re.finditer(r'\d',s[e2:]));after=s[e2+ld[-1].end():] if ld else s[e2:];listed=True
     a.tags=_jtags(before)|_jtags(after)
     if n.kind=='jfrac' or (n.kind=='half'):
         # 'その3分の1', 'Yの半分', 'ねだんの5分の1だけ安く'
@@ -1253,7 +1271,10 @@ def _jamount(s,si,n,nums,inq):
     # 'N C から M C に': a value before and after a change
     if re.match(r'\s*から',s[e2:]):a.role='state';a.verb='from'
     # the verb said of it: what follows in its clause
+    nd=re.search(r'\d',after)
+    if nd and not listed:after=after[:nd.start()]                 # '5個売って7個仕入れました': the 5's verb is 売って, not 仕入れ
     if a.verb=='from':pass
+    elif re.search(r'(?:別|べつ|ほか|他)の[^、。]{0,8}から',s[clause_a:clause_b]):a.role='other';a.verb='other_stock'   # '別の在庫から3個'
     elif J_LEFT.search(after[:8]) and re.search(r'(?:て|で)(?:い|お)|ました|ます',after):a.role='state';a.verb='left'
     elif J_LOSS.search(after) and not re.search(r'ずつ',after[:3]):a.role='loss';a.verb=J_LOSS.search(after).group(0)
     elif J_GAIN.search(after):a.role='gain';a.verb=J_GAIN.search(after).group(0)
@@ -1442,7 +1463,7 @@ def _jquestion(q,amts,sents):
     qv=J_LOSS.search(qa) or J_GAIN.search(qa)
     if tg.mode=='amount' and qv and sum(1 for a in amts if a.kind=='count' and not a.inq and a.role=='state')>=2:
         tg.mode='change';tg.verb='loss' if J_LOSS.search(q) else 'gain'
-    if tg.mode=='amount' and not tg.per and not any(a.inq for a in amts) and re.search(r'(?:ますか|ですか)[。？?]?$',q) and any(a.role in ('gain','loss') for a in amts if a.kind=='count' and not a.inq) \
+    if False and tg.mode=='amount' and not tg.per and not any(a.inq for a in amts) and re.search(r'(?:ますか|ですか)[。？?]?$',q) and any(a.role in ('gain','loss') for a in amts if a.kind=='count' and not a.inq) \
             and any(a.role=='state' for a in amts if a.kind=='count' and not a.inq):
         tg.mode='now'
     return tg
