@@ -49,7 +49,9 @@ def _asks_what_is_not(text,spec):
     if not s:return False
     a,b=s[-1];q=text[a:b]
     if not NEG_Q.search(q) or NOT_FULL.search(q):return False
-    return not str(spec.get('reader','')).startswith(('tukuyo.g4.forms_story_en/1:rest','tukuyo.g4.forms_everyday_en/1:rest'))
+    rd=str(spec.get('reader',''))
+    if rd.startswith('tukuyo.g4.reader_units/1:') and rd.endswith('rest'):return False
+    return not rd.startswith(('tukuyo.g4.forms_story_en/1:rest','tukuyo.g4.forms_everyday_en/1:rest'))
 
 # a statement that denies a holding or an event ('Lily never had some candies', 'He did not eat 3 of them'): no own
 # reading, except the condition the least-common-multiple form reads ('The store does not sell parts of a pack'). On the
@@ -144,4 +146,10 @@ def read(text):
     if e and e.get('spec'):
         why=_refused(text,e['spec'])
         if not why:return e
+    # round 11: the reader by what the amounts are (reader_units), when no reader by wording reads it
+    from . import reader_units
+    u=reader_units.read_en(text)
+    if u and u.get('spec'):
+        why=_refused(text,u['spec'])
+        if not why:return u
     return {'spec':None,'reason':why} if why else r
