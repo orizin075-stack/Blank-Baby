@@ -180,7 +180,7 @@ def test_the_held_out_set_is_as_it_was_frozen():
 def test_no_rewrite_of_a_dev_problem_that_leaves_its_answer_open_is_read():
     # every problem of the private dev set the reader reads, rewritten one place at a time so that its answer is no
     # longer given exactly (did not, could have, almost, about, at least, or more; ませんでした、予定、たそうです、ぐらい、
-    # あまり、近く): none is read. Before (2026-10-14) 18 in Japanese and 359 in English were
+    # あまり、近く): none is read. Before (2026-10-14) 1,113 of 1,636 in Japanese and 951 of 2,582 in English were
     import sys
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
@@ -188,3 +188,18 @@ def test_no_rewrite_of_a_dev_problem_that_leaves_its_answer_open_is_read():
     r = exactness_probe.probe()
     assert r['problems_read']['en'] > 50 and r['problems_read']['ja'] > 50 and r['rewrites']['en'] > 2000
     assert r['ok'], r['readings'][:5]
+
+
+def test_no_route_answers_an_amount_said_only_roughly(tmp_path):
+    # end to end (think, g4-solve), the v1022 core included: it answered these (exactness_probe.py --end-to-end)
+    from test_v1022_5_fusion import run
+    d = tmp_path / 'd'; run(d, 'init', '--individual-id', 'ROUGH')
+    for q in ('1本80円あまりのえんぴつを3本買いました。代金は何円ですか。',
+              '車で150km近くを3時間で走りました。時速何kmですか。',
+              '毎週500円より多くずつ6週間ちょ金しました。全部で何円ちょ金しましたか。',
+              '毎週500円ずつ6週間ちょ金したいです。全部で何円ちょ金しましたか。'):      # a wish, and what was done is asked
+        assert run(d, 'think', q)['answer'] is None, q
+        assert run(d, 'g4-solve', '--llm', 'off', '--', q)['answer'] is None, q
+    # without the words: answered; and what the core reads of an event not done stays (10 apples are left)
+    assert run(d, 'think', '1本80円のえんぴつを3本買いました。代金は何円ですか。')['answer'] == '240'
+    assert run(d, 'think', 'りんごが10個あります。明日3個食べる予定です。残りは何個？')['answer'] == '10'

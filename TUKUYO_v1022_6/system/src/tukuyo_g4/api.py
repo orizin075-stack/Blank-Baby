@@ -131,6 +131,14 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
     order: the parents in the order to ask them (life.trust_order: the child's trust), the configured ones only"""
     readings=[];tukuyo_ok=False
     store=None
+    # v1022.8.0: an amount said only roughly ('80円あまりの', '3本近く', '15本より多く') or a question about a wish: no
+    # route answers, the v1022 core included (tools/exactness_probe.py, end to end, found the core answering them)
+    if JA.search(text):
+        from .reader_ja import ROUGH,wished_then_asked_done
+        if ROUGH.search(text.strip()):
+            return {'answer':None,'value':None,'unit':None,'route':None,'learned':None,'readings':[],'reason':'JA:AMOUNT_NOT_EXACT'}
+        if wished_then_asked_done(text):
+            return {'answer':None,'value':None,'unit':None,'route':None,'learned':None,'readings':[],'reason':'JA:EVENT_NOT_SAID_AS_DONE'}
     if data is not None:
         from .learn import Store,instantiate
         store=Store(Path(data)/'g4')

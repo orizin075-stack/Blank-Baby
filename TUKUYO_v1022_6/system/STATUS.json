@@ -532,8 +532,19 @@
           "en": 0,
           "ja": 0
         },
-        "level": "reader (each rewrite has no determined answer)"
-      }
+        "level": "reader (each rewrite has no determined answer)",
+        "end_to_end_answered_before": {
+          "en": 951,
+          "ja": 1121,
+          "copy": "the r9 candidate before the full suite (2026-10-13)"
+        },
+        "end_to_end_answered_after": {
+          "en": 0,
+          "ja": 10
+        },
+        "end_to_end_still_answered": "v1022 core only: the price, savings or speed of an act said as wished or reported (3本買いたいです。代金は → 240, 6週間ちょ金したそうです。全部で → 3000, 3時間で走りたそうです。時速 → 50); left as the core reads them"
+      },
+      "core_guard": "api.solve: no route, the v1022 core included, answers a Japanese amount said only roughly (80円あまりの, 3本近く, 150km近く, 500円より多く) or a wish followed by a question about what was done"
     },
     "real_parents_measured": false,
     "restores_9_0": {

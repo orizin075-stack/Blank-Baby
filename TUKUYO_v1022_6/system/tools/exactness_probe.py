@@ -2,6 +2,8 @@
 """v1022.8.0: does the child's own reader still read a problem once its answer is no longer given exactly?
 
   exactness_probe.py [--out REPORT.json] [--show N]
+  exactness_probe.py --end-to-end DATA [--out REPORT.json]    also through g4-solve's path with the individual DATA
+                                                              (made with init; no parent, learn off): the v1022 core too
 
 Each problem of the private dev set (private_eval_sets.DEV, English and Japanese) that the child's own reader reads is
 rewritten, one place at a time (in a statement, or in the question), so that what the answer needs is not said
@@ -75,9 +77,19 @@ def rewrites(text,rules,parts,per_rule=3):
                 if v!=text:yield v
 
 
-def probe(sets=None):
+def answered(text,data):
+    """the answer g4-solve gives with no parent (the v1022 core reads the Japanese problems too)"""
+    from tukuyo_g4 import api
+    try:r=api.solve(text,llm='off',data=data,learn=False)
+    except Exception as e:  # noqa: BLE001 - a fault is reported as a row, not a crash of the probe
+        return None,'ERROR:'+type(e).__name__
+    return r.get('answer'),r.get('route')
+
+
+def probe(sets=None,data=None):
     sets=sets or DEV
     out={'problems_read':{},'rewrites':{},'read':{},'readings':[]}
+    if data:out.update(answered={},answers=[])
     for lang,rules,qrules in (('en',EN,EN_Q),('ja',JA,JA_Q)):
         n=0;made=0;still=0
         for text,_gold in sets[lang]:
@@ -86,16 +98,22 @@ def probe(sets=None):
             for v in [*rewrites(text,rules,stm),*rewrites(text,qrules,q)]:
                 made+=1;a=own(v)
                 if a is not None:still+=1;out['readings'].append({'lang':lang,'text':v,'answer':a})
+                if data:
+                    ans,route=answered(v,data)
+                    if ans is not None:out['answers'].append({'lang':lang,'text':v,'answer':ans,'route':route})
         out['problems_read'][lang]=n;out['rewrites'][lang]=made;out['read'][lang]=still
+        if data:out['answered'][lang]=sum(1 for x in out['answers'] if x['lang']==lang)
     out['ok']=not out['readings']
     return out
 
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--out');ap.add_argument('--show',type=int,default=20);a=ap.parse_args()
-    r=probe()
-    print(json.dumps({k:r[k] for k in ('problems_read','rewrites','read','ok')},ensure_ascii=False))
+    ap=argparse.ArgumentParser();ap.add_argument('--out');ap.add_argument('--show',type=int,default=20);ap.add_argument('--end-to-end',dest='data')
+    a=ap.parse_args()
+    r=probe(data=a.data)
+    print(json.dumps({k:r[k] for k in ('problems_read','rewrites','read','answered','ok') if k in r},ensure_ascii=False))
     for x in r['readings'][:a.show]:print(' ',x['lang'],x['answer'],'|',x['text'])
+    for x in r.get('answers',[])[:a.show]:print('  answered',x['lang'],x['answer'],x['route'],'|',x['text'])
     if a.out:Path(a.out).write_text(json.dumps(r,ensure_ascii=False,indent=1),encoding='utf-8')
     return 0
 

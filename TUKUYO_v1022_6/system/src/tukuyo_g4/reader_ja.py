@@ -57,6 +57,18 @@ QNOT=re.compile(r'(?:^|、)\s*もし|予定|つもり|明日|あした|来週|�
 # (5こあまりました) are not read by these forms either
 HEDGED=re.compile(r'(?<!どの)(?<!どれ)(?:ぐらい|くらい)|\d\s*(?:' + CNT + r')\s*(?:あまり|余り|近く|前後|強(?![いくめ])|弱(?![いくめ])|超|より(?:多|少))|(?<!先)ほど|程度|ほとんど|約\s*\d|およそ|だいたい|大体|ほぼ|以上|以下|未満|少なくとも|最大|最低|せいぜい|たぶん|多分|'
                   r'[〜~～]|または|もしくは|不明|かどうか')
+# what no route answers, the v1022 core included (api.solve): an amount said only roughly with its number (80円あまりの、
+# 3本近く、30人前後、15本より多く), which the core's own list (ぐらい、約、以上 …) does not have, and a question about a wish
+# (何こ買いたいですか). A remainder (5こあまりました、あまり、…、あまりは何こ) is another use of the word
+ROUGH=re.compile(r'\d\s*(?:' + CNT + r')\s*(?:(?:あまり|余り)(?![ま、。]|$)|近く|前後|強(?![いくめ])|弱(?![いくめ])|超|より(?:多|少))|たい(?:です|の)?か[。？?]?$')
+# a wish or a plan in the story and a question about what was done (6週間ちょ金したいです。全部で何円ちょ金しましたか): the
+# act did not happen, so what was done is not told. 買いたいです。代金は何円ですか asks the price of the wish, and is read by
+# the core
+WISHED=re.compile(r'(?:[きぎしちにびみりいえけげせてねべめれ]|(?![冷重平眠煙])[一-龯])たい(?:です|と思)|予定|つもり')
+ASKS_DONE=re.compile(r'(?:ました|でした|た)か[。？?]?$')
+def wished_then_asked_done(text):
+    sents=_sents(_norm(text))
+    return len(sents)>=2 and any(WISHED.search(x) for x in sents[:-1]) and bool(ASKS_DONE.search(sents[-1]))
 SENT=re.compile(r'[^。？?！!]+[。？?！!]?')
 MINUS=r'(?:食べ|たべ|使い|使っ|つかい|つかっ|あげ|上げ(?!て?い?ます?。?$)|売り|売れ|うり|うれ|なくし|無くし|落とし|おとし|とんでいき|とんで行|飛んでいき|飛んで行|' \
       r'飛んでいっ|とんでいっ|にげ|逃げ|降り|おり|われ|割れ|こわれ|壊れ|ぬき|抜き|出し|だし|配り|くばり|わたし|渡し|すて|捨て|へり|減り|へっ|減っ|' \
