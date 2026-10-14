@@ -330,7 +330,7 @@ def parser():
     c=sub.add_parser('dialogue-learn');c.add_argument('bundle',type=Path);c.add_argument('--teacher')
     sub.add_parser('learning-status');sub.add_parser('learning-audit')
     c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true');c.add_argument('--research-world',action='store_true',help='claude-patch5: each family lives next to a hidden-rule device; income only from understanding it')
-    c.add_argument('--max-ticks',type=int,default=512,help='v1022.7.9: a longer life for the ecology (up to 4096 ticks)');c.add_argument('--max-runtimes',type=int,default=64,help='v1022.7.9: more runtimes over its life (up to 256)')
+    c.add_argument('--max-ticks',type=int,default=512,help='v1022.7.9: a longer life for the ecology (up to 4096 ticks)');c.add_argument('--max-runtimes',type=int,default=64,help='v1022.7.9: more runtimes over its life (up to 512)')
     c.add_argument('--sharing',action='store_true',help='v1022.8.2: runtimes may give energy to a hungry one, and raise together a child the commons cannot fund (each decides with its heart; its bonds weigh)')
     c.add_argument('--stagger',action='store_true',help='v1022.8.2 r10: the founders are born at different ticks (their seed energy waits in a nursery)')
     c.add_argument('--reproduction',action='store_true',help='v1022.8.2 r10: a living runtime may bear a child with its own energy, when its heart chooses to')

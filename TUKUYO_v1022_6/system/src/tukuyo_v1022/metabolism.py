@@ -85,8 +85,9 @@ def _validate(s):
         niche.validate(s['research'])
         if s['config'].get('research_world') is not True or not set(s['active'])<=set(s['research']['runtimes']):raise ValueError('V1023R_NICHE_BINDING')
 # v1022.7.9: a long run (the roadmap's v1022.8.2 asks for 1,000 steps or more) chooses larger bounds at init. An
-# ecology made before keeps the old ones (512 ticks, 64 runtimes); the largest are 4096 ticks and 256 runtimes.
-TICK_BOUND,RUNTIME_BOUND=4096,512   # v1022.8.2 r10: 512 runtimes (a population that grows by births needs more)
+# ecology made before keeps the old ones (512 ticks, 64 runtimes); the largest are 4096 ticks and (since round 10, when a
+# population can grow by births) 512 runtimes.
+TICK_BOUND,RUNTIME_BOUND=4096,512
 # v1022.8.2 r10: the wild's own growth per tick and what it can hold (metabolism-init --explore)
 WILD_REGENERATION,WILD_CAP=1200,24000
 def bounds(s):
