@@ -195,20 +195,27 @@ def _successor(d,s,parent,tick,bequest=0):
     # v1022.8.2 r10: bequest is what the parent set aside for its successor in its last tick (0 without --bequest).
     # When no successor is born, it goes to the commons.
     if len(s['runtimes'])>=bounds(s)[1] or s['performance'][parent]['correct']<2:s['reservoir']+=bequest;return None
-    pledges={};left=6500-bequest
+    pledges={};left=6500-bequest;smaller=0
     if s['reservoir']<left:
         # v1022.8.2: the commons cannot fund the child. With sharing on, the living are asked, each by its own heart,
         # whether to give of its energy to raise the child of the one that died (its bond with that one weighs)
-        if not s['config'].get('sharing'):s['reservoir']+=bequest;return None
-        pledges=_pledges(d,s,parent,tick,left-s['reservoir'])
-        if sum(pledges.values())<left-s['reservoir']:s['reservoir']+=bequest;return None
+        if s['config'].get('sharing'):pledges=_pledges(d,s,parent,tick,left-s['reservoir'])
+        short=left-s['reservoir']-sum(pledges.values())
+        if short>0:
+            # v1022.8.2 r10: in hard times a successor its parent provided for is born smaller, with what there is (at
+            # least SMALLEST_SEED). Measured: lines fed by the wild through a drought ended at their parents' deaths,
+            # each leaving 2,000 or so where a successor needed 6,500
+            if not bequest or 6500-short<SMALLEST_SEED:s['reservoir']+=bequest;return None
+            smaller=short
     rid,pkg_sha,cultural=_make_child(d,s,parent,'mortality-gated-public-skills')
-    from_commons=left-sum(pledges.values());s['reservoir']-=from_commons
+    from_commons=left-sum(pledges.values())-smaller;s['reservoir']-=from_commons
+    if smaller:organism2.resource_gift(child(d,rid),smaller,hashlib.sha256(whole.canon({'tick':tick,'born_smaller':rid,'by':smaller})).hexdigest())
     if bequest:heart_loop.process_experience(child(d,rid),'support',.8,.5,'provisioned-by','runtime:'+parent,origin='simulated');whole.sync(child(d,rid))
     for giver,amount in pledges.items():_give(d,s,giver,rid,amount,{'tick':tick,'raised':rid,'for':parent},'raised-a-child',newborn=True)
     s['runtimes'][rid]=_snapshot(d,rid);s['active'].append(rid);s['performance'][rid]=_performance()
     s['successions'].append({'tick':tick,'parent':parent,'child':rid,'package_sha256':pkg_sha,
-        'public_learning_commitment':cultural,'actual_inherited_profile':s['runtimes'][rid]['profile'],'funded_seed_energy':6500,
+        'public_learning_commitment':cultural,'actual_inherited_profile':s['runtimes'][rid]['profile'],'funded_seed_energy':6500-smaller,
+        **({'born_smaller_by':smaller} if smaller else {}),
         **({'funded_by':{'commons':from_commons,'runtimes':pledges,**({'parent_bequest':bequest} if bequest else {})}} if pledges or bequest else {})})
     if 'research' in s:
         # Science is culture too: only a CONFIRMED law of the parent, and only when learning is on.
@@ -324,6 +331,7 @@ def step(d,ticks=1):
 # three only the public skills teach (盗まれ, 補充, 落として失い) and one no one was taught (拾い). So a runtime that
 # learned reads 6 of the 7 kinds, one that did not reads 3: what it learned decides how well exploring feeds it.
 FIND,EXPLORE_COST=1200,250
+SMALLEST_SEED=2000   # with --bequest: the least a successor born in hard times starts with
 CLUE_EVENTS=(('を落として失いました',-1),('もらいました',1),('盗まれました',-1),('使いました',-1),('補充しました',1),('食べました',-1),('拾いました',1))
 def _clue(s,rid,tick):
     b=hashlib.sha256(f"{s['seed']}|explore|{rid}|{tick}".encode()).digest();per=6+b[0]%8;count=4+b[1]%6;used=1+b[2]%5

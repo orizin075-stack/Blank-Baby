@@ -160,3 +160,16 @@ def test_the_long_run_tool_goes_on_after_a_restart(tmp_path):
     assert rep['resumed'] and rep['result']['ticks'] == 6 and rep['result']['stopped'] == 'REACHED_TICKS', p.stdout[-500:]
     assert [e['regeneration'] for e in rep['environment']] == [1000]    # the change it made is not made again
     assert rep['config']['changes'] == [[3, 1000]] and rep['audit']['ok']
+
+
+def test_in_hard_times_a_provided_for_successor_is_born_smaller(tmp_path):
+    # nothing in the commons and nothing grows back: each founder's successor has only what its parent left it
+    C, d, r = _eco(tmp_path, 'smaller', '--families', 2, '--max-age', 6, '--reservoir', 0, '--regeneration', 0, '--bequest')
+    s = C(d, 'metabolism-step', '--ticks', '7')
+    assert s['ok'] and s['actual_successions'] >= 1, s
+    for x in s['successions']:
+        assert x['funded_by']['commons'] == 0 and x['funded_seed_energy'] == x['funded_by']['parent_bequest'] < 6500
+        assert x['born_smaller_by'] == 6500 - x['funded_seed_energy'] and x['funded_seed_energy'] >= m.SMALLEST_SEED
+        ev = json.loads((m.child(d, x['child']) / 'v1007' / 'ORGANISM2_EVENTS.json').read_text())['events']
+        assert [e['gift'] for e in ev if e['event'] == 'RESOURCE_GIFT'][:1] == [x['born_smaller_by']]
+    assert C(d, 'metabolism-audit')['ok'] and C(d, 'whole-audit')['ok']
