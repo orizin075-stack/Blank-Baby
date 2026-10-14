@@ -36,11 +36,12 @@ def main():
     ap.add_argument('--wild-regeneration',type=int,default=1200);ap.add_argument('--wild-cap',type=int,default=24000)
     ap.add_argument('--change',action='append',default=[],metavar='TICK:REGENERATION',
                     help='change the environment at a tick (the reservoir regeneration from then on), e.g. 400:0 for a drought')
+    ap.add_argument('--seed',default='v1022',help='the ecology seed (which tasks and clues come to whom); another seed is another run of the same conditions')
     ap.add_argument('--resume',action='store_true',help='go on with the ecology in WORK and the report in --out (after a restart)')
     ap.add_argument('--out');a=ap.parse_args()
     changes=sorted((int(x.split(':')[0]),int(x.split(':')[1])) for x in a.change)
     d=Path(a.work).resolve()/'ecology';d.parent.mkdir(parents=True,exist_ok=True)
-    keys=('ticks','families','regeneration','reservoir','max_age','no_learning','step','max_runtimes','sharing','stagger','reproduction','explore','bequest')
+    keys=('ticks','families','regeneration','reservoir','max_age','no_learning','step','max_runtimes','sharing','stagger','reproduction','explore','bequest','seed')
     rep={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'config':{**{k:getattr(a,k) for k in keys},
                                                                            **({'wild_regeneration':a.wild_regeneration,'wild_cap':a.wild_cap} if a.explore else {}),
                                                                            'changes':[list(c) for c in changes]},'steps':[],'environment':[]}
@@ -56,6 +57,7 @@ def main():
     r=run(a.runtime_trust_file,d,'init','--individual-id','ECOLOGY-OWNER')
     if not r.get('ok'):rep['stopped']='INIT:'+str(r.get('error'));print(rep['stopped']);return _out(a,rep)
     args=['metabolism-init','--families',a.families,'--reservoir',a.reservoir,'--regeneration',a.regeneration,'--max-age',a.max_age]+(['--no-learning'] if a.no_learning else [])
+    if a.seed!='v1022':args+=['--seed',a.seed]
     if a.ticks>512 or a.max_runtimes!=64:args+=['--max-ticks',max(512,a.ticks),'--max-runtimes',a.max_runtimes]
     if a.sharing:args+=['--sharing']
     if a.stagger:args+=['--stagger']
