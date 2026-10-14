@@ -331,6 +331,7 @@ def _whole(spec,tg,pool,steps,ctx):
         if any(re.search(r'\b(?:total|in all|altogether|together|combined)\b|合わせて|あわせて|全部で|合計',x.clause or x.span or '') for x in cs if not x.derived):
             no('TOTALS_IN_THE_STORY')
         ht=tg.tags-(tg.np or frozenset())
+        if ctx.get('owners') is not None:ht=ht&ctx['owners']
         if ht and len(cs)>=2:
             # 'how many car robots does Bob have in total': only what is Bob's
             mine=[a for a in cs if _distinct(a,[x for x in cs if x is not a])&ht]
@@ -1195,6 +1196,9 @@ def _read_ja(t,stm,q):
     # a question about what there is (…ですか) after things came or went, and a start told: what there is now. The 1 of a
     # rate ('1ぱい50円で') is no start
     st=[a for a in amts if a.kind=='count' and not a.inq and a.role=='state' and a.kept!='base']
+    # '水は全部で何dLになりましたか' after water was added: what there is now, not a sum of what was and what came
+    if tg.mode=='total' and re.search(r'なりましたか|なりますか|(?:^|、)\s*今',q) and st and any(a.role in ('gain','loss') for a in amts if a.kind=='count' and not a.inq):
+        tg.mode='now'
     if tg.mode=='amount' and not tg.per and not any(a.inq for a in amts) and re.search(r'(?:ますか|ですか)[。？?]?$',q) and st and \
             any(a.role in ('gain','loss') for a in amts if a.kind=='count' and not a.inq):
         tg.mode='now'
@@ -1207,7 +1211,10 @@ def _read_ja(t,stm,q):
     for m in re.finditer(r'(?<![\d.])1\s*(?:'+JCNT+r')(?:の[^\s、。]{1,6}?)?(?:分|あたり|当たり)?(?:は|に|が|には|では)?\s*(?:何|いくら)',q):
         spec.unused.append({'raw':'1','why':'「1…何」の1 (問いの単位)'})
     for raw in restate:spec.unused.append({'raw':raw,'why':'話の期間や形の言いかえ (量ではない)'})
-    ctx={'qspan':q,'convert':_jconv,'notadj':tg.notadj,'sents':sents,'qnames':re.findall(r'([一-龯ァ-ヶーぁ-ん]{1,6}?)(?:さん|くん|ちゃん)',q),
+    owners=set(re.findall(r'([一-龯ァ-ヶーぁ-ん]{1,6}?)(?:さん|くん|ちゃん)?の',q))|set(re.findall(r'([一-龯ァ-ヶーぁ-ん]{1,6}?)(?:さん|くん|ちゃん)',q))
+    owners={re.sub(r'^(?:[ぁ-ん]{1,2})(?=[一-龯ァ-ヶー])','',w) for w in owners}
+    ctx_owners=frozenset(w for w in owners if w and w not in J_PROP and w not in J_FUNC)
+    ctx={'owners':ctx_owners,'qspan':q,'convert':_jconv,'notadj':tg.notadj,'sents':sents,'qnames':re.findall(r'([一-龯ァ-ヶーぁ-ん]{1,6}?)(?:さん|くん|ちゃん)',q),
          'equal':bool(re.search(r'同じ数|おなじ数|等分|とうぶん|ずつ|均等|同じだけ|同じように',t))}
     if tg.mode=='diff':ctx['diff_order']=tg.kind
     if tg.mode=='change':ctx['qsign']=tg.verb
@@ -1278,6 +1285,9 @@ def _jamount(s,si,n,nums,inq):
             ld=list(re.finditer(r'\d',after));after=after[ld[-1].end():]
         else:after=after[:nd.start()]                 # '5個売って7個仕入れました': the 5's verb is 売って, not 仕入れ
     if a.verb=='from':pass
+    elif re.search(r'(?:その|この)\s*うち|その中から|そのなかから',s[clause_a:n.start]) and (J_GAIN.search(after) or J_LOSS.search(after) or
+                                                                                        re.search(r'ました',after)):
+        a.role='loss';a.verb='taken_out'
     elif re.search(r'(?:別|べつ|ほか|他)の[^、。]{0,8}から',s[clause_a:clause_b]):a.role='other';a.verb='other_stock'   # '別の在庫から3個'
     elif J_LEFT.search(after[:8]) and re.search(r'(?:て|で)(?:い|お)|ました|ます',after):a.role='state';a.verb='left'
     elif J_LOSS.search(after) and not re.search(r'ずつ',after[:3]):a.role='loss';a.verb=J_LOSS.search(after).group(0)

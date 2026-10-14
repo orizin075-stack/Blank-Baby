@@ -68,6 +68,11 @@ JA = [
     ('ゆうたさんは7才、おばさんは31才です。5年後、2人の年れいの合計は何才ですか。', 48),
     ('はるかさんは毎晩9ページずつ本を読みます。7日間では何ページ読みますか。', 63),
     ('1箱12個入りが4箱あります。5個売って7個仕入れました。残り何個？', 50),                     # each number its own verb
+    # found on round 11's held-out set after its one measurement (the set is spent; these are not counted in it): the
+    # wrong answer 58 (つみました taken as came; そのうち says taken out of the whole) and the right 155 it lost (the asked
+    # 水 is no owner, so the total was not of one holder; 全部で…になりましたか after water was added is what there is now)
+    ('花だんにチューリップが8本ずつ、6列にさいています。そのうち10本をつみました。のこりは何本ですか。', 38),
+    ('水そうに水が12L入っています。さらに3L5dL入れました。水は全部で何dLになりましたか。', 155),
 ]
 
 
