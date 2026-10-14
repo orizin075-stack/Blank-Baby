@@ -1,0 +1,739 @@
+{
+ "schema": "tukuyo.growth_experiment/1",
+ "utc": "2026-10-14T02:19:04Z",
+ "seed": 20261012,
+ "earlier_reader_files_sha256": {
+  "reader.py": "46e7fbe2fdbfb969",
+  "reader_en.py": "10d32d1ae6c753db",
+  "numbers.py": "85548d0012abb354",
+  "forms_en.py": "ca5faa3304c4cbb2",
+  "forms_more_en.py": "81611d3cdd66265d",
+  "forms_algebra_en.py": "f1d8b131b06586fc"
+ },
+ "claim_boundary": {
+  "functional_experiment_of_a_functional_model": true,
+  "consciousness_established": false
+ },
+ "experiments": {
+  "upgrade": {
+   "ok": true,
+   "checks": {
+    "keeps_every_problem_it_could_not_read": true,
+    "notices_every_problem_it_can_now_read": true,
+    "notices_no_growth_that_is_wrong": true,
+    "says_so_when_it_meets_them_again": true,
+    "audits_pass": true
+   },
+   "problems": 1083,
+   "it_could_read_now_of_all_it_could_not": 30,
+   "seconds_to_live_them": 9.9,
+   "earlier_version": {
+    "right": 473,
+    "wrong": 3,
+    "held": 607
+   },
+   "kept_could_not_read": 607,
+   "not_kept": 0,
+   "this_version_reads_of_what_it_kept": {
+    "right": 30,
+    "wrong": 0
+   },
+   "reflect": {
+    "open": {
+     "can_read_now": 30,
+     "contested": 0,
+     "could_not_read": 607,
+     "disagreements": 0,
+     "doubted_ways_of_reading": []
+    },
+    "seconds": 2.8,
+    "try_again_alone": 30
+   },
+   "act": {
+    "tried_alone": 30,
+    "answered": 30,
+    "note": "NO_PARENT_TO_ASK: no parent is configured, so nobody was asked",
+    "seconds": 4.4
+   },
+   "noticed": 30,
+   "noticed_right": 30,
+   "noticed_wrong": 0,
+   "not_noticed": 0,
+   "not_noticed_beyond_the_100_it_reads_again": 0,
+   "grew_experiences": 30,
+   "experiences_before": 0,
+   "experiences_after": 30,
+   "values_before": {
+    "curiosity": 0.5,
+    "integrity": 0.8,
+    "relationship": 0.4,
+    "survival": 0.8,
+    "truthfulness": 0.65
+   },
+   "values_after": {
+    "curiosity": 0.580314,
+    "integrity": 0.8,
+    "relationship": 0.4,
+    "survival": 0.8,
+    "truthfulness": 0.65
+   },
+   "weak_spots_before": [
+    [
+     "story",
+     384
+    ],
+    [
+     "question",
+     76
+    ],
+    [
+     "who",
+     42
+    ],
+    [
+     "number",
+     39
+    ],
+    [
+     "missing",
+     36
+    ],
+    [
+     "wrong",
+     15
+    ],
+    [
+     "compare",
+     14
+    ],
+    [
+     "pattern",
+     1
+    ]
+   ],
+   "weak_spots_after": [
+    [
+     "story",
+     371
+    ],
+    [
+     "question",
+     75
+    ],
+    [
+     "who",
+     41
+    ],
+    [
+     "missing",
+     36
+    ],
+    [
+     "number",
+     29
+    ],
+    [
+     "compare",
+     14
+    ],
+    [
+     "wrong",
+     10
+    ],
+    [
+     "pattern",
+     1
+    ]
+   ],
+   "told_after": [
+    "I could not read 607 problems alone when I met them; now I can read 30 of them alone (30 with my own reader).",
+    "Where I am weak: stories I do not know how to put together yet (371 problems), questions asked in a way I do not know yet (75 problems), telling who a \"he\", \"she\" or \"they\" is (41 problems), stories in which an amount seemed not to be given (36 problems), numbers in a story that I do not know how to use (29 problems), comparisons and differences whose two sides I could not tell (14 problems), stories my reading got wrong (solving or checking it showed that) (10 problems), patterns (1 problem).",
+    "What I want to learn: stories I do not know how to put together yet (for example: \"Jae bought 12 cartons of ice cream and 3 cartons of yogurt. Each carton of ice cream cost $9 and each carton of yogurt cost $2. How much more did Jae spend on ice cream than on yogurt?\"); questions asked in a way I do not know yet (for example: \"A video game map was 10 meters wide and 2 meters long, what is the area of the map?\"); telling who a \"he\", \"she\" or \"they\" is (for example: \"Tom saw that Michael has the rare robot that would complete one of his robot sets. Michael offered to sell it but he said that Tom will need to pay 3 times the original price. If the rare robot has an original price of $3.00, how much should Tom pay?\")."
+   ],
+   "said_when_met_again": [
+    [
+     "13",
+     "I could not read this problem alone when I met it before; now I can: my own reader reads it now."
+    ],
+    [
+     "10",
+     "I could not read this problem alone when I met it before; now I can: my own reader reads it now."
+    ],
+    [
+     "5",
+     "I could not read this problem alone when I met it before; now I can: my own reader reads it now."
+    ]
+   ],
+   "audits": {
+    "whole-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "heart-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "soul-identity-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "g4-audit": {
+     "ok": true,
+     "errors": []
+    }
+   },
+   "seconds": 27.7
+  },
+  "taught": {
+   "ok": true,
+   "checks": {
+    "keeps_what_it_met": true,
+    "notices_each_problem_a_wording_it_learned_reads": true,
+    "answers_them_alone": true,
+    "its_answers_agree_with_this_versions_reading": true,
+    "says_it_could_not_read_them_before": true,
+    "audits_pass": true
+   },
+   "pairs": 22,
+   "kept": 22,
+   "learned": 17,
+   "learned_wording_reads_it": 15,
+   "noticed": 15,
+   "answered_alone": 15,
+   "agrees_with_this_version": 15,
+   "answered_but_disagrees": 0,
+   "noticed_but_cannot_answer": 0,
+   "rows": [
+    {
+     "id": "nluds-0725",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "13",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "26",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-1770",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "10",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "20",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0836",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "5",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "5",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-1955",
+     "kept": true,
+     "learned": false,
+     "answer_when_taught": "7",
+     "learned_wording_reads_it": false,
+     "noticed": false,
+     "grew_now": false,
+     "alone": null,
+     "agrees": false,
+     "says_before": true,
+     "before": "I could not read it alone when I met it before, either."
+    },
+    {
+     "id": "nluds-2172",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "11",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "22",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0264",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "547",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "1094",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0695",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "40",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "80",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0067",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "700",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "1400",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-2244",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "16",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "64",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0474",
+     "kept": true,
+     "learned": false,
+     "answer_when_taught": null,
+     "learned_wording_reads_it": false,
+     "noticed": false,
+     "grew_now": false,
+     "alone": null,
+     "agrees": false,
+     "says_before": true,
+     "before": "I could not read it alone when I met it before, either."
+    },
+    {
+     "id": "nluds-0113",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "55",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "110",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0837",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "850",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "850",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0464",
+     "kept": true,
+     "learned": false,
+     "answer_when_taught": "8",
+     "learned_wording_reads_it": false,
+     "noticed": false,
+     "grew_now": false,
+     "alone": null,
+     "agrees": false,
+     "says_before": true,
+     "before": "I could not read it alone when I met it before, either."
+    },
+    {
+     "id": "nluds-1951",
+     "kept": true,
+     "learned": false,
+     "answer_when_taught": "12",
+     "learned_wording_reads_it": false,
+     "noticed": false,
+     "grew_now": false,
+     "alone": null,
+     "agrees": false,
+     "says_before": true,
+     "before": "I could not read it alone when I met it before, either."
+    },
+    {
+     "id": "nluds-0681",
+     "kept": true,
+     "learned": false,
+     "answer_when_taught": null,
+     "learned_wording_reads_it": false,
+     "noticed": false,
+     "grew_now": false,
+     "alone": null,
+     "agrees": false,
+     "says_before": true,
+     "before": "I could not read it alone when I met it before, either."
+    },
+    {
+     "id": "nluds-0916",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "53",
+     "learned_wording_reads_it": false,
+     "noticed": false,
+     "grew_now": false,
+     "alone": null,
+     "agrees": false,
+     "says_before": true,
+     "before": "I could not read it alone when I met it before, either."
+    },
+    {
+     "id": "nluds-0833",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "10",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "10",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-2250",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "36",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "144",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-1033",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "57",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "114",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0832",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "350",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "350",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    },
+    {
+     "id": "nluds-0931",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "62",
+     "learned_wording_reads_it": false,
+     "noticed": false,
+     "grew_now": false,
+     "alone": null,
+     "agrees": false,
+     "says_before": true,
+     "before": "I could not read it alone when I met it before, either."
+    },
+    {
+     "id": "nluds-0943",
+     "kept": true,
+     "learned": true,
+     "answer_when_taught": "64",
+     "learned_wording_reads_it": true,
+     "noticed": true,
+     "grew_now": true,
+     "alone": "128",
+     "agrees": true,
+     "says_before": true,
+     "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini."
+    }
+   ],
+   "audits": {
+    "whole-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "heart-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "soul-identity-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "g4-audit": {
+     "ok": true,
+     "errors": []
+    }
+   },
+   "note": "the original problems were taught by recorded replies: this version's own reading, the same from each parent",
+   "seconds": 17.0
+  },
+  "mistaught": {
+   "ok": true,
+   "checks": {
+    "its_growth_follows_what_its_parents_agreed_on": true,
+    "says_where_what_it_used_came_from": true,
+    "gives_up_a_growth_its_parents_read_otherwise": true,
+    "does_not_answer_with_it_alone": true,
+    "notices_again_when_taught_again": true,
+    "answers_rightly_and_says_it_had_been_wrong": true,
+    "the_parents_who_taught_it_wrongly_are_looked_back_on": true,
+    "audits_pass": true
+   },
+   "steps": [
+    {
+     "step": "1. alone, it meets a problem of each wording and cannot read it",
+     "self": {
+      "could_not_read": 2,
+      "cannot_read_yet": 2,
+      "can_read_now": 0,
+      "grew": {},
+      "told": [
+       "I could not read 2 problems alone when I met them; I cannot read any of them alone yet.",
+       "Where I am weak: questions asked in a way I do not know yet (2 problems).",
+       "What I want to learn: questions asked in a way I do not know yet (for example: \"When four times a number is decreased by eight, the result is 28. What is the number?\")."
+      ]
+     }
+    },
+    {
+     "step": "2. its three parents agree on a wrong reading of each wording (a sign turned round); it learns it",
+     "answers": [
+      "6",
+      "5"
+     ],
+     "grew": [
+      1,
+      1
+     ],
+     "self": {
+      "could_not_read": 2,
+      "cannot_read_yet": 0,
+      "can_read_now": 2,
+      "grew": {
+       "learned_from_parents": 2
+      },
+      "told": [
+       "I could not read 2 problems alone when I met them; now I can read 2 of them alone (2 with what my parents taught me)."
+      ]
+     }
+    },
+    {
+     "step": "3. alone again: it answers with what it learned",
+     "alone": [
+      {
+       "answer": "5",
+       "right": "9",
+       "reason": null,
+       "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini.",
+       "held_back": null,
+       "grew": []
+      },
+      {
+       "answer": "5",
+       "right": "9",
+       "reason": null,
+       "before": "I could not read this problem alone when I met it before; now I can: I learned this wording from ChatGPT, Claude and Gemini.",
+       "held_back": null,
+       "grew": []
+      }
+     ],
+     "self": {
+      "could_not_read": 2,
+      "cannot_read_yet": 0,
+      "can_read_now": 2,
+      "grew": {
+       "learned_from_parents": 2
+      },
+      "told": [
+       "I could not read 2 problems alone when I met them; now I can read 2 of them alone (2 with what my parents taught me)."
+      ]
+     }
+    },
+    {
+     "step": "4. another problem of each wording, with its parents: they read it otherwise (the reading is contested)",
+     "answers": [
+      null,
+      null
+     ],
+     "reasons": [
+      "DISAGREE:10,6",
+      "DISAGREE:10,6"
+     ],
+     "self": {
+      "could_not_read": 2,
+      "cannot_read_yet": 2,
+      "can_read_now": 0,
+      "grew": {},
+      "told": [
+       "I could not read 2 problems alone when I met them; I cannot read any of them alone yet.",
+       "Where I am weak: wordings my parents taught me that two of them later read otherwise (2 problems).",
+       "What I want to learn: wordings my parents taught me that two of them later read otherwise (for example: \"When four times a number is decreased by eight, the result is 28. What is the number?\")."
+      ]
+     }
+    },
+    {
+     "step": "5. alone again",
+     "alone": [
+      {
+       "answer": null,
+       "right": "9",
+       "reason": "NO_VERIFIED_READING",
+       "before": null,
+       "held_back": "What I learned for this wording was read otherwise by two of my parents, so I no longer use it alone.",
+       "grew": []
+      },
+      {
+       "answer": null,
+       "right": "9",
+       "reason": "NO_VERIFIED_READING",
+       "before": null,
+       "held_back": "What I learned for this wording was read otherwise by two of my parents, so I no longer use it alone.",
+       "grew": []
+      }
+     ],
+     "self": {
+      "could_not_read": 2,
+      "cannot_read_yet": 2,
+      "can_read_now": 0,
+      "grew": {},
+      "told": [
+       "I could not read 2 problems alone when I met them; I cannot read any of them alone yet.",
+       "Where I am weak: wordings my parents taught me that two of them later read otherwise (2 problems).",
+       "What I want to learn: wordings my parents taught me that two of them later read otherwise (for example: \"When four times a number is decreased by eight, the result is 28. What is the number?\")."
+      ]
+     }
+    },
+    {
+     "step": "6. its parents teach each wording again, rightly",
+     "answers": [
+      "14",
+      "9"
+     ],
+     "grew": [
+      1,
+      1
+     ],
+     "self": {
+      "could_not_read": 2,
+      "cannot_read_yet": 0,
+      "can_read_now": 2,
+      "grew": {
+       "learned_from_parents": 2
+      },
+      "told": [
+       "I could not read 2 problems alone when I met them; now I can read 2 of them alone (2 with what my parents taught me).",
+       "2 problems I had first read with what I was taught, and two of my parents later read the wording otherwise; they taught me again, and I read them otherwise now."
+      ]
+     }
+    },
+    {
+     "step": "7. alone again",
+     "alone": [
+      {
+       "answer": "9",
+       "right": "9",
+       "reason": null,
+       "before": "Before, what I had learned for this wording read this problem as 5, and two of my parents later read the wording otherwise; now I read it as 9: I learned this wording again from ChatGPT, Claude and Gemini.",
+       "held_back": null,
+       "grew": []
+      },
+      {
+       "answer": "9",
+       "right": "9",
+       "reason": null,
+       "before": "Before, what I had learned for this wording read this problem as 5, and two of my parents later read the wording otherwise; now I read it as 9: I learned this wording again from ChatGPT, Claude and Gemini.",
+       "held_back": null,
+       "grew": []
+      }
+     ],
+     "self": {
+      "could_not_read": 2,
+      "cannot_read_yet": 0,
+      "can_read_now": 2,
+      "grew": {
+       "learned_from_parents": 2
+      },
+      "told": [
+       "I could not read 2 problems alone when I met them; now I can read 2 of them alone (2 with what my parents taught me).",
+       "2 problems I had first read with what I was taught, and two of my parents later read the wording otherwise; they taught me again, and I read them otherwise now."
+      ]
+     }
+    }
+   ],
+   "life_story": [
+    "36 experiences in its life with its parents (soul events 1-36).",
+    "It learned from what its parents agreed on 4 times.",
+    "From each parent, what held up / what failed: chatgpt 6/2, claude 6/2, gemini 6/2.",
+    "It withheld an answer rather than guess 2 times.",
+    "It solved alone with something it had learned, the first time for that wording, 2 times.",
+    "Looking back on readings it could not judge at the time, once it had learned the wording, right / wrong: chatgpt 2/2, claude 2/2, gemini 2/2.",
+    "It noticed it had grown 4 times: it could read alone a problem it could not read alone before."
+   ],
+   "grew_experiences": 4,
+   "audits": {
+    "whole-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "heart-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "soul-identity-audit": {
+     "ok": true,
+     "errors": []
+    },
+    "g4-audit": {
+     "ok": true,
+     "errors": []
+    }
+   },
+   "seconds": 23.8
+  }
+ },
+ "ok": true
+}

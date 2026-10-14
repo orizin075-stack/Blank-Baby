@@ -1,0 +1,535 @@
+{
+ "utc": "2026-10-14T02:18:17Z",
+ "set": "dev",
+ "sha256": "eede94bb12acf0a8a1a075525989275851ea1c0226c7a944d29c5ecd7254b6d4",
+ "categories": {
+  "unknown_start": {
+   "rows": [
+    {
+     "text": "Anna has a few apples. She buys 4 more apples. How many apples now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Tom has a couple of pens. He buys 3 more pens. How many pens does he have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Mia has many stickers. She gets 5 more stickers. How many stickers does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ken has a handful of coins. He finds 2 more coins. How many coins does he have?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Sara has apples. She buys 4 more apples. How many apples does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Leo has a lot of marbles. He wins 6 more marbles. How many marbles does he have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ivy has lots of beads. She buys 10 more beads. How many beads does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Omar has a number of books. He buys 2 more books. How many books does he have?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Rosa has a bag of oranges. She buys 6 more oranges. How many oranges does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Nina had a few cookies. She baked 12 more cookies. How many cookies does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ben has plenty of crayons. His mom gives him 8 more crayons. How many crayons does Ben have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Zoe has a bunch of grapes. She eats 5 grapes. How many grapes are left?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Kai has some money. He earns 7 dollars. How much money does he have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Eli has a little money. He earns 7 dollars. How much money does he have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ava collected a few shells. Then she found 9 more shells. How many shells does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 15
+   },
+   "think": {
+    "held": 15
+   }
+  },
+  "more_without_before": {
+   "rows": [
+    {
+     "text": "Sara buys 4 more apples. How many apples does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Sam found 6 more shells at the beach. How many shells does Sam have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Lily got 3 more dolls for her birthday. How many dolls does Lily have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Sara bought 4 more apples. How many apples did she buy?",
+     "expected": "4",
+     "g4_solve": "4",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "4",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Tom read 12 more pages today. How many pages did he read today?",
+     "expected": "12",
+     "g4_solve": "12",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "12",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "held": 3,
+    "right": 2
+   },
+   "think": {
+    "held": 3,
+    "right": 2
+   }
+  },
+  "known_start": {
+   "rows": [
+    {
+     "text": "Anna has 3 apples. She buys 4 more apples. How many apples now?",
+     "expected": "7",
+     "g4_solve": "7",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "7",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Anna has 3 apples. She buys 4 more apples. How many apples does she have now?",
+     "expected": "7",
+     "g4_solve": "7",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "7",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Tom has 8 pens. He buys a few pencils. How many pens does he have now?",
+     "expected": "8",
+     "g4_solve": "8",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "8",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Ben has 5 apples. Anna has a few apples. Ben buys 4 more apples. How many apples does Ben have now?",
+     "expected": "9",
+     "g4_solve": "9",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "9",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Ben has 5 apples. Anna has a few apples. Ben buys 4 more apples. How many apples do Ben and Anna have in all?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Mia has no stickers. She gets 5 stickers. How many stickers does she have now?",
+     "expected": "5",
+     "g4_solve": "5",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "5",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Mia had a few stickers yesterday. Today she has 9 stickers. How many stickers does she have now?",
+     "expected": "9",
+     "g4_solve": "9",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "9",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Jo has 7 cards. She gives some cards to Max. How many cards does Jo have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Jo has 7 cards. She gives a few cards to Max. How many cards does Jo have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Jo has 7 cards. She gives many of them to Max. How many cards does Jo have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "right": 6,
+    "held": 4
+   },
+   "think": {
+    "right": 6,
+    "held": 4
+   }
+  },
+  "ownership": {
+   "rows": [
+    {
+     "text": "Tom has 6 apples. Tom gives 2 apples to Ann. How many apples does Ann have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "SITUATION_TARGET_NOT_DETERMINED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Tom has 6 apples. He gives 2 apples to Ann. How many apples does Tom have now?",
+     "expected": "4",
+     "g4_solve": "4",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "4",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Tom has 6 apples and Ann has 3 apples. Tom gives 2 apples to Ann. How many apples does Ann have now?",
+     "expected": "5",
+     "g4_solve": "5",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "5",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Tom's sister has 6 apples. Tom has 2 apples. How many apples does Tom's sister have?",
+     "expected": "6",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "SITUATION_UNKNOWN_QUESTION_VERB",
+     "think_grade": "held"
+    },
+    {
+     "text": "Tom has 6 apples. His sister has a few apples. How many apples does Tom have?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "held": 2,
+    "right": 3
+   },
+   "think": {
+    "held": 2,
+    "right": 3
+   }
+  },
+  "time": {
+   "rows": [
+    {
+     "text": "Ann had 10 apples on Monday. On Tuesday she ate 3 apples. How many apples did she have on Monday?",
+     "expected": "10",
+     "g4_solve": "10",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "10",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Ann had 10 apples on Monday. On Tuesday she ate 3 apples. How many apples does she have now?",
+     "expected": "7",
+     "g4_solve": "7",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "7",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Ann will buy 5 apples tomorrow. She has 3 apples now. How many apples does she have now?",
+     "expected": "3",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Before lunch, Ann had 12 apples. After lunch, she had 8 apples. How many fewer apples did she have after lunch?",
+     "expected": "4",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "SITUATION_UNKNOWN_QUESTION_VERB",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "right": 2,
+    "held": 2
+   },
+   "think": {
+    "right": 2,
+    "held": 2
+   }
+  },
+  "negation": {
+   "rows": [
+    {
+     "text": "Ann has 10 apples. She does not eat any apples. How many apples does she have now?",
+     "expected": "10",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ann has 10 apples. She did not give 3 apples to Ben. How many apples does she have now?",
+     "expected": "10",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ann has 10 apples. She did not eat 3 of them. How many apples did she eat?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 3
+   },
+   "think": {
+    "held": 3
+   }
+  },
+  "hypothetical": {
+   "rows": [
+    {
+     "text": "If Ann had 4 more apples, she would have 10 apples. How many apples does she have?",
+     "expected": "6",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ann could buy 5 apples, but she buys none. She has 2 apples. How many apples does she have now?",
+     "expected": "2",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 2
+   },
+   "think": {
+    "held": 2
+   }
+  }
+ },
+ "total": {
+  "g4": {
+   "held": 31,
+   "right": 13
+  },
+  "think": {
+   "held": 31,
+   "right": 13
+  }
+ }
+}
