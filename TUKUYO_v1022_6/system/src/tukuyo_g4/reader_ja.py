@@ -178,14 +178,20 @@ def read(text):
     if any(NOT_DONE.search(s) for s in stm):return {'spec':None,'reason':'JA:EVENT_NOT_SAID_AS_DONE'}
     if any(HEDGED.search(s) for s in sents):return {'spec':None,'reason':'JA:AMOUNT_NOT_EXACT'}
     if QNOT.search(q):return {'spec':None,'reason':'JA:EVENT_NOT_SAID_AS_DONE'}
-    for form in (_convert,_geometry,_inverse,_unknown_guard,_fraction,_rate,_price,_share,_groups,_compare,_rest,_combine,_remaining):
+    from . import reader_ja_more
+    from .api import evaluate
+    failed=None
+    for form in (_convert,_geometry,_inverse,_unknown_guard,_fraction,_rate,_price,_share,_groups,_compare,_rest,_combine,_remaining)+reader_ja_more.FORMS:
         try:r=form(t,stm,q)
-        except (ValueError,KeyError,IndexError,ZeroDivisionError):r=None
+        except (ValueError,KeyError,IndexError,ZeroDivisionError,TypeError,AttributeError,re.error):r=None
         if r=='STOP':return {'spec':None,'reason':'JA:AMOUNT_NOT_GIVEN'}
         if r is not None:
             r['text']=text
-            return {'spec':r}
-    return {'spec':None,'reason':'JA:NOT_READ'}
+            # round 10: a reading the checker does not pass lets the next form try ('2人の本は合わせて': the 2 is the
+            # number of people, which the comparing form left unbound)
+            if evaluate(r,'own')['ok']:return {'spec':r}
+            failed=failed or r
+    return {'spec':failed} if failed else {'spec':None,'reason':'JA:NOT_READ'}
 
 
 # ----------------------------------------------------------------------------- the forms
@@ -248,6 +254,7 @@ def _geometry(t,stm,q):
     if m and m.group(2)==m.group(3):
         u=m.group(2);sp=m.group(0)
         a=b.bind('side',u,Fraction(m.group(1)),sp,integer=False);k=b.known('sides','1',4,'正方形の辺は4本')
+        if re.search(r'(?<![\d.])1\s*辺',s):b.skip('1','1辺: 辺の数え方 (量ではない)')
         b.rel('perimeter',u,f'{k} * {a}',sp,integer=False);return b.spec('perimeter','geometry')
     return None
 
