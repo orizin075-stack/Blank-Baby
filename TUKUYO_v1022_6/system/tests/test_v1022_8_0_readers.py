@@ -173,6 +173,7 @@ def test_the_held_out_set_is_as_it_was_frozen():
     import private_eval as pe
     assert pe.fingerprint(pe.HELD_OUT) == pe.HELD_OUT_SHA256
     assert pe.fingerprint(pe.HELD_OUT_2) == pe.HELD_OUT_2_SHA256 and pe.SETS['dev_2'] is pe.HELD_OUT
+    assert pe.fingerprint(pe.DEV_3).startswith('2de0b3c3ae5fc230')                      # the first draft, a dev set
     assert pe.value('16+(16+9)') == 41 and pe.value('50*2/5') == 20
     assert pe.grade(None, None) == 'right' and pe.grade('3', None) == 'wrong' and pe.grade(None, '3') == 'held'
     assert pe.mcnemar(22, 1) < 0.001 and pe.mcnemar(0, 0) == 1.0

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """v1022.8.0: the child's own reading (no parent) on new private problems in English and Japanese (private_eval_sets.py).
 
-  private_eval.py --set dev|dev_2|held_out|held_out_2 [--lang en|ja|all] [--work WORK] [--runtime-trust-file ANCHOR] [--out REPORT.json]
+  private_eval.py --set dev|dev_2|dev_3|held_out|held_out_2 [--lang en|ja|all] [--work WORK] [--runtime-trust-file ANCHOR] [--out REPORT.json]
                   [--totals-only] [--compare BEFORE.json]
 
 It reads as the child does in g4-solve: with an individual of its own (made under WORK), so that the v1022 core reads
@@ -20,14 +20,16 @@ import argparse,collections,hashlib,json,math,sys,time
 from fractions import Fraction
 from pathlib import Path
 HERE=Path(__file__).resolve().parents[1];sys.path.insert(0,str(HERE/'tools'))
-from private_eval_sets import DEV,HELD_OUT,HELD_OUT_2
+from private_eval_sets import DEV,HELD_OUT,DEV_3,HELD_OUT_2
 
-# dev_2: the held-out set of round 9, measured once before and once after it, and a development set since
-SETS={'dev':DEV,'held_out':HELD_OUT,'dev_2':HELD_OUT,'held_out_2':HELD_OUT_2}
+# dev_2: the held-out set of round 9, measured once before and once after it, and a development set since; dev_3: the
+# first draft of round 10's held-out set, replaced before any change (private_eval_sets.py)
+SETS={'dev':DEV,'held_out':HELD_OUT,'dev_2':HELD_OUT,'dev_3':DEV_3,'held_out_2':HELD_OUT_2}
 # the held-out set as written on 2026-10-13, before any change for it: any change to it shows here
 HELD_OUT_SHA256='9b82bf398a3165badf2d65585eab0ea794663646f917bea8efa95b8d56a64c85'
-# the held-out set of round 10, written on 2026-10-14 before any change of round 10
-HELD_OUT_2_SHA256='2de0b3c3ae5fc230a97ab7dd9dc9ff6afc0cf64b1bbe5bf1c5fe006ef4cb5918'
+# the held-out set of round 10, written on 2026-10-14 before any change of the readers in round 10 (its first draft,
+# 2de0b3c3ae5fc230..., is dev_3)
+HELD_OUT_2_SHA256='c0b294b5f647bc41c630dcb96b22e1301c51ed61ac6f7b610ddfdc41ef5fa780'
 FROZEN={'held_out':HELD_OUT_SHA256,'held_out_2':HELD_OUT_2_SHA256}
 def fingerprint(s):return hashlib.sha256(json.dumps(s,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
 
