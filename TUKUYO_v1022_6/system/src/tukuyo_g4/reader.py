@@ -87,9 +87,12 @@ def _refused(text,spec):
     if any(len(u.split('/'))==2 and u.split('/')[0]==u.split('/')[1] for u in (str(q.get('unit') or '') for q in spec.get('quantities') or [])):
         return 'EN:DEGENERATE_RATE'
     if _denies(text,spec):return 'EN:EVENT_NOT_SAID_AS_DONE'
-    # round 10: a reading the checker does not pass is not the reader's last word; the next reader is tried
+    # round 10: a reading the checker does not pass is not the reader's last word; the next reader is tried. When no
+    # reader reads it, the checker's own reason is kept (SOLVE:UNDERDETERMINED says an amount was not given, which the
+    # child's growth record and voice tell; a generic reason here made 'Mia had some shells' a story it could not read)
     from .api import evaluate
-    if not evaluate(spec,'own')['ok']:return 'EN:READING_DID_NOT_CHECK'
+    ev=evaluate(spec,'own')
+    if not ev['ok']:return ev.get('reason') or 'EN:READING_DID_NOT_CHECK'
     return None
 
 # a statement of what did not happen: what could or should have been ('Maya could have had 14 stickers'), what almost
