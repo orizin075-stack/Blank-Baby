@@ -332,6 +332,11 @@ def parser():
     c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true');c.add_argument('--research-world',action='store_true',help='claude-patch5: each family lives next to a hidden-rule device; income only from understanding it')
     c.add_argument('--max-ticks',type=int,default=512,help='v1022.7.9: a longer life for the ecology (up to 4096 ticks)');c.add_argument('--max-runtimes',type=int,default=64,help='v1022.7.9: more runtimes over its life (up to 256)')
     c.add_argument('--sharing',action='store_true',help='v1022.8.2: runtimes may give energy to a hungry one, and raise together a child the commons cannot fund (each decides with its heart; its bonds weigh)')
+    c.add_argument('--stagger',action='store_true',help='v1022.8.2 r10: the founders are born at different ticks (their seed energy waits in a nursery)')
+    c.add_argument('--reproduction',action='store_true',help='v1022.8.2 r10: a living runtime may bear a child with its own energy, when its heart chooses to')
+    c.add_argument('--bequest',action='store_true',help='v1022.8.2 r10: in its last tick an old runtime sets aside what energy it has left for its successor')
+    c.add_argument('--explore',action='store_true',help='v1022.8.2 r10: a wild place outside the commons; a runtime finds energy there only by reading a clue right')
+    c.add_argument('--wild-regeneration',type=int,default=1200,help='with --explore: how much the wild grows back per tick');c.add_argument('--wild-cap',type=int,default=24000,help='with --explore: how much the wild can hold')
     c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
     c=sub.add_parser('metabolism-environment',help='v1022.7.9: change the environment from the next tick on (the reservoir regeneration)');c.add_argument('--regeneration',type=int,required=True)
     sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
@@ -919,7 +924,8 @@ def _main(argv=None):
             elif args.cmd in ('metabolism-init','metabolism-step','metabolism-status','metabolism-audit','metabolism-environment'):
                 _require_live(data)
                 from tukuyo_v1022 import metabolism
-                if args.cmd=='metabolism-init':res=metabolism.init(data,args.runtime_trust_file,args.families,args.seed,args.reservoir,args.regeneration,args.max_age,not args.no_learning,not args.no_actions,args.research_world,args.max_ticks,args.max_runtimes,args.sharing)
+                if args.cmd=='metabolism-init':res=metabolism.init(data,args.runtime_trust_file,args.families,args.seed,args.reservoir,args.regeneration,args.max_age,not args.no_learning,not args.no_actions,args.research_world,args.max_ticks,args.max_runtimes,args.sharing,
+                                                              args.stagger,args.reproduction,args.explore,args.wild_regeneration,args.wild_cap,args.bequest)
                 elif args.cmd=='metabolism-step':res=metabolism.step(data,args.ticks)
                 elif args.cmd=='metabolism-environment':res=metabolism.environment(data,args.regeneration)
                 elif args.cmd=='metabolism-status':res=metabolism.status(data)

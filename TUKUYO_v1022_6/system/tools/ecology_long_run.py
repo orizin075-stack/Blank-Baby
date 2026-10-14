@@ -4,7 +4,8 @@ shared reservoir, dying, and succeeded by children. The roadmap's v1022.8.2 asks
 individuals and generations, with economy, learning, relations, resources and survival linked.
 
   ecology_long_run.py --work WORK --runtime-trust-file ANCHOR [--ticks N] [--families F] [--regeneration R]
-                      [--reservoir X] [--max-age A] [--no-learning] [--out REPORT.json]
+                      [--reservoir X] [--max-age A] [--no-learning] [--sharing] [--stagger] [--reproduction]
+                      [--explore [--wild-regeneration W] [--wild-cap C]] [--change TICK:REGENERATION ...] [--out REPORT.json]
 
 It runs the real CLI (run_tukuyo.py metabolism-init / metabolism-step) and records, after every step, the tick, the
 living and all runtimes, the deepest generation, the reservoir, deaths and successions, and the tasks done. It stops
@@ -28,19 +29,30 @@ def main():
     ap.add_argument('--reservoir',type=int,default=20000);ap.add_argument('--max-age',type=int,default=32);ap.add_argument('--no-learning',action='store_true')
     ap.add_argument('--step',type=int,default=32);ap.add_argument('--max-runtimes',type=int,default=64)
     ap.add_argument('--sharing',action='store_true',help='v1022.8.2: runtimes may give energy to a hungry one and raise a child together')
+    ap.add_argument('--stagger',action='store_true',help='v1022.8.2 r10: founders born at different ticks')
+    ap.add_argument('--reproduction',action='store_true',help='v1022.8.2 r10: living runtimes may bear children with their own energy')
+    ap.add_argument('--explore',action='store_true',help='v1022.8.2 r10: a wild place found only by reading a clue right')
+    ap.add_argument('--bequest',action='store_true',help='v1022.8.2 r10: an old runtime leaves what energy it has left to its successor')
+    ap.add_argument('--wild-regeneration',type=int,default=1200);ap.add_argument('--wild-cap',type=int,default=24000)
     ap.add_argument('--change',action='append',default=[],metavar='TICK:REGENERATION',
                     help='change the environment at a tick (the reservoir regeneration from then on), e.g. 400:0 for a drought')
     ap.add_argument('--out');a=ap.parse_args()
     changes=sorted((int(x.split(':')[0]),int(x.split(':')[1])) for x in a.change)
     d=Path(a.work).resolve()/'ecology';d.parent.mkdir(parents=True,exist_ok=True)
-    rep={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'config':{**{k:getattr(a,k) for k in ('ticks','families','regeneration','reservoir','max_age','no_learning','step','max_runtimes','sharing')},
-                                                                           'changes':changes},'steps':[],'environment':[]}
+    keys=('ticks','families','regeneration','reservoir','max_age','no_learning','step','max_runtimes','sharing','stagger','reproduction','explore','bequest')
+    rep={'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'config':{**{k:getattr(a,k) for k in keys},
+                                                                           **({'wild_regeneration':a.wild_regeneration,'wild_cap':a.wild_cap} if a.explore else {}),
+                                                                           'changes':[list(c) for c in changes]},'steps':[],'environment':[]}
     t0=time.time()
     r=run(a.runtime_trust_file,d,'init','--individual-id','ECOLOGY-OWNER')
     if not r.get('ok'):rep['stopped']='INIT:'+str(r.get('error'));print(rep['stopped']);return _out(a,rep)
     args=['metabolism-init','--families',a.families,'--reservoir',a.reservoir,'--regeneration',a.regeneration,'--max-age',a.max_age]+(['--no-learning'] if a.no_learning else [])
     if a.ticks>512 or a.max_runtimes!=64:args+=['--max-ticks',max(512,a.ticks),'--max-runtimes',a.max_runtimes]
     if a.sharing:args+=['--sharing']
+    if a.stagger:args+=['--stagger']
+    if a.reproduction:args+=['--reproduction']
+    if a.bequest:args+=['--bequest']
+    if a.explore:args+=['--explore','--wild-regeneration',a.wild_regeneration,'--wild-cap',a.wild_cap]
     r=run(a.runtime_trust_file,d,*args)
     if not r.get('ok'):rep['stopped']='METABOLISM_INIT:'+str(r.get('error'));print(rep['stopped']);return _out(a,rep)
     tick=0
@@ -56,9 +68,21 @@ def main():
                                   'living_energy','attempts','correct','wrong','abstained','hard_attempts','hard_correct','regeneration')}
         row['families_alive']=len({x['family'] for x in r.get('alive') or []})
         row['relations']=r.get('relations') or None
-        row['raised_together']=sum(1 for x in r.get('successions') or [] if x.get('funded_by'))
+        row['raised_together']=sum(1 for x in r.get('successions') or [] if (x.get('funded_by') or {}).get('runtimes'))
+        if a.reproduction:
+            # a house: the founder a living runtime goes back to, through successions (death) and births (living parents)
+            up={x['child']:x['parent'] for x in (r.get('successions') or [])+(r.get('births') or [])}
+            def house(rid):
+                while rid in up:rid=up[rid]
+                return rid
+            row['houses_alive']=len({house(x['runtime']) for x in r.get('alive') or []})
         row['starved']=sum(1 for x in r.get('deaths') or [] if x.get('cause')=='ENERGY')
-        row['deaths']=len(r.get('deaths') or []);row['seconds']=round(time.time()-t0,1);rep['steps'].append(row)
+        row['deaths']=len(r.get('deaths') or [])
+        if a.bequest:row['provisioned']=sum(1 for x in r.get('successions') or [] if (x.get('funded_by') or {}).get('parent_bequest'))
+        if a.reproduction:row['births']=len(r.get('births') or [])
+        if a.stagger:row['unborn']=len(r.get('unborn') or [])
+        if a.explore:row.update({k:r.get(k) for k in ('wild','found','explore_attempts','explore_correct','explore_paid')})
+        row['seconds']=round(time.time()-t0,1);rep['steps'].append(row)
         print(json.dumps(row),flush=True)
         if not r.get('active_runtime_count'):rep['stopped']='EXTINCT';break
     else:rep['stopped']='REACHED_TICKS'
@@ -69,6 +93,8 @@ def main():
                    'runtimes':last.get('total_runtime_count',0),
                    'generations':last.get('max_generation',0),'successions':last.get('actual_successions',0),'deaths':last.get('deaths',0),
                    'starved':last.get('starved',0),'raised_together':last.get('raised_together',0),'relations':last.get('relations'),
+                   **{k:last.get(k) for k in ('births','houses_alive','provisioned','found','explore_attempts','explore_correct','explore_paid') if k in last},
+                   'max_alive':max((x.get('active_runtime_count') or 0 for x in rep['steps']),default=0),
                    'stopped':rep.get('stopped'),'seconds':round(time.time()-t0,1)}
     print('result',json.dumps(rep['result']))
     return _out(a,rep)
