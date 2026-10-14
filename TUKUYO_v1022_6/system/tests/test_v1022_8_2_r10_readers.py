@@ -145,3 +145,19 @@ def test_the_wrong_answers_found_on_the_held_out_set_are_held_back(text):
 @pytest.mark.parametrize('text,answer', STILL_READ)
 def test_what_is_near_them_is_still_read(text, answer):
     assert api.solve(text, llm='off').get('answer') == answer
+
+
+def test_no_route_answers_what_is_now_after_what_was_only_wished_or_heard(tmp_path):
+    # end to end, the v1022 core included: the exactness probe over all three dev sets found the core answering these
+    # (25, 58, 13, 59). A plan stays the core's (10 are left), and so does the price of a wished act (r9)
+    from test_v1022_5_fusion import run
+    d = tmp_path / 'd'; run(d, 'init', '--individual-id', 'NOT-SAID-DONE')
+    for q in ('水そうに水が40L入っています。15L使いたいです。水は何Lのこっていますか。',
+              '電車に64人乗っていました。最初の駅で15人降りて、9人乗りたいです。今、何人乗っていますか。',
+              '池にアヒルが16羽いたいです。4羽来て、そのあと7羽飛んでいきました。今、何羽いますか。',
+              'おばあさんは68才あまり、ルーシーさんは9才です。年れいの差は何才ですか。',
+              '自転車で時速15kmで2時間走りたそうです。何km走りましたか。'):
+        assert run(d, 'g4-solve', '--llm', 'off', '--', q)['answer'] is None, q
+    assert run(d, 'g4-solve', '--llm', 'off', '--', 'りんごが10個あります。明日3個食べる予定です。残りは何個？')['answer'] == '10'
+    assert run(d, 'g4-solve', '--llm', 'off', '--', '1本80円のえんぴつを3本買いたいです。代金は何円ですか。')['answer'] == '240'
+    assert run(d, 'g4-solve', '--llm', 'off', '--', '池にアヒルが16羽いました。4羽来て、そのあと7羽飛んでいきました。今、何羽いますか。')['answer'] == '13'

@@ -60,7 +60,8 @@ HEDGED=re.compile(r'(?<!どの)(?<!どれ)(?:ぐらい|くらい)|\d\s*(?:' + CN
 # what no route answers, the v1022 core included (api.solve): an amount said only roughly with its number (80円あまりの、
 # 3本近く、30人前後、15本より多く), which the core's own list (ぐらい、約、以上 …) does not have, and a question about a wish
 # (何こ買いたいですか). A remainder (5こあまりました、あまり、…、あまりは何こ) is another use of the word
-ROUGH=re.compile(r'\d\s*(?:' + CNT + r')\s*(?:(?:あまり|余り)(?![ま、。]|$)|近く|前後|強(?![いくめ])|弱(?![いくめ])|超|より(?:多|少))|たい(?:です|の)?か[。？?]?$')
+ROUGH=re.compile(r'\d\s*(?:' + CNT + r')\s*(?:(?:あまり|余り)(?![ま、。]|$)|近く|前後|強(?![いくめ])|弱(?![いくめ])|超|より(?:多|少))|たい(?:です|の)?か[。？?]?$|'
+                 r'\d\s*(?:才|歳)\s*(?:あまり|余り)')   # round 10: an age 'あまり' is never a remainder (68才あまり、…)
 # a wish or a plan in the story and a question about what was done (6週間ちょ金したいです。全部で何円ちょ金しましたか): the
 # act did not happen, so what was done is not told. 買いたいです。代金は何円ですか asks the price of the wish, and is read by
 # the core
@@ -79,6 +80,17 @@ def start_not_given(text):
     stm=sents[:-1];a=[(s,x) for s in stm for x in _amts(s,0)]
     if len(a)!=1 or any(re.search(STATE,s) or re.search(r'はじめ|最初|もともと|もとは',s) for s in stm):return False
     s,x=a[0];return bool(re.search(ADDED_TO,s[x.e:x.e+16]))
+# round 10: the exactness probe over all three dev sets, end to end, found the v1022 core answering what a story says only
+# as wished, heard or guessed: '水が40L入っています。15L使いたいです。水は何Lのこっていますか' (25), '9人乗りたいです。今、何人
+# 乗っていますか' (58), '16羽いたいです' (a wished state). After such a statement, a question about what there is now or
+# what was done has no answer, from any route. The price or speed of a wished act ('3本買いたいです。代金は何円ですか') is
+# still the core's to read (r9), and so is a plan (明日3個食べる予定です。残りは: the core keeps the 10, as it should)
+NOT_SAID_DONE=re.compile(r'(?:[きぎしちにびみりいえけげせてねべめれ]|(?![冷重平眠煙])[一-龯])たい(?=[。、]|です|$|と|の)|た(?:そう|よう|はず|らしい)|'
+                         r'そうです|そうだ(?!ん)|ようです|ようだ|はず|らしい|だろう|かもしれ|と言(?:い|っ|わ)|と聞')
+ASKS_NOW=re.compile(r'今|いま|のこ|残|なり(?:ました|ます)か|(?:あり|い|てい)ますか[。？?]?$')
+def not_said_done_then_asked(text):
+    sents=_sents(_norm(text))
+    return len(sents)>=2 and any(NOT_SAID_DONE.search(x) for x in sents[:-1]) and bool(ASKS_NOW.search(sents[-1]) or ASKS_DONE.search(sents[-1]))
 def wished_then_asked_done(text):
     sents=_sents(_norm(text))
     return len(sents)>=2 and any(WISHED.search(x) for x in sents[:-1]) and bool(ASKS_DONE.search(sents[-1]))
