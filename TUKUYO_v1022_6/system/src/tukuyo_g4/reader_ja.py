@@ -66,6 +66,19 @@ ROUGH=re.compile(r'\d\s*(?:' + CNT + r')\s*(?:(?:あまり|余り)(?![ま、。]
 # the core
 WISHED=re.compile(r'(?:[きぎしちにびみりいえけげせてねべめれ]|(?![冷重平眠煙])[一-龯])たい(?:です|と思)|予定|つもり')
 ASKS_DONE=re.compile(r'(?:ました|でした|た)か[。？?]?$')
+# round 10 (found on the round's held-out set after its one measurement): きました is 来ました only after て/で or a particle
+# (とんできました, 3人が きました); '5km歩きました' (walked) is no increase. It read 12 + 5 for 'ゴールまであと何km'.
+# What there is now, after an amount added to what was there before, when nothing says what was there before, has no
+# answer (the v1022 core answered 4 to 'ふでばこにえんぴつを4本足しました。ふでばこのえんぴつは何本になりましたか。'; the English
+# 'N more' with no start). api.solve asks this before every route
+ADDED_TO=r'(?:足し|たし|加え|くわえ|増え|ふえ|もらい|もらっ|貰い)'
+NOW_Q=re.compile(r'に\s*なり(?:ました|ます)か|今|いま')
+def start_not_given(text):
+    sents=_sents(_norm(text))
+    if len(sents)<2 or not NOW_Q.search(sents[-1]):return False
+    stm=sents[:-1];a=[(s,x) for s in stm for x in _amts(s,0)]
+    if len(a)!=1 or any(re.search(STATE,s) or re.search(r'はじめ|最初|もともと|もとは',s) for s in stm):return False
+    s,x=a[0];return bool(re.search(ADDED_TO,s[x.e:x.e+16]))
 def wished_then_asked_done(text):
     sents=_sents(_norm(text))
     return len(sents)>=2 and any(WISHED.search(x) for x in sents[:-1]) and bool(ASKS_DONE.search(sents[-1]))
@@ -73,7 +86,7 @@ SENT=re.compile(r'[^。？?！!]+[。？?！!]?')
 MINUS=r'(?:食べ|たべ|使い|使っ|つかい|つかっ|あげ|上げ(?!て?い?ます?。?$)|売り|売れ|うり|うれ|なくし|無くし|落とし|おとし|とんでいき|とんで行|飛んでいき|飛んで行|' \
       r'飛んでいっ|とんでいっ|にげ|逃げ|降り|おり|われ|割れ|こわれ|壊れ|ぬき|抜き|出し|だし|配り|くばり|わたし|渡し|すて|捨て|へり|減り|へっ|減っ|' \
       r'取り出し|とりだし|返し|かえし|貸し|かし|散り|ちり|帰り|かえり|引い|ひい|ちぎっ|おろし|下ろし|切り取っ|あげ)'
-PLUS=r'(?:もらい|もらっ|貰い|買い|買っ|かい|かっ|拾い|拾っ|ひろい|ひろっ|ふえ|増え|もどってき|戻ってき|来|き(?=て|ました)|乗り|のり|入り|はいり|' \
+PLUS=r'(?:もらい|もらっ|貰い|買い|買っ|かい|かっ|拾い|拾っ|ひろい|ひろっ|ふえ|増え|もどってき|戻ってき|来|(?<=[てでがにもはへ、 ])き(?=て|ました)|乗り|のり|入り|はいり|' \
      r'足し|たし|のび|伸び|上がり|あがり|つみ|摘み|作り|作っ|つくり|つくっ|焼き|焼い|やき|やい|生まれ|うまれ|咲き|さき|集め|あつめ|見つけ|みつけ|' \
      r'借り|かり|加え|くわえ|入れ|いれ|育ち|そだち|植え|うえ|とれ|取れ|当たっ|ため|貯め)'
 STATE=r'(?:あります|ありました|あった|います|いました|持っています|持っていました|もっています|もっていました|とまっています|とまっていました|' \
@@ -387,6 +400,11 @@ def _rate(t,stm,q):
             if not re.search(r'全部で|何|あわせて|合わせて',q):return None
             b.rel('total',au,f'{r} * {d}',sp_r,integer=False);return b.spec('total','rate')
         if len(start)==1 and re.search(r'今|いま|何',q) and re.search(rf'{PLUS}|のび|伸び',s):
+            # round 10 (found on the round's held-out set after its one measurement): the start is an amount said as there
+            # (ありました) or the one that grew (12cmの草が…のびました), never one eaten, sold or given ('うさぎが9本食べました'
+            # was read as the start of 11本ずつ7列: 86 for 68)
+            ss=next((x for x in stm if _span_of(whole,start[0]) in x),'')
+            if re.search(MINUS,ss) or not re.search(STATE+r'|のび|伸び',ss):return None
             st=b.bind('start',au,start[0].v,_span_of(whole,start[0]),integer=False)
             b.rel('total',au,f'{st} + {r} * {d}',sp_r,integer=False);return b.spec('total','rate')
         return None

@@ -115,3 +115,33 @@ JA_TRAPS = [
 def test_japanese_traps(text, ok):
     v = own(text)
     assert v is None or v in ok, v
+
+
+# Found on round 10's held-out set after its one measurement (these four wrong answers were there in r9 too). The fixes
+# hold readings back only; on the development sets nothing they read before changed. The texts are the held-out
+# set's own: it was spent by that measurement and is development material from here on.
+AFTER_HELD_OUT_WRONG = [
+    'Kyle put 4 more pencils into his pencil case. How many pencils are in the case now?',     # no start: was 4
+    'ハイキングコースは全長12kmです。あやさんは5km歩きました。ゴールまであと何kmですか。',          # 歩きました: was 17
+    'ふでばこにえんぴつを4本足しました。ふでばこのえんぴつは何本になりましたか。',                    # no start (the core): was 4
+    'にんじんを1列に11本ずつ7列植えました。うさぎが9本食べました。にんじんは何本のこっていますか。',  # eaten as the start: was 86
+]
+STILL_READ = [
+    ('Beth has 4 packs of crayons. Each pack has 10 crayons in it. She also has 6 extra crayons. How many crayons does Beth have altogether?', '46'),
+    ('Ann has 5 apples. Tom has 4 more apples than Ann. How many apples does Tom have?', '9'),
+    ('すずめが5羽いました。3羽とんできました。すずめは何羽になりましたか。', '8'),
+    ('友だちが3人いました。あとから2人きました。みんなで何人ですか。', '5'),
+    ('はじめに9本ありました。毎日11本ずつ7日植えました。今何本ありますか。', '86'),
+    ('12cmの草が、1週間に3cmずつ4週間のびました。草は今何cmですか。', '24'),
+    ('りんごを5こ買いました。3こ食べました。のこりは何こですか。', '2'),
+]
+
+
+@pytest.mark.parametrize('text', AFTER_HELD_OUT_WRONG)
+def test_the_wrong_answers_found_on_the_held_out_set_are_held_back(text):
+    assert api.solve(text, llm='off').get('answer') is None
+
+
+@pytest.mark.parametrize('text,answer', STILL_READ)
+def test_what_is_near_them_is_still_read(text, answer):
+    assert api.solve(text, llm='off').get('answer') == answer

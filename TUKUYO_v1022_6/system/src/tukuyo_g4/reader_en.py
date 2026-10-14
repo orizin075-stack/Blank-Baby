@@ -2595,7 +2595,13 @@ def _read(text,forced=None):
     # before; when the story tells nothing of them, what she has now is not known (the review round)
     if ask.kind=='amount' and ask.noun and not ask.cmp and (ask.have or ask.when=='now') and ask.when!='initial':
         for f in st.frames:
-            if f.m is None or f.noun!=ask.noun or f.kind!='change' or not _says_before(st,f):continue
+            if f.m is None or f.noun!=ask.noun or f.kind not in ('change','state') or not _says_before(st,f):continue
+            # 'Kyle put 4 more pencils into his pencil case': a state in words, a change by its 'more' (round 10, found on
+            # the round's held-out set after its one measurement: it answered 4). A comparison ('4 more than') is not one
+            if f.kind=='state' and re.search(r'\bthan\b',st.t[f.m.end:f.m.end+40],re.I):continue
+            # and in a state only when the thing was not spoken of before ('4 packs of crayons... She also has 6 extra
+            # crayons' says what is besides the packs)
+            if f.kind=='state' and re.search(r'\b'+re.escape(f.noun)+r'(?:e?s)?\b',st.t[:f.m.start],re.I):continue
             if ask.owner and f.owner and f.owner!=ask.owner:continue
             if not any(g is not f and g.noun==ask.noun and (g.owner==f.owner or not g.owner or not f.owner) and (g.m is None or g.m.start<f.m.start)
                        for g in st.frames):no('UNKNOWN_START')
