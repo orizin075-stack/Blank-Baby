@@ -206,7 +206,7 @@ def read(text):
     from . import reader_ja_more
     from .api import evaluate
     failed=None
-    for form in (_convert,_geometry,_inverse,_unknown_guard,_fraction,_rate,_price,_share,_groups,_compare,_rest,_combine,_remaining)+reader_ja_more.FORMS:
+    for form in (_convert,_geometry,_inverse,_unknown_guard,_fraction,_rate,_price,_share,_groups,_compare,_rest,_combine,_remaining)+reader_ja_more.FORMS+(_units,):
         try:r=form(t,stm,q)
         except (ValueError,KeyError,IndexError,ZeroDivisionError,TypeError,AttributeError,re.error):r=None
         if r=='STOP':return {'spec':None,'reason':'JA:AMOUNT_NOT_GIVEN'}
@@ -220,6 +220,13 @@ def read(text):
 
 
 # ----------------------------------------------------------------------------- the forms
+def _units(t,stm,q):
+    """round 11: the reader by what the amounts are (reader_units), after every form by wording"""
+    from . import reader_units
+    r=reader_units.form_ja(t,stm,q)
+    return r if isinstance(r,dict) else None
+
+
 def _unknown_guard(t,stm,q):
     """an amount said without a number, which no form above asked for: not guessed"""
     if any(UNKNOWN.search(s) for s in stm):return 'STOP'

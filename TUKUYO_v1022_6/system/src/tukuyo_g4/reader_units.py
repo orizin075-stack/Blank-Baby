@@ -45,7 +45,7 @@ def no(why):raise NoRead(why)
 class Amt:
     """one number of the text and what it is (or an amount a law made from others)"""
     __slots__=('k','v','raw','span','u','per','kind','role','op','tags','who','sent','inq','base','of','name','used','ref','start','verb','adjs',
-               'derived','order','zero','stuff','kept','pos','end','aux','subj','lead','src','dozen','more')
+               'derived','order','zero','stuff','kept','pos','end','aux','subj','lead','src','dozen','more','noun','clause')
     def __init__(s,**kw):
         for x in s.__slots__:setattr(s,x,None)
         s.tags=frozenset();s.adjs=frozenset();s.used=False;s.ref=False;s.derived=False;s.zero=False;s.kept=False
@@ -93,13 +93,26 @@ def _d(spec,u,expr,span,tags,parts,role='derived',per=None,whole=None):
     for p in parts:p.used=True
     n=spec.rel(u,expr,span,per=per,whole=whole)
     t=frozenset(tags)
-    return Amt(name=n,u=u,per=per,kind='rate' if per else 'count',role=role,tags=t,derived=True,
+    return Amt(name=n,u=u,per=per,kind='rate' if per else 'count',role=role,tags=t,derived=True,span=span,
                order=min((p.order for p in parts if p.order is not None),default=0),sent=parts[-1].sent,inq=any(p.inq for p in parts))
 
 
+def _holder(a):
+    """the noun or name an amount is said of, when its clause says one ('A car travels at 50 miles per hour')"""
+    ws=[w for w in (a.subj or []) if w not in EN_FUNC and w not in PRON and w not in ('what','how','which')]
+    return _sing(ws[-1]) if ws else None
+
+
+def _same_holder(r,c):
+    if r.src=='subject' or r.sent==c.sent or c.inq:return True
+    a,b=_holder(r),_holder(c)
+    return not (a and b and a!=b and a not in (c.subj or []) and b not in (r.subj or []))
+
+
 def _match_per(per,c):
-    """is c an amount of what the rate is per? 'adult ticket' and '2 adults', 'day' and '5 school days'"""
+    """is c an amount of what the rate is per? 'adult ticket' and '2 adults', 'day' and '5 school days', '大人' and '大人2人'"""
     if c.u==per:return True
+    if c.noun and c.noun==per:return True
     w=per.split()
     return len(w)>1 and (c.u==w[-1] or c.u in w) and c.u not in ('dollar','cent','円')
 
@@ -108,6 +121,15 @@ def compose(text,lang,amts,tg,spec,ctx):
     """the laws, in their order, over the amounts; -> (ask name, form) or NoRead"""
     for a in amts:spec.bind(a)
     pool=list(amts);steps=[]
+    # what everyone knows: how many legs, wheels or eyes a thing has, asked of a number of them
+    fact=ctx.get('fact')
+    if fact and tg.u and not any(a.kind=='rate' and a.u==tg.u for a in pool):
+        for c in [a for a in pool if a.kind=='count' and a.u!=tg.u]:
+            k=fact(c,tg.u)
+            if k:
+                n=spec.known(tg.u,c.u,k[0],k[1])
+                pool.append(Amt(kind='rate',u=tg.u,per=c.u,name=n,derived=True,span=c.span,order=c.order,sent=c.sent,tags=c.tags))
+                steps.append('known')
     counts=lambda:[a for a in pool if a.kind=='count' and not a.used]
     # part: a fraction of an amount
     for a in [x for x in pool if x.kind=='frac']:
@@ -130,31 +152,64 @@ def compose(text,lang,amts,tg,spec,ctx):
         expr={'+':f'{base.name} + {a.name}','-':f'{base.name} - {a.name}','*':f'{base.name} * {a.name}','/':f'{base.name} / {a.name}'}[a.op]
         d=_d(spec,base.u,expr,a.span,a.tags,[a],role='cmp');d.order=a.order;d.inq=a.inq
         base.ref=True;pool.append(d);steps.append('compare')
+    # a measure said in two units ('1 meter and 30 centimeters', '1m30cm'): one amount in the smaller
+    conv=ctx.get('convert')
+    for a,b in [(x,y) for x in pool for y in pool if x.kind=='count' and y.kind=='count' and x.sent==y.sent and y.order==x.order+1]:
+        if a.used or b.used or not conv or not conv(a.u,b.u):continue
+        gap=ctx['sents'][a.sent][a.end:b.pos] if ctx.get('sents') and a.end is not None else None
+        if gap is None or not re.fullmatch(r'\s*(?:[A-Za-zぁ-んァ-ヶ一-龯²]{1,12})\s*(?:and|と)?\s*',gap) or not re.match(r'\s*(?:'+'|'.join(map(re.escape,_unit_words(a.u)))+r')',gap):continue
+        k,said=conv(a.u,b.u);n=spec.known(b.u,a.u,k,said)
+        d=_d(spec,b.u,f'{a.name} * {n} + {b.name}',b.span,a.tags|b.tags,[a,b],role=b.role or 'state',whole=False)
+        d.order=a.order;d.sent=a.sent;d.verb=b.verb;d.lead=a.lead;d.kept=b.kept;pool.append(d);steps.append('two_units')
+    # in N years, N years ago (4年後): every age then
+    sh=[a for a in pool if a.kept in ('shift+','shift-')]
+    if sh:
+        if len(sh)!=1:no('TWO_SHIFTS')
+        z=sh[0];z.used=True
+        ages=[a for a in pool if a.kind=='count' and a.u==tg.u and a is not z and not a.inq and not a.used]
+        if not ages:no('SHIFT_OF_NOTHING')
+        for a in ages:
+            d=_d(spec,tg.u,f"{a.name} {'+' if z.kept=='shift+' else '-'} {z.name}",z.span,a.tags,[a],role='state')
+            d.order=a.order;d.sent=a.sent;pool.append(d)
+        steps.append('years_later' if z.kept=='shift+' else 'years_before')
     # rate: a rate times an amount of what it is per; an amount over a rate
     changed=True
     while changed:
         changed=False
         for r in [x for x in pool if x.kind=='rate' and not x.used]:
+            # an amount in a unit the rate is not in, converted to meet it ('6 L' for '1 dL a cup', '2 hours' at '3 m a minute')
+            if conv and r.base is None:
+                for c in [x for x in counts() if not x.ref and x.u not in (r.u,r.per)]:
+                    for want in (r.per,r.u):
+                        k=conv(c.u,want) if not any(y.u==want for y in counts() if y is not c) else None
+                        if k:
+                            n=spec.known(want,c.u,k[0],k[1])
+                            d=_d(spec,want,f'{c.name} * {n}',c.span,c.tags,[c],role=c.role or 'state',whole=False)
+                            d.order=c.order;d.sent=c.sent;d.verb=c.verb;d.inq=c.inq;pool.append(d);steps.append('convert');break
             if r.base is not None:
                 # 4 cups for 2 loaves: the rate is the one over the other
                 if r.base.used:no('RATIO_BASE_USED')
                 nr=_d(spec,r.u,f'{r.name} / {r.base.name}',r.span,r.tags,[r.base],per=r.per,whole=False)
                 nr.order=r.order;r.used=True;r.base.used=True;pool.append(nr);r=nr;changed=True
-            cs=[c for c in counts() if c.per is None and _match_per(r.per,c) and c is not r.base and not c.ref]
+            cs=[c for c in counts() if c.per is None and _match_per(r.per,c) and c is not r.base and not c.ref and _same_holder(r,c)]
             if len(cs)>1:
                 # the rate's own count when its sentence says 'on each of 9 mornings' or the question names the other
                 near=[c for c in cs if c.sent==r.sent and c.order>r.order]
                 if len(near)==1:cs=near
                 else:no('RATE_TWO_COUNTS')
             if len(cs)==1:
-                c=cs[0];d=_d(spec,r.u,f'{r.name} * {c.name}',c.span if c.inq else r.span,c.tags|r.tags,[r,c],
-                             role=c.role if c.role in ('state','gain','loss','act','goal') else 'product')
+                c=cs[0];role=c.role if c.role in ('state','gain','loss','act','goal','intent') else 'product'
+                if r.u in ('dollar','cent','円') and role in ('gain','loss'):
+                    # money for things bought is spent, for things sold is taken in
+                    v=(c.verb or '')
+                    role='loss' if re.match(r'(?:buy|bought|purchas|order|rent|買|かい|かっ|注文)',v) else 'gain' if re.match(r'(?:sell|sold|売|うり|うれ)',v) else 'money'
+                c=cs[0];d=_d(spec,r.u,f'{r.name} * {c.name}',c.span if c.inq else r.span,c.tags|r.tags,[r,c],role=role)
                 d.verb=c.verb;d.lead=c.lead;d.more=c.more;d.subj=c.subj
                 d.order=max(r.order,c.order);d.adjs=c.adjs|r.adjs;pool.append(d);steps.append('rate');changed=True;continue
             if tg.u==r.per or (tg.u and _match_per(r.per,Amt(u=tg.u))):
                 cs=[c for c in counts() if c.u==r.u and not c.ref]
                 if len(cs)==1:
-                    c=cs[0];d=_d(spec,r.per.split()[-1] if ' ' in r.per else r.per,f'{c.name} / {r.name}',c.span,c.tags,[r,c],role='groups')
+                    c=cs[0];d=_d(spec,r.per.split()[-1] if ' ' in r.per else r.per,f'{c.name} / {r.name}',c.span,c.tags,[r,c],role='groups',whole=True)
                     d.order=max(r.order,c.order);pool.append(d);steps.append('groups');changed=True;continue
                 if len(cs)>1:no('RATE_TWO_TOTALS')
         # a rate in units the asked unit is converted from ('3 meters a minute' for 2 hours, asked in meters)
@@ -170,6 +225,7 @@ def compose(text,lang,amts,tg,spec,ctx):
         if len(num)!=1 or len(den)!=1:no('SHARE_NOT_ONE_EACH')
         a,b=num[0],den[0]
         if [c for c in cs if c not in (a,b) and not c.ref]:no('SHARE_LEFT_OVER')
+        if not ctx.get('equal') and not (tg.u in ('dollar','cent','円') and (a.role in ('loss','goal','state') or b.role in ('gain','loss'))):no('SHARE_NOT_SAID_EQUAL')
         d=_d(spec,tg.u,f'{a.name} / {b.name}',ctx['qspan'],a.tags,[a,b],role='share',per=tg.per,whole=spec.whole(tg.u))
         steps.append('share');return _ask(spec,tg,d,steps,ctx)
     if left_rates:no('RATE_NOT_APPLIED')
@@ -180,9 +236,27 @@ def compose(text,lang,amts,tg,spec,ctx):
             k=conv(c.u,tg.u)
             if k:
                 n=spec.known(tg.u,c.u,k[0],k[1])
-                d=_d(spec,tg.u,f'{c.name} * {n}',c.span,c.tags,[c],role='convert',whole=False);d.order=c.order;d.adjs=c.adjs;d.kept=c.kept
+                d=_d(spec,tg.u,f'{c.name} * {n}',c.span,c.tags,[c],role=c.role if c.role in ('state','gain','loss','act','goal') else 'convert',whole=False)
+                d.order=c.order;d.adjs=c.adjs;d.kept=c.kept;d.verb=c.verb;d.more=c.more;d.lead=c.lead;d.sent=c.sent
                 pool.append(d);steps.append('convert')
     return _whole(spec,tg,pool,steps,ctx)
+
+
+def _unit_words(u):
+    """the ways a unit is written right after its number"""
+    ws=[w for w,c in _EU.items() if c==u]+[w for w,c in _JC.items() if c==u]
+    return sorted(set(ws),key=len,reverse=True) or [u]
+
+
+_CAPS_NOT_NAMES=frozenset('the a an there then later after before on in at if how what when where which who why she he they it her his '
+                          'their its we you i my our your this that these those each every one two three four five six seven eight nine ten '
+                          'last next first second some all both mr mrs ms dr by for with from during while so but and or yesterday today '
+                          'tomorrow monday tuesday wednesday thursday friday saturday sunday january february march april may june july '
+                          'august september october november december moving with'.split())
+def _names(sen):
+    en={w for w in re.findall(r"\b([A-Z][a-z]+)\b",sen or '') if w.lower() not in _CAPS_NOT_NAMES}
+    ja=set(re.findall(r'([一-龯ァ-ヶーぁ-ん]{1,6}?)(?:さん|くん|ちゃん)',sen or ''))
+    return en|ja
 
 
 def _distinct(a,others):
@@ -193,7 +267,26 @@ def _whole(spec,tg,pool,steps,ctx):
     """the last law: the amounts of the asked unit, put together by the question"""
     cs=[a for a in pool if a.kind=='count' and not a.used]
     other=[a for a in cs if a.u!=tg.u and not a.ref]
-    if other:no('LEFT_OVER:'+','.join(sorted({str(a.u) for a in other})))
+    if other:
+        # an amount of another kind of thing that no law and not the question needs ('Sam is 9 years old. He has 3
+        # boxes of 6 pencils'): set aside, with the reason. Never one the laws made, one in the question, one of the asked
+        # thing's unit or of a unit it converts to, or of a unit any rate or comparison of the problem is in
+        near={tg.u,tg.per}|{x.u for x in pool if x.kind in ('rate','cmp')}|{x.per for x in pool if x.kind=='rate'}
+        conv=ctx.get('convert')
+        asked_sents={x.sent for x in pool if x.kind=='count' and x.u==tg.u and not x.derived}
+        if 'known' in steps:no('LEFT_OVER_AFTER_A_KNOWN_FACT')
+        if tg.mode=='total' and any(x.u not in EN_MEASURE and x.u not in J_MEASURE for x in other):no('LEFT_OVER_IN_ALL')
+        for a in other:
+            if a.derived or a.inq or a.u in near or (conv and (conv(a.u,tg.u) or conv(tg.u,a.u))) or a.v==0 or \
+                    a.u in TIME or a.u in ('日','週','か月','年','時間','分','秒','回') or a.sent in asked_sents:
+                no('LEFT_OVER:'+','.join(sorted({str(x.u) for x in other})))
+        if len({a.u for a in other})!=len(other):no('LEFT_OVER_SAME_KIND')
+        for a in other:
+            a.used=True
+            spec.f=[f for f in spec.f if not f['eq'].startswith(a.name+' = ')];spec.q.pop(a.name,None)
+            spec.unused.append({'raw':a.raw,'why':f'an amount of another thing ({a.u}) the question does not ask about' if spec.lang=='en'
+                                else f'問いと関わらない別のものの量 ({a.u})'})
+        steps.append('set_aside')
     cs=[a for a in cs if a.u==tg.u]
     if not cs:no('NOTHING_OF_THE_ASKED_UNIT')
     mode=tg.mode;qs=ctx['qspan']
@@ -202,11 +295,14 @@ def _whole(spec,tg,pool,steps,ctx):
     if tg.geo:return _geometry(spec,tg,cs,steps,ctx)
     if mode=='unsure':no('HOW_MANY_MORE_OF_WHAT')
     if mode=='total':
+        # a story that tells totals of its own ('The first and second bags contain a total of 11 apples'): its parts may overlap
+        if any(re.search(r'\b(?:total|in all|altogether|together|combined)\b|合わせて|あわせて|全部で|合計',x.clause or x.span or '') for x in cs if not x.derived):
+            no('TOTALS_IN_THE_STORY')
         ht=tg.tags-(tg.np or frozenset())
         if ht and len(cs)>=2:
             # 'how many car robots does Bob have in total': only what is Bob's
             mine=[a for a in cs if _distinct(a,[x for x in cs if x is not a])&ht]
-            if mine and all(x.ref or x.used for x in cs if x not in mine):cs=mine
+            if mine and all(x.ref or x.used or x.derived for x in cs if x not in mine) and not any(_distinct(x,mine)&ht for x in cs if x not in mine):cs=mine
         if len(cs)<2:
             if len(cs)==1 and cs[0].derived:return _ask(spec,tg,cs[0],steps,ctx)
             no('TOTAL_OF_ONE')
@@ -220,8 +316,10 @@ def _whole(spec,tg,pool,steps,ctx):
         if len(live)!=2:no('NEED_NOT_TWO')
         goal=[a for a in live if a.role=='goal']
         if not goal:
-            # 'A hiking trail is 12 miles long. Rita has walked 5 miles of it': the whole is a thing's, what is done a person's
-            goal=[a for a in live if a.role=='state' and a.lead in ('a','an','the','one','this','that','each','every')]
+            # 'A hiking trail is 12 miles long. Rita has walked 5 miles of it': what is had or done, and the whole wanted
+            have=[a for a in live if a.role in ('act','gain') or a.verb in ('have','has','had','saved')]
+            if len(have)==1:goal=[a for a in live if a is not have[0]]
+            else:goal=[a for a in live if a.role=='state' and a.lead in ('a','an','the','one','this','that','each','every')]
         have=[a for a in live if a not in goal]
         if len(goal)!=1 or len(have)!=1:no('NEED_GOAL_NOT_TOLD')
         d=_d(spec,tg.u,f'{goal[0].name} - {have[0].name}',qs,goal[0].tags,live,role='need');steps.append('need')
@@ -239,6 +337,9 @@ def _whole(spec,tg,pool,steps,ctx):
         st=[a for a in live if a.role=='state']
         if len(st)!=2 or len(live)!=2:no('CHANGE_NOT_TWO_STATES')
         a,b=sorted(st,key=lambda x:x.order)
+        sn=ctx.get('sents') or []
+        nm=lambda x:_names(sn[x.sent]) if x.sent is not None and x.sent<len(sn) else set()
+        if nm(a) and nm(b) and nm(a)!=nm(b):no('CHANGE_OF_TWO_HOLDERS')
         sign=ctx.get('qsign')
         if sign=='loss':d=_d(spec,tg.u,f'{a.name} - {b.name}',qs,a.tags,live,role='change')
         elif sign=='gain':d=_d(spec,tg.u,f'{b.name} - {a.name}',qs,a.tags,live,role='change')
@@ -248,10 +349,17 @@ def _whole(spec,tg,pool,steps,ctx):
         # 'A box of 28 crayons has 13 broken ones. How many crayons are not broken?': the whole less the part said so
         if len(live)!=2:no('REST_NOT_TWO')
         adj=ctx.get('notadj')
-        part=[a for a in live if adj and (adj in a.adjs or adj in a.tags)];whole=[a for a in live if a not in part]
+        part=[a for a in live if adj and (adj in a.adjs or adj in a.tags or (a.verb or '')==adj or adj in (a.span or ''))];whole=[a for a in live if a not in part]
         if len(part)!=1 or len(whole)!=1 or whole[0].order>part[0].order:no('REST_WHOLE')
         d=_d(spec,tg.u,f'{whole[0].name} - {part[0].name}',qs,whole[0].tags,live,role='rest');steps.append('rest')
         return _ask(spec,tg,d,steps,ctx)
+    # the whole less its container: 'A crate of oranges weighs 18 kg. The empty crate weighs 2 kg. How much do the oranges weigh?'
+    box=[a for a in live if a.kept=='container']
+    if len(live)==2 and len(box)==1 and mode in ('amount',):
+        whole=[a for a in live if a is not box[0]][0]
+        if tg.tags&_distinct(whole,box) and not tg.tags&_distinct(box[0],[whole]):
+            d=_d(spec,tg.u,f'{whole.name} - {box[0].name}',qs,whole.tags,live,role='rest');steps.append('container')
+            return _ask(spec,tg,d,steps,ctx)
     # one amount of the asked unit that a law made, the others it was made from
     if len(live)==1 and live[0].derived:
         a=live[0]
@@ -267,7 +375,8 @@ def _whole(spec,tg,pool,steps,ctx):
     # the question names one of several amounts: the one whose words it has, and not another's
     if len(cs)>=2 and tg.tags:
         pick=[a for a in cs if _distinct(a,[x for x in cs if x is not a])&tg.tags]
-        if len(pick)==1 and pick[0].derived and all(x.ref or x.used for x in cs if x is not pick[0]):
+        if len(pick)==1 and pick[0].derived and all(x.ref or x.used or x.derived for x in cs if x is not pick[0]) and \
+                not any(_distinct(x,[pick[0]])&tg.tags for x in cs if x is not pick[0]):
             return _ask(spec,tg,pick[0],steps,ctx)
     no('NO_LAW_FOR_THE_QUESTION')
 
@@ -289,8 +398,14 @@ def _holding(spec,tg,cs,steps,ctx):
         starts=[events[0]];events=events[1:]
     if len(starts)!=1:no('HOLDING_START:'+str(len(starts)))
     s=starts[0]
-    # the question asks about the holder of the start, not another one the story names
+    # the question asks about the holder of the start, not another one the story names; what happened was done by that
+    # holder (or to a place: 'The fish tank had 22 fish. Ben added 8 more fish')
     sn=ctx.get('sents') or []
+    own=_names(sn[s.sent]) if s.sent is not None and s.sent<len(sn) else set()
+    if own:
+        for a in events:
+            other=_names(sn[a.sent]) if a.sent is not None and a.sent<len(sn) else set()
+            if other and not other&own:no('AN_EVENT_OF_ANOTHER_HOLDER')
     for nm in ctx.get('qnames') or ():
         if s.sent is not None and s.sent<len(sn) and nm not in sn[s.sent] and any(nm in x for i,x in enumerate(sn[:-1]) if i!=s.sent):
             no('ASKS_ANOTHER_HOLDER')
@@ -382,6 +497,8 @@ EN_FUNC=STOPW|V('how|many|much|what|find|the|of|in|did|does|do|is|are|was|were|w
 ZERO_START=re.compile(r"\b(?:start(?:s|ed)? (?:out )?(?:empty|with (?:none|nothing|no \w+))|(?:was|were|is|are) (?:completely )?empty|(?:had|has|have) no \w+ (?:at first|to (?:start|begin) with)|nobody|no one was)\b",re.I)
 
 
+VAGUE_EN=re.compile(r"\b(?:some|several|a few|few|a couple|many|a lot|lots|a while|a bit|a number of|plenty|numerous|various|a handful|"
+                    r"more than one|any)\b(?!\s+of\s+(?:the|them|those|these|it|his|her|their)\b)",re.I)
 NOT_MINE_Q=re.compile(r"\b(?:about|approximately|roughly|estimate|round(?:ed)?|nearest|shortest|longest|least|most|greatest|smallest|largest|"
                       r"fewest|minimum|maximum|same|equal|equally|average|mean)\b",re.I)
 
@@ -398,7 +515,7 @@ class _Sent:
 def read_en(text):
     try:return _read_en(text)
     except NoRead as e:return {'spec':None,'reason':'UNITS:'+str(e)}
-    except (ArithmeticError,ValueError,KeyError,IndexError,TypeError,AttributeError,re.error) as e:
+    except Exception as e:  # noqa: BLE001 - a fault of this reader is no reading, never a crash of the solve
         return {'spec':None,'reason':'UNITS:INTERNAL:'+type(e).__name__}
 
 
@@ -411,6 +528,18 @@ def _read_en(text):
     # what these laws do not read: an estimate, the least or greatest of something, making amounts the same, 'up to N'
     if NOT_MINE_Q.search(qt):no('QUESTION_NOT_FOR_THESE_LAWS')
     if re.search(r'\bup to\s+\$?\d',text,re.I):no('UP_TO')
+    stm_t=text[:q.a]
+    # an amount not said ('some girls', 'for a while', 'a few'), an event that undoes another without a number ('gave them back')
+    if VAGUE_EN.search(stm_t):no('AN_AMOUNT_NOT_SAID')
+    for mb in re.finditer(r'\b(?:back|returned|returns|return)\b',stm_t,re.I):
+        near=stm_t[max(0,mb.start()-25):mb.end()+12]
+        if not re.search(r'\d',near):no('AN_EVENT_WITHOUT_AMOUNT')
+    # things bought or wanted that have no price ('a ball and a $45 bike', 'a pencil for 15 cents and an eraser')
+    for a0,b0 in ss[:-1]+[ss[-1]]:
+        sen=text[a0:b0]
+        if re.search(r'\b(?:buy|buys|bought|purchase[sd]?|order(?:s|ed)?|want(?:s|ed)? to buy|pay(?:s)? for|paid for)\b',sen,re.I):
+            items=len(re.findall(r'\b(?:a|an|one)\s+(?:\$\d[\d.,]*\s+)?[a-z]+',sen,re.I));prices=len(re.findall(r'\$\s*\d|\d[\d.,]*\s*(?:dollars?|cents?)\b',sen,re.I))
+            if items>=2 and prices and items>prices:no('AN_ITEM_WITHOUT_PRICE')
     if len(set(re.findall(r'\b(triangle|square|rectangle|circle|pentagon|hexagon|cube|polygon)s?\b',text,re.I)))>1:no('TWO_SHAPES')
     amts=[];order=0
     for s in sents:
@@ -431,6 +560,7 @@ def _read_en(text):
     _resolve_en(text,amts,sents,tg)
     spec=Spec(text,'en',lambda u:(u or '') not in EN_MEASURE and '^' not in (u or ''))
     ctx={'qspan':qt,'convert':_econv,'notadj':tg.notadj,'sents':[text[x.a:x.b] for x in sents],
+         'equal':bool(re.search(r'\b(?:evenly|equally|equal|the same (?:number|amount))\b',text,re.I)),
          'qnames':[w for w in re.findall(r"(?<=[a-z,] )([A-Z][a-z]+)",qt) if w not in ('I',)]}
     # a question about what there is (are, is, have) after things came or went: what there is now
     if tg.mode=='amount' and not tg.per and re.search(r"\b(?:are|is|does|do|has|have)\b",qt) and any(a.role in ('gain','loss') for a in amts if a.kind=='count'):
@@ -439,12 +569,24 @@ def _read_en(text):
         if re.search(r'\b'+shape+r's?\b',text,re.I):ctx['shape']=shape
     if tg.mode=='diff':ctx['diff_order']=tg.kind
     if tg.mode=='change':ctx['qsign']=tg.verb
+    ctx['fact']=_fact_en
+    if tg.u=='year':
+        for a in amts:
+            if a.inq and a.kind=='count' and a.u=='year':
+                if re.search(r'\b(?:in|after)\s+$',text[max(0,a.pos-6):a.pos],re.I) or re.match(r'\s*years?\s+(?:from now|later)',text[a.end:a.end+20],re.I):a.kept='shift+'
+                elif re.match(r'\s*years?\s+ago',text[a.end:a.end+12],re.I):a.kept='shift-'
+    # 'Kim had 4 dollars and 50 cents. How many cents does she have?': what was had, asked of now, with nothing told between
+    past=[a for a in amts if a.kind=='count' and not a.inq]
+    if tg.mode in ('amount','now') and re.search(r"\b(?:does|do)\b[^?]*\bhave\b|\b(?:has|have)\b",qt,re.I) and not re.search(r"\b(?:did|had|was|were)\b",qt,re.I) and \
+            past and all((a.verb or '') in ('had','was','were','owned','kept','held') for a in past):
+        no('ASKS_NOW_OF_WHAT_WAS')
     if ZERO_START.search(text):
         amts.append(Amt(kind='count',u=tg.u,zero=True,role='state',order=-1,tags=frozenset(),span=qt))
     if tg.geo=='area':
         for a in amts:spec.bind(a) if not a.zero else None
         live=[a for a in amts if a.kind=='count' and not a.zero]
         if len(live)!=2 or live[0].u!=live[1].u or live[0].u not in LENGTH or len(amts)!=2:no('AREA_NOT_TWO_SIDES')
+        if live[0].u!=tg.u:no('AREA_IN_ANOTHER_UNIT')
         n=spec.rel(f'{live[0].u}^2',f'{live[0].name} * {live[1].name}',qt,whole=False)
         ask,form=n,'area'
     else:
@@ -528,6 +670,8 @@ def _amount(text,s,i,sents):
     w1=_words(s,i+1,i+2);a.more={'more':'+','fewer':'-','less':'-'}.get(w1[0]) if w1 and head and head not in COMPAR else None
     after=_words(s,j,j+6);before=_words(s,max(0,i-6),i)
     a.span=_span(text,s,i,j)
+    cut=[m.end() for m in re.finditer(r'[,;]|\bbut\b',text[s.a:n.start])];c0=s.a+(cut[-1] if cut else 0)
+    c1=re.search(r'[,;]|\bbut\b|$',text[n.end:s.b]);a.clause=text[c0:n.end+(c1.start() if c1 else 0)]
     # the verb of the amount: right after it (4 penguins were moved), else the nearest before it in its sentence
     vb=None;a.aux=False
     for t2 in s.t[j:j+3]:
@@ -680,6 +824,9 @@ def _resolve_en(text,amts,sents,tg):
                 (lead in ('a','an','one','each','every') or (head.endswith('s') and _sing(head)!=head and a.u in MONEY)):
             per=_cu(head)
             if per==a.u or not per or per in ('it','he','she'):continue
+            # 'One cat has only 3 legs': one of them, not each of them
+            if re.search(r'\b(?:only|just|but|still|also|even|alone)\b',a.clause or '',re.I):continue
+            if lead=='one' and a.verb not in ('is','equals','makes'):continue
             if lead in ('a','an','one','each','every') or a.u in MONEY:
                 adj=[_sing(w) for w in subj[:-1] if w not in ('a','an','one','each','every','the') and w not in EN_FUNC]
                 if 'of' in subj:adj=[]
@@ -732,8 +879,28 @@ def _resolve_en(text,amts,sents,tg):
         if a.kind=='count':a.role=_role_en(a)
 
 
+INTENT_EN=re.compile(r"\b(?:plans?|planned|planning|wants?|wanted|hopes?|hoped|wish(?:es|ed)?|will|would|going to|tomorrow|tonight|next|might|may|"
+                     r"should|could|intends?|expects?|tries|trying|try|decides? to|is about to|later today)\b",re.I)
+def _fact_en(c,u):
+    """'a spider has 8 legs' (fpl.KNOWN_FACTS): the number of u one c has, said as the checker reads it"""
+    from .fpl import KNOWN_FACTS
+    for art in ('a','an'):
+        for w in (u+'s',{'foot':'feet'}.get(u,u+'s')):
+            said=f'{art} {c.u} has {{}} {w}'
+            for k,v in KNOWN_FACTS.items():
+                if k.startswith(f'{art} {c.u} has ') and k.endswith(' '+w):return (v,k)
+    return None
+
+
 def _role_en(a):
-    """what happened to an amount: 'state' (there was, there is, was left), 'gain', 'loss', 'act' (read, walked)"""
+    """what happened to an amount: 'state' (there was, there is, was left), 'gain', 'loss', 'act' (read, walked); an
+    event only planned or wished ('plans to give 4 apples tomorrow') is no event"""
+    r=_role_en0(a)
+    if r in ('gain','loss','act') and a.clause and INTENT_EN.search(a.clause):return 'intent'
+    return r
+
+
+def _role_en0(a):
     v=a.verb
     if v is None:return 'state'
     if a.src=='after':
@@ -742,6 +909,9 @@ def _role_en(a):
         if v in E_LOSS or v in LEAVE:return 'loss'
         return 'state'
     if v in ('need','needs','needed','want','wants','wanted','requires','required','costs','cost'):return 'goal'
+    if a.u in MONEY and (v in ('bought','buys','buy','spent','spends','spend','paid','pays','pay','purchased','ordered','rented') or re.search(r'\bfor\s*\$?\s*$',a.clause[:max(0,(a.clause or '').find(a.raw))] if a.clause else '')):
+        return 'loss'
+    if a.u in MONEY and v in ('sold','sells','sell','earned','earns','earn','made','makes','received','got','gets','found','saved'):return 'gain'
     if v in E_STATE or v in HAVE:return 'state'
     if v in E_GAIN:return 'gain'
     if v in E_LOSS:return 'loss'
@@ -811,8 +981,8 @@ def _question_en(text,q,amts,sents):
         mh=re.search(r"\bhow (long|far|tall|high|old|heavy|wide|deep)\b",low)
         kind=mk.group(1) if mk else None
         if kind in ('number','total','sum','amount') :
-            mo=re.search(r"\b(?:number|total|sum|amount) of ([a-z]+)",low)
-            if mo:tg.u=_cu(mo.group(1))
+            mo=re.search(r"\b(?:number|total|sum|amount) of (?:the |their |his |her |its |all |our |my |your )?([a-z]+)",low)
+            if mo:tg.u='year' if mo.group(1) in ('ages','age') else _cu(mo.group(1))
         word=kind or (mh.group(1) if mh else None)
         if re.search(r"\bwhat (?:does|did|do|will)\b.*\bcost\b|\bhow much (?:does|did|do|will|would)\b.*\b(?:cost|pay|spend|charge)\b|\bhow much money\b",low):word='cost'
         if re.search(r"\bhow much (?:does|did|do|will|would)\b.*\bweigh\b|\bwhat distance\b",low):word='weight' if 'weigh' in low else 'distance'
@@ -855,4 +1025,354 @@ def _question_en(text,q,amts,sents):
     qv=next((w for w in re.findall(r"[a-z]+",asked) if w in E_LOSS or w in E_GAIN),None)
     if tg.mode=='amount' and re.match(r"\s*how (?:many|much)\b",asked) and qv and sum(1 for a in amts if a.kind=='count' and not a.inq and a.verb and (a.verb in E_STATE or a.verb=='left'))>=2:
         tg.mode='change';tg.verb='loss' if qv in E_LOSS else 'gain'
+    return tg
+
+
+# ============================================================================= Japanese
+# the counters, and one way to write each (the units of the reading); container words a rate may be per ('9こ入りのかご')
+from . import reader_ja as _J
+_JC=dict(_J._C)
+_JC.update({'ぱい':'杯','ばい':'杯','章':'章','しょう':'章','晩':'晩','ばん':'晩','試合':'試合','しあい':'試合','ダース':'ダース','カップ':'カップ',
+            'ひき':'匹','びき':'匹','ぴき':'匹','さい':'才','つ':'個','か所':'か所','ヶ所':'か所','m²':'m^2','cm²':'cm^2','km²':'km^2','往復':'往復'})
+JCNT='|'.join(sorted(map(re.escape,_JC),key=len,reverse=True))
+J_MEASURE={'kg','g','t','km','m','cm','mm','L','mL','dL','時間','分','秒','日','週','か月','年','度','円','才','m^2','cm^2','km^2'}
+J_CONV={('m','cm'):(100,'1 m = 100 cm'),('km','m'):(1000,'1 km = 1000 m'),('cm','mm'):(10,'1 cm = 10 mm'),('m','mm'):(1000,'1 m = 1000 mm'),
+        ('kg','g'):(1000,'1 kg = 1000 g'),('L','mL'):(1000,'1 L = 1000 mL'),('L','dL'):(10,'1 L = 10 dL'),('dL','mL'):(100,'1 dL = 100 mL'),
+        ('t','kg'):(1000,'1 t = 1000 kg'),('時間','分'):(60,'1時間 = 60分'),('分','秒'):(60,'1分 = 60秒'),('週','日'):(7,'1週間 = 7日'),
+        ('年','か月'):(12,'1年 = 12か月'),('日','時間'):(24,'1日 = 24時間'),('ダース','個'):(12,'1ダース = 12個')}
+def _jconv(a,b):return J_CONV.get((a,b))
+J_GAIN=re.compile(_J.PLUS)
+J_LOSS=re.compile(_J.MINUS+r'|うつり|移り|うつっ|移っ|出ていき|出て行')
+J_LEFT=re.compile(r'のこ|残')
+J_HAVE=re.compile(r'持って|もって|ためて|貯めて|ためました|貯めました')
+J_CMP={'多':'+','少な':'-','若':'-','年上':'+','年下':'-','高':'+','低':'-','長':'+','短':'-','重':'+','軽':'-','安':'-','大き':'+','小さ':'-',
+       '遠':'+','近':'-','早':'-','おそ':'+','遅':'+','広':'+','せま':'-','狭':'-'}
+J_CMPRE='|'.join(sorted(map(re.escape,J_CMP),key=len,reverse=True))
+J_TOTAL=re.compile(r'全部で|ぜんぶで|合わせて|あわせて|合計|ごうけい|みんなで|両方|りょうほう|全体で|合わせると|あわせると|この\d+(?:週間|日間|日|か月|年)')
+J_NOW=re.compile(r'今(?!日|週|月|年|度|回)|(?:^|、)\s*いま|なりましたか|なりますか|最後|さいご')
+J_NEED=re.compile(r'あと\s*何|あと\s*いくら|まだ\s*何|足りな|たりな|必要')
+J_DIFF=re.compile(r'(?:何|いくつ|いくら)[^。]*?(?:多い|少ない|多く|少なく|長い|短い|高い|安い|ちがい|違い)|差')
+J_FUNC=set('こと もの とき ところ ため よう それ これ その この あの 何 いくつ いくら 全部 ぜんぶ 合計 あと まだ 今 いま 1人 1つ'.split())
+# what is said of a holder (its weight, length, price), not a holder
+J_PROP=set('体重 重さ おもさ 長さ ながさ 高さ たかさ 身長 しんちょう ねだん 値段 代金 だいきん 時間 きょり 距離 道のり みちのり 面積 数 かず 点 年れい 年齢 量 速さ はやさ 全長 料金 運賃'.split())
+
+
+def _jtags(s):
+    """the nouns of a clause: what comes before a particle (は が を の に で と も より から)"""
+    out=set()
+    for m in re.finditer(r'([一-龯ァ-ヶーa-zA-Zぁ-ん々]+?)(?:さん|くん|ちゃん)?(?=は|が|を|の|に|で|と|も|より|から|へ|、)',s):
+        w=m.group(1)
+        w=re.sub(r'^(?:[ぁ-ん]{1,2})(?=[一-龯ァ-ヶー])','',w)
+        w=re.sub(r'(?:入り|いり|だけ|用|たち)$','',w)
+        if w and w not in J_FUNC and w not in J_PROP and not re.fullmatch(r'[ぁ-ん]{1,2}',w) and not re.search(r'\d',w) and not w.startswith('何'):out.add(w)
+    return frozenset(out)
+
+
+def read_ja_text(text):
+    """the Japanese front end on its own (the guards of reader_ja.read are its caller's)"""
+    t=_J._norm(text);sents=_J._sents(t)
+    if len(sents)<1:return {'spec':None,'reason':'UNITS:EMPTY'}
+    q=_J._question(sents)
+    if q is None:return {'spec':None,'reason':'UNITS:NO_QUESTION'}
+    r=form_ja(t,sents[:-1],q)
+    if isinstance(r,dict):r['text']=text;return {'spec':r}
+    return {'spec':None,'reason':'UNITS:'+str(r)}
+
+
+def form_ja(t,stm,q):
+    """a form of reader_ja (its guards are run before it): a reading, or the reason it is not read"""
+    try:return _read_ja(t,stm,q)
+    except NoRead as e:return str(e)
+    except Exception as e:  # noqa: BLE001 - a fault of this reader is no reading, never a crash of the solve
+        return 'INTERNAL:'+type(e).__name__
+
+
+def _jcounter(s,e):
+    m=re.match(r'\s*('+JCNT+r')',s[e:])
+    return (_JC[m.group(1)],e+m.end()) if m else (None,e)
+
+
+def _read_ja(t,stm,q):
+    if re.search(r'何\s*(?:'+JCNT+r')?\s*目|何番|何位|何時(?!間)|何曜|何月|何日目',q):no('ASKS_A_POSITION')
+    if re.search(r'いちばん|一番|最も|もっとも|最大|最小|最低|最高|同じ|ひとしく|平均|およそ|約|四捨五入|切り上げ|切り捨て',q):no('QUESTION_NOT_FOR_THESE_LAWS')
+    sents=stm+[q];amts=[];order=0;pos=0;starts=[];restate=[];frames=set()
+    for si,s in enumerate(sents):
+        nums=N.find(s)
+        for n in nums:
+            if n.kind=='ordinal':continue
+            if si==len(sents)-1 and n.value==1 and re.match(r'1\s*(?:'+JCNT+r')(?:の[^\s、。]{1,6}?)?(?:分|あたり|当たり)?(?:は|に|が|には|では)?\s*(?:何|いくら)',s[n.start:]):continue
+            fr=re.match(r'1\s*('+JCNT+r')\s*(?:のうち|の中で|のなかで)',s[n.start:])
+            if fr and si<len(sents)-1:frames.add(_JC[fr.group(1)]);restate.append(n.raw);continue
+            fq=re.match(r'1\s*('+JCNT+r')\s*(?:で|に|では)',s[n.start:])
+            if fq and si==len(sents)-1 and n.value==1 and _JC[fq.group(1)] in frames:restate.append(n.raw);continue
+            if si==len(sents)-1 and re.search(r'この\s*$',s[:n.start]) and re.match(r'\s*(?:週間|日間|か月|ヶ月|年間|時間|日)',s[n.end:]):
+                restate.append(n.raw);continue
+            if re.match(r'\s*つの辺',s[n.end:]) and re.search(r'三角形|四角形|長方形|正方形',''.join(sents)):restate.append(n.raw);continue
+            a=_jamount(s,si,n,nums,si==len(sents)-1)
+            if a is None:continue
+            a.order=order;order+=1;amts.append(a)
+    if not amts:no('NO_AMOUNTS')
+    # '87点から92点にのびました': the value before and the value after the change
+    for a,b in zip(amts,amts[1:]):
+        if a.verb=='from' and b.sent==a.sent and b.u==a.u and re.match(r'\s*(?:'+JCNT+r')?\s*から\s*$',sents[a.sent][a.end:b.pos]):
+            b.role='state';b.verb='to'
+    tg=_jquestion(q,amts,sents);_FACT_Q['q']=q
+    _jresolve(amts,sents,tg)
+    # '2人の年れいの合計': the two whose ages are told, said again
+    if tg.u=='才':
+        ages=[a for a in amts if a.u=='才' and not a.inq]
+        for a in [x for x in amts if x.inq and x.u=='人' and x.v==len(ages)]:amts.remove(a);restate.append(a.raw)
+    spec=Spec(t,'ja',lambda u:(u or '') not in J_MEASURE and '^' not in (u or ''))
+    # 'the 1 of the question' (1人あたり何円, 1箱には何本): the unit asked, not an amount
+    for m in re.finditer(r'(?<![\d.])1\s*(?:'+JCNT+r')(?:の[^\s、。]{1,6}?)?(?:分|あたり|当たり)?(?:は|に|が|には|では)?\s*(?:何|いくら)',q):
+        spec.unused.append({'raw':'1','why':'「1…何」の1 (問いの単位)'})
+    for raw in restate:spec.unused.append({'raw':raw,'why':'話の期間や形の言いかえ (量ではない)'})
+    ctx={'qspan':q,'convert':_jconv,'notadj':tg.notadj,'sents':sents,'qnames':re.findall(r'([一-龯ァ-ヶーぁ-ん]{1,6}?)(?:さん|くん|ちゃん)',q),
+         'equal':bool(re.search(r'同じ数|おなじ数|等分|とうぶん|ずつ|均等|同じだけ|同じように',t))}
+    if tg.mode=='diff':ctx['diff_order']=tg.kind
+    if tg.mode=='change':ctx['qsign']=tg.verb
+    ctx['fact']=_fact_ja
+    if tg.u=='才':
+        for a in amts:
+            if a.inq and a.kind=='count' and a.u=='年' and re.match(r'\s*年\s*(?:後|ご|たった|経った)',q[a.end:a.end+6]):a.kept='shift+';a.u='才'
+            elif a.inq and a.kind=='count' and a.u=='年' and re.match(r'\s*年\s*前',q[a.end:a.end+4]):a.kept='shift-';a.u='才'
+    for shape,w in (('triangle','三角形'),('square','正方形'),('rectangle','長方形')):
+        if w in t:ctx['shape']=shape
+    if re.search(r'誰も|だれも|何も|なにも|からっぽ|空っぽ|空で',''.join(stm)) and tg.mode in ('now','left'):
+        amts.append(Amt(kind='count',u=tg.u,zero=True,role='state',order=-1,tags=frozenset(),span=q))
+    if tg.geo=='area':
+        for a in amts:spec.bind(a)
+        live=[a for a in amts if a.kind=='count']
+        if len(live)!=2 or live[0].u!=live[1].u or len(amts)!=2:no('AREA_NOT_TWO_SIDES')
+        if live[0].u!=tg.u:no('AREA_IN_ANOTHER_UNIT')
+        n=spec.rel(f'{live[0].u}^2',f'{live[0].name} * {live[1].name}',q,whole=False)
+        return spec.done(n,'area')
+    if any(a.zero for a in amts):ask,form=_compose_zero(t,amts,tg,spec,ctx)
+    else:ask,form=compose(t,'ja',amts,tg,spec,ctx)
+    return spec.done(ask,form)
+
+
+def _jamount(s,si,n,nums,inq):
+    e=n.end;c,e2=_jcounter(s,e)
+    a=Amt(v=n.value,raw=n.raw,sent=si,inq=inq,kind='count',pos=n.start,end=n.end)
+    a.noun=_noun_before(s,a)
+    clause_a=max(s.rfind('、',0,n.start),-1)+1;clause_b=s.find('、',e2);clause_b=len(s) if clause_b<0 else clause_b
+    clause=s[clause_a:clause_b];a.span=s[max(clause_a,n.start-8):min(len(s),e2+6)].strip('、。 ') or s
+    before=s[clause_a:n.start];after=s[e2:clause_b]
+    if not re.search(r'[ぁ-ん]{2,}',after) and clause_b<len(s):after=s[e2:]       # a list: the verb at the end is said of each
+    a.tags=_jtags(before)|_jtags(after)
+    if n.kind=='jfrac' or (n.kind=='half'):
+        # 'その3分の1', 'Yの半分', 'ねだんの5分の1だけ安く'
+        a.kind='frac';a.u=None
+        if re.search(r'(?:その|それの)\s*$',s[max(0,n.start-4):n.start]) or n.kind=='half' and re.search(r'その\s*$',s[max(0,n.start-4):n.start]):a.of='@prev'
+        else:
+            m=re.search(r'([^\s、。のはが]+)の\s*$',s[clause_a:n.start])
+            a.of=('@than',(m.group(1),)) if m else '@prev'
+        if re.match(r'(?:だけ)?\s*(?:安|やす|引|びき|割引|わりびき)',s[e:]):a.op='off'
+        if n.kind=='half' and re.match(r'\s*の長さ|\s*の重さ|\s*です|\s*の',s[e:]):a.kind='cmp';a.op='*';a.u=None
+        a.tags=_jtags(s[clause_a:n.start])
+        return a
+    if c is None:
+        if re.match(r'\s*倍',s[e:]):
+            a.kind='cmp';a.op='*';a.u=None
+            m=re.search(r'([^\s、。のはが]+)の\s*$',s[clause_a:n.start])
+            a.of=('@than',(m.group(1),)) if m else '@prev';a.tags=_jtags(s[clause_a:n.start])-({m.group(1)} if m else set())
+            return a
+        no('NO_COUNTER:'+n.raw)
+    a.u=c
+    mx=re.match(r'\s*の\s*([一-龯ァ-ヶー]{1,4})',s[e2:])
+    if c=='個' and mx and s[e:e2].strip() in ('つ',):a.u=_JC.get(mx.group(1),mx.group(1))
+    # 'みかん入りの箱の重さは18kg、箱だけの重さは2kg': the container alone
+    if re.search(r'(?:だけ|のみ|空の|から(?:っぽ)?の)[^、。0-9]{0,6}$',before):a.kept='container'
+    # 'N C から M C に': a value before and after a change
+    if re.match(r'\s*から',s[e2:]):a.role='state';a.verb='from'
+    # the verb said of it: what follows in its clause
+    if a.verb=='from':pass
+    elif J_LEFT.search(after[:8]) and re.search(r'(?:て|で)(?:い|お)|ました|ます',after):a.role='state';a.verb='left'
+    elif J_LOSS.search(after) and not re.search(r'ずつ',after[:3]):a.role='loss';a.verb=J_LOSS.search(after).group(0)
+    elif J_GAIN.search(after):a.role='gain';a.verb=J_GAIN.search(after).group(0)
+    elif J_HAVE.search(after):a.role='state';a.verb='have'
+    elif re.search(_J.STATE,after):a.role='state'
+    elif re.search(r'(?:き|ぎ|し|ち|に|び|み|り|い|え|け|せ|て|ね|べ|め|れ)ました',after):a.role='act';a.verb='did'
+    else:a.role='state'
+    # a rate: 'N C ずつ', '1 C1 に N C', 'C1 につき', '各C1 に', '毎C1', '1 C1 N C', 'N C入りの X', '時速N km'
+    pre=s[max(clause_a,n.start-12):n.start]
+    if re.search(r'時速\s*$',pre):a.kind='rate';a.per='時間';return a
+    if re.search(r'分速\s*$',pre):a.kind='rate';a.per='分';return a
+    if re.search(r'秒速\s*$',pre):a.kind='rate';a.per='秒';return a
+    m=re.match(r'\s*入り(?:の|で)\s*([^\s、。をがはでに0-9]{1,6}?)(?:を|が|に|で|は|、|。|$)',s[e2:])
+    if m:
+        cont=m.group(1);a.kind='rate';a.per=_JC.get(cont,cont);return a
+    m=re.search(r'(?:(?<![\d.])1\s*('+JCNT+r')(?!目)|各\s*('+JCNT+r'|[^\s、。0-9にで]{1,3})|毎\s*('+JCNT+r'|[^\s、。0-9にで]{1,3})|([^\s、。0-9]{1,4}?)(?:につき|あたり|ごとに))\s*(?:に|で|は)?\s*(?:[^\s、。0-9]{0,8}?)$',s[clause_a:n.start])
+    one_ok=m and m.group(1) and (re.search(r'1\s*(?:'+JCNT+r')\s*(?:に|で|あたり|当たり|につき|分)',s[clause_a:n.start]) or re.match(r'\s*ずつ',s[e2:]) or c=='円'
+                                 or not _jconv(_JC[m.group(1)],c))     # '1m30cm' is one length, '1日4往復' a rate
+    if m and (one_ok or m.group(2) or m.group(3) or m.group(4)):
+        g=m.group(1) or m.group(2) or m.group(3) or m.group(4)
+        a.kind='rate';a.per=_JC.get(g,g)
+        if m.group(1):a.base='@one'
+        return a
+    if re.match(r'\s*ずつ',s[e2:]):a.kind='rate';a.per='@each'
+    mn=re.search(r'(?:^|[、はがをにでとのもへ])([一-龯ァ-ヶーぁ-ん]{1,6}?)\s*$',s[clause_a:n.start])
+    if c=='円' and a.kind=='count' and mn and mn.group(1) not in J_PROP and mn.group(1) not in J_FUNC:
+        a.kept=('price_of',mn.group(1))
+    # a comparison: 'YよりN C 多い', 'N C 短く'
+    mc=re.match(r'\s*(?:だけ)?\s*('+J_CMPRE+r')',s[e2:])
+    if mc and a.kind=='count':
+        a.kind='cmp';a.op=J_CMP[mc.group(1)]
+        m=re.search(r'([^\s、。のはが]+?)(?:さん|くん)?より',s[clause_a:n.start])
+        a.of=('@than',(m.group(1),)) if m else '@prev'
+        a.tags=_jtags(s[clause_a:n.start])-({m.group(1)} if m else set())
+    return a
+
+
+def _jresolve(amts,sents,tg):
+    for x,a in enumerate(amts):
+        if a.kind=='rate' and a.base=='@one':
+            # the 1 of '1日20分ずつ', '1箱300円' is the rate's base, bound with it
+            one=[b for b in amts if b.sent==a.sent and b.order==a.order-1 and b.v==1 and b.u==a.per]
+            a.base=one[0] if one else None
+            if one:one[0].kept='base'
+        if a.kind=='rate' and a.per=='@each':
+            # 'みんなが3こずつもらいました': each of the other amount of its sentence (or of the problem)
+            sen=sents[a.sent]
+            if re.search(r'ずつ[^。]*?(?:分け|わけ|配|くば|入れ|いれ|つめ|詰め|はり|貼り|のせ|乗せ|ならべ|並べ|植え|うえ)',sen[a.end:]) and tg.u!=a.u and \
+                    not any(b.kind=='count' and (b.u==tg.u or b.noun==tg.u) for b in amts):
+                # '1dLずつコップに分けると、何ぱい分': put out so much to each of what the question counts
+                a.per=tg.u;continue
+            cs=[b for b in amts if b.sent==a.sent and b is not a and b.kind=='count' and b.u!=a.u]
+            clause=sen[max(sen.rfind('、',0,a.pos),-1)+1:a.pos]
+            mr=re.search(r'([一-龯ァ-ヶーぁ-ん]{1,6}?)の(?:たびに|ごとに)|([一-龯ァ-ヶー]{1,5}|[ぁ-ん]{2,5})(?:に|へ)(?![ぁ-ん]*ずつ)[^、。]*$',clause)
+            if not cs and mr:
+                # '箱に6こずつ', 'たん生日のたびに500円ずつ': each of the receiver its clause names, counted elsewhere
+                w=mr.group(1) or mr.group(2);w=_JC.get(w,w)
+                cs=[b for b in amts if b is not a and b.kind=='count' and b.u!=a.u and (b.u==w or b.noun==w or any(w in x for x in b.tags))]
+                if not cs:no('EACH_RECEIVER_NOT_COUNTED')
+            elif not cs:cs=[b for b in amts if b is not a and b.kind=='count' and b.u!=a.u]
+            if len(cs)!=1:no('EACH_OF_WHAT')
+            a.per=cs[0].u
+    # '大人1400円、子ども900円 ... 大人2人と子ども1人': the price for each one of them
+    for a in amts:
+        if isinstance(a.kept,tuple) and a.kept[0]=='price_of':
+            w=a.kept[1];a.kept=None
+            if any(b is not a and b.kind=='count' and b.u in J_GENERIC and _noun_before(sents[b.sent],b)==w for b in amts):
+                a.kind='rate';a.per=w
+    for r in [x for x in amts if x.kind=='rate']:
+        for b in amts:
+            if b.kind=='count' and b.u in J_GENERIC and b.noun and b.noun==r.per:b.u=b.noun
+    # 'クモの足は8本です。クモ7ひきの足は': what one has, asked of several
+    for a in amts:
+        if a.kind!='count' or a.inq or a.u!=tg.u:continue
+        qs=[b for b in amts if b.inq and b.kind=='count' and b.u!=a.u and b.u in J_GENERIC]
+        if len(qs)==1 and _noun_before(sents[qs[0].sent],qs[0]) and re.match(r'\s*'+re.escape(_noun_before(sents[qs[0].sent],qs[0]))+r'\s*の',sents[a.sent]):
+            a.kind='rate';a.per=qs[0].u
+    # 'パン2こを作るのに小麦粉を4カップ使います。パン6こでは': the one for the other, when the question names another
+    for a in amts:
+        if a.kind!='count' or a.inq:continue
+        nx=[b for b in amts if b.sent==a.sent and b.order==a.order+1 and b.kind=='count' and b.u!=a.u]
+        if not nx:continue
+        b=nx[0];sen=sents[a.sent];between=sen[a.end:b.pos]
+        if re.match(r'\s*(?:'+JCNT+r')?\s*(?:を|の)?\s*(?:作る|つくる|焼く|やく|走る|はしる|進む|すすむ|作り|焼き)?(?:のに|には|ために)',between) and \
+                any(c.inq and c.kind=='count' and c.u==a.u for c in amts):
+            b.kind='rate';b.per=a.u;b.base=a
+    # 'Xの足は8本です。X7ひきの足は': an amount said of one thing, asked for several
+    for a in amts:
+        if a.kind=='cmp' or a.kind=='frac':
+            how=a.of
+            if how=='@prev':
+                pv=[b for b in amts if b.order<a.order and b.kind=='count']
+                if not pv:no('COMPARED_TO_NOTHING')
+                a.of=pv[-1]
+            elif isinstance(how,tuple) and how[1][0] in J_PROP:
+                pv=[b for b in amts if b.order<a.order and b.kind=='count']
+                if not pv:no('COMPARED_TO_NOTHING')
+                a.of=pv[-1]
+            elif isinstance(how,tuple):
+                w=re.sub(r'^(?:[ぁ-ん]{1,2})(?=[一-龯ァ-ヶー])','',how[1][0])      # as the tags are written ('お父さん': 父)
+                w=re.sub(r'(?:入り|いり|だけ|用|たち)$','',w)
+                # the amount whose words hold the word compared to ('Yの6倍'); not a longer one that holds them ('スコティッシュ
+                # ユニコーンの3分の2' is not of the 27 ユニコーン)
+                cs=[b for b in amts if b is not a and b.kind=='count' and any(w==x or w in x for x in b.tags) and b.order<a.order]
+                if len(cs)!=1:
+                    cs=[b for b in amts if b is not a and b.kind=='count' and b.order<a.order][-1:] if w in ('その','それ') else cs
+                if len(cs)!=1:no('COMPARED_TO_WHICH')
+                a.of=cs[0]
+            if a.kind=='cmp' and a.op in '+-' and not a.u:a.u=a.of.u
+    amts[:]=[a for a in amts if a.kept!='base' or True]
+    for a in amts:
+        if a.kind in ('count','rate') and not a.u:no('NO_UNIT')
+
+
+J_GENERIC={'個','人','本','枚','匹','頭','羽','台','冊','杯','箱','袋'}
+def _noun_before(s,a):
+    """the noun right before a number with no particle: '大人2人' -> 大人, 'クモ7ひき' -> クモ"""
+    m=re.search(r'(?:^|[、。はがをにでとのもへや])([一-龯ァ-ヶーぁ-ん]{1,6}?)\s*$',s[:a.pos])
+    if not m:return None
+    w=m.group(1)
+    if re.fullmatch(r'[ぁ-ん]+',w) and w[-1] in 'はがをにでとのもへやも':
+        if len(w)>2 and w[-1] in 'はがをにでとへや':return w[:-1]       # 'にわとりが'
+        return None
+    if len(w)>1 and w[-1] in 'はがをにでとのへや':w=w[:-1]          # not も: 子ども, くも
+    return w
+
+
+J_FACTS={('足','本'):{**{w:4 for w in '犬 いぬ ねこ 猫 うし 牛 うま 馬 ぶた 豚 ひつじ 羊 うさぎ ライオン ぞう ゾウ きりん キリン 子犬 子ねこ'.split()},
+                     **{w:2 for w in 'にわとり ニワトリ 鳥 とり すずめ アヒル ハト ペンギン ダチョウ'.split()},
+                     **{w:8 for w in 'クモ くも タコ たこ'.split()},**{w:6 for w in '虫 こん虫 昆虫 アリ あり カブトムシ チョウ'.split()}},
+         ('車輪','個'):{'自転車':2,'三輪車':3,'車':4,'自動車':4,'一輪車':1},('タイヤ','本'):{'自転車':2,'三輪車':3,'車':4,'自動車':4}}
+_EN_OF={'犬':'dog','いぬ':'dog','ねこ':'cat','猫':'cat','うし':'cow','牛':'cow','うま':'horse','馬':'horse','ぶた':'pig','豚':'pig','ひつじ':'sheep','羊':'sheep',
+        'うさぎ':'rabbit','ライオン':'lion','ぞう':'elephant','ゾウ':'elephant','きりん':'giraffe','キリン':'giraffe','子犬':'puppy','子ねこ':'kitten',
+        'にわとり':'chicken','ニワトリ':'chicken','鳥':'bird','とり':'bird','すずめ':'bird','アヒル':'duck','ハト':'bird','ペンギン':'penguin','ダチョウ':'ostrich',
+        'クモ':'spider','くも':'spider','虫':'insect','こん虫':'insect','昆虫':'insect','アリ':'ant','あり':'ant','カブトムシ':'beetle','チョウ':'butterfly',
+        '自転車':'bicycle','三輪車':'tricycle','車':'car','自動車':'car','一輪車':'unicycle'}
+def _fact_ja(c,u):
+    """what everyone knows in Japanese ('犬7ひきの足は全部で何本'), said as the checker reads it (fpl.KNOWN_FACTS)"""
+    from .fpl import KNOWN_FACTS
+    thing=c.noun or next(iter(c.tags),None)
+    if not thing:return None
+    for (part,unit),table in J_FACTS.items():
+        if unit!=u or thing not in table:continue
+        if not re.search(part,_FACT_Q.get('q','')):continue
+        n=table[thing];en=_EN_OF.get(thing)
+        w='legs' if part=='足' else 'wheels'
+        k=f"{'an' if en and en[0] in 'aeiou' else 'a'} {en} has {n} {w}" if en else None
+        if k and KNOWN_FACTS.get(k)==n:return (n,k)
+        from .fpl import KNOWN
+        from fractions import Fraction as F
+        if F(n) in KNOWN:return (n,f'{thing}の{part}は{n}{u} (common knowledge)')
+    return None
+_FACT_Q={}
+
+
+def _jquestion(q,amts,sents):
+    tg=Tgt(mode='amount')
+    m=re.search(r'何\s*('+JCNT+r')',q)
+    if m:tg.u=_JC[m.group(1)]
+    elif 'いくら' in q:tg.u='円'
+    elif 'いくつ' in q:
+        m2=re.search(r'([^\s、。のはがを]+)は\s*(?:全部で|あわせて)?\s*いくつ',q)
+        tg.u=re.split(r'(?:た|る|の|に)',m2.group(1))[-1] if m2 else None
+        if tg.u and re.fullmatch(r'(?:数|かず)',tg.u):tg.u=None
+        if tg.u:tg.u=_JC.get(tg.u,tg.u)
+    if not tg.u:no('ASKED_UNIT')
+    if tg.u in ('m^2','cm^2','km^2'):tg.geo='area';tg.u=tg.u.split('^')[0]
+    if re.search(r'まわりの長さ|周りの長さ|周の長さ',q):tg.geo='perimeter'
+    tg.tags=_jtags(q)
+    mp=re.search(r'1\s*('+JCNT+r')(?:の[^\s、。]{1,6}?)?(?:分|あたり|当たり)?(?:は|に|が|には|では)?\s*(?:何|いくら)',q) or \
+       re.search(r'1\s*('+JCNT+r')\s*(?:あたり|当たり)',q)
+    if mp:tg.per=_JC[mp.group(1)]
+    if J_NEED.search(q):tg.mode='need'
+    elif J_DIFF.search(q):tg.mode='unsure'
+    elif re.search(r'のこ|残',q):tg.mode='left'
+    elif J_TOTAL.search(q):tg.mode='total'
+    elif J_NOW.search(q):tg.mode='now'
+    elif re.search(r'(?:安く|やすく)\s*なって',q):tg.mode='amount'
+    mn=re.search(r'([ぁ-ん一-龯]{1,4}?)(?:て|で)いない',q)
+    if mn and tg.mode=='amount':tg.mode='rest';tg.notadj=mn.group(1)
+    qw=re.search(r'何|いくつ|いくら',q);qa=q[qw.start():] if qw else q
+    qv=J_LOSS.search(qa) or J_GAIN.search(qa)
+    if tg.mode=='amount' and qv and sum(1 for a in amts if a.kind=='count' and not a.inq and a.role=='state')>=2:
+        tg.mode='change';tg.verb='loss' if J_LOSS.search(q) else 'gain'
+    if tg.mode=='amount' and not tg.per and not any(a.inq for a in amts) and re.search(r'(?:ますか|ですか)[。？?]?$',q) and any(a.role in ('gain','loss') for a in amts if a.kind=='count' and not a.inq) \
+            and any(a.role=='state' for a in amts if a.kind=='count' and not a.inq):
+        tg.mode='now'
     return tg

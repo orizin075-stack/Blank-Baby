@@ -100,6 +100,8 @@ EN = [
     ('A train has 60 seats. 41 seats are taken. How many seats are empty?', '19'),
     ('A tart is cut into 12 slices. Kim eats 2 slices and Lou eats 3 slices. How many slices are left?', '7'),
     ('Raj walked 4 kilometers every day for 6 days. How many kilometers did he walk?', '24'),
+    # round 11: the 7 days of a week is a known constant the reader by what the amounts are converts with (held before)
+    ('Raj walked 4 kilometers every day for 6 weeks. How many kilometers did he walk?', '168'),
     ('A pack of 4 muffins costs 6 dollars. How much does one muffin cost?', '1.5'),
     ('Mia is 9 years old. How old will she be in 4 years?', '13'),
     ('A tray has 30 cups. A third of them are blue. How many blue cups are there?', '10'),
@@ -111,7 +113,7 @@ EN = [
 EN_HOLD = [
     'A class has 14 boys and some girls. How many students are in the class?',      # answered 14 before
     'A train has 60 seats. Some seats are taken. How many seats are empty?',
-    'Raj walked 4 kilometers every day for 6 weeks. How many kilometers did he walk?',
+
     'Sid had 8 stickers. He got some more and now has 15 stones. How many stickers did he get?',
     'A jar has 40 marbles. A third of them are blue. How many blue marbles are there?',          # marbles are whole
     # amounts not said exactly, and a statement that something is not so

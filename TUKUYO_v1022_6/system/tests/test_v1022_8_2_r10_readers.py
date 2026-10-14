@@ -120,11 +120,13 @@ def test_japanese_traps(text, ok):
 # Found on round 10's held-out set after its one measurement (these four wrong answers were there in r9 too). The fixes
 # hold readings back only; on the development sets nothing they read before changed. The texts are the held-out
 # set's own: it was spent by that measurement and is development material from here on.
+# Round 11: the reader by what the amounts are (reader_units) reads two of them, rightly (the held-out set's own answers,
+# 7 and 68); the wrong answer is never given again
 AFTER_HELD_OUT_WRONG = [
-    'Kyle put 4 more pencils into his pencil case. How many pencils are in the case now?',     # no start: was 4
-    'ハイキングコースは全長12kmです。あやさんは5km歩きました。ゴールまであと何kmですか。',          # 歩きました: was 17
-    'ふでばこにえんぴつを4本足しました。ふでばこのえんぴつは何本になりましたか。',                    # no start (the core): was 4
-    'にんじんを1列に11本ずつ7列植えました。うさぎが9本食べました。にんじんは何本のこっていますか。',  # eaten as the start: was 86
+    ('Kyle put 4 more pencils into his pencil case. How many pencils are in the case now?', '4', None),     # no start
+    ('ハイキングコースは全長12kmです。あやさんは5km歩きました。ゴールまであと何kmですか。', '17', '7'),      # 歩きました
+    ('ふでばこにえんぴつを4本足しました。ふでばこのえんぴつは何本になりましたか。', '4', None),               # no start (the core)
+    ('にんじんを1列に11本ずつ7列植えました。うさぎが9本食べました。にんじんは何本のこっていますか。', '86', '68'),  # eaten as the start
 ]
 STILL_READ = [
     ('Beth has 4 packs of crayons. Each pack has 10 crayons in it. She also has 6 extra crayons. How many crayons does Beth have altogether?', '46'),
@@ -137,9 +139,10 @@ STILL_READ = [
 ]
 
 
-@pytest.mark.parametrize('text', AFTER_HELD_OUT_WRONG)
-def test_the_wrong_answers_found_on_the_held_out_set_are_held_back(text):
-    assert api.solve(text, llm='off').get('answer') is None
+@pytest.mark.parametrize('text,wrong,right', AFTER_HELD_OUT_WRONG)
+def test_the_wrong_answers_found_on_the_held_out_set_are_held_back(text, wrong, right):
+    got = api.solve(text, llm='off').get('answer')
+    assert got != wrong and got in (None, right), got
 
 
 @pytest.mark.parametrize('text,answer', STILL_READ)
