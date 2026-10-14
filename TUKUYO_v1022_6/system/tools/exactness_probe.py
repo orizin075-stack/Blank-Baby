@@ -5,7 +5,7 @@
   exactness_probe.py --end-to-end DATA [--out REPORT.json]    also through g4-solve's path with the individual DATA
                                                               (made with init; no parent, learn off): the v1022 core too
 
-Each problem of the private dev set (private_eval_sets.DEV, English and Japanese) that the child's own reader reads is
+Each problem of the private dev sets (private_eval_sets: DEV, dev_2, dev_3; English and Japanese) that the child's own reader reads is
 rewritten, one place at a time (in a statement, or in the question), so that what the answer needs is not said
 exactly: an event that did not happen or only might (ませんでした、予定、たそうです、did not, could have, almost), an amount said roughly (ぐらい、約、あまり、
 近く、about, at least, over, or more), a supposition (もし), a question about what is not so. None of the rewrites
@@ -20,7 +20,9 @@ from __future__ import annotations
 import argparse,collections,json,re,sys
 from pathlib import Path
 HERE=Path(__file__).resolve().parents[1];sys.path.insert(0,str(HERE/'src'));sys.path.insert(0,str(HERE/'tools'))
-from private_eval_sets import DEV
+from private_eval_sets import DEV,HELD_OUT,DEV_3
+# every development set: DEV, the held-out set of round 9 (dev_2 since) and the first draft of round 10's (dev_3)
+ALL_DEV={l:DEV[l]+HELD_OUT[l]+DEV_3[l] for l in ('en','ja')}
 
 CNT=r'(こ|個|まい|枚|本|人|円|ページ|才|歳|羽|km|m|cm|L|dL|mL|g|kg|台|冊|匹|ひき|分|時間|日|週間|箱|はこ|ふくろ|袋|さつ|だい)'
 JA=[(r'ました。','ませんでした。'),(r'ます。','ません。'),(r'ました','ませんでした'),(r'ます','ません'),(r'ました。','なかった。'),
@@ -87,7 +89,7 @@ def answered(text,data):
 
 
 def probe(sets=None,data=None):
-    sets=sets or DEV
+    sets=sets or ALL_DEV
     out={'problems_read':{},'rewrites':{},'read':{},'readings':[]}
     if data:out.update(answered={},answers=[])
     for lang,rules,qrules in (('en',EN,EN_Q),('ja',JA,JA_Q)):

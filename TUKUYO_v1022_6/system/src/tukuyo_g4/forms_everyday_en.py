@@ -404,7 +404,7 @@ def _rest(text,nums,sents,sk):
           re.fullmatch(rf"(?:he|she|they|[a-z]+) (?:has|have|had) (?P<st>read|used|eaten|sold|done|written) #(?P<p>\d+) (?P<Y>{W})",sk[1])
         if not b:return None
         Y=sing(b['Y'])
-        if not (Y==X or b['st']=='seated' and X=='seat' and Y in PEOPLE):return None
+        if not (Y==X or b['st']=='seated' and X in ('seat','chair','bench') and Y in PEOPLE):return None
         q=re.fullmatch(rf"how many (?P<Z>{W}) (?:are|were) (?:free|empty|left|not {b['st']}|still (?:free|empty))",sk[2]) or \
           re.fullmatch(rf"how many (?P<Z>{W}) (?:does|do) (?:he|she|they|[a-z]+) still have to (?:read|do|write|use)",sk[2])
         if not q or sing(q['Z'])!=X:return None
