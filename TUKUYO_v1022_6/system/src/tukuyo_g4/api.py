@@ -97,7 +97,9 @@ def _event_words_learned(data):
     if data is None:return True
     try:
         from tukuyo_v1022 import cognition
-        return bool(cognition.state(data).get('event_rules'))
+        rules=cognition.state(data).get('event_rules') or {}
+        # as the core counts a rule it uses: two examples behind it, and none against it
+        return any(not r.get('conflict') and len(r.get('support') or [])>=2 for r in rules.values())
     except Exception:  # noqa: BLE001 - a store it cannot read gives no knowledge of event words
         return False
 

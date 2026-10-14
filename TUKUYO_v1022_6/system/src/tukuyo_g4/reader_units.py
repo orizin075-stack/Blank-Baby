@@ -1108,7 +1108,7 @@ def _jconv(a,b):
     if a=='ダース' and b in J_GENERIC:return (12,'1ダース = 12')
     return J_CONV.get((a,b))
 J_GAIN=re.compile(_J.PLUS)
-J_LOSS=re.compile(_J.MINUS+r'|うつり|移り|うつっ|移っ|出ていき|出て行|切り取り|きりとり|切りとり|売っ|返品')
+J_LOSS=re.compile(_J.MINUS+r'|うつり|移り|うつっ|移っ|出ていき|出て行|切り取り|きりとり|切りとり|売っ')
 J_LEFT=re.compile(r'のこ|残')
 J_HAVE=re.compile(r'持って|もって|ためて|貯めて|ためました|貯めました')
 J_CMP={'多':'+','少な':'-','若':'-','年上':'+','年下':'-','高':'+','低':'-','長':'+','短':'-','重':'+','軽':'-','安':'-','大き':'+','小さ':'-',
@@ -1272,7 +1272,11 @@ def _jamount(s,si,n,nums,inq):
     if re.match(r'\s*から',s[e2:]):a.role='state';a.verb='from'
     # the verb said of it: what follows in its clause
     nd=re.search(r'\d',after)
-    if nd and not listed:after=after[:nd.start()]                 # '5個売って7個仕入れました': the 5's verb is 売って, not 仕入れ
+    if nd and not listed:
+        if re.fullmatch(r'\s*(?:と|や|、|,|か|および|及び)\s*',after[:nd.start()]):
+            # '250mLと0.5Lを使いました': a list, the verb after its last number said of each
+            ld=list(re.finditer(r'\d',after));after=after[ld[-1].end():]
+        else:after=after[:nd.start()]                 # '5個売って7個仕入れました': the 5's verb is 売って, not 仕入れ
     if a.verb=='from':pass
     elif re.search(r'(?:別|べつ|ほか|他)の[^、。]{0,8}から',s[clause_a:clause_b]):a.role='other';a.verb='other_stock'   # '別の在庫から3個'
     elif J_LEFT.search(after[:8]) and re.search(r'(?:て|で)(?:い|お)|ました|ます',after):a.role='state';a.verb='left'
