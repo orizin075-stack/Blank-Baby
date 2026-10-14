@@ -1,0 +1,175 @@
+{
+ "utc": "2026-10-14T08:38:03Z",
+ "readings": 527,
+ "variants": {
+  "unit_plural": {
+   "changed": 471,
+   "checker": {
+    "same_answer": 525,
+    "refused": 2
+   },
+   "checker_refusals": {
+    "CHECK:UNITS:total = each * groups:apple vs apple*ofs/of": 1,
+    "CHECK:UNITS:cost = ts * price_per_t:dollar vs dollar*ts/t": 1
+   },
+   "two_parents": {
+    "right": 488,
+    "abstain:UNIT_DISAGREEMENT": 1,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:SINGLE_LLM_READING": 2,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "unit_plural_english": {
+   "changed": 465,
+   "checker": {
+    "same_answer": 525,
+    "refused": 2
+   },
+   "checker_refusals": {
+    "CHECK:UNITS:total = each * groups:apple vs apple*ofs/of": 1,
+    "CHECK:UNITS:cost = ts * price_per_t:dollar vs dollar*ts/t": 1
+   },
+   "two_parents": {
+    "right": 488,
+    "abstain:UNIT_DISAGREEMENT": 1,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:SINGLE_LLM_READING": 2,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "unit_capitalized": {
+   "changed": 471,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "answer_unit_dollar_sign": {
+   "changed": 25,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "answer_unit_empty": {
+   "changed": 471,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 31,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNIT_DISAGREEMENT": 1,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "quantity_names": {
+   "changed": 527,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "span_lower_case": {
+   "changed": 494,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "span_trailing_period": {
+   "changed": 403,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "span_extra_spaces": {
+   "changed": 527,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "facts_shuffled": {
+   "changed": 526,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "numbers_as_decimals": {
+   "changed": 527,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  },
+  "eq_without_spaces": {
+   "changed": 527,
+   "checker": {
+    "same_answer": 527
+   },
+   "checker_refusals": {},
+   "two_parents": {
+    "right": 491,
+    "abstain:EVENT_NOT_ESTABLISHED": 32,
+    "abstain:EQUAL_SHARING_NOT_ESTABLISHED": 3,
+    "abstain:UNCOVERED_NUMERIC_OR_OPERATION": 1
+   }
+  }
+ }
+}

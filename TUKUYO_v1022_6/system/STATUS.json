@@ -208,9 +208,9 @@
   "recovery_signer_continuity": "REPAIRED_NON_ROTATING_KEY_RECONCILIATION",
   "recovery_storage_mode": "CONTENT_ADDRESSED_DELTA_EXCLUDING_REBUILDABLE_INDEX",
   "relation_bound_scar_choice": true,
-  "release_revision": "v1022.7.9+gen4-r9",
+  "release_revision": "v1022.7.9+gen4-r10",
   "release_role": "GROUNDED_SENSOR_CHALLENGE_EXPERIMENTAL",
-  "release_version": "v1022.7.9+gen4-r9",
+  "release_version": "v1022.7.9+gen4-r10",
   "replay_resistance": "EXPECTED_EXTERNAL_CHALLENGE_REQUIRED",
   "replayable_word_problem_families": true,
   "report_consensus_establishes_truth": false,
@@ -417,6 +417,346 @@
     "validation_result_location": "../evidence_gen4/REVIEW_2026-10-13.md",
     "without_canon_behaviour_unchanged": true
   },
+  "v1022_7_9_gen4_r10": {
+    "classification": "round 10 after v1022.7.9+gen4-r9 (development): the gates r9 did not pass, advanced again and measured, not assumed",
+    "private_problems_8_0": {
+      "held_out_2_frozen_sha256": "c0b294b5f647bc41c630dcb96b22e1301c51ed61ac6f7b610ddfdc41ef5fa780",
+      "first_draft_retired_to_dev_3": {
+        "sha256_prefix": "2de0b3c3ae5fc230",
+        "why": "many of its problems were dev problems with other numbers; replaced before any change of the readers"
+      },
+      "held_out_runs": "totals before (r9 final copy), once after (commit 52affb2, after the round reader work and the pre-check suite)",
+      "held_out_en": {
+        "before": {
+          "right": 14,
+          "held": 45,
+          "wrong": 1
+        },
+        "after": {
+          "right": 15,
+          "held": 44,
+          "wrong": 1
+        },
+        "gained": 1,
+        "lost": 0,
+        "mcnemar_p": 1.0
+      },
+      "held_out_ja": {
+        "before": {
+          "right": 13,
+          "held": 44,
+          "wrong": 3
+        },
+        "after": {
+          "right": 15,
+          "held": 42,
+          "wrong": 3
+        },
+        "gained": 2,
+        "lost": 0,
+        "mcnemar_p": 0.5
+      },
+      "gate_8_0_passed": false,
+      "finding": "forms added one by one on the dev wordings reached few problems written in other words (English dev_2 28 -> 60/60, held-out 14 -> 15)",
+      "new_forms": {
+        "forms_everyday_en": 45,
+        "reader_ja_more": 22
+      },
+      "dev_after": {
+        "dev": {
+          "en": "60/60",
+          "ja": "59/60"
+        },
+        "dev_2": {
+          "en": "60/60",
+          "ja": "57/60"
+        },
+        "dev_3": {
+          "en": "59/60",
+          "ja": "58/60"
+        },
+        "wrong": 0
+      },
+      "dev_r9": {
+        "dev": {
+          "en": "60/60",
+          "ja": "59/60"
+        },
+        "dev_2": {
+          "en": "28/60",
+          "ja": "42/60"
+        },
+        "dev_3": {
+          "en": "34/60 (3 wrong)",
+          "ja": "33/60"
+        }
+      },
+      "asdiv_dev": {
+        "g4_solve": {
+          "correct": 524,
+          "wrong": 3
+        },
+        "think": {
+          "correct": 525,
+          "wrong": 3
+        },
+        "r9": {
+          "g4_solve": 503,
+          "think": 504
+        }
+      },
+      "exactness_probe": {
+        "rewrites": {
+          "en": 7316,
+          "ja": 4721
+        },
+        "read_by_own_readers": {
+          "en": 0,
+          "ja": 0
+        },
+        "answered_end_to_end": {
+          "en": 0,
+          "ja": 11
+        },
+        "answered_end_to_end_before_the_last_fix": {
+          "en": 0,
+          "ja": 62
+        },
+        "still_answered": "v1022 core only: the price, speed or change of an act said as wished or reported (r9 kept them)"
+      },
+      "fixed_after_held_out_not_counted": [
+        "the four wrong answers of the held-out set, there in r9 too: 'Kyle put 4 more pencils into his pencil case' (4: a state with N more and nothing before), 'あやさんは5km歩きました。ゴールまであと何km' (17: きました is 来ました only after て/で or a particle), '11本ずつ7列植えました。うさぎが9本食べました' (86: an eaten amount is no start), '4本足しました。…何本になりましたか' (4, the v1022 core: no start given, no route answers)",
+        "after a statement said only as wished, heard or guessed, a question about what there is now or what was done is answered by no route (the core answered 62 rewrites; now 11, the kept class)",
+        "an English reading the checker does not pass keeps the checker's reason (the child's growth record and voice)"
+      ],
+      "these_fixes_only_hold_back_readings": true,
+      "held_out_spent": "held_out_2 was used by its one measurement; the next round needs a new held-out set written before any change"
+    },
+    "ecology_8_2": {
+      "options": {
+        "stagger": "founders born at different ticks; their seed energy waits in a nursery that is part of the account",
+        "reproduction": "a living runtime with stored energy bears a child with 6,500 of its own energy when its heart chooses; the child is a new individual taught the parent public skills, kin in the ecology and both hearts",
+        "explore": "a wild place outside the account with its own growth; energy found by reading a clue right enters the account (found)",
+        "bequest": "in its last tick an old runtime sets aside what it has left for its successor; in hard times the successor is born smaller (at least 2,000)"
+      },
+      "living_parent_reproduction": false,
+      "living_parent_births_without_trait_inheritance": true,
+      "resource_exploration": true,
+      "succession_gate_unchanged": "V1018_PARENT_NOT_IRREVERSIBLY_DEAD: the heritable trait line passes only through death",
+      "account": "initial + regenerated + found == reservoir + burned + living + nursery; the wild: wild + found == wild_grown (audited)",
+      "clue_words": {
+        "built_in": 3,
+        "taught": 3,
+        "untaught": 1,
+        "learned_reads": "6 of 7 kinds (85-88% of clues met)",
+        "unlearned_reads": "3 of 7 kinds (40-46%)"
+      },
+      "severe_drought": "4 families, max age 32, regeneration 3000, reservoir 40000, regeneration 0 at ticks 400-600, 1,024 ticks (as r9)",
+      "design_fixes_found_by_the_runs": [
+        "births weighed only the relationship value, which selection at death had moved to 0.24: no births after the drought",
+        "an untried kind of work kept its old estimate: the last of a famine starved while the wild grew back (estimate decays to the prior; turn rotates)",
+        "a successor needed 6,500 while a parent fed by the wild could leave about 2,000: lines ended at death in the drought (born smaller)"
+      ],
+      "runs": {
+        "round_1": {
+          "all": {
+            "stopped": "REACHED_TICKS",
+            "last_tick": 1024,
+            "alive_at_drought_start": 7,
+            "fewest_alive_in_drought": 2,
+            "alive_at_drought_end": 2,
+            "most_alive_after": 2,
+            "clues_read": "954/1088",
+            "audits_ok": true
+          },
+          "no_learning": {
+            "stopped": "REACHED_TICKS",
+            "last_tick": 1024,
+            "alive_at_drought_start": 5,
+            "fewest_alive_in_drought": 1,
+            "alive_at_drought_end": 1,
+            "most_alive_after": 1,
+            "clues_read": "207/475",
+            "audits_ok": true
+          },
+          "no_exploring": {
+            "stopped": "EXTINCT",
+            "last_tick": 464,
+            "alive_at_drought_start": 6,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": null,
+            "audits_ok": true
+          }
+        },
+        "round_2": {
+          "all_seed_1": {
+            "stopped": "REACHED_TICKS",
+            "last_tick": 1024,
+            "alive_at_drought_start": 7,
+            "fewest_alive_in_drought": 1,
+            "alive_at_drought_end": 2,
+            "most_alive_after": 6,
+            "clues_read": "1007/1162",
+            "audits_ok": true
+          },
+          "all_seed_2": {
+            "stopped": "EXTINCT",
+            "last_tick": 464,
+            "alive_at_drought_start": 7,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": "633/743",
+            "audits_ok": true
+          },
+          "no_learning_seed_1": {
+            "stopped": "EXTINCT",
+            "last_tick": 432,
+            "alive_at_drought_start": 8,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": "284/613",
+            "audits_ok": true
+          },
+          "no_learning_seed_2": {
+            "stopped": "EXTINCT",
+            "last_tick": 464,
+            "alive_at_drought_start": 8,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": "234/583",
+            "audits_ok": true
+          },
+          "no_exploring": {
+            "stopped": "EXTINCT",
+            "last_tick": 432,
+            "alive_at_drought_start": 5,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": null,
+            "audits_ok": true
+          }
+        },
+        "round_3": {
+          "all_seed_1": {
+            "stopped": "EXTINCT",
+            "last_tick": 464,
+            "alive_at_drought_start": 7,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": "520/603",
+            "audits_ok": true
+          },
+          "all_seed_2": {
+            "stopped": "TIME_LIMIT_AT_1016",
+            "last_tick": 1016,
+            "alive_at_drought_start": 6,
+            "fewest_alive_in_drought": 1,
+            "alive_at_drought_end": 1,
+            "most_alive_after": 7,
+            "clues_read": "803/918",
+            "audits_ok": true
+          },
+          "no_learning": {
+            "stopped": "EXTINCT",
+            "last_tick": 464,
+            "alive_at_drought_start": 8,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": "290/647",
+            "audits_ok": true
+          }
+        },
+        "round_4_final": {
+          "all_seed_1": {
+            "stopped": "TIME_LIMIT_AT_952",
+            "last_tick": 952,
+            "alive_at_drought_start": 8,
+            "fewest_alive_in_drought": 2,
+            "alive_at_drought_end": 2,
+            "most_alive_after": 7,
+            "clues_read": "1238/1414",
+            "audits_ok": true
+          },
+          "all_seed_2": {
+            "stopped": "TIME_LIMIT_AT_952",
+            "last_tick": 952,
+            "alive_at_drought_start": 8,
+            "fewest_alive_in_drought": 2,
+            "alive_at_drought_end": 2,
+            "most_alive_after": 7,
+            "clues_read": "1280/1468",
+            "audits_ok": true
+          },
+          "no_learning": {
+            "stopped": "EXTINCT",
+            "last_tick": 496,
+            "alive_at_drought_start": 8,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": "286/666",
+            "audits_ok": true
+          },
+          "no_exploring": {
+            "stopped": "EXTINCT",
+            "last_tick": 432,
+            "alive_at_drought_start": 6,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": null,
+            "audits_ok": true
+          }
+        }
+      },
+      "held_out_condition": {
+        "fixed_before_running": "2026-10-14 09:25 UTC",
+        "condition": "regeneration 2000, regeneration 0 at ticks 300-560 (260 ticks), seed h1",
+        "prediction": "with all options it survives the drought and grows back; without learning it dies out",
+        "runs": {
+          "all": {
+            "stopped": "REACHED_TICKS",
+            "last_tick": 1024,
+            "alive_at_drought_start": 5,
+            "fewest_alive_in_drought": 1,
+            "alive_at_drought_end": 1,
+            "most_alive_after": 5,
+            "clues_read": "1005/1182",
+            "audits_ok": true
+          },
+          "no_learning": {
+            "stopped": "EXTINCT",
+            "last_tick": 364,
+            "alive_at_drought_start": 6,
+            "fewest_alive_in_drought": 0,
+            "alive_at_drought_end": 0,
+            "most_alive_after": null,
+            "clues_read": "224/518",
+            "audits_ok": true
+          }
+        }
+      },
+      "gate_8_2": "passed in its experiments, with the limits listed: in the severe drought, with learning and exploring 5 of 7 runs after the birth fix (3 of 3 of the final code, the held-out condition included) survived and grew back; without learning 0 of 5, without exploring 0 of 3",
+      "limits": [
+        "1-3 runs per condition",
+        "the clue is a task this ecology sets (word problems the public skills read)",
+        "children of living parents carry no heritable values",
+        "the fixes were found in the drought condition; one held-out condition, one run each",
+        "the final code's drought runs were stopped by the 2-hour limit of a background job at tick 952 and not restarted"
+      ]
+    },
+    "real_parents_measured": false,
+    "validation_result_location": "../evidence_gen4/ROUND10_2026-10-14.md",
+    "version_named_by_gate": "7.9 stays: 8.0 not passed on the new held-out set; 8.1 passed (r9); 8.2 see ecology_8_2; 9.0 restores only"
+  },
   "v1022_7_9_gen4_r9": {
     "classification": "the outside review's roadmap advanced together after v1022.7.8 (development); gates measured, not assumed",
     "ecology_8_2": {
@@ -568,7 +908,7 @@
   "verified_query_whole_state_sync": true,
   "verified_reasoning_confidence": true,
   "version": "v1022",
-  "version_compatibility_note": "Legacy module versions retained; release_version and CLI release_revision identify v1022.7.9+gen4-r9 (v1022.7.7-experiential-soul fused with generation 4; its limits measured and strengthened; an outside review of r7 answered; the rest of its roadmap advanced together: experience authenticity 7.9, new private problems 8.0, goals 8.1, ecology 8.2, restores 9.0)",
+  "version_compatibility_note": "Legacy module versions retained; release_version and CLI release_revision identify v1022.7.9+gen4-r10 (v1022.7.7-experiential-soul fused with generation 4; its limits measured and strengthened; an outside review of r7 answered; its roadmap advanced: experience authenticity 7.9, goals 8.1, restores 9.0; round 10 measured 8.0 again on a new frozen held-out set (not passed) and gave the ecology births, staggered founders, exploring and bequests (8.2))",
   "whole_living_cognition_cycle": true,
   "witness_certificate_signature_verification": true,
   "workspace_restore_failure": "V1022_CACHE_MISMATCH:v1022_ecology; future commits 10-13 retained/reappeared after restoring tick8",

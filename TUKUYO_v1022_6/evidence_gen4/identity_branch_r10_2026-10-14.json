@@ -1,0 +1,313 @@
+{
+ "utc": "2026-10-14T08:38:47Z",
+ "without_canon": {
+  "copy": {
+   "original_lives_on": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ],
+   "copy_tries": [
+    true,
+    {
+     "ok": true,
+     "answer": "6"
+    }
+   ],
+   "copy_whole_audit": {
+    "ok": true,
+    "errors": []
+   },
+   "original_whole_audit": {
+    "ok": true,
+    "errors": []
+   }
+  },
+  "branch": {
+   "comes_back": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ],
+   "whole_audit": {
+    "ok": true,
+    "errors": []
+   },
+   "original_lives_on": [
+    true,
+    {
+     "ok": true,
+     "answer": "6"
+    }
+   ]
+  },
+  "restore": {
+   "put_back_tries": [
+    true,
+    {
+     "ok": true,
+     "answer": "3"
+    }
+   ],
+   "adopt_look": {
+    "ok": false,
+    "error": "ValueError:CANON_NOT_KEPT"
+   },
+   "adopt": null,
+   "after_adopt_lives": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ],
+   "the_newer_copy_tries": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ]
+  },
+  "death": {
+   "dead_individual_tries": [
+    false,
+    {
+     "ok": false,
+     "error": "ENTITY_DEAD"
+    }
+   ],
+   "copy_from_before_death_tries": [
+    true,
+    {
+     "ok": true,
+     "answer": "3"
+    }
+   ],
+   "copy_whole_audit": {
+    "ok": true,
+    "errors": []
+   },
+   "dead_whole_audit": {
+    "ok": true,
+    "errors": []
+   }
+  },
+  "at_once": {
+   "x": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ],
+   "y": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ],
+   "then_x": [
+    true,
+    {
+     "ok": true,
+     "answer": "6"
+    }
+   ],
+   "then_y": [
+    true,
+    {
+     "ok": true,
+     "answer": "3"
+    }
+   ]
+  }
+ },
+ "with_canon": {
+  "copy": {
+   "original_lives_on": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ],
+   "copy_tries": [
+    false,
+    {
+     "ok": false,
+     "error": "ValueError:CANON_BEHIND"
+    }
+   ],
+   "copy_whole_audit": {
+    "ok": false,
+    "errors": [
+     "CANON_BEHIND"
+    ]
+   },
+   "original_whole_audit": {
+    "ok": true,
+    "errors": []
+   }
+  },
+  "branch": {
+   "comes_back": [
+    false,
+    {
+     "ok": false,
+     "error": "ValueError:CANON_BRANCH"
+    }
+   ],
+   "whole_audit": {
+    "ok": false,
+    "errors": [
+     "CANON_BRANCH"
+    ]
+   },
+   "original_lives_on": [
+    true,
+    {
+     "ok": true,
+     "answer": "6"
+    }
+   ]
+  },
+  "restore": {
+   "put_back_tries": [
+    false,
+    {
+     "ok": false,
+     "error": "ValueError:CANON_BEHIND"
+    }
+   ],
+   "adopt_look": {
+    "ok": true,
+    "state": {
+     "canon_file": "/tmp/claude-0/-home-user-Blank-Baby/dd3c6b53-ae17-5414-bda7-717330a62fb9/scratchpad/r10/finalR10/branch/with_canon_canon/196a3781b1d10ba7f3090b93.canon.jsonl",
+     "cursor": {
+      "line_sha256": "3a635d6f2953ce61b8974974c1702be4a208ffaafb9922cf8508fa0b8b8fd86b",
+      "n": 2
+     },
+     "head": {
+      "kind": "turn",
+      "line_sha256": "77c7822661660231c4164b155b38ee53c457f35444a8de47eae2da4bc7e56f83",
+      "n": 4,
+      "utc": "2026-10-14T08:39:38Z"
+     },
+     "its_last_line": 2,
+     "kept": true,
+     "lines": 4,
+     "lines_after_it": 2,
+     "state": "BEHIND"
+    }
+   },
+   "adopt": {
+    "kind": "restore",
+    "line_sha256": "6bb53248cb9d4ab5c8f1d8a0ee47c316500f0bfdcdcf9dc81a71d54d3e35100c",
+    "n": 5
+   },
+   "after_adopt_lives": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ],
+   "the_newer_copy_tries": [
+    false,
+    {
+     "ok": false,
+     "error": "ValueError:CANON_BEHIND"
+    }
+   ]
+  },
+  "death": {
+   "dead_individual_tries": [
+    false,
+    {
+     "ok": false,
+     "error": "ENTITY_DEAD"
+    }
+   ],
+   "copy_from_before_death_tries": [
+    false,
+    {
+     "ok": false,
+     "error": "ValueError:CANON_DEAD"
+    }
+   ],
+   "copy_whole_audit": {
+    "ok": false,
+    "errors": [
+     "CANON_DEAD"
+    ]
+   },
+   "dead_whole_audit": {
+    "ok": true,
+    "errors": []
+   }
+  },
+  "at_once": {
+   "x": [
+    false,
+    {
+     "ok": false,
+     "answer": "7",
+     "error": "ValueError:CANON_BEHIND"
+    }
+   ],
+   "y": [
+    true,
+    {
+     "ok": true,
+     "answer": "7"
+    }
+   ],
+   "then_x": [
+    false,
+    {
+     "ok": false,
+     "error": "ValueError:CANON_BEHIND"
+    }
+   ],
+   "then_y": [
+    true,
+    {
+     "ok": true,
+     "answer": "3"
+    }
+   ]
+  },
+  "canon_audit": {
+   "a": {
+    "ok": true,
+    "state": "DEAD_SELF",
+    "errors": []
+   },
+   "y": {
+    "ok": true,
+    "state": "IN_SYNC",
+    "errors": []
+   }
+  }
+ },
+ "gate": {
+  "without_canon_nothing_is_told": true,
+  "copy_refused": true,
+  "copy_reported_by_whole_audit": true,
+  "branch_refused_as_branch": true,
+  "after_the_branch_the_individual_lives_on": true,
+  "restore_refused_until_adopted": true,
+  "after_restore_the_newer_copy_refused": true,
+  "copy_of_dead_refused": true,
+  "dead_individual_itself_audits_clean": true,
+  "at_once_one_lives_on": true,
+  "canon_chain_valid": true
+ },
+ "ok": true
+}
