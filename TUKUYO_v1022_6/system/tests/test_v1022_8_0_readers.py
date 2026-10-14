@@ -54,6 +54,21 @@ JA_HOLD = [
     'みかんが約20こあります。8こ食べました。のこりは何こですか。',
     'りんごが10個あります。3個食べなかったら、残りは何個？',
     'はとが30羽いました。9羽とんでいき、そのあと4羽もどってきました。今、何羽いませんか。',
+    # found by rewriting the dev problems (tools/exactness_probe.py)
+    '40Lくらいの水が入るおけに、その半分の水が入っています。水は何L入っていますか。',
+    'あめが50こあまりあります。12こ食べました。のこりは何こですか。',
+    'カードが20まい近くあります。6まい使いました。のこりは何まいですか。',
+    'まさとさんはシールを25まいより多く持っています。妹はまさとさんより5まい少なく持っています。妹は何まい持っていますか。',
+    'りんごが10こありました。3こ食べたそうです。のこりは何こですか。',
+    'りんごが10こありました。3こ食べたはずです。のこりは何こですか。',
+    'りんごが10こありました。もう少しで3こ食べるところでした。のこりは何こですか。',
+    'パーティーに子どもが25人来たいです。そのうち13人が女の子です。男の子は何人ですか。',
+]
+JA_EXACT = [   # the same without the words: read
+    ('40Lの水が入るおけに、その半分の水が入っています。水は何L入っていますか。', '20'),
+    ('あめが50こあります。12こ食べました。のこりは何こですか。', '38'),
+    ('まさとさんはシールを25まい持っています。妹はまさとさんより5まい少なく持っています。妹は何まい持っていますか。', '20'),
+    ('パーティーに子どもが25人来ました。そのうち13人が女の子です。男の子は何人ですか。', '12'),
 ]
 
 
@@ -65,6 +80,11 @@ def test_the_japanese_reader_reads_everyday_forms(text, answer):
 @pytest.mark.parametrize('text', JA_HOLD)
 def test_the_japanese_reader_does_not_guess(text):
     assert own(text) is None
+
+
+@pytest.mark.parametrize('text,answer', JA_EXACT)
+def test_the_japanese_reader_reads_the_exact_twins(text, answer):
+    assert own(text) == answer
 
 
 def test_its_japanese_readings_are_checked_like_any_other():
@@ -100,12 +120,26 @@ EN_HOLD = [
     'Sid had more than 8 stickers. He got some more and now has 15 stickers. How many stickers did he get?',
     'A tray has nearly 30 cups. A third of them are blue. How many blue cups are there?',
     'A train never has 60 seats. 41 seats are taken. How many seats are empty?',
+    'Liam saved 5 dollars every week for over 6 weeks. How much did he save?',
+    'Kim has maybe 12 shells. She gives 4 shells away. How many shells are left?',
+    'Ben read 3 or more books each month for 4 months. How many books did he read?',
+    'A recipe needs 2 cups of flour for one cake. How many cups are not needed for 5 cakes?',
+    'Maya could have had 14 stickers. She gave 5 stickers to her brother. How many stickers does Maya have left?',
+    'Nora had 20 beads. She almost lost 6 beads. How many beads does she have now?',
+    'A class has 40 students. Nearly half of them walk to school. How many students walk to school?',
+    'Lily never had some candies. She gave 6 candies to her friend and now has 9 candies. How many candies did Lily have at first?',
+    'Each ticket should have cost 8 dollars. How many tickets can you buy with 56 dollars?',
 ]
 EN_EXACT = [   # 'more than' and 'less than' that are exact, and a question about what is not so
     ('Nina has 12 dollars. Omar has 5 dollars more than Nina. How much money do they have together?', '29'),
     ('12 less than five times a number is 48. What is the number?', '12'),
     ('When 6 is added to 4 more than a number, the result is 30. What is the number?', '20'),
     ('A club has 90 members. 35 of them play chess. How many members do not play chess?', '55'),
+    ('She read 60 pages over 3 days. How many pages did she read each day?', '20'),                 # over 3 days: a span
+    ('Liam saved 5 dollars every week for 6 weeks. How much did he save?', '30'),
+    ('Nora had 20 beads. She lost 6 beads. How many beads does she have now?', '14'),
+    ('A class has 40 students. Half of them walk to school. How many students walk to school?', '20'),
+    ('A recipe needs 2 cups of flour for one cake. How many cups are needed for 5 cakes?', '10'),
 ]
 
 
@@ -141,3 +175,16 @@ def test_the_held_out_set_is_as_it_was_frozen():
     assert pe.value('16+(16+9)') == 41 and pe.value('50*2/5') == 20
     assert pe.grade(None, None) == 'right' and pe.grade('3', None) == 'wrong' and pe.grade(None, '3') == 'held'
     assert pe.mcnemar(22, 1) < 0.001 and pe.mcnemar(0, 0) == 1.0
+
+
+def test_no_rewrite_of_a_dev_problem_that_leaves_its_answer_open_is_read():
+    # every problem of the private dev set the reader reads, rewritten one place at a time so that its answer is no
+    # longer given exactly (did not, could have, almost, about, at least, or more; ませんでした、予定、たそうです、ぐらい、
+    # あまり、近く): none is read. Before (2026-10-14) 18 in Japanese and 359 in English were
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
+    import exactness_probe
+    r = exactness_probe.probe()
+    assert r['problems_read']['en'] > 50 and r['problems_read']['ja'] > 50 and r['rewrites']['en'] > 2000
+    assert r['ok'], r['readings'][:5]

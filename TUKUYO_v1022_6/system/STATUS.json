@@ -479,7 +479,7 @@
       "fix_after_held_out_not_counted": [
         "a reading the v1022 core agrees with is not held by the extra input check (one held-out problem)",
         "a share of things counted one by one is whole: 24 cards among 5 is not read as 4.8 (Japanese and English)",
-        "own readers do not read an event not said as done (歩きません, 食べていません, 明日…予定です), 分けました without 同じ数ずつ, or a hedged amount (3こぐらい, about 5 boxes, at least 8); found by the full suite"
+        "own readers do not read an event not said as done (歩きません, 食べていません, 明日…予定です, たそうです, could have had, almost lost, never had), 分けました without 同じ数ずつ, a hedged amount (3こぐらい, 45こあまり, 12こ近く, about 5 boxes, at least 8, over 6 weeks, 3 or more), or a question about what is not so; found by the full suite and by rewriting the dev problems"
       ],
       "held_out_en": {
         "after": {
@@ -517,6 +517,22 @@
         "asdiv_dev_and_private_dev_en": 0,
         "private_dev_ja": 0,
         "mgsm_ja_dev": 0
+      },
+      "exactness_probe": {
+        "tool": "tools/exactness_probe.py",
+        "rewrites": {
+          "en": 2582,
+          "ja": 1636
+        },
+        "read_by_own_readers_before": {
+          "en": 951,
+          "ja": 1113
+        },
+        "read_by_own_readers_after": {
+          "en": 0,
+          "ja": 0
+        },
+        "level": "reader (each rewrite has no determined answer)"
       }
     },
     "real_parents_measured": false,
