@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """v1022.8.0: the child's own reading (no parent) on new private problems in English and Japanese (private_eval_sets.py).
 
-  private_eval.py --set dev|held_out [--lang en|ja|all] [--work WORK] [--runtime-trust-file ANCHOR] [--out REPORT.json]
+  private_eval.py --set dev|dev_2|held_out|held_out_2 [--lang en|ja|all] [--work WORK] [--runtime-trust-file ANCHOR] [--out REPORT.json]
                   [--totals-only] [--compare BEFORE.json]
 
 It reads as the child does in g4-solve: with an individual of its own (made under WORK), so that the v1022 core reads
@@ -20,11 +20,15 @@ import argparse,collections,hashlib,json,math,sys,time
 from fractions import Fraction
 from pathlib import Path
 HERE=Path(__file__).resolve().parents[1];sys.path.insert(0,str(HERE/'tools'))
-from private_eval_sets import DEV,HELD_OUT
+from private_eval_sets import DEV,HELD_OUT,HELD_OUT_2
 
-SETS={'dev':DEV,'held_out':HELD_OUT}
+# dev_2: the held-out set of round 9, measured once before and once after it, and a development set since
+SETS={'dev':DEV,'held_out':HELD_OUT,'dev_2':HELD_OUT,'held_out_2':HELD_OUT_2}
 # the held-out set as written on 2026-10-13, before any change for it: any change to it shows here
 HELD_OUT_SHA256='9b82bf398a3165badf2d65585eab0ea794663646f917bea8efa95b8d56a64c85'
+# the held-out set of round 10, written on 2026-10-14 before any change of round 10
+HELD_OUT_2_SHA256='2de0b3c3ae5fc230a97ab7dd9dc9ff6afc0cf64b1bbe5bf1c5fe006ef4cb5918'
+FROZEN={'held_out':HELD_OUT_SHA256,'held_out_2':HELD_OUT_2_SHA256}
 def fingerprint(s):return hashlib.sha256(json.dumps(s,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
 
 def value(expr):
@@ -65,7 +69,7 @@ def main():
     ap.add_argument('--tree',help='the system directory whose reading is measured (default: this one), e.g. an earlier release')
     a=ap.parse_args();tree=Path(a.tree).resolve() if a.tree else HERE;sys.path.insert(0,str(tree/'src'))
     s=SETS[a.set];fp=fingerprint(s)
-    if a.set=='held_out' and fp!=HELD_OUT_SHA256:sys.exit('the held-out set changed since it was frozen: '+fp)
+    if a.set in FROZEN and fp!=FROZEN[a.set]:sys.exit('the held-out set changed since it was frozen: '+fp)
     from tukuyo_g4 import api
     import subprocess,tempfile
     work=Path(a.work) if a.work else Path(tempfile.mkdtemp(prefix='private-eval-'));ind=work/'individual'
@@ -96,7 +100,7 @@ def main():
             cmp[lang]={'before':before['langs'][lang]['totals'],'after':out['langs'][lang]['totals'],'right_gained':gained,'right_lost':lost,
                        'right_mcnemar_p':round(mcnemar(gained,lost),6),'wrong_added':wplus,'wrong_removed':wminus,'wrong_mcnemar_p':round(mcnemar(wplus,wminus),6)}
         out['compare']=cmp;print('compare',json.dumps(cmp,ensure_ascii=False))
-    if not a.totals_only and a.set!='held_out':
+    if not a.totals_only and a.set not in FROZEN:
         for lang,v in out['langs'].items():
             for r in v['rows']:
                 if r['grade']!='right':print(f"  {lang} {r['grade']:5s} {r['i']:2d} | {r['text'][:100]} | gold {r['gold']} got {r['got']} | {r['reason']}")
