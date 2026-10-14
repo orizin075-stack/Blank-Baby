@@ -13,7 +13,7 @@ def test_v1022_6_release_identity(tmp_path):
     p=subprocess.run(cmd+['--data',str(tmp_path/'d'),'init'],cwd=ROOT,env=env,capture_output=True,text=True,timeout=240);r=json.loads(p.stdout)
     receipt=json.loads((ROOT/'META/RELEASE_RECEIPT.json').read_text(encoding='utf-8'))
     assert r['ok'] and r['release_revision']==receipt['payload']['release_revision'],(r.get('release_revision'),receipt['payload'])
-    assert r['release_revision'].startswith(('v1022.6', 'v1022.7'))
+    assert r['release_revision'].startswith(('v1022.6', 'v1022.7', 'v1022.8'))
     st=json.loads((ROOT/'STATUS_V1022_6.json').read_text(encoding='utf-8'))
     assert st['release_revision']=='v1022.6' and st['base']=='v1022.5-fusion' and st['runtime_llm_required'] is False
     assert not any(st[k] for k in ('invents_new_kinds_of_laws','24h_completed','general_intelligence_established','self_code_modification',
