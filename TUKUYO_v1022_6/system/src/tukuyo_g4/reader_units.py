@@ -311,6 +311,14 @@ def _whole(spec,tg,pool,steps,ctx):
         steps.append('set_aside')
     cs=[a for a in cs if a.u==tg.u]
     if not cs:no('NOTHING_OF_THE_ASKED_UNIT')
+    # 'How many red balls in total?' after '4 red balls and 6 blue balls': only what is of the kind asked
+    kind=(tg.np or frozenset())-{tg.u,'more','fewer','less','total','extra','other'}
+    if kind:
+        other_kind=[a for a in cs if a.adjs and not (kind&(a.adjs|a.tags))]
+        if other_kind:
+            cs=[a for a in cs if a not in other_kind]
+            for a in other_kind:
+                if not a.derived:no('ASKS_ONE_KIND_OF_SEVERAL')
     mode=tg.mode;qs=ctx['qspan']
     live=[a for a in cs if not a.ref]
     # geometry asked: area, perimeter

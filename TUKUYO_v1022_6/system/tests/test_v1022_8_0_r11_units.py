@@ -101,6 +101,8 @@ HOLD = [
     'Jo got $14 to buy a present. This covered half of the cost. How much did the present cost?',
     'A garden is a rectangle with an area of 300 square meters. It is 20 meters long. What is its perimeter?',
     'About how many stickers does each of the 7 children get if 50 stickers are shared?',
+    'There are 4 red balls and 6 blue balls. How many red balls in total?',             # one kind asked (found by the suite)
+    '1箱に12個入りが6箱あります。箱は全部で何個？',                                         # the boxes asked (found by the suite)
     'たろうさんはりんごを5こ持っています。2こをはなこさんにあげました。はなこさんはりんごを何こ持っていますか。',
     '箱に6こずつたまごが入っています。4ふくろあります。たまごは全部で何こですか。',
     '30本のペンを5人で分けました。1人何本ですか。',
