@@ -47,7 +47,7 @@ def main():
     t0=time.time()
     if a.resume and a.out and Path(a.out).is_file() and (d/'v1022_ecology').is_dir():
         rep=json.loads(Path(a.out).read_text(encoding='utf-8'));rep.pop('stopped',None);rep.pop('result',None)
-        rep.setdefault('resumed',[]).append(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()))
+        rep.setdefault('resumed',[]).append(time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()));rep['config']['ticks']=a.ticks
         st=run(a.runtime_trust_file,d,'metabolism-status')
         if not st.get('ok'):rep['stopped']='RESUME:'+str(st.get('error'));print(rep['stopped']);return _out(a,rep)
         done={e['asked_at'] for e in rep['environment'] if e.get('ok')};changes=[c for c in changes if c[0] not in done]

@@ -309,8 +309,9 @@ def step(d,ticks=1):
     return summary(s)
 
 # v1022.8.2 r10: the wild. A clue tells how much is left at a hidden place; reading it right is finding the place. The
-# clue uses the same kind of event words the public skills teach (and one no one was taught), so what a runtime has
-# learned decides whether exploring feeds it. Without learning it cannot read the clue, and the wild is closed to it.
+# clue uses everyday event words: three a runtime knows on its own (cognition's bounded built-in words: 食べ, 使, もら),
+# three only the public skills teach (盗まれ, 補充, 落として失い) and one no one was taught (拾い). So a runtime that
+# learned reads 6 of the 7 kinds, one that did not reads 3: what it learned decides how well exploring feeds it.
 FIND,EXPLORE_COST=1200,250
 CLUE_EVENTS=(('を落として失いました',-1),('もらいました',1),('盗まれました',-1),('使いました',-1),('補充しました',1),('食べました',-1),('拾いました',1))
 def _clue(s,rid,tick):
@@ -341,12 +342,14 @@ def _births(d,s,tick):
         age=organism2.load(p).get('metabolic_age',0)
         last=max((b['tick'] for b in s['births'] if b['parent']==rid),default=None)
         if not m//4<=age<=m-4 or (last is not None and tick-last<m//4):continue
-        # what pulls: a child to care for (more when the living are few); what holds back: how badly its work has paid
-        # lately, and how little the commons (which all can see) holds for one more
+        # what pulls: a child to care for, and, when the living are few and the commons is full, its line going on (a
+        # survival concern too: lines that selection made value survival over relationship still bear when few are left).
+        # What holds back: how badly its work has paid lately, and how little the commons (all can see it) holds for one more
         paid=[x for k in ('recent_hard','recent_simple','recent_explore') for x in perf.get(k,[])]
         thriving=(sum(paid)+1)/(len(paid)+2);room=(MAX_ACTIVE-len(s['active']))/MAX_ACTIVE
         plenty=min(1.,s['reservoir']/(BIRTH_ENDOWMENT*len(s['active'])))
-        opts=[{'id':'bear','signals':{'relationship':round(.6+.6*room,6),'survival':round(-.5*(1-thriving)-.5*(1-plenty),6)}},{'id':'not-now','signals':{'survival':.25}}]
+        opts=[{'id':'bear','signals':{'relationship':round(.6+.6*room,6),'survival':round(.5*room*plenty-.5*(1-thriving)-.5*(1-plenty),6)}},
+              {'id':'not-now','signals':{'survival':.25}}]
         chosen=heart_loop.choose(p,opts,context=f'bear-tick-{tick}')['chosen'];whole.sync(p);s['runtimes'][rid]=_snapshot(d,rid)
         if chosen!='bear':out.append({'parent':rid,'child':None,'thriving':round(thriving,4),'plenty':round(plenty,4)});continue
         kid,_=_fresh(d,s);_cli(d,kid,'succession-founder-init');receipts=[]
