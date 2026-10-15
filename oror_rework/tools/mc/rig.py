@@ -166,6 +166,16 @@ def cube_quads(c):
     V0, V1, V2 = v, v + d, v + d + h
     def poly(vs, ua, va, ub, vb, n):
         return (vs, [(ub, va), (ua, va), (ua, vb), (ub, vb)], n)
+    fu = getattr(c, 'face_uv', None)
+    if fu:      # explicit per-face UV rectangles (Bedrock per-face uv), keyed top/bottom/right/front/left/back
+        out = []
+        for key, vs, n in (('top', [v5, v4, v0, v1], (0, -1, 0)), ('bottom', [v2, v3, v7, v6], (0, 1, 0)),
+                           ('right', [v0, v4, v7, v3], (-1, 0, 0)), ('front', [v1, v0, v3, v2], (0, 0, -1)),
+                           ('left', [v5, v1, v2, v6], (1, 0, 0)), ('back', [v4, v5, v6, v7], (0, 0, 1))):
+            if key in fu:
+                fu_u, fu_v, fw, fh = fu[key]
+                out.append(poly(vs, fu_u, fu_v, fu_u + fw, fu_v + fh, n))
+        return out
     return [
         poly([v5, v4, v0, v1], U1, V0, U2, V1, (0, -1, 0)),   # DOWN  (visual top)
         poly([v2, v3, v7, v6], U2, V1, U3, V0, (0, 1, 0)),    # UP    (visual bottom)

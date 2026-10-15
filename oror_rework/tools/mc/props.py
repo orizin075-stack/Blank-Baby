@@ -4,10 +4,10 @@ import math
 from paint import M
 
 def hand(h, side='r', rot=(0.0, 0.0, 0.0)):
-    arm = h.arm_r if side == 'r' else h.arm_l
-    px = arm.pivot[0]
-    y = h.top + h.arm_len - 1.5
-    b = h.rig.bone('prop_' + side, arm, (px, y, 0), rot=rot)
+    fore = h.fore_r if side == 'r' else h.fore_l
+    px = fore.pivot[0]
+    y = h.hand_y
+    b = h.rig.bone('prop_' + side, fore, (px, y, 0), rot=(rot[0] + 0.12, rot[1], rot[2]))
     return b, (px, y, 0)
 
 # all blades are modelled pointing "up" (-y) from the grip; the bone rotation aims them

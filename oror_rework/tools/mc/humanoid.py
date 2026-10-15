@@ -1,17 +1,23 @@
-"""Minecraft-proportioned characters (player-model base: 8px head, 8x12x4 body, 12px limbs)
-with skin-style overlay layers and extra cut-out parts (skirts, hair strands, sleeves, capes,
-horns, halos, wings, tails), in the way Touhou Little Maid / Iron's Spellbooks build mobs."""
+"""Anime-proportioned Minecraft characters (8px MC face, slim sculpted body) in the way Touhou Little Maid,
+Iron's Spellbooks and Alex's Caves build their people: chest / waist / pelvis instead of one torso box,
+jointed arms and legs (elbow, knee), tapered limbs and boot toes, 3D fringe strands and fanned back hair,
+flared skirts of tilted panels, sleeves, capes, horns, halos and wings."""
 import math
 from paint import M, stack, ramp
 from colors import hexc, mix, shade
 
+# chest/waist/pelvis (w, h, d); arm: upper (w, h, d) + fore (w, h, d) incl. 2-row hand; leg: thigh + shin
 BUILDS = {
-    #         torso w,h,d   arm w,d   leg w,d  leg h  head
-    'woman': dict(tw=8, th=12, td=4, aw=3, ad=4, lw=4, ld=4, lh=12, head=8),
-    'man':   dict(tw=8, th=12, td=4, aw=4, ad=4, lw=4, ld=4, lh=12, head=8),
-    'child': dict(tw=6, th=9, td=3, aw=2, ad=3, lw=3, ld=3, lh=9, head=8),
-    'large': dict(tw=10, th=14, td=6, aw=5, ad=5, lw=5, ld=5, lh=13, head=8),
-    'youth': dict(tw=8, th=11, td=4, aw=3, ad=4, lw=4, ld=4, lh=11, head=8),
+    'woman': dict(chest=(6, 5, 3), waist=(5, 2, 3), pelvis=(6, 2, 3), upper=(2, 4, 2), fore=(2, 5, 2),
+                  thigh=(3, 5, 3), shin=(2, 6, 2), neck=1, head=8, bust=True),
+    'youth': dict(chest=(6, 5, 3), waist=(5, 2, 3), pelvis=(6, 2, 3), upper=(2, 4, 2), fore=(2, 5, 2),
+                  thigh=(3, 5, 3), shin=(3, 6, 3), neck=1, head=8),
+    'man':   dict(chest=(7, 5, 4), waist=(6, 2, 3), pelvis=(6, 2, 3), upper=(3, 4, 3), fore=(3, 5, 3),
+                  thigh=(3, 5, 3), shin=(3, 6, 3), neck=1, head=8),
+    'child': dict(chest=(5, 3, 3), waist=(4, 2, 2), pelvis=(5, 2, 3), upper=(2, 3, 2), fore=(2, 4, 2),
+                  thigh=(2, 3, 2), shin=(2, 4, 2), neck=0, head=8),
+    'large': dict(chest=(11, 7, 6), waist=(9, 3, 5), pelvis=(9, 3, 5), upper=(4, 6, 4), fore=(4, 7, 4),
+                  thigh=(4, 7, 4), shin=(4, 7, 4), neck=1, head=8),
 }
 
 def _ellipse_perimeter(a, b):
@@ -20,7 +26,12 @@ def _ellipse_perimeter(a, b):
 class Humanoid:
     def __init__(self, rig, build='woman', skin='#f3dfd7', outfit='#ffffff', accent='#cccccc', hover=0.0, **over):
         B = dict(BUILDS[build])
-        B.update(over)
+        for k, v in over.items():          # simple overrides: lh / th / any key above
+            B[k] = v
+        if 'lh' in over:                   # longer legs: stretch thigh and shin
+            extra = over['lh'] - (B['thigh'][1] + B['shin'][1])
+            B['thigh'] = (B['thigh'][0], B['thigh'][1] + extra // 2, B['thigh'][2])
+            B['shin'] = (B['shin'][0], B['shin'][1] + extra - extra // 2, B['shin'][2])
         self.rig, self.B, self.build = rig, B, build
         from colors import lum
         if lum(skin) > 0.9:
@@ -29,30 +40,50 @@ class Humanoid:
         self.skin = M('skin', skin)
         self.accent = accent
         self.hair_color = '#3a2a24'
-        lh, th = B['lh'], B['th']
-        self.hip_y = 24 - lh                  # top of the legs / bottom of the torso
-        self.top = self.hip_y - th            # shoulders / neck
-        self.head_top = self.top - B['head']
+        cw, ch, cd = B['chest']
+        ww, wh, wd = B['waist']
+        pw, ph, pd = B['pelvis']
+        self.lh = B['thigh'][1] + B['shin'][1]
+        self.th = ch + wh + ph
+        B['tw'], B['td'], B['th'], B['lh'] = cw, cd, self.th, self.lh      # legacy keys used by recipes
+        B['aw'], B['ad'] = B['upper'][0], B['upper'][2]
+        self.hip_y = 24 - self.lh
+        self.top = self.hip_y - self.th
+        self.waist_y = self.top + ch
+        self.pelvis_y = self.waist_y + wh
+        self.head_top = self.top - B['neck'] - B['head']
+        self.front_z = -cd / 2                 # chest front plane
+        self.back_z = cd / 2
         self.root = rig.bone('root', None, (0, 24, 0), anim='root', hover=hover, speed=0.06)
         self.hips = rig.bone('hips', self.root, (0, self.hip_y, 0))
-        self.torso = rig.bone('torso', self.hips, (0, self.hip_y, 0), anim='breath')
+        self.torso = rig.bone('torso', self.hips, (0, self.pelvis_y, 0), anim='breath')
         self.head = rig.bone('head', self.torso, (0, self.top, 0), anim='head')
-        sx = B['tw'] / 2 + B['aw'] / 2 + (0.0 if B['aw'] % 2 == 0 else 0.0)
-        self.shoulder_x = B['tw'] / 2 + B['aw'] / 2
-        ay = self.top + 2 if build != 'child' else self.top + 1.5
-        self.arm_r = rig.bone('arm_r', self.torso, (-self.shoulder_x, ay, 0), anim='arm_r')
-        self.arm_l = rig.bone('arm_l', self.torso, (self.shoulder_x, ay, 0), anim='arm_l')
-        lx = B['lw'] / 2 if build != 'large' else B['lw'] / 2 + 0.5
+        aw = B['upper'][0]
+        self.shoulder_x = cw / 2 + aw / 2
+        ay = self.top + 1
+        self.arm_r = rig.bone('arm_r', self.torso, (-self.shoulder_x, ay, 0), rot=(0, 0, 0.06), anim='arm_r')
+        self.arm_l = rig.bone('arm_l', self.torso, (self.shoulder_x, ay, 0), rot=(0, 0, -0.06), anim='arm_l')
+        ey = self.top + B['upper'][1]
+        self.fore_r = rig.bone('fore_r', self.arm_r, (-self.shoulder_x, ey, 0), rot=(-0.12, 0, 0), anim='elbow')
+        self.fore_l = rig.bone('fore_l', self.arm_l, (self.shoulder_x, ey, 0), rot=(-0.12, 0, 0), anim='elbow')
+        self.hand_y = ey + B['fore'][1] - 1.5
+        self.arm_len = B['upper'][1] + B['fore'][1]
+        lx = max(B['thigh'][0], pw / 2) / 2 if build != 'large' else B['thigh'][0] / 2 + 0.5
+        lx = B['thigh'][0] / 2 if build != 'large' else lx
         self.leg_r = rig.bone('leg_r', self.hips, (-lx, self.hip_y, 0), anim='leg_r')
         self.leg_l = rig.bone('leg_l', self.hips, (lx, self.hip_y, 0), anim='leg_l')
+        ky = self.hip_y + B['thigh'][1]
+        self.knee_y = ky
+        self.shin_r = rig.bone('shin_r', self.leg_r, (-lx, ky, 0), anim='knee')
+        self.shin_l = rig.bone('shin_l', self.leg_l, (lx, ky, 0), anim='knee', side=1.0)
         self.headbox = None
         self.head_mat = None
+        self.blink_mat = None
 
     # ------------------------------------------------------------------ body
     def body(self, top_mat, bottom_mat=None, waist_mat=None, legs_mat=None, boots_mat=None, arms_mat=None,
              hands_mat=None, sleeve_len=None, bust_mat=None, collar_mat=None, neck='auto', boots_h=None):
         B = self.B
-        tw, th, td = B['tw'], B['th'], B['td']
         skin = self.skin
         bottom_mat = bottom_mat or top_mat
         legs_mat = legs_mat or skin
@@ -62,82 +93,104 @@ class Humanoid:
         if neck and top.get('type') == 'cloth':
             top['neckline'] = neck
             top['skin'] = self.skin_color
-        chest_rows = int(round(th * (0.62 if self.build != 'child' else 0.6)))
-        layers = [(top, chest_rows)]
-        if waist_mat is not None and waist_mat is not top_mat:
-            layers.append((waist_mat, 2))
-        layers.append((bottom_mat, 99))
-        self.torso.box((-tw / 2, self.top, -td / 2), (tw, th, td), stack(*layers), name='body')
-        self.body_mats = layers
-        # arms: sleeve then hand
-        aw, ad = B['aw'], B['ad']
-        arm_len = th
-        sl = int(round(arm_len * 0.75 if sleeve_len is None else sleeve_len))
+        cw, ch, cd = B['chest']
+        ww, wh, wd = B['waist']
+        pw, ph, pd = B['pelvis']
+        self.torso.box((-cw / 2, self.top, -cd / 2), (cw, ch, cd), top, name='chest')
+        wm = waist_mat or (top_mat if ch >= 4 else bottom_mat)
+        self.torso.box((-ww / 2, self.waist_y, -wd / 2), (ww, wh, wd), dict(wm, neckline=None), name='waist')
+        self.hips.box((-pw / 2, self.pelvis_y, -pd / 2), (pw, ph, pd), bottom_mat, name='pelvis')
+        if B['neck']:
+            self.head.box((-1, self.top - B['neck'], -1), (2, B['neck'], 2), skin, name='neck')
+        if B.get('bust') and bust_mat is not False:
+            bb = self.rig.bone('bust', self.torso, (0, self.top + 1.5, -cd / 2), rot=(0.35, 0, 0))
+            bb.box((-2.5, self.top + 1.5, -cd / 2 - 1), (5, 2, 1), dict(bust_mat or top_mat, neckline=None, pattern=None), name='bust')
+        self.body_mats = [(top, ch), (bottom_mat, 99)]
+        # arms: sleeve rows then hand rows, split across the elbow
+        uw, uh, ud = B['upper']
+        fw, fh, fd = B['fore']
         arms_mat = arms_mat or top_mat
         hm = hands_mat or skin
-        for arm, sgn in ((self.arm_r, -1), (self.arm_l, 1)):
-            px, py = arm.pivot[0], arm.pivot[1]
-            y0 = self.top
-            arm.box((px - aw / 2, y0, -ad / 2), (aw, arm_len, ad), stack((arms_mat, sl), (hm, 99)), name='arm')
-            arm.params['reach'] = round(arm_len - (py - y0) - 1.0, 3)
-        self.arm_len = arm_len
-        # legs: trousers/legs then boots
-        lw, ld, lh = B['lw'], B['ld'], B['lh']
+        total = uh + fh
+        sl = int(round(total * 0.72 if sleeve_len is None else sleeve_len))
+        sl = min(sl, total - 2)
+        for arm, fore, sgn in ((self.arm_r, self.fore_r, -1), (self.arm_l, self.fore_l, 1)):
+            px = arm.pivot[0]
+            up_mat = arms_mat if sl >= uh else stack((arms_mat, sl), (hm, 99)) if sl > 0 else hm
+            arm.box((px - uw / 2, self.top, -ud / 2), (uw, uh, ud), up_mat, name='upper')
+            rest = sl - uh
+            fm = stack((arms_mat, rest), (hm, 99)) if rest > 0 else hm
+            fore.box((px - fw / 2, self.top + uh, -fd / 2), (fw, fh, fd), fm, name='fore')
+            fore.params['reach'] = round(fh - 1.0, 3)
+            arm.params['reach'] = round(total - 1.0 - 1, 3)
+        # legs: thigh, shin with boots, toe cap
+        tw_, th_, td_ = B['thigh']
+        sw, sh, sd = B['shin']
         bh = boots_h if boots_h is not None else (4 if boots_mat else 0)
-        for leg in (self.leg_r, self.leg_l):
+        bh = min(bh, sh)
+        for leg, shin in ((self.leg_r, self.shin_r), (self.leg_l, self.shin_l)):
             px = leg.pivot[0]
-            mat = stack((legs_mat, lh - bh), (boots_mat, 99)) if bh else legs_mat
-            leg.box((px - lw / 2, self.hip_y, -ld / 2), (lw, lh, ld), mat, name='leg')
+            leg.box((px - tw_ / 2, self.hip_y, -td_ / 2), (tw_, th_, td_), legs_mat, name='thigh')
+            smat = stack((legs_mat, sh - bh), (boots_mat, 99)) if bh else legs_mat
+            shin.box((px - sw / 2, self.knee_y, -sd / 2), (sw, sh, sd), smat, name='shin')
+            shin.box((px - sw / 2, 23, -sd / 2 - 1), (sw, 1, 1), boots_mat or legs_mat, name='toe')
         if collar_mat:
-            self.torso.box((-tw / 2, self.top, -td / 2), (tw, 2, td), collar_mat, grow=0.3, name='collar',
-                           faces={'bottom': None})
+            self.torso.box((-cw / 2, self.top, -cd / 2), (cw, 2, cd), collar_mat, grow=0.3, name='collar', faces={'bottom': None})
         return self
 
     def jacket(self, mat, rows=None, open_front=True):
-        """Skin-style outer layer on the torso (coat, vest)."""
+        """Outer layer over chest and waist (coat, vest)."""
         B = self.B
-        tw, th, td = B['tw'], B['th'], B['td']
+        cw, ch, cd = B['chest']
         m = dict(mat)
         if open_front:
             m['open_front'] = True
-        self.torso.box((-tw / 2, self.top, -td / 2), (tw, rows or th, td), m, grow=0.25, name='jacket',
-                       faces={'top': None, 'bottom': None, 'front': dict(m, type='coat_front')})
+        faces = {'top': None, 'bottom': None, 'front': dict(m, type='coat_front')}
+        self.torso.box((-cw / 2, self.top, -cd / 2), (cw, ch, cd), m, grow=0.3, name='jacket', faces=faces)
+        ww, wh, wd = B['waist']
+        self.torso.box((-cw / 2, self.waist_y, -wd / 2), (cw, wh, wd), m, grow=0.3, name='jacket_low', faces=faces)
         return self
 
     def kimono_sleeves(self, mat, drop=6.0, width=None):
-        """Wide hanging sleeves: a loose tube over the upper arm plus a flap that hangs behind the wrist."""
+        """Wide hanging sleeves: a loose tube over the forearm plus a flap that hangs below the wrist."""
         B = self.B
-        aw, ad = B['aw'], B['ad']
-        D = int(width or ad + 2)
-        for arm, sgn in ((self.arm_r, -1), (self.arm_l, 1)):
+        uw, uh, ud = B['upper']
+        fw, fh, fd = B['fore']
+        D = int(width or ud + 2)
+        for arm, fore in ((self.arm_r, self.fore_r), (self.arm_l, self.fore_l)):
             px = arm.pivot[0]
-            arm.box((px - aw / 2, self.top, -D / 2), (aw, 9, D), mat, grow=0.3, name='sleeve', faces={'top': None})
+            arm.box((px - uw / 2, self.top, -ud / 2), (uw, uh, ud), mat, grow=0.35, name='sleeve_up', faces={'top': None})
+            fore.box((px - fw / 2 - 0.5, self.top + uh, -D / 2), (fw + 1, fh - 2, D), mat, grow=0.2, name='sleeve', faces={'top': None})
             if drop > 0:
-                arm.box((px - aw / 2, self.top + 9, D / 2 - 2), (aw, int(round(drop)), 2), dict(mat, shape='scallop'), grow=0.3,
-                        name='flap', faces={'top': None})
+                fore.box((px - fw / 2 - 0.5, self.top + uh + fh - 2, D / 2 - 2), (fw + 1, int(round(drop)), 2), dict(mat, shape='scallop'),
+                         grow=0.2, name='flap', faces={'top': None})
         return self
 
     def puff_sleeves(self, mat):
         B = self.B
+        uw, uh, ud = B['upper']
         for arm in (self.arm_r, self.arm_l):
             px = arm.pivot[0]
-            arm.box((px - B['aw'] / 2, self.top, -B['ad'] / 2), (B['aw'], 4, B['ad']), mat, grow=0.5, name='puff')
+            arm.box((px - uw / 2, self.top, -ud / 2), (uw, 3, ud), mat, grow=0.7, name='puff')
         return self
 
     def cuffs(self, mat, at=None):
         B = self.B
-        y = self.top + (at if at is not None else 8)
-        for arm in (self.arm_r, self.arm_l):
-            px = arm.pivot[0]
-            arm.box((px - B['aw'] / 2, y, -B['ad'] / 2), (B['aw'], 1, B['ad']), mat, grow=0.35, name='cuff')
+        fw, fh, fd = B['fore']
+        y = self.top + B['upper'][1] + fh - 3
+        for fore in (self.fore_r, self.fore_l):
+            px = fore.pivot[0]
+            fore.box((px - fw / 2, y, -fd / 2), (fw, 1, fd), mat, grow=0.4, name='cuff')
         return self
 
     def obi(self, mat, knot=None):
         B = self.B
-        y = self.top + int(round(B['th'] * 0.55))
-        self.torso.box((-B['tw'] / 2, y, -B['td'] / 2), (B['tw'], 3, B['td']), mat, grow=0.4, name='obi')
+        ww, wh, wd = B['waist']
+        cw, ch, cd = B['chest']
+        y = self.waist_y - 1
+        self.torso.box((-cw / 2, y, -cd / 2), (cw, wh + 2, cd), mat, grow=0.3, name='obi', faces={'top': None, 'bottom': None})
         if knot:
-            z = B['td'] / 2 + 0.4
+            z = cd / 2 + 0.3
             k = self.rig.bone('obi_knot', self.torso, (0, y + 1.5, z), anim='sway', ax=2, amp=0.04, speed=0.05)
             k.box((-3, y, z), (6, 3, 2), knot, name='knot')
             k.box((-1.5, y + 3, z + 0.5), (3, 4, 1), dict(knot, shape='point'), name='knot_tail')
@@ -145,10 +198,10 @@ class Humanoid:
 
     def boots(self, mat, height=5.0):
         B = self.B
-        for leg in (self.leg_r, self.leg_l):
-            px = leg.pivot[0]
-            leg.box((px - B['lw'] / 2, 24 - height, -B['ld'] / 2), (B['lw'], height, B['ld']), mat, grow=0.3, name='boot',
-                    faces={'top': mat})
+        sw, sh, sd = B['shin']
+        for shin in (self.shin_r, self.shin_l):
+            px = shin.pivot[0]
+            shin.box((px - sw / 2, 24 - height, -sd / 2), (sw, height, sd), mat, grow=0.3, name='boot', faces={'top': mat})
         return self
 
     # ------------------------------------------------------------------ head
@@ -164,8 +217,6 @@ class Humanoid:
             bm = M('blink', mat['color'], face=face_spec, hair=self.hair_color, build=self.build)
             self.blink_mat = bm
             b.box((-h / 2, self.head_top, -h / 2 - 0.25), (h, h, 0), bm, name='lids')
-        else:
-            self.blink_mat = None
         return self
 
     def _set_hair_color(self, color):
@@ -176,57 +227,73 @@ class Humanoid:
             self.blink_mat['hair'] = color
 
     def hair(self, color, style='long', length=12.0, tip=None, bangs=None, side_locks=True, twin=False, ponytail=False,
-             ahoge=False, volume=0.5, shine=True, ears_open=False, side_len=None):
+             ahoge=False, volume=0.5, shine=True, ears_open=False, side_len=None, fringe=True):
         self._set_hair_color(color)
         h = self.B['head']
         top = self.head_top
         if bangs is None:
-            bangs = 'bangs' if self.build in ('woman', 'child') else 'short'
+            bangs = 'bangs' if self.build in ('woman', 'child', 'youth') else 'short'
         if bangs is False:
             bangs = 'open'
         long_sides = style in ('long', 'very_long', 'wavy', 'bob') or self.build == 'woman'
         shell = M('hair_shell', color, tip=None, bangs=bangs, long=long_sides, shine=shine, ears_open=ears_open,
-                  back=style != 'short' or self.build != 'man')
+                  back=style != 'short' or self.build not in ('man', 'large'))
         self.head.box((-h / 2, top, -h / 2), (h, h, h), shell, grow=0.5, name='hair')
         hm = M('hair', color, tip=tip, shine=shine)
         self.hair_mat = hm
+        # 3D fringe: a few tilted strands over the forehead (above the eyes)
+        if fringe and bangs not in ('open', 'slick', 'none'):
+            fr = self.rig.bone('fringe', self.head, (0, top, -h / 2 - 0.5), rot=(-0.18, 0, 0), anim='hair', amp=0.015, speed=0.09)
+            for k, (x0, w, L, yaw) in enumerate(((-4.5, 2, 3, 0.18), (-2, 2, 4, 0.0), (0.5, 2, 3, -0.05), (2.5, 2, 3, -0.18))):
+                fb = self.rig.bone(f'fringe{k}', fr, (x0 + w / 2, top - 0.5, -h / 2 - 0.6), rot=(0, yaw, 0))
+                fb.box((x0, top - 0.5, -h / 2 - 0.6), (w, L, 1), dict(hm, cut='point', t0=0.2, t1=0.8), name='fringe')
         L = length
         back_z = h / 2 + 0.5
         if style in ('long', 'very_long', 'wavy'):
-            # one curtain from the crown to the shoulders, then three flowing strands
+            # fanned back hair: a centre panel and two side panels angled outwards, each with flowing tips
             U = int(min(8, max(4, L * 0.45)))
-            cur = self.rig.bone('hair_back', self.head, (0, top + 2, back_z), anim='hair', amp=0.02, speed=0.07, drag=0.3)
-            cur.box((-4.5, top + 2, back_z - 0.5), (9, U, 1), dict(hm, t0=0.0, t1=U / L), name='curtain')
             lower = max(2, int(round(L - U)))
-            for k, (x0, w) in enumerate(((-4.5, 3), (-1.5, 3), (1.5, 3))):
-                ln = lower + (1 if k == 1 else 0)
-                b = self.rig.bone(f'hair_tip{k}', cur, (x0 + w / 2, top + 2 + U, back_z), anim='hair', amp=0.05,
+            for k, (x0, w, yaw) in enumerate(((-2.5, 5, 0.0), (-5, 3, 0.35), (2, 3, -0.35))):
+                pz = back_z - 0.25 * k
+                cur = self.rig.bone(f'hair_back{k}', self.head, (x0 + w / 2, top + 2, pz), rot=(0.06, yaw, 0), anim='hair', amp=0.02,
+                                    speed=0.07, phase=0.4 * k, drag=0.3)
+                cur.box((x0, top + 2, pz - 0.5), (w, U, 1), dict(hm, t0=0.0, t1=U / L), name='curtain')
+                ln = lower + (1 if k == 0 else -1 if style != 'wavy' else 0)
+                b = self.rig.bone(f'hair_tip{k}', cur, (x0 + w / 2, top + 2 + U, pz), anim='hair', amp=0.05,
                                   speed=0.07, phase=0.6 * k, drag=0.5)
-                b.box((x0, top + 2 + U, back_z - 0.5), (w, ln, 1),
-                      dict(hm, t0=U / L, t1=1.0, cut='tips' if style == 'wavy' else 'point'), name='strand')
+                b.box((x0, top + 2 + U, pz - 0.5), (w, max(2, ln), 1),
+                      dict(hm, t0=U / L, t1=1.0, cut='tips' if style == 'wavy' or w > 3 else 'point'), name='strand')
         elif style == 'bob':
             self.head.box((-h / 2, top + 5, back_z - 2), (h, 4, 2), dict(hm, cut='tips'), grow=0.5, name='bob',
                           faces={'top': None})
-        elif style == 'short' and self.build != 'man':
+        elif style == 'short' and self.build not in ('man', 'large'):
             self.head.box((-h / 2, top + 6, back_z - 1), (h, 2, 1), dict(hm, cut='tips'), name='nape')
         if side_locks and long_sides:
             sl = side_len or min(10, max(4, L * 0.4))
             for sgn in (-1, 1):
-                b = self.rig.bone(f'lock_{"r" if sgn < 0 else "l"}', self.head, (sgn * (h / 2), top + 6, -h / 2 + 1),
-                                  anim='hair', amp=0.03, speed=0.09, phase=sgn)
-                b.box((sgn * (h / 2) - (1 if sgn > 0 else 0) - 0.0, top + 6, -h / 2 - 0.5), (1, int(round(sl)), 2),
+                b = self.rig.bone(f'lock_{"r" if sgn < 0 else "l"}', self.head, (sgn * (h / 2), top + 5, -h / 2 + 1),
+                                  rot=(-0.08, 0, sgn * -0.08), anim='hair', amp=0.03, speed=0.09, phase=sgn)
+                b.box((sgn * (h / 2) - (1 if sgn > 0 else 0), top + 5, -h / 2 - 0.5), (1, int(round(sl)), 2),
                       dict(hm, cut='point', t0=0.2, t1=0.7), grow=0.25, name='lock')
+                b2 = self.rig.bone(f'lock2_{"r" if sgn < 0 else "l"}', self.head, (sgn * (h / 2), top + 5, 1),
+                                   rot=(0.1, 0, sgn * -0.12), anim='hair', amp=0.04, speed=0.08, phase=sgn + 1)
+                b2.box((sgn * (h / 2) - (1 if sgn > 0 else 0), top + 5, -0.5), (1, int(round(sl * 0.8)), 3),
+                       dict(hm, cut='point', t0=0.3, t1=0.8), grow=0.2, name='lock')
         if twin:
             for sgn in (-1, 1):
                 b = self.rig.bone(f'twin_{"r" if sgn < 0 else "l"}', self.head, (sgn * (h / 2 + 1), top + 2, 1),
-                                  anim='hair', amp=0.07, speed=0.08, phase=sgn * 1.3, drag=0.5)
+                                  rot=(0.1, 0, sgn * -0.25), anim='hair', amp=0.07, speed=0.08, phase=sgn * 1.3, drag=0.5)
                 b.box((sgn * (h / 2 + 1) - 1.5, top + 2, -0.5), (3, int(round(L * 0.8)), 3), dict(hm, cut='point', t0=0.1, t1=1),
                       name='twin')
                 b.box((sgn * (h / 2 + 1) - 1, top + 1, -0), (2, 2, 2), M('cloth', self.accent), grow=0.2, name='twin_tie')
         if ponytail:
-            b = self.rig.bone('ponytail', self.head, (0, top + 2, back_z + 0.5), anim='hair', amp=0.08, speed=0.08,
+            b = self.rig.bone('ponytail', self.head, (0, top + 2, back_z + 0.5), rot=(0.25, 0, 0), anim='hair', amp=0.08, speed=0.08,
                               phase=0.5, drag=0.7)
-            b.box((-1.5, top + 2, back_z), (3, int(round(L * 0.9)), 3), dict(hm, cut='point', t0=0.1, t1=1), name='tail')
+            b.box((-1.5, top + 2, back_z), (3, int(round(L * 0.5)), 3), dict(hm, t0=0.1, t1=0.55), name='tail')
+            b2 = self.rig.bone('ponytail2', b, (0, top + 2 + int(round(L * 0.5)), back_z + 1), rot=(-0.2, 0, 0), anim='hair', amp=0.08,
+                               speed=0.08, phase=1.0, drag=0.7)
+            b2.box((-1, top + 2 + int(round(L * 0.5)), back_z + 0.5), (2, int(round(L * 0.45)), 2), dict(hm, cut='point', t0=0.55, t1=1),
+                   name='tail2')
             b.box((-1, top + 1, back_z - 0.5), (2, 2, 2), M('cloth', self.accent), name='tie')
         if ahoge:
             b = self.rig.bone('ahoge', self.head, (0, top - 0.5, -1), rot=(-0.35, 0, 0.2), anim='sway', ax=2, amp=0.08, speed=0.1)
@@ -241,7 +308,7 @@ class Humanoid:
         rxb, rzb = rx + L * math.sin(angle), rz + L * math.sin(angle)
         per = _ellipse_perimeter(rxb, rzb) * sweep
         if count is None:
-            count = max(6, int(round(per / 4.0)))
+            count = max(6, int(round(per / 3.0)))
         w = int(math.ceil(per / count)) + 1
         hub = self.rig.bone(name, parent, (0, y0, 0))
         for i in range(count):
@@ -254,75 +321,76 @@ class Humanoid:
             tb.box((px - w / 2, y0, pz), (w, L, 0), dict(mat, shape=shape), name='panel')
         return hub
 
+    def _band(self, mat, name):
+        B = self.B
+        pw, ph, pd = B['pelvis']
+        self.hips.box((-pw / 2, self.pelvis_y, -pd / 2), (pw, ph, pd), mat, grow=0.5, name=name, faces={'top': None, 'bottom': None})
+
     def skirt(self, mat, length=9.0, flare=1.4, layers=1, top_y=None, tiers=2, name='skirt'):
         B = self.B
-        y0 = top_y if top_y is not None else self.hip_y - 2
-        ang = min(0.55, 0.12 + flare * 0.12)
-        L = max(4, int(round(length * 0.7)))
-        # waistband so the panel tops are hidden
-        self.hips.box((-B['tw'] / 2, y0, -B['td'] / 2), (B['tw'], 2, B['td']), mat, grow=0.6, name=f'{name}_band',
-                      faces={'top': None, 'bottom': None})
-        hub = self.flare(self.hips, y0 + 1, B['tw'] / 2 + 0.5, B['td'] / 2 + 0.6, L, ang, mat, name=name)
+        pw, ph, pd = B['pelvis']
+        y0 = top_y if top_y is not None else self.pelvis_y
+        ang = min(0.6, 0.16 + flare * 0.13)
+        L = max(4, int(round(length * 0.72)))
+        self._band(mat, f'{name}_band')
+        hub = self.flare(self.hips, y0 + 1, pw / 2 + 0.4, pd / 2 + 0.5, L, ang, mat, name=name)
         if tiers >= 2:
             inner = dict(mat)
             inner.pop('pattern', None)
             inner['trim'] = mat.get('trim', 0) or 2
-            self.flare(self.hips, y0 + 1, B['tw'] / 2 + 0.3, B['td'] / 2 + 0.4, L + 1, ang * 0.7, dict(inner, color=shade(mat['color'], 0.85)),
+            self.flare(self.hips, y0 + 1, pw / 2 + 0.2, pd / 2 + 0.3, L + 1, ang * 0.72, dict(inner, color=shade(mat['color'], 0.85)),
                        name=name + '_under', k=0.7, shape='scallop')
         return hub
 
     def robe(self, mat, length=None, flare=2.4, split=False):
         B = self.B
-        y0 = self.hip_y - 2
+        pw, ph, pd = B['pelvis']
+        y0 = self.pelvis_y
         L = int(round((24 - y0 - 0.5) if length is None else length))
-        ang = math.atan2(flare * 0.8, L)
-        self.hips.box((-B['tw'] / 2, y0, -B['td'] / 2), (B['tw'], 2, B['td']), mat, grow=0.6, name='robe_band',
-                      faces={'top': None, 'bottom': None})
-        if split:
-            self.flare(self.hips, y0 + 1, B['tw'] / 2 + 0.5, B['td'] / 2 + 0.6, L, ang, dict(mat), name='robe', k=0.5,
-                       start=0.08, sweep=0.84)
-        else:
-            self.flare(self.hips, y0 + 1, B['tw'] / 2 + 0.5, B['td'] / 2 + 0.6, L, ang, dict(mat), name='robe', k=0.5)
+        ang = math.atan2(flare * 0.9, L)
+        self._band(mat, 'robe_band')
+        kw = dict(start=0.08, sweep=0.84) if split else {}
+        self.flare(self.hips, y0 + 1, pw / 2 + 0.4, pd / 2 + 0.5, L, ang, dict(mat), name='robe', k=0.5, **kw)
         return self
 
     def coat_tails(self, mat, length=10.0):
         B = self.B
-        y0 = self.hip_y - 1
-        self.flare(self.hips, y0, B['tw'] / 2 + 0.6, B['td'] / 2 + 0.7, int(round(length)), 0.18, dict(mat), name='coat',
+        pw, ph, pd = B['pelvis']
+        self.flare(self.hips, self.pelvis_y, pw / 2 + 0.6, pd / 2 + 0.7, int(round(length)), 0.2, dict(mat), name='coat',
                    k=0.6, start=0.2, sweep=0.6, shape='point')
         return self
 
     def cape(self, mat, length=16.0, width=None, top=None):
         B = self.B
-        w = int(round(width or B['tw'] + 2))
+        cw, ch, cd = B['chest']
+        w = int(round(width or cw + 3))
         y0 = top if top is not None else self.top
-        z = B['td'] / 2 + 0.5
+        z = cd / 2 + 0.5
         L = int(round(length))
-        a = self.rig.bone('cape', self.torso, (0, y0, z), rot=(0.08, 0, 0), anim='cape', amp=0.04, speed=0.06)
+        a = self.rig.bone('cape', self.torso, (0, y0, z), rot=(0.1, 0, 0), anim='cape', amp=0.04, speed=0.06)
         h1 = L // 2
         a.box((-w / 2, y0, z), (w, h1, 1), dict(mat, hem_shadow=False), name='cape')
-        b = self.rig.bone('cape_low', a, (0, y0 + h1, z), anim='cape', amp=0.05, speed=0.06, phase=0.8, drag=0.4)
-        b.box((-w / 2, y0 + h1, z), (w, L - h1, 1), mat, name='cape_hem')
-        # collar/mantle on the shoulders
-        self.torso.box((-B['tw'] / 2, self.top, -B['td'] / 2), (B['tw'], 1, B['td']), dict(mat, trim=0), grow=0.6,
-                       name='mantle', faces={'bottom': None})
+        b = self.rig.bone('cape_low', a, (0, y0 + h1, z), rot=(0.06, 0, 0), anim='cape', amp=0.05, speed=0.06, phase=0.8, drag=0.4)
+        b.box((-w / 2 - 1, y0 + h1, z), (w + 2, L - h1, 1), dict(mat, shape='scallop'), name='cape_hem')
+        self.torso.box((-cw / 2, self.top, -cd / 2), (cw, 1, cd), dict(mat, trim=0), grow=0.6, name='mantle', faces={'bottom': None})
         return a
 
     def shoulder_pads(self, mat, size=3.2):
         B = self.B
+        uw, uh, ud = B['upper']
         for arm, sgn in ((self.arm_r, -1), (self.arm_l, 1)):
             px = arm.pivot[0]
-            s = int(round(size))
-            arm.box((px - B['aw'] / 2 - (1 if sgn < 0 else 0), self.top - 1, -B['ad'] / 2 - 0.5), (B['aw'] + 1, 3, B['ad'] + 1),
-                    mat, grow=0.25, name='pad')
+            pb = self.rig.bone(arm.name + '_pad', arm, (px, self.top, 0), rot=(0, 0, sgn * -0.25))
+            pb.box((px - uw / 2 - 1, self.top - 1, -ud / 2 - 1), (uw + 2, 2, ud + 2), mat, grow=0.1, name='pad')
         return self
 
     def belt(self, mat, buckle=None):
         B = self.B
-        y = self.hip_y - 2
-        self.torso.box((-B['tw'] / 2, y, -B['td'] / 2), (B['tw'], 1, B['td']), mat, grow=0.35, name='belt')
+        pw, ph, pd = B['pelvis']
+        y = self.pelvis_y
+        self.hips.box((-pw / 2, y, -pd / 2), (pw, 1, pd), mat, grow=0.6, name='belt')
         if buckle:
-            self.torso.box((-1, y - 0.5, -B['td'] / 2 - 0.6), (2, 2, 0), buckle, name='buckle')
+            self.hips.box((-1, y - 0.5, -pd / 2 - 0.7), (2, 2, 0), buckle, name='buckle')
         return self
 
     # ------------------------------------------------------------------ head accessories

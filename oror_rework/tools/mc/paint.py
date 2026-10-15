@@ -524,8 +524,25 @@ def p_scale(mat, face, w, h, cube, rng):
     t[((xs + off * 1) % 2 == 0) & (ys % 2 == 0)] += 1
     t[((xs + off * 1) % 2 == 1) & (ys % 2 == 1)] -= 1
     rgb = jitter(colorize(t, c), rng, 0.02)
-    tip = mat.get('tip_color')
-    return rgb, None, None
+    belly = mat.get('belly')
+    if belly:
+        if face == 'bottom':
+            rgb = jitter(colorize(t * 0.5, belly), rng, 0.02)
+        elif face in ('front', 'back', 'left', 'right') and h >= 3 and not mat.get('no_belly_sides'):
+            n = max(1, int(round(h * mat.get('belly_frac', 0.34))))
+            rgb[-n:] = jitter(colorize(t[-n:] * 0.5, belly), rng, 0.02)
+    if face == 'top' and mat.get('back'):
+        rgb = jitter(colorize(t, mat['back']), rng, 0.02)
+    glow = None
+    pat, acc = mat.get('pattern'), mat.get('accent')
+    if pat and acc and w > 1 and h > 1 and face != 'bottom':
+        pm = pattern(pat, w, h, face, rng)
+        rgb[pm] = ramp(acc)[0]
+        if mat.get('pattern_glow'):
+            glow = np.zeros((h, w, 4), np.float32)
+            glow[pm, :3] = hexc(acc)
+            glow[pm, 3] = 255 * mat.get('glow_amount', 0.6)
+    return rgb, None, glow
 
 def p_fur(mat, face, w, h, cube, rng):
     c = mat['color']
@@ -606,14 +623,31 @@ def p_membrane(mat, face, w, h, cube, rng):
                     rgb[y, x] = np.array(mix(c, acc, 0.45), np.float32)
     rgb = jitter(rgb, rng, 0.03)
     alpha = np.ones((h, w), np.float32)
-    if face in ('front', 'back') and h >= 4 and w >= 4:
+    flat = cube is not None and cube.size[1] == 0
+    big = ('top', 'bottom') if flat else ('front', 'back')
+    if face in big and h >= 4 and w >= 4:
         seg = max(2, w // 4)
         for x in range(w):
             u = (x % seg) / seg
             depth = int(round((1 - abs(u - 0.5) * 2) * min(4, h * 0.35)))
             if depth > 0:
-                alpha[h - depth:, x] = 0
-    return rgb, alpha if face in ('front', 'back') else None, None
+                if flat:
+                    alpha[:depth, x] = 0          # trailing edge = back = image top row
+                else:
+                    alpha[h - depth:, x] = 0
+    glow = None
+    if mat.get('glow_edge'):
+        glow = np.zeros((h, w, 4), np.float32)
+        ge = hexc(mat['glow_edge'])
+        for x in range(w):
+            col = alpha[:, x]
+            idx = np.nonzero(col)[0]
+            if len(idx):
+                y = idx[0] if flat else idx[-1]
+                rgb[y, x] = ge
+                glow[y, x, :3] = ge
+                glow[y, x, 3] = 200
+    return rgb, alpha if face in big else None, glow
 
 def p_simple(mat, face, w, h, cube, rng, amp=0.04, bands=None):
     t = tone_base(w, h, face, mat)
@@ -627,20 +661,52 @@ def p_wood(mat, face, w, h, cube, rng):
         if x % 2 == 0:
             t[:, x] -= 0.6
     t[rng.integers(0, h, max(1, h // 4)), rng.integers(0, w, max(1, h // 4))] -= 1
-    return jitter(colorize(t, c), rng, 0.03), None, None
+    rgb = jitter(colorize(t, c), rng, 0.03)
+    glow = None
+    veins = mat.get('veins')
+    if veins and face in ('front', 'back', 'left', 'right') and w > 1 and h > 2:
+        pm = pattern('cracks', w, h, face, rng)
+        rgb[pm] = hexc(veins)
+        glow = np.zeros((h, w, 4), np.float32)
+        glow[pm, :3] = hexc(veins)
+        glow[pm, 3] = 255 * mat.get('glow_amount', 0.55)
+    return rgb, None, glow
 
 def p_leaf(mat, face, w, h, cube, rng):
     c = mat['color']
     t = rng.integers(-1, 2, (h, w)).astype(np.float32)
     rgb = colorize(t, c)
     alpha = np.ones((h, w), np.float32)
-    alpha[rng.random((h, w)) < 0.12] = 0
-    return rgb, alpha, None
+    alpha[rng.random((h, w)) < mat.get('holes', 0.12)] = 0
+    glow = None
+    fl = mat.get('flowers')
+    if fl:
+        cols = fl if isinstance(fl, list) else [fl]
+        glow = np.zeros((h, w, 4), np.float32)
+        for _ in range(max(1, w * h // 14)):
+            x, y = int(rng.integers(0, w)), int(rng.integers(0, h))
+            col = hexc(cols[int(rng.integers(0, len(cols)))])
+            rgb[y, x] = col
+            alpha[y, x] = 1
+            if mat.get('flower_glow'):
+                glow[y, x, :3] = col
+                glow[y, x, 3] = 200
+    return rgb, alpha, glow
 
 def p_rock(mat, face, w, h, cube, rng):
     c = mat['color']
     t = tone_base(w, h, face, mat) + rng.integers(-1, 2, (h, w)) * 0.7
     rgb = jitter(colorize(t, c), rng, 0.03)
+    top = mat.get('top')
+    if top:
+        tn = rng.integers(-1, 2, (h, w)).astype(np.float32) * 0.6
+        if face == 'top':
+            rgb = jitter(colorize(tn + 1, top), rng, 0.03)
+        elif face in ('front', 'back', 'left', 'right'):
+            rows = mat.get('top_rows', 2)
+            for x in range(w):
+                n = min(h, rows + int(rng.integers(0, 2)))
+                rgb[:n, x] = colorize(tn[:n, x:x + 1], top)[:, 0]
     glow = None
     if mat.get('pattern') == 'cracks' or mat.get('cracks'):
         pm = pattern('cracks', w, h, face, rng)
@@ -682,7 +748,15 @@ def p_slime(mat, face, w, h, cube, rng):
     for _ in range(max(1, w * h // 12)):
         x, y = rng.integers(0, max(1, w)), rng.integers(0, max(1, h))
         rgb[y, x] = ramp(c)[2]
-    return jitter(rgb, rng, 0.02), None, None
+    alpha = None
+    if mat.get('round_corners') and w >= 4 and h >= 4:
+        alpha = np.ones((h, w), np.float32)
+        for (y, x, dy, dx) in ((0, 0, 1, 1), (0, w - 1, 1, -1), (h - 1, 0, -1, 1), (h - 1, w - 1, -1, -1)):
+            alpha[y, x] = 0
+            alpha[y + dy, x] = 0
+            alpha[y, x + dx] = 0
+        rgb[1, 1] = ramp(c)[2]              # highlight
+    return jitter(rgb, rng, 0.02), alpha, None
 
 def p_ring(mat, face, w, h, cube, rng):
     """Halo / ring drawn on the two large faces of a thin plane; clear elsewhere."""
@@ -767,7 +841,7 @@ def p_plane(mat, face, w, h, cube, rng):
     if mat.get('glow'):
         glow = np.zeros((h, w, 4), np.float32)
         glow[a, :3] = rgb[a]
-        glow[a, 3] = 255
+        glow[a, 3] = 255 * mat.get('glow_amount', 1.0)
     return rgb, alpha, glow
 
 def p_eye(mat, face, w, h, cube, rng):
@@ -893,6 +967,101 @@ def p_stack(mat, face, w, h, cube, rng):
     return rgb, alpha, glow if glow[..., 3].any() else None
 
 PAINTERS['stack'] = p_stack
+
+def p_decal(mat, face, w, h, cube, rng):
+    """A base material plus single-texel decals: (face, x, y, colour[, glow]). Negative x/y count from the
+    right/bottom edge. Used for creature eyes, nostrils, teeth and markings painted onto plain boxes."""
+    base = mat['base']
+    rgb, alpha, glow = PAINTERS[base['type']](base, face, w, h, cube, rng)
+    for d in mat.get('decals', []):
+        f, x, y, col = d[:4]
+        if f != face:
+            continue
+        x = w + x if x < 0 else x
+        y = h + y if y < 0 else y
+        if not (0 <= x < w and 0 <= y < h):
+            continue
+        rgb[y, x] = hexc(col)
+        if alpha is not None:
+            alpha[y, x] = 1
+        if len(d) > 4 and d[4]:
+            if glow is None:
+                glow = np.zeros((h, w, 4), np.float32)
+            glow[y, x, :3] = hexc(col)
+            glow[y, x, 3] = 255 * (d[4] if isinstance(d[4], float) else 1.0)
+    return rgb, alpha, glow
+
+PAINTERS['decal'] = p_decal
+
+def _fin_axes(w, h, root, lean):
+    """along: 0 at the attached edge -> 1 at the free edge; across: 0..1 towards the lean side."""
+    ys, xs = np.mgrid[0:h, 0:w]
+    fx, fy = (xs + 0.5) / w, (ys + 0.5) / h
+    along = {'bottom': 1 - fy, 'top': fy, 'left': fx, 'right': 1 - fx}[root]
+    if root in ('bottom', 'top'):
+        across = fx if lean in ('right', None) else 1 - fx
+    else:
+        across = 1 - fy if lean in ('up', None) else fy
+    return along, across
+
+def p_fin(mat, face, w, h, cube, rng):
+    """Fish/whale fin on a flat plane. root = image edge attached to the body, lean = image direction
+    the tip sweeps to; fork=True makes a forked tail fin (two lobes, notch in the middle)."""
+    c = mat['color']
+    root, lean = mat.get('root', 'bottom'), mat.get('lean')
+    along, across = _fin_axes(w, h, root, lean)
+    if mat.get('fork'):
+        mid = np.abs(across - 0.5) * 2              # 0 at centre line, 1 at the lobe tips
+        a = (mid >= along * 0.9 - 0.05) & (mid <= 0.25 + along * 0.85)
+        a |= along < 0.3
+    elif lean is None:
+        a = (across >= along * 0.38) & (across <= 1 - along * 0.38)
+    else:
+        a = (across >= 0.62 * along ** 0.85) & (across <= 1 - 0.22 * along)
+    t = np.zeros((h, w), np.float32)
+    t[along > 0.55] -= 1
+    t[along < 0.2] += 1
+    rgb = jitter(colorize(t, c), rng, 0.03)
+    rays = mat.get('rays')
+    if rays:
+        rc = np.array(ramp(rays)[0], np.float32)
+        k = ((across * w * 0.5).astype(int) % 2 == 0) & (along > 0.15)
+        rgb[k & a] = rgb[k & a] * 0.5 + rc * 0.5
+    glow = None
+    edge = mat.get('edge')
+    if edge:
+        glow = np.zeros((h, w, 4), np.float32)
+        e = a & ~(np.roll(a, 1, 0) & np.roll(a, -1, 0) & np.roll(a, 1, 1) & np.roll(a, -1, 1))
+        rgb[e] = hexc(edge)
+        glow[e, :3] = hexc(edge)
+        glow[e, 3] = 255 * mat.get('glow_amount', 0.6)
+    if mat.get('rainbow'):
+        import colorsys
+        glow = np.zeros((h, w, 4), np.float32) if glow is None else glow
+        for y in range(h):
+            for x in range(w):
+                if a[y, x]:
+                    col = np.array(colorsys.hsv_to_rgb((float(along[y, x]) * 0.8 + 0.5) % 1, 0.45, 1.0)) * 255
+                    rgb[y, x] = col
+                    glow[y, x, :3] = col
+                    glow[y, x, 3] = 200
+    return rgb, a.astype(np.float32), glow
+
+def p_teeth(mat, face, w, h, cube, rng):
+    c = mat.get('color', '#f2efe6')
+    rgb = colorize(np.zeros((h, w), np.float32), c)
+    alpha = np.ones((h, w), np.float32)
+    ys, xs = np.mgrid[0:h, 0:w]
+    if h == 1:
+        alpha[:, 1::2] = 0
+    else:
+        tipdown = mat.get('down', True)
+        alpha[(ys == (h - 1 if tipdown else 0)) & (xs % 2 == 1)] = 0
+    rgb[:, ::3] = ramp(c)[-1]
+    return rgb, alpha, None
+
+PAINTERS['fin'] = p_fin
+PAINTERS['teeth'] = p_teeth
 
 def p_coat_front(mat, face, w, h, cube, rng):
     rgb, alpha, glow = p_cloth(dict(mat, type='cloth'), face, w, h, cube, rng)

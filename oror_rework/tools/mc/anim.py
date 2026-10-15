@@ -26,6 +26,11 @@ def pose(rig, age=0.0, swing=0.0, amount=0.0, motion=0, progress=0.0, action=0):
                 dx -= pulse * 2.4; dy += sign * pulse * 0.4
             elif motion in (8, 11, 15):
                 dx -= pulse * 1.7; dz += sign * pulse * 0.5
+        elif a == 'elbow':
+            dx -= 0.12 + abs(math.cos(swing * 0.6662)) * amount * 0.25 + (pulse * 0.5 if motion else 0) + (0.3 if action > 0 else 0)
+        elif a == 'knee':
+            ph = math.pi if left else 0.0
+            dx += max(0.0, math.cos(swing * 0.6662 + ph)) * amount * 1.1
         elif a in ('leg_r', 'leg_l'):
             dx += math.cos(swing * 0.6662 + (math.pi if a == 'leg_l' else 0)) * amount * 0.8
         elif a == 'skirt':
@@ -36,11 +41,18 @@ def pose(rig, age=0.0, swing=0.0, amount=0.0, motion=0, progress=0.0, action=0):
             dz += math.cos(age * speed * 0.7 + phase) * amp * 0.3
         elif a == 'tail':
             i = p.get('i', 0.0)
-            dy += math.sin(age * speed - i * 0.6) * amp * (1 + i * 0.15)
-            dx += math.cos(age * speed * 0.7 - i * 0.5) * amp * 0.25
+            main = math.sin(age * speed - i * 0.6) * amp * (1 + i * 0.15)
+            minor = math.cos(age * speed * 0.7 - i * 0.5) * amp * 0.25
+            if int(p.get('ax', 1)) == 0:
+                dx += main; dy += minor
+            else:
+                dy += main; dx += minor
         elif a in ('wing_r', 'wing_l'):
             flap = math.sin(age * speed) * amp + amount * 0.3
-            dy += -flap if a == 'wing_l' else flap
+            if int(p.get('ax', 1)) == 2:
+                dz += flap if a == 'wing_l' else -flap
+            else:
+                dy += -flap if a == 'wing_l' else flap
         elif a == 'sway':
             v = math.sin(age * speed + phase) * amp
             ax = int(p.get('ax', 0))
