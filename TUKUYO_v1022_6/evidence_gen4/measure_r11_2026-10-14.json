@@ -1,0 +1,355 @@
+{
+ "utc": "2026-10-15T01:49:32Z",
+ "seed": 20261008,
+ "note": "no parent is called; dev splits only",
+ "fuzz": {
+  "texts": 4245,
+  "entry_points": [
+   "numbers",
+   "forms",
+   "reader",
+   "solve",
+   "ask",
+   "think"
+  ],
+  "crashes": 0,
+  "by_kind": {},
+  "examples": {},
+  "seconds": 90.2,
+  "seconds_total": 90.3
+ },
+ "specs": {
+  "readings": 6000,
+  "crashes": 0,
+  "by_kind": {},
+  "seconds": 1.7,
+  "seconds_total": 1.7
+ },
+ "mutate": {
+  "readings": 542,
+  "mutations": {
+   "number_not_in_text": {
+    "n": 542,
+    "caught": 542,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "span_not_in_text": {
+    "n": 542,
+    "caught": 542,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "number_in_relation": {
+    "n": 542,
+    "caught": 542,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "binding_dropped": {
+    "n": 542,
+    "caught": 542,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "unit_changed": {
+    "n": 542,
+    "caught": 541,
+    "passed_same_answer": 1,
+    "passed_other_answer": 0,
+    "caught_pct": 99.8
+   },
+   "contradiction_added": {
+    "n": 542,
+    "caught": 542,
+    "passed_same_answer": 0,
+    "passed_other_answer": 0,
+    "caught_pct": 100.0
+   },
+   "number_declared_unused": {
+    "n": 542,
+    "caught": 522,
+    "passed_same_answer": 20,
+    "passed_other_answer": 0,
+    "caught_pct": 96.3
+   },
+   "operator_changed": {
+    "n": 500,
+    "caught": 268,
+    "passed_same_answer": 2,
+    "passed_other_answer": 230,
+    "caught_pct": 53.6
+   },
+   "other_quantity_asked": {
+    "n": 542,
+    "caught": 0,
+    "passed_same_answer": 17,
+    "passed_other_answer": 525,
+    "caught_pct": 0.0
+   }
+  },
+  "seconds_total": 7.1
+ },
+ "parents": {
+  "items": 542,
+  "note": "simulated parents: wrong readings are operator or asked-quantity changes that pass the checker",
+  "grid": [
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "correct": 405,
+    "abstain": 134,
+    "wrong": 3,
+    "committed_wrong_pct": 0.6
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "correct": 411,
+    "abstain": 130,
+    "wrong": 1,
+    "committed_wrong_pct": 0.2
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "correct": 405,
+    "abstain": 134,
+    "wrong": 3,
+    "committed_wrong_pct": 0.6
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "correct": 251,
+    "abstain": 273,
+    "wrong": 18,
+    "committed_wrong_pct": 3.3
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "correct": 255,
+    "abstain": 265,
+    "wrong": 22,
+    "committed_wrong_pct": 4.1
+   },
+   {
+    "parents": 1,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "correct": 271,
+    "abstain": 226,
+    "wrong": 45,
+    "committed_wrong_pct": 8.3
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "abstain": 84,
+    "correct": 457,
+    "wrong": 1,
+    "committed_wrong_pct": 0.2
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "abstain": 92,
+    "correct": 449,
+    "wrong": 1,
+    "committed_wrong_pct": 0.2
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "abstain": 82,
+    "correct": 454,
+    "wrong": 6,
+    "committed_wrong_pct": 1.1
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "abstain": 251,
+    "correct": 276,
+    "wrong": 15,
+    "committed_wrong_pct": 2.8
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "abstain": 239,
+    "correct": 273,
+    "wrong": 30,
+    "committed_wrong_pct": 5.5
+   },
+   {
+    "parents": 2,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "abstain": 219,
+    "correct": 279,
+    "wrong": 44,
+    "committed_wrong_pct": 8.1
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 0.0,
+    "abstain": 126,
+    "correct": 416,
+    "committed_wrong_pct": 0.0
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 0.5,
+    "abstain": 155,
+    "correct": 387,
+    "committed_wrong_pct": 0.0
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.1,
+    "rho": 1.0,
+    "abstain": 150,
+    "correct": 391,
+    "wrong": 1,
+    "committed_wrong_pct": 0.2
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 0.0,
+    "abstain": 343,
+    "correct": 195,
+    "wrong": 4,
+    "committed_wrong_pct": 0.7
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 0.5,
+    "abstain": 356,
+    "correct": 184,
+    "wrong": 2,
+    "committed_wrong_pct": 0.4
+   },
+   {
+    "parents": 3,
+    "p_wrong": 0.3,
+    "rho": 1.0,
+    "abstain": 344,
+    "correct": 187,
+    "wrong": 11,
+    "committed_wrong_pct": 2.0
+   }
+  ],
+  "seconds_total": 32.7
+ },
+ "learn": {
+  "templates": 526,
+  "from_readings": 542,
+  "audit_ok": true,
+  "agree_with_own_reader": 1018,
+  "template_abstains": 186,
+  "no_template": 39,
+  "no_instance": 27,
+  "template_only": 1,
+  "disagreements": [],
+  "seconds_total": 39.6
+ },
+ "accuracy": {
+  "asdiv": {
+   "items": 1083,
+   "g4_solve": {
+    "correct": 539,
+    "abstain": 541,
+    "wrong": 3
+   },
+   "v1022": {
+    "abstain": 1050,
+    "correct": 24,
+    "wrong": 9
+   },
+   "think": {
+    "correct": 540,
+    "abstain": 540,
+    "wrong": 3
+   },
+   "ms": {
+    "g4_solve": {
+     "median": 3.23,
+     "p95": 19.31
+    },
+    "v1022": {
+     "median": 3.78,
+     "p95": 7.81
+    },
+    "think": {
+     "median": 8.16,
+     "p95": 15.28
+    }
+   }
+  },
+  "mgsm_ja": {
+   "items": 139,
+   "g4_solve": {
+    "abstain": 139
+   },
+   "v1022": {
+    "abstain": 139
+   },
+   "think": {
+    "abstain": 139
+   },
+   "ms": {
+    "g4_solve": {
+     "median": 0.51,
+     "p95": 1.58
+    },
+    "v1022": {
+     "median": 3.77,
+     "p95": 4.66
+    },
+    "think": {
+     "median": 5.29,
+     "p95": 6.96
+    }
+   }
+  },
+  "seconds_total": 16.5
+ },
+ "life": {
+  "results": 20000,
+  "crashes": 0,
+  "by_kind": {},
+  "experience_kinds": {
+   "learning": 9198,
+   "parent_help": 1064,
+   "honesty": 1916,
+   "parent_error": 3204,
+   "discovery": 561
+  },
+  "memory": {
+   "ok": true,
+   "remembered": 1,
+   "contested": 1
+  },
+  "seconds_total": 3.8
+ }
+}

@@ -1,0 +1,712 @@
+{
+ "utc": "2026-10-14T16:15:48Z",
+ "categories": {
+  "hypothetical": {
+   "rows": [
+    {
+     "text": "If Ben shares 24 stickers equally among 4 friends, how many stickers does each friend get?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "If a box holds 12 eggs, how many eggs are in 5 boxes?",
+     "expected": "60",
+     "g4_solve": "60",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": "60",
+     "parser_b_grade": "right",
+     "think": "60",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "If Nora reads 15 pages a day, how many pages will she read in 6 days?",
+     "expected": "90",
+     "g4_solve": "90",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "90",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Kim has 15 dollars. If she buys a book for 6 dollars, how much money will she have left?",
+     "expected": "9",
+     "g4_solve": "9",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "9",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "If each bag has 8 apples and there are 7 bags, how many apples are there in all?",
+     "expected": "56",
+     "g4_solve": "56",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "56",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Leo wants to put 42 photos into an album. If each page holds 6 photos, how many pages will he need?",
+     "expected": "7",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "If 3 friends each bring 4 balloons, how many balloons do they bring altogether?",
+     "expected": "12",
+     "g4_solve": "12",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "12",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "If Rosa saves 5 dollars every week, how many dollars will she save in 8 weeks?",
+     "expected": "40",
+     "g4_solve": "40",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "40",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Eva has 14 pencils. If she gives 5 pencils to Sam, how many pencils will she have?",
+     "expected": "9",
+     "g4_solve": "9",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "9",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "right": 8,
+    "held": 1
+   },
+   "think": {
+    "right": 8,
+    "held": 1
+   },
+   "parser_b": {
+    "undecided": 8,
+    "right": 1
+   }
+  },
+  "counterfactual": {
+   "rows": [
+    {
+     "text": "If Tom had 5 more apples, he would have 12 apples. How many apples does Tom have?",
+     "expected": "7",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "SITUATION_HEDGED_OR_UNKNOWN_AMOUNT",
+     "think_grade": "held"
+    },
+    {
+     "text": "If Mia had 3 fewer pens, she would have 9 pens. How many pens does Mia have?",
+     "expected": "12",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "SITUATION_HEDGED_OR_UNKNOWN_AMOUNT",
+     "think_grade": "held"
+    },
+    {
+     "text": "Sam would have 20 cards if he had 6 more cards. How many cards does Sam have?",
+     "expected": "14",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "If Ann gave away 4 of her shells, she would have 11 shells left. How many shells does Ann have?",
+     "expected": "15",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "SITUATION_HEDGED_OR_UNKNOWN_AMOUNT",
+     "think_grade": "held"
+    },
+    {
+     "text": "If Ben had bought 2 more books, he would have bought 9 books. How many books did Ben buy?",
+     "expected": "7",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "SITUATION_HEDGED_OR_UNKNOWN_AMOUNT",
+     "think_grade": "held"
+    },
+    {
+     "text": "Lily would need 5 more beads to have 30 beads. How many beads does Lily have?",
+     "expected": "25",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 6
+   },
+   "think": {
+    "held": 6
+   },
+   "parser_b": {
+    "undecided": 6
+   }
+  },
+  "not_done": {
+   "rows": [
+    {
+     "text": "Ann has 10 apples. She plans to give 4 apples to Bob tomorrow. How many apples does Ann have now?",
+     "expected": "10",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Lee had 8 cookies. He wanted to eat 3 cookies, but he did not eat any. How many cookies does Lee have?",
+     "expected": "8",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Max has 12 marbles. He is going to lose 5 marbles in a game later. How many marbles does Max have now?",
+     "expected": "12",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Zoe had 20 stickers. She thought about giving 6 stickers to Kai. How many stickers does Zoe have?",
+     "expected": "20",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Omar has 9 toy cars. He might buy 4 more toy cars next week. How many toy cars does Omar have now?",
+     "expected": "9",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Rita had 15 shells. She gave 5 shells to Ann, but Ann gave them back. How many shells does Rita have now?",
+     "expected": "15",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 6
+   },
+   "think": {
+    "held": 6
+   },
+   "parser_b": {
+    "undecided": 6
+   }
+  },
+  "sharing": {
+   "rows": [
+    {
+     "text": "30 candies were shared equally among 5 kids. How many candies did each kid get?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Split 30 candies among 5 kids so that each kid gets the same number. How many candies does each kid get?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "30 candies were shared among 5 kids, but not equally. How many candies did each kid get?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ann and Ben shared 30 candies. Ann got 10 more candies than Ben. How many candies did Ben get?",
+     "expected": "10",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Four friends shared 20 grapes. Each friend got a different number of grapes. How many grapes did each friend get?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Steven and Megan shared some marbles in the ratio 2:3. Megan got 18 marbles. How many marbles did Steven get?",
+     "expected": "12",
+     "g4_solve": "12",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "12",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "right": 3,
+    "held": 3
+   },
+   "think": {
+    "right": 3,
+    "held": 3
+   },
+   "parser_b": {
+    "undecided": 6
+   }
+  },
+  "other_operation": {
+   "rows": [
+    {
+     "text": "Billy gave equal numbers of his 72 lemon drops to his 6 friends. How many lemon drops did each friend get?",
+     "expected": "12",
+     "g4_solve": "12",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "12",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Tom gave 12 apples to each of his 3 friends. How many apples did Tom give away?",
+     "expected": "36",
+     "g4_solve": "36",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "36",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Mia had 10 pens. She gave 4 pens to Sam. How many pens did Sam lose?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "SITUATION_AMBIGUOUS_VERB",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "right": 2,
+    "held": 1
+   },
+   "think": {
+    "right": 2,
+    "held": 1
+   },
+   "parser_b": {
+    "undecided": 3
+   }
+  },
+  "negation": {
+   "rows": [
+    {
+     "text": "Tom had 10 apples. He did not eat 3 of them. How many apples did he eat?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Mia had 10 pens. She did not lose any pens. How many pens does she have now?",
+     "expected": "10",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ben did not buy 6 boxes of pens with 4 pens in each box. How many pens did Ben buy?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Kai had 12 eggs. He did not break 4 of them. How many eggs did he break?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 4
+   },
+   "think": {
+    "held": 4
+   },
+   "parser_b": {
+    "undecided": 4
+   }
+  },
+  "kind_words": {
+   "rows": [
+    {
+     "text": "There are 6 large boxes and 4 small bags. How many small boxes are there?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ken has 5 new toys and 3 old books. How many old toys does Ken have?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ana has 7 big apples. She ate 2 big apples. How many big apples does she have left?",
+     "expected": "5",
+     "g4_solve": "5",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": "5",
+     "parser_b_grade": "right",
+     "think": "5",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Ana has 7 big apples and 3 small apples. How many apples does she have in all?",
+     "expected": "10",
+     "g4_solve": "10",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "10",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "There are 8 little ducks and 2 big ducks. How many ducks are there?",
+     "expected": "10",
+     "g4_solve": "10",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "10",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Jo bought 4 new shirts and 3 new hats. How many new shirts did Jo buy?",
+     "expected": "4",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ben has 6 old coins and 5 new coins. How many new coins does Ben have?",
+     "expected": "5",
+     "g4_solve": "5",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "5",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "held": 3,
+    "right": 4
+   },
+   "think": {
+    "held": 3,
+    "right": 4
+   },
+   "parser_b": {
+    "undecided": 6,
+    "right": 1
+   }
+  },
+  "containers": {
+   "rows": [
+    {
+     "text": "There are 36 eggs. Each carton holds 12 eggs. How many cartons are there?",
+     "expected": "3",
+     "g4_solve": "3",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "3",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Liam put 45 pencils into boxes with 9 pencils in each box. How many boxes did he use?",
+     "expected": "5",
+     "g4_solve": "5",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": "5",
+     "parser_b_grade": "right",
+     "think": "5",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "A baker packs 48 rolls into bags of 6. How many bags does she fill?",
+     "expected": "8",
+     "g4_solve": "8",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "8",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "There are 5 vans with 7 kids in each van. How many kids are there?",
+     "expected": "35",
+     "g4_solve": "35",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": "35",
+     "parser_b_grade": "right",
+     "think": "35",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Nina has 50 beads. She puts them in jars with 8 beads in each jar. How many jars can she fill?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "There are 4 shelves with 9 books on each shelf. How many shelves are there?",
+     "expected": "4",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": null,
+     "parser_b_grade": "undecided",
+     "think": null,
+     "think_reason": "UNCOVERED_NUMERIC_OR_OPERATION",
+     "think_grade": "held"
+    },
+    {
+     "text": "Jack puts 24 cookies on plates with 6 cookies on each plate. How many cookies are there?",
+     "expected": "24",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "parser_b": "24",
+     "parser_b_grade": "right",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "right": 5,
+    "held": 2
+   },
+   "think": {
+    "right": 5,
+    "held": 2
+   },
+   "parser_b": {
+    "undecided": 4,
+    "right": 3
+   }
+  }
+ },
+ "total": {
+  "g4": {
+   "right": 22,
+   "held": 26
+  },
+  "think": {
+   "right": 22,
+   "held": 26
+  },
+  "parser_b": {
+   "undecided": 43,
+   "right": 5
+  }
+ }
+}

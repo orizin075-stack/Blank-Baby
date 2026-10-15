@@ -1,0 +1,1186 @@
+{
+ "utc": "2026-10-14T16:22:10Z",
+ "set": "dev_3",
+ "sha256": "2de0b3c3ae5fc230a97ab7dd9dc9ff6afc0cf64b1bbe5bf1c5fe006ef4cb5918",
+ "langs": {
+  "en": {
+   "totals": {
+    "problems": 60,
+    "right": 59,
+    "held": 1,
+    "wrong": 0,
+    "answered": 56,
+    "range": 0.9333,
+    "right_share": 0.9833,
+    "wrong_among_answered": 0.0
+   },
+   "rows": [
+    {
+     "i": 0,
+     "text": "Nina picked 27 strawberries and ate 8 of them. How many strawberries does she have now?",
+     "gold": "19",
+     "got": "19",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 1,
+     "text": "A library has 45 picture books and 38 storybooks. How many books are there altogether?",
+     "gold": "83",
+     "got": null,
+     "reason": "NO_VERIFIED_READING",
+     "route": null,
+     "grade": "held"
+    },
+    {
+     "i": 2,
+     "text": "Owen scored 64 points. Lily scored 17 points fewer than Owen. How many points did Lily score?",
+     "gold": "47",
+     "got": "47",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 3,
+     "text": "There are 8 rows of chairs with 12 chairs in each row. How many chairs are there?",
+     "gold": "96",
+     "got": "96",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 4,
+     "text": "A farmer puts 72 eggs into cartons of 6. How many cartons does he fill?",
+     "gold": "12",
+     "got": "12",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 5,
+     "text": "A pencil costs 35 cents. How much do 4 pencils cost in cents?",
+     "gold": "140",
+     "got": "140",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 6,
+     "text": "Grace had 50 dollars. She spent 18 dollars on a shirt and 9 dollars on lunch. How much money does she have left?",
+     "gold": "23",
+     "got": "23",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 7,
+     "text": "A car travels 60 miles in one hour. How far does it travel in 5 hours?",
+     "gold": "300",
+     "got": "300",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 8,
+     "text": "How many centimeters are in 7 meters?",
+     "gold": "700",
+     "got": "700",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 9,
+     "text": "A class of 32 students went on a trip. Half of them brought a camera. How many students brought a camera?",
+     "gold": "16",
+     "got": "16",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 10,
+     "text": "Leo had some marbles. He found 6 more. How many marbles does he have now?",
+     "gold": null,
+     "got": null,
+     "reason": "NO_VERIFIED_READING",
+     "route": null,
+     "grade": "right"
+    },
+    {
+     "i": 11,
+     "text": "Zoe has 25 stamps. Her brother has 3 times as many stamps. How many stamps does her brother have?",
+     "gold": "75",
+     "got": "75",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 12,
+     "text": "A baker made 120 muffins and packed them equally into 10 boxes. How many muffins are in each box?",
+     "gold": "12",
+     "got": "12",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 13,
+     "text": "Tickets cost 7 dollars each. How many tickets can you buy with 42 dollars?",
+     "gold": "6",
+     "got": "6",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 14,
+     "text": "A rope is 90 centimeters long. Ben cuts off 35 centimeters. How long is the rope now?",
+     "gold": "55",
+     "got": "55",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 15,
+     "text": "There were 46 people on a train. At the first stop 13 got off and 9 got on. How many people are on the train now?",
+     "gold": "42",
+     "got": "42",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 16,
+     "text": "Mia reads 15 pages every day. How many pages does she read in a week?",
+     "gold": "105",
+     "got": "105",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 17,
+     "text": "A shirt costs 20 dollars. It is on sale for 10% off. What is the sale price?",
+     "gold": "18",
+     "got": "18",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 18,
+     "text": "Sara is 8 years old. Her mother is 34 years old. How much older is her mother?",
+     "gold": "26",
+     "got": "26",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 19,
+     "text": "A garden is 9 meters long and 6 meters wide. What is its area in square meters?",
+     "gold": "54",
+     "got": "54",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 20,
+     "text": "A tank holds 40 liters of water. 15 liters are used. How many liters are left in the tank?",
+     "gold": "25",
+     "got": "25",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 21,
+     "text": "Max buys 3 packs of cards. Each pack has 8 cards. He gives 5 cards to a friend. How many cards does Max have now?",
+     "gold": "19",
+     "got": "19",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 22,
+     "text": "A school has 4 classes with 28 students in each class. How many students are in the school?",
+     "gold": "112",
+     "got": "112",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 23,
+     "text": "Emma has 14 more beads than Ava. Ava has 23 beads. How many beads does Emma have?",
+     "gold": "37",
+     "got": "37",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 24,
+     "text": "A movie started at 2 o'clock and lasted 3 hours. At what time did it end?",
+     "gold": "5",
+     "got": "5",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 25,
+     "text": "Each bike has 2 wheels. How many wheels do 17 bikes have?",
+     "gold": "34",
+     "got": "34",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 26,
+     "text": "A box of 12 donuts costs 9 dollars. How much does one donut cost?",
+     "gold": "3/4",
+     "got": "0.75",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 27,
+     "text": "Jack ran 3 kilometers on Monday, 4 kilometers on Tuesday and 5 kilometers on Wednesday. How far did he run in all?",
+     "gold": "12",
+     "got": "12",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 28,
+     "text": "A pizza is cut into 8 slices. Tom eats 3 slices and Kim eats 2 slices. How many slices are left?",
+     "gold": "3",
+     "got": "3",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 29,
+     "text": "There are some birds in a tree. 5 birds fly away. How many birds are left in the tree?",
+     "gold": null,
+     "got": null,
+     "reason": "NO_VERIFIED_READING",
+     "route": null,
+     "grade": "right"
+    },
+    {
+     "i": 30,
+     "text": "Liam saves 6 dollars each week. How many weeks will it take him to save 54 dollars?",
+     "gold": "9",
+     "got": "9",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 31,
+     "text": "A farmer has 18 cows and twice as many sheep. How many sheep does the farmer have?",
+     "gold": "36",
+     "got": "36",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 32,
+     "text": "An apple costs 30 cents and a banana costs 20 cents. How much do 2 apples and 3 bananas cost in cents?",
+     "gold": "120",
+     "got": "120",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 33,
+     "text": "The temperature was 12 degrees in the morning and rose by 9 degrees by noon. What was the temperature at noon?",
+     "gold": "21",
+     "got": "21",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 34,
+     "text": "A bus can carry 40 passengers. How many passengers can 6 buses carry?",
+     "gold": "240",
+     "got": "240",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 35,
+     "text": "Ella had 100 dollars. She bought a lamp for 38 dollars. How much money did she have left?",
+     "gold": "62",
+     "got": "62",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 36,
+     "text": "There are 24 students in a class. 10 of them are boys. How many girls are in the class?",
+     "gold": "14",
+     "got": "14",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 37,
+     "text": "A dog eats 3 cups of food a day. How many cups does it eat in 14 days?",
+     "gold": "42",
+     "got": "42",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 38,
+     "text": "How many minutes are there in 3 hours?",
+     "gold": "180",
+     "got": "180",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 39,
+     "text": "Kate has 45 dollars. Her sister has 12 dollars less than Kate. How much money do they have together?",
+     "gold": "78",
+     "got": "78",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 40,
+     "text": "A shop sold 125 toys on Saturday and 98 toys on Sunday. How many more toys did it sell on Saturday?",
+     "gold": "27",
+     "got": "27",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 41,
+     "text": "Noah walks 2 kilometers to school and 2 kilometers back home every day. How many kilometers does he walk in 5 days?",
+     "gold": "20",
+     "got": "20",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 42,
+     "text": "A box holds 6 cans. How many boxes are needed for 30 cans?",
+     "gold": "5",
+     "got": "5",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 43,
+     "text": "Ivy is 4 years older than her brother. Her brother is 7. How old will Ivy be in 3 years?",
+     "gold": "14",
+     "got": "14",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 44,
+     "text": "A cake recipe uses 3 eggs. How many eggs are needed for 5 cakes?",
+     "gold": "15",
+     "got": "15",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 45,
+     "text": "Ryan had 64 stickers. He gave half of them to his sister. How many stickers does he have left?",
+     "gold": "32",
+     "got": "32",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 46,
+     "text": "A bag of rice weighs 5 kilograms. How many grams does it weigh?",
+     "gold": "5000",
+     "got": "5000",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 47,
+     "text": "There are 7 days in a week. How many days are in 9 weeks?",
+     "gold": "63",
+     "got": "63",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 48,
+     "text": "Ana had 32 balloons. Some of them popped. How many balloons does she have now?",
+     "gold": null,
+     "got": null,
+     "reason": "NO_VERIFIED_READING",
+     "route": null,
+     "grade": "right"
+    },
+    {
+     "i": 49,
+     "text": "A teacher has 96 pencils to share equally among 12 students. How many pencils does each student get?",
+     "gold": "8",
+     "got": "8",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 50,
+     "text": "The price of a book went up from 15 dollars to 22 dollars. By how many dollars did the price go up?",
+     "gold": "7",
+     "got": "7",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 51,
+     "text": "Ben swims 25 laps every day for 4 days. How many laps does he swim?",
+     "gold": "100",
+     "got": "100",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 52,
+     "text": "A square has sides of 9 centimeters. What is its perimeter in centimeters?",
+     "gold": "36",
+     "got": "36",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 53,
+     "text": "Lucy has 18 red flowers and 27 yellow flowers. She gives away 15 flowers. How many flowers does she have left?",
+     "gold": "30",
+     "got": "30",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 54,
+     "text": "A water bottle holds 750 milliliters. How many milliliters do 4 bottles hold?",
+     "gold": "3000",
+     "got": "3000",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 55,
+     "text": "Chris earns 12 dollars an hour. How much does he earn in 8 hours?",
+     "gold": "96",
+     "got": "96",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 56,
+     "text": "There are 5 boxes with 9 apples in each box and 7 loose apples. How many apples are there in total?",
+     "gold": "52",
+     "got": "52",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 57,
+     "text": "A train leaves with 210 passengers. At the next station, 45 people get off. How many passengers are still on the train?",
+     "gold": "165",
+     "got": "165",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 58,
+     "text": "Olivia has 3 times as many books as Ethan. Olivia has 27 books. How many books does Ethan have?",
+     "gold": "9",
+     "got": "9",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 59,
+     "text": "A jar has 50 candies. 20% of them are red. How many red candies are there?",
+     "gold": "10",
+     "got": "10",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    }
+   ]
+  },
+  "ja": {
+   "totals": {
+    "problems": 60,
+    "right": 59,
+    "held": 1,
+    "wrong": 0,
+    "answered": 56,
+    "range": 0.9333,
+    "right_share": 0.9833,
+    "wrong_among_answered": 0.0
+   },
+   "rows": [
+    {
+     "i": 0,
+     "text": "いちごが27こありました。8こ食べました。いちごはいくつのこっていますか。",
+     "gold": "19",
+     "got": "19",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 1,
+     "text": "図書室に絵本が45さつ、物語の本が38さつあります。本はあわせて何さつですか。",
+     "gold": "83",
+     "got": "83",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 2,
+     "text": "ゆうきさんは64点でした。はるかさんはゆうきさんより17点低かったです。はるかさんは何点でしたか。",
+     "gold": "47",
+     "got": "47",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 3,
+     "text": "いすが1列に12きゃくずつ8列ならんでいます。いすは全部で何きゃくですか。",
+     "gold": "96",
+     "got": "96",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 4,
+     "text": "たまご72こを6こずつパックに入れます。パックはいくつできますか。",
+     "gold": "12",
+     "got": "12",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 5,
+     "text": "1本35円のえんぴつを4本買います。代金はいくらですか。",
+     "gold": "140",
+     "got": "140",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 6,
+     "text": "さくらさんは5000円持っていました。1800円のシャツと900円の昼ごはんを買いました。のこりはいくらですか。",
+     "gold": "2300",
+     "got": "2300",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 7,
+     "text": "車が時速60kmで5時間走ると、何km進みますか。",
+     "gold": "300",
+     "got": "300",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 8,
+     "text": "7mは何cmですか。",
+     "gold": "700",
+     "got": "700",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 9,
+     "text": "クラスの32人のうち、半分がカメラを持ってきました。カメラを持ってきたのは何人ですか。",
+     "gold": "16",
+     "got": "16",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 10,
+     "text": "ビー玉を何こか持っていました。6こ見つけました。ビー玉は今何こありますか。",
+     "gold": null,
+     "got": null,
+     "reason": "NO_VERIFIED_READING",
+     "route": null,
+     "grade": "right"
+    },
+    {
+     "i": 11,
+     "text": "みかさんは切手を25まい持っています。お兄さんはその3倍持っています。お兄さんは何まい持っていますか。",
+     "gold": "75",
+     "got": "75",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 12,
+     "text": "マフィン120こを10箱に同じ数ずつ入れます。1箱に何こ入りますか。",
+     "gold": "12",
+     "got": "12",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 13,
+     "text": "チケットは1まい700円です。4200円では何まい買えますか。",
+     "gold": "6",
+     "got": "6",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 14,
+     "text": "90cmのロープから35cm切り取りました。ロープは何cmになりましたか。",
+     "gold": "55",
+     "got": "55",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 15,
+     "text": "電車に46人乗っていました。駅で13人おりて、9人乗りました。電車には何人乗っていますか。",
+     "gold": "42",
+     "got": "42",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 16,
+     "text": "まいさんは毎日15ページずつ本を読みます。1週間では何ページ読みますか。",
+     "gold": "105",
+     "got": "105",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 17,
+     "text": "2000円のシャツが1わり引きで売られています。売りねは何円ですか。",
+     "gold": "1800",
+     "got": "1800",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 18,
+     "text": "さきさんは8才で、お母さんは34才です。お母さんはさきさんより何才年上ですか。",
+     "gold": "26",
+     "got": "26",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 19,
+     "text": "たて9m、よこ6mの長方形の花だんの面積は何m²ですか。",
+     "gold": "54",
+     "got": "54",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 20,
+     "text": "水そうに水が40L入っています。15L使いました。水は何Lのこっていますか。",
+     "gold": "25",
+     "got": "25",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 21,
+     "text": "カードが8まいずつ入ったパックを3パック買いました。友だちに5まいあげました。カードは何まいありますか。",
+     "gold": "19",
+     "got": "19",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 22,
+     "text": "1クラス28人のクラスが4クラスあります。全部で何人ですか。",
+     "gold": "112",
+     "got": null,
+     "reason": "NO_VERIFIED_READING",
+     "route": null,
+     "grade": "held"
+    },
+    {
+     "i": 23,
+     "text": "えりさんはビーズをあやさんより14こ多く持っています。あやさんは23こ持っています。えりさんは何こ持っていますか。",
+     "gold": "37",
+     "got": "37",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 24,
+     "text": "映画は2時に始まり、3時間続きました。映画は何時に終わりましたか。",
+     "gold": "5",
+     "got": "5",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 25,
+     "text": "自転車1台にタイヤは2こあります。17台ではタイヤは何こですか。",
+     "gold": "34",
+     "got": "34",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 26,
+     "text": "ドーナツ12こ入りの箱が900円です。ドーナツ1こあたり何円ですか。",
+     "gold": "75",
+     "got": "75",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 27,
+     "text": "しょうたさんは月曜日に3km、火曜日に4km、水曜日に5km走りました。全部で何km走りましたか。",
+     "gold": "12",
+     "got": "12",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 28,
+     "text": "ピザが8切れあります。たくやさんが3切れ、けんさんが2切れ食べました。のこりは何切れですか。",
+     "gold": "3",
+     "got": "3",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 29,
+     "text": "木に鳥が何羽かとまっていました。5羽とんでいきました。木には何羽のこっていますか。",
+     "gold": null,
+     "got": null,
+     "reason": "NO_VERIFIED_READING",
+     "route": null,
+     "grade": "right"
+    },
+    {
+     "i": 30,
+     "text": "りょうさんは毎週600円ずつ貯金します。5400円貯めるには何週間かかりますか。",
+     "gold": "9",
+     "got": "9",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 31,
+     "text": "牛が18頭いて、羊は牛の2倍います。羊は何頭いますか。",
+     "gold": "36",
+     "got": "36",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 32,
+     "text": "りんごは1こ130円、バナナは1本40円です。りんご2ことバナナ3本を買うと何円ですか。",
+     "gold": "380",
+     "got": "380",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 33,
+     "text": "朝の気温は12度でした。昼までに9度上がりました。昼の気温は何度ですか。",
+     "gold": "21",
+     "got": "21",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 34,
+     "text": "バス1台に40人乗れます。バス6台では何人乗れますか。",
+     "gold": "240",
+     "got": "240",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 35,
+     "text": "えみさんは10000円持っていました。3800円のランプを買いました。のこりはいくらですか。",
+     "gold": "6200",
+     "got": "6200",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 36,
+     "text": "クラスには24人います。そのうち10人が男の子です。女の子は何人ですか。",
+     "gold": "14",
+     "got": "14",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 37,
+     "text": "犬はえさを1日に3カップ食べます。14日では何カップ食べますか。",
+     "gold": "42",
+     "got": "42",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 38,
+     "text": "3時間は何分ですか。",
+     "gold": "180",
+     "got": "180",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 39,
+     "text": "けいさんは4500円持っています。妹はけいさんより1200円少なく持っています。2人あわせて何円持っていますか。",
+     "gold": "7800",
+     "got": "7800",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 40,
+     "text": "お店は土曜日におもちゃを125こ、日曜日に98こ売りました。土曜日は日曜日より何こ多く売りましたか。",
+     "gold": "27",
+     "got": "27",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 41,
+     "text": "のぶさんは学校まで2km歩いて行き、同じ道を歩いて帰ります。5日間で何km歩きますか。",
+     "gold": "20",
+     "got": "20",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 42,
+     "text": "1箱にかんが6こ入ります。かん30こを入れるには何箱いりますか。",
+     "gold": "5",
+     "got": "5",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 43,
+     "text": "あいさんは弟より4才年上です。弟は7才です。あいさんは3年後に何才になりますか。",
+     "gold": "14",
+     "got": "14",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 44,
+     "text": "ケーキ1こにたまごを3こ使います。ケーキ5こではたまごは何こいりますか。",
+     "gold": "15",
+     "got": "15",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 45,
+     "text": "りゅうさんはシールを64まい持っていました。その半分を妹にあげました。りゅうさんのシールは何まいになりましたか。",
+     "gold": "32",
+     "got": "32",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 46,
+     "text": "5kgのお米は何gですか。",
+     "gold": "5000",
+     "got": "5000",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 47,
+     "text": "1週間は7日です。9週間は何日ですか。",
+     "gold": "63",
+     "got": "63",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 48,
+     "text": "風船が32こありました。いくつかわれました。風船は今何こありますか。",
+     "gold": null,
+     "got": null,
+     "reason": "NO_VERIFIED_READING",
+     "route": null,
+     "grade": "right"
+    },
+    {
+     "i": 49,
+     "text": "先生はえんぴつ96本を12人に同じ数ずつ分けます。1人何本もらえますか。",
+     "gold": "8",
+     "got": "8",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 50,
+     "text": "本のねだんが1500円から2200円に上がりました。何円上がりましたか。",
+     "gold": "700",
+     "got": "700",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 51,
+     "text": "ひろしさんは毎日プールを25往復ずつ4日間泳ぎました。全部で何往復泳ぎましたか。",
+     "gold": "100",
+     "got": "100",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 52,
+     "text": "1辺が9cmの正方形のまわりの長さは何cmですか。",
+     "gold": "36",
+     "got": "36",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 53,
+     "text": "ゆかさんは赤い花を18本、黄色い花を27本持っています。15本あげました。花は何本のこっていますか。",
+     "gold": "30",
+     "got": "30",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 54,
+     "text": "750mLのペットボトルが4本あります。全部で何mLですか。",
+     "gold": "3000",
+     "got": "3000",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 55,
+     "text": "アルバイトは1時間1200円です。8時間働くと何円になりますか。",
+     "gold": "9600",
+     "got": "9600",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 56,
+     "text": "りんごが9こずつ入った箱が5箱と、ばらのりんごが7こあります。りんごは全部で何こですか。",
+     "gold": "52",
+     "got": "52",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 57,
+     "text": "電車に210人乗っていました。次の駅で45人おりました。電車には何人のこっていますか。",
+     "gold": "165",
+     "got": "165",
+     "reason": null,
+     "route": "v1022+own",
+     "grade": "right"
+    },
+    {
+     "i": 58,
+     "text": "まなさんの本の数は、たけるさんの3倍で27さつです。たけるさんは何さつ持っていますか。",
+     "gold": "9",
+     "got": "9",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    },
+    {
+     "i": 59,
+     "text": "びんにあめが50こ入っています。そのうち20%が赤いあめです。赤いあめは何こですか。",
+     "gold": "10",
+     "got": "10",
+     "reason": null,
+     "route": "own",
+     "grade": "right"
+    }
+   ]
+  }
+ },
+ "total": {
+  "problems": 120,
+  "right": 118,
+  "held": 2,
+  "wrong": 0,
+  "answered": 112,
+  "range": 0.9333,
+  "right_share": 0.9833,
+  "wrong_among_answered": 0.0
+ },
+ "seconds": 1.7,
+ "tree": "/tmp/claude-0/-home-user-Blank-Baby/dd3c6b53-ae17-5414-bda7-717330a62fb9/scratchpad/r11/final/system",
+ "release_revision": "v1022.8.2+gen4-r11",
+ "compare": {
+  "en": {
+   "before": {
+    "problems": 60,
+    "right": 59,
+    "held": 1,
+    "wrong": 0,
+    "answered": 56,
+    "range": 0.9333,
+    "right_share": 0.9833,
+    "wrong_among_answered": 0.0
+   },
+   "after": {
+    "problems": 60,
+    "right": 59,
+    "held": 1,
+    "wrong": 0,
+    "answered": 56,
+    "range": 0.9333,
+    "right_share": 0.9833,
+    "wrong_among_answered": 0.0
+   },
+   "right_gained": 0,
+   "right_lost": 0,
+   "right_mcnemar_p": 1.0,
+   "wrong_added": 0,
+   "wrong_removed": 0,
+   "wrong_mcnemar_p": 1.0
+  },
+  "ja": {
+   "before": {
+    "problems": 60,
+    "right": 58,
+    "held": 2,
+    "wrong": 0,
+    "answered": 55,
+    "range": 0.9167,
+    "right_share": 0.9667,
+    "wrong_among_answered": 0.0
+   },
+   "after": {
+    "problems": 60,
+    "right": 59,
+    "held": 1,
+    "wrong": 0,
+    "answered": 56,
+    "range": 0.9333,
+    "right_share": 0.9833,
+    "wrong_among_answered": 0.0
+   },
+   "right_gained": 1,
+   "right_lost": 0,
+   "right_mcnemar_p": 1.0,
+   "wrong_added": 0,
+   "wrong_removed": 0,
+   "wrong_mcnemar_p": 1.0
+  }
+ }
+}

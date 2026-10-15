@@ -208,9 +208,9 @@
   "recovery_signer_continuity": "REPAIRED_NON_ROTATING_KEY_RECONCILIATION",
   "recovery_storage_mode": "CONTENT_ADDRESSED_DELTA_EXCLUDING_REBUILDABLE_INDEX",
   "relation_bound_scar_choice": true,
-  "release_revision": "v1022.7.9+gen4-r10",
+  "release_revision": "v1022.8.2+gen4-r11",
   "release_role": "GROUNDED_SENSOR_CHALLENGE_EXPERIMENTAL",
-  "release_version": "v1022.7.9+gen4-r10",
+  "release_version": "v1022.8.2+gen4-r11",
   "replay_resistance": "EXPECTED_EXTERNAL_CHALLENGE_REQUIRED",
   "replayable_word_problem_families": true,
   "report_consensus_establishes_truth": false,
@@ -901,6 +901,175 @@
     "validation_result_location": "../evidence_gen4/ROADMAP_2026-10-13.md",
     "version_named_by_gate": "7.9 passed; 8.0 passed for Japanese only; 8.1 passed in its experiment; 8.2 in part; 9.0 restores only"
   },
+  "v1022_8_2_gen4_r11": {
+    "classification": "round 11 after v1022.7.9+gen4-r10 (development): 8.0 advanced by reading problems by what their amounts are, measured on a new held-out set, not assumed",
+    "private_problems_8_0": {
+      "held_out_3_frozen_sha256": "5a915ee112435821812c444908102ea1231f7163b793e8344124fcdc18ffcb28",
+      "held_out_3_written": "2026-10-14 before any change of round 11, in everyday wording of its own; three problems that repeated earlier sets word for word replaced before freezing",
+      "held_out_runs": "totals before (r10 final copy), once after (signed copy of commit 9c04e90, after the round reader work and the suite fixes)",
+      "held_out_en": {
+        "before": {
+          "right": 23,
+          "held": 37,
+          "wrong": 0
+        },
+        "after": {
+          "right": 34,
+          "held": 26,
+          "wrong": 0
+        },
+        "gained": 11,
+        "lost": 0,
+        "mcnemar_p": 0.000977
+      },
+      "held_out_ja": {
+        "before": {
+          "right": 30,
+          "held": 30,
+          "wrong": 0
+        },
+        "after": {
+          "right": 42,
+          "held": 17,
+          "wrong": 1
+        },
+        "gained": 13,
+        "lost": 1,
+        "mcnemar_p": 0.001831,
+        "wrong_added": 1
+      },
+      "gate_8_0_passed": true,
+      "gate_8_0_caveat": "one new Japanese wrong answer (0 -> 1 of 40 answered; McNemar p 1.0); fixed after the measurement, not counted",
+      "new_reader": "tukuyo_g4/reader_units.py: every number read as what it is (an amount, a rate, an amount said against another, a part) and the question as what it asks; laws the same for every wording and both languages (part, compare, rate, share, holding, whole, conversions and known facts, ages later, amounts set aside with their reason)",
+      "why": "round 10 found that forms added one by one reach few problems written in other words; dev_4 (round 10 held-out, spent) showed 44 of 60 English and 44 of 60 Japanese held for question forms and schemas, not for hard problems",
+      "generalization_check": "developed on the even half of dev_4 first; on the odd half, first look, own readings English 5 -> 16, Japanese 2 -> 17 of 30, wrong 0",
+      "dev_after": {
+        "dev": {
+          "en": "60/60",
+          "ja": "59/60"
+        },
+        "dev_2": {
+          "en": "60/60",
+          "ja": "57/60"
+        },
+        "dev_3": {
+          "en": "59/60",
+          "ja": "59/60"
+        },
+        "dev_4": {
+          "en": "59/60",
+          "ja": "55/60"
+        },
+        "wrong": 0
+      },
+      "dev_r10": {
+        "dev": {
+          "en": "60/60",
+          "ja": "59/60"
+        },
+        "dev_2": {
+          "en": "60/60",
+          "ja": "57/60"
+        },
+        "dev_3": {
+          "en": "59/60",
+          "ja": "58/60"
+        },
+        "dev_4": {
+          "en": "16/60",
+          "ja": "16/60"
+        }
+      },
+      "asdiv_dev": {
+        "g4_solve": {
+          "correct": 539,
+          "wrong": 3
+        },
+        "think": {
+          "correct": 540,
+          "wrong": 3
+        },
+        "r10": {
+          "g4_solve": 524,
+          "think": 525
+        }
+      },
+      "mgsm_ja_dev": {
+        "answered": 0,
+        "wrong": 0
+      },
+      "exactness_probe": {
+        "rewrites": {
+          "en": 7316,
+          "ja": 4740
+        },
+        "read_by_own_readers": {
+          "en": 0,
+          "ja": 0
+        },
+        "answered_end_to_end": {
+          "en": 0,
+          "ja": 11
+        },
+        "widened_in_development": "all four dev sets and ASDiv dev: English 30,159 and Japanese 6,344 rewrites, no new reading"
+      },
+      "traps_written_for_it": {
+        "problems": 64,
+        "wrong_by_reader_units": 0,
+        "wrong_by_the_readers_by_wording": 8,
+        "note": "the eight wrong answers of the earlier readers are from before round 11; general guards on them cost 2 of 60 English dev problems and 18 ASDiv dev right answers and were not kept"
+      },
+      "fixed_after_held_out_not_counted": [
+        "そのうち10本をつみました is taken out of the whole (58 -> 38)",
+        "in Japanese only an owner (Xの…, a name) makes a total one holder's; 全部で…になりましたか after an addition asks what there is now (the core's 155 kept)"
+      ],
+      "tests_changed": [
+        "four tests whose held-back problems are now read rightly (the wrong answer is still never given)",
+        "the version identity test allows v1022.8"
+      ],
+      "blank_learning": "an individual made with init --blank-learning has not learned which way a Japanese event word goes; the laws of came and went do not answer for it (the v1022 core counts a rule with two examples and none against it)",
+      "held_out_spent": "held_out_3 was used by its one measurement; the next round needs a new held-out set written before any change"
+    },
+    "ecology_8_2_more_seeds": {
+      "code": "the ecology of round 10, unchanged (tools/ecology_long_run.py gained --max-ticks so a 1,024-tick run is done in jobs of 512 with --resume)",
+      "runs": {
+        "drought_all_seed_3": {
+          "stopped": "REACHED_TICKS",
+          "ticks": 1024,
+          "fewest_alive_in_drought": 2,
+          "alive_at_end": 6,
+          "births_after_drought": 4
+        },
+        "drought_all_seed_4": {
+          "stopped": "REACHED_TICKS",
+          "ticks": 1024,
+          "fewest_alive_in_drought": 2,
+          "alive_at_end": 6,
+          "births_after_drought": 4
+        },
+        "held_condition_all_seed_h2": {
+          "stopped": "REACHED_TICKS",
+          "ticks": 1024,
+          "fewest_alive_in_drought": 2,
+          "alive_at_end": 4,
+          "births_after_drought": 2
+        },
+        "drought_no_learning_seed_3": {
+          "stopped": "EXTINCT",
+          "ticks": 464
+        },
+        "held_condition_no_learning_seed_h2": {
+          "stopped": "EXTINCT",
+          "ticks": 332
+        }
+      },
+      "all_audits_ok": true,
+      "summary": "with learning and exploring 3 of 3 more runs survived the drought and grew back; without learning 0 of 2 (since the birth fix of round 10: with 8 of 10, without learning 0 of 7)"
+    },
+    "real_parents_measured": false,
+    "validation_result_location": "../evidence_gen4/ROUND11_2026-10-14.md",
+    "version_named_by_gate": "8.2: 7.9 (r9), 8.0 (r11, with one new Japanese wrong answer), 8.1 (r9), 8.2 (r10, in its experiments, with limits; r11 seeds agree) passed contiguously; 9.0 restores only"
+  },
   "verified_query_independent_semantic_verifier": true,
   "verified_query_independent_semantic_verifier_scope": "DECLARED_BOUNDED_SCHEMAS",
   "verified_query_uses_core_reasoning": true,
@@ -908,7 +1077,7 @@
   "verified_query_whole_state_sync": true,
   "verified_reasoning_confidence": true,
   "version": "v1022",
-  "version_compatibility_note": "Legacy module versions retained; release_version and CLI release_revision identify v1022.7.9+gen4-r10 (v1022.7.7-experiential-soul fused with generation 4; its limits measured and strengthened; an outside review of r7 answered; its roadmap advanced: experience authenticity 7.9, goals 8.1, restores 9.0; round 10 measured 8.0 again on a new frozen held-out set (not passed) and gave the ecology births, staggered founders, exploring and bequests (8.2))",
+  "version_compatibility_note": "Legacy module versions retained; release_version and CLI release_revision identify v1022.8.2+gen4-r11 (v1022.7.7-experiential-soul fused with generation 4; its limits measured and strengthened; an outside review of r7 answered; its roadmap advanced: experience authenticity 7.9, goals 8.1, restores 9.0; round 10 gave the ecology births, staggered founders, exploring and bequests (8.2); round 11 read problems by what their amounts are and passed 8.0 on a new frozen held-out set)",
   "whole_living_cognition_cycle": true,
   "witness_certificate_signature_verification": true,
   "workspace_restore_failure": "V1022_CACHE_MISMATCH:v1022_ecology; future commits 10-13 retained/reappeared after restoring tick8",

@@ -1,0 +1,195 @@
+{
+ "utc": "2026-10-14T16:21:31Z",
+ "steps": [
+  {
+   "step": "the same start",
+   "A_goals": [],
+   "B_goals": []
+  },
+  {
+   "step": "1 goals formed from their lives",
+   "A": [
+    "guard_against:peer-x"
+   ],
+   "B": [
+    "rely_on:peer-x"
+   ],
+   "A_reasons": [
+    [
+     1,
+     2,
+     3
+    ]
+   ],
+   "B_reasons": [
+    [
+     1,
+     2,
+     3
+    ]
+   ]
+  },
+  {
+   "step": "2 the work situation",
+   "A": "work_alone",
+   "B": "work_with_peer_x",
+   "A_heart_alone": "work_alone",
+   "B_heart_alone": "work_alone"
+  },
+  {
+   "step": "3 the food situation",
+   "A": "keep_the_food",
+   "B": "share_food_with_peer_x",
+   "A_heart_alone": "keep_the_food",
+   "B_heart_alone": "keep_the_food"
+  },
+  {
+   "step": "4 what came of B working with peer-x",
+   "before": [
+    "rely_on:peer-x"
+   ],
+   "trace": [
+    {
+     "chose": "work_with_peer_x",
+     "outcome": {
+      "kind": "betrayal",
+      "origin": "told",
+      "relation": "peer-x",
+      "theme": "shared-work",
+      "valence": -0.9
+     },
+     "changes": [
+      {
+       "at_soul_seq": 4,
+       "change": "dropped",
+       "from": null,
+       "goal": "rely_on:peer-x",
+       "reasons": [
+        4
+       ]
+      }
+     ],
+     "goals": []
+    },
+    {
+     "chose": "work_alone",
+     "outcome": null,
+     "changes": [],
+     "goals": []
+    }
+   ],
+   "after": [],
+   "next_choice": "work_alone"
+  },
+  {
+   "step": "5 A is helped by peer-x",
+   "before": [
+    "guard_against:peer-x"
+   ],
+   "changes": [
+    {
+     "at_soul_seq": 6,
+     "change": "revised",
+     "from": "guard_against:peer-x",
+     "goal": "rebuild_trust:peer-x",
+     "reasons": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ]
+    }
+   ],
+   "after": [
+    "rebuild_trust:peer-x"
+   ],
+   "next_choice": "work_alone",
+   "next_food_choice": "share_food_with_peer_x"
+  }
+ ],
+ "result": {
+  "goals_differ": true,
+  "acts_differ_work": true,
+  "acts_differ_food": true,
+  "goals_change_an_act": true,
+  "B_goal_revised_by_its_outcomes": true,
+  "B_goal_changes": [
+   {
+    "at_soul_seq": 4,
+    "change": "dropped",
+    "from": null,
+    "goal": "rely_on:peer-x",
+    "reasons": [
+     4
+    ]
+   }
+  ],
+  "B_chooses_otherwise_after": true,
+  "A_goal_revised_after_help": true,
+  "A_chooses_otherwise_after": true,
+  "audits": {
+   "A": {
+    "goal_audit": true,
+    "whole_audit": true
+   },
+   "B": {
+    "goal_audit": true,
+    "whole_audit": true
+   }
+  },
+  "seconds": 32.7,
+  "ok": true
+ },
+ "history": {
+  "A": [
+   {
+    "at_soul_seq": 2,
+    "change": "formed",
+    "from": null,
+    "goal": "guard_against:peer-x",
+    "reasons": [
+     1,
+     2
+    ]
+   },
+   {
+    "at_soul_seq": 6,
+    "change": "revised",
+    "from": "guard_against:peer-x",
+    "goal": "rebuild_trust:peer-x",
+    "reasons": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   }
+  ],
+  "B": [
+   {
+    "at_soul_seq": 2,
+    "change": "formed",
+    "from": null,
+    "goal": "rely_on:peer-x",
+    "reasons": [
+     1,
+     2
+    ]
+   },
+   {
+    "at_soul_seq": 4,
+    "change": "dropped",
+    "from": null,
+    "goal": "rely_on:peer-x",
+    "reasons": [
+     4
+    ]
+   }
+  ]
+ },
+ "ok": true
+}
