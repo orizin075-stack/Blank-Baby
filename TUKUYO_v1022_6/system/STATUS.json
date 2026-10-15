@@ -1177,12 +1177,29 @@
       "zip_sha256": "3ddd37c2d8b8e66fe2f2974c15b5b348528069d79e164fa34a853650050bde96",
       "commit": "f1e6a83"
     },
+    "decided_by_measurement": {
+      "unknown_quantity_check": "kept on every reading, with two fixes found by measuring: 'as many' / 'twice as many' is a comparison, not an unknown amount; a reading without a unit counts what the question counts. Own readers on ASDiv dev: 539 -> 534 right (wrong 3 -> 3); traps written for round 11: wrong answers of the older readers 8 -> 7",
+      "episodic_reader_first": "kept first (as the other line made it) in the own reader and the v1022 core; the four private dev sets end to end unchanged (0 gained, 0 lost, 0 wrong added); review probes dev 13 -> 14 and hidden 18 -> 19 right, limits probes 22 -> 23 right, wrong 0",
+      "negated_events": "the episodic reader answers an event said plainly as not done ('did not', 'never') in its closed grammar, as the v1022 core answers a planned one; 2 of the ASDiv dev rewrites of the exactness probe are read this way (142 for 'never gave 31 of 142'); the dev-set probe is unchanged (0 read)"
+    },
+    "files_put_in_order": "asked by the owner: the old documents and status files of system/ in system/docs/history/, the current ones in system/docs/, the measured results of evidence_gen4/ in evidence_gen4/data/, what came before generation 4 in history/, an entry README and start files at the top",
+    "full_suite": "1445/1445 passed on a signed copy of the fused and reordered tree (r11 had 1315; 130 tests of the adaptive-life line added)",
+    "kept_from_gen4": [
+      "the reader by units (r11) and every own reader",
+      "canon outside the data directory (7.8 r8)",
+      "experience provenance of soul events (7.9 r9)",
+      "experiential goals (8.1 r9)",
+      "the long ecology: stagger, reproduction, exploring, bequests, sharing, up to 4096 ticks (8.2 r9-r10)",
+      "the r8 vague-amount reading of reader_en (more refined than the other's in the same place)"
+    ],
+    "merge": "three-way (ancestor, theirs, ours): 25 new files and 9 files changed only by them taken as they are; 10 files changed by both merged by hand; META/TRAINED_SKILLS.json kept (the same payload, signed by the other key)",
+    "metabolism": "both option sets; the adaptive or developmental goals are not combined with stagger, reproduction, exploring or bequests; max ticks 32..4096 (with adaptive goals 512, 1024, 2048 or 4096)",
+    "real_parents_measured": false,
     "received": {
       "zip": "TUKUYO_v1022_8_2_ADAPTIVE_LIFE_EXPERIMENTAL_COMPACT.zip",
       "zip_sha256": "46692f82ccd170e9cfa2240e728005a9b426bffee8503fee67c9a3fb55442897",
       "signature": "its own development key (SNYPV94...); files matched its manifest; re-signed here with this line's development key"
     },
-    "merge": "three-way (ancestor, theirs, ours): 25 new files and 9 files changed only by them taken as they are; 10 files changed by both merged by hand; META/TRAINED_SKILLS.json kept (the same payload, signed by the other key)",
     "taken_from_adaptive_life": [
       "identity ledger outside the individual (7.8)",
       "strict experience origins for evidence-soul learning (7.9)",
@@ -1192,22 +1209,6 @@
       "a changing world, model revision and provisional public observations (8.2)",
       "restore frontier enforced for children restored with their owner"
     ],
-    "kept_from_gen4": [
-      "the reader by units (r11) and every own reader",
-      "canon outside the data directory (7.8 r8)",
-      "experience provenance of soul events (7.9 r9)",
-      "experiential goals (8.1 r9)",
-      "the long ecology: stagger, reproduction, exploring, bequests, sharing, up to 4096 ticks (8.2 r9-r10)",
-      "the r8 vague-amount reading of reader_en (more refined than the other's in the same place)"
-    ],
-    "decided_by_measurement": {
-      "unknown_quantity_check": "kept on every reading, with two fixes found by measuring: 'as many' / 'twice as many' is a comparison, not an unknown amount; a reading without a unit counts what the question counts. Own readers on ASDiv dev: 539 -> 534 right (wrong 3 -> 3); traps written for round 11: wrong answers of the older readers 8 -> 7",
-      "episodic_reader_first": "kept first (as the other line made it) in the own reader and the v1022 core; the four private dev sets end to end unchanged (0 gained, 0 lost, 0 wrong added); review probes dev 13 -> 14 and hidden 18 -> 19 right, limits probes 22 -> 23 right, wrong 0",
-      "negated_events": "the episodic reader answers an event said plainly as not done ('did not', 'never') in its closed grammar, as the v1022 core answers a planned one; 2 of the ASDiv dev rewrites of the exactness probe are read this way (142 for 'never gave 31 of 142'); the dev-set probe is unchanged (0 read)"
-    },
-    "metabolism": "both option sets; the adaptive or developmental goals are not combined with stagger, reproduction, exploring or bequests; max ticks 32..4096 (with adaptive goals 512, 1024, 2048 or 4096)",
-    "files_put_in_order": "asked by the owner: the old documents and status files of system/ in system/docs/history/, the current ones in system/docs/, the measured results of evidence_gen4/ in evidence_gen4/data/, what came before generation 4 in history/, an entry README and start files at the top",
-    "real_parents_measured": false,
     "validation_result_location": "../evidence_gen4/FUSION_ADAPTIVE_LIFE_2026-10-15.md",
     "version_named_by_gate": "8.2: both lines name 8.2; the gates below it stay as measured in each line"
   },
