@@ -130,7 +130,7 @@ def derive_worn(hold, scale_tp, scale_fp):
         pos = np.linalg.inv(pre) @ hand_point()
     elif hold == 'palm':
         R = frame_from(-down, out_)
-        pos = np.linalg.inv(pre) @ hand_point()
+        pos = np.linalg.inv(pre) @ (hand_point() + np.array([0.0, 2.5 / 16.0, -5.0 / 16.0, 0.0]))
     else:
         R = frame_from(-down, out_)
         arm_pt = np.array([(-3.0 - 0.6) / 16.0 - 2.4 / 32 * scale_tp, 6.5 / 16.0, 0.0, 1.0])

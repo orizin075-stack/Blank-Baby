@@ -33,7 +33,7 @@ def display_for(info, quads):
         tp = round(min(0.85, max(0.3, tp)), 3)
     else:
         tp = info['scale'] * (0.8 if info['hold'] == 'shield' else 1.0)
-    fp = round(tp * 0.8, 3)
+    fp = round(tp * 0.62, 3) if info['hold'] == 'sword' else {'fist': 0.5, 'shield': 0.55, 'palm': 0.55}[info['hold']]
     d = Hd.derive(scale_tp=tp, scale_fp=fp, hold=info['hold'])
     out = {'thirdperson_righthand': d['thirdperson_righthand'], 'firstperson_righthand': d['firstperson_righthand']}
     g = Hd.ground(quads)
