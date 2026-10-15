@@ -111,7 +111,9 @@ def instantiate(tpl,text):
         m=re.fullmatch(r'\s*([A-Za-z_]\w*)\s*=\s*#(\d+)\s*',g['eq'])
         if m:
             n=nums[int(m.group(2))];v=n.value/100 if g.get('scale')=='percent' else n.value
-            g['eq']=f'{m.group(1)} = {fmt(v) if Fraction(v).denominator==1 else str(Fraction(v).numerator)+"/"+str(Fraction(v).denominator)}'
+            # a decimal as it is written ('$4.80': 4.8, as the reading itself had it); 24/5 would be read as a number over a number,
+            # whose unit is not the quantity's (round 11: a learned wording of the reader by units failed its own audit)
+            g['eq']=f'{m.group(1)} = {fmt(v)}'
         if g.get('span'):g['span']=re.sub(r'\{#(\d+)\}',lambda x:nums[int(x.group(1))].raw,g['span'])
         g.pop('scale',None);facts.append(g)
     spec['facts']=facts

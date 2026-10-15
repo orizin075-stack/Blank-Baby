@@ -163,3 +163,18 @@ def test_no_rewrite_whose_answer_is_not_given_exactly_is_read():
     p = xp.probe(sets=sets)
     assert p['rewrites']['en'] > 300 and p['rewrites']['ja'] > 100
     assert not p['readings'], p['readings'][:3]
+
+
+def test_a_learned_wording_with_a_decimal_amount_passes_its_own_audit(tmp_path):
+    # round 11 (found by the final measures): a wording learned from a reading with '$4.80' was filled in as 24/5, a number
+    # over a number, whose unit is not the quantity's; it failed its own audit. It is written as the reading had it (4.8)
+    from tukuyo_g4 import learn
+    text = 'Lisa rented 4 DVDs for $4.80. How much did each DVD cost to rent?'
+    spec = reader.read(text)['spec']
+    assert api.evaluate(spec, 'own')['answer'] == Fraction(6, 5)
+    st = learn.Store(tmp_path / 'g4')
+    st.add(spec, {'route': 'test'})
+    assert st.audit()['ok']
+    v = 'Lisa rented 5 DVDs for $7.25. How much did each DVD cost to rent?'
+    got = learn.instantiate(st.find(v), v)
+    assert got and api.evaluate(got, 'learned')['answer'] == Fraction(29, 20)
