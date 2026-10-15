@@ -1,0 +1,15 @@
+# Members used by new code that the original jar never referenced.
+# Each one was checked by hand against the Minecraft 1.21.1 / NeoForge 21.1 API (Mojang mappings).
+net/minecraft/tags/ItemTags
+	SF LOGS Lnet/minecraft/tags/TagKey;
+	SF PLANKS Lnet/minecraft/tags/TagKey;
+	SF SAPLINGS Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/BlockTags
+	SF DIRT Lnet/minecraft/tags/TagKey;
+	SF LEAVES Lnet/minecraft/tags/TagKey;
+net/minecraft/world/level/block/LeavesBlock
+	SF PERSISTENT Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+net/minecraft/world/item/Items
+	SF BONE_MEAL Lnet/minecraft/world/item/Item;
+	SF CHARCOAL Lnet/minecraft/world/item/Item;
+	SF STICK Lnet/minecraft/world/item/Item;

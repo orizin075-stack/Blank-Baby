@@ -1,0 +1,2136 @@
+com/google/common/collect/ImmutableList
+com/google/common/collect/ImmutableSet
+	SM copyOf (Ljava/util/Collection;)Lcom/google/common/collect/ImmutableSet;
+	SM of ()Lcom/google/common/collect/ImmutableSet;
+com/google/gson/Gson
+	SP <init> ()V
+	VM fromJson (Ljava/io/Reader;Ljava/lang/Class;)Ljava/lang/Object;
+	VM fromJson (Ljava/io/Reader;Ljava/lang/reflect/Type;)Ljava/lang/Object;
+	VM toJson (Lcom/google/gson/JsonElement;)Ljava/lang/String;
+com/google/gson/GsonBuilder
+	SP <init> ()V
+	VM create ()Lcom/google/gson/Gson;
+	VM setPrettyPrinting ()Lcom/google/gson/GsonBuilder;
+com/google/gson/JsonArray
+	SP <init> ()V
+	VM add (Lcom/google/gson/JsonElement;)V
+	VM add (Ljava/lang/String;)V
+	VM get (I)Lcom/google/gson/JsonElement;
+	VM iterator ()Ljava/util/Iterator;
+com/google/gson/JsonElement
+	VM getAsBoolean ()Z
+	VM getAsInt ()I
+	VM getAsJsonObject ()Lcom/google/gson/JsonObject;
+	VM getAsLong ()J
+	VM getAsString ()Ljava/lang/String;
+	VM isJsonNull ()Z
+	VM isJsonObject ()Z
+	VM isJsonPrimitive ()Z
+com/google/gson/JsonObject
+	SP <init> ()V
+	VM add (Ljava/lang/String;Lcom/google/gson/JsonElement;)V
+	VM addProperty (Ljava/lang/String;Ljava/lang/Boolean;)V
+	VM addProperty (Ljava/lang/String;Ljava/lang/Number;)V
+	VM addProperty (Ljava/lang/String;Ljava/lang/String;)V
+	VM get (Ljava/lang/String;)Lcom/google/gson/JsonElement;
+	VM getAsJsonArray (Ljava/lang/String;)Lcom/google/gson/JsonArray;
+	VM getAsJsonObject (Ljava/lang/String;)Lcom/google/gson/JsonObject;
+	VM has (Ljava/lang/String;)Z
+	VM toString ()Ljava/lang/String;
+com/google/gson/JsonParser
+	SM parseReader (Ljava/io/Reader;)Lcom/google/gson/JsonElement;
+	SM parseString (Ljava/lang/String;)Lcom/google/gson/JsonElement;
+com/google/gson/reflect/TypeToken
+	SP <init> ()V
+	SUPER_OF jp/oror/reborn/CharacterArsenal$1
+	SUPER_OF jp/oror/reborn/MobConversation$1
+	SUPER_OF jp/oror/reborn/client/CharacterModel$1
+	VM getType ()Ljava/lang/reflect/Type;
+com/mojang/authlib/GameProfile
+	SP <init> (Ljava/util/UUID;Ljava/lang/String;)V
+	VM getName ()Ljava/lang/String;
+com/mojang/blaze3d/pipeline/RenderTarget
+com/mojang/blaze3d/vertex/PoseStack
+	VM mulPose (Lorg/joml/Quaternionf;)V
+	VM popPose ()V
+	VM pushPose ()V
+	VM scale (FFF)V
+	VM translate (DDD)V
+com/mojang/blaze3d/vertex/VertexConsumer
+com/mojang/brigadier/Command
+com/mojang/brigadier/CommandDispatcher
+	VM register (Lcom/mojang/brigadier/builder/LiteralArgumentBuilder;)Lcom/mojang/brigadier/tree/LiteralCommandNode;
+com/mojang/brigadier/Message
+com/mojang/brigadier/arguments/ArgumentType
+com/mojang/brigadier/arguments/IntegerArgumentType
+	SM getInteger (Lcom/mojang/brigadier/context/CommandContext;Ljava/lang/String;)I
+	SM integer (II)Lcom/mojang/brigadier/arguments/IntegerArgumentType;
+com/mojang/brigadier/arguments/StringArgumentType
+	SM getString (Lcom/mojang/brigadier/context/CommandContext;Ljava/lang/String;)Ljava/lang/String;
+	SM greedyString ()Lcom/mojang/brigadier/arguments/StringArgumentType;
+	SM word ()Lcom/mojang/brigadier/arguments/StringArgumentType;
+com/mojang/brigadier/builder/ArgumentBuilder
+com/mojang/brigadier/builder/LiteralArgumentBuilder
+	VM executes (Lcom/mojang/brigadier/Command;)Lcom/mojang/brigadier/builder/ArgumentBuilder;
+	VM redirect (Lcom/mojang/brigadier/tree/CommandNode;)Lcom/mojang/brigadier/builder/ArgumentBuilder;
+	VM requires (Ljava/util/function/Predicate;)Lcom/mojang/brigadier/builder/ArgumentBuilder;
+	VM then (Lcom/mojang/brigadier/builder/ArgumentBuilder;)Lcom/mojang/brigadier/builder/ArgumentBuilder;
+com/mojang/brigadier/builder/RequiredArgumentBuilder
+	VM executes (Lcom/mojang/brigadier/Command;)Lcom/mojang/brigadier/builder/ArgumentBuilder;
+	VM suggests (Lcom/mojang/brigadier/suggestion/SuggestionProvider;)Lcom/mojang/brigadier/builder/RequiredArgumentBuilder;
+	VM then (Lcom/mojang/brigadier/builder/ArgumentBuilder;)Lcom/mojang/brigadier/builder/ArgumentBuilder;
+com/mojang/brigadier/context/CommandContext
+	VM getSource ()Ljava/lang/Object;
+com/mojang/brigadier/exceptions/CommandSyntaxException
+com/mojang/brigadier/exceptions/SimpleCommandExceptionType
+	SP <init> (Lcom/mojang/brigadier/Message;)V
+	VM create ()Lcom/mojang/brigadier/exceptions/CommandSyntaxException;
+com/mojang/brigadier/suggestion/SuggestionProvider
+com/mojang/brigadier/suggestion/SuggestionsBuilder
+	VM buildFuture ()Ljava/util/concurrent/CompletableFuture;
+	VM suggest (Ljava/lang/String;)Lcom/mojang/brigadier/suggestion/SuggestionsBuilder;
+com/mojang/brigadier/tree/CommandNode
+com/mojang/brigadier/tree/LiteralCommandNode
+com/mojang/datafixers/util/Function3
+com/mojang/math/Axis
+	IMI rotationDegrees (F)Lorg/joml/Quaternionf;
+	SF XP Lcom/mojang/math/Axis;
+	SF YP Lcom/mojang/math/Axis;
+com/mojang/serialization/MapCodec
+	SM unit (Ljava/lang/Object;)Lcom/mojang/serialization/MapCodec;
+io/netty/buffer/ByteBuf
+io/netty/buffer/Unpooled
+	SM buffer ()Lio/netty/buffer/ByteBuf;
+it/unimi/dsi/fastutil/ints/Int2ObjectMap
+	IMI get (I)Ljava/lang/Object;
+it/unimi/dsi/fastutil/objects/ObjectArrayList
+net/minecraft/ChatFormatting
+	SF GOLD Lnet/minecraft/ChatFormatting;
+	SF WHITE Lnet/minecraft/ChatFormatting;
+net/minecraft/advancements/AdvancementHolder
+net/minecraft/advancements/AdvancementProgress
+	VM isDone ()Z
+net/minecraft/client/Minecraft
+	SM getInstance ()Lnet/minecraft/client/Minecraft;
+	VF gameDirectory Ljava/io/File;
+	VF gameMode Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;
+	VF level Lnet/minecraft/client/multiplayer/ClientLevel;
+	VF options Lnet/minecraft/client/Options;
+	VF player Lnet/minecraft/client/player/LocalPlayer;
+	VF screen Lnet/minecraft/client/gui/screens/Screen;
+	VM createWorldOpenFlows ()Lnet/minecraft/client/gui/screens/worldselection/WorldOpenFlows;
+	VM getConnection ()Lnet/minecraft/client/multiplayer/ClientPacketListener;
+	VM getEntityRenderDispatcher ()Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;
+	VM getItemRenderer ()Lnet/minecraft/client/renderer/entity/ItemRenderer;
+	VM getMainRenderTarget ()Lcom/mojang/blaze3d/pipeline/RenderTarget;
+	VM getModelManager ()Lnet/minecraft/client/resources/model/ModelManager;
+	VM getResourceManager ()Lnet/minecraft/server/packs/resources/ResourceManager;
+	VM getResourcePackRepository ()Lnet/minecraft/server/packs/repository/PackRepository;
+	VM getSingleplayerServer ()Lnet/minecraft/client/server/IntegratedServer;
+	VM isPaused ()Z
+	VM stop ()V
+net/minecraft/client/Options
+	VF pauseOnLostFocus Z
+net/minecraft/client/Screenshot
+	SM grab (Ljava/io/File;Lcom/mojang/blaze3d/pipeline/RenderTarget;Ljava/util/function/Consumer;)V
+net/minecraft/client/gui/components/Button
+	VF active Z
+	VM getMessage ()Lnet/minecraft/network/chat/Component;
+	VM onPress ()V
+net/minecraft/client/gui/components/events/GuiEventListener
+net/minecraft/client/gui/screens/ConnectScreen
+	SM startConnecting (Lnet/minecraft/client/gui/screens/Screen;Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/multiplayer/resolver/ServerAddress;Lnet/minecraft/client/multiplayer/ServerData;ZLnet/minecraft/client/multiplayer/TransferState;)V
+net/minecraft/client/gui/screens/DisconnectedScreen
+net/minecraft/client/gui/screens/Screen
+	VM children ()Ljava/util/List;
+net/minecraft/client/gui/screens/TitleScreen
+net/minecraft/client/gui/screens/worldselection/WorldOpenFlows
+	VM openWorld (Ljava/lang/String;Ljava/lang/Runnable;)V
+net/minecraft/client/model/EntityModel
+	OVR renderGlow (Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;I)V
+	OVR renderToBuffer (Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V
+	SP <init> ()V
+	SUPER_OF jp/oror/reborn/client/CharacterModel
+	SUPER_OF jp/oror/reborn/client/FamiliarRenderer$Model
+net/minecraft/client/model/HumanoidModel
+	OVR setupAnim (Lnet/minecraft/world/entity/npc/Villager;FFFFF)V
+	SP <init> (Lnet/minecraft/client/model/geom/ModelPart;)V
+	SP setupAnim (Lnet/minecraft/world/entity/LivingEntity;FFFFF)V
+	SUPER_OF jp/oror/reborn/client/HumanVillagerRenderer$HumanModel
+	VF body Lnet/minecraft/client/model/geom/ModelPart;
+	VF head Lnet/minecraft/client/model/geom/ModelPart;
+	VF leftArm Lnet/minecraft/client/model/geom/ModelPart;
+	VF leftArmPose Lnet/minecraft/client/model/HumanoidModel$ArmPose;
+	VF rightArm Lnet/minecraft/client/model/geom/ModelPart;
+	VF rightArmPose Lnet/minecraft/client/model/HumanoidModel$ArmPose;
+	VM setupAnim (Lnet/minecraft/world/entity/LivingEntity;FFFFF)V
+net/minecraft/client/model/HumanoidModel$ArmPose
+	SF BLOCK Lnet/minecraft/client/model/HumanoidModel$ArmPose;
+	SF BOW_AND_ARROW Lnet/minecraft/client/model/HumanoidModel$ArmPose;
+	SF CROSSBOW_HOLD Lnet/minecraft/client/model/HumanoidModel$ArmPose;
+	SF EMPTY Lnet/minecraft/client/model/HumanoidModel$ArmPose;
+	SF ITEM Lnet/minecraft/client/model/HumanoidModel$ArmPose;
+net/minecraft/client/model/VillagerModel
+	VM getHead ()Lnet/minecraft/client/model/geom/ModelPart;
+net/minecraft/client/model/geom/ModelLayerLocation
+net/minecraft/client/model/geom/ModelLayers
+	SF PLAYER Lnet/minecraft/client/model/geom/ModelLayerLocation;
+	SF PLAYER_INNER_ARMOR Lnet/minecraft/client/model/geom/ModelLayerLocation;
+	SF PLAYER_OUTER_ARMOR Lnet/minecraft/client/model/geom/ModelLayerLocation;
+net/minecraft/client/model/geom/ModelPart
+	VF x F
+	VF xRot F
+	VF xScale F
+	VF y F
+	VF yRot F
+	VF yScale F
+	VF z F
+	VF zRot F
+	VF zScale F
+	VM copyFrom (Lnet/minecraft/client/model/geom/ModelPart;)V
+	VM getAllParts ()Ljava/util/stream/Stream;
+	VM getChild (Ljava/lang/String;)Lnet/minecraft/client/model/geom/ModelPart;
+	VM hasChild (Ljava/lang/String;)Z
+	VM render (Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;III)V
+	VM resetPose ()V
+	VM translateAndRotate (Lcom/mojang/blaze3d/vertex/PoseStack;)V
+net/minecraft/client/model/geom/PartPose
+	SF ZERO Lnet/minecraft/client/model/geom/PartPose;
+	SM offset (FFF)Lnet/minecraft/client/model/geom/PartPose;
+	SM offsetAndRotation (FFFFFF)Lnet/minecraft/client/model/geom/PartPose;
+net/minecraft/client/model/geom/builders/CubeListBuilder
+	SM create ()Lnet/minecraft/client/model/geom/builders/CubeListBuilder;
+	VM addBox (FFFFFF)Lnet/minecraft/client/model/geom/builders/CubeListBuilder;
+	VM texOffs (II)Lnet/minecraft/client/model/geom/builders/CubeListBuilder;
+net/minecraft/client/model/geom/builders/LayerDefinition
+	SM create (Lnet/minecraft/client/model/geom/builders/MeshDefinition;II)Lnet/minecraft/client/model/geom/builders/LayerDefinition;
+	VM bakeRoot ()Lnet/minecraft/client/model/geom/ModelPart;
+net/minecraft/client/model/geom/builders/MeshDefinition
+	SP <init> ()V
+	VM getRoot ()Lnet/minecraft/client/model/geom/builders/PartDefinition;
+net/minecraft/client/model/geom/builders/PartDefinition
+	VM addOrReplaceChild (Ljava/lang/String;Lnet/minecraft/client/model/geom/builders/CubeListBuilder;Lnet/minecraft/client/model/geom/PartPose;)Lnet/minecraft/client/model/geom/builders/PartDefinition;
+net/minecraft/client/multiplayer/ClientLevel
+	VM addParticle (Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V
+	VM entitiesForRendering ()Ljava/lang/Iterable;
+	VM getEntity (I)Lnet/minecraft/world/entity/Entity;
+	VM getGameTime ()J
+	VM tickRateManager ()Lnet/minecraft/world/TickRateManager;
+net/minecraft/client/multiplayer/ClientPacketListener
+	VM sendCommand (Ljava/lang/String;)V
+net/minecraft/client/multiplayer/MultiPlayerGameMode
+	VM useItem (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;
+net/minecraft/client/multiplayer/ServerData
+	SP <init> (Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/client/multiplayer/ServerData$Type;)V
+net/minecraft/client/multiplayer/ServerData$Type
+	SF OTHER Lnet/minecraft/client/multiplayer/ServerData$Type;
+net/minecraft/client/multiplayer/TransferState
+net/minecraft/client/multiplayer/resolver/ServerAddress
+	SM parseString (Ljava/lang/String;)Lnet/minecraft/client/multiplayer/resolver/ServerAddress;
+net/minecraft/client/player/LocalPlayer
+	VM getGameProfile ()Lcom/mojang/authlib/GameProfile;
+net/minecraft/client/renderer/ItemInHandRenderer
+	VM renderItem (Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V
+net/minecraft/client/renderer/MultiBufferSource
+	IMI getBuffer (Lnet/minecraft/client/renderer/RenderType;)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+net/minecraft/client/renderer/RenderType
+	SM entityCutoutNoCull (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;
+	SM entityTranslucent (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;
+	SM eyes (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;
+net/minecraft/client/renderer/entity/EntityRenderDispatcher
+	VM getRenderer (Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/client/renderer/entity/EntityRenderer;
+net/minecraft/client/renderer/entity/EntityRenderer
+net/minecraft/client/renderer/entity/EntityRendererProvider
+net/minecraft/client/renderer/entity/EntityRendererProvider$Context
+	VM bakeLayer (Lnet/minecraft/client/model/geom/ModelLayerLocation;)Lnet/minecraft/client/model/geom/ModelPart;
+	VM getItemInHandRenderer ()Lnet/minecraft/client/renderer/ItemInHandRenderer;
+	VM getModelManager ()Lnet/minecraft/client/resources/model/ModelManager;
+net/minecraft/client/renderer/entity/ItemRenderer
+	VM getModel (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;I)Lnet/minecraft/client/resources/model/BakedModel;
+net/minecraft/client/renderer/entity/MobRenderer
+	OVR getTextureLocation (Lnet/minecraft/world/entity/npc/Villager;)Lnet/minecraft/resources/ResourceLocation;
+	OVR render (Lnet/minecraft/world/entity/npc/Villager;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V
+	OVRP scale (Lnet/minecraft/world/entity/npc/Villager;Lcom/mojang/blaze3d/vertex/PoseStack;F)V
+	SP <init> (Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V
+	SP getRenderType (Lnet/minecraft/world/entity/LivingEntity;ZZZ)Lnet/minecraft/client/renderer/RenderType;
+	SP render (Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V
+	SUPER_OF jp/oror/reborn/client/CharacterRenderer
+	SUPER_OF jp/oror/reborn/client/FamiliarRenderer
+	SUPER_OF jp/oror/reborn/client/HumanVillagerRenderer
+	VF model Lnet/minecraft/client/model/EntityModel;
+	VM addLayer (Lnet/minecraft/client/renderer/entity/layers/RenderLayer;)Z
+	VM getModel ()Lnet/minecraft/client/model/EntityModel;
+net/minecraft/client/renderer/entity/RenderLayerParent
+	IFACE_OF jp/oror/reborn/client/VillagerArmor$1
+net/minecraft/client/renderer/entity/VillagerRenderer
+	SP <init> (Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;)V
+	VM getTextureLocation (Lnet/minecraft/world/entity/npc/Villager;)Lnet/minecraft/resources/ResourceLocation;
+	VM render (Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V
+net/minecraft/client/renderer/entity/ZombieRenderer
+	SP <init> (Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;)V
+net/minecraft/client/renderer/entity/layers/HumanoidArmorLayer
+	SP <init> (Lnet/minecraft/client/renderer/entity/RenderLayerParent;Lnet/minecraft/client/model/HumanoidModel;Lnet/minecraft/client/model/HumanoidModel;Lnet/minecraft/client/resources/model/ModelManager;)V
+	VM render (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V
+net/minecraft/client/renderer/entity/layers/ItemInHandLayer
+	SP <init> (Lnet/minecraft/client/renderer/entity/RenderLayerParent;Lnet/minecraft/client/renderer/ItemInHandRenderer;)V
+net/minecraft/client/renderer/entity/layers/RenderLayer
+	OVR render (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V
+	OVR render (Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/npc/Villager;FFFFFF)V
+	SP <init> (Lnet/minecraft/client/renderer/entity/RenderLayerParent;)V
+	SUPER_OF jp/oror/reborn/client/CharacterRenderer$Glow
+	SUPER_OF jp/oror/reborn/client/HumanVillagerRenderer$Profession
+	SUPER_OF jp/oror/reborn/client/MindHeldItems
+	SUPER_OF jp/oror/reborn/client/VillagerArmor
+	VM getParentModel ()Lnet/minecraft/client/model/EntityModel;
+	VM getTextureLocation (Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/resources/ResourceLocation;
+net/minecraft/client/renderer/texture/OverlayTexture
+	SF NO_OVERLAY I
+net/minecraft/client/resources/model/BakedModel
+net/minecraft/client/resources/model/ModelManager
+	VM getMissingModel ()Lnet/minecraft/client/resources/model/BakedModel;
+net/minecraft/client/server/IntegratedServer
+	VM execute (Ljava/lang/Runnable;)V
+	VM overworld ()Lnet/minecraft/server/level/ServerLevel;
+net/minecraft/commands/CommandSourceStack
+	VM getLevel ()Lnet/minecraft/server/level/ServerLevel;
+	VM getPlayerOrException ()Lnet/minecraft/server/level/ServerPlayer;
+	VM getPosition ()Lnet/minecraft/world/phys/Vec3;
+	VM hasPermission (I)Z
+	VM sendFailure (Lnet/minecraft/network/chat/Component;)V
+	VM sendSuccess (Ljava/util/function/Supplier;Z)V
+	VM withSuppressedOutput ()Lnet/minecraft/commands/CommandSourceStack;
+net/minecraft/commands/Commands
+	SM argument (Ljava/lang/String;Lcom/mojang/brigadier/arguments/ArgumentType;)Lcom/mojang/brigadier/builder/RequiredArgumentBuilder;
+	SM literal (Ljava/lang/String;)Lcom/mojang/brigadier/builder/LiteralArgumentBuilder;
+	VM performPrefixedCommand (Lnet/minecraft/commands/CommandSourceStack;Ljava/lang/String;)V
+net/minecraft/commands/SharedSuggestionProvider
+	SMI suggest (Ljava/lang/Iterable;Lcom/mojang/brigadier/suggestion/SuggestionsBuilder;)Ljava/util/concurrent/CompletableFuture;
+net/minecraft/commands/arguments/EntityArgument
+	SM entities ()Lnet/minecraft/commands/arguments/EntityArgument;
+	SM getEntities (Lcom/mojang/brigadier/context/CommandContext;Ljava/lang/String;)Ljava/util/Collection;
+net/minecraft/commands/arguments/coordinates/BlockPosArgument
+	SM blockPos ()Lnet/minecraft/commands/arguments/coordinates/BlockPosArgument;
+	SM getLoadedBlockPos (Lcom/mojang/brigadier/context/CommandContext;Ljava/lang/String;)Lnet/minecraft/core/BlockPos;
+net/minecraft/core/BlockPos
+	SM betweenClosed (Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;)Ljava/lang/Iterable;
+	SM containing (DDD)Lnet/minecraft/core/BlockPos;
+	SM containing (Lnet/minecraft/core/Position;)Lnet/minecraft/core/BlockPos;
+	SM of (J)Lnet/minecraft/core/BlockPos;
+	SP <init> (III)V
+	VM above ()Lnet/minecraft/core/BlockPos;
+	VM above (I)Lnet/minecraft/core/BlockPos;
+	VM asLong ()J
+	VM below ()Lnet/minecraft/core/BlockPos;
+	VM distSqr (Lnet/minecraft/core/Vec3i;)D
+	VM east ()Lnet/minecraft/core/BlockPos;
+	VM east (I)Lnet/minecraft/core/BlockPos;
+	VM equals (Ljava/lang/Object;)Z
+	VM getX ()I
+	VM getY ()I
+	VM getZ ()I
+	VM immutable ()Lnet/minecraft/core/BlockPos;
+	VM north ()Lnet/minecraft/core/BlockPos;
+	VM north (I)Lnet/minecraft/core/BlockPos;
+	VM offset (III)Lnet/minecraft/core/BlockPos;
+	VM offset (Lnet/minecraft/core/Vec3i;)Lnet/minecraft/core/BlockPos;
+	VM relative (Lnet/minecraft/core/Direction;)Lnet/minecraft/core/BlockPos;
+	VM relative (Lnet/minecraft/core/Direction;I)Lnet/minecraft/core/BlockPos;
+	VM toShortString ()Ljava/lang/String;
+net/minecraft/core/DefaultedRegistry
+	IMI containsKey (Lnet/minecraft/resources/ResourceLocation;)Z
+	IMI get (Lnet/minecraft/resources/ResourceLocation;)Ljava/lang/Object;
+	IMI getKey (Ljava/lang/Object;)Lnet/minecraft/resources/ResourceLocation;
+	IMI keySet ()Ljava/util/Set;
+net/minecraft/core/Direction
+	SF SOUTH Lnet/minecraft/core/Direction;
+	SF UP Lnet/minecraft/core/Direction;
+	SM values ()[Lnet/minecraft/core/Direction;
+net/minecraft/core/Direction$Plane
+	SF HORIZONTAL Lnet/minecraft/core/Direction$Plane;
+	VM iterator ()Ljava/util/Iterator;
+net/minecraft/core/GlobalPos
+	SM of (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/GlobalPos;
+	VM dimension ()Lnet/minecraft/resources/ResourceKey;
+	VM pos ()Lnet/minecraft/core/BlockPos;
+net/minecraft/core/Holder
+	IMI equals (Ljava/lang/Object;)Z
+	IMI is (Lnet/minecraft/resources/ResourceKey;)Z
+	IMI unwrapKey ()Ljava/util/Optional;
+	IMI value ()Ljava/lang/Object;
+net/minecraft/core/Holder$Reference
+net/minecraft/core/HolderLookup$Provider
+net/minecraft/core/NonNullList
+	VM get (I)Ljava/lang/Object;
+	VM isEmpty ()Z
+	VM iterator ()Ljava/util/Iterator;
+	VM set (ILjava/lang/Object;)Ljava/lang/Object;
+	VM size ()I
+	VM stream ()Ljava/util/stream/Stream;
+net/minecraft/core/Position
+net/minecraft/core/Registry
+	IMI getHolderOrThrow (Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/core/Holder$Reference;
+net/minecraft/core/RegistryAccess
+	IMI registryOrThrow (Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/core/Registry;
+net/minecraft/core/Vec3i
+net/minecraft/core/component/DataComponentType
+net/minecraft/core/component/DataComponents
+	SF CUSTOM_DATA Lnet/minecraft/core/component/DataComponentType;
+	SF DYED_COLOR Lnet/minecraft/core/component/DataComponentType;
+	SF FOOD Lnet/minecraft/core/component/DataComponentType;
+net/minecraft/core/particles/DustParticleOptions
+	SP <init> (Lorg/joml/Vector3f;F)V
+net/minecraft/core/particles/ParticleOptions
+net/minecraft/core/particles/ParticleTypes
+	SF BUBBLE Lnet/minecraft/core/particles/SimpleParticleType;
+	SF COMPOSTER Lnet/minecraft/core/particles/SimpleParticleType;
+	SF CRIT Lnet/minecraft/core/particles/SimpleParticleType;
+	SF DRAGON_BREATH Lnet/minecraft/core/particles/SimpleParticleType;
+	SF ELECTRIC_SPARK Lnet/minecraft/core/particles/SimpleParticleType;
+	SF ENCHANT Lnet/minecraft/core/particles/SimpleParticleType;
+	SF END_ROD Lnet/minecraft/core/particles/SimpleParticleType;
+	SF EXPLOSION Lnet/minecraft/core/particles/SimpleParticleType;
+	SF FLAME Lnet/minecraft/core/particles/SimpleParticleType;
+	SF HAPPY_VILLAGER Lnet/minecraft/core/particles/SimpleParticleType;
+	SF PORTAL Lnet/minecraft/core/particles/SimpleParticleType;
+	SF REVERSE_PORTAL Lnet/minecraft/core/particles/SimpleParticleType;
+	SF SMOKE Lnet/minecraft/core/particles/SimpleParticleType;
+	SF SOUL Lnet/minecraft/core/particles/SimpleParticleType;
+	SF SOUL_FIRE_FLAME Lnet/minecraft/core/particles/SimpleParticleType;
+	SF SPLASH Lnet/minecraft/core/particles/SimpleParticleType;
+	SF WAX_ON Lnet/minecraft/core/particles/SimpleParticleType;
+	SF WITCH Lnet/minecraft/core/particles/SimpleParticleType;
+net/minecraft/core/particles/SimpleParticleType
+net/minecraft/core/registries/BuiltInRegistries
+	SF ENTITY_TYPE Lnet/minecraft/core/DefaultedRegistry;
+	SF ITEM Lnet/minecraft/core/DefaultedRegistry;
+	SF VILLAGER_PROFESSION Lnet/minecraft/core/DefaultedRegistry;
+net/minecraft/core/registries/Registries
+	SF ARMOR_MATERIAL Lnet/minecraft/resources/ResourceKey;
+	SF BLOCK Lnet/minecraft/resources/ResourceKey;
+	SF CREATIVE_MODE_TAB Lnet/minecraft/resources/ResourceKey;
+	SF DAMAGE_TYPE Lnet/minecraft/resources/ResourceKey;
+	SF ENCHANTMENT Lnet/minecraft/resources/ResourceKey;
+	SF ENTITY_TYPE Lnet/minecraft/resources/ResourceKey;
+	SF LOOT_FUNCTION_TYPE Lnet/minecraft/resources/ResourceKey;
+	SF LOOT_TABLE Lnet/minecraft/resources/ResourceKey;
+	SF POINT_OF_INTEREST_TYPE Lnet/minecraft/resources/ResourceKey;
+	SF VILLAGER_PROFESSION Lnet/minecraft/resources/ResourceKey;
+net/minecraft/gametest/framework/GameTest
+net/minecraft/gametest/framework/GameTestBatchFactory
+	SM fromTestFunction (Ljava/util/Collection;Lnet/minecraft/server/level/ServerLevel;)Ljava/util/Collection;
+net/minecraft/gametest/framework/GameTestHelper
+	VM absolutePos (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/BlockPos;
+	VM assertTrue (ZLjava/lang/String;)V
+	VM getBlockState (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+	VM getBounds ()Lnet/minecraft/world/phys/AABB;
+	VM getLevel ()Lnet/minecraft/server/level/ServerLevel;
+	VM makeMockPlayer (Lnet/minecraft/world/level/GameType;)Lnet/minecraft/world/entity/player/Player;
+	VM onEachTick (Ljava/lang/Runnable;)V
+	VM runAfterDelay (JLjava/lang/Runnable;)V
+	VM setBlock (IIILnet/minecraft/world/level/block/Block;)V
+	VM succeed ()V
+	VM succeedWhen (Ljava/lang/Runnable;)V
+net/minecraft/gametest/framework/GameTestInfo
+	VM getError ()Ljava/lang/Throwable;
+	VM getLevel ()Lnet/minecraft/server/level/ServerLevel;
+	VM getTestName ()Ljava/lang/String;
+	VM hasSucceeded ()Z
+	VM prepareTestStructure ()Lnet/minecraft/gametest/framework/GameTestInfo;
+	VM setNorthWestCorner (Lnet/minecraft/core/BlockPos;)V
+net/minecraft/gametest/framework/GameTestRegistry
+	SM getAllTestFunctions ()Ljava/util/Collection;
+	SM register (Ljava/lang/reflect/Method;Ljava/util/Set;)V
+net/minecraft/gametest/framework/GameTestRunner
+	VM getTestInfos ()Ljava/util/List;
+	VM start ()V
+	VM stop ()V
+net/minecraft/gametest/framework/GameTestRunner$Builder
+	SM fromBatches (Ljava/util/Collection;Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/gametest/framework/GameTestRunner$Builder;
+	VM build ()Lnet/minecraft/gametest/framework/GameTestRunner;
+	VM newStructureSpawner (Lnet/minecraft/gametest/framework/GameTestRunner$StructureSpawner;)Lnet/minecraft/gametest/framework/GameTestRunner$Builder;
+net/minecraft/gametest/framework/GameTestRunner$StructureSpawner
+	IFACE_OF jp/oror/reborn/client/ClientSmoke$IsolatedSpawner
+net/minecraft/gametest/framework/GameTestTicker
+	SF SINGLETON Lnet/minecraft/gametest/framework/GameTestTicker;
+	VM tick ()V
+net/minecraft/gametest/framework/MultipleTestTracker
+	SP <init> (Ljava/util/Collection;)V
+	VM getFailedRequiredCount ()I
+	VM getTotalCount ()I
+	VM hasFailedRequired ()Z
+	VM isDone ()Z
+net/minecraft/gametest/framework/TestFunction
+	VM testName ()Ljava/lang/String;
+net/minecraft/nbt/CompoundTag
+	SP <init> ()V
+	VM contains (Ljava/lang/String;)Z
+	VM contains (Ljava/lang/String;I)Z
+	VM copy ()Lnet/minecraft/nbt/CompoundTag;
+	VM getAllKeys ()Ljava/util/Set;
+	VM getBoolean (Ljava/lang/String;)Z
+	VM getByte (Ljava/lang/String;)B
+	VM getCompound (Ljava/lang/String;)Lnet/minecraft/nbt/CompoundTag;
+	VM getDouble (Ljava/lang/String;)D
+	VM getFloat (Ljava/lang/String;)F
+	VM getInt (Ljava/lang/String;)I
+	VM getList (Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;
+	VM getLong (Ljava/lang/String;)J
+	VM getLongArray (Ljava/lang/String;)[J
+	VM getString (Ljava/lang/String;)Ljava/lang/String;
+	VM getUUID (Ljava/lang/String;)Ljava/util/UUID;
+	VM hasUUID (Ljava/lang/String;)Z
+	VM put (Ljava/lang/String;Lnet/minecraft/nbt/Tag;)Lnet/minecraft/nbt/Tag;
+	VM putBoolean (Ljava/lang/String;Z)V
+	VM putDouble (Ljava/lang/String;D)V
+	VM putFloat (Ljava/lang/String;F)V
+	VM putInt (Ljava/lang/String;I)V
+	VM putLong (Ljava/lang/String;J)V
+	VM putLongArray (Ljava/lang/String;[J)V
+	VM putString (Ljava/lang/String;Ljava/lang/String;)V
+	VM putUUID (Ljava/lang/String;Ljava/util/UUID;)V
+	VM remove (Ljava/lang/String;)V
+	VM size ()I
+net/minecraft/nbt/ListTag
+	SP <init> ()V
+	VM add (Ljava/lang/Object;)Z
+	VM forEach (Ljava/util/function/Consumer;)V
+	VM iterator ()Ljava/util/Iterator;
+	VM remove (I)Lnet/minecraft/nbt/Tag;
+	VM size ()I
+net/minecraft/nbt/StringTag
+	SM valueOf (Ljava/lang/String;)Lnet/minecraft/nbt/StringTag;
+net/minecraft/nbt/Tag
+	IMI getAsString ()Ljava/lang/String;
+net/minecraft/network/FriendlyByteBuf
+	SP <init> (Lio/netty/buffer/ByteBuf;)V
+	VM readBytes ([B)Lnet/minecraft/network/FriendlyByteBuf;
+	VM readableBytes ()I
+	VM release ()Z
+net/minecraft/network/chat/Component
+	IMI getString ()Ljava/lang/String;
+	SMI literal (Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;
+	SMI translatable (Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;
+net/minecraft/network/chat/MutableComponent
+	VM append (Lnet/minecraft/network/chat/Component;)Lnet/minecraft/network/chat/MutableComponent;
+	VM getString ()Ljava/lang/String;
+	VM withStyle (Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;
+net/minecraft/network/codec/ByteBufCodecs
+	SF INT Lnet/minecraft/network/codec/StreamCodec;
+	SF VAR_INT Lnet/minecraft/network/codec/StreamCodec;
+net/minecraft/network/codec/StreamCodec
+	IMI encode (Ljava/lang/Object;Ljava/lang/Object;)V
+	SMI composite (Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lcom/mojang/datafixers/util/Function3;)Lnet/minecraft/network/codec/StreamCodec;
+net/minecraft/network/protocol/common/custom/CustomPacketPayload
+	IFACE_OF jp/oror/reborn/TierSignals$Rank
+net/minecraft/network/protocol/common/custom/CustomPacketPayload$Type
+	SP <init> (Lnet/minecraft/resources/ResourceLocation;)V
+net/minecraft/network/syncher/EntityDataAccessor
+	VM equals (Ljava/lang/Object;)Z
+net/minecraft/network/syncher/EntityDataSerializer
+net/minecraft/network/syncher/EntityDataSerializers
+	SF FLOAT Lnet/minecraft/network/syncher/EntityDataSerializer;
+	SF INT Lnet/minecraft/network/syncher/EntityDataSerializer;
+	SF LONG Lnet/minecraft/network/syncher/EntityDataSerializer;
+net/minecraft/network/syncher/SynchedEntityData
+	SM defineId (Ljava/lang/Class;Lnet/minecraft/network/syncher/EntityDataSerializer;)Lnet/minecraft/network/syncher/EntityDataAccessor;
+	VM get (Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;
+	VM set (Lnet/minecraft/network/syncher/EntityDataAccessor;Ljava/lang/Object;)V
+net/minecraft/network/syncher/SynchedEntityData$Builder
+	VM define (Lnet/minecraft/network/syncher/EntityDataAccessor;Ljava/lang/Object;)Lnet/minecraft/network/syncher/SynchedEntityData$Builder;
+net/minecraft/resources/ResourceKey
+	SM create (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/resources/ResourceKey;
+	VM location ()Lnet/minecraft/resources/ResourceLocation;
+net/minecraft/resources/ResourceLocation
+	SM fromNamespaceAndPath (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+	SM parse (Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+	SM tryParse (Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+	SM withDefaultNamespace (Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;
+	VM equals (Ljava/lang/Object;)Z
+	VM getNamespace ()Ljava/lang/String;
+	VM getPath ()Ljava/lang/String;
+	VM toString ()Ljava/lang/String;
+net/minecraft/server/MinecraftServer
+	VM execute (Ljava/lang/Runnable;)V
+	VM getAdvancements ()Lnet/minecraft/server/ServerAdvancementManager;
+	VM getAverageTickTimeNanos ()J
+	VM getCommands ()Lnet/minecraft/commands/Commands;
+	VM getPackRepository ()Lnet/minecraft/server/packs/repository/PackRepository;
+	VM getPlayerList ()Lnet/minecraft/server/players/PlayerList;
+	VM getRecipeManager ()Lnet/minecraft/world/item/crafting/RecipeManager;
+	VM getWorldPath (Lnet/minecraft/world/level/storage/LevelResource;)Ljava/nio/file/Path;
+	VM halt (Z)V
+	VM levelKeys ()Ljava/util/Set;
+	VM overworld ()Lnet/minecraft/server/level/ServerLevel;
+	VM reloadableRegistries ()Lnet/minecraft/server/ReloadableServerRegistries$Holder;
+net/minecraft/server/PlayerAdvancements
+	VM getOrStartProgress (Lnet/minecraft/advancements/AdvancementHolder;)Lnet/minecraft/advancements/AdvancementProgress;
+net/minecraft/server/ReloadableServerRegistries$Holder
+	VM getLootTable (Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/world/level/storage/loot/LootTable;
+net/minecraft/server/ServerAdvancementManager
+	VM get (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/advancements/AdvancementHolder;
+net/minecraft/server/ServerScoreboard
+	VM addPlayerTeam (Ljava/lang/String;)Lnet/minecraft/world/scores/PlayerTeam;
+	VM addPlayerToTeam (Ljava/lang/String;Lnet/minecraft/world/scores/PlayerTeam;)Z
+	VM getPlayerTeam (Ljava/lang/String;)Lnet/minecraft/world/scores/PlayerTeam;
+net/minecraft/server/level/ServerBossEvent
+	SP <init> (Lnet/minecraft/network/chat/Component;Lnet/minecraft/world/BossEvent$BossBarColor;Lnet/minecraft/world/BossEvent$BossBarOverlay;)V
+	VM addPlayer (Lnet/minecraft/server/level/ServerPlayer;)V
+	VM removeAllPlayers ()V
+	VM removePlayer (Lnet/minecraft/server/level/ServerPlayer;)V
+	VM setName (Lnet/minecraft/network/chat/Component;)V
+	VM setProgress (F)V
+	VM setVisible (Z)V
+net/minecraft/server/level/ServerLevel
+	VF random Lnet/minecraft/util/RandomSource;
+	VM addFreshEntity (Lnet/minecraft/world/entity/Entity;)Z
+	VM clip (Lnet/minecraft/world/level/ClipContext;)Lnet/minecraft/world/phys/BlockHitResult;
+	VM destroyBlock (Lnet/minecraft/core/BlockPos;ZLnet/minecraft/world/entity/Entity;)Z
+	VM dimension ()Lnet/minecraft/resources/ResourceKey;
+	VM dimensionType ()Lnet/minecraft/world/level/dimension/DimensionType;
+	VM getAllEntities ()Ljava/lang/Iterable;
+	VM getBlockEntity (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/entity/BlockEntity;
+	VM getBlockState (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+	VM getChunk (II)Lnet/minecraft/world/level/chunk/LevelChunk;
+	VM getDataStorage ()Lnet/minecraft/world/level/storage/DimensionDataStorage;
+	VM getEntitiesOfClass (Ljava/lang/Class;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;
+	VM getEntitiesOfClass (Ljava/lang/Class;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;
+	VM getEntity (Ljava/util/UUID;)Lnet/minecraft/world/entity/Entity;
+	VM getFluidState (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;
+	VM getGameRules ()Lnet/minecraft/world/level/GameRules;
+	VM getGameTime ()J
+	VM getHeight (Lnet/minecraft/world/level/levelgen/Heightmap$Types;II)I
+	VM getMinBuildHeight ()I
+	VM getRecipeManager ()Lnet/minecraft/world/item/crafting/RecipeManager;
+	VM getScoreboard ()Lnet/minecraft/server/ServerScoreboard;
+	VM getServer ()Lnet/minecraft/server/MinecraftServer;
+	VM getStructureManager ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplateManager;
+	VM getWorldBorder ()Lnet/minecraft/world/level/border/WorldBorder;
+	VM hasChunkAt (Lnet/minecraft/core/BlockPos;)Z
+	VM noCollision (Lnet/minecraft/world/entity/Entity;)Z
+	VM noCollision (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;)Z
+	VM noCollision (Lnet/minecraft/world/phys/AABB;)Z
+	VM playSound (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V
+	VM players ()Ljava/util/List;
+	VM registryAccess ()Lnet/minecraft/core/RegistryAccess;
+	VM sendParticles (Lnet/minecraft/core/particles/ParticleOptions;DDDIDDDD)I
+	VM setBlock (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z
+	VM setChunkForced (IIZ)Z
+	VM setDayTime (J)V
+	VM setWeatherParameters (IIZZ)V
+	VM updateNeighborsAt (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;)V
+net/minecraft/server/level/ServerPlayer
+	VF connection Lnet/minecraft/server/network/ServerGamePacketListenerImpl;
+	VF server Lnet/minecraft/server/MinecraftServer;
+	VF tickCount I
+	VM addEffect (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	VM blockPosition ()Lnet/minecraft/core/BlockPos;
+	VM displayClientMessage (Lnet/minecraft/network/chat/Component;Z)V
+	VM distanceToSqr (Lnet/minecraft/world/entity/Entity;)D
+	VM getAdvancements ()Lnet/minecraft/server/PlayerAdvancements;
+	VM getBoundingBox ()Lnet/minecraft/world/phys/AABB;
+	VM getGameProfile ()Lcom/mojang/authlib/GameProfile;
+	VM getHealth ()F
+	VM getInventory ()Lnet/minecraft/world/entity/player/Inventory;
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getMaxHealth ()F
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM getUUID ()Ljava/util/UUID;
+	VM hasEffect (Lnet/minecraft/core/Holder;)Z
+	VM heal (F)V
+	VM isAlive ()Z
+	VM isCreative ()Z
+	VM isShiftKeyDown ()Z
+	VM isSpectator ()Z
+	VM level ()Lnet/minecraft/world/level/Level;
+	VM sendSystemMessage (Lnet/minecraft/network/chat/Component;)V
+	VM serverLevel ()Lnet/minecraft/server/level/ServerLevel;
+	VM setGameMode (Lnet/minecraft/world/level/GameType;)Z
+	VM setHealth (F)V
+	VM setItemInHand (Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V
+	VM setItemSlot (Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V
+	VM setShiftKeyDown (Z)V
+net/minecraft/server/network/ServerGamePacketListenerImpl
+	VM teleport (DDDFF)V
+net/minecraft/server/packs/PackType
+	SF CLIENT_RESOURCES Lnet/minecraft/server/packs/PackType;
+	SF SERVER_DATA Lnet/minecraft/server/packs/PackType;
+net/minecraft/server/packs/repository/Pack$Position
+	SF TOP Lnet/minecraft/server/packs/repository/Pack$Position;
+net/minecraft/server/packs/repository/PackRepository
+	VM getSelectedIds ()Ljava/util/Collection;
+net/minecraft/server/packs/repository/PackSource
+	SF BUILT_IN Lnet/minecraft/server/packs/repository/PackSource;
+net/minecraft/server/packs/resources/ResourceManager
+	IMI getResource (Lnet/minecraft/resources/ResourceLocation;)Ljava/util/Optional;
+net/minecraft/server/players/PlayerList
+	VM getOpNames ()[Ljava/lang/String;
+	VM getPlayer (Ljava/util/UUID;)Lnet/minecraft/server/level/ServerPlayer;
+	VM getPlayerCount ()I
+	VM getPlayers ()Ljava/util/List;
+net/minecraft/sounds/SoundEvent
+net/minecraft/sounds/SoundEvents
+	SF AMETHYST_BLOCK_CHIME Lnet/minecraft/sounds/SoundEvent;
+	SF ARMOR_EQUIP_NETHERITE Lnet/minecraft/core/Holder;
+	SF STONE_BREAK Lnet/minecraft/sounds/SoundEvent;
+	SF TOTEM_USE Lnet/minecraft/sounds/SoundEvent;
+	SF VILLAGER_WORK_TOOLSMITH Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/sounds/SoundSource
+	SF BLOCKS Lnet/minecraft/sounds/SoundSource;
+	SF PLAYERS Lnet/minecraft/sounds/SoundSource;
+net/minecraft/tags/BlockTags
+	SF LOGS Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/DamageTypeTags
+	SF BYPASSES_INVULNERABILITY Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/FluidTags
+	SF WATER Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/TagKey
+	SM create (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/tags/TagKey;
+net/minecraft/util/Mth
+	SM cos (F)F
+	SM sin (F)F
+net/minecraft/util/RandomSource
+	IMI nextDouble ()D
+	IMI nextInt (I)I
+	IMI nextLong ()J
+net/minecraft/world/BossEvent$BossBarColor
+	SF PURPLE Lnet/minecraft/world/BossEvent$BossBarColor;
+net/minecraft/world/BossEvent$BossBarOverlay
+	SF PROGRESS Lnet/minecraft/world/BossEvent$BossBarOverlay;
+net/minecraft/world/CompoundContainer
+net/minecraft/world/Container
+	IMI canPlaceItem (ILnet/minecraft/world/item/ItemStack;)Z
+	IMI getContainerSize ()I
+	IMI getItem (I)Lnet/minecraft/world/item/ItemStack;
+	IMI getMaxStackSize ()I
+	IMI removeItem (II)Lnet/minecraft/world/item/ItemStack;
+	IMI setChanged ()V
+	IMI setItem (ILnet/minecraft/world/item/ItemStack;)V
+net/minecraft/world/InteractionHand
+	SF MAIN_HAND Lnet/minecraft/world/InteractionHand;
+	SF OFF_HAND Lnet/minecraft/world/InteractionHand;
+net/minecraft/world/InteractionResult
+	SF FAIL Lnet/minecraft/world/InteractionResult;
+	SF PASS Lnet/minecraft/world/InteractionResult;
+	SF SUCCESS Lnet/minecraft/world/InteractionResult;
+	SM sidedSuccess (Z)Lnet/minecraft/world/InteractionResult;
+	VM consumesAction ()Z
+net/minecraft/world/InteractionResultHolder
+	SM fail (Ljava/lang/Object;)Lnet/minecraft/world/InteractionResultHolder;
+	SM sidedSuccess (Ljava/lang/Object;Z)Lnet/minecraft/world/InteractionResultHolder;
+net/minecraft/world/SimpleContainer
+	SP <init> (I)V
+	VM addItem (Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;
+	VM canAddItem (Lnet/minecraft/world/item/ItemStack;)Z
+	VM createTag (Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/nbt/ListTag;
+	VM fromTag (Lnet/minecraft/nbt/ListTag;Lnet/minecraft/core/HolderLookup$Provider;)V
+	VM getContainerSize ()I
+	VM getItem (I)Lnet/minecraft/world/item/ItemStack;
+	VM getItems ()Lnet/minecraft/core/NonNullList;
+	VM isEmpty ()Z
+	VM removeItem (II)Lnet/minecraft/world/item/ItemStack;
+	VM removeItemNoUpdate (I)Lnet/minecraft/world/item/ItemStack;
+	VM setItem (ILnet/minecraft/world/item/ItemStack;)V
+net/minecraft/world/TickRateManager
+	VM isFrozen ()Z
+net/minecraft/world/damagesource/DamageSource
+	SP <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/entity/Entity;)V
+	VM getDirectEntity ()Lnet/minecraft/world/entity/Entity;
+	VM getEntity ()Lnet/minecraft/world/entity/Entity;
+	VM getMsgId ()Ljava/lang/String;
+	VM is (Lnet/minecraft/tags/TagKey;)Z
+	VM typeHolder ()Lnet/minecraft/core/Holder;
+net/minecraft/world/damagesource/DamageSources
+	VM arrow (Lnet/minecraft/world/entity/projectile/AbstractArrow;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/damagesource/DamageSource;
+	VM generic ()Lnet/minecraft/world/damagesource/DamageSource;
+	VM genericKill ()Lnet/minecraft/world/damagesource/DamageSource;
+	VM magic ()Lnet/minecraft/world/damagesource/DamageSource;
+	VM mobAttack (Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/damagesource/DamageSource;
+	VM playerAttack (Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/damagesource/DamageSource;
+net/minecraft/world/effect/MobEffect
+	VM isBeneficial ()Z
+net/minecraft/world/effect/MobEffectInstance
+	SP <init> (Lnet/minecraft/core/Holder;I)V
+	SP <init> (Lnet/minecraft/core/Holder;II)V
+	VM getAmplifier ()I
+	VM getDuration ()I
+	VM getEffect ()Lnet/minecraft/core/Holder;
+net/minecraft/world/effect/MobEffects
+	SF ABSORPTION Lnet/minecraft/core/Holder;
+	SF CONFUSION Lnet/minecraft/core/Holder;
+	SF DAMAGE_BOOST Lnet/minecraft/core/Holder;
+	SF DAMAGE_RESISTANCE Lnet/minecraft/core/Holder;
+	SF DARKNESS Lnet/minecraft/core/Holder;
+	SF DIG_SLOWDOWN Lnet/minecraft/core/Holder;
+	SF DOLPHINS_GRACE Lnet/minecraft/core/Holder;
+	SF FIRE_RESISTANCE Lnet/minecraft/core/Holder;
+	SF JUMP Lnet/minecraft/core/Holder;
+	SF LEVITATION Lnet/minecraft/core/Holder;
+	SF LUCK Lnet/minecraft/core/Holder;
+	SF MOVEMENT_SLOWDOWN Lnet/minecraft/core/Holder;
+	SF MOVEMENT_SPEED Lnet/minecraft/core/Holder;
+	SF POISON Lnet/minecraft/core/Holder;
+	SF REGENERATION Lnet/minecraft/core/Holder;
+	SF WATER_BREATHING Lnet/minecraft/core/Holder;
+	SF WEAKNESS Lnet/minecraft/core/Holder;
+	SF WITHER Lnet/minecraft/core/Holder;
+net/minecraft/world/entity/Entity
+	VF tickCount I
+	VM blockPosition ()Lnet/minecraft/core/BlockPos;
+	VM discard ()V
+	VM distanceToSqr (Lnet/minecraft/world/entity/Entity;)D
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM getType ()Lnet/minecraft/world/entity/EntityType;
+	VM getUUID ()Ljava/util/UUID;
+	VM getX ()D
+	VM getXRot ()F
+	VM getY ()D
+	VM getYRot ()F
+	VM getZ ()D
+	VM level ()Lnet/minecraft/world/level/Level;
+	VM onGround ()Z
+	VM setDeltaMovement (Lnet/minecraft/world/phys/Vec3;)V
+net/minecraft/world/entity/Entity$RemovalReason
+	VM shouldDestroy ()Z
+net/minecraft/world/entity/EntityDimensions
+	SM scalable (FF)Lnet/minecraft/world/entity/EntityDimensions;
+	VM height ()F
+net/minecraft/world/entity/EntityType
+	SF ARROW Lnet/minecraft/world/entity/EntityType;
+	SF COW Lnet/minecraft/world/entity/EntityType;
+	SF HUSK Lnet/minecraft/world/entity/EntityType;
+	SF IRON_GOLEM Lnet/minecraft/world/entity/EntityType;
+	SF PIG Lnet/minecraft/world/entity/EntityType;
+	SF VILLAGER Lnet/minecraft/world/entity/EntityType;
+	SF WOLF Lnet/minecraft/world/entity/EntityType;
+	SF ZOMBIE Lnet/minecraft/world/entity/EntityType;
+	VM create (Lnet/minecraft/world/level/Level;)Lnet/minecraft/world/entity/Entity;
+	VM getDescription ()Lnet/minecraft/network/chat/Component;
+	VM toShortString ()Ljava/lang/String;
+net/minecraft/world/entity/EntityType$Builder
+	SM of (Lnet/minecraft/world/entity/EntityType$EntityFactory;Lnet/minecraft/world/entity/MobCategory;)Lnet/minecraft/world/entity/EntityType$Builder;
+	VM build (Ljava/lang/String;)Lnet/minecraft/world/entity/EntityType;
+	VM clientTrackingRange (I)Lnet/minecraft/world/entity/EntityType$Builder;
+	VM sized (FF)Lnet/minecraft/world/entity/EntityType$Builder;
+	VM updateInterval (I)Lnet/minecraft/world/entity/EntityType$Builder;
+net/minecraft/world/entity/EntityType$EntityFactory
+net/minecraft/world/entity/EquipmentSlot
+	SF CHEST Lnet/minecraft/world/entity/EquipmentSlot;
+	SF FEET Lnet/minecraft/world/entity/EquipmentSlot;
+	SF HEAD Lnet/minecraft/world/entity/EquipmentSlot;
+	SF LEGS Lnet/minecraft/world/entity/EquipmentSlot;
+	SF MAINHAND Lnet/minecraft/world/entity/EquipmentSlot;
+	SF OFFHAND Lnet/minecraft/world/entity/EquipmentSlot;
+	SM values ()[Lnet/minecraft/world/entity/EquipmentSlot;
+	VM getName ()Ljava/lang/String;
+	VM ordinal ()I
+net/minecraft/world/entity/LivingEntity
+	SM getSlotForHand (Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/entity/EquipmentSlot;
+	VF hurtMarked Z
+	VF invulnerableTime I
+	VF swinging Z
+	VM addEffect (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	VM blockPosition ()Lnet/minecraft/core/BlockPos;
+	VM getActiveEffects ()Ljava/util/Collection;
+	VM getAllSlots ()Ljava/lang/Iterable;
+	VM getAttribute (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
+	VM getAttributeValue (Lnet/minecraft/core/Holder;)D
+	VM getBbWidth ()F
+	VM getBoundingBox ()Lnet/minecraft/world/phys/AABB;
+	VM getDeltaMovement ()Lnet/minecraft/world/phys/Vec3;
+	VM getEyePosition ()Lnet/minecraft/world/phys/Vec3;
+	VM getHealth ()F
+	VM getItemBySlot (Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getMaxHealth ()F
+	VM getOffhandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM getType ()Lnet/minecraft/world/entity/EntityType;
+	VM getUUID ()Ljava/util/UUID;
+	VM getX ()D
+	VM getY ()D
+	VM getZ ()D
+	VM heal (F)V
+	VM hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z
+	VM isAlive ()Z
+	VM isAlliedTo (Lnet/minecraft/world/entity/Entity;)Z
+	VM isBlocking ()Z
+	VM isSpectator ()Z
+	VM level ()Lnet/minecraft/world/level/Level;
+	VM moveTo (DDDFF)V
+	VM position ()Lnet/minecraft/world/phys/Vec3;
+	VM registryAccess ()Lnet/minecraft/core/RegistryAccess;
+	VM removeAllEffects ()Z
+	VM removeEffect (Lnet/minecraft/core/Holder;)Z
+	VM setDeltaMovement (Lnet/minecraft/world/phys/Vec3;)V
+	VM setHealth (F)V
+	VM stopUsingItem ()V
+	VM teleportTo (DDD)V
+net/minecraft/world/entity/Mob
+	SM createMobAttributes ()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;
+	VF fallDistance F
+	VF tickCount I
+	VM addEffect (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	VM blockPosition ()Lnet/minecraft/core/BlockPos;
+	VM damageSources ()Lnet/minecraft/world/damagesource/DamageSources;
+	VM discard ()V
+	VM distanceTo (Lnet/minecraft/world/entity/Entity;)F
+	VM distanceToSqr (Lnet/minecraft/world/entity/Entity;)D
+	VM getActiveEffects ()Ljava/util/Collection;
+	VM getAttribute (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
+	VM getBbHeight ()F
+	VM getBbWidth ()F
+	VM getBoundingBox ()Lnet/minecraft/world/phys/AABB;
+	VM getCustomName ()Lnet/minecraft/network/chat/Component;
+	VM getDeltaMovement ()Lnet/minecraft/world/phys/Vec3;
+	VM getEffect (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/effect/MobEffectInstance;
+	VM getEyePosition ()Lnet/minecraft/world/phys/Vec3;
+	VM getHealth ()F
+	VM getId ()I
+	VM getItemBySlot (Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;
+	VM getJumpControl ()Lnet/minecraft/world/entity/ai/control/JumpControl;
+	VM getLastHurtByMob ()Lnet/minecraft/world/entity/LivingEntity;
+	VM getLookControl ()Lnet/minecraft/world/entity/ai/control/LookControl;
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getMaxHealth ()F
+	VM getName ()Lnet/minecraft/network/chat/Component;
+	VM getNavigation ()Lnet/minecraft/world/entity/ai/navigation/PathNavigation;
+	VM getOffhandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM getRemovalReason ()Lnet/minecraft/world/entity/Entity$RemovalReason;
+	VM getScale ()F
+	VM getSensing ()Lnet/minecraft/world/entity/ai/sensing/Sensing;
+	VM getTarget ()Lnet/minecraft/world/entity/LivingEntity;
+	VM getType ()Lnet/minecraft/world/entity/EntityType;
+	VM getUUID ()Ljava/util/UUID;
+	VM getX ()D
+	VM getY ()D
+	VM getYRot ()F
+	VM getZ ()D
+	VM hasEffect (Lnet/minecraft/core/Holder;)Z
+	VM heal (F)V
+	VM isAlive ()Z
+	VM isAlliedTo (Lnet/minecraft/world/entity/Entity;)Z
+	VM isBaby ()Z
+	VM isInWater ()Z
+	VM isNoAi ()Z
+	VM isRemoved ()Z
+	VM isUsingItem ()Z
+	VM level ()Lnet/minecraft/world/level/Level;
+	VM moveTo (DDD)V
+	VM moveTo (DDDFF)V
+	VM onGround ()Z
+	VM position ()Lnet/minecraft/world/phys/Vec3;
+	VM registryAccess ()Lnet/minecraft/core/RegistryAccess;
+	VM removeEffect (Lnet/minecraft/core/Holder;)Z
+	VM setCustomName (Lnet/minecraft/network/chat/Component;)V
+	VM setCustomNameVisible (Z)V
+	VM setDeltaMovement (Lnet/minecraft/world/phys/Vec3;)V
+	VM setDropChance (Lnet/minecraft/world/entity/EquipmentSlot;F)V
+	VM setHealth (F)V
+	VM setItemSlot (Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V
+	VM setPersistenceRequired ()V
+	VM setSprinting (Z)V
+	VM setTarget (Lnet/minecraft/world/entity/LivingEntity;)V
+	VM setXRot (F)V
+	VM setYHeadRot (F)V
+	VM setYRot (F)V
+	VM startUsingItem (Lnet/minecraft/world/InteractionHand;)V
+	VM stopUsingItem ()V
+	VM swing (Lnet/minecraft/world/InteractionHand;)V
+	VM teleportTo (DDD)V
+net/minecraft/world/entity/MobCategory
+	SF CREATURE Lnet/minecraft/world/entity/MobCategory;
+	SF MONSTER Lnet/minecraft/world/entity/MobCategory;
+net/minecraft/world/entity/PathfinderMob
+	OVR action ()I
+	OVR addAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+	OVR ally (Lnet/minecraft/world/entity/LivingEntity;)Z
+	OVR canBeAffected (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	OVR canDrownInFluidType (Lnet/neoforged/neoforge/fluids/FluidType;)Z
+	OVR causeFallDamage (FFLnet/minecraft/world/damagesource/DamageSource;)Z
+	OVR die (Lnet/minecraft/world/damagesource/DamageSource;)V
+	OVR form ()I
+	OVR getDefaultDimensions (Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/entity/EntityDimensions;
+	OVR getProjectile (Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;
+	OVR heal (F)V
+	OVR healAllies (F)V
+	OVR hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z
+	OVR lore ()Z
+	OVR mana ()F
+	OVR mana (F)V
+	OVR manaCap ()F
+	OVR motion ()I
+	OVR motion (II)V
+	OVR motionProgress (F)F
+	OVR onSyncedDataUpdated (Lnet/minecraft/network/syncher/EntityDataAccessor;)V
+	OVR operatorLevel ()I
+	OVR phase ()I
+	OVR readAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+	OVR remove (Lnet/minecraft/world/entity/Entity$RemovalReason;)V
+	OVR removeWhenFarAway (D)Z
+	OVR rewind ()V
+	OVR setForm (I)V
+	OVR spend (F)Z
+	OVR startSeenByPlayer (Lnet/minecraft/server/level/ServerPlayer;)V
+	OVR stopSeenByPlayer (Lnet/minecraft/server/level/ServerPlayer;)V
+	OVR style ()I
+	OVR tick ()V
+	OVR validEnemy (Lnet/minecraft/world/entity/LivingEntity;)Z
+	OVRP defineSynchedData (Lnet/minecraft/network/syncher/SynchedEntityData$Builder;)V
+	OVRP getPermissionLevel ()I
+	OVRP mobInteract (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;
+	OVRP registerGoals ()V
+	SP <init> (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V
+	SP addAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+	SP canBeAffected (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	SP defineSynchedData (Lnet/minecraft/network/syncher/SynchedEntityData$Builder;)V
+	SP die (Lnet/minecraft/world/damagesource/DamageSource;)V
+	SP getDefaultDimensions (Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/entity/EntityDimensions;
+	SP getProjectile (Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;
+	SP heal (F)V
+	SP hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z
+	SP onSyncedDataUpdated (Lnet/minecraft/network/syncher/EntityDataAccessor;)V
+	SP readAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+	SP remove (Lnet/minecraft/world/entity/Entity$RemovalReason;)V
+	SP startSeenByPlayer (Lnet/minecraft/server/level/ServerPlayer;)V
+	SP stopSeenByPlayer (Lnet/minecraft/server/level/ServerPlayer;)V
+	SP tick ()V
+	SUPER_OF jp/oror/reborn/FamiliarEntity
+	SUPER_OF jp/oror/reborn/SupremeEntity
+	VF entityData Lnet/minecraft/network/syncher/SynchedEntityData;
+	VF goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+	VF invulnerableTime I
+	VF navigation Lnet/minecraft/world/entity/ai/navigation/PathNavigation;
+	VF tickCount I
+	VM addEffect (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	VM blockPosition ()Lnet/minecraft/core/BlockPos;
+	VM createCommandSourceStack ()Lnet/minecraft/commands/CommandSourceStack;
+	VM damageSources ()Lnet/minecraft/world/damagesource/DamageSources;
+	VM discard ()V
+	VM distanceTo (Lnet/minecraft/world/entity/Entity;)F
+	VM distanceToSqr (Lnet/minecraft/world/entity/Entity;)D
+	VM getAllSlots ()Ljava/lang/Iterable;
+	VM getAttribute (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
+	VM getAttributeValue (Lnet/minecraft/core/Holder;)D
+	VM getBbHeight ()F
+	VM getBbWidth ()F
+	VM getBoundingBox ()Lnet/minecraft/world/phys/AABB;
+	VM getDeltaMovement ()Lnet/minecraft/world/phys/Vec3;
+	VM getDimensions (Lnet/minecraft/world/entity/Pose;)Lnet/minecraft/world/entity/EntityDimensions;
+	VM getEffect (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/effect/MobEffectInstance;
+	VM getEyePosition ()Lnet/minecraft/world/phys/Vec3;
+	VM getEyeY ()D
+	VM getHealth ()F
+	VM getLastDamageSource ()Lnet/minecraft/world/damagesource/DamageSource;
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getMaxHealth ()F
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM getPose ()Lnet/minecraft/world/entity/Pose;
+	VM getProjectile (Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;
+	VM getRandom ()Lnet/minecraft/util/RandomSource;
+	VM getRemovalReason ()Lnet/minecraft/world/entity/Entity$RemovalReason;
+	VM getTarget ()Lnet/minecraft/world/entity/LivingEntity;
+	VM getUUID ()Ljava/util/UUID;
+	VM getX ()D
+	VM getY ()D
+	VM getZ ()D
+	VM hasEffect (Lnet/minecraft/core/Holder;)Z
+	VM hasPermissions (I)Z
+	VM isAlive ()Z
+	VM isAlliedTo (Lnet/minecraft/world/entity/Entity;)Z
+	VM isInWater ()Z
+	VM isNoAi ()Z
+	VM isRemoved ()Z
+	VM level ()Lnet/minecraft/world/level/Level;
+	VM load (Lnet/minecraft/nbt/CompoundTag;)V
+	VM lookAt (Lnet/minecraft/world/entity/Entity;FF)V
+	VM moveTo (DDD)V
+	VM moveTo (DDDFF)V
+	VM position ()Lnet/minecraft/world/phys/Vec3;
+	VM refreshDimensions ()V
+	VM removeAllEffects ()Z
+	VM saveWithoutId (Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;
+	VM setCustomName (Lnet/minecraft/network/chat/Component;)V
+	VM setDeltaMovement (Lnet/minecraft/world/phys/Vec3;)V
+	VM setDropChance (Lnet/minecraft/world/entity/EquipmentSlot;F)V
+	VM setHealth (F)V
+	VM setItemInHand (Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V
+	VM setNoAi (Z)V
+	VM setNoGravity (Z)V
+	VM setPersistenceRequired ()V
+	VM setTarget (Lnet/minecraft/world/entity/LivingEntity;)V
+	VM spawnAtLocation (Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/item/ItemEntity;
+	VM swing (Lnet/minecraft/world/InteractionHand;)V
+	VM teleportTo (DDD)V
+net/minecraft/world/entity/Pose
+net/minecraft/world/entity/TamableAnimal
+	VM getOwnerUUID ()Ljava/util/UUID;
+net/minecraft/world/entity/ai/Brain
+	VM eraseMemory (Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V
+	VM getMemory (Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)Ljava/util/Optional;
+	VM setMemory (Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;Ljava/lang/Object;)V
+net/minecraft/world/entity/ai/attributes/AttributeInstance
+	VM addPermanentModifier (Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V
+	VM addTransientModifier (Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;)V
+	VM getBaseValue ()D
+	VM getValue ()D
+	VM hasModifier (Lnet/minecraft/resources/ResourceLocation;)Z
+	VM removeModifier (Lnet/minecraft/resources/ResourceLocation;)Z
+	VM setBaseValue (D)V
+net/minecraft/world/entity/ai/attributes/AttributeModifier
+	SP <init> (Lnet/minecraft/resources/ResourceLocation;DLnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;)V
+	VM amount ()D
+	VM id ()Lnet/minecraft/resources/ResourceLocation;
+	VM operation ()Lnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;
+net/minecraft/world/entity/ai/attributes/AttributeModifier$Operation
+	SF ADD_MULTIPLIED_BASE Lnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;
+	SF ADD_VALUE Lnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;
+net/minecraft/world/entity/ai/attributes/AttributeSupplier
+net/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder
+	VM add (Lnet/minecraft/core/Holder;D)Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;
+	VM build ()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier;
+net/minecraft/world/entity/ai/attributes/Attributes
+	SF ARMOR Lnet/minecraft/core/Holder;
+	SF ARMOR_TOUGHNESS Lnet/minecraft/core/Holder;
+	SF ATTACK_DAMAGE Lnet/minecraft/core/Holder;
+	SF FLYING_SPEED Lnet/minecraft/core/Holder;
+	SF FOLLOW_RANGE Lnet/minecraft/core/Holder;
+	SF KNOCKBACK_RESISTANCE Lnet/minecraft/core/Holder;
+	SF MAX_HEALTH Lnet/minecraft/core/Holder;
+	SF MOVEMENT_SPEED Lnet/minecraft/core/Holder;
+	SF SCALE Lnet/minecraft/core/Holder;
+	SF STEP_HEIGHT Lnet/minecraft/core/Holder;
+net/minecraft/world/entity/ai/control/JumpControl
+	VM jump ()V
+net/minecraft/world/entity/ai/control/LookControl
+	VM setLookAt (DDDFF)V
+	VM setLookAt (Lnet/minecraft/world/entity/Entity;FF)V
+net/minecraft/world/entity/ai/goal/FloatGoal
+	SP <init> (Lnet/minecraft/world/entity/Mob;)V
+net/minecraft/world/entity/ai/goal/Goal
+net/minecraft/world/entity/ai/goal/GoalSelector
+	VM addGoal (ILnet/minecraft/world/entity/ai/goal/Goal;)V
+net/minecraft/world/entity/ai/goal/LookAtPlayerGoal
+	SP <init> (Lnet/minecraft/world/entity/Mob;Ljava/lang/Class;F)V
+net/minecraft/world/entity/ai/goal/RandomLookAroundGoal
+	SP <init> (Lnet/minecraft/world/entity/Mob;)V
+net/minecraft/world/entity/ai/goal/WaterAvoidingRandomStrollGoal
+	OVR canUse ()Z
+	SP <init> (Lnet/minecraft/world/entity/PathfinderMob;D)V
+	SP canUse ()Z
+	SUPER_OF jp/oror/reborn/SupremeEntity$1
+net/minecraft/world/entity/ai/memory/MemoryModuleType
+	SF HOME Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+	SF JOB_SITE Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+	SF WALK_TARGET Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+net/minecraft/world/entity/ai/memory/WalkTarget
+	SP <init> (Lnet/minecraft/core/BlockPos;FI)V
+net/minecraft/world/entity/ai/navigation/PathNavigation
+	VM moveTo (DDDD)Z
+	VM moveTo (Lnet/minecraft/world/entity/Entity;D)Z
+	VM stop ()V
+net/minecraft/world/entity/ai/sensing/Sensing
+	VM hasLineOfSight (Lnet/minecraft/world/entity/Entity;)Z
+net/minecraft/world/entity/ai/village/poi/PoiType
+	SP <init> (Ljava/util/Set;II)V
+net/minecraft/world/entity/ai/village/poi/PoiTypes
+	SM forState (Lnet/minecraft/world/level/block/state/BlockState;)Ljava/util/Optional;
+net/minecraft/world/entity/animal/Animal
+net/minecraft/world/entity/animal/Cow
+	VM discard ()V
+	VM getAttribute (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
+	VM getHealth ()F
+	VM isAlive ()Z
+	VM moveTo (DDD)V
+	VM setHealth (F)V
+	VM setNoAi (Z)V
+	VM setPersistenceRequired ()V
+net/minecraft/world/entity/animal/IronGolem
+	VM discard ()V
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM moveTo (DDD)V
+	VM setHealth (F)V
+	VM setPlayerCreated (Z)V
+net/minecraft/world/entity/animal/Wolf
+	VM setOwnerUUID (Ljava/util/UUID;)V
+	VM setTame (ZZ)V
+net/minecraft/world/entity/item/ItemEntity
+	SP <init> (Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;)V
+	VM discard ()V
+	VM getItem ()Lnet/minecraft/world/item/ItemStack;
+	VM hasPickUpDelay ()Z
+	VM isAlive ()Z
+	VM setItem (Lnet/minecraft/world/item/ItemStack;)V
+net/minecraft/world/entity/monster/Enemy
+net/minecraft/world/entity/monster/Husk
+	VM addEffect (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	VM damageSources ()Lnet/minecraft/world/damagesource/DamageSources;
+	VM discard ()V
+	VM getAttribute (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
+	VM getBoundingBox ()Lnet/minecraft/world/phys/AABB;
+	VM getHealth ()F
+	VM getItemBySlot (Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getScoreboardName ()Ljava/lang/String;
+	VM getUUID ()Ljava/util/UUID;
+	VM getX ()D
+	VM getY ()D
+	VM getZ ()D
+	VM hasEffect (Lnet/minecraft/core/Holder;)Z
+	VM hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z
+	VM isAlive ()Z
+	VM load (Lnet/minecraft/nbt/CompoundTag;)V
+	VM moveTo (DDD)V
+	VM moveTo (DDDFF)V
+	VM saveWithoutId (Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;
+	VM setHealth (F)V
+	VM setItemInHand (Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V
+	VM setItemSlot (Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V
+	VM setNoAi (Z)V
+	VM setPersistenceRequired ()V
+	VM setTarget (Lnet/minecraft/world/entity/LivingEntity;)V
+net/minecraft/world/entity/monster/Zombie
+	OVR addAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+	OVR readAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+	OVR theme ()Ljava/lang/String;
+	OVRP defineSynchedData (Lnet/minecraft/network/syncher/SynchedEntityData$Builder;)V
+	SM createAttributes ()Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier$Builder;
+	SP <init> (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V
+	SP addAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+	SP defineSynchedData (Lnet/minecraft/network/syncher/SynchedEntityData$Builder;)V
+	SP readAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+	SUPER_OF jp/oror/reborn/CitadelGuard
+	VF entityData Lnet/minecraft/network/syncher/SynchedEntityData;
+	VF tickCount I
+	VM discard ()V
+	VM getAttribute (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
+	VM getHealth ()F
+	VM getItemBySlot (Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM getRemainingFireTicks ()I
+	VM getX ()D
+	VM getY ()D
+	VM getZ ()D
+	VM isAlive ()Z
+	VM isBlocking ()Z
+	VM level ()Lnet/minecraft/world/level/Level;
+	VM load (Lnet/minecraft/nbt/CompoundTag;)V
+	VM moveTo (DDD)V
+	VM moveTo (DDDFF)V
+	VM saveWithoutId (Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;
+	VM setHealth (F)V
+	VM setItemInHand (Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V
+	VM setItemSlot (Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V
+	VM setNoAi (Z)V
+	VM setPersistenceRequired ()V
+	VM setRemainingFireTicks (I)V
+	VM startUsingItem (Lnet/minecraft/world/InteractionHand;)V
+	VM teleportTo (DDD)V
+net/minecraft/world/entity/npc/AbstractVillager
+net/minecraft/world/entity/npc/Villager
+	VF fallDistance F
+	VF invulnerableTime I
+	VF tickCount I
+	VM addEffect (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	VM blockPosition ()Lnet/minecraft/core/BlockPos;
+	VM damageSources ()Lnet/minecraft/world/damagesource/DamageSources;
+	VM discard ()V
+	VM distanceTo (Lnet/minecraft/world/entity/Entity;)F
+	VM distanceToSqr (Lnet/minecraft/world/entity/Entity;)D
+	VM distanceToSqr (Lnet/minecraft/world/phys/Vec3;)D
+	VM getAttribute (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
+	VM getAttributeValue (Lnet/minecraft/core/Holder;)D
+	VM getBoundingBox ()Lnet/minecraft/world/phys/AABB;
+	VM getBrain ()Lnet/minecraft/world/entity/ai/Brain;
+	VM getCustomName ()Lnet/minecraft/network/chat/Component;
+	VM getEyePosition ()Lnet/minecraft/world/phys/Vec3;
+	VM getEyeY ()D
+	VM getHealth ()F
+	VM getId ()I
+	VM getInventory ()Lnet/minecraft/world/SimpleContainer;
+	VM getItemBySlot (Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;
+	VM getLookControl ()Lnet/minecraft/world/entity/ai/control/LookControl;
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getMaxHealth ()F
+	VM getNavigation ()Lnet/minecraft/world/entity/ai/navigation/PathNavigation;
+	VM getOffers ()Lnet/minecraft/world/item/trading/MerchantOffers;
+	VM getOffhandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM getTarget ()Lnet/minecraft/world/entity/LivingEntity;
+	VM getTradingPlayer ()Lnet/minecraft/world/entity/player/Player;
+	VM getUUID ()Ljava/util/UUID;
+	VM getUseItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getVillagerData ()Lnet/minecraft/world/entity/npc/VillagerData;
+	VM getX ()D
+	VM getY ()D
+	VM getZ ()D
+	VM hasCustomName ()Z
+	VM heal (F)V
+	VM hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z
+	VM isAlive ()Z
+	VM isBaby ()Z
+	VM isNoAi ()Z
+	VM isUsingItem ()Z
+	VM level ()Lnet/minecraft/world/level/Level;
+	VM load (Lnet/minecraft/nbt/CompoundTag;)V
+	VM moveTo (DDD)V
+	VM moveTo (DDDFF)V
+	VM notifyTrade (Lnet/minecraft/world/item/trading/MerchantOffer;)V
+	VM refreshBrain (Lnet/minecraft/server/level/ServerLevel;)V
+	VM registryAccess ()Lnet/minecraft/core/RegistryAccess;
+	VM releasePoi (Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V
+	VM saveWithoutId (Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;
+	VM setCustomName (Lnet/minecraft/network/chat/Component;)V
+	VM setCustomNameVisible (Z)V
+	VM setDeltaMovement (DDD)V
+	VM setHealth (F)V
+	VM setItemInHand (Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V
+	VM setItemSlot (Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V
+	VM setLastHurtByMob (Lnet/minecraft/world/entity/LivingEntity;)V
+	VM setNoAi (Z)V
+	VM setOffers (Lnet/minecraft/world/item/trading/MerchantOffers;)V
+	VM setOnGround (Z)V
+	VM setPersistenceRequired ()V
+	VM setTarget (Lnet/minecraft/world/entity/LivingEntity;)V
+	VM setVillagerData (Lnet/minecraft/world/entity/npc/VillagerData;)V
+	VM swing (Lnet/minecraft/world/InteractionHand;)V
+net/minecraft/world/entity/npc/VillagerData
+	VM getLevel ()I
+	VM getProfession ()Lnet/minecraft/world/entity/npc/VillagerProfession;
+	VM setLevel (I)Lnet/minecraft/world/entity/npc/VillagerData;
+	VM setProfession (Lnet/minecraft/world/entity/npc/VillagerProfession;)Lnet/minecraft/world/entity/npc/VillagerData;
+net/minecraft/world/entity/npc/VillagerProfession
+	SF ARMORER Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF BUTCHER Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF CARTOGRAPHER Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF CLERIC Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF FARMER Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF FISHERMAN Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF FLETCHER Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF LEATHERWORKER Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF LIBRARIAN Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF MASON Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF NITWIT Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF SHEPHERD Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF TOOLSMITH Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SF WEAPONSMITH Lnet/minecraft/world/entity/npc/VillagerProfession;
+	SP <init> (Ljava/lang/String;Ljava/util/function/Predicate;Ljava/util/function/Predicate;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)V
+	VM heldJobSite ()Ljava/util/function/Predicate;
+net/minecraft/world/entity/npc/VillagerTrades$ItemListing
+net/minecraft/world/entity/player/Inventory
+	VF items Lnet/minecraft/core/NonNullList;
+	VM add (Lnet/minecraft/world/item/ItemStack;)Z
+	VM clearContent ()V
+	VM getContainerSize ()I
+	VM getItem (I)Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/entity/player/Player
+	VF fallDistance F
+	VF tickCount I
+	VF totalExperience I
+	VM addEffect (Lnet/minecraft/world/effect/MobEffectInstance;)Z
+	VM blockPosition ()Lnet/minecraft/core/BlockPos;
+	VM damageSources ()Lnet/minecraft/world/damagesource/DamageSources;
+	VM discard ()V
+	VM displayClientMessage (Lnet/minecraft/network/chat/Component;Z)V
+	VM drop (Lnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/entity/item/ItemEntity;
+	VM getActiveEffects ()Ljava/util/Collection;
+	VM getAllSlots ()Ljava/lang/Iterable;
+	VM getArmorValue ()I
+	VM getAttribute (Lnet/minecraft/core/Holder;)Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;
+	VM getAttributeValue (Lnet/minecraft/core/Holder;)D
+	VM getBoundingBox ()Lnet/minecraft/world/phys/AABB;
+	VM getCooldowns ()Lnet/minecraft/world/item/ItemCooldowns;
+	VM getDeltaMovement ()Lnet/minecraft/world/phys/Vec3;
+	VM getEyePosition ()Lnet/minecraft/world/phys/Vec3;
+	VM getFoodData ()Lnet/minecraft/world/food/FoodData;
+	VM getHealth ()F
+	VM getInventory ()Lnet/minecraft/world/entity/player/Inventory;
+	VM getItemBySlot (Lnet/minecraft/world/entity/EquipmentSlot;)Lnet/minecraft/world/item/ItemStack;
+	VM getItemInHand (Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;
+	VM getLookAngle ()Lnet/minecraft/world/phys/Vec3;
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getMaxHealth ()F
+	VM getOffhandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM getUUID ()Ljava/util/UUID;
+	VM getX ()D
+	VM getY ()D
+	VM getZ ()D
+	VM giveExperienceLevels (I)V
+	VM giveExperiencePoints (I)V
+	VM hasLineOfSight (Lnet/minecraft/world/entity/Entity;)Z
+	VM heal (F)V
+	VM hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z
+	VM isAlive ()Z
+	VM isBlocking ()Z
+	VM isCreative ()Z
+	VM isShiftKeyDown ()Z
+	VM isSprinting ()Z
+	VM level ()Lnet/minecraft/world/level/Level;
+	VM moveTo (DDD)V
+	VM moveTo (DDDFF)V
+	VM position ()Lnet/minecraft/world/phys/Vec3;
+	VM removeAllEffects ()Z
+	VM removeEffect (Lnet/minecraft/core/Holder;)Z
+	VM sendSystemMessage (Lnet/minecraft/network/chat/Component;)V
+	VM setHealth (F)V
+	VM setItemInHand (Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V
+	VM setItemSlot (Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V
+	VM swing (Lnet/minecraft/world/InteractionHand;)V
+	VM teleportTo (DDD)V
+	VM tick ()V
+net/minecraft/world/entity/projectile/AbstractArrow
+	VF pickup Lnet/minecraft/world/entity/projectile/AbstractArrow$Pickup;
+	VM getType ()Lnet/minecraft/world/entity/EntityType;
+	VM saveWithoutId (Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;
+net/minecraft/world/entity/projectile/AbstractArrow$Pickup
+	SF DISALLOWED Lnet/minecraft/world/entity/projectile/AbstractArrow$Pickup;
+net/minecraft/world/entity/projectile/Arrow
+	SP <init> (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V
+	SP <init> (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V
+	VF pickup Lnet/minecraft/world/entity/projectile/AbstractArrow$Pickup;
+	VM discard ()V
+	VM getDeltaMovement ()Lnet/minecraft/world/phys/Vec3;
+	VM getOwner ()Lnet/minecraft/world/entity/Entity;
+	VM isRemoved ()Z
+	VM moveTo (DDD)V
+	VM saveWithoutId (Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;
+	VM setBaseDamage (D)V
+	VM setDeltaMovement (DDD)V
+	VM setOwner (Lnet/minecraft/world/entity/Entity;)V
+net/minecraft/world/entity/projectile/Projectile
+	VF hasImpulse Z
+	VM discard ()V
+	VM getDeltaMovement ()Lnet/minecraft/world/phys/Vec3;
+	VM getOwner ()Lnet/minecraft/world/entity/Entity;
+	VM position ()Lnet/minecraft/world/phys/Vec3;
+	VM setDeltaMovement (Lnet/minecraft/world/phys/Vec3;)V
+	VM setOwner (Lnet/minecraft/world/entity/Entity;)V
+	VM shoot (DDDFF)V
+net/minecraft/world/entity/projectile/ProjectileUtil
+	SM getMobArrow (Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;FLnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/projectile/AbstractArrow;
+net/minecraft/world/entity/projectile/ThrownTrident
+	SP <init> (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)V
+	VF pickup Lnet/minecraft/world/entity/projectile/AbstractArrow$Pickup;
+net/minecraft/world/food/FoodData
+	VM setFoodLevel (I)V
+net/minecraft/world/food/FoodProperties
+	VM nutrition ()I
+net/minecraft/world/inventory/AbstractContainerMenu
+net/minecraft/world/inventory/ChestMenu
+	VM getContainer ()Lnet/minecraft/world/Container;
+net/minecraft/world/item/ArmorItem
+	OVR inventoryTick (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V
+	SP <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/item/ArmorItem$Type;Lnet/minecraft/world/item/Item$Properties;)V
+	SP inventoryTick (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V
+	SUPER_OF jp/oror/reborn/AdventureContent$RelicArmor
+	VM getDefaultInstance ()Lnet/minecraft/world/item/ItemStack;
+	VM getEquipmentSlot ()Lnet/minecraft/world/entity/EquipmentSlot;
+	VM inventoryTick (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V
+net/minecraft/world/item/ArmorItem$Type
+	SF BODY Lnet/minecraft/world/item/ArmorItem$Type;
+	SF BOOTS Lnet/minecraft/world/item/ArmorItem$Type;
+	SF CHESTPLATE Lnet/minecraft/world/item/ArmorItem$Type;
+	SF HELMET Lnet/minecraft/world/item/ArmorItem$Type;
+	SF LEGGINGS Lnet/minecraft/world/item/ArmorItem$Type;
+	VM getDurability (I)I
+net/minecraft/world/item/ArmorMaterial
+	SP <init> (Ljava/util/Map;ILnet/minecraft/core/Holder;Ljava/util/function/Supplier;Ljava/util/List;FF)V
+net/minecraft/world/item/ArmorMaterial$Layer
+	SP <init> (Lnet/minecraft/resources/ResourceLocation;)V
+net/minecraft/world/item/ArmorMaterials
+	SF NETHERITE Lnet/minecraft/core/Holder;
+net/minecraft/world/item/AxeItem
+net/minecraft/world/item/BlockItem
+	SP <init> (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/item/Item$Properties;)V
+	VM place (Lnet/minecraft/world/item/context/BlockPlaceContext;)Lnet/minecraft/world/InteractionResult;
+net/minecraft/world/item/BowItem
+net/minecraft/world/item/CreativeModeTab
+	SM builder ()Lnet/minecraft/world/item/CreativeModeTab$Builder;
+net/minecraft/world/item/CreativeModeTab$Builder
+	VM build ()Lnet/minecraft/world/item/CreativeModeTab;
+	VM displayItems (Lnet/minecraft/world/item/CreativeModeTab$DisplayItemsGenerator;)Lnet/minecraft/world/item/CreativeModeTab$Builder;
+	VM icon (Ljava/util/function/Supplier;)Lnet/minecraft/world/item/CreativeModeTab$Builder;
+	VM title (Lnet/minecraft/network/chat/Component;)Lnet/minecraft/world/item/CreativeModeTab$Builder;
+net/minecraft/world/item/CreativeModeTab$DisplayItemsGenerator
+net/minecraft/world/item/CreativeModeTab$ItemDisplayParameters
+net/minecraft/world/item/CreativeModeTab$Output
+	IMI accept (Lnet/minecraft/world/level/ItemLike;)V
+net/minecraft/world/item/CrossbowItem
+net/minecraft/world/item/Item
+	OVR inventoryTick (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V
+	OVR use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;
+	SP <init> (Lnet/minecraft/world/item/Item$Properties;)V
+	SP inventoryTick (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V
+	SUPER_OF jp/oror/reborn/AdventureContent$Dose
+	SUPER_OF jp/oror/reborn/AdventureContent$Guide
+	SUPER_OF jp/oror/reborn/AdventureContent$RepairTool
+	SUPER_OF jp/oror/reborn/AdventureContent$Staff
+	SUPER_OF jp/oror/reborn/CharacterRelics$Artifact
+	SUPER_OF jp/oror/reborn/NightfallArsenal$Gear
+	VM getDefaultInstance ()Lnet/minecraft/world/item/ItemStack;
+	VM getDefaultMaxStackSize ()I
+	VM isFoil (Lnet/minecraft/world/item/ItemStack;)Z
+	VM use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;
+net/minecraft/world/item/Item$Properties
+	SP <init> ()V
+	VM attributes (Lnet/minecraft/world/item/component/ItemAttributeModifiers;)Lnet/minecraft/world/item/Item$Properties;
+	VM durability (I)Lnet/minecraft/world/item/Item$Properties;
+	VM fireResistant ()Lnet/minecraft/world/item/Item$Properties;
+	VM rarity (Lnet/minecraft/world/item/Rarity;)Lnet/minecraft/world/item/Item$Properties;
+	VM stacksTo (I)Lnet/minecraft/world/item/Item$Properties;
+net/minecraft/world/item/ItemCooldowns
+	VM addCooldown (Lnet/minecraft/world/item/Item;I)V
+	VM isOnCooldown (Lnet/minecraft/world/item/Item;)Z
+net/minecraft/world/item/ItemDisplayContext
+	SF THIRD_PERSON_LEFT_HAND Lnet/minecraft/world/item/ItemDisplayContext;
+	SF THIRD_PERSON_RIGHT_HAND Lnet/minecraft/world/item/ItemDisplayContext;
+net/minecraft/world/item/ItemStack
+	SF EMPTY Lnet/minecraft/world/item/ItemStack;
+	SM isSameItemSameComponents (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z
+	SM parseOptional (Lnet/minecraft/core/HolderLookup$Provider;Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/item/ItemStack;
+	SP <init> (Lnet/minecraft/world/level/ItemLike;)V
+	SP <init> (Lnet/minecraft/world/level/ItemLike;I)V
+	VM copy ()Lnet/minecraft/world/item/ItemStack;
+	VM copyWithCount (I)Lnet/minecraft/world/item/ItemStack;
+	VM enchant (Lnet/minecraft/core/Holder;I)V
+	VM finishUsingItem (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/item/ItemStack;
+	VM forEachModifier (Lnet/minecraft/world/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V
+	VM get (Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;
+	VM getCount ()I
+	VM getDamageValue ()I
+	VM getHoverName ()Lnet/minecraft/network/chat/Component;
+	VM getItem ()Lnet/minecraft/world/item/Item;
+	VM getMaxStackSize ()I
+	VM getOrDefault (Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;
+	VM grow (I)V
+	VM has (Lnet/minecraft/core/component/DataComponentType;)Z
+	VM hurtAndBreak (ILnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;)V
+	VM is (Lnet/minecraft/tags/TagKey;)Z
+	VM is (Lnet/minecraft/world/item/Item;)Z
+	VM isCorrectToolForDrops (Lnet/minecraft/world/level/block/state/BlockState;)Z
+	VM isDamageableItem ()Z
+	VM isDamaged ()Z
+	VM isEmpty ()Z
+	VM isEnchanted ()Z
+	VM save (Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/nbt/Tag;
+	VM set (Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;
+	VM setCount (I)V
+	VM setDamageValue (I)V
+	VM shrink (I)V
+	VM split (I)Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/item/Items
+	SF AIR Lnet/minecraft/world/item/Item;
+	SF ARROW Lnet/minecraft/world/item/Item;
+	SF BEETROOT_SEEDS Lnet/minecraft/world/item/Item;
+	SF BOW Lnet/minecraft/world/item/Item;
+	SF BREAD Lnet/minecraft/world/item/Item;
+	SF CARROT Lnet/minecraft/world/item/Item;
+	SF CHEST Lnet/minecraft/world/item/Item;
+	SF COAL Lnet/minecraft/world/item/Item;
+	SF COBBLESTONE Lnet/minecraft/world/item/Item;
+	SF CROSSBOW Lnet/minecraft/world/item/Item;
+	SF DIAMOND Lnet/minecraft/world/item/Item;
+	SF DIAMOND_AXE Lnet/minecraft/world/item/Item;
+	SF DIAMOND_BOOTS Lnet/minecraft/world/item/Item;
+	SF DIAMOND_CHESTPLATE Lnet/minecraft/world/item/Item;
+	SF DIAMOND_HELMET Lnet/minecraft/world/item/Item;
+	SF DIAMOND_LEGGINGS Lnet/minecraft/world/item/Item;
+	SF DIAMOND_PICKAXE Lnet/minecraft/world/item/Item;
+	SF DIAMOND_SWORD Lnet/minecraft/world/item/Item;
+	SF DIRT Lnet/minecraft/world/item/Item;
+	SF EMERALD Lnet/minecraft/world/item/Item;
+	SF FURNACE Lnet/minecraft/world/item/Item;
+	SF GOLD_INGOT Lnet/minecraft/world/item/Item;
+	SF IRON_AXE Lnet/minecraft/world/item/Item;
+	SF IRON_BOOTS Lnet/minecraft/world/item/Item;
+	SF IRON_CHESTPLATE Lnet/minecraft/world/item/Item;
+	SF IRON_HELMET Lnet/minecraft/world/item/Item;
+	SF IRON_HOE Lnet/minecraft/world/item/Item;
+	SF IRON_INGOT Lnet/minecraft/world/item/Item;
+	SF IRON_LEGGINGS Lnet/minecraft/world/item/Item;
+	SF IRON_PICKAXE Lnet/minecraft/world/item/Item;
+	SF IRON_SWORD Lnet/minecraft/world/item/Item;
+	SF LEATHER_BOOTS Lnet/minecraft/world/item/Item;
+	SF LEATHER_CHESTPLATE Lnet/minecraft/world/item/Item;
+	SF LEATHER_HELMET Lnet/minecraft/world/item/Item;
+	SF LEATHER_LEGGINGS Lnet/minecraft/world/item/Item;
+	SF MACE Lnet/minecraft/world/item/Item;
+	SF NETHERITE_AXE Lnet/minecraft/world/item/Item;
+	SF NETHERITE_BOOTS Lnet/minecraft/world/item/Item;
+	SF NETHERITE_CHESTPLATE Lnet/minecraft/world/item/Item;
+	SF NETHERITE_HELMET Lnet/minecraft/world/item/Item;
+	SF NETHERITE_INGOT Lnet/minecraft/world/item/Item;
+	SF NETHERITE_LEGGINGS Lnet/minecraft/world/item/Item;
+	SF NETHERITE_PICKAXE Lnet/minecraft/world/item/Item;
+	SF NETHERITE_SCRAP Lnet/minecraft/world/item/Item;
+	SF NETHERITE_SWORD Lnet/minecraft/world/item/Item;
+	SF OAK_DOOR Lnet/minecraft/world/item/Item;
+	SF OAK_LOG Lnet/minecraft/world/item/Item;
+	SF OAK_PLANKS Lnet/minecraft/world/item/Item;
+	SF POTATO Lnet/minecraft/world/item/Item;
+	SF POTION Lnet/minecraft/world/item/Item;
+	SF RAW_COPPER Lnet/minecraft/world/item/Item;
+	SF RAW_GOLD Lnet/minecraft/world/item/Item;
+	SF RAW_IRON Lnet/minecraft/world/item/Item;
+	SF REDSTONE Lnet/minecraft/world/item/Item;
+	SF SHIELD Lnet/minecraft/world/item/Item;
+	SF TORCH Lnet/minecraft/world/item/Item;
+	SF TRIDENT Lnet/minecraft/world/item/Item;
+	SF WATER_BUCKET Lnet/minecraft/world/item/Item;
+	SF WHEAT Lnet/minecraft/world/item/Item;
+	SF WHEAT_SEEDS Lnet/minecraft/world/item/Item;
+	SF WHITE_BED Lnet/minecraft/world/item/Item;
+net/minecraft/world/item/ProjectileWeaponItem
+net/minecraft/world/item/Rarity
+	SF EPIC Lnet/minecraft/world/item/Rarity;
+	SF RARE Lnet/minecraft/world/item/Rarity;
+net/minecraft/world/item/SwordItem
+	OVR inventoryTick (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V
+	OVR isFoil (Lnet/minecraft/world/item/ItemStack;)Z
+	OVR use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;
+	SM createAttributes (Lnet/minecraft/world/item/Tier;FF)Lnet/minecraft/world/item/component/ItemAttributeModifiers;
+	SM createAttributes (Lnet/minecraft/world/item/Tier;IF)Lnet/minecraft/world/item/component/ItemAttributeModifiers;
+	SP <init> (Lnet/minecraft/world/item/Tier;Lnet/minecraft/world/item/Item$Properties;)V
+	SP inventoryTick (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;IZ)V
+	SP isFoil (Lnet/minecraft/world/item/ItemStack;)Z
+	SUPER_OF jp/oror/reborn/AdventureContent$AzureBlade
+	SUPER_OF jp/oror/reborn/CharacterRelics$Blade
+	SUPER_OF jp/oror/reborn/NightfallArsenal$Blade
+	VM getDefaultInstance ()Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/item/Tier
+net/minecraft/world/item/TieredItem
+net/minecraft/world/item/Tiers
+	SF NETHERITE Lnet/minecraft/world/item/Tiers;
+net/minecraft/world/item/component/CustomData
+	SF EMPTY Lnet/minecraft/world/item/component/CustomData;
+	SM update (Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/item/ItemStack;Ljava/util/function/Consumer;)V
+	VM copyTag ()Lnet/minecraft/nbt/CompoundTag;
+net/minecraft/world/item/component/DyedItemColor
+	SP <init> (IZ)V
+net/minecraft/world/item/component/ItemAttributeModifiers
+net/minecraft/world/item/context/BlockPlaceContext
+	SP <init> (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/phys/BlockHitResult;)V
+net/minecraft/world/item/crafting/CraftingInput
+	SM of (IILjava/util/List;)Lnet/minecraft/world/item/crafting/CraftingInput;
+net/minecraft/world/item/crafting/CraftingRecipe
+	IMI assemble (Lnet/minecraft/world/item/crafting/RecipeInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;
+	IMI getIngredients ()Lnet/minecraft/core/NonNullList;
+	IMI getRemainingItems (Lnet/minecraft/world/item/crafting/RecipeInput;)Lnet/minecraft/core/NonNullList;
+	IMI matches (Lnet/minecraft/world/item/crafting/RecipeInput;Lnet/minecraft/world/level/Level;)Z
+net/minecraft/world/item/crafting/Ingredient
+	SM of ([Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/crafting/Ingredient;
+	VM isEmpty ()Z
+	VM test (Lnet/minecraft/world/item/ItemStack;)Z
+net/minecraft/world/item/crafting/Recipe
+net/minecraft/world/item/crafting/RecipeHolder
+	VM id ()Lnet/minecraft/resources/ResourceLocation;
+	VM value ()Lnet/minecraft/world/item/crafting/Recipe;
+net/minecraft/world/item/crafting/RecipeInput
+net/minecraft/world/item/crafting/RecipeManager
+	VM getAllRecipesFor (Lnet/minecraft/world/item/crafting/RecipeType;)Ljava/util/List;
+	VM getRecipeFor (Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/item/crafting/RecipeInput;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;
+	VM getRecipeIds ()Ljava/util/stream/Stream;
+net/minecraft/world/item/crafting/RecipeType
+	SF CRAFTING Lnet/minecraft/world/item/crafting/RecipeType;
+	SF SMELTING Lnet/minecraft/world/item/crafting/RecipeType;
+net/minecraft/world/item/crafting/ShapedRecipe
+	VM getHeight ()I
+	VM getWidth ()I
+net/minecraft/world/item/crafting/SingleRecipeInput
+	SP <init> (Lnet/minecraft/world/item/ItemStack;)V
+net/minecraft/world/item/enchantment/Enchantments
+	SF EFFICIENCY Lnet/minecraft/resources/ResourceKey;
+	SF POWER Lnet/minecraft/resources/ResourceKey;
+	SF PROTECTION Lnet/minecraft/resources/ResourceKey;
+	SF QUICK_CHARGE Lnet/minecraft/resources/ResourceKey;
+	SF SHARPNESS Lnet/minecraft/resources/ResourceKey;
+	SF UNBREAKING Lnet/minecraft/resources/ResourceKey;
+net/minecraft/world/item/trading/ItemCost
+	SP <init> (Lnet/minecraft/world/level/ItemLike;I)V
+net/minecraft/world/item/trading/MerchantOffer
+	SP <init> (Lnet/minecraft/world/item/trading/ItemCost;Lnet/minecraft/world/item/ItemStack;IIF)V
+	VM addToSpecialPriceDiff (I)V
+	VM getBaseCostA ()Lnet/minecraft/world/item/ItemStack;
+	VM getCostA ()Lnet/minecraft/world/item/ItemStack;
+	VM getCostB ()Lnet/minecraft/world/item/ItemStack;
+	VM getResult ()Lnet/minecraft/world/item/ItemStack;
+	VM getUses ()I
+	VM isOutOfStock ()Z
+	VM satisfiedBy (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z
+	VM take (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z
+net/minecraft/world/item/trading/MerchantOffers
+	SP <init> ()V
+	VM add (Ljava/lang/Object;)Z
+	VM getFirst ()Ljava/lang/Object;
+	VM isEmpty ()Z
+	VM iterator ()Ljava/util/Iterator;
+net/minecraft/world/level/BlockGetter
+net/minecraft/world/level/ChunkPos
+	SM asLong (II)J
+	SP <init> (J)V
+	VF x I
+	VF z I
+net/minecraft/world/level/ClipContext
+	SP <init> (Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;Lnet/minecraft/world/entity/Entity;)V
+net/minecraft/world/level/ClipContext$Block
+	SF COLLIDER Lnet/minecraft/world/level/ClipContext$Block;
+net/minecraft/world/level/ClipContext$Fluid
+	SF NONE Lnet/minecraft/world/level/ClipContext$Fluid;
+net/minecraft/world/level/GameRules
+	SF RULE_DOMOBLOOT Lnet/minecraft/world/level/GameRules$Key;
+	SF RULE_MOBGRIEFING Lnet/minecraft/world/level/GameRules$Key;
+	VM getBoolean (Lnet/minecraft/world/level/GameRules$Key;)Z
+	VM getRule (Lnet/minecraft/world/level/GameRules$Key;)Lnet/minecraft/world/level/GameRules$Value;
+net/minecraft/world/level/GameRules$BooleanValue
+	VM get ()Z
+	VM set (ZLnet/minecraft/server/MinecraftServer;)V
+net/minecraft/world/level/GameRules$Key
+net/minecraft/world/level/GameRules$Value
+net/minecraft/world/level/GameType
+	SF CREATIVE Lnet/minecraft/world/level/GameType;
+	SF SURVIVAL Lnet/minecraft/world/level/GameType;
+net/minecraft/world/level/ItemLike
+net/minecraft/world/level/Level
+	VF isClientSide Z
+	VM addFreshEntity (Lnet/minecraft/world/entity/Entity;)Z
+	VM broadcastEntityEvent (Lnet/minecraft/world/entity/Entity;B)V
+	VM clip (Lnet/minecraft/world/level/ClipContext;)Lnet/minecraft/world/phys/BlockHitResult;
+	VM dimension ()Lnet/minecraft/resources/ResourceKey;
+	VM getBlockState (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+	VM getEntitiesOfClass (Ljava/lang/Class;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;
+	VM getGameTime ()J
+	VM getMaxBuildHeight ()I
+	VM getMinBuildHeight ()I
+	VM getServer ()Lnet/minecraft/server/MinecraftServer;
+	VM getWorldBorder ()Lnet/minecraft/world/level/border/WorldBorder;
+	VM hasChunkAt (Lnet/minecraft/core/BlockPos;)Z
+	VM noCollision (Lnet/minecraft/world/entity/Entity;)Z
+	VM noCollision (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;)Z
+	VM registryAccess ()Lnet/minecraft/core/RegistryAccess;
+	VM removeBlock (Lnet/minecraft/core/BlockPos;Z)Z
+net/minecraft/world/level/LevelAccessor
+net/minecraft/world/level/ServerLevelAccessor
+net/minecraft/world/level/block/AbstractFurnaceBlock
+	SF LIT Lnet/minecraft/world/level/block/state/properties/BooleanProperty;
+net/minecraft/world/level/block/BaseEntityBlock
+net/minecraft/world/level/block/BedBlock
+	SF FACING Lnet/minecraft/world/level/block/state/properties/DirectionProperty;
+	SF PART Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+net/minecraft/world/level/block/Block
+	SM getDrops (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)Ljava/util/List;
+	SP <init> (Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V
+	VM asItem ()Lnet/minecraft/world/item/Item;
+	VM defaultBlockState ()Lnet/minecraft/world/level/block/state/BlockState;
+	VM getName ()Lnet/minecraft/network/chat/MutableComponent;
+	VM getStateDefinition ()Lnet/minecraft/world/level/block/state/StateDefinition;
+net/minecraft/world/level/block/Blocks
+	SF AIR Lnet/minecraft/world/level/block/Block;
+	SF AMETHYST_BLOCK Lnet/minecraft/world/level/block/Block;
+	SF BEETROOTS Lnet/minecraft/world/level/block/Block;
+	SF BELL Lnet/minecraft/world/level/block/Block;
+	SF CARROTS Lnet/minecraft/world/level/block/Block;
+	SF CHEST Lnet/minecraft/world/level/block/Block;
+	SF COBBLESTONE Lnet/minecraft/world/level/block/Block;
+	SF COBWEB Lnet/minecraft/world/level/block/Block;
+	SF COPPER_BLOCK Lnet/minecraft/world/level/block/Block;
+	SF DEEPSLATE Lnet/minecraft/world/level/block/Block;
+	SF DIAMOND_ORE Lnet/minecraft/world/level/block/Block;
+	SF DIRT Lnet/minecraft/world/level/block/Block;
+	SF FARMLAND Lnet/minecraft/world/level/block/Block;
+	SF FURNACE Lnet/minecraft/world/level/block/Block;
+	SF GOLD_BLOCK Lnet/minecraft/world/level/block/Block;
+	SF GRASS_BLOCK Lnet/minecraft/world/level/block/Block;
+	SF IRON_ORE Lnet/minecraft/world/level/block/Block;
+	SF LAVA Lnet/minecraft/world/level/block/Block;
+	SF MOSS_BLOCK Lnet/minecraft/world/level/block/Block;
+	SF OAK_DOOR Lnet/minecraft/world/level/block/Block;
+	SF OAK_LOG Lnet/minecraft/world/level/block/Block;
+	SF OAK_PLANKS Lnet/minecraft/world/level/block/Block;
+	SF POTATOES Lnet/minecraft/world/level/block/Block;
+	SF STONE Lnet/minecraft/world/level/block/Block;
+	SF WATER Lnet/minecraft/world/level/block/Block;
+	SF WHEAT Lnet/minecraft/world/level/block/Block;
+	SF WHITE_BED Lnet/minecraft/world/level/block/Block;
+net/minecraft/world/level/block/ChestBlock
+net/minecraft/world/level/block/CropBlock
+	SF AGE Lnet/minecraft/world/level/block/state/properties/IntegerProperty;
+	VM getMaxAge ()I
+	VM getStateForAge (I)Lnet/minecraft/world/level/block/state/BlockState;
+	VM isMaxAge (Lnet/minecraft/world/level/block/state/BlockState;)Z
+net/minecraft/world/level/block/DoorBlock
+	SF HALF Lnet/minecraft/world/level/block/state/properties/EnumProperty;
+net/minecraft/world/level/block/FarmBlock
+	SF MOISTURE Lnet/minecraft/world/level/block/state/properties/IntegerProperty;
+net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity
+	SM isFuel (Lnet/minecraft/world/item/ItemStack;)Z
+net/minecraft/world/level/block/entity/BlockEntity
+net/minecraft/world/level/block/entity/ChestBlockEntity
+	VM clearContent ()V
+	VM getBlockPos ()Lnet/minecraft/core/BlockPos;
+	VM getContainerSize ()I
+	VM getItem (I)Lnet/minecraft/world/item/ItemStack;
+	VM isEmpty ()Z
+	VM setItem (ILnet/minecraft/world/item/ItemStack;)V
+	VM unpackLootTable (Lnet/minecraft/world/entity/player/Player;)V
+net/minecraft/world/level/block/entity/FurnaceBlockEntity
+	VM getItem (I)Lnet/minecraft/world/item/ItemStack;
+	VM getPersistentData ()Lnet/minecraft/nbt/CompoundTag;
+	VM setChanged ()V
+	VM setItem (ILnet/minecraft/world/item/ItemStack;)V
+net/minecraft/world/level/block/state/BlockBehaviour$Properties
+	SM of ()Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;
+	VM lightLevel (Ljava/util/function/ToIntFunction;)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;
+	VM strength (FF)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;
+net/minecraft/world/level/block/state/BlockState
+	VM canBeReplaced ()Z
+	VM getBlock ()Lnet/minecraft/world/level/block/Block;
+	VM getCollisionShape (Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/phys/shapes/VoxelShape;
+	VM getDestroySpeed (Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F
+	VM getFluidState ()Lnet/minecraft/world/level/material/FluidState;
+	VM getValue (Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;
+	VM hasBlockEntity ()Z
+	VM is (Lnet/minecraft/tags/TagKey;)Z
+	VM is (Lnet/minecraft/world/level/block/Block;)Z
+	VM isAir ()Z
+	VM setValue (Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Ljava/lang/Object;
+net/minecraft/world/level/block/state/StateDefinition
+	VM getPossibleStates ()Lcom/google/common/collect/ImmutableList;
+net/minecraft/world/level/block/state/properties/BedPart
+	SF FOOT Lnet/minecraft/world/level/block/state/properties/BedPart;
+	SF HEAD Lnet/minecraft/world/level/block/state/properties/BedPart;
+net/minecraft/world/level/block/state/properties/BooleanProperty
+net/minecraft/world/level/block/state/properties/DirectionProperty
+net/minecraft/world/level/block/state/properties/DoubleBlockHalf
+	SF LOWER Lnet/minecraft/world/level/block/state/properties/DoubleBlockHalf;
+	SF UPPER Lnet/minecraft/world/level/block/state/properties/DoubleBlockHalf;
+net/minecraft/world/level/block/state/properties/EnumProperty
+net/minecraft/world/level/block/state/properties/IntegerProperty
+net/minecraft/world/level/block/state/properties/Property
+net/minecraft/world/level/border/WorldBorder
+	VM isWithinBounds (Lnet/minecraft/core/BlockPos;)Z
+net/minecraft/world/level/chunk/LevelChunk
+net/minecraft/world/level/dimension/DimensionType
+	VM hasSkyLight ()Z
+	VM ultraWarm ()Z
+net/minecraft/world/level/levelgen/Heightmap$Types
+	SF MOTION_BLOCKING_NO_LEAVES Lnet/minecraft/world/level/levelgen/Heightmap$Types;
+net/minecraft/world/level/levelgen/structure/templatesystem/StructurePlaceSettings
+	SP <init> ()V
+net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate
+	VM placeInWorld (Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructurePlaceSettings;Lnet/minecraft/util/RandomSource;I)Z
+net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplateManager
+	VM get (Lnet/minecraft/resources/ResourceLocation;)Ljava/util/Optional;
+net/minecraft/world/level/material/FluidState
+	VM is (Lnet/minecraft/tags/TagKey;)Z
+	VM isEmpty ()Z
+	VM isSource ()Z
+net/minecraft/world/level/saveddata/SavedData
+	OVR save (Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/nbt/CompoundTag;
+	SP <init> ()V
+	SUPER_OF jp/oror/reborn/VillageLedger
+	VM setDirty ()V
+net/minecraft/world/level/saveddata/SavedData$Factory
+	SP <init> (Ljava/util/function/Supplier;Ljava/util/function/BiFunction;)V
+net/minecraft/world/level/storage/DimensionDataStorage
+	VM computeIfAbsent (Lnet/minecraft/world/level/saveddata/SavedData$Factory;Ljava/lang/String;)Lnet/minecraft/world/level/saveddata/SavedData;
+net/minecraft/world/level/storage/LevelResource
+	SF ROOT Lnet/minecraft/world/level/storage/LevelResource;
+net/minecraft/world/level/storage/loot/LootContext
+	VM getRandom ()Lnet/minecraft/util/RandomSource;
+net/minecraft/world/level/storage/loot/LootParams
+net/minecraft/world/level/storage/loot/LootParams$Builder
+	SP <init> (Lnet/minecraft/server/level/ServerLevel;)V
+	VM create (Lnet/minecraft/world/level/storage/loot/parameters/LootContextParamSet;)Lnet/minecraft/world/level/storage/loot/LootParams;
+	VM withOptionalParameter (Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;Ljava/lang/Object;)Lnet/minecraft/world/level/storage/loot/LootParams$Builder;
+	VM withParameter (Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;Ljava/lang/Object;)Lnet/minecraft/world/level/storage/loot/LootParams$Builder;
+net/minecraft/world/level/storage/loot/LootTable
+	VM getRandomItems (Lnet/minecraft/world/level/storage/loot/LootParams;J)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;
+net/minecraft/world/level/storage/loot/functions/LootItemFunction
+	IFACE_OF jp/oror/reborn/MiracleLoot$Swap
+net/minecraft/world/level/storage/loot/functions/LootItemFunctionType
+	SP <init> (Lcom/mojang/serialization/MapCodec;)V
+net/minecraft/world/level/storage/loot/parameters/LootContextParam
+net/minecraft/world/level/storage/loot/parameters/LootContextParamSet
+net/minecraft/world/level/storage/loot/parameters/LootContextParamSets
+	SF ENTITY Lnet/minecraft/world/level/storage/loot/parameters/LootContextParamSet;
+net/minecraft/world/level/storage/loot/parameters/LootContextParams
+	SF ATTACKING_ENTITY Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;
+	SF DAMAGE_SOURCE Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;
+	SF DIRECT_ATTACKING_ENTITY Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;
+	SF LAST_DAMAGE_PLAYER Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;
+	SF ORIGIN Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;
+	SF THIS_ENTITY Lnet/minecraft/world/level/storage/loot/parameters/LootContextParam;
+net/minecraft/world/phys/AABB
+	SP <init> (Lnet/minecraft/core/BlockPos;)V
+	SP <init> (Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;)V
+	VM clip (Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;)Ljava/util/Optional;
+	VM getCenter ()Lnet/minecraft/world/phys/Vec3;
+	VM inflate (D)Lnet/minecraft/world/phys/AABB;
+	VM move (DDD)Lnet/minecraft/world/phys/AABB;
+	VM move (Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/AABB;
+net/minecraft/world/phys/BlockHitResult
+	SP <init> (Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/core/Direction;Lnet/minecraft/core/BlockPos;Z)V
+	VM getBlockPos ()Lnet/minecraft/core/BlockPos;
+	VM getLocation ()Lnet/minecraft/world/phys/Vec3;
+	VM getType ()Lnet/minecraft/world/phys/HitResult$Type;
+net/minecraft/world/phys/HitResult$Type
+	SF BLOCK Lnet/minecraft/world/phys/HitResult$Type;
+	SF MISS Lnet/minecraft/world/phys/HitResult$Type;
+net/minecraft/world/phys/Vec3
+	SF ZERO Lnet/minecraft/world/phys/Vec3;
+	SM atBottomCenterOf (Lnet/minecraft/core/Vec3i;)Lnet/minecraft/world/phys/Vec3;
+	SM atCenterOf (Lnet/minecraft/core/Vec3i;)Lnet/minecraft/world/phys/Vec3;
+	SP <init> (DDD)V
+	VF x D
+	VF y D
+	VF z D
+	VM add (DDD)Lnet/minecraft/world/phys/Vec3;
+	VM add (Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
+	VM distanceTo (Lnet/minecraft/world/phys/Vec3;)D
+	VM distanceToSqr (Lnet/minecraft/world/phys/Vec3;)D
+	VM dot (Lnet/minecraft/world/phys/Vec3;)D
+	VM horizontalDistance ()D
+	VM horizontalDistanceSqr ()D
+	VM length ()D
+	VM lengthSqr ()D
+	VM multiply (DDD)Lnet/minecraft/world/phys/Vec3;
+	VM normalize ()Lnet/minecraft/world/phys/Vec3;
+	VM scale (D)Lnet/minecraft/world/phys/Vec3;
+	VM subtract (Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
+	VM toString ()Ljava/lang/String;
+net/minecraft/world/phys/shapes/VoxelShape
+	VM isEmpty ()Z
+net/minecraft/world/scores/PlayerTeam
+	VM setAllowFriendlyFire (Z)V
+net/neoforged/bus/api/Event
+net/neoforged/bus/api/IEventBus
+	IMI addListener (Ljava/util/function/Consumer;)V
+	IMI post (Lnet/neoforged/bus/api/Event;)Lnet/neoforged/bus/api/Event;
+	IMI unregister (Ljava/lang/Object;)V
+net/neoforged/bus/api/SubscribeEvent
+net/neoforged/fml/ModContainer
+	VM getModInfo ()Lnet/neoforged/neoforgespi/language/IModInfo;
+	VM registerConfig (Lnet/neoforged/fml/config/ModConfig$Type;Lnet/neoforged/fml/config/IConfigSpec;)V
+net/neoforged/fml/ModList
+	SM get ()Lnet/neoforged/fml/ModList;
+	VM getModContainerById (Ljava/lang/String;)Ljava/util/Optional;
+	VM isLoaded (Ljava/lang/String;)Z
+net/neoforged/fml/common/EventBusSubscriber
+net/neoforged/fml/common/Mod
+net/neoforged/fml/config/IConfigSpec
+net/neoforged/fml/config/ModConfig$Type
+	SF SERVER Lnet/neoforged/fml/config/ModConfig$Type;
+net/neoforged/fml/loading/LoadingModList
+	SM get ()Lnet/neoforged/fml/loading/LoadingModList;
+	VM getMods ()Ljava/util/List;
+net/neoforged/fml/loading/moddiscovery/ModInfo
+	VM getModId ()Ljava/lang/String;
+	VM getVersion ()Lorg/apache/maven/artifact/versioning/ArtifactVersion;
+net/neoforged/neoforge/client/event/ClientTickEvent$Post
+net/neoforged/neoforge/client/event/EntityRenderersEvent$RegisterRenderers
+	VM registerEntityRenderer (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/client/renderer/entity/EntityRendererProvider;)V
+net/neoforged/neoforge/common/DeferredSpawnEggItem
+	SP <init> (Ljava/util/function/Supplier;IILnet/minecraft/world/item/Item$Properties;)V
+net/neoforged/neoforge/common/ModConfigSpec
+net/neoforged/neoforge/common/ModConfigSpec$BooleanValue
+	VM get ()Ljava/lang/Object;
+	VM set (Ljava/lang/Object;)V
+net/neoforged/neoforge/common/ModConfigSpec$Builder
+	SP <init> ()V
+	VM build ()Lnet/neoforged/neoforge/common/ModConfigSpec;
+	VM comment (Ljava/lang/String;)Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
+	VM define (Ljava/lang/String;Ljava/lang/Object;)Lnet/neoforged/neoforge/common/ModConfigSpec$ConfigValue;
+	VM define (Ljava/lang/String;Z)Lnet/neoforged/neoforge/common/ModConfigSpec$BooleanValue;
+	VM defineInRange (Ljava/lang/String;DDD)Lnet/neoforged/neoforge/common/ModConfigSpec$DoubleValue;
+	VM defineInRange (Ljava/lang/String;III)Lnet/neoforged/neoforge/common/ModConfigSpec$IntValue;
+net/neoforged/neoforge/common/ModConfigSpec$ConfigValue
+	VM get ()Ljava/lang/Object;
+net/neoforged/neoforge/common/ModConfigSpec$DoubleValue
+	VM get ()Ljava/lang/Object;
+net/neoforged/neoforge/common/ModConfigSpec$IntValue
+	VM get ()Ljava/lang/Object;
+	VM set (Ljava/lang/Object;)V
+net/neoforged/neoforge/common/NeoForge
+	SF EVENT_BUS Lnet/neoforged/bus/api/IEventBus;
+net/neoforged/neoforge/common/Tags$Blocks
+	SF ORES Lnet/minecraft/tags/TagKey;
+net/neoforged/neoforge/common/Tags$Items
+	SF DUSTS Lnet/minecraft/tags/TagKey;
+	SF ORES Lnet/minecraft/tags/TagKey;
+	SF RAW_MATERIALS Lnet/minecraft/tags/TagKey;
+net/neoforged/neoforge/common/util/BlockSnapshot
+	SM create (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Lnet/neoforged/neoforge/common/util/BlockSnapshot;
+	VM restore ()Z
+net/neoforged/neoforge/common/util/FakePlayer
+	VM getMainHandItem ()Lnet/minecraft/world/item/ItemStack;
+	VM moveTo (DDD)V
+	VM moveTo (DDDFF)V
+	VM setGameMode (Lnet/minecraft/world/level/GameType;)Z
+	VM setItemInHand (Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V
+net/neoforged/neoforge/common/util/FakePlayerFactory
+	SM get (Lnet/minecraft/server/level/ServerLevel;Lcom/mojang/authlib/GameProfile;)Lnet/neoforged/neoforge/common/util/FakePlayer;
+net/neoforged/neoforge/event/AddPackFindersEvent
+	VM addPackFinders (Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/server/packs/PackType;Lnet/minecraft/network/chat/Component;Lnet/minecraft/server/packs/repository/PackSource;ZLnet/minecraft/server/packs/repository/Pack$Position;)V
+net/neoforged/neoforge/event/RegisterCommandsEvent
+	VM getDispatcher ()Lcom/mojang/brigadier/CommandDispatcher;
+net/neoforged/neoforge/event/ServerChatEvent
+	SP <init> (Lnet/minecraft/server/level/ServerPlayer;Ljava/lang/String;Lnet/minecraft/network/chat/Component;)V
+	VM getPlayer ()Lnet/minecraft/server/level/ServerPlayer;
+	VM getRawText ()Ljava/lang/String;
+	VM isCanceled ()Z
+	VM setCanceled (Z)V
+net/neoforged/neoforge/event/entity/EntityAttributeCreationEvent
+	VM put (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/entity/ai/attributes/AttributeSupplier;)V
+net/neoforged/neoforge/event/entity/EntityAttributeModificationEvent
+	VM add (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/core/Holder;D)V
+net/neoforged/neoforge/event/entity/living/LivingDamageEvent$Post
+	VM getEntity ()Lnet/minecraft/world/entity/LivingEntity;
+	VM getOriginalDamage ()F
+	VM getSource ()Lnet/minecraft/world/damagesource/DamageSource;
+net/neoforged/neoforge/event/entity/living/LivingDeathEvent
+	VM getEntity ()Lnet/minecraft/world/entity/LivingEntity;
+	VM getSource ()Lnet/minecraft/world/damagesource/DamageSource;
+net/neoforged/neoforge/event/entity/living/LivingDropsEvent
+	VM getDrops ()Ljava/util/Collection;
+	VM getEntity ()Lnet/minecraft/world/entity/LivingEntity;
+	VM getSource ()Lnet/minecraft/world/damagesource/DamageSource;
+net/neoforged/neoforge/event/entity/living/LivingExperienceDropEvent
+	VM getAttackingPlayer ()Lnet/minecraft/world/entity/player/Player;
+	VM getDroppedExperience ()I
+	VM getEntity ()Lnet/minecraft/world/entity/LivingEntity;
+	VM setDroppedExperience (I)V
+net/neoforged/neoforge/event/entity/living/LivingHealEvent
+	VM getEntity ()Lnet/minecraft/world/entity/LivingEntity;
+	VM setCanceled (Z)V
+net/neoforged/neoforge/event/entity/living/LivingIncomingDamageEvent
+	VM getAmount ()F
+	VM getEntity ()Lnet/minecraft/world/entity/LivingEntity;
+	VM getSource ()Lnet/minecraft/world/damagesource/DamageSource;
+	VM setAmount (F)V
+	VM setCanceled (Z)V
+net/neoforged/neoforge/event/entity/player/ItemTooltipEvent
+	VM getItemStack ()Lnet/minecraft/world/item/ItemStack;
+	VM getToolTip ()Ljava/util/List;
+net/neoforged/neoforge/event/entity/player/PlayerContainerEvent$Close
+	VM getEntity ()Lnet/minecraft/world/entity/player/Player;
+net/neoforged/neoforge/event/entity/player/PlayerContainerEvent$Open
+	VM getContainer ()Lnet/minecraft/world/inventory/AbstractContainerMenu;
+	VM getEntity ()Lnet/minecraft/world/entity/player/Player;
+net/neoforged/neoforge/event/entity/player/PlayerEvent$Clone
+	SP <init> (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/player/Player;Z)V
+	VM getEntity ()Lnet/minecraft/world/entity/player/Player;
+	VM getOriginal ()Lnet/minecraft/world/entity/player/Player;
+net/neoforged/neoforge/event/entity/player/PlayerEvent$StartTracking
+	VM getEntity ()Lnet/minecraft/world/entity/player/Player;
+	VM getTarget ()Lnet/minecraft/world/entity/Entity;
+net/neoforged/neoforge/event/entity/player/PlayerInteractEvent$EntityInteract
+	SP <init> (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/entity/Entity;)V
+	VM getEntity ()Lnet/minecraft/world/entity/player/Player;
+	VM getHand ()Lnet/minecraft/world/InteractionHand;
+	VM getTarget ()Lnet/minecraft/world/entity/Entity;
+	VM isCanceled ()Z
+	VM setCanceled (Z)V
+	VM setCancellationResult (Lnet/minecraft/world/InteractionResult;)V
+net/neoforged/neoforge/event/entity/player/PlayerInteractEvent$RightClickBlock
+	SP <init> (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/BlockHitResult;)V
+	VM getEntity ()Lnet/minecraft/world/entity/player/Player;
+	VM getItemStack ()Lnet/minecraft/world/item/ItemStack;
+	VM getLevel ()Lnet/minecraft/world/level/Level;
+	VM getPos ()Lnet/minecraft/core/BlockPos;
+	VM setCanceled (Z)V
+net/neoforged/neoforge/event/entity/player/TradeWithVillagerEvent
+	SP <init> (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/trading/MerchantOffer;Lnet/minecraft/world/entity/npc/AbstractVillager;)V
+	VM getAbstractVillager ()Lnet/minecraft/world/entity/npc/AbstractVillager;
+	VM getEntity ()Lnet/minecraft/world/entity/player/Player;
+net/neoforged/neoforge/event/level/BlockEvent$BreakEvent
+	SP <init> (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/player/Player;)V
+	VM getLevel ()Lnet/minecraft/world/level/LevelAccessor;
+	VM getPlayer ()Lnet/minecraft/world/entity/player/Player;
+	VM getPos ()Lnet/minecraft/core/BlockPos;
+	VM getState ()Lnet/minecraft/world/level/block/state/BlockState;
+	VM isCanceled ()Z
+net/neoforged/neoforge/event/level/BlockEvent$EntityPlaceEvent
+	SP <init> (Lnet/neoforged/neoforge/common/util/BlockSnapshot;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/Entity;)V
+	VM getEntity ()Lnet/minecraft/world/entity/Entity;
+	VM getPlacedBlock ()Lnet/minecraft/world/level/block/state/BlockState;
+	VM getPos ()Lnet/minecraft/core/BlockPos;
+	VM isCanceled ()Z
+net/neoforged/neoforge/event/server/ServerStoppingEvent
+net/neoforged/neoforge/event/tick/EntityTickEvent$Post
+	SP <init> (Lnet/minecraft/world/entity/Entity;)V
+	VM getEntity ()Lnet/minecraft/world/entity/Entity;
+net/neoforged/neoforge/event/tick/EntityTickEvent$Pre
+	VM getEntity ()Lnet/minecraft/world/entity/Entity;
+	VM setCanceled (Z)V
+net/neoforged/neoforge/event/tick/LevelTickEvent$Post
+	VM getLevel ()Lnet/minecraft/world/level/Level;
+net/neoforged/neoforge/event/tick/PlayerTickEvent$Post
+	SP <init> (Lnet/minecraft/world/entity/player/Player;)V
+	VM getEntity ()Lnet/minecraft/world/entity/player/Player;
+net/neoforged/neoforge/event/tick/ServerTickEvent$Post
+	VM getServer ()Lnet/minecraft/server/MinecraftServer;
+net/neoforged/neoforge/event/village/VillagerTradesEvent
+	VM getTrades ()Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;
+	VM getType ()Lnet/minecraft/world/entity/npc/VillagerProfession;
+net/neoforged/neoforge/fluids/FluidType
+net/neoforged/neoforge/gametest/GameTestHolder
+net/neoforged/neoforge/gametest/GameTestHooks
+	SM isGametestEnabled ()Z
+net/neoforged/neoforge/gametest/PrefixGameTestTemplate
+net/neoforged/neoforge/network/PacketDistributor
+	SM sendToPlayer (Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;[Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;)V
+	SM sendToPlayersTrackingEntity (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;[Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;)V
+net/neoforged/neoforge/network/event/RegisterPayloadHandlersEvent
+	VM registrar (Ljava/lang/String;)Lnet/neoforged/neoforge/network/registration/PayloadRegistrar;
+net/neoforged/neoforge/network/handling/IPayloadContext
+	IMI enqueueWork (Ljava/lang/Runnable;)Ljava/util/concurrent/CompletableFuture;
+net/neoforged/neoforge/network/handling/IPayloadHandler
+net/neoforged/neoforge/network/payload/ModdedNetworkQueryPayload
+	SF STREAM_CODEC Lnet/minecraft/network/codec/StreamCodec;
+	SM fromRegistry (Ljava/util/Map;)Lnet/neoforged/neoforge/network/payload/ModdedNetworkQueryPayload;
+net/neoforged/neoforge/network/registration/NetworkRegistry
+net/neoforged/neoforge/network/registration/PayloadRegistrar
+	VM optional ()Lnet/neoforged/neoforge/network/registration/PayloadRegistrar;
+	VM playToClient (Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload$Type;Lnet/minecraft/network/codec/StreamCodec;Lnet/neoforged/neoforge/network/handling/IPayloadHandler;)Lnet/neoforged/neoforge/network/registration/PayloadRegistrar;
+net/neoforged/neoforge/registries/DeferredHolder
+	VM get ()Ljava/lang/Object;
+	VM getKey ()Lnet/minecraft/resources/ResourceKey;
+net/neoforged/neoforge/registries/DeferredItem
+	VM get ()Ljava/lang/Object;
+net/neoforged/neoforge/registries/DeferredRegister
+	SM create (Lnet/minecraft/resources/ResourceKey;Ljava/lang/String;)Lnet/neoforged/neoforge/registries/DeferredRegister;
+	SM createItems (Ljava/lang/String;)Lnet/neoforged/neoforge/registries/DeferredRegister$Items;
+	VM register (Ljava/lang/String;Ljava/util/function/Supplier;)Lnet/neoforged/neoforge/registries/DeferredHolder;
+	VM register (Lnet/neoforged/bus/api/IEventBus;)V
+net/neoforged/neoforge/registries/DeferredRegister$Items
+	VM register (Ljava/lang/String;Ljava/util/function/Supplier;)Lnet/neoforged/neoforge/registries/DeferredItem;
+	VM register (Lnet/neoforged/bus/api/IEventBus;)V
+	VM registerSimpleItem (Ljava/lang/String;Lnet/minecraft/world/item/Item$Properties;)Lnet/neoforged/neoforge/registries/DeferredItem;
+net/neoforged/neoforge/server/ServerLifecycleHooks
+	SM getCurrentServer ()Lnet/minecraft/server/MinecraftServer;
+net/neoforged/neoforgespi/language/IModInfo
+	IMI getVersion ()Lorg/apache/maven/artifact/versioning/ArtifactVersion;
+org/apache/maven/artifact/versioning/ArtifactVersion
+	IMI toString ()Ljava/lang/String;
+org/joml/Quaternionf
+org/joml/Vector3f
+	SP <init> (FFF)V
+	VF y F
+	VM rotateX (F)Lorg/joml/Vector3f;
+	VM rotateY (F)Lorg/joml/Vector3f;
+	VM rotateZ (F)Lorg/joml/Vector3f;
+org/lwjgl/opengl/GL11
+	SM glGetError ()I
+org/objectweb/asm/tree/ClassNode
+org/spongepowered/asm/mixin/Mixin
+org/spongepowered/asm/mixin/Pseudo
+org/spongepowered/asm/mixin/extensibility/IMixinConfigPlugin
+	IFACE_OF jp/oror/reborn/mixin/CompatibilityMixinPlugin
+org/spongepowered/asm/mixin/extensibility/IMixinInfo
+org/spongepowered/asm/mixin/gen/Accessor
+org/spongepowered/asm/mixin/injection/Inject
+org/spongepowered/asm/mixin/injection/Redirect
+org/spongepowered/asm/mixin/injection/callback/CallbackInfo
+	VM cancel ()V
