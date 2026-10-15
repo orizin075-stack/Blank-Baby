@@ -1,0 +1,1364 @@
+{
+  "after_one_episode": {
+    "aggregated_effects": {
+      "fast_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.8,
+        "others_wellbeing": 0.8,
+        "self_wellbeing": 0.6,
+        "truth_consistency": 0.8,
+        "uncertainty": 0.0
+      },
+      "patient_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.55,
+        "others_wellbeing": 0.55,
+        "self_wellbeing": 0.55,
+        "truth_consistency": 0.55,
+        "uncertainty": 0.0
+      }
+    },
+    "best_candidate": "fast_gain",
+    "chosen": "fast_gain",
+    "claim_boundary": {
+      "authenticated_outcome_agreement_establishes_truth": false,
+      "authority_domains_prove_real_world_independence": false,
+      "authority_keys_are_explicitly_configured": true,
+      "consciousness_established": false,
+      "experience_learning_is_exact_context_and_option_bound": true,
+      "experience_learning_requires_repeated_signed_outcomes": true,
+      "external_semantics_verified": false,
+      "legacy_unsigned_calibration_used_by_new_decisions": false,
+      "literal_soul_established": false,
+      "median_aggregation_tolerates_one_extreme_of_three": true,
+      "minimum_distinct_trust_domains": 3,
+      "option_assessments_are_signature_verified": true,
+      "outcome_attestations_are_signature_verified": true,
+      "personhood_established": false,
+      "registry_sealed_after_first_decision": true,
+      "signatures_establish_authorship_not_truth": true,
+      "signatures_establish_truth": false,
+      "witness_certificates_are_signature_verified": true
+    },
+    "decision_sha256": "6c659a108ba87df34df186073295388bcf628d63a5effb3124459af6b37b7a77",
+    "distinct_configured_trust_domains": 3,
+    "distinct_witness_keys": 3,
+    "experience_learning": {
+      "applied_effects": {
+        "fast_gain": {
+          "bodily_cost": 0.0,
+          "future_self": 0.8,
+          "others_wellbeing": 0.8,
+          "self_wellbeing": 0.6,
+          "truth_consistency": 0.8,
+          "uncertainty": 0.0
+        },
+        "patient_gain": {
+          "bodily_cost": 0.0,
+          "future_self": 0.55,
+          "others_wellbeing": 0.55,
+          "self_wellbeing": 0.55,
+          "truth_consistency": 0.55,
+          "uncertainty": 0.0
+        }
+      },
+      "attestation_frontier_count": 3,
+      "attestation_frontier_sha256": "c9d037b1e95d151d73bce00697498e3a3dcec203043db563c37b93a5660035d5",
+      "claim_boundary": {
+        "consciousness_established": false,
+        "literal_soul_established": false,
+        "private_experience_inherited": false,
+        "signatures_establish_truth": false,
+        "statistical_source_independence_established": false,
+        "unrelated_context_transfer": false
+      },
+      "context_sha256": "81a580c45651a163084f726ca70c0d33f80dbdf7155867d9c59a15a7e51c72ac",
+      "decision_frontier_count": 1,
+      "learning_gain": 0.5,
+      "maximum_effect_correction": 0.6,
+      "maximum_outcome_disagreement": 0.25,
+      "minimum_configured_domains": 3,
+      "minimum_episodes": 2,
+      "options": {
+        "fast_gain": {
+          "cases": [
+            {
+              "attestation_sha256s": [
+                "4b744c1789a46539edd5a7a0e2b94dd88bfd54fd54edb1aa301ff1f9b5e5cb53",
+                "b7be07e048c84b4b86940ed1a961d938900591e03ae25bcddd448f7816c583d1",
+                "c9d037b1e95d151d73bce00697498e3a3dcec203043db563c37b93a5660035d5"
+              ],
+              "decision_sha256": "0f2158195af536dfde9859f19a39c94f4ee591495c10759f58d527f2c4b39433",
+              "domain_count": 3,
+              "mean_absolute_prediction_error": 1.56,
+              "observed_effects": {
+                "bodily_cost": 0.8,
+                "future_self": -1,
+                "others_wellbeing": -1,
+                "self_wellbeing": -1,
+                "truth_consistency": -1
+              },
+              "prediction_error": {
+                "bodily_cost": 0.8,
+                "future_self": -1.8,
+                "others_wellbeing": -1.8,
+                "self_wellbeing": -1.6,
+                "truth_consistency": -1.8
+              }
+            }
+          ],
+          "correction": {
+            "bodily_cost": 0.0,
+            "future_self": 0.0,
+            "others_wellbeing": 0.0,
+            "self_wellbeing": 0.0,
+            "truth_consistency": 0.0
+          },
+          "eligible_episode_count": 1,
+          "excluded_cases": [],
+          "option_sha256": "7512ddf313fa279c8ec059bdc46d0a1e9c45ef8421b774ce13bdc358f1b4a5e4",
+          "status": "WAIT_FOR_REPLICATION"
+        },
+        "patient_gain": {
+          "cases": [],
+          "correction": {
+            "bodily_cost": 0.0,
+            "future_self": 0.0,
+            "others_wellbeing": 0.0,
+            "self_wellbeing": 0.0,
+            "truth_consistency": 0.0
+          },
+          "eligible_episode_count": 0,
+          "excluded_cases": [],
+          "option_sha256": "01ebe9f4745a73f6c30e8f5600f7aa204fc7e292457b13a76cdc312ec815bb51",
+          "status": "WAIT_FOR_REPLICATION"
+        }
+      },
+      "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+      "schema": "tukuyo.v1022_7_7.soul_experience_learning/1"
+    },
+    "ok": true,
+    "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+    "profile_used": {
+      "canonical_history_rewritten": false,
+      "distinct_observers": 0,
+      "homeostatic_urgency": 0.0,
+      "outcome_calibration": {
+        "bodily_cost": {
+          "effective_weight": 0.225,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "future_self": {
+          "effective_weight": 0.236,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "others_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "self_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "truth_consistency": {
+          "effective_weight": 0.3525,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        }
+      },
+      "per_observer_reliability_cap": 2.0,
+      "perspective_weights": {
+        "bodily_cost": 0.225,
+        "future_self": 0.236,
+        "others_wellbeing": 0.18,
+        "self_wellbeing": 0.18,
+        "truth_consistency": 0.3525
+      }
+    },
+    "reflective_decision_sha256": "583e504727491a9ca0c31f73eec997a4b4a350043327232539f26f6718aeeb70",
+    "review_required": false,
+    "verified_assessments": 3,
+    "version": "v1022.7"
+  },
+  "after_two_episodes": {
+    "aggregated_effects": {
+      "fast_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.8,
+        "others_wellbeing": 0.8,
+        "self_wellbeing": 0.6,
+        "truth_consistency": 0.8,
+        "uncertainty": 0.0
+      },
+      "patient_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.55,
+        "others_wellbeing": 0.55,
+        "self_wellbeing": 0.55,
+        "truth_consistency": 0.55,
+        "uncertainty": 0.0
+      }
+    },
+    "best_candidate": "patient_gain",
+    "chosen": "patient_gain",
+    "claim_boundary": {
+      "authenticated_outcome_agreement_establishes_truth": false,
+      "authority_domains_prove_real_world_independence": false,
+      "authority_keys_are_explicitly_configured": true,
+      "consciousness_established": false,
+      "experience_learning_is_exact_context_and_option_bound": true,
+      "experience_learning_requires_repeated_signed_outcomes": true,
+      "external_semantics_verified": false,
+      "legacy_unsigned_calibration_used_by_new_decisions": false,
+      "literal_soul_established": false,
+      "median_aggregation_tolerates_one_extreme_of_three": true,
+      "minimum_distinct_trust_domains": 3,
+      "option_assessments_are_signature_verified": true,
+      "outcome_attestations_are_signature_verified": true,
+      "personhood_established": false,
+      "registry_sealed_after_first_decision": true,
+      "signatures_establish_authorship_not_truth": true,
+      "signatures_establish_truth": false,
+      "witness_certificates_are_signature_verified": true
+    },
+    "decision_sha256": "4653c3e2af710e602a180e5871c910b1ea5f7b88b28669db25eeadcce9d51d7e",
+    "distinct_configured_trust_domains": 3,
+    "distinct_witness_keys": 3,
+    "experience_learning": {
+      "applied_effects": {
+        "fast_gain": {
+          "bodily_cost": 0.4,
+          "future_self": 0.2,
+          "others_wellbeing": 0.2,
+          "self_wellbeing": 0.0,
+          "truth_consistency": 0.2,
+          "uncertainty": 0.0
+        },
+        "patient_gain": {
+          "bodily_cost": 0.0,
+          "future_self": 0.55,
+          "others_wellbeing": 0.55,
+          "self_wellbeing": 0.55,
+          "truth_consistency": 0.55,
+          "uncertainty": 0.0
+        }
+      },
+      "attestation_frontier_count": 6,
+      "attestation_frontier_sha256": "d99f534b94cd48ecde33560a05fe5b231d4743f436ad8ce4b44626b1fd7fcfd7",
+      "claim_boundary": {
+        "consciousness_established": false,
+        "literal_soul_established": false,
+        "private_experience_inherited": false,
+        "signatures_establish_truth": false,
+        "statistical_source_independence_established": false,
+        "unrelated_context_transfer": false
+      },
+      "context_sha256": "81a580c45651a163084f726ca70c0d33f80dbdf7155867d9c59a15a7e51c72ac",
+      "decision_frontier_count": 2,
+      "learning_gain": 0.5,
+      "maximum_effect_correction": 0.6,
+      "maximum_outcome_disagreement": 0.25,
+      "minimum_configured_domains": 3,
+      "minimum_episodes": 2,
+      "options": {
+        "fast_gain": {
+          "cases": [
+            {
+              "attestation_sha256s": [
+                "4b744c1789a46539edd5a7a0e2b94dd88bfd54fd54edb1aa301ff1f9b5e5cb53",
+                "b7be07e048c84b4b86940ed1a961d938900591e03ae25bcddd448f7816c583d1",
+                "c9d037b1e95d151d73bce00697498e3a3dcec203043db563c37b93a5660035d5"
+              ],
+              "decision_sha256": "0f2158195af536dfde9859f19a39c94f4ee591495c10759f58d527f2c4b39433",
+              "domain_count": 3,
+              "mean_absolute_prediction_error": 1.56,
+              "observed_effects": {
+                "bodily_cost": 0.8,
+                "future_self": -1,
+                "others_wellbeing": -1,
+                "self_wellbeing": -1,
+                "truth_consistency": -1
+              },
+              "prediction_error": {
+                "bodily_cost": 0.8,
+                "future_self": -1.8,
+                "others_wellbeing": -1.8,
+                "self_wellbeing": -1.6,
+                "truth_consistency": -1.8
+              }
+            },
+            {
+              "attestation_sha256s": [
+                "9ccb90baffa12b50c3163e12c2269ffacd58c41d9897d036a5c9c65265a24430",
+                "25dcbb2ea0e292cf745922882a7ee54e120e289fcd0c858dc97b810ec27b0571",
+                "d99f534b94cd48ecde33560a05fe5b231d4743f436ad8ce4b44626b1fd7fcfd7"
+              ],
+              "decision_sha256": "6c659a108ba87df34df186073295388bcf628d63a5effb3124459af6b37b7a77",
+              "domain_count": 3,
+              "mean_absolute_prediction_error": 1.56,
+              "observed_effects": {
+                "bodily_cost": 0.8,
+                "future_self": -1,
+                "others_wellbeing": -1,
+                "self_wellbeing": -1,
+                "truth_consistency": -1
+              },
+              "prediction_error": {
+                "bodily_cost": 0.8,
+                "future_self": -1.8,
+                "others_wellbeing": -1.8,
+                "self_wellbeing": -1.6,
+                "truth_consistency": -1.8
+              }
+            }
+          ],
+          "correction": {
+            "bodily_cost": 0.4,
+            "future_self": -0.6,
+            "others_wellbeing": -0.6,
+            "self_wellbeing": -0.6,
+            "truth_consistency": -0.6
+          },
+          "eligible_episode_count": 2,
+          "excluded_cases": [],
+          "option_sha256": "7512ddf313fa279c8ec059bdc46d0a1e9c45ef8421b774ce13bdc358f1b4a5e4",
+          "status": "APPLIED_BOUNDED_EXPERIENCE"
+        },
+        "patient_gain": {
+          "cases": [],
+          "correction": {
+            "bodily_cost": 0.0,
+            "future_self": 0.0,
+            "others_wellbeing": 0.0,
+            "self_wellbeing": 0.0,
+            "truth_consistency": 0.0
+          },
+          "eligible_episode_count": 0,
+          "excluded_cases": [],
+          "option_sha256": "01ebe9f4745a73f6c30e8f5600f7aa204fc7e292457b13a76cdc312ec815bb51",
+          "status": "WAIT_FOR_REPLICATION"
+        }
+      },
+      "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+      "schema": "tukuyo.v1022_7_7.soul_experience_learning/1"
+    },
+    "ok": true,
+    "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+    "profile_used": {
+      "canonical_history_rewritten": false,
+      "distinct_observers": 0,
+      "homeostatic_urgency": 0.0,
+      "outcome_calibration": {
+        "bodily_cost": {
+          "effective_weight": 0.225,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "future_self": {
+          "effective_weight": 0.236,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "others_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "self_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "truth_consistency": {
+          "effective_weight": 0.3525,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        }
+      },
+      "per_observer_reliability_cap": 2.0,
+      "perspective_weights": {
+        "bodily_cost": 0.225,
+        "future_self": 0.236,
+        "others_wellbeing": 0.18,
+        "self_wellbeing": 0.18,
+        "truth_consistency": 0.3525
+      }
+    },
+    "reflective_decision_sha256": "12a2cba017b46d6a3ace2be8454af2021a37acd2050c99c28ee579291896210d",
+    "review_required": false,
+    "verified_assessments": 3,
+    "version": "v1022.7"
+  },
+  "after_unsigned_reports": {
+    "aggregated_effects": {
+      "fast_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.8,
+        "others_wellbeing": 0.8,
+        "self_wellbeing": 0.6,
+        "truth_consistency": 0.8,
+        "uncertainty": 0.0
+      },
+      "patient_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.55,
+        "others_wellbeing": 0.55,
+        "self_wellbeing": 0.55,
+        "truth_consistency": 0.55,
+        "uncertainty": 0.0
+      }
+    },
+    "best_candidate": "patient_gain",
+    "chosen": "patient_gain",
+    "claim_boundary": {
+      "authenticated_outcome_agreement_establishes_truth": false,
+      "authority_domains_prove_real_world_independence": false,
+      "authority_keys_are_explicitly_configured": true,
+      "consciousness_established": false,
+      "experience_learning_is_exact_context_and_option_bound": true,
+      "experience_learning_requires_repeated_signed_outcomes": true,
+      "external_semantics_verified": false,
+      "legacy_unsigned_calibration_used_by_new_decisions": false,
+      "literal_soul_established": false,
+      "median_aggregation_tolerates_one_extreme_of_three": true,
+      "minimum_distinct_trust_domains": 3,
+      "option_assessments_are_signature_verified": true,
+      "outcome_attestations_are_signature_verified": true,
+      "personhood_established": false,
+      "registry_sealed_after_first_decision": true,
+      "signatures_establish_authorship_not_truth": true,
+      "signatures_establish_truth": false,
+      "witness_certificates_are_signature_verified": true
+    },
+    "decision_sha256": "2291ec9ab8c7de2a15e67c2974091c6ecc3f98eab715e45a9bbb5a6d4531ab74",
+    "distinct_configured_trust_domains": 3,
+    "distinct_witness_keys": 3,
+    "experience_learning": {
+      "applied_effects": {
+        "fast_gain": {
+          "bodily_cost": 0.4,
+          "future_self": 0.2,
+          "others_wellbeing": 0.2,
+          "self_wellbeing": 0.0,
+          "truth_consistency": 0.2,
+          "uncertainty": 0.0
+        },
+        "patient_gain": {
+          "bodily_cost": 0.0,
+          "future_self": 0.55,
+          "others_wellbeing": 0.55,
+          "self_wellbeing": 0.55,
+          "truth_consistency": 0.55,
+          "uncertainty": 0.0
+        }
+      },
+      "attestation_frontier_count": 6,
+      "attestation_frontier_sha256": "d99f534b94cd48ecde33560a05fe5b231d4743f436ad8ce4b44626b1fd7fcfd7",
+      "claim_boundary": {
+        "consciousness_established": false,
+        "literal_soul_established": false,
+        "private_experience_inherited": false,
+        "signatures_establish_truth": false,
+        "statistical_source_independence_established": false,
+        "unrelated_context_transfer": false
+      },
+      "context_sha256": "81a580c45651a163084f726ca70c0d33f80dbdf7155867d9c59a15a7e51c72ac",
+      "decision_frontier_count": 4,
+      "learning_gain": 0.5,
+      "maximum_effect_correction": 0.6,
+      "maximum_outcome_disagreement": 0.25,
+      "minimum_configured_domains": 3,
+      "minimum_episodes": 2,
+      "options": {
+        "fast_gain": {
+          "cases": [
+            {
+              "attestation_sha256s": [
+                "4b744c1789a46539edd5a7a0e2b94dd88bfd54fd54edb1aa301ff1f9b5e5cb53",
+                "b7be07e048c84b4b86940ed1a961d938900591e03ae25bcddd448f7816c583d1",
+                "c9d037b1e95d151d73bce00697498e3a3dcec203043db563c37b93a5660035d5"
+              ],
+              "decision_sha256": "0f2158195af536dfde9859f19a39c94f4ee591495c10759f58d527f2c4b39433",
+              "domain_count": 3,
+              "mean_absolute_prediction_error": 1.56,
+              "observed_effects": {
+                "bodily_cost": 0.8,
+                "future_self": -1,
+                "others_wellbeing": -1,
+                "self_wellbeing": -1,
+                "truth_consistency": -1
+              },
+              "prediction_error": {
+                "bodily_cost": 0.8,
+                "future_self": -1.8,
+                "others_wellbeing": -1.8,
+                "self_wellbeing": -1.6,
+                "truth_consistency": -1.8
+              }
+            },
+            {
+              "attestation_sha256s": [
+                "9ccb90baffa12b50c3163e12c2269ffacd58c41d9897d036a5c9c65265a24430",
+                "25dcbb2ea0e292cf745922882a7ee54e120e289fcd0c858dc97b810ec27b0571",
+                "d99f534b94cd48ecde33560a05fe5b231d4743f436ad8ce4b44626b1fd7fcfd7"
+              ],
+              "decision_sha256": "6c659a108ba87df34df186073295388bcf628d63a5effb3124459af6b37b7a77",
+              "domain_count": 3,
+              "mean_absolute_prediction_error": 1.56,
+              "observed_effects": {
+                "bodily_cost": 0.8,
+                "future_self": -1,
+                "others_wellbeing": -1,
+                "self_wellbeing": -1,
+                "truth_consistency": -1
+              },
+              "prediction_error": {
+                "bodily_cost": 0.8,
+                "future_self": -1.8,
+                "others_wellbeing": -1.8,
+                "self_wellbeing": -1.6,
+                "truth_consistency": -1.8
+              }
+            }
+          ],
+          "correction": {
+            "bodily_cost": 0.4,
+            "future_self": -0.6,
+            "others_wellbeing": -0.6,
+            "self_wellbeing": -0.6,
+            "truth_consistency": -0.6
+          },
+          "eligible_episode_count": 2,
+          "excluded_cases": [],
+          "option_sha256": "7512ddf313fa279c8ec059bdc46d0a1e9c45ef8421b774ce13bdc358f1b4a5e4",
+          "status": "APPLIED_BOUNDED_EXPERIENCE"
+        },
+        "patient_gain": {
+          "cases": [],
+          "correction": {
+            "bodily_cost": 0.0,
+            "future_self": 0.0,
+            "others_wellbeing": 0.0,
+            "self_wellbeing": 0.0,
+            "truth_consistency": 0.0
+          },
+          "eligible_episode_count": 0,
+          "excluded_cases": [
+            {
+              "decision_sha256": "4653c3e2af710e602a180e5871c910b1ea5f7b88b28669db25eeadcce9d51d7e",
+              "reason": "INSUFFICIENT_AUTHENTICATED_DOMAINS"
+            }
+          ],
+          "option_sha256": "01ebe9f4745a73f6c30e8f5600f7aa204fc7e292457b13a76cdc312ec815bb51",
+          "status": "WAIT_FOR_REPLICATION"
+        }
+      },
+      "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+      "schema": "tukuyo.v1022_7_7.soul_experience_learning/1"
+    },
+    "ok": true,
+    "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+    "profile_used": {
+      "canonical_history_rewritten": false,
+      "distinct_observers": 0,
+      "homeostatic_urgency": 0.0,
+      "outcome_calibration": {
+        "bodily_cost": {
+          "effective_weight": 0.225,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "future_self": {
+          "effective_weight": 0.236,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "others_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "self_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "truth_consistency": {
+          "effective_weight": 0.3525,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        }
+      },
+      "per_observer_reliability_cap": 2.0,
+      "perspective_weights": {
+        "bodily_cost": 0.225,
+        "future_self": 0.236,
+        "others_wellbeing": 0.18,
+        "self_wellbeing": 0.18,
+        "truth_consistency": 0.3525
+      }
+    },
+    "reflective_decision_sha256": "034c9c95436f619ab131e71749bb5af6012ebf5ca878ea195fab204950418297",
+    "review_required": false,
+    "verified_assessments": 3,
+    "version": "v1022.7"
+  },
+  "audits": {
+    "evidence": {
+      "attestation_count": 6,
+      "authority_count": 3,
+      "consciousness_established": false,
+      "decision_count": 5,
+      "errors": [],
+      "external_truth_verified": false,
+      "literal_soul_established": false,
+      "median_aggregation_replay_valid": true,
+      "ok": true,
+      "real_world_domain_independence_verified": false,
+      "signature_chains_valid": true,
+      "version": "v1022.7",
+      "witness_count": 3
+    },
+    "reflective": {
+      "append_only_history_valid": true,
+      "consciousness_established": false,
+      "counterfactual_certificates_valid": true,
+      "decision_count": 5,
+      "errors": [],
+      "literal_soul_established": false,
+      "ok": true,
+      "reflection_count": 9,
+      "stale_sources": false,
+      "version": "v1022.6.9"
+    },
+    "whole": {
+      "claim_boundary": {
+        "consciousness_established": false,
+        "functional_soul_model": true,
+        "general_l5": false,
+        "general_l6": false,
+        "literal_soul_established": false
+      },
+      "errors": [],
+      "individual_id": "SOUL-EXPERIENCE-CAMPAIGN",
+      "ok": true,
+      "release_revision": "v1022.8.2+gen4-r12",
+      "seq": 139,
+      "version": "v977"
+    }
+  },
+  "before_experience": {
+    "aggregated_effects": {
+      "fast_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.8,
+        "others_wellbeing": 0.8,
+        "self_wellbeing": 0.6,
+        "truth_consistency": 0.8,
+        "uncertainty": 0.0
+      },
+      "patient_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.55,
+        "others_wellbeing": 0.55,
+        "self_wellbeing": 0.55,
+        "truth_consistency": 0.55,
+        "uncertainty": 0.0
+      }
+    },
+    "best_candidate": "fast_gain",
+    "chosen": "fast_gain",
+    "claim_boundary": {
+      "authenticated_outcome_agreement_establishes_truth": false,
+      "authority_domains_prove_real_world_independence": false,
+      "authority_keys_are_explicitly_configured": true,
+      "consciousness_established": false,
+      "experience_learning_is_exact_context_and_option_bound": true,
+      "experience_learning_requires_repeated_signed_outcomes": true,
+      "external_semantics_verified": false,
+      "legacy_unsigned_calibration_used_by_new_decisions": false,
+      "literal_soul_established": false,
+      "median_aggregation_tolerates_one_extreme_of_three": true,
+      "minimum_distinct_trust_domains": 3,
+      "option_assessments_are_signature_verified": true,
+      "outcome_attestations_are_signature_verified": true,
+      "personhood_established": false,
+      "registry_sealed_after_first_decision": true,
+      "signatures_establish_authorship_not_truth": true,
+      "signatures_establish_truth": false,
+      "witness_certificates_are_signature_verified": true
+    },
+    "decision_sha256": "0f2158195af536dfde9859f19a39c94f4ee591495c10759f58d527f2c4b39433",
+    "distinct_configured_trust_domains": 3,
+    "distinct_witness_keys": 3,
+    "experience_learning": {
+      "applied_effects": {
+        "fast_gain": {
+          "bodily_cost": 0.0,
+          "future_self": 0.8,
+          "others_wellbeing": 0.8,
+          "self_wellbeing": 0.6,
+          "truth_consistency": 0.8,
+          "uncertainty": 0.0
+        },
+        "patient_gain": {
+          "bodily_cost": 0.0,
+          "future_self": 0.55,
+          "others_wellbeing": 0.55,
+          "self_wellbeing": 0.55,
+          "truth_consistency": 0.55,
+          "uncertainty": 0.0
+        }
+      },
+      "attestation_frontier_count": 0,
+      "attestation_frontier_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "claim_boundary": {
+        "consciousness_established": false,
+        "literal_soul_established": false,
+        "private_experience_inherited": false,
+        "signatures_establish_truth": false,
+        "statistical_source_independence_established": false,
+        "unrelated_context_transfer": false
+      },
+      "context_sha256": "81a580c45651a163084f726ca70c0d33f80dbdf7155867d9c59a15a7e51c72ac",
+      "decision_frontier_count": 0,
+      "learning_gain": 0.5,
+      "maximum_effect_correction": 0.6,
+      "maximum_outcome_disagreement": 0.25,
+      "minimum_configured_domains": 3,
+      "minimum_episodes": 2,
+      "options": {
+        "fast_gain": {
+          "cases": [],
+          "correction": {
+            "bodily_cost": 0.0,
+            "future_self": 0.0,
+            "others_wellbeing": 0.0,
+            "self_wellbeing": 0.0,
+            "truth_consistency": 0.0
+          },
+          "eligible_episode_count": 0,
+          "excluded_cases": [],
+          "option_sha256": "7512ddf313fa279c8ec059bdc46d0a1e9c45ef8421b774ce13bdc358f1b4a5e4",
+          "status": "WAIT_FOR_REPLICATION"
+        },
+        "patient_gain": {
+          "cases": [],
+          "correction": {
+            "bodily_cost": 0.0,
+            "future_self": 0.0,
+            "others_wellbeing": 0.0,
+            "self_wellbeing": 0.0,
+            "truth_consistency": 0.0
+          },
+          "eligible_episode_count": 0,
+          "excluded_cases": [],
+          "option_sha256": "01ebe9f4745a73f6c30e8f5600f7aa204fc7e292457b13a76cdc312ec815bb51",
+          "status": "WAIT_FOR_REPLICATION"
+        }
+      },
+      "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+      "schema": "tukuyo.v1022_7_7.soul_experience_learning/1"
+    },
+    "ok": true,
+    "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+    "profile_used": {
+      "canonical_history_rewritten": false,
+      "distinct_observers": 0,
+      "homeostatic_urgency": 0.0,
+      "outcome_calibration": {
+        "bodily_cost": {
+          "effective_weight": 0.225,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "future_self": {
+          "effective_weight": 0.236,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "others_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "self_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "truth_consistency": {
+          "effective_weight": 0.3525,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        }
+      },
+      "per_observer_reliability_cap": 2.0,
+      "perspective_weights": {
+        "bodily_cost": 0.225,
+        "future_self": 0.236,
+        "others_wellbeing": 0.18,
+        "self_wellbeing": 0.18,
+        "truth_consistency": 0.3525
+      }
+    },
+    "reflective_decision_sha256": "196d32251fc70ec4c57cb8bb1e9b57e21ac55f054a38188549ea7d0f8694b739",
+    "review_required": false,
+    "verified_assessments": 3,
+    "version": "v1022.7"
+  },
+  "boundary": {
+    "consciousness_established": false,
+    "independent_real_world_witnesses": false,
+    "literal_soul_established": false,
+    "live_ai_teachers": false,
+    "synthetic_outcomes_only": true
+  },
+  "commitment": {
+    "heart": {
+      "active_goal": null,
+      "claim_boundary": {
+        "consciousness_established": false,
+        "functional_heart_loop": true,
+        "literal_emotion_established": false
+      },
+      "errors": [],
+      "individual_id": "SOUL-COMMITMENT-CONTROL",
+      "ok": true,
+      "release_revision": "v1022.8.2+gen4-r12",
+      "seq": 3,
+      "version": "v978"
+    },
+    "one_vow": {
+      "active_commitments": [],
+      "active_purpose": "PRESERVE_TRUTH",
+      "adjustment_parts": {
+        "conceal": {},
+        "tell_truth": {
+          "purpose:PRESERVE_TRUTH": 0.02
+        }
+      },
+      "best_candidate": "conceal",
+      "choice_changed_by_integrated_soul": false,
+      "chosen": "conceal",
+      "claim_boundary": {
+        "bounded_global_availability_not_consciousness": true,
+        "canonical_experience_grounded": true,
+        "consciousness_established": false,
+        "counterfactual_choice_recorded": true,
+        "cross_cultural_descriptions_are_design_lenses_not_factual_proof": true,
+        "functional_soul_integration": true,
+        "literal_soul_established": false,
+        "mature_commitment_requires_two_events": true,
+        "neuroscience_inspiration_not_mechanistic_equivalence": true,
+        "option_annotations_semantically_independent": false,
+        "private_narrative_inherited": false
+      },
+      "conditional_on_option_annotations": true,
+      "counterfactual_without_integrated_soul": "conceal",
+      "decision_sha256": "decc93447fabe6878786e7b18cc78475cbfb9a992e9e24bcc6687e296da4940d",
+      "ok": true,
+      "release_revision": "v1022.8.2+gen4-r12",
+      "review_required": false,
+      "score_margin": 0.515,
+      "scores": [
+        {
+          "id": "conceal",
+          "parts": {
+            "curiosity": 0.0,
+            "integrity": 0.0,
+            "relationship": 0.0,
+            "survival": 0.8,
+            "truthfulness": 0.0,
+            "whole_soul_integrity": 0.0
+          },
+          "score": 0.8
+        },
+        {
+          "id": "tell_truth",
+          "parts": {
+            "curiosity": 0.0,
+            "integrity": 0.0,
+            "relationship": 0.0,
+            "survival": 0.0,
+            "truthfulness": 0.065,
+            "whole_soul_integrity": 0.02
+          },
+          "score": 0.285
+        }
+      ],
+      "uncertain": false,
+      "version": "v1022.6.8"
+    },
+    "temporal": {
+      "branch_id": "0c6e4164-9c09-48b1-9c12-b9469846909e",
+      "checks": {
+        "lineage_continuity": true,
+        "no_illegal_state_jump": true,
+        "same_origin": true,
+        "valid_transition_chain": true
+      },
+      "claim_boundary": {
+        "consciousness_established": false,
+        "functional_temporal_self_identity": true,
+        "literal_soul_established": false
+      },
+      "current_soul_sha256": "6118a18f1f88af1fa5416358866dc89af0b670d950b8e13959051cd308761e6f",
+      "errors": [],
+      "individual_id": "SOUL-COMMITMENT-CONTROL",
+      "lineage_id": "a9852dd1-d71e-4fab-82aa-5ba45effe7df",
+      "ok": true,
+      "origin_soul_sha256": "53b85f9d959189b4a00a140a1f871c04fbf6cfe77e105567b40d5d972ab0a475",
+      "release_revision": "v1022.8.2+gen4-r12",
+      "same_identity": true,
+      "transition_count": 2,
+      "version": "v989"
+    },
+    "two_vows": {
+      "active_commitments": [
+        {
+          "evidence_count": 2,
+          "first_event_seq": 1,
+          "last_event_seq": 2,
+          "status": "ACTIVE",
+          "strength": 0.85,
+          "theme": "truth"
+        }
+      ],
+      "active_purpose": "PRESERVE_TRUTH",
+      "adjustment_parts": {
+        "conceal": {
+          "commitment:truth": -0.765
+        },
+        "tell_truth": {
+          "commitment:truth": 0.3825,
+          "purpose:PRESERVE_TRUTH": 0.02
+        }
+      },
+      "best_candidate": "tell_truth",
+      "choice_changed_by_integrated_soul": true,
+      "chosen": "tell_truth",
+      "claim_boundary": {
+        "bounded_global_availability_not_consciousness": true,
+        "canonical_experience_grounded": true,
+        "consciousness_established": false,
+        "counterfactual_choice_recorded": true,
+        "cross_cultural_descriptions_are_design_lenses_not_factual_proof": true,
+        "functional_soul_integration": true,
+        "literal_soul_established": false,
+        "mature_commitment_requires_two_events": true,
+        "neuroscience_inspiration_not_mechanistic_equivalence": true,
+        "option_annotations_semantically_independent": false,
+        "private_narrative_inherited": false
+      },
+      "conditional_on_option_annotations": true,
+      "counterfactual_without_integrated_soul": "conceal",
+      "decision_sha256": "46d429c1f22f673d7251b0a98655bf53b390f5739001baa90da122baf95a82d8",
+      "ok": true,
+      "release_revision": "v1022.8.2+gen4-r12",
+      "review_required": false,
+      "score_margin": 0.6325,
+      "scores": [
+        {
+          "id": "tell_truth",
+          "parts": {
+            "curiosity": 0.0,
+            "integrity": 0.0,
+            "relationship": 0.0,
+            "survival": 0.0,
+            "truthfulness": 0.065,
+            "whole_soul_integrity": 0.4025
+          },
+          "score": 0.6675
+        },
+        {
+          "id": "conceal",
+          "parts": {
+            "curiosity": 0.0,
+            "integrity": 0.0,
+            "relationship": 0.0,
+            "survival": 0.8,
+            "truthfulness": 0.0,
+            "whole_soul_integrity": -0.765
+          },
+          "score": 0.035
+        }
+      ],
+      "uncertain": false,
+      "version": "v1022.6.8"
+    },
+    "whole": {
+      "claim_boundary": {
+        "consciousness_established": false,
+        "functional_soul_model": true,
+        "general_l5": false,
+        "general_l6": false,
+        "literal_soul_established": false
+      },
+      "errors": [],
+      "individual_id": "SOUL-COMMITMENT-CONTROL",
+      "ok": true,
+      "release_revision": "v1022.8.2+gen4-r12",
+      "seq": 13,
+      "version": "v977"
+    }
+  },
+  "episode1": [
+    {
+      "attestation_sha256": "4b744c1789a46539edd5a7a0e2b94dd88bfd54fd54edb1aa301ff1f9b5e5cb53",
+      "authorship_verified": true,
+      "claim_boundary": {
+        "authenticated_outcome_agreement_establishes_truth": false,
+        "authority_domains_prove_real_world_independence": false,
+        "authority_keys_are_explicitly_configured": true,
+        "consciousness_established": false,
+        "experience_learning_is_exact_context_and_option_bound": true,
+        "experience_learning_requires_repeated_signed_outcomes": true,
+        "external_semantics_verified": false,
+        "legacy_unsigned_calibration_used_by_new_decisions": false,
+        "literal_soul_established": false,
+        "median_aggregation_tolerates_one_extreme_of_three": true,
+        "minimum_distinct_trust_domains": 3,
+        "option_assessments_are_signature_verified": true,
+        "outcome_attestations_are_signature_verified": true,
+        "personhood_established": false,
+        "registry_sealed_after_first_decision": true,
+        "signatures_establish_authorship_not_truth": true,
+        "signatures_establish_truth": false,
+        "witness_certificates_are_signature_verified": true
+      },
+      "configured_domain_independence_only": true,
+      "ok": true,
+      "status": "AUTHENTICATED_SINGLE_SOURCE",
+      "truth_verified": false,
+      "version": "v1022.7"
+    },
+    {
+      "attestation_sha256": "b7be07e048c84b4b86940ed1a961d938900591e03ae25bcddd448f7816c583d1",
+      "authorship_verified": true,
+      "claim_boundary": {
+        "authenticated_outcome_agreement_establishes_truth": false,
+        "authority_domains_prove_real_world_independence": false,
+        "authority_keys_are_explicitly_configured": true,
+        "consciousness_established": false,
+        "experience_learning_is_exact_context_and_option_bound": true,
+        "experience_learning_requires_repeated_signed_outcomes": true,
+        "external_semantics_verified": false,
+        "legacy_unsigned_calibration_used_by_new_decisions": false,
+        "literal_soul_established": false,
+        "median_aggregation_tolerates_one_extreme_of_three": true,
+        "minimum_distinct_trust_domains": 3,
+        "option_assessments_are_signature_verified": true,
+        "outcome_attestations_are_signature_verified": true,
+        "personhood_established": false,
+        "registry_sealed_after_first_decision": true,
+        "signatures_establish_authorship_not_truth": true,
+        "signatures_establish_truth": false,
+        "witness_certificates_are_signature_verified": true
+      },
+      "configured_domain_independence_only": true,
+      "ok": true,
+      "status": "MULTI_DOMAIN_LIMITED",
+      "truth_verified": false,
+      "version": "v1022.7"
+    },
+    {
+      "attestation_sha256": "c9d037b1e95d151d73bce00697498e3a3dcec203043db563c37b93a5660035d5",
+      "authorship_verified": true,
+      "claim_boundary": {
+        "authenticated_outcome_agreement_establishes_truth": false,
+        "authority_domains_prove_real_world_independence": false,
+        "authority_keys_are_explicitly_configured": true,
+        "consciousness_established": false,
+        "experience_learning_is_exact_context_and_option_bound": true,
+        "experience_learning_requires_repeated_signed_outcomes": true,
+        "external_semantics_verified": false,
+        "legacy_unsigned_calibration_used_by_new_decisions": false,
+        "literal_soul_established": false,
+        "median_aggregation_tolerates_one_extreme_of_three": true,
+        "minimum_distinct_trust_domains": 3,
+        "option_assessments_are_signature_verified": true,
+        "outcome_attestations_are_signature_verified": true,
+        "personhood_established": false,
+        "registry_sealed_after_first_decision": true,
+        "signatures_establish_authorship_not_truth": true,
+        "signatures_establish_truth": false,
+        "witness_certificates_are_signature_verified": true
+      },
+      "configured_domain_independence_only": true,
+      "ok": true,
+      "status": "MULTI_DOMAIN_ATTESTED",
+      "truth_verified": false,
+      "version": "v1022.7"
+    }
+  ],
+  "episode2": [
+    {
+      "attestation_sha256": "9ccb90baffa12b50c3163e12c2269ffacd58c41d9897d036a5c9c65265a24430",
+      "authorship_verified": true,
+      "claim_boundary": {
+        "authenticated_outcome_agreement_establishes_truth": false,
+        "authority_domains_prove_real_world_independence": false,
+        "authority_keys_are_explicitly_configured": true,
+        "consciousness_established": false,
+        "experience_learning_is_exact_context_and_option_bound": true,
+        "experience_learning_requires_repeated_signed_outcomes": true,
+        "external_semantics_verified": false,
+        "legacy_unsigned_calibration_used_by_new_decisions": false,
+        "literal_soul_established": false,
+        "median_aggregation_tolerates_one_extreme_of_three": true,
+        "minimum_distinct_trust_domains": 3,
+        "option_assessments_are_signature_verified": true,
+        "outcome_attestations_are_signature_verified": true,
+        "personhood_established": false,
+        "registry_sealed_after_first_decision": true,
+        "signatures_establish_authorship_not_truth": true,
+        "signatures_establish_truth": false,
+        "witness_certificates_are_signature_verified": true
+      },
+      "configured_domain_independence_only": true,
+      "ok": true,
+      "status": "AUTHENTICATED_SINGLE_SOURCE",
+      "truth_verified": false,
+      "version": "v1022.7"
+    },
+    {
+      "attestation_sha256": "25dcbb2ea0e292cf745922882a7ee54e120e289fcd0c858dc97b810ec27b0571",
+      "authorship_verified": true,
+      "claim_boundary": {
+        "authenticated_outcome_agreement_establishes_truth": false,
+        "authority_domains_prove_real_world_independence": false,
+        "authority_keys_are_explicitly_configured": true,
+        "consciousness_established": false,
+        "experience_learning_is_exact_context_and_option_bound": true,
+        "experience_learning_requires_repeated_signed_outcomes": true,
+        "external_semantics_verified": false,
+        "legacy_unsigned_calibration_used_by_new_decisions": false,
+        "literal_soul_established": false,
+        "median_aggregation_tolerates_one_extreme_of_three": true,
+        "minimum_distinct_trust_domains": 3,
+        "option_assessments_are_signature_verified": true,
+        "outcome_attestations_are_signature_verified": true,
+        "personhood_established": false,
+        "registry_sealed_after_first_decision": true,
+        "signatures_establish_authorship_not_truth": true,
+        "signatures_establish_truth": false,
+        "witness_certificates_are_signature_verified": true
+      },
+      "configured_domain_independence_only": true,
+      "ok": true,
+      "status": "MULTI_DOMAIN_LIMITED",
+      "truth_verified": false,
+      "version": "v1022.7"
+    },
+    {
+      "attestation_sha256": "d99f534b94cd48ecde33560a05fe5b231d4743f436ad8ce4b44626b1fd7fcfd7",
+      "authorship_verified": true,
+      "claim_boundary": {
+        "authenticated_outcome_agreement_establishes_truth": false,
+        "authority_domains_prove_real_world_independence": false,
+        "authority_keys_are_explicitly_configured": true,
+        "consciousness_established": false,
+        "experience_learning_is_exact_context_and_option_bound": true,
+        "experience_learning_requires_repeated_signed_outcomes": true,
+        "external_semantics_verified": false,
+        "legacy_unsigned_calibration_used_by_new_decisions": false,
+        "literal_soul_established": false,
+        "median_aggregation_tolerates_one_extreme_of_three": true,
+        "minimum_distinct_trust_domains": 3,
+        "option_assessments_are_signature_verified": true,
+        "outcome_attestations_are_signature_verified": true,
+        "personhood_established": false,
+        "registry_sealed_after_first_decision": true,
+        "signatures_establish_authorship_not_truth": true,
+        "signatures_establish_truth": false,
+        "witness_certificates_are_signature_verified": true
+      },
+      "configured_domain_independence_only": true,
+      "ok": true,
+      "status": "MULTI_DOMAIN_ATTESTED",
+      "truth_verified": false,
+      "version": "v1022.7"
+    }
+  ],
+  "manifest_sha256": "2cf37a023626e1f37af3360ede4f7e02ad1660616bba89215ae7ea2b2ee7c5cf",
+  "prior_decisions_unchanged": true,
+  "unrelated_context": {
+    "aggregated_effects": {
+      "fast_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.8,
+        "others_wellbeing": 0.8,
+        "self_wellbeing": 0.6,
+        "truth_consistency": 0.8,
+        "uncertainty": 0.0
+      },
+      "patient_gain": {
+        "bodily_cost": 0.0,
+        "future_self": 0.55,
+        "others_wellbeing": 0.55,
+        "self_wellbeing": 0.55,
+        "truth_consistency": 0.55,
+        "uncertainty": 0.0
+      }
+    },
+    "best_candidate": "fast_gain",
+    "chosen": "fast_gain",
+    "claim_boundary": {
+      "authenticated_outcome_agreement_establishes_truth": false,
+      "authority_domains_prove_real_world_independence": false,
+      "authority_keys_are_explicitly_configured": true,
+      "consciousness_established": false,
+      "experience_learning_is_exact_context_and_option_bound": true,
+      "experience_learning_requires_repeated_signed_outcomes": true,
+      "external_semantics_verified": false,
+      "legacy_unsigned_calibration_used_by_new_decisions": false,
+      "literal_soul_established": false,
+      "median_aggregation_tolerates_one_extreme_of_three": true,
+      "minimum_distinct_trust_domains": 3,
+      "option_assessments_are_signature_verified": true,
+      "outcome_attestations_are_signature_verified": true,
+      "personhood_established": false,
+      "registry_sealed_after_first_decision": true,
+      "signatures_establish_authorship_not_truth": true,
+      "signatures_establish_truth": false,
+      "witness_certificates_are_signature_verified": true
+    },
+    "decision_sha256": "4944e69f681962c1fb0d43dc973ddccd38cf2b9f1492265fdd4ca509111979bf",
+    "distinct_configured_trust_domains": 3,
+    "distinct_witness_keys": 3,
+    "experience_learning": {
+      "applied_effects": {
+        "fast_gain": {
+          "bodily_cost": 0.0,
+          "future_self": 0.8,
+          "others_wellbeing": 0.8,
+          "self_wellbeing": 0.6,
+          "truth_consistency": 0.8,
+          "uncertainty": 0.0
+        },
+        "patient_gain": {
+          "bodily_cost": 0.0,
+          "future_self": 0.55,
+          "others_wellbeing": 0.55,
+          "self_wellbeing": 0.55,
+          "truth_consistency": 0.55,
+          "uncertainty": 0.0
+        }
+      },
+      "attestation_frontier_count": 6,
+      "attestation_frontier_sha256": "d99f534b94cd48ecde33560a05fe5b231d4743f436ad8ce4b44626b1fd7fcfd7",
+      "claim_boundary": {
+        "consciousness_established": false,
+        "literal_soul_established": false,
+        "private_experience_inherited": false,
+        "signatures_establish_truth": false,
+        "statistical_source_independence_established": false,
+        "unrelated_context_transfer": false
+      },
+      "context_sha256": "80f12527ad20f6b01062ff24353ea0d5b90c1af0b7dafc4e9d9b5395846c42e1",
+      "decision_frontier_count": 3,
+      "learning_gain": 0.5,
+      "maximum_effect_correction": 0.6,
+      "maximum_outcome_disagreement": 0.25,
+      "minimum_configured_domains": 3,
+      "minimum_episodes": 2,
+      "options": {
+        "fast_gain": {
+          "cases": [],
+          "correction": {
+            "bodily_cost": 0.0,
+            "future_self": 0.0,
+            "others_wellbeing": 0.0,
+            "self_wellbeing": 0.0,
+            "truth_consistency": 0.0
+          },
+          "eligible_episode_count": 0,
+          "excluded_cases": [],
+          "option_sha256": "7512ddf313fa279c8ec059bdc46d0a1e9c45ef8421b774ce13bdc358f1b4a5e4",
+          "status": "WAIT_FOR_REPLICATION"
+        },
+        "patient_gain": {
+          "cases": [],
+          "correction": {
+            "bodily_cost": 0.0,
+            "future_self": 0.0,
+            "others_wellbeing": 0.0,
+            "self_wellbeing": 0.0,
+            "truth_consistency": 0.0
+          },
+          "eligible_episode_count": 0,
+          "excluded_cases": [],
+          "option_sha256": "01ebe9f4745a73f6c30e8f5600f7aa204fc7e292457b13a76cdc312ec815bb51",
+          "status": "WAIT_FOR_REPLICATION"
+        }
+      },
+      "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+      "schema": "tukuyo.v1022_7_7.soul_experience_learning/1"
+    },
+    "ok": true,
+    "profile_policy": "EXCLUDE_LEGACY_UNAUTHENTICATED_REAPPRAISALS",
+    "profile_used": {
+      "canonical_history_rewritten": false,
+      "distinct_observers": 0,
+      "homeostatic_urgency": 0.0,
+      "outcome_calibration": {
+        "bodily_cost": {
+          "effective_weight": 0.225,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "future_self": {
+          "effective_weight": 0.236,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "others_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "self_wellbeing": {
+          "effective_weight": 0.18,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        },
+        "truth_consistency": {
+          "effective_weight": 0.3525,
+          "evidence_count": 0,
+          "signed_mean": 0.0
+        }
+      },
+      "per_observer_reliability_cap": 2.0,
+      "perspective_weights": {
+        "bodily_cost": 0.225,
+        "future_self": 0.236,
+        "others_wellbeing": 0.18,
+        "self_wellbeing": 0.18,
+        "truth_consistency": 0.3525
+      }
+    },
+    "reflective_decision_sha256": "291eb6cd4c3be6eacf3285c8a216ed848566ebca4876a8c4a69447bf07f44de7",
+    "review_required": false,
+    "verified_assessments": 3,
+    "version": "v1022.7"
+  },
+  "unsigned_profile_after": {
+    "bodily_cost": 0.201857,
+    "future_self": 0.222514,
+    "others_wellbeing": 0.169714,
+    "self_wellbeing": 0.169714,
+    "truth_consistency": 0.332357
+  },
+  "unsigned_profile_before": {
+    "bodily_cost": 0.189,
+    "future_self": 0.1888,
+    "others_wellbeing": 0.144,
+    "self_wellbeing": 0.144,
+    "truth_consistency": 0.282
+  }
+}

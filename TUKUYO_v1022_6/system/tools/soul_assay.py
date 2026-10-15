@@ -484,7 +484,10 @@ def m_integrity(cli,work,ctx):
 SK_A=['Nora had 30 shells. She gave 8 shells to her cousin. How many shells does she have left?',
       'Owen had 12 stamps. He gave 5 stamps to his sister. How many stamps does he have left?',
       'Pia had 24 muffins. She gave 9 muffins to her friend. How many muffins does she have left?']
-SK_A_ALONE=('Kim had 40 beads. She gave 15 beads to Ann. How many beads does she have left?','25')
+# the problem it meets alone is read the same way as the three its parents confirmed (reader_en:holding). Since the fusion with
+# the adaptive-life line, 'gave 15 beads to Ann' (to a name) is read first by its episodic stock reader, another way of reading,
+# for which it rightly says its parents have not checked it yet (experience of one way is not counted for another)
+SK_A_ALONE=('Kim had 40 beads. She gave 15 beads to her friend. How many beads does she have left?','25')
 SK_B=['Rosa has 6 more crayons than Ivan. Ivan has 15 crayons. How many crayons does Rosa have?',
       'Lena has 12 more stamps than Omar. Omar has 20 stamps. How many stamps does Lena have?']
 SK_B_ALONE=('Kai has 7 more shells than Ivy. Ivy has 11 shells. How many shells does Kai have?','18')

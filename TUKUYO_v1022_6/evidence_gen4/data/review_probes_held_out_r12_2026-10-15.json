@@ -1,0 +1,585 @@
+{
+ "utc": "2026-10-15T04:55:45Z",
+ "set": "held_out",
+ "sha256": "7e07e251cb0b2f6d57cbfd1a99726b3381b488b474012df48eb3163d7f26d6f0",
+ "categories": {
+  "unknown_start": {
+   "rows": [
+    {
+     "text": "Pedro has a few toy trucks. He gets 3 more toy trucks for his birthday. How many toy trucks does Pedro have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Grace owns a couple of goldfish. She buys 2 more goldfish. How many goldfish does she own now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "The library has many chairs. It buys 15 more chairs. How many chairs does the library have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Hana keeps a jar of buttons. She adds 7 buttons to the jar. How many buttons are in the jar now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Diego has a stack of comic books. He buys 4 more comic books. How many comic books does he have?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Lucy has a lot of ribbons. She uses 3 ribbons. How many ribbons does Lucy have left?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Noah had some baseball cards. He traded away 5 baseball cards. How many baseball cards does Noah have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Emma has crayons. Her friend gives her 6 more crayons. How many crayons does Emma have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Yuki has a handful of candies. She eats 2 candies. How many candies are left?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Carlos had a few dollars. He earned 20 dollars mowing lawns. How many dollars does he have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "Fatima has several pencils. She buys a box of 12 pencils. How many pencils does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "HEDGED_OR_INEXACT_QUANTITIES",
+     "think_grade": "held"
+    },
+    {
+     "text": "The farmer has a number of cows. He buys 8 more cows. How many cows does the farmer have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Amy has dozens of stamps. She buys 10 more stamps. How many stamps does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Amy has hundreds of stamps. She gives 10 stamps to Joe. How many stamps does Amy have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Amy has a pile of rocks. She finds 4 more rocks. How many rocks does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Zara has a basket of oranges. She buys 3 more oranges. How many oranges does she have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 16
+   },
+   "think": {
+    "held": 16
+   }
+  },
+  "more_without_before": {
+   "rows": [
+    {
+     "text": "Olivia picks 5 more flowers. How many flowers does Olivia have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "V1022_STORY_READING_UNCONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Jack catches 3 more fish. How many fish does Jack have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "Olivia picked 5 more flowers in the afternoon. How many flowers did Olivia pick in the afternoon?",
+     "expected": "5",
+     "g4_solve": "5",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "5",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "held": 2,
+    "right": 1
+   },
+   "think": {
+    "held": 2,
+    "right": 1
+   }
+  },
+  "known_start": {
+   "rows": [
+    {
+     "text": "Pedro has 4 toy trucks. He gets 3 more toy trucks for his birthday. How many toy trucks does Pedro have now?",
+     "expected": "7",
+     "g4_solve": "7",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "7",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Grace owns 2 goldfish. She buys 2 more goldfish. How many goldfish does she own now?",
+     "expected": "4",
+     "g4_solve": "4",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "4",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Lucy has 9 ribbons. She uses 3 ribbons. How many ribbons does Lucy have left?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Hana has 20 buttons. She also has a few beads. How many buttons does Hana have?",
+     "expected": "20",
+     "g4_solve": "20",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "20",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Emma has 5 crayons and a few markers. Her friend gives her 6 more crayons. How many crayons does Emma have now?",
+     "expected": "11",
+     "g4_solve": "11",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "11",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Zara has an orange. She buys 3 more oranges. How many oranges does she have now?",
+     "expected": "4",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "SUBSET_DECLARATION_UNSUPPORTED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Amy has a dozen eggs. She uses 4 eggs. How many eggs does she have left?",
+     "expected": "8",
+     "g4_solve": "8",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "8",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Leo has 10 cookies. His dog has a few toys. Leo eats 4 cookies. How many cookies does Leo have now?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Leo has many friends. He has 10 cookies and eats 4 cookies. How many cookies does Leo have now?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "right": 8,
+    "held": 1
+   },
+   "think": {
+    "right": 8,
+    "held": 1
+   }
+  },
+  "ownership": {
+   "rows": [
+    {
+     "text": "Ali has 9 marbles. He gives 4 marbles to Sam. How many marbles does Sam have now?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "EPISODIC_UNDERDETERMINED",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "EPISODIC_UNDERDETERMINED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Ali has 9 marbles and Sam has 2 marbles. Ali gives 4 marbles to Sam. How many marbles does Sam have now?",
+     "expected": "6",
+     "g4_solve": "6",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "6",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Ali has 9 marbles and Sam has 2 marbles. Ali gives 4 marbles to Sam. How many marbles does Ali have now?",
+     "expected": "5",
+     "g4_solve": "5",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "5",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Ali has 9 marbles. Sam has a few marbles. How many marbles do they have altogether?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "EPISODIC_AMBIGUOUS_ACTOR",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "EPISODIC_AMBIGUOUS_ACTOR",
+     "think_grade": "held"
+    },
+    {
+     "text": "Mei's brother has 12 stamps. Mei has 5 stamps. How many stamps does Mei's brother have?",
+     "expected": "12",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "SITUATION_UNKNOWN_QUESTION_VERB",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 3,
+    "right": 2
+   },
+   "think": {
+    "held": 3,
+    "right": 2
+   }
+  },
+  "time": {
+   "rows": [
+    {
+     "text": "On Monday, Rita had 15 stickers. On Tuesday, she gave away 6 stickers. How many stickers did Rita have on Monday?",
+     "expected": "15",
+     "g4_solve": "15",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "15",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "On Monday, Rita had 15 stickers. On Tuesday, she gave away 6 stickers. How many stickers does Rita have now?",
+     "expected": "9",
+     "g4_solve": "9",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "9",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Rita will get 5 stickers next week. She has 8 stickers now. How many stickers does Rita have now?",
+     "expected": "8",
+     "g4_solve": "8",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "8",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Last year, Tim had a few rabbits. This year he has 7 rabbits. How many rabbits does Tim have this year?",
+     "expected": "7",
+     "g4_solve": "7",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "7",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "right": 4
+   },
+   "think": {
+    "right": 4
+   }
+  },
+  "negation": {
+   "rows": [
+    {
+     "text": "Bella has 14 apples. She does not sell any apples. How many apples does she have?",
+     "expected": "14",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Bella had 14 apples. She did not eat 5 of them. How many apples did she eat?",
+     "expected": null,
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    },
+    {
+     "text": "Bella had 14 apples. She did not give away any apples, but she bought 3 more. How many apples does she have now?",
+     "expected": "17",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "WORD_PROBLEM_EVENT_NOT_CONFIRMED",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 3
+   },
+   "think": {
+    "held": 3
+   }
+  },
+  "hypothetical": {
+   "rows": [
+    {
+     "text": "If Max had 3 more books, he would have 11 books. How many books does Max have?",
+     "expected": "8",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "SITUATION_HEDGED_OR_UNKNOWN_AMOUNT",
+     "think_grade": "held"
+    },
+    {
+     "text": "Max wants to buy 6 books. He has 2 books. How many books does Max have now?",
+     "expected": "2",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "If Max buys 6 books, he will have 10 books. How many books does Max have now?",
+     "expected": "4",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "SITUATION_HEDGED_OR_UNKNOWN_AMOUNT",
+     "think_grade": "held"
+    }
+   ],
+   "g4": {
+    "held": 3
+   },
+   "think": {
+    "held": 3
+   }
+  },
+  "several_steps": {
+   "rows": [
+    {
+     "text": "A box holds 6 eggs. Lina buys 3 boxes and uses 5 eggs. How many eggs does she have left?",
+     "expected": "13",
+     "g4_solve": "13",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "13",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Kofi has 20 dollars. He buys 2 books for 4 dollars each. How much money does he have left?",
+     "expected": "12",
+     "g4_solve": "12",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "12",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "There are 4 rows of chairs with 7 chairs in each row. 5 chairs are taken away. How many chairs are left?",
+     "expected": "23",
+     "g4_solve": "23",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "23",
+     "think_reason": null,
+     "think_grade": "right"
+    },
+    {
+     "text": "Ruth reads 8 pages each day for 5 days. Then she reads 6 more pages. How many pages did she read in all?",
+     "expected": "46",
+     "g4_solve": null,
+     "g4_reason": "NO_VERIFIED_READING",
+     "g4_grade": "held",
+     "think": null,
+     "think_reason": "MEMORY_PREMISES_MISSING",
+     "think_grade": "held"
+    },
+    {
+     "text": "A team has 12 players. 3 players leave and 5 new players join. How many players are on the team now?",
+     "expected": "14",
+     "g4_solve": "14",
+     "g4_reason": null,
+     "g4_grade": "right",
+     "think": "14",
+     "think_reason": null,
+     "think_grade": "right"
+    }
+   ],
+   "g4": {
+    "right": 4,
+    "held": 1
+   },
+   "think": {
+    "right": 4,
+    "held": 1
+   }
+  }
+ },
+ "total": {
+  "g4": {
+   "held": 29,
+   "right": 19
+  },
+  "think": {
+   "held": 29,
+   "right": 19
+  }
+ }
+}

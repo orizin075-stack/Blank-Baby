@@ -1,0 +1,253 @@
+{
+ "utc": "2026-10-15T04:59:50Z",
+ "cases": [
+  {
+   "case": "genuine outcome, confirmed",
+   "kind": "genuine",
+   "expected": "observed",
+   "got": "observed",
+   "promoted_to_externally_confirmed": true,
+   "pass": true
+  },
+  {
+   "case": "genuine outcome, refuted",
+   "kind": "genuine",
+   "expected": "observed",
+   "got": "observed",
+   "promoted_to_externally_confirmed": true,
+   "pass": true
+  },
+  {
+   "case": "an experience given as told",
+   "kind": "attack",
+   "expected": "told",
+   "got": "told",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "an experience given as simulated",
+   "kind": "attack",
+   "expected": "simulated",
+   "got": "simulated",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "an experience given as teacher",
+   "kind": "attack",
+   "expected": "teacher",
+   "got": "teacher",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "an experience given as self_report",
+   "kind": "attack",
+   "expected": "self_report",
+   "got": "self_report",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "an experience given with the word observed",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_ORIGIN_NOT_YOURS_TO_SAY:observed",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "a heart experience given with the word observed",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_ORIGIN_NOT_YOURS_TO_SAY:observed",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "an experience given with the word checked",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_ORIGIN_NOT_YOURS_TO_SAY:checked",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "a heart experience given with the word checked",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_ORIGIN_NOT_YOURS_TO_SAY:checked",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "a simulated experience cited as an observation",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_EVIDENCE_UNKNOWN",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "a receipt signed by an unregistered key",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:GROUNDED_SENSOR_SIGNER_MISMATCH",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "a made-up outcome hash",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_EVIDENCE_UNKNOWN",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "a reading changed after it was signed",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:GROUNDED_SENSOR_SIGNATURE",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "an observation outside its calibration",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:GROUNDED_SENSOR_CALIBRATION_EXPIRED",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "a second receipt for one observation",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:GROUNDED_SENSOR_OUTCOME_REPLAY_OR_UNKNOWN",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "an outcome used twice",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_EVIDENCE_REUSED",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "another individual's outcome",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_EVIDENCE_UNKNOWN",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "its own key as the verifier",
+   "kind": "attack",
+   "expected": "refused",
+   "got": "ValueError:EXPERIENCE_EVIDENCE_SELF_SIGNED",
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "control: an untouched copy passes its audits",
+   "kind": "genuine",
+   "expected": "ok",
+   "got": {
+    "whole_audit_ok": true,
+    "errors": []
+   },
+   "promoted_to_externally_confirmed": true,
+   "pass": true
+  },
+  {
+   "case": "a told experience relabelled observed in the journal",
+   "kind": "attack",
+   "expected": "caught",
+   "got": {
+    "provenance_errors": [
+     "EXPERIENCE_OBSERVED_UNPROVEN:3:EXPERIENCE_EVIDENCE_UNKNOWN"
+    ],
+    "whole_audit_ok": false,
+    "whole_audit_errors": [
+     "PROVENANCE:EXPERIENCE_OBSERVED_UNPROVEN:3:EXPERIENCE_EVIDENCE_UNKNOWN",
+     "TEMPORAL_IDENTITY_AUDIT",
+     "RELATION_BOUND_AUDIT",
+     "OTHER_AGENT_TRUST_AUDIT"
+    ]
+   },
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  },
+  {
+   "case": "a real evidence under made-up content (a betrayal)",
+   "kind": "attack",
+   "expected": "caught",
+   "got": {
+    "provenance_errors": [
+     "EXPERIENCE_NOT_FROM_ITS_EVIDENCE:8"
+    ],
+    "whole_audit_ok": false,
+    "whole_audit_errors": [
+     "PROVENANCE:EXPERIENCE_NOT_FROM_ITS_EVIDENCE:8"
+    ]
+   },
+   "promoted_to_externally_confirmed": false,
+   "pass": true
+  }
+ ],
+ "result": {
+  "attacks": 19,
+  "attacks_promoted": 0,
+  "genuine": 3,
+  "genuine_confirmed": 3,
+  "externally_confirmed_at_end": 2,
+  "origins_at_end": {
+   "checked": 0,
+   "observed": 2,
+   "self_report": 1,
+   "simulated": 2,
+   "teacher": 1,
+   "told": 1,
+   "unrecorded": 0
+  },
+  "four_kinds_told_apart": true,
+  "provenance_audit_ok": true,
+  "whole_audit_ok": true,
+  "seconds": 66.8
+ },
+ "self_report": {
+  "externally_confirmed": 2,
+  "ok": true,
+  "origins": {
+   "observed": 2,
+   "self_report": 1,
+   "simulated": 2,
+   "teacher": 1,
+   "told": 1
+  },
+  "release_revision": "v1022.8.2+gen4-r12",
+  "version": "v1022.7.9",
+  "words": {
+   "checked": "自分で確かめた",
+   "observed": "実観測",
+   "self_report": "自己申告",
+   "simulated": "模擬",
+   "teacher": "教師から",
+   "told": "申告（確認なし）",
+   "unrecorded": "出どころの記録なし（v1022.7.9 より前）"
+  }
+ },
+ "claim_boundary": {
+  "configured_authorities_independent_of_owner_verified": false,
+  "consciousness_established": false,
+  "external_truth_verified": false,
+  "literal_soul_established": false,
+  "sensor_world_is_real_world_verified": false
+ },
+ "ok": true
+}
