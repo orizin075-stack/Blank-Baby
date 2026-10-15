@@ -15,6 +15,15 @@
 - 相手の経験による魂の実験は `python3 -B tools/v1022_7_7_soul_experiment.py --data FRESH --trust ANCHOR --out out.json` と、`python3 -B tools/v1022_7_7_experience_verifier.py --data FRESH` で、いつでもやり直せます（記録した結果だけ、費用 0）。
 - 統合した版の最後の確かめ（署名した写し、費用 0）：全体テスト 1031/1031、魂らしさ 12/12、汚染 6/6、成長の実験 3/3、親を使わない計測は例外 0・型の食い違い 0、ASDiv 開発用は `g4-solve` 501・`think` 502（誤りはどちらも 3）。結果は `evidence_gen4/data/*fusion_2026-10-12.json`。
 
+**adaptive-life の系統との融合（2026-10-15、`v1022.8.2+gen4-r12`）。** 記録は `FUSION_ADAPTIVE_LIFE_2026-10-15.md`。続ける人が知っておくこと：
+
+- 二つの系統の共通の祖先は第7回（r7）です。相手の新しいモジュール：`src/tukuyo_v1022/identity_ledger.py`（外部の台帳）・`experience_provenance.py`（魂の学習の厳格な出どころ）・`developmental_life.py`・`adaptive_life.py`（研究の世界での目標と、変わる世界）、`src/tukuyo_g4/episodic_*.py`（在庫の読み手と、別に書いた検査器）・`quantity_scope.py`（数の分からない量の検査）、`src/tukuyo_v1023r/changing_niche.py` など。
+- 在庫の読み手は、子の読み手の入口（`reader.read`）と v1022 の核（`cognition.solve`）のいちばん前にあります。決まった文の形に合わないときは、次の読み手に回します（形に合っても、だれのことか決まらないときは答えません）。
+- 数の分からない量の検査（`check.py` から `quantity_scope.inspect`）は、どの読みにもかかります。読み手が「some X」を量として扱ったときは、その量に `unknown_source` を書きます（`reader_en.py` と在庫の読み手は書く）。書かない読み手の読みは、答えの物にぼかした量があると止まります。
+- 生態系の相手の目標（`--adaptive-goals`・`--developmental-goals`）は、こちらの `--stagger`・`--reproduction`・`--explore`・`--bequest` と一緒には使えません。
+- ファイルの場所が変わりました：古い説明と状態は `system/docs/history/`、今の機能の説明は `system/docs/`、結果のファイルは `evidence_gen4/data/`、第4世代より前のものは `history/`。
+- 最後の確かめ（署名した写し、費用 0）：@@FINAL@@
+
 **第11回（2026-10-14、`v1022.8.2+gen4-r11`）。** 8.0 を、読み方そのものを変えて進めました（`ROUND11_2026-10-14.md`）。続ける人が知っておくこと：
 
 - 本番用 `held_out_3`（`HELD_OUT_3_SHA256`）は、今回 1 回の測定で使い終わりました。r10 の本番用は `dev_4` として開発用にしました。**次に改善を測るときは、新しい本番用を、直す前に書いて凍結すること。**
