@@ -903,6 +903,43 @@
   },
   "v1022_8_2_gen4_r11": {
     "classification": "round 11 after v1022.7.9+gen4-r10 (development): 8.0 advanced by reading problems by what their amounts are, measured on a new held-out set, not assumed",
+    "ecology_8_2_more_seeds": {
+      "code": "the ecology of round 10, unchanged (tools/ecology_long_run.py gained --max-ticks so a 1,024-tick run is done in jobs of 512 with --resume)",
+      "runs": {
+        "drought_all_seed_3": {
+          "stopped": "REACHED_TICKS",
+          "ticks": 1024,
+          "fewest_alive_in_drought": 2,
+          "alive_at_end": 6,
+          "births_after_drought": 4
+        },
+        "drought_all_seed_4": {
+          "stopped": "REACHED_TICKS",
+          "ticks": 1024,
+          "fewest_alive_in_drought": 2,
+          "alive_at_end": 6,
+          "births_after_drought": 4
+        },
+        "held_condition_all_seed_h2": {
+          "stopped": "REACHED_TICKS",
+          "ticks": 1024,
+          "fewest_alive_in_drought": 2,
+          "alive_at_end": 4,
+          "births_after_drought": 2
+        },
+        "drought_no_learning_seed_3": {
+          "stopped": "EXTINCT",
+          "ticks": 464
+        },
+        "held_condition_no_learning_seed_h2": {
+          "stopped": "EXTINCT",
+          "ticks": 332
+        }
+      },
+      "all_audits_ok": true,
+      "summary": "with learning and exploring 3 of 3 more runs survived the drought and grew back; without learning 0 of 2 (since the birth fix of round 10: with 8 of 10, without learning 0 of 7)"
+    },
+    "full_suite": "1315/1315 passed on a signed copy of the final code (an earlier candidate: 11 of 1,306 failed and were fixed)",
     "private_problems_8_0": {
       "held_out_3_frozen_sha256": "5a915ee112435821812c444908102ea1231f7163b793e8344124fcdc18ffcb28",
       "held_out_3_written": "2026-10-14 before any change of round 11, in everyday wording of its own; three problems that repeated earlier sets word for word replaced before freezing",
@@ -1029,42 +1066,6 @@
       ],
       "blank_learning": "an individual made with init --blank-learning has not learned which way a Japanese event word goes; the laws of came and went do not answer for it (the v1022 core counts a rule with two examples and none against it)",
       "held_out_spent": "held_out_3 was used by its one measurement; the next round needs a new held-out set written before any change"
-    },
-    "ecology_8_2_more_seeds": {
-      "code": "the ecology of round 10, unchanged (tools/ecology_long_run.py gained --max-ticks so a 1,024-tick run is done in jobs of 512 with --resume)",
-      "runs": {
-        "drought_all_seed_3": {
-          "stopped": "REACHED_TICKS",
-          "ticks": 1024,
-          "fewest_alive_in_drought": 2,
-          "alive_at_end": 6,
-          "births_after_drought": 4
-        },
-        "drought_all_seed_4": {
-          "stopped": "REACHED_TICKS",
-          "ticks": 1024,
-          "fewest_alive_in_drought": 2,
-          "alive_at_end": 6,
-          "births_after_drought": 4
-        },
-        "held_condition_all_seed_h2": {
-          "stopped": "REACHED_TICKS",
-          "ticks": 1024,
-          "fewest_alive_in_drought": 2,
-          "alive_at_end": 4,
-          "births_after_drought": 2
-        },
-        "drought_no_learning_seed_3": {
-          "stopped": "EXTINCT",
-          "ticks": 464
-        },
-        "held_condition_no_learning_seed_h2": {
-          "stopped": "EXTINCT",
-          "ticks": 332
-        }
-      },
-      "all_audits_ok": true,
-      "summary": "with learning and exploring 3 of 3 more runs survived the drought and grew back; without learning 0 of 2 (since the birth fix of round 10: with 8 of 10, without learning 0 of 7)"
     },
     "real_parents_measured": false,
     "validation_result_location": "../evidence_gen4/ROUND11_2026-10-14.md",
