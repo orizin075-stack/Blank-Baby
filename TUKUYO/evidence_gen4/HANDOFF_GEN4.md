@@ -138,7 +138,7 @@ ASDiv の開発用 1,083 問（他の人が作った英語の文章題）、親�
 6. 生きた個体を作ります。日本語の v1022 の核と、学んだ型の置き場所に使います。
 
 ```bash
-cd TUKUYO_v1022_6/system
+cd TUKUYO/system
 python3 -B run_tukuyo.py --runtime-trust-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt --data WORK/v1022_individual init
 ```
 
@@ -219,14 +219,14 @@ python3 -B tools/g4_contamination_probe.py DATA --items 50 --allow-paid --out pr
 - **測るだけなら、署名は要りません。** コミット済みの木は署名してあり、同梱のアンカーで検証できます。
 
 ```bash
-cd TUKUYO_v1022_6/system
+cd TUKUYO/system
 python3 -B tools/verify_release.py . --trusted-pubkey-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
 ```
 
 - `system/` の中を直すと、署名し直すまで CLI とテストが動きません（manifest が合わないため）。そのときは、そのセッションで新しい鍵を作って署名し直し、第4世代の開発用のアンカーを置きます。v1022.6 のアンカーは書き換えません。**秘密鍵はコミットしません**（セッションの scratchpad など、リポジトリの外に置く）。
 
 ```bash
-cd TUKUYO_v1022_6
+cd TUKUYO
 K=リポジトリの外の場所/g4_key
 python3 -B system/tools/claude_patch_sign.py keygen --out-dir $K
 python3 -B system/tools/claude_patch_sign.py sign system --private-key $K/patch_signing.key --revision v1022.6+gen4-dev

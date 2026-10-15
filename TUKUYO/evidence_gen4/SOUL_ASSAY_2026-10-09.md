@@ -98,7 +98,7 @@
 ## 6. やり直し方
 
 ```sh
-cd TUKUYO_v1022_6/system
+cd TUKUYO/system
 python3 -B tools/soul_assay.py --runtime-trust-file ../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt --out report.json
 # 一部だけ：--only crash,integrity　長い一生の長さ：--thoughts 600（既定）
 ```

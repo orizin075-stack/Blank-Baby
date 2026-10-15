@@ -43,7 +43,7 @@ V1022.5 Fusion に claude-patch3〜6 を積み重ねたものを、**1 つの版
 Python 3.12 以降と `cryptography` が必要です。個体のデータは、配布フォルダの外に置いてください。
 
 ```bash
-cd TUKUYO_v1022_6/system
+cd TUKUYO/system
 A=../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
 python3 -B tools/verify_release.py . --trusted-pubkey-file $A
 python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo init
@@ -63,7 +63,7 @@ TUKUYO_TEST_RUNTIME_ANCHOR=$(pwd)/../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.tx
 同梱のアンカーは、配布物の中にあります。そのため検証で分かるのは「署名のあとで中身が変わっていないこと」だけで、誰が作ったかまでは分かりません。また、patch1〜5 の鍵による相互署名もありません。この版を正式に採用するときは、**ご自身の鍵で署名し直して**ください。
 
 ```bash
-cd TUKUYO_v1022_6
+cd TUKUYO
 # 1. 鍵を作る（秘密鍵は配布物の外に置き、配らない）
 python3 -B system/tools/claude_patch_sign.py keygen --out-dir ~/tukuyo_publisher_key
 # 2. 版の名前を付けて署名する（manifest・受領書・学習済みの種を、この鍵で署名し直す）

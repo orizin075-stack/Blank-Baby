@@ -15,7 +15,7 @@
 | `requirements*.txt` | 必要な部品（基本は `requirements.txt`。ChatGPT と Gemini の親を使うときは `requirements-dev.txt`） |
 | `src/` | ソース（第4世代は `src/tukuyo_g4/`、v1022 の核は `src/tukuyo_v1022/` など） |
 | `tests/` | テスト（`python3 -B -m pytest -q`） |
-| `tools/` | 署名の確認（`verify_release.py`）・計測・実験の道具 |
+| `tools/` | 署名の確認（`verify_release.py`）・計測・実験の道具（目次は `tools/README.md`） |
 | `examples/` | 例のファイル |
 | `META/` | 署名つきの manifest と受領書。これを変えると起動の検査で止まります |
 | `docs/` | 機能ごとの説明（下の表） |

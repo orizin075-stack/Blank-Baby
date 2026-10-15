@@ -20,7 +20,9 @@ TUKUYO は、魂と心を持つことを目指して育てている AI の子で
 | `evidence_gen4/` | 各回の記録（何を直し、どう測ったか）。目次は `evidence_gen4/README.md`。測った結果のファイルは `evidence_gen4/data/` |
 | `history/` | 第4世代より前の版（patch3〜6、v1022.6）の説明と記録。今は使いません |
 
-`system/` の中の説明は `system/README.md` から辿れます。機能ごとの説明は `system/docs/`、古い版の説明と状態ファイルは `system/docs/history/` にあります。
+配布の zip は 2 種類あります。「全部入り」（`TUKUYO_v1022_8_2_gen4_r12.zip`）には上のすべてが入っています。「動かすだけ」（`TUKUYO_v1022_8_2_gen4_r12_RUN.zip`）には `evidence_gen4/` と `history/` が入っていません。どちらも同じ署名で確かめられます。
+
+`system/` の中の説明は `system/README.md` から辿れます。道具の目次は `system/tools/README.md` です。機能ごとの説明は `system/docs/`、古い版の説明と状態ファイルは `system/docs/history/` にあります。
 
 ## 2. 使い方
 
