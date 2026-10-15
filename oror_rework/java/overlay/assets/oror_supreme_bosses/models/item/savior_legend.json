@@ -1,0 +1,102 @@
+{
+ "loader": "neoforge:separate_transforms",
+ "gui_light": "front",
+ "textures": {
+  "particle": "oror_supreme_bosses:item/savior_legend"
+ },
+ "base": {
+  "loader": "neoforge:obj",
+  "model": "oror_supreme_bosses:models/item/relic3d/savior_legend.obj",
+  "flip_v": false,
+  "emissive_ambient": true,
+  "automatic_culling": false,
+  "textures": {
+   "tex": "oror_supreme_bosses:item/relic3d/savior_legend",
+   "particle": "oror_supreme_bosses:item/savior_legend"
+  },
+  "display": {
+   "thirdperson_righthand": {
+    "rotation": [
+     90.0,
+     90.0,
+     0.0
+    ],
+    "translation": [
+     3.464,
+     -2.0,
+     3.5
+    ],
+    "scale": [
+     0.72,
+     0.72,
+     0.72
+    ]
+   },
+   "firstperson_righthand": {
+    "rotation": [
+     -0.0,
+     -19.29,
+     -0.0
+    ],
+    "translation": [
+     -4.16,
+     1.6,
+     0.32
+    ],
+    "scale": [
+     0.576,
+     0.576,
+     0.576
+    ]
+   },
+   "ground": {
+    "rotation": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "translation": [
+     -0.0,
+     0.691,
+     -0.024
+    ],
+    "scale": [
+     0.361,
+     0.361,
+     0.361
+    ]
+   },
+   "head": {
+    "rotation": [
+     0.0,
+     180.0,
+     0.0
+    ],
+    "translation": [
+     0.0,
+     13.0,
+     7.0
+    ],
+    "scale": [
+     0.6,
+     0.6,
+     0.6
+    ]
+   }
+  }
+ },
+ "perspectives": {
+  "gui": {
+   "parent": "minecraft:item/generated",
+   "textures": {
+    "layer0": "oror_supreme_bosses:item/savior_legend"
+   }
+  },
+  "fixed": {
+   "parent": "minecraft:item/generated",
+   "textures": {
+    "layer0": "oror_supreme_bosses:item/savior_legend"
+   }
+  }
+ }
+}

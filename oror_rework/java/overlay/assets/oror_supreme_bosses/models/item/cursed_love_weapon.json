@@ -1,0 +1,102 @@
+{
+ "loader": "neoforge:separate_transforms",
+ "gui_light": "front",
+ "textures": {
+  "particle": "oror_supreme_bosses:item/cursed_love_weapon"
+ },
+ "base": {
+  "loader": "neoforge:obj",
+  "model": "oror_supreme_bosses:models/item/relic3d/cursed_love_weapon.obj",
+  "flip_v": false,
+  "emissive_ambient": true,
+  "automatic_culling": false,
+  "textures": {
+   "tex": "oror_supreme_bosses:item/relic3d/cursed_love_weapon",
+   "particle": "oror_supreme_bosses:item/cursed_love_weapon"
+  },
+  "display": {
+   "thirdperson_righthand": {
+    "rotation": [
+     -90.0,
+     90.0,
+     0.0
+    ],
+    "translation": [
+     -0.0,
+     -2.0,
+     1.5
+    ],
+    "scale": [
+     0.9,
+     0.9,
+     0.9
+    ]
+   },
+   "firstperson_righthand": {
+    "rotation": [
+     -76.18,
+     0.73,
+     16.23
+    ],
+    "translation": [
+     -2.24,
+     1.6,
+     1.6
+    ],
+    "scale": [
+     0.72,
+     0.72,
+     0.72
+    ]
+   },
+   "ground": {
+    "rotation": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "translation": [
+     -0.0,
+     -2.8,
+     -0.0
+    ],
+    "scale": [
+     0.4,
+     0.4,
+     0.4
+    ]
+   },
+   "head": {
+    "rotation": [
+     0.0,
+     180.0,
+     0.0
+    ],
+    "translation": [
+     0.0,
+     13.0,
+     7.0
+    ],
+    "scale": [
+     0.6,
+     0.6,
+     0.6
+    ]
+   }
+  }
+ },
+ "perspectives": {
+  "gui": {
+   "parent": "minecraft:item/generated",
+   "textures": {
+    "layer0": "oror_supreme_bosses:item/cursed_love_weapon"
+   }
+  },
+  "fixed": {
+   "parent": "minecraft:item/generated",
+   "textures": {
+    "layer0": "oror_supreme_bosses:item/cursed_love_weapon"
+   }
+  }
+ }
+}

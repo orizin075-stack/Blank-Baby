@@ -13,7 +13,7 @@ def grid(names, out, cols=6, yaw=30, size=(230, 320)):
     d = ImageDraw.Draw(img)
     for k, n in enumerate(names):
         r = allr[n]()
-        for s in ((64, 64), (128, 64), (128, 128), (256, 128), (256, 256)):
+        for s in ((64, 64), (128, 64), (128, 128), (256, 128), (256, 256), (512, 256), (512, 512)):
             r.layout = s
             try:
                 r.pack(); break

@@ -26,15 +26,24 @@ def ramp(c):
     c = hexc(c)
     return {-3: shade(c, 0.52), -2: shade(c, 0.68), -1: shade(c, 0.84), 0: c, 1: shade(c, 1.16), 2: shade(c, 1.34)}
 
+_LEVEL_CACHE = {}
+
+def _level(c, q):
+    key = (hexc(c), q)
+    v = _LEVEL_CACHE.get(key)
+    if v is None:
+        v = _LEVEL_CACHE[key] = np.array(shade(c, 1 + 0.16 * q) if q else hexc(c), np.float32)
+    return v
+
 def colorize(tone, c):
-    r = ramp(c)
-    t = np.clip(np.round(tone), -3, 2).astype(int)
-    out = np.zeros(tone.shape + (3,), np.float32)
-    for k, col in r.items():
-        out[t == k] = col
+    """Painted-pixel shading: tone is continuous, quantised to half steps of the hue-shifted ramp."""
+    t = np.clip(np.round(np.asarray(tone, np.float32) * 2) / 2, -3, 2.5)
+    out = np.zeros(t.shape + (3,), np.float32)
+    for q in np.unique(t):
+        out[t == q] = _level(c, float(q))
     return out
 
-def jitter(rgb, rng, amp=0.06):
+def jitter(rgb, rng, amp=0.04):
     n = 1.0 + rng.uniform(-amp, amp, rgb.shape[:2])[..., None]
     return np.clip(rgb * n, 0, 255)
 
@@ -145,6 +154,24 @@ def pattern(name, w, h, face, rng):
         for y in range(h):
             m[y, x] = True
             x = int(np.clip(x + rng.integers(-1, 2), 0, w - 1))
+    elif name == 'wrap':                      # criss-cross hilt wrapping
+        m = ((xs + ys) % 3 == 0) | ((xs - ys) % 3 == 0)
+    elif name == 'filigree':                  # curling engraved lines
+        for y in range(h):
+            off = int(round(1.5 * math.sin(y * 1.2)))
+            for x in range(w):
+                if (x + off) % 4 == 0:
+                    m[y, x] = True
+        m[::5, :] |= (xs[::5, :] % 2 == 1)
+    elif name == 'fuller':                    # centre groove down a blade
+        if w >= 3:
+            m[1:-1, w // 2] = True
+        else:
+            m[1:-1, :] = True
+    elif name == 'hamon':                     # wavy temper line near the edge of a katana
+        for y in range(h):
+            x = int(round((w - 1) * 0.75 + math.sin(y * 0.9) * 0.6))
+            m[y, max(0, min(w - 1, x))] = True
     elif name == 'zigzag':
         m = ((xs + (ys % 4 >= 2) * (3 - ys % 4)) % 4 == 0) if h > 1 else (xs % 2 == 0)
         m = (ys + np.abs((xs % 4) - 2)) % 4 == 0
@@ -152,16 +179,28 @@ def pattern(name, w, h, face, rng):
 
 # ------------------------------------------------------------------ painters
 def tone_base(w, h, face, mat):
+    """Soft form shading like hand-painted mob textures: light from above, rounded edges,
+    a rim light on the top row and occlusion towards the bottom."""
     t = np.zeros((h, w), np.float32)
-    if face == 'top':
-        t += 1
+    ys = (np.arange(h) + 0.5) / max(1, h)
+    xs = (np.arange(w) + 0.5) / max(1, w)
+    soft = mat.get('soft', 1.0)
+    if face in ('front', 'back', 'left', 'right'):
+        if h >= 3 and mat.get('gradient', True):
+            t += ((0.55 - 1.25 * ys) * soft)[:, None]
+        if w >= 3 and mat.get('round', True):
+            t -= (((np.abs(xs - 0.5) * 2) ** 2.2) * 0.75 * soft)[None, :]
+        if h >= 4:
+            t[0, :] += 0.5 * soft
+        if h >= 4 and mat.get('hem_shadow', True):
+            t[-1, :] -= 0.5
+    elif face == 'top':
+        t += 1.0
+        if w >= 3 and h >= 3 and mat.get('round', True):
+            e = np.maximum(np.abs(xs[None, :] - 0.5), np.abs(ys[:, None] - 0.5)) * 2
+            t -= (e ** 3) * 0.6 * soft
     elif face == 'bottom':
-        t -= 1
-    if face in ('front', 'back', 'left', 'right') and h >= 4 and mat.get('hem_shadow', True):
-        t[-1, :] -= 1
-    if face in ('front', 'back') and w >= 6 and mat.get('edge_shade', True):
-        t[:, 0] -= 1
-        t[:, -1] -= 1
+        t -= 1.2
     return t
 
 def apply_trim(rgb, mat, face, w, h):
@@ -430,6 +469,17 @@ def p_metal(mat, face, w, h, cube, rng):
     acc = mat.get('accent')
     pat = mat.get('pattern')
     glow = None
+    if mat.get('blade') and face in ('left', 'right') and w >= 2:
+        # polished flats: bright bevel along both edges, a darker fuller down the middle, a glint
+        rgb[:, 0] = np.array(ramp(c)[2], np.float32)
+        rgb[:, -1] = np.array(ramp(c)[2], np.float32)
+        if w >= 4:
+            rgb[:, w // 2] = np.array(ramp(c)[-1], np.float32)
+        if w >= 3 and h >= 4:
+            gy = int(rng.integers(1, h - 2))
+            for k in range(min(3, h - gy)):
+                xx = min(w - 1, 1 + k)
+                rgb[gy + k, xx] = np.array(mix(c, '#ffffff', 0.7), np.float32)
     if pat and acc and w > 1 and h > 1:
         pm = pattern(pat, w, h, face, rng)
         rgb[pm] = ramp(acc)[0]
@@ -1122,3 +1172,29 @@ PAINTERS['oilslick'] = p_oilslick
 
 def stack(*layers):
     return {'type': 'stack', 'color': layers[0][0]['color'], 'layers': list(layers)}
+
+def p_hilt(mat, face, w, h, cube, rng):
+    """Wrapped grip: spiral leather (default) or katana-style diamond lattice (style='diamond')."""
+    c = mat['color']
+    acc = mat.get('accent', shade(c, 0.55))
+    ys, xs = np.mgrid[0:h, 0:w]
+    t = tone_base(w, h, face, dict(mat, hem_shadow=False))
+    if face in ('top', 'bottom'):
+        return jitter(colorize(t, acc), rng, 0.02), None, None
+    if mat.get('style') == 'diamond':
+        k = (xs + ys) % 4
+        l = (xs - ys) % 4
+        cord = (k == 0) | (l == 0)
+        t = t + np.where(cord & (ys % 2 == 0), 0.5, 0)
+        rgb = colorize(t, c)
+        dia = ~cord
+        rgb[dia] = colorize(t[dia] * 0.5, acc)
+        rgb[(k == 2) & (l == 2)] = np.array(ramp(acc)[1], np.float32)
+    else:
+        ph = (ys + xs // 2) % 3
+        t = t + np.where(ph == 0, 0.8, 0) - np.where(ph == 2, 1.4, 0)
+        rgb = colorize(t, c)
+        rgb[ph == 2] = np.array(ramp(acc)[-1], np.float32)
+    return jitter(rgb, rng, 0.02), None, None
+
+PAINTERS['hilt'] = p_hilt

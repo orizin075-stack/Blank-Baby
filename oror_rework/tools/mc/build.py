@@ -22,7 +22,7 @@ def build(outdir, names=None, previews=True):
     rigs = json.load(open(rp)) if os.path.exists(rp) else {}
     for n in names:
         r = allr[n]()
-        for size in ((64, 64), (128, 64), (128, 128), (256, 128), (256, 256)):
+        for size in ((64, 64), (128, 64), (128, 128), (256, 128), (256, 256), (512, 256), (512, 512)):
             r.layout = size
             try:
                 r.pack()

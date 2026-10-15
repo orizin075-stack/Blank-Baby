@@ -13,3 +13,51 @@ net/minecraft/world/item/Items
 	SF BONE_MEAL Lnet/minecraft/world/item/Item;
 	SF CHARCOAL Lnet/minecraft/world/item/Item;
 	SF STICK Lnet/minecraft/world/item/Item;
+# Relic arts (verified against Iron's Spells 'n Spellbooks 1.21.1 sources and NeoForge 21.1)
+net/minecraft/world/entity/EntityType
+	SF LIGHTNING_BOLT Lnet/minecraft/world/entity/EntityType;
+net/minecraft/world/entity/LightningBolt
+	VM setVisualOnly (Z)V
+	VM setPos (Lnet/minecraft/world/phys/Vec3;)V
+net/minecraft/world/entity/LivingEntity
+	VM igniteForSeconds (F)V
+	VM setTicksFrozen (I)V
+	VM setGlowingTag (Z)V
+net/minecraft/world/effect/MobEffects
+	SF DIG_SPEED Lnet/minecraft/core/Holder;
+	SF NIGHT_VISION Lnet/minecraft/core/Holder;
+	SF HEALTH_BOOST Lnet/minecraft/core/Holder;
+	SF SATURATION Lnet/minecraft/core/Holder;
+	SF SLOW_FALLING Lnet/minecraft/core/Holder;
+	SF GLOWING Lnet/minecraft/core/Holder;
+	SF BLINDNESS Lnet/minecraft/core/Holder;
+	SF HUNGER Lnet/minecraft/core/Holder;
+	SF INVISIBILITY Lnet/minecraft/core/Holder;
+net/minecraft/core/particles/ParticleTypes
+	SF LARGE_SMOKE Lnet/minecraft/core/particles/SimpleParticleType;
+	SF EXPLOSION_EMITTER Lnet/minecraft/core/particles/SimpleParticleType;
+	SF SONIC_BOOM Lnet/minecraft/core/particles/SimpleParticleType;
+	SF SNOWFLAKE Lnet/minecraft/core/particles/SimpleParticleType;
+	SF HEART Lnet/minecraft/core/particles/SimpleParticleType;
+	SF FIREWORK Lnet/minecraft/core/particles/SimpleParticleType;
+	SF SCULK_SOUL Lnet/minecraft/core/particles/SimpleParticleType;
+	SF LAVA Lnet/minecraft/core/particles/SimpleParticleType;
+	SF POOF Lnet/minecraft/core/particles/SimpleParticleType;
+	SF WHITE_ASH Lnet/minecraft/core/particles/SimpleParticleType;
+	SF ANGRY_VILLAGER Lnet/minecraft/core/particles/SimpleParticleType;
+net/minecraft/sounds/SoundEvents
+	SF ENDERMAN_TELEPORT Lnet/minecraft/sounds/SoundEvent;
+	SF GLASS_BREAK Lnet/minecraft/sounds/SoundEvent;
+	SF ILLUSIONER_MIRROR_MOVE Lnet/minecraft/sounds/SoundEvent;
+	SF EVOKER_CAST_SPELL Lnet/minecraft/sounds/SoundEvent;
+	SF EVOKER_PREPARE_SUMMON Lnet/minecraft/sounds/SoundEvent;
+	SF FIREWORK_ROCKET_BLAST Lnet/minecraft/sounds/SoundEvent;
+	SF WITHER_SHOOT Lnet/minecraft/sounds/SoundEvent;
+	SF WARDEN_SONIC_CHARGE Lnet/minecraft/sounds/SoundEvent;
+	SF CHAIN_BREAK Lnet/minecraft/sounds/SoundEvent;
+	SF ANVIL_LAND Lnet/minecraft/sounds/SoundEvent;
+	SF ENDER_DRAGON_GROWL Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/ChatFormatting
+	SF AQUA Lnet/minecraft/ChatFormatting;
+	SF LIGHT_PURPLE Lnet/minecraft/ChatFormatting;
+	SF GRAY Lnet/minecraft/ChatFormatting;
