@@ -4,7 +4,7 @@ V1022.5 Fusion に claude-patch3〜6 を積み重ねたものを、**1 つの版
 
 - 版の名前（`release_revision`）は **v1022.6** です。CLI は、署名した受領書（`META/RELEASE_RECEIPT.json`）に書かれた版の名前を、毎回の出力に載せます。そのため、ご自身の鍵で `--revision v1022.6` として署名し直せば、コードを変えずにその名前が出ます。
 - 分類は **EXPERIMENTAL**（実験版）です。V1022.5 Fusion と同じです。
-- 版の状態は `STATUS_V1022_6.json`、まだ足りないことは `META/KNOWN_GAPS.json` にあります。
+- 版の状態は `docs/history/STATUS_V1022_6.json`、まだ足りないことは `META/KNOWN_GAPS.json` にあります。
 
 ## 0. この版でできること
 
@@ -23,12 +23,12 @@ V1022.5 Fusion に claude-patch3〜6 を積み重ねたものを、**1 つの版
 | 確認 | 結果 |
 |---|---|
 | 署名と manifest（`verify_release.py`） | 合格（1367 ファイル） |
-| 全体テスト | **432/432 合格**（30 分）。patch5 までの 421 件、patch6 の 10 件、版の確認の 1 件（`evidence_v1022_6/selftest_v1022_6.txt`） |
-| V1022.6 の長時間融合試験（4 時間の予定） | **完走していません。** 2 時間 7 分のところで、作業環境（クラウドの仮想マシン）が止まって中断しました。そこまでの 1,384 操作（推論 796 問）で、**確信を持った誤り 0、監査の違反 0** でした（`evidence_v1022_6/longrun_v1022_6_gate_note.json`） |
+| 全体テスト | **432/432 合格**（30 分）。patch5 までの 421 件、patch6 の 10 件、版の確認の 1 件（`history/evidence_v1022_6/selftest_v1022_6.txt`） |
+| V1022.6 の長時間融合試験（4 時間の予定） | **完走していません。** 2 時間 7 分のところで、作業環境（クラウドの仮想マシン）が止まって中断しました。そこまでの 1,384 操作（推論 796 問）で、**確信を持った誤り 0、監査の違反 0** でした（`history/evidence_v1022_6/longrun_v1022_6_gate_note.json`） |
 | 予定外の停止のあと | 止まった個体をそのまま調べると、`whole-audit`・代謝の監査（資源の保存を含む）・学習の監査・LLM の監査がすべて合格し、代謝もそのまま続けられました。停止注入ではなく、本当の停止です |
 | 未見 F・T（作る前に固定し、1 回だけ回した） | T 38/38、F 72/79、確信を持った誤り 0（どちらも、開発用の問題と同じ私が書いた点に注意。patch6 README §6.1） |
 | 研究（新しい鍵の未見世界、1 回だけ） | 新しい法則を 36 個組み立てて確定、誤った主張 0。発明を止めると patch5 の同梱の結果と 480/480 同じ |
-| 採用の予行（自分の鍵での署名・patch5 の個体・代謝の付け替え） | すべて合格（`evidence_v1022_6/adoption_rehearsal.log`） |
+| 採用の予行（自分の鍵での署名・patch5 の個体・代謝の付け替え） | すべて合格（`history/evidence_v1022_6/adoption_rehearsal.log`） |
 | リリース zip | 根のフォルダが 1 つ、構造の検査に合格、中の `system/` の署名も合格。作り直しても同じ zip |
 
 - 長時間試験で答えなかった 19 問は、`verified-query`（慎重な検査を足した経路）です。同じ形の問題は patch5 の `verified-query` も答えません。`think` と `llm-ask` は、同じ問題に正しく答えます。答えてはいけない問題 178 問は、すべて答えませんでした。
@@ -75,7 +75,7 @@ python3 -B system/tools/verify_release.py system --trusted-pubkey-file deliverab
 
 - 署名し直すと、元のアンカーでは検証が通らなくなります（`TRUST_ROOT_MISMATCH`）。これは正しい動きです。
 - 新しく作る個体も、以前の版の個体も、学習済みの種の署名の確認が通ります（今の受領書の鍵と、これまでの鍵を記録した `META/PATCH_LINEAGE_v1022_*.json` の鍵を受け付けます）。
-- この手順を、使い捨ての鍵で最初から最後まで試した記録が `evidence_v1022_6/adoption_rehearsal.log` です（台本は `adoption_rehearsal.sh`）。
+- この手順を、使い捨ての鍵で最初から最後まで試した記録が `history/evidence_v1022_6/adoption_rehearsal.log` です（台本は `history/evidence_v1022_6/adoption_rehearsal.sh`）。
 
 ## 4. 以前の版から移る
 
@@ -94,7 +94,7 @@ python3 -B system/run_tukuyo.py --runtime-trust-file NEW_ANCHOR --data D runtime
 
 ## 5. リリース zip
 
-- `evidence_v1022_6/build_release_zip.py` で作ります。根のフォルダは 1 つ（`TUKUYO_v1022_6/`）、項目は名前順、時刻と権限は固定、キャッシュは入れません。同じ木からは同じ zip ができます（同じ zlib の場合）。
+- `history/evidence_v1022_6/build_release_zip.py` で作ります。根のフォルダは 1 つ（`TUKUYO_v1022_6/`）、項目は名前順、時刻と権限は固定、キャッシュは入れません。同じ木からは同じ zip ができます（同じ zlib の場合）。
 - 作ったあとに、`system/tools/strict_zip_preflight.py`（根が 1 つ、危険なパスなし、リンクなし、CRC）と、zip の中の `system/` の署名の検証を自動で行います。
 - この版の zip は `TUKUYO_v1022_6.zip` です。zip の中にその zip 自身のハッシュは書けないので、大きさと sha256 は、リポジトリの README に書いてあります。
 
@@ -105,8 +105,8 @@ python3 -B system/run_tukuyo.py --runtime-trust-file NEW_ANCHOR --data D runtime
 - **claude-patch4**：意味の関門（数の網羅・役割の監査・作る側と別に書いた Parser B）
 - **claude-patch5**：V1023r 研究プレビュー（隠れた法則の世界・実験の選び方・方法の切り替え・再現試験・反証・記憶）、本物の代謝の中の研究ニッチ、長時間融合試験、Parser B の拡張
 - **claude-patch6**：質問の役割を読む場面モデル、問題の型と証明、patch5 の確信を持った誤りの修正、英語の数詞、論理と記憶の言い換え、文法から法則を組み立てる研究、研究エンジンの高速化、長時間試験の厳密な採点
-- **v1022.6 として**：CLI の版の名前を署名した受領書から読む、`STATUS_V1022_6.json`、`META/KNOWN_GAPS.json` の追記、版の確認テスト（`tests/test_v1022_6.py`）、採用の予行、決まった形のリリース zip
-- patch5 からの差分は `claude_patch6_vs_patch5.diff` にあります。
+- **v1022.6 として**：CLI の版の名前を署名した受領書から読む、`docs/history/STATUS_V1022_6.json`、`META/KNOWN_GAPS.json` の追記、版の確認テスト（`tests/test_v1022_6.py`）、採用の予行、決まった形のリリース zip
+- patch5 からの差分は `history/claude_patch6_vs_patch5.diff` にあります。
 
 ## 7. 限界
 

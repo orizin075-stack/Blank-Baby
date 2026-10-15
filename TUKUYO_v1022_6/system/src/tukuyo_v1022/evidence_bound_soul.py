@@ -461,6 +461,8 @@ def load(data):
 @transactional()
 def integrate(data):
     require_alive(data)
+    from . import experience_provenance as provenance
+    if provenance.needs_preflight(data):provenance.preflight(data)
     reflective.integrate(data)
     ident = _live_identity(data)
     try:
@@ -512,6 +514,8 @@ def integrate(data):
 @transactional()
 def add_authority(data, authority):
     require_alive(data)
+    from . import experience_provenance as provenance
+    if provenance.needs_preflight(data):raise ValueError('PROVENANCE_TRUST_REGISTRY_SEALED')
     integrate(data)
     state = load(data)
     if state['decisions']:
@@ -539,6 +543,8 @@ def add_authority(data, authority):
 @transactional()
 def add_witness(data, certificate):
     require_alive(data)
+    from . import experience_provenance as provenance
+    if provenance.needs_preflight(data):raise ValueError('PROVENANCE_TRUST_REGISTRY_SEALED')
     integrate(data)
     state = load(data)
     if state['decisions']:
@@ -597,7 +603,9 @@ def deliberate(data, bundle):
         raise ValueError('EVIDENCE_SOUL_ASSESSMENT_QUORUM')
     effects = _aggregate_assessments(records, [option['id'] for option in options])
     from .soul_experience_learning import prepare
-    experience = prepare(state, options, context, effects)
+    from . import experience_provenance as provenance
+    origin=provenance.snapshot(provenance.preflight(data)) if provenance.needs_preflight(data) else None
+    experience = prepare(state, options, context, effects,origin)
     reflective_options = [{**copy.deepcopy(option), 'effects': experience['applied_effects'][option['id']]}
                           for option in options]
     result = reflective.deliberate(data, reflective_options, context, authenticated_only=True)
@@ -623,6 +631,7 @@ def deliberate(data, bundle):
     state['decision_head_sha256'] = row['decision_sha256']
     validate(state)
     store.save(data, NS, COMPONENT, state)
+    if origin is not None:provenance.record_decision(data,row)
     return {
         'ok': True, 'version': 'v1022.7', 'chosen': row['chosen'],
         'best_candidate': row['best_candidate'], 'review_required': row['review_required'],
@@ -740,6 +749,9 @@ def _public(state):
 def status(data):
     state = load(data)
     result = _public(state)
+    from . import experience_provenance as provenance
+    result['experience_provenance']=provenance.status(data) if provenance.needs_preflight(data) else {
+        'mode':'LEGACY_UNCLASSIFIED','physical_truth_verified':False,'strict_origin_learning_enabled':False}
     result['audit'] = audit(data)
     return result
 

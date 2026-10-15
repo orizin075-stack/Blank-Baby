@@ -377,18 +377,23 @@ def _ratio(text,nums,sents,sk):
         if not any(_same_verb(mk.group('xv'),g) for g in GOT) or not any(_same_verb(mq.group('yv'),g) for g in GOT):return None
         if mk.group('xn') and _np(mk.group('xn'))!=noun:return None
     if mq.group('yn') and _np(mq.group('yn'))!=noun:return None
-    pa,pb=bind_ratio();a=s.qty('first',integer=True,about=f'{noun} of {A}');b=s.qty('second',integer=True,about=f'{noun} of {B}')
-    _ratio_equation(s,a,b,pa,pb,span);kn=s.bind('known',int(mk.group('n')),about=f'{noun} of {X}')
+    unit=noun.replace(' ','_') if rx is R_SHARE else '1'
+    pa,pb=bind_ratio();a=s.qty('first',unit=unit,integer=True,about=f'{noun} of {A}');b=s.qty('second',unit=unit,integer=True,about=f'{noun} of {B}')
+    _ratio_equation(s,a,b,pa,pb,span);kn=s.bind('known',int(mk.group('n')),unit=unit,about=f'{noun} of {X}')
     s.rel(f'{a if X==A else b} = {kn}',*sents[others[0][1]])
+    if rx is R_SHARE and re.search(r'\bsome\b',text[span[0]:span[1]],re.I):
+        total=s.qty('shared_total',unit=unit,integer=True,about='the initially unspecified shared quantity')
+        s.q[total]['unknown_source']={'start':span[0],'text':text[span[0]:span[1]]}
+        s.rel(f'{total} = {a} + {b}',*span)
     if md:
         if Y not in (A,B) or Y==X:return None
-        return s.done(b if Y==B else a,'','ratio:'+('every' if rx is R_EVERY else 'shared'))
+        return s.done(b if Y==B else a,'' if unit=='1' else unit,'ratio:'+('every' if rx is R_EVERY else 'shared'))
     Z=mc.group('z')
     if {Y,Z}!={A,B}:return None
     yq,zq=(a,b) if Y==A else (b,a)
-    r=s.qty('result',integer=True,about=f'how many {mc.group("cmp")}')
+    r=s.qty('result',unit=unit,integer=True,about=f'how many {mc.group("cmp")}')
     s.rel(f'{r} = {yq} - {zq}' if mc.group('cmp')=='more' else f'{r} = {zq} - {yq}',*sents[qi])
-    return s.done(r,'','ratio:compare')
+    return s.done(r,'' if unit=='1' else unit,'ratio:compare')
 
 def _rate(text,nums,sents,s,m,span,others,q,qi,bind_ratio):
     """'a recipe uses 3 cups of sugar for every 4 cups of flour' and one amount of either: the other amount"""

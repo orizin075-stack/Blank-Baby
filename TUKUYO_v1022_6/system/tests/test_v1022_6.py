@@ -1,7 +1,7 @@
 """v1022.6 release identity: the CLI reports the revision recorded in the signed release receipt (so a re-sign
 with --revision relabels the release without code changes), the version status file keeps its claim
 boundaries, and the lineage keeps every earlier seed key acceptable for existing individuals."""
-import json,os,subprocess,sys
+import json,os,re,subprocess,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];CLI=ROOT/'run_tukuyo.py'
 
@@ -13,8 +13,8 @@ def test_v1022_6_release_identity(tmp_path):
     p=subprocess.run(cmd+['--data',str(tmp_path/'d'),'init'],cwd=ROOT,env=env,capture_output=True,text=True,timeout=240);r=json.loads(p.stdout)
     receipt=json.loads((ROOT/'META/RELEASE_RECEIPT.json').read_text(encoding='utf-8'))
     assert r['ok'] and r['release_revision']==receipt['payload']['release_revision'],(r.get('release_revision'),receipt['payload'])
-    assert r['release_revision'].startswith(('v1022.6', 'v1022.7', 'v1022.8'))
-    st=json.loads((ROOT/'STATUS_V1022_6.json').read_text(encoding='utf-8'))
+    assert re.fullmatch(r'v1022\.(?:0|[1-9]\d*)(?:\.\d+)*(?:[-+][A-Za-z0-9._+-]+)?',r['release_revision'])
+    st=json.loads((ROOT/'docs/history/STATUS_V1022_6.json').read_text(encoding='utf-8'))
     assert st['release_revision']=='v1022.6' and st['base']=='v1022.5-fusion' and st['runtime_llm_required'] is False
     assert not any(st[k] for k in ('invents_new_kinds_of_laws','24h_completed','general_intelligence_established','self_code_modification',
                                    'consciousness_established','third_party_heldout_evaluation'))

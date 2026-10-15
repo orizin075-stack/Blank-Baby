@@ -39,18 +39,24 @@ def validate(r):
     if len(r['runtimes'])>64:raise ValueError('V1023R_NICHE_BOUND')
     for rec in r['runtimes'].values():
         if len(rec['agent']['L1'])!=32 or any(type(v) is not int or v<0 for v in rec['counters'].values()):raise ValueError('V1023R_NICHE_RECORD')
-def tick(seed,rec,rid,energy,remaining,heart_choose,reservoir):
+def tick(seed,rec,rid,energy,remaining,heart_choose,reservoir,development_data=None,actions=True):
     """One real tick for one runtime. Returns (action,credit,extra_cost,row,heart_feedback_ok)."""
     w=world(seed,rec['niche'],rid,rec['counters']);a=ResearchAgent.from_compact(rec['agent']);offer=w.work_offer()
     econ={**ECON,'horizon':remaining}
-    act,x,sc=a.decide(offer['locked'],energy,max(1,remaining),econ)
+    prepared=None
+    if development_data is not None:
+        from tukuyo_v1022 import developmental_life as dev
+        prepared=dev.prepare(development_data,a,offer['locked'],energy,max(1,remaining),reservoir,econ,enabled=actions)
+        a=prepared['agent'];act=prepared['row']['action'];x=prepared['row']['input'];sc={}
+    else:act,x,sc=a.decide(offer['locked'],energy,max(1,remaining),econ)
     er=energy/10000
     if act=='work':sig={'survival':sc.get('work_ev',0)/300,'curiosity':.1*er}
     elif act in ('probe','trial'):sig={'curiosity':1.0*er+.2,'survival':.15,'truthfulness':.2 if act=='trial' else 0}
     else:sig={'survival':.2}
-    chosen=heart_choose([{'id':act if act!='rest' else 'idle','signals':sig},{'id':'rest','signals':{'survival':.3 if sc.get('work_ev',0)<0 and act=='work' else 0.,'integrity':.1}}])
-    if chosen=='rest':act='rest'
-    credit=0;extra=0;row={'action':act,'agent_status':a.status}
+    if prepared is None:
+        chosen=heart_choose([{'id':act if act!='rest' else 'idle','signals':sig},{'id':'rest','signals':{'survival':.3 if sc.get('work_ev',0)<0 and act=='work' else 0.,'integrity':.1}}])
+        if chosen=='rest':act='rest'
+    credit=0;extra=0;o=None;row={'action':act,'agent_status':a.status}
     if act=='work':
         o=w.work(offer,x);extra=ECON['work'];a.observe(o);rec['stats']['works']+=1
         if o['y']:credit=min(ECON['reward'],reservoir,max(0,10000-energy));rec['stats']['works_paid']+=1
@@ -61,6 +67,7 @@ def tick(seed,rec,rid,energy,remaining,heart_choose,reservoir):
         if act=='probe':o=w.probe(x);extra=ECON['probe'];a.observe(o);rec['stats']['probes']+=1;row.update({'switches':switches(x),'sensor':o['y']})
         elif act=='trial':o=w.trial();p=a.predict_trial(o['x']);extra=ECON['probe'];a.observe(o,prediction=p);rec['stats']['trials']+=1;row.update({'switches':switches(o['x']),'sensor':o['y'],'prediction':p})
         else:rec['stats']['rests']+=1
+    if prepared is not None:row['development']=dev.complete(development_data,prepared,a,o,credit,extra)
     rec['agent']=a.to_compact();rec['counters']={'probe':w.n_probe,'trial':w.n_trial,'work':w.n_work}
     row.update({'status_after':a.status,'law':a.claim['law'] if a.claim else None})
     return act,credit,extra,row
@@ -72,3 +79,28 @@ def summary(r,seed=None):
         if seed is not None and ag['claim']:
             rows[rid]['law_correct_for_owner']=ag['claim']['table']==world(seed,rec['niche'],'reveal',{'probe':0,'trial':0,'work':0}).reveal()['table']
     return rows
+
+def audit_development(data,seed,rec,rid):
+    """Environment-side replay. The planner never receives this seed or truth.
+
+    Reproduce offers, every observation and stream counters, then bind the
+    child's predictive model to the owner's committed ecology record.
+    """
+    from tukuyo_v1022 import developmental_life as dev
+    s=dev.load(data)
+    if not s['episodes'] and rec['counters']['work']==0:return True
+    if s['last_agent']!=rec['agent']:raise ValueError('DEVELOPMENT_OWNER_MODEL_BINDING')
+    w=world(seed,rec['niche'],rid,{'probe':0,'trial':0,'work':0})
+    for r in s['episodes']:
+        offer=w.work_offer()
+        if r['locked']!={str(k):v for k,v in offer['locked'].items()}:
+            raise ValueError('DEVELOPMENT_WORLD_OFFER')
+        if r['action']=='work':obs=w.work(offer,r['input'])
+        else:
+            w.skip_work(offer)
+            obs=(w.probe(r['input']) if r['action']=='probe' else
+                 w.trial() if r['action']=='trial' else None)
+        if obs!=r['observation']:raise ValueError('DEVELOPMENT_WORLD_OBSERVATION')
+    if {'probe':w.n_probe,'trial':w.n_trial,'work':w.n_work}!=rec['counters']:
+        raise ValueError('DEVELOPMENT_WORLD_COUNTERS')
+    return True

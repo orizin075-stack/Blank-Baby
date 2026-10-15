@@ -112,6 +112,9 @@ def _not_done_en(text):
     return any(NOT_DONE_EN.search(text[a:b]) for a,b in s[:-1])
 
 def read(text):
+    from .episodic_reader import read as episodic
+    episode=episodic(text)
+    if episode is not None:return episode
     if JA.search(text):
         try:from . import reader_ja
         except ImportError:return {'spec':None,'reason':'JA:NO_READER'}

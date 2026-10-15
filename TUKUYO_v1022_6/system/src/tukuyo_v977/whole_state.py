@@ -211,6 +211,11 @@ def _component_hashes(data):
     if (d/'v1022'/'commits').exists():pairs['local_cognition_v1022']='v1022/STATE.json'
     if (d/'v1022_ecology'/'commits').exists():pairs['runtime_metabolism_v1022']='v1022_ecology/STATE.json'
     if (d/'v1023r'/'commits').exists():pairs['open_world_research_v1023r']='v1023r/STATE.json'
+    if (d/'developmental_life'/'commits').exists():pairs['developmental_life_v1022_8_1']='developmental_life/STATE.json'
+    if (d/'adaptive_life'/'PUBLIC_SEED.json').exists():pairs['adaptive_public_seed_v1022_8_2']='adaptive_life/PUBLIC_SEED.json'
+    if (d/'adaptive_life'/'commits').exists():
+        pairs['adaptive_life_v1022_8_2']='adaptive_life/STATE.json'
+        pairs['adaptive_journal_v1022_8_2']='adaptive_life/EPISODES.jsonl'
     # generation 4: what the child learned from its parents and the record of its life (tukuyo_g4.own); in a live
     # runtime what it learned is also a signed, recovery-tracked commit chain (tukuyo_g4.runtime_store)
     if (d/'g4').exists():pairs.update({'g4_learned':'g4/learned.json','g4_remembered':'g4/remembered.json','g4_life':'g4/life.json',
@@ -221,9 +226,11 @@ def _component_hashes(data):
     if (d/'soul_integrity'/'commits').exists():pairs['whole_soul_integrity']='soul_integrity/STATE.json'
     if (d/'reflective_soul'/'commits').exists():pairs['whole_reflective_soul']='reflective_soul/STATE.json'
     if (d/'evidence_bound_soul'/'commits').exists():pairs['whole_evidence_bound_soul']='evidence_bound_soul/STATE.json'
+    if (d/'experience_provenance'/'commits').exists():pairs['whole_experience_provenance']='experience_provenance/STATE.json'
     if (d/'semantic_truth'/'commits').exists():pairs['whole_semantic_truth']='semantic_truth/STATE.json'
     if (d/'grounded_sensor'/'commits').exists():pairs['whole_grounded_sensor']='grounded_sensor/STATE.json'
     if (d/'experiential_goals'/'commits').exists():pairs['whole_experiential_goals']='experiential_goals/STATE.json'   # v1022.8.1
+    if (d/'identity_ledger/BINDING.json').is_file():pairs['external_identity_binding']='identity_ledger/BINDING.json'
     return {k:_file_sha(d/v) for k,v in pairs.items()}
 
 def _own_components(data,ch,before):
@@ -329,6 +336,16 @@ def _audit_once(data):
             from tukuyo_v1023r.life import audit as research_audit
             if not research_audit(data).get('ok'):errs.append('V1023R_RESEARCH_AUDIT')
         except Exception as e:errs.append('V1023R_RESEARCH_AUDIT:'+type(e).__name__)
+    if (Path(data)/'developmental_life'/'commits').exists():
+        try:
+            from tukuyo_v1022.developmental_life import audit as developmental_audit
+            if not developmental_audit(data).get('ok'):errs.append('DEVELOPMENTAL_LIFE_AUDIT')
+        except Exception as e:errs.append('DEVELOPMENTAL_LIFE_AUDIT:'+type(e).__name__)
+    if (Path(data)/'adaptive_life').exists():
+        try:
+            from tukuyo_v1022.adaptive_life import audit as adaptive_audit
+            if not adaptive_audit(data).get('ok'):errs.append('ADAPTIVE_LIFE_AUDIT')
+        except Exception as e:errs.append('ADAPTIVE_LIFE_AUDIT:'+type(e).__name__)
     if (Path(data)/'g4'/'commits').exists() or (Path(data)/'g4'/'learned.json').exists():
         try:
             from tukuyo_g4.runtime_store import audit as g4_audit
@@ -364,6 +381,11 @@ def _audit_once(data):
             from tukuyo_v1022.semantic_truth import audit as semantic_truth_audit
             if not semantic_truth_audit(data).get('ok'):errs.append('SEMANTIC_TRUTH_AUDIT')
         except Exception as e:errs.append('SEMANTIC_TRUTH_AUDIT:'+type(e).__name__)
+    if (Path(data)/'experience_provenance').exists() or 'whole_experience_provenance' in q.get('component_hashes',{}):
+        try:
+            from tukuyo_v1022.experience_provenance import audit as provenance_audit
+            if not provenance_audit(data).get('ok'):errs.append('EXPERIENCE_PROVENANCE_AUDIT')
+        except Exception as e:errs.append('EXPERIENCE_PROVENANCE_AUDIT:'+type(e).__name__)
     if (Path(data)/'grounded_sensor').exists() or 'whole_grounded_sensor' in q.get('component_hashes',{}):
         try:
             from tukuyo_v1022.grounded_sensor import audit as grounded_sensor_audit

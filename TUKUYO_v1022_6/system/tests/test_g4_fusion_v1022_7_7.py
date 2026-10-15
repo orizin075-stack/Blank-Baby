@@ -59,12 +59,14 @@ def test_parents_who_write_the_same_thing_another_way_agree(monkeypatch):
     # v1022.6.5 holds back two readings with the same number of different things ('5 apples', '5 oranges'). It compared
     # the units as written, so parents who wrote 'cookies' did not agree with one who wrote 'cookie', nor '$' with
     # 'dollars' (the recorded parents of the tests all write the same unit, and did not show it)
-    q='Mia has 5 cookies. How many cookies does Mia have?'
     def spec(unit):
         return {'schema':fpl.SCHEMA,'text':q,'quantities':[{'name':'amount','unit':unit,'integer':True}],
-                'facts':[{'eq':'amount = 5','span':'5 cookies'}],'ask':'amount','unused':[]}
+                'facts':[{'eq':'amount = 5','span':f'5 {item}'}],'ask':'amount','unused':[]}
     monkeypatch.setattr(api,'_own',lambda text:None);monkeypatch.setattr(llm,'parents',lambda:['claude','gemini'])
-    for a,b,agree in (('cookie','cookies',True),('$','dollars',True),('pieces of candy','candies',True),('apple','orange',False),('cent','dollar',False)):
+    # v1022.8 binds the answer unit to the question too. Equivalent dollar
+    # spellings are tested on dollars; answering dollars to cookies is refused.
+    for a,b,item,agree in (('cookie','cookies','cookies',True),('$','dollars','dollars',True),('pieces of candy','candies','candies',True),('apple','orange','cookies',False),('cent','dollar','cookies',False)):
+        q=f'Mia has 5 {item}. How many {item} does Mia have?'
         monkeypatch.setattr(llm,'read',lambda text,view,parent,a=a,b=b:{'ok':True,'spec':spec(a if parent=='claude' else b)})
         r=api.solve(q,llm='on',learn=False)
         assert (r['answer']=='5') if agree else (r['answer'] is None and r['reason']=='UNIT_DISAGREEMENT'),(a,b,r.get('reason'))

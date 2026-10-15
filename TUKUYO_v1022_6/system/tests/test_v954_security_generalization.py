@@ -39,7 +39,7 @@ class V954(unittest.TestCase):
  def test_08_non_deletion_edits_are_real_promotion_candidates(self):
   x=propose_generalizing();self.assertTrue(x['promoted']);promoted={r['edit'] for r in x['candidates'] if r['evaluation']['promote']};self.assertTrue(promoted & {'priority_mul_add_sub','priority_piecewise_first','priority_small_constants','priority_small_constants'})
  def test_09_v954_status_preserved_and_top_status_advances(self):
-  old=json.loads((ROOT/'STATUS_v954.json').read_text());self.assertEqual('v954',old['version']);self.assertFalse(old['general_l6_established'])
+  old=json.loads((ROOT/'docs/history/STATUS_v954.json').read_text());self.assertEqual('v954',old['version']);self.assertFalse(old['general_l6_established'])
   cur=json.loads((ROOT/'STATUS.json').read_text());self.assertTrue(cur['version'].startswith('v'));self.assertGreaterEqual(int(cur['version'][1:]),955);self.assertFalse(cur['general_l6_established'])
  def test_10_optimized_python_still_enforces_codegen_checks(self):
   code="import sys;sys.path.insert(0,%r);from research.tukuyo_research_v936.codegen import verify_generated_source;verify_generated_source('import os\\ndef choose(m):\\n return 1\\n',{})" % str(ROOT/'src')

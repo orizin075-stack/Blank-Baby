@@ -82,6 +82,11 @@ def _validate(s):
     if 'research' in s:
         # claude-patch5 opt-in research niche (metabolism-init --research-world)
         from tukuyo_v1023r import niche
+        if s['config'].get('adaptive_goals'):
+            from tukuyo_v1023r import changing_niche as niche
+            interval=s['config']['world_change_interval']
+            if type(interval) is not int or (interval!=0 and not 8<=interval<=512):raise ValueError('ADAPTIVE_CHANGE_INTERVAL')
+            if set(s['research']['runtimes'])!=set(s['runtimes']):raise ValueError('ADAPTIVE_RUNTIME_BINDING')
         niche.validate(s['research'])
         if s['config'].get('research_world') is not True or not set(s['active'])<=set(s['research']['runtimes']):raise ValueError('V1023R_NICHE_BINDING')
 # v1022.7.9: a long run (the roadmap's v1022.8.2 asks for 1,000 steps or more) chooses larger bounds at init. An
@@ -105,9 +110,19 @@ def preflight(d):
                 raise ValueError('V1022_GROUNDED_AUTHORIZATION_BINDING')
     for rid,row in s['runtimes'].items():
         if _snapshot(d,rid)!=row:raise ValueError('V1022_RUNTIME_DRIFT:'+rid)
+        if s['config'].get('adaptive_goals'):
+            from tukuyo_v1023r import changing_niche
+            changing_niche.audit(child(d,rid),s['seed'],s['research']['runtimes'][rid],rid,s['config']['world_change_interval'])
+        elif s['config'].get('developmental_goals'):
+            from tukuyo_v1023r import niche
+            niche.audit_development(child(d,rid),s['seed'],s['research']['runtimes'][rid],rid)
     for k in ('succession_public_key','whole_public_key'):
         if len({r[k] for r in s['runtimes'].values()})!=len(s['runtimes']):raise ValueError('V1022_SHARED_KEY')
     for e in s['successions']+s.get('births',[]):
+        if s['config'].get('adaptive_goals'):
+            from tukuyo_v1023r import changing_niche
+            rec=s['research']['runtimes'][e['child']]
+            changing_niche.audit_seed(child(d,e['child']),child(d,e['parent']),rec['world_commitment'])
         if e['public_learning_commitment']:
             proofs=cognition.state(child(d,e['child']))['inherited_public_learning'];p=next((p for p in proofs if whole.sha_obj(p)==e['public_learning_commitment']),None)
             if p is None or p['public_key']!=s['runtimes'][e['parent']]['whole_public_key'] or p['payload']['source_individual_id']!=s['runtimes'][e['parent']]['individual_id']:raise ValueError('V1022_CULTURAL_PARENT_BINDING')
@@ -148,14 +163,18 @@ def _performance():return {k:0 for k in ('attempts','correct','wrong','abstained
 @transactional()
 def init(d,trust_file,families=4,seed='v1022',reservoir=20000,regeneration=0,max_age=32,learning=True,actions=True,research_world=False,
          max_ticks=512,max_runtimes=64,sharing=False,stagger=False,reproduction=False,explore=False,wild_regeneration=WILD_REGENERATION,wild_cap=WILD_CAP,
-         bequest=False):
+         bequest=False,developmental_goals=False,adaptive_goals=False,world_change_interval=0,research_culture=True):
     if root(d).exists():raise ValueError('V1022_METABOLISM_REINITIALIZATION')
     if type(families) is not int or not 2<=families<=8:raise ValueError('V1022_FAMILY_BOUND')
     if type(reservoir) is not int or not 0<=reservoir<=1000000 or type(regeneration) is not int or not 0<=regeneration<=100000:raise ValueError('V1022_RESOURCE_BOUND')
     if type(max_age) is not int or not 4<=max_age<=128:raise ValueError('V1022_AGE_BOUND')
     if type(max_ticks) is not int or type(max_runtimes) is not int or not 32<=max_ticks<=TICK_BOUND or not 8<=max_runtimes<=RUNTIME_BOUND:raise ValueError('V1022_METABOLISM_BOUND_CONFIG')
-    if research_world and (stagger or reproduction or explore or bequest):raise ValueError('V1022_OPTION_COMBINATION')
+    if (research_world or developmental_goals or adaptive_goals) and (stagger or reproduction or explore or bequest):raise ValueError('V1022_OPTION_COMBINATION')
     if explore and (type(wild_regeneration) is not int or type(wild_cap) is not int or not 0<=wild_regeneration<=100000 or not 0<=wild_cap<=1000000):raise ValueError('V1022_WILD_BOUND')
+    if adaptive_goals and developmental_goals:raise ValueError('ADAPTIVE_SELECT_ONE_POLICY')
+    # the adaptive line's lengths are 512..4096 in powers of two; a world that changes needs the adaptive goals
+    if (type(world_change_interval) is not int or (world_change_interval!=0 and not 8<=world_change_interval<=512)
+        or (adaptive_goals and max_ticks not in (512,1024,2048,4096)) or (world_change_interval and not adaptive_goals)):raise ValueError('ADAPTIVE_CONFIGURATION')
     if trust_file is None:raise ValueError('V1022_EXTERNAL_RUNTIME_TRUST_REQUIRED')
     from tukuyo_v977.startup_guard import verify_distribution
     verify_distribution(Path(__file__).resolve().parents[2],trust_file)
@@ -173,12 +192,22 @@ def init(d,trust_file,families=4,seed='v1022',reservoir=20000,regeneration=0,max
     if stagger:s['unborn']=[max(1,round(i*max_age/families)) for i in range(1,families)];s['nursery']=6500*len(s['unborn'])
     if reproduction:s['births']=[]
     if explore:s['wild']=s['wild_grown']=wild_cap;s['found']=0
+    # v1022.8.1/8.2 adaptive-life line: goals from needs and prediction errors, or a world whose hidden laws change
+    if developmental_goals:
+        research_world=True;s['config']['developmental_goals']=True
+    if adaptive_goals:
+        research_world=True;s['config'].update({'adaptive_goals':True,'world_change_interval':world_change_interval,
+                                              'max_ticks':max_ticks,'research_culture':bool(research_culture)})
     if research_world:
         from tukuyo_v1023r import niche
-        s['config']['research_world']=True;s['research']={'schema':'tukuyo.v1023r.niche/1','claim_boundary':niche.CLAIMS,'runtimes':{},'econ':dict(niche.ECON)}
+        schema='tukuyo.v1023r.niche/1'
+        if adaptive_goals:
+            from tukuyo_v1023r import changing_niche as niche
+            schema=niche.SCHEMA
+        s['config']['research_world']=True;s['research']={'schema':schema,'claim_boundary':niche.CLAIMS,'runtimes':{},'econ':dict(niche.ECON)}
     for i in range(1 if stagger else families):
         rid=_founder(d,s)
-        if research_world:s['research']['runtimes'][rid]=niche.new_record(s['seed'],s['runtimes'][rid]['family'],f'N{i}',None)
+        if research_world:s['research']['runtimes'][rid]=niche.new_record(s['seed'],s['runtimes'][rid]['family'],f'N{i}',world_change_interval if adaptive_goals else None)
     _validate(s);store.save(d,NS,COMPONENT,s);return summary(s)
 def _founder(d,s):
     rid,ident=_fresh(d,s);_cli(d,rid,'succession-founder-init')
@@ -218,6 +247,20 @@ def _successor(d,s,parent,tick,bequest=0):
         **({'born_smaller_by':smaller} if smaller else {}),
         **({'funded_by':{'commons':from_commons,'runtimes':pledges,**({'parent_bequest':bequest} if bequest else {})}} if pledges or bequest else {})})
     if 'research' in s:
+      if s['config'].get('adaptive_goals'):
+        from tukuyo_v1023r import changing_niche
+        from . import adaptive_life
+        parent_rec=s['research']['runtimes'][parent]
+        rec=changing_niche.new_record(s['seed'],s['runtimes'][rid]['family'],parent_rec['niche'],s['config']['world_change_interval'],born_at=tick)
+        if s['config']['learning'] and s['config']['research_culture']:
+            envelope=adaptive_life.export_seed(child(d,parent),s['runtimes'][rid]['individual_id'],rec['world_commitment'])
+            if envelope:
+                rec['public_observations_commitment']=adaptive_life.import_seed(child(d,rid),envelope,rec['world_commitment'])
+                rec['agent']=adaptive_life.initial_agent(child(d,rid)).to_compact()
+                s['runtimes'][rid]=_snapshot(d,rid)
+        s['research']['runtimes'][rid]=rec
+        s['successions'][-1]['public_observations_commitment']=rec['public_observations_commitment']
+      else:
         # Science is culture too: only a CONFIRMED law of the parent, and only when learning is on.
         from tukuyo_v1023r import niche
         pa=s['research']['runtimes'][parent]['agent'];law=pa['claim'] if (s['config']['learning'] and pa['status']=='CONFIRMED' and pa['claim']) else None
@@ -257,7 +300,13 @@ def step(d,ticks=1):
                 rec=s['research']['runtimes'][rid];age0=organism2.load(p).get('metabolic_age',0);hc={}
                 def _heart(opts):
                     r=heart_loop.choose(p,opts,context=f'niche-tick-{tick}') if s['config']['actions'] else {'chosen':'rest'};hc['id']=r['chosen'];return r['chosen']
-                chosen,credit,extra,niche_row=niche.tick(s['seed'],rec,rid,energy,s['config']['max_age']-age0,_heart,s['reservoir'])
+                if s['config'].get('adaptive_goals'):
+                    from tukuyo_v1023r import changing_niche
+                    chosen,credit,extra,niche_row=changing_niche.tick(p,s['seed'],rec,rid,energy,s['config']['max_age']-age0,
+                        s['reservoir'],tick,s['config']['world_change_interval'],s['config']['actions'])
+                else:
+                    chosen,credit,extra,niche_row=niche.tick(s['seed'],rec,rid,energy,s['config']['max_age']-age0,_heart,s['reservoir'],
+                        development_data=p if s['config'].get('developmental_goals') else None,actions=s['config']['actions'])
                 cost+=extra;s['reservoir']-=credit;correct=credit>0
                 if chosen=='work':perf['attempts']+=1;perf['correct']+=int(correct)
                 if hc.get('id') and hc['id']==chosen and chosen!='rest':
@@ -512,7 +561,9 @@ def summary(s):
         **({'reproduction':True,'births':s['births']} if 'births' in s else {}),**({'bequest':True} if s['config'].get('bequest') else {}),
         **({'explore':s['config']['explore'],'wild':s['wild'],'found':s['found'],
             **{k:sum(p.get(k,0) for p in s['performance'].values()) for k in ('explore_attempts','explore_correct','explore_paid')}} if 'wild' in s else {}),
-        **({'research_niche':__import__('tukuyo_v1023r.niche',fromlist=['summary']).summary(s['research'],s['seed']),'research_claim_boundary':s['research']['claim_boundary']} if 'research' in s else {})}
+        **({'research_niche':(__import__('tukuyo_v1023r.changing_niche',fromlist=['summary']).summary(s['research'],s['seed'],s['tick'],s['config']['world_change_interval'])
+             if s['config'].get('adaptive_goals') else __import__('tukuyo_v1023r.niche',fromlist=['summary']).summary(s['research'],s['seed'])),
+            'research_claim_boundary':s['research']['claim_boundary']} if 'research' in s else {})}
 def status(d):return summary(preflight(d))
 def audit(d):
     try:return {**status(d),'resource_conservation':True,'errors':[]}

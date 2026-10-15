@@ -36,8 +36,8 @@ APIキー方式も使えます。専用の `TUKUYO_OPENAI_API_KEY` と `TUKUYO_O
 ```sh
 python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_6_6_TRUST_ANCHOR.txt --data ../my_tukuyo chatgpt-chat "未解決問題の条件を整理する方法を教えて" --session lesson1 --max-calls 16
 python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_6_6_TRUST_ANCHOR.txt --data ../my_tukuyo chatgpt-chat "では、条件が足りない場合の次の観測は？" --session lesson1
-python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_6_6_TRUST_ANCHOR.txt --data ../my_tukuyo chatgpt-study chatgpt_study_examples.json --dry-run
-python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_6_6_TRUST_ANCHOR.txt --data ../my_tukuyo chatgpt-study chatgpt_study_examples.json --session arithmetic1 --max-calls 8
+python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_6_6_TRUST_ANCHOR.txt --data ../my_tukuyo chatgpt-study examples/chatgpt_study_examples.json --dry-run
+python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_6_6_TRUST_ANCHOR.txt --data ../my_tukuyo chatgpt-study examples/chatgpt_study_examples.json --session arithmetic1 --max-calls 8
 python -B run_tukuyo.py --runtime-trust-file ../TUKUYO_v1022_6_6_TRUST_ANCHOR.txt --data ../my_tukuyo think --llm off "When three times a number is decreased by twelve, the result is 60. What is the number?"
 ```
 

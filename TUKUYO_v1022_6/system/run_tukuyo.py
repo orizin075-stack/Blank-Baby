@@ -100,7 +100,7 @@ def chat(api,data,trust=None,migration_trust=None):
         except Exception as e:print('ERROR',type(e).__name__+':'+str(e))
 
 def parser():
-    p=argparse.ArgumentParser(description='TUKUYO v1022.7.8+gen4-r8: bounded experiential Soul with signed outcome learning and plan/API dialogue, fused with generation 4 (a child of three LLM parents); one individual, one history (TUKUYO_CANON)')
+    p=argparse.ArgumentParser(description='TUKUYO v1022.8.2+gen4-r12: generation 4 (a child of three LLM parents) fused with the adaptive-life line (an outside identity ledger, strict experience origins, an episodic stock reader, goals from needs, a changing world); one individual, one history (TUKUYO_CANON)')
     p.add_argument('--data',type=Path,default=Path(os.environ.get('TUKUYO_DATA_DIR', str(Path.home()/'.tukuyo'/'v999_data'))))
     p.add_argument('--ep-trust-dir',type=Path,help='External pinned local/observer/evaluator/authority public keys. Required after epistemic init.')
     p.add_argument('--cap-trust-dir',type=Path,help='External pinned capability authority key. Required to resolve learned legacy capabilities.')
@@ -115,7 +115,11 @@ def parser():
     p.add_argument('--family-promotion-trust-file',type=Path,help='External v966 family promotion authority public key.')
     p.add_argument('--runtime-trust-file',type=Path,help='Externally supplied v967 runtime release public key for fresh-process reproduction.')
     p.add_argument('--chatgpt-auth',choices=('api','plan'),help='OpenAI API key or dedicated Continue with ChatGPT credentials')
+    p.add_argument('--identity-ledger',type=Path,help='Shared pinned history witness outside the individual')
+    p.add_argument('--identity-ledger-trust-file',type=Path,help='External witness public key')
     sub=p.add_subparsers(dest='cmd',required=True)
+    for name in ('identity-ledger-enroll','identity-ledger-check','identity-ledger-publish','identity-ledger-recover-receipt'):sub.add_parser(name)
+    ilb=sub.add_parser('identity-ledger-branch');ilb.add_argument('--child-data',type=Path,required=True)
     sub.add_parser('verify-origins')
     sub.add_parser('layers')
     sub.add_parser('archive-list')
@@ -180,6 +184,10 @@ def parser():
     ed=sub.add_parser('evidence-soul-deliberate');ed.add_argument('bundle',type=Path)
     et=sub.add_parser('evidence-soul-attest');et.add_argument('attestation',type=Path)
     sub.add_parser('evidence-soul-status');sub.add_parser('evidence-soul-audit')
+    pr=sub.add_parser('soul-provenance-init');pr.add_argument('--scope',choices=('simulation','teacher','external_channel'),required=True);pr.add_argument('--environment',required=True)
+    pr=sub.add_parser('soul-provenance-source-add');pr.add_argument('certificate',type=Path)
+    pr=sub.add_parser('soul-provenance-attest');pr.add_argument('attestation',type=Path);pr.add_argument('report',type=Path)
+    sub.add_parser('soul-provenance-status');sub.add_parser('soul-provenance-audit')
     sub.add_parser('semantic-truth-integrate')
     sto=sub.add_parser('semantic-truth-oracle-add');sto.add_argument('oracle',type=Path)
     strp=sub.add_parser('semantic-truth-report');strp.add_argument('bundle',type=Path)
@@ -330,16 +338,22 @@ def parser():
     c=sub.add_parser('dialogue-learn');c.add_argument('bundle',type=Path);c.add_argument('--teacher')
     sub.add_parser('learning-status');sub.add_parser('learning-audit')
     c=sub.add_parser('metabolism-init');c.add_argument('--families',type=int,default=4);c.add_argument('--seed',default='v1022');c.add_argument('--reservoir',type=int,default=20000);c.add_argument('--regeneration',type=int,default=0);c.add_argument('--max-age',type=int,default=32);c.add_argument('--no-learning',action='store_true');c.add_argument('--no-actions',action='store_true');c.add_argument('--research-world',action='store_true',help='claude-patch5: each family lives next to a hidden-rule device; income only from understanding it')
-    c.add_argument('--max-ticks',type=int,default=512,help='v1022.7.9: a longer life for the ecology (up to 4096 ticks)');c.add_argument('--max-runtimes',type=int,default=64,help='v1022.7.9: more runtimes over its life (up to 512)')
+    c.add_argument('--max-ticks',type=int,default=512,help='v1022.7.9: a longer life for the ecology (up to 4096 ticks; with --adaptive-goals 512, 1024, 2048 or 4096)');c.add_argument('--max-runtimes',type=int,default=64,help='v1022.7.9: more runtimes over its life (up to 512)')
     c.add_argument('--sharing',action='store_true',help='v1022.8.2: runtimes may give energy to a hungry one, and raise together a child the commons cannot fund (each decides with its heart; its bonds weigh)')
     c.add_argument('--stagger',action='store_true',help='v1022.8.2 r10: the founders are born at different ticks (their seed energy waits in a nursery)')
     c.add_argument('--reproduction',action='store_true',help='v1022.8.2 r10: a living runtime may bear a child with its own energy, when its heart chooses to')
     c.add_argument('--bequest',action='store_true',help='v1022.8.2 r10: in its last tick an old runtime sets aside what energy it has left for its successor')
     c.add_argument('--explore',action='store_true',help='v1022.8.2 r10: a wild place outside the commons; a runtime finds energy there only by reading a clue right')
     c.add_argument('--wild-regeneration',type=int,default=1200,help='with --explore: how much the wild grows back per tick');c.add_argument('--wild-cap',type=int,default=24000,help='with --explore: how much the wild can hold')
+    c.add_argument('--developmental-goals',action='store_true',help='v1022.8.1 (adaptive-life line): generate finite goals from needs, uncertainty and prediction errors; implies research-world')
+    c.add_argument('--adaptive-goals',action='store_true',help='v1022.8.2 (adaptive-life line): model revision and provisional public observations; implies research-world')
+    c.add_argument('--world-change-interval',type=int,default=0,help='adaptive backend: 0 stationary, 8..512 ticks between hidden law changes')
+    c.add_argument('--no-research-culture',action='store_true',help='disable public device observation inheritance')
     c=sub.add_parser('metabolism-step');c.add_argument('--ticks',type=int,default=1)
     c=sub.add_parser('metabolism-environment',help='v1022.7.9: change the environment from the next tick on (the reservoir regeneration)');c.add_argument('--regeneration',type=int,required=True)
     sub.add_parser('metabolism-status');sub.add_parser('metabolism-audit')
+    sub.add_parser('developmental-status');sub.add_parser('developmental-audit')
+    sub.add_parser('adaptive-status');sub.add_parser('adaptive-audit')
     c=sub.add_parser('g4-solve',help='generation 4: read a problem into the formal problem language, solve it exactly, commit only verified readings that agree');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto');c.add_argument('--no-learn',action='store_true')
     c.add_argument('--no-soul',action='store_true')
     c=sub.add_parser('g4-ask',help='generation 4: a problem is solved and checked; any other question is answered by the parents (Claude, ChatGPT, Gemini, as configured), marked unverified');c.add_argument('query');c.add_argument('--llm',choices=('auto','on','off'),default='auto')
@@ -686,6 +700,14 @@ def _main(argv=None):
                 elif args.cmd=='reflective-soul-outcome':res=reflective_outcome(data,args.decision_sha256,json.loads(args.outcome.read_text(encoding='utf-8')))
                 elif args.cmd=='reflective-soul-status':res=reflective_status(data)
                 else:res=reflective_audit(data)
+            elif args.cmd in ('soul-provenance-init','soul-provenance-source-add','soul-provenance-attest','soul-provenance-status','soul-provenance-audit'):
+                _require_live(data)
+                from tukuyo_v1022 import experience_provenance as provenance
+                if args.cmd=='soul-provenance-init':res=provenance.integrate(data,args.scope,args.environment)
+                elif args.cmd=='soul-provenance-source-add':res=provenance.add_source(data,json.loads(args.certificate.read_text(encoding='utf-8')))
+                elif args.cmd=='soul-provenance-attest':res=provenance.attest(data,json.loads(args.attestation.read_text(encoding='utf-8')),json.loads(args.report.read_text(encoding='utf-8')))
+                elif args.cmd=='soul-provenance-status':res=provenance.status(data)
+                else:res=provenance.audit(data)
             elif args.cmd in ('evidence-soul-integrate','evidence-soul-authority-add','evidence-soul-witness-add','evidence-soul-deliberate','evidence-soul-attest','evidence-soul-status','evidence-soul-audit'):
                 _require_live(data)
                 from tukuyo_v1022.evidence_bound_soul import integrate as evidence_integrate,add_authority as evidence_authority,add_witness as evidence_witness,deliberate as evidence_deliberate,attest as evidence_attest,status as evidence_status,audit as evidence_audit
@@ -925,7 +947,8 @@ def _main(argv=None):
                 _require_live(data)
                 from tukuyo_v1022 import metabolism
                 if args.cmd=='metabolism-init':res=metabolism.init(data,args.runtime_trust_file,args.families,args.seed,args.reservoir,args.regeneration,args.max_age,not args.no_learning,not args.no_actions,args.research_world,args.max_ticks,args.max_runtimes,args.sharing,
-                                                              args.stagger,args.reproduction,args.explore,args.wild_regeneration,args.wild_cap,args.bequest)
+                                                              args.stagger,args.reproduction,args.explore,args.wild_regeneration,args.wild_cap,args.bequest,
+                                                              args.developmental_goals,args.adaptive_goals,args.world_change_interval,not args.no_research_culture)
                 elif args.cmd=='metabolism-step':res=metabolism.step(data,args.ticks)
                 elif args.cmd=='metabolism-environment':res=metabolism.environment(data,args.regeneration)
                 elif args.cmd=='metabolism-status':res=metabolism.status(data)
@@ -950,6 +973,12 @@ def _main(argv=None):
                 if args.cmd=='identity-canon-status':res={'ok':True,'version':'v1022.7.8',**v1022_canon.status(data)}
                 elif args.cmd=='identity-canon-audit':res={'version':'v1022.7.8',**v1022_canon.audit(data)}
                 else:res={'version':'v1022.7.8',**v1022_canon.adopt(data,args.yes)}
+            elif args.cmd in ('developmental-status','developmental-audit'):
+                from tukuyo_v1022 import developmental_life
+                res=developmental_life.status(data) if args.cmd=='developmental-status' else developmental_life.audit(data)
+            elif args.cmd in ('adaptive-status','adaptive-audit'):
+                from tukuyo_v1022 import adaptive_life
+                res=adaptive_life.status(data) if args.cmd=='adaptive-status' else adaptive_life.audit(data,use_memo=False)
             elif args.cmd=='g4-adopt-legacy':
                 _require_live(data)
                 from tukuyo_g4 import adopt as g4_adopt
@@ -1457,8 +1486,29 @@ def main(argv=None):
     args=parser().parse_args(argv)
     from tukuyo_v1019.transaction import _writer_lock
     try:
-        with _writer_lock(args.data.resolve()):
-            return _main(argv)
+        from tukuyo_v1022 import identity_ledger as il
+        control=args.cmd.startswith('identity-ledger-');enrolled=il.requires(args.data)
+        if control or enrolled or args.identity_ledger:
+            if not args.identity_ledger or not args.identity_ledger_trust_file:raise ValueError('IDENTITY_LEDGER_EXTERNAL_WITNESS_REQUIRED')
+            from tukuyo_v977.startup_guard import verify_distribution
+            verify_distribution(ROOT,args.runtime_trust_file)
+            with il.locked(args.identity_ledger):
+                if control:
+                    with _writer_lock(args.data.resolve()):
+                        from tukuyo_v1019.transaction import recover
+                        recover(args.data.resolve())
+                        f={'identity-ledger-enroll':il.enroll,'identity-ledger-check':il.check,'identity-ledger-publish':il.publish,'identity-ledger-recover-receipt':il.recover_receipt}.get(args.cmd)
+                        result=f(args.data,args.identity_ledger,args.identity_ledger_trust_file) if f else il.register_branch(args.data,args.child_data,args.identity_ledger,args.identity_ledger_trust_file)
+                    output(result);return 0
+                if args.cmd in ('chat','recovery-restore'):raise ValueError('IDENTITY_LEDGER_'+('INTERACTIVE_UNSUPPORTED' if args.cmd=='chat' else 'RESTORE_REQUIRES_DISTINCT_BRANCH'))
+                import io,contextlib
+                buffer=io.StringIO()
+                with il.guard(args.data,args.identity_ledger,args.identity_ledger_trust_file):
+                    with _writer_lock(args.data.resolve()),contextlib.redirect_stdout(buffer):code=_main(argv)
+                    result=json.loads(buffer.getvalue())
+                if code or not result.get('ok',True):output(result);return code
+                result['identity_ledger_checked']=True;output(result);return 0
+        with _writer_lock(args.data.resolve()):return _main(argv)
     except Exception as exc:
         output({'ok':False,'error':type(exc).__name__+':'+str(exc)})
         return 1

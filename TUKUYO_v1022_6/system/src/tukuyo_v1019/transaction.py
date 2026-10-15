@@ -156,6 +156,8 @@ def transactional(out_parameter=None):
                 if reflective_soul_needs_preflight(data):reflective_soul_state(data)
                 from tukuyo_v1022.evidence_bound_soul import load as evidence_soul_state,needs_preflight as evidence_soul_needs_preflight
                 if evidence_soul_needs_preflight(data):evidence_soul_state(data)
+                from tukuyo_v1022.experience_provenance import preflight as provenance_state,needs_preflight as provenance_needs_preflight
+                if provenance_needs_preflight(data):provenance_state(data)
                 from tukuyo_v1022.semantic_truth import load as semantic_truth_state,needs_preflight as semantic_truth_needs_preflight
                 if semantic_truth_needs_preflight(data):semantic_truth_state(data)
                 from tukuyo_v1022.grounded_sensor import load as grounded_sensor_state,needs_preflight as grounded_sensor_needs_preflight

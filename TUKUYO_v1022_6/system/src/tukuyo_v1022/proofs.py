@@ -183,6 +183,14 @@ def check(p,answer):
         from tukuyo_g4.proof import verify
         return verify(p.get('source_query'),answer,p)
     try:
+        if p['kind']=='episodic_quantity':
+            from tukuyo_g4.check import check as check_fpl
+            from tukuyo_g4.episodic_verify import inspect as input_episode
+            sp=p.get('spec');source=p.get('source_query')
+            if not isinstance(sp,dict) or sp.get('text')!=source or 'episodic_program' not in sp:return False
+            coverage=input_episode(source,answer,sp['episodic_program'])
+            formal=check_fpl(sp,p.get('values',{}))
+            return bool(coverage.get('recognized') and coverage['ok'] and formal['ok'] and formal['answer']==str(answer))
         if p['kind']=='linear_constraints':
             from .constraints_verify import verify as check_constraints
             v=check_constraints(p.get('source_query'),answer,p)

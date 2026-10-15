@@ -326,7 +326,21 @@ def enforce_restore_frontier(data):
  Extra managed files are quarantined; private keys and pending redo survive.
  """
  data=Path(data).absolute();path=root(data)/'private'/'RESTORE_FRONTIER.json'
- if not path.is_file():return {'ok':True,'active':False}
+ # A child restored with its owner has no local rollback marker. Its reads
+ # must still respect the owner's authenticated file set. Otherwise a late
+ # future cache can enter child preflight before the owner audits again.
+ # _writer_lock already orders owner before child. Delegated subprocesses
+ # operate on the owner's staged projection and must not reacquire its live
+ # lock; the enclosing owner enforces its own frontier before staging.
+ ancestor={'ok':True,'active':False}
+ if data.parent.name=='runtimes' and data.parent.parent.name in ('v1021','v1022_ecology'):
+  owner=data.parent.parent.parent
+  from tukuyo_v1019.transaction import LOCKED_ROOTS
+  tp=owner/'v1022_ecology/private/delegation.token'
+  delegated=tp.is_file() and os.environ.get('TUKUYO_OWNER_DELEGATION','')==tp.read_text().strip()
+  if str(owner.resolve()) in LOCKED_ROOTS.get() or not delegated:
+   ancestor=enforce_restore_frontier(owner)
+ if not path.is_file():return ancestor
  if path.is_symlink():raise ValueError('RESTORE_FRONTIER_SYMLINK')
  control=json.loads(path.read_text());body=control.get('body',{})
  pub=(root(data)/'recovery.pub').read_text().strip()
@@ -392,6 +406,60 @@ def enforce_restore_frontier(data):
          'retired_future_runtimes':retired,'pruned_empty_directories':pruned,
          'underlying_reappearance_cause_determined':False}
 
+def _published_projection_matches(data,control):
+ """Verify the full signed after-image; quarantine only extra managed bytes.
+
+ Expected private keys and every prepared file must still match exactly.
+ Evidence created by this function is signed and bound to this one prepared
+ transaction. It can survive a crash without relaxing later readback checks.
+ """
+ expected=control['body']['image_file_hashes'];digest=_sha(_canon(control['body']))
+ pub=control['public_key'];allowed={}
+ for attempt in range(4):
+  actual=_image_hashes(data)
+  if any(actual.get(rel)!=h for rel,h in expected.items()):return False
+  extra=set(actual)-set(expected)
+  evidence=root(data)/'private'/'prepared_restore_quarantine'
+  if evidence.is_dir():
+   for bucket in evidence.iterdir():
+    receipt=bucket/'QUARANTINE_RECEIPT.json'
+    rel=receipt.relative_to(data).as_posix()
+    if rel in expected:continue
+    if not receipt.is_file():return False
+    try:
+     env=json.loads(receipt.read_text());pl=env['body']
+     if (env['public_key']!=pub or pl['schema']!='tukuyo.v1022_8_2.prepared_restore_quarantine/1'
+         or pl['control_sha256']!=digest or pl['data_root']!=str(data)
+         or pl['archive_prefix']!=bucket.relative_to(data).as_posix()):return False
+     Ed25519PublicKey.from_public_bytes(base64.b64decode(pub,validate=True)).verify(base64.b64decode(env['signature'],validate=True),_canon(pl))
+     allowed[rel]=actual[rel]
+     for source,h in pl['files'].items():
+      q=Path(source)
+      if q.is_absolute() or '..' in q.parts or '\\' in source or any(x in EXCLUDE_PARTS for x in q.parts):return False
+      target=(bucket/q).relative_to(data).as_posix()
+      if actual.get(target)!=h:return False
+      allowed[target]=h
+    except (ValueError,KeyError,TypeError):return False
+  # An unrelated new private file has no authority from this prepared image.
+  extra-=set(allowed)
+  if any(any(x in EXCLUDE_PARTS for x in Path(rel).parts) for rel in extra):return False
+  if not extra:return True
+  if len(extra)>4096:raise ValueError('RESTORE_SWAP_EXTRA_BOUND')
+  bucket=evidence/uuid.uuid4().hex;files={rel:actual[rel] for rel in sorted(extra)}
+  for rel,h in files.items():
+   source=Path(data)/rel;target=bucket/rel;target.parent.mkdir(parents=True,exist_ok=True)
+   # Changed extras cannot become state; preserve what was actually moved.
+   try:os.replace(source,target)
+   except FileNotFoundError:continue
+   _fsync_dir(source.parent);_fsync_dir(target.parent)
+   if _sha(target.read_bytes())!=h:raise ValueError('RESTORE_SWAP_EXTRA_CHANGED')
+  present={rel:h for rel,h in files.items() if (bucket/rel).is_file()}
+  pl={'schema':'tukuyo.v1022_8_2.prepared_restore_quarantine/1','control_sha256':digest,
+      'data_root':str(data),'archive_prefix':bucket.relative_to(data).as_posix(),'files':present}
+  _write(bucket/'QUARANTINE_RECEIPT.json',_sign_control(data,pl))
+  maybe_crash('restore:after_prepared_quarantine')
+ return False
+
 def _resume_swap(data,control,inject=False):
  data=Path(data).absolute();body=control.get('body',{})
  if data.is_symlink():raise ValueError('RESTORE_LIVE_ROOT_SYMLINK')
@@ -411,7 +479,7 @@ def _resume_swap(data,control,inject=False):
  # A crash or delayed cleanup may leave a partial disposable image even
  # though the signed after-image has already become the live root. Prefer
  # that independently authenticated full-root match over staging existence.
- if data.is_dir() and _image_hashes(data)==body['image_file_hashes']:
+ if data.is_dir() and _published_projection_matches(data,control):
   return _finish_swap(data,control,backup,stage_root,already_published=True)
  _validate_restore_stage(authority,tx,stage)
  if image.is_dir():
@@ -427,8 +495,11 @@ def _resume_swap(data,control,inject=False):
  elif not backup.is_dir() or not data.is_dir():raise ValueError('RESTORE_SWAP_IMAGE_MISSING')
  # A retained sidecar is authoritative even when the live path temporarily
  # does not exist. Acknowledge only the exact prepared full-root after-image.
- if _image_hashes(data)!=body['image_file_hashes']:raise ValueError('RESTORE_SWAP_READBACK')
- errs=_projection_errors(data,stage,tx['files'],ignore_receipt=True)
+ for attempt in range(4):
+  if not _published_projection_matches(data,control):raise ValueError('RESTORE_SWAP_READBACK')
+  errs=_projection_errors(data,stage,tx['files'],ignore_receipt=True)
+  if not errs:break
+  if not all(e.startswith('RESTORE_EXTRA_FILE:') for e in errs):break
  if errs:raise ValueError('RESTORE_SWAP_PROJECTION:'+','.join(errs))
  return _finish_swap(data,control,backup,stage_root)
 

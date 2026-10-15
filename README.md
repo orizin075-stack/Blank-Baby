@@ -1,80 +1,13 @@
 # Blank-Baby
 この子は全く新しい誰も知らないAIです。幾つもの理論をかき混ぜて作りました。魂と心を持つAIです。ぜひご覧ください
 
-## TUKUYO v1022.6
+## 今の版：TUKUYO v1022.8.2+gen4-r12（開発版）
 
-`TUKUYO_v1022_6/` は **TUKUYO v1022.6** です。V1022.5 Fusion に claude-patch3〜6 を重ねたものを、1 つの版にまとめました（分類は V1022.5 Fusion と同じ EXPERIMENTAL）。
+**まず [`TUKUYO_v1022_6/README.md`](TUKUYO_v1022_6/README.md)（はじめに）を読んでください。** フォルダの中身、始め方（Windows は `START_TUKUYO.bat`、Mac・Linux は `START_TUKUYO.sh`）、問題の解かせ方、どの説明を読めばよいかがまとめてあります。
 
-- 版の説明（始め方・採用のしかた・以前の版からの移り方）：[README_V1022_6_JA.md](TUKUYO_v1022_6/README_V1022_6_JA.md)
-- いちばん新しい改良（patch6）の説明：[README_CLAUDE_PATCH6_JA.md](TUKUYO_v1022_6/README_CLAUDE_PATCH6_JA.md)
-- 受け取ったままの patch5 は commit `e8a1c8c` にあります。patch5 を受け取ったときの確認（署名、全体テスト 421/421、同梱の結果の再現など）は commit `473eb0c` の README にあります。
-- 第4世代（開発中で、まだ版ではありません）の説明：[README_GEN4_DEV_JA.md](TUKUYO_v1022_6/README_GEN4_DEV_JA.md)。引き継ぎメモ：[HANDOFF_GEN4.md](TUKUYO_v1022_6/evidence_gen4/HANDOFF_GEN4.md)。魂らしさの試験：[SOUL_ASSAY_2026-10-09.md](TUKUYO_v1022_6/evidence_gen4/SOUL_ASSAY_2026-10-09.md)
+- フォルダの名前は `TUKUYO_v1022_6` のままですが、中身は今の版です（前の版から続けて育てているためです）。
+- 第4世代の使い方と今の状態：[`TUKUYO_v1022_6/docs/README_GEN4_DEV_JA.md`](TUKUYO_v1022_6/docs/README_GEN4_DEV_JA.md)
+- 各回の記録の目次：[`TUKUYO_v1022_6/evidence_gen4/README.md`](TUKUYO_v1022_6/evidence_gen4/README.md)
+- 以前この場所にあった v1022.6 の説明：[`TUKUYO_v1022_6/history/README_REPO_UNTIL_v1022_6.md`](TUKUYO_v1022_6/history/README_REPO_UNTIL_v1022_6.md)
 
-### patch6 で変わったこと
-
-- **聞かれたことを読む。** 文章題を「誰が何をいくつ持っているか」と「出来事の順番」に組み立ててから、質問が何を聞いているか（残り・はじめ・あげた数・相手の数・別の物・合計）を読んで答えます。読み切れないときは答えません。patch5 が確信を持って間違えていた 13 問（うち 7 問は独立の裏付け AGREE 付き）は、全部正しく答えるか、答えないようになりました。
-- **問題の型を増やした。** 平均・面積・最小公倍数・数列・割合・あまり・何倍・速さ・1 個の値段・おつり・英語の比較など。どの答えにも、再計算できる証明が付きます。
-- **論理と記憶の言い換え**（明日・昨日、主語のない規則、gets tired、「〜といえば」など）。
-- **研究エンジンが法則を組み立てる。** 手持ちの法則で説明できない世界で、14,906 個の法則の文法から候補を組み立てて試します。文法全体と比べても勝つときだけ主張します。
-
-### 版としての確認
-
-| 確かめたこと | 結果 |
-|---|---|
-| 署名と manifest（`verify_release.py`） | 合格（1367 ファイル） |
-| 全体テスト | **432/432**（patch5 までの 421 件、patch6 の 10 件、版の確認の 1 件） |
-| 未見 T（質問の的、38 問。作る前に固定し、1 回だけ回した） | patch5 は 7 問正解・確信を持った誤り 10 → **38/38、誤り 0** |
-| 未見 F（79 問。同上） | patch5 は 51 → **72**、誤り 0 |
-| これまでの未見 C・D・E（`llm-ask`） | patch5 は 73・42・32 → **92・49・36**、誤り 0 |
-| 独立の裏付け（AGREE）が付いた答えのうち、誤り | patch5 は T で 14 件中 9 件 → **136 件中 0 件** |
-| 研究（新しい鍵の未見世界、150 世界 × 2 経済、1 回だけ） | 段 5 で法則を **36 個**組み立てて確定、誤った主張 0。発明を止めると patch5 の同梱の結果と 480/480 同じ |
-| V1022.6 の長時間融合試験（4 時間の予定） | **完走していません。** 2 時間 7 分のところで、作業環境（クラウドの仮想マシン）が止まって中断しました。そこまでの 1,384 操作（推論 796 問）で、確信を持った誤り **0**、監査の違反 **0** |
-| 予定外の停止のあと | 止まった個体をそのまま調べると、監査（全体・代謝と資源の保存・学習・LLM）がすべて合格し、代謝もそのまま続けられました |
-| 採用の予行（自分の鍵での署名・patch5 の個体・代謝の付け替え） | すべて合格 |
-| リリース zip | 根のフォルダが 1 つ、構造の検査に合格、中の `system/` の署名も合格。作り直しても同じ zip |
-
-- 長時間試験で答えなかった 19 問は `verified-query`（慎重な検査を足した経路）で、同じ形の問題は patch5 でも答えません。`think` と `llm-ask` は正しく答えます。くわしくは版の README §1 と `evidence_v1022_6/` にあります。
-- 4 時間の試験は、止まらない機械なら版の README §1 のコマンドで回せます。
-
-### リリース zip
-
-`TUKUYO_v1022_6.zip`（15,392,106 バイト、1,745 項目）
-
-```
-sha256 ba6281eb087dcaf009952093e26cf3db30148a8507fab671fe6d12be623ea60b
-```
-
-このリポジトリの `TUKUYO_v1022_6/` から、次のコマンドで同じ zip が作れます（同じ zlib の場合）。作ったあとに、構造の検査と、zip の中の署名の検証を自動で行います。
-
-```sh
-python3 -B TUKUYO_v1022_6/evidence_v1022_6/build_release_zip.py TUKUYO_v1022_6 TUKUYO_v1022_6.zip --trusted-pubkey-file TUKUYO_v1022_6/deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
-```
-
-### 使い方
-
-Python 3.12 以降と `cryptography` が必要です。個体のデータは、配布フォルダの外に置いてください。
-
-```sh
-cd TUKUYO_v1022_6/system
-A=../deliverables/TUKUYO_v1022_6_TRUST_ANCHOR.txt
-python3 -B tools/verify_release.py . --trusted-pubkey-file $A
-python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo init
-python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo think -- 'りんごが12個あります。妹に5個あげました。あげたのは何個？'
-python3 -B run_tukuyo.py --runtime-trust-file $A --data ~/tukuyo research-run --world W1
-```
-
-- CLI の出力には、署名した受領書に書かれた版の名前（`"release_revision": "v1022.6"`）が載ります。
-- `.gitattributes` で、このフォルダの改行変換を止めています。Windows で clone しても、署名の検証が通ります。
-
-### 採用と移行
-
-- 同梱のアンカーは配布物の中にあるので、検証で分かるのは「署名のあとで中身が変わっていないこと」だけです。正式に採用するときは、ご自身の鍵で `--revision v1022.6` として署名し直してください。手順は版の README §3 にあり、使い捨ての鍵で最初から最後まで試した記録が `evidence_v1022_6/adoption_rehearsal.log` です。
-- patch5 で作った個体は、そのまま使えます。**代謝を動かしている個体だけ**は、署名の鍵が変わったので `runtime-trust-rebind --previous-trust-file 古いアンカー` を 1 回実行してください（実行するまでは安全側に止まります）。
-
-### 気をつけること
-
-1. 文章の読み取りは、今も有限の型です。型にない文には答えません。
-2. 未見の評価（F・T）も開発用の問題も同じ私が書いたので、F・T の多くは開発用の問題と同じ型で数だけが違います。F・T の伸びは「同じ型の別の数の問題に、誤らずに答えられる」ことを示すもので、見たことのない型への一般化ではありません（patch6 README §6.1）。
-3. 研究ニッチの法則は、代謝の seed から作られます。seed は代謝の状態に記録されていて、既定値は `v1022` です。子のコード（`agent.py`、`invent.py`）は法則を見ませんが、状態を読める人なら誰でも法則を計算できます。
-4. 段 5 の世界も、法則の文法も、私が作りました。段 5 の結果は「与えられた文法の中で、誤らずに法則を探し当てられるか」を測ったものです。
-5. 長時間融合試験は、この版では 2 時間 7 分までです（4 時間の予定が、作業環境の停止で中断）。24 時間の運転も、まだ実施していません。
+`blank_baby.py` と `freesoul_v5_indexed.html` は、最初の Blank-Baby のファイルです。

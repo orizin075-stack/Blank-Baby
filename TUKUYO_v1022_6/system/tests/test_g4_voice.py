@@ -100,8 +100,14 @@ def test_how_sure_it_is_follows_its_own_life(tmp_path,clean):
     d,fresh=tmp_path/'d',tmp_path/'fresh'
     assert run(d,'init')['ok'] and run(fresh,'init')['ok']
     rec=tmp_path/'r.jsonl'
-    rec.write_text('\n'.join(json.dumps(x) for x in [_line(p,t,_reading(t)) for t in GIVE for p in PARENTS]+[_line(p,t,_reading(t,flip=True)) for t in MORE for p in PARENTS])+'\n',encoding='utf-8')
+    # v1022.8 adds a distinct stock-flow reader. Experience of reader_en must
+    # not be counted as confirmation of an untested new parser. Teach both.
+    stock_flow=['Nora had 30 shells. She gave 8 shells to Ann. How many shells does she have left?',
+                'Owen had 12 stamps. He gave 5 stamps to Ben. How many stamps does he have left?']
+    rec.write_text('\n'.join(json.dumps(x) for x in [_line(p,t,_reading(t)) for t in GIVE+stock_flow for p in PARENTS]+[_line(p,t,_reading(t,flip=True)) for t in MORE for p in PARENTS])+'\n',encoding='utf-8')
     for t in GIVE:
+        v=run(d,'g4-solve','--',t,replay=rec)['voice'];assert v['sure']=='sure' and 'Claude read it the same way' in v['why']
+    for t in stock_flow:
         v=run(d,'g4-solve','--',t,replay=rec)['voice'];assert v['sure']=='sure' and 'Claude read it the same way' in v['why']
     for t in MORE:assert run(d,'g4-solve','--',t,replay=rec)['answer'] is None
     alone='Kim had 40 beads. She gave 15 beads to Ann. How many beads does she have left?'

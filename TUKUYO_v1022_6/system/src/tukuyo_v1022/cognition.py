@@ -470,6 +470,25 @@ def _solve_core_v5(data,query,formal_task=None):
 def solve(data,query,formal_task=None):
     if formal_task is None and not str(query or '').strip():return _no('EMPTY_QUERY',recognized=False)
     if formal_task is None:
+        from tukuyo_g4.episodic_reader import read as read_episode
+        episode=read_episode(str(query))
+        if episode is not None:
+            from tukuyo_g4.episodic_verify import inspect as check_episode_input
+            independent=check_episode_input(str(query))
+            if episode.get('spec') is None or not independent.get('recognized') or not independent['ok']:
+                reason=episode.get('reason') or independent.get('reason','EPISODIC_SECOND_READER_OUTSIDE')
+                return {**_no(reason),'information_request':episode.get('information_request') or independent.get('information_request'),
+                        'verification_evidence':{'input_coverage':independent}}
+            from tukuyo_g4.solve import solve as solve_episode_fpl
+            from tukuyo_g4.fpl import fmt as exact_number
+            solved=solve_episode_fpl(episode['spec'])
+            if not solved['ok']:return {**_no('EPISODIC_FORMAL_'+solved['reason']),'verification_evidence':{'input_coverage':independent}}
+            answer=exact_number(solved['answer'])
+            proof={'kind':'episodic_quantity','source_query':str(query),'spec':episode['spec'],'values':{k:exact_number(v) for k,v in solved['values'].items()}}
+            r=_yes(answer,proof,.93)
+            if r.get('answer') is not None:r.update(explanation='人物・品物・時点を分けて在庫と移動を追跡し、別の入力解析で再計算しました。',verification_evidence={'input_coverage':check_episode_input(str(query),answer,episode['spec']['episodic_program'])})
+            return r
+    if formal_task is None:
         from .semantic_coverage import quantity_scope
         scope=quantity_scope(query)
         if scope is not None:return {**_no(scope['reason']),'verification_evidence':{'input_coverage':scope}}

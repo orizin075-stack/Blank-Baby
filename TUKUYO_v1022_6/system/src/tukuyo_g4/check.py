@@ -293,6 +293,16 @@ def check(spec,values):
         if i in covered or i in unused or N.optional(n,text):continue
         fails.append('NUMBER_NOT_ACCOUNTED:'+n.raw)
     ask=spec.get('ask')
+    if 'episodic_program' in spec:
+        from .episodic_verify import inspect as verify_episode
+        uc=verify_episode(text,fmt(v[ask]) if ask in v else None,spec['episodic_program'])
+        if not uc.get('recognized') or not uc['ok']:fails.append(uc.get('reason','EPISODIC_INPUT_OUTSIDE_GRAMMAR'))
+        if spec.get('answer_unit')!=spec['episodic_program'].get('query',{}).get('unit'):fails.append('EPISODIC_ANSWER_UNIT')
+    else:
+        from .quantity_scope import inspect
+        uc=inspect(text,spec['quantities'],spec['facts'],ask)
+    if not uc['ok']:fails.append('UNKNOWN_QUANTITY_NOT_ACCOUNTED')
+    out['unknown_quantity_coverage']=uc
     out.update({'ok':not fails,'answer':fmt(v[ask]) if ask in v else None,'unit':qmeta.get(ask,{}).get('unit',''),
                 'covered':sorted(nums[i].raw for i in covered),'unused':sorted({nums[i].raw for i in unused})})
     return out

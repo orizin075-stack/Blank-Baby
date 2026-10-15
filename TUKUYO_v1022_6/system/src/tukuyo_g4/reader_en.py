@@ -2698,6 +2698,20 @@ def finish(st,p,target,noun,ask):
     for n in st.nums:
         if n.start in p.used or N.optional(n,st.t) or n.start in out_pos:continue
         no('UNREAD_NUMBER:'+n.raw)
+    for f in st.frames:
+        q=f.get('_q')
+        if f.m is None and q in p.qs:
+            p.qs[q]['unknown_source']={'start':st.t.find(f.span),'text':f.span}
+    bound={m.group(1) for f in p.facts if (m:=re.match(r'^([a-z_][a-z0-9_]*)\s*=\s*\d+(?:\.\d+)?\s*$',f['eq']))}
+    for name,q in p.qs.items():
+        if name in bound or 'unknown_source' in q:continue
+        for f in p.facts:
+            span=f.get('span','')
+            if not re.search(r'\b'+re.escape(name)+r'\b',f['eq']):continue
+            for m in re.finditer(r'\b(?:some|several|(?:a\s+)?few)\s+(?:more\s+)?([a-z]+)',span,re.I):
+                if sing(m.group(1).lower())==q['unit']:
+                    q['unknown_source']={'start':st.t.find(span),'text':span};break
+            if 'unknown_source' in q:break
     spec={'schema':'tukuyo.g4.fpl/1','lang':'en','text':st.t,'quantities':list(p.qs.values()),'facts':p.facts,'ask':target,
           'answer_unit':noun or '','unused':unused,'reader':'tukuyo.g4.reader_en/3:'+p.name+('+compose' if getattr(st,'composed',False) else '')}
     return {'spec':spec}

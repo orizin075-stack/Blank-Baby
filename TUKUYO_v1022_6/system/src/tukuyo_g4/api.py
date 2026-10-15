@@ -58,6 +58,9 @@ def _input_coverage(text,answer,proof=None,mine=False):
     learned wording, the v1022 core: mine=True) a refusal for one of NOT_FOR_OWN_READINGS is set aside (kept in
     'set_aside'); every other check applies, the event-scope guard ('3個食べたわけではない') and an asked entity that is
     not the one declared ('4 red balls and 6 blue apples ... red balls in total') among them"""
+    from .episodic_verify import inspect as episodic_inspect
+    episodic=episodic_inspect(text,answer)
+    if episodic.get('recognized'):return episodic
     from tukuyo_v1022.input_audit import inspect
     coverage=inspect(text,answer,proof)
     # The older subset parser recognizes a narrow declaration grammar. A
@@ -163,8 +166,12 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
         elif t:
             spec=instantiate(t,text)
             if spec:readings.append(evaluate(spec,'learned'));readings[-1]['template']=store.key_of(text);tukuyo_ok|=readings[-1]['ok']
-    if v1022 is not None:readings.append(v1022);tukuyo_ok|=v1022['ok']
-    if JA.search(text) and data is not None and v1022 is None:readings.append(_v1022(data,text));tukuyo_ok|=readings[-1]['ok']
+    # v1022.8 (fused): a reading of the v1022 core made by the episodic reader is the same generator as the own
+    # reader's episodic reading, so it is not counted as a second, independent reading
+    if v1022 is not None and v1022.get('proof_kind')!='episodic_quantity':readings.append(v1022);tukuyo_ok|=v1022['ok']
+    if JA.search(text) and data is not None and v1022 is None:
+        old=_v1022(data,text)
+        if old.get('proof_kind')!='episodic_quantity':readings.append(old);tukuyo_ok|=old['ok']
     # its own reader, in English and (v1022.8.0) in Japanese (reader_ja): a Japanese problem the v1022 core also reads
     # is answered only when both readings agree
     own=_own(text)
@@ -230,7 +237,12 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
          'readings':[{k:v for k,v in r.items() if k not in ('answer',)} for r in readings]}
     if contested:out['template_contested']=contested
     if self_checks:out['self_checks']=self_checks
-    if not good:return {**out,'reason':'NO_VERIFIED_READING' if readings else 'NOT_READ'}
+    if not good:
+        from .episodic_verify import inspect as inspect_episode
+        epistemic=inspect_episode(text)
+        if epistemic.get('recognized') and not epistemic['ok']:
+            return {**out,'reason':epistemic['reason'],'information_request':epistemic.get('information_request'),'input_coverage':epistemic}
+        return {**out,'reason':'NO_VERIFIED_READING' if readings else 'NOT_READ'}
     vals={r['answer'] for r in good}
     if len(vals)>1:
         reason='DISAGREE:'+','.join(sorted(fmt(v) for v in vals))
@@ -273,6 +285,10 @@ def solve(text,llm='auto',data=None,learn=True,v1022=None,order=None):
             out['readings']=[{k:v for k,v in r.items() if k not in ('answer',)} for r in readings]
     if coverage.get('recognized') and not coverage['ok']:
         return {**out,'reason':coverage['reason'],'input_coverage':coverage,'withheld':g['value']}
+    if coverage.get('recognized') and coverage.get('program') and g.get('unit'):
+        expected_unit=coverage['program']['query']['unit']
+        if _different_things(g['unit'],expected_unit):
+            return {**out,'reason':'EPISODIC_ANSWER_UNIT_MISMATCH','input_coverage':coverage,'withheld':g['value']}
     if mine and llms and data is not None:
         # a parent read it the same way, and the answer stands: its own way of reading held up
         out['self_checks']=self_checks+[{'skill':r['skill'],'held':True} for r in good if not r['route'].startswith('llm') and r.get('skill')]
@@ -327,7 +343,7 @@ def think(data,text,base,llm='auto',learn=True,order=None):
     # A new reading must not rescue a refusal about unresolved event scope.
     from tukuyo_v1022.semantic_coverage import quantity_scope
     scope=quantity_scope(text)
-    if scope is not None:
+    if scope is not None and (base.get('proof') or {}).get('kind')!='episodic_quantity':
         return {**base,'ok':True,'answer':None,'confidence':0.,'uncertain':True,
                 'recognized':True,'reason':scope['reason'],'proof':None,
                 'verification_evidence':{'input_coverage':scope}}
