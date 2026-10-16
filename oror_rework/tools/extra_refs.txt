@@ -61,3 +61,16 @@ net/minecraft/ChatFormatting
 	SF AQUA Lnet/minecraft/ChatFormatting;
 	SF LIGHT_PURPLE Lnet/minecraft/ChatFormatting;
 	SF GRAY Lnet/minecraft/ChatFormatting;
+# Sculpted character meshes (RigModel): vertex emission as in ModelPart.Cube / Iron's Spells 1.21.1 renderers
+com/mojang/blaze3d/vertex/PoseStack
+	VM last ()Lcom/mojang/blaze3d/vertex/PoseStack$Pose;
+com/mojang/blaze3d/vertex/PoseStack$Pose
+	VM pose ()Lorg/joml/Matrix4f;
+	VM normal ()Lorg/joml/Matrix3f;
+com/mojang/blaze3d/vertex/VertexConsumer
+	VM addVertex (FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+	VM setColor (I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+	VM setUv (FF)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+	VM setOverlay (I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+	VM setLight (I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+	VM setNormal (FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;

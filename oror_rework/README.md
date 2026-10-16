@@ -1,7 +1,7 @@
-# OROR War × Nightfall — rework workspace (v0.15.0)
+# OROR War × Nightfall — rework workspace (v0.15.1)
 
-Release: `dist/OROR_War_Nightfall_v0.15.0_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.15.0_JA.md`, the list of all 205 relic arts.
+Release: `dist/OROR_War_Nightfall_v0.15.1_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.15.1_JA.md`, the list of all 205 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates
@@ -22,6 +22,12 @@ Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.15.0_JA
 - `java/compile.sh` compiles `java/src` against stubs; new Minecraft refs must be listed in `java/allow.txt` and
   `tools/extra_refs.txt` (hand-checked against 1.21.1).
 - `tools/package.py <workspace> <out> <version>` builds the jar and the import zip.
+
+## Sculpted characters (work in progress, not in the release yet)
+- `java/src/jp/oror/reborn/client/RigModel.java` reads an optional `meshes/<key>.bin` per rig: smooth per-vertex-normal
+  quads attached to the rig bones (plus the emissive subset for the glow pass); blink / knee / elbow animations.
+- `tools/mc/sculpt.py` (lofts, rounded boxes, relief plates, UV-space baking with ambient occlusion, mesh export),
+  `spaint.py` (painters), `figure.py` (humanoid builder), `wings3d.py`, `trinkets.py`, `chars3d.py`, `build3d.py <out> [names]`.
 
 ## Characters
 - `tools/mc/` (chars.py, creatures.py, humanoid.py, paint.py) — character rigs and textures; `build.py <out>` writes

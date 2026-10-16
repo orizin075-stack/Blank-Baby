@@ -37,7 +37,7 @@ def build_jar(S, out, version):
                 z.write(entries[rel], rel)
     return out
 
-def relic_guide(S):
+def relic_guide(S, version):
     sys.path.insert(0, os.path.join(S, 'tools', 'mc'))
     import relic_arts as R
     import relic_arts_a, relic_arts_b, relic_arts_c   # noqa: F401
@@ -52,7 +52,7 @@ def relic_guide(S):
         if r['character'] not in chars:
             chars.append(r['character'])
     slot_ja = {'weapon': '武器', 'focus': '秘具', 'charm': '護符', 'legend': '伝説', 'relic_weapon': '残響（ダンジョン聖遺物）'}
-    out = ['# 聖遺物アーツ一覧（v0.15.0）', '',
+    out = [f'# 聖遺物アーツ一覧（v{version}）', '',
            '全164の聖遺物と41のダンジョン聖遺物（残響）それぞれに固有の効果があります。',
            '右クリックで「使用」効果、手（メイン・オフハンド）に持っている間は「所持中」効果、武器で殴ると「命中時」効果が発動します。',
            '武器・伝説・残響はすべて3Dモデル（手に持つと立体表示）です。秘具・護符も3Dモデルになりました。', '']
@@ -74,7 +74,7 @@ def build_zip(S, jar, out, version):
     man = json.load(open(os.path.join(src, 'manifest.json'), encoding='utf-8'))
     man['version'] = version
     jar_name = os.path.basename(jar)
-    guide = relic_guide(S)
+    guide = relic_guide(S, version)
     notes = open(os.path.join(S, 'tools', 'CHANGES_JA.md'), encoding='utf-8').read() if os.path.exists(os.path.join(S, 'tools', 'CHANGES_JA.md')) else ''
     with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         z.writestr('manifest.json', json.dumps(man, ensure_ascii=False, indent=2))

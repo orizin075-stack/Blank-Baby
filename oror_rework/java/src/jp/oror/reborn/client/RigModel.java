@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,11 +25,16 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 /**
  * Data-driven model: bones, cubes and animation tags come from assets/oror_supreme_bosses/rigs.json.
  * Bones form a real hierarchy (hair, horns and halos follow the head; sleeves and weapons follow the arms)
  * and every cube has its own UV box, so textures can carry faces, hair strands and clothing detail.
+ * A rig may also name a sculpted mesh (assets/oror_supreme_bosses/meshes/<name>.bin): smooth, per-vertex-normal
+ * quads attached to the same bones, drawn like ModelPart cubes so every animation tag still applies.
  */
 public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
     private static final Map<String, Rig> RIGS = load();
@@ -44,6 +51,9 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
     private final List<ModelPart> chainLeft = new ArrayList<>();
     private float reachRight = 10.0F;
     private float reachLeft = 10.0F;
+    private MeshNode[] meshRoots;
+    private float[] scratch = new float[0];
+    private final Vector3f tmp = new Vector3f();
 
     private static Map<String, Rig> load() {
         try (InputStream in = RigModel.class.getResourceAsStream("/assets/oror_supreme_bosses/rigs.json")) {
@@ -110,8 +120,164 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
             }
         }
 
-        chain(parentOf, "arm_r", this.chainRight);
-        chain(parentOf, "arm_l", this.chainLeft);
+        String handR = "arm_r";
+        String handL = "arm_l";
+        for (Bone b : rig.bones) {
+            if (b.name.equals("fore_r") && b.p != null && b.p.containsKey("reach")) {
+                handR = "fore_r";
+                this.reachRight = b.p.get("reach");
+            }
+
+            if (b.name.equals("fore_l") && b.p != null && b.p.containsKey("reach")) {
+                handL = "fore_l";
+                this.reachLeft = b.p.get("reach");
+            }
+        }
+
+        chain(parentOf, handR, this.chainRight);
+        chain(parentOf, handL, this.chainLeft);
+        if (rig.mesh != null) {
+            this.meshRoots = loadMesh(rig, this.parts);
+        }
+    }
+
+    /**
+     * Reads meshes/<name>.bin: per bone (rig order) its vertices (1/32 px, uv / 65535, normal / 127), its quads and
+     * the subset of quads that carry emissive texels (the only ones the glow pass has to draw).
+     */
+    private static MeshNode[] loadMesh(Rig rig, Map<String, ModelPart> parts) {
+        String path = "/assets/oror_supreme_bosses/meshes/" + rig.mesh + ".bin";
+        try (InputStream raw = RigModel.class.getResourceAsStream(path)) {
+            if (raw == null) {
+                throw new IllegalStateException("Missing " + path);
+            }
+
+            DataInputStream in = new DataInputStream(new BufferedInputStream(raw));
+            if (in.readInt() != 0x4F524D33 || in.readInt() != rig.bones.size()) {
+                throw new IllegalStateException("Bad mesh " + path);
+            }
+
+            Map<String, MeshNode> nodes = new HashMap<>();
+            List<MeshNode> roots = new ArrayList<>();
+            List<MeshNode> order = new ArrayList<>();
+            for (Bone b : rig.bones) {
+                int vc = in.readInt();
+                float[] v = new float[vc * 8];
+                int[] q = new int[0];
+                int[] g = new int[0];
+                if (vc > 0) {
+                    for (int i = 0; i < vc; i++) {
+                        int o = i * 8;
+                        v[o] = in.readShort() / 512.0F;
+                        v[o + 1] = in.readShort() / 512.0F;
+                        v[o + 2] = in.readShort() / 512.0F;
+                        v[o + 3] = in.readChar() / 65535.0F;
+                        v[o + 4] = in.readChar() / 65535.0F;
+                        v[o + 5] = in.readByte() / 127.0F;
+                        v[o + 6] = in.readByte() / 127.0F;
+                        v[o + 7] = in.readByte() / 127.0F;
+                    }
+
+                    q = new int[in.readInt() * 4];
+                    for (int i = 0; i < q.length; i++) {
+                        q[i] = in.readChar();
+                    }
+
+                    g = new int[in.readInt() * 4];
+                    for (int i = 0; i < g.length; i++) {
+                        g[i] = in.readChar();
+                    }
+                }
+
+                MeshNode n = new MeshNode(parts.get(b.name), v, q, g);
+                nodes.put(b.name, n);
+                order.add(n);
+                if (b.parent == null) {
+                    roots.add(n);
+                } else {
+                    nodes.get(b.parent).children.add(n);
+                }
+            }
+
+            for (int i = order.size() - 1; i >= 0; i--) {
+                MeshNode n = order.get(i);
+                n.children.removeIf(c -> !c.used);
+                n.used = n.quads.length > 0 || !n.children.isEmpty();
+            }
+
+            roots.removeIf(n -> !n.used);
+            return roots.toArray(new MeshNode[0]);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unreadable " + path, e);
+        }
+    }
+
+    private void renderMeshes(PoseStack p, VertexConsumer v, int light, int overlay, int color, boolean glow) {
+        if (this.meshRoots == null) {
+            return;
+        }
+
+        p.pushPose();
+        this.root.translateAndRotate(p);
+        for (MeshNode n : this.meshRoots) {
+            this.draw(n, p, v, light, overlay, color, glow);
+        }
+
+        p.popPose();
+    }
+
+    private void draw(MeshNode n, PoseStack p, VertexConsumer v, int light, int overlay, int color, boolean glow) {
+        ModelPart part = n.part;
+        if (part.xScale == 0.0F && part.yScale == 0.0F && part.zScale == 0.0F) {
+            return;
+        }
+
+        p.pushPose();
+        part.translateAndRotate(p);
+        int[] quads = glow ? n.glowQuads : n.quads;
+        if (quads.length > 0) {
+            PoseStack.Pose pose = p.last();
+            Matrix4f m = pose.pose();
+            Matrix3f nm = pose.normal();
+            float[] d = n.verts;
+            int count = d.length / 8;
+            if (this.scratch.length < count * 6) {
+                this.scratch = new float[count * 6];
+            }
+
+            float[] out = this.scratch;
+            Vector3f t = this.tmp;
+            for (int i = 0; i < count; i++) {
+                int k = i * 8;
+                int o = i * 6;
+                m.transformPosition(d[k], d[k + 1], d[k + 2], t);
+                out[o] = t.x;
+                out[o + 1] = t.y;
+                out[o + 2] = t.z;
+                nm.transform(d[k + 5], d[k + 6], d[k + 7], t);
+                t.normalize();
+                out[o + 3] = t.x;
+                out[o + 4] = t.y;
+                out[o + 5] = t.z;
+            }
+
+            for (int q : quads) {
+                int k = q * 8;
+                int o = q * 6;
+                v.addVertex(out[o], out[o + 1], out[o + 2])
+                    .setColor(color)
+                    .setUv(d[k + 3], d[k + 4])
+                    .setOverlay(overlay)
+                    .setLight(light)
+                    .setNormal(out[o + 3], out[o + 4], out[o + 5]);
+            }
+        }
+
+        for (MeshNode c : n.children) {
+            this.draw(c, p, v, light, overlay, color, glow);
+        }
+
+        p.popPose();
     }
 
     private void chain(Map<String, String> parentOf, String end, List<ModelPart> out) {
@@ -269,6 +435,23 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
                     }
                     break;
                 }
+                case "blink": {
+                    // eyelids: shown for three ticks every 'every' ticks, offset per entity
+                    int every = Math.max(20, (int)a.f("every", 90.0F));
+                    float t = (age + (float)Math.floorMod(System.identityHashCode(e), every)) % (float)every;
+                    float s = t < 3.0F ? 1.0F : 0.0F;
+                    part.xScale = s;
+                    part.yScale = s;
+                    part.zScale = s;
+                    break;
+                }
+                case "knee":
+                    part.xRot = part.xRot + Math.max(0.0F, Mth.cos(swing * 0.6662F + (a.left ? (float) Math.PI : 0.0F))) * amount * 0.9F;
+                    break;
+                case "elbow":
+                    part.xRot = part.xRot - Math.max(0.0F, -Mth.cos(swing * 0.6662F + (a.left ? 0.0F : (float) Math.PI))) * amount * 0.5F
+                        - (action > 0 ? 0.25F : 0.0F);
+                    break;
                 case "jaw":
                     part.xRot = part.xRot + Mth.sin(age * 0.05F) * 0.03F + (action > 0 ? 0.25F : 0.0F) + pulse * 0.45F;
                     break;
@@ -342,10 +525,13 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
 
     public void renderGlow(PoseStack p, VertexConsumer v, int overlay) {
         this.root.render(p, v, 15728880, overlay, -1);
+        this.renderMeshes(p, v, 15728880, overlay, -1, true);
     }
 
     public void renderToBuffer(PoseStack p, VertexConsumer v, int light, int overlay, int color) {
-        this.root.render(p, v, light, overlay, this.tint == -1 ? color : multiply(color, this.tint));
+        int c = this.tint == -1 ? color : multiply(color, this.tint);
+        this.root.render(p, v, light, overlay, c);
+        this.renderMeshes(p, v, light, overlay, c, false);
     }
 
     private static int multiply(int a, int b) {
@@ -375,8 +561,25 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
         }
     }
 
+    private static final class MeshNode {
+        final ModelPart part;
+        final float[] verts;
+        final int[] quads;
+        final int[] glowQuads;
+        final List<MeshNode> children = new ArrayList<>();
+        boolean used;
+
+        MeshNode(ModelPart part, float[] verts, int[] quads, int[] glowQuads) {
+            this.part = part;
+            this.verts = verts;
+            this.quads = quads;
+            this.glowQuads = glowQuads;
+        }
+    }
+
     static final class Rig {
         String texture;
+        String mesh;
         int[] size;
         float height;
         boolean translucent;

@@ -49,3 +49,19 @@ net/minecraft/sounds/SoundEvents.ENDER_DRAGON_GROWL:Lnet/minecraft/sounds/SoundE
 net/minecraft/ChatFormatting.AQUA:Lnet/minecraft/ChatFormatting;
 net/minecraft/ChatFormatting.LIGHT_PURPLE:Lnet/minecraft/ChatFormatting;
 net/minecraft/ChatFormatting.GRAY:Lnet/minecraft/ChatFormatting;
+# Sculpted meshes: PoseStack/VertexConsumer as used by Iron's Spells 1.21.1 renderers; JOML 1.10.5 (the version 1.21.1 ships) checked with javap
+com/mojang/blaze3d/vertex/PoseStack$Pose.normal()Lorg/joml/Matrix3f;
+com/mojang/blaze3d/vertex/PoseStack$Pose.pose()Lorg/joml/Matrix4f;
+com/mojang/blaze3d/vertex/PoseStack.last()Lcom/mojang/blaze3d/vertex/PoseStack$Pose;
+com/mojang/blaze3d/vertex/VertexConsumer.addVertex(FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+com/mojang/blaze3d/vertex/VertexConsumer.setColor(I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+com/mojang/blaze3d/vertex/VertexConsumer.setLight(I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+com/mojang/blaze3d/vertex/VertexConsumer.setNormal(FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+com/mojang/blaze3d/vertex/VertexConsumer.setOverlay(I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+com/mojang/blaze3d/vertex/VertexConsumer.setUv(FF)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+org/joml/Matrix3f.transform(FFFLorg/joml/Vector3f;)Lorg/joml/Vector3f;
+org/joml/Matrix4f.transformPosition(FFFLorg/joml/Vector3f;)Lorg/joml/Vector3f;
+org/joml/Vector3f.<init>()V
+org/joml/Vector3f.normalize()Lorg/joml/Vector3f;
+org/joml/Vector3f.x:F
+org/joml/Vector3f.z:F
