@@ -649,6 +649,9 @@ SURF.update({'face': s_face, 'lids': s_lids})
 # ------------------------------------------------------------------------------ dispatcher
 def paint_surf(s, ctx):
     rgb, alpha, glow = _paint_surf(s, ctx)
+    if s.kind != 'box' and s.mat is not None and s.mat.get('alpha') is not None:
+        a0 = s.mat['alpha'] / 255.0 if s.mat['alpha'] > 1 else s.mat['alpha']
+        alpha = (np.ones(rgb.shape[:2], np.float32) if alpha is None else alpha) * a0
     fn = s.info.get('alpha_fn')
     if fn is not None:
         a = fn(ctx)

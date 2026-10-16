@@ -690,6 +690,98 @@ class Humanoid:
             SC.crbox(self.hips, (0, y, -b - 0.18), (1.5, 1.1, 0.4), buckle, radius=0.2, name='buckle')
         return self
 
+    # ------------------------------------------------------------------ armour and garments over the body
+    def front_at(self, y, x=0.0):
+        """z of the body's front surface at height y (bust included)."""
+        a, b = self.ring_at(y)
+        yb = self.rings[4][0]
+        bump = self.T['bust'] * b * float(np.exp(-((y - yb) / 1.6) ** 2)) * (1.0 if abs(x) < a * 0.8 else 0.3)
+        return -(b + bump)
+
+    def breastplate(self, mat, y0=None, y1=None):
+        """Cuirass over the chest: the front half of the torso loft, raised and rimmed."""
+        y0 = self.rings[1][0] + 0.3 if y0 is None else y0
+        y1 = self.waist_y - 0.3 if y1 is None else y1
+        rr = [(y, a + 0.32, b + 0.32, e) for y, a, b, e in self.rings if y0 <= y <= y1]
+        if len(rr) < 2:
+            rr = [(y0,) + self.ring_at(y0, 0.32) + (2.6,), (y1,) + self.ring_at(y1, 0.32) + (2.4,)]
+        bust = self.T['bust']
+        yb = self.rings[4][0]
+        tcb = (yb - rr[0][0]) / max(1e-6, rr[-1][0] - rr[0][0])
+        def mod(th, t):
+            return 1 + bust * 0.75 * gauss(t, tcb, 0.25) * gauss(np.abs(th), 0.5, 0.5)
+        SC.sweep(self.torso, [(0, r[0], 0) for r in rr], [r[1] for r in rr], [r[2] for r in rr], mat, e=[r[3] for r in rr], k=18,
+                 caps=(None, None), arc_range=(-1.35, 1.35), mod=mod, name='breastplate', info={'hem': True}, td=4)
+        return self
+
+    def stole(self, mat, length=None):
+        """Priest's stole: a band from behind the neck over both shoulders, hanging straight down the front."""
+        L = (self.pelvis_y + 4.0 - self.top) if length is None else length
+        r1 = self.rings[1]
+        for sgn in (-1, 1):
+            x = sgn * 1.15
+            pts = [(sgn * 0.6, r1[0] - 0.35, 0.9), (sgn * 1.5, r1[0] + 0.05, -r1[2] * 0.7), (x, self.top + 2.2, self.front_at(self.top + 2.2, x) - 0.25),
+                   (x, self.waist_y, self.front_at(self.waist_y, x) - 0.3), (x * 1.05, self.top + L, self.front_at(self.waist_y, x) - 1.1)]
+            SC.sweep(self.torso, SC.resample(SC.bezier(*pts[:3], n=8).tolist() + pts[3:], 0.8), 0.6, 0.1, mat, e=3.0, k=8, up=(0, -0.2, -1),
+                     caps=('round', 'flat'), name='stole', info={'hem': True}, td=4)
+        return self
+
+    def fur_collar(self, mat, shoulders=True):
+        """Thick fur ruff round the neck and shoulders (and tufts over the shoulder joints)."""
+        r1, r2 = self.rings[1], self.rings[2]
+        fluffy = lambda th, t: 1 + 0.12 * np.cos(9 * th) * np.sin(math.pi * t)
+        SC.sweep(self.torso, [(0, r1[0] - 0.8, 0.1), (0, r1[0] + 0.1, 0.1), (0, r2[0] + 0.5, 0.15)],
+                 [r1[1] * 0.75 + 0.6, r1[1] + 0.9, r2[1] + 0.55], [r1[2] + 0.6, r1[2] + 0.95, r2[2] + 0.6], mat, e=2.4, k=36,
+                 caps=(None, None), mod=fluffy, name='fur_collar', info={'hem': False}, td=4)
+        if shoulders:
+            for arm in (self.arm_r, self.arm_l):
+                x = arm.pivot[0]
+                SC.torus(arm, (x, self.shoulder_y + 0.4, 0), self.T['r_up'][0] + 0.35, 0.5, mat, axis='y', k=8, n=16, name='fur')
+        return self
+
+    def hood(self, mat, trim=None, drape=True):
+        """Deep hood over the head: a rounded shell open at the face, with a drape down the back."""
+        H = self.hs / 2 + 0.95
+        y0, y1 = self.head_top - 1.0, self.chin_y + 1.2
+        ys = np.linspace(y0, y1, 6)
+        a = [H * (0.7 + 0.3 * math.sin(min(1.0, (y - y0) / (y1 - y0) * 2.2) * math.pi / 2)) for y in ys]
+        a[-1] = H * 0.85
+        b = [v + 0.1 for v in a]
+        SC.sweep(self.head, [(0, y, 0.35) for y in ys], a, b, mat, e=3.2, k=30, caps=('round', None), cap_len=1.0,
+                 arc_range=(0.72, 2 * math.pi - 0.72), name='hood', info={'hem': True}, td=4)
+        if trim:
+            # rim round the face opening
+            pts = []
+            for t in np.linspace(0, 1, 14):
+                y = y1 - (y1 - y0 - 1.6) * math.sin(t * math.pi)
+                side = -1 + 2 * t
+                pts.append((side * H * 0.66, y, -H * 0.72 + 0.35))
+            SC.sweep(self.head, pts, 0.28, 0.2, trim, k=6, caps=('round', 'round'), name='hood_rim', info={'hem': False}, td=4)
+        if drape:
+            zb = self.ring_at(self.top + 1.5)[1] + 0.5
+            SC.sweep(self.torso, [(0, y1 - 0.4, H * 0.7), (0, self.top + 1.0, zb + 0.4), (0, self.top + 4.5, zb + 0.6)],
+                     [H * 0.85, self.rings[2][1] + 0.4, self.rings[2][1] * 0.75], 0.22, mat, e=4, k=20, up=(0, 0, 1),
+                     caps=(None, None), off=lambda th, t: (0 * th, -1.2 * np.sin(th) ** 2 * (1 - t * 0.5)), name='hood_drape',
+                     info={'hem': True, 'hem_cut': 'point'}, td=4)
+        return self
+
+    def wreath(self, mat, blossoms=()):
+        """Circlet of leaves round the head (yggdrasil): a twisted vine ring with leaves and flowers."""
+        import trinkets as TK
+        H = self.hs / 2 + 0.55
+        y = self.head_top + 1.1
+        b = self.rig.bone('wreath', self.head, (0, y, 0))
+        SC.sweep(b, [(H * math.cos(a), y + 0.15 * math.sin(3 * a), H * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 40)[:-1]],
+                 0.35, None, mat, k=6, closed=True, up=(0, -1, 0), caps=None, name='wreath_vine', info={'hem': False}, td=4)
+        for i in range(12):
+            a = 2 * math.pi * i / 12
+            c = (H * 1.05 * math.cos(a), y - 0.2, H * 1.05 * math.sin(a))
+            TK.star_plate(b, c, 0.75, mat, shape='leaf', normal=(math.cos(a), 0, math.sin(a)))
+        for i, col in enumerate(blossoms):
+            a = -math.pi / 2 + (i - (len(blossoms) - 1) / 2) * 0.55
+            TK.sphere(b, (H * 1.12 * math.cos(a), y - 0.3, H * 1.12 * math.sin(a)), 0.42, M('gem', col, glow=False))
+        return b
+
     # ------------------------------------------------------------------ head accessories
     def horns(self, mat, kind='dragon', length=6.0, spread=0.35, base=1.5):
         top, hh, hw = self.head_top, self.hh, self.hw

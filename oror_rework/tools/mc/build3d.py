@@ -3,6 +3,7 @@
 Usage: python3 build3d.py <out_dir> [names...]
   out_dir/rigs.json, out_dir/meshes/<key>.bin, out_dir/textures/<tex>.png (+ _glow), out_dir/preview/<key>.png"""
 import sys, os, json, math
+from paint import M
 import numpy as np
 from PIL import Image, ImageDraw
 import sculpt as SC
@@ -31,17 +32,60 @@ def drop_props(rig):
         sc.surfs = [s for s in sc.surfs if s.bone.name not in gone]
     return len(gone)
 
+def ring_from_plane(b, o, s, mat):
+    """A painted ring on a flat box (halo, magic circle, rotor) becomes a real torus with spikes, spokes or a
+    star polygon, in the plane of the box."""
+    import trinkets as TK
+    i0 = int(np.argmin(s))
+    others = [s[i] for i in range(3) if i != i0]
+    c = o + s / 2
+    width = float(mat.get('width', 0.16))
+    R = min(others) / 2 * (1 - width * 0.5)
+    thick = max(0.2, R * width * 0.45)
+    axis = 'xyz'[i0]
+    m = dict(mat)
+    if mat.get('rainbow'):
+        m = M('rainbow', mat['color'])
+    SC.torus(b, tuple(c), R, thick, m, axis=axis, k=8, n=max(24, int(R * 6)), name='ring')
+    def on_plane(a, r):
+        u, v = [i for i in range(3) if i != i0]
+        p = c.copy()
+        p[u] += r * math.cos(a)
+        p[v] += r * math.sin(a)
+        return p
+    sp = int(mat.get('spikes', 0) or 0)
+    for k in range(sp):
+        a = 2 * math.pi * k / sp
+        p0, p1 = on_plane(a, R + thick * 0.5), on_plane(a, R + thick + 0.9 + 0.4 * (k % 2))
+        SC.sweep(b, [p0, p1], lambda t: thick * 0.9 * (1 - 0.9 * t), None, m, k=5, caps=('round', 'point'), name='ring_spike', info={'hem': False})
+    spokes = int(mat.get('spokes', 0) or 0)
+    for k in range(spokes):
+        a = 2 * math.pi * k / spokes
+        SC.sweep(b, [on_plane(a, R * 0.12), on_plane(a, R - thick)], thick * 0.6, None, m, k=6, caps=('round', 'round'), name='ring_spoke',
+                 info={'hem': False})
+    poly = int(mat.get('poly', 0) or 0)
+    for k in range(poly):
+        a0 = 2 * math.pi * k / poly - math.pi / 2
+        a1 = 2 * math.pi * ((k + 2) % poly) / poly - math.pi / 2
+        SC.sweep(b, [on_plane(a0, R * 0.96), on_plane(a1, R * 0.96)], thick * 0.5, None, m, k=5, caps=('round', 'round'), name='ring_star',
+                 info={'hem': False})
+
 def cubes_to_surfaces(rig):
-    """Explicit Bone.box() parts of a recipe become rounded boxes with the same box painters."""
+    """Explicit Bone.box() parts of a recipe become rounded boxes with the same box painters (painted rings on flat
+    boxes become real rings)."""
     n = 0
     for b in rig.bones:
         for c in b.cubes:
             o = np.array(b.pivot, float) + np.array(c.origin, float)
             s = np.array(c.size, float)
+            if c.mat.get('type') == 'ring' and (s < 0.05).sum() == 1:
+                ring_from_plane(b, o, s, c.mat)
+                n += 1
+                continue
             pos = [v for v in s if v > 0.05]
             r = min(0.8, 0.28 * min(pos)) if pos else 0.0
             if min(pos or [0]) <= 1.0:
-                r = min(r, 0.22)
+                r = 0.0
             SC.rbox(b, tuple(o), tuple(s), c.mat, radius=r, name=c.name or 'box', faces=c.faces, grow=c.grow)
             n += 1
         b.cubes = []

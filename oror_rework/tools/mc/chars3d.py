@@ -1,9 +1,12 @@
-"""Character recipes (Minecraft style). Appearance, weapons and props follow the setting texts,
-characters.json features and the relic list. Characters whose setting gives them a weapon hold it."""
+"""Character recipes for the sculpted figures (figure.Humanoid): Minecraft pixel face on a rounded-cube head, human
+proportions, clothing and accessories sculpted over the body. Appearance follows the setting texts and
+characters.json; the bosses hold their 3D relic items, so weapon props are not modelled here."""
 from rig import Rig
 from paint import M
 from figure import Humanoid, tail, wing, orbiters, ring_shape
 import props3d as P
+import sculpt as SC
+import trinkets as TK
 
 RECIPES = {}
 def recipe(fn):
@@ -30,9 +33,10 @@ def kokuhaku():
     b, at = P.hand(h, 'r', P.POINT_FORWARD)
     P.katana(b, at, M('metal', '#b8c0cc', edge_glow='#7fd6ff'), M('metal', '#8a7a52'), M('cloth', '#1c2440', accent='#c8d8ff', pattern='stripes'), length=16)
     # 無音の鞘 at the left hip
-    saya = r.bone('saya', h.hips, (4.5, h.hip_y - 2, -1), rot=(1.0, 0.1, -0.25))
-    saya.box((4, h.hip_y - 2, -1.5), (1, 2, 1), M('metal', '#d9c27a'), name='koiguchi')
-    saya.box((4, h.hip_y, -1.5), (1, 14, 1), M('metal', '#1b2238', edge_glow='#5fb0e0'), name='scabbard')
+    saya = r.bone('saya', h.hips, (3.4, h.pelvis_y, -0.6), rot=(1.0, 0.1, -0.25))
+    SC.sweep(saya, [(3.4, h.pelvis_y - 0.6, -0.6), (3.4, h.pelvis_y + 11, -0.6)], [0.42, 0.36], 0.32, M('metal', '#1b2238', edge_glow='#5fb0e0'),
+             k=8, caps=('flat', 'round'), name='scabbard', info={'hem': False})
+    SC.torus(saya, (3.4, h.pelvis_y - 0.3, -0.6), 0.45, 0.16, M('metal', '#d9c27a'), axis='y', k=6, n=12, name='koiguchi')
     return r
 
 @recipe
@@ -83,7 +87,8 @@ def berit():
     h.coat_tails(coat, length=11)
     h.belt(M('cloth', '#5a4630'))
     for i, col in enumerate(['#6fe3a8', '#e36fb2', '#6fb0e3']):
-        h.hips.box((-3 + i * 2, h.hip_y - 1, -2.75), (1, 2, 1), M('gem', col), name='vial')
+        y = h.pelvis_y + 1.0
+        TK.vial(h.hips, (-1.6 + i * 1.6, y, -h.ring_at(y)[1] - 0.75), M('gem', '#d8f0ff', glow=False), M('energy', col), r=0.42, L=1.5)
     h.head_cube({'iris': '#e09a2a', 'iris2': '#fff0a0', 'mouth': 'smirk'})
     h.hair('#4a5060', style='long', length=13, tip='#b8c0cc', ponytail=True, bangs='messy')
     b, at = P.hand(h, 'l', (0.6, 0, 0))
@@ -122,13 +127,14 @@ def valeria():
     h.belt(M('cloth', '#6a4a2a'), buckle=M('metal', '#e7a444'))
     h.cuffs(M('metal', '#8a7a64', rivets=True), at=7)
     for i in range(3):
-        h.hips.box((-3.5 + i * 2.5, h.hip_y - 1, -2.75), (1, 3, 1), M('metal', '#9aa2ae'), name='tool')
+        y = h.pelvis_y + 1.3
+        SC.crbox(h.hips, (-2.0 + i * 2.0, y, -h.ring_at(y)[1] - 0.6), (0.6, 2.2, 0.6), M('metal', '#9aa2ae'), radius=0.2, name='tool')
     h.head_cube({'iris': '#c87a2a', 'mouth': 'smile'})
     h.hair('#1a2030', style='long', length=12, tip='#2a3448', ponytail=True, bangs='swept')
     h.jacket(M('cloth', '#8a7656', accent='#4a3a2a', pattern='marks'), rows=12)
     h.coat_tails(M('cloth', '#8a7656', accent='#4a3a2a', trim=1), length=12)
     for sx in (-1, 1):
-        h.head.box((sx * 4.25 - 0.5, h.head_top + 5, -0.5), (1, 2, 1), M('gem', '#ffbf5a'), name='earring')
+        TK.crystal(h.head, (sx * (h.hs / 2 + 0.25), h.head_top + h.hs * 0.85, 0.0), 0.3, M('gem', '#ffbf5a'))
     b, at = P.hand(h, 'r', P.POINT_FORWARD)
     P.hammer(b, at, M('metal', '#9aa2ae', rivets=True, accent='#e7a444', pattern='band'), M('wood', '#6a4a2a'))
     orbiters(r, h.torso, (0, h.top, 0), M('metal', '#c8b080', rivets=True), count=2, radius=10, size=2, speed=0.04, name='drones')
@@ -146,12 +152,15 @@ def huang_linghua():
            arms_mat=M('cloth', '#17494c', accent='#d8b754', trim=2))
     h.robe(teal, flare=2.0, split=True)
     h.shoulder_pads(M('metal', '#d8b754', rivets=True))
-    h.torso.box((-3, h.top + 2, -2.75), (6, 3, 1), M('metal', '#d8b754', rivets=True), name='breastplate')
+    h.breastplate(M('metal', '#d8b754', rivets=True, accent='#8a6a20', pattern='dragon'))
     h.head_cube({'iris': '#c870a8', 'iris2': '#ffd0f0', 'style': 'calm'})
     h.hair('#fbfbff', style='very_long', length=19, tip='#f0e8f8', bangs='blunt')
     for sx in (-1, 1):
-        cord = r.bone('cord_' + ('r' if sx < 0 else 'l'), h.head, (sx * 4.5, h.head_top + 4, 1), anim='hair', amp=0.05, speed=0.08, phase=sx)
-        cord.box((sx * 4.5 - 0.5, h.head_top + 4, 0.5), (1, 7, 1), M('cloth', '#d8303a', accent='#ffd36b', trim=2), name='cord')
+        cx = sx * (h.hs / 2 + 0.6)
+        cord = r.bone('cord_' + ('r' if sx < 0 else 'l'), h.head, (cx, h.head_top + 2.5, 1), anim='hair', amp=0.05, speed=0.08, phase=sx)
+        SC.sweep(cord, SC.bezier((cx, h.head_top + 2.3, 1), (cx + sx * 0.4, h.head_top + 5.5, 1.3), (cx + sx * 0.2, h.head_top + 9, 1.1), n=8),
+                 0.3, None, M('cloth', '#d8303a', accent='#ffd36b'), k=6, caps=('round', 'round'), name='cord', info={'hem': False})
+        TK.sphere(cord, (cx + sx * 0.2, h.head_top + 9.4, 1.1), 0.45, M('cloth', '#ffd36b'))
     h.horns(M('horn', '#23202a', tip='#e8c460', glow=True), kind='dragon', length=9, spread=0.45, base=2)
     tail(r, h.hips, (0, h.hip_y - 1, 2), M('scale', '#efedf4'), segments=6, length=3, width=3, taper=0.84, droop=0.18,
          tip_mat=M('scale', '#d8b754'))
@@ -226,8 +235,6 @@ def taika():
     h = Humanoid(r, 'man', skin='#efd0b8', accent='#e44c49')
     h.body(top_mat=M('skin', '#efd0b8'), bottom_mat=M('cloth', '#2a1a24', accent='#e44c49', pattern='trim'), legs_mat=M('cloth', '#2a1a24'),
            boots_mat=M('cloth', '#e8e0d8'), arms_mat=M('skin', '#efd0b8'), hands_mat=M('cloth', '#e8e0d8', accent='#e44c49', pattern='stripes'), neck=None)
-    h.torso.box((-3.5, h.top + 2, -2.25), (7, 2, 0), M('skin', '#dcb69c'), name='pecs')
-    h.torso.box((-2, h.top + 5, -2.25), (4, 3, 0), M('skin', '#dcb69c', pattern='band', accent='#c49a80'), name='abs')
     h.obi(M('cloth', '#e44c49', accent='#ffd36b', pattern='band'), knot=M('cloth', '#e44c49'))
     h.skirt(M('cloth', '#40283a', accent='#e44c49', trim=2), length=9, flare=1.2, tiers=1)
     h.cuffs(M('cloth', '#e44c49', accent='#ffd36b'), at=8)
@@ -264,7 +271,7 @@ def savior():
            boots_mat=M('cloth', '#d8c890'), arms_mat=M('cloth', '#f8f9fc', accent='#dac36c', trim=2), hands_mat=M('cloth', '#ffffff'), neck=None)
     h.robe(robe, flare=2.2)
     h.cape(M('cloth', '#e8ecf6', accent='#dac36c', trim=2), length=19)
-    h.torso.box((-3, h.top, -2.5), (6, 9, 0), M('cloth', '#dac36c', accent='#ffffff', pattern='cross'), name='stole')
+    h.stole(M('cloth', '#dac36c', accent='#ffffff', pattern='cross', trim=2))
     h.head_cube({'iris': '#5a98d8', 'style': 'calm', 'mouth': 'smile'})
     h.hair('#e9eaf2', style='short', length=7, bangs='parted')
     h.halo(M('ring', '#ffe9a0', width=0.16), radius=5, y=h.head_top - 2.5, tilt=0.2)
@@ -282,9 +289,7 @@ def gokuka():
     h.body(top_mat=goo, bottom_mat=goo, legs_mat=M('scale', '#3a2a4a'), boots_mat=M('horn', '#2a1a2a', tip='#af55bb'),
            arms_mat=M('scale', '#3a2a4a'), hands_mat=M('horn', '#2a1a2a', tip='#e070f0', glow=True), neck=None)
     h.skirt(goo, length=12, flare=2.0, tiers=1)
-    h.torso.box((-4, h.top, -2), (8, 2, 4), M('fur', '#4a3a40', tip='#2a2030'), grow=0.8, name='fur_collar', faces={'bottom': None})
-    for arm in (h.arm_r, h.arm_l):
-        arm.box((arm.pivot[0] - 1.5, h.top, -2), (3, 2, 4), M('fur', '#4a3a40', tip='#2a2030'), grow=0.7, name='fur')
+    h.fur_collar(M('fur', '#4a3a40', tip='#2a2030'))
     h.head_cube({'iris': '#c060e0', 'iris2': '#ffb0ff', 'style': 'slit', 'mouth': 'fang', 'glow_eyes': True, 'marks': '#af55bb'})
     h.hair('#322439', style='very_long', length=18, tip='#af55bb', bangs='messy')
     h.horns(M('horn', '#2a1a2a', tip='#af55bb', glow=True), kind='dragon', length=7, spread=0.5, base=2)
@@ -422,7 +427,7 @@ def magna_mater():
     h.head_cube({'iris': '#c8a030', 'iris2': '#fff0a0', 'style': 'slit', 'mouth': 'smile'})
     h.hair('#749a66', style='very_long', length=20, tip='#a8d080', bangs='parted')
     for i, col in enumerate(['#ff9ab8', '#fff0a0', '#ffffff']):
-        h.head.box((-3.5 + i * 3, h.head_top - 1, -4.75), (1, 1, 1), M('gem', col, glow=False), name='bloom')
+        TK.sphere(h.head, (-2.2 + i * 2.2, h.head_top + 0.2, -h.hs / 2 - 0.55), 0.45, M('gem', col, glow=False), name='bloom')
     h.ears('elf', length=3)
     for side in ('r', 'l'):
         b, (x, y, z) = P.hand(h, side, (0.15, 0, 0))
@@ -444,9 +449,8 @@ def ouroboros():
     h.head_cube({'iris': '#d8a840', 'iris2': '#fff0b0', 'style': 'calm', 'mouth': 'smile'})
     h.hair('#7a8092', style='long', length=10, tip='#a0a8b8')
     wheel = r.bone('wheel', h.torso, (0, h.top + 4, 5), anim='spin', ax=2, speed=0.02, cast=0.0)
-    wheel.box((-11, h.top - 7, 5), (22, 22, 0), M('ring', '#b08a48', width=0.09, inner=0.84, spikes=12, spokes=8, glow_amount=0.35), name='wheel_front')
-    wheel.box((-7, h.top - 3, 5.25), (14, 14, 0), M('ring', '#8ab0e8', width=0.07, inner=0.86, glow_amount=0.6), name='wheel_runes')
-    wheel.box((-1.5, h.top + 2.5, 4.5), (3, 3, 1), M('gem', '#dfb971'), name='hub')
+    TK.wheel(wheel, (0, h.top + 4, 5), 8.5, M('metal', '#b08a48', accent='#6a4a20', pattern='filigree'), runes=M('energy', '#8ab0e8'),
+             hub=M('gem', '#dfb971'))
     return r
 
 @recipe
@@ -464,9 +468,12 @@ def miyohime():
     h.head_cube({'iris': '#b070ff', 'iris2': '#7ffff0', 'style': 'big', 'mouth': 'smile', 'glow_eyes': True, 'marks': ['forehead']})
     h.hair('#dde2f0', style='very_long', length=18, tip='#c890ff', bangs='blunt')
     crown = r.bone('dread_crown', h.head, (0, h.head_top - 3, 0), anim='float', amp=0.4, speed=0.05)
-    crown.box((-4, h.head_top - 3, -4), (8, 0, 8), M('ring', '#3a2a4a', width=0.25, spikes=7), name='crown')
+    from figure import halo_ring
+    halo_ring(crown, (0, h.head_top - 1.6, 0), h.hs * 0.42, M('metal', '#3a2a4a', width=0.22, spikes=7, accent='#ba84f0',
+                                                                pattern='runes', pattern_glow=True))
     geo = r.bone('geo_halo', h.head, (0, h.head_top + 1, 6), rot=(1.57, 0, 0), anim='spin', speed=0.015)
-    geo.box((-8, h.head_top + 1, 6 - 8), (16, 0, 16), M('ring', '#ffffff', width=0.08, inner=0.7, poly=7, rainbow=True), name='geo')
+    TK.poly_ring(geo, (0, h.head_top + 1, 6), 6.5, 7, 0.35, M('rainbow', '#ffffff'))
+    TK.poly_ring(geo, (0, h.head_top + 1, 6), 4.6, 7, 0.22, M('rainbow', '#ffffff'))
     orbiters(r, h.torso, (0, h.top + 6, 0), [M('gem', '#ba84f0'), M('gem', '#7ffff0'), M('gem', '#ff7fd0')], count=6, radius=9,
              size=2, speed=0.03, name='crystals')
     return r
@@ -498,16 +505,16 @@ def brutality():
            legs_mat=M('cloth', '#2a201c', pattern='marks', accent='#4a3a30'), boots_mat=M('cloth', '#1a1412'),
            arms_mat=M('cloth', '#6e4a36', accent='#a87060', pattern='marks'), hands_mat=M('cloth', '#d8c8b0', accent='#8a2a1a', pattern='marks'),
            neck=None)
-    h.torso.box((-4, h.top + 2, -3.25), (8, 3, 0), M('skin', '#5e3e2c'), name='pecs')
     h.belt(M('cloth', '#3a2a20'), buckle=M('metal', '#7a6a5a'))
     h.shoulder_pads(M('metal', '#4a4048', rivets=True))
     h.head_cube({'iris': '#c0503a', 'style': 'fierce', 'scar': True, 'mouth': 'grin', 'line': '#1a1010', 'blink': False})
     h.hair('#201b20', style='short', length=4, side_locks=False, bangs='slick', shine=False)
     for side in ('r', 'l'):
         b, (x, y, z) = P.hand(h, side, (0, 0, 0))
-        b.box((x - 2.5, y, z - 3), (5, 3, 1), M('metal', '#5a5054', rivets=True), grow=0.3, name='knuckle')
+        SC.crbox(b, (x, y + 1.6, z - 1.3), (2.6, 1.4, 0.7), M('metal', '#5a5054', rivets=True), radius=0.3, name='knuckle')
         for k in range(3):
-            b.box((x - 2 + k * 1.5, y + 0.5, z - 4), (1, 1, 1), M('metal', '#9a9098'), name='spike')
+            SC.sweep(b, [(x - 0.8 + k * 0.8, y + 1.6, z - 1.6), (x - 0.8 + k * 0.8, y + 1.6, z - 2.6)], lambda t: 0.3 * (1 - 0.85 * t), None,
+                     M('metal', '#9a9098'), k=6, caps=('round', 'point'), name='spike', info={'hem': False})
     return r
 
 @recipe
@@ -537,7 +544,7 @@ def relentless_research():
            boots_mat=M('cloth', '#1a2426'), arms_mat=coat, hands_mat=M('cloth', '#d8f0ea'), neck='round')
     h.jacket(M('cloth', '#f2f5f6', accent='#8bdbc7'))
     h.coat_tails(coat, length=13)
-    h.torso.box((-3, h.top + 3, -2.5), (1, 2, 0), M('gem', '#8bdbc7'), name='badge')
+    SC.crbox(h.torso, (-1.6, h.top + 1.8, h.front_at(h.top + 1.8, -1.6) - 0.35), (0.6, 0.9, 0.2), M('gem', '#8bdbc7'), radius=0.1, name='badge')
     h.head_cube({'iris': '#4a8a7a', 'style': 'calm', 'mouth': 'smile', 'glasses': '#d8b050'})
     h.hair('#dadee4', style='short', length=6, bangs='swept')
     b, at = P.hand(h, 'r', (0.6, 0, 0))
@@ -562,8 +569,9 @@ def fallen_savior():
     b, at = P.hand(h, 'r', P.POINT_FORWARD)
     P.sword(b, at, M('metal', '#f4f6ff', edge_glow='#fff6b0'), M('metal', '#d9d589'), M('cloth', '#3a3a6a'), length=15, width=2,
             guard_w=5, pommel=M('gem', '#9fd8ff'))
-    sheath = r.bone('sheath', h.hips, (-4.5, h.hip_y - 2, -1), rot=(0.9, -0.1, 0.25))
-    sheath.box((-5, h.hip_y - 2, -1.5), (1, 14, 2), M('cloth', '#4a3a2a', accent='#d9d589', trim=2), name='sheath')
+    sheath = r.bone('sheath', h.hips, (-3.4, h.pelvis_y, -0.6), rot=(0.9, -0.1, 0.25))
+    SC.sweep(sheath, [(-3.4, h.pelvis_y - 0.6, -0.6), (-3.4, h.pelvis_y + 11, -0.6)], [0.55, 0.45], 0.32,
+             M('cloth', '#4a3a2a', accent='#d9d589', trim=2), k=8, caps=('flat', 'round'), name='sheath', info={'hem': True})
     return r
 
 @recipe
@@ -577,15 +585,15 @@ def sweet_pact():
     h.robe(robe, flare=2.4)
     h.head_cube({'iris': '#d8a040', 'veil': '#5a5870', 'veil_eyes': '#ffcf6a'})
     h.hair('#9998a2', style='long', length=14)
-    hood = r.bone('hood', h.head, (0, h.head_top, 0))
-    hood.box((-4, h.head_top, -4), (8, 8, 8), M('hood', '#353446', accent='#d8b175'), grow=0.9, name='hood')
-    hood.box((-4.5, h.head_top + 8, 3), (9, 6, 2), M('cloth', '#353446', accent='#d8b175', trim=2), name='hood_back')
+    h.hood(M('cloth', '#353446', accent='#d8b175', trim=2), trim=M('metal', '#d8b175'))
     pack = r.bone('merchant_pack', h.torso, (0, h.top + 3, 2.5))
     pack.box((-3.5, h.top + 1, 2.5), (7, 8, 3), M('cloth', '#6a5038', accent='#d8b175', pattern='band'), name='pack')
     b, at = P.hand(h, 'l', (0.4, 0, 0))
     P.scroll(b, at, M('cloth', '#f6ead0', accent='#c03040', pattern='runes', pattern_glow=True), M('metal', '#d8b175'))
     for i in range(3):
-        h.hips.box((-3 + i * 2.5, h.hip_y - 1, -2.75), (1, 2, 1), M('gem', ['#ffcf6a', '#ff9ab8', '#c8e070'][i]), name='honey_jar')
+        y = h.pelvis_y + 1.0
+        TK.vial(h.hips, (-1.7 + i * 1.7, y, -h.ring_at(y)[1] - 0.75), M('gem', '#fff4d8', glow=False), M('energy', ['#ffcf6a', '#ff9ab8', '#c8e070'][i]),
+                r=0.5, L=1.3)
     return r
 
 @recipe
@@ -599,8 +607,5 @@ def yggdrasil_avatar():
     h.head_cube({'iris': '#5ab040', 'iris2': '#d8ff9a', 'style': 'big', 'mouth': 'smile', 'blush': True})
     h.hair('#cadb8a', style='very_long', length=16, tip='#f0f0a0')
     h.ears('elf', length=4)
-    wreath = r.bone('wreath', h.head, (0, h.head_top, 0))
-    wreath.box((-4, h.head_top, -4), (8, 1, 8), M('leaf', '#5a9a3a'), grow=0.75, faces={'top': None, 'bottom': None}, name='wreath')
-    for i, col in enumerate(['#ffd0e8', '#fff6b0', '#ffd0e8']):
-        wreath.box((-3 + i * 3, h.head_top - 1, -5), (1, 1, 1), M('gem', col, glow=False), name='blossom')
+    h.wreath(M('leaf', '#5a9a3a'), blossoms=['#ffd0e8', '#fff6b0', '#ffd0e8'])
     return r

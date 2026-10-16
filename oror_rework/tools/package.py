@@ -25,7 +25,7 @@ def build_jar(S, out, version):
         entries[rel] = full
     toml = open(entries['META-INF/neoforge.mods.toml'], encoding='utf-8').read()
     toml = re.sub(r'version="[^"]+"', f'version="{version}"', toml, count=1)
-    toml = toml.replace('description="', 'description="3D relic arsenal (164 relics + 41 replicas, OBJ models) with unique relic arts. ', 1)
+    toml = toml.replace('description="', 'description="Sculpted 3D characters (46 rigs), 3D relic arsenal (164 relics + 41 replicas, OBJ models) with unique relic arts. ', 1)
     with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         man = 'META-INF/MANIFEST.MF'
         if man in entries:

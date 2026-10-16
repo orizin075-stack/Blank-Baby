@@ -325,7 +325,7 @@ def _samples(lo, hi, r, step=None):
         xs |= set(np.linspace(lo, hi, max(2, int(math.ceil(L / step)) + 1)).round(5))
     if r > 1e-6 and L > 0:
         rr = min(r, L / 2)
-        for f in (0.3, 0.65, 1.0):
+        for f in (0.5, 1.0):
             xs.add(round(lo + rr * f, 5))
             xs.add(round(hi - rr * f, 5))
     return np.array(sorted(xs))

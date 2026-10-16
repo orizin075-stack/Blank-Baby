@@ -102,3 +102,39 @@ def orbiters(rig, parent, center, mat, count=4, radius=10.0, size=1.6, speed=0.0
         else:
             SC.crbox(b, (px, cy, pz), tuple(max(0.8, v) for v in s), m, radius=0.3, name='orb')
     return hub
+
+
+def wheel(bone, center, R, rim, runes=None, hub=None, spokes=8, teeth=12):
+    """Great wheel worn on the back (ouroboros): rim with teeth, spokes, an inner rune ring and a hub gem,
+    in the bone's XY plane facing +Z."""
+    cx, cy, cz = center
+    SC.torus(bone, center, R, 0.42, dict(rim), axis='z', k=8, n=48, name='wheel_rim')
+    SC.torus(bone, center, R - 0.9, 0.22, dict(rim), axis='z', k=6, n=44, name='wheel_rim2')
+    for i in range(teeth):
+        a = 2 * math.pi * i / teeth
+        d = np.array([math.cos(a), math.sin(a), 0.0])
+        base = np.array(center) + d * (R + 0.3)
+        SC.sweep(bone, [base, base + d * 1.1], lambda t: 0.45 * (1 - 0.85 * t), 0.3, dict(rim), k=6, up=(0, 0, 1),
+                 caps=('round', 'point'), name='wheel_tooth', info={'hem': False})
+    for i in range(spokes):
+        a = 2 * math.pi * (i + 0.5) / spokes
+        d = np.array([math.cos(a), math.sin(a), 0.0])
+        SC.sweep(bone, [np.array(center) + d * 0.9, np.array(center) + d * (R - 0.9)], [0.22, 0.16], None, dict(rim), k=6,
+                 caps=('round', 'round'), name='wheel_spoke', info={'hem': False})
+    if runes:
+        SC.torus(bone, (cx, cy, cz + 0.15), R * 0.62, 0.2, dict(runes, glow=True), axis='z', k=6, n=36, name='wheel_runes')
+    if hub:
+        crystal(bone, (cx, cy, cz - 0.1), 0.9, hub, long=1.2)
+
+def poly_ring(bone, center, R, sides, thick, mat, axis='y'):
+    """Polygonal halo (a heptagram-like geometric ring), closed path with crisp corners."""
+    cx, cy, cz = center
+    pts = []
+    for i in range(sides):
+        a0, a1 = 2 * math.pi * i / sides, 2 * math.pi * (i + 1) / sides
+        for t in np.linspace(0, 1, 6)[:-1]:
+            x = (1 - t) * math.cos(a0) + t * math.cos(a1)
+            z = (1 - t) * math.sin(a0) + t * math.sin(a1)
+            pts.append((cx + R * x, cy, cz + R * z) if axis == 'y' else (cx + R * x, cy + R * z, cz))
+    up = (0, -1, 0) if axis == 'y' else (0, 0, 1)
+    SC.sweep(bone, pts, thick, thick * 0.6, dict(mat), k=6, closed=True, up=up, caps=None, name='poly_ring', info={'hem': False})

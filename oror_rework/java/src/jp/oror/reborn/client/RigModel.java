@@ -137,7 +137,13 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
         chain(parentOf, handR, this.chainRight);
         chain(parentOf, handL, this.chainLeft);
         if (rig.mesh != null) {
-            this.meshRoots = loadMesh(rig, this.parts);
+            try {
+                this.meshRoots = loadMesh(rig, this.parts);
+            } catch (RuntimeException e) {
+                // a broken or missing mesh must not take the game down: the character is then simply not drawn
+                System.err.println("[oror_supreme_bosses] could not load mesh for rig " + key + ": " + e);
+                this.meshRoots = null;
+            }
         }
     }
 
