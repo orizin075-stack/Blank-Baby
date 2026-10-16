@@ -78,6 +78,8 @@ for c, ents in classes.items():
     for e in ents:
         if e.startswith('IFACE_OF'): iface_of.add(c)
 
+CLASS_RETENTION = {'org/spongepowered/asm/mixin/Mixin', 'org/spongepowered/asm/mixin/Pseudo'}
+
 def render_class(c, indent, nested=False):
     o = OV.get(c, {})
     k = o.get('kind') or ('interface' if c in iface_of else kind_of(c))
@@ -88,6 +90,11 @@ def render_class(c, indent, nested=False):
     mods = 'public ' + ('static ' if nested and k in ('class', 'enum') else '')
     head = {'class': 'class', 'interface': 'interface', 'enum': 'enum', 'annotation': '@interface'}[k]
     s = f"{indent}{mods}{head} {name}{tp}"
+    if k == 'annotation':
+        # retention must match the real library: NeoForge / Minecraft annotations are read at runtime (event bus,
+        # @Mod, game tests); Mixin's own annotations are CLASS retention
+        pol = 'CLASS' if c in CLASS_RETENTION else 'RUNTIME'
+        s = f"{indent}@java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.{pol})\n" + s
     if ext and k in ('class', 'interface'): s += f" extends {ext}"
     if impl and k in ('class', 'enum'): s += f" implements {impl}"
     lines = [s + ' {']

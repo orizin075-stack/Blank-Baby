@@ -12,11 +12,9 @@ import spaint as SP
 def recipes():
     import chars3d
     out = dict(chars3d.RECIPES)
-    try:
-        import creatures3d
-        out.update(creatures3d.RECIPES)
-    except ImportError:
-        pass
+    import creatures3d, creatures_sc
+    out.update(creatures3d.RECIPES)
+    out.update(creatures_sc.RECIPES)          # sculpted versions take precedence
     return out
 
 def drop_props(rig):

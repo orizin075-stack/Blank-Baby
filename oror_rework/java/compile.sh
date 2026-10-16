@@ -7,3 +7,5 @@ LIBS=$(ls $S/tools/lib/*.jar | grep -v asm | tr '\n' ':')
 rm -rf classes && mkdir -p classes
 javac -nowarn -encoding UTF-8 -proc:none -g -cp "$S/tools/stubs/stubs.jar:${LIBS}$S/mod/extracted/overrides/mods/oror_supreme_bosses-0.14.0.jar" -d classes $(find src -name "*.java") 2>&1 | grep -v "^Picked\|^Note:" 
 java -cp $S/tools/lib/asm.jar:$S/tools/lib/asm-tree.jar:$S/tools/stubgen Verify $S/mod/extracted/overrides/mods/oror_supreme_bosses-0.14.0.jar classes allow.txt $S/tools/stubs/stubs.jar 2>&1 | grep -v "^Picked\|^ok-inherited"
+# annotation visibility must match the original jar (event bus subscribers, @Mod, mixins)
+java -cp $S/tools/stubgen:$S/tools/lib/asm.jar:$S/tools/lib/asm-tree.jar AnnCheck $S/mod/extracted/overrides/mods/oror_supreme_bosses-0.14.0.jar classes 2>&1 | grep -v "^Picked\|^  \|^annotation types"

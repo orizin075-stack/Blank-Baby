@@ -84,7 +84,7 @@ def membrane_half(span, height, mat, bone_mat, outer, side):
             if acc:
                 for k in range(3):
                     art.curve((W * 0.2 * (k + 1), top + 2), (W * 0.22 * (k + 1), H * 0.35), (W * 0.2 * (k + 1) + 2, H * 0.55), 0.6,
-                              _pm('energy', acc, 0.7, d=0.35, outline=False), 3)
+                              _pm('cloth', acc, 0.35, d=0.35, outline=False), 3)
         else:
             tips = []
             for k in range(4):
@@ -101,7 +101,6 @@ def membrane_half(span, height, mat, bone_mat, outer, side):
             art.poly(poly, _pm('cloth', col, 0.0, d=0.3), 1)
             for tp in tips:
                 art.stroke([(0.5, top + 0.5), tp], 2.0, _pm('cloth', bcol, 0.0, d=0.85, d0=0.35, bev=2), 5, taper=(2.6, 0.9))
-                art.dot(tp[0], tp[1], _pm('cloth', mat.get('accent', shade(bcol, 0.6)), 0.0, d=0.9), 6, r=0.8)
     return draw, W, H
 
 def wing(rig, parent, side, at, kind, mat, span=12.0, height=10.0, mat2=None, rest=0.45):

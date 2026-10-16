@@ -646,17 +646,126 @@ def s_lids(s, ctx):
 
 SURF.update({'face': s_face, 'lids': s_lids})
 
+def s_rock(s, ctx):
+    """Stone with cracks; up-facing texels take the 'top' colour (grass), the highest take 'snow'."""
+    mat = s.mat
+    xs, ys, u, v, theta = coords(s)
+    P, N = ctx['P'], ctx['N']
+    t = form_tone(ctx, 0.7, 2.2) + ctx['rng'].integers(-1, 2, s.size[::-1]) * 0.45
+    t -= (((xs * 3 + ys * 7) % 11) == 0) * 0.8
+    rgb = jitter(colorize(t, mat['color']), ctx['rng'], 0.04)
+    top = mat.get('top')
+    if top:
+        up = -N[..., 1]
+        g = up > 0.55 - 0.15 * np.sin(xs * 0.9 + ys * 0.5)
+        rgb[g] = colorize(t[g] * 0.6 + 0.3 * (((xs[g] + ys[g]) % 3) == 0), top) * (1 + ctx['rng'].uniform(-0.05, 0.05, (int(g.sum()), 1)))
+    snow = mat.get('snow')
+    if snow:
+        hi = P[..., 1] < mat.get('snow_y', -1e9)
+        rgb[hi] = colorize(t[hi] * 0.4 + 0.6, snow)
+    glow = None
+    if mat.get('cracks') and mat.get('accent'):
+        cr = ((np.round(xs + 2 * np.sin(ys * 0.4)).astype(int) % 13) == 0) & (ctx['rng'].random(s.size[::-1]) < 0.85)
+        rgb[cr] = np.array(hexc(mat['accent']), np.float32)
+        glow = glow_from(rgb, cr, 0.6, mat['accent'])
+    return rgb, None, glow
+
+def s_leaf2(s, ctx):
+    """Foliage: clumped light/dark leaves, optional blossoms (glowing)."""
+    mat = s.mat
+    xs, ys, u, v, theta = coords(s)
+    rng = ctx['rng']
+    t = form_tone(ctx, 0.8, 2.6) + rng.integers(-1, 2, s.size[::-1]) * 0.6
+    t += ((((xs // 2) + (ys // 2)) % 3) == 0) * 0.6
+    rgb = jitter(colorize(t, mat['color']), rng, 0.04)
+    glow = None
+    fl = mat.get('flowers')
+    if fl:
+        m = rng.random(s.size[::-1]) < 0.025
+        cols = [np.array(hexc(c), np.float32) for c in fl]
+        idx = rng.integers(0, len(cols), s.size[::-1])
+        for i, c in enumerate(cols):
+            rgb[m & (idx == i)] = c
+        if mat.get('flower_glow'):
+            glow = glow_from(rgb, m, 0.7)
+    return rgb, None, glow
+
+def s_wood2(s, ctx):
+    mat = s.mat
+    rgb, a, g = s_wood(s, ctx)
+    if mat.get('veins'):
+        xs, ys, u, v, theta = coords(s)
+        vein = (np.abs(((xs + np.round(3 * np.sin(ys * 0.15 + xs * 0.05)).astype(int)) % 17) - 0) < 1)
+        rgb[vein] = np.array(hexc(mat['veins']), np.float32)
+        g = glow_from(rgb, vein, mat.get('glow_amount', 0.5), mat['veins'])
+    return rgb, a, g
+
+SURF.update({'rock': s_rock, 'leaf': s_leaf2, 'wood': s_wood2})
+
 # ------------------------------------------------------------------------------ dispatcher
 def paint_surf(s, ctx):
     rgb, alpha, glow = _paint_surf(s, ctx)
     if s.kind != 'box' and s.mat is not None and s.mat.get('alpha') is not None:
         a0 = s.mat['alpha'] / 255.0 if s.mat['alpha'] > 1 else s.mat['alpha']
         alpha = (np.ones(rgb.shape[:2], np.float32) if alpha is None else alpha) * a0
+    if s.info.get('spots'):
+        rgb, glow = paint_spots(s, ctx, rgb, glow)
     fn = s.info.get('alpha_fn')
     if fn is not None:
         a = fn(ctx)
         alpha = a if alpha is None else alpha * a
     return rgb, alpha, glow
+
+def paint_spots(s, ctx, rgb, glow):
+    """Features painted at 3D positions (given in the surface's bone frame): creature eyes with slit pupils and
+    catchlights, nostrils, markings, gill lines."""
+    import sculpt as SC
+    M = SC.rest_matrix(s.bone)
+    piv = np.array(s.bone.pivot, float)
+    P, N = ctx['P'], ctx['N']
+    H, W = rgb.shape[:2]
+    if glow is None:
+        glow = np.zeros((H, W, 4), np.float32)
+    for sp in s.info['spots']:
+        c = (M[:3, :3] @ (np.asarray(sp['p'], float) - piv)) + M[:3, 3]
+        d = P - c
+        kind = sp.get('kind', 'dot')
+        r = sp['r']
+        if kind == 'line':
+            c2 = (M[:3, :3] @ (np.asarray(sp['p2'], float) - piv)) + M[:3, 3]
+            ab = c2 - c
+            t = np.clip((d @ ab) / max(1e-9, ab @ ab), 0, 1)
+            dist = np.linalg.norm(d - t[..., None] * ab, axis=-1)
+            m = dist < r
+        else:
+            dist = np.linalg.norm(d, axis=-1)
+            m = dist < r
+        if not m.any():
+            continue
+        col = np.array(hexc(sp['color']), np.float32)
+        rgb[m] = col
+        if kind == 'eye':
+            n = N[m].mean(0)
+            n = n / max(1e-9, np.linalg.norm(n))
+            up = np.array([0, -1.0, 0])
+            side = np.cross(n, up)
+            side = side / max(1e-9, np.linalg.norm(side))
+            dh = np.abs(d @ side)
+            dv = d @ up
+            ring = m & (dist > r * 0.78)
+            rgb[ring] = np.array(shade(sp['color'], 0.55), np.float32)
+            pupil = m & (dh < r * (0.2 if sp.get('slit', True) else 0.42)) & (np.abs(dv) < r * 0.75)
+            rgb[pupil] = np.array(hexc(sp.get('pupil', '#0a0c14')), np.float32)
+            hl = m & (np.linalg.norm(d - (up * r * 0.45 + side * r * 0.3), axis=-1) < r * 0.24)
+            rgb[hl] = 255
+            if sp.get('glow', True):
+                g = m & ~pupil
+                glow[g, :3] = rgb[g]
+                glow[g, 3] = 255
+        elif sp.get('glow'):
+            glow[m, :3] = col
+            glow[m, 3] = 255 * float(sp.get('glow_amount', 1.0))
+    return rgb, (glow if glow[..., 3].any() else None)
 
 def _paint_surf(s, ctx):
     if s.info.get('painter'):
