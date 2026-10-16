@@ -338,7 +338,7 @@ class Humanoid(FG.Humanoid):
         return up_b, lo_b
 
     def hair(self, color, style='long', length=12.0, tip=None, bangs=None, side_locks=True, twin=False, ponytail=False,
-             ahoge=False, volume=0.5, shine=True, ears_open=False, side_len=None, fringe=True):
+             ahoge=False, volume=0.5, shine=True, ears_open=False, side_len=None, fringe=False):
         man = self.build in ('man', 'large')
         if bangs is None:
             bangs = 'bangs' if self.build in ('woman', 'child', 'youth') else 'short'

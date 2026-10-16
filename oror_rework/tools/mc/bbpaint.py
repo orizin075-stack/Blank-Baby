@@ -8,6 +8,7 @@ import math, zlib
 import numpy as np
 from colors import hexc, mix, shade, lum
 import bbface as BF
+import mcface as MF
 
 SIDE = ('front', 'back', 'left', 'right')
 
@@ -624,21 +625,21 @@ def m_head(mat, f, s, ctx):
     skin, hair, build = mat['color'], mat.get('hair', '#3a2a24'), mat.get('build', 'woman')
     bangs = mat.get('bangs', 'bangs')
     if f.face == 'front':
-        rgb, glow = BF.face(spec, skin, hair, build, bangs)
+        rgb, glow = MF.face(spec, skin, hair, build, bangs)
     else:
-        rgb, glow = BF.head_side(f.face, skin, hair), None
+        rgb, glow = MF.head_side(f.face, skin, hair), None
     return fit(rgb, f), None, (fit(glow, f) if glow is not None else None)
 
 
 def m_blink(mat, f, s, ctx):
     spec = mat.get('face', {})
-    rgba = BF.lids(spec, mat['color'], mat.get('hair', '#3a2a24'), mat.get('build', 'woman'))
+    rgba = MF.lids(spec, mat['color'], mat.get('hair', '#3a2a24'), mat.get('build', 'woman'))
     rgba = fit(rgba, f)
     return rgba[..., :3], rgba[..., 3] / 255.0, None
 
 
 def m_hair_shell(mat, f, s, ctx):
-    rgba = BF.shell(f.face, mat['color'], mat.get('bangs', 'bangs'), mat.get('long', True), mat.get('back', True),
+    rgba = MF.shell(f.face, mat['color'], mat.get('bangs', 'bangs'), mat.get('long', True), mat.get('back', True),
                     mat.get('ears_open', False), mat.get('man', False), mat.get('shine', True), mat.get('tip_shell'))
     rgba = fit(rgba, f)
     return rgba[..., :3], rgba[..., 3] / 255.0, None

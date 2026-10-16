@@ -33,6 +33,73 @@ EYES = {
     'man_sad':    ['..LLL', '.LLDD', '.WIPI'],
 }
 
+EYESETS = {
+    'lash': None,     # filled below with EYES
+    # big glossy iris, no white: the common look of anime HD skins
+    'iris': {
+        'girl':    ['.LLLL', '.DDDD', '.IIII', '.IJJI', '..JJ.'],
+        'big':     ['.LLLL', '.DDDD', '.IIII', '.IJJI', '.JJJJ'],
+        'calm':    ['.....', '.LLLL', '.DDDD', '.IJJI', '..JJ.'],
+        'sharp':   ['LL...', '.LLLL', '.DDDD', '.IJJI', '..II.'],
+        'fierce':  ['LL...', '.LLLL', '.DDDD', '.IJJI', '..II.'],
+        'sad':     ['...LL', '.LLLL', '.DDDD', '.IJJI', '..JJ.'],
+        'slit':    ['.LLLL', '.DDPD', '.IIPI', '.IJPJ', '..JJ.'],
+        'closed':  ['.....', '.....', '.L..L', '..LL.', '.....'],
+        'lowered': ['.....', '.....', '.LLLL', '.DDDD', '..JJ.'],
+        'void':    ['.LLLL', '.PPPP', '.PPKP', '.PPPP', '..PP.'],
+        'man':        ['.LLLL', '.DDDD', '.IJJI'],
+        'man_calm':   ['.LLLL', '.DDDD', '.IJJI'],
+        'man_sharp':  ['LL...', '.LLLL', '.DJJD'],
+        'man_slit':   ['.LLLL', '.DDPD', '.IJPJ'],
+        'man_closed': ['.....', '.LLLL', '.....'],
+        'man_void':   ['.LLLL', '.PPKP', '..PP.'],
+        'man_sad':    ['...LL', '.LLLL', '.DJJD'],
+    },
+    # large anime eyes (5 x 6), dark-over-light iris, square catchlight, no white: baby-face proportions
+    'anime': {
+        'girl':    ['LLLLL', 'DDDDD', 'IIIII', 'IIIII', 'IJJJI', '.JJJ.'],
+        'big':     ['LLLLL', 'DDDDD', 'IIIII', 'IIIII', 'IJJJI', '.JJJ.'],
+        'calm':    ['.....', 'LLLLL', 'DDDDD', 'IIIII', 'IJJJI', '.JJJ.'],
+        'sharp':   ['LL...', '.LLLL', 'DDDDD', 'IIIII', 'IJJJI', '.JJJ.'],
+        'fierce':  ['LL...', '.LLLL', 'DDDDD', 'IIIII', 'IJJJI', '.JJJ.'],
+        'sad':     ['...LL', 'LLLL.', 'DDDDD', 'IIIII', 'IJJJI', '.JJJ.'],
+        'slit':    ['LLLLL', 'DDPDD', 'DIPID', 'IIPII', 'IJPJI', '.JJJ.'],
+        'closed':  ['.....', '.....', '.....', 'L...L', '.LLL.', '.....'],
+        'lowered': ['.....', '.....', 'LLLLL', 'DDDDD', 'IJJJI', '.JJJ.'],
+        'void':    ['LLLLL', 'PPPPP', 'PPKPP', 'PPPPP', 'PPPPP', '.PPP.'],
+        'man':        ['LLLLL', 'DDDDD', 'IIIII', '.JJJ.'],
+        'man_calm':   ['LLLLL', 'DDDDD', 'IIIII', '.JJJ.'],
+        'man_sharp':  ['LL...', '.LLLL', 'DDDDD', 'IJJJI'],
+        'man_slit':   ['LLLLL', 'DDPDD', 'IIPII', '.JPJ.'],
+        'man_closed': ['.....', 'LLLLL', '.....', '.....'],
+        'man_void':   ['LLLLL', 'PPKPP', 'PPPPP', '.PPP.'],
+        'man_sad':    ['...LL', 'LLLL.', 'DDDDD', 'IJJJI'],
+    },
+    # Touhou Little Maid at twice the resolution: white outer half, dark-over-light iris, no lash line
+    'tlm': {
+        'girl':    ['.WWDD', '.WWDD', '.WWII', '.WWJJ'],
+        'big':     ['.WDDD', '.WDDD', '.WIII', '.WJJJ'],
+        'calm':    ['.....', '.DDDD', '.WWII', '.WWJJ'],
+        'sharp':   ['.DD..', '.WDDD', '.WWII', '.WWJJ'],
+        'fierce':  ['.DD..', '.WDDD', '.WWII', '.WWJJ'],
+        'sad':     ['...DD', '.WDDD', '.WWII', '.WWJJ'],
+        'slit':    ['.DDPD', '.IIPI', '.IJPJ', '.JJPJ'],
+        'closed':  ['.....', '.....', '.DDDD', '.....'],
+        'lowered': ['.....', '.....', '.DDDD', '.WWJJ'],
+        'void':    ['.PPPP', '.PPKP', '.PPPP', '.PPPP'],
+        'man':        ['.DDDD', '.WWII', '.WWJJ'],
+        'man_calm':   ['.DDDD', '.WWII', '.WWJJ'],
+        'man_sharp':  ['.DD..', '.WDDD', '.WWII'],
+        'man_slit':   ['.DDPD', '.IIPI', '.JJPJ'],
+        'man_closed': ['.....', '.DDDD', '.....'],
+        'man_void':   ['.PPKP', '.PPPP', '.PPPP'],
+        'man_sad':    ['...DD', '.WDDD', '.WWII'],
+    },
+}
+VARIANT = 'lash'
+SKIN_SAT = 0.13
+AUTO_BLUSH = False
+
 STYLE = {
     'woman': {'normal': 'girl', 'big': 'big', 'glint': 'girl', 'calm': 'calm', 'sharp': 'sharp', 'fierce': 'fierce', 'sad': 'sad',
               'slit': 'slit', 'closed': 'closed', 'lowered': 'lowered', 'void': 'void'},
@@ -104,8 +171,11 @@ LAYOUT = {   # eye top row, nose row (None = no nose), mouth base row
 
 
 def eye_rows(build, style):
-    tpl = EYES[style]
-    return LAYOUT.get(build, LAYOUT['woman'])[0], tpl
+    tpl = (EYESETS.get(VARIANT) or EYES)[style]
+    top = LAYOUT.get(build, LAYOUT['woman'])[0]
+    if VARIANT == 'anime':
+        top = 8 if build in ('man', 'large') else 7
+    return top, tpl
 
 
 def warm(skin):
@@ -119,7 +189,7 @@ def warm(skin):
     if v > 0.55:
         d = ((0.055 - h + 0.5) % 1) - 0.5
         h = h + max(-0.03, min(0.03, d))
-        sat = min(0.3, max(sat, 0.13))
+        sat = min(0.32, max(sat, SKIN_SAT))
         v = min(1.0, v * 1.01 + 0.01)
     else:
         sat = max(sat, 0.3)
@@ -139,7 +209,7 @@ def palette(spec, skin, hair, build, right=False):
         'W': C('#f6f6fb'),
         'D': C(shade(iris, 0.62)),
         'I': C(iris),
-        'J': C(mix(iris, iris2, 0.45)),
+        'J': C(mix(shade(iris, 1.3), iris2, 0.25) if VARIANT == 'anime' else mix(iris, iris2, 0.45)),
         'P': C(mix(shade(iris, 0.25), '#100818', 0.6)),
         'K': C(mix(iris2, '#ffffff', 0.3)),
         'H': C('#ffffff'),
@@ -247,7 +317,8 @@ def face(spec, skin, hair, build='woman', bangs='bangs'):
             glow[y, x, :3] = pal[code]
             glow[y, x, 3] = 255 if code != 'D' else 160
     # catchlight: the same side (viewer-left) of both irises, on the iris' top row
-    if style not in ('closed', 'man_closed', 'void', 'man_void'):
+    catch = {'lash': 1, 'iris': 2, 'tlm': 0, 'anime': 3}.get(VARIANT, 1)
+    if catch and style not in ('closed', 'man_closed', 'void', 'man_void'):
         for side in (0, 1):
             if side == 0 and crushed:
                 continue
@@ -256,11 +327,33 @@ def face(spec, skin, hair, build='woman', bangs='bangs'):
                 continue
             y0 = min(y for y, x in irow)
             xs = [x for y, x in irow if y == y0]
-            rgb[y0, min(xs)] = pals[side]['H']
-            glow[y0, min(xs), :3] = C('#ffffff') if glow_eyes else glow[y0, min(xs), :3]
-            if glow_eyes:
-                glow[y0, min(xs), 3] = 255
-            if style in ('big',):
+            hx = min(xs)
+            if catch == 3:
+                big = len(tpl) >= 5 and style not in ('calm', 'lowered', 'sharp', 'fierce', 'sad')
+                for dy in range(2 if big else 1):
+                    for dx in range(2 if big else 1):
+                        rgb[y0 + dy, hx + dx] = pals[side]['H']
+                        if glow_eyes:
+                            glow[y0 + dy, hx + dx, :3] = C('#ffffff')
+                            glow[y0 + dy, hx + dx, 3] = 255
+                ys = [y for y, x, code, sd in cells if sd == side and code == 'J']
+                if ys:
+                    y1 = max(ys) - 1
+                    xr = max(x for y, x, code, sd in cells if sd == side and code in 'IJ' and y == y1)
+                    rgb[y1, xr] = C(mix('#ffffff', spec.get('iris', '#888888'), 0.35))
+                continue
+            for dy in range(catch if len(tpl) >= 4 else 1):
+                rgb[y0 + dy, hx] = pals[side]['H']
+                if glow_eyes:
+                    glow[y0 + dy, hx, :3] = C('#ffffff')
+                    glow[y0 + dy, hx, 3] = 255
+            if catch == 2 and len(tpl) >= 4:
+                ys = [y for y, x, code, sd in cells if sd == side and code == 'J']
+                if ys:
+                    y1 = max(ys)
+                    xr = max(x for y, x, code, sd in cells if sd == side and code in 'IJ' and y == y1 - 1)
+                    rgb[y1 - 1, xr] = C(mix('#ffffff', spec.get('iris', '#888888'), 0.3))
+            elif style in ('big',):
                 y1 = max(y for y, x, code, sd in cells if sd == side and code in 'IJ')
                 xr = max(x for y, x, code, sd in cells if sd == side and code in 'IJ' and y == y1)
                 rgb[y1 - 1, xr] = C(mix('#ffffff', spec.get('iris', '#888888'), 0.25))
@@ -279,7 +372,7 @@ def face(spec, skin, hair, build='woman', bangs='bangs'):
         for r, c, code in MOUTHS.get(spec.get('mouth', 'small'), MOUTHS['small']):
             rgb[min(N - 1, mr + r), c] = pals[0][code]
     eb = top + len(tpl)
-    if spec.get('blush'):
+    if spec.get('blush') or (AUTO_BLUSH and not man and not spec.get('veil')):
         bl = C(mix(skin, '#ff7088', 0.32))
         for x in (2, 3, 12, 13):
             rgb[min(N - 2, eb), x] = bl

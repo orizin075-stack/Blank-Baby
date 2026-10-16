@@ -1,10 +1,11 @@
-# OROR War × Nightfall — rework workspace (v0.17.0)
+# OROR War × Nightfall — rework workspace (v0.17.1)
 
-Release: `dist/OROR_War_Nightfall_v0.17.0_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
-v0.17.0 rebuilds all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures, anime skin faces).
+Release: `dist/OROR_War_Nightfall_v0.17.1_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
+the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.0_JA.md`, the list of all 205 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.1_JA.md`, the list of all 205 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates
@@ -34,8 +35,9 @@ Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.0_JA
   sharp boxes and stepped pixel extrusions, so the creature and trinket recipes build in the same style.
 - `tools/mc/figure_bb.py` — humanoid builder (same API as `figure.py`): 8x8x8 head, chest / waist / pelvis boxes, elbows
   and knees, hair shell with cut-out fringe plus 3D strands, skirt and robe panels, sleeves, capes, armour.
-- `tools/mc/bbface.py` — 16x16 anime faces (no nose or mouth, as in hand-made anime skins; catchlights on the same side
-  of both irises), blink lids, hair shell faces. `bbpaint.py` — clean pixel-art material painters.
+- `tools/mc/mcface.py` — faces in the vanilla skin grammar (studied from Steve, Alex, the seven new default skins,
+  villagers and illagers): 8x8, white + iris eyes on row 4, two-pixel mouth, hair rows, hat-layer fringe; blink lids.
+  `bbface.py` keeps the colour ramps (and the earlier 16x16 anime eyes, unused). `bbpaint.py` — material painters.
 - `tools/mc/build_bb.py <out> [names]` builds rigs.json, meshes, textures and previews from `chars3d.py`,
   `creatures3d.py` and `creatures_sc.py`.
 - Older sculpted toolkit (`sculpt.py`, `spaint.py`, `figure.py`, `build3d.py`) is kept as the base the recipes and
