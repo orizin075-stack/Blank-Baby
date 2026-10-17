@@ -178,3 +178,10 @@ net/minecraft/world/entity/ai/navigation/PathNavigation
 	VM isDone ()Z
 net/minecraft/world/phys/AABB
 	VM inflate (DDD)Lnet/minecraft/world/phys/AABB;
+# v0.17.10 weapons: DamageSources.indirectMagic(direct, causing) (Iron's Spells 1.21 ServerPlayerEvents) so magic damage from
+# relics is the player's; MoveControl.setWantedPosition(x, y, z, speed) (Iron's Spells 1.21 flying goals) to walk
+# melee characters into reach.
+net/minecraft/world/damagesource/DamageSources
+	VM indirectMagic (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/damagesource/DamageSource;
+net/minecraft/world/entity/ai/control/MoveControl
+	VM setWantedPosition (DDDD)V

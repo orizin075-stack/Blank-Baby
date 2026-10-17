@@ -81,6 +81,7 @@ public final class BossPowers {
             RelicEffects.circle(sl, b.position().add(0.0, 0.1, 0.0), 4.5, RelicEffects.dust(color, 1.2F));
         }
         BossMoves.tick(b, sl, t, awake, color);
+        BossArms.tick(b, sl, t, awake, color);
     }
 
     /** Half health: the legend form. */

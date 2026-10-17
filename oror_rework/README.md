@@ -1,6 +1,6 @@
-# OROR War × Nightfall — rework workspace (v0.17.9)
+# OROR War × Nightfall — rework workspace (v0.17.10)
 
-Release: `dist/OROR_War_Nightfall_v0.17.9_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Release: `dist/OROR_War_Nightfall_v0.17.10_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
 v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
 the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.17.2 fixes rigs.json failing to load in game (a non-numeric hair bone param); `java/meshtest/RigsCheck.java` now
@@ -26,9 +26,14 @@ watch; villagers flee home or behind a guard instead of charging. Walks are set 
 since profession/growth bonuses times the old 1.1-1.35 multipliers had villagers running at 20-80 blocks/s;
 `VillagerLife` keeps one job at a time and walks to the nearest candidate once; every smart mob's combat spacing is
 per-tick `MoveControl.strafe` footwork instead of velocity kicks. `MindGameTests` now uses armorers as the guards.
+v0.17.10 holds staff-shaped catalysts upright (`held.derive_staff`, `STAFF` in `export3d.py`, `--display` rewrites only
+the transforms), fires bolts from the weapon and credits relic magic damage to the player (`indirectMagic`: kills gave
+no experience), and gives the 41 characters basic attacks by weapon kind (`BossArms.java`): melee kinds walk into reach
+(the base AI's 9-block stand-off predates kinds) and strike at their kind's pace, shooting kinds fire bolts, rounds,
+shells or light shots, also for lore-mode characters in AdaptiveCombat instead of plain arrows.
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.9_JA.md`, the list of all 164 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.10_JA.md`, the list of all 164 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates

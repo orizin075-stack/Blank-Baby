@@ -312,7 +312,8 @@ public final class RelicArts {
                         RelicDrops.fracture(b, p, amount);
                     }
                     e.invulnerableTime = 0;
-                    e.hurt(o.has("magic") ? p.damageSources().magic() : p.damageSources().playerAttack(p), amount);
+                    // v0.17.10: magic damage is the player's (indirectMagic), so kills give experience and player drops
+                    e.hurt(o.has("magic") ? p.damageSources().indirectMagic(p, p) : p.damageSources().playerAttack(p), amount);
                     impact(c, e);
                 }
             }
@@ -996,9 +997,15 @@ public final class RelicArts {
             }
         }
         Vec3 end = a.add(dir.scale(best));
-        int n = (int) Math.min(80.0, best * (gatling ? 1.5 : 2.5));
+        // v0.17.10: the trail starts at the weapon (a staff's head, a gun's muzzle) at the right hand, not inside the eyes
+        Vec3 side = new Vec3(-dir.z, 0.0, dir.x);
+        side = side.lengthSqr() < 1.0E-6 ? new Vec3(1.0, 0.0, 0.0) : side.normalize();
+        Vec3 muzzle = a.add(dir.scale(0.8)).add(side.scale(0.4)).add(0.0, mode.equals("bolt") ? 0.0 : -0.4, 0.0);
+        Vec3 path = end.subtract(muzzle);
+        sl.sendParticles(dust, muzzle.x, muzzle.y, muzzle.z, 4, 0.06, 0.06, 0.06, 0.0);
+        int n = (int) Math.min(80.0, path.length() * (gatling ? 1.5 : 2.5));
         for (int i = 1; i <= n; i++) {
-            Vec3 q = a.add(dir.scale(best * i / n));
+            Vec3 q = muzzle.add(path.scale((double) i / n));
             sl.sendParticles(dust, q.x, q.y, q.z, 1, 0.0, 0.0, 0.0, 0.0);
             if (i % (gatling ? 3 : 2) == 0) {
                 sl.sendParticles(shell ? ParticleTypes.LARGE_SMOKE : (gatling ? ParticleTypes.CRIT : ParticleTypes.END_ROD), q.x, q.y, q.z, 1, 0.0, 0.0, 0.0, 0.0);
@@ -1027,7 +1034,7 @@ public final class RelicArts {
                 }
                 sl.sendParticles(ParticleTypes.CRIT, end.x, end.y, end.z, 6, 0.15, 0.15, 0.15, 0.2);
             }
-            sl.sendParticles(heat >= 20 ? ParticleTypes.FLAME : ParticleTypes.SMOKE, a.x + dir.x, a.y + dir.y - 0.2, a.z + dir.z, 2, 0.05, 0.05, 0.05, 0.02);
+            sl.sendParticles(heat >= 20 ? ParticleTypes.FLAME : ParticleTypes.SMOKE, muzzle.x, muzzle.y, muzzle.z, 2, 0.05, 0.05, 0.05, 0.02);
             sl.playSound(null, p.blockPosition(), SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 0.45F, 1.6F + heat * 0.02F);
         } else if (great) {
             for (LivingEntity e : near(p, end, 3.0)) {
@@ -1058,7 +1065,8 @@ public final class RelicArts {
                 RelicDrops.fracture(b, p, amount);
             }
             e.invulnerableTime = 0;
-            e.hurt(magic ? p.damageSources().magic() : p.damageSources().playerAttack(p), amount);
+            // a plain magic() source has no attacker: bolt kills gave no experience or player drops and nothing fought back
+            e.hurt(magic ? p.damageSources().indirectMagic(p, p) : p.damageSources().playerAttack(p), amount);
         } finally {
             if (outer) {
                 BUSY.set(false);

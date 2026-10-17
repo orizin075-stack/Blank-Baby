@@ -129,3 +129,7 @@ net/minecraft/world/entity/Mob.getEyeY()D
 net/minecraft/world/entity/Mob.setLastHurtByMob(Lnet/minecraft/world/entity/LivingEntity;)V
 net/minecraft/world/entity/ai/navigation/PathNavigation.isDone()Z
 net/minecraft/world/phys/AABB.inflate(DDD)Lnet/minecraft/world/phys/AABB;
+# v0.17.10: DamageSources.indirectMagic(direct, causing) and MoveControl.setWantedPosition(x, y, z, speed), both used this
+# way by Iron's Spells 1.21.
+net/minecraft/world/damagesource/DamageSources.indirectMagic(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/damagesource/DamageSource;
+net/minecraft/world/entity/ai/control/MoveControl.setWantedPosition(DDDD)V

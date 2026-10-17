@@ -23,18 +23,29 @@ TARGET = {'katana': 2.0, 'greatsword': 2.4, 'old holy sword': 2.1, 'branching sw
           'scythe': 2.7, 'hammer': 2.1, 'toy hammer': 1.8, 'maul': 2.3, 'kanabo': 2.2, 'gatling': 1.7, 'arm cannon': 1.6,
           'bow': 1.8, 'parasol': 2.2, 'kusarigama': 2.0, 'vine whip': 2.4, 'chakram': 1.4, 'syringe': 2.2, 'scales': 2.3}
 
+# v0.17.10: catalysts shaped like staves are held upright (held.derive_staff), at this in-hand length (blocks);
+# wands and brushes stay pointed like a sword
+STAFF = {'staff': 2.15, 'spindle staff': 2.15, 'conch staff': 2.1, 'marotte': 2.0, 'kagura bell': 1.7, 'scales': 2.0}
+
 def length_blocks(quads):
     ys = np.concatenate([F.to_obj_space(P)[:, 1] for P, *_ in quads])
     return float(ys.max() - ys.min())
 
 def display_for(info, quads):
+    if info['hold'] == 'sword' and info['kind'] in STAFF:
+        n = length_blocks(quads)
+        tp = round(STAFF[info['kind']] / (n * 0.9375), 3)
+        fp = round(1.05 / n, 3)
+        return finish(Hd.derive(scale_tp=tp, scale_fp=fp, hold='staff'), quads)
     if info['hold'] == 'sword':
         tp = TARGET.get(info['kind'], 2.2) / (length_blocks(quads) * 0.9375)
         tp = round(min(0.85, max(0.3, tp)), 3)
     else:
         tp = info['scale'] * (0.8 if info['hold'] == 'shield' else 1.0)
     fp = round(tp * 0.62, 3) if info['hold'] == 'sword' else {'fist': 0.5, 'shield': 0.55, 'palm': 0.55}[info['hold']]
-    d = Hd.derive(scale_tp=tp, scale_fp=fp, hold=info['hold'])
+    return finish(Hd.derive(scale_tp=tp, scale_fp=fp, hold=info['hold']), quads)
+
+def finish(d, quads):
     out = {'thirdperson_righthand': d['thirdperson_righthand'], 'firstperson_righthand': d['firstperson_righthand']}
     g = Hd.ground(quads)
     out['ground'] = g
@@ -104,8 +115,22 @@ def export_artifacts(root, relics_json):
         n, S, disp = export_one(root, r['id'], w, info)
         print(r['id'], arch, hold, n, S, flush=True)
 
+def redisplay(root, keys):
+    """Rewrite only the hand/ground transforms of already exported weapons (models and textures untouched)."""
+    import w3designs as D
+    for k in keys:
+        info = D.WEAPONS[k]
+        for aw, slot in ((False, 'weapon'), (True, 'legend')):
+            rid = f'{k}_{slot}'
+            quads, _atlas, _S = D.build(k, aw).build()
+            with open(os.path.join(root, 'models', 'item', rid + '.json'), 'w') as fh:
+                json.dump(item_json(rid, rid, display_for(info, quads)), fh, indent=1)
+            print('display', rid, flush=True)
+
 if __name__ == '__main__':
-    if sys.argv[1] == '--artifacts':
+    if sys.argv[1] == '--display':
+        redisplay(sys.argv[2], sys.argv[3:])
+    elif sys.argv[1] == '--artifacts':
         export_artifacts(sys.argv[2], sys.argv[3])
     else:
         export_weapons(sys.argv[1], sys.argv[2:] or None)

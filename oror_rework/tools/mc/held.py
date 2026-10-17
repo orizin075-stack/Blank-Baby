@@ -94,6 +94,8 @@ def derive(scale_tp=0.85, scale_fp=0.6, tilt_tp=0.0, tilt_fp=0.0, grip_fp=(3.5, 
     """Display transforms for a model whose grip is at the block centre, axis +Y, front (drawing) +Z."""
     if hold in ('fist', 'shield', 'palm'):
         return derive_worn(hold, scale_tp, scale_fp)
+    if hold == 'staff':
+        return derive_staff(scale_tp, scale_fp)
     out = {}
     # third person: grip -> the fist, blade along the vanilla sword's blade
     v = VANILLA['thirdperson_righthand']
@@ -116,6 +118,25 @@ def derive(scale_tp=0.85, scale_fp=0.6, tilt_tp=0.0, tilt_fp=0.0, grip_fp=(3.5, 
         r = out[k + '_righthand']
         out[k + '_lefthand'] = dict(rotation=list(r['rotation']), translation=list(r['translation']), scale=list(r['scale']))
     return out
+
+def derive_staff(scale_tp, scale_fp, lean=12.0):
+    """Staves (v0.17.10): upright in the fist, leaning a little forward, the head's front turned forward and slightly
+    out; the grip sits just in front of the fist so the shaft clears the forearm. First person: upright at the right of
+    the view with the whole head in sight (held like a sword, a staff ran off the top of the screen)."""
+    W = hand_frame()                                   # display frame -> entity frame (faces +Z, right hand at -X)
+    Rw = W[:3, :3] / np.cbrt(np.linalg.det(W[:3, :3]))
+    inv = np.linalg.inv(Rw)
+    up = np.array([0.0, math.cos(lean * DEG), math.sin(lean * DEG)])
+    face = np.array([-0.5, 0.0, 0.85])
+    R = frame_from(inv @ up, inv @ face)
+    pre = Rx(-math.pi / 2) @ Ry(math.pi) @ T(1 / 16.0, 0.125, -0.625)
+    fist = (np.linalg.inv(pre) @ hand_point())[:3]
+    pos = fist + inv @ np.array([0.0, 0.0, 3.5 / 16.0])
+    res = {'thirdperson_righthand': dict(rotation=euler_xyz(R), translation=[round(c * 16, 3) for c in pos], scale=[scale_tp] * 3)}
+    Rf = frame_from([-0.16, 1.0, -0.12], [0.4, 0.0, 1.0])
+    land = np.array([0.52, -0.52, -0.82]) - fp_frame()[:3, 3]
+    res['firstperson_righthand'] = dict(rotation=euler_xyz(Rf), translation=[round(c * 16, 3) for c in land], scale=[scale_fp] * 3)
+    return res
 
 def derive_worn(hold, scale_tp, scale_fp):
     """Gauntlets / claws / held-by-the-ear plush (axis along the forearm, knuckles at +u, back of hand +w)

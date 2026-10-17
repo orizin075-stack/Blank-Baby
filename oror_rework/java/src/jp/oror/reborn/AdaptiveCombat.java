@@ -508,6 +508,20 @@ public final class AdaptiveCombat {
     }
 
     public static void shoot(Mob m, LivingEntity t, String weapon, ServerLevel sl) {
+        // v0.17.10: characters with a catalyst, gun, cannon or bow relic fire its bolts and shells, not plain arrows
+        if (m instanceof SupremeEntity b) {
+            CharacterRelics.Kind kind = CharacterRelics.kindOf(b.spec.id);
+            if (kind.ranged() && !kind.mode.equals("guard")) {
+                float dmg = (float)((b.lore() ? 1000000.0 : b.spec.damage * kind.shot) * MobMind.strength(m));
+                int n = MobMind.data(m).getInt("Shots") + 1;
+                BossArms.fire(b, sl, t, kind, dmg, BossPowers.color(b), n % 4 == 0);
+                m.swing(InteractionHand.MAIN_HAND);
+                MobMind.practice(m, weapon, 1);
+                MobMind.data(m).putInt("Shots", n);
+                return;
+            }
+        }
+
         Projectile projectile;
         if (weapon.equals("trident")) {
             ThrownTrident p = new ThrownTrident(sl, m, Items.TRIDENT.getDefaultInstance());
