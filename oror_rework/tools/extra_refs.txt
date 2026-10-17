@@ -152,3 +152,29 @@ net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent
 net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent$Hands
 	VM getEntity ()Lnet/minecraft/world/entity/LivingEntity;
 	VM setCanceled (Z)V
+# v0.17.9 village AI: Mob.getMoveControl and MoveControl.strafe(FF) (Iron's Spells 1.21 attack goals strafe this way);
+# Level.isDay and LivingEntity.isSleeping (Iron's Spells 1.21 ReturnToHomeAtNightGoal, PriestEntity); SoundEvents.VILLAGER_NO
+# is a plain SoundEvent (PriestEntity plays it with playSound(SoundEvent, float, float)).
+net/minecraft/world/entity/Mob
+	VM getMoveControl ()Lnet/minecraft/world/entity/ai/control/MoveControl;
+net/minecraft/world/entity/ai/control/MoveControl
+	VM strafe (FF)V
+net/minecraft/world/level/Level
+	VM isDay ()Z
+net/minecraft/world/entity/LivingEntity
+	VM isSleeping ()Z
+net/minecraft/sounds/SoundEvents
+	SF VILLAGER_NO Lnet/minecraft/sounds/SoundEvent;
+# v0.17.9: long-standing vanilla members called on a Mob (the original jar calls them on PathfinderMob, Villager or Player):
+# Entity.getEyeY / isSprinting, Mob.lookAt, LivingEntity.setLastHurtByMob; PathNavigation.isDone; AABB.inflate(x, y, z).
+net/minecraft/world/entity/Entity
+	VM getEyeY ()D
+	VM isSprinting ()Z
+net/minecraft/world/entity/Mob
+	VM lookAt (Lnet/minecraft/world/entity/Entity;FF)V
+net/minecraft/world/entity/LivingEntity
+	VM setLastHurtByMob (Lnet/minecraft/world/entity/LivingEntity;)V
+net/minecraft/world/entity/ai/navigation/PathNavigation
+	VM isDone ()Z
+net/minecraft/world/phys/AABB
+	VM inflate (DDD)Lnet/minecraft/world/phys/AABB;

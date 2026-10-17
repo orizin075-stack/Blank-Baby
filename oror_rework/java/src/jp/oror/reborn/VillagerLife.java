@@ -120,6 +120,11 @@ public final class VillagerLife {
             }
 
             consume(v);
+            if (VillageAI.fleeing(v)) {
+                data(v).putString("Task", "避難中");
+                return;
+            }
+
             if (AdaptiveCombat.enemy(v, v.getTarget())) {
                 data(v).putString("Task", "村を防衛");
                 return;
@@ -129,9 +134,24 @@ public final class VillagerLife {
                 return;
             }
 
+            // v0.17.9: guards walk their rounds; at night everyone else rests and the brain takes them to bed
+            if (VillageAI.patrol(v, sl)) {
+                return;
+            }
+
+            if (!sl.isDay()) {
+                data(v).putString("Task", "休息");
+                return;
+            }
+
             pickup(v, sl);
             equip(v);
-            int phase = Math.floorMod((int)(sl.getGameTime() / 20L) + v.getId(), 8);
+            // stay with a job for a while instead of picking a new one (and a new destination) every second
+            CompoundTag n = data(v);
+            long now = sl.getGameTime();
+            int phase = n.getLong("JobUntil") > now ? n.getInt("JobPhase") : Math.floorMod((int)(now / 20L) + v.getId(), 8);
+            goal = null;
+            goalDistance = Double.MAX_VALUE;
 
             boolean changed = switch (phase) {
                 case 0 -> farm(v, sl);
@@ -143,8 +163,20 @@ public final class VillagerLife {
                 case 6 -> pray(v, sl);
                 default -> storage(v, sl, true);
             };
-            if (!changed) {
-                data(v).putString("Task", "素材や仕事を探しています");
+            if (changed) {
+                n.putInt("JobPhase", phase);
+                n.putLong("JobUntil", now + 60L);
+            } else if (goal != null) {
+                // walk once to the nearest place this job needs, and keep at the job until there or 12 s pass
+                VillageAI.walk(v, goal, VillageAI.pace(v, VillageAI.WORK), 2);
+                if (n.getLong("JobUntil") <= now || n.getInt("JobPhase") != phase) {
+                    n.putInt("JobPhase", phase);
+                    n.putLong("JobUntil", now + 240L);
+                }
+                n.putString("Task", "仕事場へ向かっています");
+            } else {
+                n.remove("JobUntil");
+                n.putString("Task", "素材や仕事を探しています");
             }
 
             return;
@@ -282,12 +314,22 @@ public final class VillagerLife {
         }
     }
 
+    // v0.17.9: the work searches used to send the villager toward every far candidate in turn at 1.1x speed (the last one
+    // won, so a farmer drifted toward the far corner of its search box every second); now the nearest candidate is kept
+    // and tick() walks there once, at a working pace.
+    private static BlockPos goal;
+    private static double goalDistance = Double.MAX_VALUE;
+
     private static boolean nearby(Villager v, BlockPos p) {
-        if (v.distanceToSqr(Vec3.atCenterOf(p)) <= 16.0) {
+        double d = v.distanceToSqr(Vec3.atCenterOf(p));
+        if (d <= 16.0) {
             return true;
         } else {
-            v.getNavigation().moveTo((double)p.getX() + 0.5, (double)p.getY(), (double)p.getZ() + 0.5, 1.1);
-            v.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(p, 1.1F, 2));
+            if (d < goalDistance) {
+                goalDistance = d;
+                goal = p.immutable();
+            }
+
             return false;
         }
     }
@@ -339,7 +381,6 @@ public final class VillagerLife {
 
     public static boolean expandFarm(Villager v, ServerLevel sl, BlockPos ground) {
         if (editable(v, sl, ground)
-            && nearby(v, ground)
             && sl.getBlockState(ground.above()).isAir()
             && (sl.getBlockState(ground).is(Blocks.DIRT) || sl.getBlockState(ground).is(Blocks.GRASS_BLOCK))) {
             boolean water = false;
@@ -351,7 +392,7 @@ public final class VillagerLife {
                 }
             }
 
-            if (!water) {
+            if (!water || !nearby(v, ground)) {
                 return false;
             } else {
                 int slot = -1;

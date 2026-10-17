@@ -541,8 +541,10 @@ public final class VillagerIndustry {
     }
 
     private static void walk(Villager v, BlockPos at, float speed, int distance) {
-        v.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(at, speed, distance));
-        v.getNavigation().moveTo((double)at.getX() + 0.5, (double)at.getY(), (double)at.getZ() + 0.5, (double)speed);
+        // v0.17.9: a working pace whatever the miner's speed bonuses (1.1x on a boosted villager was a sprint)
+        float pace = VillageAI.pace(v, VillageAI.WORK * speed / 1.1F);
+        v.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(at, pace, distance));
+        v.getNavigation().moveTo((double)at.getX() + 0.5, (double)at.getY(), (double)at.getZ() + 0.5, (double)pace);
     }
 
     private static void returnTo(Villager v, BlockPos at, ServerLevel sl) {

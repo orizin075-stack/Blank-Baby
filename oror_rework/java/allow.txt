@@ -115,3 +115,17 @@ net/minecraft/world/entity/LivingEntity.getLookAngle()Lnet/minecraft/world/phys/
 # v0.17.8: NeoForge 21.1 LivingSwapItemsEvent.Hands (LivingEvent.getEntity, ICancellableEvent.setCanceled).
 net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent$Hands.getEntity()Lnet/minecraft/world/entity/LivingEntity;
 net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent$Hands.setCanceled(Z)V
+# v0.17.9 village AI and footwork: MoveControl.strafe via Mob.getMoveControl, Level.isDay, LivingEntity.isSleeping (all used
+# this way by Iron's Spells 1.21); SoundEvents.VILLAGER_NO (plain SoundEvent); long-standing vanilla members called on a Mob
+# or Villager (Entity.getEyeY/isSprinting, Mob.lookAt, LivingEntity.setLastHurtByMob), PathNavigation.isDone, AABB.inflate(DDD).
+net/minecraft/world/entity/Mob.getMoveControl()Lnet/minecraft/world/entity/ai/control/MoveControl;
+net/minecraft/world/entity/ai/control/MoveControl.strafe(FF)V
+net/minecraft/server/level/ServerLevel.isDay()Z
+net/minecraft/world/entity/npc/Villager.isSleeping()Z
+net/minecraft/sounds/SoundEvents.VILLAGER_NO:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/world/entity/Mob.isSprinting()Z
+net/minecraft/world/entity/Mob.lookAt(Lnet/minecraft/world/entity/Entity;FF)V
+net/minecraft/world/entity/Mob.getEyeY()D
+net/minecraft/world/entity/Mob.setLastHurtByMob(Lnet/minecraft/world/entity/LivingEntity;)V
+net/minecraft/world/entity/ai/navigation/PathNavigation.isDone()Z
+net/minecraft/world/phys/AABB.inflate(DDD)Lnet/minecraft/world/phys/AABB;

@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -147,6 +148,11 @@ public final class AdaptiveCombat {
                 arm(m);
             }
 
+            // v0.17.9: guards hold their post, villagers run instead of charging (VillageAI)
+            if (guardian(m) && VillageAI.tick(m, sl, n)) {
+                return;
+            }
+
             LivingEntity t = m.getTarget();
             if (t != null && !enemy(m, t)) {
                 m.setTarget(null);
@@ -155,21 +161,19 @@ public final class AdaptiveCombat {
 
             if (t == null && m.tickCount % 20 == Math.floorMod(m.getId(), 20)) {
                 LivingEntity attacker = m.getLastHurtByMob();
-                if (enemy(m, attacker) && m.distanceToSqr(attacker) < 4096.0) {
+                if (enemy(m, attacker) && m.distanceToSqr(attacker) < 4096.0 && (!guardian(m) || VillageAI.engage(m, attacker))) {
                     m.setTarget(attacker);
                 } else if (guardian(m) && (Boolean)RebornConfig.ARMED_VILLAGERS.get()) {
-                    m.setTarget(
-                        sl.getEntitiesOfClass(LivingEntity.class, m.getBoundingBox().inflate(24.0), v -> v instanceof Enemy && enemy(m, v))
-                            .stream()
-                            .min(Comparator.comparingDouble(m::distanceToSqr))
-                            .orElse(null)
-                    );
+                    m.setTarget(VillageAI.threat(m, sl));
                 }
 
                 t = m.getTarget();
             }
 
             if (!enemy(m, t)) {
+                if (m.isSprinting()) {
+                    m.setSprinting(false);
+                }
                 return;
             }
 
@@ -178,6 +182,8 @@ public final class AdaptiveCombat {
                 return;
             }
 
+            long now = sl.getGameTime();
+            footwork(m, n, now);
             int decision = MobLevels.decisionTicks(m);
             if (m.tickCount % decision == Math.floorMod(m.getId(), decision) && CombatBudget.take(m, sl)) {
                 TacticalLearning.observe(m, t);
@@ -204,7 +210,10 @@ public final class AdaptiveCombat {
                     m.heal((float)Math.min((double)m.getMaxHealth() * 0.2, 12.0 * MobMind.strength(m)));
                     MobMind.practice(m, "healing", 2);
                     n.putLong("NextHeal", sl.getGameTime() + 160L);
-                    m.setDeltaMovement(m.position().subtract(t.position()).normalize().scale(0.3));
+                    if (m.onGround()) {
+                        Vec3 hop = BossPowers.flat(m.position().subtract(t.position())).scale(0.45);
+                        m.setDeltaMovement(new Vec3(hop.x, 0.32, hop.z));
+                    }
                     n.putLong("RetreatUntil", sl.getGameTime() + 32L);
                 }
 
@@ -248,33 +257,41 @@ public final class AdaptiveCombat {
                     m.stopUsingItem();
                 }
 
-                if (n.getLong("RetreatUntil") > sl.getGameTime() && distance < 8.0) {
-                    m.getNavigation().stop();
-                    Vec3 back = m.position().subtract(t.position()).normalize().scale(0.3);
-                    if (sl.noCollision(m, m.getBoundingBox().move(back))) {
-                        m.setDeltaMovement(new Vec3(back.x, m.getDeltaMovement().y, back.z));
-                    }
-
+                // footwork side: flips every two seconds, per mob
+                float sign = (now / 40L + (long)m.getId()) % 2L == 0L ? 1.0F : -1.0F;
+                if (n.getLong("RetreatUntil") > now && distance < 8.0) {
+                    step(n, now, decision + 2, -1.0F, 0.35F * sign);
+                    m.setSprinting(false);
                     return;
                 }
 
                 boolean ranged = Set.of("bow", "crossbow", "trident", "gun", "magic").contains(weapon);
-                if (distance > (ranged ? 10.0 : 2.8)) {
+                // footwork keeps a melee fighter in its band until the target is clearly out of reach (no stop-start jitter)
+                boolean stepping = n.getLong("FootUntil") > now;
+                if (distance > (ranged ? 10.0 : (stepping ? 4.5 : 2.8))) {
                     Vec3 formation = Teamplay.formation(m, t, distance);
-                    m.getNavigation().moveTo(formation.x, formation.y, formation.z, guardian(m) ? 1.35 : 1.15);
-                    m.setSprinting(true);
-                } else if (distance < 2.0 && ranged) {
-                    m.getNavigation().stop();
-                    m.setDeltaMovement(m.position().subtract(t.position()).normalize().scale(0.22));
+                    n.remove("FootUntil");
+                    if (guardian(m)) {
+                        VillageAI.walk(m, BlockPos.containing(formation), VillageAI.pace(m, VillageAI.CHARGE), 1);
+                    } else {
+                        m.getNavigation().moveTo(formation.x, formation.y, formation.z, 1.15);
+                    }
+                    m.setSprinting(distance > 8.0 && (guardian(m) || MobLevels.level(m) >= 3));
+                } else if (distance < 3.0 && ranged) {
+                    step(n, now, decision + 2, -0.8F, 0.3F * sign);
+                    m.setSprinting(false);
                 } else if (sight) {
-                    m.getNavigation().stop();
-                    double sign = (double)((sl.getGameTime() / 32L + (long)m.getId()) % 2L == 0L ? 1 : -1);
-                    Vec3 toward = t.position().subtract(m.position()).normalize();
-                    double var10002 = -toward.z * 0.16 * sign;
-                    double var10004 = toward.x * 0.16;
-                    Vec3 step = new Vec3(var10002, m.getDeltaMovement().y, var10004 * sign);
-                    if (sl.noCollision(m, m.getBoundingBox().move(step))) {
-                        m.setDeltaMovement(step);
+                    m.setSprinting(false);
+                    if (ranged) {
+                        // archers circle at range like a skeleton
+                        step(n, now, decision + 2, distance < 6.0 ? -0.35F : (distance > 9.0 ? 0.3F : 0.0F), 0.5F * sign);
+                    } else {
+                        // circle while the weapon recovers, step in when it is ready (after the step out that follows a blow)
+                        long ready = n.getLong("NextAttack") - now;
+                        float fwd = ready <= 4L || distance > 3.2 ? 0.6F : (distance < 1.6 ? -0.4F : 0.05F);
+                        if (n.getLong("FootHold") <= now) {
+                            step(n, now, decision + 2, fwd, (ready <= 4L ? 0.15F : 0.5F) * sign);
+                        }
                     }
                 }
 
@@ -283,7 +300,6 @@ public final class AdaptiveCombat {
                 }
 
                 TerrainPlay.bridge(m, t, sl);
-                long now = sl.getGameTime();
                 if (now >= n.getLong("NextAttack") && sight && !m.isUsingItem()) {
                     if (Set.of("gun", "magic").contains(weapon) && distance < 40.0) {
                         if (clearShot(m, t, sl)) {
@@ -329,6 +345,8 @@ public final class AdaptiveCombat {
 
                         n.remove("CriticalUntil");
                         strike(m, t, weapon, sl);
+                        step(n, now, 6, -0.7F, 0.35F * sign);
+                        n.putLong("FootHold", now + 6L);
                         n.putLong("NextAttack", now + (long)MobLevels.cooldown(m, weapon.equals("axe") ? 20 : (weapon.equals("unarmed") ? 8 : 12)));
                     }
 
@@ -346,6 +364,31 @@ public final class AdaptiveCombat {
         MobLevels.arm(m);
     }
 
+    /** Queue footwork: forward/sideways input (as for a skeleton's strafing) for the next ticks. */
+    private static void step(CompoundTag n, long now, int ticks, float forward, float side) {
+        n.putLong("FootUntil", now + (long)ticks);
+        n.putFloat("FootForward", forward);
+        n.putFloat("FootSide", side);
+    }
+
+    /**
+     * Per-tick footwork (v0.17.9): sidesteps, step-backs and closing steps go through the move control every tick, which
+     * keeps the mob's footing (it will not strafe off a ledge) and looks like stepping; before, a velocity kick once every
+     * few decision ticks made fighters twitch.
+     */
+    private static void footwork(Mob m, CompoundTag n, long now) {
+        LivingEntity t = m.getTarget();
+        if (t == null || n.getLong("FootUntil") <= now) {
+            return;
+        }
+        m.getNavigation().stop();
+        if (m instanceof Villager v) {
+            v.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+        }
+        m.lookAt(t, 30.0F, 30.0F);
+        m.getMoveControl().strafe(n.getFloat("FootForward"), n.getFloat("FootSide"));
+    }
+
     private static void growth(Mob m) {
         double power = MobMind.strength(m);
 
@@ -354,9 +397,9 @@ public final class AdaptiveCombat {
             if (a != null) {
                 a.removeModifier(GROWTH);
                 if (power > 1.0) {
-                    a.addPermanentModifier(
-                        new AttributeModifier(GROWTH, Math.min(attr == Attributes.MOVEMENT_SPEED ? 0.8 : 31.0, power - 1.0), Operation.ADD_MULTIPLIED_BASE)
-                    );
+                    // movement: at most +15% (+32% ground speed); the old +80% made veterans more than three times as fast
+                    double amount = attr == Attributes.MOVEMENT_SPEED ? Math.min(0.15, (power - 1.0) * 0.06) : Math.min(31.0, power - 1.0);
+                    a.addPermanentModifier(new AttributeModifier(GROWTH, amount, Operation.ADD_MULTIPLIED_BASE));
                 }
             }
         }
@@ -673,14 +716,19 @@ public final class AdaptiveCombat {
                     MobMind.practice(m, "shield", 1);
                     MobMind.remember(m, BuiltInRegistries.ENTITY_TYPE.getKey(attacker.getType()).toString(), "observed_" + event.getSource().getMsgId());
                     if (guardian(m) && (Boolean)RebornConfig.ARMED_VILLAGERS.get()) {
-                        m.setTarget(attacker);
+                        // v0.17.9: guards take up the fight, villagers hear the alarm and run (VillageAI)
+                        if (VillageAI.fighter(m)) {
+                            m.setTarget(attacker);
+                        }
 
                         for (Mob ally : sl.getEntitiesOfClass(Mob.class, m.getBoundingBox().inflate(24.0), AdaptiveCombat::guardian)) {
-                            if (active(ally) && allied(m, ally) && enemy(ally, attacker)) {
+                            if (active(ally) && allied(m, ally) && enemy(ally, attacker) && VillageAI.engage(ally, attacker)) {
                                 ally.setTarget(attacker);
                                 MobMind.practice(ally, "teamwork", 1);
                             }
                         }
+
+                        VillageAI.alarm(sl, m, attacker);
                     }
                 }
             }
