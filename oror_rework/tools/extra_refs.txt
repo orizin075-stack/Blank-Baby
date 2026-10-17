@@ -132,3 +132,7 @@ net/minecraft/sounds/SoundEvents
 	SF PLAYER_ATTACK_SWEEP Lnet/minecraft/sounds/SoundEvent;
 net/minecraft/util/RandomSource
 	IMI nextFloat ()F
+# v0.17.5: unbreakable relic weapons. NeoForge 21.1 IItemExtension: <T extends LivingEntity> int damageItem(ItemStack, int, T,
+# Consumer<Item>) returns the damage passed on to vanilla (ItemStack.hurtAndBreak patch calls getItem().damageItem).
+net/minecraft/world/item/Item
+	OVR damageItem (Lnet/minecraft/world/item/ItemStack;ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)I

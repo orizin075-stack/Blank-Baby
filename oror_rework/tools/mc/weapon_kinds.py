@@ -12,6 +12,7 @@ form of a weapon is its awakened shape, so it shares the kind.
   mode   melee | bolt | gatling | shell | bow | guard   (right-click behaviour)
   shot   damage of one shot / one full-draw arrow, as a multiple of the relic's damage
   gap    ticks between shots
+POWER scales every relic weapon's damage by rank (weapon 1, legend 3): they are the strongest weapons in the pack.
 Usage: python3 -I weapon_kinds.py <overlay assets dir>"""
 import json, os, sys
 
@@ -36,6 +37,9 @@ KINDS = [
     ('bow',         -2.0, 0.30, 0.0, 0.0, False, 'bow',     1.4,  0, '弓',       '矢なしで射る（伝説は3本同時）', 'Bow',         'needs no arrows (legend fires three)'),
     ('shield',      -2.2, 0.50, 0.0, 1.0, False, 'guard',   0.0,  0, '盾',       '構えて防ぐ・盾で殴る',           'Shield',      'raise to block, bash to strike'),
 ]
+
+# v0.17.5: relic weapon (rank 1) 3x, legend (rank 3) 4x. A netherite sword deals 8; a relic weapon 90-145, a legend ~660.
+POWER = {1: 3.0, 2: 3.5, 3: 4.0}
 
 CHARACTERS = {
     'kokuhaku': 'katana', 'riha': 'magic', 'tenki': 'greatsword', 'chaos': 'magic', 'berit': 'fist',
@@ -104,7 +108,7 @@ def data():
         assert mode in HOW, mode
         assert kid in SPECIAL, kid
         kinds[kid] = dict(speed=speed, mul=mul, reach=reach, knock=knock, sweep=sweep, mode=mode, shot=shot, gap=gap)
-    return {'kinds': kinds, 'characters': CHARACTERS}
+    return {'kinds': kinds, 'characters': CHARACTERS, 'power': {str(r): m for r, m in POWER.items()}}
 
 
 def write(assets):

@@ -18,6 +18,10 @@ public class KindCheck {
             if (!mode.equals("melee") && !mode.equals("guard") && shot <= 0) throw new IllegalStateException(id + " shot");
             if (speed + 4.0F <= 0 || mul <= 0) throw new IllegalStateException(id + " stats");
         }
+        JsonObject power = top.getAsJsonObject("power");
+        for (String r : power.keySet()) {
+            if (Integer.parseInt(r) < 1 || Integer.parseInt(r) > 3 || power.get(r).getAsFloat() < 1.0F) throw new IllegalStateException("power " + r);
+        }
         int n = 0;
         for (String g : new String[]{"characters"}) {
             JsonObject m = top.getAsJsonObject(g);

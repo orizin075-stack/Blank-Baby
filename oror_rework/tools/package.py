@@ -68,6 +68,9 @@ def relic_guide(S, version):
         kind = kinds['characters'][c]
         out.append(lang[f'weapon_kind.oror_supreme_bosses.{kind}'] + '　' + lang[f'weapon_kind.oror_supreme_bosses.how.{kinds["kinds"][kind]["mode"]}'])
         out.append(lang[f'weapon_skill.oror_supreme_bosses.{kind}.desc'])
+        k = kinds['kinds'][kind]
+        atk = {r['slot']: 1 + (r['damage'] + 4) * kinds['power'][str(r['rank'])] * k['mul'] for r in rel if r['character'] == c and r['slot'] in ('weapon', 'legend')}
+        out.append(f'攻撃力：武器 {atk["weapon"]:.0f}／伝説 {atk["legend"]:.0f}（ネザライトの剣は8）')
         for slot in ('weapon', 'focus', 'charm', 'legend'):
             rid = f'{c}_{slot}'
             a = R.ARTS[rid]

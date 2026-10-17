@@ -52,6 +52,8 @@ public final class CharacterRelics {
     public static final Map<String, DeferredItem<Item>> ITEMS = new LinkedHashMap<>();
     public static final Map<String, Kind> KINDS = new HashMap<>();
     private static final Map<String, String> BY_CHARACTER = new HashMap<>();
+    /** Damage multiplier of relic weapons by rank (weapon_kinds.json "power"). */
+    private static final Map<Integer, Float> POWER = new HashMap<>();
     private static final ResourceLocation REACH_ID = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "weapon_kind_reach");
     private static final ResourceLocation KNOCK_ID = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "weapon_kind_knockback");
     /** The netherite tier bonus SwordItem.createAttributes added to every relic's damage. */
@@ -94,6 +96,10 @@ public final class CharacterRelics {
                 k.mode = o.get("mode").getAsString();
                 k.gap = o.get("gap").getAsInt();
                 KINDS.put(id, k);
+            }
+            JsonObject power = top.getAsJsonObject("power");
+            for (String r : power.keySet()) {
+                POWER.put(Integer.parseInt(r), power.get(r).getAsFloat());
             }
             JsonObject chars = top.getAsJsonObject("characters");
             for (String c : chars.keySet()) {
@@ -141,7 +147,7 @@ public final class CharacterRelics {
         if (!s.slot.equals("weapon") && !s.slot.equals("legend")) {
             return new CharacterRelics.Artifact(s);
         }
-        Wield w = new Wield(s, s.id, kindOf(s.character), s.damage + TIER_BONUS, s.rank, s.cooldown);
+        Wield w = new Wield(s, s.id, kindOf(s.character), (s.damage + TIER_BONUS) * POWER.getOrDefault(s.rank, 1.0F), s.rank, s.cooldown);
         return make(w, s.rank == 3 ? 65535 : 8192, s.rank == 3 ? Rarity.EPIC : Rarity.RARE);
     }
 
@@ -400,6 +406,13 @@ public final class CharacterRelics {
             return this.w;
         }
 
+        /** Relic weapons never wear out (NeoForge IItemExtension.damageItem; same erased descriptor as its generic form). */
+        @Override
+        @SuppressWarnings("rawtypes")
+        public int damageItem(ItemStack stack, int amount, LivingEntity entity, java.util.function.Consumer onBroken) {
+            return 0;
+        }
+
         public boolean isFoil(ItemStack s) {
             return this.w.rank == 3 || super.isFoil(s);
         }
@@ -443,6 +456,13 @@ public final class CharacterRelics {
         @Override
         public Wield wield() {
             return this.w;
+        }
+
+        /** Relic weapons never wear out (NeoForge IItemExtension.damageItem; same erased descriptor as its generic form). */
+        @Override
+        @SuppressWarnings("rawtypes")
+        public int damageItem(ItemStack stack, int amount, LivingEntity entity, java.util.function.Consumer onBroken) {
+            return 0;
         }
 
         public boolean isFoil(ItemStack s) {
