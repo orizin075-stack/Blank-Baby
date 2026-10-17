@@ -322,6 +322,8 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
     protected void animate(T e, float swing, float amount, float age, float yaw, float pitch, int motion, float progress, int action, int form) {
         this.root.getAllParts().forEach(ModelPart::resetPose);
         float pulse = Mth.sin(progress * (float) Math.PI);
+        // off the ground (leaps, knock-ups, dashes) the legs tuck up
+        float air = e.onGround() ? 0.0F : 1.0F;
 
         for (Animated a : this.animated) {
             ModelPart part = a.part;
@@ -346,6 +348,19 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
                         part.xRot = part.xRot - pulse * 0.15F;
                     } else if (motion == 12) {
                         part.yRot = part.yRot - pulse * 0.4F;
+                    } else if (motion == 1 || motion == 9) {
+                        part.yRot = part.yRot - pulse * 0.3F;
+                    } else if (motion == 5) {
+                        part.yRot = part.yRot + pulse * 0.45F;
+                    } else if (motion == 2) {
+                        part.xRot = part.xRot + pulse * 0.22F;
+                    } else if (motion == 3) {
+                        part.xRot = part.xRot + pulse * 0.18F;
+                        part.y = part.y + pulse * 1.2F;
+                    } else if (motion == 13) {
+                        part.y = part.y - pulse * 0.8F;
+                    } else if (motion == 8 || motion == 11 || motion == 15) {
+                        part.xRot = part.xRot - pulse * 0.08F;
                     }
                     break;
                 }
@@ -353,6 +368,12 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
                     part.xRot = part.xRot + Mth.sin(age * 0.08F) * 0.015F + (action > 0 ? 0.08F : 0.0F);
                     if (motion == 1 || motion == 3 || motion == 5) {
                         part.yRot = part.yRot + pulse * 0.35F;
+                    } else if (motion == 9 || motion == 12) {
+                        part.yRot = part.yRot - pulse * 0.35F;
+                    } else if (motion == 2) {
+                        part.xRot = part.xRot + pulse * 0.15F;
+                    } else if (motion == 16) {
+                        part.xRot = part.xRot - pulse * 0.12F;
                     }
                     break;
                 case "head":
@@ -376,9 +397,13 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
                     break;
                 }
                 case "leg_r":
-                case "leg_l":
-                    part.xRot = part.xRot + Mth.cos(swing * 0.6662F + (a.anim.equals("leg_l") ? (float) Math.PI : 0.0F)) * amount * 0.8F;
+                case "leg_l": {
+                    boolean leftLeg = a.anim.equals("leg_l");
+                    part.xRot = part.xRot + Mth.cos(swing * 0.6662F + (leftLeg ? (float) Math.PI : 0.0F)) * amount * 0.8F * (1.0F - air);
+                    part.xRot = part.xRot - air * (leftLeg ? 0.35F : 0.7F);
+                    leg(part, motion, pulse, leftLeg ? -1.0F : 1.0F, leftLeg);
                     break;
+                }
                 case "skirt":
                     part.xRot = part.xRot - Math.abs(Mth.cos(swing * 0.6662F)) * amount * 0.12F * a.f("k", 1.0F);
                     part.zRot = part.zRot + Mth.sin(age * 0.05F) * 0.012F;
@@ -452,7 +477,8 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
                     break;
                 }
                 case "knee":
-                    part.xRot = part.xRot + Math.max(0.0F, Mth.cos(swing * 0.6662F + (a.left ? (float) Math.PI : 0.0F))) * amount * 0.9F;
+                    part.xRot = part.xRot + Math.max(0.0F, Mth.cos(swing * 0.6662F + (a.left ? (float) Math.PI : 0.0F))) * amount * 0.9F
+                        + air * 0.9F + (motion == 3 || motion == 7 ? pulse * 0.8F : 0.0F) + (motion == 2 && !a.left ? pulse * 0.5F : 0.0F);
                     break;
                 case "elbow":
                     part.xRot = part.xRot - Math.max(0.0F, -Mth.cos(swing * 0.6662F + (a.left ? 0.0F : (float) Math.PI))) * amount * 0.5F
@@ -473,6 +499,44 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
                 default:
                     break;
             }
+        }
+    }
+
+    /** Footwork for the attack motions: a lunge for thrusts, a planted stance for swings and smashes, a crouch for slams. */
+    private static void leg(ModelPart part, int motion, float pulse, float sign, boolean left) {
+        switch (motion) {
+            case 2:
+                part.xRot = part.xRot + (left ? 0.5F : -0.75F) * pulse;
+                break;
+            case 1:
+            case 5:
+            case 9:
+            case 12:
+                part.zRot = part.zRot + sign * pulse * 0.18F;
+                part.xRot = part.xRot + (left ? 0.25F : -0.25F) * pulse;
+                break;
+            case 3:
+                part.zRot = part.zRot + sign * pulse * 0.22F;
+                part.xRot = part.xRot - pulse * 0.3F;
+                break;
+            case 6:
+                part.zRot = part.zRot + sign * pulse * 0.35F;
+                break;
+            case 7:
+                part.xRot = part.xRot - pulse * 0.45F;
+                part.zRot = part.zRot + sign * pulse * 0.15F;
+                break;
+            case 10:
+                part.xRot = part.xRot + pulse * 0.3F;
+                break;
+            case 14:
+                part.xRot = part.xRot + pulse * 0.25F;
+                break;
+            case 16:
+                part.xRot = part.xRot - (left ? 0.0F : 0.6F) * pulse;
+                break;
+            default:
+                break;
         }
     }
 

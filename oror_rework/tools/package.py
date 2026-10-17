@@ -65,6 +65,10 @@ def relic_guide(S, version):
            '秘具を手に持つと攻撃力＋40％・攻撃速度＋20％、護符を手に持つと最大体力＋20・防具＋10・防具強度＋6・移動速度＋20％・'
            'ノックバック耐性＋50％。秘具・護符のアーツは威力と回復が2倍、強化効果が1段階上・1.5倍長く・範囲1.25倍です。', '']
     kinds = json.load(open(os.path.join(S, 'build', 'overlay', 'assets', 'oror_supreme_bosses', 'weapon_kinds.json'), encoding='utf-8'))
+    moves = json.load(open(os.path.join(S, 'build', 'overlay', 'assets', 'oror_supreme_bosses', 'boss_moves.json'), encoding='utf-8'))['characters']
+    style_ja = {'duelist': '踏み込み・後退・横跳び', 'brawler': '跳びかかる', 'caster': '距離を取り、詰められると転移', 'gunner': '距離を取って横移動',
+                'juggernaut': '跳躍で一気に詰める', 'guardian': 'じりじり前進', 'flyer': '急降下', 'swimmer': '突進するように泳ぐ',
+                'trickster': '瞬間移動で翻弄', 'rooted': 'その場から動かない'}
     for c in chars:
         out.append(f'## {c}')
         kind = kinds['characters'][c]
@@ -73,6 +77,8 @@ def relic_guide(S, version):
         k = kinds['kinds'][kind]
         atk = {r['slot']: 1 + (r['damage'] + 4) * kinds['power'][str(r['rank'])] * k['mul'] for r in rel if r['character'] == c and r['slot'] in ('weapon', 'legend')}
         out.append(f'攻撃力：武器 {atk["weapon"]:.0f}／伝説 {atk["legend"]:.0f}（ネザライトの剣は8）')
+        mv = moves[c]
+        out.append('ボスとしての技：' + '／'.join(lang[f'boss_move.oror_supreme_bosses.{c}.{m}'] for m in mv['moves']) + f'（動き：{style_ja[mv["style"]]}）')
         for slot in ('weapon', 'focus', 'charm', 'legend'):
             rid = f'{c}_{slot}'
             a = R.ARTS[rid]
