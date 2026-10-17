@@ -74,6 +74,10 @@ public final class VillageAI {
             // asleep: nothing until something wakes them (being hurt does)
             return true;
         }
+        if (v.isPassenger() && VillageVehicles.manned(v.getVehicle())) {
+            // v0.17.15: crewing a village tank or jet; the vehicle's own weapons take its target
+            return true;
+        }
         long now = sl.getGameTime();
         return strong(v) ? stand(v, sl, n, now) : civilian(v, sl, n, now);
     }

@@ -112,6 +112,11 @@ public final class WorldEvents {
         if (e.getLevel() instanceof ServerLevel cleanup) {
             TerrainPlay.cleanup(cleanup);
             RelicShells.tick(cleanup);
+            // v0.17.15: gates to put out, and now and then a wandering expedition party
+            VillageExpeditions.timers(cleanup);
+            if ((Boolean)RebornConfig.VILLAGE_LIFE.get()) {
+                VillageExpeditions.wanderers(cleanup);
+            }
         }
 
         if (e.getLevel() instanceof ServerLevel sl && (Boolean)RebornConfig.NATURAL.get() && !sl.players().isEmpty()) {

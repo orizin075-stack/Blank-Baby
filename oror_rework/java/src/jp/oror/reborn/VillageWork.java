@@ -78,6 +78,12 @@ public final class VillageWork {
         "gravel", "clay", "stone", "cobblestone", "mossy_cobblestone", "andesite", "diorite", "granite", "tuff", "deepslate", "cobbled_deepslate",
         "sandstone", "red_sandstone", "terracotta", "snow_block"
     );
+    /** v0.17.15: what a villager hands in to the communal chests whatever it holds (for expeditions, guns and aircraft). */
+    private static final Set<String> VILLAGE_GOODS = Set.of(
+        "ender_eye", "ender_pearl", "blaze_rod", "blaze_powder", "obsidian", "crying_obsidian", "ancient_debris", "netherite_scrap", "netherite_ingot",
+        "gold_ingot", "copper_ingot", "diamond", "gunpowder", "ghast_tear", "magma_cream", "nether_wart", "quartz", "glowstone_dust", "shulker_shell",
+        "chorus_fruit", "redstone", "netherite_upgrade_smithing_template", "dragon_breath"
+    );
     private static final List<String> JOBS = List.of("composter", "barrel", "fletching_table", "smithing_table", "cartography_table", "loom");
 
     private VillageWork() {
@@ -102,9 +108,38 @@ public final class VillageWork {
         long bedAt;
         long siteless;
         int misses;
+        /** v0.17.15: what the village has, for its development, expeditions, guns and aircraft. */
+        final Map<Item, Integer> stock = new HashMap<>();
+        final List<BlockPos> lava = new ArrayList<>();
+        final List<BlockPos> spawners = new ArrayList<>();
+        int population;
+        int strong;
+        int miners;
+        int raw;
+        boolean night;
+        long spawnersAt;
+        long nextGun;
+        BlockPos gateSpot;
+        BlockPos pool;
 
         Survey(VillageLedger.Village village) {
             this.village = village;
+        }
+
+        /** How many of a vanilla item the communal chests hold. */
+        int stock(String id) {
+            return this.stock.getOrDefault(item(id), 0);
+        }
+
+        /** How many of a kind of item the communal chests hold. */
+        int count(Predicate<ItemStack> is) {
+            int n = 0;
+            for (Map.Entry<Item, Integer> e : this.stock.entrySet()) {
+                if (is.test(e.getKey().getDefaultInstance())) {
+                    n += e.getValue();
+                }
+            }
+            return n;
         }
     }
 
@@ -160,11 +195,34 @@ public final class VillageWork {
                 s.chests.add(p);
             }
         }
+        s.stock.clear();
+        s.raw = 0;
         for (BlockPos p : s.chests) {
             Container box = VillageReputation.communalChest(sl, village, p);
             for (int i = 0; box != null && i < box.getContainerSize(); i++) {
                 ItemStack st = box.getItem(i);
+                if (st.isEmpty()) {
+                    continue;
+                }
                 s.wood += st.is(ItemTags.LOGS) ? st.getCount() * 4 : (st.is(ItemTags.PLANKS) ? st.getCount() : 0);
+                s.stock.merge(st.getItem(), st.getCount(), Integer::sum);
+                if (st.is(net.neoforged.neoforge.common.Tags.Items.RAW_MATERIALS) || st.is(net.neoforged.neoforge.common.Tags.Items.ORES)) {
+                    s.raw += st.getCount();
+                }
+            }
+        }
+        // surface lava within 32 blocks (water on it makes obsidian)
+        s.lava.clear();
+        for (int dx = -32; dx <= 32 && s.lava.size() < 8; dx += 2) {
+            for (int dz = -32; dz <= 32 && s.lava.size() < 8; dz += 2) {
+                BlockPos col = c.offset(dx, 0, dz);
+                if (!sl.hasChunkAt(col)) {
+                    continue;
+                }
+                BlockPos p = new BlockPos(col.getX(), sl.getHeight(Types.MOTION_BLOCKING_NO_LEAVES, col.getX(), col.getZ()) - 1, col.getZ());
+                if (sl.getFluidState(p).is(net.minecraft.tags.FluidTags.LAVA) && sl.getFluidState(p).isSource()) {
+                    s.lava.add(p.immutable());
+                }
             }
         }
         // dark ground (block light under 4) within 24 blocks, where a torch can stand
@@ -207,8 +265,18 @@ public final class VillageWork {
         }
         s.unemployed = 0;
         s.homeless = 0;
-        for (Villager x : sl.getEntitiesOfClass(Villager.class, new AABB(c).inflate(64.0, 16.0, 64.0), x -> x.isAlive() && !x.isBaby() && x.tickCount > 1200)) {
-            if (VillageLedger.of(x) != village) {
+        s.population = 0;
+        s.strong = 0;
+        s.miners = 0;
+        s.night = !sl.isDay();
+        for (Villager x : sl.getEntitiesOfClass(Villager.class, new AABB(c).inflate(64.0, 16.0, 64.0), x -> x.isAlive() && !x.isBaby())) {
+            if (x.getPersistentData().getBoolean("OrorWanderer") || VillageLedger.of(x) != village) {
+                continue;
+            }
+            s.population++;
+            s.strong += VillageAI.strong(x) ? 1 : 0;
+            s.miners += VillagerIndustry.miner(x) ? 1 : 0;
+            if (x.tickCount <= 1200) {
                 continue;
             }
             if (VillagerRoles.profession(x).equals("none")) {
@@ -223,6 +291,8 @@ public final class VillageWork {
                 s.furnace = g.pos();
             }
         }
+        // v0.17.15: development, expeditions, guns and flights
+        VillageExpeditions.review(sl, s);
         return s;
     }
 
@@ -271,6 +341,33 @@ public final class VillageWork {
         return true;
     }
 
+    /** Open ground with nothing solid beside it (for a placed workbench). */
+    static boolean open(ServerLevel sl, BlockPos p) {
+        return free(sl, p, true);
+    }
+
+    static Block campfire() {
+        return B.CAMPFIRE;
+    }
+
+    /** Put as much of a stack as fits into a container; what is left. */
+    static ItemStack insert(Container box, ItemStack st) {
+        ItemStack left = st.copy();
+        for (int i = 0; i < box.getContainerSize() && !left.isEmpty(); i++) {
+            ItemStack in = box.getItem(i);
+            if (in.isEmpty()) {
+                box.setItem(i, left.copy());
+                left = ItemStack.EMPTY;
+            } else if (ItemStack.isSameItemSameComponents(in, left) && in.getCount() < in.getMaxStackSize()) {
+                int n = Math.min(left.getCount(), in.getMaxStackSize() - in.getCount());
+                in.grow(n);
+                left.shrink(n);
+            }
+        }
+        box.setChanged();
+        return left;
+    }
+
     /** Natural ground: soil, sand, gravel or stone (not a floor, a roof, a path or a field). */
     static boolean natural(BlockState st) {
         return GROUND.contains(BuiltInRegistries.ITEM.getKey(st.getBlock().asItem()).getPath());
@@ -308,9 +405,23 @@ public final class VillageWork {
         if (count(v, i -> i.is(Items.WHEAT)) >= 3 && count(v, i -> i.has(DataComponents.FOOD)) < 8) {
             todo.add("bread");
         }
+        // v0.17.15: what a growing village works toward (VillageExpeditions)
+        VillageProgress.Record rec = VillageProgress.get(sl).of(village);
+        if (rec.stage >= 3 && rec.gate == null) {
+            todo.add("gate");
+        }
+        if (rec.nethers >= 1 && s.stock("ender_eye") < 12 && (s.stock("blaze_rod") > 0 || s.stock("blaze_powder") > 0) && s.stock("ender_pearl") > 0) {
+            todo.add("eyes");
+        }
+        if (s.stock("ancient_debris") > 0 || s.stock("netherite_scrap") >= 4 && s.stock("gold_ingot") >= 4) {
+            todo.add("netherite");
+        }
+        if (VillageArms.low(v)) {
+            todo.add("ammo");
+        }
         for (String chore : todo) {
-            // baking is the baker's own business; the rest go to one villager at a time
-            if (!chore.equals("bread") && !claim(s, chore, v, now)) {
+            // baking and a gunner's own ammunition are their own business; the rest go to one villager at a time
+            if (!chore.equals("bread") && !chore.equals("ammo") && !claim(s, chore, v, now)) {
                 continue;
             }
             int r = chore(v, sl, s, chore, now);
@@ -336,6 +447,16 @@ public final class VillageWork {
             case "bed" -> bed(v, sl, s);
             case "torch" -> set(v, sl, s, chore, "torch", 0, 0, false);
             case "bread" -> craft(v, sl, "bread");
+            case "gate" -> gate(v, sl, s);
+            case "eyes" -> {
+                int r = obtain(v, sl, s, "blaze_powder", 1);
+                if (r == HAVE) {
+                    r = obtain(v, sl, s, "ender_pearl", 1);
+                }
+                yield r == HAVE ? craft(v, sl, "ender_eye") : r;
+            }
+            case "netherite" -> netherite(v, sl, s);
+            case "ammo" -> VillageArms.ammo(v, sl, s);
             default -> CANNOT;
         };
     }
@@ -506,6 +627,116 @@ public final class VillageWork {
             .orElse(null);
     }
 
+    // ------------------------------------------------------------------------------------- v0.17.15 projects
+    /** The nether gate: ten obsidian set block by block into a frame near the centre. */
+    private static int gate(Villager v, ServerLevel sl, Survey s) {
+        if (s.gateSpot == null) {
+            s.gateSpot = VillageExpeditions.gateSpot(v, sl, s);
+            if (s.gateSpot == null) {
+                return CANNOT;
+            }
+        }
+        BlockPos next = null;
+        int done = 0;
+        for (BlockPos p : VillageExpeditions.frame(s.gateSpot)) {
+            if (sl.getBlockState(p).is(Blocks.OBSIDIAN)) {
+                done++;
+            } else if (next == null) {
+                next = p;
+            }
+        }
+        VillageProgress db = VillageProgress.get(sl);
+        if (next == null) {
+            db.of(s.village).gate = s.gateSpot;
+            db.setDirty();
+            s.gateSpot = null;
+            VillageProgress.announce(sl, s.village, "村の外れにネザーゲートを建設しました", false);
+            return ACTED;
+        }
+        if (!sl.getBlockState(next).canBeReplaced() || !VillagerLife.editable(v, sl, next)) {
+            s.gateSpot = null;
+            return CANNOT;
+        }
+        int r = obtain(v, sl, s, "obsidian", 1);
+        if (r != HAVE) {
+            return r;
+        }
+        if (!VillagerLife.nearby(v, next)) {
+            return WALK;
+        }
+        int slot = slot(v, is("obsidian"));
+        if (slot < 0 || !VillagerLife.place(v, sl, next, Blocks.OBSIDIAN.defaultBlockState())) {
+            return CANNOT;
+        }
+        v.getInventory().getItem(slot).shrink(1);
+        s.village.communal.add(next.asLong());
+        done(v, sl, next, "ネザーゲートを建設 " + (done + 1) + "/10");
+        return ACTED;
+    }
+
+    /** Obsidian from a lava pool: water poured on a source block, the obsidian dug out and the hole filled with cobblestone. */
+    private static int cast(Villager v, ServerLevel sl, Survey s) {
+        s.lava.removeIf(p -> !sl.hasChunkAt(p) || !sl.getFluidState(p).is(net.minecraft.tags.FluidTags.LAVA) || !sl.getFluidState(p).isSource());
+        BlockPos lava = s.lava.stream()
+            .filter(p -> VillagerLife.editable(v, sl, p))
+            .min(Comparator.comparingDouble(p -> v.distanceToSqr(Vec3.atCenterOf(p))))
+            .orElse(null);
+        if (lava == null) {
+            return CANNOT;
+        }
+        if (!VillagerLife.nearby(v, lava)) {
+            VillagerLife.data(v).putString("Task", "黒曜石を作りに溶岩へ");
+            return WALK;
+        }
+        ItemStack rest = v.getInventory().addItem(Blocks.OBSIDIAN.asItem().getDefaultInstance());
+        if (!rest.isEmpty()) {
+            return CANNOT;
+        }
+        sl.setBlock(lava, Blocks.COBBLESTONE.defaultBlockState(), 3);
+        s.lava.remove(lava);
+        sl.sendParticles(ParticleTypes.LARGE_SMOKE, lava.getX() + 0.5, lava.getY() + 1.0, lava.getZ() + 0.5, 12, 0.3, 0.2, 0.3, 0.02);
+        RelicEffects.sound(sl, lava, SoundEvents.FIRE_EXTINGUISH, 1.0F, 1.0F);
+        v.swing(InteractionHand.MAIN_HAND);
+        VillagerLife.count(v, "Obsidian");
+        VillagerLife.data(v).putString("Task", "溶岩に水をかけて黒曜石を掘り出しました");
+        return ACTED;
+    }
+
+    /** Ancient debris smelted into netherite scrap at a furnace, four scrap and four gold made into an ingot. */
+    private static int netherite(Villager v, ServerLevel sl, Survey s) {
+        if (count(v, is("netherite_scrap")) + s.stock("netherite_scrap") >= 4 && count(v, is("gold_ingot")) + s.stock("gold_ingot") >= 4) {
+            int r = obtain(v, sl, s, "netherite_scrap", 4);
+            if (r == HAVE) {
+                r = obtain(v, sl, s, "gold_ingot", 4);
+            }
+            return r == HAVE ? craft(v, sl, "netherite_ingot") : r;
+        }
+        if (s.furnace == null) {
+            return CANNOT;
+        }
+        int r = obtain(v, sl, s, "ancient_debris", 1);
+        if (r != HAVE) {
+            return r;
+        }
+        if (!VillagerLife.nearby(v, s.furnace)) {
+            return WALK;
+        }
+        int slot = slot(v, is("ancient_debris"));
+        if (slot < 0) {
+            return CANNOT;
+        }
+        v.getInventory().getItem(slot).shrink(1);
+        ItemStack rest = v.getInventory().addItem(item("netherite_scrap").getDefaultInstance());
+        if (!rest.isEmpty()) {
+            sl.addFreshEntity(new ItemEntity(sl, v.getX(), v.getY() + 0.5, v.getZ(), rest));
+        }
+        sl.sendParticles(ParticleTypes.LAVA, s.furnace.getX() + 0.5, s.furnace.getY() + 1.0, s.furnace.getZ() + 0.5, 6, 0.2, 0.2, 0.2, 0.0);
+        RelicEffects.sound(sl, s.furnace, SoundEvents.ANVIL_USE, 0.6F, 0.8F);
+        v.swing(InteractionHand.MAIN_HAND);
+        VillagerLife.data(v).putString("Task", "古代の残骸を精錬してネザライトの欠片に");
+        return ACTED;
+    }
+
     // ------------------------------------------------------------------------------------- getting things
     /**
      * One step toward having n of something: HAVE when the villager holds them, ACTED after a step (a craft, a fetch, a
@@ -571,8 +802,21 @@ public final class VillageWork {
                 int r = fetch(v, sl, s, is(what), n - have);
                 return r != CANNOT ? r : shear(v, sl);
             }
-            case "cobblestone", "flint", "iron", "paper", "string", "wheat":
+            case "cobblestone", "flint", "iron", "paper", "string", "wheat", "ender_pearl", "blaze_rod", "gold_ingot", "netherite_scrap", "ancient_debris",
+                "gunpowder":
                 return fetch(v, sl, s, is(what), n - have);
+            case "obsidian": {
+                int r = fetch(v, sl, s, is(what), n - have);
+                return r != CANNOT ? r : cast(v, sl, s);
+            }
+            case "blaze_powder": {
+                int r = fetch(v, sl, s, is(what), n - have);
+                if (r != CANNOT) {
+                    return r;
+                }
+                r = obtain(v, sl, s, "blaze_rod", 1);
+                return r == HAVE ? craft(v, sl, "blaze_powder") : r;
+            }
             default: {
                 // made at the crafting table from what it takes, gathered in this order
                 String[] needs = switch (what) {
@@ -638,6 +882,10 @@ public final class VillageWork {
             }
         }
         return n;
+    }
+
+    static int slotOf(Villager v, Predicate<ItemStack> is) {
+        return slot(v, is);
     }
 
     private static int slot(Villager v, Predicate<ItemStack> is) {
@@ -962,6 +1210,10 @@ public final class VillageWork {
         } else if (st.has(DataComponents.FOOD)) {
             return 16;
         } else if (st.is(item("flint")) || st.is(item("iron_ingot")) || st.is(item("paper")) || st.is(item("string"))) {
+            return 0;
+        } else if (st.is(Items.EMERALD)) {
+            return 8;
+        } else if (VILLAGE_GOODS.contains(BuiltInRegistries.ITEM.getKey(st.getItem()).getPath())) {
             return 0;
         }
         return -1;

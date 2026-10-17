@@ -1,6 +1,6 @@
-# OROR War × Nightfall — rework workspace (v0.17.14)
+# OROR War × Nightfall — rework workspace (v0.17.15)
 
-Release: `dist/OROR_War_Nightfall_v0.17.14_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Release: `dist/OROR_War_Nightfall_v0.17.15_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
 v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
 the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.17.2 fixes rigs.json failing to load in game (a non-numeric hair bone param); `java/meshtest/RigsCheck.java` now
@@ -51,9 +51,16 @@ blocks, torches on dark ground, bread, beds and houses for the homeless, made fr
 materials fetched from the communal chests, trees felled whole, logs burnt to charcoal and sheep shorn); shaped recipes
 are laid on a grid of their own size (`VillagerLife.craft`), and fields grow from their edges. Miners get work clothes and
 a lit hard hat on the human villager model and new vanilla-model textures (`tools/mc/villager_outfits.py`).
+v0.17.15 lets villages grow (`VillageProgress.java`: 開拓地 to 天空の都, saved per village). Miners smelt blast-only ores in
+a blast furnace they build (`VillagerIndustry.blast`). Villages send expeditions to dungeons, the Nether (through an
+obsidian gate they build and light only while passing) and the End (`VillageExpeditions.java`; members leave the world as
+saved data and come back as veterans). Strange villages' monstrous expedition parties sometimes roam near players.
+Airships and biplanes from Immersive Aircraft carry trade between villages (`VillageFlights.java`). Grown villages make
+Superb Warfare guns (`VillageArms.java`; mobs now reload and work bolts in `MobEquipmentUse`) and send out Superb Warfare
+tanks and jets crewed by strong villagers when serious threats come near (`VillageVehicles.java`).
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.14_JA.md`, the list of all 164 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.15_JA.md`, the list of all 164 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates

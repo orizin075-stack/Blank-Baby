@@ -153,3 +153,53 @@ net/minecraft/world/level/block/state/BlockState.canSurvive(Lnet/minecraft/world
 # v0.17.14: HumanoidModel's public leg parts, for the miner's clothes on the human villager model (1.21.1).
 net/minecraft/client/model/HumanoidModel.leftLeg:Lnet/minecraft/client/model/geom/ModelPart;
 net/minecraft/client/model/HumanoidModel.rightLeg:Lnet/minecraft/client/model/geom/ModelPart;
+# v0.17.15 miner blast furnace: RecipeType.BLASTING; a blast furnace's slots through AbstractFurnaceBlockEntity (Container
+# getItem/setItem from BaseContainerBlockEntity, setChanged from BlockEntity; 1.21.1).
+net/minecraft/world/item/crafting/RecipeType.BLASTING:Lnet/minecraft/world/item/crafting/RecipeType;
+net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.getItem(I)Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.setChanged()V
+net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity.setItem(ILnet/minecraft/world/item/ItemStack;)V
+# v0.17.15 (village progression, expeditions, flights, vehicles): Minecraft 1.21.1 / NeoForge 21.1 / JOML members, checked by hand.
+net/minecraft/nbt/ListTag.addAll(Ljava/util/Collection;)Z
+net/minecraft/nbt/ListTag.clear()V
+net/minecraft/nbt/ListTag.isEmpty()Z
+net/minecraft/nbt/ListTag.removeIf(Ljava/util/function/Predicate;)Z
+net/minecraft/server/level/ServerChunkCache.getChunkNow(II)Lnet/minecraft/world/level/chunk/LevelChunk;
+net/minecraft/server/level/ServerLevel.findNearestMapStructure(Lnet/minecraft/tags/TagKey;Lnet/minecraft/core/BlockPos;IZ)Lnet/minecraft/core/BlockPos;
+net/minecraft/server/level/ServerLevel.getChunkSource()Lnet/minecraft/server/level/ServerChunkCache;
+net/minecraft/server/level/ServerLevel.getNearestPlayer(Lnet/minecraft/world/entity/Entity;D)Lnet/minecraft/world/entity/player/Player;
+net/minecraft/sounds/SoundEvents.ANVIL_USE:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/sounds/SoundEvents.FIRECHARGE_USE:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/sounds/SoundEvents.FIRE_EXTINGUISH:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/tags/FluidTags.LAVA:Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/StructureTags.EYE_OF_ENDER_LOCATED:Lnet/minecraft/tags/TagKey;
+net/minecraft/world/entity/Entity.ejectPassengers()V
+net/minecraft/world/entity/Entity.getBoundingBox()Lnet/minecraft/world/phys/AABB;
+net/minecraft/world/entity/Entity.getPassengers()Ljava/util/List;
+net/minecraft/world/entity/Entity.isAlive()Z
+net/minecraft/world/entity/Entity.moveTo(DDDFF)V
+net/minecraft/world/entity/Entity.setNoGravity(Z)V
+net/minecraft/world/entity/Entity.setPos(DDD)V
+net/minecraft/world/entity/Entity.setXRot(F)V
+net/minecraft/world/entity/Entity.setYRot(F)V
+net/minecraft/world/entity/Entity.stopRiding()V
+net/minecraft/world/entity/LivingEntity.distanceToSqr(Lnet/minecraft/world/phys/Vec3;)D
+net/minecraft/world/entity/LivingEntity.getName()Lnet/minecraft/network/chat/Component;
+net/minecraft/world/entity/LivingEntity.isNoGravity()Z
+net/minecraft/world/entity/npc/Villager.getArmorValue()I
+net/minecraft/world/entity/npc/Villager.getVehicle()Lnet/minecraft/world/entity/Entity;
+net/minecraft/world/entity/npc/Villager.isPassenger()Z
+net/minecraft/world/entity/npc/Villager.startRiding(Lnet/minecraft/world/entity/Entity;Z)Z
+net/minecraft/world/entity/npc/Villager.stopRiding()V
+net/minecraft/world/item/ItemStack.transmuteCopy(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/level/block/Blocks.FIRE:Lnet/minecraft/world/level/block/Block;
+net/minecraft/world/level/block/Blocks.OBSIDIAN:Lnet/minecraft/world/level/block/Block;
+net/minecraft/world/level/block/entity/BlockEntity.getBlockPos()Lnet/minecraft/core/BlockPos;
+net/minecraft/world/level/block/entity/BlockEntity.getBlockState()Lnet/minecraft/world/level/block/state/BlockState;
+net/minecraft/world/level/block/entity/ChestBlockEntity.removeItem(II)Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/level/block/entity/ChestBlockEntity.setChanged()V
+net/minecraft/world/level/chunk/LevelChunk.getBlockEntities()Ljava/util/Map;
+net/minecraft/world/level/levelgen/Heightmap$Types.MOTION_BLOCKING:Lnet/minecraft/world/level/levelgen/Heightmap$Types;
+net/neoforged/neoforge/event/entity/player/TradeWithVillagerEvent.getMerchantOffer()Lnet/minecraft/world/item/trading/MerchantOffer;
+org/joml/Quaternionf.<init>(FFFF)V
+net/minecraft/nbt/ListTag.stream()Ljava/util/stream/Stream;

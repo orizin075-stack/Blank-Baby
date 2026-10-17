@@ -69,6 +69,20 @@ public final class VillageReputation {
     public static void trade(TradeWithVillagerEvent e) {
         if (e.getAbstractVillager() instanceof Villager v && v.level() instanceof ServerLevel sl) {
             change(sl, VillageLedger.of(v), e.getEntity(), 3, "取引");
+            // v0.17.15: the emeralds a player pays stay in the village (the villager carries them to the communal chests)
+            int paid = 0;
+            for (ItemStack cost : List.of(e.getMerchantOffer().getCostA(), e.getMerchantOffer().getCostB())) {
+                if (cost.is(net.minecraft.world.item.Items.EMERALD)) {
+                    paid += cost.getCount();
+                }
+            }
+            if (paid > 0) {
+                ItemStack rest = v.getInventory().addItem(new ItemStack(net.minecraft.world.item.Items.EMERALD, paid));
+                if (!rest.isEmpty() && VillageLedger.of(v) != null) {
+                    VillageProgress db = VillageProgress.get(sl);
+                    db.deliver(db.of(VillageLedger.of(v)), List.of(rest), sl.registryAccess());
+                }
+            }
         }
     }
 

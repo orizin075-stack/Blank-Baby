@@ -107,13 +107,31 @@ public final class VillagerLife {
     }
 
     public static void tick(Post e) {
+        if (!(e.getEntity() instanceof Villager)) {
+            // v0.17.15: the village's aircraft and vehicles on the move
+            VillageFlights.tick(e.getEntity());
+            VillageVehicles.tick(e.getEntity());
+            return;
+        }
         if (e.getEntity() instanceof Villager v
             && v.level() instanceof ServerLevel sl
             && (Boolean)RebornConfig.VILLAGE_LIFE.get()
             && !v.isBaby()
             && v.isAlive()
-            && !v.isNoAi()
-            && v.tickCount % 20 == Math.floorMod(v.getId(), 20)) {
+            && !v.isNoAi()) {
+            // v0.17.15: wandering expedition parties live on the road; expedition members and flight crews follow their trip
+            if (v.getPersistentData().getBoolean("OrorWanderer")) {
+                if (v.tickCount % 20 == Math.floorMod(v.getId(), 20)) {
+                    VillageExpeditions.wander(v, sl);
+                }
+                return;
+            }
+            if (VillageExpeditions.member(v, sl) || VillageFlights.crew(v, sl) || VillageVehicles.crew(v, sl)) {
+                return;
+            }
+            if (v.tickCount % 20 != Math.floorMod(v.getId(), 20)) {
+                return;
+            }
             VillageLedger.of(v);
             if (!take(sl)) {
                 return;
@@ -142,6 +160,7 @@ public final class VillagerLife {
 
             pickup(v, sl);
             equip(v);
+            VillageExpeditions.stow(v, sl);
             // stay with a job for a while instead of picking a new one (and a new destination) every second
             CompoundTag n = data(v);
             long now = sl.getGameTime();

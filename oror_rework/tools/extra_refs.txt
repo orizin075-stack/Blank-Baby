@@ -217,3 +217,59 @@ net/minecraft/sounds/SoundEvents
 net/minecraft/client/model/HumanoidModel
 	VF rightLeg Lnet/minecraft/client/model/geom/ModelPart;
 	VF leftLeg Lnet/minecraft/client/model/geom/ModelPart;
+# v0.17.15 miner blast furnace: RecipeType.BLASTING (1.21.1)
+net/minecraft/world/item/crafting/RecipeType
+	SF BLASTING Lnet/minecraft/world/item/crafting/RecipeType;
+# v0.17.15 village development and expeditions (Minecraft 1.21.1 / NeoForge 21.1): ServerLevel.findNearestMapStructure as
+# in Iron's Spells' wayward compass; the loaded-chunk block entity scan for dungeon spawners; TradeWithVillagerEvent's
+# offer (NeoForge 1.21.1 source); vanilla constants.
+net/minecraft/server/level/ServerLevel
+	VM getChunkSource ()Lnet/minecraft/server/level/ServerChunkCache;
+	VM findNearestMapStructure (Lnet/minecraft/tags/TagKey;Lnet/minecraft/core/BlockPos;IZ)Lnet/minecraft/core/BlockPos;
+net/minecraft/server/level/ServerChunkCache
+	VM getChunkNow (II)Lnet/minecraft/world/level/chunk/LevelChunk;
+net/minecraft/world/level/chunk/LevelChunk
+net/minecraft/world/level/block/entity/BlockEntity
+	VM getBlockPos ()Lnet/minecraft/core/BlockPos;
+	VM getBlockState ()Lnet/minecraft/world/level/block/state/BlockState;
+net/minecraft/tags/StructureTags
+	SF EYE_OF_ENDER_LOCATED Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/FluidTags
+	SF LAVA Lnet/minecraft/tags/TagKey;
+net/minecraft/world/level/block/Blocks
+	SF OBSIDIAN Lnet/minecraft/world/level/block/Block;
+	SF FIRE Lnet/minecraft/world/level/block/Block;
+net/minecraft/sounds/SoundEvents
+	SF FIRE_EXTINGUISH Lnet/minecraft/sounds/SoundEvent;
+	SF ANVIL_USE Lnet/minecraft/sounds/SoundEvent;
+	SF FIRECHARGE_USE Lnet/minecraft/sounds/SoundEvent;
+net/neoforged/neoforge/event/entity/player/TradeWithVillagerEvent
+	VM getMerchantOffer ()Lnet/minecraft/world/item/trading/MerchantOffer;
+net/minecraft/world/entity/LivingEntity
+	VM getArmorValue ()I
+net/minecraft/world/entity/Entity
+	VM stopRiding ()V
+	VM startRiding (Lnet/minecraft/world/entity/Entity;Z)Z
+	VM ejectPassengers ()V
+	VM getPassengers ()Ljava/util/List;
+	VM isPassenger ()Z
+	VM getVehicle ()Lnet/minecraft/world/entity/Entity;
+	VM setPos (DDD)V
+	VM setYRot (F)V
+	VM setXRot (F)V
+	VM discard ()V
+	VM getBoundingBox ()Lnet/minecraft/world/phys/AABB;
+net/minecraft/world/level/Level
+	VM getNearestPlayer (Lnet/minecraft/world/entity/Entity;D)Lnet/minecraft/world/entity/player/Player;
+net/minecraft/world/entity/Entity
+	VM moveTo (DDDFF)V
+	VM isAlive ()Z
+	VM setNoGravity (Z)V
+net/minecraft/world/level/levelgen/Heightmap$Types
+	SF MOTION_BLOCKING Lnet/minecraft/world/level/levelgen/Heightmap$Types;
+net/minecraft/world/item/ItemStack
+	VM transmuteCopy (Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/entity/Entity
+	VM isNoGravity ()Z
+	VM getName ()Lnet/minecraft/network/chat/Component;
+	VM distanceToSqr (Lnet/minecraft/world/phys/Vec3;)D

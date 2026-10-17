@@ -314,6 +314,7 @@ public final class VillagerIndustry {
                         }
 
                         service(v, furnace, c, at, sl);
+                        blast(v, furnace, at, sl);
                         saveCargo(v, c);
                         if (n.getString("State").equals("保管場所が満杯") || n.getString("State").equals("燃料待ち")) {
                             return;
@@ -714,6 +715,162 @@ public final class VillagerIndustry {
         furnace.setChanged();
         boolean needsFuel = !furnace.getItem(0).isEmpty() && furnace.getItem(1).isEmpty() && !(Boolean)sl.getBlockState(at).getValue(AbstractFurnaceBlock.LIT);
         n.putString("State", needsFuel ? "燃料待ち" : "採掘・精錬しています");
+    }
+
+    // ------------------------------------------------------------------------------------- the blast furnace (v0.17.15)
+    /** An ore, raw metal or dust the furnace has no recipe for but a blast furnace has. */
+    public static boolean blastOnly(ItemStack item, ServerLevel sl) {
+        return ore(item) && !sl.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(item), sl).isPresent() && blastable(item, sl);
+    }
+
+    private static boolean blastable(ItemStack item, ServerLevel sl) {
+        return ore(item) && sl.getRecipeManager().getRecipeFor(RecipeType.BLASTING, new SingleRecipeInput(item), sl).isPresent();
+    }
+
+    private static boolean ore(ItemStack item) {
+        return !item.isEmpty()
+            && (
+                item.is(net.neoforged.neoforge.common.Tags.Items.RAW_MATERIALS)
+                    || item.is(net.neoforged.neoforge.common.Tags.Items.ORES)
+                    || item.is(net.neoforged.neoforge.common.Tags.Items.DUSTS)
+            );
+    }
+
+    private static Item item(String id) {
+        return (Item)net.minecraft.core.registries.BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(id));
+    }
+
+    /**
+     * v0.17.15: what the furnace cannot smelt goes to a blast furnace. Ores, raw metal and dusts that only have a blasting
+     * recipe wait in the station's chests until a blast furnace stands within four blocks of the furnace; then the miner
+     * keeps it loaded, fuelled and emptied like the furnace, and lets it take ores the furnace is too busy for (a blast
+     * furnace smelts them twice as fast). A miner without one builds it the crafting way: five iron ingots, a furnace
+     * (eight cobblestone) and three smooth stone, the smooth stone smelted in its own furnace from stone and cobblestone.
+     */
+    private static void blast(Villager v, FurnaceBlockEntity furnace, BlockPos at, ServerLevel sl) {
+        CompoundTag n = data(v);
+        List<Container> boxes = boxes(sl, at);
+        Block block = item("blast_furnace") instanceof BlockItem b ? b.getBlock() : null;
+        if (block == null || boxes.isEmpty()) {
+            return;
+        }
+        BlockPos found = null;
+        for (BlockPos p : BlockPos.betweenClosed(at.offset(-4, -2, -4), at.offset(4, 2, 4))) {
+            if (sl.getBlockState(p).is(block) && sl.getBlockEntity(p) instanceof AbstractFurnaceBlockEntity) {
+                found = p.immutable();
+                break;
+            }
+        }
+        if (found != null) {
+            AbstractFurnaceBlockEntity kiln = (AbstractFurnaceBlockEntity)sl.getBlockEntity(found);
+            ItemStack output = kiln.getItem(2);
+            if (!output.isEmpty()) {
+                int moved = movedToBoxes(boxes, output);
+                n.putInt("ProductsCollected", n.getInt("ProductsCollected") + moved);
+                if (output.isEmpty()) {
+                    kiln.setItem(2, ItemStack.EMPTY);
+                }
+            }
+            if (kiln.getItem(0).isEmpty()) {
+                // what only it can smelt first, then ores the furnace has queued behind its own load
+                boolean busy = !furnace.getItem(0).isEmpty();
+                ItemStack input = take(boxes, s -> blastOnly(s, sl), 64);
+                if (input.isEmpty() && busy) {
+                    input = take(boxes, s -> blastable(s, sl), 64);
+                }
+                if (!input.isEmpty()) {
+                    kiln.setItem(0, input);
+                }
+            }
+            if (kiln.getItem(1).isEmpty() && !kiln.getItem(0).isEmpty()) {
+                ItemStack fuel = take(boxes, AbstractFurnaceBlockEntity::isFuel, 1);
+                if (!fuel.isEmpty()) {
+                    kiln.setItem(1, fuel);
+                }
+            }
+            kiln.setChanged();
+            if (!kiln.getItem(0).isEmpty()) {
+                n.putString("State", "竈と溶鉱炉で精錬しています");
+            }
+            return;
+        }
+        if (count(boxes, s -> blastOnly(s, sl)) == 0) {
+            return;
+        }
+        // build one: 5 iron ingots, a furnace (8 cobblestone) and 3 smooth stone
+        Item iron = item("iron_ingot");
+        Item smooth = item("smooth_stone");
+        Item stone = item("stone");
+        int needSmooth = Math.max(0, 3 - count(boxes, s -> s.is(smooth)));
+        int cobble = count(boxes, s -> s.is(Items.COBBLESTONE));
+        if (needSmooth > 0 && furnace.getItem(0).isEmpty()) {
+            // smooth stone is stone smelted again; stone is cobblestone smelted
+            ItemStack feed = take(boxes, s -> s.is(stone), needSmooth);
+            if (feed.isEmpty() && cobble > 8) {
+                feed = take(boxes, s -> s.is(Items.COBBLESTONE), Math.min(needSmooth, cobble - 8));
+            }
+            if (!feed.isEmpty()) {
+                furnace.setItem(0, feed);
+                furnace.setChanged();
+            }
+        }
+        if (needSmooth > 0 || count(boxes, s -> s.is(iron)) < 5 || cobble < 8) {
+            n.putString("State", "溶鉱炉の材料集め（鉄インゴット" + Math.min(5, count(boxes, s -> s.is(iron))) + "/5・丸石" + Math.min(8, cobble)
+                + "/8・滑らかな石" + (3 - needSmooth) + "/3）");
+            return;
+        }
+        if (!sl.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+            return;
+        }
+        for (Direction d : Plane.HORIZONTAL) {
+            BlockPos p = at.relative(d);
+            if (sl.getBlockState(p).canBeReplaced() && sl.getFluidState(p).isEmpty() && !sl.getBlockState(p.below()).canBeReplaced()
+                && sl.noCollision(new AABB(p))) {
+                take(boxes, s -> s.is(iron), 5);
+                take(boxes, s -> s.is(Items.COBBLESTONE), 8);
+                take(boxes, s -> s.is(smooth), 3);
+                sl.setBlock(p, block.defaultBlockState(), 3);
+                sl.sendParticles(ParticleTypes.CLOUD, p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.02);
+                RelicEffects.sound(sl, p, SoundEvents.ANVIL_LAND, 0.6F, 1.2F);
+                v.swing(InteractionHand.MAIN_HAND);
+                n.putString("State", "溶鉱炉を組み立てました");
+                return;
+            }
+        }
+        n.putString("State", "溶鉱炉を置く場所がありません");
+    }
+
+    private static int count(List<Container> boxes, java.util.function.Predicate<ItemStack> is) {
+        int n = 0;
+        for (Container box : boxes) {
+            for (int i = 0; i < box.getContainerSize(); i++) {
+                if (!box.getItem(i).isEmpty() && is.test(box.getItem(i))) {
+                    n += box.getItem(i).getCount();
+                }
+            }
+        }
+        return n;
+    }
+
+    /** Take up to n of one kind (the first matching stack's item) out of the chests. */
+    private static ItemStack take(List<Container> boxes, java.util.function.Predicate<ItemStack> is, int n) {
+        ItemStack got = ItemStack.EMPTY;
+        for (Container box : boxes) {
+            for (int i = 0; i < box.getContainerSize() && got.getCount() < n; i++) {
+                ItemStack st = box.getItem(i);
+                if (st.isEmpty() || !is.test(st) || !got.isEmpty() && !ItemStack.isSameItemSameComponents(got, st)) {
+                    continue;
+                }
+                ItemStack part = box.removeItem(i, Math.min(n - got.getCount(), st.getCount()));
+                if (got.isEmpty()) {
+                    got = part;
+                } else {
+                    got.grow(part.getCount());
+                }
+                box.setChanged();
+            }
+        }
+        return got;
     }
 
     public static String status(Villager v) {

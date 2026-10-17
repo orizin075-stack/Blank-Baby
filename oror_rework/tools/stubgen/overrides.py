@@ -8,7 +8,7 @@ def c(**k): return k
 
 OV = {
  # ---------- entities ----------
- 'net/minecraft/world/entity/Entity': c(implements='net.minecraft.world.level.entity.EntityAccess'),
+ 'net/minecraft/world/entity/Entity': c(implements='net.minecraft.world.level.entity.EntityAccess', drop=['getPassengers'], members=['public java.util.List<net.minecraft.world.entity.Entity> getPassengers() { return null; }']),
  'net/minecraft/world/level/entity/EntityAccess': c(kind='interface'),
  'net/minecraft/world/entity/LivingEntity': c(extends=E+'Entity'),
  'net/minecraft/world/entity/Mob': c(extends=E+'LivingEntity', members=[
@@ -145,6 +145,7 @@ OV = {
  # ---------- level ----------
  'net/minecraft/world/level/BlockGetter': c(kind='interface'),
  'net/minecraft/world/level/LevelReader': c(kind='interface', extends='net.minecraft.world.level.BlockGetter'),
+ 'net/minecraft/world/level/chunk/LevelChunk': c(members=['public java.util.Map<net.minecraft.core.BlockPos, net.minecraft.world.level.block.entity.BlockEntity> getBlockEntities() { return null; }']),
  'net/minecraft/world/level/LevelAccessor': c(kind='interface', extends='net.minecraft.world.level.LevelReader'),
  'net/minecraft/world/level/ServerLevelAccessor': c(kind='interface', extends='net.minecraft.world.level.LevelAccessor'),
  'net/minecraft/world/level/Level': c(implements='net.minecraft.world.level.LevelAccessor', drop=['getEntitiesOfClass', 'players', 'getEntities'], members=[
@@ -376,9 +377,10 @@ OV.update({
  'net/minecraft/world/item/crafting/ShapedRecipe': c(implements='net.minecraft.world.item.crafting.CraftingRecipe'),
  'net/minecraft/world/item/crafting/AbstractCookingRecipe': c(implements='net.minecraft.world.item.crafting.Recipe<net.minecraft.world.item.crafting.SingleRecipeInput>'),
  'net/minecraft/world/item/crafting/SmeltingRecipe': c(extends='net.minecraft.world.item.crafting.AbstractCookingRecipe'),
+ 'net/minecraft/world/item/crafting/BlastingRecipe': c(extends='net.minecraft.world.item.crafting.AbstractCookingRecipe'),
  'net/minecraft/world/item/crafting/RecipeHolder': c(tparams='<T extends net.minecraft.world.item.crafting.Recipe<?>>', drop=['value','id'], members=['public T value() { return null; }', 'public net.minecraft.resources.ResourceLocation id() { return null; }']),
  'net/minecraft/world/item/crafting/RecipeType': c(kind='interface', tparams='<T extends net.minecraft.world.item.crafting.Recipe<?>>', drop=['CRAFTING','SMELTING','BLASTING','SMOKING'], members=[
-     'RecipeType<net.minecraft.world.item.crafting.CraftingRecipe> CRAFTING = null;', 'RecipeType<net.minecraft.world.item.crafting.SmeltingRecipe> SMELTING = null;']),
+     'RecipeType<net.minecraft.world.item.crafting.CraftingRecipe> CRAFTING = null;', 'RecipeType<net.minecraft.world.item.crafting.SmeltingRecipe> SMELTING = null;', 'RecipeType<net.minecraft.world.item.crafting.BlastingRecipe> BLASTING = null;']),
  'net/minecraft/world/item/crafting/RecipeManager': c(drop=['getAllRecipesFor','getRecipeFor'], members=[
      'public <I extends net.minecraft.world.item.crafting.RecipeInput, T extends net.minecraft.world.item.crafting.Recipe<I>> java.util.List<net.minecraft.world.item.crafting.RecipeHolder<T>> getAllRecipesFor(net.minecraft.world.item.crafting.RecipeType<T> p0) { return null; }',
      'public <I extends net.minecraft.world.item.crafting.RecipeInput, T extends net.minecraft.world.item.crafting.Recipe<I>> java.util.Optional<net.minecraft.world.item.crafting.RecipeHolder<T>> getRecipeFor(net.minecraft.world.item.crafting.RecipeType<T> p0, I p1, net.minecraft.world.level.Level p2) { return null; }']),
@@ -388,7 +390,7 @@ OV['net/minecraft/world/level/block/LeavesBlock'] = c(extends='net.minecraft.wor
 OV['net/minecraft/world/level/block/state/StateHolder']['members'].append('public boolean hasProperty(net.minecraft.world.level.block.state.properties.Property<?> p0) { return false; }')
 OV['net/minecraft/world/entity/npc/VillagerProfession'] = c(drop=['<init>'], members=['public VillagerProfession(String p0, java.util.function.Predicate<net.minecraft.core.Holder<net.minecraft.world.entity.ai.village.poi.PoiType>> p1, java.util.function.Predicate<net.minecraft.core.Holder<net.minecraft.world.entity.ai.village.poi.PoiType>> p2, com.google.common.collect.ImmutableSet<net.minecraft.world.item.Item> p3, com.google.common.collect.ImmutableSet<net.minecraft.world.level.block.Block> p4, net.minecraft.sounds.SoundEvent p5) {}'])
 OV['net/neoforged/neoforge/registries/DeferredHolder']['members'].append('public net.minecraft.resources.ResourceKey<R> getKey() { return null; }')
-EXTRA_CLASSES = ['net/minecraft/world/level/block/LeavesBlock', 'net/minecraft/world/level/block/state/StateHolder', 'net/minecraft/world/item/crafting/AbstractCookingRecipe', 'net/minecraft/world/item/crafting/SmeltingRecipe', 'net/minecraft/world/entity/ai/goal/RandomStrollGoal', 'net/minecraft/core/particles/ParticleType', 'net/minecraft/world/entity/AgeableMob', 'net/minecraft/world/entity/animal/AbstractGolem', 'net/minecraft/world/entity/monster/Monster',
+EXTRA_CLASSES = ['net/minecraft/world/level/block/LeavesBlock', 'net/minecraft/world/level/block/state/StateHolder', 'net/minecraft/world/item/crafting/AbstractCookingRecipe', 'net/minecraft/world/item/crafting/SmeltingRecipe', 'net/minecraft/world/item/crafting/BlastingRecipe', 'net/minecraft/world/entity/ai/goal/RandomStrollGoal', 'net/minecraft/core/particles/ParticleType', 'net/minecraft/world/entity/AgeableMob', 'net/minecraft/world/entity/animal/AbstractGolem', 'net/minecraft/world/entity/monster/Monster',
                  'net/minecraft/client/player/AbstractClientPlayer', 'net/minecraft/world/item/DiggerItem', 'net/minecraft/world/item/SpawnEggItem',
                  'net/minecraft/world/level/block/state/BlockBehaviour', 'net/minecraft/client/renderer/entity/LivingEntityRenderer', 'net/minecraft/client/model/Model',
                  'net/minecraft/world/level/block/entity/BaseContainerBlockEntity', 'net/minecraft/world/phys/HitResult', 'net/minecraft/world/level/entity/EntityAccess',
