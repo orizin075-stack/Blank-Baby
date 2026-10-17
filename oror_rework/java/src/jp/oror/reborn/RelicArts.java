@@ -192,14 +192,7 @@ public final class RelicArts {
     }
 
     public static String idOf(ItemStack stack) {
-        Item item = stack.getItem();
-        if (item instanceof CharacterRelics.Relic r) {
-            return r.spec().id;
-        }
-        if (item instanceof Replica rep) {
-            return rep.artId;
-        }
-        return null;
+        return stack.getItem() instanceof CharacterRelics.Wielded x ? x.wield().art : null;
     }
 
     // ------------------------------------------------------------------------------------- interpreter
@@ -920,40 +913,67 @@ public final class RelicArts {
         };
     }
 
-    // ------------------------------------------------------------------------------------- dungeon replicas
-    /** The dungeon relic weapon of a character: a lesser echo of its relic with its own art. */
-    public static final class Replica extends net.minecraft.world.item.SwordItem {
-        public final String artId;
-
-        public Replica(String character, Properties props) {
-            super(net.minecraft.world.item.Tiers.NETHERITE, props);
-            this.artId = character + "_relic_weapon";
+    // ------------------------------------------------------------------------------------- weapon shots
+    /**
+     * Right-click attack of the shooting weapon kinds: a magic bolt hits the first enemy on the line of sight, a gatling
+     * round does the same with a little spread, a shell bursts where it lands. Walls stop all of them.
+     */
+    public static void shot(Player p, String mode, float damage) {
+        if (!(p.level() instanceof ServerLevel sl)) {
+            return;
         }
-
-        @Override
-        public net.minecraft.world.InteractionResultHolder<ItemStack> use(Level l, Player p, net.minecraft.world.InteractionHand h) {
-            ItemStack stack = p.getItemInHand(h);
-            if (p.getCooldowns().isOnCooldown(stack.getItem())) {
-                return net.minecraft.world.InteractionResultHolder.fail(stack);
+        boolean shell = mode.equals("shell");
+        boolean gatling = mode.equals("gatling");
+        double range = shell ? 48.0 : (gatling ? 32.0 : 40.0);
+        Vec3 a = p.getEyePosition();
+        Vec3 d = p.getLookAngle().normalize();
+        if (gatling) {
+            d = d.add((sl.random.nextDouble() - 0.5) * 0.05, (sl.random.nextDouble() - 0.5) * 0.05, (sl.random.nextDouble() - 0.5) * 0.05).normalize();
+        }
+        net.minecraft.world.phys.BlockHitResult wall = sl.clip(new net.minecraft.world.level.ClipContext(
+            a, a.add(d.scale(range)), net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, p));
+        if (wall.getType() != net.minecraft.world.phys.HitResult.Type.MISS) {
+            range = wall.getLocation().distanceTo(a);
+        }
+        Vec3 far = a.add(d.scale(range));
+        LivingEntity first = null;
+        double best = range;
+        for (LivingEntity e : sl.getEntitiesOfClass(LivingEntity.class, new AABB(a, far).inflate(1.5), e -> RelicPowers.enemy(p, e))) {
+            java.util.Optional<Vec3> hit = e.getBoundingBox().inflate(0.3).clip(a, far);
+            if (hit.isPresent() && hit.get().distanceTo(a) < best) {
+                best = hit.get().distanceTo(a);
+                first = e;
             }
-            if (!l.isClientSide && RelicArts.cast(this.artId, p)) {
-                p.getCooldowns().addCooldown(stack.getItem(), RelicArts.cooldown(this.artId, 60));
+        }
+        Vec3 end = a.add(d.scale(best));
+        ParticleOptions trail = shell ? ParticleTypes.LARGE_SMOKE : (gatling ? ParticleTypes.CRIT : ParticleTypes.END_ROD);
+        int n = (int) Math.min(64.0, best * (gatling ? 1.0 : 2.0));
+        for (int i = 1; i <= n; i++) {
+            Vec3 q = a.add(d.scale(best * i / n));
+            sl.sendParticles(trail, q.x, q.y, q.z, 1, 0.0, 0.0, 0.0, 0.0);
+        }
+        if (shell) {
+            sl.sendParticles(ParticleTypes.EXPLOSION, end.x, end.y, end.z, 4, 0.8, 0.8, 0.8, 0.0);
+            for (LivingEntity e : near(p, end, 3.5)) {
+                strike(p, e, damage, false);
             }
-            return net.minecraft.world.InteractionResultHolder.sidedSuccess(stack, l.isClientSide);
-        }
-
-        @Override
-        public void inventoryTick(ItemStack stack, Level l, Entity e, int slot, boolean selected) {
-            super.inventoryTick(stack, l, e, slot, selected);
-            if (!l.isClientSide && e instanceof Player p && p.tickCount % 20 == 0 && (p.getMainHandItem() == stack || p.getOffhandItem() == stack)) {
-                RelicArts.passive(this.artId, p);
+            sl.playSound(null, p.blockPosition(), SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 0.8F, 1.3F);
+            sl.playSound(null, BlockPos.containing(end), SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 1.5F, 0.6F);
+        } else {
+            if (first != null) {
+                strike(p, first, damage, !gatling);
+                sl.sendParticles(gatling ? ParticleTypes.CRIT : ParticleTypes.ENCHANT, end.x, end.y, end.z, 6, 0.2, 0.2, 0.2, 0.1);
             }
+            sl.playSound(null, p.blockPosition(), gatling ? SoundEvents.FIREWORK_ROCKET_BLAST : SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, gatling ? 0.5F : 1.0F, gatling ? 1.8F : 1.4F);
         }
+    }
 
-        @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
-            RelicArts.tooltip(this.artId, lines);
+    private static void strike(Player p, LivingEntity e, float amount, boolean magic) {
+        if (e instanceof SupremeEntity b) {
+            RelicDrops.fracture(b, p, amount);
         }
+        e.invulnerableTime = 0;
+        e.hurt(magic ? p.damageSources().magic() : p.damageSources().playerAttack(p), amount);
     }
 
     public static void tooltip(String id, List<Component> lines) {

@@ -74,3 +74,38 @@ com/mojang/blaze3d/vertex/VertexConsumer
 	VM setOverlay (I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
 	VM setLight (I)Lcom/mojang/blaze3d/vertex/VertexConsumer;
 	VM setNormal (FFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;
+# Weapon kinds (NeoForge 21.1 sources/patches for ShieldItem, BowItem, SwordItem, ItemAbilities, LivingEntity.isBlocking;
+# Iron's Spells 'n Spellbooks 1.21.1 ExtendedSwordItem / TwilightGaleItem for the attribute builder and use/release API)
+net/minecraft/world/item/Item
+	SF BASE_ATTACK_DAMAGE_ID Lnet/minecraft/resources/ResourceLocation;
+	SF BASE_ATTACK_SPEED_ID Lnet/minecraft/resources/ResourceLocation;
+	VM isFoil (Lnet/minecraft/world/item/ItemStack;)Z
+net/minecraft/world/item/component/ItemAttributeModifiers
+	SM builder ()Lnet/minecraft/world/item/component/ItemAttributeModifiers$Builder;
+net/minecraft/world/item/component/ItemAttributeModifiers$Builder
+	VM add (Lnet/minecraft/core/Holder;Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;Lnet/minecraft/world/entity/EquipmentSlotGroup;)Lnet/minecraft/world/item/component/ItemAttributeModifiers$Builder;
+	VM build ()Lnet/minecraft/world/item/component/ItemAttributeModifiers;
+net/minecraft/world/entity/EquipmentSlotGroup
+	SF MAINHAND Lnet/minecraft/world/entity/EquipmentSlotGroup;
+net/neoforged/neoforge/common/ItemAbility
+net/neoforged/neoforge/common/ItemAbilities
+	SF SWORD_SWEEP Lnet/neoforged/neoforge/common/ItemAbility;
+net/minecraft/world/item/SwordItem
+	OVR canPerformAction (Lnet/minecraft/world/item/ItemStack;Lnet/neoforged/neoforge/common/ItemAbility;)Z
+net/minecraft/world/item/BowItem
+	SP <init> (Lnet/minecraft/world/item/Item$Properties;)V
+	OVR use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;
+	OVR releaseUsing (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;I)V
+net/minecraft/world/item/ShieldItem
+	SP <init> (Lnet/minecraft/world/item/Item$Properties;)V
+	OVR use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;
+net/minecraft/world/InteractionResultHolder
+	SM consume (Ljava/lang/Object;)Lnet/minecraft/world/InteractionResultHolder;
+net/minecraft/world/entity/LivingEntity
+	VM getUsedItemHand ()Lnet/minecraft/world/InteractionHand;
+net/minecraft/world/entity/Entity
+	VM setShiftKeyDown (Z)V
+net/minecraft/sounds/SoundEvents
+	SF ARROW_SHOOT Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/world/entity/LivingEntity
+	VM startUsingItem (Lnet/minecraft/world/InteractionHand;)V

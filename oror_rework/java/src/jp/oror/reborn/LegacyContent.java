@@ -13,8 +13,6 @@ import net.minecraft.world.entity.EntityType.Builder;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
@@ -67,13 +65,7 @@ public final class LegacyContent {
             CONTENT.add(OrorReborn.ITEMS.register(s.id + "_essence", () -> new Item(new net.minecraft.world.item.Item.Properties())));
             CONTENT.add(
                 OrorReborn.ITEMS
-                    .register(
-                        s.id + "_relic_weapon",
-                        () -> new RelicArts.Replica(
-                                s.id,
-                                new net.minecraft.world.item.Item.Properties().fireResistant().attributes(SwordItem.createAttributes(Tiers.NETHERITE, 9, -2.2F))
-                            )
-                    )
+                    .register(s.id + "_relic_weapon", () -> CharacterRelics.replica(s.id))
             );
             CONTENT.add(
                 OrorReborn.ITEMS

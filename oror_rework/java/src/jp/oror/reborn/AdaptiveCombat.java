@@ -652,6 +652,10 @@ public final class AdaptiveCombat {
                                             : (event.getSource().getDirectEntity() instanceof Projectile ? "bow" : "unarmed")
                                     )
                             );
+                        String kind = CharacterRelics.style(player.getMainHandItem());
+                        if (kind != null) {
+                            observed = kind;
+                        }
                         MobMind.practice(m, observed, 1);
                         MobMind.data(m).putString("ObservedPlayerStyle", observed);
                         MobMind.data(m).putString("PlayerEvidenceKind", "observed_attack_attempt");

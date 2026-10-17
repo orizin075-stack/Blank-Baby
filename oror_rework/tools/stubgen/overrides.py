@@ -211,6 +211,8 @@ OV = {
  'net/minecraft/world/item/BlockItem': c(extends='net.minecraft.world.item.Item'),
  'net/minecraft/world/item/ProjectileWeaponItem': c(extends='net.minecraft.world.item.Item'),
  'net/minecraft/world/item/BowItem': c(extends='net.minecraft.world.item.ProjectileWeaponItem'),
+ 'net/minecraft/world/item/ShieldItem': c(extends='net.minecraft.world.item.Item'),
+ 'net/minecraft/world/entity/EquipmentSlotGroup': c(kind='enum'),
  'net/minecraft/world/item/CrossbowItem': c(extends='net.minecraft.world.item.ProjectileWeaponItem'),
  'net/minecraft/world/item/SpawnEggItem': c(extends='net.minecraft.world.item.Item'),
  'net/neoforged/neoforge/common/DeferredSpawnEggItem': c(extends='net.minecraft.world.item.SpawnEggItem'),
@@ -303,6 +305,9 @@ OV = {
  'net/neoforged/api/distmarker/Dist': c(kind='enum', consts=['CLIENT', 'DEDICATED_SERVER']),
  'net/neoforged/fml/common/EventBusSubscriber': c(kind='annotation', imports=['java.lang.annotation.*'], members=['String modid() default "";', 'net.neoforged.api.distmarker.Dist[] value() default {};', 'Bus bus() default Bus.GAME;', 'enum Bus { GAME, MOD }']),
  'net/neoforged/bus/api/SubscribeEvent': c(kind='annotation'),
+ 'net/minecraft/gametest/framework/GameTest': c(kind='annotation', members=['String template() default "";', 'String batch() default "defaultBatch";', 'long setupTicks() default 0L;', 'int timeoutTicks() default 100;']),
+ 'net/neoforged/neoforge/gametest/GameTestHolder': c(kind='annotation', members=['String value() default "minecraft";']),
+ 'net/neoforged/neoforge/gametest/PrefixGameTestTemplate': c(kind='annotation', members=['boolean value() default true;']),
  'net/neoforged/fml/common/Mod': c(kind='annotation', members=['String value();']),
 }
 # events that only need Event as superclass

@@ -65,3 +65,24 @@ org/joml/Vector3f.<init>()V
 org/joml/Vector3f.normalize()Lorg/joml/Vector3f;
 org/joml/Vector3f.x:F
 org/joml/Vector3f.z:F
+# Weapon kinds. ShieldItem/BowItem/SwordItem.canPerformAction/ItemAbilities/LivingEntity.isBlocking: NeoForge 1.21.1 sources and patches.
+# Attribute builder, EquipmentSlotGroup, Attributes holders, consume, getUsedItemHand, startUsingItem: Iron's Spells 'n Spellbooks 1.21.1
+# (ExtendedSwordItem, TwilightGaleItem). ARROW_SHOOT is the plain SoundEvent BowItem.releaseUsing plays. Gson 2.10 (shipped with 1.21.1).
+SUPER net/minecraft/world/item/BowItem
+SUPER net/minecraft/world/item/ShieldItem
+com/google/gson/JsonElement.getAsFloat()F
+com/google/gson/JsonObject.keySet()Ljava/util/Set;
+net/minecraft/sounds/SoundEvents.ARROW_SHOOT:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/world/InteractionResultHolder.consume(Ljava/lang/Object;)Lnet/minecraft/world/InteractionResultHolder;
+net/minecraft/world/entity/EquipmentSlotGroup.MAINHAND:Lnet/minecraft/world/entity/EquipmentSlotGroup;
+net/minecraft/world/entity/LivingEntity.getUsedItemHand()Lnet/minecraft/world/InteractionHand;
+net/minecraft/world/entity/ai/attributes/Attributes.ATTACK_KNOCKBACK:Lnet/minecraft/core/Holder;
+net/minecraft/world/entity/ai/attributes/Attributes.ATTACK_SPEED:Lnet/minecraft/core/Holder;
+net/minecraft/world/entity/ai/attributes/Attributes.ENTITY_INTERACTION_RANGE:Lnet/minecraft/core/Holder;
+net/minecraft/world/entity/player/Player.setShiftKeyDown(Z)V
+net/minecraft/world/entity/player/Player.startUsingItem(Lnet/minecraft/world/InteractionHand;)V
+net/minecraft/world/item/SwordItem.canPerformAction(Lnet/minecraft/world/item/ItemStack;Lnet/neoforged/neoforge/common/ItemAbility;)Z
+net/minecraft/world/item/component/ItemAttributeModifiers$Builder.add(Lnet/minecraft/core/Holder;Lnet/minecraft/world/entity/ai/attributes/AttributeModifier;Lnet/minecraft/world/entity/EquipmentSlotGroup;)Lnet/minecraft/world/item/component/ItemAttributeModifiers$Builder;
+net/minecraft/world/item/component/ItemAttributeModifiers$Builder.build()Lnet/minecraft/world/item/component/ItemAttributeModifiers;
+net/minecraft/world/item/component/ItemAttributeModifiers.builder()Lnet/minecraft/world/item/component/ItemAttributeModifiers$Builder;
+net/neoforged/neoforge/common/ItemAbilities.SWORD_SWEEP:Lnet/neoforged/neoforge/common/ItemAbility;
