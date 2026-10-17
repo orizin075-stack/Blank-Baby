@@ -977,6 +977,14 @@ public final class RelicArts {
         double range = shell ? 48.0 : (gatling ? 32.0 : 40.0);
         Vec3 a = p.getEyePosition();
         Vec3 dir = p.getLookAngle().normalize();
+        if (shell) {
+            // v0.17.11: a shell flies (RelicShells) instead of bursting at once wherever the crosshair points
+            Vec3 side = new Vec3(-dir.z, 0.0, dir.x);
+            side = side.lengthSqr() < 1.0E-6 ? new Vec3(1.0, 0.0, 0.0) : side.normalize();
+            Vec3 muzzle = a.add(dir.scale(0.9)).add(side.scale(0.4)).add(0.0, -0.4, 0.0);
+            RelicShells.fire(p, sl, muzzle, dir.scale(2.4).add(0.0, 0.05, 0.0), damage, w.rank >= 3 ? 5.0 : 4.0, color, w.rank >= 3);
+            return;
+        }
         if (gatling) {
             double j = 0.02 + heat * 0.002;
             dir = dir.add((sl.random.nextDouble() - 0.5) * j, (sl.random.nextDouble() - 0.5) * j, (sl.random.nextDouble() - 0.5) * j).normalize();

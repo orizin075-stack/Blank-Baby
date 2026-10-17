@@ -1,6 +1,5 @@
 package jp.oror.reborn;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -9,8 +8,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -122,7 +119,7 @@ public final class BossArms {
             }
             case "shell" -> {
                 b.motion(8, 14);
-                shell(b, sl, t, dmg, dust);
+                shell(b, sl, t, dmg);
             }
             case "bow" -> {
                 b.motion(8, 12);
@@ -150,26 +147,11 @@ public final class BossArms {
         }
     }
 
-    /** A shell: flies straight from the eyes, bursts on the target or the first wall, hitting everything within 3 blocks. */
-    private static void shell(SupremeEntity b, ServerLevel sl, LivingEntity t, float dmg, DustParticleOptions dust) {
-        Vec3 a = b.getEyePosition();
-        Vec3 end = t.position().add(0.0, t.getBbHeight() * 0.5, 0.0);
-        var wall = sl.clip(new ClipContext(a, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, b));
-        if (wall.getType() != HitResult.Type.MISS) {
-            end = wall.getLocation();
-        }
-        RelicEffects.line(sl, a, end, ParticleTypes.LARGE_SMOKE, 0.6);
-        RelicEffects.line(sl, a, end, dust, 0.4);
-        for (LivingEntity e : BossPowers.enemies(b, end, 3.0)) {
-            BossPowers.hit(b, e, dmg);
-            if (!(e instanceof SupremeEntity)) {
-                BossPowers.push(e, BossPowers.flat(e.position().subtract(end)).scale(0.7).add(0.0, 0.5, 0.0));
-            }
-        }
-        sl.sendParticles(ParticleTypes.EXPLOSION, end.x, end.y, end.z, 3, 0.6, 0.6, 0.6, 0.0);
-        RelicEffects.burst(sl, end, dust, 24, 1.0, 0.0);
-        RelicEffects.sound(sl, b.blockPosition(), SoundEvents.WITHER_SHOOT, 0.6F, 1.4F);
-        RelicEffects.sound(sl, BlockPos.containing(end), SoundEvents.FIREWORK_ROCKET_BLAST, 1.6F, 0.6F);
+    /** A shell lobbed at the target (RelicShells): it flies and bursts on the first enemy or block it meets. */
+    private static void shell(SupremeEntity b, ServerLevel sl, LivingEntity t, float dmg) {
+        Vec3 from = b.getEyePosition().add(BossPowers.flat(t.position().subtract(b.position())).scale(0.8));
+        Vec3 to = t.position().add(0.0, t.getBbHeight() * 0.5, 0.0);
+        RelicShells.fire(b, sl, from, RelicShells.lob(from, to, 2.0), dmg, 3.0, BossPowers.color(b), false);
     }
 
     /** The pose a melee character's ability wind-up takes. */

@@ -29,7 +29,7 @@ KINDS = [
     ('polearm',     -2.3, 1.05, 2.0, 0.3, False, 'melee',   0.0,  0, '長柄',     '長い間合いの突き・なぎ払い無し', 'Polearm',     'long-reach thrusts, no sweep'),
     ('heavy',       -2.8, 1.45, 0.0, 1.5, False, 'melee',   0.0,  0, '鈍器',     '遅いが重い一撃・強い吹き飛ばし', 'Heavy',       'slow crushing blows, strong knockback'),
     ('toyhammer',   -2.0, 0.70, 0.0, 3.0, False, 'melee',   0.0,  0, '玩具槌',   '威力控えめ・吹き飛ばし最大',     'Toy Hammer',  'light damage, huge knockback'),
-    ('fist',        -0.4, 0.60, -0.5, 0.3, False, 'melee',  0.0,  0, '拳',       '超高速の連打・短い間合い',       'Fist',        'very fast blows, short reach'),
+    ('fist',        -0.4, 0.60, 0.0, 0.3, False, 'melee',   0.0,  0, '拳',       '超高速の連打・殴るほど強くなる', 'Fist',        'very fast blows that build up'),
     ('whip',        -2.2, 0.80, 3.0, 0.0, False, 'melee',   0.0,  0, '鞭・鎖',   '最長の間合い・なぎ払い無し',     'Whip / Chain', 'longest reach, no sweep'),
     ('magic',       -2.0, 0.40, 0.0, 0.0, False, 'bolt',    0.75, 10, '魔導具',  '魔弾を撃つ（殴りは弱い）',       'Catalyst',    'fires magic bolts (weak in melee)'),
     ('gatling',     -2.0, 0.35, 0.0, 0.0, False, 'gatling', 0.3,  4, '連射砲',   '押し続けて連射',                 'Gatling',     'hold to fire rapidly'),
@@ -173,6 +173,13 @@ def write(assets):
         L[f'boss_skill.{NS}.awaken'] = '（覚醒）' if li == 0 else ' (Awakened)'
         L[f'weapon_kind.{NS}.cooldown'] = 'アーツ再使用まで' if li == 0 else 'Art ready in'
         L[f'weapon_kind.{NS}.seconds'] = '秒' if li == 0 else 's'
+        # v0.17.11: focus and charm relics fit Curios slots of their own (data/<ns>/curios, data/curios/tags/item)
+        L[f'weapon_kind.{NS}.worn.focus'] = ('秘具スロット（装飾品）に着けても効果あり。着けている間は F でアーツ' if li == 0 else
+                                             'Also works in the Relic Focus accessory slot; worn, F casts its art')
+        L[f'weapon_kind.{NS}.worn.charm'] = ('護符スロット（装飾品）に着けても効果あり。着けている間は F でアーツ' if li == 0 else
+                                             'Also works in the Relic Charm accessory slot; worn, F casts its art')
+        L['curios.identifier.relic_focus'] = '秘具' if li == 0 else 'Relic Focus'
+        L['curios.identifier.relic_charm'] = '護符' if li == 0 else 'Relic Charm'
         with open(path, 'w', encoding='utf-8') as fh:
             json.dump(L, fh, ensure_ascii=False, indent=1)
     counts = {}

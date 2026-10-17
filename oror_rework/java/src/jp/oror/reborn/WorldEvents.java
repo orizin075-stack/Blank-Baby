@@ -24,6 +24,9 @@ public final class WorldEvents {
             if (v instanceof SupremeEntity boss && v.level() instanceof ServerLevel bl && (n.getLong("ororFreezeUntil") <= now || LorePowers.timeIndependent(boss))) {
                 BossPowers.tick(boss, bl);
             }
+            if (v instanceof Player wearer && now % 20L == 3L) {
+                CharacterRelics.unwear(wearer);
+            }
             if (!(v instanceof Player) && (!(v instanceof SupremeEntity b) || !LorePowers.timeIndependent(b)) && n.getLong("ororFreezeUntil") > now) {
                 v.setDeltaMovement(Vec3.ZERO);
                 e.setCanceled(true);
@@ -105,6 +108,7 @@ public final class WorldEvents {
     public static void levelTick(Post e) {
         if (e.getLevel() instanceof ServerLevel cleanup) {
             TerrainPlay.cleanup(cleanup);
+            RelicShells.tick(cleanup);
         }
 
         if (e.getLevel() instanceof ServerLevel sl && (Boolean)RebornConfig.NATURAL.get() && !sl.players().isEmpty()) {

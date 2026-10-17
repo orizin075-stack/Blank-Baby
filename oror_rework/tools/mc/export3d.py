@@ -27,6 +27,9 @@ TARGET = {'katana': 2.0, 'greatsword': 2.4, 'old holy sword': 2.1, 'branching sw
 # wands and brushes stay pointed like a sword
 STAFF = {'staff': 2.15, 'spindle staff': 2.15, 'conch staff': 2.1, 'marotte': 2.0, 'kagura bell': 1.7, 'scales': 2.0}
 
+# guns keep the sword grip in third person but aim into the view in first person (held.gun_fp), this long (blocks)
+GUN = {'gatling': 1.0, 'arm cannon': 1.0}
+
 def length_blocks(quads):
     ys = np.concatenate([F.to_obj_space(P)[:, 1] for P, *_ in quads])
     return float(ys.max() - ys.min())
@@ -43,7 +46,10 @@ def display_for(info, quads):
     else:
         tp = info['scale'] * (0.8 if info['hold'] == 'shield' else 1.0)
     fp = round(tp * 0.62, 3) if info['hold'] == 'sword' else {'fist': 0.5, 'shield': 0.55, 'palm': 0.55}[info['hold']]
-    return finish(Hd.derive(scale_tp=tp, scale_fp=fp, hold=info['hold']), quads)
+    d = Hd.derive(scale_tp=tp, scale_fp=fp, hold=info['hold'])
+    if info['hold'] == 'sword' and info['kind'] in GUN:
+        d['firstperson_righthand'] = Hd.gun_fp(round(GUN[info['kind']] / length_blocks(quads), 3))
+    return finish(d, quads)
 
 def finish(d, quads):
     out = {'thirdperson_righthand': d['thirdperson_righthand'], 'firstperson_righthand': d['firstperson_righthand']}

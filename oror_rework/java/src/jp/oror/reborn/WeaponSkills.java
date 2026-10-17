@@ -204,6 +204,10 @@ public final class WeaponSkills {
                 p.displayClientMessage(Component.translatable("weapon_skill.oror_supreme_bosses.combo").append(Component.literal(" ×" + n)).withStyle(ChatFormatting.GOLD), true);
                 RelicEffects.burst(sl, at, ParticleTypes.CRIT, 6 + n, 0.25, 0.3);
                 RelicEffects.burst(sl, at, dust, 6, 0.3, 0.0);
+                // v0.17.11: the blow lands like a punch: a straight streak from the fist and a puff at the impact
+                RelicEffects.line(sl, p.getEyePosition().add(0.0, -0.45, 0.0), at, dust, 0.25);
+                RelicEffects.burst(sl, at, ParticleTypes.POOF, 4, 0.1, 0.06);
+                RelicEffects.sound(sl, v.blockPosition(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, 0.5F, 1.2F + Math.min(n, 12) * 0.04F);
                 if (n % 5 == 0) {
                     announce(p, w);
                     for (LivingEntity t : around(p, v.position(), 3.0)) {

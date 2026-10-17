@@ -69,7 +69,9 @@ def relic_guide(S, version):
            'どの聖遺物も F（持ち替えキー）でアーツを使えます（しゃがみ＋F で普通の持ち替え）。Epic Fight の戦闘モードでは'
            '刀・剣・大剣・大鎌・輪刃・鈍器・玩具槌の右クリックがガードになるので、F を使ってください。',
            '秘具を手に持つと攻撃力＋40％・攻撃速度＋20％、護符を手に持つと最大体力＋20・防具＋10・防具強度＋6・移動速度＋20％・'
-           'ノックバック耐性＋50％。秘具・護符のアーツは威力と回復が2倍、強化効果が1段階上・1.5倍長く・範囲1.25倍です。', '']
+           'ノックバック耐性＋50％。秘具・護符のアーツは威力と回復が2倍、強化効果が1段階上・1.5倍長く・範囲1.25倍です。',
+           '秘具・護符は装飾品スロット（Curios の「秘具」「護符」、各1つ）に着けても、手に持ったときと同じ効果と「所持中」効果があります。'
+           '着けている秘具・護符のアーツは F で使えます（手に聖遺物が無いとき、または手の聖遺物のアーツが再使用待ちのとき。秘具→護符の順）。', '']
     kinds = json.load(open(os.path.join(S, 'build', 'overlay', 'assets', 'oror_supreme_bosses', 'weapon_kinds.json'), encoding='utf-8'))
     moves = json.load(open(os.path.join(S, 'build', 'overlay', 'assets', 'oror_supreme_bosses', 'boss_moves.json'), encoding='utf-8'))['characters']
     style_ja = {'duelist': '踏み込み・後退・横跳び', 'brawler': '跳びかかる', 'caster': '距離を取り、詰められると転移', 'gunner': '距離を取って横移動',

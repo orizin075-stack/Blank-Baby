@@ -163,7 +163,11 @@ public final class CharacterRelics {
 
     // ------------------------------------------------------------------------------------- right-click
     private static InteractionResultHolder<ItemStack> art(Wield w, Level l, Player p, InteractionHand hand) {
-        ItemStack stack = p.getItemInHand(hand);
+        return art(w, l, p, p.getItemInHand(hand), hand);
+    }
+
+    /** The art of a relic; hand is null for a focus or charm worn as an accessory. */
+    private static InteractionResultHolder<ItemStack> art(Wield w, Level l, Player p, ItemStack stack, InteractionHand hand) {
         if (p.getCooldowns().isOnCooldown(stack.getItem())) {
             return InteractionResultHolder.fail(stack);
         }
@@ -209,7 +213,7 @@ public final class CharacterRelics {
             } else {
                 p.getCooldowns().addCooldown(stack.getItem(), cd);
             }
-            if (w.spec != null && stack.isDamageableItem()) {
+            if (w.spec != null && hand != null && stack.isDamageableItem()) {
                 stack.hurtAndBreak(1, p, LivingEntity.getSlotForHand(hand));
             }
         }
@@ -286,13 +290,21 @@ public final class CharacterRelics {
         }
     }
 
-    /** Passive arts run once a second while the item is in either hand; a raised relic shield also guards nearby players. */
-    static void held(Wield w, ItemStack stack, Level l, Entity e) {
+    /**
+     * Passive arts run once a second while the item is in either hand; a raised relic shield also guards nearby players.
+     * v0.17.11: a focus or charm worn in its Curios slot (Curios ticks worn items with slot -1) works as if held, with
+     * its held bonuses (wear()).
+     */
+    static void held(Wield w, ItemStack stack, Level l, Entity e, int slot) {
         if (w.art == null || l.isClientSide || !(e instanceof Player p) || p.tickCount % 20 != 0) {
             return;
         }
-        if (p.getMainHandItem() != stack && p.getOffhandItem() != stack) {
+        boolean worn = slot == -1 && w.kind == null && w.spec != null;
+        if (!worn && p.getMainHandItem() != stack && p.getOffhandItem() != stack) {
             return;
+        }
+        if (worn) {
+            wear(w, p);
         }
         if (w.kind != null && w.kind.mode.equals("guard") && p.isBlocking() && p.getUseItem() == stack && l instanceof ServerLevel sl) {
             WeaponSkills.sanctuary(p, w, sl);
@@ -302,6 +314,66 @@ public final class CharacterRelics {
         } else if (w.spec != null && (w.spec.rank == 3 || w.spec.slot.equals("charm"))) {
             RelicPowers.passive(w.spec, p);
         }
+    }
+
+    // ------------------------------------------------------------------------------------- accessories (v0.17.11)
+    /** The bonuses of a focus or charm, the same held (item attributes) and worn (transient modifiers on the wearer). */
+    private record Bonus(net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> attribute, String id, double amount, AttributeModifier.Operation op) {
+    }
+
+    private static final List<Bonus> FOCUS = List.of(
+        new Bonus(Attributes.ATTACK_DAMAGE, "focus_attack", 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+        new Bonus(Attributes.ATTACK_SPEED, "focus_speed", 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+    private static final List<Bonus> CHARM = List.of(
+        new Bonus(Attributes.MAX_HEALTH, "charm_health", 20.0, AttributeModifier.Operation.ADD_VALUE),
+        new Bonus(Attributes.ARMOR, "charm_armor", 10.0, AttributeModifier.Operation.ADD_VALUE),
+        new Bonus(Attributes.ARMOR_TOUGHNESS, "charm_toughness", 6.0, AttributeModifier.Operation.ADD_VALUE),
+        new Bonus(Attributes.MOVEMENT_SPEED, "charm_speed", 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+        new Bonus(Attributes.KNOCKBACK_RESISTANCE, "charm_steady", 0.5, AttributeModifier.Operation.ADD_VALUE));
+
+    private static ResourceLocation worn(Bonus b) {
+        return ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "worn_" + b.id());
+    }
+
+    /** A focus or charm in its Curios slot: its bonuses on the wearer, refreshed while it stays on (unwear() drops them). */
+    private static void wear(Wield w, Player p) {
+        boolean focus = w.spec.slot.equals("focus");
+        CompoundTag d = p.getPersistentData();
+        d.putLong(focus ? "ororWornFocusAt" : "ororWornCharmAt", p.level().getGameTime());
+        d.putString(focus ? "ororWornFocus" : "ororWornCharm", w.spec.id);
+        for (Bonus b : focus ? FOCUS : CHARM) {
+            net.minecraft.world.entity.ai.attributes.AttributeInstance a = p.getAttribute(b.attribute());
+            if (a != null && !a.hasModifier(worn(b))) {
+                a.addTransientModifier(new AttributeModifier(worn(b), b.amount(), b.op()));
+            }
+        }
+    }
+
+    /** Once a second for every player (WorldEvents): takes off the bonuses of an accessory no longer worn. */
+    static void unwear(Player p) {
+        CompoundTag d = p.getPersistentData();
+        long now = p.level().getGameTime();
+        for (boolean focus : new boolean[]{true, false}) {
+            if (now - d.getLong(focus ? "ororWornFocusAt" : "ororWornCharmAt") <= 40L) {
+                continue;
+            }
+            for (Bonus b : focus ? FOCUS : CHARM) {
+                net.minecraft.world.entity.ai.attributes.AttributeInstance a = p.getAttribute(b.attribute());
+                if (a != null && a.hasModifier(worn(b))) {
+                    a.removeModifier(worn(b));
+                }
+            }
+        }
+    }
+
+    /** The focus or charm the player wears, or null. */
+    private static Wielded wornItem(Player p, boolean focus) {
+        CompoundTag d = p.getPersistentData();
+        if (p.level().getGameTime() - d.getLong(focus ? "ororWornFocusAt" : "ororWornCharmAt") > 40L) {
+            return null;
+        }
+        DeferredItem<Item> item = ITEMS.get(d.getString(focus ? "ororWornFocus" : "ororWornCharm"));
+        return item != null && item.get() instanceof Wielded x ? x : null;
     }
 
     static void describe(Wield w, List<Component> lines) {
@@ -347,9 +419,30 @@ public final class CharacterRelics {
         if (!(e.getEntity() instanceof Player p) || p.level().isClientSide || p.isShiftKeyDown()) {
             return;
         }
-        if (p.getMainHandItem().getItem() instanceof CharacterRelics.Wielded x && x.wield().art != null) {
+        ItemStack main = p.getMainHandItem();
+        boolean relic = main.getItem() instanceof CharacterRelics.Wielded x && x.wield().art != null;
+        if (relic && !artCooling(p, main)) {
             e.setCanceled(true);
-            CharacterRelics.art(x.wield(), p.level(), p, InteractionHand.MAIN_HAND);
+            CharacterRelics.art(((Wielded) main.getItem()).wield(), p.level(), p, InteractionHand.MAIN_HAND);
+            return;
+        }
+        // v0.17.11: F again while the weapon's art recharges (or with no relic in hand) casts the worn focus's art, then
+        // the worn charm's
+        for (boolean focus : new boolean[]{true, false}) {
+            Wielded worn = wornItem(p, focus);
+            if (worn != null && worn.wield().art != null) {
+                ItemStack s = new ItemStack((Item) worn);
+                if (!artCooling(p, s)) {
+                    e.setCanceled(true);
+                    CharacterRelics.art(worn.wield(), p.level(), p, s, null);
+                    return;
+                }
+            }
+        }
+        if (relic) {
+            // everything recharging: keep the relic in hand (and show a ranged kind's countdown)
+            e.setCanceled(true);
+            CharacterRelics.art(((Wielded) main.getItem()).wield(), p.level(), p, InteractionHand.MAIN_HAND);
         }
     }
 
@@ -365,15 +458,8 @@ public final class CharacterRelics {
         /** Held in either hand: a focus sharpens the wielder's attacks, a charm hardens and quickens them (v0.17.6). */
         static ItemAttributeModifiers attributes(RelicSpec s) {
             ItemAttributeModifiers.Builder b = ItemAttributeModifiers.builder();
-            if (s.slot.equals("focus")) {
-                b.add(Attributes.ATTACK_DAMAGE, modifier("focus_attack", 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.ANY)
-                    .add(Attributes.ATTACK_SPEED, modifier("focus_speed", 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.ANY);
-            } else {
-                b.add(Attributes.MAX_HEALTH, modifier("charm_health", 20.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY)
-                    .add(Attributes.ARMOR, modifier("charm_armor", 10.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY)
-                    .add(Attributes.ARMOR_TOUGHNESS, modifier("charm_toughness", 6.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY)
-                    .add(Attributes.MOVEMENT_SPEED, modifier("charm_speed", 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.ANY)
-                    .add(Attributes.KNOCKBACK_RESISTANCE, modifier("charm_steady", 0.5, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY);
+            for (Bonus x : s.slot.equals("focus") ? FOCUS : CHARM) {
+                b.add(x.attribute(), modifier(x.id(), x.amount(), x.op()), EquipmentSlotGroup.ANY);
             }
             return b.build();
         }
@@ -398,12 +484,13 @@ public final class CharacterRelics {
 
         public void inventoryTick(ItemStack stack, Level l, Entity e, int slot, boolean selected) {
             super.inventoryTick(stack, l, e, slot, selected);
-            CharacterRelics.held(this.w, stack, l, e);
+            CharacterRelics.held(this.w, stack, l, e, slot);
         }
 
         @Override
         public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
             RelicArts.tooltip(this.w.art, lines);
+            lines.add(Component.translatable("weapon_kind.oror_supreme_bosses.worn." + this.w.spec.slot).withStyle(ChatFormatting.WHITE));
         }
     }
 
@@ -465,7 +552,7 @@ public final class CharacterRelics {
 
         public void inventoryTick(ItemStack stack, Level l, Entity e, int slot, boolean selected) {
             super.inventoryTick(stack, l, e, slot, selected);
-            CharacterRelics.held(this.w, stack, l, e);
+            CharacterRelics.held(this.w, stack, l, e, slot);
         }
 
         @Override
@@ -519,7 +606,7 @@ public final class CharacterRelics {
 
         public void inventoryTick(ItemStack stack, Level l, Entity e, int slot, boolean selected) {
             super.inventoryTick(stack, l, e, slot, selected);
-            CharacterRelics.held(this.w, stack, l, e);
+            CharacterRelics.held(this.w, stack, l, e, slot);
         }
 
         @Override
@@ -562,7 +649,7 @@ public final class CharacterRelics {
 
         public void inventoryTick(ItemStack stack, Level l, Entity e, int slot, boolean selected) {
             super.inventoryTick(stack, l, e, slot, selected);
-            CharacterRelics.held(this.w, stack, l, e);
+            CharacterRelics.held(this.w, stack, l, e, slot);
         }
 
         @Override

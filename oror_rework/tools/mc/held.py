@@ -138,6 +138,13 @@ def derive_staff(scale_tp, scale_fp, lean=12.0):
     res['firstperson_righthand'] = dict(rotation=euler_xyz(Rf), translation=[round(c * 16, 3) for c in land], scale=[scale_fp] * 3)
     return res
 
+def gun_fp(scale_fp):
+    """First person for guns and cannons (v0.17.10): the barrel (+Y) points into the view from the lower right, the
+    decorated side towards the middle, instead of a sword's blade sweeping up across half the screen."""
+    Rf = frame_from([-0.12, 0.1, -1.0], [-1.0, 0.35, 0.0])
+    land = np.array([0.36, -0.36, -0.55]) - fp_frame()[:3, 3]
+    return dict(rotation=euler_xyz(Rf), translation=[round(c * 16, 3) for c in land], scale=[scale_fp] * 3)
+
 def derive_worn(hold, scale_tp, scale_fp):
     """Gauntlets / claws / held-by-the-ear plush (axis along the forearm, knuckles at +u, back of hand +w)
     and shields (face outwards on the forearm, point down)."""
