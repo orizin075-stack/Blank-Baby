@@ -324,6 +324,8 @@ class Humanoid(FG.Humanoid):
         P = SC.bezier(*P, n=max(4, len(P) * 2)) if len(P) <= 5 else P
         n = len(P)
         k = min(max(1, int(round(split * (n - 1)))), n - 2)
+        anim_kw = dict(anim_kw)
+        up_dir = anim_kw.pop('up', (0, 0, 1))         # geometry only: bone params must stay numeric (RigModel reads floats)
         up_b = self.rig.bone(bname, parent, tuple(P[0]), anim='hair', **anim_kw)
         lo_b = self.rig.bone(bname + '_tip', up_b, tuple(P[k]), anim='hair', **dict(anim_kw, amp=anim_kw.get('amp', 0.03) * 1.6,
                                                                                     phase=anim_kw.get('phase', 0) + 0.6))
@@ -333,7 +335,7 @@ class Humanoid(FG.Humanoid):
             b = up_b if i < k else lo_b
             w = (W[i] + W[i + 1]) / 2
             d = thick * (1 - 0.35 * tt[i])
-            bb.beam(b, P[i], P[i + 1], w, d, dict(mat), up=anim_kw.get('up', (0, 0, 1)), name=name, ext=0.4,
+            bb.beam(b, P[i], P[i + 1], w, d, dict(mat), up=up_dir, name=name, ext=0.4,
                     info={'t_lo': float(tt[i]), 't_hi': float(tt[i + 1])})
         return up_b, lo_b
 

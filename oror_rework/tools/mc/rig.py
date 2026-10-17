@@ -58,6 +58,15 @@ class Bone:
         size = tuple(texels(v) for v in size)
         return self.box(tuple(center[i] - size[i] / 2 for i in range(3)), size, mat, glow, name, grow, **kw)
 
+def numeric_params(key, b):
+    """Bone params as RigModel reads them (gson Map<String, Float>): numbers only, or the whole rig fails to load."""
+    out = {}
+    for k, v in b.params.items():
+        if isinstance(v, bool) or not isinstance(v, (int, float)):
+            raise TypeError(f'{key}/{b.name}: bone param {k!r} must be a number, got {type(v).__name__} {v!r}')
+        out[k] = v
+    return out
+
 class Rig:
     def __init__(self, key, texture=None, layout=(128, 128), density=1, height=None, translucent=False):
         self.key, self.texture = key, texture or key
@@ -114,7 +123,7 @@ class Rig:
                 'at': [round(b.pivot[i] - pp[i], 4) for i in range(3)],
                 'rot': [round(r, 5) for r in b.rot],
                 'anim': b.anim or '',
-                'p': {k: v for k, v in b.params.items()},
+                'p': numeric_params(self.key, b),
                 'cubes': [dict({'uv': list(c.uv), 'o': [round(v, 4) for v in c.origin], 's': [round(v, 4) for v in c.size]},
                                **({'g': round(c.grow, 4)} if c.grow else {})) for c in b.cubes],
             })
