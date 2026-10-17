@@ -133,3 +133,23 @@ net/minecraft/world/phys/AABB.inflate(DDD)Lnet/minecraft/world/phys/AABB;
 # way by Iron's Spells 1.21.
 net/minecraft/world/damagesource/DamageSources.indirectMagic(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/damagesource/DamageSource;
 net/minecraft/world/entity/ai/control/MoveControl.setWantedPosition(DDDD)V
+# v0.17.14 village work: BlockAndTintGetter.getBrightness (as in Iron's Spells), BlockStateBase.canSurvive, BlockItem.getBlock
+# (as in NeoForge's RenderTypeHelper), Sheep shearing, DyeColor.getName, vanilla item tags and block sounds (1.21.1).
+net/minecraft/server/level/ServerLevel.getBrightness(Lnet/minecraft/world/level/LightLayer;Lnet/minecraft/core/BlockPos;)I
+net/minecraft/sounds/SoundEvents.CAMPFIRE_CRACKLE:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/sounds/SoundEvents.SHEEP_SHEAR:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/sounds/SoundEvents.WOOD_PLACE:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/tags/ItemTags.BEDS:Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/ItemTags.WOODEN_DOORS:Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/ItemTags.WOODEN_SLABS:Lnet/minecraft/tags/TagKey;
+net/minecraft/tags/ItemTags.WOOL:Lnet/minecraft/tags/TagKey;
+net/minecraft/world/entity/animal/Sheep.getColor()Lnet/minecraft/world/item/DyeColor;
+net/minecraft/world/entity/animal/Sheep.readyForShearing()Z
+net/minecraft/world/entity/animal/Sheep.setSheared(Z)V
+net/minecraft/world/item/BlockItem.getBlock()Lnet/minecraft/world/level/block/Block;
+net/minecraft/world/item/DyeColor.getName()Ljava/lang/String;
+net/minecraft/world/level/LightLayer.BLOCK:Lnet/minecraft/world/level/LightLayer;
+net/minecraft/world/level/block/state/BlockState.canSurvive(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z
+# v0.17.14: HumanoidModel's public leg parts, for the miner's clothes on the human villager model (1.21.1).
+net/minecraft/client/model/HumanoidModel.leftLeg:Lnet/minecraft/client/model/geom/ModelPart;
+net/minecraft/client/model/HumanoidModel.rightLeg:Lnet/minecraft/client/model/geom/ModelPart;

@@ -25,14 +25,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Village guards and villagers (v0.17.9), called from AdaptiveCombat.tick and VillagerLife.tick.
- * - Guards (衛兵): the fighting professions, veterans (level 4+) and guard mods' guards. They hold a post at the village
- *   centre, pick threats that menace villagers or players first, do not hunt through walls, let a target go once it is
- *   more than 56 blocks from the post (48 to take one on) and walk back, raise the alarm when they engage, patrol the village by day and keep
- *   the night watch. Sword guards leave creepers to the archers.
- * - Villagers (村人): every other profession and all children. They no longer charge into fights: on a threat or an
- *   alarm they run home (at night), behind the nearest guard (by day) or away, and strike back only when cornered at arm's
- *   length.
+ * Village roles (v0.17.9; redrawn in v0.17.14), called from AdaptiveCombat.tick, AdaptiveCombat.damage and VillagerLife.tick.
+ * - Guards (衛兵) are Guard Villagers' guards. They fight with their own AI (AdaptiveCombat leaves them alone); here they
+ *   only answer a villager's cry for help.
+ * - Strong villagers: armorers, weaponsmiths, toolsmiths, fletchers, butchers, leatherworkers, masons and miners. They are
+ *   villagers like any other - they work by day, sleep at night and carry their gear only while danger is near - but they
+ *   do not run: they take on what threatens them or the villagers around them, within 16 blocks of where they stood, and
+ *   go back to work once it is beaten or gone. Creepers they leave to the archers.
+ * - Every other villager, and every child, runs: home at night, behind a guard or a strong villager by day, or away, and
+ *   strikes back only when cornered at arm's length.
  * Every walk here is given as a ground speed, so profession, growth and potion bonuses to movement speed no longer turn
  * villagers into a blur: a mob's ground speed grows with the square of its speed value, and the old 1.1-1.35 multipliers on
  * a boosted villager came to 20-80 blocks a second.
@@ -40,98 +41,114 @@ import net.minecraft.world.phys.Vec3;
 public final class VillageAI {
     /** Ground speeds (movement speed value; about 44 x value^2 blocks a second). Vanilla villagers walk at 0.25. */
     static final double WORK = 0.3;
-    static final double PATROL = 0.27;
     static final double FLEE = 0.36;
     static final double CHARGE = 0.38;
-    private static final double LEASH = 48.0;
-    private static final Set<String> FIGHTERS = Set.of("armorer", "weaponsmith", "toolsmith", "fletcher", "butcher", "leatherworker", "mason", "miner");
+    /** How far from where it stood a strong villager follows a fight. */
+    private static final double REACH = 16.0;
+    private static final Set<String> STRONG = Set.of("armorer", "weaponsmith", "toolsmith", "fletcher", "butcher", "leatherworker", "mason", "miner");
     private static final Set<String> SHOOTERS = Set.of("bow", "crossbow", "trident");
 
     private VillageAI() {
     }
 
-    /** Guards fight; everyone else in the village flees. Without armed villagers nobody stands guard. */
+    /** Guards: other mods' village guards. A villager is never one. */
     public static boolean fighter(Mob m) {
-        if (!(m instanceof Villager v)) {
-            return AdaptiveCombat.guardian(m);
-        }
-        return (Boolean) RebornConfig.ARMED_VILLAGERS.get() && !v.isBaby()
-            && (FIGHTERS.contains(VillagerRoles.profession(v)) || MobLevels.level(v) >= 4);
+        return !(m instanceof Villager) && AdaptiveCombat.guardian(m);
+    }
+
+    /** A grown villager of one of the strong trades (with armed villagers on). */
+    public static boolean strong(Mob m) {
+        return m instanceof Villager v && (Boolean) RebornConfig.ARMED_VILLAGERS.get() && !v.isBaby() && STRONG.contains(VillagerRoles.profession(v));
     }
 
     public static boolean fleeing(Mob m) {
         return MobMind.data(m).getLong("VillageFlee") > m.level().getGameTime();
     }
 
-    /** True when the combat AI should sit this tick out (a villager that is fleeing or simply living its day). */
+    /** True when the combat AI should sit this tick out (a villager that is asleep, fleeing or simply living its day). */
     static boolean tick(Mob m, ServerLevel sl, CompoundTag n) {
-        long now = sl.getGameTime();
-        if (m instanceof Villager v && v.isSleeping()) {
+        if (!(m instanceof Villager v)) {
+            return false;
+        }
+        if (v.isSleeping()) {
             // asleep: nothing until something wakes them (being hurt does)
             return true;
         }
-        if (!fighter(m)) {
-            return civilian(m, sl, n, now);
+        long now = sl.getGameTime();
+        return strong(v) ? stand(v, sl, n, now) : civilian(v, sl, n, now);
+    }
+
+    /** May m take e on? A guard always; a strong villager that is awake when e is within reach of where it stood. */
+    static boolean engage(Mob m, LivingEntity e) {
+        if (fighter(m)) {
+            return true;
         }
-        LivingEntity t = m.getTarget();
-        if (t != null && (now + m.getId()) % 10L == 0L) {
-            BlockPos post = post(m, n);
-            if (far(t, post, LEASH + 8.0)) {
-                // the target ran off: let it go and walk back to the post
-                m.setTarget(null);
-                m.setLastHurtByMob(null);
-                n.putLong("VillageReturn", now + 200L);
-                walk(m, post, pace(m, CHARGE), 3);
-                label(m, "持ち場へ戻る");
+        return e != null && strong(m) && !((Villager) m).isSleeping() && !far(e, spot(m, MobMind.data(m)), REACH);
+    }
+
+    // ------------------------------------------------------------------------------------- strong villagers
+    /** A strong villager's turn: fight what is near, let it go once it is beaten or far, otherwise live like the rest. */
+    private static boolean stand(Villager v, ServerLevel sl, CompoundTag n, long now) {
+        LivingEntity t = v.getTarget();
+        if (t != null && (!AdaptiveCombat.enemy(v, t) || far(t, spot(v, n), REACH + 4.0))) {
+            // beaten or run off: back to the day's work
+            v.setTarget(null);
+            v.setLastHurtByMob(null);
+            t = null;
+        }
+        if (t == null && (now + v.getId()) % 10L == 0L) {
+            t = foe(v, sl, n);
+            if (t != null) {
+                v.setTarget(t);
+                alarm(sl, v, t);
             }
         }
+        if (t == null) {
+            // creepers and what is out of reach: step away like anyone else
+            return civilian(v, sl, n, now);
+        }
+        n.putLong("VillageStand", spot(v, n).asLong());
+        n.putLong("VillageStandUntil", now + 200L);
+        gear(v, n, now, true);
+        label(v, "応戦中");
         return false;
     }
 
-    // ------------------------------------------------------------------------------------- guards
-    /** May this guard take on e? Not beyond the leash, and not while walking back unless it is close. */
-    static boolean engage(Mob m, LivingEntity e) {
-        if (!fighter(m)) {
-            return false;
-        }
-        CompoundTag n = MobMind.data(m);
-        if (far(e, post(m, n), LEASH)) {
-            return false;
-        }
-        return n.getLong("VillageReturn") <= m.level().getGameTime() || m.distanceToSqr(e) < 64.0;
+    /** Where the fight began (for ten seconds after it ends), or where the villager stands now. */
+    private static BlockPos spot(Mob m, CompoundTag n) {
+        return n.getLong("VillageStandUntil") > m.level().getGameTime() ? BlockPos.of(n.getLong("VillageStand")) : m.blockPosition();
     }
 
-    /** The threat a guard should take: menaces to villagers and players first, then the nearest one in sight. */
-    static LivingEntity threat(Mob m, ServerLevel sl) {
-        if (!fighter(m)) {
-            return null;
+    /** Whoever hurt it, or the hostile nearby that hunts someone (or is at arm's length) and is in sight; menaces first. */
+    private static LivingEntity foe(Villager v, ServerLevel sl, CompoundTag n) {
+        BlockPos at = spot(v, n);
+        LivingEntity hurt = v.getLastHurtByMob();
+        if (AdaptiveCombat.enemy(v, hurt) && !far(hurt, at, REACH)) {
+            return hurt;
         }
-        boolean shooter = SHOOTERS.contains(VillagerRoles.preferred(m));
+        boolean shooter = SHOOTERS.contains(VillagerRoles.preferred(v));
         LivingEntity best = null;
         double score = Double.MAX_VALUE;
-        for (LivingEntity e : sl.getEntitiesOfClass(LivingEntity.class, m.getBoundingBox().inflate(24.0, 8.0, 24.0), x -> x instanceof Enemy && AdaptiveCombat.enemy(m, x))) {
-            if (!shooter && BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath().equals("creeper")) {
+        for (Mob e : sl.getEntitiesOfClass(Mob.class, v.getBoundingBox().inflate(REACH, 6.0, REACH), x -> x instanceof Enemy && AdaptiveCombat.enemy(v, x))) {
+            if (!shooter && BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath().equals("creeper") || far(e, at, REACH)) {
                 continue;
             }
-            boolean menace = e instanceof Mob h && h.getTarget() != null
-                && (h.getTarget() instanceof Player || h.getTarget() instanceof Mob a && AdaptiveCombat.allied(m, a));
-            double d = Math.sqrt(m.distanceToSqr(e));
-            if (!engage(m, e) || !menace && d > 6.0 && !m.getSensing().hasLineOfSight(e)) {
+            LivingEntity aim = e.getTarget();
+            boolean menace = aim != null && (aim instanceof Player || aim instanceof Mob a && AdaptiveCombat.allied(v, a));
+            double d = Math.sqrt(v.distanceToSqr(e));
+            if (!menace && d > 6.0 || d > 4.0 && !v.getSensing().hasLineOfSight(e)) {
                 continue;
             }
-            double s = d - (menace ? 12.0 : 0.0);
+            double s = d - (menace ? 8.0 : 0.0);
             if (s < score) {
                 score = s;
                 best = e;
             }
         }
-        if (best != null) {
-            alarm(sl, m, best);
-        }
         return best;
     }
 
-    /** A guard shouts: the nearest free guards answer, villagers within earshot run. */
+    /** A cry for help: guards and strong villagers near the threat answer (three at most), the rest within earshot run. */
     static void alarm(ServerLevel sl, Mob caller, LivingEntity threat) {
         CompoundTag n = MobMind.data(caller);
         long now = sl.getGameTime();
@@ -148,7 +165,7 @@ public final class VillageAI {
             .toList();
         int answered = 0;
         for (Mob a : near) {
-            if (fighter(a)) {
+            if (fighter(a) || strong(a)) {
                 if (answered < 3 && a.getTarget() == null && a.distanceToSqr(threat) < 576.0 && engage(a, threat)) {
                     a.setTarget(threat);
                     answered++;
@@ -162,49 +179,6 @@ public final class VillageAI {
         }
     }
 
-    /** Day patrols around the post and, all night, the night watch. True while it keeps the guard busy. */
-    static boolean patrol(Villager v, ServerLevel sl) {
-        if (!fighter(v) || v.isSleeping()) {
-            return false;
-        }
-        CompoundTag n = MobMind.data(v);
-        long now = sl.getGameTime();
-        if (n.getLong("VillageReturn") > now) {
-            // still walking back to the post after letting a target go
-            label(v, "持ち場へ戻る");
-            return true;
-        }
-        boolean night = !sl.isDay();
-        BlockPos post = post(v, n);
-        if (post == null) {
-            return false;
-        }
-        if (n.contains("VillagePatrol") && n.getLong("VillagePatrolUntil") > now) {
-            BlockPos at = BlockPos.of(n.getLong("VillagePatrol"));
-            if (v.blockPosition().distSqr(at) > 9.0) {
-                walk(v, at, pace(v, PATROL), 2);
-            }
-            label(v, night ? "夜警" : "見回り中");
-            return true;
-        }
-        if (!night && n.getLong("VillagePatrolNext") > now) {
-            return false;
-        }
-        double a = sl.random.nextDouble() * Math.PI * 2.0;
-        double r = 8.0 + sl.random.nextDouble() * 18.0;
-        BlockPos p = ground(sl, post.offset((int) (Math.cos(a) * r), 0, (int) (Math.sin(a) * r)), post.getY(), 8);
-        n.putLong("VillagePatrolNext", now + 900L + sl.random.nextInt(600));
-        if (p == null) {
-            return false;
-        }
-        // walk there, then stand watch until the leg is over
-        n.putLong("VillagePatrol", p.asLong());
-        n.putLong("VillagePatrolUntil", now + 300L);
-        walk(v, p, pace(v, PATROL), 2);
-        label(v, night ? "夜警" : "見回り中");
-        return true;
-    }
-
     // ------------------------------------------------------------------------------------- villagers
     private static boolean civilian(Mob m, ServerLevel sl, CompoundTag n, long now) {
         LivingEntity t = m.getTarget();
@@ -214,7 +188,7 @@ public final class VillageAI {
                 gear(m, n, now, true);
                 return false;
             }
-            // shared targets and grudges are for the guards; a villager steps back from them
+            // shared targets and grudges are for the guards and the strong; a villager steps back from them
             m.setTarget(null);
             if (AdaptiveCombat.enemy(m, t) && m.distanceToSqr(t) < 400.0) {
                 threat = t;
@@ -245,7 +219,7 @@ public final class VillageAI {
     }
 
     /**
-     * v0.17.13: a villager (not a guard) wears armor and carries a weapon only while danger is near, and puts them away
+     * v0.17.13: a villager, strong or not, wears armor and carries a weapon only while danger is near, and puts them away
      * ten seconds after it passes, so the profession's clothes show the rest of the time. Only the gear MobLevels.arm
      * gave is taken off; anything a player handed over stays.
      */
@@ -283,7 +257,7 @@ public final class VillageAI {
     }
 
     /**
-     * v0.17.13: at night a villager who is not on guard goes home to bed (the brain takes it the last steps and to sleep);
+     * v0.17.13: at night every villager goes home to bed (the brain takes it the last steps and to sleep);
      * from far away it is walked home first. Returns the status line.
      */
     static String bedtime(Villager v, ServerLevel sl) {
@@ -329,8 +303,8 @@ public final class VillageAI {
         boolean homeSafe = home != null && home.distSqr(m.blockPosition()) < 2304.0 && safe(me, Vec3.atCenterOf(home), from, danger);
         BlockPos to = !sl.isDay() && homeSafe ? home : null;
         if (to == null) {
-            // run behind the nearest guard that is not in the threat's direction
-            for (Mob g : sl.getEntitiesOfClass(Mob.class, m.getBoundingBox().inflate(24.0, 6.0, 24.0), x -> x != m && AdaptiveCombat.active(x) && fighter(x) && AdaptiveCombat.allied(m, x))
+            // run behind the nearest guard or strong villager that is not in the threat's direction
+            for (Mob g : sl.getEntitiesOfClass(Mob.class, m.getBoundingBox().inflate(24.0, 6.0, 24.0), x -> x != m && AdaptiveCombat.active(x) && (fighter(x) || strong(x)) && AdaptiveCombat.allied(m, x))
                 .stream()
                 .sorted(Comparator.comparingDouble(m::distanceToSqr))
                 .toList()) {
@@ -392,18 +366,6 @@ public final class VillageAI {
         }
         n.putLong("VillageWalk", p.asLong());
         m.getNavigation().moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, mod);
-    }
-
-    /** A guard's post: its village centre, or where it first stood when it has no village. */
-    static BlockPos post(Mob m, CompoundTag n) {
-        VillageLedger.Village v = VillageLedger.of(m);
-        if (v != null) {
-            return v.center;
-        }
-        if (!n.contains("VillagePost")) {
-            n.putLong("VillagePost", m.blockPosition().asLong());
-        }
-        return BlockPos.of(n.getLong("VillagePost"));
     }
 
     private static boolean far(LivingEntity e, BlockPos post, double r) {

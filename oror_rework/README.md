@@ -1,6 +1,6 @@
-# OROR War × Nightfall — rework workspace (v0.17.13)
+# OROR War × Nightfall — rework workspace (v0.17.14)
 
-Release: `dist/OROR_War_Nightfall_v0.17.13_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Release: `dist/OROR_War_Nightfall_v0.17.14_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
 v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
 the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.17.2 fixes rigs.json failing to load in game (a non-numeric hair bone param); `java/meshtest/RigsCheck.java` now
@@ -44,9 +44,16 @@ v0.17.13 tones down the Suppression mod's screen darkening (`tools/pack_config/`
 leaves mobs Epic Fight animates and other mods' mobs to their own AI (`AdaptiveCombat.drivenElsewhere`,
 `EpicFightBridge.java`), arms ordinary villagers only in danger (`VillageAI.gear`; guards always) and sends them home to
 sleep at night while the guards keep the night watch (`VillageAI.bedtime`).
+v0.17.14 makes the eight fighting trades strong villagers instead of guards (they work, sleep and arm only in danger,
+but fight what threatens them within 16 blocks: `VillageAI.strong`/`stand`); the guards are Guard Villagers' own, left to
+their own AI. Village work follows what the village lacks (`VillageWork.java`: a 30-second survey; chests, a campfire, job
+blocks, torches on dark ground, bread, beds and houses for the homeless, made from real recipes step by step, with
+materials fetched from the communal chests, trees felled whole, logs burnt to charcoal and sheep shorn); shaped recipes
+are laid on a grid of their own size (`VillagerLife.craft`), and fields grow from their edges. Miners get work clothes and
+a lit hard hat on the human villager model and new vanilla-model textures (`tools/mc/villager_outfits.py`).
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.13_JA.md`, the list of all 164 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.14_JA.md`, the list of all 164 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates

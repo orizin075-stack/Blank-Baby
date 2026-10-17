@@ -185,3 +185,35 @@ net/minecraft/world/damagesource/DamageSources
 	VM indirectMagic (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/damagesource/DamageSource;
 net/minecraft/world/entity/ai/control/MoveControl
 	VM setWantedPosition (DDDD)V
+# v0.17.14 village work (Minecraft 1.21.1, Mojang names): BlockItem.getBlock as in NeoForge's RenderTypeHelper;
+# BlockAndTintGetter.getBrightness(LightLayer, BlockPos) as in Iron's Spells' light checks; BlockStateBase.canSurvive;
+# Sheep.readyForShearing/setSheared/getColor and DyeColor.getName; the vanilla item tags minecraft:wooden_slabs, wool,
+# wooden_doors and beds.
+net/minecraft/world/item/BlockItem
+	VM getBlock ()Lnet/minecraft/world/level/block/Block;
+net/minecraft/server/level/ServerLevel
+	VM getBrightness (Lnet/minecraft/world/level/LightLayer;Lnet/minecraft/core/BlockPos;)I
+net/minecraft/world/level/LightLayer
+	SF BLOCK Lnet/minecraft/world/level/LightLayer;
+net/minecraft/world/level/LevelReader
+net/minecraft/world/level/block/state/BlockState
+	VM canSurvive (Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z
+net/minecraft/world/entity/animal/Sheep
+	VM readyForShearing ()Z
+	VM setSheared (Z)V
+	VM getColor ()Lnet/minecraft/world/item/DyeColor;
+net/minecraft/world/item/DyeColor
+	VM getName ()Ljava/lang/String;
+net/minecraft/tags/ItemTags
+	SF WOODEN_SLABS Lnet/minecraft/tags/TagKey;
+	SF WOOL Lnet/minecraft/tags/TagKey;
+	SF WOODEN_DOORS Lnet/minecraft/tags/TagKey;
+	SF BEDS Lnet/minecraft/tags/TagKey;
+net/minecraft/sounds/SoundEvents
+	SF CAMPFIRE_CRACKLE Lnet/minecraft/sounds/SoundEvent;
+	SF SHEEP_SHEAR Lnet/minecraft/sounds/SoundEvent;
+	SF WOOD_PLACE Lnet/minecraft/sounds/SoundEvent;
+# v0.17.14 miner clothes on the human villager model: HumanoidModel's public leg parts (1.21.1)
+net/minecraft/client/model/HumanoidModel
+	VF rightLeg Lnet/minecraft/client/model/geom/ModelPart;
+	VF leftLeg Lnet/minecraft/client/model/geom/ModelPart;

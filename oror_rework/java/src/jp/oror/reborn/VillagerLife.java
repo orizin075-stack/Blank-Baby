@@ -130,21 +130,13 @@ public final class VillagerLife {
                 return;
             }
 
-            // v0.17.13: at night the guards keep watch and everyone else, miners too, goes home to bed
+            // v0.17.13: at night every villager, strong ones and miners too, goes home to bed (the guards are Guard Villagers')
             if (!sl.isDay()) {
-                if (!VillageAI.patrol(v, sl)) {
-                    data(v).putString("Task", VillageAI.bedtime(v, sl));
-                }
-
+                data(v).putString("Task", VillageAI.bedtime(v, sl));
                 return;
             }
 
             if (VillagerIndustry.miner(v)) {
-                return;
-            }
-
-            // v0.17.9: guards walk their rounds now and then
-            if (VillageAI.patrol(v, sl)) {
                 return;
             }
 
@@ -154,18 +146,23 @@ public final class VillagerLife {
             CompoundTag n = data(v);
             long now = sl.getGameTime();
             int phase = n.getLong("JobUntil") > now ? n.getInt("JobPhase") : Math.floorMod((int)(now / 20L) + v.getId(), 8);
+            if (n.getLong("JobUntil") <= now && n.contains("BuildOrigin") && sl.random.nextInt(2) == 0) {
+                // a house going up comes before the other chores
+                phase = 3;
+            }
             goal = null;
             goalDistance = Double.MAX_VALUE;
 
+            // v0.17.14: crafting, storing and tidying follow what the village lacks (VillageWork)
             boolean changed = switch (phase) {
                 case 0 -> farm(v, sl);
-                case 1 -> lumber(v, sl);
-                case 2 -> craft(v, sl, null);
+                case 1 -> VillageWork.wantsWood(v, sl) && lumber(v, sl);
+                case 2 -> VillageWork.chores(v, sl);
                 case 3 -> build(v, sl);
-                case 4 -> storage(v, sl, false);
+                case 4 -> VillageWork.store(v, sl);
                 case 5 -> trade(v, sl);
                 case 6 -> pray(v, sl);
-                default -> storage(v, sl, true);
+                default -> VillageWork.tidy(v, sl);
             };
             if (changed) {
                 n.putInt("JobPhase", phase);
@@ -220,7 +217,8 @@ public final class VillagerLife {
                 || s.is(Items.STICK)
                 || s.is(Items.COAL)
                 || s.is(Items.CHARCOAL)
-                || s.is(Items.BONE_MEAL);
+                || s.is(Items.BONE_MEAL)
+                || VillageWork.material(s);
         }
     }
 
@@ -285,7 +283,7 @@ public final class VillagerLife {
         }
     }
 
-    private static boolean editable(Villager v, ServerLevel sl, BlockPos p) {
+    static boolean editable(Villager v, ServerLevel sl, BlockPos p) {
         VillageLedger.Village village = VillageLedger.of(v);
         return sl.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)
             && sl.hasChunkAt(p)
@@ -324,7 +322,7 @@ public final class VillagerLife {
     private static BlockPos goal;
     private static double goalDistance = Double.MAX_VALUE;
 
-    private static boolean nearby(Villager v, BlockPos p) {
+    static boolean nearby(Villager v, BlockPos p) {
         double d = v.distanceToSqr(Vec3.atCenterOf(p));
         if (d <= 16.0) {
             return true;
@@ -458,52 +456,126 @@ public final class VillagerLife {
 
         if (!VillagerRoles.profession(v).equals("farmer")) {
             return false;
-        } else {
+        }
+        // v0.17.14: fields grow from their edges (dirt or grass beside farmland, near water), up to 16 plots a day; a
+        // farmer had to be standing by water with seeds before, so it hardly ever happened
+        CompoundTag n = data(v);
+        long day = Math.floorDiv(sl.getGameTime(), 24000L);
+        if (n.getLong("FarmDay") != day) {
+            n.putLong("FarmDay", day);
+            n.putInt("FarmToday", 0);
+        }
+        if (n.getInt("FarmToday") >= 16) {
+            return false;
+        }
+        if (VillageWork.count(v, i -> i.is(Items.WHEAT_SEEDS) || i.is(Items.CARROT) || i.is(Items.POTATO)) == 0) {
+            return VillageWork.seeds(v, sl) == VillageWork.ACTED;
+        }
+        boolean fields = false;
+        for (BlockPos px : BlockPos.betweenClosed(v.blockPosition().offset(-8, -2, -8), v.blockPosition().offset(8, 1, 8))) {
+            if (sl.getBlockState(px).is(Blocks.FARMLAND)) {
+                fields = true;
+            } else if (edge(sl, px) && expandFarm(v, sl, px.immutable())) {
+                n.putInt("FarmToday", n.getInt("FarmToday") + 1);
+                return true;
+            }
+        }
+        if (!fields) {
+            // no field nearby yet: break ground by water
             for (BlockPos px : BlockPos.betweenClosed(v.blockPosition().offset(-4, -1, -4), v.blockPosition().offset(4, -1, 4))) {
                 if (expandFarm(v, sl, px.immutable())) {
+                    n.putInt("FarmToday", n.getInt("FarmToday") + 1);
                     return true;
                 }
             }
+        }
+        return false;
+    }
 
+    /** Dirt or grass right beside farmland. */
+    private static boolean edge(ServerLevel sl, BlockPos ground) {
+        BlockState st = sl.getBlockState(ground);
+        if (!st.is(Blocks.DIRT) && !st.is(Blocks.GRASS_BLOCK)) {
             return false;
         }
+        for (Direction d : Direction.Plane.HORIZONTAL) {
+            if (sl.getBlockState(ground.relative(d)).is(Blocks.FARMLAND)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean fell(Villager v, ServerLevel sl, BlockPos p) {
         BlockState state = sl.getBlockState(p);
-        if (editable(v, sl, p)
-            && state.is(BlockTags.LOGS)
+        if (state.is(BlockTags.LOGS)
+            && editable(v, sl, p)
             && !VillageReputation.villageOwned(sl, p)
             && naturalTree(sl, p)
             && nearby(v, p)
             && sl.getBlockEntity(p) == null) {
+            // v0.17.14: the whole trunk comes down (felling one log left the rest floating, and a floating trunk is no
+            // longer a natural tree, so it stayed), then a sapling goes back in
             ItemStack tool = MobLevels.weapon(v, "axe");
-            if (((BreakEvent)NeoForge.EVENT_BUS.post(new BreakEvent(sl, p, state, actor(v, sl, tool)))).isCanceled()) {
-                return false;
-            } else {
-                List<ItemStack> drops = Block.getDrops(state, sl, p, null, v, tool);
-                if (!sl.setBlock(p, Blocks.AIR.defaultBlockState(), 3)) {
-                    return false;
-                } else {
-                    for (ItemStack stack : drops) {
-                        ItemStack rest = v.getInventory().addItem(stack);
-                        if (!rest.isEmpty()) {
-                            sl.addFreshEntity(new ItemEntity(sl, (double)p.getX() + 0.5, (double)p.getY() + 0.5, (double)p.getZ() + 0.5, rest));
-                        }
-                    }
-
-                    v.swing(InteractionHand.MAIN_HAND);
-                    count(v, "Logs");
-                    data(v).putString("Task", "木を伐採しました");
-                    return true;
+            BlockPos base = p;
+            for (int i = 0; i < 32 && sl.getBlockState(base.below()).is(BlockTags.LOGS); i++) {
+                base = base.below();
+            }
+            List<BlockPos> trunk = new ArrayList<>();
+            List<BlockPos> open = new ArrayList<>(List.of(base));
+            while (!open.isEmpty() && trunk.size() < 48) {
+                BlockPos q = open.remove(open.size() - 1);
+                if (trunk.contains(q) || !sl.getBlockState(q).is(BlockTags.LOGS) || Math.abs(q.getX() - base.getX()) > 4 || Math.abs(q.getZ() - base.getZ()) > 4
+                    || q.getY() < base.getY() || !editable(v, sl, q) || VillageReputation.villageOwned(sl, q)) {
+                    continue;
+                }
+                trunk.add(q);
+                for (BlockPos r : BlockPos.betweenClosed(q.offset(-1, 0, -1), q.offset(1, 1, 1))) {
+                    open.add(r.immutable());
                 }
             }
+            int felled = 0;
+            for (BlockPos q : trunk) {
+                BlockState log = sl.getBlockState(q);
+                if (((BreakEvent)NeoForge.EVENT_BUS.post(new BreakEvent(sl, q, log, actor(v, sl, tool)))).isCanceled()) {
+                    continue;
+                }
+                List<ItemStack> drops = Block.getDrops(log, sl, q, null, v, tool);
+                if (!sl.setBlock(q, Blocks.AIR.defaultBlockState(), 3)) {
+                    continue;
+                }
+                felled++;
+                for (ItemStack stack : drops) {
+                    ItemStack rest = v.getInventory().addItem(stack);
+                    if (!rest.isEmpty()) {
+                        sl.addFreshEntity(new ItemEntity(sl, (double)q.getX() + 0.5, (double)q.getY() + 0.5, (double)q.getZ() + 0.5, rest));
+                    }
+                }
+            }
+            if (felled == 0) {
+                return false;
+            }
+            for (int i = 0; i < v.getInventory().getContainerSize(); i++) {
+                ItemStack sapling = v.getInventory().getItem(i);
+                if (sapling.is(ItemTags.SAPLINGS) && sapling.getItem() instanceof BlockItem b && sl.getBlockState(base.below()).is(BlockTags.DIRT)
+                    && b.getBlock().defaultBlockState().canSurvive(sl, base) && place(v, sl, base, b.getBlock().defaultBlockState())) {
+                    sapling.shrink(1);
+                    count(v, "Planted");
+                    break;
+                }
+            }
+            v.swing(InteractionHand.MAIN_HAND);
+            for (int i = 0; i < felled; i++) {
+                count(v, "Logs");
+            }
+            data(v).putString("Task", "木を伐採しました（" + felled + "本）");
+            return true;
         } else {
             return false;
         }
     }
 
-    private static boolean naturalTree(ServerLevel sl, BlockPos p) {
+    static boolean naturalTree(ServerLevel sl, BlockPos p) {
         BlockPos base = p;
 
         for (int i = 0; i < 32 && sl.getBlockState(base.below()).is(BlockTags.LOGS); i++) {
@@ -530,8 +602,8 @@ public final class VillagerLife {
         }
     }
 
-    private static boolean lumber(Villager v, ServerLevel sl) {
-        for (BlockPos p : BlockPos.betweenClosed(v.blockPosition().offset(-5, 0, -5), v.blockPosition().offset(5, 5, 5))) {
+    static boolean lumber(Villager v, ServerLevel sl) {
+        for (BlockPos p : BlockPos.betweenClosed(v.blockPosition().offset(-5, -1, -5), v.blockPosition().offset(5, 5, 5))) {
             if (fell(v, sl, p.immutable())) {
                 return true;
             }
@@ -540,7 +612,7 @@ public final class VillagerLife {
         return false;
     }
 
-    private static SimpleContainer copy(Container c) {
+    static SimpleContainer copy(Container c) {
         SimpleContainer result = new SimpleContainer(c.getContainerSize());
 
         for (int i = 0; i < c.getContainerSize(); i++) {
@@ -550,107 +622,80 @@ public final class VillagerLife {
         return result;
     }
 
+    /**
+     * Craft one batch of a recipe from the villager's inventory. v0.17.14: by id only (VillageWork decides what is needed;
+     * the random recipes are gone), and a shaped recipe is laid on a grid of its own size: the crafting table trims the
+     * grid to the pattern before matching, and a 3x3 grid never matched a smaller pattern (planks, sticks, torches,
+     * doors...), so most of what villagers tried to make failed.
+     */
     public static boolean craft(Villager v, ServerLevel sl, ResourceLocation wanted) {
-        SimpleContainer inv = v.getInventory();
-        List<RecipeHolder<CraftingRecipe>> recipes = sl.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING);
-        if (recipes.isEmpty()) {
-            return false;
-        } else {
-            int start = data(v).getInt("RecipeCursor");
-
-            for (int j = 0; j < Math.min(24, recipes.size()); j++) {
-                RecipeHolder<CraftingRecipe> holder = wanted == null
-                    ? recipes.get(Math.floorMod(start + j, recipes.size()))
-                    : recipes.stream().filter(r -> r.id().equals(wanted)).findFirst().orElse(null);
-                if (holder == null) {
-                    return false;
-                }
-
-                CraftingRecipe recipe = (CraftingRecipe)holder.value();
-                int w = recipe instanceof ShapedRecipe shaped ? shaped.getWidth() : 3;
-                if (recipe instanceof ShapedRecipe shapedx) {
-                    shapedx.getHeight();
-                } else {
-                    byte var26 = 3;
-                }
-
-                NonNullList<Ingredient> ingredients = recipe.getIngredients();
-                if (!ingredients.isEmpty() && ingredients.size() <= 9) {
-                    ArrayList<ItemStack> grid = new ArrayList<>(Collections.nCopies(9, ItemStack.EMPTY));
-                    SimpleContainer remaining = copy(inv);
-                    boolean matches = true;
-
-                    for (int k = 0; k < ingredients.size(); k++) {
-                        Ingredient ingredient = (Ingredient)ingredients.get(k);
-                        if (!ingredient.isEmpty()) {
-                            int slot = -1;
-
-                            for (int i = 0; i < remaining.getContainerSize(); i++) {
-                                if (!remaining.getItem(i).isEmpty() && ingredient.test(remaining.getItem(i))) {
-                                    slot = i;
-                                    break;
-                                }
-                            }
-
-                            if (slot < 0) {
-                                matches = false;
-                                break;
-                            }
-
-                            grid.set(recipe instanceof ShapedRecipe ? k / w * 3 + k % w : k, remaining.removeItem(slot, 1));
-                        }
-                    }
-
-                    if (matches) {
-                        CraftingInput input = CraftingInput.of(3, 3, grid);
-                        if (recipe.matches(input, sl)) {
-                            ItemStack result = recipe.assemble(input, sl.registryAccess());
-                            if (!result.isEmpty()
-                                && (
-                                    wanted != null
-                                        || result.getItem() instanceof BlockItem
-                                        || result.has(DataComponents.FOOD)
-                                        || result.getItem() instanceof TieredItem
-                                )
-                                && remaining.addItem(result.copy()).isEmpty()) {
-                                boolean fits = true;
-
-                                for (ItemStack remainder : recipe.getRemainingItems(input)) {
-                                    if (!remainder.isEmpty() && !remaining.addItem(remainder.copy()).isEmpty()) {
-                                        fits = false;
-                                        break;
-                                    }
-                                }
-
-                                if (fits) {
-                                    for (int ix = 0; ix < inv.getContainerSize(); ix++) {
-                                        inv.setItem(ix, remaining.getItem(ix));
-                                    }
-
-                                    count(v, "Crafts");
-                                    data(v).putString("LastRecipe", holder.id().toString());
-                                    data(v).putString("Task", "製作：" + result.getHoverName().getString());
-                                    data(v).putInt("RecipeCursor", start + j + 1);
-                                    v.swing(InteractionHand.MAIN_HAND);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            data(v).putInt("RecipeCursor", start + 24);
+        RecipeHolder<CraftingRecipe> holder = wanted == null ? null : VillageWork.recipe(sl, wanted);
+        if (holder == null) {
             return false;
         }
+        CraftingRecipe recipe = (CraftingRecipe)holder.value();
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        if (ingredients.isEmpty() || ingredients.size() > 9) {
+            return false;
+        }
+        int w = recipe instanceof ShapedRecipe shaped ? shaped.getWidth() : 3;
+        int h = recipe instanceof ShapedRecipe shaped ? shaped.getHeight() : 3;
+        if (w * h < ingredients.size()) {
+            return false;
+        }
+        SimpleContainer inv = v.getInventory();
+        ArrayList<ItemStack> grid = new ArrayList<>(Collections.nCopies(w * h, ItemStack.EMPTY));
+        SimpleContainer remaining = copy(inv);
+        for (int k = 0; k < ingredients.size(); k++) {
+            Ingredient ingredient = (Ingredient)ingredients.get(k);
+            if (ingredient.isEmpty()) {
+                continue;
+            }
+            int slot = -1;
+            for (int i = 0; i < remaining.getContainerSize(); i++) {
+                if (!remaining.getItem(i).isEmpty() && ingredient.test(remaining.getItem(i))) {
+                    slot = i;
+                    break;
+                }
+            }
+            if (slot < 0) {
+                return false;
+            }
+            grid.set(k, remaining.removeItem(slot, 1));
+        }
+        CraftingInput input = CraftingInput.of(w, h, grid);
+        if (!recipe.matches(input, sl)) {
+            return false;
+        }
+        ItemStack result = recipe.assemble(input, sl.registryAccess());
+        if (result.isEmpty() || !remaining.addItem(result.copy()).isEmpty()) {
+            return false;
+        }
+        for (ItemStack remainder : recipe.getRemainingItems(input)) {
+            if (!remainder.isEmpty() && !remaining.addItem(remainder.copy()).isEmpty()) {
+                return false;
+            }
+        }
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            inv.setItem(i, remaining.getItem(i));
+        }
+        count(v, "Crafts");
+        data(v).putString("LastRecipe", holder.id().toString());
+        data(v).putString("Task", "製作：" + result.getHoverName().getString());
+        v.swing(InteractionHand.MAIN_HAND);
+        return true;
     }
 
+    /**
+     * The house: a 5x5 plot with a floor (F), walls three high (W) with a door (D), a roof (R), a chest (C), a bed (B) and a
+     * torch (T, when one is to hand). The second half of a door or a bed (charge false) is set with the first.
+     */
     private static List<VillagerLife.BuildPart> plan() {
         ArrayList<VillagerLife.BuildPart> result = new ArrayList<>();
 
         for (int x = 0; x < 5; x++) {
             for (int z = 0; z < 5; z++) {
-                result.add(new VillagerLife.BuildPart(new BlockPos(x, -1, z), Blocks.COBBLESTONE));
+                result.add(new VillagerLife.BuildPart(new BlockPos(x, -1, z), 'F'));
             }
         }
 
@@ -658,7 +703,7 @@ public final class VillagerLife {
             for (int x = 0; x < 5; x++) {
                 for (int z = 0; z < 5; z++) {
                     if ((x == 0 || x == 4 || z == 0 || z == 4) && (x != 2 || z != 0 || y >= 2)) {
-                        result.add(new VillagerLife.BuildPart(new BlockPos(x, y, z), Blocks.OAK_PLANKS));
+                        result.add(new VillagerLife.BuildPart(new BlockPos(x, y, z), 'W'));
                     }
                 }
             }
@@ -666,51 +711,82 @@ public final class VillagerLife {
 
         for (int x = 0; x < 5; x++) {
             for (int zx = 0; zx < 5; zx++) {
-                result.add(new VillagerLife.BuildPart(new BlockPos(x, 3, zx), Blocks.OAK_PLANKS));
+                result.add(new VillagerLife.BuildPart(new BlockPos(x, 3, zx), 'R'));
             }
         }
 
-        result.add(new VillagerLife.BuildPart(new BlockPos(1, 0, 2), Blocks.CHEST));
-        result.add(new VillagerLife.BuildPart(new BlockPos(2, 0, 0), Blocks.OAK_DOOR));
-        result.add(new VillagerLife.BuildPart(new BlockPos(2, 1, 0), Blocks.OAK_DOOR, false));
-        result.add(new VillagerLife.BuildPart(new BlockPos(3, 0, 2), Blocks.WHITE_BED));
-        result.add(new VillagerLife.BuildPart(new BlockPos(3, 0, 3), Blocks.WHITE_BED, false));
+        result.add(new VillagerLife.BuildPart(new BlockPos(1, 0, 2), 'C'));
+        result.add(new VillagerLife.BuildPart(new BlockPos(2, 0, 0), 'D'));
+        result.add(new VillagerLife.BuildPart(new BlockPos(2, 1, 0), 'D', false));
+        result.add(new VillagerLife.BuildPart(new BlockPos(3, 0, 2), 'B'));
+        result.add(new VillagerLife.BuildPart(new BlockPos(3, 0, 3), 'B', false));
+        result.add(new VillagerLife.BuildPart(new BlockPos(1, 0, 3), 'T'));
         return List.copyOf(result);
     }
 
+    /**
+     * A plot for a house at 'at' (its floor level). v0.17.14: the plot and a strip around it must be open air four high (so
+     * a house is not built into another), on natural ground or one block over it, and not on a path, a field or water.
+     */
     public static boolean startBuild(Villager v, ServerLevel sl, BlockPos at) {
         VillageLedger.Village village = VillageLedger.of(v);
-        if (village.houses < 8 && village.contains(at.offset(5, 0, 5))) {
-            for (int x = 0; x < 5; x++) {
-                for (int z = 0; z < 5; z++) {
-                    for (int y = 0; y < 4; y++) {
-                        if (!editable(v, sl, at.offset(x, y, z)) || !sl.getBlockState(at.offset(x, y, z)).canBeReplaced()) {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            for (int x = 0; x < 5; x++) {
-                for (int z = 0; z < 5; z++) {
-                    BlockPos ground = at.offset(x, -1, z);
-                    BlockState soil = sl.getBlockState(ground);
-                    boolean clearable = soil.is(Blocks.STONE) || soil.is(Blocks.DIRT) || soil.is(Blocks.GRASS_BLOCK);
-                    if (!editable(v, sl, ground) || !clearable && (!soil.canBeReplaced() || sl.getBlockState(ground.below()).canBeReplaced())) {
+        if (village == null || village.houses >= 12 || !village.contains(at.offset(5, 0, 5))) {
+            return false;
+        }
+        for (int x = -1; x <= 5; x++) {
+            for (int z = -1; z <= 5; z++) {
+                for (int y = 0; y < 4; y++) {
+                    BlockPos p = at.offset(x, y, z);
+                    boolean inside = x >= 0 && x <= 4 && z >= 0 && z <= 4;
+                    if (!sl.hasChunkAt(p) || inside && !editable(v, sl, p) || !sl.getBlockState(p).canBeReplaced() || !sl.getFluidState(p).isEmpty()) {
                         return false;
                     }
                 }
             }
-
-            data(v).putLong("BuildOrigin", at.asLong());
-            data(v).putInt("BuildStep", 0);
-            return true;
-        } else {
-            return false;
         }
+
+        for (int x = 0; x < 5; x++) {
+            for (int z = 0; z < 5; z++) {
+                BlockPos ground = at.offset(x, -1, z);
+                BlockState soil = sl.getBlockState(ground);
+                if (!editable(v, sl, ground) || !sl.getFluidState(ground).isEmpty()) {
+                    return false;
+                }
+                if (soil.canBeReplaced() ? sl.getBlockState(ground.below()).canBeReplaced() : !VillageWork.natural(soil)) {
+                    return false;
+                }
+            }
+        }
+
+        data(v).putLong("BuildOrigin", at.asLong());
+        data(v).putInt("BuildStep", 0);
+        return true;
     }
 
-    private static boolean placePair(Villager v, ServerLevel sl, BlockPos p, BlockState first, BlockPos q, BlockState second) {
+    /** v0.17.14: house plots on rings 10-28 blocks around the village centre, a few tried each time. */
+    private static boolean site(Villager v, ServerLevel sl) {
+        VillageLedger.Village village = VillageLedger.of(v);
+        CompoundTag n = data(v);
+        int cursor = n.getInt("SiteCursor");
+        for (int i = 0; i < 4; i++) {
+            int k = cursor + i;
+            int ring = 10 + Math.floorMod(k / 8, 4) * 6;
+            double a = Math.floorMod(k, 8) * Math.PI / 4.0 + Math.floorMod(k / 32, 4) * 0.4;
+            BlockPos c = village.center.offset((int)Math.round(Math.cos(a) * ring) - 2, 0, (int)Math.round(Math.sin(a) * ring) - 2);
+            if (!sl.hasChunkAt(c)) {
+                continue;
+            }
+            BlockPos at = new BlockPos(c.getX(), sl.getHeight(Types.MOTION_BLOCKING_NO_LEAVES, c.getX() + 2, c.getZ() + 2), c.getZ());
+            if (Math.abs(at.getY() - village.center.getY()) <= 6 && startBuild(v, sl, at)) {
+                n.putInt("SiteCursor", k + 1);
+                return true;
+            }
+        }
+        n.putInt("SiteCursor", cursor + 4);
+        return false;
+    }
+
+    static boolean placePair(Villager v, ServerLevel sl, BlockPos p, BlockState first, BlockPos q, BlockState second) {
         if (editable(v, sl, p)
             && editable(v, sl, q)
             && sl.getBlockState(p).canBeReplaced()
@@ -744,185 +820,223 @@ public final class VillagerLife {
         }
     }
 
+    /** What a house part is made of: any planks for walls and roof, cobblestone (or planks over a gap) for the floor. */
+    private static java.util.function.Predicate<ItemStack> material(VillagerLife.BuildPart part) {
+        return switch (part.kind) {
+            case 'C' -> VillageWork.is("chest");
+            case 'D' -> VillageWork.is("door");
+            case 'B' -> VillageWork.is("bed");
+            case 'T' -> VillageWork.is("torch");
+            case 'F' -> VillageWork.is("cobblestone");
+            default -> VillageWork.is("planks");
+        };
+    }
+
+    /**
+     * One step of the house. v0.17.14: any wood's planks, door and bed will do (only oak planks, an oak door and a white bed
+     * did, and nobody made them); what the builder lacks it makes, takes from the chests or fells (VillageWork.supply);
+     * natural ground stays the floor unless the builder has cobblestone for it; a spot something solid already fills is
+     * passed over instead of holding the house up for ever. The builder starts only when someone in the village is
+     * homeless (VillageWork.wantsHouse), on a plot it finds itself.
+     */
     public static boolean build(Villager v, ServerLevel sl) {
         CompoundTag n = data(v);
         if (!n.contains("BuildOrigin")) {
-            int planks = 0;
-
-            for (ItemStack stack : v.getInventory().getItems()) {
-                if (stack.is(Items.OAK_PLANKS)) {
-                    planks += stack.getCount();
-                }
+            if (!VillageWork.wantsHouse(v, sl)) {
+                return false;
             }
-
-            BlockPos site = VillageLedger.of(v).center.offset(8 + v.getId() % 3 * 7, 0, 8);
-            site = new BlockPos(site.getX(), sl.getHeight(Types.MOTION_BLOCKING_NO_LEAVES, site.getX() + 2, site.getZ() + 2), site.getZ());
-            if (planks < 32 || !startBuild(v, sl, site)) {
+            if (!site(v, sl)) {
+                VillageWork.noSite(v, sl);
                 return false;
             }
         }
 
+        BlockPos origin = BlockPos.of(n.getLong("BuildOrigin"));
         int step = n.getInt("BuildStep");
+        boolean planks = VillageWork.count(v, VillageWork.is("planks")) > 0;
+        while (step < HOUSE.size()) {
+            VillagerLife.BuildPart part = HOUSE.get(step);
+            BlockState here = sl.getBlockState(origin.offset(part.offset));
+            boolean floor = part.kind == 'F';
+            boolean pass = !part.charge
+                || !floor && !here.canBeReplaced()
+                || floor && !here.canBeReplaced() && planks && VillageWork.count(v, material(part)) == 0
+                || part.kind == 'T' && VillageWork.count(v, material(part)) == 0;
+            if (!pass) {
+                break;
+            }
+            step++;
+        }
+        n.putInt("BuildStep", step);
         if (step >= HOUSE.size()) {
             n.remove("BuildOrigin");
             VillageLedger.of(v).houses++;
             VillageLedger.get(sl).setDirty();
+            VillageWork.building(v, sl, false);
             count(v, "Houses");
+            n.putString("Task", "住居が完成しました");
             return true;
-        } else {
-            VillagerLife.BuildPart part = HOUSE.get(step);
-            BlockPos p = BlockPos.of(n.getLong("BuildOrigin")).offset(part.offset);
-            if (sl.getBlockState(p).is(part.block)) {
-                n.putInt("BuildStep", step + 1);
-                return true;
-            } else if (!nearby(v, p)) {
-                return false;
-            } else {
-                int slot = -1;
+        }
+        VillageWork.building(v, sl, true);
 
-                for (int i = 0; i < v.getInventory().getContainerSize(); i++) {
-                    if (v.getInventory().getItem(i).is(part.block.asItem())) {
-                        slot = i;
-                        break;
-                    }
-                }
-
-                if (slot < 0 && part.charge) {
-                    n.putString("Task", "建築資材待ち：" + part.block.getName().getString());
-                    return false;
-                } else {
-                    BlockState original = sl.getBlockState(p);
-                    if (part.offset.getY() < 0 && !original.canBeReplaced()) {
-                        if (!editable(v, sl, p)
-                            || !original.is(Blocks.STONE) && !original.is(Blocks.DIRT) && !original.is(Blocks.GRASS_BLOCK)
-                            || ((BreakEvent)NeoForge.EVENT_BUS.post(new BreakEvent(sl, p, original, actor(v, sl, v.getMainHandItem())))).isCanceled()) {
-                            return false;
-                        }
-
-                        sl.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
-                    }
-
-                    BlockState state = part.block.defaultBlockState();
-                    if (part.block instanceof DoorBlock) {
-                        state = (BlockState)state.setValue(DoorBlock.HALF, part.charge ? DoubleBlockHalf.LOWER : DoubleBlockHalf.UPPER);
-                    }
-
-                    if (part.block instanceof BedBlock) {
-                        state = (BlockState)((BlockState)state.setValue(BedBlock.FACING, Direction.SOUTH))
-                            .setValue(BedBlock.PART, part.charge ? BedPart.FOOT : BedPart.HEAD);
-                    }
-
-                    int placed = 1;
-                    if (part.charge && (part.block instanceof DoorBlock || part.block instanceof BedBlock)) {
-                        VillagerLife.BuildPart next = HOUSE.get(step + 1);
-                        BlockState second = part.block instanceof DoorBlock
-                            ? (BlockState)state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER)
-                            : (BlockState)state.setValue(BedBlock.PART, BedPart.HEAD);
-                        BlockPos partner = BlockPos.of(n.getLong("BuildOrigin")).offset(next.offset);
-                        if (!placePair(v, sl, p, state, partner, second)) {
-                            return false;
-                        }
-
-                        VillageLedger.of(v).communal.add(partner.asLong());
-                        placed = 2;
-                    } else if (!place(v, sl, p, state)) {
-                        if (!original.canBeReplaced()) {
-                            sl.setBlock(p, original, 3);
-                        }
-
-                        return false;
-                    }
-
-                    if (part.charge) {
-                        v.getInventory().getItem(slot).shrink(1);
-                    }
-
-                    n.putInt("BuildStep", step + placed);
-                    VillageLedger.of(v).communal.add(p.asLong());
-                    VillageLedger.get(sl).setDirty();
-
-                    for (int ix = 0; ix < placed; ix++) {
-                        count(v, "Built");
-                    }
-
-                    v.swing(InteractionHand.MAIN_HAND);
-                    n.putString("Task", "住居を建設 " + (step + placed) + "/" + HOUSE.size());
-                    return true;
-                }
+        VillagerLife.BuildPart part = HOUSE.get(step);
+        BlockPos p = origin.offset(part.offset);
+        int slot = -1;
+        for (int i = 0; i < v.getInventory().getContainerSize(); i++) {
+            ItemStack item = v.getInventory().getItem(i);
+            if (!item.isEmpty() && (material(part).test(item) || part.kind == 'F' && item.is(ItemTags.PLANKS)) && item.getItem() instanceof BlockItem) {
+                slot = i;
+                break;
             }
         }
-    }
 
-    public static boolean sort(Container c) {
-        List<ItemStack> original = VillageReputation.snapshot(c);
-        List<ItemStack> all = original.stream()
-            .filter(s -> !s.isEmpty())
-            .sorted(Comparator.comparing(s -> BuiltInRegistries.ITEM.getKey(s.getItem()).toString()))
-            .toList();
-        SimpleContainer sorted = new SimpleContainer(c.getContainerSize());
+        if (slot < 0) {
+            String what = switch (part.kind) {
+                case 'C' -> "chest";
+                case 'D' -> "door";
+                case 'B' -> "bed";
+                default -> "planks";
+            };
+            int left = 0;
+            for (int i = step; i < HOUSE.size(); i++) {
+                left += "FWR".indexOf(HOUSE.get(i).kind) >= 0 ? 1 : 0;
+            }
+            int r = VillageWork.supply(v, sl, what, what.equals("planks") ? Math.max(1, Math.min(16, left)) : 1);
+            if (r == VillageWork.CANNOT) {
+                n.putString("Task", "建築資材待ち：" + what);
+            }
+            return r == VillageWork.ACTED;
+        }
 
-        for (ItemStack item : all) {
-            if (!sorted.addItem(item.copy()).isEmpty()) {
+        if (!nearby(v, p)) {
+            return false;
+        }
+
+        ItemStack stack = v.getInventory().getItem(slot);
+        Block block = ((BlockItem)stack.getItem()).getBlock();
+        BlockState original = sl.getBlockState(p);
+        if (part.kind == 'F' && !original.canBeReplaced()) {
+            // natural ground under the floor gives way to the builder's cobblestone
+            if (!editable(v, sl, p) || !VillageWork.natural(original)
+                || ((BreakEvent)NeoForge.EVENT_BUS.post(new BreakEvent(sl, p, original, actor(v, sl, v.getMainHandItem())))).isCanceled()) {
+                n.putInt("BuildStep", step + 1);
                 return false;
             }
+
+            sl.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
+        }
+
+        BlockState state = block.defaultBlockState();
+        int placed = 1;
+        if (part.kind == 'D' || part.kind == 'B') {
+            BlockState first = part.kind == 'D'
+                ? (BlockState)state.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER)
+                : (BlockState)((BlockState)state.setValue(BedBlock.FACING, Direction.SOUTH)).setValue(BedBlock.PART, BedPart.FOOT);
+            BlockState second = part.kind == 'D'
+                ? (BlockState)first.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER)
+                : (BlockState)first.setValue(BedBlock.PART, BedPart.HEAD);
+            BlockPos partner = origin.offset(HOUSE.get(step + 1).offset);
+            if (!placePair(v, sl, p, first, partner, second)) {
+                return false;
+            }
+
+            VillageLedger.of(v).communal.add(partner.asLong());
+            placed = 2;
+        } else if (!place(v, sl, p, state)) {
+            if (!original.canBeReplaced()) {
+                sl.setBlock(p, original, 3);
+            }
+
+            return false;
+        }
+
+        stack.shrink(1);
+        n.putInt("BuildStep", step + placed);
+        VillageLedger.of(v).communal.add(p.asLong());
+        VillageLedger.get(sl).setDirty();
+
+        for (int ix = 0; ix < placed; ix++) {
+            count(v, "Built");
+        }
+
+        v.swing(InteractionHand.MAIN_HAND);
+        n.putString("Task", "住居を建設 " + (step + placed) + "/" + HOUSE.size());
+        return true;
+    }
+
+    /**
+     * Sort a chest: v0.17.14 groups wood, stone, fuel and ores, crops, food, wool, gear and the rest (each by id) and merges
+     * part stacks, instead of plain id order.
+     */
+    public static boolean sort(Container c) {
+        List<ItemStack> sorted = arrangement(c);
+        if (sorted == null) {
+            return false;
         }
 
         for (int i = 0; i < c.getContainerSize(); i++) {
-            c.setItem(i, sorted.getItem(i));
+            c.setItem(i, sorted.get(i));
         }
 
         c.setChanged();
         return true;
     }
 
-    private static boolean storage(Villager v, ServerLevel sl, boolean tidy) {
-        VillageLedger.Village village = VillageLedger.of(v);
+    /** True when the chest is already in the order sort() would leave it. */
+    public static boolean sorted(Container c) {
+        List<ItemStack> sorted = arrangement(c);
+        if (sorted == null) {
+            return true;
+        }
+        for (int i = 0; i < c.getContainerSize(); i++) {
+            ItemStack a = c.getItem(i);
+            ItemStack b = sorted.get(i);
+            if (a.isEmpty() != b.isEmpty() || !a.isEmpty() && (!ItemStack.isSameItemSameComponents(a, b) || a.getCount() != b.getCount())) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-        for (BlockPos p : BlockPos.betweenClosed(v.blockPosition().offset(-5, -1, -5), v.blockPosition().offset(5, 1, 5))) {
-            Container box = VillageReputation.communalChest(sl, village, p.immutable());
-            if (box != null && nearby(v, p)) {
-                if (tidy) {
-                    if (sort(box)) {
-                        count(v, "Sorted");
-                        data(v).putString("Task", "共有チェストを整理");
-                        return true;
-                    }
-                } else {
-                    SimpleContainer inv = v.getInventory();
-                    if (inv.isEmpty()) {
-                        for (int i = 0; i < box.getContainerSize(); i++) {
-                            if (!box.getItem(i).isEmpty() && inv.canAddItem(box.getItem(i))) {
-                                inv.addItem(box.removeItem(i, Math.min(64, box.getItem(i).getCount())));
-                                box.setChanged();
-                                count(v, "Supplies");
-                                return true;
-                            }
-                        }
-                    } else {
-                        for (int ix = 0; ix < inv.getContainerSize(); ix++) {
-                            ItemStack stack = inv.getItem(ix);
-                            if (!stack.isEmpty() && stack.getCount() >= 24 && !stack.has(DataComponents.FOOD)) {
-                                SimpleContainer temp = copy(box);
-                                ItemStack rest = temp.addItem(stack.copyWithCount(stack.getCount() - 8));
-                                int stored = stack.getCount() - 8 - rest.getCount();
-                                if (stored > 0) {
-                                    for (int j = 0; j < box.getContainerSize(); j++) {
-                                        box.setItem(j, temp.getItem(j));
-                                    }
+    private static List<ItemStack> arrangement(Container c) {
+        List<ItemStack> all = VillageReputation.snapshot(c).stream()
+            .filter(s -> !s.isEmpty())
+            .sorted(Comparator.<ItemStack>comparingInt(VillagerLife::shelf).thenComparing(s -> BuiltInRegistries.ITEM.getKey(s.getItem()).toString()))
+            .toList();
+        SimpleContainer sorted = new SimpleContainer(c.getContainerSize());
 
-                                    stack.shrink(stored);
-                                    box.setChanged();
-                                    count(v, "Stored");
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
+        for (ItemStack item : all) {
+            if (!sorted.addItem(item.copy()).isEmpty()) {
+                return null;
             }
         }
 
-        return false;
+        List<ItemStack> out = new ArrayList<>();
+        for (int i = 0; i < sorted.getContainerSize(); i++) {
+            out.add(sorted.getItem(i));
+        }
+        return out;
+    }
+
+    private static int shelf(ItemStack s) {
+        String id = BuiltInRegistries.ITEM.getKey(s.getItem()).getPath();
+        if (s.is(ItemTags.LOGS) || s.is(ItemTags.PLANKS) || s.is(ItemTags.WOODEN_SLABS) || s.is(Items.STICK) || s.is(ItemTags.SAPLINGS)) {
+            return 0;
+        } else if (id.contains("cobble") || id.contains("stone") || id.contains("deepslate") || id.equals("dirt") || id.equals("gravel") || id.contains("sand")) {
+            return 1;
+        } else if (s.is(Items.COAL) || s.is(Items.CHARCOAL) || id.endsWith("_ingot") || id.startsWith("raw_") || id.endsWith("_nugget") || id.contains("diamond")
+            || id.contains("emerald")) {
+            return 2;
+        } else if (id.endsWith("_seeds") || s.is(Items.WHEAT) || s.is(Items.BONE_MEAL)) {
+            return 3;
+        } else if (s.has(DataComponents.FOOD)) {
+            return 4;
+        } else if (s.is(ItemTags.WOOL)) {
+            return 5;
+        } else if (s.isDamageableItem()) {
+            return 6;
+        }
+        return 7;
     }
 
     public static boolean tradeWith(Villager buyer, Villager seller) {
@@ -1035,9 +1149,9 @@ public final class VillagerLife {
     private VillagerLife() {
     }
 
-    private static record BuildPart(BlockPos offset, Block block, boolean charge) {
-        BuildPart(BlockPos offset, Block block) {
-            this(offset, block, true);
+    private static record BuildPart(BlockPos offset, char kind, boolean charge) {
+        BuildPart(BlockPos offset, char kind) {
+            this(offset, kind, true);
         }
     }
 }

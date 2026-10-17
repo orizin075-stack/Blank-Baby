@@ -131,7 +131,7 @@ public final class MindGameTests {
         batch = "mind"
     )
     public static void low_health_mob_retreats_during_healing(GameTestHelper h) {
-        Villager v = guard((Villager)mob(h, EntityType.VILLAGER, 8, 8));
+        Villager v = strong((Villager)mob(h, EntityType.VILLAGER, 8, 8));
         AdaptiveCombat.arm(v);
         v.setHealth(40.0F);
         Husk t = (Husk)mob(h, EntityType.HUSK, 10, 8);
@@ -207,8 +207,8 @@ public final class MindGameTests {
         );
     }
 
-    /** An armorer: one of the village's guards (VillageAI.fighter). */
-    private static Villager guard(Villager v) {
+    /** An armorer: one of the strong villagers (VillageAI.strong). */
+    private static Villager strong(Villager v) {
         v.setVillagerData(v.getVillagerData().setProfession(VillagerProfession.ARMORER));
         return v;
     }
@@ -326,16 +326,16 @@ public final class MindGameTests {
         batch = "mind"
     )
     public static void villagers_alert_allies_after_player_attack(GameTestHelper h) {
-        // v0.17.9: the guards (fighting professions) take up the fight; an ordinary villager hears the alarm instead
-        Villager a = guard((Villager)mob(h, EntityType.VILLAGER, 8, 8));
-        Villager b = guard((Villager)mob(h, EntityType.VILLAGER, 11, 8));
+        // v0.17.14: the strong villagers (fighting professions) take up the fight; an ordinary villager hears the alarm instead
+        Villager a = strong((Villager)mob(h, EntityType.VILLAGER, 8, 8));
+        Villager b = strong((Villager)mob(h, EntityType.VILLAGER, 11, 8));
         Villager c = (Villager)mob(h, EntityType.VILLAGER, 9, 11);
         Player p = h.makeMockPlayer(GameType.SURVIVAL);
         p.moveTo(a.getX() + 1.0, a.getY(), a.getZ());
         a.hurt(p.damageSources().playerAttack(p), 2.0F);
-        h.assertTrue(a.getTarget() == p && b.getTarget() == p && MobMind.skill(b, "teamwork") > 0, "Nearby guards share an aggressor");
+        h.assertTrue(a.getTarget() == p && b.getTarget() == p && MobMind.skill(b, "teamwork") > 0, "Nearby strong villagers share an aggressor");
         h.assertTrue(
-            !VillageAI.fighter(c) && c.getTarget() == null && MobMind.data(c).getLong("VillageAlarm") > h.getLevel().getGameTime(),
+            VillageAI.strong(a) && !VillageAI.strong(c) && !VillageAI.fighter(a) && c.getTarget() == null && MobMind.data(c).getLong("VillageAlarm") > h.getLevel().getGameTime(),
             "An ordinary villager is warned, not sent in"
         );
         h.succeed();
@@ -507,7 +507,7 @@ public final class MindGameTests {
         batch = "mind"
     )
     public static void native_combat_tick_uses_cooldowns_and_gains_experience(GameTestHelper h) {
-        Villager v = guard((Villager)mob(h, EntityType.VILLAGER, 8, 8));
+        Villager v = strong((Villager)mob(h, EntityType.VILLAGER, 8, 8));
         AdaptiveCombat.arm(v);
         Zombie t = (Zombie)mob(h, EntityType.ZOMBIE, 10, 8);
         t.setNoAi(true);

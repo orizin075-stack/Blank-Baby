@@ -21,6 +21,7 @@ OV = {
  'net/minecraft/world/entity/TamableAnimal': c(extends=E+'animal.Animal'),
  'net/minecraft/world/entity/animal/Wolf': c(extends=E+'TamableAnimal'),
  'net/minecraft/world/entity/animal/Cow': c(extends=E+'animal.Animal'),
+ 'net/minecraft/world/entity/animal/Sheep': c(extends=E+'animal.Animal'),
  'net/minecraft/world/entity/animal/AbstractGolem': c(extends=E+'PathfinderMob'),
  'net/minecraft/world/entity/animal/IronGolem': c(extends=E+'animal.AbstractGolem'),
  'net/minecraft/world/entity/monster/Monster': c(extends=E+'PathfinderMob', implements=E+'monster.Enemy'),
@@ -143,7 +144,8 @@ OV = {
  'net/minecraft/ChatFormatting': c(kind='enum'),
  # ---------- level ----------
  'net/minecraft/world/level/BlockGetter': c(kind='interface'),
- 'net/minecraft/world/level/LevelAccessor': c(kind='interface', extends='net.minecraft.world.level.BlockGetter'),
+ 'net/minecraft/world/level/LevelReader': c(kind='interface', extends='net.minecraft.world.level.BlockGetter'),
+ 'net/minecraft/world/level/LevelAccessor': c(kind='interface', extends='net.minecraft.world.level.LevelReader'),
  'net/minecraft/world/level/ServerLevelAccessor': c(kind='interface', extends='net.minecraft.world.level.LevelAccessor'),
  'net/minecraft/world/level/Level': c(implements='net.minecraft.world.level.LevelAccessor', drop=['getEntitiesOfClass', 'players', 'getEntities'], members=[
      'public boolean isClientSide;',

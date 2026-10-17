@@ -152,14 +152,8 @@ public final class AdaptiveCombat {
             }
 
             TerrainPlay.fallRescue(m, sl);
-            // v0.17.13: only guards wear their gear all the time; other villagers arm when danger comes (VillageAI.gear)
-            if (guardian(m) && (Boolean)RebornConfig.ARMED_VILLAGERS.get() && !m.isBaby() && VillageAI.fighter(m)
-                && (!n.getBoolean("Armed") || n.contains("VillageGeared") && !n.getBoolean("VillageGeared"))) {
-                arm(m);
-                n.putBoolean("VillageGeared", true);
-            }
-
-            // v0.17.9: guards hold their post, villagers run instead of charging (VillageAI)
+            // v0.17.14: villagers arm only when danger comes (VillageAI.gear); strong villagers fight what is near, the
+            // rest run (VillageAI)
             if (guardian(m) && VillageAI.tick(m, sl, n)) {
                 return;
             }
@@ -174,8 +168,6 @@ public final class AdaptiveCombat {
                 LivingEntity attacker = m.getLastHurtByMob();
                 if (enemy(m, attacker) && m.distanceToSqr(attacker) < 4096.0 && (!guardian(m) || VillageAI.engage(m, attacker))) {
                     m.setTarget(attacker);
-                } else if (guardian(m) && (Boolean)RebornConfig.ARMED_VILLAGERS.get()) {
-                    m.setTarget(VillageAI.threat(m, sl));
                 }
 
                 t = m.getTarget();
@@ -388,7 +380,8 @@ public final class AdaptiveCombat {
      * older version swapped away is given back once.
      */
     private static boolean drivenElsewhere(Mob m, CompoundTag n) {
-        if (guardian(m) || m instanceof SupremeEntity || m instanceof FamiliarEntity) {
+        // v0.17.14: Guard Villagers' guards too (they are other mods' mobs); villagers, characters and familiars are ours
+        if (m instanceof Villager || m instanceof SupremeEntity || m instanceof FamiliarEntity) {
             return false;
         }
         Boolean known = ELSEWHERE.get(m);
@@ -843,8 +836,8 @@ public final class AdaptiveCombat {
                     MobMind.practice(m, "shield", 1);
                     MobMind.remember(m, BuiltInRegistries.ENTITY_TYPE.getKey(attacker.getType()).toString(), "observed_" + event.getSource().getMsgId());
                     if (guardian(m) && (Boolean)RebornConfig.ARMED_VILLAGERS.get()) {
-                        // v0.17.9: guards take up the fight, villagers hear the alarm and run (VillageAI)
-                        if (VillageAI.fighter(m)) {
+                        // v0.17.14: guards and strong villagers take up the fight, the rest hear the alarm and run (VillageAI)
+                        if (VillageAI.engage(m, attacker)) {
                             m.setTarget(attacker);
                         }
 
