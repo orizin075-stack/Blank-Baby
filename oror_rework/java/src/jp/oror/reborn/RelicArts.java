@@ -210,6 +210,11 @@ public final class RelicArts {
         Art art;
         float base;
         int color;
+        /** Slot scaling (v0.17.6): focus and charm arts hit and heal 2x, buffs one level higher, longer and wider. */
+        float heal = 1.0F;
+        int amp;
+        float span = 1.0F;
+        float reach = 1.0F;
         LivingEntity victim;
         List<LivingEntity> t = new ArrayList<>();
     }
@@ -226,6 +231,15 @@ public final class RelicArts {
             c.base = a.rank >= 3 ? 1000000.0F : 3000.0F * a.rank;
             RelicSpec owner = RelicSpec.ALL.get(a.character + "_weapon");
             c.color = owner != null ? owner.color : 0xFFFFFF;
+            if (a.id.endsWith("_focus") || a.id.endsWith("_charm")) {
+                c.base *= 2.0F;
+                c.heal = 2.0F;
+                c.amp = 1;
+                c.span = 1.5F;
+                c.reach = 1.25F;
+            } else {
+                c.span = 1.25F;
+            }
             c.victim = victim;
             if (victim != null) {
                 c.t.add(victim);
@@ -263,20 +277,20 @@ public final class RelicArts {
         long now = sl.getGameTime();
         switch (op) {
             // ---------- selectors
-            case "area" -> c.t = sorted(near(p, p.position(), num(o, "r", 16)), p.position(), (int) num(o, "n", 64));
-            case "near" -> c.t = sorted(near(p, p.position(), num(o, "r", 24)), p.position(), (int) num(o, "n", 1));
+            case "area" -> c.t = sorted(near(p, p.position(), num(o, "r", 16) * c.reach), p.position(), (int) num(o, "n", 64));
+            case "near" -> c.t = sorted(near(p, p.position(), num(o, "r", 24) * c.reach), p.position(), (int) num(o, "n", 1));
             case "around" -> {
                 Vec3 at = c.victim != null ? c.victim.position() : p.position();
-                List<LivingEntity> l = sorted(near(p, at, num(o, "r", 4)), at, (int) num(o, "n", 16));
+                List<LivingEntity> l = sorted(near(p, at, num(o, "r", 4) * c.reach), at, (int) num(o, "n", 16));
                 if (c.victim != null && o.has("exclude")) {
                     l.remove(c.victim);
                 }
                 c.t = l;
             }
-            case "line" -> c.t = line(p, num(o, "r", 32), num(o, "w", 2.5));
-            case "cone" -> c.t = cone(p, num(o, "r", 12), num(o, "a", 90));
-            case "chain" -> c.t = chain(p, c.victim, (int) num(o, "n", 6), num(o, "r", 10));
-            case "allies" -> c.t = allies(p, num(o, "r", 16));
+            case "line" -> c.t = line(p, num(o, "r", 32) * c.reach, num(o, "w", 2.5));
+            case "cone" -> c.t = cone(p, num(o, "r", 12) * c.reach, num(o, "a", 90));
+            case "chain" -> c.t = chain(p, c.victim, (int) num(o, "n", 6), num(o, "r", 10) * c.reach);
+            case "allies" -> c.t = allies(p, num(o, "r", 16) * c.reach);
             case "self" -> {
                 c.t = new ArrayList<>();
                 c.t.add(p);
@@ -320,14 +334,14 @@ public final class RelicArts {
             }
             case "stun" -> c.t.forEach(e -> {
                 if (e != p) {
-                    Abilities.stun(e, (int) num(o, "t", 60));
+                    Abilities.stun(e, (int) (num(o, "t", 60) * c.span));
                 }
             });
             case "eff" -> {
                 Holder<MobEffect> h = effect(str(o, "e", "weakness"));
                 for (LivingEntity e : c.t) {
                     if (e != p || o.has("self")) {
-                        e.addEffect(new MobEffectInstance(h, (int) num(o, "t", 100), (int) num(o, "a", 0)));
+                        e.addEffect(new MobEffectInstance(h, (int) (num(o, "t", 100) * c.span), (int) num(o, "a", 0) + c.amp));
                     }
                 }
             }
@@ -461,18 +475,18 @@ public final class RelicArts {
             // ---------- self / allies
             case "heal" -> {
                 for (LivingEntity e : targetsOrSelf(c, o)) {
-                    e.heal((float) num(o, "v", 20));
+                    e.heal((float) num(o, "v", 20) * c.heal);
                 }
             }
             case "healpct" -> {
                 for (LivingEntity e : targetsOrSelf(c, o)) {
-                    e.heal((float) (e.getMaxHealth() * num(o, "v", 1.0)));
+                    e.heal((float) (e.getMaxHealth() * Math.min(1.0, num(o, "v", 1.0) * c.heal)));
                 }
             }
             case "buff" -> {
                 Holder<MobEffect> h = effect(str(o, "e", "strength"));
                 for (LivingEntity e : targetsOrSelf(c, o)) {
-                    e.addEffect(new MobEffectInstance(h, (int) num(o, "t", 200), (int) num(o, "a", 0)));
+                    e.addEffect(new MobEffectInstance(h, (int) (num(o, "t", 200) * c.span), (int) num(o, "a", 0) + c.amp));
                 }
             }
             case "cleanse" -> targetsOrSelf(c, o).forEach(RelicPowers::cleanse);

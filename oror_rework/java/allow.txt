@@ -103,3 +103,9 @@ net/minecraft/world/entity/Entity.position()Lnet/minecraft/world/phys/Vec3;
 net/minecraft/world/entity/LivingEntity.getBbHeight()F
 net/minecraft/world/entity/player/Player.getAttackStrengthScale(F)F
 net/minecraft/world/entity/player/Player.getUseItem()Lnet/minecraft/world/item/ItemStack;
+# v0.17.6: EquipmentSlotGroup.ANY and Operation.ADD_MULTIPLIED_TOTAL (Iron's Spells 1.21.1 uses both); ChatFormatting.RED and
+# AABB.contains(Vec3) are long-standing vanilla members.
+net/minecraft/world/entity/EquipmentSlotGroup.ANY:Lnet/minecraft/world/entity/EquipmentSlotGroup;
+net/minecraft/world/entity/ai/attributes/AttributeModifier$Operation.ADD_MULTIPLIED_TOTAL:Lnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;
+net/minecraft/ChatFormatting.RED:Lnet/minecraft/ChatFormatting;
+net/minecraft/world/phys/AABB.contains(Lnet/minecraft/world/phys/Vec3;)Z

@@ -99,6 +99,16 @@ SPECIAL = {
                'Perfect Guard', 'blocking within half a second of raising it nullifies the hit and counters; raised, it shields nearby allies'),
 }
 
+# Signature attacks of the 41 characters by their weapon kind (BossPowers.java): (ja, en)
+BOSS = {
+    'katana': ('瞬閃', 'Flash Step'), 'sword': ('剣閃波', 'Blade Wave'), 'rapier': ('千本突き', 'Thousand Thrusts'),
+    'greatsword': ('震撃', 'Quake Strike'), 'heavy': ('震撃', 'Quake Strike'), 'toyhammer': ('大ピコピコ', 'Mega Boing'),
+    'scythe': ('魂刈りの円舞', 'Reaping Waltz'), 'chakram': ('輪刃乱舞', 'Whirling Rings'), 'polearm': ('突進', 'Charge'),
+    'fist': ('覇拳', 'Overlord Fist'), 'whip': ('縛鎖', 'Binding Chains'), 'magic': ('魔弾掃射', 'Bolt Barrage'),
+    'gatling': ('弾幕', 'Bullet Storm'), 'cannon': ('一斉砲撃', 'Barrage'), 'bow': ('光矢斉射', 'Volley of Light'),
+    'shield': ('聖盾結界', 'Sacred Bulwark'),
+}
+
 
 def data():
     ids = [k[0] for k in KINDS]
@@ -106,7 +116,7 @@ def data():
     kinds = {}
     for (kid, speed, mul, reach, knock, sweep, mode, shot, gap, *_n) in KINDS:
         assert mode in HOW, mode
-        assert kid in SPECIAL, kid
+        assert kid in SPECIAL and kid in BOSS, kid
         kinds[kid] = dict(speed=speed, mul=mul, reach=reach, knock=knock, sweep=sweep, mode=mode, shot=shot, gap=gap)
     return {'kinds': kinds, 'characters': CHARACTERS, 'power': {str(r): m for r, m in POWER.items()}}
 
@@ -131,6 +141,9 @@ def write(assets):
             L[f'weapon_skill.{NS}.{kid}'] = ja + '！' if li == 0 else en + '!'
             L[f'weapon_skill.{NS}.{kid}.desc'] = f'特殊：{ja} ― {jad}' if li == 0 else f'Special: {en} - {end}'
         L[f'weapon_skill.{NS}.combo'] = '連撃' if li == 0 else 'Combo'
+        for kid, names in BOSS.items():
+            L[f'boss_skill.{NS}.{kid}'] = names[li]
+        L[f'boss_skill.{NS}.awaken'] = '（覚醒）' if li == 0 else ' (Awakened)'
         L[f'weapon_kind.{NS}.cooldown'] = 'アーツ再使用まで' if li == 0 else 'Art ready in'
         L[f'weapon_kind.{NS}.seconds'] = '秒' if li == 0 else 's'
         with open(path, 'w', encoding='utf-8') as fh:

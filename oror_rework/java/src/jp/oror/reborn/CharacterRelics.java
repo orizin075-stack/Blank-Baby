@@ -344,8 +344,28 @@ public final class CharacterRelics {
         private final Wield w;
 
         Artifact(RelicSpec s) {
-            super(new Properties().stacksTo(1).fireResistant().rarity(Rarity.RARE));
+            super(new Properties().stacksTo(1).fireResistant().rarity(Rarity.RARE).attributes(attributes(s)));
             this.w = new Wield(s, s.id, null, 0.0F, s.rank, s.cooldown);
+        }
+
+        /** Held in either hand: a focus sharpens the wielder's attacks, a charm hardens and quickens them (v0.17.6). */
+        static ItemAttributeModifiers attributes(RelicSpec s) {
+            ItemAttributeModifiers.Builder b = ItemAttributeModifiers.builder();
+            if (s.slot.equals("focus")) {
+                b.add(Attributes.ATTACK_DAMAGE, modifier("focus_attack", 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.ANY)
+                    .add(Attributes.ATTACK_SPEED, modifier("focus_speed", 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.ANY);
+            } else {
+                b.add(Attributes.MAX_HEALTH, modifier("charm_health", 20.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY)
+                    .add(Attributes.ARMOR, modifier("charm_armor", 10.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY)
+                    .add(Attributes.ARMOR_TOUGHNESS, modifier("charm_toughness", 6.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY)
+                    .add(Attributes.MOVEMENT_SPEED, modifier("charm_speed", 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.ANY)
+                    .add(Attributes.KNOCKBACK_RESISTANCE, modifier("charm_steady", 0.5, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY);
+            }
+            return b.build();
+        }
+
+        private static AttributeModifier modifier(String id, double amount, AttributeModifier.Operation op) {
+            return new AttributeModifier(ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", id), amount, op);
         }
 
         @Override

@@ -21,6 +21,9 @@ public final class WorldEvents {
         if (!v.level().isClientSide) {
             CompoundTag n = v.getPersistentData();
             long now = v.level().getGameTime();
+            if (v instanceof SupremeEntity boss && v.level() instanceof ServerLevel bl && (n.getLong("ororFreezeUntil") <= now || LorePowers.timeIndependent(boss))) {
+                BossPowers.tick(boss, bl);
+            }
             if (!(v instanceof Player) && (!(v instanceof SupremeEntity b) || !LorePowers.timeIndependent(b)) && n.getLong("ororFreezeUntil") > now) {
                 v.setDeltaMovement(Vec3.ZERO);
                 e.setCanceled(true);
@@ -64,6 +67,9 @@ public final class WorldEvents {
 
     public static void damage(LivingIncomingDamageEvent e) {
         LivingEntity v = e.getEntity();
+        if (v instanceof SupremeEntity boss && !v.level().isClientSide) {
+            BossPowers.incoming(e, boss);
+        }
         if (!v.level().isClientSide && !e.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             List<SupremeEntity> guards = v.level()
                 .getEntitiesOfClass(SupremeEntity.class, v.getBoundingBox().inflate(8.0), bx -> bx.ally(v) && bx.isAlive() && !bx.isNoAi());

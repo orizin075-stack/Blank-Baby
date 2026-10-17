@@ -1,6 +1,6 @@
-# OROR War × Nightfall — rework workspace (v0.17.5)
+# OROR War × Nightfall — rework workspace (v0.17.6)
 
-Release: `dist/OROR_War_Nightfall_v0.17.5_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Release: `dist/OROR_War_Nightfall_v0.17.6_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
 v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
 the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.17.2 fixes rigs.json failing to load in game (a non-numeric hair bone param); `java/meshtest/RigsCheck.java` now
@@ -11,9 +11,12 @@ v0.17.4 gives each kind a special skill (`WeaponSkills.java`), makes arts 1.5x s
 impact effects (`RelicEffects.java`), and removes 275 clutter items (`tools/mc/prune_items.py`).
 v0.17.5 multiplies relic weapon damage by rank (weapon 3x, legend 4x: `POWER` in `weapon_kinds.py`) and makes them
 unbreakable (`damageItem` returns 0).
+v0.17.6 strengthens focus/charm relics (held attribute bonuses, 2x art power) and the 41 characters: signature
+attacks by weapon kind, awakening at half health, resolve against huge hits (`BossPowers.java`) and tuned stats
+(`tools/mc/boss_tuning.py`, checked by `java/meshtest/RosterCheck.java`).
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.5_JA.md`, the list of all 164 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.6_JA.md`, the list of all 164 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates
