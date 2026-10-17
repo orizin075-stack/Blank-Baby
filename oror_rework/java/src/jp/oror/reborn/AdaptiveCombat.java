@@ -124,8 +124,12 @@ public final class AdaptiveCombat {
                 return;
             }
 
-            MobEquipmentUse.clock(m);
             CompoundTag n = MobMind.data(m);
+            if (nativeGunner(m, n)) {
+                return;
+            }
+
+            MobEquipmentUse.clock(m);
             MobLevels.initialize(m);
             if (m instanceof SupremeEntity b && !n.contains("OriginalWeapon")) {
                 DeferredItem<Item> relic = CharacterRelics.ITEMS.get(b.spec.id + "_weapon");
@@ -224,6 +228,9 @@ public final class AdaptiveCombat {
                             && (!(p.getOwner() instanceof LivingEntity a) || !allied(m, a))
                             && p.getDeltaMovement().lengthSqr() > 0.02
                             && p.getDeltaMovement().dot(m.position().subtract(p.position())) > 0.0
+                            // v0.17.12: nobody sees a bullet coming; reacting to gun mods' bullets kept shields up for
+                            // as long as a gun fired, so automatic fire never got through from the front
+                            && !GUN_MODS.contains(BuiltInRegistries.ENTITY_TYPE.getKey(p.getType()).getNamespace())
                 );
                 if (!threats.isEmpty() && m.getOffhandItem().is(Items.SHIELD) && !m.isUsingItem() && n.getLong("ShieldBroken") <= sl.getGameTime()) {
                     m.startUsingItem(InteractionHand.OFF_HAND);
@@ -364,6 +371,63 @@ public final class AdaptiveCombat {
         MobLevels.arm(m);
     }
 
+    private static final Set<String> GUN_MODS = Set.of("tacz", "jeg", "superbwarfare", "pillagers_gun", "pillagerguns", "tacz_bandits");
+
+    /** An item from another mod (not vanilla, not this mod's). */
+    static boolean foreign(ItemStack s) {
+        if (s.isEmpty()) {
+            return false;
+        }
+        String ns = BuiltInRegistries.ITEM.getKey(s.getItem()).getNamespace();
+        return !ns.equals("minecraft") && !ns.equals("oror_supreme_bosses");
+    }
+
+    /** A gun from one of the pack's gun mods (or any other mod's gun or launcher). */
+    static boolean gun(ItemStack s) {
+        if (!foreign(s)) {
+            return false;
+        }
+        String ns = BuiltInRegistries.ITEM.getKey(s.getItem()).getNamespace();
+        return GUN_MODS.contains(ns) && !(s.getItem() instanceof SwordItem) || s.getItem() instanceof ProjectileWeaponItem || gunClass(s);
+    }
+
+    /** Another mod's gun item: its class or a superclass is a gun (TaCZ ModernKineticGunItem, JEG and Superb Warfare GunItem). */
+    static boolean gunClass(ItemStack s) {
+        if (!foreign(s)) {
+            return false;
+        }
+        for (Class<?> c = s.getItem().getClass(); c != null && c != Item.class; c = c.getSuperclass()) {
+            if (c.getSimpleName().toLowerCase(java.util.Locale.ROOT).contains("gun")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * v0.17.12: a mob that carries another mod's gun (pillagers from Pillager Guns and Pillagers Gun, TaCZ bandits, JEG and
+     * Superb Warfare mobs) fights with that mod's own AI. Driving the same gun from here as well fired it twice, fought
+     * its AI over aiming and reloads, ticked Superb Warfare guns twice and swapped guns this file did not know for vanilla
+     * crossbows and swords. Villagers and the characters, which have no gun AI of their own, still shoot through
+     * MobEquipmentUse. A gun swapped away by an older version is given back.
+     */
+    private static boolean nativeGunner(Mob m, CompoundTag n) {
+        if (guardian(m) || m instanceof SupremeEntity) {
+            return false;
+        }
+        if (!n.getBoolean("GunRestoreChecked") && !gun(m.getMainHandItem()) && n.contains("OriginalWeapon") && !n.getBoolean("OriginalAuto")) {
+            // once per mob: parsing the saved weapon every tick would be wasted work
+            n.putBoolean("GunRestoreChecked", true);
+            ItemStack original = ItemStack.parseOptional(m.registryAccess(), n.getCompound("OriginalWeapon"));
+            if (gun(original)) {
+                m.setItemSlot(EquipmentSlot.MAINHAND, original);
+                n.remove("OriginalWeapon");
+                n.remove("Selected");
+            }
+        }
+        return gun(m.getMainHandItem());
+    }
+
     /** Queue footwork: forward/sideways input (as for a skeleton's strafing) for the next ticks. */
     private static void step(CompoundTag n, long now, int ticks, float forward, float side) {
         n.putLong("FootUntil", now + (long)ticks);
@@ -416,6 +480,11 @@ public final class AdaptiveCombat {
         if (!special.isEmpty()) {
             MobMind.data(m).putString("Selected", special);
             return special;
+        } else if (foreign(m.getMainHandItem())) {
+            // v0.17.12: another mod's weapon stays in hand (it used to be swapped for a vanilla one)
+            String kept = gun(m.getMainHandItem()) ? "bow" : "sword";
+            MobMind.data(m).putString("Selected", kept);
+            return kept;
         } else {
             String wanted = MobMind.preferred(m);
             String stance = MobMind.stance(m);

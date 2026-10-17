@@ -1,6 +1,6 @@
-# OROR War × Nightfall — rework workspace (v0.17.11)
+# OROR War × Nightfall — rework workspace (v0.17.12)
 
-Release: `dist/OROR_War_Nightfall_v0.17.11_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Release: `dist/OROR_War_Nightfall_v0.17.12_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
 v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
 the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.17.2 fixes rigs.json failing to load in game (a non-numeric hair bone param); `java/meshtest/RigsCheck.java` now
@@ -36,9 +36,13 @@ v0.17.11 lets focus and charm relics be worn in Curios slots of their own (`java
 transient modifiers (`wear`/`unwear`) and F casts the worn focus's then charm's art. Cannon shells fly
 (`RelicShells.java`, server-simulated, drawn with particles), guns aim into the first-person view (`held.gun_fp`) and
 fists get normal reach and punch feedback.
+v0.17.12 fixes guns: holding another mod's gun puts the player in Epic Fight's vanilla mode (`GunCompat.java`, by
+reflection; battle mode turned every shot into a melee swing), mobs carrying other mods' guns are left to those mods' AI
+(`AdaptiveCombat.nativeGunner`: no double firing, no swapping to vanilla weapons, swapped guns restored), foreign
+weapons are never swapped, and gun-mod bullets no longer make mobs raise shields.
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.11_JA.md`, the list of all 164 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.12_JA.md`, the list of all 164 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates

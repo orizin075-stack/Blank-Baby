@@ -27,6 +27,9 @@ public final class WorldEvents {
             if (v instanceof Player wearer && now % 20L == 3L) {
                 CharacterRelics.unwear(wearer);
             }
+            if (v instanceof Player gunner && now % 5L == 1L) {
+                GunCompat.tick(gunner);
+            }
             if (!(v instanceof Player) && (!(v instanceof SupremeEntity b) || !LorePowers.timeIndependent(b)) && n.getLong("ororFreezeUntil") > now) {
                 v.setDeltaMovement(Vec3.ZERO);
                 e.setCanceled(true);

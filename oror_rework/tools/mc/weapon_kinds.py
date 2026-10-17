@@ -178,6 +178,8 @@ def write(assets):
                                              'Also works in the Relic Focus accessory slot; worn, F casts its art')
         L[f'weapon_kind.{NS}.worn.charm'] = ('護符スロット（装飾品）に着けても効果あり。着けている間は F でアーツ' if li == 0 else
                                              'Also works in the Relic Charm accessory slot; worn, F casts its art')
+        L[f'weapon_kind.{NS}.gun_mode'] = ('銃を持っている間は通常操作（Epic Fight の戦闘モードを一時オフ）' if li == 0 else
+                                           'Gun in hand: vanilla controls (Epic Fight battle mode paused)')
         L['curios.identifier.relic_focus'] = '秘具' if li == 0 else 'Relic Focus'
         L['curios.identifier.relic_charm'] = '護符' if li == 0 else 'Relic Charm'
         with open(path, 'w', encoding='utf-8') as fh:
