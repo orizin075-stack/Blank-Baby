@@ -147,9 +147,16 @@ public final class AdaptiveCombat {
                 VillagerRoles.ability(v, sl);
             }
 
+            if (drivenElsewhere(m, n)) {
+                return;
+            }
+
             TerrainPlay.fallRescue(m, sl);
-            if (guardian(m) && (Boolean)RebornConfig.ARMED_VILLAGERS.get() && !m.isBaby() && !n.getBoolean("Armed")) {
+            // v0.17.13: only guards wear their gear all the time; other villagers arm when danger comes (VillageAI.gear)
+            if (guardian(m) && (Boolean)RebornConfig.ARMED_VILLAGERS.get() && !m.isBaby() && VillageAI.fighter(m)
+                && (!n.getBoolean("Armed") || n.contains("VillageGeared") && !n.getBoolean("VillageGeared"))) {
                 arm(m);
+                n.putBoolean("VillageGeared", true);
             }
 
             // v0.17.9: guards hold their post, villagers run instead of charging (VillageAI)
@@ -369,6 +376,43 @@ public final class AdaptiveCombat {
 
     public static void arm(Mob m) {
         MobLevels.arm(m);
+    }
+
+    private static final java.util.Map<Mob, Boolean> ELSEWHERE = new java.util.WeakHashMap<>();
+
+    /**
+     * v0.17.13: mobs another mod drives. Epic Fight animates vanilla zombies, skeletons, piglins, illagers and more with
+     * combat AI of its own (it swaps their attack goals for its own and rebuilds them whenever the held item changes), and
+     * other mods' mobs have AI of their own; moving them, side-stepping them and swapping their weapons here as well made
+     * two controllers fight over one body. These keep their levels and growth but fight with their own AI. A weapon an
+     * older version swapped away is given back once.
+     */
+    private static boolean drivenElsewhere(Mob m, CompoundTag n) {
+        if (guardian(m) || m instanceof SupremeEntity || m instanceof FamiliarEntity) {
+            return false;
+        }
+        Boolean known = ELSEWHERE.get(m);
+        if (known == null) {
+            if (m.tickCount < 20) {
+                // Epic Fight attaches its patch as the mob joins the world: decide once it has settled
+                return true;
+            }
+            String ns = BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()).getNamespace();
+            known = !ns.equals("minecraft") && !ns.equals("oror_supreme_bosses") || EpicFightBridge.animates(m);
+            ELSEWHERE.put(m, known);
+            if (known && !n.getBoolean("NativeWeaponRestored") && n.contains("OriginalWeapon") && !n.getBoolean("OriginalAuto")) {
+                n.putBoolean("NativeWeaponRestored", true);
+                ItemStack original = ItemStack.parseOptional(m.registryAccess(), n.getCompound("OriginalWeapon"));
+                if (!original.isEmpty()) {
+                    m.setItemSlot(EquipmentSlot.MAINHAND, original);
+                    n.remove("Selected");
+                }
+            }
+            if (known && m.isSprinting()) {
+                m.setSprinting(false);
+            }
+        }
+        return known;
     }
 
     private static final Set<String> GUN_MODS = Set.of("tacz", "jeg", "superbwarfare", "pillagers_gun", "pillagerguns", "tacz_bandits");

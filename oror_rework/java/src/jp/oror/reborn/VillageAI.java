@@ -11,6 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -27,7 +29,7 @@ import net.minecraft.world.phys.Vec3;
  * - Guards (衛兵): the fighting professions, veterans (level 4+) and guard mods' guards. They hold a post at the village
  *   centre, pick threats that menace villagers or players first, do not hunt through walls, let a target go once it is
  *   more than 56 blocks from the post (48 to take one on) and walk back, raise the alarm when they engage, patrol the village by day and keep
- *   a night watch on alternate nights. Sword guards leave creepers to the archers.
+ *   the night watch. Sword guards leave creepers to the archers.
  * - Villagers (村人): every other profession and all children. They no longer charge into fights: on a threat or an
  *   alarm they run home (at night), behind the nearest guard (by day) or away, and strike back only when cornered at arm's
  *   length.
@@ -160,7 +162,7 @@ public final class VillageAI {
         }
     }
 
-    /** Day patrols around the post and, on alternate nights, a night watch. True while it keeps the guard busy. */
+    /** Day patrols around the post and, all night, the night watch. True while it keeps the guard busy. */
     static boolean patrol(Villager v, ServerLevel sl) {
         if (!fighter(v) || v.isSleeping()) {
             return false;
@@ -173,9 +175,6 @@ public final class VillageAI {
             return true;
         }
         boolean night = !sl.isDay();
-        if (night && Math.floorMod(now / 24000L + v.getId(), 2L) != 0L) {
-            return false;
-        }
         BlockPos post = post(v, n);
         if (post == null) {
             return false;
@@ -212,6 +211,7 @@ public final class VillageAI {
         LivingEntity threat = null;
         if (t != null) {
             if (AdaptiveCombat.enemy(m, t) && cornered(m, t)) {
+                gear(m, n, now, true);
                 return false;
             }
             // shared targets and grudges are for the guards; a villager steps back from them
@@ -232,14 +232,70 @@ public final class VillageAI {
             from = alarm.distanceToSqr(m.position()) < 576.0 ? alarm : null;
         }
         if (from == null) {
+            gear(m, n, now, false);
             return true;
         }
+        gear(m, n, now, true);
         if (threat != null && cornered(m, threat)) {
             m.setTarget(threat);
             return false;
         }
         flee(m, sl, n, from, now);
         return true;
+    }
+
+    /**
+     * v0.17.13: a villager (not a guard) wears armor and carries a weapon only while danger is near, and puts them away
+     * ten seconds after it passes, so the profession's clothes show the rest of the time. Only the gear MobLevels.arm
+     * gave is taken off; anything a player handed over stays.
+     */
+    private static void gear(Mob m, CompoundTag n, long now, boolean danger) {
+        if (!(Boolean) RebornConfig.ARMED_VILLAGERS.get() || m.isBaby()) {
+            return;
+        }
+        if (danger) {
+            n.putLong("VillageGearUntil", now + 200L);
+            if (!n.contains("VillageGeared") || !n.getBoolean("VillageGeared")) {
+                // arming also sets the armed health; keep the wounds the villager already has
+                float health = m.getHealth();
+                MobLevels.arm(m);
+                m.setHealth(Math.min(health, m.getMaxHealth()));
+                n.putBoolean("VillageGeared", true);
+            }
+        } else if (now >= n.getLong("VillageGearUntil") && (!n.contains("VillageGeared") || n.getBoolean("VillageGeared"))) {
+            for (EquipmentSlot slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.OFFHAND, EquipmentSlot.MAINHAND)) {
+                String key = "Managed_" + slot.getName();
+                ItemStack worn = m.getItemBySlot(slot);
+                if (!worn.isEmpty() && n.contains(key) && ItemStack.isSameItemSameComponents(worn, ItemStack.parseOptional(m.registryAccess(), n.getCompound(key)))) {
+                    m.setItemSlot(slot, ItemStack.EMPTY);
+                }
+            }
+            // the role weapon the combat AI switched to (a bow, an axe...) is this mod's vanilla weapon too
+            ItemStack hand = m.getMainHandItem();
+            if (n.getBoolean("OriginalAuto") && !AdaptiveCombat.foreign(hand) && (hand.getItem() instanceof net.minecraft.world.item.SwordItem
+                || hand.getItem() instanceof net.minecraft.world.item.AxeItem || hand.getItem() instanceof net.minecraft.world.item.ProjectileWeaponItem
+                || hand.is(net.minecraft.world.item.Items.TRIDENT) || hand.is(net.minecraft.world.item.Items.MACE))) {
+                m.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            }
+            n.remove("Selected");
+            n.putBoolean("VillageGeared", false);
+        }
+    }
+
+    /**
+     * v0.17.13: at night a villager who is not on guard goes home to bed (the brain takes it the last steps and to sleep);
+     * from far away it is walked home first. Returns the status line.
+     */
+    static String bedtime(Villager v, ServerLevel sl) {
+        if (v.isSleeping()) {
+            return "就寝";
+        }
+        BlockPos home = home(v, sl);
+        if (home != null && home.distSqr(v.blockPosition()) > 36.0) {
+            walk(v, home, pace(v, WORK), 1);
+            return "帰宅中";
+        }
+        return "就寝準備";
     }
 
     private static boolean cornered(Mob m, LivingEntity t) {

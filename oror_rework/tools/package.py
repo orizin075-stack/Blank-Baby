@@ -105,13 +105,18 @@ def build_zip(S, jar, out, version):
     jar_name = os.path.basename(jar)
     guide = relic_guide(S, version)
     notes = open(os.path.join(S, 'tools', 'CHANGES_JA.md'), encoding='utf-8').read() if os.path.exists(os.path.join(S, 'tools', 'CHANGES_JA.md')) else ''
+    # v0.17.13: pack config files this rework replaces (tools/pack_config/<path under overrides>)
+    pack_config = os.path.join(S, 'tools', 'pack_config')
+    replaced = {'overrides/' + rel: full for rel, full in add_tree(None, pack_config)} if os.path.isdir(pack_config) else {}
     with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         z.writestr('manifest.json', json.dumps(man, ensure_ascii=False, indent=2))
         for rel, full in add_tree(None, src):
-            if rel == 'manifest.json':
+            if rel == 'manifest.json' or rel in replaced:
                 continue
             if rel.startswith('overrides/mods/oror_supreme_bosses-'):
                 continue
+            z.write(full, rel)
+        for rel, full in sorted(replaced.items()):
             z.write(full, rel)
         z.write(jar, 'overrides/mods/' + jar_name)
         z.writestr(f'overrides/RELIC_ARTS_v{version}_JA.md', guide)

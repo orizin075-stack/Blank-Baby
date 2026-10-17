@@ -130,17 +130,21 @@ public final class VillagerLife {
                 return;
             }
 
+            // v0.17.13: at night the guards keep watch and everyone else, miners too, goes home to bed
+            if (!sl.isDay()) {
+                if (!VillageAI.patrol(v, sl)) {
+                    data(v).putString("Task", VillageAI.bedtime(v, sl));
+                }
+
+                return;
+            }
+
             if (VillagerIndustry.miner(v)) {
                 return;
             }
 
-            // v0.17.9: guards walk their rounds; at night everyone else rests and the brain takes them to bed
+            // v0.17.9: guards walk their rounds now and then
             if (VillageAI.patrol(v, sl)) {
-                return;
-            }
-
-            if (!sl.isDay()) {
-                data(v).putString("Task", "休息");
                 return;
             }
 

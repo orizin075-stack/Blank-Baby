@@ -3,9 +3,7 @@ package jp.oror.reborn;
 import java.lang.reflect.Method;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.fml.ModList;
 
 /**
  * Guns and Epic Fight (v0.17.12). The pack starts every player in Epic Fight's battle mode, where a left click that is
@@ -16,9 +14,6 @@ import net.neoforged.fml.ModList;
  * Called every 5 ticks for each player from WorldEvents.
  */
 public final class GunCompat {
-    private static boolean broken;
-    private static Method patchOf;
-    private static Class<?> patchClass;
     private static Method isBattle;
     private static Method toVanilla;
     private static Method toBattle;
@@ -27,19 +22,21 @@ public final class GunCompat {
     }
 
     static void tick(Player p) {
-        if (broken || !ModList.get().isLoaded("epicfight")) {
-            return;
-        }
         CompoundTag d = p.getPersistentData();
         boolean gun = AdaptiveCombat.gunClass(p.getMainHandItem());
         if (gun == d.getBoolean("ororGunHeld")) {
             return;
         }
         d.putBoolean("ororGunHeld", gun);
+        Object patch = EpicFightBridge.patch(p, true);
+        if (patch == null) {
+            return;
+        }
         try {
-            Object patch = patch(p);
-            if (patch == null) {
-                return;
+            if (isBattle == null) {
+                isBattle = patch.getClass().getMethod("isEpicFightMode");
+                toVanilla = patch.getClass().getMethod("toVanillaMode", boolean.class);
+                toBattle = patch.getClass().getMethod("toEpicFightMode", boolean.class);
             }
             if (gun && (Boolean) isBattle.invoke(patch)) {
                 toVanilla.invoke(patch, true);
@@ -52,20 +49,9 @@ public final class GunCompat {
                 }
             }
         } catch (LinkageError | ReflectiveOperationException | ClassCastException e) {
-            broken = true;
-            System.out.println("[OROR_GUNS] Epic Fight mode switching disabled: " + e.getClass().getSimpleName());
+            isBattle = null;
+            toVanilla = toBattle = null;
+            EpicFightBridge.broken(e);
         }
-    }
-
-    private static Object patch(Player p) throws ReflectiveOperationException {
-        if (patchOf == null) {
-            Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
-            patchClass = Class.forName("yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch");
-            patchOf = caps.getMethod("getEntityPatch", Entity.class, Class.class);
-            isBattle = patchClass.getMethod("isEpicFightMode");
-            toVanilla = patchClass.getMethod("toVanillaMode", boolean.class);
-            toBattle = patchClass.getMethod("toEpicFightMode", boolean.class);
-        }
-        return patchOf.invoke(null, p, patchClass);
     }
 }
