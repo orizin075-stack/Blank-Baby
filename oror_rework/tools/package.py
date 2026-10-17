@@ -27,6 +27,10 @@ def build_jar(S, out, version):
         entries[rel] = full
     for rel in [r for r in entries if removed_path(r)]:
         del entries[rel]
+    # Epic Fight capabilities of shooting and guarding relics: none, so right-click reaches them (weapon_kinds.py)
+    import weapon_kinds
+    for rel in weapon_kinds.epic_fight_files(os.path.join(S, 'build', 'overlay'))[1]:
+        entries.pop(rel, None)
     toml = open(entries['META-INF/neoforge.mods.toml'], encoding='utf-8').read()
     toml = re.sub(r'version="[^"]+"', f'version="{version}"', toml, count=1)
     toml = toml.replace('description="', 'description="Sculpted 3D characters (46 rigs), 3D relic arsenal (164 relics in 16 weapon kinds with special skills, OBJ models) with unique relic arts. ', 1)
@@ -62,6 +66,8 @@ def relic_guide(S, version):
            '武器・伝説はすべて3Dモデル（手に持つと立体表示）です。秘具・護符も3Dモデルです。',
            '武器・伝説には種別（刀・槍・鈍器・弓・魔導具・盾など）と、種別ごとの特殊能力があります。弓・魔導具・連射砲・砲・盾は'
            '右クリックで射撃や防御をし、アーツは「しゃがみ＋右クリック」で使います。それ以外の種別は右クリックでアーツです。',
+           'どの聖遺物も F（持ち替えキー）でアーツを使えます（しゃがみ＋F で普通の持ち替え）。Epic Fight の戦闘モードでは'
+           '刀・剣・大剣・大鎌・輪刃・鈍器・玩具槌の右クリックがガードになるので、F を使ってください。',
            '秘具を手に持つと攻撃力＋40％・攻撃速度＋20％、護符を手に持つと最大体力＋20・防具＋10・防具強度＋6・移動速度＋20％・'
            'ノックバック耐性＋50％。秘具・護符のアーツは威力と回復が2倍、強化効果が1段階上・1.5倍長く・範囲1.25倍です。', '']
     kinds = json.load(open(os.path.join(S, 'build', 'overlay', 'assets', 'oror_supreme_bosses', 'weapon_kinds.json'), encoding='utf-8'))

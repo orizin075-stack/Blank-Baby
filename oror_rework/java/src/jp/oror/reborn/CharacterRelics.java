@@ -337,6 +337,20 @@ public final class CharacterRelics {
         for (RelicSpec s : RelicSpec.ALL.values()) {
             ITEMS.put(s.id, OrorReborn.ITEMS.register(s.id, () -> relic(s)));
         }
+        // the swap-hands key casts the art too: Epic Fight's battle mode turns right-click into guard for its
+        // sword-type weapons and cancels the item use, so right-click alone cannot be relied on
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(CharacterRelics::swapHands);
+    }
+
+    /** F (swap hands) with a relic in the main hand casts its art; sneak + F swaps hands as usual. Server side. */
+    static void swapHands(net.neoforged.neoforge.event.entity.living.LivingSwapItemsEvent.Hands e) {
+        if (!(e.getEntity() instanceof Player p) || p.level().isClientSide || p.isShiftKeyDown()) {
+            return;
+        }
+        if (p.getMainHandItem().getItem() instanceof CharacterRelics.Wielded x && x.wield().art != null) {
+            e.setCanceled(true);
+            CharacterRelics.art(x.wield(), p.level(), p, InteractionHand.MAIN_HAND);
+        }
     }
 
     // ------------------------------------------------------------------------------------- items

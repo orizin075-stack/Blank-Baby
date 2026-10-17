@@ -61,6 +61,10 @@ public final class BossPowers {
             d.putBoolean("ororAwakened", false);
             hold(b, "_weapon");
         }
+        // older worlds (and AdaptiveCombat before v0.17.8) could have swapped the relic for a vanilla weapon
+        if (now % 20L == 0L) {
+            hold(b, awake ? "_legend" : "_weapon");
+        }
         int color = color(b);
         if (t != null && now % 10L == 0L) {
             double a = now * 0.3;

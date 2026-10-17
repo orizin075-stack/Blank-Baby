@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -39,7 +40,11 @@ public final class WeaponSkills {
             return;
         }
         d.putLong("ororSkillTick", now);
-        boolean full = p.getAttackStrengthScale(0.5F) > 0.9F;
+        // a charged blow: the vanilla attack bar, or - for Epic Fight's own attacks, which do not use that bar - at least
+        // one full swing interval (20 / attack speed ticks) since the previous relic blow
+        double interval = 20.0 / Math.max(0.25, p.getAttributeValue(Attributes.ATTACK_SPEED));
+        boolean full = p.getAttackStrengthScale(0.5F) > 0.9F || now - d.getLong("ororBlowAt") >= interval * 0.9;
+        d.putLong("ororBlowAt", now);
         float hit = e.getAmount();
         float pow = w.rank >= 3 ? 1.5F : 1.0F;
         int color = w.spec != null ? w.spec.color : 0xFFFFFF;

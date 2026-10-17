@@ -146,3 +146,9 @@ net/minecraft/ChatFormatting
 	SF RED Lnet/minecraft/ChatFormatting;
 net/minecraft/world/phys/AABB
 	VM contains (Lnet/minecraft/world/phys/Vec3;)Z
+# v0.17.8: the swap-hands key casts relic arts. NeoForge 21.1 LivingSwapItemsEvent.Hands (cancellable; posted by
+# CommonHooks.onLivingSwapHandItems from ServerGamePacketListenerImpl's SWAP_ITEM_WITH_OFFHAND before the swap).
+net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent
+net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent$Hands
+	VM getEntity ()Lnet/minecraft/world/entity/LivingEntity;
+	VM setCanceled (Z)V

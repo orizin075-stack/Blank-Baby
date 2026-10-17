@@ -309,6 +309,8 @@ OV = {
  'net/neoforged/neoforge/gametest/GameTestHolder': c(kind='annotation', members=['String value() default "minecraft";']),
  'net/neoforged/neoforge/gametest/PrefixGameTestTemplate': c(kind='annotation', members=['boolean value() default true;']),
  'net/neoforged/fml/common/Mod': c(kind='annotation', members=['String value();']),
+ 'net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent': c(extends='net.neoforged.bus.api.Event'),
+ 'net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent$Hands': c(extends='net.neoforged.neoforge.event.entity.living.LivingSwapItemsEvent'),
 }
 # events that only need Event as superclass
 for ev in ['net/neoforged/neoforge/event/entity/living/LivingIncomingDamageEvent', 'net/neoforged/neoforge/event/entity/living/LivingHealEvent',

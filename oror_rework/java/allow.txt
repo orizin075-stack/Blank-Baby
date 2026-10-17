@@ -112,3 +112,6 @@ net/minecraft/world/phys/AABB.contains(Lnet/minecraft/world/phys/Vec3;)Z
 # v0.17.7 boss moves: Gson JsonArray.size (Gson 2.10); Entity.getLookAngle called on a LivingEntity.
 com/google/gson/JsonArray.size()I
 net/minecraft/world/entity/LivingEntity.getLookAngle()Lnet/minecraft/world/phys/Vec3;
+# v0.17.8: NeoForge 21.1 LivingSwapItemsEvent.Hands (LivingEvent.getEntity, ICancellableEvent.setCanceled).
+net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent$Hands.getEntity()Lnet/minecraft/world/entity/LivingEntity;
+net/neoforged/neoforge/event/entity/living/LivingSwapItemsEvent$Hands.setCanceled(Z)V

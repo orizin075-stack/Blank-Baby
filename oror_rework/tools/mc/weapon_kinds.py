@@ -53,14 +53,41 @@ CHARACTERS = {
     'fallen_savior': 'sword', 'sweet_pact': 'magic',
 }
 
-HOW = {  # right-click help per mode
-    'melee': ('右クリック：アーツ', 'Right-click: art'),
-    'bolt': ('右クリック：魔弾　しゃがみ＋右クリック：アーツ', 'Right-click: bolt   Sneak + right-click: art'),
-    'gatling': ('右クリック長押し：連射　しゃがみ＋右クリック：アーツ', 'Hold right-click: rapid fire   Sneak + right-click: art'),
-    'shell': ('右クリック：砲撃　しゃがみ＋右クリック：アーツ', 'Right-click: fire shell   Sneak + right-click: art'),
-    'bow': ('右クリックで引いて離す：射る　しゃがみ＋右クリック：アーツ', 'Hold and release right-click: shoot   Sneak + right-click: art'),
-    'guard': ('右クリック：構える　しゃがみ＋右クリック：アーツ', 'Right-click: block   Sneak + right-click: art'),
+HOW = {  # control help per mode (F = the swap-hands key)
+    'melee': ('右クリック または F：アーツ　しゃがみ＋F：持ち替え', 'Right-click or F: art   Sneak + F: swap hands'),
+    'bolt': ('右クリック：魔弾　しゃがみ＋右クリック または F：アーツ', 'Right-click: bolt   Sneak + right-click or F: art'),
+    'gatling': ('右クリック長押し：連射　しゃがみ＋右クリック または F：アーツ', 'Hold right-click: rapid fire   Sneak + right-click or F: art'),
+    'shell': ('右クリック：砲撃　しゃがみ＋右クリック または F：アーツ', 'Right-click: fire shell   Sneak + right-click or F: art'),
+    'bow': ('右クリックで引いて離す：射る　しゃがみ＋右クリック または F：アーツ', 'Hold and release right-click: shoot   Sneak + right-click or F: art'),
+    'guard': ('右クリック：構える　しゃがみ＋右クリック または F：アーツ', 'Right-click: block   Sneak + right-click or F: art'),
 }
+
+# Epic Fight weapon type of each kind (data/<ns>/capabilities/weapons/<item>.json). Only types the original jar already
+# shipped are used. Epic Fight's battle mode turns right-click into guard for sword/tachi/longsword/greatsword types and
+# cancels the item use (ControlEngine), so those kinds also cast their art with F; spear and fist types cannot guard,
+# so right-click reaches the item. Shooting and guarding kinds get no Epic Fight type at all: right-click must reach them.
+EPIC_FIGHT = {
+    'katana': 'epicfight:tachi', 'sword': 'epicfight:sword', 'greatsword': 'epicfight:greatsword', 'scythe': 'epicfight:longsword',
+    'chakram': 'epicfight:sword', 'rapier': 'epicfight:spear', 'polearm': 'epicfight:spear', 'heavy': 'epicfight:greatsword',
+    'toyhammer': 'epicfight:greatsword', 'fist': 'epicfight:fist', 'whip': 'epicfight:spear',
+    'magic': None, 'gatling': None, 'cannon': None, 'bow': None, 'shield': None,
+}
+EF_ATTRIBUTES = {'common': {'impact': 4, 'armor_negation': 60, 'max_strikes': 8}}
+
+
+def epic_fight_files(assets_root_parent):
+    """(written, dropped): capability files the overlay writes, and the jar's capability files that must go."""
+    written, dropped = {}, []
+    for cid, kind in CHARACTERS.items():
+        for slot in ('weapon', 'legend'):
+            rel = f'data/{NS}/capabilities/weapons/{cid}_{slot}.json'
+            t = EPIC_FIGHT[kind]
+            if t:
+                written[rel] = {'type': t, 'attributes': EF_ATTRIBUTES}
+            else:
+                dropped.append(rel)
+    return written, dropped
+
 
 # The special ability of each kind (WeaponSkills.java): (ja name, ja description, en name, en description).
 # "Full" hits are fully charged swings (the attack-strength bar full).
@@ -106,7 +133,7 @@ def data():
     kinds = {}
     for (kid, speed, mul, reach, knock, sweep, mode, shot, gap, *_n) in KINDS:
         assert mode in HOW, mode
-        assert kid in SPECIAL, kid
+        assert kid in SPECIAL and kid in EPIC_FIGHT, kid
         kinds[kid] = dict(speed=speed, mul=mul, reach=reach, knock=knock, sweep=sweep, mode=mode, shot=shot, gap=gap)
     return {'kinds': kinds, 'characters': CHARACTERS, 'power': {str(r): m for r, m in POWER.items()}}
 
@@ -118,6 +145,16 @@ def write(assets):
     assert sorted(CHARACTERS) == chars, set(chars) ^ set(CHARACTERS)
     with open(os.path.join(assets, 'weapon_kinds.json'), 'w', encoding='utf-8') as fh:
         json.dump(d, fh, ensure_ascii=False, indent=1)
+    overlay = os.path.dirname(os.path.dirname(os.path.normpath(assets)))   # <overlay>/assets/<ns> -> <overlay>
+    written, dropped = epic_fight_files(overlay)
+    for rel, cap in written.items():
+        path = os.path.join(overlay, rel)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w', encoding='utf-8') as fh:
+            json.dump(cap, fh, indent=2)
+    for rel in dropped:
+        if os.path.exists(os.path.join(overlay, rel)):
+            os.remove(os.path.join(overlay, rel))
     for lang, li in (('ja_jp', 0), ('en_us', 1)):
         path = os.path.join(assets, 'lang', lang + '.json')
         L = json.load(open(path, encoding='utf-8'))

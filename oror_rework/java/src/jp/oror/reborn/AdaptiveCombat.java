@@ -363,6 +363,12 @@ public final class AdaptiveCombat {
     }
 
     public static String select(Mob m, LivingEntity t, double distance) {
+        // characters fight with their own relic (BossPowers keeps it in hand): never trade it for a vanilla weapon
+        String relic = m instanceof SupremeEntity ? CharacterRelics.style(m.getMainHandItem()) : null;
+        if (relic != null) {
+            MobMind.data(m).putString("Selected", relic);
+            return relic;
+        }
         String special = MobEquipmentUse.kind(m.getMainHandItem());
         if (!special.isEmpty()) {
             MobMind.data(m).putString("Selected", special);

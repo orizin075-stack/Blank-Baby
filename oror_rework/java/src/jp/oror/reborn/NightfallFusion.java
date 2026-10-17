@@ -319,8 +319,9 @@ public final class NightfallFusion {
 
    public static boolean temper(Player p) {
       ItemStack held = p.getMainHandItem();
+      // relic bows, shields and catalysts temper like swords (they stopped being SwordItems in v0.17.3)
       if (!held.isEmpty()
-         && held.getItem() instanceof SwordItem
+         && (held.getItem() instanceof SwordItem || held.getItem() instanceof CharacterRelics.Wielded w && w.wield().kind != null)
          && ((CustomData)held.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)).copyTag().getInt("OrorTemper") < 5) {
          Inventory inv = p.getInventory();
          int material = 0;
