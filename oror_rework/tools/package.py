@@ -17,15 +17,19 @@ def add_tree(z, root, prefix='', skip=()):
 
 def build_jar(S, out, version):
     entries = {}
+    sys.path.insert(0, os.path.join(S, 'tools', 'mc'))
+    from prune_items import removed_path   # models, textures and data of the items removed in v0.17.4
     for rel, full in add_tree(None, os.path.join(S, 'mod', 'jar')):
         entries[rel] = full
     for rel, full in add_tree(None, os.path.join(S, 'build', 'classes')):
         entries[rel] = full
     for rel, full in add_tree(None, os.path.join(S, 'build', 'overlay')):
         entries[rel] = full
+    for rel in [r for r in entries if removed_path(r)]:
+        del entries[rel]
     toml = open(entries['META-INF/neoforge.mods.toml'], encoding='utf-8').read()
     toml = re.sub(r'version="[^"]+"', f'version="{version}"', toml, count=1)
-    toml = toml.replace('description="', 'description="Sculpted 3D characters (46 rigs), 3D relic arsenal (164 relics + 41 replicas, OBJ models) with unique relic arts. ', 1)
+    toml = toml.replace('description="', 'description="Sculpted 3D characters (46 rigs), 3D relic arsenal (164 relics in 16 weapon kinds with special skills, OBJ models) with unique relic arts. ', 1)
     with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         man = 'META-INF/MANIFEST.MF'
         if man in entries:
@@ -51,19 +55,20 @@ def relic_guide(S, version):
     for r in rel:
         if r['character'] not in chars:
             chars.append(r['character'])
-    slot_ja = {'weapon': '武器', 'focus': '秘具', 'charm': '護符', 'legend': '伝説', 'relic_weapon': '残響（ダンジョン聖遺物）'}
+    slot_ja = {'weapon': '武器', 'focus': '秘具', 'charm': '護符', 'legend': '伝説'}
     out = [f'# 聖遺物アーツ一覧（v{version}）', '',
-           '全164の聖遺物と41のダンジョン聖遺物（残響）それぞれに固有の効果があります。',
+           '全164の聖遺物それぞれに固有の効果があります。',
            '右クリックで「使用」効果、手（メイン・オフハンド）に持っている間は「所持中」効果、武器で殴ると「命中時」効果が発動します。',
-           '武器・伝説・残響はすべて3Dモデル（手に持つと立体表示）です。秘具・護符も3Dモデルになりました。',
-           '武器・伝説・残響には種別があります（刀・槍・鈍器・弓・魔導具・盾など）。弓・魔導具・連射砲・砲・盾は右クリックで射撃や防御をし、'
-           'アーツは「しゃがみ＋右クリック」で使います。それ以外の種別は右クリックでアーツです。', '']
+           '武器・伝説はすべて3Dモデル（手に持つと立体表示）です。秘具・護符も3Dモデルです。',
+           '武器・伝説には種別（刀・槍・鈍器・弓・魔導具・盾など）と、種別ごとの特殊能力があります。弓・魔導具・連射砲・砲・盾は'
+           '右クリックで射撃や防御をし、アーツは「しゃがみ＋右クリック」で使います。それ以外の種別は右クリックでアーツです。', '']
     kinds = json.load(open(os.path.join(S, 'build', 'overlay', 'assets', 'oror_supreme_bosses', 'weapon_kinds.json'), encoding='utf-8'))
     for c in chars:
         out.append(f'## {c}')
         kind = kinds['characters'][c]
         out.append(lang[f'weapon_kind.oror_supreme_bosses.{kind}'] + '　' + lang[f'weapon_kind.oror_supreme_bosses.how.{kinds["kinds"][kind]["mode"]}'])
-        for slot in ('weapon', 'focus', 'charm', 'legend', 'relic_weapon'):
+        out.append(lang[f'weapon_skill.oror_supreme_bosses.{kind}.desc'])
+        for slot in ('weapon', 'focus', 'charm', 'legend'):
             rid = f'{c}_{slot}'
             a = R.ARTS[rid]
             out.append(f'- **{names.get(rid, rid)}**（{slot_ja[slot]}）— 「{a["name"][0]}」：{a["desc"][0]}')

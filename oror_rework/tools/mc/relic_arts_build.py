@@ -43,7 +43,7 @@ def main(root, relics_path):
     relics = json.load(open(relics_path, encoding='utf-8'))
     ids = [r['id'] for r in relics]
     chars = sorted({r['character'] for r in relics})
-    want = set(ids) | {c + '_relic_weapon' for c in chars}
+    want = set(ids)
     have = set(R.ARTS)
     assert want == have, f'missing {sorted(want - have)} extra {sorted(have - want)}'
     for a in R.ARTS.values():
@@ -54,9 +54,7 @@ def main(root, relics_path):
     for rid in sorted(R.ARTS):
         a = R.ARTS[rid]
         e = {'id': rid, 'character': a['character'], 'rank': a['rank'], 'cast': a['cast'], 'passive': a['passive'], 'hit': a['hit']}
-        if rid.endswith('_relic_weapon'):
-            e['cd'] = a['cd'] or 60
-        elif a['cd']:
+        if a['cd']:
             e['cd'] = a['cd']
         if rid in by_id:
             assert by_id[rid]['rank'] == a['rank'], f'{rid}: rank {a["rank"]} != {by_id[rid]["rank"]}'
@@ -83,12 +81,14 @@ def main(root, relics_path):
             else:
                 name = {'weapon': N.WEAPON[c][1], 'legend': N.LEGEND_EN[c], 'focus': N.FOCUS_EN[c], 'charm': N.CHARM_EN[c]}[slot]
             d[f'item.{NS}.{r["id"]}'] = name
-        for c in chars:
-            d[f'item.{NS}.{c}_relic_weapon'] = N.WEAPON[c][0] + '【残響】' if li == 0 else N.WEAPON[c][1] + ' (Echo)'
+        # the dungeon replicas (<character>_relic_weapon, "Echo") were removed in v0.17.4
+        for k in [k for k in d if k.startswith((f'item.{NS}.', f'relic_art.{NS}.')) and '_relic_weapon' in k]:
+            del d[k]
         for rid, a in R.ARTS.items():
             k = f'relic_art.{NS}.{rid}'
             d[k + '.name'] = ('◆ ' if li == 0 else '◆ ') + a['name'][li] + ('（使用）' if li == 0 else ' (use)')
             d[k + '.desc'] = a['desc'][li]
+            d[k + '.title'] = '◆ ' + a['name'][li] + ' ◆'   # cast banner over the hotbar
             if a['passive']:
                 d[k + '.passive'] = (a['pdesc'] or ('所持中の効果', 'Held effect'))[li]
             if a['hit']:

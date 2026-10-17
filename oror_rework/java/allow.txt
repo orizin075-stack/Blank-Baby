@@ -86,3 +86,20 @@ net/minecraft/world/item/component/ItemAttributeModifiers$Builder.add(Lnet/minec
 net/minecraft/world/item/component/ItemAttributeModifiers$Builder.build()Lnet/minecraft/world/item/component/ItemAttributeModifiers;
 net/minecraft/world/item/component/ItemAttributeModifiers.builder()Lnet/minecraft/world/item/component/ItemAttributeModifiers$Builder;
 net/neoforged/neoforge/common/ItemAbilities.SWORD_SWEEP:Lnet/neoforged/neoforge/common/ItemAbility;
+# Weapon skills (v0.17.4): Entity.position/getLookAngle/getBbHeight and LivingEntity.getUseItem are long-standing vanilla
+# methods; Player.getAttackStrengthScale is accurate in damage events per NeoForge 1.21.1's Player patch; PLAYER_ATTACK_* are
+# plain SoundEvents (NeoForge Player patch plays PLAYER_ATTACK_NODAMAGE, Iron's 1.21.1 plays PLAYER_ATTACK_KNOCKBACK).
+net/minecraft/ChatFormatting.YELLOW:Lnet/minecraft/ChatFormatting;
+net/minecraft/core/particles/ParticleTypes.CLOUD:Lnet/minecraft/core/particles/SimpleParticleType;
+net/minecraft/core/particles/ParticleTypes.ENCHANTED_HIT:Lnet/minecraft/core/particles/SimpleParticleType;
+net/minecraft/core/particles/ParticleTypes.SWEEP_ATTACK:Lnet/minecraft/core/particles/SimpleParticleType;
+net/minecraft/sounds/SoundEvents.PLAYER_ATTACK_CRIT:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/sounds/SoundEvents.PLAYER_ATTACK_KNOCKBACK:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/sounds/SoundEvents.PLAYER_ATTACK_SWEEP:Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/util/RandomSource.nextFloat()F
+net/minecraft/world/entity/Entity.getBbHeight()F
+net/minecraft/world/entity/Entity.getLookAngle()Lnet/minecraft/world/phys/Vec3;
+net/minecraft/world/entity/Entity.position()Lnet/minecraft/world/phys/Vec3;
+net/minecraft/world/entity/LivingEntity.getBbHeight()F
+net/minecraft/world/entity/player/Player.getAttackStrengthScale(F)F
+net/minecraft/world/entity/player/Player.getUseItem()Lnet/minecraft/world/item/ItemStack;

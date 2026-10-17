@@ -49,42 +49,51 @@ CHARACTERS = {
     'fallen_savior': 'sword', 'sweet_pact': 'magic',
 }
 
-# NightfallCraft counterparts (FusionItems): kind from the item name
-FUSION_RULES = [
-    (('spear', 'halberd'), 'polearm'),
-    (('axe',), 'heavy'),
-    (('dagger', 'shortsword'), 'rapier'),
-    (('claw',), 'fist'),
-    (('greatsword', 'broadblade'), 'greatsword'),
-    (('tachi', 'katana', 'murasama', 'yamato', 'kusabimaru', 'hf_blade'), 'katana'),
-    (('thornwheel',), 'chakram'),
-]
-FUSION_WEAPONS = [
-    'efn:air_tachi', 'efn:broadblade', 'efn:co_tachi', 'efn:crescent_moon', 'efn:crimson_moon', 'efn:exsiliumgladius',
-    'efn:fire_exsiliumgladius', 'efn:hf_blade', 'efn:hf_murasama', 'efn:kusabimaru', 'efn:meen_spear', 'efn:nf_claw',
-    'efn:nf_dual_sword', 'efn:nf_shortsword', 'efn:ruinsgreatsword', 'efn:sword_of_pioneer', 'efn:thornwheel',
-    'efn:yamato_dmc4_in_sheath', 'efn:yamato_dmc_in_sheath', 'tcrcore:ashen_crescent', 'tcrcore:cinderwyrm',
-    'tcrcore:emberfang', 'tcrcore:magic_axe', 'tcrcore:magic_dagger', 'tcrcore:magic_greatsword', 'tcrcore:magic_halberd',
-    'tcrcore:magic_katana', 'tcrcore:magic_longsword', 'tcrcore:magic_spear', 'tcrcore:magic_sword', 'tcrcore:magic_tachi',
-    'tcrcore:magmaheart', 'tcrcore:purging_swallow',
-]
-
-HOW = {  # right-click help per mode: (with art, plain)
-    'melee': (('右クリック：アーツ', 'Right-click: art'), None),
-    'bolt': (('右クリック：魔弾　しゃがみ＋右クリック：アーツ', 'Right-click: bolt   Sneak + right-click: art'), ('右クリック：魔弾', 'Right-click: bolt')),
-    'gatling': (('右クリック長押し：連射　しゃがみ＋右クリック：アーツ', 'Hold right-click: rapid fire   Sneak + right-click: art'), ('右クリック長押し：連射', 'Hold right-click: rapid fire')),
-    'shell': (('右クリック：砲撃　しゃがみ＋右クリック：アーツ', 'Right-click: fire shell   Sneak + right-click: art'), ('右クリック：砲撃', 'Right-click: fire shell')),
-    'bow': (('右クリックで引いて離す：射る　しゃがみ＋右クリック：アーツ', 'Hold and release right-click: shoot   Sneak + right-click: art'), ('右クリックで引いて離す：射る', 'Hold and release right-click: shoot')),
-    'guard': (('右クリック：構える　しゃがみ＋右クリック：アーツ', 'Right-click: block   Sneak + right-click: art'), ('右クリック：構える', 'Right-click: block')),
+HOW = {  # right-click help per mode
+    'melee': ('右クリック：アーツ', 'Right-click: art'),
+    'bolt': ('右クリック：魔弾　しゃがみ＋右クリック：アーツ', 'Right-click: bolt   Sneak + right-click: art'),
+    'gatling': ('右クリック長押し：連射　しゃがみ＋右クリック：アーツ', 'Hold right-click: rapid fire   Sneak + right-click: art'),
+    'shell': ('右クリック：砲撃　しゃがみ＋右クリック：アーツ', 'Right-click: fire shell   Sneak + right-click: art'),
+    'bow': ('右クリックで引いて離す：射る　しゃがみ＋右クリック：アーツ', 'Hold and release right-click: shoot   Sneak + right-click: art'),
+    'guard': ('右クリック：構える　しゃがみ＋右クリック：アーツ', 'Right-click: block   Sneak + right-click: art'),
 }
 
-
-def fusion_kind(src):
-    name = src.split(':', 1)[1]
-    for keys, kind in FUSION_RULES:
-        if any(k in name for k in keys):
-            return kind
-    return 'sword'
+# The special ability of each kind (WeaponSkills.java): (ja name, ja description, en name, en description).
+# "Full" hits are fully charged swings (the attack-strength bar full).
+SPECIAL = {
+    'katana': ('居合・閃', '溜め斬りの3連撃目で、前方7マスを一閃して貫く',
+               'Iai Flash', 'every third charged cut flashes through enemies up to 7 blocks ahead'),
+    'sword': ('剣閃', '溜め斬りで斬撃が飛び、後ろの敵まで斬る',
+              'Sword Gale', 'charged cuts send a slash wave through the enemies behind'),
+    'greatsword': ('大断撃', '溜め斬りで衝撃波。周囲4マスの敵を斬って浮かせる',
+                   'Cleaving Quake', 'charged cuts release a shockwave that cuts and lifts enemies within 4 blocks'),
+    'scythe': ('魂刈り', '斬るたびに体力を吸収。溜め斬りで瀕死の敵を刈り取る（ボスには追加ダメージ）',
+               'Soul Reap', 'every cut drains life; charged cuts reap enemies near death (bonus damage on bosses)'),
+    'chakram': ('跳ね輪', '溜め斬りで輪刃が近くの敵へ次々と跳ね返る（伝説は5体）',
+                'Ricochet', 'charged cuts ricochet the blade between nearby enemies (five for a legend)'),
+    'rapier': ('急所突き', '突くたびに出血（衰弱の呪い）。30％（伝説は50％）で2.2倍の急所突き',
+               'Vital Thrust', 'every thrust bleeds the target; 30% (legend 50%) chance of a 2.2x critical thrust'),
+    'polearm': ('貫通突き', '溜め突きで後ろの敵まで6マス貫き、押し込む',
+                'Piercing Lunge', 'charged thrusts pierce 6 blocks through the enemies behind and drive them back'),
+    'heavy': ('地割れ', '溜め打ちで地面を叩き割り、周囲の敵を打ち上げて足止め',
+              'Earthsplitter', 'charged blows split the ground, launching and pinning down enemies around'),
+    'toyhammer': ('ピコッ！', '叩いた敵を空高く吹き飛ばす。溜め打ちで周りもまとめて',
+                  'Boing!', 'sends the target flying; charged blows bounce everyone around too'),
+    'fist': ('連撃', '連続で殴るほど威力が上がり（最大＋96％）、5発ごとに衝撃波',
+             'Combo', 'each blow in a chain hits harder (up to +96%) and every fifth one bursts'),
+    'whip': ('縛鎖', '打った敵を引き寄せて足止め。溜め打ちで近くの敵にも絡みつく',
+             'Binding Chain', 'pulls and slows the target; charged lashes also catch a nearby enemy'),
+    'magic': ('大魔弾', '4発ごとに炸裂する大魔弾（2.5倍・範囲攻撃）',
+              'Great Bolt', 'every fourth bolt is a great bolt that bursts (2.5x, area damage)'),
+    'gatling': ('過熱', '撃ち続けるほど威力が上がり（最大＋80％）、最大まで熱すると燃える弾になる',
+                'Overheat', 'keeps getting stronger while firing (up to +80%); at full heat rounds set targets ablaze'),
+    'cannon': ('炸裂弾', '着弾した砲弾が周囲4マス（伝説は5マス）を吹き飛ばす',
+               'Burst Shell', 'shells blast everything within 4 blocks (5 for a legend) into the air'),
+    'bow': ('光矢', '命中した敵を光らせる。引き絞った矢は周りの敵も焼く',
+            'Light Arrow', 'hit enemies glow; fully drawn arrows also scorch the enemies around'),
+    'shield': ('完全防御', '構えた直後0.5秒の防御で攻撃を無効化し反撃。構え中は近くの仲間も守る',
+               'Perfect Guard', 'blocking within half a second of raising it nullifies the hit and counters; raised, it shields nearby allies'),
+}
 
 
 def data():
@@ -93,8 +102,9 @@ def data():
     kinds = {}
     for (kid, speed, mul, reach, knock, sweep, mode, shot, gap, *_n) in KINDS:
         assert mode in HOW, mode
+        assert kid in SPECIAL, kid
         kinds[kid] = dict(speed=speed, mul=mul, reach=reach, knock=knock, sweep=sweep, mode=mode, shot=shot, gap=gap)
-    return {'kinds': kinds, 'characters': CHARACTERS, 'fusion': {s: fusion_kind(s) for s in FUSION_WEAPONS}}
+    return {'kinds': kinds, 'characters': CHARACTERS}
 
 
 def write(assets):
@@ -109,10 +119,14 @@ def write(assets):
         L = json.load(open(path, encoding='utf-8'))
         for (kid, *_s, ja, jaf, en, enf) in KINDS:
             L[f'weapon_kind.{NS}.{kid}'] = f'種別：{ja}（{jaf}）' if li == 0 else f'Kind: {en} ({enf})'
-        for mode, (art, plain) in HOW.items():
-            L[f'weapon_kind.{NS}.how.{mode}'] = art[li]
-            if plain:
-                L[f'weapon_kind.{NS}.how.{mode}.plain'] = plain[li]
+        for mode, text in HOW.items():
+            L[f'weapon_kind.{NS}.how.{mode}'] = text[li]
+        for k in [k for k in L if k.startswith(f'weapon_kind.{NS}.how.') and k.endswith('.plain')]:
+            del L[k]   # help for relic-less fusion weapons, removed in v0.17.4
+        for kid, (ja, jad, en, end) in SPECIAL.items():
+            L[f'weapon_skill.{NS}.{kid}'] = ja + '！' if li == 0 else en + '!'
+            L[f'weapon_skill.{NS}.{kid}.desc'] = f'特殊：{ja} ― {jad}' if li == 0 else f'Special: {en} - {end}'
+        L[f'weapon_skill.{NS}.combo'] = '連撃' if li == 0 else 'Combo'
         L[f'weapon_kind.{NS}.cooldown'] = 'アーツ再使用まで' if li == 0 else 'Art ready in'
         L[f'weapon_kind.{NS}.seconds'] = '秒' if li == 0 else 's'
         with open(path, 'w', encoding='utf-8') as fh:
@@ -120,7 +134,7 @@ def write(assets):
     counts = {}
     for k in CHARACTERS.values():
         counts[k] = counts.get(k, 0) + 1
-    print('weapon kinds', len(KINDS), 'characters', counts, 'fusion', {s.split(':')[1]: k for s, k in d['fusion'].items() if k != 'sword'})
+    print('weapon kinds', len(KINDS), 'characters', counts)
 
 
 if __name__ == '__main__':

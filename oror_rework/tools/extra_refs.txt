@@ -109,3 +109,26 @@ net/minecraft/sounds/SoundEvents
 	SF ARROW_SHOOT Lnet/minecraft/sounds/SoundEvent;
 net/minecraft/world/entity/LivingEntity
 	VM startUsingItem (Lnet/minecraft/world/InteractionHand;)V
+# Weapon skills (v0.17.4). getAttackStrengthScale: NeoForge 1.21.1 Player patch moves resetAttackStrengthTicker to the end
+# of attack() so it is accurate during damage events. PLAYER_ATTACK_* are plain SoundEvents (Player.attack plays
+# PLAYER_ATTACK_NODAMAGE / Iron's 1.21.1 plays PLAYER_ATTACK_KNOCKBACK as SoundEvent); the particles are SimpleParticleTypes.
+net/minecraft/world/entity/Entity
+	VM position ()Lnet/minecraft/world/phys/Vec3;
+	VM getLookAngle ()Lnet/minecraft/world/phys/Vec3;
+	VM getBbHeight ()F
+net/minecraft/world/entity/player/Player
+	VM getAttackStrengthScale (F)F
+net/minecraft/world/entity/LivingEntity
+	VM getUseItem ()Lnet/minecraft/world/item/ItemStack;
+net/minecraft/ChatFormatting
+	SF YELLOW Lnet/minecraft/ChatFormatting;
+net/minecraft/core/particles/ParticleTypes
+	SF CLOUD Lnet/minecraft/core/particles/SimpleParticleType;
+	SF ENCHANTED_HIT Lnet/minecraft/core/particles/SimpleParticleType;
+	SF SWEEP_ATTACK Lnet/minecraft/core/particles/SimpleParticleType;
+net/minecraft/sounds/SoundEvents
+	SF PLAYER_ATTACK_KNOCKBACK Lnet/minecraft/sounds/SoundEvent;
+	SF PLAYER_ATTACK_CRIT Lnet/minecraft/sounds/SoundEvent;
+	SF PLAYER_ATTACK_SWEEP Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/util/RandomSource
+	IMI nextFloat ()F

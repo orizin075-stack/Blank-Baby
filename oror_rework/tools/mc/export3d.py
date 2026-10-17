@@ -90,9 +90,6 @@ def export_weapons(root, keys=None):
             rid = f'{k}_{slot}'
             n, S, disp = export_one(root, rid, D.build(k, aw), info)
             report[rid] = (n, S)
-        # the legacy dungeon relic weapon is a replica of the weapon: same model, same icon
-        with open(os.path.join(root, 'models', 'item', f'{k}_relic_weapon.json'), 'w') as fh:
-            json.dump(item_json(f'{k}_weapon', f'{k}_weapon', display_for(info, D.build(k, False).build()[0])), fh, indent=1)
         print(k, report[f'{k}_weapon'], report[f'{k}_legend'], flush=True)
     return report
 

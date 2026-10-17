@@ -19,7 +19,7 @@ public class KindCheck {
             if (speed + 4.0F <= 0 || mul <= 0) throw new IllegalStateException(id + " stats");
         }
         int n = 0;
-        for (String g : new String[]{"characters", "fusion"}) {
+        for (String g : new String[]{"characters"}) {
             JsonObject m = top.getAsJsonObject(g);
             for (String k : m.keySet()) { n++; if (!kinds.has(m.get(k).getAsString())) throw new IllegalStateException(k + " -> " + m.get(k)); }
         }

@@ -140,6 +140,9 @@ public final class RelicArts {
         long now = sl.getGameTime();
         CompoundTag vd = v.getPersistentData();
         if (v instanceof Player vp) {
+            if (WeaponSkills.guard(e, vp, sl)) {
+                return true;
+            }
             if (vd.getLong("ororArtGuardUntil") > now) {
                 e.setCanceled(true);
                 return true;
@@ -174,6 +177,11 @@ public final class RelicArts {
                 if (a != null && !a.hit.isEmpty()) {
                     run(a, a.hit, sl, p, v);
                 }
+                if (p.getMainHandItem().getItem() instanceof CharacterRelics.Wielded x && x.wield().kind != null) {
+                    WeaponSkills.melee(e, p, v, x.wield(), sl);
+                }
+            } else if (e.getSource().getDirectEntity() instanceof Arrow ar && ar.getPersistentData().contains("ororRelicArrow")) {
+                WeaponSkills.arrow(e, p, v, ar, sl);
             }
         }
         return false;
@@ -201,6 +209,7 @@ public final class RelicArts {
         Player p;
         Art art;
         float base;
+        int color;
         LivingEntity victim;
         List<LivingEntity> t = new ArrayList<>();
     }
@@ -213,7 +222,10 @@ public final class RelicArts {
             c.sl = sl;
             c.p = p;
             c.art = a;
-            c.base = a.rank >= 3 ? 1000000.0F : 2000.0F * a.rank;
+            // v0.17.4: rank 1/2 arts hit 1.5x harder (rank 3 stays at the lore-mode cap)
+            c.base = a.rank >= 3 ? 1000000.0F : 3000.0F * a.rank;
+            RelicSpec owner = RelicSpec.ALL.get(a.character + "_weapon");
+            c.color = owner != null ? owner.color : 0xFFFFFF;
             c.victim = victim;
             if (victim != null) {
                 c.t.add(victim);
@@ -287,6 +299,7 @@ public final class RelicArts {
                     }
                     e.invulnerableTime = 0;
                     e.hurt(o.has("magic") ? p.damageSources().magic() : p.damageSources().playerAttack(p), amount);
+                    impact(c, e);
                 }
             }
             case "execute" -> {
@@ -915,27 +928,50 @@ public final class RelicArts {
 
     // ------------------------------------------------------------------------------------- weapon shots
     /**
-     * Right-click attack of the shooting weapon kinds: a magic bolt hits the first enemy on the line of sight, a gatling
-     * round does the same with a little spread, a shell bursts where it lands. Walls stop all of them.
+     * Right-click attack of the shooting weapon kinds, stopped by walls. A catalyst fires a bolt at the first enemy on
+     * the line of sight and every fourth bolt is a great bolt that bursts; a gatling heats up as it keeps firing
+     * (more damage, then burning rounds); a cannon shell bursts and throws enemies up.
      */
-    public static void shot(Player p, String mode, float damage) {
+    public static void shot(Player p, CharacterRelics.Wield w) {
         if (!(p.level() instanceof ServerLevel sl)) {
             return;
         }
+        String mode = w.kind.mode;
         boolean shell = mode.equals("shell");
         boolean gatling = mode.equals("gatling");
+        long now = sl.getGameTime();
+        CompoundTag d = p.getPersistentData();
+        float damage = w.damage * w.kind.shot;
+        int color = w.spec != null ? w.spec.color : 0xFFFFFF;
+        net.minecraft.core.particles.DustParticleOptions dust = RelicEffects.dust(color, shell ? 2.0F : 1.2F);
+        boolean great = false;
+        int heat = 0;
+        if (gatling) {
+            heat = now - d.getLong("ororHeatAt") <= 8L ? Math.min(20, d.getInt("ororHeat") + 1) : 0;
+            d.putInt("ororHeat", heat);
+            d.putLong("ororHeatAt", now);
+            damage *= 1.0F + heat * 0.04F;
+        } else if (!shell) {
+            int n = d.getInt("ororBolts") + 1;
+            d.putInt("ororBolts", n);
+            great = n % 4 == 0;
+            if (great) {
+                damage *= 2.5F;
+            }
+        }
         double range = shell ? 48.0 : (gatling ? 32.0 : 40.0);
         Vec3 a = p.getEyePosition();
-        Vec3 d = p.getLookAngle().normalize();
+        Vec3 dir = p.getLookAngle().normalize();
         if (gatling) {
-            d = d.add((sl.random.nextDouble() - 0.5) * 0.05, (sl.random.nextDouble() - 0.5) * 0.05, (sl.random.nextDouble() - 0.5) * 0.05).normalize();
+            double j = 0.02 + heat * 0.002;
+            dir = dir.add((sl.random.nextDouble() - 0.5) * j, (sl.random.nextDouble() - 0.5) * j, (sl.random.nextDouble() - 0.5) * j).normalize();
         }
         net.minecraft.world.phys.BlockHitResult wall = sl.clip(new net.minecraft.world.level.ClipContext(
-            a, a.add(d.scale(range)), net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, p));
+            a, a.add(dir.scale(range)), net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, p));
         if (wall.getType() != net.minecraft.world.phys.HitResult.Type.MISS) {
             range = wall.getLocation().distanceTo(a);
         }
-        Vec3 far = a.add(d.scale(range));
+        Vec3 far = a.add(dir.scale(range));
         LivingEntity first = null;
         double best = range;
         for (LivingEntity e : sl.getEntitiesOfClass(LivingEntity.class, new AABB(a, far).inflate(1.5), e -> RelicPowers.enemy(p, e))) {
@@ -945,35 +981,89 @@ public final class RelicArts {
                 first = e;
             }
         }
-        Vec3 end = a.add(d.scale(best));
-        ParticleOptions trail = shell ? ParticleTypes.LARGE_SMOKE : (gatling ? ParticleTypes.CRIT : ParticleTypes.END_ROD);
-        int n = (int) Math.min(64.0, best * (gatling ? 1.0 : 2.0));
+        Vec3 end = a.add(dir.scale(best));
+        int n = (int) Math.min(80.0, best * (gatling ? 1.5 : 2.5));
         for (int i = 1; i <= n; i++) {
-            Vec3 q = a.add(d.scale(best * i / n));
-            sl.sendParticles(trail, q.x, q.y, q.z, 1, 0.0, 0.0, 0.0, 0.0);
+            Vec3 q = a.add(dir.scale(best * i / n));
+            sl.sendParticles(dust, q.x, q.y, q.z, 1, 0.0, 0.0, 0.0, 0.0);
+            if (i % (gatling ? 3 : 2) == 0) {
+                sl.sendParticles(shell ? ParticleTypes.LARGE_SMOKE : (gatling ? ParticleTypes.CRIT : ParticleTypes.END_ROD), q.x, q.y, q.z, 1, 0.0, 0.0, 0.0, 0.0);
+            }
         }
         if (shell) {
-            sl.sendParticles(ParticleTypes.EXPLOSION, end.x, end.y, end.z, 4, 0.8, 0.8, 0.8, 0.0);
-            for (LivingEntity e : near(p, end, 3.5)) {
+            double r = w.rank >= 3 ? 5.0 : 4.0;
+            for (LivingEntity e : near(p, end, r)) {
                 strike(p, e, damage, false);
+                if (!(e instanceof SupremeEntity)) {
+                    e.setDeltaMovement(e.getDeltaMovement().add(e.position().subtract(end).normalize().scale(0.8).add(0.0, 0.7, 0.0)));
+                    e.hurtMarked = true;
+                }
             }
+            sl.sendParticles(w.rank >= 3 ? ParticleTypes.EXPLOSION_EMITTER : ParticleTypes.EXPLOSION, end.x, end.y, end.z, w.rank >= 3 ? 1 : 5, 0.8, 0.8, 0.8, 0.0);
+            RelicEffects.shock(sl, end, 40, ParticleTypes.CLOUD, 0.5);
+            RelicEffects.burst(sl, end, dust, 30, r * 0.4, 0.0);
+            RelicEffects.burst(sl, end, ParticleTypes.LAVA, 8, 0.6, 0.0);
             sl.playSound(null, p.blockPosition(), SoundEvents.WITHER_SHOOT, SoundSource.PLAYERS, 0.8F, 1.3F);
-            sl.playSound(null, BlockPos.containing(end), SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 1.5F, 0.6F);
+            sl.playSound(null, BlockPos.containing(end), SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 2.0F, 0.5F);
+        } else if (gatling) {
+            if (first != null) {
+                strike(p, first, damage, false);
+                if (heat >= 20) {
+                    first.igniteForSeconds(3.0F);
+                }
+                sl.sendParticles(ParticleTypes.CRIT, end.x, end.y, end.z, 6, 0.15, 0.15, 0.15, 0.2);
+            }
+            sl.sendParticles(heat >= 20 ? ParticleTypes.FLAME : ParticleTypes.SMOKE, a.x + dir.x, a.y + dir.y - 0.2, a.z + dir.z, 2, 0.05, 0.05, 0.05, 0.02);
+            sl.playSound(null, p.blockPosition(), SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 0.45F, 1.6F + heat * 0.02F);
+        } else if (great) {
+            for (LivingEntity e : near(p, end, 3.0)) {
+                strike(p, e, damage, true);
+            }
+            RelicEffects.burst(sl, end, dust, 40, 1.0, 0.0);
+            RelicEffects.burst(sl, end, ParticleTypes.END_ROD, 24, 0.2, 0.25);
+            RelicEffects.shock(sl, end, 24, ParticleTypes.END_ROD, 0.3);
+            sl.playSound(null, BlockPos.containing(end), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.6F);
+            sl.playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.2F, 0.8F);
+            p.displayClientMessage(Component.translatable("weapon_skill.oror_supreme_bosses.magic").withStyle(net.minecraft.ChatFormatting.GOLD), true);
         } else {
             if (first != null) {
-                strike(p, first, damage, !gatling);
-                sl.sendParticles(gatling ? ParticleTypes.CRIT : ParticleTypes.ENCHANT, end.x, end.y, end.z, 6, 0.2, 0.2, 0.2, 0.1);
+                strike(p, first, damage, true);
+                sl.sendParticles(ParticleTypes.ENCHANT, end.x, end.y, end.z, 12, 0.2, 0.2, 0.2, 0.4);
+                sl.sendParticles(dust, end.x, end.y, end.z, 10, 0.25, 0.25, 0.25, 0.0);
             }
-            sl.playSound(null, p.blockPosition(), gatling ? SoundEvents.FIREWORK_ROCKET_BLAST : SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, gatling ? 0.5F : 1.0F, gatling ? 1.8F : 1.4F);
+            sl.playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.0F, 1.4F);
         }
     }
 
-    private static void strike(Player p, LivingEntity e, float amount, boolean magic) {
-        if (e instanceof SupremeEntity b) {
-            RelicDrops.fracture(b, p, amount);
+    /** Damage from weapon skills and shots: it never re-triggers on-hit arts or weapon skills. */
+    static void strike(Player p, LivingEntity e, float amount, boolean magic) {
+        boolean outer = !BUSY.get();
+        BUSY.set(true);
+        try {
+            if (e instanceof SupremeEntity b) {
+                RelicDrops.fracture(b, p, amount);
+            }
+            e.invulnerableTime = 0;
+            e.hurt(magic ? p.damageSources().magic() : p.damageSources().playerAttack(p), amount);
+        } finally {
+            if (outer) {
+                BUSY.set(false);
+            }
         }
-        e.invulnerableTime = 0;
-        e.hurt(magic ? p.damageSources().magic() : p.damageSources().playerAttack(p), amount);
+    }
+
+    static void reflectProjectile(Player p, Projectile pr) {
+        reflect(p, pr);
+    }
+
+    /** Where an art's damage lands: a burst in the character's colour, a shock flash for rank 3 arts. */
+    private static void impact(Ctx c, LivingEntity e) {
+        Vec3 at = e.position().add(0.0, e.getBbHeight() * 0.5, 0.0);
+        c.sl.sendParticles(RelicEffects.dust(c.color, 1.6F), at.x, at.y, at.z, 14, 0.35, 0.45, 0.35, 0.0);
+        c.sl.sendParticles(ParticleTypes.CRIT, at.x, at.y, at.z, 8, 0.2, 0.3, 0.2, 0.35);
+        if (c.art.rank >= 3) {
+            c.sl.sendParticles(ParticleTypes.SONIC_BOOM, at.x, at.y, at.z, 1, 0.0, 0.0, 0.0, 0.0);
+        }
     }
 
     public static void tooltip(String id, List<Component> lines) {

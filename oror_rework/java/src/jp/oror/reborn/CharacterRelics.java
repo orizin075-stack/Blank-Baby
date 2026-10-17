@@ -38,6 +38,7 @@ import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import jp.oror.reborn.RelicArts.Art;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -46,13 +47,11 @@ import net.neoforged.neoforge.registries.DeferredItem;
  * The 164 character relics. Weapons and legends are wielded according to their kind (weapon_kinds.json, written by
  * tools/mc/weapon_kinds.py): melee kinds differ in speed, reach, knockback and sweep and use their art on right-click;
  * catalysts, guns and cannons shoot, bows draw and shields block on right-click, with the art on sneak + right-click.
- * Dungeon replicas and the NightfallCraft counterparts use the same item classes.
  */
 public final class CharacterRelics {
     public static final Map<String, DeferredItem<Item>> ITEMS = new LinkedHashMap<>();
     public static final Map<String, Kind> KINDS = new HashMap<>();
     private static final Map<String, String> BY_CHARACTER = new HashMap<>();
-    private static final Map<String, String> BY_FUSION = new HashMap<>();
     private static final ResourceLocation REACH_ID = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "weapon_kind_reach");
     private static final ResourceLocation KNOCK_ID = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "weapon_kind_knockback");
     /** The netherite tier bonus SwordItem.createAttributes added to every relic's damage. */
@@ -100,10 +99,6 @@ public final class CharacterRelics {
             for (String c : chars.keySet()) {
                 BY_CHARACTER.put(c, chars.get(c).getAsString());
             }
-            JsonObject fusion = top.getAsJsonObject("fusion");
-            for (String f : fusion.keySet()) {
-                BY_FUSION.put(f, fusion.get(f).getAsString());
-            }
         } catch (Exception e) {
             throw new IllegalStateException("Invalid weapon_kinds.json", e);
         }
@@ -122,7 +117,7 @@ public final class CharacterRelics {
         return stack.getItem() instanceof CharacterRelics.Relic r ? r.spec() : null;
     }
 
-    /** What a wielded item is: a character relic (spec), a dungeon replica (art only) or a NightfallCraft counterpart (neither). */
+    /** A wielded relic: its spec, the art it casts, its kind and its attack damage before the kind multiplier. */
     public static final class Wield {
         public final RelicSpec spec;
         public final String art;
@@ -150,21 +145,8 @@ public final class CharacterRelics {
         return make(w, s.rank == 3 ? 65535 : 8192, s.rank == 3 ? Rarity.EPIC : Rarity.RARE);
     }
 
-    /** The dungeon relic weapon of a character: a lesser echo of its relic weapon with its own art. */
-    public static Item replica(String character) {
-        return make(new Wield(null, character + "_relic_weapon", kindOf(character), 9.0F + TIER_BONUS, 1, 60), 2031, null);
-    }
-
-    /** The original counterpart of a NightfallCraft weapon, shaped after its name. */
-    public static Item fusion(String source) {
-        return make(new Wield(null, null, kind(BY_FUSION.get(source)), 24.0F + TIER_BONUS, 1, 0), 2400, null);
-    }
-
     private static Item make(Wield w, int durability, Rarity rarity) {
-        Properties props = new Properties().fireResistant();
-        if (rarity != null) {
-            props.rarity(rarity);
-        }
+        Properties props = new Properties().fireResistant().rarity(rarity);
         return switch (w.kind.mode) {
             case "bow" -> new CharacterRelics.Bow(w, props.durability(durability));
             // A blocked lore-mode hit (1e6 damage) would wear any durability away at once, so relic shields do not wear.
@@ -207,7 +189,14 @@ public final class CharacterRelics {
             cast = true;
         }
         if (cast) {
-            int cd = RelicArts.cooldown(w.art, w.cooldown);
+            // the art's name flashes over the hotbar; v0.17.4 also shortened every art cooldown by a quarter
+            Art banner = RelicArts.of(w.art);
+            if (banner != null) {
+                p.displayClientMessage(
+                    Component.translatable("relic_art.oror_supreme_bosses." + w.art + ".title").withStyle(w.rank >= 3 ? ChatFormatting.GOLD : ChatFormatting.AQUA), true
+                );
+            }
+            int cd = Math.max(20, RelicArts.cooldown(w.art, w.cooldown) * 3 / 4);
             if (clock) {
                 clocks.putLong(w.art, now + cd);
                 p.getPersistentData().put("ororArtClock", clocks);
@@ -242,7 +231,7 @@ public final class CharacterRelics {
         }
         data.putLong("ororShotAt", now + Math.max(1, w.kind.gap));
         if (!l.isClientSide) {
-            RelicArts.shot(p, w.kind.mode, w.damage * w.kind.shot);
+            RelicArts.shot(p, w);
         }
         return w.kind.mode.equals("bolt") ? InteractionResultHolder.sidedSuccess(stack, l.isClientSide) : InteractionResultHolder.consume(stack);
     }
@@ -274,21 +263,33 @@ public final class CharacterRelics {
             a.shoot(look.x * c - look.z * s, look.y, look.x * s + look.z * c, power * 3.0F, 1.0F);
             a.setBaseDamage(w.damage * w.kind.shot / 3.0);
             a.pickup = AbstractArrow.Pickup.DISALLOWED;
+            // read back by WeaponSkills.arrow when it lands
+            CompoundTag tag = a.getPersistentData();
+            tag.putInt("ororRelicArrow", w.spec != null ? w.spec.color : 0xFFFFFF);
+            tag.putFloat("ororArrowPow", power);
+            tag.putInt("ororArrowRank", w.rank);
             sl.addFreshEntity(a);
         }
         sl.playSound(null, p.blockPosition(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 0.7F + power * 0.5F);
+        if (power >= 1.0F) {
+            RelicEffects.burst(sl, p.getEyePosition().add(look.scale(1.2)), RelicEffects.dust(w.spec != null ? w.spec.color : 0xFFFFFF, 1.4F), 16, 0.25, 0.0);
+            RelicEffects.sound(sl, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, 0.8F, 1.7F);
+        }
         if (stack.isDamageableItem()) {
             stack.hurtAndBreak(1, p, LivingEntity.getSlotForHand(who.getUsedItemHand()));
         }
     }
 
-    /** Passive arts run once a second while the item is in either hand. */
+    /** Passive arts run once a second while the item is in either hand; a raised relic shield also guards nearby players. */
     static void held(Wield w, ItemStack stack, Level l, Entity e) {
         if (w.art == null || l.isClientSide || !(e instanceof Player p) || p.tickCount % 20 != 0) {
             return;
         }
         if (p.getMainHandItem() != stack && p.getOffhandItem() != stack) {
             return;
+        }
+        if (w.kind != null && w.kind.mode.equals("guard") && p.isBlocking() && p.getUseItem() == stack && l instanceof ServerLevel sl) {
+            WeaponSkills.sanctuary(p, w, sl);
         }
         if (RelicArts.of(w.art) != null) {
             RelicArts.passive(w.art, p);
@@ -300,8 +301,9 @@ public final class CharacterRelics {
     static void describe(Wield w, List<Component> lines) {
         String k = "weapon_kind.oror_supreme_bosses.";
         lines.add(Component.translatable(k + w.kind.id).withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("weapon_skill.oror_supreme_bosses." + w.kind.id + ".desc").withStyle(ChatFormatting.YELLOW));
         if (w.art != null || w.kind.ranged()) {
-            lines.add(Component.translatable(k + "how." + w.kind.mode + (w.art == null ? ".plain" : "")).withStyle(ChatFormatting.WHITE));
+            lines.add(Component.translatable(k + "how." + w.kind.mode).withStyle(ChatFormatting.WHITE));
         }
         if (w.art != null) {
             RelicArts.tooltip(w.art, lines);
@@ -499,6 +501,8 @@ public final class CharacterRelics {
             if (this.w.art != null && p.isShiftKeyDown()) {
                 return CharacterRelics.art(this.w, l, p, h);
             }
+            // the perfect-guard window (WeaponSkills.guard) opens when the shield is raised
+            p.getPersistentData().putLong("ororGuardAt", l.getGameTime());
             return super.use(l, p, h);
         }
 
@@ -513,7 +517,7 @@ public final class CharacterRelics {
         }
     }
 
-    /** A character relic; spec() is null for dungeon replicas and NightfallCraft counterparts. */
+    /** A character relic. */
     public interface Relic {
         RelicSpec spec();
     }

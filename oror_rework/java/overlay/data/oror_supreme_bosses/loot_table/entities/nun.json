@@ -1,0 +1,66 @@
+{
+ "type": "minecraft:entity",
+ "pools": [
+  {
+   "rolls": {
+    "type": "minecraft:uniform",
+    "min": 4,
+    "max": 10
+   },
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "oror_supreme_bosses:omniregistry_treasure"
+    }
+   ]
+  },
+  {
+   "rolls": 1,
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "oror_supreme_bosses:nun_spawn_egg"
+    }
+   ]
+  },
+  {
+   "rolls": {
+    "type": "minecraft:uniform",
+    "min": 12,
+    "max": 28
+   },
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:nether_star",
+     "weight": 12
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:enchanted_golden_apple",
+     "weight": 10
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:netherite_block",
+     "weight": 6
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:heavy_core",
+     "weight": 8
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:totem_of_undying",
+     "weight": 12
+    },
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:experience_bottle",
+     "weight": 20
+    }
+   ]
+  }
+ ]
+}

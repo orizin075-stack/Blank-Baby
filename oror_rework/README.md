@@ -1,15 +1,17 @@
-# OROR War × Nightfall — rework workspace (v0.17.3)
+# OROR War × Nightfall — rework workspace (v0.17.4)
 
-Release: `dist/OROR_War_Nightfall_v0.17.3_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Release: `dist/OROR_War_Nightfall_v0.17.4_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
 v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
 the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.17.2 fixes rigs.json failing to load in game (a non-numeric hair bone param); `java/meshtest/RigsCheck.java` now
 parses rigs.json with Gson into RigModel's own classes, and `MeshCheck.java` reads the meshes like RigModel.
 v0.17.3 gives every relic weapon a kind instead of making all of them swords (katana, polearm, heavy, fist, whip,
 catalyst, gatling, cannon, bow, shield...): see "Weapon kinds" below.
+v0.17.4 gives each kind a special skill (`WeaponSkills.java`), makes arts 1.5x stronger with colour-tinted cast and
+impact effects (`RelicEffects.java`), and removes 275 clutter items (`tools/mc/prune_items.py`).
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.3_JA.md`, the list of all 205 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.4_JA.md`, the list of all 164 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates
@@ -35,6 +37,15 @@ Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.3_JA
   weapon and cast their art on sneak + right-click, with the art cooldown on a clock of its own (item cooldowns
   would block the weapon). `RelicArts.shot` is the bolt / gatling / shell attack.
 - `java/meshtest/KindCheck.java` parses `weapon_kinds.json` with Gson the way `CharacterRelics` does.
+- `java/src/jp/oror/reborn/WeaponSkills.java` — the special skill of each kind (katana iai flash, greatsword quake,
+  scythe reap, fist combo, shield perfect guard, light arrows...), hooked into `RelicArts.incoming`.
+- `java/src/jp/oror/reborn/RelicEffects.java` — magic circles, arcs, beams and expanding rings in the character colour.
+
+## Removed items (v0.17.4)
+- `tools/mc/prune_items.py <jar tree> <overlay>` — the 275 removed items (per-character citadel bricks, guard eggs,
+  essences and seal items, the 41 Echo replicas, the 70 NightfallCraft stand-ins): rewrites the loot tables that
+  dropped them, drops their lang keys, and `package.py` leaves their models and data out of the jar. Seal blocks stay.
+  NightfallCraft quest items whose mods are not in the pack now count as done (`NightfallFusion.java`).
 
 ## Build
 - `java/compile.sh` compiles `java/src` against stubs; new Minecraft refs must be listed in `java/allow.txt` and

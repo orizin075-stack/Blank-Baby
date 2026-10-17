@@ -23,9 +23,6 @@ L('kokuhaku_legend', 3, 'void', ('剣理終極・虚無一閃', 'Sword Truth: No
    area(32), dmg(1.0), stun(100), erase(48), guard(100), blink(16)],
   LP + [buff('speed', 40, 2), reflect(25, 12)], ('所持中：剣神の加護（剛力・不壊・迎撃）', 'Held: sword god\'s blessing'),
   [chain(6, 12), dmg(0.5)], ('命中時：斬撃が6体へ連鎖', 'On hit: the cut chains to 6 foes'), hitfx='sonic')
-L('kokuhaku_relic_weapon', 1, 'void', ('残響の一閃', 'Echo Flash'),
-  ('16mを一閃し2秒拘束', 'Slash 16m, bind 2s'), [line(16, 2), dmg(0.8), stun(40)],
-  hit=[around(3), dmg(0.15)], hit_desc=('命中時：小さく薙ぐ', 'On hit: small cleave'))
 
 # 2 riha ----------------------------------------------------------------------------------------------------
 says('riha_weapon', [('理覇：「止まれ」', 'Riha: "Stop."'), ('理覇：「治れ」', 'Riha: "Heal."'), ('理覇：「退け」', 'Riha: "Begone."'), ('理覇：「死んで」', 'Riha: "Die."')])
@@ -54,9 +51,6 @@ L('riha_legend', 3, 'word', ('絶対真言', 'Absolute Mantra'),
    area(48), dmg(2.5), execute(0.5), weather('clear')],
   LP + [allies(16), buff('regen', 40, 1, True)], ('所持中：言霊の神子（味方も再生）', 'Held: blessed oracle, allies regenerate'),
   [victim(), stun(60), mark(100, 2.0)], ('命中時：「止まれ」＋刻印', 'On hit: "Stop." and mark'))
-L('riha_relic_weapon', 1, 'word', ('言霊の残響', 'Echoing Word'),
-  ('16m内の敵を「止まれ」で5秒停止', 'Stops foes within 16m for 5s'), [area(16), stun(100)],
-  hit=[victim(), eff('slow', 60, 2)], hit_desc=('命中時：減速', 'On hit: slow'))
 
 # 3 tenki ---------------------------------------------------------------------------------------------------
 L('tenki_weapon', 1, 'royal', ('王権執行', 'Royal Decree'),
@@ -78,9 +72,6 @@ L('tenki_legend', 3, 'royal', ('唯一絶対・王権万象', 'Sole Absolute: Ro
    me(), undying(600), guard(100), cleanse(), buff('absorb', 600, 9), erase(48)],
   LP + [cleanse()], ('所持中：王の加護（弱体無効）', 'Held: king\'s aegis'),
   [victim(), strip(True), mark(200, 2.0)], ('命中時：強化を奪い刻印', 'On hit: steal buffs and mark'))
-L('tenki_relic_weapon', 1, 'royal', ('王威の残響', 'Echo of Majesty'),
-  ('16m内の敵の強化を剥奪し衰弱', 'Strip buffs within 16m and weaken'), [area(16), strip(), eff('weakness', 160, 1)],
-  hit=[victim(), strip()], hit_desc=('命中時：強化剥奪', 'On hit: strip buffs'))
 
 # 4 chaos ---------------------------------------------------------------------------------------------------
 CHAOS_ROLL = [transmute(), launch(2.4), eff('levitate', 100, 3), stun(100), dmg(1.5), freeze(300), burn(10)]
@@ -102,9 +93,6 @@ L('chaos_legend', 3, 'chaos', ('万象錯綜・虹核崩界', 'Rainbow Core Coll
   [area(40), transmute(), area(40), dmg(2.5), eff('levitate', 200, 4), stun(200), fx('firework', 60, 't')],
   LP + [adapt(40)], ('所持中：混沌の加護', 'Held: chaos aegis'),
   [chance(0.5, [victim(), transmute()], [victim(), dmg(0.5)])], ('命中時：50%で家畜化', 'On hit: 50% livestock'), hitfx='witch')
-L('chaos_relic_weapon', 1, 'chaos', ('変質の残響', 'Echo of Change'),
-  ('12m内の敵を無作為に変質', 'Random change within 12m'), [area(12), each([launch(1.6), stun(60), dmg(0.8), eff('nausea', 100)])],
-  hit=[chance(0.15, [victim(), transmute()])], hit_desc=('命中時：15%で家畜化', 'On hit: 15% livestock'))
 
 # 5 berit ---------------------------------------------------------------------------------------------------
 L('berit_weapon', 1, 'alchemy', ('万界解体', 'Universal Dismantle'),
@@ -126,9 +114,6 @@ L('berit_legend', 3, 'alchemy', ('塵芥創界・神域錬成', 'Dust Genesis'),
    me(), healpct(1.0), buff('absorb', 600, 6), allies(24), buff('absorb', 600, 4, True)],
   LP + [repair(64)], ('所持中：神域の錬成者', 'Held: divine alchemist'),
   [chance(0.3, [victim(), transmute()], [give('gold', 1)])], ('命中時：30%で錬成変質', 'On hit: 30% transmute'))
-L('berit_relic_weapon', 1, 'alchemy', ('錬成の残響', 'Echo of Alchemy'),
-  ('金を錬成し装備を修復', 'Transmute gold and repair'), [give('gold', 2), repair(64)],
-  hit=[chance(0.1, [give('gold', 1)])], hit_desc=('命中時：10%で金', 'On hit: 10% gold'))
 
 # 6 elseria -------------------------------------------------------------------------------------------------
 L('elseria_weapon', 1, 'star', ('星脈射線', 'Starvein Ray'),
@@ -150,9 +135,6 @@ L('elseria_legend', 3, 'star', ('星界大術・原初魔典', 'Primordial Codex
    allies(32), healpct(1.0, True), cleanse(True)],
   LP, ('所持中：魔祖の加護', 'Held: archmage\'s blessing'),
   [chain(6, 12), dmg(0.4), lightning()], ('命中時：雷が6体へ連鎖', 'On hit: lightning chains to 6'), hitfx='spark')
-L('elseria_relic_weapon', 1, 'star', ('星光の残響', 'Echo of Starlight'),
-  ('24mの光線で炎上', 'A 24m burning ray'), [line(24, 2), dmg(0.8), burn(4)],
-  hit=[victim(), burn(4)], hit_desc=('命中時：炎上', 'On hit: burn'))
 
 # 7 valeria -------------------------------------------------------------------------------------------------
 L('valeria_weapon', 1, 'tech', ('変形打撃', 'Transforming Strike'),
@@ -173,9 +155,6 @@ L('valeria_legend', 3, 'tech', ('終着無限・万機工房', 'Endless Workshop
   [summon('golem', 6), repair(99999), me(), buff('absorb', 1200, 9), guard(100), area(40), dmg(2.5), stun(120), fx('explosion', 4, 't')],
   LP + [reflect(25, 10), repair(64)], ('所持中：工房の加護（迎撃・修復）', 'Held: workshop aegis'),
   [around(4), dmg(0.4), knock(1.5)], ('命中時：衝撃波', 'On hit: shockwave'))
-L('valeria_relic_weapon', 1, 'tech', ('工匠の残響', 'Echo of the Smith'),
-  ('6m内を打撃し修復', 'Strike within 6m, repair'), [area(6), dmg(0.8), knock(2.0), repair(64)],
-  hit=[victim(), knock(1.2)], hit_desc=('命中時：吹き飛ばし', 'On hit: knockback'))
 
 # 8 huang_linghua -------------------------------------------------------------------------------------------
 L('huang_linghua_weapon', 1, 'dragon', ('龍気衝', 'Dragon Qi Lance'),
@@ -197,9 +176,6 @@ L('huang_linghua_legend', 3, 'dragon', ('皇龍創法・万龍封界', 'Imperial
    buff('absorb', 600, 5, True), me(), undying(400)],
   LP + [allies(16), buff('regen', 40, 0, True)], ('所持中：龍仙の加護（味方再生）', 'Held: dragon sage aegis'),
   [chain(5, 10), dmg(0.3)], ('命中時：龍気が5体へ', 'On hit: qi chains to 5'), hitfx='spark')
-L('huang_linghua_relic_weapon', 1, 'dragon', ('龍気の残響', 'Echo of Qi'),
-  ('20mを龍気で貫く', 'Pierce 20m'), [line(20, 2), dmg(0.8), knock(2.0)],
-  hit=[victim(), stun(15)], hit_desc=('命中時：一瞬拘束', 'On hit: brief bind'))
 
 # 9 ferdinand -----------------------------------------------------------------------------------------------
 L('ferdinand_weapon', 1, 'tech', ('魔導連射', 'Arcane Barrage'),
@@ -220,9 +196,6 @@ L('ferdinand_legend', 3, 'tech', ('文明跳躍・未来工廠', 'Future Foundry
   [area(48), lightning(), arrows(10, 60), dmg(2.5), summon('golem', 6), give('diamond', 8), give('netherite', 2), repair(99999)],
   LP + [buff('haste', 40, 3)], ('所持中：未来工廠', 'Held: future foundry'),
   [around(5), dmg(0.4), fx('explosion', 3, 't')], ('命中時：炸裂', 'On hit: explosion'))
-L('ferdinand_relic_weapon', 1, 'tech', ('試作の残響', 'Prototype Echo'),
-  ('最寄りの敵に矢の雨', 'Arrow rain on the nearest foe'), [near(32, 1), arrows(4, 20), repair(64)],
-  hit=[chance(0.2, [around(3), dmg(0.2)])], hit_desc=('命中時：20%で炸裂', 'On hit: 20% burst'))
 
 # 10 mels ---------------------------------------------------------------------------------------------------
 L('mels_weapon', 1, 'water', ('百拳流転', 'Hundred Fists'),
@@ -243,9 +216,6 @@ L('mels_legend', 3, 'water', ('武理完成・無形万武', 'Formless Myriad Ar
   [area(32), pull(3.0)] + rep(6, dmg(1.0)) + [stun(240), knock(4.0), me(), guard(80), adapt(600)],
   LP + [buff('resist', 40, 1)], ('所持中：武王の加護', 'Held: martial king aegis'),
   [victim(), dmg(0.3), dmg(0.3), dmg(0.3), around(4), dmg(0.2)], ('命中時：3連撃＋衝撃', 'On hit: 3 strikes + shock'), hitfx='splash')
-L('mels_relic_weapon', 1, 'water', ('流武の残響', 'Echo of Flow'),
-  ('6m内に2連撃と拘束', '2 strikes and a bind within 6m'), [area(6), dmg(0.4), dmg(0.4), stun(40)],
-  hit=[victim(), dmg(0.1)], hit_desc=('命中時：追い打ち', 'On hit: extra strike'))
 
 # 11 hephaistos ---------------------------------------------------------------------------------------------
 L('hephaistos_weapon', 1, 'tech', ('概念切削', 'Concept Cutting'),
@@ -267,9 +237,6 @@ L('hephaistos_legend', 3, 'tech', ('製造神格・無限工廠', 'Godforge'),
    give('netherite', 4), repair(99999)],
   LP + [adapt(40), repair(64)], ('所持中：機械神の加護', 'Held: machine god aegis'),
   [victim(), execute(0.3)], ('命中時：30%以下を消去', 'On hit: erase below 30%'))
-L('hephaistos_relic_weapon', 1, 'tech', ('切削の残響', 'Echo of the Drill'),
-  ('16mを切削し強化剥奪', 'Drill 16m and strip'), [line(16, 2), dmg(0.8), strip()],
-  hit=[victim(), strip()], hit_desc=('命中時：強化剥奪', 'On hit: strip'))
 
 # 12 nortia -------------------------------------------------------------------------------------------------
 L('nortia_weapon', 1, 'game', ('罰ゲーム！', 'Penalty Game!'),
@@ -292,9 +259,6 @@ L('nortia_legend', 3, 'game', ('世界遊戯・絶対ルール', 'Absolute Rule'
   [area(48), stun(400), eff('levitate', 200, 3), strip(), dmg(2.5), allies(32), healpct(1.0, True), undying(600, True)],
   LP + [snapshot()], ('所持中：遊戯神の加護', 'Held: game god aegis'),
   [victim(), launch(1.4), stun(30)], ('命中時：打ち上げ拘束', 'On hit: launch and bind'), hitfx='heart')
-L('nortia_relic_weapon', 1, 'game', ('遊戯の残響', 'Echo of Play'),
-  ('16m内の敵を4秒拘束し打ち上げ', 'Bind 4s and launch within 16m'), [area(16), stun(80), launch(0.8)],
-  hit=[victim(), launch(0.8)], hit_desc=('命中時：打ち上げ', 'On hit: launch'))
 
 # 13 lucifara -----------------------------------------------------------------------------------------------
 L('lucifara_weapon', 1, 'desire', ('堕天刈り', 'Fallen Reap'),
@@ -316,9 +280,6 @@ L('lucifara_legend', 3, 'desire', ('欲望王権・魂宴の聖杯', 'Grail of t
    allies(32), healpct(1.0, True)],
   LP + [buff('regen', 40, 1)], ('所持中：欲望の王', 'Held: lord of desire'),
   [victim(), strip(True), me(), heal(10)], ('命中時：強化強奪・回復', 'On hit: steal, heal'), hitfx='heart')
-L('lucifara_relic_weapon', 1, 'desire', ('欲刃の残響', 'Echo of Desire'),
-  ('前方10mを刈り衰弱', 'Reap 10m ahead, weaken'), [cone(10, 120), dmg(0.8), eff('weakness', 160, 1)],
-  hit=[me(), heal(2)], hit_desc=('命中時：吸収回復', 'On hit: drain'))
 
 # 14 taika --------------------------------------------------------------------------------------------------
 L('taika_weapon', 1, 'force', ('超克連撃', 'Transcending Barrage'),
@@ -339,6 +300,3 @@ L('taika_legend', 3, 'force', ('覇王更新・無限超克', 'Endless Transcend
   [area(32)] + rep(5, dmg(1.0)) + [launch(2.0), knock(5.0), me(), buff('strength', 1200, 20), buff('speed', 1200, 4), undying(600), adapt(1200)],
   LP + [buff('speed', 40, 1)], ('所持中：覇王', 'Held: overlord'),
   [victim(), dmg(0.5), dmg(0.5), knock(3.0)], ('命中時：2連撃で吹き飛ばす', 'On hit: 2 strikes and blast'), hitfx='explosion')
-L('taika_relic_weapon', 1, 'force', ('超克の残響', 'Echo of Transcendence'),
-  ('最寄りの敵へ踏み込み一撃', 'Lunge at the nearest foe'), [near(12, 1), behind(), dmg(1.0), knock(3.0)],
-  hit=[victim(), knock(1.5)], hit_desc=('命中時：吹き飛ばし', 'On hit: knockback'))

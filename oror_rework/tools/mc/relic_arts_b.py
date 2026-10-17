@@ -24,9 +24,6 @@ L('mary_sue_legend', 3, 'story', ('物語永続・無限覚醒', 'Eternal Awaken
    area(40), dmg(2.5), stun(160)],
   LP + [low(0.5, [me(), undying(40)])], ('所持中：体力50%以下で倒れない', 'Held: cannot fall below 50% health'),
   [low(0.5, [victim(), dmg(1.0)])], ('命中時：窮地なら大打撃', 'On hit: heavy damage when low'), hitfx='end_rod')
-L('mary_sue_relic_weapon', 1, 'story', ('英雄譚の残響', 'Echo of the Tale'),
-  ('半回復・剛力III', 'Heal half, strength III'), [me(), healpct(0.4), buff('strength', 200, 2)],
-  hit=[low(0.4, [victim(), dmg(0.3)])], hit_desc=('命中時：窮地で追撃', 'On hit: extra when low'))
 
 # 16 savior -------------------------------------------------------------------------------------------------
 L('savior_weapon', 1, 'holy', ('聖域展開', 'Sanctuary'),
@@ -48,9 +45,6 @@ L('savior_legend', 3, 'holy', ('万命救済・最後の聖域', 'The Last Sanct
    dmg(2.0), erase(64)],
   LP + [allies(16), buff('regen', 40, 1, True), reflect(25, 8)], ('所持中：救世の結界', 'Held: savior\'s barrier'),
   [victim(), knock(3.0), stun(20)], ('命中時：押し返し拘束', 'On hit: push and bind'), hitfx='end_rod')
-L('savior_relic_weapon', 1, 'holy', ('聖光の残響', 'Echo of Grace'),
-  ('12m内の味方を回復', 'Heal allies within 12m'), [allies(12), heal(20, True)],
-  hit=[victim(), knock(1.0)], hit_desc=('命中時：押し返し', 'On hit: push'))
 
 # 17 gokuka -------------------------------------------------------------------------------------------------
 L('gokuka_weapon', 1, 'curse', ('呪禍裂爪', 'Cursed Rending'),
@@ -72,9 +66,6 @@ L('gokuka_legend', 3, 'curse', ('業禍根源・万呪外法', 'Root of All Curs
    eff('dark', 600), dmg(2.5), execute(0.5), mark(600, 3.0), summon('wolf', 6)],
   LP + [area(8), eff('wither', 40, 2)], ('所持中：呪いの瘴気（周囲を蝕む）', 'Held: curse miasma'),
   [victim(), eff('wither', 200, 4), execute(0.2)], ('命中時：呪い・20%以下即死', 'On hit: curse, execute below 20%'), hitfx='sculk')
-L('gokuka_relic_weapon', 1, 'curse', ('呪いの残響', 'Echo of Curse'),
-  ('12m内に衰弱の呪い', 'Wither within 12m'), [area(12), eff('wither', 200, 2)],
-  hit=[victim(), eff('poison', 60, 1)], hit_desc=('命中時：毒', 'On hit: poison'))
 
 # 18 merlinus -----------------------------------------------------------------------------------------------
 L('merlinus_weapon', 1, 'arcane', ('深淵射線', 'Abyssal Ray'),
@@ -95,9 +86,6 @@ L('merlinus_legend', 3, 'arcane', ('魔導真理・知の深淵', 'Abyss of Know
   [area(48), stun(400), freeze(400), dmg(2.5), strip(), line(64, 4), dmg(2.0), reflect(400, 48), erase(64), me(), guard(100)],
   LP + [reflect(25, 12)], ('所持中：魔導の深淵', 'Held: arcane abyss'),
   [chain(6, 12), dmg(0.5)], ('命中時：魔弾が6体へ', 'On hit: bolts chain to 6'), hitfx='enchant')
-L('merlinus_relic_weapon', 1, 'arcane', ('魔導の残響', 'Arcane Echo'),
-  ('24mの射線で拘束', 'A 24m binding ray'), [line(24, 2), dmg(0.8), stun(40)],
-  hit=[victim(), stun(10)], hit_desc=('命中時：一瞬停止', 'On hit: brief stop'))
 
 # 19 enkou --------------------------------------------------------------------------------------------------
 L('enkou_weapon', 1, 'abyss', ('深淵圧壊', 'Abyssal Crush'),
@@ -118,9 +106,6 @@ L('enkou_legend', 3, 'abyss', ('海獣災極・深淵咆哮', 'Abyssal Roar'),
   [o('weather', w='thunder'), area(48), dmg(2.5), slam(5.0), stun(300), eff('dark', 600), eff('poison', 600, 9), eff('blind', 200), pull(3.0)],
   LP + [buff('water', 300), buff('dolphin', 40, 2)], ('所持中：海の災厄', 'Held: calamity of the sea'),
   [victim(), eff('poison', 100, 4), eff('dark', 60)], ('命中時：深淵の毒', 'On hit: abyssal venom'), hitfx='bubble')
-L('enkou_relic_weapon', 1, 'abyss', ('海牙の残響', 'Echo of the Fang'),
-  ('8m内を海流で引き寄せ毒', 'Pull and poison within 8m'), [area(8), pull(2.0), eff('poison', 160, 1)],
-  hit=[victim(), eff('poison', 60, 1)], hit_desc=('命中時：毒', 'On hit: poison'))
 
 # 20 kurma --------------------------------------------------------------------------------------------------
 L('kurma_weapon', 1, 'earth', ('地裂震撃', 'Earthsplitter'),
@@ -142,9 +127,6 @@ L('kurma_legend', 3, 'earth', ('地龍世界・大陸の心臓', 'Heart of the C
    buff('resist', 1200, 4), give('diamond', 4)],
   LP + [buff('absorb', 40, 4)], ('所持中：大陸の加護', 'Held: continental aegis'),
   [around(5), dmg(0.4), launch(1.0)], ('命中時：地震', 'On hit: quake'), hitfx='compost')
-L('kurma_relic_weapon', 1, 'earth', ('地脈の残響', 'Echo of the Ley'),
-  ('8m内に小地震', 'A tremor within 8m'), [area(8), dmg(0.8), launch(1.0)],
-  hit=[victim(), launch(0.6)], hit_desc=('命中時：打ち上げ', 'On hit: launch'))
 
 # 21 teia ---------------------------------------------------------------------------------------------------
 L('teia_weapon', 1, 'light', ('天裂光矢', 'Sky-Rending Arrow'),
@@ -166,9 +148,6 @@ L('teia_legend', 3, 'light', ('超光翔空・天裂の神矢', 'Divine Arrow'),
    blink(24), me(), buff('speed', 600, 5)],
   LP + [buff('speed', 40, 3), reflect(25, 10)], ('所持中：光越の龍', 'Held: lightspeed dragon'),
   [chain(5, 12), dmg(0.5)], ('命中時：光跡が5体へ', 'On hit: light trails to 5'), hitfx='firework')
-L('teia_relic_weapon', 1, 'light', ('光跡の残響', 'Echo of Light'),
-  ('32mの光の矢', 'A 32m arrow of light'), [line(32, 2), dmg(0.8)],
-  hit=[victim(), burn(2)], hit_desc=('命中時：炎上', 'On hit: burn'))
 
 # 22 bahamut ------------------------------------------------------------------------------------------------
 L('bahamut_weapon', 1, 'tide', ('潮流衝撃', 'Tidal Impact'),
@@ -190,9 +169,6 @@ L('bahamut_legend', 3, 'tide', ('海理皇権・世界潮歌', 'World Tide Song'
    buff('regen', 1200, 4, True), undying(400, True)],
   LP + [allies(16), buff('regen', 40, 1, True), buff('water', 300)], ('所持中：海皇の加護', 'Held: sea emperor aegis'),
   [victim(), knock(3.0)], ('命中時：大潮の押し返し', 'On hit: great tide push'), hitfx='splash')
-L('bahamut_relic_weapon', 1, 'tide', ('潮騒の残響', 'Echo of the Tide'),
-  ('前方12mを押し流す', 'Wash 12m ahead'), [cone(12, 90), dmg(0.6), knock(3.0)],
-  hit=[victim(), knock(1.5)], hit_desc=('命中時：押し返し', 'On hit: push'))
 
 # 23 nun ----------------------------------------------------------------------------------------------------
 L('nun_weapon', 1, 'mask', ('千面変化', 'Thousand Faces'),
@@ -213,9 +189,6 @@ L('nun_legend', 3, 'mask', ('存在万化・無限の仮面', 'Infinite Masks'),
   [area(40), strip(True), each([dmg(2.5), stun(300), launch(3.0), freeze(400)]), me(), adapt(1200), undying(600), buff('strength', 600, 9)],
   LP + [adapt(40)], ('所持中：万化の王', 'Held: king of change'),
   [victim(), strip(True), dmg(0.3)], ('命中時：強化を奪い打撃', 'On hit: steal and strike'), hitfx='smoke')
-L('nun_relic_weapon', 1, 'mask', ('仮面の残響', 'Echo of the Mask'),
-  ('最寄りの敵と入れ替わり幻惑', 'Swap with the nearest foe and confuse'), [near(12, 1), swap(), eff('nausea', 160)],
-  hit=[victim(), strip(True)], hit_desc=('命中時：強化を写す', 'On hit: copy buffs'))
 
 # 24 arcana -------------------------------------------------------------------------------------------------
 L('arcana_weapon', 1, 'fate', ('因果結び', 'Knot of Causality'),
@@ -236,9 +209,6 @@ L('arcana_legend', 3, 'fate', ('最善終章・運命再編', 'Fate Rewritten'),
   [allies(48), undying(1200, True), healpct(1.0, True), guard(100, True), area(48), strip(), dmg(2.5), mark(600, 3.0), reflect(400, 48)],
   LP + [buff('luck', 40, 5), reflect(25, 8)], ('所持中：運命の天使', 'Held: angel of fate'),
   [chance(0.5, [victim(), dmg(1.5)])], ('命中時：50%で会心', 'On hit: 50% critical'), hitfx='end_rod')
-L('arcana_relic_weapon', 1, 'fate', ('運命の残響', 'Echo of Fate'),
-  ('因果の糸を4体へ', 'Tie fate to 4 foes'), [chain(4, 10), dmg(0.6)],
-  hit=[chance(0.2, [victim(), dmg(0.5)])], hit_desc=('命中時：20%で会心', 'On hit: 20% critical'))
 
 # 25 eomaia -------------------------------------------------------------------------------------------------
 L('eomaia_weapon', 1, 'beast', ('始祖の咆哮', 'Primal Roar'),
@@ -261,9 +231,6 @@ L('eomaia_legend', 3, 'beast', ('原初獣王・全獣の血脈', 'Bloodline of 
    buff('regen', 1200, 2, True), me(), undying(400)],
   LP + [allies(16), buff('strength', 40, 2, True)], ('所持中：獣王の鼓舞', 'Held: beast king\'s rally'),
   [victim(), dmg(0.3), dmg(0.3)], ('命中時：獣の二連撃', 'On hit: double rend'), hitfx='crit')
-L('eomaia_relic_weapon', 1, 'beast', ('獣牙の残響', 'Echo of the Fang'),
-  ('狼1体を招く', 'Call a wolf'), [summon('wolf', 1)],
-  hit=[around(2), dmg(0.1)], hit_desc=('命中時：小さく薙ぐ', 'On hit: small sweep'))
 
 # 26 demiurgos ----------------------------------------------------------------------------------------------
 L('demiurgos_weapon', 1, 'dream', ('空想顕現', 'Imagination Made Real'),
@@ -284,9 +251,6 @@ L('demiurgos_legend', 3, 'dream', ('空創龍権・万物創現', 'Genesis of Al
   [area(48), execute(0.6), dmg(3.0), stun(200), summon('golem', 6), me(), undying(1200), guard(100), blink(20)],
   LP + [reflect(25, 8)], ('所持中：空創の龍王', 'Held: dragon of creation'),
   [victim(), execute(0.3)], ('命中時：30%以下を断絶', 'On hit: sever below 30%'), hitfx='dragon')
-L('demiurgos_relic_weapon', 1, 'dream', ('空想の残響', 'Echo of Imagination'),
-  ('16mを斬り10%以下を断絶', 'Cut 16m, sever below 10%'), [line(16, 2), dmg(0.8), execute(0.1)],
-  hit=[victim(), execute(0.05)], hit_desc=('命中時：5%以下を断絶', 'On hit: sever below 5%'))
 
 # 27 hakyoku ------------------------------------------------------------------------------------------------
 L('hakyoku_weapon', 1, 'evolve', ('捕食砲', 'Predation Cannon'),
@@ -307,9 +271,6 @@ L('hakyoku_legend', 3, 'evolve', ('討伐不能・無窮の覇核', 'Undefeatabl
   [area(48), strip(True), dmg(3.0), execute(0.5), me(), undying(2400), adapt(2400), healpct(1.0), buff('strength', 1200, 12)],
   LP + [adapt(40), low(0.4, [me(), undying(40)])], ('所持中：討伐不能', 'Held: cannot be defeated'),
   [victim(), strip(True), execute(0.25)], ('命中時：喰らい・捕食', 'On hit: devour'), hitfx='lava')
-L('hakyoku_relic_weapon', 1, 'evolve', ('捕食の残響', 'Echo of Hunger'),
-  ('20mの捕食砲', 'A 20m predation beam'), [line(20, 2), dmg(0.8)],
-  hit=[me(), heal(2)], hit_desc=('命中時：回復', 'On hit: heal'))
 
 # 28 shinra -------------------------------------------------------------------------------------------------
 L('shinra_weapon', 1, 'hunt', ('天敵解析', 'Natural Enemy Analysis'),
@@ -330,6 +291,3 @@ L('shinra_legend', 3, 'hunt', ('終焉例外・万物天敵', 'Enemy of All Thin
   [area(48), strip(), mark(1200, 5.0), dmg(3.0), execute(0.5), me(), adapt(2400), undying(600)],
   LP + [adapt(40)], ('所持中：万物の天敵', 'Held: enemy of all'),
   [victim(), mark(200, 3.0), execute(0.25)], ('命中時：被ダメ3倍・25%以下を狩る', 'On hit: x3 and hunt below 25%'), hitfx='crit')
-L('shinra_relic_weapon', 1, 'hunt', ('天敵の残響', 'Echo of the Predator'),
-  ('最寄りの敵に被ダメ1.5倍の刻印', 'Mark the nearest foe x1.5'), [near(16, 1), mark(200, 1.5)],
-  hit=[victim(), mark(100, 1.5)], hit_desc=('命中時：刻印', 'On hit: mark'))

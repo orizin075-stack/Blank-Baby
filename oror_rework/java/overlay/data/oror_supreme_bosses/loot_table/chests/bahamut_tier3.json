@@ -1,0 +1,94 @@
+{
+ "type": "minecraft:chest",
+ "pools": [
+  {
+   "rolls": 1,
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:emerald",
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": 64
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "rolls": 1,
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:diamond",
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": 12
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "rolls": 1,
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "oror_supreme_bosses:bahamut_focus"
+    }
+   ]
+  },
+  {
+   "rolls": 1,
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "minecraft:netherite_ingot",
+     "functions": [
+      {
+       "function": "minecraft:set_count",
+       "count": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "rolls": 1,
+   "conditions": [
+    {
+     "condition": "minecraft:random_chance",
+     "chance": 0.08
+    }
+   ],
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "oror_supreme_bosses:bahamut_legend"
+    }
+   ]
+  },
+  {
+   "rolls": 1,
+   "conditions": [
+    {
+     "condition": "minecraft:random_chance",
+     "chance": 0.12
+    }
+   ],
+   "entries": [
+    {
+     "type": "minecraft:item",
+     "name": "oror_supreme_bosses:reverie_rapier",
+     "functions": [
+      {
+       "function": "oror_supreme_bosses:miracle_weapon"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

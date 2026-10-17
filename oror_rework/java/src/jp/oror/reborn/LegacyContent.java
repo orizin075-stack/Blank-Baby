@@ -11,11 +11,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType.Builder;
 import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -52,30 +49,12 @@ public final class LegacyContent {
     }
 
     static {
+        // v0.17.4: only the seal block is left of the per-character content (citadels place it; right-clicking it summons
+        // the boss). Its item, the citadel bricks, the essences, the Echo replicas and the 41 guard eggs are gone.
         for (CharacterSpec s : CharacterSpec.ALL.values()) {
-            for (String suffix : List.of("_citadel_bricks", "_boss_seal")) {
-                DeferredHolder<Block, Block> b = BLOCKS.register(s.id + suffix, () -> new Block(Properties.of().strength(6.0F, 30.0F)));
-                if (suffix.equals("_boss_seal")) {
-                    SEALS.put(s.id, b);
-                }
-
-                CONTENT.add(OrorReborn.ITEMS.register(s.id + suffix, () -> new BlockItem((Block)b.get(), new net.minecraft.world.item.Item.Properties())));
-            }
-
-            CONTENT.add(OrorReborn.ITEMS.register(s.id + "_essence", () -> new Item(new net.minecraft.world.item.Item.Properties())));
-            CONTENT.add(
-                OrorReborn.ITEMS
-                    .register(s.id + "_relic_weapon", () -> CharacterRelics.replica(s.id))
-            );
-            CONTENT.add(
-                OrorReborn.ITEMS
-                    .register(
-                        s.id + "_dungeon_spawn_egg",
-                        () -> new DeferredSpawnEggItem(DUNGEON, s.outfit, s.accent, new net.minecraft.world.item.Item.Properties())
-                    )
-            );
+            SEALS.put(s.id, BLOCKS.register(s.id + "_boss_seal", () -> new Block(Properties.of().strength(6.0F, 30.0F))));
         }
 
-        CONTENT.add(OrorReborn.ITEMS.register("omniregistry_treasure", () -> new Item(new net.minecraft.world.item.Item.Properties())));
+        CONTENT.add(OrorReborn.ITEMS.register("omniregistry_treasure", () -> new net.minecraft.world.item.Item(new net.minecraft.world.item.Item.Properties())));
     }
 }

@@ -22,9 +22,6 @@ L('ain_sof_aur_legend', 3, 'branch', ('全界選択・無限分岐の玉座', 'T
   [area(48), dmg(3.0), stun(300), strip(), execute(0.5), summon('golem', 6), me(), undying(1200), guard(100), healpct(1.0), reflect(400, 48)],
   LP + [snapshot()], ('所持中：分岐の神', 'Held: god of branches'),
   [chance(0.5, [victim(), dmg(1.0)])], ('命中時：50%で別の結果', 'On hit: 50% another outcome'), hitfx='end_rod')
-L('ain_sof_aur_relic_weapon', 1, 'branch', ('分岐の残響', 'Echo of Branches'),
-  ('50%で打撃、50%で回復', '50% strike, 50% heal'), [chance(0.5, [near(16, 1), dmg(1.2)], [me(), healpct(0.4)])],
-  hit=[chance(0.25, [victim(), dmg(0.3)])], hit_desc=('命中時：25%で追撃', 'On hit: 25% extra'))
 
 # 30 angra_mainyu -------------------------------------------------------------------------------------------
 L('angra_mainyu_weapon', 1, 'evil', ('全害の鎖', 'Chains of All Harm'),
@@ -46,9 +43,6 @@ L('angra_mainyu_legend', 3, 'evil', ('世界悪核・全害の王権', 'Core of 
    buff('absorb', 1200, 9)],
   LP + [area(8), eff('wither', 40, 2)], ('所持中：悪の瘴気', 'Held: miasma of evil'),
   [victim(), eff('wither', 200, 4), me(), heal(10)], ('命中時：腐敗・吸命', 'On hit: wither and drain'), hitfx='sculk')
-L('angra_mainyu_relic_weapon', 1, 'evil', ('影鎖の残響', 'Echo of Shadow Chains'),
-  ('影の鎖を3体へ', 'Chain 3 foes'), [chain(3, 10), pull(1.5), eff('wither', 160, 1)],
-  hit=[me(), heal(2)], hit_desc=('命中時：吸命', 'On hit: drain'))
 
 # 31 magna_mater --------------------------------------------------------------------------------------------
 L('magna_mater_weapon', 1, 'life', ('蔓縛', 'Vine Bind'),
@@ -70,9 +64,6 @@ L('magna_mater_legend', 3, 'life', ('始源創命・無窮の母胎', 'Womb of E
    buff('health', 2400, 5, True), area(48), stun(300), pull(2.0)],
   LP + [allies(16), buff('regen', 40, 1, True)], ('所持中：命の母', 'Held: mother of life'),
   [victim(), stun(30)], ('命中時：蔓縛', 'On hit: vine bind'), hitfx='happy')
-L('magna_mater_relic_weapon', 1, 'life', ('蔓の残響', 'Echo of Vines'),
-  ('12mの蔓で引き寄せ3秒縛る', 'Pull and bind 3s with 12m vines'), [line(12, 2), pull(2.0), stun(60)],
-  hit=[victim(), eff('slow', 60, 1)], hit_desc=('命中時：減速', 'On hit: slow'))
 
 # 32 ouroboros ----------------------------------------------------------------------------------------------
 L('ouroboros_weapon', 1, 'cycle', ('円環巻戻し', 'Ring Rewind'),
@@ -93,8 +84,6 @@ L('ouroboros_legend', 3, 'cycle', ('宇宙継続・無限円環', 'Endless Ring'
   [rewind(), me(), undying(1200), healpct(1.0), area(48), stun(400), dmg(2.5), eff('slow', 600, 6), erase(64)],
   LP + [snapshot()], ('所持中：円環の神霊', 'Held: spirit of the ring'),
   [victim(), stun(30)], ('命中時：時を止める', 'On hit: stops time'), hitfx='enchant')
-L('ouroboros_relic_weapon', 1, 'cycle', ('円環の残響', 'Echo of the Ring'),
-  ('5秒前へ巻き戻る', 'Rewind 5s'), [rewind()], [snapshot()], ('所持中：記録', 'Held: record'))
 
 # 33 yggdrasil ----------------------------------------------------------------------------------------------
 L('yggdrasil_weapon', 1, 'tree', ('根縛', 'Root Bind'),
@@ -116,9 +105,6 @@ L('yggdrasil_legend', 3, 'tree', ('玖界循環・神樹の心葉', 'Heartleaf o
    area(48), stun(300), lightning(), dmg(2.5)],
   LP + [allies(16), buff('regen', 40, 1, True)], ('所持中：世界樹の加護', 'Held: world tree aegis'),
   [victim(), stun(20)], ('命中時：根縛', 'On hit: root bind'), hitfx='happy')
-L('yggdrasil_relic_weapon', 1, 'tree', ('若枝の残響', 'Echo of the Sprout'),
-  ('8m内を根で4秒縛る', 'Root foes within 8m for 4s'), [area(8), stun(80)],
-  passive=[me(), buff('regen', 40, 0)], passive_desc=('所持中：再生', 'Held: regeneration'))
 
 # 34 miyohime -----------------------------------------------------------------------------------------------
 LAWS = [launch(3.0), slam(4.0), freeze(400), stun(300), eff('slow', 600, 9), eff('levitate', 200, 4)]
@@ -141,9 +127,6 @@ L('miyohime_legend', 3, 'law', ('理外自由・万律自在神璽', 'Seal of Al
   [area(48), each(LAWS), dmg(3.0), stun(300), me(), undying(1200), guard(100), adapt(2400), buff('strength', 1200, 12), erase(64)],
   LP + [cleanse(), reflect(25, 8)], ('所持中：法則の神（弱体無効・反射）', 'Held: god of laws'),
   [victim(), each(LAWS)], ('命中時：法則改竄', 'On hit: law rewrite'), hitfx='firework')
-L('miyohime_relic_weapon', 1, 'law', ('神楽の残響', 'Echo of Kagura'),
-  ('最寄りの敵の法則を改竄', 'Rewrite the nearest foe\'s law'), [near(16, 1), each(LAWS)],
-  hit=[chance(0.15, [victim(), launch(1.5)])], hit_desc=('命中時：15%で反重力', 'On hit: 15% antigravity'))
 
 # 35 innocence ----------------------------------------------------------------------------------------------
 L('innocence_weapon', 1, 'toy', ('玩具化', 'Toyification'),
@@ -165,9 +148,6 @@ L('innocence_legend', 3, 'toy', ('無垢創世・全能の遊び場', 'Playgroun
    me(), guard(200)],
   LP + [cleanse(), low(0.4, [me(), undying(40)])], ('所持中：無垢なる全能', 'Held: innocent omnipotence'),
   [chance(0.5, [victim(), transmute()])], ('命中時：50%で玩具化', 'On hit: 50% toyify'), hitfx='heart')
-L('innocence_relic_weapon', 1, 'toy', ('無垢の残響', 'Echo of Innocence'),
-  ('最寄りの敵を浮かべる', 'Float the nearest foe'), [near(16, 1), eff('levitate', 100, 2)],
-  hit=[chance(0.1, [victim(), transmute()])], hit_desc=('命中時：10%で玩具化', 'On hit: 10% toyify'))
 
 # 36 brutality ----------------------------------------------------------------------------------------------
 L('brutality_weapon', 1, 'brutal', ('凄惨連打', 'Brutal Barrage'),
@@ -188,9 +168,6 @@ L('brutality_legend', 3, 'brutal', ('絶対暴力・凄惨の覇拳', 'Absolute 
   [area(40), strip()] + rep(4, dmg(1.5)) + [launch(3.0), knock(6.0), stun(200), execute(0.5), me(), buff('strength', 1200, 20), undying(600), cleanse()],
   LP + [buff('strength', 40, 4)], ('所持中：暴力の化身', 'Held: violence incarnate'),
   [victim(), strip(), dmg(0.6), dmg(0.6), knock(4.0)], ('命中時：二連打で殴り飛ばす', 'On hit: double blow'), hitfx='explosion')
-L('brutality_relic_weapon', 1, 'brutal', ('暴虐の残響', 'Echo of Brutality'),
-  ('最寄りの敵を殴り飛ばす', 'Blast the nearest foe'), [near(8, 1), dmg(1.2), knock(4.0)],
-  hit=[victim(), knock(2.0)], hit_desc=('命中時：殴り飛ばす', 'On hit: blast'))
 
 # 37 cursed_love --------------------------------------------------------------------------------------------
 L('cursed_love_weapon', 1, 'tragedy', ('悲劇の糸', 'Strings of Tragedy'),
@@ -212,9 +189,6 @@ L('cursed_love_legend', 3, 'tragedy', ('終わらぬ悲劇・呪愛の心臓', '
    me(), healpct(1.0), undying(600)],
   LP + [area(8), eff('wither', 40, 2)], ('所持中：悲劇の瘴気', 'Held: miasma of tragedy'),
   [victim(), eff('wither', 200, 5), mark(200, 2.0)], ('命中時：呪い・刻印', 'On hit: curse and mark'), hitfx='dragon')
-L('cursed_love_relic_weapon', 1, 'tragedy', ('操糸の残響', 'Echo of Strings'),
-  ('最寄りの敵を引き寄せ腐敗', 'Pull the nearest foe and wither'), [near(12, 1), pull(2.0), eff('wither', 160, 2)],
-  hit=[victim(), eff('wither', 60, 1)], hit_desc=('命中時：腐敗', 'On hit: wither'))
 
 # 38 relentless_research ------------------------------------------------------------------------------------
 L('relentless_research_weapon', 1, 'lab', ('強制治験', 'Forced Trial'),
@@ -236,9 +210,6 @@ L('relentless_research_legend', 3, 'lab', ('全救済実験・戒進の原理', 
    undying(600, True), summon('wolf', 6)],
   LP + [allies(16), buff('regen', 40, 1, True)], ('所持中：救済の研究者', 'Held: researcher of salvation'),
   [victim(), eff('poison', 200, 6), execute(0.2)], ('命中時：劇毒・20%以下を処置', 'On hit: lethal dose'), hitfx='witch')
-L('relentless_research_relic_weapon', 1, 'lab', ('注射の残響', 'Echo of the Needle'),
-  ('最寄りの敵に毒、味方を回復', 'Poison the nearest foe, heal allies'), [near(12, 1), eff('poison', 200, 3), allies(12), heal(12, True)],
-  hit=[victim(), eff('poison', 60, 1)], hit_desc=('命中時：毒', 'On hit: poison'))
 
 # 39 forbidden_arcana ---------------------------------------------------------------------------------------
 L('forbidden_arcana_weapon', 1, 'forbidden', ('禁理展開', 'Forbidden Unfold'),
@@ -259,9 +230,6 @@ L('forbidden_arcana_legend', 3, 'forbidden', ('魔導自己研究・外悪の深
   [area(48), strip(True), stun(400), dmg(3.0), execute(0.45), reflect(600, 48), me(), adapt(2400), undying(600), erase(64)],
   LP + [adapt(40), reflect(25, 10)], ('所持中：外悪の魔導', 'Held: outer evil sorcery'),
   [chain(6, 12), dmg(0.5)], ('命中時：術式が6体へ', 'On hit: spell chains to 6'), hitfx='portal')
-L('forbidden_arcana_relic_weapon', 1, 'forbidden', ('禁術の残響', 'Echo of the Forbidden'),
-  ('16mの禁術で拘束', 'A 16m binding spell'), [line(16, 2), dmg(0.8), stun(40)],
-  hit=[victim(), stun(10)], hit_desc=('命中時：一瞬拘束', 'On hit: brief bind'))
 
 # 40 fallen_savior ------------------------------------------------------------------------------------------
 L('fallen_savior_weapon', 1, 'fallen', ('光の断罪', 'Judgment of Light'),
@@ -283,9 +251,6 @@ L('fallen_savior_legend', 3, 'fallen', ('全悪救滅・神殺しの聖剣', 'Go
    me(), undying(1200), healpct(1.0), cleanse(), buff('strength', 1200, 10)],
   LP + [low(0.4, [me(), undying(40)])], ('所持中：倒れぬ勇者', 'Held: the hero who never falls'),
   [victim(), execute(0.3), burn(6)], ('命中時：30%以下を断つ', 'On hit: sever below 30%'), hitfx='end_rod')
-L('fallen_savior_relic_weapon', 1, 'fallen', ('聖剣の残響', 'Echo of the Holy Sword'),
-  ('20mの光の斬撃', 'A 20m slash of light'), [line(20, 2), dmg(1.0)],
-  hit=[victim(), burn(3)], hit_desc=('命中時：聖火', 'On hit: holy fire'))
 
 # 41 sweet_pact ---------------------------------------------------------------------------------------------
 L('sweet_pact_weapon', 1, 'pact', ('未来差押え', 'Foreclose the Future'),
@@ -307,6 +272,3 @@ L('sweet_pact_legend', 3, 'pact', ('未来総有・未怪の債権冠', 'Crown o
    me(), healpct(1.0), undying(600), buff('absorb', 1200, 9)],
   LP + [buff('saturation', 40)], ('所持中：未来の債権者', 'Held: creditor of the future'),
   [chance(0.35, [give('emerald', 2)])], ('命中時：35%で利息', 'On hit: 35% interest'), hitfx='wax')
-L('sweet_pact_relic_weapon', 1, 'pact', ('契約の残響', 'Echo of the Pact'),
-  ('エメラルド2、最寄りの敵を3秒停止', '2 emeralds; stop the nearest foe 3s'), [give('emerald', 2), near(12, 1), stun(60)],
-  hit=[chance(0.1, [give('emerald', 1)])], hit_desc=('命中時：10%で利息', 'On hit: 10% interest'))
