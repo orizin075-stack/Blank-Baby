@@ -401,6 +401,12 @@ public final class VillageExpeditions {
             return;
         }
         CompoundTag mind = MobMind.data(v);
+        if (mind.contains("OriginalWeapon") && !mind.getBoolean("OriginalAuto")) {
+            // the issued weapon, not one the combat AI made for a fight, is what goes back
+            v.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.parseOptional(v.registryAccess(), mind.getCompound("OriginalWeapon")));
+            mind.remove("OriginalWeapon");
+            mind.remove("Selected");
+        }
         List<ItemStack> back = new ArrayList<>();
         for (EquipmentSlot slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.MAINHAND)) {
             ItemStack worn = v.getItemBySlot(slot);
@@ -435,6 +441,12 @@ public final class VillageExpeditions {
                 for (Villager v : members) {
                     VillagerLife.data(v).remove("Trip");
                     unkit(sl, v, r);
+                }
+                if (kind.equals("end")) {
+                    // v0.17.17: the twelve eyes of ender go back to the chests
+                    List<ItemStack> eyes = new ArrayList<>();
+                    add(eyes, sl, "ender_eye", 12, 12);
+                    VillageProgress.get(sl).deliver(r, eyes, sl.registryAccess());
                 }
                 r.trip = null;
                 r.nextTrip = now + 6000L;
@@ -472,10 +484,7 @@ public final class VillageExpeditions {
                 VillageProgress.get(sl).setDirty();
             }
         } else if (now >= trip.getLong("Back")) {
-            if (kind.equals("nether") && !gateIntact(sl, r.gate)) {
-                // the gate was broken while they were away: they come back the long way
-                kind = "dungeon";
-            }
+            // a gate broken while they were away: back() brings them home the long way
             back(sl, s, r, now);
         }
     }
@@ -525,8 +534,15 @@ public final class VillageExpeditions {
             return false;
         }
         VillageProgress.Record r = n.hasUUID("TripVillage") ? VillageProgress.get(sl).villages.get(n.getUUID("TripVillage")) : null;
-        if (r == null || r.trip == null || !r.trip.getString("Phase").equals("muster") && !r.trip.getString("Phase").equals("depart")) {
+        // v0.17.17: only a member of the trip under way (a tag left from a called-off trip is not)
+        if (r == null || r.trip == null || !r.trip.getString("Phase").equals("muster") && !r.trip.getString("Phase").equals("depart")
+            || r.trip.getList("Members", 10).stream().noneMatch(t -> ((CompoundTag)t).getUUID("Id").equals(v.getUUID()))) {
             n.remove("Trip");
+            // v0.17.17: the trip is off (or gone): the armoury's kit goes back now, not never
+            VillageLedger.Village home = VillageLedger.of(v);
+            if (home != null) {
+                unkit(sl, v, VillageProgress.get(sl).of(home));
+            }
             return false;
         }
         boolean depart = r.trip.getString("Phase").equals("depart");
@@ -1169,9 +1185,16 @@ public final class VillageExpeditions {
         VillageLedger ledger = VillageLedger.get(sl);
         List<VillageLedger.Village> known = new ArrayList<>(ledger.villages.values());
         known.removeIf(x -> x.id.equals(notFrom));
-        VillageLedger.Village home = known.isEmpty()
-            ? ledger.register(at.offset(sl.random.nextInt(2) == 0 ? 3000 : -3000, 0, sl.random.nextInt(2) == 0 ? 3000 : -3000))
-            : known.get(sl.random.nextInt(known.size()));
+        VillageLedger.Village home = known.isEmpty() ? null : known.get(sl.random.nextInt(known.size()));
+        for (int i = 0; home == null && i < 8; i++) {
+            // a far village nobody has seen; v0.17.17: never the rival's own (they would count as allies and not fight)
+            VillageLedger.Village far = ledger.register(at.offset((sl.random.nextInt(2) == 0 ? 1 : -1) * (3000 + i * 700), 0,
+                (sl.random.nextInt(2) == 0 ? 1 : -1) * (3000 + i * 700)));
+            home = far.id.equals(notFrom) ? null : far;
+        }
+        if (home == null) {
+            return new ArrayList<>();
+        }
         String name = VillageProgress.get(sl).of(home).name();
         UUID id = UUID.randomUUID();
         List<Villager> out = new ArrayList<>();
@@ -1246,7 +1269,7 @@ public final class VillageExpeditions {
         if (VillageFeuds.wander(v, sl)) {
             return;
         }
-        if (root.hasUUID("OrorCaravan") && WanderingTraders.escort(v, sl)) {
+        if (root.hasUUID("OrorCaravan") && !AdaptiveCombat.enemy(v, v.getTarget()) && WanderingTraders.escort(v, sl)) {
             return;
         }
         if (now >= root.getLong("OrorWanderUntil") && sl.getNearestPlayer(v, 64.0) == null) {

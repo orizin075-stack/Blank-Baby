@@ -191,12 +191,15 @@ public final class VillagerLife {
             if (changed) {
                 n.putInt("JobPhase", phase);
                 n.putLong("JobUntil", now + 60L);
+                n.putBoolean("JobWalk", false);
             } else if (goal != null) {
                 // walk once to the nearest place this job needs, and keep at the job until there or 12 s pass
+                // (v0.17.17: also when the walk follows a step of the job, which only held the job for 3 s)
                 VillageAI.walk(v, goal, VillageAI.pace(v, VillageAI.WORK), 2);
-                if (n.getLong("JobUntil") <= now || n.getInt("JobPhase") != phase) {
+                if (n.getLong("JobUntil") <= now || n.getInt("JobPhase") != phase || !n.getBoolean("JobWalk")) {
                     n.putInt("JobPhase", phase);
                     n.putLong("JobUntil", now + 240L);
+                    n.putBoolean("JobWalk", true);
                 }
                 n.putString("Task", "仕事場へ向かっています");
             } else {
@@ -247,6 +250,10 @@ public final class VillagerLife {
     }
 
     private static void equip(Villager v) {
+        // v0.17.17: weapons from the pack only while the villager is armed for danger (VillageAI.gear puts them away)
+        if (!MobMind.data(v).getBoolean("VillageGeared")) {
+            return;
+        }
         if (!MobEquipmentUse.supported(v.getMainHandItem())) {
             SimpleContainer inv = v.getInventory();
 
@@ -406,8 +413,9 @@ public final class VillagerLife {
     }
 
     public static boolean expandFarm(Villager v, ServerLevel sl, BlockPos ground) {
+        // v0.17.17: short grass or a flower on the ground is no obstacle (the crop takes its place)
         if (editable(v, sl, ground)
-            && sl.getBlockState(ground.above()).isAir()
+            && sl.getBlockState(ground.above()).canBeReplaced() && sl.getFluidState(ground.above()).isEmpty()
             && (sl.getBlockState(ground).is(Blocks.DIRT) || sl.getBlockState(ground).is(Blocks.GRASS_BLOCK))) {
             boolean water = false;
 

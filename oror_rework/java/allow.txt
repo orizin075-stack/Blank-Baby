@@ -258,3 +258,11 @@ net/minecraft/world/item/trading/MerchantOffer.<init>(Lnet/minecraft/world/item/
 net/minecraft/world/level/storage/loot/parameters/LootContextParamSets.CHEST:Lnet/minecraft/world/level/storage/loot/parameters/LootContextParamSet;
 # v0.17.17: ItemStack.isSameItem (1.21.1, static) for issued villager gear that has taken damage.
 net/minecraft/world/item/ItemStack.isSameItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z
+# v0.17.17: the villager brain's panic memories (erased while a strong villager fights), Entity.getId on a LivingEntity.
+net/minecraft/world/entity/LivingEntity.getId()I
+net/minecraft/world/entity/ai/memory/MemoryModuleType.HURT_BY:Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+net/minecraft/world/entity/ai/memory/MemoryModuleType.HURT_BY_ENTITY:Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+net/minecraft/world/entity/ai/memory/MemoryModuleType.NEAREST_HOSTILE:Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+# v0.17.17: a thief trader checks it can walk to a chest (PathNavigation.createPath / Path.canReach, 1.21.1).
+net/minecraft/world/entity/ai/navigation/PathNavigation.createPath(Lnet/minecraft/core/BlockPos;I)Lnet/minecraft/world/level/pathfinder/Path;
+net/minecraft/world/level/pathfinder/Path.canReach()Z

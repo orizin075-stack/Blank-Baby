@@ -119,13 +119,13 @@ public final class VillageFlights {
 
     private static void plan(ServerLevel sl, VillageWork.Survey s, VillageProgress.Record r, long now) {
         r.nextFlight = now + 6000L;
-        VillageLedger.Village dest = VillageLedger.get(sl).villages.values().stream()
-            .filter(o -> o != s.village && o.center.distSqr(s.village.center) > 96.0 * 96.0 && o.center.distSqr(s.village.center) < 5000.0 * 5000.0)
+        // one of the three nearest (v0.17.17: of however many there are - skipping up to two of one or two found none)
+        List<VillageLedger.Village> near = VillageLedger.get(sl).villages.values().stream()
+            .filter(o -> !o.id.equals(s.village.id) && o.center.distSqr(s.village.center) > 96.0 * 96.0 && o.center.distSqr(s.village.center) < 5000.0 * 5000.0)
             .sorted(Comparator.comparingDouble(o -> o.center.distSqr(s.village.center)))
             .limit(3L)
-            .skip(sl.random.nextInt(3))
-            .findFirst()
-            .orElse(null);
+            .toList();
+        VillageLedger.Village dest = near.isEmpty() ? null : near.get(sl.random.nextInt(near.size()));
         if (dest == null) {
             return;
         }
@@ -285,6 +285,9 @@ public final class VillageFlights {
                 if (craft == null || !craft.isAlive()) {
                     // shot down or lost before it was out of sight: the cargo comes back to the chests
                     cancel(sl, s, r, null);
+                } else if (now >= f.getLong("Until") + 200L) {
+                    // v0.17.17: out past the distance where entities still tick, the craft never put itself away
+                    stow(sl, craft, r);
                 }
             }
             case "away" -> {

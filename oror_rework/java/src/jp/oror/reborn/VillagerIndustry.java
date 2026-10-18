@@ -273,6 +273,11 @@ public final class VillagerIndustry {
             }
 
             n.putLong("NextWork", now + 5L);
+            if (!sl.isDay() || v.isSleeping()) {
+                // v0.17.17: miners sleep too (this re-set the walk every 5 ticks, so the walk home never happened)
+                n.putString("State", "就寝");
+                return;
+            }
             if (station(v) == null) {
                 Optional<GlobalPos> memory = v.getBrain().getMemory(MemoryModuleType.JOB_SITE);
                 if (memory.isPresent() && memory.get().dimension().equals(sl.dimension())) {
@@ -306,7 +311,10 @@ public final class VillagerIndustry {
                     }
 
                     SimpleContainer c = cargo(v);
-                    if (v.distanceToSqr(Vec3.atCenterOf(at)) <= 16.0 || hasCargo(c) || !furnace.getItem(2).isEmpty() || !furnace.getItem(0).isEmpty()) {
+                    // v0.17.17: back to the furnace with a fair load (or a full pack), not after every block and not to
+                    // wait on the furnace; and a furnace waiting for fuel no longer stops the mining (coal is mined too)
+                    boolean haul = used(c) >= 5 || !c.canAddItem(Items.COBBLESTONE.getDefaultInstance());
+                    if (v.distanceToSqr(Vec3.atCenterOf(at)) <= 16.0 || haul) {
                         if (v.distanceToSqr(Vec3.atCenterOf(at)) > 16.0) {
                             returnTo(v, at, sl);
                             n.putString("State", "鉱石を竈へ運んでいます");
@@ -316,7 +324,7 @@ public final class VillagerIndustry {
                         service(v, furnace, c, at, sl);
                         blast(v, furnace, at, sl);
                         saveCargo(v, c);
-                        if (n.getString("State").equals("保管場所が満杯") || n.getString("State").equals("燃料待ち")) {
+                        if (n.getString("State").equals("保管場所が満杯")) {
                             return;
                         }
                     }
@@ -388,8 +396,13 @@ public final class VillagerIndustry {
                     }
 
                     boolean blocked = false;
+                    // v0.17.17: going down, the head passes through the block above the next step's headroom; going up,
+                    // the block above the miner's own head
+                    List<BlockPos> parts = target.getY() < v.blockPosition().getY() - 1 ? List.of(step.above(2), step.above(), step)
+                        : target.getY() > v.blockPosition().getY() + 1 ? List.of(v.blockPosition().above(2), step.above(), step)
+                        : List.of(step.above(), step);
 
-                    for (BlockPos part : List.of(step.above(), step)) {
+                    for (BlockPos part : parts) {
                         if (!sl.getBlockState(part).getCollisionShape(sl, part).isEmpty()) {
                             blocked = true;
                             if (now >= n.getLong("NextDig")) {
@@ -416,6 +429,39 @@ public final class VillagerIndustry {
             n.putString("State", "竈の登録待ち");
             return;
         }
+    }
+
+    private static int used(Container c) {
+        int n = 0;
+        for (int i = 0; i < c.getContainerSize(); i++) {
+            if (!c.getItem(i).isEmpty()) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** Tunnel spoil nobody needs more of. */
+    private static boolean junk(ItemStack st) {
+        String id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(st.getItem()).getPath();
+        return List.of("cobblestone", "cobbled_deepslate", "deepslate", "stone", "dirt", "gravel", "andesite", "diorite", "granite", "tuff",
+            "netherrack", "calcite", "sand", "red_sand", "blackstone", "basalt").contains(id);
+    }
+
+    /**
+     * v0.17.17: where a miner's products go - the chests beside its furnace, or, with none there, the village's communal
+     * chests (before this, a miner without a chest by its furnace filled its pack with spoil and stopped for good).
+     */
+    private static List<Container> stores(Villager v, ServerLevel sl, BlockPos at) {
+        List<Container> out = boxes(sl, at);
+        if (out.isEmpty()) {
+            VillageLedger.Village village = VillageLedger.of(v);
+            VillageWork.Survey s = village == null ? null : VillageWork.cached(village.id);
+            if (s != null) {
+                out.addAll(VillageExpeditions.chests(sl, s));
+            }
+        }
+        return out;
     }
 
     private static boolean hasCargo(Container c) {
@@ -622,7 +668,14 @@ public final class VillagerIndustry {
 
     public static void service(Villager v, FurnaceBlockEntity furnace, SimpleContainer c, BlockPos at, ServerLevel sl) {
         CompoundTag n = data(v);
-        List<Container> boxes = boxes(sl, at);
+        boolean communal = boxes(sl, at).isEmpty();
+        List<Container> boxes = stores(v, sl, at);
+        // spoil is left in the tunnels rather than carried to the village's chests
+        for (int i = 0; i < c.getContainerSize(); i++) {
+            if (communal && junk(c.getItem(i))) {
+                c.setItem(i, ItemStack.EMPTY);
+            }
+        }
         ItemStack output = furnace.getItem(2);
         if (!output.isEmpty()) {
             int before = output.getCount();
@@ -749,7 +802,7 @@ public final class VillagerIndustry {
      */
     private static void blast(Villager v, FurnaceBlockEntity furnace, BlockPos at, ServerLevel sl) {
         CompoundTag n = data(v);
-        List<Container> boxes = boxes(sl, at);
+        List<Container> boxes = stores(v, sl, at);
         Block block = item("blast_furnace") instanceof BlockItem b ? b.getBlock() : null;
         if (block == null || boxes.isEmpty()) {
             return;
@@ -794,7 +847,9 @@ public final class VillagerIndustry {
             }
             return;
         }
-        if (count(boxes, s -> blastOnly(s, sl)) == 0) {
+        // v0.17.17: built for ore only a blast furnace can smelt, or (every vanilla ore smelts in a furnace too) when ore
+        // piles up faster than the furnace gets through it
+        if (count(boxes, s -> blastOnly(s, sl)) == 0 && count(boxes, s -> blastable(s, sl)) < 16) {
             return;
         }
         // build one: 5 iron ingots, a furnace (8 cobblestone) and 3 smooth stone

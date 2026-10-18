@@ -125,6 +125,9 @@ public final class WorldEvents {
                 // v0.17.16: traders' grenades and smoke, caravans, raid messengers' hordes
                 WanderingTraders.levelTick(cleanup);
                 VillageRaids.levelTick(cleanup);
+                // v0.17.17: the village review also at night and while everyone hides (it held the threat check for
+                // the tanks and jets, and it only ran when some villager was doing its day's chores)
+                VillageWork.watch(cleanup);
             }
         }
 

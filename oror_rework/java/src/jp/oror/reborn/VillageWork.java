@@ -72,6 +72,25 @@ public final class VillageWork {
     static final int CANNOT = -1;
     private static final Map<UUID, Survey> SURVEYS = new HashMap<>();
 
+    /** v0.17.17: every 10 s, the survey (and its review) of each village with a player within 160 blocks. */
+    static void watch(ServerLevel sl) {
+        if (sl.getGameTime() % 200L != 51L) {
+            return;
+        }
+        if (sl.players().isEmpty()) {
+            return;
+        }
+        for (VillageLedger.Village v : new ArrayList<>(VillageLedger.get(sl).villages.values())) {
+            boolean near = false;
+            for (net.minecraft.server.level.ServerPlayer p : sl.players()) {
+                near |= !p.isSpectator() && p.blockPosition().distSqr(v.center) < 160.0 * 160.0;
+            }
+            if (near && sl.hasChunkAt(v.center)) {
+                survey(sl, v);
+            }
+        }
+    }
+
     /** v0.17.16: the latest survey of a village, if one has been made since the server started. */
     static Survey cached(UUID village) {
         return SURVEYS.get(village);
@@ -96,7 +115,8 @@ public final class VillageWork {
 
     /** What a village has and lacks, shared by its villagers. */
     static final class Survey {
-        final VillageLedger.Village village;
+        /** v0.17.17: refreshed on every call - a world opened again in the same game has new village objects. */
+        VillageLedger.Village village;
         final List<BlockPos> chests = new ArrayList<>();
         final List<BlockPos> dark = new ArrayList<>();
         final List<BlockPos> trees = new ArrayList<>();
@@ -151,8 +171,12 @@ public final class VillageWork {
     // ------------------------------------------------------------------------------------- the survey
     static Survey survey(ServerLevel sl, VillageLedger.Village village) {
         Survey s = SURVEYS.computeIfAbsent(village.id, k -> new Survey(village));
+        s.village = village;
         long now = sl.getGameTime();
-        if (now >= s.at && now - s.at < 600L) {
+        // v0.17.17: "never surveyed" is its own case - with at = Long.MIN_VALUE, now - at overflowed to a negative
+        // number, so this returned the empty survey every time and no village ever saw its chests, dark ground,
+        // jobless, homeless or trees (and never reached VillageExpeditions.review)
+        if (s.at != Long.MIN_VALUE && now >= s.at && now - s.at < 600L) {
             return s;
         }
         s.at = now;
@@ -388,8 +412,9 @@ public final class VillageWork {
         Survey s = survey(sl, village);
         long now = sl.getGameTime();
         if (!roomy(v)) {
-            // hands full: put the surplus away first
-            return store(v, sl);
+            // hands full: put the surplus away first; v0.17.17: and when nothing is over what the villager keeps, the
+            // biggest stack goes anyway (a pack of eight kept stacks blocked every chore for good)
+            return store(v, sl, false) || store(v, sl, true);
         }
         List<String> todo = new ArrayList<>();
         if (s.chests.isEmpty()) {
@@ -412,6 +437,11 @@ public final class VillageWork {
         }
         // v0.17.15: what a growing village works toward (VillageExpeditions)
         VillageProgress.Record rec = VillageProgress.get(sl).of(village);
+        if (rec.stage >= 3 && rec.gate != null && sl.hasChunkAt(rec.gate) && !VillageExpeditions.gateIntact(sl, rec.gate)) {
+            // v0.17.17: a broken gate is forgotten and built anew (before, no more nether trips ever happened)
+            rec.gate = null;
+            VillageProgress.get(sl).setDirty();
+        }
         if (rec.stage >= 3 && rec.gate == null) {
             todo.add("gate");
         }
@@ -1135,6 +1165,12 @@ public final class VillageWork {
         }
         Survey s = survey(sl, village);
         int wood = count(v, is("planks")) + count(v, is("logs")) * 4 + s.wood;
+        // v0.17.17: a house already going up (its builder asleep for the night) is not started again by someone else
+        UUID builder = s.takers.get("house");
+        if (builder != null && !builder.equals(v.getUUID()) && sl.getEntity(builder) instanceof Villager b && b.isAlive()
+            && VillagerLife.data(b).contains("BuildOrigin")) {
+            return false;
+        }
         return s.homeless > 0 && (wood >= 40 || !s.trees.isEmpty()) && claim(s, "house", v, sl.getGameTime());
     }
 
@@ -1153,7 +1189,7 @@ public final class VillageWork {
         }
     }
 
-    /** No plot found: let the claim go; after 32 failed plots the village sets beds on open ground for ten minutes. */
+    /** No plot found: let the claim go; after 8 failed plots the village sets beds on open ground for ten minutes. */
     static void noSite(Villager v, ServerLevel sl) {
         VillageLedger.Village village = VillageLedger.of(v);
         if (village == null) {
@@ -1226,19 +1262,37 @@ public final class VillageWork {
 
     /** The storage phase: carry what is over the villager's keep to the nearest communal chest with room. */
     static boolean store(Villager v, ServerLevel sl) {
+        return store(v, sl, false);
+    }
+
+    private static boolean store(Villager v, ServerLevel sl, boolean force) {
         VillageLedger.Village village = VillageLedger.of(v);
         if (village == null) {
             return false;
         }
         Survey s = survey(sl, village);
         SimpleContainer inv = v.getInventory();
+        // v0.17.17: what a villager fetched for the chore it has taken on stays with it until the chore is done
+        boolean busy = s.takers.containsValue(v.getUUID());
+        int forced = -1;
+        if (force) {
+            for (int i = 0; i < inv.getContainerSize(); i++) {
+                ItemStack st = inv.getItem(i);
+                if (!st.isEmpty() && !MobEquipmentUse.supported(st) && (forced < 0 || st.getCount() > inv.getItem(forced).getCount())) {
+                    forced = i;
+                }
+            }
+        }
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack st = inv.getItem(i);
-            int keep = st.isEmpty() ? -1 : keep(v, st);
-            if (keep < 0) {
+            if (force && i != forced) {
                 continue;
             }
-            int over = Math.min(st.getCount(), count(v, x -> x.is(st.getItem())) - keep);
+            int keep = st.isEmpty() ? -1 : keep(v, st);
+            if (keep < 0 && !force || keep == 0 && busy && !force) {
+                continue;
+            }
+            int over = force ? st.getCount() : Math.min(st.getCount(), count(v, x -> x.is(st.getItem())) - keep);
             if (over <= 0) {
                 continue;
             }

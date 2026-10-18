@@ -50,7 +50,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
  */
 public final class VillageRaids {
     private static final ResourceLocation MIGHT = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "horde_might");
-    private static final Set<String> SEEN = new HashSet<>();
+    private static final java.util.Map<ServerLevel, Set<Integer>> SEEN = new java.util.WeakHashMap<>();
     private static final int CAP = 48;
     private static final String[][] SOLDIERS = {
         {"pillager", "38"}, {"vindicator", "38"}, {"witch", "8"}, {"evoker", "7"}, {"ravager", "5"}, {"illusioner", "4"}
@@ -83,7 +83,7 @@ public final class VillageRaids {
         }
         if (e instanceof Raider r && r.tickCount % 40 == Math.floorMod(r.getId(), 40) && (Boolean)RebornConfig.VILLAGE_LIFE.get()) {
             Raid raid = r.getCurrentRaid();
-            if (raid != null && !raid.isOver() && SEEN.add(sl.dimension().location() + "#" + raid.getId())) {
+            if (raid != null && !raid.isOver() && SEEN.computeIfAbsent(sl, k -> new HashSet<>()).add(raid.getId())) {
                 vanguard(sl, raid, r);
             }
         }
@@ -249,6 +249,7 @@ public final class VillageRaids {
             VillageProgress.Record r = VillageProgress.get(sl).villages.get(root.getUUID("OrorHorde"));
             if (r != null && r.horde != null) {
                 r.horde.putInt("Killed", r.horde.getInt("Killed") + 1);
+                VillageProgress.get(sl).setDirty();
             }
         }
         if (root.getBoolean("OrorWarlord")) {
@@ -398,10 +399,17 @@ public final class VillageRaids {
         }
         if (elapsed % 40 == 0 && spawned < total && alive.size() < CAP) {
             int n = Math.min(8, Math.min(total - spawned, CAP - alive.size()));
+            int arrived = 0;
             for (int i = 0; i < n; i++) {
-                soldier(sl, v, h);
+                arrived += soldier(sl, v, h) ? 1 : 0;
             }
+            if (arrived == 0) {
+                // v0.17.17: that side is water or not loaded: the horde comes round another way
+                h.putDouble("Angle", sl.random.nextDouble() * Math.PI * 2.0);
+            }
+            n = arrived;
             h.putInt("Spawned", spawned + n);
+            db.setDirty();
             if (!h.getBoolean("Messenger") && spawned + n >= 16) {
                 h.putBoolean("Messenger", true);
                 CompoundTag tag = new CompoundTag();
@@ -449,15 +457,15 @@ public final class VillageRaids {
     }
 
     /** One soldier of the horde: strong on its own, armoured by the reports, with a monstrous weapon. */
-    private static void soldier(ServerLevel sl, VillageLedger.Village v, CompoundTag h) {
+    private static boolean soldier(ServerLevel sl, VillageLedger.Village v, CompoundTag h) {
         BlockPos at = edge(sl, v, h);
         if (at == null) {
-            return;
+            return false;
         }
         String id = pick(sl);
         EntityType<?> type = (EntityType<?>)BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.withDefaultNamespace(id));
         if (!(type.create(sl) instanceof Mob m)) {
-            return;
+            return false;
         }
         int reports = h.getInt("Reports");
         m.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, sl.random.nextFloat() * 360.0F, 0.0F);
@@ -484,9 +492,11 @@ public final class VillageRaids {
             m.setCustomName(Component.literal("§c本部の精鋭"));
             m.setCustomNameVisible(true);
         }
-        if (sl.addFreshEntity(m)) {
-            sl.sendParticles(ParticleTypes.LARGE_SMOKE, m.getX(), m.getY() + 1.0, m.getZ(), 6, 0.3, 0.6, 0.3, 0.02);
+        if (!sl.addFreshEntity(m)) {
+            return false;
         }
+        sl.sendParticles(ParticleTypes.LARGE_SMOKE, m.getX(), m.getY() + 1.0, m.getZ(), 6, 0.3, 0.6, 0.3, 0.02);
+        return true;
     }
 
     private static void enchant(ServerLevel sl, ItemStack st, net.minecraft.resources.ResourceKey<net.minecraft.world.item.enchantment.Enchantment> key, int level) {
@@ -506,7 +516,10 @@ public final class VillageRaids {
             }
         }
         ItemStack weapon = ItemStack.EMPTY;
-        if (id.equals("vindicator")) {
+        if (id.equals("illusioner")) {
+            weapon = Items.BOW.getDefaultInstance();
+            enchant(sl, weapon, Enchantments.POWER, Math.min(5, 2 + reports));
+        } else if (id.equals("vindicator")) {
             weapon = Items.NETHERITE_AXE.getDefaultInstance();
             enchant(sl, weapon, Enchantments.SHARPNESS, Math.min(10, 5 + reports));
             enchant(sl, weapon, Enchantments.FIRE_ASPECT, 2);

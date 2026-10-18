@@ -211,6 +211,8 @@ public final class VillageReputation {
             && e.getOriginalDamage() > 0.0F
             && v.level() instanceof ServerLevel sl) {
             change(sl, VillageLedger.of(v), p, -120, "村人への攻撃");
+            // v0.17.17: strong villagers keep after a player only while the attacks go on (VillageAI.grudge)
+            p.getPersistentData().putLong("OrorVillagerHitAt", sl.getGameTime());
         }
     }
 

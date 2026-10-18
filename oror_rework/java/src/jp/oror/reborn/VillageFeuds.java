@@ -110,6 +110,11 @@ public final class VillageFeuds {
             CompoundTag root = v.getPersistentData();
             if (root.getBoolean("OrorWanderer") && !root.hasUUID("OrorCaravan")) {
                 engage(sl, v, p);
+                // v0.17.17: whether to run is decided on the blow (regeneration and the combat AI's healing pulled
+                // health back above the line before the once-a-second check could see it)
+                if (v.getHealth() - e.getAmount() < v.getMaxHealth() * 0.35F) {
+                    flee(sl, v, p);
+                }
             }
         }
     }
@@ -150,13 +155,8 @@ public final class VillageFeuds {
                 return true;
             }
             root.putInt("OrorEngagedFar", 0);
-            if (!root.getBoolean("OrorFleeing") && v.getHealth() < v.getMaxHealth() * 0.3F) {
-                root.putBoolean("OrorFleeing", true);
-                root.putLong("OrorFleeSince", now);
-                v.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1200, 1));
-                if (!outlaw(sl, id)) {
-                    p.displayClientMessage(Component.literal("§c" + v.getName().getString() + "が逃げ出した！ 逃がすと世界中の村に知られる"), true);
-                }
+            if (v.getHealth() < v.getMaxHealth() * 0.35F) {
+                flee(sl, v, p);
             }
             if (root.getBoolean("OrorFleeing")) {
                 v.setTarget(null);
@@ -232,6 +232,21 @@ public final class VillageFeuds {
             }
         }
         return false;
+    }
+
+    /** A badly hurt member makes a run for home. */
+    private static void flee(ServerLevel sl, Villager v, Player p) {
+        CompoundTag root = v.getPersistentData();
+        if (root.getBoolean("OrorFleeing")) {
+            return;
+        }
+        root.putBoolean("OrorFleeing", true);
+        root.putLong("OrorFleeSince", sl.getGameTime());
+        v.setTarget(null);
+        v.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1200, 1));
+        if (!outlaw(sl, p.getUUID())) {
+            p.displayClientMessage(Component.literal("§c" + v.getName().getString() + "が逃げ出した！ 逃がすと世界中の村に知られる"), true);
+        }
     }
 
     /** A member gets away (or the party outlasted the player): word goes home. */

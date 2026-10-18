@@ -637,8 +637,18 @@ public final class WanderingTraders {
                 return;
             }
             List<Long> boxes = new ArrayList<>(village.communal);
-            BlockPos chest = BlockPos.of(boxes.get(sl.random.nextInt(boxes.size())));
-            if (!sl.hasChunkAt(chest) || !(sl.getBlockEntity(chest) instanceof Container)) {
+            Collections.shuffle(boxes, new java.util.Random(sl.random.nextLong()));
+            BlockPos chest = null;
+            for (Long b : boxes.subList(0, Math.min(4, boxes.size()))) {
+                BlockPos p = BlockPos.of(b);
+                // v0.17.17: one it can actually walk up to (traders do not open doors)
+                net.minecraft.world.level.pathfinder.Path path = sl.hasChunkAt(p) && sl.getBlockEntity(p) instanceof Container ? t.getNavigation().createPath(p, 1) : null;
+                if (path != null && path.canReach()) {
+                    chest = p;
+                    break;
+                }
+            }
+            if (chest == null) {
                 return;
             }
             root.putString("OrorThief", "sneak");

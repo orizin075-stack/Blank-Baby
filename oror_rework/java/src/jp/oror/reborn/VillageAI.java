@@ -58,7 +58,9 @@ public final class VillageAI {
 
     /** A grown villager of one of the strong trades (with armed villagers on). */
     public static boolean strong(Mob m) {
-        return m instanceof Villager v && (Boolean) RebornConfig.ARMED_VILLAGERS.get() && !v.isBaby() && STRONG.contains(VillagerRoles.profession(v));
+        // v0.17.17: an expedition party (or a caravan's guard) fights whatever the armed-villagers setting
+        return m instanceof Villager v && (v.getPersistentData().getBoolean("OrorWanderer")
+            || (Boolean) RebornConfig.ARMED_VILLAGERS.get() && !v.isBaby() && STRONG.contains(VillagerRoles.profession(v)));
     }
 
     public static boolean fleeing(Mob m) {
@@ -71,7 +73,10 @@ public final class VillageAI {
             return false;
         }
         if (v.isSleeping()) {
-            // asleep: nothing until something wakes them (being hurt does)
+            // asleep: nothing until something wakes them (being hurt does); v0.17.17: but not in armour
+            if ((sl.getGameTime() + v.getId()) % 20L == 0L) {
+                gear(v, n, sl.getGameTime(), false);
+            }
             return true;
         }
         if (v.isPassenger() && VillageVehicles.manned(v.getVehicle())) {
@@ -99,8 +104,14 @@ public final class VillageAI {
     private static boolean stand(Villager v, ServerLevel sl, CompoundTag n, long now) {
         LivingEntity t = v.getTarget();
         // v0.17.16: a wandering party has no village to keep to and follows its quarry much farther
-        double reach = v.getPersistentData().getBoolean("OrorWanderer") ? 48.0 : REACH;
-        if (t != null && (!AdaptiveCombat.enemy(v, t) || far(t, spot(v, n), reach + 4.0))) {
+        boolean wanderer = v.getPersistentData().getBoolean("OrorWanderer");
+        double reach = wanderer ? 48.0 : REACH;
+        if (t != null && (!AdaptiveCombat.enemy(v, t) || far(t, wanderer ? v.blockPosition() : spot(v, n), reach + 4.0)
+            // v0.17.17: what is far above or below (a pit, a roof, a cave), out of sight for ten seconds, a creeper
+            // for anyone but an archer, or a player who is no longer a threat to the village is let go
+            || Math.abs(t.getY() - v.getY()) > 8.0 || lostSight(v, n, t, now)
+            || !SHOOTERS.contains(VillagerRoles.preferred(v)) && BuiltInRegistries.ENTITY_TYPE.getKey(t.getType()).getPath().equals("creeper")
+            || !wanderer && t instanceof Player p && !grudge(v, sl, p, now))) {
             // beaten or run off: back to the day's work
             v.setTarget(null);
             v.setLastHurtByMob(null);
@@ -119,9 +130,34 @@ public final class VillageAI {
         }
         n.putLong("VillageStand", spot(v, n).asLong());
         n.putLong("VillageStandUntil", now + 200L);
+        // v0.17.17: a strong villager does not panic - the brain's panic walked it away from the very foe the combat AI
+        // walked it toward, every tick
+        v.getBrain().eraseMemory(MemoryModuleType.HURT_BY);
+        v.getBrain().eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
+        v.getBrain().eraseMemory(MemoryModuleType.NEAREST_HOSTILE);
         gear(v, n, now, true);
         label(v, "応戦中");
         return false;
+    }
+
+    /** Out of sight for ten seconds (the clock starts again with each new target). */
+    private static boolean lostSight(Villager v, CompoundTag n, LivingEntity t, long now) {
+        if (n.getInt("VillageTargetId") != t.getId()) {
+            n.putInt("VillageTargetId", t.getId());
+            n.putLong("VillageSightAt", now);
+            return false;
+        }
+        if (v.getSensing().hasLineOfSight(t)) {
+            n.putLong("VillageSightAt", now);
+            return false;
+        }
+        return now - n.getLong("VillageSightAt") > 200L;
+    }
+
+    /** A player stays a foe while they keep hurting villagers (20 s), or while the village or the world holds them an enemy. */
+    private static boolean grudge(Villager v, ServerLevel sl, Player p, long now) {
+        return now - p.getPersistentData().getLong("OrorVillagerHitAt") < 400L || VillageReputation.score(v, p.getUUID()) <= -80
+            || VillageFeuds.outlaw(sl, p.getUUID());
     }
 
     /** Where the fight began (for ten seconds after it ends), or where the villager stands now. */
@@ -246,7 +282,14 @@ public final class VillageAI {
                 m.setHealth(Math.min(health, m.getMaxHealth()));
                 n.putBoolean("VillageGeared", true);
             }
+            draw(m, n);
         } else if (now >= n.getLong("VillageGearUntil")) {
+            // v0.17.17: a weapon the combat AI swapped in for the villager's own (an expedition's kit, a player's gift)
+            // gives the villager's own back - the swapped-in one was made for the fight and goes with it
+            if (n.contains("OriginalWeapon") && !n.getBoolean("OriginalAuto")) {
+                m.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.parseOptional(m.registryAccess(), n.getCompound("OriginalWeapon")));
+                n.remove("OriginalWeapon");
+            }
             // v0.17.17: whenever it is calm (not only right after a fight: MobLevels.refresh arms villagers again when
             // their level changes), and by the item alone - armour and blades lose durability in a fight, and the
             // exact-copy comparison this used before never matched a worn piece again, so gear stayed on for good
@@ -264,8 +307,45 @@ public final class VillageAI {
                 || hand.is(net.minecraft.world.item.Items.TRIDENT) || hand.is(net.minecraft.world.item.Items.MACE))) {
                 m.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             }
+            // a gun the village gave goes back into the villager's pack, to be drawn again when danger comes
+            if (n.getBoolean("VillageHolster") && m instanceof Villager v && MobEquipmentUse.kind(m.getMainHandItem()).equals("gun")
+                && v.getInventory().canAddItem(m.getMainHandItem())) {
+                v.getInventory().addItem(m.getMainHandItem().copy());
+                m.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                n.remove("VillageHolster");
+            }
             n.remove("Selected");
             n.putBoolean("VillageGeared", false);
+        }
+    }
+
+    /** v0.17.17: in danger, a gun in the villager's pack (the village's gunsmithy makes them) goes into its hand. */
+    private static void draw(Mob m, CompoundTag n) {
+        if (!(m instanceof Villager v) || MobEquipmentUse.kind(m.getMainHandItem()).equals("gun")) {
+            return;
+        }
+        net.minecraft.world.SimpleContainer inv = v.getInventory();
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            ItemStack gun = inv.getItem(i);
+            if (gun.isEmpty() || !MobEquipmentUse.kind(gun).equals("gun")) {
+                continue;
+            }
+            ItemStack held = m.getMainHandItem();
+            boolean issued = !held.isEmpty() && n.contains("Managed_mainhand")
+                && ItemStack.isSameItem(held, ItemStack.parseOptional(m.registryAccess(), n.getCompound("Managed_mainhand")));
+            inv.setItem(i, ItemStack.EMPTY);
+            if (!held.isEmpty() && !issued) {
+                // the villager's own weapon goes into the pack in the gun's place
+                inv.setItem(i, held.copy());
+            }
+            m.setItemSlot(EquipmentSlot.MAINHAND, gun);
+            n.remove("Managed_mainhand");
+            n.remove("OriginalWeapon");
+            n.remove("Selected");
+            n.putBoolean("OriginalAuto", false);
+            n.putString("Weapon", "gun");
+            n.putBoolean("VillageHolster", true);
+            return;
         }
     }
 

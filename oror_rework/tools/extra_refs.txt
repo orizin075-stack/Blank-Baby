@@ -347,3 +347,11 @@ net/minecraft/world/item/trading/MerchantOffer
 	VM getResult ()Lnet/minecraft/world/item/ItemStack;
 net/minecraft/world/item/ItemStack
 	SM isSameItem (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z
+net/minecraft/world/entity/ai/memory/MemoryModuleType
+	SF HURT_BY Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+	SF HURT_BY_ENTITY Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+	SF NEAREST_HOSTILE Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;
+net/minecraft/world/entity/ai/navigation/PathNavigation
+	VM createPath (Lnet/minecraft/core/BlockPos;I)Lnet/minecraft/world/level/pathfinder/Path;
+net/minecraft/world/level/pathfinder/Path
+	VM canReach ()Z
