@@ -30,6 +30,16 @@ OV = {
  'net/minecraft/world/entity/monster/Husk': c(extends=E+'monster.Zombie'),
  'net/minecraft/world/entity/npc/AbstractVillager': c(extends=E+'AgeableMob'),
  'net/minecraft/world/entity/npc/Villager': c(extends=E+'npc.AbstractVillager'),
+ 'net/minecraft/world/entity/npc/WanderingTrader': c(extends=E+'npc.AbstractVillager'),
+ 'net/minecraft/world/entity/animal/horse/AbstractHorse': c(extends=E+'animal.Animal'),
+ 'net/minecraft/world/entity/animal/horse/AbstractChestedHorse': c(extends=E+'animal.horse.AbstractHorse'),
+ 'net/minecraft/world/entity/animal/horse/Llama': c(extends=E+'animal.horse.AbstractChestedHorse'),
+ 'net/minecraft/world/entity/animal/horse/TraderLlama': c(extends=E+'animal.horse.Llama'),
+ 'net/minecraft/world/entity/monster/PatrollingMonster': c(extends=E+'monster.Monster'),
+ 'net/minecraft/world/entity/raid/Raider': c(extends=E+'monster.PatrollingMonster'),
+ 'net/minecraft/world/entity/ai/gossip/GossipType': c(kind='enum'),
+ 'net/minecraft/world/item/EnchantedBookItem': c(extends=W+'item.Item'),
+ 'net/minecraft/server/ReloadableServerRegistries$Holder': c(members=['public java.util.Collection<net.minecraft.resources.ResourceLocation> getKeys(net.minecraft.resources.ResourceKey<? extends net.minecraft.core.Registry<?>> p0) { return null; }']),
  'net/minecraft/world/entity/player/Player': c(extends=E+'LivingEntity'),
  'net/minecraft/server/level/ServerPlayer': c(extends=E+'player.Player'),
  'net/minecraft/client/player/AbstractClientPlayer': c(extends=E+'player.Player'),
@@ -112,7 +122,8 @@ OV = {
      'public static net.minecraft.resources.ResourceKey<net.minecraft.core.Registry<net.minecraft.world.entity.ai.village.poi.PoiType>> POINT_OF_INTEREST_TYPE;',
      'public static net.minecraft.resources.ResourceKey<net.minecraft.core.Registry<net.minecraft.world.entity.npc.VillagerProfession>> VILLAGER_PROFESSION;',
      'public static net.minecraft.resources.ResourceKey<net.minecraft.core.Registry<net.minecraft.world.level.storage.loot.LootTable>> LOOT_TABLE;',
-     'public static net.minecraft.resources.ResourceKey<net.minecraft.core.Registry<net.minecraft.world.effect.MobEffect>> MOB_EFFECT;']),
+     'public static net.minecraft.resources.ResourceKey<net.minecraft.core.Registry<net.minecraft.world.effect.MobEffect>> MOB_EFFECT;',
+     'public static net.minecraft.resources.ResourceKey<net.minecraft.core.Registry<net.minecraft.world.level.levelgen.structure.Structure>> STRUCTURE;']),
  'net/minecraft/core/HolderLookup$Provider': c(kind='interface'),
  'net/minecraft/core/RegistryAccess': c(kind='interface', extends='net.minecraft.core.HolderLookup.Provider', drop=['registryOrThrow', 'registry'], members=[
      'default <E> net.minecraft.core.Registry<E> registryOrThrow(net.minecraft.resources.ResourceKey<? extends net.minecraft.core.Registry<? extends E>> p0) { return null; }']),
@@ -390,7 +401,7 @@ OV['net/minecraft/world/level/block/LeavesBlock'] = c(extends='net.minecraft.wor
 OV['net/minecraft/world/level/block/state/StateHolder']['members'].append('public boolean hasProperty(net.minecraft.world.level.block.state.properties.Property<?> p0) { return false; }')
 OV['net/minecraft/world/entity/npc/VillagerProfession'] = c(drop=['<init>'], members=['public VillagerProfession(String p0, java.util.function.Predicate<net.minecraft.core.Holder<net.minecraft.world.entity.ai.village.poi.PoiType>> p1, java.util.function.Predicate<net.minecraft.core.Holder<net.minecraft.world.entity.ai.village.poi.PoiType>> p2, com.google.common.collect.ImmutableSet<net.minecraft.world.item.Item> p3, com.google.common.collect.ImmutableSet<net.minecraft.world.level.block.Block> p4, net.minecraft.sounds.SoundEvent p5) {}'])
 OV['net/neoforged/neoforge/registries/DeferredHolder']['members'].append('public net.minecraft.resources.ResourceKey<R> getKey() { return null; }')
-EXTRA_CLASSES = ['net/minecraft/world/level/block/LeavesBlock', 'net/minecraft/world/level/block/state/StateHolder', 'net/minecraft/world/item/crafting/AbstractCookingRecipe', 'net/minecraft/world/item/crafting/SmeltingRecipe', 'net/minecraft/world/item/crafting/BlastingRecipe', 'net/minecraft/world/entity/ai/goal/RandomStrollGoal', 'net/minecraft/core/particles/ParticleType', 'net/minecraft/world/entity/AgeableMob', 'net/minecraft/world/entity/animal/AbstractGolem', 'net/minecraft/world/entity/monster/Monster',
+EXTRA_CLASSES = ['net/minecraft/world/level/levelgen/structure/Structure', 'net/minecraft/world/entity/animal/horse/AbstractHorse', 'net/minecraft/world/entity/animal/horse/AbstractChestedHorse', 'net/minecraft/world/entity/monster/PatrollingMonster', 'net/minecraft/world/entity/animal/horse/TraderLlama', 'net/minecraft/world/entity/animal/horse/Llama', 'net/minecraft/world/entity/raid/Raid', 'net/minecraft/world/level/block/LeavesBlock', 'net/minecraft/world/level/block/state/StateHolder', 'net/minecraft/world/item/crafting/AbstractCookingRecipe', 'net/minecraft/world/item/crafting/SmeltingRecipe', 'net/minecraft/world/item/crafting/BlastingRecipe', 'net/minecraft/world/entity/ai/goal/RandomStrollGoal', 'net/minecraft/core/particles/ParticleType', 'net/minecraft/world/entity/AgeableMob', 'net/minecraft/world/entity/animal/AbstractGolem', 'net/minecraft/world/entity/monster/Monster',
                  'net/minecraft/client/player/AbstractClientPlayer', 'net/minecraft/world/item/DiggerItem', 'net/minecraft/world/item/SpawnEggItem',
                  'net/minecraft/world/level/block/state/BlockBehaviour', 'net/minecraft/client/renderer/entity/LivingEntityRenderer', 'net/minecraft/client/model/Model',
                  'net/minecraft/world/level/block/entity/BaseContainerBlockEntity', 'net/minecraft/world/phys/HitResult', 'net/minecraft/world/level/entity/EntityAccess',

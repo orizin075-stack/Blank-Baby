@@ -78,6 +78,10 @@ public final class VillageAI {
             // v0.17.15: crewing a village tank or jet; the vehicle's own weapons take its target
             return true;
         }
+        if (VillageFeuds.fleeing(v)) {
+            // v0.17.16: a party member running for home with the story
+            return true;
+        }
         long now = sl.getGameTime();
         return strong(v) ? stand(v, sl, n, now) : civilian(v, sl, n, now);
     }
@@ -94,7 +98,9 @@ public final class VillageAI {
     /** A strong villager's turn: fight what is near, let it go once it is beaten or far, otherwise live like the rest. */
     private static boolean stand(Villager v, ServerLevel sl, CompoundTag n, long now) {
         LivingEntity t = v.getTarget();
-        if (t != null && (!AdaptiveCombat.enemy(v, t) || far(t, spot(v, n), REACH + 4.0))) {
+        // v0.17.16: a wandering party has no village to keep to and follows its quarry much farther
+        double reach = v.getPersistentData().getBoolean("OrorWanderer") ? 48.0 : REACH;
+        if (t != null && (!AdaptiveCombat.enemy(v, t) || far(t, spot(v, n), reach + 4.0))) {
             // beaten or run off: back to the day's work
             v.setTarget(null);
             v.setLastHurtByMob(null);

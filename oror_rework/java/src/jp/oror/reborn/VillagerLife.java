@@ -111,6 +111,9 @@ public final class VillagerLife {
             // v0.17.15: the village's aircraft and vehicles on the move
             VillageFlights.tick(e.getEntity());
             VillageVehicles.tick(e.getEntity());
+            // v0.17.16: wandering traders and their llamas, raid messengers and horde soldiers
+            WanderingTraders.tick(e.getEntity());
+            VillageRaids.tick(e.getEntity());
             return;
         }
         if (e.getEntity() instanceof Villager v

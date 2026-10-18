@@ -273,3 +273,75 @@ net/minecraft/world/entity/Entity
 	VM isNoGravity ()Z
 	VM getName ()Lnet/minecraft/network/chat/Component;
 	VM distanceToSqr (Lnet/minecraft/world/phys/Vec3;)D
+# v0.17.16: wandering traders, their llamas, raids, gossip, enchanted books, horde soldiers (Minecraft 1.21.1)
+net/minecraft/world/entity/npc/WanderingTrader
+	VM setDespawnDelay (I)V
+	VM getDespawnDelay ()I
+net/minecraft/world/entity/npc/AbstractVillager
+	VM getOffers ()Lnet/minecraft/world/item/trading/MerchantOffers;
+net/minecraft/world/entity/Mob
+	VM getLeashHolder ()Lnet/minecraft/world/entity/Entity;
+	VM dropLeash (ZZ)V
+	VM setLeashedTo (Lnet/minecraft/world/entity/Entity;Z)V
+net/minecraft/world/entity/LivingEntity
+	VM hasLineOfSight (Lnet/minecraft/world/entity/Entity;)Z
+	VM swing (Lnet/minecraft/world/InteractionHand;)V
+	VM getLastHurtByMob ()Lnet/minecraft/world/entity/LivingEntity;
+net/minecraft/world/entity/Entity
+	VM getEyePosition ()Lnet/minecraft/world/phys/Vec3;
+	VM setDeltaMovement (DDD)V
+	VM damageSources ()Lnet/minecraft/world/damagesource/DamageSources;
+	VM getId ()I
+net/minecraft/world/level/Level
+	VM getPlayerByUUID (Ljava/util/UUID;)Lnet/minecraft/world/entity/player/Player;
+net/minecraft/server/level/ServerLevel
+	VM getRaids ()Lnet/minecraft/world/entity/raid/Raids;
+net/minecraft/world/entity/raid/Raids
+	VM get (I)Lnet/minecraft/world/entity/raid/Raid;
+net/minecraft/world/entity/raid/Raid
+	VM getId ()I
+	VM isOver ()Z
+	VM getCenter ()Lnet/minecraft/core/BlockPos;
+net/minecraft/world/entity/raid/Raider
+	VM getCurrentRaid ()Lnet/minecraft/world/entity/raid/Raid;
+	VM setCanJoinRaid (Z)V
+net/minecraft/world/entity/npc/Villager
+	VM getGossips ()Lnet/minecraft/world/entity/ai/gossip/GossipContainer;
+net/minecraft/world/entity/ai/gossip/GossipContainer
+	VM add (Ljava/util/UUID;Lnet/minecraft/world/entity/ai/gossip/GossipType;I)V
+net/minecraft/world/entity/ai/gossip/GossipType
+	SF MAJOR_NEGATIVE Lnet/minecraft/world/entity/ai/gossip/GossipType;
+net/minecraft/world/item/EnchantedBookItem
+	SM createForEnchantment (Lnet/minecraft/world/item/enchantment/EnchantmentInstance;)Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/item/enchantment/EnchantmentInstance
+	SP <init> (Lnet/minecraft/core/Holder;I)V
+net/minecraft/world/item/enchantment/Enchantments
+	SF MENDING Lnet/minecraft/resources/ResourceKey;
+	SF FORTUNE Lnet/minecraft/resources/ResourceKey;
+	SF LOOTING Lnet/minecraft/resources/ResourceKey;
+	SF FEATHER_FALLING Lnet/minecraft/resources/ResourceKey;
+	SF SILK_TOUCH Lnet/minecraft/resources/ResourceKey;
+	SF FIRE_ASPECT Lnet/minecraft/resources/ResourceKey;
+	SF FLAME Lnet/minecraft/resources/ResourceKey;
+	SF INFINITY Lnet/minecraft/resources/ResourceKey;
+	SF KNOCKBACK Lnet/minecraft/resources/ResourceKey;
+	SF MULTISHOT Lnet/minecraft/resources/ResourceKey;
+	SF PIERCING Lnet/minecraft/resources/ResourceKey;
+net/minecraft/world/item/Items
+	SF EMERALD_BLOCK Lnet/minecraft/world/item/Item;
+net/minecraft/core/particles/ParticleTypes
+	SF TOTEM_OF_UNDYING Lnet/minecraft/core/particles/SimpleParticleType;
+	SF FLASH Lnet/minecraft/core/particles/SimpleParticleType;
+	SF CAMPFIRE_COSY_SMOKE Lnet/minecraft/core/particles/SimpleParticleType;
+net/minecraft/sounds/SoundEvents
+	SF CHEST_OPEN Lnet/minecraft/sounds/SoundEvent;
+	SF CHEST_CLOSE Lnet/minecraft/sounds/SoundEvent;
+net/minecraft/world/entity/EntityType
+	SF PILLAGER Lnet/minecraft/world/entity/EntityType;
+	SF WANDERING_TRADER Lnet/minecraft/world/entity/EntityType;
+	SF TRADER_LLAMA Lnet/minecraft/world/entity/EntityType;
+net/minecraft/world/level/storage/loot/parameters/LootContextParamSets
+	SF CHEST Lnet/minecraft/world/level/storage/loot/parameters/LootContextParamSet;
+net/minecraft/world/item/trading/MerchantOffer
+	SP <init> (Lnet/minecraft/world/item/trading/ItemCost;Ljava/util/Optional;Lnet/minecraft/world/item/ItemStack;IIF)V
+	VM getResult ()Lnet/minecraft/world/item/ItemStack;

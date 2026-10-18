@@ -151,6 +151,11 @@ public final class AdaptiveCombat {
                 return;
             }
 
+            // v0.17.16: a trader who has shown its true colours, its llama turrets and raid messengers fight their own way
+            if (WanderingTraders.driven(m) || VillageRaids.driven(m)) {
+                return;
+            }
+
             TerrainPlay.fallRescue(m, sl);
             // v0.17.14: villagers arm only when danger comes (VillageAI.gear); strong villagers fight what is near, the
             // rest run (VillageAI)

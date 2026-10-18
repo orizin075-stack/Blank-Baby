@@ -73,6 +73,12 @@ public final class WorldEvents {
 
     public static void damage(LivingIncomingDamageEvent e) {
         LivingEntity v = e.getEntity();
+        if (!v.level().isClientSide) {
+            // v0.17.16: crossing an expedition party, a wandering trader or a caravan, and a raid messenger's ritual
+            VillageFeuds.attacked(e);
+            WanderingTraders.attacked(e);
+            VillageRaids.hurt(e);
+        }
         if (v instanceof SupremeEntity boss && !v.level().isClientSide) {
             BossPowers.incoming(e, boss);
         }
@@ -116,6 +122,9 @@ public final class WorldEvents {
             VillageExpeditions.timers(cleanup);
             if ((Boolean)RebornConfig.VILLAGE_LIFE.get()) {
                 VillageExpeditions.wanderers(cleanup);
+                // v0.17.16: traders' grenades and smoke, caravans, raid messengers' hordes
+                WanderingTraders.levelTick(cleanup);
+                VillageRaids.levelTick(cleanup);
             }
         }
 

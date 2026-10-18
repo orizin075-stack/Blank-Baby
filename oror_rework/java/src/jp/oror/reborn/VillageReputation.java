@@ -87,6 +87,10 @@ public final class VillageReputation {
     }
 
     public static void interact(EntityInteract e) {
+        // v0.17.16: a trader in its true colours does not trade
+        if (WanderingTraders.refuse(e)) {
+            return;
+        }
         if (e.getHand() == InteractionHand.MAIN_HAND
             && e.getTarget() instanceof Villager v
             && v.level() instanceof ServerLevel sl
@@ -209,6 +213,10 @@ public final class VillageReputation {
     }
 
     public static void death(LivingDeathEvent e) {
+        // v0.17.16: the last of a party, a trader's or a raid's end
+        VillageFeuds.died(e);
+        WanderingTraders.died(e);
+        VillageRaids.died(e);
         if (e.getEntity() instanceof Villager v && e.getSource().getEntity() instanceof Player p && v.level() instanceof ServerLevel sl) {
             change(sl, VillageLedger.of(v), p, -400, "村人の殺害");
         }
@@ -327,6 +335,7 @@ public final class VillageReputation {
                 if (village.contains(p.blockPosition()) && !(v.distanceToSqr(p) > 1600.0)) {
                     int score = village.score(p.getUUID());
                     if (score <= -80 && !p.isCreative() && !p.isSpectator()) {
+                        VillageFeuds.gossip(v, p);
                         v.setTarget(p);
                         MobMind.data(v).putBoolean("VillageRetaliation", true);
                         break;

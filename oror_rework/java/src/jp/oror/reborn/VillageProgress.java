@@ -22,12 +22,16 @@ import net.minecraft.world.level.saveddata.SavedData.Factory;
  * How far each village has come (v0.17.15), kept beside VillageLedger: its name, the expeditions it has made, its nether
  * gate, the guns it has unlocked, its aircraft and trade flight, and goods on their way to its chests. Villagers away on
  * an expedition or a flight are kept here as saved entity data until they come back.
+ * v0.17.16: the dragon egg and the dragon head each village longs for, the reports raid messengers carry home and the
+ * horde they bring, and (for the whole world) the players every village has turned against.
  */
 public final class VillageProgress extends SavedData {
     public static final String ID = "oror_village_progress";
     private static final String[] HEAD = {"東", "西", "北", "南", "麦", "石", "杉", "樺", "鈴", "霧", "月", "楓", "柊", "灯", "朝", "風", "苔", "岩", "柳", "桜"};
     private static final String[] TAIL = {"の村", "ヶ原", "谷", "台", "の里", "沢", "野", "崎"};
     public final Map<UUID, Record> villages = new HashMap<>();
+    /** v0.17.16: players known to every village as attackers of an expedition party (id -> name). */
+    public final Map<UUID, String> outlaws = new HashMap<>();
 
     public static VillageProgress get(ServerLevel level) {
         return (VillageProgress)level.getDataStorage().computeIfAbsent(new Factory(VillageProgress::new, (tag, registries) -> load((CompoundTag)tag, (Provider)registries)), ID);
@@ -63,6 +67,17 @@ public final class VillageProgress extends SavedData {
         public CompoundTag sortie;
         public long nextSortie;
         public final ListTag deliveries = new ListTag();
+        /** v0.17.16: the village's great wish (the dragon egg, and the dragon head from an end ship), and modded dungeons raided. */
+        public boolean egg;
+        public boolean head;
+        public int ruins;
+        /** v0.17.16: raid messengers who got home (each makes the next horde bigger), when the horde comes, the horde under way. */
+        public int reports;
+        public long hordeAt;
+        public CompoundTag horde;
+        public int hordesBeaten;
+        /** The raid that last brought this village a messenger (raid ids are kept with the world). */
+        public int raidMessenger = -1;
 
         Record(UUID id) {
             this.id = id;
@@ -154,7 +169,21 @@ public final class VillageProgress extends SavedData {
             r.sortie = n.contains("Sortie", 10) ? n.getCompound("Sortie") : null;
             r.nextSortie = n.getLong("NextSortie");
             r.deliveries.addAll(n.getList("Deliveries", 10));
+            r.egg = n.getBoolean("Egg");
+            r.head = n.getBoolean("Head");
+            r.ruins = n.getInt("Ruins");
+            r.reports = n.getInt("Reports");
+            r.hordeAt = n.getLong("HordeAt");
+            r.horde = n.contains("Horde", 10) ? n.getCompound("Horde") : null;
+            r.hordesBeaten = n.getInt("HordesBeaten");
+            r.raidMessenger = n.contains("RaidMessenger") ? n.getInt("RaidMessenger") : -1;
             db.villages.put(r.id, r);
+        }
+        for (Tag raw : tag.getList("Outlaws", 10)) {
+            CompoundTag n = (CompoundTag)raw;
+            if (n.hasUUID("Id")) {
+                db.outlaws.put(n.getUUID("Id"), n.getString("Name"));
+            }
         }
         return db;
     }
@@ -200,9 +229,26 @@ public final class VillageProgress extends SavedData {
             ListTag goods = new ListTag();
             goods.addAll(r.deliveries);
             n.put("Deliveries", goods);
+            n.putBoolean("Egg", r.egg);
+            n.putBoolean("Head", r.head);
+            n.putInt("Ruins", r.ruins);
+            n.putInt("Reports", r.reports);
+            n.putLong("HordeAt", r.hordeAt);
+            if (r.horde != null) {
+                n.put("Horde", r.horde);
+            }
+            n.putInt("HordesBeaten", r.hordesBeaten);
+            n.putInt("RaidMessenger", r.raidMessenger);
             list.add(n);
         }
         tag.put("Villages", list);
+        ListTag outlaws = new ListTag();
+        for (Map.Entry<UUID, String> e : this.outlaws.entrySet()) {
+            CompoundTag n = uuid(e.getKey());
+            n.putString("Name", e.getValue());
+            outlaws.add(n);
+        }
+        tag.put("Outlaws", outlaws);
         return tag;
     }
 }

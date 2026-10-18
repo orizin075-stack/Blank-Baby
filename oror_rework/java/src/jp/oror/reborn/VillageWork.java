@@ -71,6 +71,11 @@ public final class VillageWork {
     static final int WALK = 0;
     static final int CANNOT = -1;
     private static final Map<UUID, Survey> SURVEYS = new HashMap<>();
+
+    /** v0.17.16: the latest survey of a village, if one has been made since the server started. */
+    static Survey cached(UUID village) {
+        return SURVEYS.get(village);
+    }
     private static final Map<RecipeManager, Map<ResourceLocation, RecipeHolder<CraftingRecipe>>> BOOK = new WeakHashMap<>();
     /** Natural ground a villager sets things on (not floors, roofs, paths or fields). */
     private static final Set<String> GROUND = Set.of(

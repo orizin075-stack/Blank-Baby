@@ -57,10 +57,18 @@ import net.minecraft.world.phys.Vec3;
  * Away, the party is not in the world (unloaded ground does not move, so a journey there could not happen anyway): its
  * villagers are kept as saved data in VillageProgress and come back as themselves.
  * - Wandering parties (流れの遠征隊): now and then a party of some village's veterans is met in the wild - netherite gear,
- *   the highest level, guns where TaCZ is installed. They fight what they meet, camp at night and move on.
+ *   the highest level, guns where Superb Warfare is installed. They fight what they meet, camp at night and move on.
+ * v0.17.16:
+ * - A 辺境の都 also raids other mods' dungeons: a structure of a mod with chest loot of its own, whose chests (that mod's
+ *   own loot tables, rolled for real) the party brings back.
+ * - The great wish (悲願): the dragon egg, and the dragon head from an end ship. Until both are home a 辺境の都 puts the
+ *   End first; either one in the communal chests (brought back, or put there by a player) is set on an altar by the
+ *   centre for the whole world to hear of, and with both the village becomes a 竜の都.
+ * - Two parties from different villages sometimes meet on the road and fight (VillageFeuds), and parties hunt players
+ *   known to have attacked one.
  */
 public final class VillageExpeditions {
-    private static final String[] STAGES = {"開拓地", "村", "町", "城下町", "辺境の都", "天空の都"};
+    private static final String[] STAGES = {"開拓地", "村", "町", "城下町", "辺境の都", "天空の都", "竜の都"};
     private static final ResourceLocation VETERAN = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "expedition_veteran");
     private static final List<String> STRONG = List.of("armorer", "weaponsmith", "toolsmith", "fletcher", "butcher", "leatherworker", "mason");
 
@@ -78,8 +86,11 @@ public final class VillageExpeditions {
         if (stage > r.stage) {
             r.stage = stage;
             db.setDirty();
-            VillageProgress.announce(sl, s.village, "村が「" + STAGES[stage] + "」に発展しました（村人" + s.population + "人）", stage >= 4);
+            VillageProgress.announce(sl, s.village, "村が「" + STAGES[stage] + "」に発展しました（村人" + s.population + "人）"
+                + (stage == 4 && (!r.egg || !r.head) ? "　村の悲願：エンダードラゴンの卵と、エンドシップのドラゴンの頭" : ""), stage >= 4);
         }
+        VillageFeuds.enforce(sl, s.village);
+        wish(sl, s, r);
         if (now - s.spawnersAt > 12000L || s.spawnersAt == 0L) {
             s.spawnersAt = now;
             spawners(sl, s);
@@ -129,6 +140,9 @@ public final class VillageExpeditions {
     }
 
     static int stage(VillageWork.Survey s, VillageProgress.Record r) {
+        if (r.egg && r.head) {
+            return 6;
+        }
         if (r.ends > 0) {
             return 5;
         }
@@ -195,8 +209,13 @@ public final class VillageExpeditions {
             power += power(v);
         }
         String kind = "dungeon";
-        if (r.stage >= 4 && s.stock("ender_eye") >= 12 && power >= 260) {
+        ResourceLocation target = null;
+        // the great wish puts the End first until the egg and the head are home
+        boolean wish = !r.egg || !r.head;
+        if (r.stage >= 4 && s.stock("ender_eye") >= 12 && power >= 260 && (wish || sl.random.nextInt(3) == 0)) {
             kind = "end";
+        } else if (r.stage >= 4 && power >= 200 && sl.random.nextInt(2) == 0 && (target = ruin(sl)) != null) {
+            kind = "ruin";
         } else if (r.stage >= 3 && gateIntact(sl, r.gate)) {
             kind = "nether";
         }
@@ -226,17 +245,30 @@ public final class VillageExpeditions {
         if (kind.equals("dungeon") && !s.spawners.isEmpty()) {
             trip.putLong("Spawner", s.spawners.get(0).asLong());
         }
+        if (target != null) {
+            trip.putString("TargetNs", target.getNamespace());
+            trip.putString("TargetPath", target.getPath());
+        }
         r.trip = trip;
         VillageProgress.get(sl).setDirty();
-        VillageProgress.announce(sl, s.village, "遠征隊（" + party.size() + "名・戦力" + power + "）が" + place(kind) + "への遠征の準備を始めました", false);
+        VillageProgress.announce(sl, s.village, "遠征隊（" + party.size() + "名・戦力" + power + "）が" + place(trip) + "への遠征の準備を始めました", false);
     }
 
     private static String place(String kind) {
         return switch (kind) {
             case "nether" -> "ネザー";
             case "end" -> "ジ・エンド";
+            case "ruin" -> "他のMODのダンジョン";
             default -> "ダンジョン";
         };
+    }
+
+    /** The trip's destination by name: a modded dungeon's structure and mod. */
+    private static String place(CompoundTag trip) {
+        if (trip.getString("Kind").equals("ruin") && trip.contains("TargetPath")) {
+            return "「" + trip.getString("TargetPath").replace('_', ' ') + "」（" + trip.getString("TargetNs") + "）";
+        }
+        return place(trip.getString("Kind"));
     }
 
     /** The strongest healthy strong villagers who are not miners, up to four. */
@@ -392,7 +424,7 @@ public final class VillageExpeditions {
             for (Villager v : members) {
                 VillagerLife.data(v).putString("Trip", kind + ":depart");
             }
-            VillageProgress.announce(sl, s.village, "遠征隊が" + place(kind) + "へ出発しました", kind.equals("end"));
+            VillageProgress.announce(sl, s.village, "遠征隊が" + place(trip) + "へ出発しました", kind.equals("end"));
         } else if (phase.equals("depart")) {
             List<Villager> members = members(sl, trip);
             if (members.isEmpty() || now >= trip.getLong("Until")) {
@@ -405,6 +437,7 @@ public final class VillageExpeditions {
                 long away = switch (kind) {
                     case "nether" -> 24000L;
                     case "end" -> 36000L;
+                    case "ruin" -> 30000L;
                     default -> 12000L;
                 };
                 trip.putString("Phase", "away");
@@ -553,11 +586,13 @@ public final class VillageExpeditions {
         double danger = switch (kind) {
             case "nether" -> 0.12;
             case "end" -> 0.18;
+            case "ruin" -> 0.16;
             default -> 0.05;
         };
         double need = switch (kind) {
             case "nether" -> 160.0;
             case "end" -> 260.0;
+            case "ruin" -> 220.0;
             default -> 80.0;
         };
         double edge = Math.max(0.25, Math.min(2.5, power / need));
@@ -606,6 +641,19 @@ public final class VillageExpeditions {
             names.add(v.getName().getString());
         }
         List<ItemStack> loot = loot(sl, kind, power, party - lost);
+        if (kind.equals("ruin") && lost < party && trip.contains("TargetNs")) {
+            loot.addAll(ruinLoot(sl, ResourceLocation.fromNamespaceAndPath(trip.getString("TargetNs"), trip.getString("TargetPath")),
+                Math.min(6, 2 + power / 100), s.village.center));
+        }
+        if (kind.equals("end") && lost < party) {
+            // the great wish: an end ship's dragon head, and (with the dragon beaten) its egg
+            if (!r.head && chance(sl, Math.min(0.55, 0.15 + power / 1000.0))) {
+                add(loot, sl, "dragon_head", 1, 1);
+            }
+            if (!r.egg && chance(sl, Math.min(0.35, 0.05 + power / 1500.0))) {
+                add(loot, sl, "dragon_egg", 1, 1);
+            }
+        }
         String cleared = "";
         if (kind.equals("dungeon") && trip.contains("Spawner") && lost < party) {
             cleared = clear(sl, BlockPos.of(trip.getLong("Spawner")), loot);
@@ -616,6 +664,7 @@ public final class VillageExpeditions {
         switch (kind) {
             case "nether" -> r.nethers++;
             case "end" -> r.ends++;
+            case "ruin" -> r.ruins++;
             default -> r.dungeons++;
         }
         r.trip = null;
@@ -624,7 +673,7 @@ public final class VillageExpeditions {
             later(sl, r.gate, 60L);
         }
         db.setDirty();
-        StringBuilder text = new StringBuilder("遠征隊が" + place(kind) + "から帰還しました");
+        StringBuilder text = new StringBuilder("遠征隊が" + place(trip) + "から帰還しました");
         text.append(lost > 0 ? "（" + lost + "名が戻らず）" : "（全員無事）");
         text.append(cleared);
         text.append("　持ち帰り：").append(summary(loot));
@@ -678,6 +727,127 @@ public final class VillageExpeditions {
         sl.sendParticles(ParticleTypes.EXPLOSION, spawner.getX() + 0.5, spawner.getY() + 0.5, spawner.getZ() + 0.5, 1, 0.0, 0.0, 0.0, 0.0);
         return "　近くのダンジョン（" + spawner.getX() + ", " + spawner.getY() + ", " + spawner.getZ() + "）を攻略してスポナーを破壊"
             + (chests > 0 ? "、宝箱" + chests + "個を回収" : "");
+    }
+
+    // ------------------------------------------------------------------------------------- other mods' dungeons
+    private static Map<String, List<ResourceLocation>> chestTables;
+
+    /** Other mods' chest loot tables by mod, read once. */
+    private static Map<String, List<ResourceLocation>> tables(ServerLevel sl) {
+        if (chestTables == null) {
+            Map<String, List<ResourceLocation>> m = new java.util.HashMap<>();
+            for (ResourceLocation id : sl.getServer().reloadableRegistries().getKeys(net.minecraft.core.registries.Registries.LOOT_TABLE)) {
+                String ns = id.getNamespace();
+                if (!ns.equals("minecraft") && !ns.equals("oror_supreme_bosses") && id.getPath().contains("chest")) {
+                    m.computeIfAbsent(ns, k -> new ArrayList<>()).add(id);
+                }
+            }
+            chestTables = m;
+        }
+        return chestTables;
+    }
+
+    /** A modded dungeon to raid: a structure of another mod that has chest loot of its own; null when there is none. */
+    private static ResourceLocation ruin(ServerLevel sl) {
+        Map<String, List<ResourceLocation>> t = tables(sl);
+        List<ResourceLocation> found = new ArrayList<>();
+        for (ResourceLocation id : sl.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).keySet()) {
+            if (t.containsKey(id.getNamespace())) {
+                found.add(id);
+            }
+        }
+        return found.isEmpty() ? null : found.get(sl.random.nextInt(found.size()));
+    }
+
+    /** A modded dungeon's chests: that mod's own loot tables rolled for real, those named like the place first. */
+    private static List<ItemStack> ruinLoot(ServerLevel sl, ResourceLocation target, int rolls, BlockPos at) {
+        List<ResourceLocation> all = tables(sl).getOrDefault(target.getNamespace(), List.of());
+        List<ItemStack> out = new ArrayList<>();
+        if (all.isEmpty()) {
+            return out;
+        }
+        String[] words = target.getPath().replace('/', '_').split("_");
+        List<ResourceLocation> like = new ArrayList<>();
+        for (ResourceLocation id : all) {
+            for (String w : words) {
+                if (w.length() > 3 && id.getPath().contains(w)) {
+                    like.add(id);
+                    break;
+                }
+            }
+        }
+        List<ResourceLocation> pool = like.isEmpty() ? all : like;
+        net.minecraft.world.level.storage.loot.LootParams params = new net.minecraft.world.level.storage.loot.LootParams.Builder(sl)
+            .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN, Vec3.atCenterOf(at))
+            .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.CHEST);
+        for (int i = 0; i < rolls; i++) {
+            ResourceLocation id = pool.get(sl.random.nextInt(pool.size()));
+            try {
+                out.addAll(sl.getServer().reloadableRegistries()
+                    .getLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, id))
+                    .getRandomItems(params, sl.random.nextLong()));
+            } catch (RuntimeException ex) {
+                // a table that wants more than a chest gives it: left out
+            }
+        }
+        return out;
+    }
+
+    // ------------------------------------------------------------------------------------- the great wish
+    /**
+     * The great wish (悲願): the dragon egg and an end ship's dragon head. Either one in the communal chests - brought back
+     * from the End, or put there by a player - is set on an altar by the centre, and the whole world hears of it.
+     */
+    private static void wish(ServerLevel sl, VillageWork.Survey s, VillageProgress.Record r) {
+        for (int i = 0; i < 2; i++) {
+            boolean egg = i == 0;
+            String id = egg ? "dragon_egg" : "dragon_head";
+            if ((egg ? r.egg : r.head) || s.stock(id) < 1 || take(sl, s, id, 1) < 1) {
+                continue;
+            }
+            if (egg) {
+                r.egg = true;
+            } else {
+                r.head = true;
+            }
+            VillageProgress.get(sl).setDirty();
+            Block block = item(id) instanceof BlockItem b ? b.getBlock() : null;
+            BlockPos altar = block == null ? null : enshrine(sl, s, block, egg ? 2 : -2);
+            if (altar == null) {
+                VillageProgress.get(sl).deliver(r, List.of(item(id).getDefaultInstance()), sl.registryAccess());
+            }
+            celebrate(sl, s, altar != null ? altar : s.village.center);
+            VillageProgress.announce(sl, s.village, "村の悲願「" + (egg ? "エンダードラゴンの卵" : "エンドシップのドラゴンの頭") + "」が叶い、"
+                + (altar != null ? "村の中心の祭壇に祀られました！" : "村の宝になりました！")
+                + (r.egg && r.head ? "　二つの悲願を果たし、村は「竜の都」となりました" : ""), true);
+        }
+    }
+
+    /** An obsidian pedestal by the centre with the treasure on it; null when there is no room. */
+    private static BlockPos enshrine(ServerLevel sl, VillageWork.Survey s, Block treasure, int side) {
+        BlockPos c = s.village.center;
+        for (int i = 0; i < 8; i++) {
+            BlockPos p = top(sl, c.offset(side + (i % 3) - 1, 0, 3 + i / 3));
+            if (p == null || !sl.getBlockState(p).canBeReplaced() || !sl.getBlockState(p.above()).canBeReplaced() || !sl.getFluidState(p).isEmpty()) {
+                continue;
+            }
+            sl.setBlock(p, Blocks.OBSIDIAN.defaultBlockState(), 3);
+            sl.setBlock(p.above(), treasure.defaultBlockState(), 3);
+            return p.above();
+        }
+        return null;
+    }
+
+    /** Fireworks over the altar; players near the village are the village's heroes for a day. */
+    private static void celebrate(ServerLevel sl, VillageWork.Survey s, BlockPos at) {
+        sl.sendParticles(ParticleTypes.FIREWORK, at.getX() + 0.5, at.getY() + 3.0, at.getZ() + 0.5, 120, 2.5, 2.5, 2.5, 0.15);
+        sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 0.5, 80, 1.5, 1.5, 1.5, 0.4);
+        RelicEffects.sound(sl, at, SoundEvents.TOTEM_USE, 1.5F, 1.0F);
+        for (net.minecraft.world.entity.player.Player p : sl.getEntitiesOfClass(net.minecraft.world.entity.player.Player.class,
+                new net.minecraft.world.phys.AABB(s.village.center).inflate(64.0))) {
+            p.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.HERO_OF_THE_VILLAGE, 24000, 2));
+            VillageReputation.change(sl, s.village, p, 200, "村の悲願の成就");
+        }
     }
 
     // ------------------------------------------------------------------------------------- the haul
@@ -908,45 +1078,80 @@ public final class VillageExpeditions {
     }
 
     // ------------------------------------------------------------------------------------- wandering parties
-    /** Now and then (about once in two days per player) a party of some village's veterans is met in the wild. */
+    /**
+     * Now and then (about once in two days per player) a party of some village's veterans is met in the wild; sometimes
+     * a rival party comes the other way and they fight. A player every village knows as an attacker of a party is hunted:
+     * parties come for them far more often, wherever they are.
+     */
     public static void wanderers(ServerLevel sl) {
         if (!sl.dimension().location().getPath().equals("overworld") || sl.getGameTime() % 2400L != 1200L) {
             return;
         }
         for (net.minecraft.server.level.ServerPlayer p : sl.players()) {
-            if (p.isSpectator() || sl.random.nextDouble() > 0.06) {
+            boolean hunted = !p.isCreative() && VillageFeuds.outlaw(sl, p.getUUID());
+            if (p.isSpectator() || sl.random.nextDouble() > (hunted ? 0.2 : 0.06)) {
                 continue;
             }
             if (!sl.getEntitiesOfClass(Villager.class, p.getBoundingBox().inflate(160.0), v -> v.getPersistentData().getBoolean("OrorWanderer")).isEmpty()) {
                 continue;
             }
             VillageLedger ledger = VillageLedger.get(sl);
-            if (ledger.nearest(p.blockPosition()) != null) {
+            if (!hunted && ledger.nearest(p.blockPosition()) != null) {
                 // inside a village they would be at home, not passing through
                 continue;
             }
             double a = sl.random.nextDouble() * Math.PI * 2.0;
-            BlockPos at = top(sl, p.blockPosition().offset((int)(Math.cos(a) * 40.0), 0, (int)(Math.sin(a) * 40.0)));
-            if (at == null || !sl.getFluidState(at.below()).isEmpty() || !sl.getBlockState(at).canBeReplaced()) {
+            BlockPos at = open(sl, p.blockPosition().offset((int)(Math.cos(a) * 40.0), 0, (int)(Math.sin(a) * 40.0)));
+            if (at == null) {
                 continue;
             }
-            party(sl, at);
+            // hunters make for the outlaw; others are only passing
+            double heading = hunted ? Math.atan2(p.getZ() - at.getZ(), p.getX() - at.getX()) : sl.random.nextDouble() * Math.PI * 2.0;
+            List<Villager> one = party(sl, at, heading, null, hunted ? "の追っ手" : "の遠征隊", 3 + sl.random.nextInt(3), hunted);
+            if (one.isEmpty() || hunted || sl.random.nextDouble() >= 0.25) {
+                continue;
+            }
+            // a rival party on the same road, coming the other way
+            BlockPos far = open(sl, at.offset((int)(Math.cos(heading) * 36.0), 0, (int)(Math.sin(heading) * 36.0)));
+            if (far == null) {
+                continue;
+            }
+            CompoundTag first = one.get(0).getPersistentData();
+            List<Villager> two = party(sl, far, heading + Math.PI, first.getUUID("OrorVillage"), "の遠征隊", 3 + sl.random.nextInt(3), false);
+            if (!two.isEmpty()) {
+                UUID a1 = first.getUUID("OrorParty");
+                UUID b1 = two.get(0).getPersistentData().getUUID("OrorParty");
+                for (Villager v : one) {
+                    v.getPersistentData().putUUID("OrorRival", b1);
+                }
+                for (Villager v : two) {
+                    v.getPersistentData().putUUID("OrorRival", a1);
+                }
+            }
         }
     }
 
-    private static void party(ServerLevel sl, BlockPos at) {
+    /** Dry open ground at the surface there, or null. */
+    private static BlockPos open(ServerLevel sl, BlockPos p) {
+        BlockPos at = top(sl, p);
+        return at == null || !sl.getFluidState(at.below()).isEmpty() || !sl.getBlockState(at).canBeReplaced() ? null : at;
+    }
+
+    /** A party of some village (not notFrom) in the wild: netherite, the highest level, veterans; the first is the leader. */
+    static List<Villager> party(ServerLevel sl, BlockPos at, double heading, UUID notFrom, String title, int size, boolean hunters) {
         VillageLedger ledger = VillageLedger.get(sl);
         List<VillageLedger.Village> known = new ArrayList<>(ledger.villages.values());
+        known.removeIf(x -> x.id.equals(notFrom));
         VillageLedger.Village home = known.isEmpty()
             ? ledger.register(at.offset(sl.random.nextInt(2) == 0 ? 3000 : -3000, 0, sl.random.nextInt(2) == 0 ? 3000 : -3000))
             : known.get(sl.random.nextInt(known.size()));
         String name = VillageProgress.get(sl).of(home).name();
-        int size = 3 + sl.random.nextInt(3);
-        double heading = sl.random.nextDouble() * Math.PI * 2.0;
+        UUID id = UUID.randomUUID();
+        List<Villager> out = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             Villager v = (Villager)EntityType.VILLAGER.create(sl);
             if (v == null) {
-                return;
+                break;
             }
             String job = STRONG.get(sl.random.nextInt(STRONG.size()));
             net.minecraft.world.entity.npc.VillagerProfession prof = (net.minecraft.world.entity.npc.VillagerProfession)BuiltInRegistries.VILLAGER_PROFESSION
@@ -956,21 +1161,27 @@ public final class VillageExpeditions {
             CompoundTag root = v.getPersistentData();
             root.putBoolean("OrorWanderer", true);
             root.putUUID("OrorVillage", home.id);
+            root.putUUID("OrorParty", id);
+            root.putBoolean("OrorLeader", i == 0);
+            root.putBoolean("OrorHunter", hunters);
             root.putLong("OrorWanderUntil", sl.getGameTime() + 24000L);
             root.putDouble("OrorWanderHeading", heading);
-            v.setCustomName(net.minecraft.network.chat.Component.literal(name + "の遠征隊"));
+            v.setCustomName(net.minecraft.network.chat.Component.literal(name + title));
             v.setCustomNameVisible(true);
             v.setPersistenceRequired();
             MobLevels.set(v, 6);
-            veteran(v, 6);
+            veteran(v, hunters ? 8 : 6);
             dress(sl, v, i == 0);
             v.setHealth(v.getMaxHealth());
-            sl.addFreshEntity(v);
+            if (sl.addFreshEntity(v)) {
+                out.add(v);
+            }
         }
+        return out;
     }
 
-    /** Netherite, enchanted; the leader carries a TaCZ gun where the mod is installed, the rest a blade or a bow. */
-    private static void dress(ServerLevel sl, Villager v, boolean leader) {
+    /** Netherite, enchanted; the leader carries a Superb Warfare gun where the mod is installed, the rest a blade or a bow. */
+    static void dress(ServerLevel sl, Villager v, boolean leader) {
         String[] armour = {"netherite_helmet", "netherite_chestplate", "netherite_leggings", "netherite_boots"};
         EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
         var enchants = sl.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
@@ -1004,6 +1215,13 @@ public final class VillageExpeditions {
     static void wander(Villager v, ServerLevel sl) {
         CompoundTag root = v.getPersistentData();
         long now = sl.getGameTime();
+        // v0.17.16: at war with a player, at feud with another party, or after an outlaw
+        if (VillageFeuds.wander(v, sl)) {
+            return;
+        }
+        if (root.hasUUID("OrorCaravan") && WanderingTraders.escort(v, sl)) {
+            return;
+        }
         if (now >= root.getLong("OrorWanderUntil") && sl.getNearestPlayer(v, 64.0) == null) {
             unCamp(sl, root);
             v.discard();

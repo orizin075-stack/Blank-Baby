@@ -911,6 +911,9 @@ public final class VillagerIndustry {
     }
 
     public static void drops(LivingDropsEvent e) {
+        // v0.17.16: a party member's gear and pack, a trader's stolen goods
+        VillageFeuds.drops(e);
+        WanderingTraders.drops(e);
         if (e.getEntity() instanceof Villager v && miner(v)) {
             SimpleContainer c = cargo(v);
 
