@@ -159,6 +159,33 @@ public final class VillageExpeditions {
         return stage;
     }
 
+    /**
+     * v0.17.17: villagers of a kingdom (村人の王国) or a villager fortress (村人の要塞) found in the world bring their village
+     * up to what such a place already is: a kingdom is a 辺境の都 with guns, a fortress a 城下町.
+     */
+    static void settle(Villager v, ServerLevel sl) {
+        CompoundTag root = v.getPersistentData();
+        String kind = root.getString("OrorSettlement");
+        if (kind.isEmpty() || root.getBoolean("OrorSettled")) {
+            return;
+        }
+        VillageLedger.Village village = VillageLedger.of(v);
+        if (village == null) {
+            return;
+        }
+        root.putBoolean("OrorSettled", true);
+        VillageProgress db = VillageProgress.get(sl);
+        VillageProgress.Record r = db.of(village);
+        boolean kingdom = kind.equals("kingdom");
+        if (kingdom && !r.kingdom) {
+            r.kingdom = true;
+            r.guns = r.guns || VillageArms.present();
+            VillageProgress.announce(sl, village, "この地は村人の王国です", false);
+        }
+        r.stage = Math.max(r.stage, kingdom ? 4 : 3);
+        db.setDirty();
+    }
+
     static String stageName(int stage) {
         return STAGES[Math.max(0, Math.min(STAGES.length - 1, stage))];
     }

@@ -1,6 +1,6 @@
-# OROR War × Nightfall — rework workspace (v0.17.16)
+# OROR War × Nightfall — rework workspace (v0.17.17)
 
-Release: `dist/OROR_War_Nightfall_v0.17.16_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Release: `dist/OROR_War_Nightfall_v0.17.17_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
 v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
 the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.17.2 fixes rigs.json failing to load in game (a non-numeric hair bone param); `java/meshtest/RigsCheck.java` now
@@ -65,9 +65,13 @@ dragon egg and an end ship's dragon head, enshrined on an altar; both make a 竜
 Warfare arms at huge prices, steal from village chests and, struck or seen, turn into debuffers with llama sentry turrets;
 rare armed caravans carry unobtainable goods (`WanderingTraders.java`). Raids bring a messenger who tries to teleport
 home; one that gets away brings a horde of a hundred and more (`VillageRaids.java`).
+v0.17.17 adds five surface structures generated from code (`tools/mc/structgen.py` writes the NBT templates and the
+jigsaw/structure-set/pool/biome-tag JSON into `java/overlay`): illager fortresses and cities (the hordes' headquarters;
+killing their commander calls the hordes off), villager fortresses, trader exchanges and villager kingdoms (their
+villagers raise their village's stage, `VillageExpeditions.settle`). Villagers now really put issued gear away when calm.
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.16_JA.md`, the list of all 164 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.17_JA.md`, the list of all 164 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates

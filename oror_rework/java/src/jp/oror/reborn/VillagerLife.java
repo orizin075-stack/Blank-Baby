@@ -136,6 +136,8 @@ public final class VillagerLife {
                 return;
             }
             VillageLedger.of(v);
+            // v0.17.17: kingdom and fortress villagers bring their village up to what the place already is
+            VillageExpeditions.settle(v, sl);
             if (!take(sl)) {
                 return;
             }

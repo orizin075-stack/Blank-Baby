@@ -251,6 +251,57 @@ public final class VillageRaids {
                 r.horde.putInt("Killed", r.horde.getInt("Killed") + 1);
             }
         }
+        if (root.getBoolean("OrorWarlord")) {
+            warlordFallen(sl, e.getEntity().blockPosition());
+        }
+    }
+
+    /**
+     * v0.17.17: the commander of an illager city or fortress (the headquarters) is killed: the villages around (within
+     * 2500 blocks) are no longer marked, and a horde on its way turns back.
+     */
+    private static void warlordFallen(ServerLevel sl, BlockPos at) {
+        VillageProgress db = VillageProgress.get(sl);
+        VillageLedger ledger = VillageLedger.get(sl);
+        int freed = 0;
+        for (VillageProgress.Record r : new ArrayList<>(db.villages.values())) {
+            VillageLedger.Village v = ledger.villages.get(r.id);
+            if (v == null || v.center.distSqr(at) > 2500.0 * 2500.0 || r.reports <= 0 && r.hordeAt <= 0L && r.horde == null) {
+                continue;
+            }
+            r.reports = 0;
+            r.hordeAt = 0L;
+            if (r.horde != null) {
+                // the soldiers still out go home (VillageRaids.run sends them off)
+                r.horde.putInt("Elapsed", 40000);
+            }
+            freed++;
+        }
+        db.setDirty();
+        Component line = Component.literal("【朗報】邪悪な村人の本部の将が討たれた" + (freed > 0 ? "。周りの村々（" + freed + "）への大軍の侵攻は止まった" : ""));
+        for (Object o : sl.getServer().getPlayerList().getPlayers()) {
+            if (o instanceof net.minecraft.server.level.ServerPlayer p) {
+                p.sendSystemMessage(line);
+            }
+        }
+    }
+
+    private static final net.minecraft.tags.TagKey<net.minecraft.world.level.levelgen.structure.Structure> HEADQUARTERS =
+        net.minecraft.tags.TagKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "illager_headquarters"));
+
+    /** The nearest illager city or fortress (the horde's headquarters), or null. */
+    private static BlockPos headquarters(ServerLevel sl, BlockPos from) {
+        try {
+            return sl.findNearestMapStructure(HEADQUARTERS, from, 64, false);
+        } catch (RuntimeException ex) {
+            return null;
+        }
+    }
+
+    private static String bearing(double dx, double dz) {
+        String[] names = {"東", "南東", "南", "南西", "西", "北西", "北", "北東"};
+        double a = Math.toDegrees(Math.atan2(dz, dx));
+        return names[Math.floorMod((int)Math.round(a / 45.0), 8)];
     }
 
     // ------------------------------------------------------------------------------------- the horde
@@ -297,12 +348,23 @@ public final class VillageRaids {
         h.putInt("Killed", 0);
         h.putInt("Elapsed", 0);
         h.putInt("Reports", Math.max(1, r.reports));
-        h.putDouble("Angle", sl.random.nextDouble() * Math.PI * 2.0);
+        // v0.17.17: from the nearest illager city or fortress, if there is one
+        BlockPos hq = headquarters(sl, v.center);
+        String from = "";
+        if (hq != null && hq.distSqr(v.center) > 64.0) {
+            double dx = hq.getX() - v.center.getX();
+            double dz = hq.getZ() - v.center.getZ();
+            h.putDouble("Angle", Math.atan2(dz, dx));
+            h.putLong("Hq", hq.asLong());
+            from = "　本部は" + bearing(dx, dz) + "に約" + (int)Math.sqrt(dx * dx + dz * dz) + "ブロック（その将を討てば侵攻は止まる）";
+        } else {
+            h.putDouble("Angle", sl.random.nextDouble() * Math.PI * 2.0);
+        }
         r.horde = h;
         r.hordeAt = 0L;
         db.setDirty();
         RelicEffects.sound(sl, v.center, SoundEvents.ENDER_DRAGON_GROWL, 3.0F, 0.5F);
-        VillageProgress.announce(sl, v, "【急報】本部の大軍（" + h.getInt("Total") + "人）が攻めてきた！", true);
+        VillageProgress.announce(sl, v, "【急報】本部の大軍（" + h.getInt("Total") + "人）が攻めてきた！" + from, true);
     }
 
     private static void run(ServerLevel sl, VillageProgress db, VillageProgress.Record r, VillageLedger.Village v) {

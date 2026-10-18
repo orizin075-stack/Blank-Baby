@@ -138,6 +138,8 @@ public final class VillageReputation {
                     CompoundTag n = MobMind.data(v);
                     n.remove("OriginalWeapon");
                     n.remove("Selected");
+                    // v0.17.17: a player's gift is the villager's own, never put away as issued gear
+                    n.remove("Managed_mainhand");
                     n.putBoolean("OriginalAuto", false);
                     n.putString("Weapon", MobEquipmentUse.kind(v.getMainHandItem()));
                     change(sl, village, p, 4, "装備の提供");

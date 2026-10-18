@@ -256,3 +256,5 @@ net/minecraft/world/item/enchantment/Enchantments.PIERCING:Lnet/minecraft/resour
 net/minecraft/world/item/enchantment/Enchantments.SILK_TOUCH:Lnet/minecraft/resources/ResourceKey;
 net/minecraft/world/item/trading/MerchantOffer.<init>(Lnet/minecraft/world/item/trading/ItemCost;Ljava/util/Optional;Lnet/minecraft/world/item/ItemStack;IIF)V
 net/minecraft/world/level/storage/loot/parameters/LootContextParamSets.CHEST:Lnet/minecraft/world/level/storage/loot/parameters/LootContextParamSet;
+# v0.17.17: ItemStack.isSameItem (1.21.1, static) for issued villager gear that has taken damage.
+net/minecraft/world/item/ItemStack.isSameItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z

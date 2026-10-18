@@ -246,11 +246,14 @@ public final class VillageAI {
                 m.setHealth(Math.min(health, m.getMaxHealth()));
                 n.putBoolean("VillageGeared", true);
             }
-        } else if (now >= n.getLong("VillageGearUntil") && (!n.contains("VillageGeared") || n.getBoolean("VillageGeared"))) {
+        } else if (now >= n.getLong("VillageGearUntil")) {
+            // v0.17.17: whenever it is calm (not only right after a fight: MobLevels.refresh arms villagers again when
+            // their level changes), and by the item alone - armour and blades lose durability in a fight, and the
+            // exact-copy comparison this used before never matched a worn piece again, so gear stayed on for good
             for (EquipmentSlot slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.OFFHAND, EquipmentSlot.MAINHAND)) {
                 String key = "Managed_" + slot.getName();
                 ItemStack worn = m.getItemBySlot(slot);
-                if (!worn.isEmpty() && n.contains(key) && ItemStack.isSameItemSameComponents(worn, ItemStack.parseOptional(m.registryAccess(), n.getCompound(key)))) {
+                if (!worn.isEmpty() && n.contains(key) && ItemStack.isSameItem(worn, ItemStack.parseOptional(m.registryAccess(), n.getCompound(key)))) {
                     m.setItemSlot(slot, ItemStack.EMPTY);
                 }
             }

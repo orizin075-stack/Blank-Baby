@@ -29,6 +29,8 @@ public final class VillageProgress extends SavedData {
     public static final String ID = "oror_village_progress";
     private static final String[] HEAD = {"東", "西", "北", "南", "麦", "石", "杉", "樺", "鈴", "霧", "月", "楓", "柊", "灯", "朝", "風", "苔", "岩", "柳", "桜"};
     private static final String[] TAIL = {"の村", "ヶ原", "谷", "台", "の里", "沢", "野", "崎"};
+    private static final String[] KINGDOMS = {"アルデア", "ベルニカ", "カローネ", "ドラヴィア", "エルセン", "フィオレ", "グラナート", "ハイデン",
+        "イシュタリア", "ヨルムガ", "ルクセリア", "ミルディン"};
     public final Map<UUID, Record> villages = new HashMap<>();
     /** v0.17.16: players known to every village as attackers of an expedition party (id -> name). */
     public final Map<UUID, String> outlaws = new HashMap<>();
@@ -78,6 +80,8 @@ public final class VillageProgress extends SavedData {
         public int hordesBeaten;
         /** The raid that last brought this village a messenger (raid ids are kept with the world). */
         public int raidMessenger = -1;
+        /** v0.17.17: a village that grew from a kingdom (村人の王国) found in the world. */
+        public boolean kingdom;
 
         Record(UUID id) {
             this.id = id;
@@ -85,6 +89,9 @@ public final class VillageProgress extends SavedData {
 
         public String name() {
             int h = this.id.hashCode();
+            if (this.kingdom) {
+                return KINGDOMS[Math.floorMod(h, KINGDOMS.length)] + "王国";
+            }
             return HEAD[Math.floorMod(h, HEAD.length)] + TAIL[Math.floorMod(h / 31, TAIL.length)];
         }
     }
@@ -177,6 +184,7 @@ public final class VillageProgress extends SavedData {
             r.horde = n.contains("Horde", 10) ? n.getCompound("Horde") : null;
             r.hordesBeaten = n.getInt("HordesBeaten");
             r.raidMessenger = n.contains("RaidMessenger") ? n.getInt("RaidMessenger") : -1;
+            r.kingdom = n.getBoolean("Kingdom");
             db.villages.put(r.id, r);
         }
         for (Tag raw : tag.getList("Outlaws", 10)) {
@@ -239,6 +247,7 @@ public final class VillageProgress extends SavedData {
             }
             n.putInt("HordesBeaten", r.hordesBeaten);
             n.putInt("RaidMessenger", r.raidMessenger);
+            n.putBoolean("Kingdom", r.kingdom);
             list.add(n);
         }
         tag.put("Villages", list);

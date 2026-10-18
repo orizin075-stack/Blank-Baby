@@ -345,3 +345,5 @@ net/minecraft/world/level/storage/loot/parameters/LootContextParamSets
 net/minecraft/world/item/trading/MerchantOffer
 	SP <init> (Lnet/minecraft/world/item/trading/ItemCost;Ljava/util/Optional;Lnet/minecraft/world/item/ItemStack;IIF)V
 	VM getResult ()Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/item/ItemStack
+	SM isSameItem (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z
