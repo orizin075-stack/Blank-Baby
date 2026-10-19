@@ -1,0 +1,62 @@
+// OROR Reborn for Minecraft 1.20.1 / Forge 47 (NightfallCraft 2.2.8.6 runs Forge 47.4.x)
+plugins {
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
+}
+
+version = mod_version
+group = 'jp.oror.reborn'
+base { archivesName = 'oror_supreme_bosses' }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+    copyIdeResources = true
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'info'
+            mods { oror_supreme_bosses { source sourceSets.main } }
+        }
+        server {
+            property 'forge.enabledGameTestNamespaces', 'oror_supreme_bosses'
+            args '--nogui'
+        }
+        gameTestServer {
+            property 'forge.enabledGameTestNamespaces', 'oror_supreme_bosses'
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, 'oror_reborn.refmap.json'
+    config 'oror_reborn.mixins.json'
+}
+
+repositories {
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+jar {
+    manifest {
+        attributes([
+            'Specification-Title'   : 'oror_supreme_bosses',
+            'Implementation-Title'  : 'OROR Reborn',
+            'Implementation-Version': project.version,
+            'MixinConfigs'          : 'oror_reborn.mixins.json'
+        ])
+    }
+    finalizedBy 'reobfJar'
+}

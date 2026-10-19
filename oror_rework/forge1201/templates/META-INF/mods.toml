@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+[[mods]]
+modId="oror_supreme_bosses"
+version="${file.jarVersion}"
+displayName="OROR Reborn — 41 Supreme Entities"
+authors="OROR Project"
+description='''Sculpted 3D characters (46 rigs), 3D relic arsenal (164 relics in 16 weapon kinds with special skills, OBJ models) with unique relic arts. 41 original characters with native animated models, mana, individual adaptation and neutral NPC interaction. Villages that grow, arm, trade and go on expeditions. Forge 1.20.1 build for NightfallCraft.'''
+[[dependencies.oror_supreme_bosses]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.oror_supreme_bosses]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.20.2)"
+ordering="NONE"
+side="BOTH"
