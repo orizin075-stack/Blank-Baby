@@ -50,7 +50,7 @@ public final class FusionGameTests {
       batch = "fusion"
    )
    public static void quest_accept_and_claim_pay_native_experience_once(GameTestHelper h) {
-      Player p = h.makeMockPlayer(GameType.SURVIVAL);
+      Player p = h.makeMockPlayer();
       Entry<String, JsonObject> entry = NightfallFusion.QUESTS
          .entrySet()
          .stream()
@@ -80,7 +80,7 @@ public final class FusionGameTests {
    )
    public static void quests_for_missing_mods_pay_nothing_and_let_the_next_ones_through(GameTestHelper h) {
       // v0.17.18: the three Fantasy Armor helmet sets paid 100 levels each after a single kill
-      Player p = h.makeMockPlayer(GameType.SURVIVAL);
+      Player p = h.makeMockPlayer();
       NightfallFusion.data(p).putInt("Defeats", 50);
       int levels = p.totalExperience;
       h.assertTrue(
@@ -106,7 +106,7 @@ public final class FusionGameTests {
       batch = "fusion"
    )
    public static void tempering_requires_material_and_preserves_actual_item_components(GameTestHelper h) {
-      Player p = h.makeMockPlayer(GameType.SURVIVAL);
+      Player p = h.makeMockPlayer();
       p.setItemInHand(InteractionHand.MAIN_HAND, Items.NETHERITE_SWORD.getDefaultInstance());
       h.assertTrue(!NightfallFusion.temper(p), "No free tempering without resource");
       p.getInventory().add(new ItemStack((ItemLike)AdventureContent.MANA.get(), 4));

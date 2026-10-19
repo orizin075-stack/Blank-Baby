@@ -645,7 +645,7 @@ public final class AdaptiveCombat {
                 ItemStack source = m.getMainHandItem().getItem() instanceof ProjectileWeaponItem
                     ? m.getMainHandItem()
                     : (weapon.equals("crossbow") ? Items.CROSSBOW : Items.BOW).getDefaultInstance();
-                p = new Arrow(sl, m, Items.ARROW.getDefaultInstance(), source);
+                p = new Arrow(sl, m);
                 if (m instanceof SupremeEntity b && b.lore()) {
                     var10001 = 1000000;
                     break label27;

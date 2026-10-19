@@ -84,7 +84,7 @@ public final class RegressionGameTests {
         h.getLevel().addFreshEntity(hostile);
         FamiliarEntity f = (FamiliarEntity)((EntityType)OrorReborn.FAMILIAR.get()).create(h.getLevel());
         f.creator = a.getUUID();
-        Arrow summonArrow = new Arrow(h.getLevel(), f, Items.ARROW.getDefaultInstance(), null);
+        Arrow summonArrow = new Arrow(h.getLevel(), f);
         summonArrow.moveTo(b.getX() + 1.0, b.getY() + 1.0, b.getZ() - 1.0);
         h.getLevel().addFreshEntity(summonArrow);
         Abilities.cast(b, h.getLevel(), z);
@@ -127,17 +127,15 @@ public final class RegressionGameTests {
             AbstractArrow a = ProjectileUtil.getMobArrow(owner, ammo, 1.0F);
             CompoundTag n = new CompoundTag();
             a.saveWithoutId(n);
-            h.assertTrue(n.contains("item"), "Arrow item serialized");
+            // 1.20.1 arrows keep no item stack (1.20.5 added it), so this only checks that they save
+            h.assertTrue(n.contains("pickup"), "Arrow serialized");
         }
 
-        Arrow invalid = new Arrow(h.getLevel(), b, ItemStack.EMPTY, null);
+        Arrow invalid = new Arrow(h.getLevel(), b);
         invalid.pickup = Pickup.DISALLOWED;
         CompoundTag repaired = new CompoundTag();
         invalid.saveWithoutId(repaired);
-        h.assertTrue(
-            repaired.getCompound("item").getString("id").equals("minecraft:arrow") && repaired.getByte("pickup") == 0,
-            "Malformed non-pickup arrow saved without enabling pickup"
-        );
+        h.assertTrue(repaired.getByte("pickup") == 0, "Non-pickup arrow saved without enabling pickup");
         System.out.println("[OROR_AMMO] NPC, familiar, and malformed non-pickup arrow NBT save PASS");
         h.succeed();
     }

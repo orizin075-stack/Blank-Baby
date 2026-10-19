@@ -274,7 +274,7 @@ public final class AdventureGameTests {
         batch = "adventure"
     )
     public static void rewind_talisman_prevents_lethal_hit(GameTestHelper h) {
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         p.setHealth(4.0F);
         p.setItemInHand(InteractionHand.OFF_HAND, ((Item)AdventureContent.TALISMAN.get()).getDefaultInstance());
         p.hurt(p.damageSources().generic(), 1000.0F);

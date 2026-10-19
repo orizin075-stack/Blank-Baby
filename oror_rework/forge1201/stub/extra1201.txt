@@ -66,3 +66,12 @@ net/minecraft/world/entity/player/Player
 	VM getAbilities ()Lnet/minecraft/world/entity/player/Abilities;
 net/minecraft/world/entity/player/Abilities
 	VF invulnerable Z
+net/minecraft/world/entity/projectile/Arrow
+	SP <init> (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V
+net/minecraft/gametest/framework/GameTestHelper
+	VM absolutePos (Lnet/minecraft/core/BlockPos;)Lnet/minecraft/core/BlockPos;
+net/minecraft/core/BlockPos
+	SF ZERO Lnet/minecraft/core/BlockPos;
+net/minecraft/world/Container
+	IMI getContainerSize ()I
+	IMI getItem (I)Lnet/minecraft/world/item/ItemStack;

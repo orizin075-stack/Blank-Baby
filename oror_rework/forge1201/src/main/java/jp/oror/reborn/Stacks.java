@@ -20,6 +20,15 @@ public final class Stacks {
         f.accept(stack.getOrCreateTag());
     }
 
+    /** The container's stacks, a copy of the list (1.20.1's SimpleContainer has no getItems()); the stacks are live. */
+    public static java.util.List<ItemStack> items(net.minecraft.world.Container c) {
+        java.util.List<ItemStack> out = new java.util.ArrayList<>(c.getContainerSize());
+        for (int i = 0; i < c.getContainerSize(); i++) {
+            out.add(c.getItem(i));
+        }
+        return out;
+    }
+
     private Stacks() {
     }
 }

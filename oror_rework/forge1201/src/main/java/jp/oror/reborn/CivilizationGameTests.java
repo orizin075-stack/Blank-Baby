@@ -95,7 +95,7 @@ public final class CivilizationGameTests {
     )
     public static void actual_food_interaction_and_trade_improve_local_score(GameTestHelper h) {
         Villager v = worker(h, 8, 8);
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BREAD, 3));
         EntityInteract interaction = new EntityInteract(p, InteractionHand.MAIN_HAND, v);
         VillageReputation.interact(interaction);
@@ -122,7 +122,7 @@ public final class CivilizationGameTests {
         Villager v = worker(h, 8, 8);
         v.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1024.0);
         v.setHealth(1024.0F);
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         v.hurt(p.damageSources().playerAttack(p), 10.0F);
         h.assertTrue(VillageReputation.score(v, p.getUUID()) <= -120, "Real damage causes severe local hostility");
         v.invulnerableTime = 0;
@@ -139,7 +139,7 @@ public final class CivilizationGameTests {
     )
     public static void benefits_change_real_merchant_prices(GameTestHelper h) {
         Villager v = worker(h, 8, 8);
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         MerchantOffers offers = new MerchantOffers();
         offers.add(new MerchantOffer(new ItemStack(Items.EMERALD, 20), Items.DIAMOND.getDefaultInstance(), 16, 2, 0.05F));
         v.setOffers(offers);
@@ -404,7 +404,7 @@ public final class CivilizationGameTests {
         b.setNoAi(false);
         float hp = b.getHealth();
         b.hurt(a.damageSources().mobAttack(a), 200.0F);
-        Arrow arrow = new Arrow(h.getLevel(), a, Items.ARROW.getDefaultInstance(), Items.BOW.getDefaultInstance());
+        Arrow arrow = new Arrow(h.getLevel(), a);
         b.invulnerableTime = 0;
         b.hurt(a.damageSources().arrow(arrow, a), 200.0F);
         h.assertTrue(VillageReputation.sameVillage(a, b) && b.getHealth() == hp && b.getTarget() != a, "Same-village friendly damage cannot start infighting");

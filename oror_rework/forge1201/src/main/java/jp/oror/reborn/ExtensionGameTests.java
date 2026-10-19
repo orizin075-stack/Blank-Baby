@@ -179,7 +179,7 @@ public final class ExtensionGameTests {
         Husk m = mob(h, EntityType.HUSK, 8, 8);
         m.setNoAi(true);
         MobLevels.set(m, 6);
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         p.moveTo(m.getX() + 1.0, m.getY(), m.getZ());
         m.hurt(p.damageSources().playerAttack(p), 1000000.0F);
         h.succeedWhen(
@@ -314,7 +314,7 @@ public final class ExtensionGameTests {
         batch = "extension"
     )
     public static void original_parry_and_execution_work_on_native_damage(GameTestHelper h) {
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         Husk t = mob(h, EntityType.HUSK, 8, 8);
         t.setNoAi(true);
         p.moveTo(t.getX() + 1.0, t.getY(), t.getZ());

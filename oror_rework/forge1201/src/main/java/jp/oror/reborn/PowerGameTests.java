@@ -105,7 +105,7 @@ public final class PowerGameTests {
             v.setNoAi(false);
             MobLevels.set(v, rank[0]);
             MobLevels.refresh(v);
-            Player p = h.makeMockPlayer(GameType.SURVIVAL);
+            Player p = h.makeMockPlayer();
             p.getInventory().clearContent();
             p.removeAllEffects();
             p.moveTo(v.getX() + 2.0, v.getY(), v.getZ());

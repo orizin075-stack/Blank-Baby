@@ -126,7 +126,7 @@ public final class ProgressionGameTests {
         Villager v = mob(h, EntityType.VILLAGER, 8, 8);
         MobLevels.set(v, 5);
         AdaptiveCombat.arm(v);
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         p.moveTo(v.getX() + 2.0, v.getY(), v.getZ());
         Enchantment protection = Enchantments.ALL_DAMAGE_PROTECTION;
 

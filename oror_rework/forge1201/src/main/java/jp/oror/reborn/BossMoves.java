@@ -470,7 +470,7 @@ public final class BossMoves {
                 if (e >= w && (e - w) % 2 == 0) {
                     ItemStack bow = b.getMainHandItem().isEmpty() ? new ItemStack(Items.BOW) : b.getMainHandItem();
                     for (int i = 0; i < 2; i++) {
-                        Arrow a = new Arrow(sl, b, new ItemStack(Items.ARROW), bow);
+                        Arrow a = new Arrow(sl, b);
                         a.moveTo(aim.x + (sl.random.nextDouble() - 0.5) * 10.0, aim.y + 12.0, aim.z + (sl.random.nextDouble() - 0.5) * 10.0);
                         a.setDeltaMovement(0.0, -2.6, 0.0);
                         a.setBaseDamage(dmg * 0.3F);

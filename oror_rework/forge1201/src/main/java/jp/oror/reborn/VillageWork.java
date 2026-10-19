@@ -813,7 +813,7 @@ public final class VillageWork {
                 if (r != HAVE) {
                     return r;
                 }
-                for (ItemStack st : v.getInventory().getItems()) {
+                for (ItemStack st : Stacks.items(v.getInventory())) {
                     if (st.is(ItemTags.WOOL) && count(v, i -> i.is(st.getItem())) >= 3) {
                         String colour = BuiltInRegistries.ITEM.getKey(st.getItem()).getPath().replace("_wool", "");
                         return craft(v, sl, colour + "_bed");
@@ -909,7 +909,7 @@ public final class VillageWork {
 
     static int count(Villager v, Predicate<ItemStack> is) {
         int n = 0;
-        for (ItemStack st : v.getInventory().getItems()) {
+        for (ItemStack st : Stacks.items(v.getInventory())) {
             if (!st.isEmpty() && is.test(st)) {
                 n += st.getCount();
             }
@@ -933,7 +933,7 @@ public final class VillageWork {
 
     /** At least one free slot in the villager's eight. */
     private static boolean roomy(Villager v) {
-        for (ItemStack st : v.getInventory().getItems()) {
+        for (ItemStack st : Stacks.items(v.getInventory())) {
             if (st.isEmpty()) {
                 return true;
             }
@@ -976,7 +976,7 @@ public final class VillageWork {
 
     /** Saw a log into planks of its own wood. */
     private static boolean saw(Villager v, ServerLevel sl) {
-        for (ItemStack st : List.copyOf(v.getInventory().getItems())) {
+        for (ItemStack st : Stacks.items(v.getInventory())) {
             if (st.is(ItemTags.LOGS) && VillagerLife.craft(v, sl, wood(st, "_planks"))) {
                 return true;
             }
@@ -986,7 +986,7 @@ public final class VillageWork {
 
     /** Slabs or a door from planks of one wood (a door takes six of the same kind). */
     private static int wooden(Villager v, ServerLevel sl, Survey s, String ending, int per) {
-        for (ItemStack st : List.copyOf(v.getInventory().getItems())) {
+        for (ItemStack st : Stacks.items(v.getInventory())) {
             if (st.is(ItemTags.PLANKS) && count(v, i -> i.is(st.getItem())) >= per && VillagerLife.craft(v, sl, wood(st, ending))) {
                 return ACTED;
             }

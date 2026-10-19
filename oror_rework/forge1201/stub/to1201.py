@@ -97,6 +97,14 @@ M = {
     ('net/minecraft/world/item/Items', 'MACE'): None,
     ('net/minecraft/world/item/ArmorItem$Type', 'getDurability'): None,
     ('net/minecraft/world/item/ArmorItem$Type', 'BODY'): None,  # wolf armour slot, 1.20.5
+    # found by the first real Forge 1.20.1 compile (CI)
+    ('net/minecraft/world/entity/projectile/Arrow', '<init>'): ('<init>', '(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;)V'),
+    ('net/minecraft/world/SimpleContainer', 'getItems'): None,
+    ('net/minecraft/world/entity/LivingEntity', 'registryAccess'): None,
+    ('net/minecraft/world/entity/Mob', 'registryAccess'): None,
+    ('net/minecraft/world/entity/npc/Villager', 'registryAccess'): None,
+    ('net/minecraft/gametest/framework/GameTestHelper', 'makeMockPlayer'): ('makeMockPlayer', '()Lnet/minecraft/world/entity/player/Player;'),
+    ('net/minecraft/gametest/framework/GameTestHelper', 'getBounds'): None,
     ('net/minecraft/world/item/ArmorMaterials', 'NETHERITE'): ('NETHERITE', 'Lnet/minecraft/world/item/ArmorMaterials;'),
     # entities
     ('net/minecraft/world/entity/LivingEntity', 'getSlotForHand'): None,

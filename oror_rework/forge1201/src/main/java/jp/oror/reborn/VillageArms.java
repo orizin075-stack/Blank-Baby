@@ -125,7 +125,7 @@ public final class VillageArms {
         if (MobEquipmentUse.kind(v.getMainHandItem()).equals("gun")) {
             return true;
         }
-        for (ItemStack st : v.getInventory().getItems()) {
+        for (ItemStack st : Stacks.items(v.getInventory())) {
             if (!st.isEmpty() && MobEquipmentUse.kind(st).equals("gun")) {
                 return true;
             }

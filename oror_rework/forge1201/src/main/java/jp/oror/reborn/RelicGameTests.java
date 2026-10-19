@@ -40,7 +40,7 @@ public final class RelicGameTests {
    }
 
    private static Player player(GameTestHelper h) {
-      Player p = h.makeMockPlayer(GameType.SURVIVAL);
+      Player p = h.makeMockPlayer();
       BlockPos at = h.absolutePos(new BlockPos(8, 2, 8));
       p.moveTo((double)at.getX() + 0.5, (double)at.getY(), (double)at.getZ() + 0.5, 0.0F, 0.0F);
       return p;
@@ -319,7 +319,7 @@ public final class RelicGameTests {
          h.assertTrue(summons(h) == initial + 3, "Mixed summon order must not exceed shared limit");
       } finally {
          RebornConfig.LEVEL_SUMMONS.set(old);
-         for (Mob entity : h.getLevel().getEntitiesOfClass(Mob.class, h.getBounds().inflate(40.0))) {
+         for (Mob entity : h.getLevel().getEntitiesOfClass(Mob.class, new net.minecraft.world.phys.AABB(h.absolutePos(net.minecraft.core.BlockPos.ZERO)).inflate(48.0))) {
             if (entity instanceof FamiliarEntity f && b.getUUID().equals(f.creator)
                || entity.getPersistentData().hasUUID("ororRelicOwner") && p.getUUID().equals(entity.getPersistentData().getUUID("ororRelicOwner"))) {
                entity.discard();

@@ -107,7 +107,7 @@ public final class LorePowers {
                     ResourceKey<DamageType> key = ResourceKey.create(
                         Registries.DAMAGE_TYPE, new ResourceLocation("oror_supreme_bosses", "erasure")
                     );
-                    DamageSource source = new DamageSource(t.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), b);
+                    DamageSource source = new DamageSource(t.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), b);
                     t.getPersistentData().putBoolean("ororErased", true);
                     float amount = (float)Math.min(8.5070587E37F, Math.max(1000000.0, (double)t.getMaxHealth() * 1024.0));
                     t.hurt(source, amount);

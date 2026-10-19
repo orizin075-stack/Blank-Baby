@@ -114,7 +114,7 @@ public final class MindGameTests {
         AdaptiveCombat.strike(v, t, "mace", h.getLevel());
         h.assertTrue(t.getHealth() < 920.0F && MobMind.data(v).getInt("SuccessfulStrikes") == 1, "Mace fall damage is actually dealt");
         v.setNoAi(false);
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         // 1.20.1 has no vanilla mace: the observed-style check uses an axe
         p.setItemInHand(InteractionHand.MAIN_HAND, Items.IRON_AXE.getDefaultInstance());
         p.moveTo(v.getX() + 1.0, v.getY(), v.getZ());
@@ -310,7 +310,7 @@ public final class MindGameTests {
     public static void villager_arms_and_defeats_survival_player(GameTestHelper h) {
         Villager v = (Villager)mob(h, EntityType.VILLAGER, 8, 8);
         AdaptiveCombat.arm(v);
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         p.moveTo(v.getX() + 1.0, v.getY(), v.getZ());
         v.setTarget(p);
         AdaptiveCombat.strike(v, p, "sword", h.getLevel());
@@ -332,7 +332,7 @@ public final class MindGameTests {
         Villager a = strong((Villager)mob(h, EntityType.VILLAGER, 8, 8));
         Villager b = strong((Villager)mob(h, EntityType.VILLAGER, 11, 8));
         Villager c = (Villager)mob(h, EntityType.VILLAGER, 9, 11);
-        Player p = h.makeMockPlayer(GameType.SURVIVAL);
+        Player p = h.makeMockPlayer();
         p.moveTo(a.getX() + 1.0, a.getY(), a.getZ());
         a.hurt(p.damageSources().playerAttack(p), 2.0F);
         h.assertTrue(a.getTarget() == p && b.getTarget() == p && MobMind.skill(b, "teamwork") > 0, "Nearby strong villagers share an aggressor");

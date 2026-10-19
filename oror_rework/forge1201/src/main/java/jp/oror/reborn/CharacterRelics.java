@@ -272,7 +272,7 @@ public final class CharacterRelics {
             double yaw = Math.toRadians((i - (n - 1) * 0.5) * 6.0);
             double c = Math.cos(yaw);
             double s = Math.sin(yaw);
-            Arrow a = new Arrow(sl, p, new ItemStack(Items.ARROW), stack);
+            Arrow a = new Arrow(sl, p);
             a.shoot(look.x * c - look.z * s, look.y, look.x * s + look.z * c, power * 3.0F, 1.0F);
             a.setBaseDamage(w.damage * w.kind.shot / 3.0);
             a.pickup = AbstractArrow.Pickup.DISALLOWED;
