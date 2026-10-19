@@ -39,6 +39,14 @@ OV = {
  'net/minecraft/world/entity/raid/Raider': c(extends=E+'monster.PatrollingMonster'),
  'net/minecraft/world/entity/ai/gossip/GossipType': c(kind='enum'),
  'net/minecraft/world/item/EnchantedBookItem': c(extends=W+'item.Item'),
+ # v0.17.18
+ 'net/minecraft/world/entity/boss/enderdragon/EnderDragon': c(extends=E+'Mob'),
+ 'net/minecraft/world/entity/boss/wither/WitherBoss': c(extends=E+'monster.Monster'),
+ 'net/minecraft/world/entity/MobSpawnType': c(kind='enum'),
+ 'net/neoforged/neoforge/event/entity/living/MobSpawnEvent': c(extends='net.neoforged.bus.api.Event'),
+ 'net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck': c(extends='net.neoforged.neoforge.event.entity.living.MobSpawnEvent'),
+ 'net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck$Result': c(kind='enum', consts=['SUCCEED', 'DEFAULT', 'FAIL']),
+ 'net/minecraft/network/chat/ClickEvent$Action': c(kind='enum'),
  'net/minecraft/server/ReloadableServerRegistries$Holder': c(members=['public java.util.Collection<net.minecraft.resources.ResourceLocation> getKeys(net.minecraft.resources.ResourceKey<? extends net.minecraft.core.Registry<?>> p0) { return null; }']),
  'net/minecraft/world/entity/player/Player': c(extends=E+'LivingEntity'),
  'net/minecraft/server/level/ServerPlayer': c(extends=E+'player.Player'),
@@ -406,4 +414,5 @@ EXTRA_CLASSES = ['net/minecraft/world/level/levelgen/structure/Structure', 'net/
                  'net/minecraft/world/level/block/state/BlockBehaviour', 'net/minecraft/client/renderer/entity/LivingEntityRenderer', 'net/minecraft/client/model/Model',
                  'net/minecraft/world/level/block/entity/BaseContainerBlockEntity', 'net/minecraft/world/phys/HitResult', 'net/minecraft/world/level/entity/EntityAccess',
                  'net/minecraft/world/damagesource/DamageType', 'net/minecraft/world/item/enchantment/Enchantment', 'net/neoforged/api/distmarker/Dist',
-                 'net/minecraft/world/entity/ai/attributes/Attribute']
+                 'net/minecraft/world/entity/ai/attributes/Attribute', 'net/minecraft/world/entity/boss/enderdragon/EnderDragon',
+                 'net/minecraft/world/entity/boss/wither/WitherBoss']

@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -70,6 +71,33 @@ public final class FusionGameTests {
       );
       int after = p.totalExperience;
       h.assertTrue(!NightfallFusion.claim(p, entry.getKey()) && p.totalExperience == after, "Reconnect/repeat claim cannot duplicate reward");
+      h.succeed();
+   }
+
+   @GameTest(
+      template = "empty",
+      setupTicks = 40L,
+      timeoutTicks = 120,
+      batch = "fusion"
+   )
+   public static void quests_for_missing_mods_pay_nothing_and_let_the_next_ones_through(GameTestHelper h) {
+      // v0.17.18: the three Fantasy Armor helmet sets paid 100 levels each after a single kill
+      Player p = h.makeMockPlayer(GameType.SURVIVAL);
+      NightfallFusion.data(p).putInt("Defeats", 50);
+      int levels = p.totalExperience;
+      h.assertTrue(
+         ModList.get().isLoaded("fantasy_armor")
+            || !NightfallFusion.available(NightfallFusion.QUESTS.get("7B9624C198F07020"))
+               && !NightfallFusion.claim(p, "7B9624C198F07020")
+               && p.totalExperience == levels,
+         "A quest for a mod this pack lacks pays nothing"
+      );
+      // Tidal Claws (Cataclysm) waits behind the Nightfall claw of a missing mod: that one is passed through
+      h.assertTrue(NightfallFusion.claim(p, "2F9F109962C8ADF4"), "The weapon chapter opens after a defeat");
+      h.assertTrue(
+         !ModList.get().isLoaded("cataclysm") || ModList.get().isLoaded("efn") || NightfallFusion.open(p, NightfallFusion.QUESTS.get("12C6899DBC971D90")),
+         "A quest after an unported one is open"
+      );
       h.succeed();
    }
 

@@ -1,6 +1,6 @@
-# OROR War × Nightfall — rework workspace (v0.17.17)
+# OROR War × Nightfall — rework workspace (v0.17.18)
 
-Release: `dist/OROR_War_Nightfall_v0.17.17_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
+Release: `dist/OROR_War_Nightfall_v0.17.18_Import.zip` (CurseForge import, NeoForge 21.1.262 / Minecraft 1.21.1).
 v0.17.0 rebuilt all 46 character models in the Blockbench style (crisp cuboids, pixel-art textures); v0.17.1 redraws
 the faces in the vanilla Minecraft skin grammar (8x8: two-pixel eyes on row 4, two-pixel mouth, hair rows).
 v0.17.2 fixes rigs.json failing to load in game (a non-numeric hair bone param); `java/meshtest/RigsCheck.java` now
@@ -69,9 +69,16 @@ v0.17.17 adds five surface structures generated from code (`tools/mc/structgen.p
 jigsaw/structure-set/pool/biome-tag JSON into `java/overlay`): illager fortresses and cities (the hordes' headquarters;
 killing their commander calls the hordes off), villager fortresses, trader exchanges and villager kingdoms (their
 villagers raise their village's stage, `VillageExpeditions.settle`). Villagers now really put issued gear away when calm.
+v0.17.18 carries in what NightfallCraft 2.2.8.6 wrote itself as config (`NightfallRules.java`): its Multiplayer Boss
+Fight scaling (per extra player near a boss: damage taken divided by 1.4, i.e. +40% toughness past the 1024 health cap,
+and +10% attack) and its InControl spawn caps (700 of a kind per dimension, creepers 3 per player, ...); its Iron's
+Spells tweaks ship as datapack spell configs. The quest chapters were already in (232 quests, identical);
+`NightfallFusion` now hides quests this pack cannot do instead of paying them for free, lets the quests behind them
+through, honours optional tasks and spell levels, and matches skill books and enchanted books
+(`tools/quest_reach.py` replays these rules on the quest file).
 v0.15.0-v0.16.0 failed to load (the recompiled tooltip subscriber lost its runtime-visible @SubscribeEvent); fixed in
 v0.15.2, and `java/compile.sh` now checks annotation visibility against the original jar (`tools/stubgen/AnnCheck.java`).
-Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.17_JA.md`, the list of all 164 relic arts.
+Change notes: `tools/CHANGES_JA.md`. The zip also carries `RELIC_ARTS_v0.17.18_JA.md`, the list of all 164 relic arts.
 
 ## 3D relic arsenal
 - `tools/mc/forge3d.py` — 3D item builder: rotated boxes painted with box-UV painters, and pixel-art relief plates

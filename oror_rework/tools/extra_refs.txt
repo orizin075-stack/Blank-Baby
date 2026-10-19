@@ -355,3 +355,36 @@ net/minecraft/world/entity/ai/navigation/PathNavigation
 	VM createPath (Lnet/minecraft/core/BlockPos;I)Lnet/minecraft/world/level/pathfinder/Path;
 net/minecraft/world/level/pathfinder/Path
 	VM canReach ()Z
+# v0.17.18: NightfallCraft's config rules (boss party scaling, spawn caps) and the quest list
+# (checked against Minecraft 1.21.1 / NeoForge 21.1 sources)
+net/minecraft/network/chat/Component
+	SMI empty ()Lnet/minecraft/network/chat/MutableComponent;
+	SMI translatableWithFallback (Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;
+net/minecraft/network/chat/MutableComponent
+	VM append (Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;
+	VM setStyle (Lnet/minecraft/network/chat/Style;)Lnet/minecraft/network/chat/MutableComponent;
+net/minecraft/network/chat/Style
+	SF EMPTY Lnet/minecraft/network/chat/Style;
+	VM withColor (Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/Style;
+	VM withClickEvent (Lnet/minecraft/network/chat/ClickEvent;)Lnet/minecraft/network/chat/Style;
+net/minecraft/network/chat/ClickEvent
+	SP <init> (Lnet/minecraft/network/chat/ClickEvent$Action;Ljava/lang/String;)V
+net/minecraft/network/chat/ClickEvent$Action
+	SF RUN_COMMAND Lnet/minecraft/network/chat/ClickEvent$Action;
+net/minecraft/world/entity/Entity
+	VM getDisplayName ()Lnet/minecraft/network/chat/Component;
+net/minecraft/world/entity/EntityType
+	VM is (Lnet/minecraft/tags/TagKey;)Z
+net/minecraft/world/entity/MobSpawnType
+	SF NATURAL Lnet/minecraft/world/entity/MobSpawnType;
+net/neoforged/neoforge/event/entity/living/MobSpawnEvent
+	VM getEntity ()Lnet/minecraft/world/entity/Mob;
+	VM getLevel ()Lnet/minecraft/world/level/ServerLevelAccessor;
+net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck
+	VM getSpawnType ()Lnet/minecraft/world/entity/MobSpawnType;
+	VM setResult (Lnet/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck$Result;)V
+net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck$Result
+	SF FAIL Lnet/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck$Result;
+net/minecraft/world/entity/Mob
+	VM checkSpawnRules (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/MobSpawnType;)Z
+	VM checkSpawnObstruction (Lnet/minecraft/world/level/LevelReader;)Z

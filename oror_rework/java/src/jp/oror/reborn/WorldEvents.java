@@ -30,6 +30,10 @@ public final class WorldEvents {
             if (v instanceof Player gunner && now % 5L == 1L) {
                 GunCompat.tick(gunner);
             }
+            // v0.17.18: NightfallCraft's multiplayer boss fight, a boss grows with the players around it
+            if (v instanceof LivingEntity big && now % 40L == 13L && v.level() instanceof ServerLevel partyLevel) {
+                NightfallRules.party(big, partyLevel);
+            }
             if (!(v instanceof Player) && (!(v instanceof SupremeEntity b) || !LorePowers.timeIndependent(b)) && n.getLong("ororFreezeUntil") > now) {
                 v.setDeltaMovement(Vec3.ZERO);
                 e.setCanceled(true);
@@ -78,6 +82,8 @@ public final class WorldEvents {
             VillageFeuds.attacked(e);
             WanderingTraders.attacked(e);
             VillageRaids.hurt(e);
+            // v0.17.18: a boss sharing its fight with several players (NightfallCraft's multiplayer boss fight)
+            NightfallRules.damage(e);
         }
         if (v instanceof SupremeEntity boss && !v.level().isClientSide) {
             BossPowers.incoming(e, boss);
@@ -116,6 +122,8 @@ public final class WorldEvents {
 
     public static void levelTick(Post e) {
         if (e.getLevel() instanceof ServerLevel cleanup) {
+            // v0.17.18: NightfallCraft's spawn caps (its InControl rules)
+            NightfallRules.hook();
             TerrainPlay.cleanup(cleanup);
             RelicShells.tick(cleanup);
             // v0.17.15: gates to put out, and now and then a wandering expedition party

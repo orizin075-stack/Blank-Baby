@@ -266,3 +266,29 @@ net/minecraft/world/entity/ai/memory/MemoryModuleType.NEAREST_HOSTILE:Lnet/minec
 # v0.17.17: a thief trader checks it can walk to a chest (PathNavigation.createPath / Path.canReach, 1.21.1).
 net/minecraft/world/entity/ai/navigation/PathNavigation.createPath(Lnet/minecraft/core/BlockPos;I)Lnet/minecraft/world/level/pathfinder/Path;
 net/minecraft/world/level/pathfinder/Path.canReach()Z
+# v0.17.18: NightfallCraft config rules and quest list (gson 2.10, Minecraft 1.21.1, NeoForge 21.1 MobSpawnEvent.PositionCheck)
+com/google/gson/JsonElement.getAsJsonArray()Lcom/google/gson/JsonArray;
+com/google/gson/JsonElement.getAsJsonPrimitive()Lcom/google/gson/JsonPrimitive;
+com/google/gson/JsonElement.isJsonArray()Z
+com/google/gson/JsonObject.entrySet()Ljava/util/Set;
+com/google/gson/JsonPrimitive.isString()Z
+net/minecraft/nbt/Tag.toString()Ljava/lang/String;
+net/minecraft/network/chat/ClickEvent$Action.RUN_COMMAND:Lnet/minecraft/network/chat/ClickEvent$Action;
+net/minecraft/network/chat/ClickEvent.<init>(Lnet/minecraft/network/chat/ClickEvent$Action;Ljava/lang/String;)V
+net/minecraft/network/chat/Component.empty()Lnet/minecraft/network/chat/MutableComponent;
+net/minecraft/network/chat/Component.translatableWithFallback(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;
+net/minecraft/network/chat/MutableComponent.append(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;
+net/minecraft/network/chat/MutableComponent.setStyle(Lnet/minecraft/network/chat/Style;)Lnet/minecraft/network/chat/MutableComponent;
+net/minecraft/network/chat/Style.EMPTY:Lnet/minecraft/network/chat/Style;
+net/minecraft/network/chat/Style.withClickEvent(Lnet/minecraft/network/chat/ClickEvent;)Lnet/minecraft/network/chat/Style;
+net/minecraft/network/chat/Style.withColor(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/Style;
+net/minecraft/world/entity/EntityType.is(Lnet/minecraft/tags/TagKey;)Z
+net/minecraft/world/entity/LivingEntity.getDisplayName()Lnet/minecraft/network/chat/Component;
+net/minecraft/world/entity/MobSpawnType.NATURAL:Lnet/minecraft/world/entity/MobSpawnType;
+net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck$Result.FAIL:Lnet/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck$Result;
+net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck.getEntity()Lnet/minecraft/world/entity/Mob;
+net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck.getLevel()Lnet/minecraft/world/level/ServerLevelAccessor;
+net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck.getSpawnType()Lnet/minecraft/world/entity/MobSpawnType;
+net/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck.setResult(Lnet/neoforged/neoforge/event/entity/living/MobSpawnEvent$PositionCheck$Result;)V
+net/minecraft/world/entity/Mob.checkSpawnObstruction(Lnet/minecraft/world/level/LevelReader;)Z
+net/minecraft/world/entity/Mob.checkSpawnRules(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/world/entity/MobSpawnType;)Z
