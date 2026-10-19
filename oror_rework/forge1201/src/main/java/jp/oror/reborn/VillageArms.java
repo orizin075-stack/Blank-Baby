@@ -233,8 +233,12 @@ public final class VillageArms {
         Object data = data(gun);
         Object virtual = value(data, "virtualAmmo");
         virtual.getClass().getMethod("set", int.class).invoke(virtual, rounds);
-        Object version = value(data, "nbtVersion");
-        version.getClass().getMethod("invalidateState").invoke(version);
+        try {
+            // Superb Warfare 0.8.9.1+ caches the saved state; 0.8.9 (NightfallCraft 2.2.8.6) has no cache to invalidate
+            Object version = value(data, "nbtVersion");
+            version.getClass().getMethod("invalidateState").invoke(version);
+        } catch (NoSuchFieldException | NoSuchMethodException older) {
+        }
         data.getClass().getMethod("save").invoke(data);
     }
 

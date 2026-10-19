@@ -96,6 +96,7 @@ M = {
     ('net/minecraft/world/item/Item', 'BASE_ATTACK_SPEED_ID'): None,
     ('net/minecraft/world/item/Items', 'MACE'): None,
     ('net/minecraft/world/item/ArmorItem$Type', 'getDurability'): None,
+    ('net/minecraft/world/item/ArmorItem$Type', 'BODY'): None,  # wolf armour slot, 1.20.5
     ('net/minecraft/world/item/ArmorMaterials', 'NETHERITE'): ('NETHERITE', 'Lnet/minecraft/world/item/ArmorMaterials;'),
     # entities
     ('net/minecraft/world/entity/LivingEntity', 'getSlotForHand'): None,

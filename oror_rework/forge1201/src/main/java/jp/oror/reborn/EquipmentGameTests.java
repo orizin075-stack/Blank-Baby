@@ -1,8 +1,5 @@
 package jp.oror.reborn;
 
-import java.util.function.Supplier;
-import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -56,7 +53,7 @@ public final class EquipmentGameTests {
         api.getMethod("setId", ResourceLocation.class).invoke(builder, new ResourceLocation("tacz:ak47"));
         api.getMethod("setAmmoCount", int.class).invoke(builder, 8);
         api.getMethod("setAmmoInBarrel", boolean.class).invoke(builder, true);
-        ItemStack gun = (ItemStack)api.getMethod("build", Provider.class).invoke(builder, h.getLevel().registryAccess());
+        ItemStack gun = (ItemStack)api.getMethod("build").invoke(builder);
         h.assertTrue(!gun.isEmpty() && MobEquipmentUse.kind(gun).equals("gun"), "Actual TaCZ gun recognized");
         equip(v, gun);
         h.succeedWhen(() -> {
@@ -89,7 +86,6 @@ public final class EquipmentGameTests {
         Class<?> sp = Class.forName("io.redspace.ironsspellbooks.api.spells.AbstractSpell");
         Class<?> api = Class.forName("io.redspace.ironsspellbooks.api.spells.ISpellContainer");
         Object container = api.getMethod("createScrollContainer", sp, int.class, ItemStack.class).invoke(null, spell, 3, scroll);
-        api.getMethod("set", ItemStack.class, api).invoke(null, scroll, container);
         h.assertTrue(MobEquipmentUse.kind(scroll).equals("magic"), "Real spell components recognized");
         equip(v, scroll);
         v.getPersistentData().putLong("OrorSilencedUntil", h.getLevel().getGameTime() + 100L);
@@ -104,36 +100,6 @@ public final class EquipmentGameTests {
                             + (1024.0F - t.getHealth())
                             + " spell="
                             + MobMind.data(v).getString("LastSpell")
-                    );
-            }
-        );
-    }
-
-    @GameTest(
-        template = "empty",
-        setupTicks = 40L,
-        timeoutTicks = 240,
-        batch = "equipment"
-    )
-    public static void jeg_native_tactical_goal_fires_a_real_loaded_rifle(GameTestHelper h) throws ReflectiveOperationException {
-        Villager v = CivilizationGameTests.worker(h, 8, 8);
-        Mob t = enemy(h, v);
-        ItemStack gun = ((Item)BuiltInRegistries.ITEM.get(new ResourceLocation("jeg:assault_rifle"))).getDefaultInstance();
-        Supplier<?> holder = (Supplier<?>)Class.forName("ttv.migami.jeg.init.ModDataComponents").getField("GUN_AMMO").get(null);
-        DataComponentType<Integer> ammo = (DataComponentType<Integer>)holder.get();
-        gun.set(ammo, 12);
-        h.assertTrue(MobEquipmentUse.kind(gun).equals("gun"), "Actual JEG rifle recognized");
-        equip(v, gun);
-        h.assertTrue(MobEquipmentUse.nativeGoal(v), "Native tactical goal installed");
-        h.succeedWhen(
-            () -> {
-                h.assertTrue(t.getHealth() < 1024.0F && v.getMainHandItem().is(gun.getItem()), "Actual JEG rounds hit; " + MobMind.data(v));
-                System.out
-                    .println(
-                        "[OROR_EQUIPMENT_CHECK] provider=jeg damage="
-                            + (1024.0F - t.getHealth())
-                            + " remaining_ammo="
-                            + v.getMainHandItem().getOrDefault(ammo, 0)
                     );
             }
         );
