@@ -128,7 +128,7 @@ public final class ProgressionGameTests {
         AdaptiveCombat.arm(v);
         Player p = h.makeMockPlayer(GameType.SURVIVAL);
         p.moveTo(v.getX() + 2.0, v.getY(), v.getZ());
-        Reference<Enchantment> protection = h.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.PROTECTION);
+        Enchantment protection = Enchantments.ALL_DAMAGE_PROTECTION;
 
         for (EquipmentSlot slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
             Item item = switch (slot) {
@@ -439,7 +439,7 @@ public final class ProgressionGameTests {
         v.setNoAi(true);
         SimpleContainer c = new SimpleContainer(9);
         c.setItem(0, new ItemStack(Items.RAW_GOLD, 3));
-        VillagerIndustry.data(v).put("Cargo", c.createTag(v.registryAccess()));
+        VillagerIndustry.data(v).put("Cargo", c.createTag());
         VillagerIndustry.data(v).putInt("OresMined", 7);
         CompoundTag n = new CompoundTag();
         v.saveWithoutId(n);

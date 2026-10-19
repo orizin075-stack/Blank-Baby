@@ -120,14 +120,14 @@ public final class PowerGameTests {
                     default -> Items.NETHERITE_BOOTS;
                 };
                 ItemStack stack = item.getDefaultInstance();
-                stack.enchant(registry.getHolderOrThrow(Enchantments.PROTECTION), 4);
+                stack.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 4);
                 p.setItemSlot(slot, stack);
             }
 
             for (EquipmentSlot slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
-                p.getItemBySlot(slot).forEachModifier(slot, (attribute, modifier) -> {
+                p.getItemBySlot(slot).getAttributeModifiers(slot).forEach((attribute, modifier) -> {
                     AttributeInstance instance = p.getAttribute(attribute);
-                    if (instance != null && !instance.hasModifier(modifier.id())) {
+                    if (instance != null && instance.getModifier(modifier.getId()) == null) {
                         instance.addTransientModifier(modifier);
                     }
                 });
@@ -284,7 +284,7 @@ public final class PowerGameTests {
         float health = cow.getHealth();
         b.setTarget(enemy);
         DivineDomains.begin(b);
-        DivineDomains.tick(new Post(b));
+        DivineDomains.tick(new LivingTickEvent(b));
         h.assertTrue(
             !enemy.isAlive() && cow.isAlive() && cow.getHealth() == health, "Peaceful character's field defeats attackers while preserving unrelated animals"
         );

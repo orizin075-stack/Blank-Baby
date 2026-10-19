@@ -115,11 +115,13 @@ public final class MindGameTests {
         h.assertTrue(t.getHealth() < 920.0F && MobMind.data(v).getInt("SuccessfulStrikes") == 1, "Mace fall damage is actually dealt");
         v.setNoAi(false);
         Player p = h.makeMockPlayer(GameType.SURVIVAL);
-        p.setItemInHand(InteractionHand.MAIN_HAND, Items.MACE.getDefaultInstance());
+        // 1.20.1 has no vanilla mace: the observed-style check uses an axe
+        p.setItemInHand(InteractionHand.MAIN_HAND, Items.IRON_AXE.getDefaultInstance());
         p.moveTo(v.getX() + 1.0, v.getY(), v.getZ());
+        int axeBefore = MobMind.skill(v, "axe");
         v.hurt(p.damageSources().playerAttack(p), 1.0F);
         h.assertTrue(
-            MobMind.data(v).getString("ObservedPlayerStyle").equals("mace") && MobMind.skill(v, "mace") >= 3, "Observed player weapon trains matching skill"
+            MobMind.data(v).getString("ObservedPlayerStyle").equals("axe") && MobMind.skill(v, "axe") > axeBefore, "Observed player weapon trains matching skill"
         );
         h.succeed();
     }

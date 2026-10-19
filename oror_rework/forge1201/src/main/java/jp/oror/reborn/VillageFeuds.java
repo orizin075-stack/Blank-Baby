@@ -330,20 +330,20 @@ public final class VillageFeuds {
     }
 
     private static final Object[][] BOOKS = {
-        {Enchantments.MENDING, 1}, {Enchantments.PROTECTION, 4}, {Enchantments.SHARPNESS, 5}, {Enchantments.EFFICIENCY, 5},
-        {Enchantments.FORTUNE, 3}, {Enchantments.LOOTING, 3}, {Enchantments.UNBREAKING, 3}, {Enchantments.FEATHER_FALLING, 4},
-        {Enchantments.POWER, 5}, {Enchantments.SILK_TOUCH, 1}, {Enchantments.MENDING, 1}
+        {Enchantments.MENDING, 1}, {Enchantments.ALL_DAMAGE_PROTECTION, 4}, {Enchantments.SHARPNESS, 5}, {Enchantments.BLOCK_EFFICIENCY, 5},
+        {Enchantments.BLOCK_FORTUNE, 3}, {Enchantments.MOB_LOOTING, 3}, {Enchantments.UNBREAKING, 3}, {Enchantments.FALL_PROTECTION, 4},
+        {Enchantments.POWER_ARROWS, 5}, {Enchantments.SILK_TOUCH, 1}, {Enchantments.MENDING, 1}
     };
 
     @SuppressWarnings("unchecked")
     private static ItemStack book(ServerLevel sl) {
         Object[] b = BOOKS[sl.random.nextInt(BOOKS.length)];
-        Holder<Enchantment> h = sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow((ResourceKey<Enchantment>)b[0]);
+        Enchantment h = (Enchantment)b[0];
         return EnchantedBookItem.createForEnchantment(new EnchantmentInstance(h, (Integer)b[1]));
     }
 
     static void add(List<ItemStack> out, ServerLevel sl, String id, int min, int max) {
-        Item item = (Item)BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(id));
+        Item item = (Item)BuiltInRegistries.ITEM.get(new ResourceLocation(id));
         int n = min + (max > min ? sl.random.nextInt(max - min + 1) : 0);
         while (n > 0 && item != null && item != net.minecraft.world.item.Items.AIR) {
             int part = Math.min(n, item.getDefaultInstance().getMaxStackSize());

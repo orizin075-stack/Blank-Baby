@@ -86,8 +86,8 @@ public final class NightfallArsenal {
     public static final class Blade extends SwordItem {
         Blade() {
             super(
-                Tiers.NETHERITE,
-                new Properties().durability(6144).fireResistant().rarity(Rarity.EPIC).attributes(SwordItem.createAttributes(Tiers.NETHERITE, 72, -1.8F))
+                Tiers.NETHERITE, 72, -1.8F,
+                new Properties().durability(6144).fireResistant().rarity(Rarity.EPIC)
             );
         }
 
@@ -106,7 +106,7 @@ public final class NightfallArsenal {
                         }
                     }
 
-                    stack.hurtAndBreak(3, p, LivingEntity.getSlotForHand(hand));
+                    stack.hurtAndBreak(3, p, x -> x.broadcastBreakEvent(hand));
                     p.getCooldowns().addCooldown(this, 50);
                     NightfallArsenal.particles(sl, p);
                 }

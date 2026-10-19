@@ -15,6 +15,6 @@ public abstract class VillagerPricesMixin {
         at = {@At("TAIL")}
     )
     private void oror$localVillagePrices(Player player, CallbackInfo ci) {
-        VillageReputation.prices((Villager)this, player);
+        VillageReputation.prices((Villager)(Object)this, player);
     }
 }

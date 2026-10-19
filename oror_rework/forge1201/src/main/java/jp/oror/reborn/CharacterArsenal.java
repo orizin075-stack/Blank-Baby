@@ -96,11 +96,11 @@ public final class CharacterArsenal {
                         strike(b, target, 3.0F, true);
                         break;
                     case "BURST": {
-                        for (LivingEntity t : targets) {
-                            strike(b, t, 1.2F, false);
-                            Vec3 d = t.position().subtract(b.position()).normalize();
-                            t.setDeltaMovement(d.scale(1.4).add(0.0, 0.45, 0.0));
-                            t.hurtMarked = true;
+                        for (LivingEntity foe : targets) {
+                            strike(b, foe, 1.2F, false);
+                            Vec3 d = foe.position().subtract(b.position()).normalize();
+                            foe.setDeltaMovement(d.scale(1.4).add(0.0, 0.45, 0.0));
+                            foe.hurtMarked = true;
                         }
                         break;
                     }
@@ -113,10 +113,10 @@ public final class CharacterArsenal {
                         break;
                     }
                     case "SEAL": {
-                        for (LivingEntity t : targets) {
-                            Abilities.stun(t, 60);
-                            t.getPersistentData().putLong("OrorSilencedUntil", sl.getGameTime() + 80L);
-                            t.getPersistentData().putLong("OrorHealLockedUntil", sl.getGameTime() + 60L);
+                        for (LivingEntity foe : targets) {
+                            Abilities.stun(foe, 60);
+                            foe.getPersistentData().putLong("OrorSilencedUntil", sl.getGameTime() + 80L);
+                            foe.getPersistentData().putLong("OrorHealLockedUntil", sl.getGameTime() + 60L);
                         }
                         break;
                     }
@@ -231,47 +231,40 @@ public final class CharacterArsenal {
                         b.shield = Math.max(40.0F, b.shield);
                         break;
                     case "PULL": {
-                        for (LivingEntity t : targets) {
-                            Vec3 d = b.position().subtract(t.position()).normalize();
-                            t.setDeltaMovement(d.scale(0.9).add(0.0, 0.2, 0.0));
-                            t.hurtMarked = true;
-                            Abilities.stun(t, 20);
+                        for (LivingEntity foe : targets) {
+                            Vec3 d = b.position().subtract(foe.position()).normalize();
+                            foe.setDeltaMovement(d.scale(0.9).add(0.0, 0.2, 0.0));
+                            foe.hurtMarked = true;
+                            Abilities.stun(foe, 20);
                         }
 
                         strike(b, target, 0.7F, false);
                         break;
                     }
                     case "CURSE": {
-                        for (LivingEntity t : targets) {
-                            t.addEffect(new MobEffectInstance(MobEffects.WITHER, 120, 2));
-                            t.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 120, 0));
-                            t.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 120, 2));
-                            t.getPersistentData().putUUID("ororTragedyCreator", b.getUUID());
-                            t.getPersistentData().putLong("ororTragedyUntil", sl.getGameTime() + 240L);
-                            t.getPersistentData().putFloat("ororTragedyHealth", t.getHealth());
+                        for (LivingEntity foe : targets) {
+                            foe.addEffect(new MobEffectInstance(MobEffects.WITHER, 120, 2));
+                            foe.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 120, 0));
+                            foe.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 120, 2));
+                            foe.getPersistentData().putUUID("ororTragedyCreator", b.getUUID());
+                            foe.getPersistentData().putLong("ororTragedyUntil", sl.getGameTime() + 240L);
+                            foe.getPersistentData().putFloat("ororTragedyHealth", foe.getHealth());
                         }
                         break;
                     }
                     case "LAW": {
-                        for (LivingEntity t : targets) {
-                            t.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 60, 1));
-                            t.getPersistentData().putLong("OrorSilencedUntil", sl.getGameTime() + 60L);
-                            t.setDeltaMovement(t.getDeltaMovement().add(0.0, 0.5, 0.0));
-                            t.hurtMarked = true;
+                        for (LivingEntity foe : targets) {
+                            foe.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 60, 1));
+                            foe.getPersistentData().putLong("OrorSilencedUntil", sl.getGameTime() + 60L);
+                            foe.setDeltaMovement(foe.getDeltaMovement().add(0.0, 0.5, 0.0));
+                            foe.hurtMarked = true;
                         }
                         break;
                     }
                     case "TOY":
-                        AttributeInstance scale = target.getAttribute(Attributes.SCALE);
-                        if (scale != null) {
-                            CompoundTag nbt = target.getPersistentData();
-                            if (!nbt.contains("OrorOldScale")) {
-                                nbt.putDouble("OrorOldScale", scale.getBaseValue());
-                            }
-
-                            scale.setBaseValue(0.15);
-                            nbt.putLong("OrorToyUntil", sl.getGameTime() + 120L);
-                        }
+                        // Forge 1.20.1 has no scale attribute: the toy curse slows and weakens instead of shrinking
+                        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3));
+                        target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 120, 2));
 
                         Abilities.stun(target, 40);
                         break;
@@ -340,15 +333,12 @@ public final class CharacterArsenal {
     }
 
     public static void tick(LivingTickEvent e) {
-        if (e.getEntity() instanceof LivingEntity t && t.level() instanceof ServerLevel sl) {
+        LivingEntity t = e.getEntity();
+        if (t.level() instanceof ServerLevel sl) {
             CompoundTag var11 = t.getPersistentData();
             long now = sl.getGameTime();
             if (var11.contains("OrorOldScale") && var11.getLong("OrorToyUntil") <= now) {
-                AttributeInstance scale = t.getAttribute(Attributes.SCALE);
-                if (scale != null) {
-                    scale.setBaseValue(var11.getDouble("OrorOldScale"));
-                }
-
+                // left by the 1.21.1 build's toy curse in a world carried over
                 var11.remove("OrorOldScale");
                 var11.remove("OrorToyUntil");
             }

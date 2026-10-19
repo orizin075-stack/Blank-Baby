@@ -124,7 +124,7 @@ public final class RegressionGameTests {
             ItemStack bow = Items.BOW.getDefaultInstance();
             ItemStack ammo = owner.getProjectile(bow);
             h.assertTrue(!ammo.isEmpty(), "External bow AI receives valid ammunition");
-            AbstractArrow a = ProjectileUtil.getMobArrow(owner, ammo, 1.0F, bow);
+            AbstractArrow a = ProjectileUtil.getMobArrow(owner, ammo, 1.0F);
             CompoundTag n = new CompoundTag();
             a.saveWithoutId(n);
             h.assertTrue(n.contains("item"), "Arrow item serialized");
@@ -209,7 +209,7 @@ public final class RegressionGameTests {
                     h.assertTrue(bx.memory.entries().size() <= 128, "Bounded adaptation " + bx.spec.id);
                 }
 
-                long summons = (long)h.getLevel().getEntitiesOfClass(FamiliarEntity.class, group.getFirst().getBoundingBox().inflate(48.0)).size();
+                long summons = (long)h.getLevel().getEntitiesOfClass(FamiliarEntity.class, group.get(0).getBoundingBox().inflate(48.0)).size();
                 h.assertTrue(summons <= (long)((Integer)RebornConfig.LEVEL_SUMMONS.get()).intValue(), "Level summon budget");
                 System.out
                     .println(
@@ -218,7 +218,7 @@ public final class RegressionGameTests {
                             + " summons="
                             + summons
                             + " avgTickMs="
-                            + (double)h.getLevel().getServer().getAverageTickTimeNanos() / 1000000.0
+                            + (double)h.getLevel().getServer().getAverageTickTime()
                     );
                 h.succeed();
             }

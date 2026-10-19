@@ -1,9 +1,7 @@
 package jp.oror.reborn;
 
 import java.util.List;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -24,14 +22,12 @@ public final class RelicDrops {
             .withParameter(LootContextParams.THIS_ENTITY, b)
             .withParameter(LootContextParams.ORIGIN, b.position())
             .withParameter(LootContextParams.DAMAGE_SOURCE, s)
-            .withOptionalParameter(LootContextParams.ATTACKING_ENTITY, s.getEntity())
-            .withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, s.getDirectEntity())
+            .withOptionalParameter(LootContextParams.KILLER_ENTITY, s.getEntity())
+            .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, s.getDirectEntity())
             .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, p)
             .create(LootContextParamSets.ENTITY);
-        ResourceKey<LootTable> key = ResourceKey.create(
-            Registries.LOOT_TABLE, new ResourceLocation("oror_supreme_bosses", "defeats/" + b.spec.id)
-        );
-        return sl.getServer().reloadableRegistries().getLootTable(key).getRandomItems(params, seed);
+        LootTable table = sl.getServer().getLootData().getLootTable(new ResourceLocation("oror_supreme_bosses", "defeats/" + b.spec.id));
+        return table.getRandomItems(params, seed);
     }
 
     public static boolean defeat(SupremeEntity b, DamageSource s) {

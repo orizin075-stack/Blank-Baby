@@ -5,6 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "oror_reborn.refmap.json",
   "plugin": "jp.oror.reborn.mixin.CompatibilityMixinPlugin",
-  "mixins": ["ArrowSaveMixin", "SuppressionConfigSyncMixin", "VillagerPricesMixin", "CompoundContainerAccess", "OfflinePatreonMixin", "MobGoalSelectorAccess"],
-  "injectors": {"defaultRequire": 1}
+  "mixins": [
+    "VillagerPricesMixin",
+    "CompoundContainerAccess",
+    "MobGoalSelectorAccess"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

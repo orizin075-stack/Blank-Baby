@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -19,14 +18,13 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.saveddata.SavedData.Factory;
 
 public final class VillageLedger extends SavedData {
     public static final String ID = "oror_villages";
     public final Map<UUID, VillageLedger.Village> villages = new LinkedHashMap<>();
 
     public static VillageLedger get(ServerLevel level) {
-        return (VillageLedger)level.getDataStorage().computeIfAbsent(new Factory(VillageLedger::new, VillageLedger::load), "oror_villages");
+        return (VillageLedger)level.getDataStorage().computeIfAbsent(VillageLedger::load, VillageLedger::new, "oror_villages");
     }
 
     public VillageLedger.Village nearest(BlockPos p) {
@@ -88,13 +86,13 @@ public final class VillageLedger extends SavedData {
             v.dailyGains.put(key, used + amount);
         }
 
-        int score = Math.clamp((long)(v.score(player) + amount), -1000, 1000);
+        int score = net.minecraft.util.Mth.clamp((int)(v.score(player) + amount), -1000, 1000);
         v.scores.put(player, score);
         this.setDirty();
         return score;
     }
 
-    public static VillageLedger load(CompoundTag tag, Provider registries) {
+    public static VillageLedger load(CompoundTag tag) {
         VillageLedger db = new VillageLedger();
 
         for (Tag raw : tag.getList("Villages", 10)) {
@@ -107,7 +105,7 @@ public final class VillageLedger extends SavedData {
                 for (Tag entry : n.getList("Scores", 10)) {
                     CompoundTag s = (CompoundTag)entry;
                     if (s.hasUUID("Player")) {
-                        v.scores.put(s.getUUID("Player"), Math.clamp((long)s.getInt("Score"), -1000, 1000));
+                        v.scores.put(s.getUUID("Player"), net.minecraft.util.Mth.clamp((int)s.getInt("Score"), -1000, 1000));
                     }
                 }
 
@@ -131,7 +129,9 @@ public final class VillageLedger extends SavedData {
         return db;
     }
 
-    public CompoundTag save(CompoundTag tag, Provider registries) {
+    // Forge 1.20.1: SavedData.save takes the tag alone (the registries arrived in 1.20.5)
+    @Override
+    public CompoundTag save(CompoundTag tag) {
         ListTag list = new ListTag();
 
         for (VillageLedger.Village v : this.villages.values()) {

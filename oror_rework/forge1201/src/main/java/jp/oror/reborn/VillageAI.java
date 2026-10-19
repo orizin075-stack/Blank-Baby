@@ -287,7 +287,7 @@ public final class VillageAI {
             // v0.17.17: a weapon the combat AI swapped in for the villager's own (an expedition's kit, a player's gift)
             // gives the villager's own back - the swapped-in one was made for the fight and goes with it
             if (n.contains("OriginalWeapon") && !n.getBoolean("OriginalAuto")) {
-                m.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.parseOptional(m.registryAccess(), n.getCompound("OriginalWeapon")));
+                m.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.of(n.getCompound("OriginalWeapon")));
                 n.remove("OriginalWeapon");
             }
             // v0.17.17: whenever it is calm (not only right after a fight: MobLevels.refresh arms villagers again when
@@ -296,7 +296,7 @@ public final class VillageAI {
             for (EquipmentSlot slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.OFFHAND, EquipmentSlot.MAINHAND)) {
                 String key = "Managed_" + slot.getName();
                 ItemStack worn = m.getItemBySlot(slot);
-                if (!worn.isEmpty() && n.contains(key) && ItemStack.isSameItem(worn, ItemStack.parseOptional(m.registryAccess(), n.getCompound(key)))) {
+                if (!worn.isEmpty() && n.contains(key) && ItemStack.isSameItem(worn, ItemStack.of(n.getCompound(key)))) {
                     m.setItemSlot(slot, ItemStack.EMPTY);
                 }
             }
@@ -304,7 +304,7 @@ public final class VillageAI {
             ItemStack hand = m.getMainHandItem();
             if (n.getBoolean("OriginalAuto") && !AdaptiveCombat.foreign(hand) && (hand.getItem() instanceof net.minecraft.world.item.SwordItem
                 || hand.getItem() instanceof net.minecraft.world.item.AxeItem || hand.getItem() instanceof net.minecraft.world.item.ProjectileWeaponItem
-                || hand.is(net.minecraft.world.item.Items.TRIDENT) || hand.is(net.minecraft.world.item.Items.MACE))) {
+                || hand.is(net.minecraft.world.item.Items.TRIDENT))) {
                 m.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             }
             // a gun the village gave goes back into the villager's pack, to be drawn again when danger comes
@@ -332,7 +332,7 @@ public final class VillageAI {
             }
             ItemStack held = m.getMainHandItem();
             boolean issued = !held.isEmpty() && n.contains("Managed_mainhand")
-                && ItemStack.isSameItem(held, ItemStack.parseOptional(m.registryAccess(), n.getCompound("Managed_mainhand")));
+                && ItemStack.isSameItem(held, ItemStack.of(n.getCompound("Managed_mainhand")));
             inv.setItem(i, ItemStack.EMPTY);
             if (!held.isEmpty() && !issued) {
                 // the villager's own weapon goes into the pack in the gun's place

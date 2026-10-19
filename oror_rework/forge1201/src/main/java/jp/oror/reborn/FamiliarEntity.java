@@ -37,9 +37,9 @@ public final class FamiliarEntity extends PathfinderMob {
             .add(Attributes.FOLLOW_RANGE, 24.0);
     }
 
-    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder b) {
-        super.defineSynchedData(b);
-        b.define(STYLE, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(STYLE, 0);
     }
 
     public int style() {

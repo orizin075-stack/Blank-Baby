@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -16,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.saveddata.SavedData.Factory;
 
 /**
  * How far each village has come (v0.17.15), kept beside VillageLedger: its name, the expeditions it has made, its nether
@@ -36,7 +34,7 @@ public final class VillageProgress extends SavedData {
     public final Map<UUID, String> outlaws = new HashMap<>();
 
     public static VillageProgress get(ServerLevel level) {
-        return (VillageProgress)level.getDataStorage().computeIfAbsent(new Factory(VillageProgress::new, (tag, registries) -> load((CompoundTag)tag, (Provider)registries)), ID);
+        return (VillageProgress)level.getDataStorage().computeIfAbsent(VillageProgress::load, VillageProgress::new, ID);
     }
 
     public Record of(VillageLedger.Village village) {
@@ -105,23 +103,23 @@ public final class VillageProgress extends SavedData {
 
     // ------------------------------------------------------------------------------------- goods on their way
     /** Goods for the village's chests, put there when its villagers next look at their chests. */
-    public void deliver(Record r, List<ItemStack> goods, Provider registries) {
+    public void deliver(Record r, List<ItemStack> goods) {
         for (ItemStack st : goods) {
             if (!st.isEmpty()) {
-                r.deliveries.add(st.save(registries));
+                r.deliveries.add(st.save(new CompoundTag()));
             }
         }
         this.setDirty();
     }
 
     /** Put what is waiting into the chests, as far as they have room. */
-    public void unload(Record r, List<Container> chests, Provider registries) {
+    public void unload(Record r, List<Container> chests) {
         if (r.deliveries.isEmpty() || chests.isEmpty()) {
             return;
         }
         ListTag left = new ListTag();
         for (Tag t : r.deliveries) {
-            ItemStack st = ItemStack.parseOptional(registries, (CompoundTag)t);
+            ItemStack st = ItemStack.of((CompoundTag)t);
             for (Container box : chests) {
                 if (st.isEmpty()) {
                     break;
@@ -129,7 +127,7 @@ public final class VillageProgress extends SavedData {
                 st = VillageWork.insert(box, st);
             }
             if (!st.isEmpty()) {
-                left.add(st.save(registries));
+                left.add(st.save(new CompoundTag()));
             }
         }
         r.deliveries.clear();
@@ -148,7 +146,7 @@ public final class VillageProgress extends SavedData {
     }
 
     // ------------------------------------------------------------------------------------- saving
-    public static VillageProgress load(CompoundTag tag, Provider registries) {
+    public static VillageProgress load(CompoundTag tag) {
         VillageProgress db = new VillageProgress();
         for (Tag raw : tag.getList("Villages", 10)) {
             CompoundTag n = (CompoundTag)raw;
@@ -196,7 +194,9 @@ public final class VillageProgress extends SavedData {
         return db;
     }
 
-    public CompoundTag save(CompoundTag tag, Provider registries) {
+    // Forge 1.20.1: SavedData.save takes the tag alone (the registries arrived in 1.20.5)
+    @Override
+    public CompoundTag save(CompoundTag tag) {
         ListTag list = new ListTag();
         for (Record r : new ArrayList<>(this.villages.values())) {
             CompoundTag n = new CompoundTag();

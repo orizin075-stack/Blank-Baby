@@ -81,7 +81,7 @@ public final class VillageExpeditions {
         VillageProgress db = VillageProgress.get(sl);
         VillageProgress.Record r = db.of(s.village);
         long now = sl.getGameTime();
-        db.unload(r, chests(sl, s), sl.registryAccess());
+        db.unload(r, chests(sl, s));
         int stage = Math.max(r.stage, stage(s, r));
         if (stage > r.stage) {
             r.stage = stage;
@@ -131,7 +131,11 @@ public final class VillageExpeditions {
                 if (take(sl, s, "netherite_ingot", 1) < 1) {
                     return;
                 }
-                box.setItem(i, st.transmuteCopy(better, 1));
+                ItemStack up = new ItemStack(better);
+                if (st.getTag() != null) {
+                    up.setTag(st.getTag().copy());
+                }
+                box.setItem(i, up);
                 box.setChanged();
                 VillageProgress.announce(sl, s.village, "村の鍛冶場で「" + st.getHoverName().getString() + "」をネザライトに強化しました", false);
                 return;
@@ -403,7 +407,7 @@ public final class VillageExpeditions {
         CompoundTag mind = MobMind.data(v);
         if (mind.contains("OriginalWeapon") && !mind.getBoolean("OriginalAuto")) {
             // the issued weapon, not one the combat AI made for a fight, is what goes back
-            v.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.parseOptional(v.registryAccess(), mind.getCompound("OriginalWeapon")));
+            v.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.of(mind.getCompound("OriginalWeapon")));
             mind.remove("OriginalWeapon");
             mind.remove("Selected");
         }
@@ -416,7 +420,7 @@ public final class VillageExpeditions {
             }
         }
         VillagerLife.data(v).remove("Kit");
-        VillageProgress.get(sl).deliver(r, back, sl.registryAccess());
+        VillageProgress.get(sl).deliver(r, back);
     }
 
     // ------------------------------------------------------------------------------------- under way
@@ -446,7 +450,7 @@ public final class VillageExpeditions {
                     // v0.17.17: the twelve eyes of ender go back to the chests
                     List<ItemStack> eyes = new ArrayList<>();
                     add(eyes, sl, "ender_eye", 12, 12);
-                    VillageProgress.get(sl).deliver(r, eyes, sl.registryAccess());
+                    VillageProgress.get(sl).deliver(r, eyes);
                 }
                 r.trip = null;
                 r.nextTrip = now + 6000L;
@@ -702,8 +706,8 @@ public final class VillageExpeditions {
             cleared = clear(sl, BlockPos.of(trip.getLong("Spawner")), loot);
         }
         VillageProgress db = VillageProgress.get(sl);
-        db.deliver(r, loot, sl.registryAccess());
-        db.unload(r, chests(sl, s), sl.registryAccess());
+        db.deliver(r, loot);
+        db.unload(r, chests(sl, s));
         switch (kind) {
             case "nether" -> r.nethers++;
             case "end" -> r.ends++;
@@ -727,13 +731,13 @@ public final class VillageExpeditions {
     static void veteran(Villager v, int rank) {
         AttributeInstance hp = v.getAttribute(Attributes.MAX_HEALTH);
         if (hp != null) {
-            hp.removeModifier(VETERAN);
-            hp.addPermanentModifier(new AttributeModifier(VETERAN, 0.15 * rank, AttributeModifier.Operation.MULTIPLY_BASE));
+            Mods.remove(hp, VETERAN);
+            hp.addPermanentModifier(Mods.make(VETERAN, 0.15 * rank, AttributeModifier.Operation.MULTIPLY_BASE));
         }
         AttributeInstance atk = v.getAttribute(Attributes.ATTACK_DAMAGE);
         if (atk != null) {
-            atk.removeModifier(VETERAN);
-            atk.addPermanentModifier(new AttributeModifier(VETERAN, 0.1 * rank, AttributeModifier.Operation.MULTIPLY_BASE));
+            Mods.remove(atk, VETERAN);
+            atk.addPermanentModifier(Mods.make(VETERAN, 0.1 * rank, AttributeModifier.Operation.MULTIPLY_BASE));
         }
     }
 
@@ -779,7 +783,7 @@ public final class VillageExpeditions {
     private static Map<String, List<ResourceLocation>> tables(ServerLevel sl) {
         if (chestTables == null) {
             Map<String, List<ResourceLocation>> m = new java.util.HashMap<>();
-            for (ResourceLocation id : sl.getServer().reloadableRegistries().getKeys(net.minecraft.core.registries.Registries.LOOT_TABLE)) {
+            for (ResourceLocation id : sl.getServer().getLootData().getKeys(net.minecraft.world.level.storage.loot.LootDataType.TABLE)) {
                 String ns = id.getNamespace();
                 if (!ns.equals("minecraft") && !ns.equals("oror_supreme_bosses") && id.getPath().contains("chest")) {
                     m.computeIfAbsent(ns, k -> new ArrayList<>()).add(id);
@@ -826,8 +830,7 @@ public final class VillageExpeditions {
         for (int i = 0; i < rolls; i++) {
             ResourceLocation id = pool.get(sl.random.nextInt(pool.size()));
             try {
-                out.addAll(sl.getServer().reloadableRegistries()
-                    .getLootTable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, id))
+                out.addAll(sl.getServer().getLootData().getLootTable(id)
                     .getRandomItems(params, sl.random.nextLong()));
             } catch (RuntimeException ex) {
                 // a table that wants more than a chest gives it: left out
@@ -857,7 +860,7 @@ public final class VillageExpeditions {
             Block block = item(id) instanceof BlockItem b ? b.getBlock() : null;
             BlockPos altar = block == null ? null : enshrine(sl, s, block, egg ? 2 : -2);
             if (altar == null) {
-                VillageProgress.get(sl).deliver(r, List.of(item(id).getDefaultInstance()), sl.registryAccess());
+                VillageProgress.get(sl).deliver(r, List.of(item(id).getDefaultInstance()));
             }
             celebrate(sl, s, altar != null ? altar : s.village.center);
             VillageProgress.announce(sl, s.village, "村の悲願「" + (egg ? "エンダードラゴンの卵" : "エンドシップのドラゴンの頭") + "」が叶い、"
@@ -895,7 +898,7 @@ public final class VillageExpeditions {
 
     // ------------------------------------------------------------------------------------- the haul
     private static void add(List<ItemStack> loot, ServerLevel sl, String id, int min, int max) {
-        Item item = (Item)BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(id));
+        Item item = (Item)BuiltInRegistries.ITEM.get(new ResourceLocation(id));
         int n = min + (max > min ? sl.random.nextInt(max - min + 1) : 0);
         while (n > 0 && item != null && item != net.minecraft.world.item.Items.AIR) {
             int part = Math.min(n, item.getDefaultInstance().getMaxStackSize());
@@ -999,7 +1002,7 @@ public final class VillageExpeditions {
 
     /** Take up to n of an item (by vanilla id) out of the communal chests; how many were taken. */
     static int take(ServerLevel sl, VillageWork.Survey s, String id, int n) {
-        Item item = (Item)BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(id));
+        Item item = (Item)BuiltInRegistries.ITEM.get(new ResourceLocation(id));
         return take(sl, s, st -> st.is(item), n);
     }
 
@@ -1085,7 +1088,7 @@ public final class VillageExpeditions {
     }
 
     private static Item item(String id) {
-        return (Item)BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(id));
+        return (Item)BuiltInRegistries.ITEM.get(new ResourceLocation(id));
     }
 
     private static Block spawner() {
@@ -1205,7 +1208,7 @@ public final class VillageExpeditions {
             }
             String job = STRONG.get(sl.random.nextInt(STRONG.size()));
             net.minecraft.world.entity.npc.VillagerProfession prof = (net.minecraft.world.entity.npc.VillagerProfession)BuiltInRegistries.VILLAGER_PROFESSION
-                .get(ResourceLocation.withDefaultNamespace(job));
+                .get(new ResourceLocation(job));
             v.setVillagerData(v.getVillagerData().setProfession(prof).setLevel(5));
             v.moveTo(at.getX() + 0.5 + i % 2, at.getY(), at.getZ() + 0.5 + i / 2, (float)Math.toDegrees(heading), 0.0F);
             CompoundTag root = v.getPersistentData();
@@ -1234,11 +1237,10 @@ public final class VillageExpeditions {
     static void dress(ServerLevel sl, Villager v, boolean leader) {
         String[] armour = {"netherite_helmet", "netherite_chestplate", "netherite_leggings", "netherite_boots"};
         EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
-        var enchants = sl.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
         for (int i = 0; i < 4; i++) {
             ItemStack st = item(armour[i]).getDefaultInstance();
-            st.enchant(enchants.getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.PROTECTION), 4);
-            st.enchant(enchants.getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.UNBREAKING), 3);
+            st.enchant(net.minecraft.world.item.enchantment.Enchantments.ALL_DAMAGE_PROTECTION, 4);
+            st.enchant(net.minecraft.world.item.enchantment.Enchantments.UNBREAKING, 3);
             v.setItemSlot(slots[i], st);
             v.setDropChance(slots[i], 0.0F);
         }
@@ -1246,8 +1248,8 @@ public final class VillageExpeditions {
         if (weapon.isEmpty()) {
             weapon = item(VillagerRoles.profession(v).equals("fletcher") ? "bow" : (sl.random.nextInt(2) == 0 ? "netherite_sword" : "netherite_axe"))
                 .getDefaultInstance();
-            weapon.enchant(enchants.getHolderOrThrow(VillagerRoles.profession(v).equals("fletcher")
-                ? net.minecraft.world.item.enchantment.Enchantments.POWER : net.minecraft.world.item.enchantment.Enchantments.SHARPNESS), 5);
+            weapon.enchant(VillagerRoles.profession(v).equals("fletcher")
+                ? net.minecraft.world.item.enchantment.Enchantments.POWER_ARROWS : net.minecraft.world.item.enchantment.Enchantments.SHARPNESS, 5);
         }
         v.setItemSlot(EquipmentSlot.MAINHAND, weapon);
         v.setDropChance(EquipmentSlot.MAINHAND, 0.0F);

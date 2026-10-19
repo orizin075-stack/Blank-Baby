@@ -47,11 +47,12 @@ public final class OrorReborn {
 
     public OrorReborn() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        TierSignals.init();
         MiracleLoot.FUNCTIONS.register(bus);
         NightfallArsenal.CONTENT.size();
         FusionItems.ITEMS.size();
         CharacterRelics.ITEMS.size();
-        AdventureContent.MATERIALS.register(bus);
+        AdventureContent.CONTENT.size();
         LegacyContent.BLOCKS.register(bus);
         VillagerIndustry.POIS.register(bus);
         VillagerIndustry.PROFESSIONS.register(bus);
@@ -122,7 +123,7 @@ public final class OrorReborn {
         for (CharacterSpec s : CharacterSpec.ALL.values()) {
             RegistryObject<EntityType<SupremeEntity>> t = ENTITIES.register(
                 s.id,
-                () -> Builder.of((type, l) -> new SupremeEntity(type, l, s), MobCategory.CREATURE)
+                () -> Builder.<SupremeEntity>of((type, l) -> new SupremeEntity(type, l, s), MobCategory.CREATURE)
                         .sized(s.width, s.height)
                         .clientTrackingRange(12)
                         .updateInterval(2)

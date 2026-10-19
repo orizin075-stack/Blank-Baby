@@ -11,7 +11,6 @@ import java.util.WeakHashMap;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -32,7 +31,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.LightLayer;
@@ -95,7 +93,7 @@ public final class VillageWork {
     static Survey cached(UUID village) {
         return SURVEYS.get(village);
     }
-    private static final Map<RecipeManager, Map<ResourceLocation, RecipeHolder<CraftingRecipe>>> BOOK = new WeakHashMap<>();
+    private static final Map<RecipeManager, Map<ResourceLocation, CraftingRecipe>> BOOK = new WeakHashMap<>();
     /** Natural ground a villager sets things on (not floors, roofs, paths or fields). */
     private static final Set<String> GROUND = Set.of(
         "grass_block", "dirt", "coarse_dirt", "podzol", "rooted_dirt", "mycelium", "mud", "packed_mud", "moss_block", "sand", "red_sand",
@@ -432,7 +430,7 @@ public final class VillageWork {
         if (!s.dark.isEmpty()) {
             todo.add("torch");
         }
-        if (count(v, i -> i.is(Items.WHEAT)) >= 3 && count(v, i -> i.has(DataComponents.FOOD)) < 8) {
+        if (count(v, i -> i.is(Items.WHEAT)) >= 3 && count(v, i -> i.isEdible()) < 8) {
             todo.add("bread");
         }
         // v0.17.15: what a growing village works toward (VillageExpeditions)
@@ -902,7 +900,7 @@ public final class VillageWork {
     }
 
     private static Item item(String id) {
-        return (Item) BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(id));
+        return (Item) BuiltInRegistries.ITEM.get(new ResourceLocation(id));
     }
 
     private static Block block(String id) {
@@ -945,15 +943,15 @@ public final class VillageWork {
 
     /** A crafting step by vanilla recipe id. */
     private static int craft(Villager v, ServerLevel sl, String id) {
-        return VillagerLife.craft(v, sl, ResourceLocation.withDefaultNamespace(id)) ? ACTED : CANNOT;
+        return VillagerLife.craft(v, sl, new ResourceLocation(id)) ? ACTED : CANNOT;
     }
 
     /** The crafting recipes by id, read once per recipe manager (a reload makes a new one). */
-    static RecipeHolder<CraftingRecipe> recipe(ServerLevel sl, ResourceLocation id) {
-        Map<ResourceLocation, RecipeHolder<CraftingRecipe>> book = BOOK.computeIfAbsent(sl.getRecipeManager(), m -> {
-            Map<ResourceLocation, RecipeHolder<CraftingRecipe>> all = new HashMap<>();
-            for (RecipeHolder<CraftingRecipe> r : m.getAllRecipesFor(RecipeType.CRAFTING)) {
-                all.put(r.id(), r);
+    static CraftingRecipe recipe(ServerLevel sl, ResourceLocation id) {
+        Map<ResourceLocation, CraftingRecipe> book = BOOK.computeIfAbsent(sl.getRecipeManager(), m -> {
+            Map<ResourceLocation, CraftingRecipe> all = new HashMap<>();
+            for (CraftingRecipe r : m.getAllRecipesFor(RecipeType.CRAFTING)) {
+                all.put(r.getId(), r);
             }
             return all;
         });
@@ -1248,7 +1246,7 @@ public final class VillageWork {
             return farmer ? 32 : 0;
         } else if (st.is(Items.WHEAT)) {
             return 16;
-        } else if (st.has(DataComponents.FOOD)) {
+        } else if (st.isEdible()) {
             return 16;
         } else if (st.is(item("flint")) || st.is(item("iron_ingot")) || st.is(item("paper")) || st.is(item("string"))) {
             return 0;

@@ -87,7 +87,7 @@ public final class Abilities {
         }
     }
 
-    private static void effect(LivingEntity t, Holder<MobEffect> e, int ticks, int amp) {
+    private static void effect(LivingEntity t, MobEffect e, int ticks, int amp) {
         t.addEffect(new MobEffectInstance(e, ticks, amp));
     }
 
@@ -456,7 +456,7 @@ public final class Abilities {
                     b.shield = 80.0F;
                     break;
                 case "nun":
-                    String m = t instanceof SupremeEntity s ? s.spec.model : (t instanceof Animal ? "beast" : "human");
+                    String m = t instanceof SupremeEntity sb ? sb.spec.model : (t instanceof Animal ? "beast" : "human");
 
                     b.setForm(switch (m) {
                         case "beast", "sea", "whale" -> 1;

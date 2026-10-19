@@ -10,7 +10,6 @@ import java.util.WeakHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -32,10 +31,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -233,7 +233,7 @@ public final class VillagerLife {
         if (s.isEmpty() || s.isDamageableItem()) {
             return false;
         } else {
-            return s.has(DataComponents.FOOD)
+            return s.isEdible()
                 || s.is(ItemTags.LOGS)
                 || s.is(ItemTags.PLANKS)
                 || s.is(ItemTags.SAPLINGS)
@@ -290,8 +290,8 @@ public final class VillagerLife {
 
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 ItemStack stack = inv.getItem(i);
-                if (stack.has(DataComponents.FOOD)) {
-                    v.heal((float)Math.max(2, ((FoodProperties)stack.get(DataComponents.FOOD)).nutrition()));
+                if (stack.isEdible()) {
+                    v.heal((float)Math.max(2, stack.getFoodProperties(v).getNutrition()));
                     stack.shrink(1);
                     v.swing(InteractionHand.MAIN_HAND);
                     count(v, "Meals");
@@ -335,8 +335,7 @@ public final class VillagerLife {
             BlockSnapshot before = BlockSnapshot.create(sl.dimension(), sl, p);
             if (!sl.setBlock(p, state, 3)) {
                 return false;
-            } else if (((EntityPlaceEvent)MinecraftForge.EVENT_BUS.post(new EntityPlaceEvent(before, sl.getBlockState(p.below()), actor(v, sl, v.getMainHandItem()))))
-                .isCanceled()) {
+            } else if (MinecraftForge.EVENT_BUS.post(new EntityPlaceEvent(before, sl.getBlockState(p.below()), actor(v, sl, v.getMainHandItem())))) {
                 before.restore();
                 return false;
             } else {
@@ -371,7 +370,7 @@ public final class VillagerLife {
         BlockState state = sl.getBlockState(p);
         if (editable(v, sl, p) && state.getBlock() instanceof CropBlock crop && crop.isMaxAge(state) && nearby(v, p)) {
             FakePlayer fake = actor(v, sl, Items.IRON_HOE.getDefaultInstance());
-            if (((BreakEvent)MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, p, state, fake))).isCanceled()) {
+            if (MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, p, state, fake))) {
                 return false;
             } else {
                 List<ItemStack> drops = Block.getDrops(state, sl, p, null, v, fake.getMainHandItem());
@@ -457,8 +456,7 @@ public final class VillagerLife {
                     return false;
                 } else {
                     BlockState state = sl.getBlockState(ground);
-                    if (((BreakEvent)MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, ground, state, actor(v, sl, Items.IRON_HOE.getDefaultInstance()))))
-                        .isCanceled()) {
+                    if (MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, ground, state, actor(v, sl, Items.IRON_HOE.getDefaultInstance())))) {
                         return false;
                     } else {
                         sl.setBlock(ground, (BlockState)Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7), 3);
@@ -569,7 +567,7 @@ public final class VillagerLife {
             int felled = 0;
             for (BlockPos q : trunk) {
                 BlockState log = sl.getBlockState(q);
-                if (((BreakEvent)MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, q, log, actor(v, sl, tool)))).isCanceled()) {
+                if (MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, q, log, actor(v, sl, tool)))) {
                     continue;
                 }
                 List<ItemStack> drops = Block.getDrops(log, sl, q, null, v, tool);
@@ -660,12 +658,24 @@ public final class VillagerLife {
      * grid to the pattern before matching, and a 3x3 grid never matched a smaller pattern (planks, sticks, torches,
      * doors...), so most of what villagers tried to make failed.
      */
-    public static boolean craft(Villager v, ServerLevel sl, ResourceLocation wanted) {
-        RecipeHolder<CraftingRecipe> holder = wanted == null ? null : VillageWork.recipe(sl, wanted);
-        if (holder == null) {
+    /** The menu a crafting container needs; nothing ever opens it. */
+    private static final AbstractContainerMenu NO_MENU = new AbstractContainerMenu(null, -1) {
+        @Override
+        public boolean stillValid(Player player) {
             return false;
         }
-        CraftingRecipe recipe = (CraftingRecipe)holder.value();
+
+        @Override
+        public ItemStack quickMoveStack(Player player, int slot) {
+            return ItemStack.EMPTY;
+        }
+    };
+
+    public static boolean craft(Villager v, ServerLevel sl, ResourceLocation wanted) {
+        CraftingRecipe recipe = wanted == null ? null : VillageWork.recipe(sl, wanted);
+        if (recipe == null) {
+            return false;
+        }
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         if (ingredients.isEmpty() || ingredients.size() > 9) {
             return false;
@@ -695,7 +705,11 @@ public final class VillagerLife {
             }
             grid.set(k, remaining.removeItem(slot, 1));
         }
-        CraftingInput input = CraftingInput.of(w, h, grid);
+        // Forge 1.20.1: recipes match a crafting container (a CraftingInput in 1.21.1)
+        TransientCraftingContainer input = new TransientCraftingContainer(NO_MENU, w, h);
+        for (int k = 0; k < grid.size(); k++) {
+            input.setItem(k, grid.get(k));
+        }
         if (!recipe.matches(input, sl)) {
             return false;
         }
@@ -712,7 +726,7 @@ public final class VillagerLife {
             inv.setItem(i, remaining.getItem(i));
         }
         count(v, "Crafts");
-        data(v).putString("LastRecipe", holder.id().toString());
+        data(v).putString("LastRecipe", recipe.getId().toString());
         data(v).putString("Task", "製作：" + result.getHoverName().getString());
         v.swing(InteractionHand.MAIN_HAND);
         return true;
@@ -829,10 +843,8 @@ public final class VillagerLife {
             BlockSnapshot b = BlockSnapshot.create(sl.dimension(), sl, q);
             if (sl.setBlock(p, first, 2)
                 && sl.setBlock(q, second, 2)
-                && !((EntityPlaceEvent)MinecraftForge.EVENT_BUS.post(new EntityPlaceEvent(a, sl.getBlockState(p.below()), actor(v, sl, v.getMainHandItem()))))
-                    .isCanceled()
-                && !((EntityPlaceEvent)MinecraftForge.EVENT_BUS.post(new EntityPlaceEvent(b, sl.getBlockState(q.below()), actor(v, sl, v.getMainHandItem()))))
-                    .isCanceled()) {
+                && !MinecraftForge.EVENT_BUS.post(new EntityPlaceEvent(a, sl.getBlockState(p.below()), actor(v, sl, v.getMainHandItem())))
+                && !MinecraftForge.EVENT_BUS.post(new EntityPlaceEvent(b, sl.getBlockState(q.below()), actor(v, sl, v.getMainHandItem())))) {
                 sl.updateNeighborsAt(p, first.getBlock());
                 sl.updateNeighborsAt(q, second.getBlock());
                 if (sl.getBlockState(p).is(first.getBlock()) && sl.getBlockState(q).is(second.getBlock())) {
@@ -950,7 +962,7 @@ public final class VillagerLife {
         if (part.kind == 'F' && !original.canBeReplaced()) {
             // natural ground under the floor gives way to the builder's cobblestone
             if (!editable(v, sl, p) || !VillageWork.natural(original)
-                || ((BreakEvent)MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, p, original, actor(v, sl, v.getMainHandItem())))).isCanceled()) {
+                || MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, p, original, actor(v, sl, v.getMainHandItem())))) {
                 n.putInt("BuildStep", step + 1);
                 return false;
             }
@@ -1061,7 +1073,7 @@ public final class VillagerLife {
             return 2;
         } else if (id.endsWith("_seeds") || s.is(Items.WHEAT) || s.is(Items.BONE_MEAL)) {
             return 3;
-        } else if (s.has(DataComponents.FOOD)) {
+        } else if (s.isEdible()) {
             return 4;
         } else if (s.is(ItemTags.WOOL)) {
             return 5;

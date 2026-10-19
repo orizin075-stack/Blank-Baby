@@ -2,6 +2,8 @@ package jp.oror.reborn;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -19,8 +21,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -35,10 +38,10 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.Item.Properties;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import jp.oror.reborn.RelicArts.Art;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.registries.RegistryObject;
@@ -214,7 +217,7 @@ public final class CharacterRelics {
                 p.getCooldowns().addCooldown(stack.getItem(), cd);
             }
             if (w.spec != null && hand != null && stack.isDamageableItem()) {
-                stack.hurtAndBreak(1, p, LivingEntity.getSlotForHand(hand));
+                stack.hurtAndBreak(1, p, x -> x.broadcastBreakEvent(hand));
             }
         }
         return InteractionResultHolder.sidedSuccess(stack, false);
@@ -286,7 +289,7 @@ public final class CharacterRelics {
             RelicEffects.sound(sl, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, 0.8F, 1.7F);
         }
         if (stack.isDamageableItem()) {
-            stack.hurtAndBreak(1, p, LivingEntity.getSlotForHand(who.getUsedItemHand()));
+            stack.hurtAndBreak(1, p, x -> x.broadcastBreakEvent(who.getUsedItemHand()));
         }
     }
 
@@ -318,7 +321,7 @@ public final class CharacterRelics {
 
     // ------------------------------------------------------------------------------------- accessories (v0.17.11)
     /** The bonuses of a focus or charm, the same held (item attributes) and worn (transient modifiers on the wearer). */
-    private record Bonus(net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> attribute, String id, double amount, AttributeModifier.Operation op) {
+    private record Bonus(net.minecraft.world.entity.ai.attributes.Attribute attribute, String id, double amount, AttributeModifier.Operation op) {
     }
 
     private static final List<Bonus> FOCUS = List.of(
@@ -343,8 +346,8 @@ public final class CharacterRelics {
         d.putString(focus ? "ororWornFocus" : "ororWornCharm", w.spec.id);
         for (Bonus b : focus ? FOCUS : CHARM) {
             net.minecraft.world.entity.ai.attributes.AttributeInstance a = p.getAttribute(b.attribute());
-            if (a != null && !a.hasModifier(worn(b))) {
-                a.addTransientModifier(new AttributeModifier(worn(b), b.amount(), b.op()));
+            if (a != null && !Mods.has(a, worn(b))) {
+                a.addTransientModifier(Mods.make(worn(b), b.amount(), b.op()));
             }
         }
     }
@@ -359,8 +362,8 @@ public final class CharacterRelics {
             }
             for (Bonus b : focus ? FOCUS : CHARM) {
                 net.minecraft.world.entity.ai.attributes.AttributeInstance a = p.getAttribute(b.attribute());
-                if (a != null && a.hasModifier(worn(b))) {
-                    a.removeModifier(worn(b));
+                if (a != null && Mods.has(a, worn(b))) {
+                    Mods.remove(a, worn(b));
                 }
             }
         }
@@ -451,21 +454,32 @@ public final class CharacterRelics {
         private final Wield w;
 
         Artifact(RelicSpec s) {
-            super(new Properties().stacksTo(1).fireResistant().rarity(Rarity.RARE).attributes(attributes(s)));
+            super(new Properties().stacksTo(1).fireResistant().rarity(Rarity.RARE));
             this.w = new Wield(s, s.id, null, 0.0F, s.rank, s.cooldown);
         }
 
+        private Multimap<Attribute, AttributeModifier> main;
+        private Multimap<Attribute, AttributeModifier> off;
+
         /** Held in either hand: a focus sharpens the wielder's attacks, a charm hardens and quickens them (v0.17.6). */
-        static ItemAttributeModifiers attributes(RelicSpec s) {
-            ItemAttributeModifiers.Builder b = ItemAttributeModifiers.builder();
+        static Multimap<Attribute, AttributeModifier> attributes(RelicSpec s, EquipmentSlot hand) {
+            // Forge 1.20.1 refuses a second modifier with the same UUID on an attribute: one set per hand
+            ImmutableMultimap.Builder<Attribute, AttributeModifier> b = ImmutableMultimap.builder();
             for (Bonus x : s.slot.equals("focus") ? FOCUS : CHARM) {
-                b.add(x.attribute(), modifier(x.id(), x.amount(), x.op()), EquipmentSlotGroup.ANY);
+                b.put(x.attribute(), Mods.make(new ResourceLocation("oror_supreme_bosses", x.id() + "_" + hand.getName()), x.amount(), x.op()));
             }
             return b.build();
         }
 
-        private static AttributeModifier modifier(String id, double amount, AttributeModifier.Operation op) {
-            return new AttributeModifier(new ResourceLocation("oror_supreme_bosses", id), amount, op);
+        @Override
+        public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+            if (slot == EquipmentSlot.MAINHAND) {
+                return this.main != null ? this.main : (this.main = attributes(this.w.spec, slot));
+            }
+            if (slot == EquipmentSlot.OFFHAND) {
+                return this.off != null ? this.off : (this.off = attributes(this.w.spec, slot));
+            }
+            return super.getAttributeModifiers(slot, stack);
         }
 
         @Override
@@ -488,7 +502,7 @@ public final class CharacterRelics {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, Level ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
             RelicArts.tooltip(this.w.art, lines);
             lines.add(Component.translatable("weapon_kind.oror_supreme_bosses.worn." + this.w.spec.slot).withStyle(ChatFormatting.WHITE));
         }
@@ -499,22 +513,32 @@ public final class CharacterRelics {
         private final Wield w;
 
         Blade(Wield w, Properties props) {
-            super(Tiers.NETHERITE, props.attributes(attributes(w.kind, w.damage)));
+            super(Tiers.NETHERITE, 0, 0.0F, props);
             this.w = w;
         }
 
-        /** Damage and speed replace the base modifiers like SwordItem.createAttributes; reach and knockback are added on top. */
-        static ItemAttributeModifiers attributes(Kind k, float damage) {
-            ItemAttributeModifiers.Builder b = ItemAttributeModifiers.builder()
-                .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, damage * k.mul, AttributeModifier.Operation.ADDITION), EquipmentSlotGroup.MAINHAND)
-                .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, k.speed, AttributeModifier.Operation.ADDITION), EquipmentSlotGroup.MAINHAND);
+        private Multimap<Attribute, AttributeModifier> mods;
+
+        /** Damage and speed replace the base modifiers of SwordItem; reach and knockback are added on top. */
+        static Multimap<Attribute, AttributeModifier> attributes(Kind k, float damage) {
+            ImmutableMultimap.Builder<Attribute, AttributeModifier> b = ImmutableMultimap.builder();
+            b.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", damage * k.mul, AttributeModifier.Operation.ADDITION));
+            b.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", k.speed, AttributeModifier.Operation.ADDITION));
             if (k.reach != 0.0F) {
-                b.add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(REACH_ID, k.reach, AttributeModifier.Operation.ADDITION), EquipmentSlotGroup.MAINHAND);
+                b.put(ForgeMod.ENTITY_REACH.get(), Mods.make(REACH_ID, k.reach, AttributeModifier.Operation.ADDITION));
             }
             if (k.knock != 0.0F) {
-                b.add(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(KNOCK_ID, k.knock, AttributeModifier.Operation.ADDITION), EquipmentSlotGroup.MAINHAND);
+                b.put(Attributes.ATTACK_KNOCKBACK, Mods.make(KNOCK_ID, k.knock, AttributeModifier.Operation.ADDITION));
             }
             return b.build();
+        }
+
+        @Override
+        public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+            if (slot != EquipmentSlot.MAINHAND) {
+                return super.getAttributeModifiers(slot, stack);
+            }
+            return this.mods != null ? this.mods : (this.mods = attributes(this.w.kind, this.w.damage));
         }
 
         @Override
@@ -556,7 +580,7 @@ public final class CharacterRelics {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, Level ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
             CharacterRelics.describe(this.w, lines);
         }
     }
@@ -565,8 +589,18 @@ public final class CharacterRelics {
         private final Wield w;
 
         Bow(Wield w, Properties props) {
-            super(props.attributes(Blade.attributes(w.kind, w.damage)));
+            super(props);
             this.w = w;
+        }
+
+        private Multimap<Attribute, AttributeModifier> mods;
+
+        @Override
+        public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+            if (slot != EquipmentSlot.MAINHAND) {
+                return super.getAttributeModifiers(slot, stack);
+            }
+            return this.mods != null ? this.mods : (this.mods = Blade.attributes(this.w.kind, this.w.damage));
         }
 
         @Override
@@ -610,7 +644,7 @@ public final class CharacterRelics {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, Level ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
             CharacterRelics.describe(this.w, lines);
         }
     }
@@ -619,8 +653,18 @@ public final class CharacterRelics {
         private final Wield w;
 
         Shield(Wield w, Properties props) {
-            super(props.attributes(Blade.attributes(w.kind, w.damage)));
+            super(props);
             this.w = w;
+        }
+
+        private Multimap<Attribute, AttributeModifier> mods;
+
+        @Override
+        public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+            if (slot != EquipmentSlot.MAINHAND) {
+                return super.getAttributeModifiers(slot, stack);
+            }
+            return this.mods != null ? this.mods : (this.mods = Blade.attributes(this.w.kind, this.w.damage));
         }
 
         @Override
@@ -653,7 +697,7 @@ public final class CharacterRelics {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, Level ctx, java.util.List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
             CharacterRelics.describe(this.w, lines);
         }
     }

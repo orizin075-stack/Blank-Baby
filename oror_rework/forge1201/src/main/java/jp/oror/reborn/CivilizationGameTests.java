@@ -19,7 +19,6 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.GameRules;
@@ -83,7 +82,7 @@ public final class CivilizationGameTests {
         VillageLedger db = VillageLedger.get(h.getLevel());
         db.change(av, p, 80, h.getLevel().getGameTime(), "trade");
         h.assertTrue(av.score(p) == 80 && bv.score(p) == 0 && !VillageReputation.sameVillage(a, b), "Only the local settlement gains reputation");
-        VillageLedger copy = VillageLedger.load(db.save(new CompoundTag(), h.getLevel().registryAccess()), h.getLevel().registryAccess());
+        VillageLedger copy = VillageLedger.load(db.save(new CompoundTag()));
         h.assertTrue(copy.villages.get(av.id).score(p) == 80 && copy.villages.get(bv.id).score(p) == 0, "World saved data retains both villages separately");
         h.succeed();
     }
@@ -107,7 +106,7 @@ public final class CivilizationGameTests {
                 && VillageReputation.score(v, p.getUUID()) == 2,
             "Donated actual food is consumed and stored"
         );
-        MerchantOffer offer = new MerchantOffer(new ItemCost(Items.EMERALD, 2), Items.BREAD.getDefaultInstance(), 16, 2, 0.05F);
+        MerchantOffer offer = new MerchantOffer(new ItemStack(Items.EMERALD, 2), Items.BREAD.getDefaultInstance(), 16, 2, 0.05F);
         VillageReputation.trade(new TradeWithVillagerEvent(p, offer, v));
         h.assertTrue(VillageReputation.score(v, p.getUUID()) == 5, "Completed trade adds local reputation");
         h.succeed();
@@ -142,7 +141,7 @@ public final class CivilizationGameTests {
         Villager v = worker(h, 8, 8);
         Player p = h.makeMockPlayer(GameType.SURVIVAL);
         MerchantOffers offers = new MerchantOffers();
-        offers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 20), Items.DIAMOND.getDefaultInstance(), 16, 2, 0.05F));
+        offers.add(new MerchantOffer(new ItemStack(Items.EMERALD, 20), Items.DIAMOND.getDefaultInstance(), 16, 2, 0.05F));
         v.setOffers(offers);
         VillageLedger.Village village = VillageLedger.of(v);
 
@@ -151,7 +150,7 @@ public final class CivilizationGameTests {
         }
 
         VillageReputation.prices(v, p);
-        h.assertTrue(((MerchantOffer)v.getOffers().getFirst()).getCostA().getCount() == 10, "High local trust discounts a real offer from 20 to 10");
+        h.assertTrue(((MerchantOffer)v.getOffers().get(0)).getCostA().getCount() == 10, "High local trust discounts a real offer from 20 to 10");
         h.succeed();
     }
 
@@ -246,7 +245,7 @@ public final class CivilizationGameTests {
             "Actual log is cut and collected"
         );
         h.assertTrue(
-            VillagerLife.craft(v, h.getLevel(), ResourceLocation.withDefaultNamespace("oak_planks"))
+            VillagerLife.craft(v, h.getLevel(), new ResourceLocation("oak_planks"))
                 && count(v.getInventory(), Items.OAK_LOG) == 0
                 && count(v.getInventory(), Items.OAK_PLANKS) == 4,
             "A registered native recipe consumes one log and outputs four planks"
@@ -337,7 +336,7 @@ public final class CivilizationGameTests {
         Villager buyer = worker(h, 8, 8);
         Villager seller = worker(h, 10, 8);
         MerchantOffers offers = new MerchantOffers();
-        offers.add(new MerchantOffer(new ItemCost(Items.EMERALD, 2), new ItemStack(Items.BREAD, 3), 16, 2, 0.05F));
+        offers.add(new MerchantOffer(new ItemStack(Items.EMERALD, 2), new ItemStack(Items.BREAD, 3), 16, 2, 0.05F));
         seller.setOffers(offers);
         buyer.getInventory().addItem(new ItemStack(Items.EMERALD, 4));
         h.assertTrue(
@@ -345,7 +344,7 @@ public final class CivilizationGameTests {
                 && count(buyer.getInventory(), Items.EMERALD) == 2
                 && count(buyer.getInventory(), Items.BREAD) == 3
                 && count(seller.getInventory(), Items.EMERALD) == 2
-                && ((MerchantOffer)seller.getOffers().getFirst()).getUses() == 1,
+                && ((MerchantOffer)seller.getOffers().get(0)).getUses() == 1,
             "Trade transferred real payment and honored actual stock usage"
         );
         h.succeed();

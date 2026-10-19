@@ -3,7 +3,6 @@ package jp.oror.reborn;
 import com.google.gson.JsonObject;
 import java.util.Map;
 import java.util.Map.Entry;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.ModList;
@@ -114,7 +112,7 @@ public final class FusionGameTests {
       p.getInventory().add(new ItemStack((ItemLike)AdventureContent.MANA.get(), 4));
       h.assertTrue(
          NightfallFusion.temper(p)
-            && ((CustomData)p.getMainHandItem().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)).copyTag().getInt("OrorTemper") == 1,
+            && Stacks.custom(p.getMainHandItem()).getInt("OrorTemper") == 1,
          "Actual item components store upgrade"
       );
       h.assertTrue(

@@ -1,0 +1,51 @@
+# Minecraft 1.20.1 members the Forge port uses that the 1.21.1 build did not. Each one is used the same way in the
+# Forge 1.20.1 sources or in Create / Iron's Spells / Epic Fight for 1.20.1 (ref1201/).
+net/minecraft/network/FriendlyByteBuf
+	VM writeVarInt (I)Lnet/minecraft/network/FriendlyByteBuf;
+	VM readVarInt ()I
+	VM writeInt (I)Lio/netty/buffer/ByteBuf;
+	VM readInt ()I
+	VM writeUtf (Ljava/lang/String;)Lnet/minecraft/network/FriendlyByteBuf;
+	VM readUtf ()Ljava/lang/String;
+	VM writeNbt (Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/network/FriendlyByteBuf;
+	VM readNbt ()Lnet/minecraft/nbt/CompoundTag;
+net/minecraft/world/entity/LivingEntity
+	VM broadcastBreakEvent (Lnet/minecraft/world/InteractionHand;)V
+	VM broadcastBreakEvent (Lnet/minecraft/world/entity/EquipmentSlot;)V
+net/minecraft/world/entity/EquipmentSlot
+	VM getName ()Ljava/lang/String;
+net/minecraft/world/item/SwordItem
+	SP <init> (Lnet/minecraft/world/item/Tier;IFLnet/minecraft/world/item/Item$Properties;)V
+net/minecraft/world/item/ItemStack
+	VM isEdible ()Z
+	VM getFoodProperties (Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/food/FoodProperties;
+	VM getOrCreateTagElement (Ljava/lang/String;)Lnet/minecraft/nbt/CompoundTag;
+net/minecraft/world/food/FoodProperties
+	VM getNutrition ()I
+	VM getSaturationModifier ()F
+net/minecraft/advancements/Advancement
+net/minecraft/nbt/CompoundTag
+	VM copy ()Lnet/minecraft/nbt/CompoundTag;
+net/minecraft/commands/CommandSourceStack
+	VM hasPermission (I)Z
+net/minecraft/world/entity/animal/Wolf
+	VM setTame (Z)V
+net/minecraft/world/entity/Entity
+	VM setSecondsOnFire (I)V
+net/minecraft/world/item/trading/MerchantOffer
+	SP <init> (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;IIF)V
+net/minecraft/world/SimpleContainer
+	VM fromTag (Lnet/minecraft/nbt/ListTag;)V
+	VM createTag ()Lnet/minecraft/nbt/ListTag;
+net/minecraft/world/inventory/AbstractContainerMenu
+	SP <init> (Lnet/minecraft/world/inventory/MenuType;I)V
+	OVR stillValid (Lnet/minecraft/world/entity/player/Player;)Z
+	OVR quickMoveStack (Lnet/minecraft/world/entity/player/Player;I)Lnet/minecraft/world/item/ItemStack;
+net/minecraft/world/inventory/MenuType
+net/minecraft/client/model/geom/ModelPart
+	VM render (Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V
+net/minecraft/util/Mth
+	SM clamp (III)I
+	SM clamp (FFF)F
+	SM clamp (DDD)D
+	SM clamp (JJJ)J

@@ -2,23 +2,17 @@ package jp.oror.reborn.mixin;
 
 import java.util.List;
 import java.util.Set;
-import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public final class CompatibilityMixinPlugin implements IMixinConfigPlugin {
+    /**
+     * Forge 1.20.1 port: only the vanilla mixins remain (the arrow-save fix, the Suppression config broadcast and the
+     * offline TenshiLib supporter list were for the 1.21.1 builds of those mods).
+     */
     public boolean shouldApplyMixin(String target, String mixin) {
-        if (mixin.endsWith("OfflinePatreonMixin")) {
-            LoadingModList loaded = LoadingModList.get();
-            return loaded != null && loaded.getMods().stream().anyMatch(mod -> mod.getModId().equals("tenshilib"));
-        } else if (!mixin.endsWith("SuppressionConfigSyncMixin")) {
-            return true;
-        } else {
-            LoadingModList mods = LoadingModList.get();
-            return mods != null
-                && mods.getMods().stream().anyMatch(mod -> mod.getModId().equals("suppressionmod") && mod.getVersion().toString().equals("1.2.0"));
-        }
+        return true;
     }
 
     public void onLoad(String mixinPackage) {

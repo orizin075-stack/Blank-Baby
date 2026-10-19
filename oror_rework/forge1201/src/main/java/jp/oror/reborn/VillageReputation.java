@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 import jp.oror.reborn.mixin.CompoundContainerAccess;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -80,7 +79,7 @@ public final class VillageReputation {
                 ItemStack rest = v.getInventory().addItem(new ItemStack(net.minecraft.world.item.Items.EMERALD, paid));
                 if (!rest.isEmpty() && VillageLedger.of(v) != null) {
                     VillageProgress db = VillageProgress.get(sl);
-                    db.deliver(db.of(VillageLedger.of(v)), List.of(rest), sl.registryAccess());
+                    db.deliver(db.of(VillageLedger.of(v)), List.of(rest));
                 }
             }
         }
@@ -118,7 +117,7 @@ public final class VillageReputation {
                 );
                 e.setCancellationResult(InteractionResult.SUCCESS);
                 e.setCanceled(true);
-            } else if (p.isShiftKeyDown() && stack.has(DataComponents.FOOD) && v.getInventory().canAddItem(stack.copyWithCount(1))) {
+            } else if (p.isShiftKeyDown() && stack.isEdible() && v.getInventory().canAddItem(stack.copyWithCount(1))) {
                 v.getInventory().addItem(stack.copyWithCount(1));
                 if (!p.isCreative()) {
                     stack.shrink(1);
@@ -208,7 +207,7 @@ public final class VillageReputation {
     public static void damaged(LivingDamageEvent e) {
         if (e.getEntity() instanceof Villager v
             && e.getSource().getEntity() instanceof Player p
-            && e.getOriginalDamage() > 0.0F
+            && e.getAmount() > 0.0F
             && v.level() instanceof ServerLevel sl) {
             change(sl, VillageLedger.of(v), p, -120, "村人への攻撃");
             // v0.17.17: strong villagers keep after a player only while the attacks go on (VillageAI.grudge)

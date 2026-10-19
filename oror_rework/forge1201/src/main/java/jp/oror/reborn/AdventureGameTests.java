@@ -256,7 +256,7 @@ public final class AdventureGameTests {
         old.getPersistentData().putLong("ororPactNextVisit", 123456L);
         PactSystem.clone(new Clone(next, old, true));
         next.tickCount = 40;
-        PactSystem.tick(new Post(next));
+        PactSystem.tick(new PlayerTickEvent(net.minecraftforge.event.TickEvent.Phase.END, next));
         h.assertTrue(
             next.getPersistentData().getInt("ororPactDebt") == 8
                 && next.getPersistentData().getLong("ororPactNextVisit") == 123456L
@@ -420,7 +420,7 @@ public final class AdventureGameTests {
                         "[OROR_LORE_CONCURRENT] simulatedTicks=400 alive="
                             + group.size()
                             + " avgTickMs="
-                            + (double)h.getLevel().getServer().getAverageTickTimeNanos() / 1000000.0
+                            + (double)h.getLevel().getServer().getAverageTickTime()
                     );
                 h.succeed();
             }

@@ -189,8 +189,8 @@ public final class ArsenalGameTests {
                             || skill.mechanic().equals("MANA") && b.mana() > mana
                             || skill.mechanic().equals("REFLECT") && arrow.getOwner() == b && arrow.getDeltaMovement().x > 0.0;
                         h.assertTrue(cast && changed, "Actual technique effect " + spec.id + " / " + skill.name());
-                        String row = skill.mechanic();
-                        switch (row) {
+                        String mechanic = skill.mechanic();
+                        switch (mechanic) {
                             case "SUMMON":
                                 h.assertTrue(familiars(b) > summons, "Actual owned familiar spawned for " + spec.id);
                                 break;

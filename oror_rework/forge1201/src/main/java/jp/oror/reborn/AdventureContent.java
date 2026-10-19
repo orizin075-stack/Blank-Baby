@@ -11,6 +11,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
@@ -34,7 +35,6 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.ArmorItem.Type;
-import net.minecraft.world.item.ArmorMaterial.Layer;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ClipContext;
@@ -52,24 +52,64 @@ import net.minecraftforge.registries.DeferredRegister;
 
 public final class AdventureContent {
     public static final List<RegistryObject<?>> CONTENT = new ArrayList<>();
-    public static final DeferredRegister<ArmorMaterial> MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, "oror_supreme_bosses");
     public static final RegistryObject<Item> STAR = plain("star_shard");
     public static final RegistryObject<Item> DRAGON = plain("dragon_core");
     public static final RegistryObject<Item> FORGE = plain("forge_core");
     public static final RegistryObject<Item> CURSE = plain("curse_residue");
     public static final RegistryObject<Item> THREAD = plain("world_thread");
-    public static final RegistryObject<ArmorMaterial> ARMOR = MATERIALS.register(
-        "dragon_furnace",
-        () -> new ArmorMaterial(
-                Map.of(Type.HELMET, 5, Type.CHESTPLATE, 12, Type.LEGGINGS, 9, Type.BOOTS, 5, Type.BODY, 12),
-                25,
-                SoundEvents.ARMOR_EQUIP_NETHERITE,
-                () -> Ingredient.of(new ItemLike[]{(ItemLike)DRAGON.get()}),
-                List.of(new Layer(new ResourceLocation("oror_supreme_bosses", "dragon_furnace"))),
-                4.0F,
-                0.2F
-            )
-    );
+    /** Forge 1.20.1: an armor material is a plain object (a data-driven registry entry in 1.21.1). */
+    public static final ArmorMaterial ARMOR = new ArmorMaterial() {
+        @Override
+        public int getDurabilityForType(Type type) {
+            // vanilla's per-piece health (13 / 15 / 16 / 11) times 64, as Type.getDurability(64) gave in 1.21.1
+            return 64 * switch (type) {
+                case HELMET -> 11;
+                case CHESTPLATE -> 16;
+                case LEGGINGS -> 15;
+                case BOOTS -> 13;
+            };
+        }
+
+        @Override
+        public int getDefenseForType(Type type) {
+            return switch (type) {
+                case HELMET, BOOTS -> 5;
+                case CHESTPLATE -> 12;
+                case LEGGINGS -> 9;
+            };
+        }
+
+        @Override
+        public int getEnchantmentValue() {
+            return 25;
+        }
+
+        @Override
+        public SoundEvent getEquipSound() {
+            return SoundEvents.ARMOR_EQUIP_NETHERITE;
+        }
+
+        @Override
+        public Ingredient getRepairIngredient() {
+            return Ingredient.of(new ItemLike[]{(ItemLike)DRAGON.get()});
+        }
+
+        @Override
+        public String getName() {
+            // textures/models/armor/dragon_furnace_layer_1.png, as the 1.21.1 layer named it
+            return "oror_supreme_bosses:dragon_furnace";
+        }
+
+        @Override
+        public float getToughness() {
+            return 4.0F;
+        }
+
+        @Override
+        public float getKnockbackResistance() {
+            return 0.2F;
+        }
+    };
     public static final RegistryObject<SwordItem> BLADE = add(OrorReborn.ITEMS.register("azure_blade", () -> new AdventureContent.AzureBlade()));
     public static final RegistryObject<Item> STAFF = add(OrorReborn.ITEMS.register("star_staff", () -> new AdventureContent.Staff()));
     public static final RegistryObject<Item> TOOL = add(OrorReborn.ITEMS.register("forge_tool", () -> new AdventureContent.RepairTool()));
@@ -91,7 +131,7 @@ public final class AdventureContent {
     }
 
     private static RegistryObject<Item> plain(String id) {
-        return add(OrorReborn.ITEMS.registerSimpleItem(id, new Properties().rarity(Rarity.RARE)));
+        return add(OrorReborn.ITEMS.register(id, () -> new Item(new Properties().rarity(Rarity.RARE))));
     }
 
     private static boolean hostile(Player p, LivingEntity e) {
@@ -196,8 +236,8 @@ public final class AdventureContent {
     public static final class AzureBlade extends SwordItem {
         AzureBlade() {
             super(
-                Tiers.NETHERITE,
-                new Properties().durability(4096).fireResistant().rarity(Rarity.EPIC).attributes(SwordItem.createAttributes(Tiers.NETHERITE, 28, -2.0F))
+                Tiers.NETHERITE, 28, -2.0F,
+                new Properties().durability(4096).fireResistant().rarity(Rarity.EPIC)
             );
         }
 
@@ -227,7 +267,7 @@ public final class AdventureContent {
                         }
                     }
 
-                    stack.hurtAndBreak(2, p, LivingEntity.getSlotForHand(h));
+                    stack.hurtAndBreak(2, p, x -> x.broadcastBreakEvent(h));
                     p.getCooldowns().addCooldown(this, 40);
                 }
 
@@ -254,8 +294,8 @@ public final class AdventureContent {
                         p.heal(8.0F);
                         p.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 200, 1));
                     } else {
-                        for (MobEffectInstance effect : new ArrayList(p.getActiveEffects())) {
-                            if (!((MobEffect)effect.getEffect().value()).isBeneficial()) {
+                        for (MobEffectInstance effect : new ArrayList<>(p.getActiveEffects())) {
+                            if (!effect.getEffect().isBeneficial()) {
                                 p.removeEffect(effect.getEffect());
                             }
                         }
@@ -292,7 +332,7 @@ public final class AdventureContent {
 
     public static final class RelicArmor extends ArmorItem {
         RelicArmor(Type type) {
-            super(AdventureContent.ARMOR, type, new Properties().durability(type.getDurability(64)).fireResistant().rarity(Rarity.EPIC));
+            super(AdventureContent.ARMOR, type, new Properties().fireResistant().rarity(Rarity.EPIC));
         }
 
         public void inventoryTick(ItemStack stack, Level l, Entity e, int slot, boolean selected) {
@@ -337,7 +377,7 @@ public final class AdventureContent {
                     }
 
                     if (n > 0) {
-                        s.hurtAndBreak(1, p, LivingEntity.getSlotForHand(h));
+                        s.hurtAndBreak(1, p, x -> x.broadcastBreakEvent(h));
                     }
 
                     p.getCooldowns().addCooldown(this, 80);
@@ -364,7 +404,7 @@ public final class AdventureContent {
                     }
 
                     p.heal(10.0F);
-                    s.hurtAndBreak(1, p, LivingEntity.getSlotForHand(h));
+                    s.hurtAndBreak(1, p, x -> x.broadcastBreakEvent(h));
                     p.getCooldowns().addCooldown(this, 80);
                 }
 

@@ -148,18 +148,18 @@ public final class VillageFlights {
             .limit(seats)
             .toList();
         if (crew.size() < seats) {
-            VillageProgress.get(sl).deliver(r, cargo, sl.registryAccess());
+            VillageProgress.get(sl).deliver(r, cargo);
             return;
         }
         Entity craft = type.create(sl);
         if (craft == null) {
-            VillageProgress.get(sl).deliver(r, cargo, sl.registryAccess());
+            VillageProgress.get(sl).deliver(r, cargo);
             return;
         }
         Vec3 dir = Vec3.atCenterOf(dest.center).subtract(Vec3.atCenterOf(s.village.center)).multiply(1.0, 0.0, 1.0).normalize();
         craft.moveTo(field.getX() + 0.5, field.getY(), field.getZ() + 0.5, yaw(dir), 0.0F);
         if (!sl.noCollision(craft, craft.getBoundingBox()) || !sl.addFreshEntity(craft)) {
-            VillageProgress.get(sl).deliver(r, cargo, sl.registryAccess());
+            VillageProgress.get(sl).deliver(r, cargo);
             return;
         }
         mark(craft, s.village.id);
@@ -174,7 +174,7 @@ public final class VillageFlights {
         f.putDouble("DirZ", dir.z);
         ListTag goods = new ListTag();
         for (ItemStack st : cargo) {
-            goods.add(st.save(sl.registryAccess()));
+            goods.add(st.save(new CompoundTag()));
         }
         f.put("Cargo", goods);
         ListTag ids = new ListTag();
@@ -320,7 +320,7 @@ public final class VillageFlights {
     private static List<ItemStack> goods(ServerLevel sl, ListTag list) {
         List<ItemStack> out = new ArrayList<>();
         for (Tag t : list) {
-            ItemStack st = ItemStack.parseOptional(sl.registryAccess(), (CompoundTag)t);
+            ItemStack st = ItemStack.of((CompoundTag)t);
             if (!st.isEmpty()) {
                 out.add(st);
             }
@@ -333,7 +333,7 @@ public final class VillageFlights {
             craft.ejectPassengers();
             craft.discard();
         }
-        VillageProgress.get(sl).deliver(r, goods(sl, r.flight.getList("Cargo", 10)), sl.registryAccess());
+        VillageProgress.get(sl).deliver(r, goods(sl, r.flight.getList("Cargo", 10)));
         for (Tag t : r.flight.getList("Crew", 10)) {
             if (sl.getEntity(((CompoundTag)t).getUUID("Id")) instanceof Villager v) {
                 VillagerLife.data(v).remove("Flight");
@@ -486,11 +486,11 @@ public final class VillageFlights {
         int theirs = dest == null ? 0 : db.of(dest).stage;
         pay.addAll(wares(sl, theirs));
         if (dest != null) {
-            db.deliver(db.of(dest), cargo, sl.registryAccess());
+            db.deliver(db.of(dest), cargo);
         }
         ListTag p = new ListTag();
         for (ItemStack st : pay) {
-            p.add(st.save(sl.registryAccess()));
+            p.add(st.save(new CompoundTag()));
         }
         f.put("Pay", p);
         double dist = dest == null ? 500.0 : Math.sqrt(dest.center.distSqr(BlockPos.containing(craft.position())));
@@ -502,7 +502,7 @@ public final class VillageFlights {
     /** What a load fetches in emeralds: about one a stack of common things, more for metal and gems. */
     private static int worth(ItemStack st) {
         String id = BuiltInRegistries.ITEM.getKey(st.getItem()).getPath();
-        double each = id.endsWith("_ingot") ? 0.25 : (id.contains("diamond") ? 2.0 : (st.has(net.minecraft.core.component.DataComponents.FOOD) ? 0.08 : 0.0625));
+        double each = id.endsWith("_ingot") ? 0.25 : (id.contains("diamond") ? 2.0 : (st.isEdible() ? 0.08 : 0.0625));
         return (int)Math.ceil(st.getCount() * each);
     }
 
@@ -521,7 +521,7 @@ public final class VillageFlights {
     }
 
     private static ItemStack stack(String id, int n) {
-        return ((Item)BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(id))).getDefaultInstance().copyWithCount(n);
+        return ((Item)BuiltInRegistries.ITEM.get(new ResourceLocation(id))).getDefaultInstance().copyWithCount(n);
     }
 
     /** Coming home: the aircraft appears out on its line at cruising height with its crew aboard and comes in to land. */
@@ -581,7 +581,7 @@ public final class VillageFlights {
         }
         List<ItemStack> pay = goods(sl, f.getList("Pay", 10));
         VillageProgress db = VillageProgress.get(sl);
-        db.deliver(r, pay, sl.registryAccess());
+        db.deliver(r, pay);
         f.putString("Phase", "parked");
         f.putLong("Until", sl.getGameTime() + 1200L);
         f.remove("CrewSaved");

@@ -134,7 +134,7 @@ public final class AdaptiveCombat {
             if (m instanceof SupremeEntity b && !n.contains("OriginalWeapon")) {
                 RegistryObject<Item> relic = CharacterRelics.ITEMS.get(b.spec.id + "_weapon");
                 if (relic != null) {
-                    n.put("OriginalWeapon", ((Item)relic.get()).getDefaultInstance().save(m.registryAccess()));
+                    n.put("OriginalWeapon", ((Item)relic.get()).getDefaultInstance().save(new CompoundTag()));
                 }
             }
 
@@ -243,7 +243,7 @@ public final class AdaptiveCombat {
                 }
 
                 if (!threats.isEmpty() && MobLevels.level(m) >= 2) {
-                    Vec3 approach = threats.getFirst().getDeltaMovement().normalize();
+                    Vec3 approach = threats.get(0).getDeltaMovement().normalize();
                     double sign = (double)((sl.getGameTime() / 20L + (long)m.getId()) % 2L == 0L ? 1 : -1);
                     Vec3 dodge = new Vec3(-approach.z * 0.28 * sign, 0.0, approach.x * 0.28 * sign);
                     if (sl.noCollision(m, m.getBoundingBox().move(dodge))
@@ -400,7 +400,7 @@ public final class AdaptiveCombat {
             ELSEWHERE.put(m, known);
             if (known && !n.getBoolean("NativeWeaponRestored") && n.contains("OriginalWeapon") && !n.getBoolean("OriginalAuto")) {
                 n.putBoolean("NativeWeaponRestored", true);
-                ItemStack original = ItemStack.parseOptional(m.registryAccess(), n.getCompound("OriginalWeapon"));
+                ItemStack original = ItemStack.of(n.getCompound("OriginalWeapon"));
                 if (!original.isEmpty()) {
                     m.setItemSlot(EquipmentSlot.MAINHAND, original);
                     n.remove("Selected");
@@ -460,7 +460,7 @@ public final class AdaptiveCombat {
         if (!n.getBoolean("GunRestoreChecked") && !gun(m.getMainHandItem()) && n.contains("OriginalWeapon") && !n.getBoolean("OriginalAuto")) {
             // once per mob: parsing the saved weapon every tick would be wasted work
             n.putBoolean("GunRestoreChecked", true);
-            ItemStack original = ItemStack.parseOptional(m.registryAccess(), n.getCompound("OriginalWeapon"));
+            ItemStack original = ItemStack.of(n.getCompound("OriginalWeapon"));
             if (gun(original)) {
                 m.setItemSlot(EquipmentSlot.MAINHAND, original);
                 n.remove("OriginalWeapon");
@@ -498,14 +498,14 @@ public final class AdaptiveCombat {
     private static void growth(Mob m) {
         double power = MobMind.strength(m);
 
-        for (Holder<Attribute> attr : List.of(Attributes.ATTACK_DAMAGE, Attributes.MAX_HEALTH, Attributes.MOVEMENT_SPEED)) {
+        for (Attribute attr : List.of(Attributes.ATTACK_DAMAGE, Attributes.MAX_HEALTH, Attributes.MOVEMENT_SPEED)) {
             AttributeInstance a = m.getAttribute(attr);
             if (a != null) {
-                a.removeModifier(GROWTH);
+                Mods.remove(a, GROWTH);
                 if (power > 1.0) {
                     // movement: at most +15% (+32% ground speed); the old +80% made veterans more than three times as fast
                     double amount = attr == Attributes.MOVEMENT_SPEED ? Math.min(0.15, (power - 1.0) * 0.06) : Math.min(31.0, power - 1.0);
-                    a.addPermanentModifier(new AttributeModifier(GROWTH, amount, Operation.MULTIPLY_BASE));
+                    a.addPermanentModifier(Mods.make(GROWTH, amount, Operation.MULTIPLY_BASE));
                 }
             }
         }
@@ -573,14 +573,14 @@ public final class AdaptiveCombat {
             if (!previous.equals(wanted)) {
                 ItemStack held = m.getMainHandItem();
                 if (!held.isEmpty() && !n.getBoolean("OriginalAuto") && !n.contains("OriginalWeapon")) {
-                    n.put("OriginalWeapon", held.save(m.registryAccess()));
+                    n.put("OriginalWeapon", held.save(new CompoundTag()));
                 }
 
                 ItemStack next = wanted.equals("unarmed")
                     ? ItemStack.EMPTY
                     : (
                         wanted.equals("sword") && n.contains("OriginalWeapon") && !n.getBoolean("OriginalAuto")
-                            ? ItemStack.parseOptional(m.registryAccess(), n.getCompound("OriginalWeapon"))
+                            ? ItemStack.of(n.getCompound("OriginalWeapon"))
                             : MobLevels.weapon(m, wanted)
                     );
                 if (wanted.equals("sword")
@@ -732,9 +732,9 @@ public final class AdaptiveCombat {
 
     private static double weaponBonus(Mob m) {
         double[] amount = new double[]{0.0};
-        m.getMainHandItem().forEachModifier(EquipmentSlot.MAINHAND, (attribute, modifier) -> {
-            if (attribute.equals(Attributes.ATTACK_DAMAGE) && modifier.operation() == Operation.ADDITION) {
-                amount[0] += modifier.amount();
+        m.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).forEach((attribute, modifier) -> {
+            if (attribute.equals(Attributes.ATTACK_DAMAGE) && modifier.getOperation() == Operation.ADDITION) {
+                amount[0] += modifier.getAmount();
             }
         });
         MobEffectInstance effect = m.getEffect(MobEffects.DAMAGE_BOOST);
@@ -815,7 +815,7 @@ public final class AdaptiveCombat {
 
                 if (event.getEntity() instanceof Mob m && active(m) && enemy(m, attacker)) {
                     if (attacker instanceof Player player) {
-                        String observed = player.getMainHandItem().is(Items.MACE)
+                        String observed = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(player.getMainHandItem().getItem()).getPath().endsWith("mace")
                             ? "mace"
                             : (
                                 player.getMainHandItem().getItem() instanceof AxeItem

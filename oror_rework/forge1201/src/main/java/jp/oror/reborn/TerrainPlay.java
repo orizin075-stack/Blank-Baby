@@ -61,7 +61,7 @@ public final class TerrainPlay {
             BlockSnapshot snapshot = BlockSnapshot.create(sl.dimension(), sl, p);
             if (!sl.setBlock(p, state, 3)) {
                 return false;
-            } else if (((EntityPlaceEvent)MinecraftForge.EVENT_BUS.post(new EntityPlaceEvent(snapshot, sl.getBlockState(p.below()), m))).isCanceled()) {
+            } else if (MinecraftForge.EVENT_BUS.post(new EntityPlaceEvent(snapshot, sl.getBlockState(p.below()), m))) {
                 sl.setBlock(p, previous, 3);
                 return false;
             } else {

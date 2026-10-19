@@ -339,7 +339,7 @@ public final class RelicArts {
                 }
             });
             case "eff" -> {
-                Holder<MobEffect> h = effect(str(o, "e", "weakness"));
+                MobEffect h = effect(str(o, "e", "weakness"));
                 for (LivingEntity e : c.t) {
                     if (e != p || o.has("self")) {
                         e.addEffect(new MobEffectInstance(h, (int) (num(o, "t", 100) * c.span), (int) num(o, "a", 0) + c.amp));
@@ -348,7 +348,7 @@ public final class RelicArts {
             }
             case "burn" -> c.t.forEach(e -> {
                 if (e != p) {
-                    e.igniteForSeconds((float) num(o, "s", 8));
+                    e.setSecondsOnFire((int) ((float) num(o, "s", 8)));
                 }
             });
             case "freeze" -> c.t.forEach(e -> {
@@ -370,7 +370,7 @@ public final class RelicArts {
                         continue;
                     }
                     for (MobEffectInstance m : new ArrayList<>(e.getActiveEffects())) {
-                        if (((MobEffect) m.getEffect().value()).isBeneficial()) {
+                        if (m.getEffect().isBeneficial()) {
                             e.removeEffect(m.getEffect());
                             if (o.has("steal")) {
                                 p.addEffect(new MobEffectInstance(m.getEffect(), m.getDuration(), m.getAmplifier()));
@@ -485,7 +485,7 @@ public final class RelicArts {
                 }
             }
             case "buff" -> {
-                Holder<MobEffect> h = effect(str(o, "e", "strength"));
+                MobEffect h = effect(str(o, "e", "strength"));
                 for (LivingEntity e : targetsOrSelf(c, o)) {
                     e.addEffect(new MobEffectInstance(h, (int) (num(o, "t", 200) * c.span), (int) num(o, "a", 0) + c.amp));
                 }
@@ -759,7 +759,7 @@ public final class RelicArts {
                     g.setPlayerCreated(true);
                 }
                 if (e instanceof Wolf wolf) {
-                    wolf.setTame(true, true);
+                    wolf.setTame(true);
                     wolf.setOwnerUUID(p.getUUID());
                 }
                 CompoundTag tag = e.getPersistentData();
@@ -841,7 +841,7 @@ public final class RelicArts {
     }
 
     // ------------------------------------------------------------------------------------- vocab
-    private static Holder<MobEffect> effect(String n) {
+    private static MobEffect effect(String n) {
         return switch (n) {
             case "slow" -> MobEffects.MOVEMENT_SLOWDOWN;
             case "speed" -> MobEffects.MOVEMENT_SPEED;
@@ -1038,7 +1038,7 @@ public final class RelicArts {
             if (first != null) {
                 strike(p, first, damage, false);
                 if (heat >= 20) {
-                    first.igniteForSeconds(3.0F);
+                    first.setSecondsOnFire((int) (3.0F));
                 }
                 sl.sendParticles(ParticleTypes.CRIT, end.x, end.y, end.z, 6, 0.15, 0.15, 0.15, 0.2);
             }

@@ -114,7 +114,7 @@ public final class NightfallRules {
         Set<String> natives = DIMENSION_MOBS.get(dimension);
         if (natives != null) {
             if (!natives.contains(id)) {
-                e.setResult(PositionCheck.Result.FAIL);
+                e.setResult(net.minecraftforge.eventbus.api.Event.Result.DENY);
             }
 
             return;
@@ -127,7 +127,7 @@ public final class NightfallRules {
             || PER_PLAYER.containsKey(id) && have >= PER_PLAYER.get(id) * players
             || FLAT.containsKey(id) && have >= FLAT.get(id);
         if (deny) {
-            e.setResult(PositionCheck.Result.FAIL);
+            e.setResult(net.minecraftforge.eventbus.api.Event.Result.DENY);
         } else if ((PER_PLAYER.containsKey(id) || FLAT.containsKey(id)) && mob.checkSpawnRules(sl, MobSpawnType.NATURAL) && mob.checkSpawnObstruction(sl)) {
             // a pack spawns in one tick, before the next count: add the ones that will really appear (the same two
             // checks the event falls back to), so a refused attempt does not use up the allowance

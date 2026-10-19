@@ -270,12 +270,13 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
             for (int q : quads) {
                 int k = q * 8;
                 int o = q * 6;
-                v.addVertex(out[o], out[o + 1], out[o + 2])
-                    .setColor(color)
-                    .setUv(d[k + 3], d[k + 4])
-                    .setOverlay(overlay)
-                    .setLight(light)
-                    .setNormal(out[o + 3], out[o + 4], out[o + 5]);
+                v.vertex(out[o], out[o + 1], out[o + 2])
+                    .color(color >> 16 & 255, color >> 8 & 255, color & 255, color >>> 24)
+                    .uv(d[k + 3], d[k + 4])
+                    .overlayCoords(overlay)
+                    .uv2(light)
+                    .normal(out[o + 3], out[o + 4], out[o + 5])
+                    .endVertex();
             }
         }
 
@@ -594,14 +595,25 @@ public abstract class RigModel<T extends LivingEntity> extends EntityModel<T> {
     }
 
     public void renderGlow(PoseStack p, VertexConsumer v, int overlay) {
-        this.root.render(p, v, 15728880, overlay, -1);
+        render(this.root, p, v, 15728880, overlay, -1);
         this.renderMeshes(p, v, 15728880, overlay, -1, true);
     }
 
-    public void renderToBuffer(PoseStack p, VertexConsumer v, int light, int overlay, int color) {
+    @Override
+    public void renderToBuffer(PoseStack p, VertexConsumer v, int light, int overlay, float red, float green, float blue, float alpha) {
+        int color = channel(alpha) << 24 | channel(red) << 16 | channel(green) << 8 | channel(blue);
         int c = this.tint == -1 ? color : multiply(color, this.tint);
-        this.root.render(p, v, light, overlay, c);
+        render(this.root, p, v, light, overlay, c);
         this.renderMeshes(p, v, light, overlay, c, false);
+    }
+
+    /** ModelPart.render with a packed ARGB colour: 1.20.1 takes the channels as floats. */
+    public static void render(ModelPart part, PoseStack p, VertexConsumer v, int light, int overlay, int color) {
+        part.render(p, v, light, overlay, (color >> 16 & 255) / 255.0F, (color >> 8 & 255) / 255.0F, (color & 255) / 255.0F, (color >>> 24) / 255.0F);
+    }
+
+    private static int channel(float f) {
+        return Math.round(Math.max(0.0F, Math.min(1.0F, f)) * 255.0F);
     }
 
     private static int multiply(int a, int b) {

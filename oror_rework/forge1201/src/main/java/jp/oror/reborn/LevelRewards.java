@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 public final class LevelRewards {
     public static List<ItemStack> rewards(int level, Random random, boolean miracles) {
         ArrayList<ItemStack> out = new ArrayList<>();
-        out.add(new ItemStack(Items.EMERALD, new int[]{0, 1, 3, 6, 12, 24, 48}[Math.clamp((long)level, 1, 6)]));
+        out.add(new ItemStack(Items.EMERALD, new int[]{0, 1, 3, 6, 12, 24, 48}[net.minecraft.util.Mth.clamp((int)level, 1, 6)]));
         if (level >= 3) {
             out.add(new ItemStack(Items.DIAMOND, level - 2));
         }

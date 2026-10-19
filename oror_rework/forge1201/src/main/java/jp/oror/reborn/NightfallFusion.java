@@ -18,8 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ClickEvent;
@@ -36,7 +35,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -228,7 +226,7 @@ public final class NightfallFusion {
          String saved = ENCODED.get(stack);
          if (saved == null) {
             try {
-               saved = stack.save(p.level().registryAccess()).toString();
+               saved = stack.save(new CompoundTag()).toString();
             } catch (RuntimeException var8) {
                saved = "";
             }
@@ -285,7 +283,7 @@ public final class NightfallFusion {
                   return false;
                }
 
-               AdvancementHolder advancement = player.server.getAdvancements().get(new ResourceLocation(key));
+               Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(key));
                return advancement != null && player.getAdvancements().getOrStartProgress(advancement).isDone();
             }
          default:
@@ -481,17 +479,17 @@ public final class NightfallFusion {
                      Item item = resolveItem(r.get("item"));
                      if (item == Items.AIR) {
                         // unported NightfallCraft reward: paid in experience instead
-                        int xp = 30 * Math.clamp(r.has("count") ? r.get("count").getAsInt() : 1, 1, 64);
+                        int xp = 30 * net.minecraft.util.Mth.clamp(r.has("count") ? r.get("count").getAsInt() : 1, 1, 64);
                         p.giveExperiencePoints(xp);
                         p.sendSystemMessage(Component.literal("未移植の報酬（" + id(r.get("item")) + "）は経験値 " + xp + " に置き換えました"));
                      } else {
                         int count = r.has("count")
                            ? r.get("count").getAsInt()
                            : (r.get("item").isJsonObject() && r.getAsJsonObject("item").has("Count") ? r.getAsJsonObject("item").get("Count").getAsInt() : 1);
-                        int left = Math.clamp((long)count, 1, 512);
+                        int left = net.minecraft.util.Mth.clamp((int)count, 1, 512);
 
                         while (left > 0) {
-                           int part = Math.min(left, item.getDefaultMaxStackSize());
+                           int part = Math.min(left, item.getMaxStackSize());
                            ItemStack stack = new ItemStack(item, part);
                            if (!p.getInventory().add(stack) && !stack.isEmpty()) {
                               p.drop(stack, false);
@@ -668,7 +666,7 @@ public final class NightfallFusion {
       // relic bows, shields and catalysts temper like swords (they stopped being SwordItems in v0.17.3)
       if (!held.isEmpty()
          && (held.getItem() instanceof SwordItem || held.getItem() instanceof CharacterRelics.Wielded w && w.wield().kind != null)
-         && ((CustomData)held.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)).copyTag().getInt("OrorTemper") < 5) {
+         && Stacks.custom(held).getInt("OrorTemper") < 5) {
          Inventory inv = p.getInventory();
          int material = 0;
 
@@ -678,7 +676,7 @@ public final class NightfallFusion {
             }
          }
 
-         int rank = ((CustomData)held.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)).copyTag().getInt("OrorTemper");
+         int rank = Stacks.custom(held).getInt("OrorTemper");
          int cost = 4 * (rank + 1);
          if (material < cost) {
             return false;
@@ -691,7 +689,7 @@ public final class NightfallFusion {
                }
             }
 
-            CustomData.update(DataComponents.CUSTOM_DATA, held, n -> ((CompoundTag)n).putInt("OrorTemper", rank + 1));
+            Stacks.update(held, n -> ((CompoundTag)n).putInt("OrorTemper", rank + 1));
             return true;
          }
       } else {
@@ -719,7 +717,7 @@ public final class NightfallFusion {
 
    public static void damage(LivingHurtEvent e) {
       if (e.getSource().getEntity() instanceof Player p) {
-         int temper = ((CustomData)p.getMainHandItem().getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)).copyTag().getInt("OrorTemper");
+         int temper = Stacks.custom(p.getMainHandItem()).getInt("OrorTemper");
          if (temper > 0) {
             e.setAmount(e.getAmount() * (1.0F + (float)Math.min(5, temper) * 0.16F));
          }

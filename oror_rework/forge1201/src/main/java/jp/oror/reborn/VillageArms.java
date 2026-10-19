@@ -111,7 +111,7 @@ public final class VillageArms {
         VillageExpeditions.take(sl, s, "emerald", 6);
         ItemStack rest = who.getInventory().addItem(gun);
         if (!rest.isEmpty()) {
-            VillageProgress.get(sl).deliver(r, List.of(rest), sl.registryAccess());
+            VillageProgress.get(sl).deliver(r, List.of(rest));
         }
         r.gunsMade++;
         VillageProgress.get(sl).setDirty();

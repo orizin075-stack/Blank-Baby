@@ -111,23 +111,23 @@ public final class SupremeEntity extends PathfinderMob {
             .add(Attributes.FLYING_SPEED, 0.5)
             .add(Attributes.FOLLOW_RANGE, 40.0)
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
-            .add(Attributes.STEP_HEIGHT, 1.2);
+            .add(net.minecraftforge.common.ForgeMod.STEP_HEIGHT_ADDITION.get(), 0.6);
     }
 
-    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder b) {
-        super.defineSynchedData(b);
-        b.define(PHASE, 0);
-        b.define(ACTION, 0);
-        b.define(FORM, 0);
-        b.define(MANA, 0.0F);
-        b.define(OPERATOR, 0);
-        b.define(MOTION, 0);
-        b.define(MOTION_DURATION, 1);
-        b.define(MOTION_START, 0L);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(PHASE, 0);
+        this.entityData.define(ACTION, 0);
+        this.entityData.define(FORM, 0);
+        this.entityData.define(MANA, 0.0F);
+        this.entityData.define(OPERATOR, 0);
+        this.entityData.define(MOTION, 0);
+        this.entityData.define(MOTION_DURATION, 1);
+        this.entityData.define(MOTION_START, 0L);
     }
 
     public void motion(int id, int duration) {
-        this.entityData.set(MOTION, Math.clamp((long)id, 0, 16));
+        this.entityData.set(MOTION, net.minecraft.util.Mth.clamp((int)id, 0, 16));
         this.entityData.set(MOTION_DURATION, Math.max(1, duration));
         this.entityData.set(MOTION_START, this.level().getGameTime());
     }
@@ -141,7 +141,7 @@ public final class SupremeEntity extends PathfinderMob {
     }
 
     public float motionProgress(float partial) {
-        return Math.clamp(((float)this.motionElapsed() + partial) / (float)((Integer)this.entityData.get(MOTION_DURATION)).intValue(), 0.0F, 1.0F);
+        return net.minecraft.util.Mth.clamp(((float)this.motionElapsed() + partial) / (float)((Integer)this.entityData.get(MOTION_DURATION)).intValue(), 0.0F, 1.0F);
     }
 
     protected void registerGoals() {
@@ -174,7 +174,7 @@ public final class SupremeEntity extends PathfinderMob {
     }
 
     public boolean canBeAffected(MobEffectInstance e) {
-        return (this.spec == null || this.operatorLevel() != 4 || ((MobEffect)e.getEffect().value()).isBeneficial()) && super.canBeAffected(e);
+        return (this.spec == null || this.operatorLevel() != 4 || e.getEffect().isBeneficial()) && super.canBeAffected(e);
     }
 
     public int phase() {
@@ -209,10 +209,10 @@ public final class SupremeEntity extends PathfinderMob {
         }
     }
 
-    public EntityDimensions getDefaultDimensions(Pose p) {
+    public EntityDimensions getDimensions(Pose p) {
         return this.spec != null && this.spec.id.equals("yggdrasil") && this.form() == 1
             ? EntityDimensions.scalable(0.6F, 1.7F)
-            : super.getDefaultDimensions(p);
+            : super.getDimensions(p);
     }
 
     public float mana() {

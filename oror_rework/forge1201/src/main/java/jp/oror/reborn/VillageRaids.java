@@ -463,7 +463,7 @@ public final class VillageRaids {
             return false;
         }
         String id = pick(sl);
-        EntityType<?> type = (EntityType<?>)BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.withDefaultNamespace(id));
+        EntityType<?> type = (EntityType<?>)BuiltInRegistries.ENTITY_TYPE.get(new ResourceLocation(id));
         if (!(type.create(sl) instanceof Mob m)) {
             return false;
         }
@@ -475,11 +475,11 @@ public final class VillageRaids {
         MobLevels.set(m, elite || roll < 0.45 ? 5 : 4);
         AttributeInstance hp = m.getAttribute(Attributes.MAX_HEALTH);
         if (hp != null) {
-            hp.addPermanentModifier(new AttributeModifier(MIGHT, 1.0 + 0.5 * (reports - 1), AttributeModifier.Operation.MULTIPLY_BASE));
+            hp.addPermanentModifier(Mods.make(MIGHT, 1.0 + 0.5 * (reports - 1), AttributeModifier.Operation.MULTIPLY_BASE));
         }
         AttributeInstance atk = m.getAttribute(Attributes.ATTACK_DAMAGE);
         if (atk != null) {
-            atk.addPermanentModifier(new AttributeModifier(MIGHT, 0.5, AttributeModifier.Operation.MULTIPLY_BASE));
+            atk.addPermanentModifier(Mods.make(MIGHT, 0.5, AttributeModifier.Operation.MULTIPLY_BASE));
         }
         m.setHealth(m.getMaxHealth());
         arm(sl, m, id, reports, elite);
@@ -499,8 +499,8 @@ public final class VillageRaids {
         return true;
     }
 
-    private static void enchant(ServerLevel sl, ItemStack st, net.minecraft.resources.ResourceKey<net.minecraft.world.item.enchantment.Enchantment> key, int level) {
-        st.enchant(sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(key), level);
+    private static void enchant(ServerLevel sl, ItemStack st, net.minecraft.world.item.enchantment.Enchantment key, int level) {
+        st.enchant(key, level);
     }
 
     private static void arm(ServerLevel sl, Mob m, String id, int reports, boolean elite) {
@@ -509,8 +509,8 @@ public final class VillageRaids {
         EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
         if (!id.equals("ravager")) {
             for (int i = 0; i < 4; i++) {
-                ItemStack st = ((Item)BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(metal + parts[i]))).getDefaultInstance();
-                enchant(sl, st, Enchantments.PROTECTION, Math.min(4, 1 + reports));
+                ItemStack st = ((Item)BuiltInRegistries.ITEM.get(new ResourceLocation(metal + parts[i]))).getDefaultInstance();
+                enchant(sl, st, Enchantments.ALL_DAMAGE_PROTECTION, Math.min(4, 1 + reports));
                 m.setItemSlot(slots[i], st);
                 m.setDropChance(slots[i], 0.0F);
             }
@@ -518,7 +518,7 @@ public final class VillageRaids {
         ItemStack weapon = ItemStack.EMPTY;
         if (id.equals("illusioner")) {
             weapon = Items.BOW.getDefaultInstance();
-            enchant(sl, weapon, Enchantments.POWER, Math.min(5, 2 + reports));
+            enchant(sl, weapon, Enchantments.POWER_ARROWS, Math.min(5, 2 + reports));
         } else if (id.equals("vindicator")) {
             weapon = Items.NETHERITE_AXE.getDefaultInstance();
             enchant(sl, weapon, Enchantments.SHARPNESS, Math.min(10, 5 + reports));

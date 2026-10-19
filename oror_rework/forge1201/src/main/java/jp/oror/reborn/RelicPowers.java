@@ -78,13 +78,13 @@ public final class RelicPowers {
             .toList();
     }
 
-    private static void effect(LivingEntity e, Holder<MobEffect> type, int time, int amp) {
+    private static void effect(LivingEntity e, MobEffect type, int time, int amp) {
         e.addEffect(new MobEffectInstance(type, time, amp));
     }
 
     public static void cleanse(LivingEntity e) {
         for (MobEffectInstance v : new ArrayList<MobEffectInstance>(e.getActiveEffects())) {
-            if (!((MobEffect)v.getEffect().value()).isBeneficial()) {
+            if (!v.getEffect().isBeneficial()) {
                 e.removeEffect(v.getEffect());
             }
         }
@@ -153,7 +153,7 @@ public final class RelicPowers {
                     }
 
                     if (!var12.isEmpty()) {
-                        blink(p, ((LivingEntity)var12.getFirst()).position().add(-2.0, 0.0, 0.0));
+                        blink(p, ((LivingEntity)var12.get(0)).position().add(-2.0, 0.0, 0.0));
                     }
 
                     eraseProjectiles(p);
@@ -646,7 +646,7 @@ public final class RelicPowers {
                         }
 
                         if (e instanceof Wolf wolf) {
-                            wolf.setTame(true, true);
+                            wolf.setTame(true);
                             wolf.setOwnerUUID(p.getUUID());
                         }
 

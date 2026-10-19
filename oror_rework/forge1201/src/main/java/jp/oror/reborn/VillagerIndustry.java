@@ -36,8 +36,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
@@ -99,12 +97,12 @@ public final class VillagerIndustry {
 
     public static SimpleContainer cargo(Villager v) {
         SimpleContainer c = new SimpleContainer(9);
-        c.fromTag(data(v).getList("Cargo", 10), v.registryAccess());
+        c.fromTag(data(v).getList("Cargo", 10));
         return c;
     }
 
     private static void saveCargo(Villager v, SimpleContainer cargo) {
-        data(v).put("Cargo", cargo.createTag(v.registryAccess()));
+        data(v).put("Cargo", cargo.createTag());
     }
 
     public static boolean miner(Villager v) {
@@ -247,11 +245,11 @@ public final class VillagerIndustry {
             for (int rank = 1; rank <= 5; rank++) {
                 int r = rank;
                 e.getTrades().get(rank)
-                    .add((entity, random) -> new MerchantOffer(new ItemCost(buy[r - 1], r == 5 ? 2 : 8), Items.EMERALD.getDefaultInstance(), 16, r * 5, 0.05F));
+                    .add((entity, random) -> new MerchantOffer(new ItemStack(buy[r - 1], r == 5 ? 2 : 8), Items.EMERALD.getDefaultInstance(), 16, r * 5, 0.05F));
                 e.getTrades().get(rank)
                     .add(
                         (entity, random) -> new MerchantOffer(
-                                new ItemCost(Items.EMERALD, r == 1 ? 1 : r * 4), new ItemStack(sell[r - 1], r == 1 ? 16 : 1), 12, r * 8, 0.05F
+                                new ItemStack(Items.EMERALD, r == 1 ? 1 : r * 4), new ItemStack(sell[r - 1], r == 1 ? 16 : 1), 12, r * 8, 0.05F
                             )
                     );
             }
@@ -541,7 +539,7 @@ public final class VillagerIndustry {
                 CompoundTag n = data(v);
                 FakePlayer fake = FakePlayerFactory.get(sl, new GameProfile(n.hasUUID("Owner") ? n.getUUID("Owner") : v.getUUID(), "[OROR Miner]"));
                 fake.setItemInHand(InteractionHand.MAIN_HAND, tool);
-                if (((BreakEvent)MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, p, s, fake))).isCanceled()) {
+                if (MinecraftForge.EVENT_BUS.post(new BreakEvent(sl, p, s, fake))) {
                     return false;
                 } else {
                     List<ItemStack> drops = Block.getDrops(s, sl, p, null, fake, tool);
@@ -624,7 +622,7 @@ public final class VillagerIndustry {
                     || item.is(net.minecraftforge.common.Tags.Items.ORES)
                     || item.is(net.minecraftforge.common.Tags.Items.DUSTS)
             )
-            && sl.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(item), sl).isPresent();
+            && sl.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(item), sl).isPresent();
     }
 
     private static ItemStack insert(Container container, ItemStack input) {
@@ -773,11 +771,11 @@ public final class VillagerIndustry {
     // ------------------------------------------------------------------------------------- the blast furnace (v0.17.15)
     /** An ore, raw metal or dust the furnace has no recipe for but a blast furnace has. */
     public static boolean blastOnly(ItemStack item, ServerLevel sl) {
-        return ore(item) && !sl.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(item), sl).isPresent() && blastable(item, sl);
+        return ore(item) && !sl.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(item), sl).isPresent() && blastable(item, sl);
     }
 
     private static boolean blastable(ItemStack item, ServerLevel sl) {
-        return ore(item) && sl.getRecipeManager().getRecipeFor(RecipeType.BLASTING, new SingleRecipeInput(item), sl).isPresent();
+        return ore(item) && sl.getRecipeManager().getRecipeFor(RecipeType.BLASTING, new SimpleContainer(item), sl).isPresent();
     }
 
     private static boolean ore(ItemStack item) {
@@ -790,7 +788,7 @@ public final class VillagerIndustry {
     }
 
     private static Item item(String id) {
-        return (Item)net.minecraft.core.registries.BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(id));
+        return (Item)net.minecraft.core.registries.BuiltInRegistries.ITEM.get(new ResourceLocation(id));
     }
 
     /**

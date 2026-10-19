@@ -49,7 +49,7 @@ public final class HumanVillagerRenderer extends MobRenderer<Villager, HumanoidM
     }
 
     public ResourceLocation getTextureLocation(Villager v) {
-        return ResourceLocation.withDefaultNamespace("textures/entity/player/wide/" + SKINS[Math.floorMod(v.getUUID().hashCode(), SKINS.length)] + ".png");
+        return new ResourceLocation("textures/entity/player/wide/" + SKINS[Math.floorMod(v.getUUID().hashCode(), SKINS.length)] + ".png");
     }
 
     protected void scale(Villager v, PoseStack p, float partial) {
@@ -97,7 +97,7 @@ public final class HumanVillagerRenderer extends MobRenderer<Villager, HumanoidM
         private final ModelPart apron;
         private final ModelPart hardHat;
         private final ModelPart lamp;
-        private static final ResourceLocation TEX = ResourceLocation.withDefaultNamespace("textures/block/white_concrete.png");
+        private static final ResourceLocation TEX = new ResourceLocation("textures/block/white_concrete.png");
         private static final ResourceLocation MINER = new ResourceLocation("oror_supreme_bosses", "textures/entity/villager/human/miner.png");
         private static final ResourceLocation MINER_GEAR = new ResourceLocation("oror_supreme_bosses", "textures/entity/villager/human/miner_gear.png");
         private static final int FULL_BRIGHT = 15728880;
@@ -125,21 +125,21 @@ public final class HumanVillagerRenderer extends MobRenderer<Villager, HumanoidM
                 HumanoidModel<Villager> m = (HumanoidModel<Villager>)this.getParentModel();
                 var clothes = b.getBuffer(RenderType.entityCutoutNoCull(MINER));
                 for (ModelPart part : new ModelPart[]{m.body, m.rightArm, m.leftArm, m.rightLeg, m.leftLeg}) {
-                    part.render(p, clothes, light, OverlayTexture.NO_OVERLAY, -1);
+                    RigModel.render(part, p, clothes, light, OverlayTexture.NO_OVERLAY, -1);
                 }
                 if (v.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
                     p.pushPose();
                     m.head.translateAndRotate(p);
                     p.scale(1.06F, 1.06F, 1.06F);
                     var gear = b.getBuffer(RenderType.entityCutoutNoCull(MINER_GEAR));
-                    this.hardHat.render(p, gear, light, OverlayTexture.NO_OVERLAY, -1);
-                    this.lamp.render(p, gear, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, -1);
+                    RigModel.render(this.hardHat, p, gear, light, OverlayTexture.NO_OVERLAY, -1);
+                    RigModel.render(this.lamp, p, gear, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, -1);
                     p.popPose();
                 }
             } else if (!v.isBaby()) {
                 p.pushPose();
                 ((HumanoidModel)this.getParentModel()).body.translateAndRotate(p);
-                this.apron.render(p, b.getBuffer(RenderType.entityCutoutNoCull(TEX)), light, OverlayTexture.NO_OVERLAY, 0xFF000000 | VillagerRoles.color(v));
+                RigModel.render(this.apron, p, b.getBuffer(RenderType.entityCutoutNoCull(TEX)), light, OverlayTexture.NO_OVERLAY, 0xFF000000 | VillagerRoles.color(v));
                 p.popPose();
             }
         }

@@ -69,12 +69,12 @@ public final class VillagerRoles {
         }
     }
 
-    private static void modifier(Villager v, Holder<Attribute> attribute, ResourceLocation id, double amount) {
+    private static void modifier(Villager v, Attribute attribute, ResourceLocation id, double amount) {
         AttributeInstance a = v.getAttribute(attribute);
         if (a != null) {
-            a.removeModifier(id);
+            Mods.remove(a, id);
             if (amount != 0.0) {
-                a.addPermanentModifier(new AttributeModifier(id, amount, Operation.MULTIPLY_BASE));
+                a.addPermanentModifier(Mods.make(id, amount, Operation.MULTIPLY_BASE));
             }
         }
     }

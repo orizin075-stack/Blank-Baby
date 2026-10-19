@@ -46,7 +46,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.ClipContext;
@@ -122,12 +121,12 @@ public final class WanderingTraders {
 
     private static Item item(String id) {
         ResourceLocation rl = id.contains(":") ? new ResourceLocation(id.substring(0, id.indexOf(':')), id.substring(id.indexOf(':') + 1))
-            : ResourceLocation.withDefaultNamespace(id);
+            : new ResourceLocation(id);
         return BuiltInRegistries.ITEM.containsKey(rl) ? (Item)BuiltInRegistries.ITEM.get(rl) : null;
     }
 
     private static MerchantOffer offer(ItemStack result, Item a, int na, Item b, int nb, int uses) {
-        return new MerchantOffer(new ItemCost(a, Math.min(64, na)), b == null || nb <= 0 ? Optional.empty() : Optional.of(new ItemCost(b, Math.min(64, nb))),
+        return new MerchantOffer(new ItemStack(a, Math.min(64, na)), b == null || nb <= 0 ? ItemStack.EMPTY : new ItemStack(b, Math.min(64, nb)),
             result, uses, 0, 0.0F);
     }
 
@@ -159,16 +158,16 @@ public final class WanderingTraders {
         // enchanted netherite, whatever else is installed
         var ench = sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
         ItemStack sword = Items.NETHERITE_SWORD.getDefaultInstance();
-        sword.enchant(ench.getHolderOrThrow(Enchantments.SHARPNESS), 5);
-        sword.enchant(ench.getHolderOrThrow(Enchantments.LOOTING), 3);
-        sword.enchant(ench.getHolderOrThrow(Enchantments.FIRE_ASPECT), 2);
-        sword.enchant(ench.getHolderOrThrow(Enchantments.UNBREAKING), 3);
+        sword.enchant(Enchantments.SHARPNESS, 5);
+        sword.enchant(Enchantments.MOB_LOOTING, 3);
+        sword.enchant(Enchantments.FIRE_ASPECT, 2);
+        sword.enchant(Enchantments.UNBREAKING, 3);
         offers.add(offer(sword, Items.EMERALD, 56, Items.DIAMOND, 12, 1));
         ItemStack bow = Items.BOW.getDefaultInstance();
-        bow.enchant(ench.getHolderOrThrow(Enchantments.POWER), 5);
-        bow.enchant(ench.getHolderOrThrow(Enchantments.FLAME), 1);
-        bow.enchant(ench.getHolderOrThrow(Enchantments.INFINITY), 1);
-        bow.enchant(ench.getHolderOrThrow(Enchantments.UNBREAKING), 3);
+        bow.enchant(Enchantments.POWER_ARROWS, 5);
+        bow.enchant(Enchantments.FLAMING_ARROWS, 1);
+        bow.enchant(Enchantments.INFINITY_ARROWS, 1);
+        bow.enchant(Enchantments.UNBREAKING, 3);
         offers.add(offer(bow, Items.EMERALD, 40, Items.DIAMOND, 6, 1));
         if (!root.hasUUID("OrorCaravan")) {
             return;
@@ -250,11 +249,11 @@ public final class WanderingTraders {
         return traderRoot.hasUUID("OrorCaravan") && r.hasUUID("OrorCaravan") && r.getUUID("OrorCaravan").equals(traderRoot.getUUID("OrorCaravan"));
     }
 
-    private static void modifier(LivingEntity e, Holder<Attribute> a, double amount, AttributeModifier.Operation op) {
+    private static void modifier(LivingEntity e, Attribute a, double amount, AttributeModifier.Operation op) {
         AttributeInstance i = e.getAttribute(a);
         if (i != null) {
-            i.removeModifier(TRUE);
-            i.addPermanentModifier(new AttributeModifier(TRUE, amount, op));
+            Mods.remove(i, TRUE);
+            i.addPermanentModifier(Mods.make(TRUE, amount, op));
         }
     }
 
@@ -373,26 +372,12 @@ public final class WanderingTraders {
     }
 
     // ------------------------------------------------------------------------------------- the debuffer
-    private static java.lang.reflect.Field goals;
-    private static boolean noGoals;
-
-    /** Clear a mob's goals (its goal selector reached by reflection, as its access differs between versions). */
+    /**
+     * Clear a mob's goals. Forge 1.20.1 runs with obfuscated names, so the goal selector is reached through the
+     * MobGoalSelectorAccess mixin (its refmap carries the production name), not by reflection on "goalSelector".
+     */
     private static void calm(Mob m) {
-        if (noGoals) {
-            return;
-        }
-        try {
-            if (goals == null) {
-                goals = Mob.class.getDeclaredField("goalSelector");
-                goals.setAccessible(true);
-            }
-            Object selector = goals.get(m);
-            java.util.function.Predicate<Object> all = g -> true;
-            selector.getClass().getMethod("removeAllGoals", java.util.function.Predicate.class).invoke(selector, all);
-        } catch (ReflectiveOperationException | RuntimeException | LinkageError ex) {
-            // its own goals stay; the navigation set every half second still wins most of the time
-            noGoals = true;
-        }
+        ((jp.oror.reborn.mixin.MobGoalSelectorAccess)m).oror$getGoals().removeAllGoals(g -> true);
     }
 
     private static boolean ready(CompoundTag root, String key, long now) {
@@ -463,7 +448,7 @@ public final class WanderingTraders {
         }
     }
 
-    private static void effect(LivingEntity e, Holder<MobEffect> what, int ticks, int amp) {
+    private static void effect(LivingEntity e, MobEffect what, int ticks, int amp) {
         e.addEffect(new MobEffectInstance(what, ticks, amp));
     }
 
@@ -696,7 +681,7 @@ public final class WanderingTraders {
         for (int i = 0; i < box.getContainerSize() && taken < 3; i++) {
             ItemStack st = box.getItem(i);
             if (!st.isEmpty() && valuable(st)) {
-                loot.add(st.save(sl.registryAccess()));
+                loot.add(st.save(new CompoundTag()));
                 box.setItem(i, ItemStack.EMPTY);
                 taken++;
             }
@@ -842,7 +827,7 @@ public final class WanderingTraders {
         List<ItemStack> out = new ArrayList<>();
         if (v instanceof WanderingTrader t) {
             for (Tag x : root.getList("OrorLoot", 10)) {
-                ItemStack st = ItemStack.parseOptional(sl.registryAccess(), (CompoundTag)x);
+                ItemStack st = ItemStack.of((CompoundTag)x);
                 if (!st.isEmpty()) {
                     out.add(st);
                 }

@@ -62,7 +62,7 @@ public final class MobLevels {
             if (n.getBoolean("Elite")) {
                 return 6;
             } else if (m instanceof Villager v) {
-                return Math.clamp((long)v.getVillagerData().getLevel(), 1, 5);
+                return net.minecraft.util.Mth.clamp((int)v.getVillagerData().getLevel(), 1, 5);
             } else {
                 long xp = Math.max(0L, n.getLong("Experience"));
                 long age = MobMind.age(m);
@@ -76,7 +76,7 @@ public final class MobLevels {
                     }
                 }
 
-                return Math.clamp((long)Math.max(n.getInt("BaseLevel"), trained), 1, 5);
+                return net.minecraft.util.Mth.clamp((int)Math.max(n.getInt("BaseLevel"), trained), 1, 5);
             }
         }
     }
@@ -85,7 +85,7 @@ public final class MobLevels {
         CompoundTag n = MobMind.data(m);
         n.putBoolean("LevelInitialized", true);
         n.putBoolean("Elite", rank == 6);
-        n.putInt("BaseLevel", Math.clamp((long)rank, 1, 6));
+        n.putInt("BaseLevel", net.minecraft.util.Mth.clamp((int)rank, 1, 6));
         if (m instanceof Villager v) {
             v.setVillagerData(v.getVillagerData().setLevel(Math.min(5, rank)));
         }
@@ -157,7 +157,7 @@ public final class MobLevels {
 
             n.putBoolean("LevelBuffs", true);
         } else if (n.getBoolean("LevelBuffs")) {
-            for (Holder<MobEffect> effect : List.of(
+            for (MobEffect effect : List.of(
                 MobEffects.DAMAGE_BOOST, MobEffects.DAMAGE_RESISTANCE, MobEffects.MOVEMENT_SPEED, MobEffects.REGENERATION, MobEffects.ABSORPTION
             )) {
                 MobEffectInstance e = m.getEffect(effect);
@@ -182,13 +182,13 @@ public final class MobLevels {
             ItemStack current = m.getItemBySlot(slot);
             boolean managed = current.isEmpty()
                 || legacy
-                || n.contains(key) && ItemStack.isSameItemSameTags(current, ItemStack.parseOptional(m.registryAccess(), n.getCompound(key)));
+                || n.contains(key) && ItemStack.isSameItemSameTags(current, ItemStack.of(n.getCompound(key)));
             if (managed) {
                 ItemStack stack = slot == EquipmentSlot.MAINHAND
                     ? weapon(m, "sword")
                     : (slot == EquipmentSlot.OFFHAND ? Items.SHIELD.getDefaultInstance() : armor(rank, slot).getDefaultInstance());
                 if (rank >= 3 && slot != EquipmentSlot.MAINHAND) {
-                    ench(m, stack, slot == EquipmentSlot.OFFHAND ? Enchantments.UNBREAKING : Enchantments.PROTECTION, rank == 3 ? 2 : 4);
+                    ench(m, stack, slot == EquipmentSlot.OFFHAND ? Enchantments.UNBREAKING : Enchantments.ALL_DAMAGE_PROTECTION, rank == 3 ? 2 : 4);
                 }
 
                 if (rank >= 5) {
@@ -197,7 +197,7 @@ public final class MobLevels {
 
                 m.setItemSlot(slot, stack);
                 m.setDropChance(slot, 0.0F);
-                n.put(key, stack.save(m.registryAccess()));
+                n.put(key, stack.save(new CompoundTag()));
                 if (slot == EquipmentSlot.MAINHAND) {
                     n.putBoolean("OriginalAuto", true);
                 }
@@ -244,7 +244,7 @@ public final class MobLevels {
             case "bow" -> Items.BOW;
             case "crossbow" -> Items.CROSSBOW;
             case "trident" -> Items.TRIDENT;
-            case "mace" -> Items.MACE;
+            case "mace" -> Items.IRON_AXE;
             case "axe" -> rank >= 4 ? Items.NETHERITE_AXE : (rank >= 2 ? Items.DIAMOND_AXE : Items.IRON_AXE);
             case "pickaxe" -> rank >= 4 ? Items.NETHERITE_PICKAXE : (rank >= 2 ? Items.DIAMOND_PICKAXE : Items.IRON_PICKAXE);
             default -> rank == 6
@@ -253,10 +253,10 @@ public final class MobLevels {
         };
         ItemStack stack = item.getDefaultInstance();
         if (rank >= 3) {
-            ResourceKey<Enchantment> enchant = switch (kind) {
-                case "bow" -> Enchantments.POWER;
+            Enchantment enchant = switch (kind) {
+                case "bow" -> Enchantments.POWER_ARROWS;
                 case "crossbow" -> Enchantments.QUICK_CHARGE;
-                case "pickaxe" -> Enchantments.EFFICIENCY;
+                case "pickaxe" -> Enchantments.BLOCK_EFFICIENCY;
                 case "sword", "axe" -> Enchantments.SHARPNESS;
                 default -> Enchantments.UNBREAKING;
             };
@@ -270,7 +270,7 @@ public final class MobLevels {
         return stack;
     }
 
-    private static void ench(Mob m, ItemStack stack, ResourceKey<Enchantment> key, int level) {
-        stack.enchant(m.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(key), level);
+    private static void ench(Mob m, ItemStack stack, Enchantment key, int level) {
+        stack.enchant(key, level);
     }
 }
