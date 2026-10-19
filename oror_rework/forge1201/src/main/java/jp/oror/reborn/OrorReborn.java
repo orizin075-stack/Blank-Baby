@@ -95,7 +95,7 @@ public final class OrorReborn {
         // the compatibility packs patched the 1.21.1 builds of other mods; NightfallCraft runs their 1.20.1 builds
         ModLoadingContext.get().registerConfig(Type.SERVER, RebornConfig.SPEC);
         MinecraftForge.EVENT_BUS.addListener(NightfallArsenal::damage);
-        MinecraftForge.EVENT_BUS.addListener(event -> DialogueArchive.flush(3000L));
+        MinecraftForge.EVENT_BUS.addListener((net.minecraftforge.event.server.ServerStoppingEvent event) -> DialogueArchive.flush(3000L));
         MinecraftForge.EVENT_BUS.addListener(RelicPowers::damage);
         MinecraftForge.EVENT_BUS.addListener(RelicPowers::summonedTick);
         MinecraftForge.EVENT_BUS.addListener(AdventureContent::damage);

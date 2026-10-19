@@ -13,3 +13,27 @@ join the NightfallCraft modpack.
   hand against the real Forge 1.20.1 build.
 - Build: `gradle build` (ForgeGradle 6, official mappings, JDK 17). Needs maven.minecraftforge.net, the Mojang hosts
   and repo.spongepowered.org.
+
+## Checking without the Forge toolchain
+
+The Forge and Mojang hosts were out of reach while porting, so the port is checked against reconstructed stubs:
+
+- `stub/build_stubs.sh` builds `stub/stubs1201.jar`: Minecraft classes generated from the members the 1.21.1 build
+  used (`refs121_all.txt`), turned into their 1.20.1 form by `to1201.py` (renames, removed members, `extra1201.txt`
+  additions each checked in Forge/Create/Iron's/Epic Fight 1.20.1 code, `overrides1201.py` for generics and abstract
+  classes), plus skeletons of the real Forge 1.20.1 / eventbus / Mixin sources (`Skeleton.java`, `forge_closure.py`).
+  It expects the reference checkouts in `../../ref1201` (paths at the top of the script).
+- `compile_stub.sh` compiles `src/main/java` against them with JDK 17's javac (Forge 1.20.1 runs on Java 17, so Java
+  21 library calls are errors too).
+- `tools/audit/Overrides.java` lists the methods of every class that extends a Minecraft class (the sources are
+  decompiled, so `@Override` is mostly missing and the stubs cannot catch an override whose signature changed);
+  `tools/audit/idx.py` + `chk.py` list the Minecraft members the port uses that never occur in the 1.20.1 reference
+  sources, for review by hand.
+
+A clean stub compile is not a build: the stubs only know members the code uses, so the real `gradle build` against
+Forge 47 is still the check that counts, and only `reobfJar` (SRG names) gives a jar Forge 1.20.1 can load.
+
+## Packaging for NightfallCraft
+
+`tools/package_nfc.py <extracted NightfallCraft 2.2.8.6 import> <build/libs jar> <out zip> <version>` keeps the pack's
+manifest, modlist and overrides and adds the jar under `overrides/mods`.
