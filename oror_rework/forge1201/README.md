@@ -37,3 +37,17 @@ Forge 47 is still the check that counts, and only `reobfJar` (SRG names) gives a
 
 `tools/package_nfc.py <extracted NightfallCraft 2.2.8.6 import> <build/libs jar> <out zip> <version>` keeps the pack's
 manifest, modlist and overrides and adds the jar under `overrides/mods`.
+
+## Next steps once the network allows the Forge and Mojang hosts
+
+Needs maven.minecraftforge.net, piston-meta.mojang.com, piston-data.mojang.com, libraries.minecraft.net and
+repo.spongepowered.org (Gradle itself, 8.14 in /opt/gradle, and the plugin portal were already reachable).
+
+1. Resources: unzip the 0.17.18 jar from `../dist/OROR_War_Nightfall_v0.17.18_Import.zip`
+   (`overrides/mods/oror_supreme_bosses-*.jar`) into an empty directory and run `./prepare.sh <that directory>`.
+2. `gradle build` here (JDK 17 toolchain): compiles against the real Forge 47, runs the mixin annotation processor
+   for the refmap and reobfuscates to SRG. Fix whatever the real compiler finds that the stubs could not.
+3. `gradle runGameTestServer`: the game tests (`*GameTests.java`; batches needing TaCZ, Iron's, Superb Warfare or
+   Epic Fight only pass with those mods in `run/mods`).
+4. `python3 tools/package_nfc.py <extracted NightfallCraft 2.2.8.6 import> build/libs/oror_supreme_bosses-<v>.jar
+   <out zip> <v>`: the NightfallCraft import is the user's upload, not kept in the repository.
