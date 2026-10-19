@@ -36,7 +36,23 @@ jobs:
           bash oror_rework/forge1201/prepare.sh "$RUNNER_TEMP/oror/jar"
       - name: Build
         working-directory: oror_rework/forge1201
-        run: gradle build --console=plain --stacktrace
+        run: |
+          set -o pipefail
+          gradle build --console=plain 2>&1 | tee "$RUNNER_TEMP/build.log"
+      - name: Report the build errors
+        if: failure()
+        run: |
+          # the job log is not readable from where the port is worked on: the errors go last and onto the branch
+          mkdir -p oror_rework/forge1201/out
+          grep -E 'error:|warning: \[|What went wrong|FAILURE|Could not' -A3 "$RUNNER_TEMP/build.log" | head -1500 > oror_rework/forge1201/out/build-errors.txt || true
+          cp "$RUNNER_TEMP/build.log" oror_rework/forge1201/out/build.log
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add oror_rework/forge1201/out/build-errors.txt oror_rework/forge1201/out/build.log
+          git commit -m "Forge 1.20.1 build log from CI build ${GITHUB_SHA::7} [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          tail -400 oror_rework/forge1201/out/build-errors.txt
       - name: Keep the jar
         run: |
           mkdir -p oror_rework/forge1201/out
@@ -45,6 +61,7 @@ jobs:
           ls -l oror_rework/forge1201/out
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm -q --ignore-unmatch oror_rework/forge1201/out/build-errors.txt oror_rework/forge1201/out/build.log
           git add oror_rework/forge1201/out
           git commit -m "Forge 1.20.1 jar from CI build ${GITHUB_SHA::7} [skip ci]"
           git pull --rebase origin "${GITHUB_REF_NAME}"
