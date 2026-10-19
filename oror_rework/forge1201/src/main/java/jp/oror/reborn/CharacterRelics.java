@@ -458,26 +458,23 @@ public final class CharacterRelics {
             this.w = new Wield(s, s.id, null, 0.0F, s.rank, s.cooldown);
         }
 
-        private Multimap<Attribute, AttributeModifier> main;
-        private Multimap<Attribute, AttributeModifier> off;
+        private Multimap<Attribute, AttributeModifier> held;
 
         /** Held in either hand: a focus sharpens the wielder's attacks, a charm hardens and quickens them (v0.17.6). */
-        static Multimap<Attribute, AttributeModifier> attributes(RelicSpec s, EquipmentSlot hand) {
-            // Forge 1.20.1 refuses a second modifier with the same UUID on an attribute: one set per hand
+        static Multimap<Attribute, AttributeModifier> attributes(RelicSpec s) {
+            // one UUID per bonus for both hands, as 1.21.1's single id: a second relic of the same slot replaces the
+            // first instead of stacking (AttributeMap.addTransientAttributeModifiers removes by UUID before adding)
             ImmutableMultimap.Builder<Attribute, AttributeModifier> b = ImmutableMultimap.builder();
             for (Bonus x : s.slot.equals("focus") ? FOCUS : CHARM) {
-                b.put(x.attribute(), Mods.make(new ResourceLocation("oror_supreme_bosses", x.id() + "_" + hand.getName()), x.amount(), x.op()));
+                b.put(x.attribute(), Mods.make(new ResourceLocation("oror_supreme_bosses", x.id()), x.amount(), x.op()));
             }
             return b.build();
         }
 
         @Override
         public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-            if (slot == EquipmentSlot.MAINHAND) {
-                return this.main != null ? this.main : (this.main = attributes(this.w.spec, slot));
-            }
-            if (slot == EquipmentSlot.OFFHAND) {
-                return this.off != null ? this.off : (this.off = attributes(this.w.spec, slot));
+            if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) {
+                return this.held != null ? this.held : (this.held = attributes(this.w.spec));
             }
             return super.getAttributeModifiers(slot, stack);
         }
@@ -515,6 +512,12 @@ public final class CharacterRelics {
         Blade(Wield w, Properties props) {
             super(Tiers.NETHERITE, 0, 0.0F, props);
             this.w = w;
+        }
+
+        /** What Mob.canReplaceCurrentItem compares in 1.20.1: a mob must not drop its relic for an ordinary sword. */
+        @Override
+        public float getDamage() {
+            return this.w.damage * this.w.kind.mul;
         }
 
         private Multimap<Attribute, AttributeModifier> mods;

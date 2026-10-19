@@ -49,3 +49,20 @@ net/minecraft/util/Mth
 	SM clamp (FFF)F
 	SM clamp (DDD)D
 	SM clamp (JJJ)J
+net/minecraft/world/item/SwordItem
+	VM getDamage ()F
+net/minecraft/server/level/ServerLevel
+	VM isPositionEntityTicking (Lnet/minecraft/core/BlockPos;)Z
+	VM getForcedChunks ()Lit/unimi/dsi/fastutil/longs/LongSet;
+net/minecraft/world/entity/Entity
+	VM isRemoved ()Z
+	VM isInvulnerableTo (Lnet/minecraft/world/damagesource/DamageSource;)Z
+net/minecraft/world/entity/LivingEntity
+	VM isDeadOrDying ()Z
+	VM hasEffect (Lnet/minecraft/world/effect/MobEffect;)Z
+net/minecraft/tags/DamageTypeTags
+	SF IS_FIRE Lnet/minecraft/tags/TagKey;
+net/minecraft/world/entity/player/Player
+	VM getAbilities ()Lnet/minecraft/world/entity/player/Abilities;
+net/minecraft/world/entity/player/Abilities
+	VF invulnerable Z

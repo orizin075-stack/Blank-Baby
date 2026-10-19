@@ -126,11 +126,22 @@ public final class WorldEvents {
         }
         if (e.level instanceof ServerLevel cleanup) {
             // Forge 1.20.1 ticks only living entities through an event: the village's aircraft and vehicles (and any
-            // other non-living entity) are visited here instead
-            for (Entity thing : cleanup.getAllEntities()) {
-                if (!(thing instanceof LivingEntity)) {
-                    VillageFlights.tick(thing);
-                    VillageVehicles.tick(thing);
+            // other non-living entity) are visited here instead. Copied first, since a flight that lands discards its
+            // crew and craft, and only where the level ticks entities, as the 1.21.1 entity tick event did.
+            if (!cleanup.players().isEmpty() || !cleanup.getForcedChunks().isEmpty()) {
+                List<Entity> things = new java.util.ArrayList<>();
+                for (Entity thing : cleanup.getAllEntities()) {
+                    if (!(thing instanceof LivingEntity) && cleanup.isPositionEntityTicking(thing.blockPosition())) {
+                        things.add(thing);
+                    }
+                }
+                for (Entity thing : things) {
+                    if (!thing.isRemoved()) {
+                        VillageFlights.tick(thing);
+                    }
+                    if (!thing.isRemoved()) {
+                        VillageVehicles.tick(thing);
+                    }
                 }
             }
             // v0.17.18: NightfallCraft's spawn caps (its InControl rules)

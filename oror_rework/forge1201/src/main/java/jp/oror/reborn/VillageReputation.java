@@ -205,9 +205,10 @@ public final class VillageReputation {
     }
 
     public static void damaged(LivingDamageEvent e) {
+        // Forge fires this only for a hit that got through with damage before armour (1.21.1 tested the original
+        // damage); its amount is after absorption, which an elite villager's Absorption IV can take to zero
         if (e.getEntity() instanceof Villager v
             && e.getSource().getEntity() instanceof Player p
-            && e.getAmount() > 0.0F
             && v.level() instanceof ServerLevel sl) {
             change(sl, VillageLedger.of(v), p, -120, "村人への攻撃");
             // v0.17.17: strong villagers keep after a player only while the attacks go on (VillageAI.grudge)

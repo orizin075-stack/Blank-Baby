@@ -61,7 +61,6 @@ public final class OrorReborn {
         TABS.register(bus);
         MinecraftForge.EVENT_BUS.addListener(AdaptiveCombat::tick);
         MinecraftForge.EVENT_BUS.addListener(TukuyoBridge::tick);
-        MinecraftForge.EVENT_BUS.addListener(AdaptiveCombat::damage);
         MinecraftForge.EVENT_BUS.addListener(VillagerLife::tick);
         MinecraftForge.EVENT_BUS.addListener(VillageReputation::tick);
         MinecraftForge.EVENT_BUS.addListener(VillageReputation::interact);
@@ -81,7 +80,6 @@ public final class OrorReborn {
         MinecraftForge.EVENT_BUS.addListener(NightfallFusion::kill);
         MinecraftForge.EVENT_BUS.addListener(NightfallFusion::clone);
         MinecraftForge.EVENT_BUS.addListener(NightfallFusion::tick);
-        MinecraftForge.EVENT_BUS.addListener(NightfallFusion::damage);
         MinecraftForge.EVENT_BUS.addListener(VillagerIndustry::tick);
         MinecraftForge.EVENT_BUS.addListener(VillagerIndustry::interact);
         MinecraftForge.EVENT_BUS.addListener(VillagerIndustry::trades);
@@ -94,18 +92,18 @@ public final class OrorReborn {
         bus.addListener(OrorReborn::combatAttributes);
         // the compatibility packs patched the 1.21.1 builds of other mods; NightfallCraft runs their 1.20.1 builds
         ModLoadingContext.get().registerConfig(Type.SERVER, RebornConfig.SPEC);
-        MinecraftForge.EVENT_BUS.addListener(NightfallArsenal::damage);
         MinecraftForge.EVENT_BUS.addListener((net.minecraftforge.event.server.ServerStoppingEvent event) -> DialogueArchive.flush(3000L));
-        MinecraftForge.EVENT_BUS.addListener(RelicPowers::damage);
-        MinecraftForge.EVENT_BUS.addListener(RelicPowers::summonedTick);
-        MinecraftForge.EVENT_BUS.addListener(AdventureContent::damage);
+        // 1.21.1's EntityTickEvent.Pre listeners: a stun or freeze they cancel must stop the other tick listeners too
+        MinecraftForge.EVENT_BUS.addListener(net.minecraftforge.eventbus.api.EventPriority.HIGH, RelicPowers::summonedTick);
         MinecraftForge.EVENT_BUS.addListener(AdventureContent::gate);
         MinecraftForge.EVENT_BUS.addListener(PactSystem::tick);
         MinecraftForge.EVENT_BUS.addListener(PactSystem::clone);
         MinecraftForge.EVENT_BUS.addListener(RebornCommands::register);
         MinecraftForge.EVENT_BUS.addListener(LegacyContent::seal);
-        MinecraftForge.EVENT_BUS.addListener(WorldEvents::livingTick);
-        MinecraftForge.EVENT_BUS.addListener(WorldEvents::damage);
+        MinecraftForge.EVENT_BUS.addListener(net.minecraftforge.eventbus.api.EventPriority.HIGH, WorldEvents::livingTick);
+        // the damage handlers ran on NeoForge's LivingIncomingDamageEvent (IncomingDamage)
+        MinecraftForge.EVENT_BUS.addListener(IncomingDamage::attack);
+        MinecraftForge.EVENT_BUS.addListener(net.minecraftforge.eventbus.api.EventPriority.HIGHEST, IncomingDamage::hurt);
         MinecraftForge.EVENT_BUS.addListener(WorldEvents::levelTick);
     }
 
