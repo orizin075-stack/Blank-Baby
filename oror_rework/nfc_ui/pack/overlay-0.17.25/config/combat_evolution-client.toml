@@ -1,4 +1,3 @@
-
 [music]
 	#Should CE Music Play (Such as Boss BGM)
 	playCEMusic = true
@@ -14,9 +13,16 @@
 	#Allowed Values: CENTER, CENTER_LEFT, CENTER_RIGHT, TOP, TOP_LEFT, TOP_RIGHT, BOTTOM, BOTTOM_LEFT, BOTTOM_RIGHT
 	iconAlignment = "CENTER"
 	#Position X of Execution Icon
-	#Range: -1.7976931348623157E308 ~ 1.7976931348623157E308
+	# Default: 30.0
+	# Range: -1.7976931348623157E308 ~ 1.7976931348623157E308
 	iconX = 30.0
 	#Position Y of Execution Icon
-	#Range: -1.7976931348623157E308 ~ 1.7976931348623157E308
+	# Default: 30.0
+	# Range: -1.7976931348623157E308 ~ 1.7976931348623157E308
 	iconY = 30.0
+	#Whether to show the icon for available assassinations
+	assassinationIconDisplay = true
 
+[rendering]
+	#Whether to render Combat Evolution shader effects
+	enableShaderRendering = true

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
@@ -170,7 +171,9 @@ public final class Harness {
                 mc.setScreen(null);
             }
             case 760 -> shot(mc, "08_hud_weapon_again");
-            case 780 -> finish(mc, "complete");
+            case 770 -> mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            case 860 -> shot(mc, "09_third_person");
+            case 880 -> finish(mc, "complete");
             default -> { }
         }
     }
