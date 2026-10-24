@@ -62,7 +62,7 @@ jobs:
           EOF
           cp "$(ls -v $P/out/oror_supreme_bosses-*.jar | tail -n 1)" $G/mods/
           python3 -I $U/tools/pack_tools.py fetch $OUT/resolved.json $G $OUT/lock-additions.json 2>&1 | tail -n 60
-          ls $G/mods | wc -l; ls $G/resourcepacks $G/shaderpacks
+          mkdir -p $G/resourcepacks $G/shaderpacks; ls $G/mods | wc -l; ls $G/resourcepacks $G/shaderpacks
       - name: Dependencies declared by every jar
         run: python3 -I $U/tools/pack_tools.py depcheck $RUNNER_TEMP/game/mods $OUT/depcheck.txt
       - name: Epic Fight combat items and NightfallCraft's menu images
