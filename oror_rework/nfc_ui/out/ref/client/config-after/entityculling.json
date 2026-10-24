@@ -1,5 +1,6 @@
 {
-  "configVersion": 7,
+  "configVersion": 9,
+  "safeMode": true,
   "renderNametagsThroughWalls": true,
   "blockEntityWhitelist": [
     "create:rope_pulley",
@@ -91,7 +92,6 @@
   "sleepDelay": 10,
   "hitboxLimit": 50,
   "captureRate": 5,
-  "skipMarkerArmorStands": true,
   "tickCulling": true,
   "tickCullingWhitelist": [
     "epicfight_leonidas:leonidas",
@@ -187,7 +187,15 @@
     "fdbosses:radial_earthquake",
     "fdbosses:chesed_crystal",
     "fdbosses:chesed",
-    "fdbosses:malkuth"
+    "fdbosses:malkuth",
+    "cinematiccataclysm:scylla_cutscene",
+    "cinematiccataclysm:maledictus_cutscene",
+    "cinematiccataclysm:leviathan_cutscene",
+    "cinematiccataclysm:ancient_remnant_cutscene",
+    "createbigcannons:cannon_carriage",
+    "createbigcannons:pitch_contraption",
+    "cinematiccataclysm:ignis_cutscene",
+    "voidscape:corrupted_pawn"
   ],
   "disableF3": false,
   "skipEntityCulling": false,

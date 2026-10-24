@@ -1,197 +1,127 @@
-[13:56:21] [main] [INFO] Disabled 'lazy_entity_renderers.curios.Curios_ClientProxyMixin' due to config
-[13:56:21] [main] [INFO] Disabled 'lazy_entity_renderers.habitat.HabitatChestItemMixin' due to config
-[13:56:21] [main] [INFO] Disabled 'lazy_entity_renderers.supplementaries.SignPostBlockTileRendererMixin' due to config
-[13:56:21] [main] [INFO] Disabled 'lazy_entity_renderers.what_are_you_voting_for_2023.ClientEventBusSubscriberMixin' due to config
-[13:56:21] [main] [INFO] Disabled 'pack_resources_cache.ForgePathPackResourcesMixin' due to config
-[13:56:21] [main] [INFO] Disabled 'pack_resources_cache.PathPackResourcesMixin' due to config
-[13:56:21] [main] [INFO] Disabled 'pack_resources_cache.dynamic_trees.FlatTreeResourcePackMixin' due to config
-[13:56:21] [main] [INFO] Disabled 'pack_resources_cache.sinytra_connector.ModNioResourcePackMixin' due to config
-[13:56:21] [main] [WARN] Error loading class: net/jitl/client/ClientLoginChecker (java.lang.ClassNotFoundException: net.jitl.client.ClientLoginChecker)
-[13:56:21] [main] [WARN] @Mixin target net.jitl.client.ClientLoginChecker was not found lazyyyyy.forge.mixins.json:jitl.fix_login_crash.ClientLoginCheckerMixin from mod (unknown)
-[13:56:21] [main] [WARN] Error loading class: com/ultramega/cabletiers/registry/ClientEventHandler (java.lang.ClassNotFoundException: com.ultramega.cabletiers.registry.ClientEventHandler)
-[13:56:21] [main] [WARN] @Mixin target com.ultramega.cabletiers.registry.ClientEventHandler was not found lazyyyyy.forge.mixins.json:lazy_model_bake.cable_tiers.ClientEventHandlerMixin from mod (unknown)
-[13:56:22] [main] [WARN] Error loading class: com/refinedmods/refinedstorage/setup/ClientSetup (java.lang.ClassNotFoundException: com.refinedmods.refinedstorage.setup.ClientSetup)
-[13:56:22] [main] [WARN] @Mixin target com.refinedmods.refinedstorage.setup.ClientSetup was not found lazyyyyy.forge.mixins.json:lazy_model_bake.refined_storage.ClientSetupMixin from mod (unknown)
-[13:56:22] [main] [INFO] Disabled 'lazy_entity_renderers.big_brain.BigBrainRendererEventsMixin' due to config
-[13:56:22] [main] [INFO] Disabled 'lazy_entity_renderers.bovines_and_buttercups.BovinesAndButtercupsClientForgeMixin' due to config
-[13:56:22] [main] [INFO] Disabled 'lazy_entity_renderers.cloudstorage.ClientProxyMixin' due to config
-[13:56:22] [main] [INFO] Disabled 'lazy_entity_renderers.curios.EntityRenderDispatcherMixin' due to config
-[13:56:22] [main] [INFO] Disabled 'lazy_entity_renderers.joy_of_painting.EntityRenderDispatcherMixin' due to config
-[13:56:22] [main] [INFO] Disabled 'lazy_entity_renderers.quark.UsesForCursesModule_ClientMixin' due to config
-[13:56:22] [main] [INFO] Disabled 'lazy_entity_renderers.taniwha.TForgeClientEventsMixin' due to config
-[13:56:22] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/data/ArrayLightDataCache (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.data.ArrayLightDataCache)
-[13:56:22] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/flat/FlatLightPipeline (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.flat.FlatLightPipeline)
-[13:56:22] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/data/LightDataAccess (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.data.LightDataAccess)
-[13:56:22] [main] [WARN] Error loading class: net/fabricmc/fabric/impl/client/indigo/renderer/aocalc/AoCalculator (java.lang.ClassNotFoundException: net.fabricmc.fabric.impl.client.indigo.renderer.aocalc.AoCalculator)
-[13:56:22] [main] [WARN] Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent)
-[13:56:22] [main] [WARN] @Mixin target com.github.leawind.thirdperson.core.CameraAgent was not found betterlockon.compat.mixins.json:CameraAgentMixin from mod (unknown)
-[13:56:22] [main] [WARN] Error loading class: com/github/exopandora/shouldersurfing/forge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.forge.event.ClientEventHandler)
-[13:56:22] [main] [WARN] @Mixin target com.github.exopandora.shouldersurfing.forge.event.ClientEventHandler was not found betterlockon.compat.mixins.json:ClientEventHandlerMixin from mod (unknown)
-[13:56:22] [main] [WARN] Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent)
-[13:56:22] [main] [WARN] @Mixin target com.github.leawind.thirdperson.core.EntityAgent was not found betterlockon.compat.mixins.json:EntityAgentMixin from mod (unknown)
-[13:56:22] [main] [WARN] Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera)
-[13:56:22] [main] [WARN] @Mixin target com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera was not found betterlockon.compat.mixins.json:ShoulderSurfingCameraMixin from mod (unknown)
-[13:56:22] [main] [WARN] Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents)
-[13:56:22] [main] [WARN] @Mixin target com.github.leawind.thirdperson.ThirdPersonEvents was not found betterlockon.compat.mixins.json:ThirdPersonEventsMixin from mod (unknown)
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicfight.AnimationPlayerMixin.class -> yesman.epicfight.api.animation.AnimationPlayer.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicfight.MixinCapabilityItem.class -> yesman.epicfight.world.capabilities.item.CapabilityItem.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicfight.MixinCapabilityItem.class -> yesman.epicfight.world.capabilities.item.WeaponCapability.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicfight.MixinLevelUtil.class -> yesman.epicfight.api.utils.LevelUtil.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicfight.WeaponCapabilityAccessor.class -> yesman.epicfight.world.capabilities.item.WeaponCapability.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicfight.client.RenderEngineEventsMixin.class -> yesman.epicfight.client.events.engine.RenderEngine$Events.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.ponder.MixinPonderTooltipHandler.class -> net.createmod.ponder.foundation.PonderTooltipHandler.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.ponder.MixinSchematicLevelHitbox.class -> net.createmod.catnip.levelWrappers.SchematicLevel.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:43]: [Ares Hud Mixin Loader]Apply Compat Mixin: org.arc.epic_ponder.mixin.compat.epicfightx.MixinRenderUchigatanaX.class -> com.asanginxst.epicfightx.client.renderer.RenderUchigatanaX.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicskills.AccessorSkillBookScreen.class -> yesman.epicfight.client.gui.screen.SkillBookScreen.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicskills.client.MixinSkillInfoScreen.class -> com.yesman.epicskills.client.gui.screen.SkillInfoScreen.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.epicskills.client.MixinSkillTreeNodeButton.class -> com.yesman.epicskills.client.gui.screen.SkillTreeScreen$TreePage$NodeButton.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.ponder.MixinPonderUI.class -> net.createmod.ponder.foundation.ui.PonderUI.class
-[13:56:22] [main] [INFO] [org.arc.epic_ponder.mixinloader.CompatInfos:shouldMixin:48]: [Ares Hud Mixin Loader]Apply Default Mixin: org.arc.epic_ponder.mixin.ponder.MixinPonderUIAccessor.class -> net.createmod.ponder.foundation.ui.PonderUI.class
-[13:56:22] [main] [INFO] Superb Warfare mixin com.victoriomods.taczballisticbreaching.mixin.SuperbWarfareRayHitMixin enabled=true
-[13:56:22] [main] [INFO] Superb Warfare mixin com.victoriomods.taczballisticbreaching.mixin.SuperbWarfareProjectileMixin enabled=true
-[13:56:22] [main] [INFO] Superb Warfare mixin com.victoriomods.taczballisticbreaching.mixin.SuperbWarfareMagazineMixin enabled=true
-[13:56:22] [main] [WARN] Error loading class: com/mrcrayfish/backpacked/inventory/container/UnlockableController (java.lang.ClassNotFoundException: com.mrcrayfish.backpacked.inventory.container.UnlockableController)
-[13:56:22] [main] [WARN] Error loading class: vectorwing/farmersdelight/common/block/TomatoVineBlock (java.lang.ClassNotFoundException: vectorwing.farmersdelight.common.block.TomatoVineBlock)
-[13:56:22] [main] [WARN] Error loading class: net/raphimc/immediatelyfast/feature/map_atlas_generation/MapAtlasTexture (java.lang.ClassNotFoundException: net.raphimc.immediatelyfast.feature.map_atlas_generation.MapAtlasTexture)
-[13:56:22] [main] [INFO] Patching IForgeItemStack#getEnchantmentLevel
-[13:56:22] [main] [INFO] Patching IForgeItemStack#getEnchantmentLevel
-[13:56:22] [main] [INFO] Resolve kubejs version: null
-[13:56:22] [main] [INFO] Resolve roughlyenoughitems version: null
-[13:56:22] [main] [INFO] Resolve replaymod version: null
-[13:56:22] [main] [INFO] Resolve curios version: 5.14.1+1.20.1
-[13:56:22] [main] [INFO] Resolve accessories version: null
-[13:56:22] [main] [INFO] Resolve epicfight version: 20.14.17
-[13:56:22] [main] [INFO] Resolve tacz version: 1.1.8-hotfix2
-[13:56:22] [main] [INFO] Resolve ryoamiclights version: null
-[13:56:22] [main] [INFO] Resolve lambdynlights version: null
-[13:56:22] [main] [INFO] Resolve sodiumdynamiclights version: 1.0.9
-[13:56:22] [main] [INFO] Resolve backpacked version: null
-[13:56:22] [main] [INFO] Resolve travelersbackpack version: null
-[13:56:22] [main] [INFO] Resolve sophisticatedbackpacks version: null
-[13:56:22] [main] [INFO] Resolve optifine version: null
-[13:56:22] [main] [INFO] Resolve iris version: null
-[13:56:22] [main] [INFO] Resolve oculus version: 1.8.0
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.ActionAnimationMixin.class -> yesman.epicfight.api.animation.types.ActionAnimation.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.AnimationPlayerMixin.class -> yesman.epicfight.api.animation.AnimationPlayer.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.ArmaturesAccessor.class -> yesman.epicfight.gameasset.Armatures.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.GuardSkillMixin.class -> yesman.epicfight.skill.guard.GuardSkill.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.MixinEpicFightCameraAPI.class -> yesman.epicfight.api.client.camera.EpicFightCameraAPI.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.MixinInputManager.class -> com.p1nero.invincible.client.InputManager.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.MixinMob.class -> net.minecraft.world.entity.Mob.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.MixinPatchedItemInHandLayer.class -> yesman.epicfight.client.renderer.patched.layer.PatchedItemInHandLayer.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.NearestAttackableTargetGoalMixin.class -> net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.ServerPlayerPatchMixin.class -> yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.SkillMixin.class -> yesman.epicfight.skill.Skill.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.WeaponDodgeRequestMixin.class -> yesman.epicfight.skill.SkillContainer.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.WeaponGuardRequestMixin.class -> yesman.epicfight.skill.SkillContainer.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.UtilMixin.class -> net.minecraft.Util.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:81]: [EFN Mixin Loader]Apply Compat Mixin: com.hm.efn.mixin.compat.cataclysm.MixinIABossMonster.class -> com.github.L_Ender.cataclysm.entity.InternalAnimationMonster.IABossMonsters.IABoss_monster.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:81]: [EFN Mixin Loader]Apply Compat Mixin: com.hm.efn.mixin.compat.cataclysm.MixinLLibraryBossMonster.class -> com.github.L_Ender.cataclysm.entity.AnimationMonster.BossMonsters.LLibrary_Boss_Monster.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:81]: [EFN Mixin Loader]Apply Compat Mixin: com.hm.efn.mixin.compat.citadel.AnimationHandlerMixin.class -> com.github.alexthe666.citadel.animation.AnimationHandler.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:81]: [EFN Mixin Loader]Apply Compat Mixin: com.hm.efn.mixin.compat.geckolib.AnimationProcessorMixin.class -> software.bernie.geckolib.core.animation.AnimationProcessor.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:81]: [EFN Mixin Loader]Apply Compat Mixin: com.hm.efn.mixin.compat.lionfishapi.AnimationHandlerMixin.class -> com.github.L_Ender.lionfishapi.server.animation.AnimationHandler.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.AdrenalineParticleProviderMixin.class -> yesman.epicfight.client.particle.EntityAfterimageParticle$AdrenalineParticleProvider.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.CameraAccessor.class -> net.minecraft.client.Camera.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.EntitySnapshotMixin.class -> yesman.epicfight.api.utils.EntitySnapshot.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.LockonMixin.class -> yesman.epicfight.api.client.camera.EpicFightCameraAPI.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.MixinKeyboardHandler.class -> net.minecraft.client.KeyboardHandler.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.MixinKeyMapping.class -> net.minecraft.client.KeyMapping.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.MixinMouseHandler.class -> net.minecraft.client.MouseHandler.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.MouseHandlerMixin.class -> net.minecraft.client.MouseHandler.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.PPlayerRendererMixin.class -> yesman.epicfight.client.renderer.patched.entity.PPlayerRenderer.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.WhiteAfterimageProviderMixin.class -> yesman.epicfight.client.particle.EntityAfterimageParticle$WhiteAfterimageProvider.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.WeaponDodgeInputMixin.class -> yesman.epicfight.skill.SkillContainer.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.WeaponGuardInputMixin.class -> yesman.epicfight.skill.SkillContainer.class
-[13:56:23] [main] [INFO] [com.hm.efn.mixinloader.CompatInfos:shouldMixin:86]: [EFN Mixin Loader]Apply Default Mixin: com.hm.efn.mixin.WeaponGuardInteractionMixin.class -> yesman.epicfight.client.events.engine.ControlEngine$Events.class
-[13:56:23] [main] [WARN] Error loading class: net/p3pp3rf1y/sophisticatedcore/util/InventoryHelper (java.lang.ClassNotFoundException: net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper)
-[13:56:23] [main] [WARN] @Mixin target net.p3pp3rf1y.sophisticatedcore.util.InventoryHelper was not found tcrcore.mixins.json:sophisticatedbackpacks.BackpackInventoryHelperMixin from mod (unknown)
-[13:56:23] [main] [WARN] Error loading class: com/kuzhi/findme/server/CompanionContractService (java.lang.ClassNotFoundException: com.kuzhi.findme.server.CompanionContractService)
-[13:56:23] [main] [WARN] @Mixin target com.kuzhi.findme.server.CompanionContractService was not found tcrcore.mixins.json:findme.CompanionContractServiceMixin from mod (unknown)
-[13:56:23] [main] [WARN] Error loading class: com/kuzhi/findme/server/CompanionEntityClassifier (java.lang.ClassNotFoundException: com.kuzhi.findme.server.CompanionEntityClassifier)
-[13:56:23] [main] [WARN] @Mixin target com.kuzhi.findme.server.CompanionEntityClassifier was not found tcrcore.mixins.json:findme.CompanionEntityClassifierMixin from mod (unknown)
-[13:56:23] [main] [WARN] Error loading class: com/kuzhi/findme/server/CompanionManager (java.lang.ClassNotFoundException: com.kuzhi.findme.server.CompanionManager)
-[13:56:23] [main] [WARN] @Mixin target com.kuzhi.findme.server.CompanionManager was not found tcrcore.mixins.json:findme.CompanionManagerMixin from mod (unknown)
-[13:56:23] [main] [WARN] Error loading class: com/kuzhi/findme/server/CompanionMountCinematicFlowService (java.lang.ClassNotFoundException: com.kuzhi.findme.server.CompanionMountCinematicFlowService)
-[13:56:23] [main] [WARN] @Mixin target com.kuzhi.findme.server.CompanionMountCinematicFlowService was not found tcrcore.mixins.json:findme.CompanionMountCinematicFlowServiceMixin from mod (unknown)
-[13:56:23] [main] [WARN] Error loading class: com/kuzhi/findme/server/CompanionSummonCompletionService (java.lang.ClassNotFoundException: com.kuzhi.findme.server.CompanionSummonCompletionService)
-[13:56:23] [main] [WARN] @Mixin target com.kuzhi.findme.server.CompanionSummonCompletionService was not found tcrcore.mixins.json:findme.CompanionSummonCompletionServiceMixin from mod (unknown)
-[13:56:23] [main] [WARN] Error loading class: net/p3pp3rf1y/sophisticatedcore/upgrades/magnet/MagnetUpgradeWrapper (java.lang.ClassNotFoundException: net.p3pp3rf1y.sophisticatedcore.upgrades.magnet.MagnetUpgradeWrapper)
-[13:56:23] [main] [WARN] @Mixin target net.p3pp3rf1y.sophisticatedcore.upgrades.magnet.MagnetUpgradeWrapper was not found tcrcore.mixins.json:sophisticatedbackpacks.MagnetUpgradeWrapperMixin from mod (unknown)
-[13:56:23] [main] [WARN] Error loading class: com/p1nero/tcr_bosses/entity/custom/BaseSmallBossEntity (java.lang.ClassNotFoundException: com.p1nero.tcr_bosses.entity.custom.BaseSmallBossEntity)
-[13:56:23] [main] [WARN] @Mixin target com.p1nero.tcr_bosses.entity.custom.BaseSmallBossEntity was not found tcrcore.mixins.json:tcr_bosses.BaseSmallBossEntityMixin from mod (unknown)
-[13:56:23] [main] [WARN] Error loading class: com/kuzhi/findme/client/ClientEvents (java.lang.ClassNotFoundException: com.kuzhi.findme.client.ClientEvents)
-[13:56:23] [main] [WARN] @Mixin target com.kuzhi.findme.client.ClientEvents was not found tcrcore.mixins.json:findme.ClientEventsMixin from mod (unknown)
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.entity_model_features.EMFManagerMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'pack_resources_cache.FilePackResourcesMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'pack_resources_cache.PathPackResourcesMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'pack_resources_cache.VanillaPackResourcesMixin' due to config
-[13:56:23] [main] [WARN] Error loading class: net/sweenus/simplyswords/config/Config (java.lang.ClassNotFoundException: net.sweenus.simplyswords.config.Config)
-[13:56:23] [main] [WARN] @Mixin target net.sweenus.simplyswords.config.Config was not found lazyyyyy.mixins.json:simply_swords.faster_config.ConfigMixin from mod (unknown)
-[13:56:23] [main] [INFO] Disabled 'async_model_baking.EntityModelSetMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'async_model_baking.ModelPartAccessor' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.BlockEntityRenderDispatcherAccessor' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.BlockEntityRenderDispatcherMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.BlockEntityRenderersMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.EntityRenderDispatcherAccessor' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.EntityRenderDispatcherMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.EntityRendererAccessor' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.EntityRenderersMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.LivingEntityRendererAccessor' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.botania.EntityRenderDispatcherMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.botania.GaiaGuardianRendererMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'lazy_entity_renderers.spectrum.SpectrumSkullBlockEntityRendererMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'yacl.lazy_animated_image.AnimatedDynamicTextureImageMixin' due to config
-[13:56:23] [main] [INFO] Disabled 'yacl.lazy_animated_image.structurify.ImageButtonWidgetMixin' due to config
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:80]: [VIX Mixin Loader]Apply Compat Mixin: com.guhao.vix.mixin.compat.epicfight.MixinAnimationPlayer.class -> yesman.epicfight.api.animation.AnimationPlayer.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:85]: [VIX Mixin Loader]Apply Default Mixin: com.guhao.vix.mixin.MixinGameRenderer.class -> net.minecraft.client.renderer.GameRenderer.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:85]: [VIX Mixin Loader]Apply Default Mixin: com.guhao.vix.mixin.MixinLevelRenderer.class -> net.minecraft.client.renderer.LevelRenderer.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:85]: [VIX Mixin Loader]Apply Default Mixin: com.guhao.vix.mixin.MixinParticleEngine.class -> net.minecraft.client.particle.ParticleEngine.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:85]: [VIX Mixin Loader]Apply Default Mixin: com.guhao.vix.mixin.accessor.CameraAccessor.class -> net.minecraft.client.Camera.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:82]: [VIX Mixin Loader]Skip Mixin: com.guhao.vix.mixin.compat.aaa.MixinEffectDefinition.class -> mod.chloeprime.aaaparticles.api.client.EffectDefinition.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:80]: [VIX Mixin Loader]Apply Compat Mixin: com.guhao.vix.mixin.compat.aaa.MixinEffectDefinitionBatch.class -> mod.chloeprime.aaaparticles.api.client.EffectDefinition.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:80]: [VIX Mixin Loader]Apply Compat Mixin: com.guhao.vix.mixin.compat.aaa.performance.MixinAAAPEffectDefinitionAccess.class -> mod.chloeprime.aaaparticles.api.client.EffectDefinition.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:80]: [VIX Mixin Loader]Apply Compat Mixin: com.guhao.vix.mixin.compat.aaa.performance.MixinAAAPParticleEmitterPerformance.class -> mod.chloeprime.aaaparticles.api.client.effekseer.ParticleEmitter.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:80]: [VIX Mixin Loader]Apply Compat Mixin: com.guhao.vix.mixin.compat.aaa.performance.MixinAAAPEffekRendererPerformance.class -> mod.chloeprime.aaaparticles.client.render.EffekRenderer.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:80]: [VIX Mixin Loader]Apply Compat Mixin: com.guhao.vix.mixin.compat.aaa.performance.MixinAAAPRenderUtilPerformance.class -> mod.chloeprime.aaaparticles.client.render.RenderUtil.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:80]: [VIX Mixin Loader]Apply Compat Mixin: com.guhao.vix.mixin.compat.aaa.performance.MixinAAAPSamplerRestorerPerformance.class -> mod.chloeprime.aaaparticles.client.render.SamplerRestorer.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:82]: [VIX Mixin Loader]Skip Mixin: com.guhao.vix.mixin.compat.oculus.MixinParticleEngineA.class -> net.minecraft.client.particle.ParticleEngine.class
-[13:56:23] [main] [INFO] [com.guhao.vix.mixinloader.CompatInfos:shouldMixin:80]: [VIX Mixin Loader]Apply Compat Mixin: com.guhao.vix.mixin.compat.oculus.MixinParticleEngineB.class -> net.minecraft.client.particle.ParticleEngine.class
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.world.sky.WorldRendererMixin' as rule 'mixin.features.render.world.sky' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.world.sky.ClientWorldMixin' as rule 'mixin.features.render.world.sky' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.world.sky.BackgroundRendererMixin' as rule 'mixin.features.render.world.sky' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.gui.font.GlyphRendererMixin' as rule 'mixin.features.render.gui.font' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.gui.font.FontSetMixin' as rule 'mixin.features.render.gui.font' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.entity.shadows.EntityRenderDispatcherMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.entity.remove_streams.ModelPartMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.entity.remove_streams.HierarchicalModelMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.entity.fast_render.ModelPartMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.entity.fast_render.CuboidMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Force-disabling mixin 'features.render.entity.cull.EntityRendererMixin' as rule 'mixin.features.render.entity' (added by mods [oculus]) disables it and children
-[13:56:23] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/data/ArrayLightDataCache (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.data.ArrayLightDataCache)
-[13:56:23] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/data/ArrayLightDataCache (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.data.ArrayLightDataCache)
-[13:56:23] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/flat/FlatLightPipeline (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.flat.FlatLightPipeline)
-[13:56:23] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/flat/FlatLightPipeline (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.flat.FlatLightPipeline)
-[13:56:23] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/data/LightDataAccess (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.data.LightDataAccess)
-[13:56:23] [main] [WARN] Error loading class: net/caffeinemc/mods/sodium/client/model/light/data/LightDataAccess (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.model.light.data.LightDataAccess)
-[13:56:23] [main] [WARN] Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal)
-[13:56:24] [main] [WARN] Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal)
-[13:56:24] [main] [INFO] Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.5).
-[13:56:24] [main] [INFO] Transformed net/minecraft/resources/ResourceLocation with [customskinloader:interface-patch/identifier.constructor]
-[13:56:24] [main] [INFO] Transformed ModLauncher target net/minecraft/resources/ResourceLocation with [customskinloader:interface-patch/identifier.constructor]
-[13:56:25] [main] [INFO] Setting java.awt.headless to false
-[13:56:25] [main] [INFO] Transformed net/minecraft/resources/ResourceLocation with [customskinloader:interface-patch/identifier.constructor]
-[13:56:25] [main] [INFO] Transformed ModLauncher target net/minecraft/resources/ResourceLocation with [customskinloader:interface-patch/identifier.constructor]
-[13:56:25] [main] [INFO] Transformed net/minecraft/server/packs/resources/ResourceManager with [customskinloader:interface-patch/resource-manager.interfaces]
-[13:56:25] [main] [INFO] Transformed ModLauncher target net/minecraft/server/packs/resources/ResourceManager with [customskinloader:interface-patch/resource-manager.interfaces]
-[13:56:25] [main] [WARN] Cancelled mixin com.aetherteam.aether.mixin.mixins.client.TitleScreenMixin. Check debug logs for more information.
-[13:56:26] [main] [WARN] Error loading class: com/apexhosting/partnerlink/ApexPartnerLinkScreen (java.lang.ClassNotFoundException: com.apexhosting.partnerlink.ApexPartnerLinkScreen)
-[13:56:26] [main] [WARN] Not transforming member reference INVOKESPECIAL for com/apexhosting/partnerlink/ApexPartnerLinkScreen.<init>()V as owner class was not found
-[13:56:26] [main] [WARN] Error loading class: com/apexhosting/partnerlink/ApexPartnerLinkScreen (java.lang.ClassNotFoundException: com.apexhosting.partnerlink.ApexPartnerLinkScreen)
-[13:56:26] [main] [FATAL] org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException: Unexpecteded ClassMetadataNotFoundException whilst transforming the mixin class: [MAIN Applicator Phase -> tcrcore.mixins.json:TitleScreenMixin from mod (unknown) -> Apply Methods -> (Lnet/minecraft/client/gui/components/Button;)V:mdb6ace8$lambda$tcr$addCustomButton$5$5 -> Transform Instructions -> NEW com/apexhosting/partnerlink/ApexPartnerLinkScreen -> desc=com/apexhosting/partnerlink/ApexPartnerLinkScreen]
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformMethod(MixinTargetContext.java:510)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyNormalMethod(MixinApplicatorStandard.java:535)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMethods(MixinApplicatorStandard.java:521)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:388)
+Skipping this key.
+Config file: /home/runner/work/_temp/game/config/jei/jei-client.ini
+Line #253: "	ButtonNavigationVisibility = ENABLED"
+[14:06:43] [modloading-worker-0] [ERROR] 'BookmarkList' is not a valid config category.
+Skipping this key.
+Config file: /home/runner/work/_temp/game/config/jei/jei-client.ini
+Line #258: "	DrawBackground = false"
+[14:06:43] [modloading-worker-0] [WARN] Legacy MezzConfig source '/home/runner/work/_temp/game/config/jei/jei-client.ini' had 49 problem(s); usable values will be imported and the source will remain unchanged.
+[14:06:43] [modloading-worker-0] [INFO] Migrated legacy config file '/home/runner/work/_temp/game/config/jei/jei-client.ini' to '/home/runner/work/_temp/game/config/jei/client/jei-client.ini'; the source was preserved and backed up at '/home/runner/work/_temp/game/config/jei/jei-client.ini.bak.1'.
+[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: GeckolibCompat
+[14:06:43] [modloading-worker-0] [WARN] Azure Lib version 3 is not supported yet.
+[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: IRISCompat
+[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: IceAndFireCompat
+[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: CuriosCompat
+[14:06:43] [modloading-worker-0] [INFO] Registering C2S receiver with id aaa_particles:main/2b101225a0983c178c43c737d76def52
+[14:06:43] [modloading-worker-0] [INFO] Registering S2C receiver with id aaa_particles:main/2b101225a0983c178c43c737d76def52
+[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: PlayerAnimatorCompat
+[14:06:43] [modloading-worker-0] [INFO] Registering C2S receiver with id aaa_particles:main/878ba3ad853235668eff51eb0a40c900
+[14:06:43] [modloading-worker-0] [INFO] Registering S2C receiver with id aaa_particles:main/878ba3ad853235668eff51eb0a40c900
+[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: PlayerReviveCompat
+[14:06:43] [modloading-worker-0] [INFO] Registering C2S receiver with id aaa_particles:main/878ba3ad853235668eff51eb0a40c900
+[14:06:43] [modloading-worker-0] [INFO] Registering S2C receiver with id aaa_particles:main/878ba3ad853235668eff51eb0a40c900
+[14:06:43] [modloading-worker-0] [INFO] Registering C2S receiver with id aaa_particles:main/9b5bc39f00d53db2acf81d859b596583
+[14:06:43] [modloading-worker-0] [INFO] Registering S2C receiver with id aaa_particles:main/9b5bc39f00d53db2acf81d859b596583
+[14:06:43] [modloading-worker-0] [INFO] Installing Effekseer native library at /home/runner/work/_temp/game/libEffekseerNativeForJava.so
+[14:06:43] [modloading-worker-0] [WARN] java.lang.UnsatisfiedLinkError: /home/runner/work/_temp/game/libEffekseerNativeForJava.so: libOpenGL.so.0: cannot open shared object file: No such file or directory
+	at java.base/jdk.internal.loader.NativeLibraries.load(Native Method)
+	at java.base/jdk.internal.loader.NativeLibraries$NativeLibraryImpl.open(NativeLibraries.java:388)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:232)
+	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:174)
+	at java.base/java.lang.ClassLoader.loadLibrary(ClassLoader.java:2394)
+	at java.base/java.lang.Runtime.load0(Runtime.java:755)
+	at java.base/java.lang.System.load(System.java:1970)
+	at TRANSFORMER/aaa_particles@2.3.4/mod.chloeprime.aaaparticles.client.AAAParticlesClient.installNativeLibrary(AAAParticlesClient.java:61)
+	at TRANSFORMER/aaa_particles@2.3.4/mod.chloeprime.aaaparticles.client.AAAParticlesClient.init(AAAParticlesClient.java:28)
+	at TRANSFORMER/aaa_particles@2.3.4/mod.chloeprime.aaaparticles.forge.AAAParticlesForge.<init>(AAAParticlesForge.java:19)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at LAYER PLUGIN/javafmllanguage@1.20.1-47.4.28/net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:77)
+	at LAYER PLUGIN/fmlcore@1.20.1-47.4.28/net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$5(ModContainer.java:126)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+[14:06:43] [modloading-worker-0] [INFO] [DRIPPY LOADING SCREEN] Loading v3.1.5 in client-side mode on FORGE!
+[14:06:43] [modloading-worker-0] [INFO] Forge mod loading, version 47.4.28, for MC 1.20.1 with MCP 20230612.114412
+[14:06:43] [modloading-worker-0] [INFO] MinecraftForge v47.4.28 Initialized
+[14:06:43] [modloading-worker-0] [INFO] Sending ConfigManager...
+[14:06:43] [modloading-worker-0] [INFO] Sending ConfigManager took 3.152 milliseconds
+[14:06:43] [modloading-worker-0] [INFO] [yalter.mousetweaks.Logger:Log:6]: [Mouse Tweaks] Main.initialize()
+[14:06:43] [modloading-worker-0] [INFO] [yalter.mousetweaks.Logger:Log:6]: [Mouse Tweaks] Initialized.
+[14:06:43] [modloading-worker-0] [INFO] Kotlin For Forge Enabled!
+[14:06:43] [modloading-worker-0] [INFO] Halovecs mod initialized
+[14:06:43] [modloading-worker-0] [INFO] Xaero's Minimap: World Map found!
+[14:06:43] [modloading-worker-0] [INFO] No Optifine!
+[14:06:43] [modloading-worker-0] [INFO] Xaero's Minimap: No Vivecraft!
+[14:06:43] [modloading-worker-0] [INFO] Xaero's Minimap: Iris found!
+[14:06:43] [modloading-worker-0] [INFO] Xaero's Minimap: Waystones found!
+[14:06:44] [modloading-worker-0] [INFO] Registering common data for channel xaerominimap:main!
+[14:06:44] [modloading-worker-0] [INFO] Constructing common components for puzzleslib:main
+[14:06:44] [modloading-worker-0] [INFO] Registering client data for channel xaerominimap:main!
+[14:06:44] [modloading-worker-0] [INFO] Loading primary common config for channel xaerominimap:main!
+[14:06:44] [modloading-worker-0] [INFO] Loading server config profiles for channel xaerominimap:main!
+[14:06:44] [modloading-worker-0] [INFO] Loading primary client config for channel xaerominimap:main!
+[14:06:44] [modloading-worker-0] [INFO] Loading client config profiles for channel xaerominimap:main!
+[14:06:44] [modloading-worker-0] [INFO] Constructing client components for puzzleslib:main
+[14:06:44] [modloading-worker-0] [INFO] UI manager initialized
+[14:06:44] [modloading-worker-0] [INFO] [AntiSeat] migrated legacy config custom_anti_seat_entity.toml into custom_anti_seat_entity.json
+[14:06:44] [modloading-worker-0] [INFO] [AntiSeat] default config written to /home/runner/work/_temp/game/config/ash_of_sin/custom_anti_seat_entity.json
+[14:06:44] [modloading-worker-0] [INFO] Doing super early config setup for zeta
+[14:06:44] [DefaultDispatcher-worker-3] [INFO] Transformed net/minecraft/client/renderer/entity/layers/CapeLayer with [customskinloader:render-patch/cape-layer.render.v2]
+[14:06:44] [DefaultDispatcher-worker-3] [INFO] Transformed ModLauncher target net/minecraft/client/renderer/entity/layers/CapeLayer with [customskinloader:render-patch/cape-layer.render.v2]
+[14:06:44] [modloading-worker-0] [INFO] Registering config for defaultoptions:common (COMMON) with 3 properties.
+[14:06:44] [modloading-worker-0] [INFO] Registering common data for channel xaeroworldmap:main!
+[14:06:44] [modloading-worker-0] [INFO] Registering client data for channel xaeroworldmap:main!
+[14:06:44] [modloading-worker-0] [INFO] Loading primary common config for channel xaeroworldmap:main!
+[14:06:44] [modloading-worker-0] [INFO] Loading server config profiles for channel xaeroworldmap:main!
+[14:06:44] [modloading-worker-0] [INFO] Loading primary client config for channel xaeroworldmap:main!
+[14:06:44] [modloading-worker-0] [INFO] Loading client config profiles for channel xaeroworldmap:main!
+[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:pufferfish_bucket is now minecraft:bucket.
+[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:salmon_bucket is now minecraft:bucket.
+[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:cod_bucket is now minecraft:bucket.
+[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:tropical_fish_bucket is now minecraft:bucket.
+[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:axolotl_bucket is now minecraft:bucket.
+[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:powder_snow_bucket is now minecraft:bucket.
+[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:tadpole_bucket is now minecraft:bucket.
+[14:06:45] [modloading-worker-0] [INFO] Registering Book of Dragons configuration...
+[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'cliff' with 2 dragons
+[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'cave' with 2 dragons
+[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'glade' with 2 dragons
+[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'wetland' with 1 dragons
+[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'barrens' with 2 dragons
+[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded 5 roost archetypes: [cave, glade, cliff, wetland, barrens]
+[14:06:45] [modloading-worker-0] [INFO] Loaded dragon variants from config: /home/runner/work/_temp/game/config/bookofdragons/dragon_variants.json
+[14:06:45] [modloading-worker-0] [INFO] Configuration system initialized successfully!
+[14:06:45] [modloading-worker-0] [INFO] [MELODY] Loading Melody background audio library..
+[14:06:45] [modloading-worker-0] [INFO] Created TextLayoutEngine
+[14:06:45] [modloading-worker-0] [INFO] Initialized Modern UI text engine
+[14:06:45] [modloading-worker-0] [INFO] Initialized Modern UI client
+[14:06:45] [modloading-worker-0] [INFO] Initialized Modern UI
+[14:06:45] [modloading-worker-0] [INFO] [KONKRETE] Successfully initialized!
+[14:06:45] [modloading-worker-0] [INFO] [KONKRETE] Server-side libs ready to use!
+[14:06:45] [modloading-worker-0] [WARN] org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: Critical injection failure: @Redirect annotation on tacticalBreaching$includeBreachableBlocks could not find any targets matching 'tick' in com.atsuishio.superbwarfare.entity.projectile.ProjectileEntity. No refMap loaded. [ -> redirect$ecp000$tacticalBreaching$includeBreachableBlocks()Ljava/util/function/Predicate; -> Parse]
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.validateTargets(InjectionInfo.java:656)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.findTargets(InjectionInfo.java:587)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.readAnnotation(InjectionInfo.java:330)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:316)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:308)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.RedirectInjectionInfo.<init>(RedirectInjectionInfo.java:44)
+	at jdk.internal.reflect.GeneratedConstructorAccessor35.newInstance(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo$InjectorEntry.create(InjectionInfo.java:149)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.parse(InjectionInfo.java:708)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.prepareInjections(MixinTargetContext.java:1329)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.prepareInjections(MixinApplicatorStandard.java:1053)
+	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395)
 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:327)
 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.TargetClassContext.apply(TargetClassContext.java:421)
 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:403)
@@ -209,92 +139,162 @@
 	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
 	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-	at TRANSFORMER/patchouli@1.20.1-85-FORGE/vazkii.patchouli.client.handler.BookCrashHandler.appendToCrashReport(BookCrashHandler.java:23)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.SystemReport.handler$dnm000$patchouli_addContext(SystemReport.java:1016)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.SystemReport.<init>(SystemReport.java:58)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.CrashReport.<init>(CrashReport.java:31)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.CrashReport.m_127529_(CrashReport.java:216)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:149)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
-Caused by: org.spongepowered.asm.mixin.throwables.ClassMetadataNotFoundException: com.apexhosting.partnerlink.ApexPartnerLinkScreen
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformSingleDescriptor(MixinTargetContext.java:1001)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformDescriptor(MixinTargetContext.java:946)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformTypeNode(MixinTargetContext.java:704)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformMethod(MixinTargetContext.java:493)
-	... 41 more
-Exception in thread "main" [13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:32)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1077]: 	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: Caused by: java.lang.reflect.InvocationTargetException
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-[13:56:26] [main] [INFO] [java.lang.ThreadGroup:uncaughtException:1086]: 	... 7 more
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:392)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:156)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at TRANSFORMER/patchouli@1.20.1-85-FORGE/vazkii.patchouli.client.handler.BookCrashHandler.appendToCrashReport(BookCrashHandler.java:23)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at TRANSFORMER/minecraft@1.20.1/net.minecraft.SystemReport.handler$dnm000$patchouli_addContext(SystemReport.java:1016)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at TRANSFORMER/minecraft@1.20.1/net.minecraft.SystemReport.<init>(SystemReport.java:58)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at TRANSFORMER/minecraft@1.20.1/net.minecraft.CrashReport.<init>(CrashReport.java:31)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at TRANSFORMER/minecraft@1.20.1/net.minecraft.CrashReport.m_127529_(CrashReport.java:216)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:149)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:659]: 	... 15 more
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:682]: Caused by: org.spongepowered.asm.mixin.throwables.MixinApplyError: Mixin [tcrcore.mixins.json:TitleScreenMixin from mod (unknown)] from phase [DEFAULT] in config [tcrcore.mixins.json] FAILED during APPLY
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:682]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinError(MixinProcessor.java:638)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:682]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinApplyError(MixinProcessor.java:589)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:682]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:379)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printStackTrace:682]: 	... 34 more
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: Caused by: org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException: Unexpecteded ClassMetadataNotFoundException whilst transforming the mixin class: [MAIN Applicator Phase -> tcrcore.mixins.json:TitleScreenMixin from mod (unknown) -> Apply Methods -> (Lnet/minecraft/client/gui/components/Button;)V:mdb6ace8$lambda$tcr$addCustomButton$5$5 -> Transform Instructions -> NEW com/apexhosting/partnerlink/ApexPartnerLinkScreen -> desc=com/apexhosting/partnerlink/ApexPartnerLinkScreen]
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformMethod(MixinTargetContext.java:510)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyNormalMethod(MixinApplicatorStandard.java:535)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMethods(MixinApplicatorStandard.java:521)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:388)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:327)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.TargetClassContext.apply(TargetClassContext.java:421)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:403)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	... 34 more
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: Caused by: org.spongepowered.asm.mixin.throwables.ClassMetadataNotFoundException: com.apexhosting.partnerlink.ApexPartnerLinkScreen
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformSingleDescriptor(MixinTargetContext.java:1001)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformDescriptor(MixinTargetContext.java:946)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformTypeNode(MixinTargetContext.java:704)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.transformMethod(MixinTargetContext.java:493)
-[13:56:26] [main] [INFO] [java.lang.Throwable:printEnclosedStackTrace:724]: 	... 41 more
+	at TRANSFORMER/superbwarfare@0.8.9.2/com.atsuishio.superbwarfare.init.ModEntities$PROJECTILE$1.<init>(ModEntities.kt)
+	at TRANSFORMER/superbwarfare@0.8.9.2/com.atsuishio.superbwarfare.init.ModEntities$PROJECTILE$1.<clinit>(ModEntities.kt)
+	at TRANSFORMER/superbwarfare@0.8.9.2/com.atsuishio.superbwarfare.init.ModEntities.<clinit>(ModEntities.kt:148)
+	at TRANSFORMER/superbwarfare@0.8.9.2/com.atsuishio.superbwarfare.Mod.<init>(Mod.kt:66)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+	at LAYER PLUGIN/thedarkcolour.kotlinforforge.kfflang@4.12.0/thedarkcolour.kotlinforforge.KotlinModContainer.constructMod(KotlinModContainer.kt:64)
+	at LAYER PLUGIN/fmlcore@1.20.1-47.4.28/net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$5(ModContainer.java:126)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+[14:06:46] [modloading-worker-0] [INFO] [SBW Optimized] Initialized.
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftblibrary:edit_nbt
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftblibrary:edit_nbt_response
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftblibrary:sync_known_server_registries
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftblibrary:edit_config
+[14:06:46] [modloading-worker-0] [INFO] Setting ALSOFT_CONF via native putenv: ALSOFT_CONF=/tmp/sbw-openal17054728867431515012.conf
+[14:06:46] [modloading-worker-0] [INFO] ALSOFT_CONF set successfully
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:sync_teams
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:sync_message_history
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:open_gui
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:open_my_team_gui
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:update_settings
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:update_settings_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:send_message
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:send_message_response
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:update_presence
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:create_party
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:player_gui_operation
+[14:06:46] [modloading-worker-0] [INFO] Initializing ChatPlus
+[14:06:46] [modloading-worker-0] [INFO] Loading languages...
+[14:06:46] [modloading-worker-0] [INFO] Loaded 110 languages
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_quests
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_team_data
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:update_task_progress
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:submit_task
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:claim_reward
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:claim_reward_response
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_editing_mode
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:get_emergency_items
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:create_other_team_data
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:claim_all_rewards
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:claim_choice_reward
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:display_completion_toast
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:display_reward_toast
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:display_item_reward_toast
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:custom_reward_toast
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:toggle_pinned
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:toggle_pinned_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:toggle_chapter_pinned
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:toggle_chapter_pinned_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:toggle_editing_mode
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:force_save
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:update_team_data
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:set_custom_image
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:object_started
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:object_completed
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:object_started_reset
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:object_completed_reset
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_lock
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:reset_reward
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:team_data_changed
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:task_screen_config_req
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:task_screen_config_resp
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:give_item_to_player
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:reorder_item
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:change_progress
+[14:06:46] [modloading-worker-0] [INFO] Loaded config for: cupboard.json
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:create_object
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:create_object_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:create_task_at
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:delete_object
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:delete_object_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:edit_object
+[14:06:46] [modloading-worker-0] [INFO] Config Directory: /home/runner/work/_temp/game/config/chatplus
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:edit_object_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:move_chapter
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:move_chapter_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:move_quest
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:move_quest_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:change_chapter_group
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:change_chapter_group_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:move_chapter_group
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:move_chapter_group_response
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_reward_blocking
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:copy_quest
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:copy_chapter_image
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:sync_structures_request
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_structures_response
+[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:request_team_data
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_editor_permission
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:open_quest_book
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:clear_display_cache
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:reorder_item_response
+[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:clear_repeat_cooldown
+[14:06:46] [modloading-worker-0] [INFO] ChatRenderer init
+[14:06:46] [modloading-worker-0] [INFO] x: 0, y: -81, width: 242, height: 117
+[14:06:46] [modloading-worker-0] [INFO] Create ChatWindow()
+[14:06:46] [modloading-worker-0] [INFO] SpeechToText initialized
+[14:06:46] [modloading-worker-0] [INFO] Config Loaded
+[14:06:46] [ChatPlusMicrophoneThread] [INFO] SpeechToText Thread started
+[14:06:46] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone items
+[14:06:46] [modloading-worker-0] [INFO] Registering common data for channel xaerolib:main!
+[14:06:46] [modloading-worker-0] [INFO] Registering client data for channel xaerolib:main!
+[14:06:46] [modloading-worker-0] [INFO] Loading primary common config for channel xaerolib:main!
+[14:06:46] [modloading-worker-0] [INFO] Loading server config profiles for channel xaerolib:main!
+[14:06:46] [modloading-worker-0] [INFO] Loading primary client config for channel xaerolib:main!
+[14:06:46] [modloading-worker-0] [INFO] Loading client config profiles for channel xaerolib:main!
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Blocks
+[14:06:47] [modloading-worker-0] [INFO] Done Initializing ChatPlus
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Wood
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Block Entities
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Entities
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Creative Tabs
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Sounds
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Block Predicate
+[14:06:47] [UI thread] [INFO] UI thread initialized in 2936ms
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone State Providers
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Tree Decorators
+[14:06:47] [modloading-worker-0] [WARN] Unsupported Superb Warfare version 0.8.9.2; compatibility disabled.
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Custom Features
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Structure Pieces
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Custom Structure Types
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Configured Features
+[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Overworld Vegetation Configured Features
+ERROR (VoskAPI:Model():model.cc:122) Folder '/home/runner/work/_temp/game/config/chatplus/models/' does not contain model files. Make sure you specified the model path properly in Model constructor. If you are not sure about relative path, use absolute path specification.
+[14:06:47] [ChatPlusMicrophoneThread] [ERROR] java.io.IOException: Failed to create a model
+[14:06:47] [modloading-worker-0] [INFO] [dev.tr7zw.trender.gui.impl.client.LibGuiClient:onInitializeClient:37]: [TRender] Initializing Client...
+[14:06:47] [modloading-worker-0] [INFO] Create 6.0.8 initializing! Commit hash: 1a1a9a2819b4f89f78caec41b55ed8cb222fa24b
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Tree Configured Features
+[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Vanilla Configured Features
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes You'll Go Overworld Configured Features
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Placed Features
+[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Overworld Tree Placed Features
+[14:06:47] [modloading-worker-0] [INFO] Chloride is here, lets make your experience taste-able
+[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Overworld Vegetation Placed Features
+[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Vanilla Placed Features
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Custom Surface Rules
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Template Pools
+[14:06:47] [modloading-worker-0] [INFO] Disabled ModernFix perf.resourcepacks
+[14:06:47] [modloading-worker-0] [WARN] Cancelled mixin org.embeddedt.modernfix.common.mixin.perf.resourcepacks.ForgePathPackResourcesMixin. Check debug logs for more information.
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biome's We've Gone Village Template Pools
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Poi Types
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Villager Professions
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Custom Structure Processors
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone villager types
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Schedules
+[14:06:47] [modloading-worker-0] [INFO] Discovered 11 common integration modules and 2 client integration modules
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Memory Module Types
+[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Sensor Types
+[14:06:47] [modloading-worker-0] [INFO] Registering config for waystones:common (COMMON) with 46 properties.
+[14:06:47] [modloading-worker-0] [ERROR] [TCRMeshes] : This mod is exclusively for 'the Casket of Reveries' modpack. If you wish to use this mod or models, please request authorization from P1nero (gaylordfocker@foxmail.com).

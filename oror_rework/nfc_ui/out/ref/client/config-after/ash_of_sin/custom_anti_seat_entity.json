@@ -1,0 +1,101 @@
+{
+  "_comment": [
+    "Ash Of Sin: Custom Anti Seat Entity —— JSON 配置（1.1.0+）",
+    "首次启动自动生成于 config/ash_of_sin/custom_anti_seat_entity.json；改完保存后 1 秒内自动热重载，",
+    "也可以执行 /ashofsin case reload 立即生效（根节点权限 0，管理指令权限 4）。",
+    "也可以拆成多个文件：config/ash_of_sin/custom_anti_seat_entity/<任意名字>.json（以 _ 或 . 开头的文件会被忽略）。",
+    "数据包同样可以写：data/<命名空间>/anti_seat/<任意名字>.json，/reload 后生效（数据包只贡献名单）。",
+    "",
+    "-- options 段（全局选项，整段省略时用下面的默认值）--",
+    "  ignore_living_target  true  = 坐垫本身是生物（马、猪、盔甲架……）且没有被名单命中时不拦（保持 1.0.x 行为）",
+    "  remove_seat_entity    true  = 拦截成功后移除空的非生物坐垫实体（船、矿车、椅子实体）",
+    "  destroy_seat_block    false = 拦截成功后破坏命中 sit_block_list 的方块",
+    "                               默认关闭：不触发 BlockEvent.BreakEvent，会绕过依赖该事件的领地保护，也可能拆掉玩家建筑",
+    "  drop_seat_block       false = 破坏方块时是否掉落物品",
+    "  sit_target_mode       WHITELIST = 名单内放行、其余全反（空名单 = 全部反，等同旧版行为）；BLACKLIST = 只有名单内反",
+    "",
+    "-- 名单（字符串或数组都可以）--",
+    "  anti_seat_entities  上坐的实体（骑乘者）名单：这些人形 / Boss 实体不会被坐垫接住",
+    "  sit_block_list      坐垫方块名单：椅子方块（台阶、楼梯、模组椅子……）",
+    "  sit_entity_list     坐垫实体名单：椅子 / 座位实体",
+    "  实体 ID 支持 minecraft:wither / minecraft.wither / entity.minecraft.wither / wither 四种写法；标签在 ID 前加 #",
+    "  没装的模组 ID 会被自动忽略（不报错），只有写错又不在内置默认名单里的条目会在日志里 warn 提示",
+    "",
+    "下面 \"_examples\" 整棵子树只是示例，不会被读取（以 _ 开头的键一律忽略）。"
+  ],
+  "_examples": {
+    "options": {
+      "sit_target_mode": "BLACKLIST",
+      "destroy_seat_block": true
+    },
+    "anti_seat_entities": [
+      "minecraft:zombie",
+      "#minecraft:raiders"
+    ],
+    "sit_block_list": [
+      "minecraft:oak_stairs"
+    ],
+    "sit_entity_list": [
+      "somemod:chair"
+    ]
+  },
+  "options": {
+    "ignore_living_target": true,
+    "remove_seat_entity": true,
+    "destroy_seat_block": false,
+    "drop_seat_block": false,
+    "sit_target_mode": "WHITELIST"
+  },
+  "anti_seat_entities": [
+    "epicfight_leonidas:leonidas",
+    "minecraft:wither",
+    "minecraft:ender_dragon",
+    "minecraft:warden",
+    "minecraft:iron_golem",
+    "cataclysm:ender_guardian",
+    "cataclysm:ignis",
+    "cataclysm:netherite_monstrosity",
+    "cataclysm:the_harbinger",
+    "cataclysm:the_leviathan",
+    "cataclysm:ancient_ancient_remnant",
+    "cataclysm:ancient_remnant",
+    "cataclysm:maledictus",
+    "aquamirae:captain_cornelia",
+    "fromtheshadows:nehemoth",
+    "block_factorys_bosses:infernal_dragon",
+    "block_factorys_bosses:sandworm",
+    "block_factorys_bosses:yeti",
+    "block_factorys_bosses:underworld_knight",
+    "fdbosses:malkuth",
+    "fdbosses:chesed",
+    "nightfall_invade:arterius",
+    "alexsmobs:void_worm",
+    "mowziesmobs:ferrous_wroughtnaut",
+    "mowziesmobs:frostmaw",
+    "mowziesmobs:umvuthi",
+    "bosses_of_mass_destruction:gauntlet",
+    "bosses_of_mass_destruction:lich",
+    "bosses_of_mass_destruction:obsidilith",
+    "bosses_of_mass_destruction:void_blossom",
+    "ba_bt:land_golem",
+    "ba_bt:ocean_golem",
+    "ba_bt:core_golem",
+    "ba_bt:nether_golem",
+    "ba_bt:sky_golem",
+    "ba_bt:end_golem",
+    "minecraft:zombie",
+    "minecraft:husk",
+    "minecraft:drowned",
+    "minecraft:skeleton",
+    "minecraft:wither_skeleton",
+    "minecraft:stray",
+    "minecraft:pillager",
+    "minecraft:vindicator",
+    "mowziesmobs:umvuthana",
+    "mowziesmobs:umvuthana_raptor",
+    "mowziesmobs:umvuthana_crane",
+    "quark:forgotten"
+  ],
+  "sit_block_list": [],
+  "sit_entity_list": []
+}
