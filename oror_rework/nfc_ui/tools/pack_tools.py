@@ -6,6 +6,7 @@
   python3 -I pack_tools.py depcheck <mods dir> <out report.txt>
   python3 -I pack_tools.py items <mods dir> <nightfallcraft epicfight-client.toml> <out items.json>
   python3 -I pack_tools.py setitems <epicfight-client.toml> <items.json>
+  python3 -I pack_tools.py search <out.json> <name>...
   python3 -I pack_tools.py menu <tcrcore jar> <fancymenu customization dir> <game dir> <out members.json>
 
 resolve: the additions' newest NeoForge 1.21.1 file where none is pinned (CurseForge site API), and for NightfallCraft's
@@ -17,6 +18,7 @@ depcheck: every jar's (and jar-in-jar's) neoforge.mods.toml against the others: 
   dependencies, incompatible mods present, the same mod id twice.
 items: Epic Fight's combat_preferred_items for the pack: NightfallCraft's list where the item exists in some jar, plus
   every item with an Epic Fight weapon capability file (data/<ns>/capabilities/weapons/<item>.json).
+search: CurseForge projects with NeoForge 1.21.1 files matching each name (ports often live under a new project).
 setitems: writes that list into an epicfight-client.toml.
 menu: the TCR Core images NightfallCraft's FancyMenu layouts use, copied from the 1.20.1 jar to the paths the converted
   layouts read ([source:local]/config/fancymenu/assets/nightfallcraft/...), with each image's SHA-256 for the installer.
@@ -293,6 +295,23 @@ def items(folder, nightfallcraft_client, out):
     print(len(kept), 'combat items', by_ns, '| NightfallCraft items not in the pack:', len(result['nightfallcraft_missing']))
 
 
+def search(out, *names):
+    found = {}
+    for name in names:
+        hits = []
+        for class_id, loader in ((6, '&gameFlavors[0]=6'), (12, ''), (6552, '')):
+            data = get('https://www.curseforge.com/api/v1/mods/search?gameId=432&index=0&pageSize=20&sortField=1&gameVersion=1.21.1'
+                       f'&classId={class_id}{loader}&filterText=' + urllib.parse.quote(name))
+            for d in (data or {}).get('data', []):
+                hits.append({'id': d.get('id'), 'name': d.get('name'), 'slug': d.get('slug'), 'class': class_id,
+                             'author': (d.get('author') or {}).get('username') if isinstance(d.get('author'), dict) else d.get('author'),
+                             'downloads': d.get('downloads')})
+            time.sleep(0.3)
+        found[name] = hits if data is not None else 'search failed'
+        print(name, '->', [(h['id'], h['name']) for h in hits[:6]] if isinstance(found[name], list) else found[name])
+    json.dump(found, open(out, 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
+
+
 def setitems(toml, items_json):
     wanted = json.load(open(items_json, encoding='utf-8'))['combat_preferred_items']
     text = open(toml, encoding='utf-8').read()
@@ -323,4 +342,4 @@ def menu(jar_path, customization, game, out):
 
 if __name__ == '__main__':
     command, args = sys.argv[1], sys.argv[2:]
-    {'resolve': resolve, 'fetch': fetch, 'fetchpack': fetchpack, 'depcheck': depcheck, 'items': items, 'setitems': setitems, 'menu': menu}[command](*args)
+    {'resolve': resolve, 'fetch': fetch, 'fetchpack': fetchpack, 'depcheck': depcheck, 'items': items, 'setitems': setitems, 'menu': menu, 'search': search}[command](*args)

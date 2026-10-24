@@ -44,6 +44,9 @@ jobs:
           rm -rf "$OUT"; mkdir -p "$OUT"
           python3 -I $U/tools/pack_tools.py resolve $U/additions-0.17.25.json $U/nfc/nightfallcraft-2.2.8.6-mods.json \
             $U/out/survey.json $OUT/resolved.json 2>&1 | tee $OUT/resolve.txt
+          python3 -I $U/tools/pack_tools.py search $OUT/search.json 'Kill-Cam' 'Fancy Trail' 'EFN Enhance' 'Sword Trail' \
+            'More Power Trail' 'Trident Model trail' 'Eclectic Trove' 'Reforge the Sword Edge' 'yamato Nightfall' 'TCR Core' \
+            'Shoulder Surfing' 'Stay True' 'Enhanced Vanilla' 2>&1 | tee $OUT/search.txt || true
       - name: Fetch every mod, resource pack and shader pack
         run: |
           G=$RUNNER_TEMP/game; mkdir -p $G/mods
@@ -73,6 +76,16 @@ jobs:
           cp -r $U/pack/overlay-0.17.25/. $G/
           python3 -I $U/tools/pack_tools.py setitems $G/config/epicfight-client.toml $OUT/combat_items.json || echo 'setitems failed' | tee -a $OUT/problems.txt
           python3 -I $U/tools/pack_tools.py menu "$RUNNER_TEMP/$NAME" $G/config/fancymenu/customization $G $OUT/menu_members.json || echo 'menu failed' | tee -a $OUT/problems.txt
+      - name: Setup script's menu step under PowerShell (same images as above)
+        run: |
+          R="$RUNNER_TEMP/setup root ü"; mkdir -p "$R/oror-install"
+          cp $U/pack/overlay-0.17.25/oror-install/setup.ps1 $U/pack/overlay-0.17.25/oror-install/install.json "$R/oror-install/"
+          for round in 1 2; do
+            pwsh -NoProfile -Command "& ([scriptblock]::Create([IO.File]::ReadAllText('$R/oror-install/setup.ps1'))) -Root '$R' -MenuOnly" 2>&1
+          done | tee $OUT/setup-menu.txt
+          diff -r "$R/config/fancymenu/assets/nightfallcraft" $RUNNER_TEMP/game/config/fancymenu/assets/nightfallcraft \
+            && echo 'same files as the CI copy' | tee -a $OUT/setup-menu.txt
+          ls -A "$R/oror-install/cache" | tee -a $OUT/setup-menu.txt
       - name: Build the CI harness mod
         working-directory: oror_rework/nfc_ui/harness
         run: |
