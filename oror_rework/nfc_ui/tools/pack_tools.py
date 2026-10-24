@@ -7,6 +7,7 @@
   python3 -I pack_tools.py items <mods dir> <nightfallcraft epicfight-client.toml> <out items.json>
   python3 -I pack_tools.py setitems <epicfight-client.toml> <items.json>
   python3 -I pack_tools.py search <out.json> <name>...
+  python3 -I pack_tools.py nfcfetch <nightfallcraft-2.2.8.6-mods.json> <game dir> <out files.json>
   python3 -I pack_tools.py menu <tcrcore jar> <fancymenu customization dir> <game dir> <out members.json>
 
 resolve: the additions' newest NeoForge 1.21.1 file where none is pinned (CurseForge site API), and for NightfallCraft's
@@ -19,6 +20,8 @@ depcheck: every jar's (and jar-in-jar's) neoforge.mods.toml against the others: 
 items: Epic Fight's combat_preferred_items for the pack: NightfallCraft's list where the item exists in some jar, plus
   every item with an Epic Fight weapon capability file (data/<ns>/capabilities/weapons/<item>.json).
 search: CurseForge projects with NeoForge 1.21.1 files matching each name (ports often live under a new project).
+nfcfetch: every file of NightfallCraft 2.2.8.6's manifest (names looked up by file id), into mods, resourcepacks or
+  shaderpacks by the modlist category, for running NightfallCraft itself as the reference.
 setitems: writes that list into an epicfight-client.toml.
 menu: the TCR Core images NightfallCraft's FancyMenu layouts use, copied from the 1.20.1 jar to the paths the converted
   layouts read ([source:local]/config/fancymenu/assets/nightfallcraft/...), with each image's SHA-256 for the installer.
@@ -403,6 +406,47 @@ def search(out, *names):
     json.dump(found, open(out, 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
 
 
+def nfcfetch(mods_json, game, out):
+    data = json.load(open(mods_json, encoding='utf-8'))
+    folder = {'mc-mods': 'mods', 'texture-packs': 'resourcepacks', 'shaders': 'shaderpacks'}
+
+    def one(pair):
+        f, ml = pair
+        pid, fid = f['projectID'], f['fileID']
+        info = get(f'https://www.curseforge.com/api/v1/mods/{pid}/files/{fid}')
+        name = ((info or {}).get('data') or {}).get('fileName')
+        page = 0
+        while not name and page < 40:
+            listing = get(FILES.format(pid, page))
+            rows = (listing or {}).get('data') or []
+            name = next((r['fileName'] for r in rows if r['id'] == fid), None)
+            if len(rows) < 50:
+                break
+            page += 1
+        if not name:
+            return {'projectID': pid, 'fileID': fid, 'path': ml['path'], 'error': 'name not found'}
+        target = os.path.join(game, folder.get(ml['path'].split('/')[0], 'mods'), name)
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        url = CDN.format(fid // 1000, fid % 1000, urllib.parse.quote(name))
+        for attempt in range(4):
+            try:
+                body = urllib.request.urlopen(urllib.request.Request(url, headers=AGENT), timeout=300).read()
+                break
+            except Exception as error:
+                if attempt == 3:
+                    return {'projectID': pid, 'fileID': fid, 'path': ml['path'], 'fileName': name, 'error': repr(error)}
+                time.sleep(5)
+        open(target, 'wb').write(body)
+        return {'projectID': pid, 'fileID': fid, 'path': ml['path'], 'fileName': name, 'bytes': len(body),
+                'sha256': hashlib.sha256(body).hexdigest()}
+
+    with concurrent.futures.ThreadPoolExecutor(8) as pool:
+        rows = list(pool.map(one, zip(data['files'], data['modlist'])))
+    json.dump(rows, open(out, 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
+    failed = [r for r in rows if 'error' in r]
+    print(len(rows) - len(failed), 'fetched,', len(failed), 'failed:', [(r['path'], r['error']) for r in failed])
+
+
 def setitems(toml, items_json):
     wanted = json.load(open(items_json, encoding='utf-8'))['combat_preferred_items']
     text = open(toml, encoding='utf-8').read()
@@ -433,4 +477,4 @@ def menu(jar_path, customization, game, out):
 
 if __name__ == '__main__':
     command, args = sys.argv[1], sys.argv[2:]
-    {'resolve': resolve, 'fetch': fetch, 'fetchpack': fetchpack, 'depcheck': depcheck, 'items': items, 'setitems': setitems, 'menu': menu, 'search': search}[command](*args)
+    {'resolve': resolve, 'fetch': fetch, 'fetchpack': fetchpack, 'depcheck': depcheck, 'items': items, 'setitems': setitems, 'menu': menu, 'search': search, 'nfcfetch': nfcfetch}[command](*args)

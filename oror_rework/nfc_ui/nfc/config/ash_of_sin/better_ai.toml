@@ -1,0 +1,19 @@
+
+["Better AI Settings"]
+	#Enable exclusion list for inactive mob behavior (bosses and custom entities).
+	exclusionEnabled = true
+	#List of entity IDs (e.g., 'minecraft:ender_dragon') that are excluded from inactive mob behavior control. Default includes common bosses.
+	exclusionList = ["epicfight_leonidas:leonidas", "minecraft:wither", "minecraft:ender_dragon", "minecraft:warden", "cataclysm:ancient_remnant", "cataclysm:the_leviathan", "cataclysm:the_harbinger", "cataclysm:netherite_monstrosity", "cataclysm:ignis", "cataclysm:ender_guardian", "cataclysm:maledictus", "cataclysm:scylla", "mowziesmobs:ferrous_wroughtnaut", "mowziesmobs:frostmaw", "mowziesmobs:umvuthi", "mowziesmobs:naga", "aquamirae:captain_cornelia", "irons_spellbooks:dead_king", "irons_spellbooks:fire_boss", "alexsmobs:void_worm", "alexsmobs:void_worm_part", "bosses_of_mass_destruction:gauntlet", "bosses_of_mass_destruction:lich", "bosses_of_mass_destruction:obsidilith", "bosses_of_mass_destruction:void_blossom", "fromtheshadows:nehemoth", "nightfall_invade:arterius", "dodosmobs:bone_chimera", "fdbosses:malkuth", "fdbosses:chesed", "fdbosses:geburah", "ba_bt:land_golem", "ba_bt:ocean_golem", "ba_bt:core_golem", "ba_bt:nether_golem", "ba_bt:sky_golem", "ba_bt:end_golem", "aether:valkyrie", "tcr_bosses:citadel_keeper", "tcr_bosses:gilded_hunter", "tcr_bosses:valkyrie", "tcr_bosses:evening_ghost", "tcr_bosses:golden_executor", "tcr_bosses:scylla_humanoid", "tcr_bosses:ancient_remnant_humanoid", "tcr_bosses:harbinger_humanoid", "tcr_bosses:maledictus_humanoid", "tcr_bosses:netherite_humanoid", "tcr_bosses:ender_guardian_humanoid", "tcr_bosses:leviathan_humanoid", "tcr_bosses:ignis_humanoid", "tcrcore:tutorial_golem", "tcrcore:tutorial_humanoid", "quark:forgotten","irons_spellbooks:summoned_skeleton","irons_spellbooks:summoned_zombie","minecraft:drowned","minecraft:husk","minecraft:piglin","minecraft:piglin_brute","minecraft:pillager","minecraft:skeleton","minecraft:vindicator","minecraft:wither_skeleton","minecraft:zombie","minecraft:zombified_piglin"]
+	#Enable better AI system (based on hate and attack limit).
+	betterAIOn = false
+	#Maximum number of mobs that can simultaneously attack a player.
+	#Range: 1 ~ 39
+	battleLimit = 1
+	#Distance (in blocks) within which mobs consider players as candidates.
+	#Range: 8.0 ~ 128.0
+	trackingRange = 32.0
+	#List of entity IDs that are considered neutral monsters (e.g., 'minecraft:enderman'). These entities will only become hostile when provoked.
+	neutralMonsterList = ["minecraft:enderman", "minecraft:piglin", "minecraft:piglin_brute", "minecraft:zombified_piglin"]
+	#List of entity IDs that are always friendly and will never attack players (e.g., 'minecraft:villager'). These entities will be ignored by the entire system.
+	friendlyList = []
+

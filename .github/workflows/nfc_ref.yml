@@ -1,0 +1,99 @@
+# NightfallCraft 2.2.8.6 (Forge 1.20.1) itself, as the reference for OROR War x Nightfall's look: every file of its
+# manifest from CurseForge, its config overrides, and the OROR Forge port, started in a real client with a CI-only
+# harness mod that photographs the title screen, world creation, the HUD, the inventory and the pause menu.
+# Results go to oror_rework/nfc_ui/out/ref on this branch.
+name: NightfallCraft reference screenshots
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['oror_rework/nfc_ui/harness1201/**', '.github/workflows/nfc_ref.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nfc-ref-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    defaults:
+      run:
+        shell: bash
+    env:
+      U: oror_rework/nfc_ui
+      OUT: oror_rework/nfc_ui/out/ref
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.8'
+      - name: Fetch NightfallCraft's files and overrides
+        run: |
+          rm -rf "$OUT"; mkdir -p "$OUT"; G=$RUNNER_TEMP/game; mkdir -p $G/mods $G/resourcepacks $G/shaderpacks
+          python3 -I $U/tools/pack_tools.py nfcfetch $U/nfc/nightfallcraft-2.2.8.6-mods.json $G $OUT/files.json 2>&1 | tail -n 5
+          cp oror_rework/forge1201/out/oror_supreme_bosses-0.17.18.jar $G/mods/
+          cp -r $U/nfc/config $G/config
+          ls $G/mods | wc -l; ls $G/resourcepacks $G/shaderpacks
+      - name: Build the CI harness mod (Forge 1.20.1)
+        working-directory: oror_rework/nfc_ui/harness1201
+        run: |
+          gradle build --console=plain 2>&1 | tail -n 40
+          cp build/libs/oror_harness_1201-1.0.0.jar $RUNNER_TEMP/game/mods/
+      - name: Install the client and a virtual display
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq xvfb mesa-utils libgl1-mesa-dri imagemagick rsync > /dev/null
+          python3 -m venv $RUNNER_TEMP/venv && $RUNNER_TEMP/venv/bin/pip install -q portablemc==5.0.6
+          G=$RUNNER_TEMP/game
+          # NightfallCraft ships no options.txt; only Japanese (as for OROR) and the unattended-run settings are added.
+          mkdir -p $G/config/defaultoptions
+          printf 'lang:ja_jp\nonboardAccessibility:false\npauseOnLostFocus:false\nrenderDistance:6\nsimulationDistance:5\nskipMultiplayerWarning:true\njoinedFirstServer:true\ntutorialStep:none\nsoundCategory_master:0.0\n' >> $G/config/defaultoptions/options.txt
+          cp -r $G/config $RUNNER_TEMP/config-input
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s '-screen 0 1600x900x24' glxinfo -B | tee $OUT/glxinfo.txt || true
+      - name: Run the client
+        timeout-minutes: 60
+        run: |
+          G=$RUNNER_TEMP/game
+          export LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null
+          # A mod loading failure leaves NeoForge's error screen up; stop the client once a crash report is written.
+          ( while sleep 15; do
+              if ls $G/crash-reports/*.txt > /dev/null 2>&1; then sleep 20; pkill -f forgeclient || pkill java; break; fi
+            done ) &
+          timeout 55m xvfb-run -a -s '-screen 0 1600x900x24' $RUNNER_TEMP/venv/bin/portablemc start forge::1.20.1-47.4.28 \
+            --main-dir $RUNNER_TEMP/mc --mc-dir $G -u OrorTester --resolution 1600x900 --jvm "$JAVA_HOME/bin/java" \
+            --jvm-arg=-Xmx8G,-Xms2G > $RUNNER_TEMP/client.out 2>&1 || echo "client exit code $?" | tee $OUT/client-exit.txt
+          tail -n 60 $RUNNER_TEMP/client.out
+      - name: Collect screenshots, logs and written configs
+        if: always()
+        run: |
+          G=$RUNNER_TEMP/game; C=$OUT/client; mkdir -p $C
+          tail -n 300 $RUNNER_TEMP/client.out > $C/stdout-tail.txt 2>/dev/null || true
+          for f in $G/screenshots/*.png; do [ -f "$f" ] && convert "$f" -resize '1280x>' -quality 82 "$C/$(basename "${f%.png}").jpg"; done
+          cp $G/harness/* $C/ 2>/dev/null || true
+          mkdir -p $C/crash-reports; cp $G/crash-reports/* $C/crash-reports/ 2>/dev/null || true
+          L=$G/logs/latest.log
+          if [ -f $L ]; then
+            grep -n -E '\[harness\]|ERROR|FATAL|Exception|Caused by|Mixin apply failed|InvalidInjection' $L | cut -c1-600 | head -n 4000 > $C/latest-filtered.log
+            gzip -c $L > $C/latest.log.gz; [ $(stat -c %s $C/latest.log.gz) -lt 8000000 ] || rm $C/latest.log.gz
+          fi
+          cp $G/options.txt $C/options.txt 2>/dev/null || true
+          [ -d $RUNNER_TEMP/config-input ] && rsync -a --checksum --compare-dest=$RUNNER_TEMP/config-input/ $G/config/ $C/config-after/ \
+            && find $C/config-after -type d -empty -delete || true
+          ls -la $C
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$OUT"
+          git commit -m "NightfallCraft reference screenshots ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

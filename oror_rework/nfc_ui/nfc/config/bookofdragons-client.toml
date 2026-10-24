@@ -1,0 +1,42 @@
+
+#Book of Dragons Client Settings
+[client]
+	#Sprint mode while riding dragons
+	#HOLD: Sprint while holding the sprint key (like vanilla)
+	#TOGGLE: Press to start sprinting, press again to stop
+	#Allowed Values: HOLD, TOGGLE
+	sprintMode = "TOGGLE"
+	#Enable camera roll while riding dragons
+	#Set to false to disable for motion sickness accessibility
+	cameraRollEnabled = true
+	#Third person camera distance when riding dragons
+	#Range: 4.0 ~ 100.0
+	thirdPersonDistance = 8.0
+	#FOV offset for first-person view while riding
+	#Range: -50.0 ~ 50.0
+	firstPersonFovOffset = 0.0
+	#Enable barrel roll with A/D keys while flying
+	#When true: A/D causes the dragon to roll left/right
+	#When false: A/D applies yaw (turn left/right) with natural banking
+	barrelRollEnabled = false
+	#Enable speed-based FOV effects while flying
+	speedFovEffectEnabled = true
+	#Multiplier for the speed-based FOV effect
+	#Range: 0.0 ~ 10.0
+	speedFovEffectStrength = 1.0
+	#Dragon flight mouse sensitivity multiplier
+	#Applied on top of vanilla camera sensitivity after normalisation.
+	#Increase if dragon controls feel too heavy (e.g. Raw Input disabled,
+	#remote desktop, or low-DPI mouse with non-default pointer speed).
+	#Default 1.0 = same feel as before for players with Raw Input enabled.
+	#Range: 0.1 ~ 10.0
+	dragonMouseSensitivity = 1.0
+	#Preferred camera perspective when mounting a dragon
+	#FIRST_PERSON: First-person view
+	#THIRD_PERSON: Third-person view (behind the dragon)
+	#Allowed Values: FIRST_PERSON, THIRD_PERSON
+	ridingCameraPerspective = "THIRD_PERSON"
+	#When true, remembers the last camera perspective used while riding
+	#and restores it on the next mount instead of always switching to the preferred one
+	rememberLastCameraPerspective = false
+

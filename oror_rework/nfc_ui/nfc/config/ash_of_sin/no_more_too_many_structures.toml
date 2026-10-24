@@ -1,0 +1,28 @@
+
+["No More Too Many Structures Settings"]
+	only_overlap = false
+	#Radius (in blocks) to check for nearby structures/features. 0.0 ~ 1000.0
+	#Range: 0.0 ~ 1000.0
+	checkRadius = 75.0
+	#Maximum number of structures/features allowed within the radius. 0 ~ 16
+	#Range: 0 ~ 16
+	maxNearby = 1
+	#Structures that will always generate regardless of overlap (registry names). Example: 'minecraft:ancient_city'
+	whitelistStructures = ["cataclysm:soul_black_smith", "cataclysm:ruined_citadel", "cataclysm:burning_arena", "cataclysm:ancient_factory", "cataclysm:sunken_city", "cataclysm:cursed_pyramid", "cataclysm:frosted_prison", "cataclysm:acropolis", "betterfortresses:fortress", "irons_spellbooks:citadel", "tcrcore:gate_of_disaster", "ba_bt:land_tower", "ba_bt:ocean_tower", "ba_bt:core_tower", "dodosmobs:jungle_prison", "ribbits:ribbit_village", "betteroceanmonuments:ocean_monument", "tlc:lost_castle", "aether:silver_dungeon", "aether:gold_dungeon", "lost_aether_content:platinum_dungeon"]
+	#Features that will always generate regardless of overlap (registry names). Example: 'minecraft:tree'
+	whitelistFeatures = []
+	#Structures that will never generate (registry names). Example: 'minecraft:shipwreck'
+	blacklistStructures = ["minecraft:shipwreck", "minecraft:mineshaft"]
+	#Features that will never generate (registry names). Example: 'minecraft:tree'
+	blacklistFeatures = []
+	#Structures that will be completely ignored (no checks, no recording). Example: 'minecraft:village'
+	ignoreStructures = []
+	#Features that will be completely ignored (no checks, no recording). Example: 'minecraft:seagrass'
+	ignoreFeatures = ["minecraft:seagrass", "minecraft:kelp", "minecraft:random_selector", "minecraft:random_patch", "minecraft:ore", "minecraft:simple_block", "minecraft:flower", "minecraft:vegetation_patch", "minecraft:multiface_growth", "minecraft:simple_random_selector", "minecraft:random_boolean_selector", "minecraft:block_column", "biomesoplenty:crag_splatter", "biomesoplenty:sparse_dune_grass"]
+	#Dimensions whose No-More-Too-Many-Structures data will be cleared automatically when no players are present. Example: 'minecraft:the_end'
+	autoResetDimensions = ["cataclysm_dimension:cataclysm_abyssal_depths", "cataclysm_dimension:cataclysm_bastion_lost", "cataclysm_dimension:cataclysm_eternal_frosthold", "cataclysm_dimension:cataclysm_forge_of_aeons", "cataclysm_dimension:cataclysm_infernos_maw", "cataclysm_dimension:cataclysm_pharaohs_bane", "cataclysm_dimension:cataclysm_sanctum_fallen", "cataclysm_dimension:cataclysm_souls_anvil"]
+	#If true, whitelisted structures/features will be allowed to overlap with each other.
+	allowWhitelistOverlap = true
+	#Enable debug logging for skipped structures/features.
+	debug = false
+

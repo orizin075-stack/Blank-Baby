@@ -1,0 +1,49 @@
+{
+    "_comment": "Dragon spawn configuration per roost archetype. Changes apply on world load. Format: {dragon, weight}",
+    "cliff": [
+        {
+            "dragon": "nightfury",
+            "weight": 30
+        },
+        {
+            "dragon": "skrill",
+            "weight": 70
+        }
+    ],
+    "cave": [
+        {
+            "dragon": "gronckle",
+            "weight": 50
+        },
+        {
+            "dragon": "whispering_death",
+            "weight": 50
+        }
+    ],
+    "glade": [
+        {
+            "dragon": "deadly_nadder",
+            "weight": 60
+        },
+        {
+            "dragon": "hideous_zippleback",
+            "weight": 40
+        }
+    ],
+    "wetland": [
+        {
+            "dragon": "hideous_zippleback",
+            "weight": 100
+        }
+    ],
+    "barrens": [
+        {
+            "dragon": "monstrous_nightmare",
+            "weight": 50
+        },
+        {
+            "dragon": "gronckle",
+            "weight": 50
+        }
+    ]
+}
