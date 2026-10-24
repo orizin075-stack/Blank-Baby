@@ -1,0 +1,569 @@
+{
+	default_hide_dependency_lines: true
+	default_quest_shape: ""
+	filename: "shen_mo"
+	group: ""
+	hide_quest_until_deps_visible: true
+	icon: "cataclysm:altar_of_fire"
+	id: "0CE9782910610D72"
+	images: [{
+		height: 30.0d
+		image: "tcrcore:textures/ftb/magic_bg.png"
+		rotation: 0.0d
+		width: 40.0d
+		x: 0.0d
+		y: -1.0d
+	}]
+	order_index: 5
+	quest_links: [ ]
+	quests: [
+		{
+			description: [
+				"{ftbquests.chapter.shen_mo.quest7560919920425465995.description2}"
+				"{ftbquests.chapter.shen_mo.quest7560919920425465995.description3}"
+			]
+			hide_dependency_lines: true
+			hide_dependent_lines: true
+			hide_until_deps_complete: false
+			hide_until_deps_visible: true
+			icon: "tudigong:tudi_temple"
+			icon_scale: 1.5d
+			id: "68EDC89BB022788B"
+			invisible: true
+			rewards: [{
+				id: "4B50245D1763A8CF"
+				item: "tudigong:tudi_command_spell"
+				type: "item"
+			}]
+			shape: "none"
+			size: 2.0d
+			tasks: [{
+				advancement: "tcrcore:unlock_magic_and_boss"
+				criterion: ""
+				id: "18A4D4525511C684"
+				title: "{ftbquests.chapter.shen_mo.quest7560919920425465995.task.1775777603170453124.title}"
+				type: "advancement"
+			}]
+			x: 0.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "6FD4134465F4B80A"
+			rewards: [{
+				id: "4CFF088657A4EA43"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.shen_mo.common.in_sanctum}"
+			tasks: [{
+				entity: "cataclysm:the_leviathan"
+				icon: "tcrcore:abyss_core"
+				id: "31F81725804DBD7A"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest8058086817761900554.title}"
+			x: -8.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "460AD9F2064DC761"
+			rewards: [{
+				id: "6D87029CD8BFF1ED"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.shen_mo.common.in_sanctum}"
+			tasks: [{
+				entity: "cataclysm:maledictus"
+				icon: "cataclysm:cursium_ingot"
+				id: "0672B910E28C9389"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest5047085965933135713.title}"
+			x: -10.0d
+			y: 1.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "588584D95F9A501F"
+			rewards: [{
+				id: "001C4587898094DE"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.shen_mo.common.in_sanctum}"
+			tasks: [{
+				entity: "cataclysm:scylla"
+				icon: "cataclysm:essence_of_the_storm"
+				id: "2D1A10B1F70903F7"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest6378650516386893855.title}"
+			x: 11.0d
+			y: 1.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "3B4BBA5C2B7507EB"
+			rewards: [{
+				id: "5E5A606711F1366F"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.shen_mo.common.in_sanctum}"
+			tasks: [{
+				entity: "cataclysm:ancient_remnant"
+				icon: "cataclysm:ancient_metal_ingot"
+				id: "7A40C0DB2D45F3F3"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest4272713576519895019.title}"
+			x: 9.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "0C0A726EABBAB2E8"
+			rewards: [{
+				id: "636D3ACA46010492"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.shen_mo.common.in_sanctum}"
+			tasks: [{
+				entity: "cataclysm:ignis"
+				icon: "cataclysm:ignitium_ingot"
+				id: "74DADD5A7C11C5F2"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest867631697875350248.title}"
+			x: 2.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "3CD75C4FCB8D8CBC"
+			rewards: [{
+				id: "221F5370ED45DE6B"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.shen_mo.common.in_sanctum}"
+			tasks: [{
+				entity: "cataclysm:ender_guardian"
+				icon: "tcrcore:void_core"
+				id: "7D9A20ADEF956304"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest4384074260055690428.title}"
+			x: -2.0d
+			y: -8.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "52F6B6200AB100C4"
+			rewards: [{
+				id: "3E33B9941E05A368"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.shen_mo.common.in_sanctum}"
+			tasks: [{
+				entity: "cataclysm:netherite_monstrosity"
+				icon: {
+					Count: 1
+					id: "cataclysm:monstrous_helm"
+					tag: {
+						Damage: 0
+					}
+				}
+				id: "3989EE9853B1FBE1"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest5978165804115493060.title}"
+			x: 7.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "660B6B2EE98EF82A"
+			rewards: [{
+				id: "5B3A31020279CDC9"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.shen_mo.common.in_sanctum}"
+			tasks: [{
+				entity: "cataclysm:the_harbinger"
+				icon: "cataclysm:witherite_ingot"
+				id: "6BB06FB311748574"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest7353088665843595306.title}"
+			x: -6.0d
+			y: -6.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			description: [""]
+			icon: "efn:deepdark_heart"
+			id: "3460F65A23FDA799"
+			rewards: [{
+				count: 3
+				id: "1B26981A9BBD9863"
+				item: "epicskills:ability_stone"
+				type: "item"
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest3774287354747791257.subtitle}\\n{ftbquests.chapter.shen_mo.common.can_be_search}"
+			tasks: [{
+				entity: "minecraft:warden"
+				icon: "efn:deepdark_heart"
+				id: "0D2A0E0DCC3F302F"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest3774287354747791257.title}"
+			x: 0.0d
+			y: 3.0d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			description: [""]
+			id: "5509B6D7C1DF4BB6"
+			rewards: [{
+				count: 3
+				id: "028AC83ABBE3DC5C"
+				item: "epicskills:ability_stone"
+				type: "item"
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest6127629805801130934.subtitle}\\n{ftbquests.chapter.shen_mo.common.can_be_search}"
+			tasks: [{
+				entity: "mowziesmobs:ferrous_wroughtnaut"
+				icon: "mowziesmobs:wrought_helmet"
+				id: "614173474E896E0C"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest6127629805801130934.title}"
+			x: 3.0d
+			y: 3.75d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			description: [""]
+			id: "29FCA2144193E4B7"
+			rewards: [{
+				count: 3
+				id: "5237FF2CF295CBC1"
+				item: "epicskills:ability_stone"
+				type: "item"
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest3025471257569387703.subtitle}\\n{ftbquests.chapter.shen_mo.common.can_be_search}"
+			tasks: [{
+				entity: "mowziesmobs:frostmaw"
+				icon: {
+					Count: 1
+					id: "mowziesmobs:ice_crystal"
+					tag: {
+						Damage: 0
+					}
+				}
+				id: "02FA8B5ABECE0D28"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest3025471257569387703.title}"
+			x: -3.0d
+			y: 0.75d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			description: [""]
+			hide_until_deps_complete: false
+			id: "236A628B78740D00"
+			rewards: [{
+				count: 3
+				id: "21CEF973AB38E742"
+				item: "epicskills:ability_stone"
+				type: "item"
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest2551960490019654912.subtitle}\\n{ftbquests.chapter.shen_mo.common.can_be_search}"
+			tasks: [{
+				entity: "mowziesmobs:umvuthi"
+				icon: "mowziesmobs:sol_visage"
+				id: "02C024329915C365"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest2551960490019654912.title}"
+			x: 3.0d
+			y: 0.75d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "75FC56E08479B2AD"
+			rewards: [
+				{
+					count: 4
+					id: "0AD970BFFFF2A83C"
+					item: "epicskills:ability_stone"
+					type: "item"
+				}
+				{
+					id: "5754A182B81A369F"
+					item: "tcrcore:rare_artifact_ticket"
+					type: "item"
+				}
+			]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest8501765718863884973.subtitle}"
+			tasks: [{
+				entity: "alexsmobs:void_worm"
+				icon: "alexsmobs:mysterious_worm"
+				id: "3820BA9AE2646328"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest8501765718863884973.title}"
+			x: 3.0d
+			y: 6.75d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			description: [""]
+			id: "7351102E290520AA"
+			rewards: [{
+				count: 3
+				id: "44F3FC4F48F2C084"
+				item: "epicskills:ability_stone"
+				type: "item"
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest7351102E290520AA.subtitle}\\n{ftbquests.chapter.shen_mo.common.can_be_search}"
+			tasks: [{
+				entity: "bosses_of_mass_destruction:void_blossom"
+				icon: "bosses_of_mass_destruction:void_thorn"
+				id: "22A3C527A3E9ACEC"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest7351102E290520AA.title}"
+			x: -3.0d
+			y: 3.75d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			description: [""]
+			id: "1B626D8CAC2DC5F6"
+			rewards: [{
+				count: 3
+				id: "3BD07A4731B5C533"
+				item: "epicskills:ability_stone"
+				type: "item"
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest1B626D8CAC2DC5F6.subtitle}\\n{ftbquests.chapter.shen_mo.common.can_be_search}"
+			tasks: [{
+				entity: "bosses_of_mass_destruction:gauntlet"
+				icon: "bosses_of_mass_destruction:blazing_eye"
+				id: "4EC4982DACA280B0"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest1B626D8CAC2DC5F6.title}"
+			x: 0.0d
+			y: 5.25d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			description: [""]
+			id: "6A0D7B0C41B137EC"
+			rewards: [{
+				count: 3
+				id: "0B0FDCB2C8529DBF"
+				item: "epicskills:ability_stone"
+				type: "item"
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest6A0D7B0C41B137EC.subtitle}\\n{ftbquests.chapter.shen_mo.common.can_be_search}"
+			tasks: [{
+				entity: "bosses_of_mass_destruction:obsidilith"
+				icon: "bosses_of_mass_destruction:obsidian_heart"
+				id: "0AEA090AF6A2BBA3"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest6A0D7B0C41B137EC.title}"
+			x: -3.0d
+			y: 6.75d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "3507A660CAD8962F"
+			rewards: [{
+				count: 5
+				id: "6E8BFD4D5DA65A57"
+				item: "epicskills:ability_stone"
+				type: "item"
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest3507A660CAD8962F.subtitle}"
+			tasks: [{
+				entity: "epicfight_arachne:arachne"
+				icon: "epicfight_arachne:arachne_harp"
+				id: "03F91847BA93D935"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest3507A660CAD8962F.title}"
+			x: 0.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "5A48692DDAB580FC"
+			rewards: [{
+				id: "7271A8082901EA26"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest5A48692DDAB580FC.subtitle}"
+			tasks: [{
+				entity: "wom:hollow"
+				icon: {
+					Count: 1
+					id: "wom:hollow_longsword"
+					tag: {
+						Damage: 0
+					}
+				}
+				id: "6435DE102259119B"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest5A48692DDAB580FC.title}"
+			x: -3.0d
+			y: -2.25d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "25D9989B6AEDB15A"
+			rewards: [{
+				id: "49FEF09A0FD74783"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest25D9989B6AEDB15A.subtitle}"
+			tasks: [{
+				entity: "wom:saulomonk"
+				icon: {
+					Count: 1
+					id: "wom:orbit"
+					tag: {
+						Damage: 0
+					}
+				}
+				id: "54915B47EC0693F8"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest25D9989B6AEDB15A.title}"
+			x: 3.0d
+			y: -2.25d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "5BDBD4318ED4E78D"
+			rewards: [{
+				id: "46B8A8C0471E83C7"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest5BDBD4318ED4E78D.subtitle}"
+			tasks: [{
+				entity: "wom:lycanth"
+				icon: {
+					Count: 1
+					id: "wom:cursed_mask"
+					tag: {
+						Damage: 0
+					}
+				}
+				id: "6C41F974302336C3"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest5BDBD4318ED4E78D.title}"
+			x: -6.0d
+			y: -0.75d
+		}
+		{
+			dependencies: ["68EDC89BB022788B"]
+			id: "6371E70D0B1FC322"
+			rewards: [{
+				id: "47688FEAB94E47B0"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			subtitle: "{ftbquests.chapter.shen_mo.quest6371E70D0B1FC322.subtitle}"
+			tasks: [{
+				entity: "wom:evil_skeleton"
+				icon: "minecraft:wither_skeleton_skull"
+				id: "034777CBDEEB5874"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.shen_mo.quest6371E70D0B1FC322.title}"
+			x: 6.0d
+			y: -0.75d
+		}
+	]
+	title: "{ftbquests.chapter.shen_mo.title}"
+}

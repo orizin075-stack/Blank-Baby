@@ -1,0 +1,14 @@
+#发送冷却(tick)
+#Cooldown(tick)
+#Range: > 0
+cooldown = 600
+#是否全局广播救援文本 为true全局可见 为false则只有求救者可见
+#Broadcast to all when tp. If true, all players can see, or only sender can see.
+broadcast = true
+#是否播放救援音频
+#Enable playing sound when tp
+play_sound = true
+#默认名字播报格式 如：<Steve>
+#Format of name. Default: <Steve>
+format = "[%s] : "
+

@@ -1,0 +1,164 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "xu_zhang"
+	group: ""
+	icon: {
+		Count: 1
+		id: "minecraft:writable_book"
+		tag: {
+			fdbosses: { }
+		}
+	}
+	id: "721BC8BD525EA3BB"
+	images: [{
+		height: 18.0d
+		image: "tcrcore:textures/ftb/preface_bg.png"
+		rotation: 0.0d
+		width: 32.0d
+		x: 0.0d
+		y: -1.5d
+	}]
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			description: [
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description1}"
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description2}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description3}"
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description4}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description5}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description6}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description7}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description8}"
+				""
+				""
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description1}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description2}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description3}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description4}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description5}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description6}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description7}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description8}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description9}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description10}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description11}"
+				""
+				""
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description12}"
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description13}"
+				"{ftbquests.chapter.xu_zhang.quest9DE1A548EA3F9BA.description14}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest711034741643803066.description15}"
+			]
+			icon: "cataclysm:strange_key"
+			icon_scale: 2.0d
+			id: "09DE1A548EA3F9BA"
+			rewards: [{
+				id: "00CFBCF68BF19DED"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.0d
+			subtitle: "{ftbquests.chapter.xu_zhang.quest711034741643803066.subtitle}"
+			tasks: [{
+				id: "7A35FB5FAB5EC5CC"
+				title: "{ftbquests.chapter.xu_zhang.quest711034741643803066.task.8806221034708452812.title}"
+				type: "checkmark"
+			}]
+			title: "{ftbquests.chapter.xu_zhang.quest711034741643803066.title}"
+			x: 3.857142857142861d
+			y: 1.6428571428571388d
+		}
+		{
+			description: [
+				"{ftbquests.chapter.xu_zhang.quest7487272814909384521.description0}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest7487272814909384521.description1}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest7487272814909384521.description2}"
+				""
+				""
+				"{ftbquests.chapter.xu_zhang.quest7487272814909384521.description3}"
+			]
+			icon: {
+				Count: 1
+				id: "tcrcore:dragon_flute"
+				tag: {
+					fdbosses: { }
+				}
+			}
+			id: "67E822F4B51CE749"
+			rewards: [{
+				id: "33E3EFC36260F10F"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.xu_zhang.quest7487272814909384521.subtitle}"
+			tasks: [{
+				id: "5293E10F1D65A447"
+				title: "{ftbquests.chapter.xu_zhang.quest7487272814909384521.task.5950346987720516679.title}"
+				type: "checkmark"
+			}]
+			x: -4.5d
+			y: -5.0d
+		}
+		{
+			can_repeat: true
+			description: [
+				"{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.description1}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.description2}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.description3}"
+				"{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.description4}"
+				"{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.description5}"
+				"{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.description6}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.description8}"
+				""
+				"{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.description7}"
+			]
+			icon: "cataclysm:burning_ashes"
+			id: "44D2EB5EE8D3FEF8"
+			rewards: [{
+				exclude_from_claim_all: true
+				id: "561EFFF7EF07C464"
+				table_id: 2433919762815874758L
+				type: "choice"
+			}]
+			shape: "none"
+			size: 2.0d
+			subtitle: "{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.subtitle}"
+			tasks: [{
+				id: "6A5FE5F7F06097C6"
+				title: "{ftbquests.chapter.xu_zhang.quest44D2EB5EE8D3FEF8.title}"
+				type: "checkmark"
+			}]
+			x: 7.0d
+			y: -0.5d
+		}
+	]
+	title: "{ftbquests.chapter.xu_zhang.title}"
+}

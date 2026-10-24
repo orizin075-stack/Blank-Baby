@@ -1,0 +1,2230 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: "none"
+	filename: "cui_ling"
+	group: ""
+	icon: "tcrcore:necromancy_scroll"
+	id: "0F64FD2BCA58DAD9"
+	images: [{
+		height: 20.0d
+		image: "tcrcore:textures/ftb/magic_bg.png"
+		rotation: 0.0d
+		width: 32.0d
+		x: 0.5d
+		y: 0.5d
+	}]
+	order_index: 6
+	quest_links: [ ]
+	quests: [
+		{
+			id: "721C4011155C1854"
+			invisible: true
+			size: 3.0d
+			tasks: [{
+				advancement: "tcrcore:unlock_magic_and_boss"
+				criterion: ""
+				id: "1F735F12108C5F0E"
+				type: "advancement"
+			}]
+			x: 0.5d
+			y: 1.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "7C05F412489E8068"
+			rewards: [{
+				id: "1B2B722EC432249E"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "7B2225E6C5831CA4"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:acupuncture"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -6.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "3BBAE6FD85E6F3E0"
+			rewards: [{
+				id: "03D2BAC186C04EE2"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "62106391886A51BB"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:arrow_volley"
+								index: 0
+								level: 6
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -6.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "0E894F9A3DCE5034"
+			rewards: [{
+				id: "73F1FC69870C6F26"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "5C5245B721949958"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:ascension"
+								index: 0
+								level: 1
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 0.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "5561C86C479B5025"
+			rewards: [{
+				id: "4CDAFC5732C76195"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "6D1835F67617B251"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:blessing_of_life"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 7.5d
+			y: -3.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "7A03AC4CD85E68AC"
+			rewards: [{
+				id: "3508818FD10D7626"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "4A2313D75EDE336C"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:frostwave"
+								index: 0
+								level: 8
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 9.0d
+			y: 5.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "458208370F22490E"
+			rewards: [{
+				id: "3614963FAC5E9885"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "798411427FB1A0AD"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:fire_arrow"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -6.0d
+			y: 4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "511046F23B8DA271"
+			rewards: [{
+				id: "2A266BB4D3EC0CA3"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "435BBE05EE442585"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:blood_needles"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -4.5d
+			y: 0.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "69348396FF2F3E57"
+			rewards: [{
+				id: "1D730DD79386FF66"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "455F7006B9FCF9B3"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:blood_slash"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -5.0d
+			y: 1.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "08017C4E119BC163"
+			rewards: [{
+				id: "78CB4C9817181EA0"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "0687055EE70B5085"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:devour"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -6.0d
+			y: 1.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "31D8365DD72FB922"
+			rewards: [{
+				id: "374E923345A81F6F"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "6CD8CE6DA84D41CC"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:chain_creeper"
+								index: 0
+								level: 6
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -4.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "5BA6E1EA617144D7"
+			rewards: [{
+				id: "33F49143B7CF3A59"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "32EE25B14A3437E5"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:fang_strike"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -5.0d
+			y: -2.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "1E10BAA72E11F6E6"
+			rewards: [{
+				id: "5D3C3714BF3CC5E0"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "513854B2669AE3C8"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:fang_ward"
+								index: 0
+								level: 8
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -6.0d
+			y: -1.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "1BEE25F3B47B31F1"
+			rewards: [{
+				id: "29753F066AF3A3D9"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "7711EA5A203FC647"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:ball_lightning"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 2.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "7BA10B1C585CEC04"
+			rewards: [{
+				id: "5FCCDA2C34D6082C"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "76120FEA544154D4"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:chain_lightning"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 1.5d
+			y: -2.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "4D2A3CA610D92F66"
+			rewards: [{
+				id: "2EFEBE83700764D1"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "09D93E1710605335"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:electrocute"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 0.5d
+			y: -1.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "6950D20282E7B3E5"
+			rewards: [{
+				id: "27A0510E174676B5"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "4266146AC582405F"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:cone_of_cold"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 8.0d
+			y: 4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "4AE5E90B64182B47"
+			rewards: [{
+				id: "456F084D8ED41369"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "773B05485F3D9FF3"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:divine_smite"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 9.0d
+			y: -3.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "6EAA4A89812CC654"
+			rewards: [{
+				id: "3CCEFF679737B48D"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "2B8AAE8E46477651"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:dragon_breath"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 7.928571428571431d
+			y: 0.9897959183673422d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "1CC2A68473C56B4A"
+			rewards: [{
+				id: "12F5725215DE691C"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "2A6BAE03BDF7C4B0"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:earthquake"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 2.0d
+			y: 4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "48FFDFAC4D4E11E2"
+			rewards: [{
+				id: "1D331F2CA646BCB4"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "7D17010FF7BF1548"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:fire_breath"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -4.5d
+			y: 4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "414B1FA7F4165F2F"
+			rewards: [{
+				id: "799F9FD92771486C"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "4A7E29008B972FC4"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:fireball"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -5.0d
+			y: 5.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "563106BB8992C318"
+			rewards: [{
+				id: "3D16D7E8F50BE5D3"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "23DB93233755244C"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:firebolt"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -6.0d
+			y: 6.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "0A211723A77355F7"
+			rewards: [{
+				id: "364AC1A0B8A2C167"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "1D8E06D5DD52E937"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:firecracker"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -7.0d
+			y: -2.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "19FE9588BF5A7850"
+			rewards: [{
+				id: "084101EF0DEAD7D9"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "7D92DC9C7627FFB2"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:fortify"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 8.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "736F7F875C7D311C"
+			rewards: [{
+				id: "14D6B74E11A5BFBF"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "30D230E1210B8D77"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:frostbite"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 9.5d
+			y: 4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "21FD4E16142443B8"
+			rewards: [{
+				id: "389C54088F2BE3CA"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "7353DA8942ABB837"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:firefly_swarm"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 1.5d
+			y: 5.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "0AFF25C2BD48D197"
+			rewards: [{
+				id: "541CBE7D234C30CE"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "41B09DED370B4664"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:flaming_barrage"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -7.0d
+			y: 5.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "395BE7ABD8BCB151"
+			rewards: [{
+				id: "31BE4F152C1BEC26"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "166718AF4CE5EEBF"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:flaming_strike"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -7.5d
+			y: 4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "480256B2A691A81B"
+			rewards: [{
+				id: "3C5384C4D23BE208"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "5CC37C7AADA5CB46"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:gust"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -7.5d
+			y: -3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "778E8AA17B43E031"
+			rewards: [{
+				id: "02A7F39B00774660"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "1714783FF1364D13"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:lob_creeper"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -7.0d
+			y: -4.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "656446C6E4A4AEE2"
+			rewards: [{
+				id: "6886274FC5C4F130"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "185E929499888C99"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:lightning_bolt"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -0.5d
+			y: -2.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "25E073AAAB3FB661"
+			rewards: [{
+				id: "48677A371DDA8D66"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "00FD426213266845"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:lightning_lance"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -1.0d
+			y: -3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "5377D8909BDBBCE4"
+			rewards: [{
+				id: "4891D0A6967E5EA9"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "72F1304F567094AF"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:guiding_bolt"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 7.5d
+			y: -2.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "2C258A91D6C67B15"
+			rewards: [{
+				id: "71005BDC163E3F0F"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "5EBFC94F73CD5353"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:haste"
+								index: 0
+								level: 4
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 6.5d
+			y: -2.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "373C09A89AC0094D"
+			rewards: [{
+				id: "5B3FA102B0D81AE9"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "2077B6F628848516"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:heal"
+								index: 0
+								level: 1
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 6.0d
+			y: -3.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "5A9DD44A4844AD01"
+			rewards: [{
+				id: "1976DE8A4D8F23B1"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "7A904D9C4454F376"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:ice_block"
+								index: 0
+								level: 6
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 8.0d
+			y: 6.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "3A46985DD7C66A1E"
+			rewards: [{
+				id: "5B8BE8056064FDCC"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "3588631935171092"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:ice_spikes"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 7.0d
+			y: 5.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "03495097ADC91269"
+			rewards: [{
+				id: "06AD0DA40F10A5FB"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "5668952A993DDF58"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:ice_tomb"
+								index: 0
+								level: 8
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 6.5d
+			y: 4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "393FB229ECD1AC27"
+			rewards: [{
+				id: "5432270539628007"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "5E1D5216A5C693C4"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:icicle"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 7.0d
+			y: 3.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "736BD62E7D5EA81E"
+			rewards: [{
+				id: "7CE8865738012C7E"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "666F1DEB22DDE67C"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:ray_of_frost"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 8.0d
+			y: 3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "2E312257FE7E0C87"
+			rewards: [{
+				id: "45A6232BC6B0811D"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "4599C2B588288982"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:magic_arrow"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 9.0d
+			y: 0.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "59DD7D2B294331EF"
+			rewards: [{
+				id: "0EA2487264366C85"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "1ED3C7159287EBAA"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:magic_missile"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 8.98979591836735d
+			y: 2.051020408163268d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "63929B798CE6AE03"
+			rewards: [{
+				id: "05BFE53C79FC5FD0"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "22CC5D363EE4C961"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:poison_arrow"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 0.5d
+			y: 6.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "3AB92219E9BAA4BB"
+			rewards: [{
+				id: "09877F62650ADC44"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "763AE3D4BCD75E68"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:poison_breath"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -0.5d
+			y: 5.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "7DB5A93FF6B27EF4"
+			rewards: [{
+				id: "2E031DEC660275EB"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "2ADC0394A154D697"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:poison_splash"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -1.0d
+			y: 4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "3FC5BFF51CD81FF0"
+			rewards: [{
+				id: "065D32A826E6D80B"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "775008C873AAA7D3"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:magma_bomb"
+								index: 0
+								level: 8
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -7.0d
+			y: 3.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "5F1A19D87D0EF6FB"
+			rewards: [{
+				id: "068B620E577CE513"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "6E5A9EF982E2F889"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:raise_hell"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -6.0d
+			y: 3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "57DE64EC462F7932"
+			rewards: [{
+				id: "0D48025BC454D3DA"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "664141FC14193638"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:scorch"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -5.0d
+			y: 3.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "088EA9D34D506B94"
+			rewards: [{
+				id: "0055F39BF02597EF"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "04449C8737B618EA"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:ray_of_siphoning"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -7.0d
+			y: 1.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "195176BB3D5BA42B"
+			rewards: [{
+				id: "071BFDA4313837FA"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "5340C1A4F0FF352D"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:shadow_slash"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 6.867346938775512d
+			y: 1.9693877551020407d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "67727E551FBA5997"
+			rewards: [{
+				id: "3793BB255A9E7949"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "6E5C90A3CC4B628A"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:shield"
+								index: 0
+								level: 1
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -6.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "5D971BE63DFCC8C3"
+			rewards: [{
+				id: "78DCDDD3440D99A3"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "005F939F88590B56"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:shockwave"
+								index: 0
+								level: 8
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -0.5d
+			y: -4.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "63B15C95AEDDF701"
+			rewards: [{
+				id: "380BD9AB5AE24684"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "2150BD93A38B4B71"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:snowball"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 9.0d
+			y: 3.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "3BD3AD3DA2BD85D4"
+			rewards: [{
+				id: "254FB4780FF808CA"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "3135F57D226A9EED"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:spider_aspect"
+								index: 0
+								level: 8
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -0.5d
+			y: 3.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "3A3E45DB8C7639FB"
+			rewards: [{
+				id: "6884F24CEF6CE475"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "71AD19D9AE0CEF96"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:starfall"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 6.75d
+			y: 0.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "5B6AC49F60177AF8"
+			rewards: [{
+				id: "3829E39125BB5656"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "28D4DCE519BF8DE7"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:stomp"
+								index: 0
+								level: 5
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 0.5d
+			y: 3.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "7E41571B42F5FA39"
+			rewards: [{
+				id: "283B178D9E9E834A"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "6DB5402D2BC3B525"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:sunbeam"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 6.5d
+			y: -4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "572369CA07E3F9F5"
+			rewards: [{
+				id: "32507B95366B1C78"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "7A9ACD07E276DCBC"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:wisp"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 7.5d
+			y: -5.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "7A44ED9DB93EE2DF"
+			rewards: [{
+				id: "688C4252D18327EF"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "609A10AFDBBCF737"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:thunderstorm"
+								index: 0
+								level: 8
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 0.5d
+			y: -4.5d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "7F296CBF65A85064"
+			rewards: [{
+				id: "51B3103086B4DCF1"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "0D00A5BD00454369"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:wither_skull"
+								index: 0
+								level: 10
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: -7.5d
+			y: 0.0d
+		}
+		{
+			dependencies: ["721C4011155C1854"]
+			hide_dependency_lines: true
+			id: "4AE23ECB3CD85F2E"
+			rewards: [{
+				id: "7DD2A030C150508D"
+				type: "xp"
+				xp: 1
+			}]
+			size: 1.5d
+			tasks: [{
+				consume_items: false
+				id: "57CAA978B93702F5"
+				item: {
+					Count: 1
+					id: "irons_spellbooks:scroll"
+					tag: {
+						"irons_spellbooks:spell_container": {
+							data: [{
+								id: "irons_spellbooks:greater_heal"
+								index: 0
+								level: 1
+								locked: 1b
+							}]
+							maxSpells: 1
+							mustEquip: 0b
+							spellWheel: 0b
+						}
+					}
+				}
+				match_nbt: true
+				type: "item"
+			}]
+			x: 8.58163265306122d
+			y: -4.561224489795919d
+		}
+	]
+	title: "{ftbquests.chapter.cui_ling.title}"
+}

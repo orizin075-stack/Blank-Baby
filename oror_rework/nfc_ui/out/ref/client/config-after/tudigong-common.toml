@@ -1,0 +1,49 @@
+#Tell player how to summon TuDi when first meet TuDiTemple. This config will be set to false if the tutorial has finished.
+guide_mode = true
+#Whether to spawn the cloud guider
+spawn_guider = true
+#Whether to generate TuDiTemple in villages
+generate_temple = true
+#Whether to show the target coordinate.
+mark_location = true
+
+[Summoning]
+	#Cooldown for the TuDi Command Spell in ticks (20 ticks = 1 second).
+	#Range: > 0
+	spell_cooldown = 600
+	#How many times the player needs to sneak near a TuDi Temple to summon TuDiGong.
+	#Range: 1 ~ 10
+	temple_summon_shift_count = 3
+	#Cooldown in ticks after a successful summon from a TuDi Temple before it can be used again.
+	#Range: > 0
+	temple_summon_cooldown_ticks = 40
+	#Time in ticks before the sneak counter resets if the summoning is not completed.
+	#Range: > 20
+	temple_summon_reset_ticks = 60
+
+[Searching]
+	#The search radius in chunks for structures.
+	#Range: 10 ~ 500
+	structure_search_radius_chunks = 500
+	#The search radius in blocks for biomes.
+	#Range: 100 ~ 20000
+	biome_search_radius_blocks = 10000
+	#Distance in blocks from the destination to trigger the glowing highlight effect.
+	#Range: 16 ~ 512
+	highlight_distance_blocks = 144
+	#Duration in ticks for the glowing highlight effect (20 ticks = 1 second).
+	#Range: 100 ~ 72000
+	highlight_duration_ticks = 600
+	#A list of structure resource locations that TuDiGong will not be able to find.
+	structure_blacklist = []
+	#When searching for structures, try to find structures in unexplored chunks. This may increase search times and is not applicable to biome searches.
+	avoid_duplicate_searches = true
+
+["Entity Behavior"]
+	#Time in ticks before TuDiGong despawns if not interacted with.
+	#Range: 100 ~ 72000
+	tudigong_lifetime_ticks = 1200
+	#Distance in blocks from the destination at which the XianQi guider will disappear.
+	#Range: 1 ~ 64
+	xianqi_discard_distance_blocks = 20
+
