@@ -65,10 +65,20 @@
   },
   {
    "projectID": 250419,
-   "fileID": 8693034,
+   "fileID": null,
    "fileName": "enchdesc-neoforge-1.21.1-21.1.11.jar",
    "kind": "mod",
-   "why": "Enchantment Descriptions"
+   "why": "Enchantment Descriptions",
+   "needs": "prickle"
+  },
+  {
+   "projectID": null,
+   "slug": "prickle",
+   "prefix": "prickle-neoforge-1.21.1-21.1",
+   "fileID": null,
+   "fileName": null,
+   "kind": "mod",
+   "why": "Prickle: config library Enchantment Descriptions 21.1.11 requires ([21.1,21.2))"
   },
   {
    "projectID": 228525,

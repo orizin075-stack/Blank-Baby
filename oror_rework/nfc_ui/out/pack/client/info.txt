@@ -1,0 +1,186 @@
+gl Mesa | llvmpipe (LLVM 20.1.2, 256 bits) | 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.4
+window 1600x900 gui scale 3.0
+selected packs [vanilla]
+available packs [high_contrast, programmer_art, vanilla, file/Mandalas GUI - Dark Mode KOTS Compat 3.6.zip, file/MandalasGUI+Dakmode_1.21.8_v3.1.zip, file/Vulmoons calaclysm remake_0.5.zip, file/true_nitwit_texture.zip]
+key key.attack default=key.mouse.left now=key.mouse.left category=key.categories.gameplay
+key key.use default=key.mouse.right now=key.mouse.right category=key.categories.gameplay
+key key.forward default=key.keyboard.w now=key.keyboard.w category=key.categories.movement
+key key.left default=key.keyboard.a now=key.keyboard.a category=key.categories.movement
+key key.back default=key.keyboard.s now=key.keyboard.s category=key.categories.movement
+key key.right default=key.keyboard.d now=key.keyboard.d category=key.categories.movement
+key key.jump default=key.keyboard.space now=key.keyboard.space category=key.categories.movement
+key key.sneak default=key.keyboard.left.shift now=key.keyboard.left.shift category=key.categories.movement
+key key.sprint default=key.keyboard.left.control now=key.keyboard.left.control category=key.categories.movement
+key key.drop default=key.keyboard.q now=key.keyboard.q category=key.categories.inventory
+key key.inventory default=key.keyboard.e now=key.keyboard.e category=key.categories.inventory
+key key.chat default=key.keyboard.t now=key.keyboard.t category=key.categories.multiplayer
+key key.playerlist default=key.keyboard.tab now=key.keyboard.tab category=key.categories.multiplayer
+key key.pickItem default=key.mouse.middle now=key.mouse.middle category=key.categories.gameplay
+key key.command default=key.keyboard.slash now=key.keyboard.slash category=key.categories.multiplayer
+key key.socialInteractions default=key.keyboard.p now=key.keyboard.p category=key.categories.multiplayer
+key key.screenshot default=key.keyboard.f2 now=key.keyboard.f2 category=key.categories.misc
+key key.togglePerspective default=key.keyboard.f5 now=key.keyboard.f5 category=key.categories.misc
+key key.smoothCamera default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.misc
+key key.fullscreen default=key.keyboard.f11 now=key.keyboard.f11 category=key.categories.misc
+key key.spectatorOutlines default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.misc
+key key.swapOffhand default=key.keyboard.f now=key.keyboard.f category=key.categories.inventory
+key key.saveToolbarActivator default=key.keyboard.c now=key.keyboard.c category=key.categories.creative
+key key.loadToolbarActivator default=key.keyboard.x now=key.keyboard.x category=key.categories.creative
+key key.advancements default=key.keyboard.l now=key.keyboard.l category=key.categories.misc
+key key.hotbar.1 default=key.keyboard.1 now=key.keyboard.1 category=key.categories.inventory
+key key.hotbar.2 default=key.keyboard.2 now=key.keyboard.2 category=key.categories.inventory
+key key.hotbar.3 default=key.keyboard.3 now=key.keyboard.3 category=key.categories.inventory
+key key.hotbar.4 default=key.keyboard.4 now=key.keyboard.4 category=key.categories.inventory
+key key.hotbar.5 default=key.keyboard.5 now=key.keyboard.5 category=key.categories.inventory
+key key.hotbar.6 default=key.keyboard.6 now=key.keyboard.6 category=key.categories.inventory
+key key.hotbar.7 default=key.keyboard.7 now=key.keyboard.7 category=key.categories.inventory
+key key.hotbar.8 default=key.keyboard.8 now=key.keyboard.8 category=key.categories.inventory
+key key.hotbar.9 default=key.keyboard.9 now=key.keyboard.9 category=key.categories.inventory
+key key.fancytoasts.config_menu default=key.keyboard.k now=key.keyboard.k category=key.categories.misc
+mod kuma_api 21.0.8
+mod fabric_renderer_api_v1 3.4.1+9125b6dc19
+mod cataclysm_mux_0316 1.0.4
+mod playeranimator 2.0.4+1.21.1
+mod aeronautics_bundled 1.3.2
+mod gtbcs_geomancy_plus 1.1.0-1.21.1
+mod globalshaderpackproperties 1.1.0
+mod immersive_aircraft 1.6.0+1.21.1
+mod sophisticatedcore 1.5.12
+mod ritchiesprojectilelib 2.1.2
+mod xaeroworldmap 1.47.0
+mod neoforge 21.1.262
+mod prism 1.0.11
+mod placebo 9.9.4
+mod modernfix 5.27.26+mc1.21.1
+mod citadel 2.7.6
+mod fabric_block_view_api_v2 1.0.10+9afaaf8c19
+mod iris 1.8.12-snapshot+mc1.21.1-local
+mod bookshelf 21.1.81
+mod veil 4.3.2
+mod epicskills 21.3.3
+mod sophisticatedbackpacks 3.26.12
+mod guardvillagers 2.4.12
+mod simulated 1.3.2
+mod cataclysm_mux_0327 1.0.4
+mod superbwarfare 0.8.9.2
+mod balm 21.0.66
+mod golemdungeons 2.0.9
+mod melody 1.0.10
+mod cloth_config 15.0.140
+mod sound_physics_remastered 1.21.1-1.5.2
+mod l2damagetracker 3.0.5
+mod integration 0.2
+mod oror_supreme_bosses 0.17.25
+mod oror_nightfall_patch 0.17.25
+mod sodiumdynamiclights 1.0.9
+mod konkrete 1.9.9
+mod tenshilib 1.21.1-2.3.1-neoforge
+mod betterlockon 2.0.8-neoforge
+mod fancytoasts 1.5.1
+mod jupiter 2.3.7
+mod apothic_attributes 2.11.0
+mod medievalmusic 2.1
+mod lionfishapi 3.1
+mod gtbcs_spell_lib 2.2.0-1.21.1
+mod you_died 4.0.0.19
+mod cataclysm 3.33
+mod curios 9.5.1+1.21.1
+mod patchouli 1.21.1-93-NEOFORGE
+mod simplebedrockmodel 2.5.1.1-neoforge-mc1.21.1
+mod collective 8.52
+mod ftbultimine 2101.1.15
+mod resourcefullib 3.0.12
+mod architectury 13.0.11
+mod cupboard 4.2
+mod apothic_enchanting 1.6.4
+mod transition 1.0.26
+mod oror_harness 1.0.0
+mod fabric_rendering_data_attachment_v1 0.3.48+73761d2e19
+mod jadeaddons 6.1.2+neoforge
+mod l2library 3.0.8
+mod l2menustacker 3.0.10
+mod mezz_config 0.6.8
+mod mowziesmobs 1.8.2
+mod geckolib 4.9.3
+mod l2tabs 3.0.6+7
+mod ftblibrary 2101.1.37
+mod treeharvester 10.2
+mod jeg 1.8.2
+mod jei 19.64.0.453
+mod irons_lib 1.21.1-2.2.0
+mod xaerolib 1.7.3
+mod aeronautics 1.3.2
+mod tacz 1.1.8-hotfix-r7
+mod pillagerguns 1.1.0
+mod cataclysm_mux 1.0.4
+mod trender 1.0.17
+mod invmove 0.9.3
+mod waystones 21.1.46
+mod epicfight 21.17.3.1
+mod invincible 21.15.8.2
+mod combat_evolution 2.3.2
+mod vix 1.0.9
+mod wom 2.0.178
+mod configured 2.6.3
+mod aaa_particles 2.3.4
+mod cinematiccataclysm 1.0.1
+mod magistuarmory 10.17
+mod dungeoncrawl 2.3.17
+mod oreharvester 2.0
+mod iceandfire 2.1.4
+mod sodium 0.8.13+mc1.21.1
+mod uranus 2.4.1-bugfix
+mod sbwdroneconfig 1.0.6
+mod friendsandfoes 5.0.2
+mod offroad 1.3.2
+mod dungeons_arise 2.1.68
+mod drippyloadingscreen 3.1.5
+mod minecraft 1.21.1
+mod tacz_bandits 1.3
+mod just_in_nether 1.0.0
+mod alexscaves 2.0.10
+mod apothic_spawners 1.4.0
+mod apotheosis 8.9.0
+mod fabric_api_base 0.4.42+d1308ded19
+mod mousetweaks 2.26.1
+mod visual_keybinder 1.21.1 - 0.1.13-neoforge
+mod jade 15.10.6+neoforge
+mod macabre 0.9.1
+mod halovecs 5.1.0
+mod dodge_parry_reward 1.21.1-1.0.0
+mod modulargolems 3.1.43
+mod kotlinforforge 5.12.0
+mod chatplus 2.8.1
+mod iceberg 1.3.2
+mod itemborders 1.2.5
+mod sablecompanion 1.6.0
+mod flywheel 1.0.6
+mod ponder 1.0.87+mc1.21.1
+mod create 6.0.10
+mod sable 2.0.6
+mod legendarytooltips 1.5.5
+mod brutalbosses 8.6
+mod xaerominimap 26.6.0
+mod epic_fight_avalon 21.12.6.2
+mod l2core 3.0.8+15
+mod irons_spellbooks 1.21.1-3.16.3
+mod ironssablecompat 1.0.4
+mod efiscompat 3.1.0
+mod suppressionmod 1.2.0
+mod entityculling 1.11.3
+mod ares_hud 2.1.0
+mod mob_weapon_api 3.0.21
+mod pillagers_gun 3.2.2
+mod aaa_particles_world 2.0.0
+mod better_trident_model 1.2.0
+mod fancymenu 3.9.14
+mod extrasounds 1.5.6
+mod efn 3.4.0
+mod ferritecore 7.0.3
+mod yet_another_config_lib_v3 3.8.2+1.21.1-neoforge
+mod modernui 3.13.0.1
+mod puzzleslib 21.1.64
+mod l2itemselector 3.1.6
+mod epicfightx 1.2.2
+mod p1nero_bow 21.16.1.0-neoforge
+mod defaultoptions 21.1.8

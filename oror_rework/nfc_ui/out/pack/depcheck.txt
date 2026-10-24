@@ -1,11 +1,8 @@
-115 mods in 116 files, 147 mod ids with jar-in-jar
+114 mods in 115 files, 146 mod ids with jar-in-jar
 
-MISSING prickle [21.1, 21.2) (side BOTH) needed by enchdesc [enchdesc-neoforge-1.21.1-21.1.11.jar]
-VERSION irons_spellbooks 1.21.1-3.16.3 not in [1.21-3.8.9,) needed by gtbcs_spell_lib [gtbcs_spell_lib-2.2.0-1.21.1.jar]
-VERSION minecraft 1.21.1 not in [1.21, 1.21.1) needed by jei [jei-1.21.1-neoforge-19.64.0.453.jar]
-VERSION minecraft 1.21.1 not in [1.21,1.21.1) needed by dungeons_arise [DungeonsArise-1.21.1-2.1.68-release.jar]
-VERSION minecraft 1.21.1 not in [1.21,1.21.1) needed by iris [iris-neoforge-1.8.12+mc1.21.1.jar]
-VERSION simplebedrockmodel 2.5.1.1-neoforge-mc1.21.1 not in [2.5.1.1,) needed by superbwarfare [superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar]
+VERSION minecraft 1.21.1 not in [1.21, 1.21.1) needed by jei [jei-1.21.1-neoforge-19.64.0.453.jar] {"modId": "minecraft", "type": "required", "versionRange": "[1.21, 1.21.1)", "ordering": "NONE", "side": "BOTH"}
+VERSION minecraft 1.21.1 not in [1.21,1.21.1) needed by dungeons_arise [DungeonsArise-1.21.1-2.1.68-release.jar] {"modId": "minecraft", "type": "required", "versionRange": "[1.21,1.21.1)", "ordering": "NONE", "side": "BOTH"}
+VERSION minecraft 1.21.1 not in [1.21,1.21.1) needed by iris [iris-neoforge-1.8.12+mc1.21.1.jar] {"modId": "minecraft", "type": "required", "versionRange": "[1.21,1.21.1)", "ordering": "NONE", "side": "CLIENT"}
 
 == mods
 aaa_particles 2.3.4 [aaa_particles-neoforge-1.21.1-2.3.4.jar]
@@ -45,7 +42,6 @@ dungeoncrawl 2.3.17 [DungeonCrawl-NeoForge-1.21-2.3.17.jar]
 dungeons_arise 2.1.68 [DungeonsArise-1.21.1-2.1.68-release.jar]
 efiscompat 3.1.0 [efiscompat-3.1.0.jar]
 efn 3.4.0 [NightFall-1.21.1-Neoforge-3.4.0.jar]
-enchdesc 21.1.11 [enchdesc-neoforge-1.21.1-21.1.11.jar]
 entityculling 1.11.3 [entityculling-neoforge-1.11.3-mc1.21.1.jar]
 epic_fight_avalon 21.12.6.2 [NightFall-1.21.1-Neoforge-3.4.0.jar!META-INF/jarjar/epic_fight_avalon-21.12.6.2.jar (jar-in-jar)]
 epicfight 21.17.3.1 [epic-fight-21.17.3.1-mc1.21.1-neoforge.jar]
@@ -113,8 +109,8 @@ mowziesmobs 1.8.2 [mowziesmobs-1.21.1-1.8.2.jar]
 neoforge 21.1.262 [loader]
 offroad 1.3.2 [create-aeronautics-bundled-1.21.1-1.3.2.jar!META-INF/jarjar/dev.ryanhcode.offroad.offroad-neoforge-1.21.1-1.3.2.jar (jar-in-jar)]
 oreharvester 2.0 [oreharvester-1.21.1-2.0.jar]
-oror_nightfall_patch 0.17.24 [oror_supreme_bosses-0.17.24.jar]
-oror_supreme_bosses 0.17.24 [oror_supreme_bosses-0.17.24.jar]
+oror_nightfall_patch 0.17.25 [oror_supreme_bosses-0.17.25.jar]
+oror_supreme_bosses 0.17.25 [oror_supreme_bosses-0.17.25.jar]
 p1nero_bow 21.16.1.0-neoforge [p1nero_bow-neoforge1.21.1-21.16.1.0-neoforge.jar]
 patchouli 1.21.1-93-NEOFORGE [Patchouli-1.21.1-93-NEOFORGE.jar]
 pillagerguns 1.1.0 [pillagerguns-neoforge-1.21.1-1.1.0.jar]
