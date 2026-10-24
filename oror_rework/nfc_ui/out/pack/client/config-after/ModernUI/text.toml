@@ -1,3 +1,4 @@
+
 #Text Engine Config
 [text]
 	#Allow text renderer to drop shadow, setting to false can improve performance.
@@ -9,29 +10,23 @@
 	#Control base font size, in GUI scaled pixels. The default and vanilla value is 8.
 	#For bitmap fonts, 8 represents a glyph size of 8x or 16x if fixed resolution.
 	#This option only applies to TrueType fonts.
-	# Default: 8.0
-	# Range: 6.5 ~ 9.5
+	#Range: 6.5 ~ 9.5
 	baseFontSize = 8.0
 	#Control vertical baseline for vanilla text layout, in GUI scaled pixels.
 	#The vanilla default value is 7.
-	# Default: 7.0
-	# Range: 4.0 ~ 10.0
+	#Range: 4.0 ~ 10.0
 	baselineShift = 7.0
 	#Control the text shadow offset for vanilla text rendering, in GUI scaled pixels.
-	# Default: 0.5
-	# Range: 0.20000000298023224 ~ 2.0
+	#Range: 0.20000000298023224 ~ 2.0
 	shadowOffset = 0.5
 	#Control the text outline offset for vanilla text rendering, in GUI scaled pixels.
-	# Default: 0.5
-	# Range: 0.20000000298023224 ~ 2.0
+	#Range: 0.20000000298023224 ~ 2.0
 	outlineOffset = 0.5
 	#Control the horizontal offset for bitmap fonts, in GUI scaled pixels.
-	# Default: 0.5
-	# Range: 0.0 ~ 1.0
+	#Range: 0.0 ~ 1.0
 	bitmapOffset = 0.5
 	#Set the recycle time of layout cache in seconds, using least recently used algorithm.
-	# Default: 6
-	# Range: 2 ~ 15
+	#Range: 2 ~ 15
 	cacheLifespan = 6
 	#The bidirectional text heuristic algorithm. The default is FirstStrong (Locale).
 	#This will affect which BiDi algorithm to use during text layout.
@@ -97,11 +92,11 @@
 	#Control the minimum pixel density for SDF text and text in 3D world rendering.
 	#This value will be no less than current GUI scale.
 	#Recommend setting a higher value on high-res monitor and powerful PC hardware.
-	# Default: 4
-	# Range: 4 ~ 10
+	#Range: 4 ~ 10
 	minPixelDensityForSDF = 4
 	#Enable linear sampling for A8 font atlases with mipmaps, mag filter will be always
 	#NEAREST. We prefer computeDeviceFontSize and allowSDFTextIn2D, then setting this to
 	#false can improve performance. If either of the above two is false or Shaders are active,
 	#then setting this to true can improve readability.
 	linearSamplingA8Atlas = false
+

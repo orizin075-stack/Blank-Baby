@@ -1,0 +1,81 @@
+---- Minecraft Crash Report ----
+// I feel sad now :(
+
+Time: 2026-10-24 13:22:36
+Description: Mod loading failures have occurred; consult the issue messages for more details
+
+net.neoforged.neoforge.logging.CrashReportExtender$ModLoadingCrashException: Mod loading has failed
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Mod loading issue for: veil --
+Details:
+	Mod file: /home/runner/work/_temp/game/mods/sable-neoforge-1.21.1-2.0.6.jar#394!/META-INF/jarjar/veil-neoforge-1.21.1-4.3.2.jar
+	Failure message: Mod veil only supports sodium 0.8.12-alpha.2+mc1.21.1 or above
+		Currently, sodium is 0.6.13+mc1.21.1
+	Mod version: 4.3.2
+	Mod issues URL: https://github.com/FoundryMC/Veil/issues
+	Exception message: <No associated exception found>
+
+-- Mod loading issue for: sable --
+Details:
+	Mod file: /home/runner/work/_temp/game/mods/sable-neoforge-1.21.1-2.0.6.jar
+	Failure message: Mod sable is incompatible with sodium below 0.8.12-alpha.2+mc1.21.1
+		Currently, sodium is 0.6.13+mc1.21.1
+		The reason is: Sable supports Sodium 0.8.12-alpha.2+mc1.21.1 and above
+	Mod version: 2.0.6
+	Mod issues URL: https://github.com/ryanhcode/sable/issues
+	Exception message: <No associated exception found>
+
+-- System Details --
+Details:
+	Minecraft Version: 1.21.1
+	Minecraft Version ID: 1.21.1
+	Operating System: Linux (amd64) version 6.17.0-1022-azure
+	Java Version: 21.0.12.1, Eclipse Adoptium
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Eclipse Adoptium
+	Memory: 1058081216 bytes (1009 MiB) / 2147483648 bytes (2048 MiB) up to 8589934592 bytes (8192 MiB)
+	CPUs: 4
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD EPYC 9V74 80-Core Processor
+	Identifier: AuthenticAMD Family 25 Model 17 Stepping 1
+	Microarchitecture: Zen 3
+	Frequency (GHz): -0.00
+	Number of physical packages: 1
+	Number of physical CPUs: 2
+	Number of logical CPUs: 4
+	Graphics card #0 name: hyperv_drmdrmfb
+	Graphics card #0 vendor: unknown
+	Graphics card #0 VRAM (MiB): 0.00
+	Graphics card #0 deviceId: unknown
+	Graphics card #0 versionInfo: unknown
+	Virtual memory max (MiB): 11066.84
+	Virtual memory used (MiB): 3561.60
+	Swap memory total (MiB): 3072.00
+	Swap memory used (MiB): 0.00
+	Space in storage for jna.tmpdir (MiB): available: 84457.72, total: 147718.61
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): available: 84457.72, total: 147718.61
+	Space in storage for io.netty.native.workdir (MiB): available: 84457.72, total: 147718.61
+	Space in storage for java.io.tmpdir (MiB): available: 84457.72, total: 147718.61
+	Space in storage for workdir (MiB): available: 84457.72, total: 147718.61
+	JVM Flags: 2 total; -Xmx8G -Xms2G
+	ModLauncher: 11.0.5+main.901c6ea8
+	ModLauncher launch target: forgeclient
+	ModLauncher services: 
+		sponge-mixin-0.16.4+mixin.0.8.7.jar mixin PLUGINSERVICE 
+		loader-4.0.45.jar slf4jfixer PLUGINSERVICE 
+		loader-4.0.45.jar runtime_enum_extender PLUGINSERVICE 
+		at-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE 
+		loader-4.0.45.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-11.0.5.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-11.0.5.jar fml TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		kotlinforforge@5.12.0
+		javafml@4.0
+		lowcodefml@4.0
+		minecraft@4.0
+	Mod List: 
+		client-1.21.1-20240808.144430-srg.jar             |Minecraft                     |minecraft                     |1.21.1              |Manifest: a1:d4:5e:04:4f:d3:d6:e0:7b:37:97:cf:77:b0:de:ad:4a:47:ce:8c:96:49:5f:0a:cf:8c:ae:b2:6d:4b:8a:3f
+		neoforge-21.1.262-universal.jar                   |NeoForge                      |neoforge                      |21.1.262            |Manifest: NOSIGNATURE

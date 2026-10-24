@@ -1,5 +1,6 @@
 117 mods in 118 files, 149 mod ids with jar-in-jar
 
+INCOMPATIBLE sodium 0.6.13+mc1.21.1 with sable [sable-neoforge-1.21.1-2.0.6.jar]: Sable supports Sodium 0.8.12-alpha.2+mc1.21.1 and above
 VERSION minecraft 1.21.1 not in [1.21, 1.21.1) needed by jei [jei-1.21.1-neoforge-19.64.0.453.jar] {"modId": "minecraft", "type": "required", "versionRange": "[1.21, 1.21.1)", "ordering": "NONE", "side": "BOTH"}
 VERSION minecraft 1.21.1 not in [1.21,1.21.1) needed by dungeons_arise [DungeonsArise-1.21.1-2.1.68-release.jar] {"modId": "minecraft", "type": "required", "versionRange": "[1.21,1.21.1)", "ordering": "NONE", "side": "BOTH"}
 VERSION minecraft 1.21.1 not in [1.21,1.21.1) needed by iris [iris-neoforge-1.8.12+mc1.21.1.jar] {"modId": "minecraft", "type": "required", "versionRange": "[1.21,1.21.1)", "ordering": "NONE", "side": "CLIENT"}
@@ -51,7 +52,7 @@ epicskills 21.3.3 [epicfight-skilltree-neoforge-21.3.3-1.21.1.jar]
 extrasounds 1.5.6 [extrasounds-1.5.6+1.21.1-neoforge.jar]
 fabric_api_base 0.4.42+d1308ded19 [iris-neoforge-1.8.12+mc1.21.1.jar!META-INF/jarjar/fabric-api-base-0.4.42+d1308ded19.jar (jar-in-jar)]
 fabric_block_view_api_v2 1.0.10+9afaaf8c19 [iris-neoforge-1.8.12+mc1.21.1.jar!META-INF/jarjar/fabric-block-view-api-v2-1.0.10+9afaaf8c19.jar (jar-in-jar)]
-fabric_renderer_api_v1 3.4.1+9125b6dc19 [sodium-neoforge-0.8.13+mc1.21.1.jar!META-INF/jarjar/fabric-renderer-api-v1-3.4.1+9125b6dc19.jar (jar-in-jar)]
+fabric_renderer_api_v1 3.4.0+acb05a3919 [iris-neoforge-1.8.12+mc1.21.1.jar!META-INF/jarjar/fabric-renderer-api-v1-3.4.0+acb05a3919.jar (jar-in-jar)]
 fabric_rendering_data_attachment_v1 0.3.48+73761d2e19 [iris-neoforge-1.8.12+mc1.21.1.jar!META-INF/jarjar/fabric-rendering-data-attachment-v1-0.3.48+73761d2e19.jar (jar-in-jar)]
 fancymenu 3.9.14 [fancymenu_neoforge_3.9.14_MC_1.21.1.jar]
 fancytoasts 1.5.1 [fancytoasts-1.5.1-neoforge-1.21.1.jar]
@@ -130,7 +131,7 @@ sablecompanion 1.6.0 [ironssablecompat-1.0.4.jar!META-INF/jarjar/sable-companion
 sbwdroneconfig 1.0.6 [SBW-Drone-Warfare-1.21.1-NeoForge-1.0.6.jar]
 simplebedrockmodel 2.5.1.1-neoforge-mc1.21.1 [better_trident_model-neoforge1.21.1-1.2.0.jar!META-INF/jarjar/simplebedrockmodel-2.5.1.1-neoforge-mc1.21.1.jar (jar-in-jar)]
 simulated 1.3.2 [create-aeronautics-bundled-1.21.1-1.3.2.jar!META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar (jar-in-jar)]
-sodium 0.8.13+mc1.21.1 [sodium-neoforge-0.8.13+mc1.21.1.jar]
+sodium 0.6.13+mc1.21.1 [sodium-neoforge-0.6.13+mc1.21.1.jar]
 sodiumdynamiclights 1.0.9 [sodiumdynamiclights-neoforge-1.0.10-1.21.1.jar]
 sophisticatedbackpacks 3.26.12 [sophisticatedbackpacks-1.21.1-3.26.12.2208.jar]
 sophisticatedcore 1.5.12 [sophisticatedcore-1.21.1-1.5.12.2400.jar]
