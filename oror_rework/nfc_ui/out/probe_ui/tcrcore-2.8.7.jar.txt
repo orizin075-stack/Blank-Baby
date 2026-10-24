@@ -1,0 +1,107 @@
+== tcrcore-2.8.7.jar (1325071:8671039) 39120708 bytes
+mod ids: ['tcrcore', 'forge', 'minecraft', 'epicfight', 'epicskills', 'dodge_parry_reward', 'cataclysm', 'p1nero_ec', 'efn', 'indestructible', 'combat_evolution', 'sword_soaring', 'super_golem', 'irons_spellbooks', 'bookofdragons', 'ba_bt']
+vanilla GUI texture overrides: 14
+  packs/custom_models/assets/minecraft/textures/gui/title/background/panorama_0.png
+  packs/custom_models/assets/minecraft/textures/gui/title/background/panorama_1.png
+  packs/custom_models/assets/minecraft/textures/gui/title/background/panorama_2.png
+  packs/custom_models/assets/minecraft/textures/gui/title/background/panorama_3.png
+  packs/custom_models/assets/minecraft/textures/gui/title/background/panorama_4.png
+  packs/custom_models/assets/minecraft/textures/gui/title/background/panorama_5.png
+  packs/custom_models/assets/minecraft/textures/gui/widgets.png
+  packs/tcr_assets/assets/minecraft/textures/gui/title/background/panorama_0.png
+  packs/tcr_assets/assets/minecraft/textures/gui/title/background/panorama_1.png
+  packs/tcr_assets/assets/minecraft/textures/gui/title/background/panorama_2.png
+  packs/tcr_assets/assets/minecraft/textures/gui/title/background/panorama_3.png
+  packs/tcr_assets/assets/minecraft/textures/gui/title/background/panorama_4.png
+  packs/tcr_assets/assets/minecraft/textures/gui/title/background/panorama_5.png
+  packs/tcr_assets/assets/minecraft/textures/gui/widgets.png
+own GUI textures: 53
+  assets/tcrcore/textures/gui/footer_separator.png
+  assets/tcrcore/textures/gui/header_separator.png
+  assets/tcrcore/textures/gui/loading_en.png
+  assets/tcrcore/textures/gui/loading_progress_bg.png
+  assets/tcrcore/textures/gui/loading_progress_fg.png
+  assets/tcrcore/textures/gui/loading_zh.png
+  assets/tcrcore/textures/gui/logo.png
+  assets/tcrcore/textures/gui/quest_arrow.png
+  assets/tcrcore/textures/gui/quest_border.png
+  assets/tcrcore/textures/gui/quest_border_small.png
+  assets/tcrcore/textures/gui/quest_border_small_hover.png
+  assets/tcrcore/textures/gui/quest_border_small_selected.png
+  assets/tcrcore/textures/gui/quest_icon.png
+  assets/tcrcore/textures/gui/side_quest_1.png
+  assets/tcrcore/textures/gui/skill_point/bg.png
+  assets/tcrcore/textures/gui/skill_point/in_out.png
+  assets/tcrcore/textures/gui/skill_point/loop.png
+  assets/tcrcore/textures/gui/skill_tree/background/magic.png
+  assets/tcrcore/textures/gui/skill_tree/icon/magic.png
+  assets/tcrcore/textures/gui/skills/passive/fire_avoid.png
+  assets/tcrcore/textures/gui/skills/passive/perfect_dodge.png
+  assets/tcrcore/textures/gui/skills/passive/water_avoid.png
+  assets/tcrcore/textures/gui/tab/tab.png
+  assets/tcrcore/textures/gui/tab/tab_highlighted.png
+  assets/tcrcore/textures/gui/tab/tab_selected.png
+  assets/tcrcore/textures/gui/tab/tab_selected_highlighted.png
+  assets/tcrcore/textures/gui/title/title_en.png
+  assets/tcrcore/textures/gui/title/title_en_new.png
+  assets/tcrcore/textures/gui/title/title_zh.png
+  assets/tcrcore/textures/gui/title/title_zh_new.png
+  assets/tcrcore/textures/menu/background.png
+  assets/tcrcore/textures/menu/background_blurred.png
+  assets/tcrcore/textures/menu/banner.png
+  assets/tcrcore/textures/menu/banner_hovering.png
+  assets/tcrcore/textures/menu/bg/bg_anim.gif
+  assets/tcrcore/textures/menu/buttons1.png
+  assets/tcrcore/textures/menu/buttons1_highlight.png
+  assets/tcrcore/textures/menu/buttons2.png
+  assets/tcrcore/textures/menu/buttons2_highlight.png
+  assets/tcrcore/textures/menu/buttons3.png
+  assets/tcrcore/textures/menu/buttons3_highlight.png
+  assets/tcrcore/textures/menu/buttons4.png
+  assets/tcrcore/textures/menu/buttons4_highlight.png
+  assets/tcrcore/textures/menu/buttons5.png
+  assets/tcrcore/textures/menu/buttons5_highlight.png
+  assets/tcrcore/textures/menu/discord.png
+  assets/tcrcore/textures/menu/discord_highlight.png
+  assets/tcrcore/textures/menu/text1.png
+  assets/tcrcore/textures/menu/text1_highlight.png
+  assets/tcrcore/textures/menu/text2.png
+  assets/tcrcore/textures/menu/text2_highlight.png
+  assets/tcrcore/textures/menu/title.png
+  assets/tcrcore/textures/menu/title_zh.png
+built-in packs: ['packs/custom_models', 'packs/i18n', 'packs/idas_modify', 'packs/structure_set_control', 'packs/tcr_assets', 'packs/tcr_data', 'packs/zh_cn_patch']
+mixins tcrcore.mixins.json: 125 classes, GUI/HUD ones: ['sophisticatedbackpacks.BackpackInventoryHelperMixin', 'aether.GuiHooksMixin', 'aether.MenuHooksMixin', 'iss.ArcaneAnvilMenuMixin', 'CreateWorldScreenMixin', 'CreateWorldScreenMoreTabMixin', 'ExperimentsScreenMixin', 'ScreenMixin', 'SelectWorldScreenMixin', 'TabButtonMixin', 'TitleScreenMixin', 'WinScreenMixin', 'epicskills.SkillTreeScreenAccessor', 'epicskills.SkillTreeScreenMixin', 'ftbq.QuestScreenMixin', 'iss.CastBarOverlayMixin']
+jar-in-jar META-INF/jarjar/Ponder-Forge-1.20.1-1.0.91.jar
+  mod ids: ['ponder', 'forge', 'minecraft', 'flywheel']
+  vanilla GUI texture overrides: 0
+  own GUI textures: 3
+    assets/ponder/textures/gui/logo.png
+    assets/ponder/textures/gui/placement_indicator.png
+    assets/ponder/textures/gui/widgets.png
+  built-in packs: []
+  mixins ponder-common.mixins.json: 6 classes, GUI/HUD ones: []
+  mixins ponder.mixins.json: 1 classes, GUI/HUD ones: []
+jar-in-jar META-INF/jarjar/epic_ponder-1.0.0.jar
+  mod ids: ['epic_fight_ponder', 'forge', 'minecraft', 'epicfight']
+  vanilla GUI texture overrides: 0
+  own GUI textures: 0
+  built-in packs: []
+  mixins epic_fight_ponder.mixins.json: 13 classes, GUI/HUD ones: ['ponder.MixinPonderTooltipHandler', 'epicskills.AccessorSkillBookScreen', 'epicskills.client.MixinSkillInfoScreen', 'epicskills.client.MixinSkillTreeNodeButton']
+jar-in-jar META-INF/jarjar/flywheel-forge-1.20.1-1.0.2.jar
+  mod ids: ['flywheel', 'minecraft', 'forge', 'embeddium', 'sodium']
+  vanilla GUI texture overrides: 0
+  own GUI textures: 0
+  built-in packs: []
+  mixins flywheel.backend.mixins.json: 8 classes, GUI/HUD ones: []
+  mixins flywheel.impl.mixins.json: 15 classes, GUI/HUD ones: []
+jar-in-jar META-INF/jarjar/mixinextras-forge-0.5.0.jar
+  vanilla GUI texture overrides: 0
+  own GUI textures: 0
+  built-in packs: []
+  mixins mixinextras.init.mixins.json: 0 classes, GUI/HUD ones: []
+jar-in-jar META-INF/jarjar/mixinsquared-forge-0.3.7-beta.1.jar
+  mod ids: ['mixinsquared']
+  vanilla GUI texture overrides: 0
+  own GUI textures: 0
+  built-in packs: []
+  mixins mixinsquared.forge.init.mixins.json: 0 classes, GUI/HUD ones: []
