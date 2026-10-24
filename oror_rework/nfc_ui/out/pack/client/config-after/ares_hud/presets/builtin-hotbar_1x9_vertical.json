@@ -1,0 +1,239 @@
+{
+  "formatVersion": 1,
+  "id": "builtin-hotbar_1x9_vertical",
+  "name": "HOTBAR_1X9_VERTICAL",
+  "baseStyle": "HOTBAR_1X9_VERTICAL",
+  "layout": {
+    "hotbarBounds": {
+      "relativeX": 0.9601874,
+      "relativeY": 0.25502008,
+      "baseScale": 0.7408146
+    },
+    "offhandBounds": {
+      "relativeX": 0.9609375,
+      "relativeY": 0.79341316,
+      "baseScale": 0.7177625
+    },
+    "centerBounds": {
+      "relativeX": 0.340625,
+      "relativeY": 0.88622755,
+      "baseScale": 0.69972897
+    },
+    "bossBarBounds": {
+      "relativeX": 0.31041667,
+      "relativeY": 0.011952192,
+      "baseScale": 1.0
+    },
+    "xpBounds": {
+      "relativeX": 0.48594847,
+      "relativeY": 0.88554215,
+      "baseScale": 0.7549255
+    },
+    "statusValueBounds": {
+      "relativeX": 0.340625,
+      "relativeY": 0.96107787,
+      "baseScale": 0.9156377
+    },
+    "flaskBounds": {
+      "relativeX": 0.2671875,
+      "relativeY": 0.88023955,
+      "baseScale": 1.1501495
+    },
+    "temperatureBounds": {
+      "relativeX": 0.48738968,
+      "relativeY": 0.8314041,
+      "baseScale": 0.7549255
+    },
+    "bodyDamageBounds": {
+      "relativeX": 0.66978925,
+      "relativeY": 0.90809625,
+      "baseScale": 0.6702424
+    },
+    "wetnessBounds": {
+      "relativeX": 0.49210796,
+      "relativeY": 0.8073427,
+      "baseScale": 0.7549255
+    },
+    "finalityHotbarLayout": "ONE_BY_NINE",
+    "centerHudLayoutMode": "MERGED",
+    "separateCenterHudInitialized": false,
+    "separateAuxiliaryHudInitialized": false,
+    "centerSlotBounds": [
+      {
+        "relativeX": 0.34166667,
+        "relativeY": 0.8454335,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 0.0,
+          "offsetY": -14.0
+        }
+      },
+      {
+        "relativeX": 0.5151411,
+        "relativeY": 0.8454335,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 119.0,
+          "offsetY": -14.0
+        }
+      },
+      {
+        "relativeX": 0.34166667,
+        "relativeY": 0.8844622,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 0.0,
+          "offsetY": 0.0
+        }
+      },
+      {
+        "relativeX": 0.5151411,
+        "relativeY": 0.8844622,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 119.0,
+          "offsetY": 0.0
+        }
+      },
+      {
+        "relativeX": 0.34166667,
+        "relativeY": 0.9234908,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 0.0,
+          "offsetY": 14.0
+        }
+      },
+      {
+        "relativeX": 0.5151411,
+        "relativeY": 0.9234908,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 119.0,
+          "offsetY": 14.0
+        }
+      }
+    ],
+    "dynamicBarBounds": [
+      {
+        "relativeX": 0.34166667,
+        "relativeY": 0.8454335,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 0.0,
+          "offsetY": -14.0
+        }
+      },
+      {
+        "relativeX": 0.5151411,
+        "relativeY": 0.8454335,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 119.0,
+          "offsetY": -14.0
+        }
+      },
+      {
+        "relativeX": 0.5151411,
+        "relativeY": 0.80640477,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 119.0,
+          "offsetY": -28.0
+        }
+      }
+    ],
+    "auxiliaryGroupBounds": [
+      {
+        "relativeX": 0.34166667,
+        "relativeY": 0.8454335,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 0.0,
+          "offsetY": -14.0
+        }
+      },
+      {
+        "relativeX": 0.5151411,
+        "relativeY": 0.80640477,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 119.0,
+          "offsetY": -28.0
+        }
+      },
+      {
+        "relativeX": 0.5151411,
+        "relativeY": 0.8454335,
+        "baseScale": 0.69972897,
+        "automaticAnchor": {
+          "originX": 0.340625,
+          "originY": 0.88622755,
+          "offsetX": 119.0,
+          "offsetY": -14.0
+        }
+      }
+    ],
+    "mainHandOffsets": {
+      "x": 1,
+      "y": 1,
+      "xSelected": 0,
+      "ySelected": 0
+    },
+    "enHotbar": true,
+    "enCenter": true,
+    "enXp": true,
+    "enOffhand": true,
+    "enStatusVal": true,
+    "enFlask": true,
+    "staminaSource": "EPIC_FIGHT",
+    "manaSource": "IRONS_SPELLBOOKS",
+    "thirstBarMode": "MERGED",
+    "enHealthBar": true,
+    "enFoodBar": true,
+    "enStaminaBar": true,
+    "enTimeBar": false,
+    "enArmorBar": true,
+    "enStandaloneArmorBar": false,
+    "barSlots": [
+      "EMPTY",
+      "EMPTY",
+      "HEALTH",
+      "FOOD",
+      "STAMINA",
+      "ARMOR"
+    ],
+    "paddingHoriz": 19,
+    "paddingVert": 2,
+    "paddingHorizGuiOffset": 0
+  },
+  "layers": {},
+  "display": {},
+  "dynamicDefaults175": false,
+  "displayScope": "SAME_ROW",
+  "hotbarDefaultsVersion": 0,
+  "displayMigrationVersion": 0,
+  "overlayMessageDefaultsVersion": 1
+}

@@ -1,300 +1,300 @@
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:360)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:328)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.client.ClientHooks.fireClientTickPost(ClientHooks.java:1077)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.tick(Minecraft.java:1915)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230)
-[13:08:50] [_stdout_] [INFO] at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69)
-[13:08:50] [_stdout_] [INFO] Caused by: java.lang.IllegalStateException: Unknown registry key in ResourceKey[minecraft:root / minecraft:worldgen/structure_pool_element]: golemdungeons:custom_beard
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult$Error.getOrThrow(DataResult.java:287)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult.getOrThrow(DataResult.java:81)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadElementFromResource(RegistryDataLoader.java:211)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:238)
-[13:08:50] [_stdout_] [INFO] ... 36 more
-[13:08:50] [_stdout_] [INFO] >> Errors in element golemdungeons:sculk_factory/right_plaza:
-[13:08:50] [_stdout_] [INFO] java.lang.IllegalStateException: Failed to parse golemdungeons:worldgen/template_pool/sculk_factory/right_plaza.json from pack mod/golemdungeons
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:243)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader$Loader.loadFromResources(RegistryDataLoader.java:295)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$2(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$5(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.Iterable.forEach(Iterable.java:75)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadLayer(WorldLoader.java:76)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadAndReplaceLayer(WorldLoader.java:82)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.load(WorldLoader.java:35)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.worldselection.CreateWorldScreen.openFresh(CreateWorldScreen.java:123)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.title(Harness.java:111)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.tick(Harness.java:96)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.lambda$new$0(Harness.java:68)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:360)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:328)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.client.ClientHooks.fireClientTickPost(ClientHooks.java:1077)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.tick(Minecraft.java:1915)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230)
-[13:08:50] [_stdout_] [INFO] at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69)
-[13:08:50] [_stdout_] [INFO] Caused by: java.lang.IllegalStateException: Unknown registry key in ResourceKey[minecraft:root / minecraft:worldgen/structure_pool_element]: golemdungeons:custom_beard
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult$Error.getOrThrow(DataResult.java:287)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult.getOrThrow(DataResult.java:81)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadElementFromResource(RegistryDataLoader.java:211)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:238)
-[13:08:50] [_stdout_] [INFO] ... 36 more
-[13:08:50] [_stdout_] [INFO] >> Errors in element golemdungeons:sculk_factory/root:
-[13:08:50] [_stdout_] [INFO] java.lang.IllegalStateException: Failed to parse golemdungeons:worldgen/template_pool/sculk_factory/root.json from pack mod/golemdungeons
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:243)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader$Loader.loadFromResources(RegistryDataLoader.java:295)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$2(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$5(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.Iterable.forEach(Iterable.java:75)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadLayer(WorldLoader.java:76)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadAndReplaceLayer(WorldLoader.java:82)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.load(WorldLoader.java:35)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.worldselection.CreateWorldScreen.openFresh(CreateWorldScreen.java:123)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.title(Harness.java:111)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.tick(Harness.java:96)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.lambda$new$0(Harness.java:68)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:360)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:328)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.client.ClientHooks.fireClientTickPost(ClientHooks.java:1077)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.tick(Minecraft.java:1915)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230)
-[13:08:50] [_stdout_] [INFO] at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69)
-[13:08:50] [_stdout_] [INFO] Caused by: java.lang.IllegalStateException: Unknown registry key in ResourceKey[minecraft:root / minecraft:worldgen/structure_pool_element]: golemdungeons:custom_beard
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult$Error.getOrThrow(DataResult.java:287)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult.getOrThrow(DataResult.java:81)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadElementFromResource(RegistryDataLoader.java:211)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:238)
-[13:08:50] [_stdout_] [INFO] ... 36 more
-[13:08:50] [_stdout_] [INFO] >> Errors in element golemdungeons:sculk_factory/sculpture:
-[13:08:50] [_stdout_] [INFO] java.lang.IllegalStateException: Failed to parse golemdungeons:worldgen/template_pool/sculk_factory/sculpture.json from pack mod/golemdungeons
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:243)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader$Loader.loadFromResources(RegistryDataLoader.java:295)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$2(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$5(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.Iterable.forEach(Iterable.java:75)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadLayer(WorldLoader.java:76)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadAndReplaceLayer(WorldLoader.java:82)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.load(WorldLoader.java:35)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.worldselection.CreateWorldScreen.openFresh(CreateWorldScreen.java:123)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.title(Harness.java:111)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.tick(Harness.java:96)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.lambda$new$0(Harness.java:68)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:360)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:328)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.client.ClientHooks.fireClientTickPost(ClientHooks.java:1077)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.tick(Minecraft.java:1915)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230)
-[13:08:50] [_stdout_] [INFO] at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69)
-[13:08:50] [_stdout_] [INFO] Caused by: java.lang.IllegalStateException: Unknown registry key in ResourceKey[minecraft:root / minecraft:worldgen/structure_pool_element]: golemdungeons:custom_beard
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult$Error.getOrThrow(DataResult.java:287)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult.getOrThrow(DataResult.java:81)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadElementFromResource(RegistryDataLoader.java:211)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:238)
-[13:08:50] [_stdout_] [INFO] ... 36 more
-[13:08:50] [_stdout_] [INFO] >> Errors in element golemdungeons:sculk_factory/side_path:
-[13:08:50] [_stdout_] [INFO] java.lang.IllegalStateException: Failed to parse golemdungeons:worldgen/template_pool/sculk_factory/side_path.json from pack mod/golemdungeons
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:243)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader$Loader.loadFromResources(RegistryDataLoader.java:295)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$2(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$5(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.Iterable.forEach(Iterable.java:75)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadLayer(WorldLoader.java:76)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadAndReplaceLayer(WorldLoader.java:82)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.load(WorldLoader.java:35)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.worldselection.CreateWorldScreen.openFresh(CreateWorldScreen.java:123)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.title(Harness.java:111)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.tick(Harness.java:96)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.lambda$new$0(Harness.java:68)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:360)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:328)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.client.ClientHooks.fireClientTickPost(ClientHooks.java:1077)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.tick(Minecraft.java:1915)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230)
-[13:08:50] [_stdout_] [INFO] at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69)
-[13:08:50] [_stdout_] [INFO] Caused by: java.lang.IllegalStateException: Unknown registry key in ResourceKey[minecraft:root / minecraft:worldgen/structure_pool_element]: golemdungeons:custom_beard
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult$Error.getOrThrow(DataResult.java:287)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult.getOrThrow(DataResult.java:81)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadElementFromResource(RegistryDataLoader.java:211)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:238)
-[13:08:50] [_stdout_] [INFO] ... 36 more
-[13:08:50] [_stdout_] [INFO] >> Errors in element golemdungeons:sculk_factory/treasure:
-[13:08:50] [_stdout_] [INFO] java.lang.IllegalStateException: Failed to parse golemdungeons:worldgen/template_pool/sculk_factory/treasure.json from pack mod/golemdungeons
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:243)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader$Loader.loadFromResources(RegistryDataLoader.java:295)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$2(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.lambda$load$5(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.Iterable.forEach(Iterable.java:75)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:138)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:118)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadLayer(WorldLoader.java:76)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadAndReplaceLayer(WorldLoader.java:82)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.load(WorldLoader.java:35)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.worldselection.CreateWorldScreen.openFresh(CreateWorldScreen.java:123)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.title(Harness.java:111)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.tick(Harness.java:96)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.lambda$new$0(Harness.java:68)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:360)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:328)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.client.ClientHooks.fireClientTickPost(ClientHooks.java:1077)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.tick(Minecraft.java:1915)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230)
-[13:08:50] [_stdout_] [INFO] at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210)
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69)
-[13:08:50] [_stdout_] [INFO] Caused by: java.lang.IllegalStateException: Unknown registry key in ResourceKey[minecraft:root / minecraft:worldgen/structure_pool_element]: golemdungeons:custom_beard
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult$Error.getOrThrow(DataResult.java:287)
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/datafixerupper@8.0.16/com.mojang.serialization.DataResult.getOrThrow(DataResult.java:81)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadElementFromResource(RegistryDataLoader.java:211)
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.loadContentsFromManager(RegistryDataLoader.java:238)
-[13:08:50] [_stdout_] [INFO] ... 36 more
-[13:08:50] [_stdout_] [INFO] [13:08:50] [Render thread/WARN] [ModernFix/]: Initial datapack load took 1.393 s
-[13:08:50] [_stdout_] [INFO] [13:08:50] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] tick failed: java.util.concurrent.CompletionException: java.lang.IllegalStateException: Failed to load registries due to above errors
-[13:08:50] [_stdout_] [INFO] [13:08:50] [Render thread/ERROR] [jp.or.ha.Harness/]: [harness] tick failed
-[13:08:50] [_stdout_] [INFO] java.util.concurrent.CompletionException: java.lang.IllegalStateException: Failed to load registries due to above errors
-[13:08:50] [_stdout_] [INFO] at java.base/java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:332) ~[?:?] {}
-[13:08:50] [_stdout_] [INFO] at java.base/java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:347) ~[?:?] {}
-[13:08:50] [_stdout_] [INFO] at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:874) ~[?:?] {}
-[13:08:50] [_stdout_] [INFO] at java.base/java.util.concurrent.CompletableFuture.uniWhenCompleteStage(CompletableFuture.java:887) ~[?:?] {}
-[13:08:50] [_stdout_] [INFO] at java.base/java.util.concurrent.CompletableFuture.whenComplete(CompletableFuture.java:2357) ~[?:?] {}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.modifyReturnValue$zfl000$modernfix$finishStopwatch(WorldLoader.java:527) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,re:classloading,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.WorldLoaderMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:core.WorldLoaderMixin from mod modernfix,pl:mixin:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.load(WorldLoader.java:68) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,re:classloading,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.WorldLoaderMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:core.WorldLoaderMixin from mod modernfix,pl:mixin:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.gui.screens.worldselection.CreateWorldScreen.openFresh(CreateWorldScreen.java:123) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.dedicated_reload_executor.CreateWorldScreenMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:bugfix.extra_experimental_screen.CreateWorldScreenMixin from mod modernfix,pl:mixin:APP:simulated.mixins.json:world_presets.CreateWorldScreenMixin from mod simulated,pl:mixin:APP:fancymenu.mixins.json:client.MixinCreateWorldScreen from mod fancymenu,pl:mixin:A,pl:runtimedistcleaner:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.title(Harness.java:111) ~[oror_harness-1.0.0.jar%23382!/:?] {re:classloading}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.tick(Harness.java:96) ~[oror_harness-1.0.0.jar%23382!/:?] {re:classloading}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/oror_harness@1.0.0/jp.oror.harness.Harness.lambda$new$0(Harness.java:68) ~[oror_harness-1.0.0.jar%23382!/:?] {re:classloading}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.ConsumerEventHandler.invoke(ConsumerEventHandler.java:27) ~[bus-8.0.5.jar%2396!/:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:360) ~[bus-8.0.5.jar%2396!/:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:328) ~[bus-8.0.5.jar%2396!/:?] {}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.client.ClientHooks.fireClientTickPost(ClientHooks.java:1077) ~[neoforge-21.1.262-universal.jar%23294!/:?] {re:mixin,re:classloading,pl:mixin:APP:sodium-neoforge.mixins.json:platform.neoforge.ClientHooksMixin from mod sodium,pl:mixin:APP:iceberg.neoforge.mixins.json:ClientHooksMixin from mod iceberg,pl:mixin:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.tick(Minecraft.java:1915) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:computing_frames,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:alexscaves.mixins.json:client.MinecraftMixin from mod alexscaves,pl:mixin:APP:mixins.modernui-neoforge.json:MixinMinecraft from mod modernui,pl:mixin:APP:immersive_aircraft.mixins.json:client.AircraftControlsMixin from mod immersive_aircraft,pl:mixin:APP:xaeroworldmap.mixins.json:MixinMinecraftClient from mod xaeroworldmap,pl:mixin:APP:xaeroworldmap.neoforge.mixins.json:MixinForgeMinecraftClient from mod xaeroworldmap,pl:mixin:APP:prism.mixins.json:MinecraftMixin from mod prism,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.dedicated_reload_executor.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.encoder_cache_leak.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.suspend_integrated_server_during_load.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:bugfix.world_leaks.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.MinecraftMixin_Forge from mod modernfix,pl:mixin:APP:mixins.iris.json:MixinMinecraft_Images from mod iris,pl:mixin:APP:mixins.iris.json:MixinMinecraft_Keybinds from mod iris,pl:mixin:APP:mixins.iris.json:MixinMinecraft_PipelineManagement from mod iris,pl:mixin:APP:bookshelf.mixins.json:access.client.AccessorMinecraft from mod bookshelf,pl:mixin:APP:veil.debug.mixins.json:client.DebugMinecraftMixin from mod veil,pl:mixin:APP:veil.pipeline.mixins.json:client.PipelineMinecraftMixin from mod veil,pl:mixin:APP:veil.neoforge.mixins.json:client.MinecraftMixin from mod veil,pl:mixin:APP:simulated.mixins.json:handle.MinecraftMixin from mod simulated,pl:mixin:APP:mixins.superbwarfare.json:MinecraftMixin from mod superbwarfare,pl:mixin:APP:balm.neoforge.mixins.json:MinecraftMixin from mod balm,pl:mixin:APP:sound_physics_remastered.mixins.json:MinecraftMixin from mod sound_physics_remastered,pl:mixin:APP:mixins.sodiumdynamiclights.json:MinecraftClientMixin from mod sodiumdynamiclights,pl:mixin:APP:konkrete.mixins.json:client.MixinMinecraft from mod konkrete,pl:mixin:APP:fancytoasts.mixins.json:MinecraftMixin from mod fancytoasts,pl:mixin:APP:architectury.mixins.json:MixinMinecraft from mod architectury,pl:mixin:APP:transition.mixins.json:EntityRenderStateMixin from mod transition,pl:mixin:APP:transition.mixins.json:EntityRendererMixin from mod transition,pl:mixin:APP:transition.mixins.json:BlockEntityRenderStateMixin from mod transition,pl:mixin:APP:transition.mixins.json:MinecraftMixin from mod transition,pl:mixin:APP:l2menustacker.mixins.json:MinecraftMixin from mod l2menustacker,pl:mixin:APP:jeg.mixins.json:MinecraftVehicleHotbarMixin from mod jeg,pl:mixin:APP:aeronautics.mixins.json:custom_situational_music.MinecraftMixin from mod aeronautics,pl:mixin:APP:epicfight.mixins.json:client.MixinMinecraft from mod epicfight,pl:mixin:APP:aaa_particles-common.mixins.json:client.ClientShutdownHookMixin from mod aaa_particles,pl:mixin:APP:aaa_particles-common.mixins.json:client.MixinMinecraft from mod aaa_particles,pl:mixin:APP:sodium-common.mixins.json:core.MinecraftMixin from mod sodium,pl:mixin:APP:sodium-neoforge.mixins.json:platform.neoforge.EntrypointMixin from mod sodium,pl:mixin:APP:drippyloadingscreen.mixins.json:client.IMixinMinecraft from mod drippyloadingscreen,pl:mixin:APP:iceberg.mixins.json:MinecraftMixin from mod iceberg,pl:mixin:APP:flywheel.impl.mixins.json:MinecraftMixin from mod flywheel,pl:mixin:APP:ponder-common.mixins.json:client.WindowResizeMixin from mod ponder,pl:mixin:APP:create.mixins.json:accessor.MinecraftAccessor from mod create,pl:mixin:APP:sable.mixins.json:camera.new_camera_types.MinecraftMixin from mod sable,pl:mixin:APP:sable.mixins.json:plot.MinecraftMixin from mod sable,pl:mixin:APP:sable.mixins.json:punching.MinecraftMixin from mod sable,pl:mixin:APP:xaerohud.mixins.json:MixinMinecraftClient from mod xaerominimap,pl:mixin:APP:irons_spellbooks.mixins.json:MinecraftMixin from mod irons_spellbooks,pl:mixin:APP:entityculling.mixins.json:DebugScreenEntriesAccessor from mod entityculling,pl:mixin:APP:entityculling.mixins.json:LivingEntityRendererAccessor from mod entityculling,pl:mixin:APP:fancymenu.mixins.json:client.IMixinMinecraft from mod fancymenu,pl:mixin:APP:fancymenu.mixins.json:client.MixinMinecraft from mod fancymenu,pl:mixin:APP:extrasounds.mixins.json:core.MinecraftClientMixin from mod extrasounds,pl:mixin:APP:yacl.mixins.json:MinecraftMixin from mod yet_another_config_lib_v3,pl:mixin:APP:collective_neoforge.mixins.json:MinecraftMixin from mod collective,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.remove_telemetry.MinecraftMixin_Telemetry from mod modernfix,pl:mixin:A,pl:runtimedistcleaner:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1161) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:computing_frames,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:alexscaves.mixins.json:client.MinecraftMixin from mod alexscaves,pl:mixin:APP:mixins.modernui-neoforge.json:MixinMinecraft from mod modernui,pl:mixin:APP:immersive_aircraft.mixins.json:client.AircraftControlsMixin from mod immersive_aircraft,pl:mixin:APP:xaeroworldmap.mixins.json:MixinMinecraftClient from mod xaeroworldmap,pl:mixin:APP:xaeroworldmap.neoforge.mixins.json:MixinForgeMinecraftClient from mod xaeroworldmap,pl:mixin:APP:prism.mixins.json:MinecraftMixin from mod prism,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.dedicated_reload_executor.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.encoder_cache_leak.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.suspend_integrated_server_during_load.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:bugfix.world_leaks.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.MinecraftMixin_Forge from mod modernfix,pl:mixin:APP:mixins.iris.json:MixinMinecraft_Images from mod iris,pl:mixin:APP:mixins.iris.json:MixinMinecraft_Keybinds from mod iris,pl:mixin:APP:mixins.iris.json:MixinMinecraft_PipelineManagement from mod iris,pl:mixin:APP:bookshelf.mixins.json:access.client.AccessorMinecraft from mod bookshelf,pl:mixin:APP:veil.debug.mixins.json:client.DebugMinecraftMixin from mod veil,pl:mixin:APP:veil.pipeline.mixins.json:client.PipelineMinecraftMixin from mod veil,pl:mixin:APP:veil.neoforge.mixins.json:client.MinecraftMixin from mod veil,pl:mixin:APP:simulated.mixins.json:handle.MinecraftMixin from mod simulated,pl:mixin:APP:mixins.superbwarfare.json:MinecraftMixin from mod superbwarfare,pl:mixin:APP:balm.neoforge.mixins.json:MinecraftMixin from mod balm,pl:mixin:APP:sound_physics_remastered.mixins.json:MinecraftMixin from mod sound_physics_remastered,pl:mixin:APP:mixins.sodiumdynamiclights.json:MinecraftClientMixin from mod sodiumdynamiclights,pl:mixin:APP:konkrete.mixins.json:client.MixinMinecraft from mod konkrete,pl:mixin:APP:fancytoasts.mixins.json:MinecraftMixin from mod fancytoasts,pl:mixin:APP:architectury.mixins.json:MixinMinecraft from mod architectury,pl:mixin:APP:transition.mixins.json:EntityRenderStateMixin from mod transition,pl:mixin:APP:transition.mixins.json:EntityRendererMixin from mod transition,pl:mixin:APP:transition.mixins.json:BlockEntityRenderStateMixin from mod transition,pl:mixin:APP:transition.mixins.json:MinecraftMixin from mod transition,pl:mixin:APP:l2menustacker.mixins.json:MinecraftMixin from mod l2menustacker,pl:mixin:APP:jeg.mixins.json:MinecraftVehicleHotbarMixin from mod jeg,pl:mixin:APP:aeronautics.mixins.json:custom_situational_music.MinecraftMixin from mod aeronautics,pl:mixin:APP:epicfight.mixins.json:client.MixinMinecraft from mod epicfight,pl:mixin:APP:aaa_particles-common.mixins.json:client.ClientShutdownHookMixin from mod aaa_particles,pl:mixin:APP:aaa_particles-common.mixins.json:client.MixinMinecraft from mod aaa_particles,pl:mixin:APP:sodium-common.mixins.json:core.MinecraftMixin from mod sodium,pl:mixin:APP:sodium-neoforge.mixins.json:platform.neoforge.EntrypointMixin from mod sodium,pl:mixin:APP:drippyloadingscreen.mixins.json:client.IMixinMinecraft from mod drippyloadingscreen,pl:mixin:APP:iceberg.mixins.json:MinecraftMixin from mod iceberg,pl:mixin:APP:flywheel.impl.mixins.json:MinecraftMixin from mod flywheel,pl:mixin:APP:ponder-common.mixins.json:client.WindowResizeMixin from mod ponder,pl:mixin:APP:create.mixins.json:accessor.MinecraftAccessor from mod create,pl:mixin:APP:sable.mixins.json:camera.new_camera_types.MinecraftMixin from mod sable,pl:mixin:APP:sable.mixins.json:plot.MinecraftMixin from mod sable,pl:mixin:APP:sable.mixins.json:punching.MinecraftMixin from mod sable,pl:mixin:APP:xaerohud.mixins.json:MixinMinecraftClient from mod xaerominimap,pl:mixin:APP:irons_spellbooks.mixins.json:MinecraftMixin from mod irons_spellbooks,pl:mixin:APP:entityculling.mixins.json:DebugScreenEntriesAccessor from mod entityculling,pl:mixin:APP:entityculling.mixins.json:LivingEntityRendererAccessor from mod entityculling,pl:mixin:APP:fancymenu.mixins.json:client.IMixinMinecraft from mod fancymenu,pl:mixin:APP:fancymenu.mixins.json:client.MixinMinecraft from mod fancymenu,pl:mixin:APP:extrasounds.mixins.json:core.MinecraftClientMixin from mod extrasounds,pl:mixin:APP:yacl.mixins.json:MinecraftMixin from mod yet_another_config_lib_v3,pl:mixin:APP:collective_neoforge.mixins.json:MinecraftMixin from mod collective,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.remove_telemetry.MinecraftMixin_Telemetry from mod modernfix,pl:mixin:A,pl:runtimedistcleaner:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:computing_frames,pl:accesstransformer:B,pl:runtimedistcleaner:A,re:classloading,pl:accesstransformer:B,pl:mixin:APP:alexscaves.mixins.json:client.MinecraftMixin from mod alexscaves,pl:mixin:APP:mixins.modernui-neoforge.json:MixinMinecraft from mod modernui,pl:mixin:APP:immersive_aircraft.mixins.json:client.AircraftControlsMixin from mod immersive_aircraft,pl:mixin:APP:xaeroworldmap.mixins.json:MixinMinecraftClient from mod xaeroworldmap,pl:mixin:APP:xaeroworldmap.neoforge.mixins.json:MixinForgeMinecraftClient from mod xaeroworldmap,pl:mixin:APP:prism.mixins.json:MinecraftMixin from mod prism,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.dedicated_reload_executor.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.encoder_cache_leak.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:perf.suspend_integrated_server_during_load.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:bugfix.world_leaks.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.MinecraftMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.MinecraftMixin_Forge from mod modernfix,pl:mixin:APP:mixins.iris.json:MixinMinecraft_Images from mod iris,pl:mixin:APP:mixins.iris.json:MixinMinecraft_Keybinds from mod iris,pl:mixin:APP:mixins.iris.json:MixinMinecraft_PipelineManagement from mod iris,pl:mixin:APP:bookshelf.mixins.json:access.client.AccessorMinecraft from mod bookshelf,pl:mixin:APP:veil.debug.mixins.json:client.DebugMinecraftMixin from mod veil,pl:mixin:APP:veil.pipeline.mixins.json:client.PipelineMinecraftMixin from mod veil,pl:mixin:APP:veil.neoforge.mixins.json:client.MinecraftMixin from mod veil,pl:mixin:APP:simulated.mixins.json:handle.MinecraftMixin from mod simulated,pl:mixin:APP:mixins.superbwarfare.json:MinecraftMixin from mod superbwarfare,pl:mixin:APP:balm.neoforge.mixins.json:MinecraftMixin from mod balm,pl:mixin:APP:sound_physics_remastered.mixins.json:MinecraftMixin from mod sound_physics_remastered,pl:mixin:APP:mixins.sodiumdynamiclights.json:MinecraftClientMixin from mod sodiumdynamiclights,pl:mixin:APP:konkrete.mixins.json:client.MixinMinecraft from mod konkrete,pl:mixin:APP:fancytoasts.mixins.json:MinecraftMixin from mod fancytoasts,pl:mixin:APP:architectury.mixins.json:MixinMinecraft from mod architectury,pl:mixin:APP:transition.mixins.json:EntityRenderStateMixin from mod transition,pl:mixin:APP:transition.mixins.json:EntityRendererMixin from mod transition,pl:mixin:APP:transition.mixins.json:BlockEntityRenderStateMixin from mod transition,pl:mixin:APP:transition.mixins.json:MinecraftMixin from mod transition,pl:mixin:APP:l2menustacker.mixins.json:MinecraftMixin from mod l2menustacker,pl:mixin:APP:jeg.mixins.json:MinecraftVehicleHotbarMixin from mod jeg,pl:mixin:APP:aeronautics.mixins.json:custom_situational_music.MinecraftMixin from mod aeronautics,pl:mixin:APP:epicfight.mixins.json:client.MixinMinecraft from mod epicfight,pl:mixin:APP:aaa_particles-common.mixins.json:client.ClientShutdownHookMixin from mod aaa_particles,pl:mixin:APP:aaa_particles-common.mixins.json:client.MixinMinecraft from mod aaa_particles,pl:mixin:APP:sodium-common.mixins.json:core.MinecraftMixin from mod sodium,pl:mixin:APP:sodium-neoforge.mixins.json:platform.neoforge.EntrypointMixin from mod sodium,pl:mixin:APP:drippyloadingscreen.mixins.json:client.IMixinMinecraft from mod drippyloadingscreen,pl:mixin:APP:iceberg.mixins.json:MinecraftMixin from mod iceberg,pl:mixin:APP:flywheel.impl.mixins.json:MinecraftMixin from mod flywheel,pl:mixin:APP:ponder-common.mixins.json:client.WindowResizeMixin from mod ponder,pl:mixin:APP:create.mixins.json:accessor.MinecraftAccessor from mod create,pl:mixin:APP:sable.mixins.json:camera.new_camera_types.MinecraftMixin from mod sable,pl:mixin:APP:sable.mixins.json:plot.MinecraftMixin from mod sable,pl:mixin:APP:sable.mixins.json:punching.MinecraftMixin from mod sable,pl:mixin:APP:xaerohud.mixins.json:MixinMinecraftClient from mod xaerominimap,pl:mixin:APP:irons_spellbooks.mixins.json:MinecraftMixin from mod irons_spellbooks,pl:mixin:APP:entityculling.mixins.json:DebugScreenEntriesAccessor from mod entityculling,pl:mixin:APP:entityculling.mixins.json:LivingEntityRendererAccessor from mod entityculling,pl:mixin:APP:fancymenu.mixins.json:client.IMixinMinecraft from mod fancymenu,pl:mixin:APP:fancymenu.mixins.json:client.MixinMinecraft from mod fancymenu,pl:mixin:APP:extrasounds.mixins.json:core.MinecraftClientMixin from mod extrasounds,pl:mixin:APP:yacl.mixins.json:MinecraftMixin from mod yet_another_config_lib_v3,pl:mixin:APP:collective_neoforge.mixins.json:MinecraftMixin from mod collective,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.remove_telemetry.MinecraftMixin_Telemetry from mod modernfix,pl:mixin:A,pl:runtimedistcleaner:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,pl:runtimedistcleaner:A,re:classloading,pl:mixin:APP:veil.debug.mixins.json:client.DebugMainMixin from mod veil,pl:mixin:APP:chatplus-common.mixins.json:AWTHackMixin from mod chatplus,pl:mixin:A,pl:runtimedistcleaner:A}
-[13:08:50] [_stdout_] [INFO] at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
-[13:08:50] [_stdout_] [INFO] at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%2393!/:4.0] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.45.jar%2393!/:4.0] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32) ~[loader-4.0.45.jar%2393!/:4.0] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.45.jar%2393!/:4.0] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.5.jar%2398!/:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.5.jar%2398!/:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.5.jar%2398!/:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.5.jar%2398!/:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.5.jar%2398!/:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.5.jar%2398!/:?] {}
-[13:08:50] [_stdout_] [INFO] at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.5.jar%2398!/:?] {}
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?] {}
-[13:08:50] [_stdout_] [INFO] at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?] {}
-[13:08:50] [_stdout_] [INFO] Caused by: java.lang.IllegalStateException: Failed to load registries due to above errors
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:154) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:classloading,pl:accesstransformer:B}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.resources.RegistryDataLoader.load(RegistryDataLoader.java:118) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:classloading,pl:accesstransformer:B}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadLayer(WorldLoader.java:76) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,re:classloading,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.WorldLoaderMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:core.WorldLoaderMixin from mod modernfix,pl:mixin:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.loadAndReplaceLayer(WorldLoader.java:82) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,re:classloading,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.WorldLoaderMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:core.WorldLoaderMixin from mod modernfix,pl:mixin:A}
-[13:08:50] [_stdout_] [INFO] at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.WorldLoader.load(WorldLoader.java:35) ~[client-1.21.1-20240808.144430-srg.jar%23293!/:?] {re:mixin,re:classloading,pl:mixin:APP:modernfix-modernfix.mixins.json:feature.measure_time.WorldLoaderMixin from mod modernfix,pl:mixin:APP:modernfix-modernfix.mixins.json:core.WorldLoaderMixin from mod modernfix,pl:mixin:A}
-[13:08:50] [_stdout_] [INFO] ... 27 more
-[13:08:50] [_stdout_] [INFO] [13:08:50] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] screen net.minecraft.client.gui.screens.GenericMessageScreen in CREATE
+[13:15:45] [_stdout_] [INFO] [13:15:45] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: efn:effect/summoned_sword/summoned_sword_shoot
+[13:15:45] [_stdout_] [INFO] [13:15:45] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: efn:effect/summoned_sword/summoned_sword_shoot_down1
+[13:15:45] [_stdout_] [INFO] [13:15:45] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: efn:effect/summoned_sword/summoned_sword_shoot_down2
+[13:15:45] [_stdout_] [INFO] [13:15:45] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: efn:effect/summoned_sword/summoned_sword_shoot_test
+[13:15:45] [_stdout_] [INFO] [13:15:45] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: efn:effect/summoned_sword/summoned_sword_shoot_up1
+[13:15:45] [_stdout_] [INFO] [13:15:45] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: efn:effect/summoned_sword/summoned_sword_shoot_up2
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: efn:effect/ymd/ymds1
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: efn:effect/ymd/ymds2
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/ERROR] [epicfight/]: Datapack animation reading failed: No constructor information has provided: epic_fight_avalon:ik_test_1
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [co.fi.fd.FDLib/]: Initializing shaders...
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/WARN] [minecraft/EffectInstance]: Shader fdlib:impact_frame could not find uniform named InSize in the specified shader program.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/WARN] [minecraft/EffectInstance]: Shader fdlib:chromatic_abberation could not find uniform named InSize in the specified shader program.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/WARN] [minecraft/EffectInstance]: Shader fdlib:shattered_screen could not find uniform named InSize in the specified shader program.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [co.fi.fd.FDLib/]: Finished shader initialization.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [flywheel/backend/shaders/]: Loaded 77 shader sources in 41.287 ms
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [co.si.cr.Create/]: Loaded 58 train hat configurations.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [de.ke.fa.ut.re.ResourceHandlers/]: [FANCYMENU] Reloading resources..
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [de.ke.fa.ut.re.pr.ResourcePreLoader/]: [FANCYMENU] Pre-loading resources..
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [de.ke.fa.ut.re.re.au.AudioEngineReloadHandler/]: [FANCYMENU] Sound engine reload detected. Releasing cached audio resources.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] Minecraft resource reload: FINISHED
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [co.cu.Cupboard/]: Loaded config for: brutalbosses.json
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [efn/]: TitleScreen opened, checking for warning...
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: title_screen
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [Iris/]: Creating pipeline for dimension minecraft:overworld
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [co.fi.fd.FDLib/]: Initializing shaders...
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/WARN] [minecraft/EffectInstance]: Shader fdlib:impact_frame could not find uniform named InSize in the specified shader program.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/WARN] [minecraft/EffectInstance]: Shader fdlib:chromatic_abberation could not find uniform named InSize in the specified shader program.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/WARN] [minecraft/EffectInstance]: Shader fdlib:shattered_screen could not find uniform named InSize in the specified shader program.
+[13:15:46] [_stdout_] [INFO] [13:15:46] [Render thread/INFO] [co.fi.fd.FDLib/]: Finished shader initialization.
+[13:15:47] [_stdout_] [INFO] [13:15:47] [Render thread/INFO] [efn/]: Mod 'aaa_particles' installed: true
+[13:15:47] [_stdout_] [INFO] [13:15:47] [Render thread/INFO] [efn/]: Mod 'aaa_particles' installed: true
+[13:15:47] [_stdout_] [INFO] [13:15:47] [Render thread/INFO] [efn/]: Should show warning: false (Target mod installed: true)
+[13:15:48] [_stdout_] [INFO] [13:15:48] [Render thread/INFO] [Veil/]: Multi-Bind supported, using core
+[13:15:48] [_stdout_] [INFO] [13:15:48] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] screenshot 00_loading_overlay
+[13:15:48] [_stdout_] [INFO] [13:15:48] [Render thread/WARN] [ModernFix/]: Game took 75.704 seconds to start
+[13:15:48] [_stdout_] [INFO] [13:15:48] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+[13:15:49] [_stdout_] [INFO] [13:15:49] [Render thread/WARN] [minecraft/ShaderInstance]: Shader apotheosis:gray could not find uniform named IViewRotMat in the specified shader program.
+[13:15:50] [_stdout_] [INFO] [13:15:50] [Render thread/WARN] [minecraft/ShaderInstance]: Shader fdlib:noise could not find uniform named ColorModulator in the specified shader program.
+[13:15:51] [_stdout_] [INFO] [13:15:51] [Render thread/INFO] [Veil/]: Finished uploading vanilla shaders
+[13:15:52] [_stdout_] [INFO] [13:15:52] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[13:15:52] [_stdout_] [INFO] java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+[13:15:52] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:949) ~[java.net.http:?] {}
+[13:15:52] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133) ~[java.net.http:?] {}
+[13:15:52] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.openUrlString(VersionChecker.java:129) ~[loader-4.0.45.jar%2393!/:4.0] {}
+[13:15:52] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.process(VersionChecker.java:162) ~[loader-4.0.45.jar%2393!/:4.0] {}
+[13:15:52] [_stdout_] [INFO] at java.base/java.lang.Iterable.forEach(Iterable.java:75) [?:?] {}
+[13:15:52] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.run(VersionChecker.java:105) [loader-4.0.45.jar%2393!/:4.0] {}
+[13:15:52] [_stdout_] [INFO] Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+[13:15:52] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:68) ~[java.net.http:?] {}
+[13:15:52] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1788) ~[java.net.http:?] {}
+[13:15:52] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:1386) ~[java.net.http:?] {}
+[13:15:52] [_stdout_] [INFO] Caused by: java.net.ConnectException: HTTP connect timed out
+[13:15:52] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:69) ~[java.net.http:?] {}
+[13:15:52] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1788) ~[java.net.http:?] {}
+[13:15:52] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:1386) ~[java.net.http:?] {}
+[13:15:52] [_stdout_] [INFO] [13:15:52] [NeoForge Version Check/INFO] [ne.ne.fm.VersionChecker/]: [itemborders] Starting version check at https://mc-update-check.anthonyhilyard.com/513769
+[13:15:58] [_stdout_] [INFO] [13:15:58] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] screenshot 01_title
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: generic_dirt_message_screen
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [co.si.cr.Create/]: Created 224 recipes which will be injected into the game
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [co.si.cr.Create/]: Created 10 tags which will be injected into the game
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [tacz/GunPackFinder]: Start scanning for gun packs in /home/runner/work/_temp/game/tacz
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [tacz/GunPackFinder]: - tacz_default_gun, Main namespace: tacz
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [tacz/GunPackFinder]: Found 1 possible gunpack(s) and added them to resource set.
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [minecraft/MinecraftServer]: Found new data pack mod/oror_supreme_bosses:resourcepacks/dungeons_arise_2168, loading it automatically
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [minecraft/MinecraftServer]: Found new data pack mod/oror_supreme_bosses:resourcepacks/golemdungeons_209, loading it automatically
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [minecraft/MinecraftServer]: Found new data pack mod/oror_supreme_bosses:resourcepacks/iceandfire_214, loading it automatically
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [minecraft/MinecraftServer]: Found new data pack mod/oror_supreme_bosses:resourcepacks/modulargolems_3143, loading it automatically
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [minecraft/MinecraftServer]: Found new data pack tacz_resources, loading it automatically
+[13:15:59] [_stdout_] [INFO] [13:15:59] [Render thread/INFO] [minecraft/MinecraftServer]: Found new data pack create:dynamic_data, loading it automatically
+[13:16:01] [_stdout_] [INFO] [13:16:01] [Worker-ResourceReload-2/WARN] [minecraft/ReloadableServerRegistries]: Found loot table element validation problem in {minecraft:loot_table:alexscaves:blocks/amber}.pools[1].condition[1]: Parameters [
+[13:16:01] [_stdout_] [INFO] minecraft:attacking_entity>] are not provided in this context
+[13:16:01] [Worker-ResourceReload-2/INFO] [ne.ne.co.Co.apothic_enchanting/COREMODLOG]: Replaced 2 calls to Enchantment#getMaxLevel() in net/minecraft/server/commands/EnchantCommand
+[13:16:02] [_stdout_] [INFO] [13:16:02] [Worker-ResourceReload-1/INFO] [epicfight/]: Generated conditional modifier: epicfight:bokken/generated/modifier/ochs
+[13:16:02] [_stdout_] [INFO] [13:16:02] [Worker-ResourceReload-1/INFO] [epicfight/]: Generated moveset modifier: epicfight:bokken/generated/modifier/ochs
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [minecraft/RecipeManager]: Loaded 6760 recipes
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [minecraft/AdvancementTree]: Loaded 4796 advancements
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [ne.ne.ne.co.lo.LootModifierManager/]: Could not decode GlobalLootModifier with json id golemdungeons:fiery_pick_smelting - error: Unknown registry key in ResourceKey[minecraft:root / neoforge:global_loot_modifier_serializers]: twilightforest:fiery_pick_smelting
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [co.ia.ju.Jupiter/]: Cannot find suitable entry for key=sub_level_renderer, type=dev.ryanhcode.sable.sublevel.render.SubLevelRenderer$SelectedRenderer$2 in config=sable:CLIENT
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [co.ia.ju.Jupiter/]: Cannot find suitable entry for key=hotbarType, type=com.super_awesome_baby.ares_hud.client.config.HotbarType in config=ares_hud:CLIENT
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [co.ia.ju.Jupiter/]: Notice: Jupiter cannot resolve 7 empty List
+[13:16:03] [_stdout_] [INFO] since technical issue in Java, it is recommended to add a value in default value list.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.ia.ju.Jupiter/]: Config spec loading complete, found 62 configs from 44 mods.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.ia.ju.Jupiter/]: Cloth Config loading complete, found 1 configs from 1 mods.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.ia.ju.Jupiter/]: Successfully reload 34 server config(s).
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [Curios API/]: Loaded 22 curio slots
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [Curios API/]: Loaded 4 curio entities
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [jeg/]: Loaded 17 JEG vehicle data entries
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [jeg/]: Loaded 17 JEG vehicle assembly recipes
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Skill efn:example doesn't exist in the registry.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Skill epicfight:air_slash doesn't exist in the registry.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:orbit from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:pickaxe from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:trident from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:evil_tachi from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:torment from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:shovel from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:ruine from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:crossbow from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:moonless from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:longsword from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:bow from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:solar from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:tachi from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:spear from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:ender_blaster from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:blackstar from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:fist from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:clawed_gauntle from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:uchigatana from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:sword from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:axe from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:agony from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:staff from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:napoleon from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:gesetz from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:antitheus from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:herrscher from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:greatsword from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:map from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:shield from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:nova from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:bokken from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:hoe from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:dagger from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling wom:satsujin from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [epicfight/]: Pulling epicfight:armor from register
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.as.ep.EpicFightExtraMod/]: EFX: Replaced Epic Fight weapon type presets after default export
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for invincible:custom_combo_demo: Can't find weapon type: invincible:custom_weapon_demo
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for magistuarmory:silver_morgenstern: Can't find weapon type: minecraft:axe
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for minecraft:wooden_sword: No value present
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [Dungeon Crawl/]: Loading data...
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [Dungeon Crawl/]: Done.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/WARN] [ne.sh.co.CombatEvolution/]: Unknown attribute epicfight:max_stamina in CE mob patch minecraft:vindicator; skipping it
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [friendsandfoes/]: Loaded 1 moobloom variants
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:drownedboss for: minecraft:drowned
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:irongolemboss for: minecraft:iron_golem
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:snowgolemboss for: minecraft:snow_golem
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zombieboss for: minecraft:zombie
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:skeletonshieldboss for: minecraft:skeleton
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:pillagerboss for: minecraft:pillager
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:vexboss for: minecraft:vex
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evokerboss for: minecraft:evoker
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:dummyboss for: minecraft:zombie
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:vindicatorboss for: minecraft:vindicator
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witherskeletonshieldboss for: minecraft:wither_skeleton
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witherskeletonrangedboss for: minecraft:wither_skeleton
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:cavespiderboss for: minecraft:cave_spider
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zombietoxicboss for: minecraft:zombie
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:huskboss for: minecraft:husk
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evokersummoner for: minecraft:evoker
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:archmageboss for: minecraft:wandering_trader
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:guardianboss for: minecraft:guardian
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:endervindicatorboss for: minecraft:vindicator
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:shulkerboss for: minecraft:shulker
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zoglinboss for: minecraft:zoglin
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evilchickenboss for: minecraft:chicken
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:blazeboss for: minecraft:blaze
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witchboss for: minecraft:witch
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:phantomboss for: minecraft:phantom
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:madcowboss for: minecraft:mooshroom
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:rabbitboss for: minecraft:rabbit
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:piglinbruteboss for: minecraft:piglin_brute
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:ghastboss for: minecraft:ghast
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:strayboss for: minecraft:stray
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [placebo/]: Registered 30 gear_sets.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [placebo/]: Registered 36 wanderer_trades.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [placebo/]: Registered 37 brewing_mixes.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [Apotheosis : Enchantment/]: Registered 26 enchanting_stats.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [apotheosis/]: Registered 5 rarities.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [apotheosis/]: Registered 1 rarity_override.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [apotheosis/]: Registered 99 affixes.
+[13:16:03] [_stdout_] [INFO] [13:16:03] [Render thread/INFO] [apotheosis/]: Registered 0 extra_gem_bonuses.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [apotheosis/]: Registered 21 gems.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [apotheosis/]: Registered 50 affix_loot_entries.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [apotheosis/]: Registered 23 apothic_invaders.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [apotheosis/]: Registered 9 rogue_spawners.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [apotheosis/]: Registered 4 apothic_elites.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [apotheosis/]: Registered 1 purity_weights.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [apotheosis/]: Registered 1 apothic_augments.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [apotheosis/]: Registered 27 tier_augments.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/WARN] [minecraft/MappedRegistry]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:block] are present in data pack: cataclysm:needs_black_steel_tool, cataclysm:needs_monstrosity_tool
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/WARN] [ModernFix/]: Initial datapack load took 4.370 s
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: create_world_screen
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [defaultoptions/]: Default difficulty has been set to NORMAL.
+[13:16:04] [_stdout_] [INFO] [13:16:04] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+[13:16:06] [_stdout_] [INFO] [13:16:06] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] screenshot 02_create_world
+[13:16:07] [_stdout_] [INFO] [13:16:07] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] press selectWorld.create on CreateWorldScreen
+[13:16:07] [_stdout_] [INFO] [13:16:07] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: confirm_screen
+[13:16:07] [_stdout_] [INFO] [13:16:07] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+[13:16:07] [_stdout_] [INFO] [13:16:07] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[13:16:07] [_stdout_] [INFO] java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+[13:16:07] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:949) ~[java.net.http:?] {}
+[13:16:07] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133) ~[java.net.http:?] {}
+[13:16:07] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.openUrlString(VersionChecker.java:129) ~[loader-4.0.45.jar%2393!/:4.0] {}
+[13:16:07] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.process(VersionChecker.java:162) ~[loader-4.0.45.jar%2393!/:4.0] {}
+[13:16:07] [_stdout_] [INFO] at java.base/java.lang.Iterable.forEach(Iterable.java:75) [?:?] {}
+[13:16:07] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.run(VersionChecker.java:105) [loader-4.0.45.jar%2393!/:4.0] {}
+[13:16:07] [_stdout_] [INFO] Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+[13:16:07] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:68) ~[java.net.http:?] {}
+[13:16:07] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1788) ~[java.net.http:?] {}
+[13:16:07] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:1386) ~[java.net.http:?] {}
+[13:16:07] [_stdout_] [INFO] Caused by: java.net.ConnectException: HTTP connect timed out
+[13:16:07] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:69) ~[java.net.http:?] {}
+[13:16:07] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1788) ~[java.net.http:?] {}
+[13:16:07] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:1386) ~[java.net.http:?] {}
+[13:16:07] [_stdout_] [INFO] [13:16:07] [NeoForge Version Check/INFO] [ne.ne.fm.VersionChecker/]: [create] Starting version check at https://api.modrinth.com/updates/create/forge_updates.json?neoforge=only
+[13:16:08] [_stdout_] [INFO] [13:16:08] [NeoForge Version Check/INFO] [ne.ne.fm.VersionChecker/]: [create] Found status: OUTDATED Current: 6.0.10 Target: 6.0.10+mc1.21.1
+[13:16:08] [_stdout_] [INFO] [13:16:08] [NeoForge Version Check/INFO] [ne.ne.fm.VersionChecker/]: [legendarytooltips] Starting version check at https://mc-update-check.anthonyhilyard.com/532127
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] screenshot popup_1_ConfirmScreen
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [jp.or.ha.Harness/]: [harness] press gui.yes on ConfirmScreen
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/WARN] [co.ia.ur.Uranus/]: Suppressing EXPERIMENTAL level lifecycle
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/WARN] [co.ia.ur.Uranus/]: Suppressing EXPERIMENTAL level lifecycle
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [co.si.cr.Create/]: Created 224 recipes which will be injected into the game
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [co.si.cr.Create/]: Created 10 tags which will be injected into the game
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [tacz/GunPackFinder]: Start scanning for gun packs in /home/runner/work/_temp/game/tacz
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [tacz/GunPackFinder]: - tacz_default_gun, Main namespace: tacz
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [tacz/GunPackFinder]: Found 1 possible gunpack(s) and added them to resource set.
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: progress_screen
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Render thread/INFO] [co.gi.al.al.AlexsCaves/]: [AC] WorldGenOptionsMixin: Set world seed -2071640812755934762 in ACWorldSeedHolder (thread: Render thread)
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Server thread/INFO] [minecraft/IntegratedServer]: Starting integrated minecraft server version 1.21.1
+[13:16:12] [_stdout_] [INFO] [13:16:12] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [ne.ne.fm.co.ConfigTracker/CONFIG]: Loading default config file from path /home/runner/work/_temp/game/defaultconfigs/oror_supreme_bosses-server.toml
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.ne.co.ModConfigSpec/CORE]: Configuration LoadedConfig[config=SynchronizedConfig{DataHolder:{loreMode=true, terrainChanges=false, naturalEncounters=true, summonsPerCreator=6, summonsPerLevel=96, balancedRevivalLimit=2, damageMultiplier=1.0, blocksPerAbility=24, encounterIntervalTicks=12000, smartMobs=true, armedVillagers=true, aiTerrain=true, mobLevels=true, miningVillagers=true, villagerRoles=true, levelRewards=true, levelAuras=true, divineDomains=true, dialogueArchive=true, onlineAi=true, localGenerativeAi=true, localAiEndpoint=http://127.0.0.1:8023/v1/responses, localAiRequestsPerHour=600, aiRequestsPerHour=16, chatCooldownSeconds=3, chatCharacters=2048, replyCharacters=1024, combatDecisionsPerTick=256, level6Chance=5.0E-4, minerRange=16, minerDepth=16, tukuyo=true, tukuyoEndpoint=http://127.0.0.1:8022/v1/mind, autonomousResearch=true, humanVillagerModels=false}}, path=/home/runner/work/_temp/game/config/oror_supreme_bosses-server.toml, modConfig=net.neoforged.fml.config.ModConfig@5a110bf7] is not correct. Correcting
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.ne.co.ModConfigSpec/CORE]: Incorrect key aiModel was corrected from null to its default, gpt-5.4-mini.
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.ne.co.ModConfigSpec/CORE]: Incorrect key villageReputation was corrected from null to its default, true.
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.ne.co.ModConfigSpec/CORE]: Incorrect key villagerCivilization was corrected from null to its default, true.
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.ne.co.ModConfigSpec/CORE]: Incorrect key mobCooperation was corrected from null to its default, true.
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.ne.co.ModConfigSpec/CORE]: Incorrect key extraCharacterAbilities was corrected from null to its default, true.
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.ne.co.ModConfigSpec/CORE]: Incorrect key modEquipmentUse was corrected from null to its default, true.
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.ne.co.ModConfigSpec/CORE]: Incorrect key villageActionsPerTick was corrected from null to its default, 16.
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/WARN] [ne.ne.fm.co.ConfigTracker/CONFIG]: Configuration file /home/runner/work/_temp/game/config/suppressionmod-server.toml is not correct. Correcting
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] SurfaceRuleInitializer: Starting initialization...
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] OVERWORLD rules registered: true
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:the_nether
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: irons_spellbooks:pocket_dimension
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: macabre:the_pit
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: macabre:the_pit (category: OVERWORLD)
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:overworld
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: minecraft:overworld (category: OVERWORLD)
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:the_end
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: macabre:limbo
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: macabre:limbo (category: OVERWORLD)
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [citadel/]: [Citadel] SurfaceRuleInitializer: Initialization complete.
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: level_loading_screen
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [de.ry.sa.Sable/]: Creating physics pipeline for ResourceKey[minecraft:dimension / minecraft:overworld] using RapierPhysicsPipelineProvider
+[13:16:13] [_stdout_] [INFO] [13:16:13] [Server thread/INFO] [de.ry.sa.Sable/]: Using game directory relative Sable Rapier native directory /home/runner/work/_temp/game/.sable/natives
