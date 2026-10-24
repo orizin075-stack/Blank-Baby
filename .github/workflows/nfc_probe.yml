@@ -1,0 +1,56 @@
+# One-off probe for 0.17.25: what NightfallCraft's resource packs without a 1.21.1 tag contain (pack.mcmeta, files),
+# and how Epic Fight 21.17 and Nightfall 3.4 for 1.21.1 define weapon trails, to see whether those packs still apply.
+name: NightfallCraft resource pack probe
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['.github/workflows/nfc_probe.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Packs and jars
+        run: |
+          O=oror_rework/nfc_ui/out/probe; mkdir -p $O; T=$RUNNER_TEMP/p; mkdir -p $T
+          get() { curl -sSfL -A oror-nightfall-ci -o "$T/$3" "https://mediafilez.forgecdn.net/files/$1/$2/$(python3 -I -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1]))' "$3")" || echo "failed $3" >> $O/failed.txt; }
+          get 5596 851 "xali's Enhanced Vanilla -1.11.2b-rev.54d51d4.zip"
+          get 7690 496 "epicfightx_better_trail1.5.zip"
+          get 6534 716 "Stay True 1.21.5.zip"
+          get 7690 641 "more_power.zip"
+          get 4934 33 "EclecticTrove-1.19.2-1.3.0.zip"
+          get 7631 787 "【Released】BDHill Reforge the Sword Edge-2.0_1.20.1.zip"
+          get 7432 571 "DMC5 yamato for Nightfall v1.2.zip"
+          get 7355 973 "trident trail.zip"
+          python3 -I oror_rework/neoforge1211patch/tools/cf_fetch.py oror_rework/neoforge1211patch/pack/manifest-0.17.23.json \
+            oror_rework/neoforge1211patch/pack/lock-0.17.23.json $T epic-fight-21.17.3.1-mc1.21.1-neoforge.jar \
+            epicfight-extra-neoforge1.21.1-1.2.2.jar
+          curl -sSfL -o "$T/nightfall.jar" "$(python3 -I -c 'import json;print(json.load(open("oror_rework/neoforge1211patch/pack/install-0.17.23.json"))["nightfall"]["url"])')"
+          for f in "$T"/*.zip; do
+            n=$(basename "$f"); {
+              echo "== $n $(stat -c %s "$f") bytes"
+              unzip -p "$f" pack.mcmeta 2>/dev/null | head -c 1500; echo
+              unzip -l "$f" | awk '{print $4}' | grep -v '/$' | sed 's#^#  #' | head -n 150
+              echo "  ... $(unzip -l "$f" | tail -n 1)"
+            } > "$O/pack_${n//[^A-Za-z0-9._-]/_}.txt"
+          done
+          for j in epic-fight-21.17.3.1-mc1.21.1-neoforge.jar epicfight-extra-neoforge1.21.1-1.2.2.jar nightfall.jar; do
+            { echo "== $j"; unzip -l "$T/$j" | awk '{print $4}' | grep -i -E 'trail|item_skin|skins/' | head -n 120; } > "$O/jar_$j.txt"
+          done
+          ls -la $O
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f oror_rework/nfc_ui/out/probe
+          git commit -m "NightfallCraft resource pack probe ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
