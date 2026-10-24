@@ -1,0 +1,25 @@
+[Spawning]
+	#Multiplier for bandit spawn chance (0.0 to 1.0, where 1.0 is 100% of the defined JSON weight)
+	# Default: 1.0
+	# Range: 0.0 ~ 1.0
+	spawnChance = 1.0
+
+[AggroSettings]
+	#If true, Bandits will attack other hostile mobs (Monsters).
+	hostileToMobs = true
+
+[BehaviorSettings]
+	#If true, Bandits will break glass blocks to shoot.
+	canBreakGlass = true
+	#If true, Bandits will open doors.
+	canOpenDoors = true
+
+[LootSettings]
+	#Chance for bandits to drop their weapons on death (0.0 to 1.0)
+	# Default: 0.05
+	# Range: 0.0 ~ 1.0
+	weaponDropChance = 0.05
+	#Chance for bandits to spawn with weapon attachments (e.g. scopes, silencers)
+	# Default: 0.3
+	# Range: 0.0 ~ 1.0
+	weaponAttachmentChance = 0.3

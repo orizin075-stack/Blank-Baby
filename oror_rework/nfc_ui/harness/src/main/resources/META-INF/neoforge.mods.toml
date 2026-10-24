@@ -1,0 +1,16 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "oror_harness"
+version = "1.0.0"
+displayName = "OROR CI screenshot harness"
+description = "CI only: takes screenshots of the title screen, world creation and the in-game HUD, then quits."
+
+[[dependencies.oror_harness]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "CLIENT"

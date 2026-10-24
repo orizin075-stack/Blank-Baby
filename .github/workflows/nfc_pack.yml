@@ -1,0 +1,124 @@
+# OROR War x Nightfall 0.17.25 (NeoForge 1.21.1) with NightfallCraft's screens and combat feel: resolves and fetches
+# every mod of the pack plus the NightfallCraft additions, checks their declared dependencies, then starts the real
+# client (portablemc, Xvfb with Mesa's software renderer) with a CI-only harness mod that photographs the title screen,
+# world creation and the in-game HUD. Reports, screenshots and the configs the run wrote go to
+# oror_rework/nfc_ui/out/pack on this branch.
+name: NightfallCraft look check
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['oror_rework/nfc_ui/additions-*.json', 'oror_rework/nfc_ui/pack/**', 'oror_rework/nfc_ui/harness/**',
+            'oror_rework/nfc_ui/tools/pack_tools.py', '.github/workflows/nfc_pack.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nfc-pack-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    defaults:
+      run:
+        shell: bash
+    env:
+      U: oror_rework/nfc_ui
+      P: oror_rework/neoforge1211patch
+      OUT: oror_rework/nfc_ui/out/pack
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.3'
+      - name: Resolve the additions
+        run: |
+          rm -rf "$OUT"; mkdir -p "$OUT"
+          python3 -I $U/tools/pack_tools.py resolve $U/additions-0.17.25.json $U/nfc/nightfallcraft-2.2.8.6-mods.json \
+            $U/out/survey.json $OUT/resolved.json 2>&1 | tee $OUT/resolve.txt
+      - name: Fetch every mod, resource pack and shader pack
+        run: |
+          G=$RUNNER_TEMP/game; mkdir -p $G/mods
+          python3 -I $U/tools/pack_tools.py fetchpack $P/pack/manifest-0.17.23.json $P/pack/lock-0.17.23.json $G/mods \
+            oror_supreme_bosses- falchionmoveset- sword_soaring- NightFall- 2>&1 | tail -n 5
+          python3 -I - "$P/pack/install-0.17.23.json" "$G/mods" <<'EOF'
+          import hashlib, json, os, sys, urllib.request
+          spec = json.load(open(sys.argv[1]))['nightfall']
+          data = urllib.request.urlopen(urllib.request.Request(spec['url'], headers={'User-Agent': 'oror-nightfall-ci'}), timeout=300).read()
+          assert hashlib.sha256(data).hexdigest() == spec['sha256'], 'Nightfall SHA-256'
+          open(os.path.join(sys.argv[2], spec['filename']), 'wb').write(data)
+          print('fetched', spec['filename'])
+          EOF
+          cp "$(ls -v $P/out/oror_supreme_bosses-*.jar | tail -n 1)" $G/mods/
+          python3 -I $U/tools/pack_tools.py fetch $OUT/resolved.json $G $OUT/lock-additions.json 2>&1 | tail -n 60
+          ls $G/mods | wc -l; ls $G/resourcepacks $G/shaderpacks
+      - name: Dependencies declared by every jar
+        run: python3 -I $U/tools/pack_tools.py depcheck $RUNNER_TEMP/game/mods $OUT/depcheck.txt
+      - name: Epic Fight combat items and NightfallCraft's menu images
+        run: |
+          G=$RUNNER_TEMP/game
+          python3 -I $U/tools/pack_tools.py items $G/mods $U/nfc/config/epicfight-client.toml $OUT/combat_items.json || echo 'items failed' | tee -a $OUT/problems.txt
+          read -r NAME < <(python3 -I -c 'import json,sys; print(next(e["nightfallcraft_file"] for e in json.load(open(sys.argv[1]))["nightfallcraft_without_1211"] if e["projectID"] == 1325071))' $OUT/resolved.json)
+          curl -sSfL -A oror-nightfall-ci -o "$RUNNER_TEMP/$NAME" "https://mediafilez.forgecdn.net/files/8671/39/$(python3 -I -c 'import sys,urllib.parse; print(urllib.parse.quote(sys.argv[1]))' "$NAME")"
+          { echo "filename=$NAME"; echo "bytes=$(stat -c %s "$RUNNER_TEMP/$NAME")"; echo "sha256=$(sha256sum "$RUNNER_TEMP/$NAME" | cut -d' ' -f1)"; } | tee $OUT/tcrcore.txt
+          cp -r $U/pack/base-0.17.23/config $U/pack/base-0.17.23/defaultconfigs $G/
+          cp -r $U/pack/overlay-0.17.25/. $G/
+          python3 -I $U/tools/pack_tools.py setitems $G/config/epicfight-client.toml $OUT/combat_items.json || echo 'setitems failed' | tee -a $OUT/problems.txt
+          python3 -I $U/tools/pack_tools.py menu "$RUNNER_TEMP/$NAME" $G/config/fancymenu/customization $G $OUT/menu_members.json || echo 'menu failed' | tee -a $OUT/problems.txt
+      - name: Build the CI harness mod
+        working-directory: oror_rework/nfc_ui/harness
+        run: |
+          gradle build --console=plain 2>&1 | tail -n 40
+          cp build/libs/oror_harness-1.0.0.jar $RUNNER_TEMP/game/mods/
+      - name: Install the client and a virtual display
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq xvfb mesa-utils libgl1-mesa-dri imagemagick rsync > /dev/null
+          python3 -m venv $RUNNER_TEMP/venv && $RUNNER_TEMP/venv/bin/pip install -q portablemc==5.0.6
+          G=$RUNNER_TEMP/game
+          # Unattended run only: no focus pause, short view distance, no sound.
+          printf 'pauseOnLostFocus:false\nrenderDistance:6\nsimulationDistance:5\nskipMultiplayerWarning:true\njoinedFirstServer:true\ntutorialStep:none\nsoundCategory_master:0.0\n' >> $G/config/defaultoptions/options.txt
+          cp -r $G/config $RUNNER_TEMP/config-input
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s '-screen 0 1600x900x24' glxinfo -B | tee $OUT/glxinfo.txt || true
+      - name: Run the client
+        timeout-minutes: 60
+        run: |
+          G=$RUNNER_TEMP/game
+          export LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null
+          timeout 55m xvfb-run -a -s '-screen 0 1600x900x24' $RUNNER_TEMP/venv/bin/portablemc start neoforge::21.1.262 \
+            --main-dir $RUNNER_TEMP/mc --mc-dir $G -u OrorTester --resolution 1600x900 --jvm "$JAVA_HOME/bin/java" \
+            --jvm-arg=-Xmx8G,-Xms2G > $RUNNER_TEMP/client.out 2>&1 || echo "client exit code $?" | tee $OUT/client-exit.txt
+          tail -n 60 $RUNNER_TEMP/client.out
+      - name: Collect screenshots, logs and written configs
+        if: always()
+        run: |
+          G=$RUNNER_TEMP/game; C=$OUT/client; mkdir -p $C
+          tail -n 300 $RUNNER_TEMP/client.out > $C/stdout-tail.txt 2>/dev/null || true
+          for f in $G/screenshots/*.png; do [ -f "$f" ] && convert "$f" -resize '1280x>' -quality 82 "$C/$(basename "${f%.png}").jpg"; done
+          cp $G/harness/* $C/ 2>/dev/null || true
+          mkdir -p $C/crash-reports; cp $G/crash-reports/* $C/crash-reports/ 2>/dev/null || true
+          L=$G/logs/latest.log
+          if [ -f $L ]; then
+            grep -n -E '\[harness\]|ERROR|FATAL|Exception|Caused by|Mixin apply failed|InvalidInjection' $L | cut -c1-600 | head -n 4000 > $C/latest-filtered.log
+            gzip -c $L > $C/latest.log.gz; [ $(stat -c %s $C/latest.log.gz) -lt 8000000 ] || rm $C/latest.log.gz
+          fi
+          cp $G/options.txt $C/options.txt 2>/dev/null || true
+          [ -d $RUNNER_TEMP/config-input ] && rsync -a --checksum --compare-dest=$RUNNER_TEMP/config-input/ $G/config/ $C/config-after/ \
+            && find $C/config-after -type d -empty -delete || true
+          ls -la $C
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$OUT"
+          git commit -m "NightfallCraft look check ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

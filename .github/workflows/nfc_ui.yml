@@ -6,7 +6,7 @@ name: NightfallCraft UI survey
 on:
   push:
     branches: [claude/jolly-einstein-wvpjq1]
-    paths: ['oror_rework/nfc_ui/tools/**', 'oror_rework/nfc_ui/nfc/**', '.github/workflows/nfc_ui.yml']
+    paths: ['oror_rework/nfc_ui/tools/survey.py', 'oror_rework/nfc_ui/nfc/nightfallcraft-2.2.8.6-mods.json', '.github/workflows/nfc_ui.yml']
   workflow_dispatch:
 
 permissions:
