@@ -41,7 +41,7 @@
 		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
 		manaSource = "IRONS_SPELLBOOKS"
 		healthBarEnabled = true
-		foodBarEnabled = true
+		foodBarEnabled = false
 		staminaBarEnabled = true
 		timeBarReplacesStamina = false
 		armorBarEnabled = true
@@ -53,7 +53,7 @@
 		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
 		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
 		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
-		barSlotAssignments = "EMPTY,EMPTY,HEALTH,FOOD,STAMINA_EPIC_FIGHT,ARMOR"
+		barSlotAssignments = "EMPTY,EMPTY,HEALTH,ARMOR,STAMINA_EPIC_FIGHT,MANA_IRONS_SPELLBOOKS"
 		# Default: 22
 		# Range: 0 ~ 50
 		statusHorizontalPadding = 22
@@ -105,7 +105,7 @@
 		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
 		manaSource = "IRONS_SPELLBOOKS"
 		healthBarEnabled = true
-		foodBarEnabled = true
+		foodBarEnabled = false
 		staminaBarEnabled = true
 		timeBarReplacesStamina = false
 		armorBarEnabled = true
@@ -117,7 +117,7 @@
 		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
 		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
 		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
-		barSlotAssignments = "EMPTY,EMPTY,HEALTH,FOOD,STAMINA_EPIC_FIGHT,ARMOR"
+		barSlotAssignments = "EMPTY,EMPTY,HEALTH,ARMOR,STAMINA_EPIC_FIGHT,MANA_IRONS_SPELLBOOKS"
 		# Default: 17
 		# Range: 0 ~ 50
 		statusHorizontalPadding = 17
@@ -169,7 +169,7 @@
 		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
 		manaSource = "IRONS_SPELLBOOKS"
 		healthBarEnabled = true
-		foodBarEnabled = true
+		foodBarEnabled = false
 		staminaBarEnabled = true
 		timeBarReplacesStamina = false
 		armorBarEnabled = true
@@ -181,7 +181,7 @@
 		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
 		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
 		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
-		barSlotAssignments = "EMPTY,EMPTY,HEALTH,FOOD,STAMINA_EPIC_FIGHT,ARMOR"
+		barSlotAssignments = "EMPTY,EMPTY,HEALTH,ARMOR,STAMINA_EPIC_FIGHT,MANA_IRONS_SPELLBOOKS"
 		# Default: 19
 		# Range: 0 ~ 50
 		statusHorizontalPadding = 19
@@ -233,7 +233,7 @@
 		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
 		manaSource = "IRONS_SPELLBOOKS"
 		healthBarEnabled = true
-		foodBarEnabled = true
+		foodBarEnabled = false
 		staminaBarEnabled = true
 		timeBarReplacesStamina = false
 		armorBarEnabled = true
@@ -245,7 +245,7 @@
 		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
 		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
 		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
-		barSlotAssignments = "EMPTY,EMPTY,HEALTH,FOOD,STAMINA_EPIC_FIGHT,ARMOR"
+		barSlotAssignments = "EMPTY,EMPTY,HEALTH,ARMOR,STAMINA_EPIC_FIGHT,MANA_IRONS_SPELLBOOKS"
 		# Default: 20
 		# Range: 0 ~ 50
 		statusHorizontalPadding = 20
@@ -297,7 +297,7 @@
 		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
 		manaSource = "IRONS_SPELLBOOKS"
 		healthBarEnabled = true
-		foodBarEnabled = true
+		foodBarEnabled = false
 		staminaBarEnabled = true
 		timeBarReplacesStamina = false
 		armorBarEnabled = true
@@ -309,7 +309,7 @@
 		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
 		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
 		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
-		barSlotAssignments = "ARMOR,THIRST,HEALTH,FOOD,STAMINA_EPIC_FIGHT,MANA_IRONS_SPELLBOOKS"
+		barSlotAssignments = "ARMOR,THIRST,HEALTH,EMPTY,STAMINA_EPIC_FIGHT,MANA_IRONS_SPELLBOOKS"
 		# Default: 17
 		# Range: 0 ~ 50
 		statusHorizontalPadding = 17
@@ -363,7 +363,7 @@
 		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
 		manaSource = "IRONS_SPELLBOOKS"
 		healthBarEnabled = true
-		foodBarEnabled = true
+		foodBarEnabled = false
 		staminaBarEnabled = true
 		timeBarReplacesStamina = false
 		armorBarEnabled = true
@@ -429,7 +429,7 @@
 		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
 		manaSource = "IRONS_SPELLBOOKS"
 		healthBarEnabled = true
-		foodBarEnabled = true
+		foodBarEnabled = false
 		staminaBarEnabled = true
 		timeBarReplacesStamina = false
 		armorBarEnabled = true
@@ -494,7 +494,7 @@
 		#Always Display mana for Iron's Spells
 		focusDisplayManaIss = false
 		#Always Display Food In Status Valuebar, if turned off, it depend on wether the bar is on
-		focusDisplayStatusValueBarFood = true
+		focusDisplayStatusValueBarFood = false
 		#Always Display Mana In Status Valuebar, if turned off, it depend on wether the bar is on
 		focusDisplayStatusValueBarMana = true
 		#Always Display Armor In Status Valuebar, if turned off, it depend on wether the bar is on
