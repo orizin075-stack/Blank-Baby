@@ -1,0 +1,543 @@
+#Ares HUD UI Properties
+[properties]
+	#Type of hotbar layout to use.
+	#Allowed Values: DEFAULT, HOTBAR_1X9, HOTBAR_1X9_VERTICAL, HOTBAR_3X3, THIRST_ADDITIONAL, FINALITY_1, FINALITY_2
+	hotbarType = "DEFAULT"
+
+	[properties.Layout_DEFAULT]
+		hotbarDefaultProperties = "0.0011709601,0.8694779277,0.8003640175"
+		offhandDefaultProperties = "0.2729170024,0.7968130112,0.7514969707"
+		centerHudDefaultProperties = "0.3390625119,0.8862275481,0.7060214877"
+		bossBarDefaultProperties = "0.3104166687,0.0119521916,1.0000000000"
+		#Allowed Values: MERGED, SEPARATE
+		centerHudLayoutMode = "MERGED"
+		separateCenterHudInitialized = false
+		separateAuxiliaryHudInitialized = false
+		centerHudSlotTOP_LEFTProperties = "0.3395833373,0.8478952646,0.7060214877,0.3390625119,0.8862275481,0.0000000000,-13.0000000000"
+		centerHudSlotTOP_RIGHTProperties = "0.5190304518,0.8478952646,0.7060214877,0.3390625119,0.8862275481,122.0000000000,-13.0000000000"
+		centerHudSlotMIDDLE_LEFTProperties = "0.3395833373,0.8844621778,0.7060214877,0.3390625119,0.8862275481,0.0000000000,0.0000000000"
+		centerHudSlotMIDDLE_RIGHTProperties = "0.5190304518,0.8844621778,0.7060214877,0.3390625119,0.8862275481,122.0000000000,0.0000000000"
+		centerHudSlotBOTTOM_LEFTProperties = "0.3395833373,0.9210290313,0.7060214877,0.3390625119,0.8862275481,0.0000000000,13.0000000000"
+		centerHudSlotBOTTOM_RIGHTProperties = "0.5190304518,0.9210290313,0.7060214877,0.3390625119,0.8862275481,122.0000000000,13.0000000000"
+		centerHudDynamicVEHICLE_HEALTHProperties = "0.3395833373,0.8478952646,0.7060214877,0.3390625119,0.8862275481,0.0000000000,-13.0000000000"
+		centerHudDynamicAIRProperties = "0.5190304518,0.8478952646,0.7060214877,0.3390625119,0.8862275481,122.0000000000,-13.0000000000"
+		centerHudDynamicJUMPProperties = "0.5190304518,0.8113284707,0.7060214877,0.3390625119,0.8862275481,122.0000000000,-26.0000000000"
+		centerHudAuxiliaryBENEFICIAL_BUFFSProperties = "0.3395833373,0.8450824618,0.7060214877,0.3390625119,0.8862275481,0.0000000000,-14.0000000000"
+		centerHudAuxiliaryDETRIMENTAL_BUFFSProperties = "0.5190304518,0.8057028055,0.7060214877,0.3390625119,0.8862275481,122.0000000000,-28.0000000000"
+		centerHudAuxiliaryVALHEIM_FOODProperties = "0.5190304518,0.8450824618,0.7060214877,0.3390625119,0.8862275481,122.0000000000,-14.0000000000"
+		xpBarDefaultProperties = "0.4859375060,0.8832335472,0.7970403433"
+		statusValueBarDefaultProperties = "0.3375000060,0.9640718699,0.9422094822"
+		temperatureDefaultProperties = "0.4889057577,0.8260752559,0.7970403433"
+		bodyDamageDefaultProperties = "0.6756440401,0.9080962539,0.6702424288"
+		wetnessDefaultProperties = "0.4938872457,0.8006715775,0.7970403433"
+		DefaultMainHandOffsets = "0,0,0,0"
+		hotbarEnabled = true
+		centerHudEnabled = true
+		xpBarEnabled = true
+		statusValueBarEnabled = true
+		offhandEnabled = false
+		#Allowed Values: EPIC_FIGHT, PARCOOL, PEAK_STAMINA, FEATHERS
+		staminaSource = "EPIC_FIGHT"
+		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
+		manaSource = "IRONS_SPELLBOOKS"
+		healthBarEnabled = true
+		foodBarEnabled = true
+		staminaBarEnabled = true
+		timeBarReplacesStamina = false
+		armorBarEnabled = true
+		#Legacy thirst bar setting used for migration.
+		thirstBarEnabled = false
+		#Allowed Values: STANDALONE, MERGED, DISABLED, LEGACY
+		thirstBarMode = "MERGED"
+		standaloneArmorBarEnabled = false
+		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
+		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
+		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
+		barSlotAssignments = "EMPTY,EMPTY,HEALTH,FOOD,STAMINA_EPIC_FIGHT,ARMOR"
+		# Default: 22
+		# Range: 0 ~ 50
+		statusHorizontalPadding = 22
+		# Default: 0
+		# Range: -10000 ~ 10000
+		statusHorizontalPaddingGuiOffset = 0
+		# Default: 1
+		# Range: 0 ~ 50
+		statusBarVerticalSpacing = 1
+		#Bounds for Flask UI in Default layout. DuelCraft Only
+		flaskDefaultProperties = "0.2734375000,0.8892215490,1.1126120090"
+		#Enable Flask UI in Default layout. DuelCraft Only
+		flaskEnabledDefault = true
+
+	[properties.Layout_HOTBAR_1X9]
+		hotbar1x9Properties = "0.3515625000,0.9341317415,0.7815815210"
+		offhand1x9Properties = "0.3031249940,0.9333333373,0.7824444175"
+		centerHud1x9Properties = "0.3484374881,0.8592814207,0.6702424288"
+		bossBar1x9Properties = "0.3104166687,0.0119521916,1.0000000000"
+		#Allowed Values: MERGED, SEPARATE
+		centerHudLayoutMode = "MERGED"
+		separateCenterHudInitialized = false
+		separateAuxiliaryHudInitialized = false
+		centerHudSlotTOP_LEFTProperties = "0.3479166627,0.8231737614,0.6702424288,0.3484374881,0.8592814207,0.0000000000,-14.0000000000"
+		centerHudSlotTOP_RIGHTProperties = "0.5112882853,0.8231737614,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-14.0000000000"
+		centerHudSlotMIDDLE_LEFTProperties = "0.3479166627,0.8605577946,0.6702424288,0.3484374881,0.8592814207,0.0000000000,0.0000000000"
+		centerHudSlotMIDDLE_RIGHTProperties = "0.5112882853,0.8605577946,0.6702424288,0.3484374881,0.8592814207,117.0000000000,0.0000000000"
+		centerHudSlotBOTTOM_LEFTProperties = "0.3479166627,0.8979418278,0.6702424288,0.3484374881,0.8592814207,0.0000000000,14.0000000000"
+		centerHudSlotBOTTOM_RIGHTProperties = "0.5112882853,0.8979418278,0.6702424288,0.3484374881,0.8592814207,117.0000000000,14.0000000000"
+		centerHudDynamicVEHICLE_HEALTHProperties = "0.3479166627,0.8231737614,0.6702424288,0.3484374881,0.8592814207,0.0000000000,-14.0000000000"
+		centerHudDynamicAIRProperties = "0.5112882853,0.8231737614,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-14.0000000000"
+		centerHudDynamicJUMPProperties = "0.5112882853,0.7857897282,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-28.0000000000"
+		centerHudAuxiliaryBENEFICIAL_BUFFSProperties = "0.3479166627,0.8231737614,0.6702424288,0.3484374881,0.8592814207,0.0000000000,-14.0000000000"
+		centerHudAuxiliaryDETRIMENTAL_BUFFSProperties = "0.5112882853,0.7857897282,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-28.0000000000"
+		centerHudAuxiliaryVALHEIM_FOODProperties = "0.5112882853,0.8231737614,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-14.0000000000"
+		xpBar1x9Properties = "0.4593749940,0.8592814207,0.7109642625"
+		statusValueBar1x9Properties = "0.6796875000,0.9520958066,0.7747759819"
+		temperature1x9Properties = "0.4876550138,0.8082959652,0.7109642625"
+		bodyDamage1x9Properties = "0.6545667648,0.9080962539,0.6702424288"
+		wetness1x9Properties = "0.4920985401,0.7856357694,0.7109642625"
+		1x9MainHandOffsets = "0,1,0,0"
+		hotbarEnabled = true
+		centerHudEnabled = true
+		xpBarEnabled = true
+		statusValueBarEnabled = false
+		offhandEnabled = true
+		#Allowed Values: EPIC_FIGHT, PARCOOL, PEAK_STAMINA, FEATHERS
+		staminaSource = "EPIC_FIGHT"
+		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
+		manaSource = "IRONS_SPELLBOOKS"
+		healthBarEnabled = true
+		foodBarEnabled = true
+		staminaBarEnabled = true
+		timeBarReplacesStamina = false
+		armorBarEnabled = true
+		#Legacy thirst bar setting used for migration.
+		thirstBarEnabled = false
+		#Allowed Values: STANDALONE, MERGED, DISABLED, LEGACY
+		thirstBarMode = "MERGED"
+		standaloneArmorBarEnabled = false
+		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
+		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
+		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
+		barSlotAssignments = "EMPTY,EMPTY,HEALTH,FOOD,STAMINA_EPIC_FIGHT,ARMOR"
+		# Default: 17
+		# Range: 0 ~ 50
+		statusHorizontalPadding = 17
+		# Default: 0
+		# Range: -10000 ~ 10000
+		statusHorizontalPaddingGuiOffset = 0
+		# Default: 2
+		# Range: 0 ~ 50
+		statusBarVerticalSpacing = 2
+		#Bounds for Flask UI in 1x9 layout. DuelCraft Only
+		flask1x9Properties = "0.6578124762,0.8832335472,1.1501494646"
+		#Enable Flask UI in 1x9 layout. DuelCraft Only
+		flaskEnabled1x9 = true
+
+	[properties.Layout_HOTBAR_1X9_VERTICAL]
+		hotbar1x9VerticalProperties = "0.9601873755,0.2550200820,0.7408146262"
+		offhand1x9VerticalProperties = "0.9609375000,0.7934131622,0.7177624702"
+		centerHud1x9VerticalProperties = "0.3406249881,0.8862275481,0.6997289658"
+		bossBar1x9VerticalProperties = "0.3104166687,0.0119521916,1.0000000000"
+		#Allowed Values: MERGED, SEPARATE
+		centerHudLayoutMode = "MERGED"
+		separateCenterHudInitialized = false
+		separateAuxiliaryHudInitialized = false
+		centerHudSlotTOP_LEFTProperties = "0.3416666687,0.8454334736,0.6997289658,0.3406249881,0.8862275481,0.0000000000,-14.0000000000"
+		centerHudSlotTOP_RIGHTProperties = "0.5151411295,0.8454334736,0.6997289658,0.3406249881,0.8862275481,119.0000000000,-14.0000000000"
+		centerHudSlotMIDDLE_LEFTProperties = "0.3416666687,0.8844621778,0.6997289658,0.3406249881,0.8862275481,0.0000000000,0.0000000000"
+		centerHudSlotMIDDLE_RIGHTProperties = "0.5151411295,0.8844621778,0.6997289658,0.3406249881,0.8862275481,119.0000000000,0.0000000000"
+		centerHudSlotBOTTOM_LEFTProperties = "0.3416666687,0.9234908223,0.6997289658,0.3406249881,0.8862275481,0.0000000000,14.0000000000"
+		centerHudSlotBOTTOM_RIGHTProperties = "0.5151411295,0.9234908223,0.6997289658,0.3406249881,0.8862275481,119.0000000000,14.0000000000"
+		centerHudDynamicVEHICLE_HEALTHProperties = "0.3416666687,0.8454334736,0.6997289658,0.3406249881,0.8862275481,0.0000000000,-14.0000000000"
+		centerHudDynamicAIRProperties = "0.5151411295,0.8454334736,0.6997289658,0.3406249881,0.8862275481,119.0000000000,-14.0000000000"
+		centerHudDynamicJUMPProperties = "0.5151411295,0.8064047694,0.6997289658,0.3406249881,0.8862275481,119.0000000000,-28.0000000000"
+		centerHudAuxiliaryBENEFICIAL_BUFFSProperties = "0.3416666687,0.8454334736,0.6997289658,0.3406249881,0.8862275481,0.0000000000,-14.0000000000"
+		centerHudAuxiliaryDETRIMENTAL_BUFFSProperties = "0.5151411295,0.8064047694,0.6997289658,0.3406249881,0.8862275481,119.0000000000,-28.0000000000"
+		centerHudAuxiliaryVALHEIM_FOODProperties = "0.5151411295,0.8454334736,0.6997289658,0.3406249881,0.8862275481,119.0000000000,-14.0000000000"
+		xpBar1x9VerticalProperties = "0.4859484732,0.8855421543,0.7549254894"
+		statusValueBar1x9VerticalProperties = "0.3406249881,0.9610778689,0.9156376719"
+		temperature1x9VerticalProperties = "0.4873896837,0.8314040899,0.7549254894"
+		bodyDamage1x9VerticalProperties = "0.6697892547,0.9080962539,0.6702424288"
+		wetness1x9VerticalProperties = "0.4921079576,0.8073427081,0.7549254894"
+		1x9VerticalMainHandOffsets = "1,1,0,0"
+		hotbarEnabled = true
+		centerHudEnabled = true
+		xpBarEnabled = true
+		statusValueBarEnabled = true
+		offhandEnabled = true
+		#Allowed Values: EPIC_FIGHT, PARCOOL, PEAK_STAMINA, FEATHERS
+		staminaSource = "EPIC_FIGHT"
+		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
+		manaSource = "IRONS_SPELLBOOKS"
+		healthBarEnabled = true
+		foodBarEnabled = true
+		staminaBarEnabled = true
+		timeBarReplacesStamina = false
+		armorBarEnabled = true
+		#Legacy thirst bar setting used for migration.
+		thirstBarEnabled = false
+		#Allowed Values: STANDALONE, MERGED, DISABLED, LEGACY
+		thirstBarMode = "MERGED"
+		standaloneArmorBarEnabled = false
+		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
+		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
+		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
+		barSlotAssignments = "EMPTY,EMPTY,HEALTH,FOOD,STAMINA_EPIC_FIGHT,ARMOR"
+		# Default: 19
+		# Range: 0 ~ 50
+		statusHorizontalPadding = 19
+		# Default: 0
+		# Range: -10000 ~ 10000
+		statusHorizontalPaddingGuiOffset = 0
+		# Default: 2
+		# Range: 0 ~ 50
+		statusBarVerticalSpacing = 2
+		#Bounds for Flask UI in 1x9Vertical layout. DuelCraft Only
+		flask1x9VerticalProperties = "0.2671875060,0.8802395463,1.1501494646"
+		#Enable Flask UI in 1x9Vertical layout. DuelCraft Only
+		flaskEnabled1x9Vertical = true
+
+	[properties.Layout_HOTBAR_3X3]
+		hotbar3x3Properties = "0.0046838406,0.8112449646,0.7814065218"
+		offhand3x3Properties = "0.1124999970,0.9401197433,0.7012566924"
+		centerHud3x3Properties = "0.3484374881,0.8862275481,0.6714066863"
+		bossBar3x3Properties = "0.3104166687,0.0119521916,1.0000000000"
+		#Allowed Values: MERGED, SEPARATE
+		centerHudLayoutMode = "MERGED"
+		separateCenterHudInitialized = false
+		separateAuxiliaryHudInitialized = false
+		centerHudSlotTOP_LEFTProperties = "0.3479166627,0.8416633010,0.6714066863,0.3484374881,0.8862275481,0.0000000000,-16.0000000000"
+		centerHudSlotTOP_RIGHTProperties = "0.5157683492,0.8416633010,0.6714066863,0.3484374881,0.8862275481,120.0000000000,-16.0000000000"
+		centerHudSlotMIDDLE_LEFTProperties = "0.3479166627,0.8844621778,0.6714066863,0.3484374881,0.8862275481,0.0000000000,0.0000000000"
+		centerHudSlotMIDDLE_RIGHTProperties = "0.5157683492,0.8844621778,0.6714066863,0.3484374881,0.8862275481,120.0000000000,0.0000000000"
+		centerHudSlotBOTTOM_LEFTProperties = "0.3479166627,0.9272609949,0.6714066863,0.3484374881,0.8862275481,0.0000000000,16.0000000000"
+		centerHudSlotBOTTOM_RIGHTProperties = "0.5157683492,0.9272609949,0.6714066863,0.3484374881,0.8862275481,120.0000000000,16.0000000000"
+		centerHudDynamicVEHICLE_HEALTHProperties = "0.3479166627,0.8416633010,0.6714066863,0.3484374881,0.8862275481,0.0000000000,-16.0000000000"
+		centerHudDynamicAIRProperties = "0.5157683492,0.8416633010,0.6714066863,0.3484374881,0.8862275481,120.0000000000,-16.0000000000"
+		centerHudDynamicJUMPProperties = "0.5157683492,0.7988644838,0.6714066863,0.3484374881,0.8862275481,120.0000000000,-32.0000000000"
+		centerHudAuxiliaryBENEFICIAL_BUFFSProperties = "0.3479166627,0.8470131755,0.6714066863,0.3484374881,0.8862275481,0.0000000000,-14.0000000000"
+		centerHudAuxiliaryDETRIMENTAL_BUFFSProperties = "0.5157683492,0.8095641732,0.6714066863,0.3484374881,0.8862275481,120.0000000000,-28.0000000000"
+		centerHudAuxiliaryVALHEIM_FOODProperties = "0.5157683492,0.8470131755,0.6714066863,0.3484374881,0.8862275481,120.0000000000,-14.0000000000"
+		xpBar3x3Properties = "0.4730679095,0.8835341334,0.8033816218"
+		statusValueBar3x3Properties = "0.3484374881,0.9640718699,0.8780996799"
+		temperature3x3Properties = "0.4893610179,0.8259211183,0.8033816218"
+		bodyDamage3x3Properties = "0.6662763357,0.9080962539,0.6702424288"
+		wetness3x3Properties = "0.4943821430,0.8003153205,0.8033816218"
+		3x3MainHandOffsets = "1,1,1,0"
+		hotbarEnabled = true
+		centerHudEnabled = true
+		xpBarEnabled = true
+		statusValueBarEnabled = true
+		offhandEnabled = true
+		#Allowed Values: EPIC_FIGHT, PARCOOL, PEAK_STAMINA, FEATHERS
+		staminaSource = "EPIC_FIGHT"
+		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
+		manaSource = "IRONS_SPELLBOOKS"
+		healthBarEnabled = true
+		foodBarEnabled = true
+		staminaBarEnabled = true
+		timeBarReplacesStamina = false
+		armorBarEnabled = true
+		#Legacy thirst bar setting used for migration.
+		thirstBarEnabled = false
+		#Allowed Values: STANDALONE, MERGED, DISABLED, LEGACY
+		thirstBarMode = "MERGED"
+		standaloneArmorBarEnabled = false
+		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
+		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
+		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
+		barSlotAssignments = "EMPTY,EMPTY,HEALTH,FOOD,STAMINA_EPIC_FIGHT,ARMOR"
+		# Default: 20
+		# Range: 0 ~ 50
+		statusHorizontalPadding = 20
+		# Default: 0
+		# Range: -10000 ~ 10000
+		statusHorizontalPaddingGuiOffset = 0
+		# Default: 4
+		# Range: 0 ~ 50
+		statusBarVerticalSpacing = 4
+		#Bounds for Flask UI in 3x3 layout. DuelCraft Only
+		flask3x3Properties = "0.2687500119,0.8802395463,1.1876868010"
+		#Enable Flask UI in 3x3 layout. DuelCraft Only
+		flaskEnabled3x3 = true
+
+	[properties.Layout_THIRST_ADDITIONAL]
+		hotbarThirstAdditionalProperties = "0.3515625000,0.9341317415,0.7815815210"
+		offhandThirstAdditionalProperties = "0.3031249940,0.9333333373,0.7824444175"
+		centerHudThirstAdditionalProperties = "0.3484374881,0.8592814207,0.6702424288"
+		bossBarThirstAdditionalProperties = "0.3104166687,0.0119521916,1.0000000000"
+		#Allowed Values: MERGED, SEPARATE
+		centerHudLayoutMode = "MERGED"
+		separateCenterHudInitialized = false
+		separateAuxiliaryHudInitialized = false
+		centerHudSlotTOP_LEFTProperties = "0.3479166627,0.8231737614,0.6702424288,0.3484374881,0.8592814207,0.0000000000,-14.0000000000"
+		centerHudSlotTOP_RIGHTProperties = "0.5112882853,0.8231737614,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-14.0000000000"
+		centerHudSlotMIDDLE_LEFTProperties = "0.3479166627,0.8605577946,0.6702424288,0.3484374881,0.8592814207,0.0000000000,0.0000000000"
+		centerHudSlotMIDDLE_RIGHTProperties = "0.5112882853,0.8605577946,0.6702424288,0.3484374881,0.8592814207,117.0000000000,0.0000000000"
+		centerHudSlotBOTTOM_LEFTProperties = "0.3479166627,0.8979418278,0.6702424288,0.3484374881,0.8592814207,0.0000000000,14.0000000000"
+		centerHudSlotBOTTOM_RIGHTProperties = "0.5112882853,0.8979418278,0.6702424288,0.3484374881,0.8592814207,117.0000000000,14.0000000000"
+		centerHudDynamicVEHICLE_HEALTHProperties = "0.3479166627,0.7857897282,0.6702424288,0.3484374881,0.8592814207,0.0000000000,-28.0000000000"
+		centerHudDynamicAIRProperties = "0.5112882853,0.7857897282,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-28.0000000000"
+		centerHudDynamicJUMPProperties = "0.5112882853,0.7484056950,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-42.0000000000"
+		centerHudAuxiliaryBENEFICIAL_BUFFSProperties = "0.3479166627,0.7857897282,0.6702424288,0.3484374881,0.8592814207,0.0000000000,-28.0000000000"
+		centerHudAuxiliaryDETRIMENTAL_BUFFSProperties = "0.5112882853,0.7484056950,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-42.0000000000"
+		centerHudAuxiliaryVALHEIM_FOODProperties = "0.5112882853,0.7857897282,0.6702424288,0.3484374881,0.8592814207,117.0000000000,-28.0000000000"
+		xpBarThirstAdditionalProperties = "0.4593749940,0.8592814207,0.7109642625"
+		statusValueBarThirstAdditionalProperties = "0.6796875000,0.9520958066,0.7747759819"
+		temperatureThirstAdditionalProperties = "0.4876550138,0.8082959652,0.7109642625"
+		bodyDamageThirstAdditionalProperties = "0.6545667648,0.9080962539,0.6702424288"
+		wetnessThirstAdditionalProperties = "0.4920985401,0.7856357694,0.7109642625"
+		ThirstAdditionalMainHandOffsets = "0,1,0,0"
+		hotbarEnabled = true
+		centerHudEnabled = true
+		xpBarEnabled = true
+		statusValueBarEnabled = false
+		offhandEnabled = true
+		#Allowed Values: EPIC_FIGHT, PARCOOL, PEAK_STAMINA, FEATHERS
+		staminaSource = "EPIC_FIGHT"
+		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
+		manaSource = "IRONS_SPELLBOOKS"
+		healthBarEnabled = true
+		foodBarEnabled = true
+		staminaBarEnabled = true
+		timeBarReplacesStamina = false
+		armorBarEnabled = true
+		#Legacy thirst bar setting used for migration.
+		thirstBarEnabled = true
+		#Allowed Values: STANDALONE, MERGED, DISABLED, LEGACY
+		thirstBarMode = "MERGED"
+		standaloneArmorBarEnabled = true
+		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
+		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
+		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
+		barSlotAssignments = "ARMOR,THIRST,HEALTH,FOOD,STAMINA_EPIC_FIGHT,MANA_IRONS_SPELLBOOKS"
+		# Default: 17
+		# Range: 0 ~ 50
+		statusHorizontalPadding = 17
+		# Default: 0
+		# Range: -10000 ~ 10000
+		statusHorizontalPaddingGuiOffset = 0
+		# Default: 2
+		# Range: 0 ~ 50
+		statusBarVerticalSpacing = 2
+		#Bounds for Flask UI in ThirstAdditional layout. DuelCraft Only
+		flaskThirstAdditionalProperties = "0.6578124762,0.8832335472,1.1501494646"
+		#Enable Flask UI in ThirstAdditional layout. DuelCraft Only
+		flaskEnabledThirstAdditional = true
+
+	[properties.Layout_FINALITY_1]
+		hotbarFinality1Properties = "0.0000000000,0.1597374231,0.7408146262"
+		offhandFinality1Properties = "0.0000000000,0.7483588457,0.7177624702"
+		centerHudFinality1Properties = "0.0526932068,0.6673960686,1.2999999523"
+		bossBarFinality1Properties = "0.3104166687,0.0119521916,1.0000000000"
+		#Allowed Values: ONE_BY_NINE, ONE_BY_NINE_VERTICAL, TWO_BY_FIVE, THREE_BY_THREE
+		finalityHotbarLayout = "ONE_BY_NINE_VERTICAL"
+		#Allowed Values: MERGED, SEPARATE
+		centerHudLayoutMode = "MERGED"
+		separateCenterHudInitialized = false
+		separateAuxiliaryHudInitialized = false
+		centerHudSlotTOP_LEFTProperties = "0.0520833321,0.5968127847,1.2999999523,0.0526932068,0.6673960686,0.0000000000,-14.0000000000"
+		centerHudSlotTOP_RIGHTProperties = "0.3689583242,0.5968127847,1.2999999523,0.0526932068,0.6673960686,117.0000000000,-14.0000000000"
+		centerHudSlotMIDDLE_LEFTProperties = "0.0520833321,0.6693227291,1.2999999523,0.0526932068,0.6673960686,0.0000000000,0.0000000000"
+		centerHudSlotMIDDLE_RIGHTProperties = "0.3689583242,0.6693227291,1.2999999523,0.0526932068,0.6673960686,117.0000000000,0.0000000000"
+		centerHudSlotBOTTOM_LEFTProperties = "0.0520833321,0.7418326735,1.2999999523,0.0526932068,0.6673960686,0.0000000000,14.0000000000"
+		centerHudSlotBOTTOM_RIGHTProperties = "0.3689583242,0.7418326735,1.2999999523,0.0526932068,0.6673960686,117.0000000000,14.0000000000"
+		centerHudDynamicVEHICLE_HEALTHProperties = "0.0520833321,0.5243028402,1.2999999523,0.0526932068,0.6673960686,0.0000000000,-28.0000000000"
+		centerHudDynamicAIRProperties = "0.3689583242,0.5968127847,1.2999999523,0.0526932068,0.6673960686,117.0000000000,-14.0000000000"
+		centerHudDynamicJUMPProperties = "0.3689583242,0.5243028402,1.2999999523,0.0526932068,0.6673960686,117.0000000000,-28.0000000000"
+		centerHudAuxiliaryBENEFICIAL_BUFFSProperties = "0.0520833321,0.5243028402,1.2999999523,0.0526932068,0.6673960686,0.0000000000,-28.0000000000"
+		centerHudAuxiliaryDETRIMENTAL_BUFFSProperties = "0.3689583242,0.5243028402,1.2999999523,0.0526932068,0.6673960686,117.0000000000,-28.0000000000"
+		centerHudAuxiliaryVALHEIM_FOODProperties = "0.3689583242,0.5968127847,1.2999999523,0.0526932068,0.6673960686,117.0000000000,-14.0000000000"
+		xpBarFinality1Properties = "0.4593749940,0.8592814207,0.7109642625"
+		statusValueBarFinality1Properties = "0.6796875000,0.9520958066,0.7747759819"
+		temperatureFinality1Properties = "0.1018735394,0.6564551592,0.7109642625"
+		bodyDamageFinality1Properties = "0.6545667648,0.9080962539,0.6702424288"
+		wetnessFinality1Properties = "0.1065573767,0.6367614865,0.7109642625"
+		Finality1MainHandOffsets = "1,1,0,0"
+		hotbarEnabled = true
+		centerHudEnabled = true
+		xpBarEnabled = true
+		statusValueBarEnabled = false
+		offhandEnabled = true
+		#Allowed Values: EPIC_FIGHT, PARCOOL, PEAK_STAMINA, FEATHERS
+		staminaSource = "EPIC_FIGHT"
+		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
+		manaSource = "IRONS_SPELLBOOKS"
+		healthBarEnabled = true
+		foodBarEnabled = true
+		staminaBarEnabled = true
+		timeBarReplacesStamina = false
+		armorBarEnabled = true
+		#Legacy thirst bar setting used for migration.
+		thirstBarEnabled = false
+		#Allowed Values: STANDALONE, MERGED, DISABLED, LEGACY
+		thirstBarMode = "MERGED"
+		standaloneArmorBarEnabled = false
+		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
+		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
+		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
+		barSlotAssignments = "MANA_IRONS_SPELLBOOKS,EMPTY,HEALTH,EMPTY,STAMINA_EPIC_FIGHT,EMPTY"
+		# Default: 17
+		# Range: 0 ~ 50
+		statusHorizontalPadding = 17
+		# Default: 0
+		# Range: -10000 ~ 10000
+		statusHorizontalPaddingGuiOffset = 0
+		# Default: 2
+		# Range: 0 ~ 50
+		statusBarVerticalSpacing = 2
+		#Bounds for Flask UI in Finality1 layout. DuelCraft Only
+		flaskFinality1Properties = "0.6578124762,0.8832335472,1.1501494646"
+		#Enable Flask UI in Finality1 layout. DuelCraft Only
+		flaskEnabledFinality1 = true
+
+	[properties.Layout_FINALITY_2]
+		hotbarFinality2Properties = "0.3515625000,0.9341317415,0.7815815210"
+		offhandFinality2Properties = "0.3031249940,0.9333333373,0.7824444175"
+		centerHudFinality2Properties = "0.3384074867,0.8096280098,1.3999999762"
+		bossBarFinality2Properties = "0.3104166687,0.0119521916,1.0000000000"
+		#Allowed Values: ONE_BY_NINE, ONE_BY_NINE_VERTICAL, TWO_BY_FIVE, THREE_BY_THREE
+		finalityHotbarLayout = "ONE_BY_NINE"
+		#Allowed Values: MERGED, SEPARATE
+		centerHudLayoutMode = "MERGED"
+		separateCenterHudInitialized = false
+		separateAuxiliaryHudInitialized = false
+		centerHudSlotTOP_LEFTProperties = "0.3375000060,0.7306772470,1.3999999762,0.3384074867,0.8096280098,0.0000000000,-14.0000000000"
+		centerHudSlotTOP_RIGHTProperties = "0.6787499785,0.7306772470,1.3999999762,0.3384074867,0.8096280098,117.0000000000,-14.0000000000"
+		centerHudSlotMIDDLE_LEFTProperties = "0.3375000060,0.8087649345,1.3999999762,0.3384074867,0.8096280098,0.0000000000,0.0000000000"
+		centerHudSlotMIDDLE_RIGHTProperties = "0.6787499785,0.8087649345,1.3999999762,0.3384074867,0.8096280098,117.0000000000,0.0000000000"
+		centerHudSlotBOTTOM_LEFTProperties = "0.3375000060,0.8868526220,1.3999999762,0.3384074867,0.8096280098,0.0000000000,14.0000000000"
+		centerHudSlotBOTTOM_RIGHTProperties = "0.6787499785,0.8868526220,1.3999999762,0.3384074867,0.8096280098,117.0000000000,14.0000000000"
+		centerHudDynamicVEHICLE_HEALTHProperties = "0.3375000060,0.6525896788,1.3999999762,0.3384074867,0.8096280098,0.0000000000,-28.0000000000"
+		centerHudDynamicAIRProperties = "0.6787499785,0.6525896788,1.3999999762,0.3384074867,0.8096280098,117.0000000000,-28.0000000000"
+		centerHudDynamicJUMPProperties = "0.6787499785,0.5745019913,1.3999999762,0.3384074867,0.8096280098,117.0000000000,-42.0000000000"
+		centerHudAuxiliaryBENEFICIAL_BUFFSProperties = "0.3375000060,0.6525896788,1.3999999762,0.3384074867,0.8096280098,0.0000000000,-28.0000000000"
+		centerHudAuxiliaryDETRIMENTAL_BUFFSProperties = "0.6787499785,0.5745019913,1.3999999762,0.3384074867,0.8096280098,117.0000000000,-42.0000000000"
+		centerHudAuxiliaryVALHEIM_FOODProperties = "0.6787499785,0.6525896788,1.3999999762,0.3384074867,0.8096280098,117.0000000000,-28.0000000000"
+		xpBarFinality2Properties = "0.4593749940,0.8592814207,0.7109642625"
+		statusValueBarFinality2Properties = "0.6796875000,0.9520958066,0.7747759819"
+		temperatureFinality2Properties = "0.4954422712,0.8082959652,0.7109642625"
+		bodyDamageFinality2Properties = "0.6545667648,0.9080962539,0.6702424288"
+		wetnessFinality2Properties = "0.4998857975,0.7856357694,0.7109642625"
+		Finality2MainHandOffsets = "0,1,0,0"
+		hotbarEnabled = true
+		centerHudEnabled = true
+		xpBarEnabled = true
+		statusValueBarEnabled = false
+		offhandEnabled = true
+		#Allowed Values: EPIC_FIGHT, PARCOOL, PEAK_STAMINA, FEATHERS
+		staminaSource = "EPIC_FIGHT"
+		#Allowed Values: IRONS_SPELLBOOKS, ARS_NOUVEAU
+		manaSource = "IRONS_SPELLBOOKS"
+		healthBarEnabled = true
+		foodBarEnabled = true
+		staminaBarEnabled = true
+		timeBarReplacesStamina = false
+		armorBarEnabled = true
+		#Legacy thirst bar setting used for migration.
+		thirstBarEnabled = false
+		#Allowed Values: STANDALONE, MERGED, DISABLED, LEGACY
+		thirstBarMode = "MERGED"
+		standaloneArmorBarEnabled = false
+		#Bar type per center HUD slot, order: TOP_LEFT,TOP_RIGHT,MIDDLE_LEFT,MIDDLE_RIGHT,BOTTOM_LEFT,BOTTOM_RIGHT.
+		#Valid types: EMPTY, HEALTH, FOOD, STAMINA_EPIC_FIGHT, STAMINA_PARCOOL, STAMINA_PEAK_STAMINA, STAMINA_FEATHERS, ARMOR, THIRST, MANA_IRONS_SPELLBOOKS, MANA_ARS_NOUVEAU, MANA, TIME.
+		#STAMINA is a legacy value migrated using staminaSource. Empty string = migrate from the legacy per-bar toggles above.
+		barSlotAssignments = "STAMINA_EPIC_FIGHT,EXPERIENCE,HEALTH,EMPTY,MANA_IRONS_SPELLBOOKS,EMPTY"
+		# Default: 17
+		# Range: 0 ~ 50
+		statusHorizontalPadding = 17
+		# Default: 0
+		# Range: -10000 ~ 10000
+		statusHorizontalPaddingGuiOffset = 0
+		# Default: 2
+		# Range: 0 ~ 50
+		statusBarVerticalSpacing = 2
+		#Bounds for Flask UI in Finality2 layout. DuelCraft Only
+		flaskFinality2Properties = "0.6578124762,0.8832335472,1.1501494646"
+		#Enable Flask UI in Finality2 layout. DuelCraft Only
+		flaskEnabledFinality2 = true
+
+	[properties.Global_Offsets]
+		defaultOffHandOffsets = "0,0,0,0"
+		separateOffHandOffsets = "-2,-3,0,0"
+		selectedItemNameOffsets = "2,0,0,0"
+
+	[properties.Global_Buff_Settings]
+		#Scale factor for buff icons.
+		# Default: 0.5
+		# Range: 0.1 ~ 5.0
+		buffFrameScaleFactor = 0.5
+		#Vertical offset of buff bar from the bottom center HUD.
+		# Default: 2
+		# Range: -100 ~ 100
+		buffBarVerticalOffset = 2
+		#Horizontal gap between buff icons.
+		# Default: 2
+		# Range: 0 ~ 50
+		buffIconHorizontalGap = 2
+		#Vertical gap between rows of buff icons.
+		# Default: 2
+		# Range: 0 ~ 50
+		buffRowVerticalGap = 2
+
+	[properties.Global_Toggles]
+		#Allow Ares HUD to override Mana Unification/Iron's Spells/Covenant of the Seven Mana/LP bars.
+		#Set to false if you want to use the original mod's UI.
+		overrideSpellBars = true
+		#Select whether Spice of Life: Valheim Reforged renders its native food HUD or Ares HUD renders the food slots.
+		#Allowed Values: NATIVE, ARES
+		valheimFoodHudMode = "NATIVE"
+		#Replace the food/hunger bar with the mana bar.
+		#Functions similarly to the TcrCore/DuelCraft integration. Suitable for magic-heavy modpacks.
+		replaceFoodWithMana = false
+		#Always Display mana for Mana Unification
+		focusDisplayManaMu = true
+		#Always Display mana for Iron's Spells
+		focusDisplayManaIss = false
+		#Always Display Food In Status Valuebar, if turned off, it depend on wether the bar is on
+		focusDisplayStatusValueBarFood = true
+		#Always Display Mana In Status Valuebar, if turned off, it depend on wether the bar is on
+		focusDisplayStatusValueBarMana = true
+		#Always Display Armor In Status Valuebar, if turned off, it depend on wether the bar is on
+		focusDisplayStatusValueBarArmor = true
+		#Automatically snap the XP/Ascension orb to the center of the gap between left and right status bars.
+		#When disabled, a scale-aware proximity check is used instead.
+		snapXpToCenterHud = true
+
+	[properties.Dynamic_Hud]
+		#Dynamically hide Ares HUD components when they are not needed.
+		enabled = false
+		#Allowed Values: MOVE, FADE, BOTH, NONE
+		animation = "FADE"
+		#Allowed Values: INDIVIDUAL, SAME_ROW, GROUPED, ALL
+		grouping = "SAME_ROW"
+		# Default: 120
+		# Range: 10 ~ 400
+		revealTicks = 120
+		# Default: 10
+		# Range: 0 ~ 40
+		animationTicks = 10
+		# Default: 40
+		# Range: 0 ~ 200
+		moveDistance = 40
+		showOnActivity = true
+		autoHide = true
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		healthPolicy = "CHANGING"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		foodPolicy = "CHANGING"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		armorPolicy = "CHANGING"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		thirstPolicy = "CHANGING"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		manaPolicy = "CHANGING"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		staminaPolicy = "CHANGING"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		airPolicy = "CHANGING"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		hotbarPolicy = "ALWAYS"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		experiencePolicy = "FOLLOW_CENTER_HUD"
+		#Allowed Values: ALWAYS, FORCE_ALWAYS, DISABLED, FOLLOW_CENTER_HUD, CHANGING, INCREASING, DECREASING, NOT_FULL, LOW
+		statusValuesPolicy = "CHANGING"

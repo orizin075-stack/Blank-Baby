@@ -1,0 +1,81 @@
+#Unlimited thematic revivals, with engine ceilings.
+loreMode = true
+#Bounded alchemy, also requires mobGriefing.
+terrainChanges = false
+naturalEncounters = true
+# Default: 6
+# Range: 0 ~ 16
+summonsPerCreator = 6
+# Default: 96
+# Range: 0 ~ 256
+summonsPerLevel = 96
+# Default: 2
+# Range: 0 ~ 16
+balancedRevivalLimit = 2
+# Default: 1.0
+# Range: 0.05 ~ 100.0
+damageMultiplier = 1.0
+# Default: 24
+# Range: 0 ~ 128
+blocksPerAbility = 24
+# Default: 12000
+# Range: 1200 ~ 72000
+encounterIntervalTicks = 12000
+#Persistent combat, memory and growth for all mobs.
+smartMobs = true
+armedVillagers = true
+#One safe terrain action per mob per 40 ticks; respects mobGriefing.
+aiTerrain = true
+mobLevels = true
+miningVillagers = true
+villagerRoles = true
+levelRewards = true
+levelAuras = true
+divineDomains = true
+dialogueArchive = true
+#Server-only API; no key means local dialogue.
+onlineAi = true
+localGenerativeAi = true
+localAiEndpoint = "http://127.0.0.1:8023/v1/responses"
+# Default: 600
+# Range: 0 ~ 10000
+localAiRequestsPerHour = 600
+# Default: 16
+# Range: 0 ~ 1000
+aiRequestsPerHour = 16
+# Default: 3
+# Range: 1 ~ 3600
+chatCooldownSeconds = 3
+# Default: 2048
+# Range: 500 ~ 8192
+chatCharacters = 2048
+# Default: 1024
+# Range: 240 ~ 4096
+replyCharacters = 1024
+# Default: 256
+# Range: 32 ~ 4096
+combatDecisionsPerTick = 256
+#One persistent level-6 lottery per individual, default one in 2000.
+# Default: 5.0E-4
+# Range: 0.0 ~ 1.0
+level6Chance = 5.0E-4
+# Default: 16
+# Range: 4 ~ 24
+minerRange = 16
+# Default: 16
+# Range: 2 ~ 32
+minerDepth = 16
+tukuyo = true
+tukuyoEndpoint = "http://127.0.0.1:8022/v1/mind"
+#Nearby NPCs may research combat once per Minecraft day, within the shared API budget.
+autonomousResearch = true
+humanVillagerModels = false
+aiModel = "gpt-5.4-mini"
+villageReputation = true
+villagerCivilization = true
+mobCooperation = true
+extraCharacterAbilities = true
+modEquipmentUse = true
+# Default: 16
+# Range: 1 ~ 128
+villageActionsPerTick = 16

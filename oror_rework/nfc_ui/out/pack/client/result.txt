@@ -1,0 +1,24 @@
+201 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+401 screenshot 01_title
+422 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+482 screenshot 02_create_world
+492 press selectWorld.create on CreateWorldScreen
+493 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+593 screenshot popup_1_ConfirmScreen
+593 press gui.yes on ConfirmScreen
+594 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+619 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+639 screen none in LOADING
+640 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+740 screenshot popup_2_
+741 screen none in PLAY
+762 weapon efn:hf_murasama
+1140 screenshot 04_hud_weapon
+1240 screenshot 05_hud_tool
+1251 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
+1320 screenshot 06_inventory
+1331 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
+1390 screenshot 07_pause
+1401 screen none in PLAY
+1500 screenshot 08_hud_weapon_again
+1520 finished: complete

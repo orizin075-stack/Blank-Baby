@@ -1,0 +1,467 @@
+gl Mesa | llvmpipe (LLVM 20.1.2, 256 bits) | 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.4
+window 1600x900 gui scale 3.0
+selected packs [tacz_resources, vanilla, mod_resources, file/xali's Enhanced Vanilla -1.11.2b-rev.54d51d4.zip, file/Stay_True_1.20.zip, file/true_nitwit_texture.zip, file/Vulmoons calaclysm remake_0.5.zip, file/DMC5 yamato for Nightfall v1.2.zip, file/trident trail.zip, file/more_power.zip, file/【Released】BDHill Reforge the Sword Edge-2.0_1.20.1.zip, file/epicfightx_better_trail1.5.zip, file/EclecticTrove-1.20.1-1.3.0.zip, file/MandalasGUI+Dakmode_1.21.8_v3.1.zip, file/Mandalas GUI - Dark Mode KOTS Compat 3.6.zip, mod/oror_supreme_bosses:resourcepacks/macabre_091_atlas, mod/oror_supreme_bosses:resourcepacks/geomancy_110_atlas, mod/oror_supreme_bosses:resourcepacks/golems_guide_3143, mod/oror_supreme_bosses:resourcepacks/mowzie_182, mod/oror_supreme_bosses:resourcepacks/sbw_0892, mod/oror_supreme_bosses:resourcepacks/jeg_182]
+available packs [high_contrast, programmer_art, vanilla, file/DMC5 yamato for Nightfall v1.2.zip, file/EclecticTrove-1.20.1-1.3.0.zip, file/Mandalas GUI - Dark Mode KOTS Compat 3.6.zip, file/MandalasGUI+Dakmode_1.21.8_v3.1.zip, file/Stay_True_1.20.zip, file/Vulmoons calaclysm remake_0.5.zip, file/epicfightx_better_trail1.5.zip, file/more_power.zip, file/trident trail.zip, file/true_nitwit_texture.zip, file/xali's Enhanced Vanilla -1.11.2b-rev.54d51d4.zip, file/【Released】BDHill Reforge the Sword Edge-2.0_1.20.1.zip, mod_resources, epicfightx_builtin, mod/superbwarfare:resourcepacks/sbw_legacy, mod/oror_supreme_bosses:resourcepacks/macabre_091_atlas, mod/oror_supreme_bosses:resourcepacks/geomancy_110_atlas, mod/oror_supreme_bosses:resourcepacks/golems_guide_3143, mod/oror_supreme_bosses:resourcepacks/mowzie_182, mod/oror_supreme_bosses:resourcepacks/sbw_0892, mod/oror_supreme_bosses:resourcepacks/jeg_182, tacz_resources, epicfight_legacy, mod/iceandfire:resourcepacks/iaf_legacy, builtin/builtin_resource_packs/legacy_dead_king_resource_pack]
+key key.attack default=key.mouse.left now=key.mouse.left category=key.categories.gameplay
+key key.use default=key.mouse.right now=key.mouse.right category=key.categories.gameplay
+key key.forward default=key.keyboard.w now=key.keyboard.w category=key.categories.movement
+key key.left default=key.keyboard.a now=key.keyboard.a category=key.categories.movement
+key key.back default=key.keyboard.s now=key.keyboard.s category=key.categories.movement
+key key.right default=key.keyboard.d now=key.keyboard.d category=key.categories.movement
+key key.jump default=key.keyboard.space now=key.keyboard.space category=key.categories.movement
+key key.sneak default=key.keyboard.left.shift now=key.keyboard.left.shift category=key.categories.movement
+key key.sprint default=key.keyboard.left.control now=key.keyboard.left.control category=key.categories.movement
+key key.drop default=key.keyboard.q now=key.keyboard.q category=key.categories.inventory
+key key.inventory default=key.keyboard.e now=key.keyboard.e category=key.categories.inventory
+key key.chat default=key.keyboard.t now=key.keyboard.t category=key.categories.multiplayer
+key key.playerlist default=key.keyboard.tab now=key.keyboard.tab category=key.categories.multiplayer
+key key.pickItem default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.gameplay
+key key.command default=key.keyboard.slash now=key.keyboard.slash category=key.categories.multiplayer
+key key.socialInteractions default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.multiplayer
+key key.screenshot default=key.keyboard.f2 now=key.keyboard.f2 category=key.categories.misc
+key key.togglePerspective default=key.keyboard.f5 now=key.keyboard.f5 category=key.categories.misc
+key key.smoothCamera default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.misc
+key key.fullscreen default=key.keyboard.f11 now=key.keyboard.f11 category=key.categories.misc
+key key.spectatorOutlines default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.misc
+key key.swapOffhand default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.inventory
+key key.saveToolbarActivator default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.creative
+key key.loadToolbarActivator default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.creative
+key key.advancements default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.misc
+key key.hotbar.1 default=key.keyboard.1 now=key.keyboard.1 category=key.categories.inventory
+key key.hotbar.2 default=key.keyboard.2 now=key.keyboard.2 category=key.categories.inventory
+key key.hotbar.3 default=key.keyboard.3 now=key.keyboard.3 category=key.categories.inventory
+key key.hotbar.4 default=key.keyboard.4 now=key.keyboard.4 category=key.categories.inventory
+key key.hotbar.5 default=key.keyboard.5 now=key.keyboard.5 category=key.categories.inventory
+key key.hotbar.6 default=key.keyboard.6 now=key.keyboard.6 category=key.categories.inventory
+key key.hotbar.7 default=key.keyboard.7 now=key.keyboard.7 category=key.categories.inventory
+key key.hotbar.8 default=key.keyboard.8 now=key.keyboard.8 category=key.categories.inventory
+key key.hotbar.9 default=key.keyboard.9 now=key.keyboard.9 category=key.categories.inventory
+key key.fancytoasts.config_menu default=key.keyboard.k now=key.keyboard.k category=key.categories.misc
+key key.immersive_aircraft.fallback_control_left default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_right default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_forward default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_backward default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_up default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_down default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_throttle_up default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_throttle_down default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_pull default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_control_push default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.fallback_use default=key.keyboard.unknown now=key.keyboard.unknown category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.dismount default=key.keyboard.r now=key.keyboard.r category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.boost default=key.keyboard.b now=key.keyboard.b category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.mouse_control default=key.keyboard.grave.accent now=key.keyboard.grave.accent category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.immersive_aircraft.free_look default=key.keyboard.left.alt now=key.keyboard.left.alt category=itemGroup.immersive_aircraft.immersive_aircraft_tab
+key key.sophisticatedcore.sort default=key.mouse.middle now=key.mouse.middle category=key.category.sophisticatedcore.main
+key key.sophisticatedcore.transfer_to_storage default=key.keyboard.left.bracket now=key.keyboard.left.bracket category=key.category.sophisticatedcore.main
+key key.sophisticatedcore.transfer_to_inventory default=key.keyboard.right.bracket now=key.keyboard.right.bracket category=key.category.sophisticatedcore.main
+key gui.xaero_open_map default=key.keyboard.m now=key.keyboard.m category=Xaero's World Map
+key gui.xaero_open_settings default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's World Map
+key gui.xaero_world_map_server_settings default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's World Map
+key gui.xaero_map_zoom_in default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's World Map
+key gui.xaero_map_zoom_out default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's World Map
+key gui.xaero_quick_confirm default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's World Map
+key gui.xaero_toggle_dimension default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's World Map
+key placebo.toggleTrails default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.placebo
+key placebo.toggleWings default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.placebo
+key key.modernfix.config default=key.keyboard.unknown now=key.keyboard.unknown category=key.modernfix
+key key.epicskills.open_skill_tree default=key.keyboard.k now=key.keyboard.k category=key.epicskills.gui
+key key.sophisticatedbackpacks.open_backpack default=key.keyboard.b now=key.keyboard.b category=key.category.sophisticatedbackpacks.main
+key key.sophisticatedbackpacks.inventory_interaction default=key.keyboard.c now=key.keyboard.c category=key.category.sophisticatedbackpacks.main
+key key.sophisticatedbackpacks.tool_swap default=key.keyboard.unknown now=key.keyboard.unknown category=key.category.sophisticatedbackpacks.main
+key key.sophisticatedbackpacks.toggle_upgrade_4 default=key.keyboard.unknown now=key.keyboard.unknown category=key.category.sophisticatedbackpacks.main
+key key.sophisticatedbackpacks.toggle_upgrade_5 default=key.keyboard.unknown now=key.keyboard.unknown category=key.category.sophisticatedbackpacks.main
+key key.sophisticatedbackpacks.toggle_upgrade_1 default=key.keyboard.z now=key.keyboard.z category=key.category.sophisticatedbackpacks.main
+key key.sophisticatedbackpacks.toggle_upgrade_2 default=key.keyboard.x now=key.keyboard.x category=key.category.sophisticatedbackpacks.main
+key key.sophisticatedbackpacks.toggle_upgrade_3 default=key.keyboard.unknown now=key.keyboard.unknown category=key.category.sophisticatedbackpacks.main
+key simulated.keyinfo.rotate_mode default=key.keyboard.tab now=key.keyboard.tab category=Create Simulated
+key simulated.keyinfo.scroll_up default=key.keyboard.unknown now=key.keyboard.unknown category=Create Simulated
+key simulated.keyinfo.scroll_down default=key.keyboard.unknown now=key.keyboard.unknown category=Create Simulated
+key key.superbwarfare.move_forward default=key.keyboard.w now=key.keyboard.w category=key.categories.superbwarfare
+key key.superbwarfare.move_backward default=key.keyboard.s now=key.keyboard.s category=key.categories.superbwarfare
+key key.superbwarfare.move_left default=key.keyboard.a now=key.keyboard.a category=key.categories.superbwarfare
+key key.superbwarfare.move_right default=key.keyboard.d now=key.keyboard.d category=key.categories.superbwarfare
+key key.superbwarfare.move_space default=key.keyboard.space now=key.keyboard.space category=key.categories.superbwarfare
+key key.superbwarfare.move_shift default=key.keyboard.left.shift now=key.keyboard.left.shift category=key.categories.superbwarfare
+key key.superbwarfare.move_ctrl default=key.keyboard.left.control now=key.keyboard.left.control category=key.categories.superbwarfare
+key key.superbwarfare.reload default=key.keyboard.r now=key.keyboard.r category=key.categories.superbwarfare
+key key.superbwarfare.fire_mode default=key.keyboard.n now=key.keyboard.n category=key.categories.superbwarfare
+key key.superbwarfare.sensitivity_increase default=key.keyboard.page.up now=key.keyboard.page.up category=key.categories.superbwarfare
+key key.superbwarfare.sensitivity_reduce default=key.keyboard.page.down now=key.keyboard.page.down category=key.categories.superbwarfare
+key key.superbwarfare.interact default=key.keyboard.x now=key.keyboard.x category=key.categories.superbwarfare
+key key.superbwarfare.dismount default=key.keyboard.left.alt now=key.keyboard.left.alt category=key.categories.superbwarfare
+key key.superbwarfare.breath default=key.keyboard.left.control now=key.keyboard.left.control category=key.categories.superbwarfare
+key key.superbwarfare.change_seat default=key.keyboard.left.shift now=key.keyboard.left.shift category=key.categories.superbwarfare
+key key.superbwarfare.config default=key.keyboard.o now=key.keyboard.o category=key.categories.superbwarfare
+key key.superbwarfare.edit_mode default=key.keyboard.h now=key.keyboard.h category=key.categories.superbwarfare
+key key.superbwarfare.change_ammo_forward default=key.keyboard.left now=key.keyboard.left category=key.categories.superbwarfare
+key key.superbwarfare.change_ammo_backward default=key.keyboard.right now=key.keyboard.right category=key.categories.superbwarfare
+key key.superbwarfare.change_fire_mode_forward default=key.keyboard.up now=key.keyboard.up category=key.categories.superbwarfare
+key key.superbwarfare.change_fire_mode_backward default=key.keyboard.down now=key.keyboard.down category=key.categories.superbwarfare
+key key.superbwarfare.unload default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.superbwarfare
+key key.superbwarfare.unload_passengers default=key.keyboard.u now=key.keyboard.u category=key.categories.superbwarfare
+key key.superbwarfare.disconnect_towing default=key.keyboard.y now=key.keyboard.y category=key.categories.superbwarfare
+key key.superbwarfare.fire default=key.mouse.left now=key.mouse.left category=key.categories.superbwarfare
+key key.superbwarfare.hold_zoom default=key.mouse.right now=key.mouse.right category=key.categories.superbwarfare
+key key.superbwarfare.switch_zoom default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.superbwarfare
+key key.superbwarfare.release_decoy default=key.keyboard.v now=key.keyboard.v category=key.categories.superbwarfare
+key key.superbwarfare.free_camera default=key.keyboard.c now=key.keyboard.c category=key.categories.superbwarfare
+key key.superbwarfare.melee default=key.keyboard.v now=key.keyboard.v category=key.categories.superbwarfare
+key key.superbwarfare.vehicle_seek default=key.keyboard.x now=key.keyboard.x category=key.categories.superbwarfare
+key key.superbwarfare.mark default=key.mouse.middle now=key.mouse.middle category=key.categories.superbwarfare
+key key.superbwarfare.active_thermal_imaging default=key.keyboard.k now=key.keyboard.k category=key.categories.superbwarfare
+key key.superbwarfare.loiter_config default=key.keyboard.j now=key.keyboard.j category=key.categories.superbwarfare
+key key.superbwarfare.toggle_tactical_map default=key.keyboard.m now=key.keyboard.m category=key.categories.superbwarfare
+key key.gtbcs_spell_lib.lore_item_previous default=key.keyboard.left now=key.keyboard.left category=key.categories.gtbcs_spell_lib
+key key.gtbcs_spell_lib.lore_item_next default=key.keyboard.right now=key.keyboard.right category=key.categories.gtbcs_spell_lib
+key key.cataclysm.ability default=key.keyboard.x now=key.keyboard.x category=key.categories.cataclysm
+key key.cataclysm.helmet_ability default=key.keyboard.c now=key.keyboard.c category=key.categories.cataclysm
+key key.cataclysm.chestplate_ability default=key.keyboard.y now=key.keyboard.y category=key.categories.cataclysm
+key key.cataclysm.boots_ability default=key.keyboard.v now=key.keyboard.v category=key.categories.cataclysm
+key key.curios.open.desc default=key.keyboard.unknown now=key.keyboard.unknown category=key.curios.category
+key key.ftbultimine default=key.keyboard.grave.accent now=key.keyboard.grave.accent category=key.categories.ftbultimine
+key ftbultimine.change_shape.next default=key.keyboard.up now=key.keyboard.up category=key.categories.ftbultimine
+key ftbultimine.change_shape.prev default=key.keyboard.down now=key.keyboard.down category=key.categories.ftbultimine
+key key.jeg.reload default=key.keyboard.r now=key.keyboard.r category=key.categories.jeg
+key key.jeg.attachments default=key.keyboard.z now=key.keyboard.z category=key.categories.jeg
+key key.jeg.melee default=key.keyboard.v now=key.keyboard.v category=key.categories.jeg
+key key.jeg.inspect default=key.keyboard.y now=key.keyboard.y category=key.categories.jeg
+key key.jeg.launcher_mode default=key.keyboard.n now=key.keyboard.n category=key.categories.jeg
+key key.jeg.drone_interact default=key.keyboard.x now=key.keyboard.x category=key.categories.jeg
+key key.jeg.vehicle_free_look default=key.keyboard.c now=key.keyboard.c category=key.categories.jeg
+key key.jeg.vehicle_switch_weapon default=key.keyboard.x now=key.keyboard.x category=key.categories.jeg
+key key.jeg.vehicle_previous_weapon default=key.keyboard.z now=key.keyboard.z category=key.categories.jeg
+key key.jeg.vehicle_deploy_decoy default=key.keyboard.g now=key.keyboard.g category=key.categories.jeg
+key key.jeg.vehicle_seek default=key.keyboard.v now=key.keyboard.v category=key.categories.jeg
+key key.jeg.vehicle_brake_descend default=key.keyboard.left.control now=key.keyboard.left.control category=key.categories.jeg
+key key.jeg.vehicle_change_seat default=key.keyboard.b now=key.keyboard.b category=key.categories.jeg
+key key.jeg.vehicle_dismount default=key.keyboard.left.alt now=key.keyboard.left.alt category=key.categories.jeg
+key key.jeg.vehicle_player_inventory default=key.keyboard.h now=key.keyboard.h category=key.categories.jeg
+key key.jei.toggleOverlay default=key.keyboard.o now=key.keyboard.o category=jei.key.category.overlays
+key key.jei.focusSearch default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.overlays
+key key.jei.previousPage default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.overlays
+key key.jei.nextPage default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.overlays
+key key.jei.toggleBookmarkOverlay default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.overlays
+key key.jei.bookmark default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.mouse.hover
+key key.jei.showRecipe default=key.keyboard.r now=key.keyboard.r category=jei.key.category.mouse.hover
+key key.jei.showRecipe2 default=key.mouse.left now=key.mouse.left category=jei.key.category.mouse.hover
+key key.jei.showUses default=key.keyboard.u now=key.keyboard.u category=jei.key.category.mouse.hover
+key key.jei.showUses2 default=key.mouse.right now=key.mouse.right category=jei.key.category.mouse.hover
+key key.jei.transferRecipeBookmark default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.mouse.hover
+key key.jei.maxTransferRecipeBookmark default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.mouse.hover
+key key.jei.transferRecipeGui default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.recipe.gui
+key key.jei.maxTransferRecipeGui default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.recipe.gui
+key key.jei.quickMove default=key.mouse.left now=key.mouse.left category=jei.key.category.mouse.hover
+key key.jei.shareToChat default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.mouse.hover
+key key.jei.clearSearchBar default=key.mouse.right now=key.mouse.right category=jei.key.category.search
+key key.jei.previousSearch default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.search
+key key.jei.nextSearch default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.search
+key key.jei.toggleCheatMode default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.cheat.mode
+key key.jei.cheatOneItem default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.cheat.mode
+key key.jei.cheatOneItem2 default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.cheat.mode
+key key.jei.cheatItemStack default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.cheat.mode
+key key.jei.cheatItemStack2 default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.cheat.mode
+key key.jei.toggleCheatModeConfigButton default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.hover.config.button
+key key.jei.toggleEditMode default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.edit.mode
+key key.jei.toggleHideIngredient default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.edit.mode
+key key.jei.toggleWildcardHideIngredient default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.edit.mode
+key key.jei.recipeBack default=key.keyboard.backspace now=key.keyboard.backspace category=jei.key.category.recipe.gui
+key key.jei.recipeForward default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.recipe.gui
+key key.jei.previousRecipePage default=key.keyboard.page.up now=key.keyboard.page.up category=jei.key.category.recipe.gui
+key key.jei.nextRecipePage default=key.keyboard.page.down now=key.keyboard.page.down category=jei.key.category.recipe.gui
+key key.jei.pauseRecipeCycling default=key.keyboard.left.shift now=key.keyboard.left.shift category=jei.key.category.recipe.gui
+key key.jei.previousCategory default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.recipe.gui
+key key.jei.nextCategory default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.recipe.gui
+key key.jei.closeRecipeGui default=key.keyboard.escape now=key.keyboard.escape category=jei.key.category.recipe.gui
+key key.jei.copy.recipe.id default=key.keyboard.unknown now=key.keyboard.unknown category=jei.key.category.dev.tools
+key key.tacz.inspect.desc default=key.keyboard.h now=key.keyboard.h category=key.category.tacz
+key key.tacz.reload.desc default=key.keyboard.r now=key.keyboard.r category=key.category.tacz
+key key.tacz.shoot.desc default=key.mouse.left now=key.mouse.left category=key.category.tacz
+key key.tacz.interact.desc default=key.keyboard.o now=key.keyboard.o category=key.category.tacz
+key key.tacz.fire_select.desc default=key.keyboard.g now=key.keyboard.g category=key.category.tacz
+key key.tacz.aim.desc default=key.mouse.right now=key.mouse.right category=key.category.tacz
+key key.tacz.crawl.desc default=key.keyboard.c now=key.keyboard.c category=key.category.tacz
+key key.tacz.refit.desc default=key.keyboard.z now=key.keyboard.z category=key.category.tacz
+key key.tacz.zoom.desc default=key.keyboard.v now=key.keyboard.v category=key.category.tacz
+key key.tacz.melee.desc default=key.keyboard.v now=key.keyboard.v category=key.category.tacz
+key key.tacz.open_config.desc default=key.keyboard.t now=key.keyboard.t category=key.category.tacz
+key key.epicfight.show_tooltip default=key.keyboard.left.shift now=key.keyboard.left.shift category=key.epicfight.gui
+key key.epicfight.skill_gui default=key.keyboard.unknown now=key.keyboard.unknown category=key.epicfight.gui
+key key.epicfight.config default=key.keyboard.unknown now=key.keyboard.unknown category=key.epicfight.gui
+key key.epicfight.emote default=key.keyboard.y now=key.keyboard.y category=key.epicfight.gui
+key key.epicfight.dodge default=key.keyboard.left.alt now=key.keyboard.left.alt category=key.epicfight.combat
+key key.epicfight.guard default=key.mouse.right now=key.mouse.right category=key.epicfight.combat
+key key.epicfight.attack default=key.mouse.left now=key.mouse.left category=key.epicfight.combat
+key key.epicfight.weapon_innate_skill default=key.mouse.left now=key.mouse.left category=key.epicfight.combat
+key key.epicfight.mover_skill default=key.keyboard.space now=key.keyboard.space category=key.epicfight.combat
+key key.epicfight.switch_mode default=key.keyboard.f now=key.keyboard.f category=key.epicfight.combat
+key key.epicfight.lock_on default=key.mouse.middle now=key.mouse.middle category=key.epicfight.camera
+key key.epicfight.lock_on_shift_left default=key.keyboard.left now=key.keyboard.left category=key.epicfight.camera
+key key.epicfight.lock_on_shift_right default=key.keyboard.right now=key.keyboard.right category=key.epicfight.camera
+key key.epicfight.lock_on_shift_freely default=key.keyboard.unknown now=key.keyboard.unknown category=key.epicfight.camera
+key key.epicfight.switch_vanilla_model_debug default=key.keyboard.unknown now=key.keyboard.unknown category=key.epicfight.system
+key key.invincible.key1 default=key.mouse.left now=key.mouse.left category=key.invincible.category
+key key.invincible.key2 default=key.mouse.right now=key.mouse.right category=key.invincible.category
+key key.invincible.key3 default=key.mouse.4 now=key.mouse.4 category=key.invincible.category
+key key.invincible.key4 default=key.mouse.5 now=key.mouse.5 category=key.invincible.category
+key key.combat_evolution.execution default=key.mouse.right now=key.mouse.right category=key.categories.combat_evolution
+key key.configured.open_mod_list default=key.keyboard.unknown now=key.keyboard.unknown category=key.categories.configured
+key key.dragon_fireAttack default=key.keyboard.r now=key.keyboard.r category=key.categories.gameplay
+key key.dragon_strike default=key.keyboard.g now=key.keyboard.g category=key.categories.gameplay
+key key.dragon_down default=key.keyboard.x now=key.keyboard.x category=key.categories.gameplay
+key key.dragon_change_view default=key.keyboard.f7 now=key.keyboard.f7 category=key.categories.gameplay
+key key.sbwdroneconfig.toggle_thermal default=key.keyboard.v now=key.keyboard.v category=key.categories.sbwdroneconfig
+key key.sbwdroneconfig.zoom_fpv_camera default=key.keyboard.c now=key.keyboard.c category=key.categories.sbwdroneconfig
+key key.sbwdroneconfig.wipe_drone_camera default=key.keyboard.x now=key.keyboard.x category=key.categories.sbwdroneconfig
+key key.sbwdroneconfig.take_drone_screenshot default=key.keyboard.o now=key.keyboard.o category=key.categories.sbwdroneconfig
+key key.sbwdroneconfig.toggle_spotlight default=key.keyboard.b now=key.keyboard.b category=key.categories.sbwdroneconfig
+key key.sbwdroneconfig.drop_mortar_payload default=key.keyboard.h now=key.keyboard.h category=key.categories.sbwdroneconfig
+key key.sbwdroneconfig.deploy_delivery_crate default=key.keyboard.y now=key.keyboard.y category=key.categories.sbwdroneconfig
+key key.sbwdroneconfig.pickup_delivery_crate default=key.keyboard.u now=key.keyboard.u category=key.categories.sbwdroneconfig
+key key.special_ability default=key.keyboard.g now=key.keyboard.g category=key.categories.misc
+key key.apotheosis.toggle_radial_mining default=key.keyboard.o now=key.keyboard.o category=key.categories.apotheosis
+key key.apotheosis.toggle_attribute_bonuses default=key.keyboard.k now=key.keyboard.k category=key.categories.apotheosis
+key key.apotheosis.open_world_tier_select default=key.keyboard.t now=key.keyboard.t category=key.categories.apotheosis
+key key.apotheosis.link_item_to_chat default=key.keyboard.t now=key.keyboard.t category=key.categories.apotheosis
+key key.apotheosis.compare_equipment default=key.keyboard.left.shift now=key.keyboard.left.shift category=key.categories.apotheosis
+key key.raws_visual_keybinder.open_screen default=key.keyboard.unknown now=key.keyboard.unknown category=key.raws_visual_keybinder.category
+key key.raws_visual_keybinder.switch_to_preset_1 default=key.keyboard.unknown now=key.keyboard.unknown category=key.raws_visual_keybinder.category
+key key.raws_visual_keybinder.switch_to_preset_2 default=key.keyboard.unknown now=key.keyboard.unknown category=key.raws_visual_keybinder.category
+key key.raws_visual_keybinder.switch_to_preset_3 default=key.keyboard.unknown now=key.keyboard.unknown category=key.raws_visual_keybinder.category
+key key.raws_visual_keybinder.switch_to_preset_4 default=key.keyboard.unknown now=key.keyboard.unknown category=key.raws_visual_keybinder.category
+key key.raws_visual_keybinder.switch_to_preset_5 default=key.keyboard.unknown now=key.keyboard.unknown category=key.raws_visual_keybinder.category
+key key.jade.config default=key.keyboard.keypad.0 now=key.keyboard.keypad.0 category=modmenu.nameTranslation.jade
+key key.jade.show_overlay default=key.keyboard.keypad.1 now=key.keyboard.keypad.1 category=modmenu.nameTranslation.jade
+key key.jade.toggle_liquid default=key.keyboard.unknown now=key.keyboard.unknown category=modmenu.nameTranslation.jade
+key key.jade.show_recipes default=key.keyboard.unknown now=key.keyboard.unknown category=modmenu.nameTranslation.jade
+key key.jade.show_uses default=key.keyboard.unknown now=key.keyboard.unknown category=modmenu.nameTranslation.jade
+key key.jade.narrate default=key.keyboard.unknown now=key.keyboard.unknown category=modmenu.nameTranslation.jade
+key key.jade.show_details default=key.keyboard.left.shift now=key.keyboard.left.shift category=modmenu.nameTranslation.jade
+key fdlib.key.end_cutscene default=key.keyboard.unknown now=key.keyboard.unknown category=fdlib.key_category
+key key.macabre.eye_slot_1 default=key.keyboard.z now=key.keyboard.z category=key.categories.macabre
+key key.macabre.eye_slot_2 default=key.keyboard.x now=key.keyboard.x category=key.categories.macabre
+key key.macabre.eye_slot_3 default=key.keyboard.c now=key.keyboard.c category=key.categories.macabre
+key key.macabre.eye_slot_4 default=key.keyboard.v now=key.keyboard.v category=key.categories.macabre
+key key.macabre.eye_slot_5 default=key.keyboard.b now=key.keyboard.b category=key.categories.macabre
+key key.macabre.eye_slot_6 default=key.keyboard.n now=key.keyboard.n category=key.categories.macabre
+key key.macabre.eye_slot_7 default=key.keyboard.m now=key.keyboard.m category=key.categories.macabre
+key key.macabre.eye_slot_8 default=key.keyboard.comma now=key.keyboard.comma category=key.categories.macabre
+key key.macabre.eye_slot_9 default=key.keyboard.period now=key.keyboard.period category=key.categories.macabre
+key legendarytooltips.key.scrollTooltips default=key.keyboard.left.shift now=key.keyboard.left.shift category=key.categories.inventory
+key key.ponder.ponder default=key.keyboard.w now=key.keyboard.w category=key.categories.ponder
+key create.keyinfo.toolmenu default=key.keyboard.left.alt now=key.keyboard.left.alt category=Create
+key create.keyinfo.toolbelt default=key.keyboard.left.alt now=key.keyboard.left.alt category=Create
+key create.keyinfo.rotate_menu default=key.keyboard.unknown now=key.keyboard.unknown category=Create
+key create.keyinfo.shift_modifier default=key.keyboard.left.shift now=key.keyboard.left.shift category=Create
+key create.keyinfo.ctrl_modifier default=key.keyboard.left.control now=key.keyboard.left.control category=Create
+key create.keyinfo.alt_modifier default=key.keyboard.left.alt now=key.keyboard.left.alt category=Create
+key gui.xaero_minimap_settings default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_minimap_server_profiles default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_zoom_in default=key.keyboard.keypad.add now=key.keyboard.keypad.add category=Xaero's Minimap
+key gui.xaero_zoom_out default=key.keyboard.keypad.subtract now=key.keyboard.keypad.subtract category=Xaero's Minimap
+key gui.xaero_new_waypoint default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_waypoints_key default=key.keyboard.u now=key.keyboard.u category=Xaero's Minimap
+key gui.xaero_enlarge_map default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_map default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_waypoints default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_map_waypoints default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_slime default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_grid default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_instant_waypoint default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_switch_waypoint_set default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_display_all_sets default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_light_overlay default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_entity_radar default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_reverse_entity_radar default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_manual_cave_mode default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_alternative_list_players default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_tracked_players_on_map default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_tracked_players_in_world default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key gui.xaero_toggle_pac_chunk_claims default=key.keyboard.unknown now=key.keyboard.unknown category=Xaero's Minimap
+key key.irons_spellbooks.spell_wheel default=key.keyboard.r now=key.keyboard.r category=key.irons_spellbooks.group_1
+key key.irons_spellbooks.spell_wheel_toggle default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_1
+key key.irons_spellbooks.spellbook_cast default=key.keyboard.v now=key.keyboard.v category=key.irons_spellbooks.group_1
+key key.irons_spellbooks.spell_bar_modifier default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_1
+key key.irons_spellbooks.spell_quick_cast_1 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_2 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_3 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_4 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_5 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_6 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_7 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_8 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_9 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_10 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_11 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_12 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_13 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_14 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.irons_spellbooks.spell_quick_cast_15 default=key.keyboard.unknown now=key.keyboard.unknown category=key.irons_spellbooks.group_2
+key key.ares_hud.dynamic_hud_control default=key.keyboard.grave.accent now=key.keyboard.grave.accent category=key.categories.ares_hud
+key key.efn.doppelganger default=key.keyboard.v now=key.keyboard.v category=key.efn.category
+key key.efn.doppelganger_delay default=key.keyboard.z now=key.keyboard.z category=key.efn.category
+key key.efn.summoned_sword default=key.mouse.5 now=key.mouse.5 category=key.efn.category
+key key.efn.zansetsu_input_switch default=key.keyboard.left.control now=key.keyboard.left.control category=key.efn.category
+key key.efn.arts default=key.keyboard.c now=key.keyboard.c category=key.efn.category
+key key.efn.angel default=key.keyboard.left.control now=key.keyboard.left.control category=key.efn.category
+key key.efn.demon default=key.mouse.right now=key.mouse.right category=key.efn.category
+key key.modernui.openCenter default=key.keyboard.k now=key.keyboard.k category=Modern UI
+key key.modernui.zoom default=key.keyboard.unknown now=key.keyboard.unknown category=Modern UI
+key key.l2mods.up default=key.keyboard.up now=key.keyboard.up category=key.categories.l2mods
+key key.l2mods.down default=key.keyboard.down now=key.keyboard.down category=key.categories.l2mods
+key key.l2mods.left default=key.keyboard.left now=key.keyboard.left category=key.categories.l2mods
+key key.l2mods.right default=key.keyboard.right now=key.keyboard.right category=key.categories.l2mods
+key key.l2mods.swap default=key.keyboard.r now=key.keyboard.r category=key.categories.l2mods
+key key.l2mods.wheel default=key.keyboard.x now=key.keyboard.x category=key.categories.l2mods
+key key.l2mods.shift default=key.keyboard.left.shift now=key.keyboard.left.shift category=key.categories.l2mods
+key key.l2mods.alt default=key.keyboard.left.alt now=key.keyboard.left.alt category=key.categories.l2mods
+key keybind.invmove.toggleMove default=key.keyboard.unknown now=key.keyboard.unknown category=key.category.invmove.main
+key key.entityculling.toggle default=key.keyboard.unknown now=key.keyboard.unknown category=text.entityculling.title
+mod kuma_api 21.0.8
+mod fabric_renderer_api_v1 3.4.1+9125b6dc19
+mod cataclysm_mux_0316 1.0.4
+mod playeranimator 2.0.4+1.21.1
+mod aeronautics_bundled 1.3.2
+mod gtbcs_geomancy_plus 1.1.0-1.21.1
+mod immersive_aircraft 1.6.0+1.21.1
+mod sophisticatedcore 1.5.12
+mod ritchiesprojectilelib 2.1.2
+mod xaeroworldmap 1.47.0
+mod neoforge 21.1.262
+mod prism 1.0.11
+mod placebo 9.9.4
+mod modernfix 5.27.26+mc1.21.1
+mod citadel 2.7.6
+mod fabric_block_view_api_v2 1.0.10+9afaaf8c19
+mod bookshelf 21.1.81
+mod veil 4.3.2
+mod epicskills 21.3.3
+mod sophisticatedbackpacks 3.26.12
+mod guardvillagers 2.4.12
+mod simulated 1.3.2
+mod cataclysm_mux_0327 1.0.4
+mod superbwarfare 0.8.9.2
+mod balm 21.0.66
+mod prickle 21.1.11
+mod golemdungeons 2.0.9
+mod melody 1.0.10
+mod cloth_config 15.0.140
+mod sound_physics_remastered 1.21.1-1.5.2
+mod l2damagetracker 3.0.5
+mod integration 0.2
+mod oror_supreme_bosses 0.17.25
+mod oror_nightfall_patch 0.17.25
+mod sodiumdynamiclights 1.0.9
+mod konkrete 1.9.9
+mod tenshilib 1.21.1-2.3.1-neoforge
+mod betterlockon 2.0.8-neoforge
+mod fancytoasts 1.5.1
+mod jupiter 2.3.7
+mod apothic_attributes 2.11.0
+mod medievalmusic 2.1
+mod lionfishapi 3.1
+mod gtbcs_spell_lib 2.2.0-1.21.1
+mod you_died 4.0.0.19
+mod cataclysm 3.33
+mod curios 9.5.1+1.21.1
+mod patchouli 1.21.1-93-NEOFORGE
+mod simplebedrockmodel 2.5.1.1-neoforge-mc1.21.1
+mod collective 8.52
+mod ftbultimine 2101.1.15
+mod resourcefullib 3.0.12
+mod architectury 13.0.11
+mod cupboard 4.2
+mod apothic_enchanting 1.6.4
+mod transition 1.0.26
+mod oror_harness 1.0.0
+mod fabric_rendering_data_attachment_v1 0.3.48+73761d2e19
+mod jadeaddons 6.1.2+neoforge
+mod l2library 3.0.8
+mod l2menustacker 3.0.10
+mod mezz_config 0.6.8
+mod mowziesmobs 1.8.2
+mod geckolib 4.9.3
+mod l2tabs 3.0.6+7
+mod ftblibrary 2101.1.37
+mod treeharvester 10.2
+mod jeg 1.8.2
+mod jei 19.64.0.453
+mod irons_lib 1.21.1-2.2.0
+mod xaerolib 1.7.3
+mod aeronautics 1.3.2
+mod tacz 1.1.8-hotfix-r7
+mod pillagerguns 1.1.0
+mod cataclysm_mux 1.0.4
+mod trender 1.0.17
+mod invmove 0.9.3
+mod waystones 21.1.46
+mod epicfight 21.17.3.1
+mod invincible 21.15.8.2
+mod combat_evolution 2.3.2
+mod vix 1.0.9
+mod wom 2.0.178
+mod configured 2.6.3
+mod aaa_particles 2.3.4
+mod cinematiccataclysm 1.0.1
+mod magistuarmory 10.17
+mod dungeoncrawl 2.3.17
+mod oreharvester 2.0
+mod iceandfire 2.1.4
+mod sodium 0.8.13+mc1.21.1
+mod uranus 2.4.1-bugfix
+mod sbwdroneconfig 1.0.6
+mod friendsandfoes 5.0.2
+mod offroad 1.3.2
+mod dungeons_arise 2.1.68
+mod drippyloadingscreen 3.1.5
+mod minecraft 1.21.1
+mod tacz_bandits 1.3
+mod just_in_nether 1.0.0
+mod alexscaves 2.0.10
+mod enchdesc 21.1.11
+mod apothic_spawners 1.4.0
+mod apotheosis 8.9.0
+mod fabric_api_base 0.4.42+d1308ded19
+mod mousetweaks 2.26.1
+mod visual_keybinder 1.21.1 - 0.1.13-neoforge
+mod jade 15.10.6+neoforge
+mod fdlib 1.0.9
+mod macabre 0.9.1
+mod halovecs 5.1.0
+mod dodge_parry_reward 1.21.1-1.0.0
+mod modulargolems 3.1.43
+mod kotlinforforge 5.12.0
+mod chatplus 2.8.1
+mod iceberg 1.3.2
+mod itemborders 1.2.5
+mod sablecompanion 1.6.0
+mod flywheel 1.0.6
+mod ponder 1.0.87+mc1.21.1
+mod create 6.0.10
+mod sable 2.0.6
+mod legendarytooltips 1.5.5
+mod brutalbosses 8.6
+mod xaerominimap 26.6.0
+mod epic_fight_avalon 21.12.6.2
+mod l2core 3.0.8+15
+mod irons_spellbooks 1.21.1-3.16.3
+mod ironssablecompat 1.0.4
+mod efiscompat 3.1.0
+mod suppressionmod 1.2.0
+mod entityculling 1.11.3
+mod ares_hud 2.1.0
+mod mob_weapon_api 3.0.21
+mod pillagers_gun 3.2.2
+mod aaa_particles_world 2.0.0
+mod better_trident_model 1.2.0
+mod fancymenu 3.9.14
+mod extrasounds 1.5.6
+mod efn 3.4.0
+mod ferritecore 7.0.3
+mod yet_another_config_lib_v3 3.8.2+1.21.1-neoforge
+mod modernui 3.13.0.1
+mod puzzleslib 21.1.64
+mod l2itemselector 3.1.6
+mod epicfightx 1.2.2
+mod p1nero_bow 21.16.1.0-neoforge
+mod defaultoptions 21.1.8
