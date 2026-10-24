@@ -58,9 +58,10 @@ jobs:
           } 2>&1 | tee -a out/report.txt
       - name: Make the release jar
         run: |
-          python3 -I tools/patch_jar.py base/oror_supreme_bosses-0.17.23.jar build/classes/java/main lang \
-            out/oror_supreme_bosses-0.17.24.jar 0.17.23 0.17.24 2>&1 | tee -a out/report.txt
-          sha256sum out/oror_supreme_bosses-0.17.24.jar | tee -a out/report.txt
+          BASE=$(sed -n 's/^base_version=//p' gradle.properties); NEW=$(sed -n 's/^release_version=//p' gradle.properties)
+          python3 -I tools/patch_jar.py base/oror_supreme_bosses-$BASE.jar build/classes/java/main lang \
+            out/oror_supreme_bosses-$NEW.jar $BASE $NEW 2>&1 | tee -a out/report.txt
+          sha256sum out/oror_supreme_bosses-$NEW.jar | tee -a out/report.txt
       - name: Commit the result
         if: always()
         working-directory: .

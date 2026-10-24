@@ -21,3 +21,9 @@ merged from `lang/<namespace>/<language>.json`.
 - `NightfallSetupCheck` (new): a player joining a game without Nightfall or Sword Soaring is told to run
   `SETUP_NIGHTFALL.cmd`.
 - Translations for the Incinerator Soul and the four sheaths (tcrcore, en/ja/zh), and the setup message.
+
+## 0.17.25
+
+- `NightfallPatchSettings`: `compactHud` defaults to false. 0.17.22 hid every Ares HUD layer (stamina, guard and parry,
+  mana) and drew a plain health row instead; the 0.17.25 pack also ships `compactHud=false`.
+- The rest of 0.17.25 is the pack around the jar: NightfallCraft's screens and combat feel, in `oror_rework/nfc_ui`.
