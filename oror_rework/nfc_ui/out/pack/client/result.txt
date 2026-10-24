@@ -1,24 +1,25 @@
-201 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-401 screenshot 01_title
-422 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-482 screenshot 02_create_world
-492 press selectWorld.create on CreateWorldScreen
-493 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-593 screenshot popup_1_ConfirmScreen
-593 press gui.yes on ConfirmScreen
-594 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-619 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-639 screen none in LOADING
-640 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-740 screenshot popup_2_
-741 screen none in PLAY
-762 weapon efn:hf_murasama
-1140 screenshot 04_hud_weapon
-1240 screenshot 05_hud_tool
-1251 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
-1320 screenshot 06_inventory
-1331 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
-1390 screenshot 07_pause
-1401 screen none in PLAY
-1500 screenshot 08_hud_weapon_again
-1520 finished: complete
+295 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+495 screenshot 01_title
+516 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+576 screenshot 02_create_world
+586 press selectWorld.create on CreateWorldScreen
+587 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+687 screenshot popup_1_ConfirmScreen
+687 press gui.yes on ConfirmScreen
+688 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+717 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+738 screen none in LOADING
+739 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+839 screenshot popup_2_
+840 screen none in PLAY
+867 weapon efn:hf_murasama
+1239 screenshot 04_hud_weapon
+1339 screenshot 05_hud_tool
+1350 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
+1419 screenshot 06_inventory
+1430 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
+1489 screenshot 07_pause
+1500 screen none in PLAY
+1599 screenshot 08_hud_weapon_again
+1699 screenshot 09_third_person
+1719 finished: complete

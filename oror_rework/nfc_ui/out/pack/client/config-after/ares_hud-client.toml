@@ -2,7 +2,7 @@
 [properties]
 	#Type of hotbar layout to use.
 	#Allowed Values: DEFAULT, HOTBAR_1X9, HOTBAR_1X9_VERTICAL, HOTBAR_3X3, THIRST_ADDITIONAL, FINALITY_1, FINALITY_2
-	hotbarType = "DEFAULT"
+	hotbarType = "HOTBAR_1X9"
 
 	[properties.Layout_DEFAULT]
 		hotbarDefaultProperties = "0.0011709601,0.8694779277,0.8003640175"
@@ -70,7 +70,7 @@
 
 	[properties.Layout_HOTBAR_1X9]
 		hotbar1x9Properties = "0.3515625000,0.9341317415,0.7815815210"
-		offhand1x9Properties = "0.3031249940,0.9333333373,0.7824444175"
+		offhand1x9Properties = "0.3031249940,0.9311377406,0.7824444175"
 		centerHud1x9Properties = "0.3484374881,0.8592814207,0.6702424288"
 		bossBar1x9Properties = "0.3104166687,0.0119521916,1.0000000000"
 		#Allowed Values: MERGED, SEPARATE
