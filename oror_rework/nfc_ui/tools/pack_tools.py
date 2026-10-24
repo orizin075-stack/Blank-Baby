@@ -62,14 +62,27 @@ def resolve(additions, nightfall, survey, out):
     for e in entries:
         if e.get('fileID'):
             continue
+        if not e.get('projectID'):
+            data = get('https://www.curseforge.com/api/v1/mods/search?gameId=432&index=0&pageSize=20&sortField=1&classId=6'
+                       '&filterText=' + urllib.parse.quote(e['slug']))
+            e['projectID'] = next((d.get('id') for d in (data or {}).get('data', []) if d.get('slug') == e['slug']), None)
+            if not e['projectID']:
+                print('no CurseForge project with slug', e['slug'])
+                continue
         files = [f for f in listing(e['projectID'])
-                 if '1.21.1' in f.get('gameVersions', []) and 'NeoForge' in f.get('gameVersions', [])]
+                 if '1.21.1' in f.get('gameVersions', []) and 'NeoForge' in f.get('gameVersions', [])
+                 and f['fileName'].startswith(e.get('prefix', ''))]
         release = [f for f in files if f.get('releaseType') == 1] or files
         if not release:
             print('no NeoForge 1.21.1 file:', e['projectID'], e['why'])
             continue
         e['fileID'], e['fileName'] = release[0]['id'], release[0]['fileName']
         print('resolved', e['projectID'], e['fileID'], e['fileName'])
+    ready = {e.get('slug') for e in entries if e.get('fileID')}
+    for e in entries:
+        if e.get('needs') and e['needs'] not in ready and e.get('fileID'):
+            print('dropped', e['fileName'], 'because', e['needs'], 'is not resolved')
+            e['fileID'] = None
     used = {f['projectID']: f['fileID'] for f in json.load(open(nightfall, encoding='utf-8'))['files']}
     missing = []
     for r in json.load(open(survey, encoding='utf-8'))['curseforge']:
@@ -140,24 +153,92 @@ def fetchpack(manifest, lock, out, *skip):
             print('fetched', name, hit, len(data))
 
 
-# Maven-style versions and ranges, close enough to NeoForge's for a report.
-def tokens(version):
-    out = []
-    for part in re.split(r'[.\-+_]', version.lower()):
-        for t in re.findall(r'\d+|[a-z]+', part):
-            out.append((1, int(t), '') if t.isdigit() else (0, 0, t))
-    return out
+# Versions compared like Maven's ComparableVersion, which NeoForge uses for dependency ranges.
+QUALIFIERS = ['alpha', 'beta', 'milestone', 'rc', 'snapshot', '', 'sp']
+ALIASES = {'ga': '', 'final': '', 'release': '', 'cr': 'rc'}
+
+
+def parse(version):
+    root = []
+    current, stack, start, digit = root, [root], 0, False
+
+    def item(text, is_digit):
+        return ('i', int(text)) if is_digit else ('s', ALIASES.get(text, text))
+
+    def sub():
+        nonlocal current
+        nested = []
+        current.append(('l', nested))
+        current = nested
+        stack.append(nested)
+
+    version = version.lower()
+    for i, c in enumerate(version):
+        if c in '.-':
+            current.append(('i', 0) if i == start else item(version[start:i], digit))
+            start = i + 1
+            if c == '-':
+                sub()
+        elif c.isdigit():
+            if not digit and i > start:
+                current.append(item(version[start:i], False))
+                start = i
+                sub()
+            digit = True
+        else:
+            if digit and i > start:
+                current.append(item(version[start:i], True))
+                start = i
+                sub()
+            digit = False
+    if len(version) > start:
+        current.append(item(version[start:], digit))
+    for items in reversed(stack):
+        while items and (items[-1] in (('i', 0), ('s', '')) or items[-1] == ('l', [])):
+            items.pop()
+    return ('l', root)
+
+
+def qualifier(text):
+    return (QUALIFIERS.index(text), '') if text in QUALIFIERS else (len(QUALIFIERS), text)
+
+
+def cmp_item(a, b):
+    if a is None:
+        return 0 if b is None else -cmp_item(b, None)
+    kind, value = a
+    if kind == 'i':
+        if b is None:
+            return 0 if value == 0 else 1
+        if b[0] != 'i':
+            return 1
+        return (value > b[1]) - (value < b[1])
+    if kind == 's':
+        if b is None:
+            other = qualifier('')
+        elif b[0] == 's':
+            other = qualifier(b[1])
+        else:
+            return -1
+        mine = qualifier(value)
+        return (mine > other) - (mine < other)
+    if b is None:
+        return cmp_item(value[0], None) if value else 0
+    if b[0] == 'i':
+        return -1
+    if b[0] == 's':
+        return 1
+    for i in range(max(len(value), len(b[1]))):
+        x = value[i] if i < len(value) else None
+        y = b[1][i] if i < len(b[1]) else None
+        result = cmp_item(x, y)
+        if result:
+            return result
+    return 0
 
 
 def compare(a, b):
-    """A missing part counts as 0, and a qualifier sorts below 0: 1.0-beta < 1.0 = 1.0.0 < 1.0.1."""
-    ta, tb = tokens(a), tokens(b)
-    zero = (1, 0, '')
-    for i in range(max(len(ta), len(tb))):
-        x, y = ta[i] if i < len(ta) else zero, tb[i] if i < len(tb) else zero
-        if x != y:
-            return -1 if x < y else 1
-    return 0
+    return cmp_item(parse(a), parse(b))
 
 
 def in_range(version, spec):
@@ -245,7 +326,7 @@ def depcheck(folder, report):
                 if present is None:
                     lines.append(f'MISSING {target} {spec} (side {side}) needed by {modid} [{jar}]')
                 elif not in_range(present[0], spec):
-                    lines.append(f'VERSION {target} {present[0]} not in {spec} needed by {modid} [{jar}]')
+                    lines.append(f'VERSION {target} {present[0]} not in {spec} needed by {modid} [{jar}] {json.dumps(dep)}')
             elif kind in ('incompatible', 'discouraged') and present is not None and in_range(present[0], spec):
                 lines.append(f'{kind.upper()} {target} {present[0]} with {modid} [{jar}]: {dep.get("reason", "")}')
     head = [f'{len(top)} mods in {len(os.listdir(folder))} files, {len(mods)} mod ids with jar-in-jar', '']

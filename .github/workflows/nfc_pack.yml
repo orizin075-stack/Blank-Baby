@@ -105,6 +105,10 @@ jobs:
         run: |
           G=$RUNNER_TEMP/game
           export LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null
+          # A mod loading failure leaves NeoForge's error screen up; stop the client once a crash report is written.
+          ( while sleep 15; do
+              if ls $G/crash-reports/*.txt > /dev/null 2>&1; then sleep 20; pkill -f forgeclient || pkill java; break; fi
+            done ) &
           timeout 55m xvfb-run -a -s '-screen 0 1600x900x24' $RUNNER_TEMP/venv/bin/portablemc start neoforge::21.1.262 \
             --main-dir $RUNNER_TEMP/mc --mc-dir $G -u OrorTester --resolution 1600x900 --jvm "$JAVA_HOME/bin/java" \
             --jvm-arg=-Xmx8G,-Xms2G > $RUNNER_TEMP/client.out 2>&1 || echo "client exit code $?" | tee $OUT/client-exit.txt
