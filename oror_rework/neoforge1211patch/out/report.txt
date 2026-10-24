@@ -26,51 +26,51 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/1757c8b1fbfc6b638504e1f6cceb05893f7389d5/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.28s
-[1m*** Started working on [4mdownloadServer[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.47s
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
-  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
   ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.29s
+  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
+  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.51s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.46s
-[1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 0.85s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.12s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.59s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 1.52s
+[1m*** Started working on [4mstripClient[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.84s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.54s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.65s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.89s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.67s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.26s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.07s
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.27s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.25s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 3.81s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 5.62s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 3.65s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.46s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.18s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.67s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.50s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.11s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 3.13s
-Total runtime: 19.66s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.75s
+Total runtime: 30.02s
 
 
 > Task :compileJava
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1792842531152.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1792846679941.json
 
-BUILD SUCCESSFUL in 55s
+BUILD SUCCESSFUL in 1m 9s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -82,5 +82,5 @@ BUILD SUCCESSFUL in 55s
 modId = "efn"
 modId = "neoforge"
 modId = "minecraft"
-replaced 3 old class files; added 4 compiled; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json']
-92216c31cf6c5d25ad341e76224638b9ab9fed33b58899e6b2d51ea46aee7634  out/oror_supreme_bosses-0.17.24.jar
+replaced 4 old class files; added 5 compiled; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json']
+e462744e2ed887071952772ef906fa78ac0268f2ad03703bf78e05f34abcc4ee  out/oror_supreme_bosses-0.17.25.jar
