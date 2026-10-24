@@ -254,15 +254,17 @@
   "fileID": null,
   "fileName": null,
   "kind": "mod",
-  "why": "Sodium 0.6 (Iris 1.8 for 1.21.1 is built against it; Sodium 0.8 crashed Iris's mixins in the CI client)",
-  "prefix": "sodium-neoforge-0.6."
+  "why": "Sodium (Sable, bundled with Create Aeronautics, needs 0.8.12 or later)"
  },
  {
   "projectID": 455508,
   "fileID": null,
   "fileName": null,
   "kind": "mod",
-  "why": "Iris (shaders; NightfallCraft ran Oculus)"
+  "why": "Iris: 1.8.12 for 1.21.1 only works with Sodium 0.6, which Sable refuses; left out until an Iris for Sodium 0.8 exists",
+  "skip": true,
+  "show": true,
+  "slug": "iris"
  },
  {
   "projectID": 551736,
@@ -276,7 +278,8 @@
   "fileID": 7369909,
   "fileName": "globalshaderpackproperties-neoforge1.21.1-1.1.0.jar",
   "kind": "mod",
-  "why": "Global Shaderpack Properties"
+  "why": "Global Shaderpack Properties",
+  "needs": "iris"
  },
  {
   "projectID": 232131,
@@ -381,13 +384,15 @@
   "fileID": 8884654,
   "fileName": "ComplementaryReimagined_r5.9.3.zip",
   "kind": "shader",
-  "why": "Complementary Reimagined"
+  "why": "Complementary Reimagined",
+  "needs": "iris"
  },
  {
   "projectID": 385587,
   "fileID": 8884656,
   "fileName": "ComplementaryUnbound_r5.9.3.zip",
   "kind": "shader",
-  "why": "Complementary Unbound"
+  "why": "Complementary Unbound",
+  "needs": "iris"
  }
 ]

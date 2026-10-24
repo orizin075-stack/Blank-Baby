@@ -72,7 +72,14 @@ def resolve(additions, nightfall, survey, out):
             if not e['projectID']:
                 print('no CurseForge project with slug', e['slug'])
                 continue
-        files = [f for f in listing(e['projectID'])
+        every = listing(e['projectID'])
+        if e.get('show'):
+            for f in every[:12]:
+                print('  file', e['projectID'], f['id'], f['fileName'], 'releaseType', f.get('releaseType'), f.get('gameVersions'))
+        if e.get('skip'):
+            print('skipped', e['projectID'], e['why'])
+            continue
+        files = [f for f in every
                  if '1.21.1' in f.get('gameVersions', []) and 'NeoForge' in f.get('gameVersions', [])
                  and f['fileName'].startswith(e.get('prefix', ''))]
         release = [f for f in files if f.get('releaseType') == 1] or files
