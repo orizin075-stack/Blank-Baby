@@ -161,7 +161,16 @@
   "fileID": 7550281,
   "fileName": "cinematiccataclysm-1.0.1-1.21.1.jar",
   "kind": "mod",
-  "why": "Cinematic Cataclysm"
+  "why": "Cinematic Cataclysm",
+  "needs": "fdlib"
+ },
+ {
+  "projectID": 1271749,
+  "slug": "fdlib",
+  "fileID": null,
+  "fileName": null,
+  "kind": "mod",
+  "why": "FDLib: Cinematic Cataclysm uses it without declaring it (NoClassDefFoundError com/finderfeed/fdlib/nbt/AutoSerializable)"
  },
  {
   "projectID": 1401130,

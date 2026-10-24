@@ -123,6 +123,9 @@ public final class Harness {
             phase = Phase.LOADING;
         } else if (screen == null && mc.level != null) {
             phase = Phase.PLAY;
+        } else if (screen instanceof TitleScreen && onScreen == 100) {
+            shot(mc, "02_back_to_title");
+            finish(mc, "world creation did not start");
         } else if (screen != null) {
             popup(mc, screen);
         }

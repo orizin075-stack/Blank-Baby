@@ -66,6 +66,9 @@ def resolve(additions, nightfall, survey, out):
             data = get('https://www.curseforge.com/api/v1/mods/search?gameId=432&index=0&pageSize=20&sortField=1&classId=6'
                        '&filterText=' + urllib.parse.quote(e['slug']))
             e['projectID'] = next((d.get('id') for d in (data or {}).get('data', []) if d.get('slug') == e['slug']), None)
+            if not e['projectID']:  # CurseForge's site search refuses scripts; CFWidget maps a slug to its project id
+                widget = get('https://api.cfwidget.com/minecraft/mc-mods/' + urllib.parse.quote(e['slug']))
+                e['projectID'] = (widget or {}).get('id')
             if not e['projectID']:
                 print('no CurseForge project with slug', e['slug'])
                 continue
