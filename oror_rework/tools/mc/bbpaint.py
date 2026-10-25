@@ -684,7 +684,7 @@ def paint_surf(s, ctx):
     rgb = np.asarray(rgb, np.float32)
     rgb, alpha = details(rgb, alpha, f, s, ctx)
     # contact shadow from the volumetric occlusion, in two crisp steps
-    if s.info.get('ao', True) and mat.get('type') not in ('head', 'blink', 'hair_shell', 'energy', 'ring', 'eye') and ctx.get('ao') is not None:
+    if s.info.get('ao', True) and mat.get('type') not in ('head', 'blink', 'hair_shell', 'energy', 'ring', 'eye', 'gel') and ctx.get('ao') is not None:
         a = ctx['ao']
         k = np.where(a < 0.62, 0.8, np.where(a < 0.8, 0.9, 1.0)).astype(np.float32)
         rgb = ramp(rgb, k)
@@ -692,7 +692,7 @@ def paint_surf(s, ctx):
         glow = np.zeros((f.H, f.W, 4), np.float32)
         glow[..., :3] = rgb
         glow[..., 3] = 255 * float(mat.get('glow_amount', 1.0))
-    if mat.get('alpha') is not None and mat.get('type') not in ('slime', 'energy'):
+    if mat.get('alpha') is not None and mat.get('type') not in ('slime', 'energy', 'gel'):
         a0 = mat['alpha'] / 255.0 if mat['alpha'] > 1 else mat['alpha']
         alpha = (np.ones((f.H, f.W), np.float32) if alpha is None else alpha) * a0
     return rgb, alpha, glow

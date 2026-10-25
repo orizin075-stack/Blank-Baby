@@ -165,8 +165,32 @@ def m_wingskin(mat, f, s, ctx):
                 glow[vm, 3] = 170
         else:
             rgb[vm] = ramp(base, 0.66)
+    bands = mat.get('bands')
+    if bands:
+        # photon flow (Teia): rainbow bands streaming out from the wing root, bright and glowing
+        cols = np.asarray([C(c) for c in bands], np.float32)
+        ph = (t * len(cols) * 1.6 + 0.35 * np.sin(np.arctan2(b - span[0][1], a - span[0][0]) * 9.0)) % len(cols)
+        i0 = np.floor(ph).astype(int) % len(cols)
+        fr = (ph - np.floor(ph))[..., None]
+        band = cols[i0] * (1 - fr) + cols[(i0 + 1) % len(cols)] * fr
+        rgb = rgb * 0.35 + band * 0.65
+        glow = glow if glow is not None else np.zeros((H, W, 4), np.float32)
+        glow[inside, :3] = rgb[inside]
+        glow[inside, 3] = 120
+    stars = mat.get('stars')
+    if stars:
+        # a night sky in the membrane (Demiurgos): sparse stars in model space
+        sm = inside & (_hash2(np.floor(a * 2), np.floor(b * 2), 29) > 1 - stars)
+        rgb[sm] = C(mat.get('star', '#f4e8ff'))
+        glow = glow if glow is not None else np.zeros((H, W, 4), np.float32)
+        glow[sm, :3] = rgb[sm]
+        glow[sm, 3] = 230
     edge = inside & ~_inside(a, b, poly, shrink=texel * 1.5 / (np.linalg.norm(hi - lo) + 1e-6))
-    rgb[edge] = ramp(base, 0.7)
+    rgb[edge] = ramp(base, 0.7) if not mat.get('edge') else C(mat['edge'])
+    if mat.get('edge') and mat.get('glow'):
+        glow = glow if glow is not None else np.zeros((H, W, 4), np.float32)
+        glow[edge, :3] = C(mat['edge'])
+        glow[edge, 3] = 200
     return rgb, inside.astype(np.float32), glow
 
 
@@ -200,3 +224,234 @@ PAINTERS = {'eye': m_eye, 'mouth': m_mouth, 'tooth': m_tooth, 'wingskin': m_wing
 
 def enable():
     BP.PAINTERS.update(PAINTERS)
+
+
+# ---------------------------------------------------------------------------------------------------------- hides
+
+def _world_uv(ctx, f):
+    """Two model-space coordinates running across a face: along the body (z or x) and down it (y), so patterns
+    continue from box to box like a hand-painted hide."""
+    P, N = ctx['P'], ctx['N']
+    ax = np.abs(N)
+    side = (ax[..., 0] >= ax[..., 1]) & (ax[..., 0] >= ax[..., 2])
+    topb = (ax[..., 1] > ax[..., 0]) & (ax[..., 1] >= ax[..., 2])
+    a = np.where(side | topb, P[..., 2], P[..., 0])
+    b = np.where(topb, P[..., 0], P[..., 1])
+    return a, b, topb
+
+
+def m_shingle(mat, f, s, ctx):
+    """Monster Hunter / Ice and Fire scales: overlapping shingles with a lit top, a curved shadowed lower rim and
+    dark gaps, staggered row by row, laid in model space. Bellies (faces looking down) get broad plates."""
+    base = C(mat['color'])
+    if ctx.get('P') is None:
+        return ramp(base, np.ones((f.H, f.W), np.float32)), None, None
+    a, b, topb = _world_uv(ctx, f)
+    sw = 2.4 * mat.get('scale_size', 1.0)
+    sh = 1.9 * mat.get('scale_size', 1.0)
+    row = np.floor(b / sh)
+    cu = ((a + (row % 2) * sw / 2) % sw) / sw          # 0..1 across the scale
+    cv = (b % sh) / sh                                   # 0 top .. 1 bottom
+    edge = np.abs(cu - 0.5) * 2                          # 0 centre .. 1 sides
+    rim = cv > 0.78 - 0.32 * edge ** 2                   # the curved lower rim
+    gap = (cv > 0.93 - 0.2 * edge ** 2) | (edge > 0.94)
+    k = np.where(cv < 0.22, 1.2, np.where(rim, 0.78, 1.0)).astype(np.float32)
+    k = np.where(gap, 0.55, k)
+    k = k * (1.0 - 0.08 * edge)
+    N = ctx['N']
+    k = k * (1.0 + 0.1 * -N[..., 1])                     # backs a touch lighter under the sky light
+    belly = N[..., 1] > 0.55
+    rgb = ramp(base, GP.q(k, 0.05))
+    if belly.any():
+        bc = C(mat.get('belly', '#d8c8a0'))
+        bk = np.where((b % 2.2) < 0.45, 0.72, np.where((b % 2.2) < 0.9, 1.15, 1.0)).astype(np.float32)
+        rgb[belly] = ramp(bc, bk)[belly]
+    glow = None
+    cs = mat.get('countershade')
+    if cs is not None:
+        # sharks and orcas: the pale belly colour climbs the flanks below a wavy line (an orca's white patches)
+        line, wav = cs if isinstance(cs, (tuple, list)) else (cs, 0.0)
+        side = np.abs(N[..., 0]) > 0.45
+        low = side & (b > line + wav * np.sin(a * 0.45))
+        if low.any():
+            bc = C(mat.get('belly', '#d8c8a0'))
+            rgb[low] = ramp(bc, np.where(cv < 0.22, 1.08, np.where(rim, 0.9, 1.0)).astype(np.float32))[low]
+            belly = belly | low
+    glow = _marks(mat, a, b, N, belly, rgb, f, glow)
+    pat = mat.get('stripes')
+    if pat:
+        col, period, width = pat
+        sm = (np.abs(((a * 0.8 + b * 0.35) % period) - period / 2) < width) & ~belly
+        rgb[sm] = ramp(C(col), k)[sm]
+    acc = mat.get('glints')
+    if acc:
+        # a gem set in one scale here and there: its colour across the upper half, a bright facet on top
+        gl = (_hash2(np.floor(a / sw), row, 7) > 1 - mat.get('glint_rate', 0.045)) & (cv < 0.55) & (edge < 0.8) & ~belly
+        cols = [C(c) for c in acc]
+        idx = (_hash2(np.floor(a / sw), row, 13) * len(cols)).astype(int) % len(cols)
+        for i, c in enumerate(cols):
+            m = gl & (idx == i)
+            rgb[m] = np.where((cv < 0.2)[..., None], np.minimum(255, c * 1.35 + 40), c)[m]
+        glow = glow if glow is not None else np.zeros((f.H, f.W, 4), np.float32)
+        glow[gl, :3] = rgb[gl]
+        glow[gl, 3] = 220
+    return rgb, None, glow
+
+
+def _marks(mat, a, b, N, belly, rgb, f, glow):
+    """Glowing marks laid in model space on the flanks: waves=[(y, amplitude, wavelength, phase), ...] (Enkou's
+    sea-life patterns, circuit lines) and dots=(y, spacing, size) (a row of photophores), in mat['mark']."""
+    col = mat.get('mark')
+    if not col:
+        return glow
+    side = np.abs(N[..., 0]) > 0.45
+    m = np.zeros(a.shape, bool)
+    for (y, amp, wl, ph) in mat.get('waves', ()):
+        m |= side & (np.abs(b - (y + amp * np.sin(a * 2 * np.pi / wl + ph))) < 0.32)
+    d = mat.get('dots')
+    if d:
+        y, sp, sz = d
+        m |= side & (np.abs(b - y) < sz) & (np.abs((a % sp) - sp / 2) < sz)
+    if not m.any():
+        return glow
+    rgb[m] = C(col)
+    glow = glow if glow is not None else np.zeros((f.H, f.W, 4), np.float32)
+    glow[m, :3] = C(col)
+    glow[m, 3] = 230
+    return glow
+
+
+def _hash2(x, y, seed):
+    h = (x.astype(np.int64) * 73856093) ^ (y.astype(np.int64) * 19349663) ^ (seed * 83492791)
+    h = (h ^ (h >> 13)) * 1274126177
+    return ((h ^ (h >> 16)) & 0xFFFF) / 65535.0
+
+
+def m_carapace(mat, f, s, ctx):
+    """Armour plate / carapace: a smooth gradient from a lit top edge to a dark lower lip, a pale bevel line along
+    the top, two or three scratches, and an optional glowing seam (accent)."""
+    base = C(mat['color'])
+    W, H = f.W, f.H
+    t = (f.v + 0.5) / H
+    side = f.face not in ('top', 'bottom')
+    if side:
+        k = (1.18 - 0.38 * t).astype(np.float32)
+    else:
+        k = np.full((H, W), 1.12 if f.face == 'top' else 0.7, np.float32)
+    if W >= 3:
+        k[:, 0] *= 0.85
+        k[:, -1] *= 0.85
+    if side and H >= 3:
+        k[0, :] = 1.42
+        k[-1, :] *= 0.62
+    rgb = ramp(base, GP.q(k, 0.05))
+    hm = BP.hashmap(H, W, f.seed)
+    scratch = (hm > 0.985) & side
+    rgb[scratch] = ramp(base, 0.7)
+    glow = None
+    acc = mat.get('accent')
+    if acc and side and H >= 5:
+        mid = H // 2
+        rgb[mid, 1:-1] = C(acc)
+        glow = np.zeros((H, W, 4), np.float32)
+        glow[mid, 1:-1, :3] = C(acc)
+        glow[mid, 1:-1, 3] = 230
+    return rgb, None, glow
+
+
+def m_hide(mat, f, s, ctx):
+    """Smooth hide (whales, sharks): soft mottling in model space, countershaded, with optional pale spots."""
+    base = C(mat['color'])
+    if ctx.get('P') is None:
+        return ramp(base, np.ones((f.H, f.W), np.float32)), None, None
+    a, b, topb = _world_uv(ctx, f)
+    N = ctx['N']
+    mott = np.sin(a * 0.9 + np.sin(b * 0.7) * 1.3) * np.sin(b * 1.1 + np.cos(a * 0.4))
+    k = 1.0 + 0.06 * np.round(mott * 2) / 2 + 0.12 * -N[..., 1]
+    belly = N[..., 1] > 0.5
+    rgb = ramp(base, GP.q(k.astype(np.float32), 0.04))
+    if belly.any():
+        bc = C(mat.get('belly', '#e0e8ec'))
+        grooves = (b % 1.4) < 0.35 if mat.get('grooves') else np.zeros_like(belly)
+        bk = np.where(grooves, 0.8, 1.05).astype(np.float32)
+        rgb[belly] = ramp(bc, bk)[belly]
+    glow = _marks(mat, a, b, N, belly, rgb, f, None)
+    spots = mat.get('spots')
+    if spots:
+        sp = (_hash2(np.floor(a / 1.6), np.floor(b / 1.6), 3) > 0.9) & ~belly
+        rgb[sp] = C(spots)
+        if mat.get('spots_glow'):
+            glow = glow if glow is not None else np.zeros((f.H, f.W, 4), np.float32)
+            glow[sp, :3] = C(spots)
+            glow[sp, 3] = 230
+    return rgb, None, glow
+
+
+def m_strata(mat, f, s, ctx):
+    """Layered rock (Kurma): bands of colour by height in model space, gently warped, each with a grainy texture,
+    darker cracks between layers, sparse glowing ore (mat['ore']) and a grass or snow cover on faces looking up
+    (mat['top'])."""
+    bands = [C(c) for c in mat.get('bands', [mat['color']])]
+    if ctx.get('P') is None:
+        return ramp(bands[0], np.ones((f.H, f.W), np.float32)), None, None
+    P, N = ctx['P'], ctx['N']
+    a, b, topb = _world_uv(ctx, f)
+    th = mat.get('band', 1.6)
+    yy = P[..., 1] + 0.5 * np.sin(a * 0.35 + 0.8) + 0.3 * np.sin(a * 0.9)
+    idx = np.floor(yy / th).astype(int)
+    col = np.asarray(bands, np.float32)[idx % len(bands)]
+    grain = _hash2(np.floor(a * 2), np.floor(b * 2), 5)
+    k = 0.9 + 0.2 * np.round(grain * 3) / 3
+    crack = (((yy / th) % 1.0) > 0.88) & bool(mat.get('cracks', True))
+    k = np.where(crack, 0.68, k)
+    k = k * (1.0 + 0.1 * -N[..., 1])
+    rgb = (col * k[..., None]).clip(0, 255).astype(np.float32)
+    glow = None
+    ore = mat.get('ore')
+    if ore:
+        om = (_hash2(np.floor(a * 1.5), np.floor(b * 1.5), 41) > 0.985) & ~crack
+        rgb[om] = C(ore)
+        glow = np.zeros((f.H, f.W, 4), np.float32)
+        glow[om, :3] = C(ore)
+        glow[om, 3] = 220
+    top = mat.get('top')
+    if top:
+        up = N[..., 1] < -0.5
+        tk = 0.92 + 0.16 * np.round(_hash2(np.floor(a * 2), np.floor(b * 2), 9) * 2) / 2
+        rgb[up] = ramp(C(top), tk.astype(np.float32))[up]
+        # the cover spills one texel over the top edge of the sides
+        if f.face not in ('top', 'bottom') and f.H >= 3:
+            fringe = (f.v == 0) | ((f.v == 1) & (_hash2(f.u.astype(float), f.v.astype(float), 3) > 0.5))
+            rgb[fringe] = ramp(C(top), 0.85)
+    return rgb, None, glow
+
+
+def m_gel(mat, f, s, ctx):
+    """Clear living gel (Mels): see-through colour, denser toward the rim of the sphere (c, r) so the outline reads,
+    a sharp specular window high on the front-left and a soft rim light low on the back-right."""
+    base = C(mat['color'])
+    if ctx.get('P') is None:
+        return ramp(base, np.ones((f.H, f.W), np.float32)), np.full((f.H, f.W), 0.45, np.float32), None
+    P = ctx['P']
+    c = np.asarray(mat.get('c', (0, 0, 0)), float)
+    rr = float(mat.get('r', 4.0))
+    d = P - c
+    dist = np.sqrt((d ** 2).sum(-1)) / rr
+    a0 = mat.get('alpha', 110)
+    a0 = a0 / 255.0 if a0 > 1 else a0
+    alpha = np.clip(a0 * (0.75 + 0.6 * dist ** 3), 0, 0.92).astype(np.float32)
+    k = (1.08 - 0.22 * dist).astype(np.float32)
+    rgb = ramp(base, GP.q(k, 0.05))
+    hl = np.asarray(mat.get('light', (-0.42, -0.5, -0.6)), float) * rr + c
+    spec = ((P - hl) ** 2).sum(-1) < (rr * 0.16) ** 2
+    rgb[spec] = C('#ffffff')
+    alpha[spec] = 0.95
+    rim = (dist > 0.92) & (d[..., 1] > 0.2 * rr)
+    rgb[rim] = ramp(base, 1.3)
+    glow = np.zeros((f.H, f.W, 4), np.float32)
+    glow[spec, :3] = 255
+    glow[spec, 3] = 200
+    return rgb, alpha, glow
+
+
+PAINTERS.update({'shingle': m_shingle, 'carapace': m_carapace, 'hide': m_hide, 'strata': m_strata, 'gel': m_gel})

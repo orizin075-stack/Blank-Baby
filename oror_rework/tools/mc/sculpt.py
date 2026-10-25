@@ -692,41 +692,50 @@ def render(rig, tex, glow=None, yaw=25, pitch=8, size=(420, 560), pose=None, bg=
     else:
         cx, cy, span = frame
     sc = W / span
-    for P, uv, lit in tris:
-        Sx = (P[:, 0] - cx) * sc + W / 2
-        Sy = -(P[:, 1] - cy) * sc + H / 2
-        x0, x1 = int(max(0, math.floor(Sx.min()))), int(min(W - 1, math.ceil(Sx.max())))
-        y0, y1 = int(max(0, math.floor(Sy.min()))), int(min(H - 1, math.ceil(Sy.max())))
-        if x1 < x0 or y1 < y0:
-            continue
-        den = (Sy[1] - Sy[2]) * (Sx[0] - Sx[2]) + (Sx[2] - Sx[1]) * (Sy[0] - Sy[2])
-        if abs(den) < 1e-9:
-            continue
-        ys, xs = np.mgrid[y0:y1 + 1, x0:x1 + 1]
-        px, py = xs + 0.5, ys + 0.5
-        l1 = ((Sy[1] - Sy[2]) * (px - Sx[2]) + (Sx[2] - Sx[1]) * (py - Sy[2])) / den
-        l2 = ((Sy[2] - Sy[0]) * (px - Sx[2]) + (Sx[0] - Sx[2]) * (py - Sy[2])) / den
-        l3 = 1 - l1 - l2
-        m = (l1 >= 0) & (l2 >= 0) & (l3 >= 0)
-        if not m.any():
-            continue
-        z = l1 * P[0, 2] + l2 * P[1, 2] + l3 * P[2, 2]
-        sub = zb[y0:y1 + 1, x0:x1 + 1]
-        m &= z > sub
-        if not m.any():
-            continue
-        u = l1 * uv[0, 0] + l2 * uv[1, 0] + l3 * uv[2, 0]
-        v = l1 * uv[0, 1] + l2 * uv[1, 1] + l3 * uv[2, 1]
-        ui = np.clip(u.astype(int), 0, tw - 1)
-        vi = np.clip(v.astype(int), 0, th - 1)
-        texel = T[vi, ui]
-        m &= texel[..., 3] > 0.1
-        if not m.any():
-            continue
-        li = l1 * lit[0] + l2 * lit[1] + l3 * lit[2]
-        col = texel[..., :3] * li[..., None] * 255
-        if G is not None:
-            col = col + G[vi, ui, :3] * 255
-        sub[m] = z[m]
-        img[y0:y1 + 1, x0:x1 + 1][m] = np.clip(col[m], 0, 255)
+    # opaque texels first with depth, then see-through texels blended back to front over them
+    tris.sort(key=lambda t: float(t[0][:, 2].mean()))
+    for see_through in (False, True):
+        for P, uv, lit in tris:
+            Sx = (P[:, 0] - cx) * sc + W / 2
+            Sy = -(P[:, 1] - cy) * sc + H / 2
+            x0, x1 = int(max(0, math.floor(Sx.min()))), int(min(W - 1, math.ceil(Sx.max())))
+            y0, y1 = int(max(0, math.floor(Sy.min()))), int(min(H - 1, math.ceil(Sy.max())))
+            if x1 < x0 or y1 < y0:
+                continue
+            den = (Sy[1] - Sy[2]) * (Sx[0] - Sx[2]) + (Sx[2] - Sx[1]) * (Sy[0] - Sy[2])
+            if abs(den) < 1e-9:
+                continue
+            ys, xs = np.mgrid[y0:y1 + 1, x0:x1 + 1]
+            px, py = xs + 0.5, ys + 0.5
+            l1 = ((Sy[1] - Sy[2]) * (px - Sx[2]) + (Sx[2] - Sx[1]) * (py - Sy[2])) / den
+            l2 = ((Sy[2] - Sy[0]) * (px - Sx[2]) + (Sx[0] - Sx[2]) * (py - Sy[2])) / den
+            l3 = 1 - l1 - l2
+            m = (l1 >= 0) & (l2 >= 0) & (l3 >= 0)
+            if not m.any():
+                continue
+            z = l1 * P[0, 2] + l2 * P[1, 2] + l3 * P[2, 2]
+            sub = zb[y0:y1 + 1, x0:x1 + 1]
+            m &= z > sub
+            if not m.any():
+                continue
+            u = l1 * uv[0, 0] + l2 * uv[1, 0] + l3 * uv[2, 0]
+            v = l1 * uv[0, 1] + l2 * uv[1, 1] + l3 * uv[2, 1]
+            ui = np.clip(u.astype(int), 0, tw - 1)
+            vi = np.clip(v.astype(int), 0, th - 1)
+            texel = T[vi, ui]
+            m &= texel[..., 3] > 0.1
+            m &= (texel[..., 3] < 0.95) if see_through else (texel[..., 3] >= 0.95)
+            if not m.any():
+                continue
+            li = l1 * lit[0] + l2 * lit[1] + l3 * lit[2]
+            col = texel[..., :3] * li[..., None] * 255
+            if G is not None:
+                col = col + G[vi, ui, :3] * 255
+            if see_through:
+                a = texel[..., 3][m][..., None]
+                dst = img[y0:y1 + 1, x0:x1 + 1]
+                dst[m] = np.clip(dst[m] * (1 - a) + col[m] * a, 0, 255)
+            else:
+                sub[m] = z[m]
+                img[y0:y1 + 1, x0:x1 + 1][m] = np.clip(col[m], 0, 255)
     return Image.fromarray(img.astype(np.uint8))

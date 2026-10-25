@@ -298,6 +298,8 @@ def m_horn(mat, f, s, ctx):
     """Ridged horn: rings along its length (a lit ridge and a shaded groove), darker at the root."""
     base = C(mat['color'])
     t = BP.along_t(f, s)
+    if 't0' in mat:                          # one box of a multi-box horn: its share of the whole horn's length
+        t = mat['t0'] + t * (mat.get('t1', 1.0) - mat['t0'])
     k = roundk(f, 0.22, 0.0, 0.0)
     if f.side:
         ring = (f.v % 4)
