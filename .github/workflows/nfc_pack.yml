@@ -61,6 +61,10 @@ jobs:
           print('fetched', spec['filename'])
           EOF
           cp "$(ls -v $P/out/oror_supreme_bosses-*.jar | tail -n 1)" $G/mods/
+          # The 0.17.24 native-combat line ships an Indestructible compatibility build (client config registration
+          # limited to physical clients); for a client run the original fork it is made from behaves the same.
+          curl -sSfL -A oror-nightfall-ci -o $G/mods/indestructible-21.16.3-1.21.1.jar \
+            https://mediafilez.forgecdn.net/files/7932/288/indestructible-21.16.3-1.21.1.jar
           python3 -I $U/tools/pack_tools.py fetch $OUT/resolved.json $G $OUT/lock-additions.json 2>&1 | tail -n 60
           mkdir -p $G/resourcepacks $G/shaderpacks; ls $G/mods | wc -l; ls $G/resourcepacks $G/shaderpacks
       - name: Dependencies declared by every jar
