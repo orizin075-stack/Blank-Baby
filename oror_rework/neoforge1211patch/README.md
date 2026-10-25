@@ -24,6 +24,16 @@ merged from `lang/<namespace>/<language>.json`.
 
 ## 0.17.25
 
+Built on the 0.17.24 "native combat" jar made elsewhere (`base/oror_supreme_bosses-0.17.24.jar`: NightfallCraft's enemy
+behaviour through an Indestructible compatibility build, Nightfall's own parry and starter skills). My 0.17.24 fixes
+were made on 0.17.23 and are carried over; `out/oror_supreme_bosses-0.17.24.jar` is that other, earlier 0.17.24.
+
+- `NightfallIdleAiMixin`, `NightfallMagicAttackMixin`, `NightfallSetupCheck`: the 0.17.24 fixes above (that jar still
+  had the 0.17.23 classes); the setup check also names a missing Indestructible.
+- `NightfallBasicParry` (that jar's source, reformatted): plain Guard is replaced by Nightfall's parry on the first
+  check only, not every second; nothing is touched without Nightfall, whose classes are only loaded when it is.
+- `CompatibilityMixinPlugin`: the mixins on Nightfall's or Indestructible's classes are skipped without those mods; the
+  config is required, so a profile without them stopped at start-up instead of saying what is missing.
 - `NightfallPatchSettings`: `compactHud` defaults to false. 0.17.22 hid every Ares HUD layer (stamina, guard and parry,
   mana) and drew a plain health row instead; the 0.17.25 pack also ships `compactHud=false`.
 - The rest of 0.17.25 is the pack around the jar: NightfallCraft's screens and combat feel, in `oror_rework/nfc_ui`.
