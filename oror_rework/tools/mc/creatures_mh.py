@@ -25,6 +25,26 @@ def recipe(fn):
 
 # ====================================================================================================== the kit
 
+def fit_height(r, skip=('wing',)):
+    """Sets the rig's height (what the renderer scales to the hitbox) from the body alone: parts on bones whose name
+    starts with one of `skip` (raised wings, orbiting satellites, a hanging town) may rise above the hitbox, so they
+    no longer shrink the body."""
+    import sculpt as SC
+    mats = SC.world_of(r)
+    top = 1e9
+    for s in r.sculpt.surfs:
+        b, hidden = s.bone, False
+        while b is not None:
+            if any(b.name.startswith(k) for k in skip):
+                hidden = True
+                break
+            b = b.parent
+        if not hidden:
+            top = min(top, float(SC.surf_world(s, mats)[0][:, 1].min()))
+    r.height = round(24 - top, 3)
+    return r
+
+
 def lerp(a, b, t):
     return tuple(a[i] + (b[i] - a[i]) * t for i in range(len(a)))
 
@@ -297,7 +317,7 @@ def wyvern(key, spec):
         spec['tail_tip'](r, ends[-1])
     if spec.get('extra'):
         spec['extra'](r, root, body)
-    return r
+    return fit_height(r, ('wing', 'shards'))
 
 
 @recipe
@@ -404,7 +424,7 @@ def teia():
     b, (x, y, z) = ends[-1]
     box(b, (-0.15, y - 3.0, z - 2.0), (0.15, y + 3.0, z + 1.6), light('#7ff6ff'), rot=(0.5, 0, 0), pivot=(0, y, z))
     box(b, (-3.0, y - 0.15, z - 2.0), (3.0, y + 0.15, z + 1.6), light('#ff9af2'))
-    return r
+    return fit_height(r, ('wing',))
 
 
 # ------------------------------------------------------------------------------------------- lofted bodies
@@ -961,7 +981,7 @@ def eomaia():
     tb = tail_loft(r, body, tail_ctrl, [18, 23, 28], scales, amp=0.16, speed=0.07)
     fin(tb[-1], [(31.0, 6.6), (34.6, 2.0), (36.4, 3.6), (35.2, 6.8), (36.4, 10.0), (34.6, 11.4), (31.0, 7.0)], 'zy', 0.0, finc, accent=edge,
         glow=True, veins=[(31.5, 6.7, 35.4, 2.6), (31.5, 6.7, 35.8, 6.8), (31.5, 6.7, 35.4, 10.8)])
-    return r
+    return fit_height(r, ('wing',))
 
 
 def sphere(bone, c, rad, mat, n=None, octa=False, squash=(1.0, 1.0, 1.0)):
@@ -1058,7 +1078,7 @@ def mels():
                 cbox(ring, (x + math.cos(a) * (0.9 - 0.9 * t * t), y + t * 2.0, z + math.sin(a) * (0.9 - 0.9 * t * t)), (0.4, 1.1, 0.4),
                      shard, rot=(0, a, -t * 0.5))
             cbox(ring, (x, y, z), (0.12, 4.2, 0.12), edge, rot=(0, a, 0))
-    return r
+    return fit_height(r, ('shards',))
 
 
 def machine_ball(bone, c, rad, hull, band, seam=None, n=None):
@@ -1179,7 +1199,7 @@ def hephaistos():
     for k in range(5):
         a = k * 2 * math.pi / 5 + 0.3
         sphere(orbit_c, (math.cos(a) * 18.0, c[1] + math.sin(a * 2) * 2.0, math.sin(a) * 18.0), 1.0, hull, n=4, octa=True)
-    return r
+    return fit_height(r, ('orbit',))
 
 
 @recipe
@@ -1322,7 +1342,7 @@ def chaos():
             fy = -4.0 + h + 2.0 + f * 3.0
             box(orbit, (x - 0.5 + f, fy - 0.6, z - 2.6), (x + 0.5 + f, fy + 0.6, z - 0.4), M('shingle', '#ff9a4a', belly='#ffe0b0', scale_size=0.5))
             box(orbit, (x + f - 0.1, fy - 1.0, z - 0.4), (x + f + 0.1, fy + 1.0, z + 0.8), M('energy', '#ffb36a', glow=True, glow_amount=0.3))
-    return r
+    return fit_height(r, ('orbit',))
 
 
 def world_orb(bone, c, rad, kind):
