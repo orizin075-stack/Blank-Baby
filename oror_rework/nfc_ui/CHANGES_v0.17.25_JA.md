@@ -37,9 +37,18 @@ Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21。いただいた 0.17.24（Nativ
   「中央下に1列のホットバー、その上に HP・防御力・スタミナ・マナのバー」（Ares HUD の HOTBAR_1X9）です。
   （config/oror-nightfall-patch.properties の compactHud=true で以前の表示に戻せます）
 - **タイトル画面・起動中のロード画面・ワールド読み込み画面**：NightfallCraft と同じ FancyMenu / Drippy Loading Screen の
-  レイアウトです。画像は TCR Core（1.20.1 版のみ）のものなので、`SETUP_NIGHTFALL.cmd` が CurseForge から
-  TCR Core 2.8.7（約39MB）を取得し、使う画像 25 枚だけを config/fancymenu/assets/nightfallcraft に置きます
+  レイアウトです。
+- **メニュー（ボタン・タブ・区切り線・背景）**：NightfallCraft のメニューの見た目は、NightfallCraft の中核 MOD
+  「TCR Core」が出していました（ボタンの画像の差し替え、タブと区切り線の差し替え、土の背景の代わりに月夜のぼかし絵）。
+  TCR Core は 1.20.1 版しかないため、OROR がその画像から 1.21.1 用のボタン・タブ・区切り線を作る内蔵パック
+  「NightfallCraft GUI (TCR Core)」を常に適用し、ワールドの外で開くメニューには同じ背景を表示します。
+- **画像の取得**：タイトル画面とメニューの画像は TCR Core のものなので、`SETUP_NIGHTFALL.cmd` が CurseForge から
+  TCR Core 2.8.7（約39MB）を取得し、使う画像 33 枚だけを config/fancymenu/assets/nightfallcraft に置きます
   （1枚ずつ SHA-256 を照合。失敗してもゲームは遊べ、もう一度実行すれば入ります）。
+- **リソースパック**：NightfallCraft と同じく、最初はどれも無効です（NightfallCraft は初期設定ファイルを持たず、
+  Mandala の暗い GUI なども最初は無効でした）。NightfallCraft に入っていたパック（Mandala's GUI ダークモード、
+  剣の軌跡4種、DMC5 yamato、Eclectic Trove、Stay True、xali's Enhanced Vanilla、True Nitwit、Vulmoon's）は導入済みなので、
+  「設定 → リソースパック」から有効にできます。
 - Modern UI（背景ぼかし・フォント。日本語は Yu Gothic UI / Meiryo UI を優先）、Legendary Tooltips、Item Borders、
   Enchantment Descriptions（＋Prickle）、Jade、Xaero's Minimap / World Map、Fancy Toasts、You Died、Chat Plus、
   InvMove、Mouse Tweaks、Visual Keybinder、Configured。
@@ -52,8 +61,7 @@ Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21。いただいた 0.17.24（Nativ
   戦闘モード、素手で採掘モード（対象は NightfallCraft の一覧のうちこのパックにある武器と、Epic Fight の武器設定を持つ
   すべての武器 439 個）。ブロック採掘ガイドと対象ガイドは非表示。
 - Better Lock On（ロックオン）、Combat Evolution の HUD、Nightfall の VFX Plus は NightfallCraft の設定。
-- 演出：AAA Particles、P1nero's Bow、Cinematic Cataclysm（＋FDLib）、Better Trident Model、剣の軌跡パック4種、
-  DMC5 yamato for Nightfall。音：Extra Sounds、Sound Physics Remastered、Medieval Music。
+- 演出：AAA Particles、P1nero's Bow、Cinematic Cataclysm（＋FDLib）、Better Trident Model。音：Extra Sounds、Sound Physics Remastered、Medieval Music。
 - 動作：Sodium 0.8、Entity Culling、FerriteCore、ModernFix、Sodium Dynamic Lights。
 
 ## 入れられなかったもの
@@ -78,9 +86,15 @@ Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21。いただいた 0.17.24（Nativ
 
 - 変更したクラスは、NeoForge 21.1.262 とパックと同じ版の実 JAR（Epic Fight・Iron's Spells・Nightfall・Indestructible・
   Dodge Parry Reward など。CurseForge から取得し SHA-256 を記録）に対して GitHub Actions 上でコンパイルしました。
-- このパックの全 MOD を実際の NeoForge クライアントで起動し（ソフトウェア描画）、タイトル画面 → ワールド新規作成 →
-  ワールド内で HUD・インベントリ・ポーズ画面の画面写真を撮り、依存関係のエラーやクラッシュがないことを確認しました。
+- このパックの全 MOD を実際の NeoForge クライアントで起動し（ソフトウェア描画）、タイトル画面 → 設定画面 →
+  ワールド新規作成 → ワールド内で HUD・インベントリ・ポーズ画面・3人称の画面写真を撮り、依存関係のエラーやクラッシュが
+  ないこと、満腹度の代わりに防御力が出ること、Nightfall のパリィが装備されることを確認しました。
+- NightfallCraft のメニューの作りは、TCR Core 2.8.7 の該当コードと画像を読んで確認しました。NightfallCraft 2.2.8.6 本体を
+  同じ方法で起動して並べて比べることも試みましたが、公開されている構成のままでは依存関係の不整合などで起動せず、
+  比較写真は撮れていません。
 - セットアップの画像取得（PowerShell）は、実際の CurseForge からの取得・2回目の省略・壊れた画像の復元・通信失敗時を確認済み。
 - CI の起動では、Sword Soaring 互換版と falchion 互換版（配布物にだけ含まれる改変 JAR）は外し、Indestructible は
   互換版の元になった公式の fork 版を使っています。
 - 実際の戦闘（パリィ・ロックオン・軌跡）、Windows での起動、マルチプレイは試していません。
+
+OROR JAR SHA-256：`0a481480adfd92232ef10d251b1b8179888578faedfcd8692d8b543169c293d7`
