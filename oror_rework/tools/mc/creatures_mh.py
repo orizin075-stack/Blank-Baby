@@ -12,8 +12,17 @@ Model space: pixels, y down (ground y = 24), the front is -z.
 import math
 import numpy as np
 from paint import M
-from creatures_ia import (rig, box, rbox, cbox, seg, chain_boxes, eye, teeth, teeth_x, fin, ball, hoop, sea_fin_bone,
+from creatures_ia import (rig as _rig, box, rbox, cbox, seg, chain_boxes, eye, teeth, teeth_x, fin, ball, hoop, sea_fin_bone,
                           recipe as _unused)
+
+
+def rig(key, td=1):
+    """One texel per model pixel and every texel on its material's palette: the reference mods (Cataclysm, Alex's Caves,
+    Legendary Monsters) paint at vanilla density with 14-32 colours per boss texture; OROR's earlier 2 texels per pixel
+    and painted gradients gave 250-960."""
+    r = _rig(key, td=td)
+    r.snap = True
+    return r
 
 RECIPES = {}
 

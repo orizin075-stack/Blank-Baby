@@ -688,6 +688,8 @@ def paint_surf(s, ctx):
         a = ctx['ao']
         k = np.where(a < 0.62, 0.8, np.where(a < 0.8, 0.9, 1.0)).astype(np.float32)
         rgb = ramp(rgb, k)
+    if getattr(s.bone.rig, 'snap', False) and mat.get('type') not in NO_SNAP:
+        rgb = snap(rgb, mat)
     if mat.get('glow') is True and glow is None and mat.get('type') not in ('gem', 'horn', 'feather'):
         glow = np.zeros((f.H, f.W, 4), np.float32)
         glow[..., :3] = rgb
@@ -696,6 +698,48 @@ def paint_surf(s, ctx):
         a0 = mat['alpha'] / 255.0 if mat['alpha'] > 1 else mat['alpha']
         alpha = (np.ones((f.H, f.W), np.float32) if alpha is None else alpha) * a0
     return rgb, alpha, glow
+
+
+# ------------------------------------------------------------------------------------------- palette snapping
+# The reference boss mods (L_Ender's Cataclysm, Alex's Caves, Legendary Monsters) paint a boss with 17-90 colours in
+# all; OROR's painters made 250-960 through gradients, noise and occlusion. A rig with `snap` set has every texel
+# put on its material's own ramp: six shades of each base colour, three of each accent, so parts read as flat,
+# deliberate pixel art.
+NO_SNAP = ('eye', 'energy', 'rainbow', 'gel', 'ring', 'head', 'blink', 'hair_shell')
+SNAP_KEYS = ('color', 'belly', 'accent', 'tip', 'mark', 'edge', 'spots', 'star', 'lid', 'tongue', 'flowers', 'top', 'ore', 'sclera',
+             'vein', 'trim', 'pattern_colour')
+SNAP_LISTS = ('glints', 'bands', 'hues', 'stripes')
+_palettes = {}
+
+
+def _palette(mat):
+    key = repr(sorted((k, str(v)) for k, v in mat.items() if k in SNAP_KEYS + SNAP_LISTS))
+    pal = _palettes.get(key)
+    if pal is None:
+        cols = []
+        base = mat.get('color')
+        if isinstance(base, str):
+            cols += [ramp(C(base), k) for k in (0.52, 0.68, 0.84, 1.0, 1.16, 1.34)]
+        for k in SNAP_KEYS[1:]:
+            v = mat.get(k)
+            if isinstance(v, str) and v.startswith('#'):
+                cols += [ramp(C(v), q) for q in (0.8, 1.0, 1.2)]
+        for k in SNAP_LISTS:
+            for v in mat.get(k) or ():
+                if isinstance(v, str) and v.startswith('#'):
+                    cols += [C(v), ramp(C(v), 1.25)]
+        cols.append(C('#ffffff'))
+        pal = np.unique(np.clip(np.asarray(cols, np.float32).reshape(-1, 3), 0, 255), axis=0)
+        _palettes[key] = pal
+    return pal
+
+
+def snap(rgb, mat):
+    pal = _palette(mat)
+    flat = rgb.reshape(-1, 3)
+    # weighted RGB distance (eyes are most sensitive to green, least to blue)
+    d = ((flat[:, None, :] - pal[None, :, :]) ** 2 * np.array([0.3, 0.59, 0.11], np.float32)).sum(-1)
+    return pal[d.argmin(1)].reshape(rgb.shape)
 
 
 # ------------------------------------------------------------------------------------------- garment details
