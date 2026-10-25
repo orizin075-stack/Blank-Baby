@@ -36,11 +36,11 @@ jobs:
           for lang in ('en_us', 'ja_jp', 'zh_cn'):
               p = f'assets/superbwarfare/lang/{lang}.json'
               if not os.path.exists(p): continue
-              t = json.load(open(p, encoding='utf-8'))
+              t = json.load(open(p, encoding='utf-8-sig'))
               hits = {k: v for k, v in t.items() if re.search(r'print|rail|laser|blue|charge|energy|blueprint', k + ' ' + v, re.I)}
               print('==', p, len(t), 'matching:', len(hits))
               for k, v in sorted(hits.items())[:120]: print(' ', k, '=', v)
-          names = json.load(open('assets/superbwarfare/lang/en_us.json', encoding='utf-8'))
+          names = json.load(open('assets/superbwarfare/lang/en_us.json', encoding='utf-8-sig'))
           print('== items', sorted(k[len('item.superbwarfare.'):] + '=' + v for k, v in names.items() if k.startswith('item.superbwarfare.') and k.count('.') == 2))
           for root in ('data/superbwarfare',):
               for d, _, files in sorted(os.walk(root)):
