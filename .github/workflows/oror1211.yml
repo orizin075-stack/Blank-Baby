@@ -46,6 +46,20 @@ jobs:
           curl -sSfL -o "$RUNNER_TEMP/indestructible.jar" https://mediafilez.forgecdn.net/files/7932/288/indestructible-21.16.3-1.21.1.jar
           cp "$RUNNER_TEMP/indestructible.jar" libs/
           sha256sum libs/nightfall.jar "$RUNNER_TEMP/indestructible.jar" | tee -a out/report.txt
+      - name: Nightfall's names of the weapons the alias weapons copy
+        run: |
+          python3 -I - libs/nightfall.jar <<'PY' 2>&1 | tee -a out/report.txt
+          import json, re, sys, zipfile
+          z = zipfile.ZipFile(sys.argv[1])
+          wanted = re.compile(r'item\.efn\.(exsiliumgladius|fire_exsiliumgladius|meen_spear|crimson_moon|air_tachi|arc_tachi|nf_shortsword|nf_shortsword_2|crescent_moon|excalibur|flag_bearer)(_e)?$')
+          for lang in ('en_us', 'ja_jp', 'zh_cn'):
+              name = f'assets/efn/lang/{lang}.json'
+              table = json.loads(z.read(name).decode('utf-8')) if name in z.namelist() else {}
+              print('==', name, len(table))
+              for key in sorted(table):
+                  if wanted.match(key) or 'flag' in key or 'excalibur' in key:
+                      print(' ', key, '=', json.dumps(table[key], ensure_ascii=False))
+          PY
       - name: Compile against NeoForge 1.21.1
         run: |
           gradle compileJava --console=plain 2>&1 | tee -a out/report.txt
