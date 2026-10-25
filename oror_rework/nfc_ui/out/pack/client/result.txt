@@ -1,48 +1,49 @@
-260 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-460 screenshot 01_title
-481 screen net.minecraft.client.gui.screens.options.OptionsScreen in TITLE
-541 screenshot 01b_options
-552 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-752 screenshot 01_title
-773 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-833 screenshot 02_create_world
-843 press selectWorld.create on CreateWorldScreen
-844 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-944 screenshot popup_1_ConfirmScreen
-944 press gui.yes on ConfirmScreen
-945 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-975 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-996 screen none in LOADING
-997 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-1097 screenshot popup_2_
-1098 screen none in PLAY
-1143 weapon efn:hf_murasama
-1487 epic fight mode combat holding efn:hf_murasama: holding the weapon since equipping (expect combat)
-1497 screenshot 04_hud_weapon
-1597 screenshot 05_hud_tool
-1608 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
-1677 screenshot 06_inventory
-1688 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
-1747 screenshot 07_pause
-1758 screen none in PLAY
-1857 screenshot 08_hud_weapon_again
-1957 screenshot 09_third_person
-1967 switched to the vanilla mode
-1997 epic fight mode vanilla holding efn:hf_murasama: same weapon after switching to the vanilla mode, as R does (expect vanilla)
-2042 epic fight mode combat holding efn:hf_murasama: after taking the weapon again (expect combat)
-2047 fixed weapon efn:nf_shortsword_e
-2047 fixed weapon efn:nf_shortsword_2_e
-2047 fixed weapon efn:exsiliumgladius_e
-2047 fixed weapon efn:fire_exsiliumgladius_e
-2047 fixed weapon efn:meen_spear_e
-2047 fixed weapon efn:air_tachi_e
-2047 fixed weapon efn:arc_tachi
-2047 fixed weapon efn:crimson_moon_e
-2047 fixed weapon efn:crescent_moon_e
-2047 fixed weapon efn:flag_bearer
-2047 fixed weapon efn:flag_bearer_e
-2047 fixed weapon efn:excalibur
-2078 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
-2137 screenshot 10_fixed_weapons
-2148 screen none in PLAY
-2157 finished: complete
+204 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+404 screenshot 01_title
+425 screen net.minecraft.client.gui.screens.options.OptionsScreen in TITLE
+485 screenshot 01b_options
+496 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+696 screenshot 01_title
+717 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+777 screenshot 02_create_world
+787 press selectWorld.create on CreateWorldScreen
+788 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+888 screenshot popup_1_ConfirmScreen
+888 press gui.yes on ConfirmScreen
+889 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+913 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+934 screen none in LOADING
+935 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+1035 screenshot popup_2_
+1036 screen none in PLAY
+1056 weapon efn:hf_murasama
+1425 epic fight mode combat holding efn:hf_murasama: holding the weapon since equipping (expect combat)
+1435 screenshot 04_hud_weapon
+1535 screenshot 05_hud_tool
+1546 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
+1615 screenshot 06_inventory
+1626 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
+1685 screenshot 07_pause
+1696 screen none in PLAY
+1795 screenshot 08_hud_weapon_again
+1895 screenshot 09_third_person
+1905 switched to the vanilla mode
+1935 epic fight mode vanilla holding efn:hf_murasama: same weapon after switching to the vanilla mode, as R does (expect vanilla)
+1980 epic fight mode combat holding efn:hf_murasama: after taking the weapon again (expect combat)
+1985 fixed weapon efn:nf_shortsword_e
+1985 fixed weapon efn:nf_shortsword_2_e
+1985 fixed weapon efn:exsiliumgladius_e
+1985 fixed weapon efn:fire_exsiliumgladius_e
+1985 fixed weapon efn:meen_spear_e
+1985 fixed weapon efn:air_tachi_e
+1985 fixed weapon efn:arc_tachi
+1985 fixed weapon efn:crimson_moon_e
+1985 fixed weapon efn:crescent_moon_e
+1985 fixed weapon efn:flag_bearer
+1985 fixed weapon efn:flag_bearer_e
+1985 fixed weapon efn:excalibur
+2016 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
+2075 screenshot 10_fixed_weapons
+2075 untranslated item names: 66
+2086 screen none in PLAY
+2095 finished: complete
