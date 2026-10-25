@@ -1,0 +1,39 @@
+{
+ "neoforge:conditions": [
+  {
+   "type": "neoforge:mod_loaded",
+   "modid": "superbwarfare"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "category": "equipment",
+ "pattern": [
+  "EAE",
+  "FSF",
+  "BLB"
+ ],
+ "key": {
+  "E": {
+   "item": "minecraft:ender_eye"
+  },
+  "A": {
+   "item": "superbwarfare:ancient_cpu"
+  },
+  "F": {
+   "item": "oror_supreme_bosses:forge_core"
+  },
+  "S": {
+   "item": "minecraft:nether_star"
+  },
+  "B": {
+   "item": "superbwarfare:large_battery_pack"
+  },
+  "L": {
+   "item": "superbwarfare:legendary_material_pack"
+  }
+ },
+ "result": {
+  "id": "oror_supreme_bosses:blueprinter",
+  "count": 1
+ }
+}

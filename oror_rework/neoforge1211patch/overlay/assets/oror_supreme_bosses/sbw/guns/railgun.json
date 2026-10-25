@@ -1,0 +1,24 @@
+{
+ "Animation": {
+  "Idle": "animation.railgun.idle",
+  "Fire": "animation.railgun.fire",
+  "Reload": "animation.railgun.reload",
+  "Run": "animation.railgun.run"
+ },
+ "Model": {
+  "Animation": "oror_supreme_bosses:animations/railgun.animation.json",
+  "Model": "oror_supreme_bosses:geo/railgun.geo.json",
+  "Texture": "oror_supreme_bosses:textures/item/railgun.png",
+  "LODModel": "oror_supreme_bosses:geo/railgun.geo.json",
+  "LODTexture": "oror_supreme_bosses:textures/item/railgun.png"
+ },
+ "Icon": "oror_supreme_bosses:textures/gun_icon/railgun_icon.png",
+ "FlarePosition": [
+  0,
+  0,
+  1.7875
+ ],
+ "FlareSize": 1.4,
+ "EnergyBarColor": "0x4FF3FF",
+ "HideCrosshairWhenZoom": false
+}

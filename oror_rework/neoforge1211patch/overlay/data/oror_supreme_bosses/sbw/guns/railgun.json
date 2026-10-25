@@ -1,0 +1,46 @@
+{
+ "ID": "oror_supreme_bosses:railgun",
+ "MaxEnergy": 1000000,
+ "Damage": 1600,
+ "Headshot": 2,
+ "BypassesArmor": 1,
+ "Velocity": 400,
+ "Range": 512,
+ "Magazine": 1,
+ "AmmoCostPerShoot": 1,
+ "Projectile": "empty",
+ "AmmoType": "oror_supreme_bosses:rail_slug",
+ "ShootDelay": 30,
+ "RPM": 20,
+ "DefaultZoom": 4,
+ "MinZoom": 2,
+ "MaxZoom": 10,
+ "Spread": 0,
+ "ZoomSpreadRate": 0,
+ "RecoilX": 0.012,
+ "RecoilY": 0.09,
+ "Recoil": 0.8,
+ "Weight": 9,
+ "NormalReloadTime": 52,
+ "EmptyReloadTime": 52,
+ "SoundRadius": 64,
+ "GunType": "Sniper",
+ "DefaultFireMode": "Semi",
+ "AvailableFireModes": [
+  "Semi"
+ ],
+ "AvailablePerks": [],
+ "Icon": "oror_supreme_bosses:textures/gun_icon/railgun_icon.png",
+ "SoundInfo": {
+  "Fire1P": "superbwarfare:annihilator_fire_1p",
+  "Fire3P": "superbwarfare:annihilator_fire_3p",
+  "Fire3PFar": "superbwarfare:annihilator_far",
+  "Fire3PVeryFar": "superbwarfare:annihilator_veryfar",
+  "ReloadNormal": "superbwarfare:sentinel_reload_normal",
+  "ReloadEmpty": "superbwarfare:sentinel_reload_empty",
+  "CancellableSounds": [
+   "superbwarfare:sentinel_reload_normal",
+   "superbwarfare:sentinel_reload_empty"
+  ]
+ }
+}

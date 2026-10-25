@@ -1,0 +1,33 @@
+{
+ "neoforge:conditions": [
+  {
+   "type": "neoforge:mod_loaded",
+   "modid": "superbwarfare"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "category": "equipment",
+ "pattern": [
+  "GDG",
+  "ECE",
+  "GDG"
+ ],
+ "key": {
+  "G": {
+   "item": "minecraft:gold_ingot"
+  },
+  "D": {
+   "item": "minecraft:diamond"
+  },
+  "E": {
+   "item": "minecraft:end_crystal"
+  },
+  "C": {
+   "item": "superbwarfare:cell"
+  }
+ },
+ "result": {
+  "id": "oror_supreme_bosses:focus_cell",
+  "count": 1
+ }
+}

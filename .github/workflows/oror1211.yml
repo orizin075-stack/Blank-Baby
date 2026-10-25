@@ -39,7 +39,11 @@ jobs:
           python3 -I tools/cf_fetch.py pack/manifest-0.17.23.json pack/lock-0.17.23.json libs \
             epic-fight-21.17.3.1-mc1.21.1-neoforge.jar irons_spellbooks-1.21.1-3.16.3.jar irons_lib-1.21.1-2.2.0.jar \
             geckolib-neoforge-1.21.1-4.9.3.jar player-animation-lib-forge-2.0.4+1.21.1.jar curios-neoforge-9.5.1+1.21.1.jar \
-            dodge_parry_reward-1.21.1-1.0.0.jar 2>&1 | tee out/report.txt
+            dodge_parry_reward-1.21.1-1.0.0.jar superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar kotlinforforge-5.12.0-all.jar \
+            2>&1 | tee out/report.txt
+          # where GeckoLib keeps the classes the OROR guns' renderer and model use (its packages moved in 4.5)
+          unzip -l libs/geckolib-neoforge-1.21.1-4.9.3.jar | grep -E '/(GeoBone|AnimationState|GeoAnimatable|GeoItem|GeoItemRenderer|GeoModel)\.class' \
+            | awk '{print $4}' | tee -a out/report.txt
           # Nightfall (SETUP_NIGHTFALL.cmd's download) and the original Indestructible fork the 0.17.24 native-combat jar
           # builds on (its compatibility build differs only in client config registration).
           curl -sSfL -o libs/nightfall.jar "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
@@ -88,6 +92,9 @@ jobs:
             for c in $(cd "$RUNNER_TEMP/ind" && grep -rl --include='*.class' setParry com | sed 's/\.class$//;s#/#.#g'); do
               echo "-- $c"; javap -c -p -cp "$RUNNER_TEMP/ind" "$c" | grep -B3 'setParry' | grep -E 'iconst|setParry|Method .*\(' | head -12
             done
+            echo '== Superb Warfare charging station (the OROR guns hold 1,000,000 and 600,000 FE)'
+            javap -constants -p -cp libs/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar \
+              com.atsuishio.superbwarfare.block.entity.ChargingStationBlockEntity | grep -E 'static final int'
             echo '== EpicFightCapabilities.getEntityPatch (null entity?)'
             javap -c -p -cp libs/epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman.epicfight.world.capabilities.EpicFightCapabilities \
               | awk '/getEntityPatch\(net.minecraft.world.entity.Entity, java.lang.Class\)/{on=1} on{print; if(++n>14) exit}'

@@ -1,0 +1,45 @@
+{
+ "ID": "oror_supreme_bosses:laser_gun",
+ "MaxEnergy": 600000,
+ "Damage": 1000,
+ "Headshot": 1.5,
+ "BypassesArmor": 1,
+ "Velocity": 400,
+ "Range": 256,
+ "Magazine": 1,
+ "AmmoCostPerShoot": 1,
+ "Projectile": "empty",
+ "AmmoType": "oror_supreme_bosses:focus_cell",
+ "ShootDelay": 20,
+ "RPM": 20,
+ "DefaultZoom": 2,
+ "MinZoom": 1.25,
+ "MaxZoom": 4,
+ "Spread": 0,
+ "ZoomSpreadRate": 0,
+ "RecoilX": 0.004,
+ "RecoilY": 0.035,
+ "Weight": 6,
+ "NormalReloadTime": 52,
+ "EmptyReloadTime": 52,
+ "SoundRadius": 48,
+ "GunType": "Special",
+ "DefaultFireMode": "Semi",
+ "AvailableFireModes": [
+  "Semi"
+ ],
+ "AvailablePerks": [],
+ "Icon": "oror_supreme_bosses:textures/gun_icon/laser_gun_icon.png",
+ "SoundInfo": {
+  "Fire1P": "superbwarfare:secondary_cataclysm_fire_1p_charge",
+  "Fire3P": "superbwarfare:laser_tower_shoot",
+  "Fire3PFar": "superbwarfare:secondary_cataclysm_far_charge",
+  "Fire3PVeryFar": "superbwarfare:secondary_cataclysm_veryfar_charge",
+  "ReloadNormal": "superbwarfare:sentinel_reload_normal",
+  "ReloadEmpty": "superbwarfare:sentinel_reload_empty",
+  "CancellableSounds": [
+   "superbwarfare:sentinel_reload_normal",
+   "superbwarfare:sentinel_reload_empty"
+  ]
+ }
+}

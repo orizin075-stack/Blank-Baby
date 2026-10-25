@@ -1,0 +1,33 @@
+{
+ "neoforge:conditions": [
+  {
+   "type": "neoforge:mod_loaded",
+   "modid": "superbwarfare"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "category": "equipment",
+ "pattern": [
+  "CNC",
+  "CDC",
+  "CEC"
+ ],
+ "key": {
+  "C": {
+   "item": "superbwarfare:cemented_carbide_ingot"
+  },
+  "N": {
+   "item": "minecraft:netherite_ingot"
+  },
+  "D": {
+   "item": "minecraft:diamond"
+  },
+  "E": {
+   "item": "superbwarfare:cell"
+  }
+ },
+ "result": {
+  "id": "oror_supreme_bosses:rail_slug",
+  "count": 1
+ }
+}
