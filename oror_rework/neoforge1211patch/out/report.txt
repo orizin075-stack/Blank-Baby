@@ -4,6 +4,9 @@ fetched irons_lib-1.21.1-2.2.0.jar 462255 https://mediafilez.forgecdn.net/files/
 fetched geckolib-neoforge-1.21.1-4.9.3.jar 634531 https://mediafilez.forgecdn.net/files/8893/490/geckolib-neoforge-1.21.1-4.9.3.jar
 fetched player-animation-lib-forge-2.0.4+1.21.1.jar 203149 https://mediafilez.forgecdn.net/files/7389/814/player-animation-lib-forge-2.0.4%2B1.21.1.jar
 fetched curios-neoforge-9.5.1+1.21.1.jar 410690 https://mediafilez.forgecdn.net/files/6529/130/curios-neoforge-9.5.1%2B1.21.1.jar
+fetched dodge_parry_reward-1.21.1-1.0.0.jar 283238 https://mediafilez.forgecdn.net/files/8671/97/dodge_parry_reward-1.21.1-1.0.0.jar
+ec66e0b42a0f8561ebbf57af356dfd237be170297cc5e5e712de0bec34a7fa4c  libs/nightfall.jar
+efa161747dcb3cfb0f20defc43d14c2ca3e64003150f1957623c06ccdbac6dd0  /home/runner/work/_temp/indestructible.jar
 
 Welcome to Gradle 8.14.3!
 
@@ -26,61 +29,98 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/1757c8b1fbfc6b638504e1f6cceb05893f7389d5/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.47s
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.32s
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
-[1m*** Started working on [4mdownloadServer[23;0m[23;0m
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.51s
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.35s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.12s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.68s
+[1m*** Started working on [4mstripClient[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.07s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 1.52s
-[1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.84s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.61s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.89s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.67s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.26s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 2.88s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.74s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.84s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.25s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.57s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 5.62s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 4.74s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.46s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 4.08s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.67s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.31s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.11s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.66s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.75s
-Total runtime: 30.02s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 4.89s
+Total runtime: 24.16s
 
 
 > Task :compileJava
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1792846679941.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1792897193027.json
 
-BUILD SUCCESSFUL in 1m 9s
+BUILD SUCCESSFUL in 1m 12s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
 == AbstractSpell.canBeCastedBy (Iron's Spells)
   public io.redspace.ironsspellbooks.api.spells.CastResult canBeCastedBy(int, io.redspace.ironsspellbooks.api.spells.CastSource, io.redspace.ironsspellbooks.api.magic.MagicData, net.minecraft.world.entity.player.Player);
-== AdaptiveCombat.tick (OROR 0.17.23)
+== AdaptiveCombat.tick (base/oror_supreme_bosses-0.17.24.jar)
   public static void tick(net.neoforged.neoforge.event.tick.EntityTickEvent$Post);
-== Nightfall mod id
+== Nightfall and Indestructible mod ids
 modId = "efn"
 modId = "neoforge"
 modId = "minecraft"
-replaced 4 old class files; added 5 compiled; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json']
-e462744e2ed887071952772ef906fa78ac0268f2ad03703bf78e05f34abcc4ee  out/oror_supreme_bosses-0.17.25.jar
+modId="indestructible"
+modId="neoforge"
+modId="minecraft"
+== EFNSkills / DPRSkills fields
+  public static final net.neoforged.neoforge.registries.DeferredHolder<yesman.epicfight.skill.Skill, com.hm.efn.skill.dodge.EFNDodgeSkill_Roll> EFN_DODGE_ROLL_HOLDER;
+  public static final net.neoforged.neoforge.registries.DeferredHolder<yesman.epicfight.skill.Skill, com.hm.efn.skill.dodge.EFNDodgeSkill_Step> EFN_DODGE_STEP_HOLDER;
+  public static final net.neoforged.neoforge.registries.DeferredHolder<yesman.epicfight.skill.Skill, com.hm.efn.skill.guard.EFNParryingSkill> EFN_PARRY_HOLDER;
+  public static yesman.epicfight.skill.Skill EFN_DODGE_ROLL;
+  public static yesman.epicfight.skill.Skill EFN_DODGE_STEP;
+  public static yesman.epicfight.skill.Skill EFN_PARRY;
+  public static final net.neoforged.neoforge.registries.DeferredHolder<yesman.epicfight.skill.Skill, com.p1nero.dpr.skill.ParryAndDodgeRewardSkill> STAMINA1;
+== Indestructible AdvancedCustomHumanoidMobPatch: isBlocking/setParry inside preTickServer (NightfallEnemyRecoveryMixin redirects every isBlocking call there)
+32:      61: invokevirtual #252                // Method isBlocking:()Z
+41:      78: invokevirtual #255                // Method getStamina:()F
+44:      83: invokevirtual #156                // Method getMaxStamina:()F
+60:     113: getfield      #47                 // Field regenStaminaStandbyTime:I
+86:     153: invokevirtual #159                // Method setStamina:(F)V
+96:     169: invokevirtual #159                // Method setStamina:(F)V
+103:     180: invokevirtual #159                // Method setStamina:(F)V
+== who calls setParry(true) (NightfallEnemyParryWindowMixin times the window from the last call)
+-- com.nameless.indestructible.data.AdvancedMobpatchReloader
+      39: invokevirtual #1100               // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setBlockTick:(I)V
+      45: invokevirtual #1103               // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParry:(Z)V
+-- com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotionSet
+       7: invokespecial #27                 // Method "<init>":(III)V
+  public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotionSet setParryTimes(int);
+-- com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion
+  public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion setParryCost(float);
+  public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion setParryAnimations(java.lang.Object[]);
+  private static void lambda$setParryAnimations$0(java.util.ArrayList, java.lang.String);
+-- com.nameless.indestructible.world.ai.goal.GuardGoal
+      13: iconst_0
+      14: invokevirtual #45                 // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParryCounter:(I)V
+-- com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch
+  public void setParry(boolean);
+  public void setParryCounter(int);
+== EpicFightCapabilities.getEntityPatch (null entity?)
+replaced 5 old class files; added 7 compiled; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json']
+76d7b3d311ecacd4e6ffc352c3b473f00275614f4c2b2c42189054fce2e0e966  out/oror_supreme_bosses-0.17.25.jar
