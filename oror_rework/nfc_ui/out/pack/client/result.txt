@@ -1,25 +1,26 @@
-206 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-406 screenshot 01_title
-427 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-487 screenshot 02_create_world
-497 press selectWorld.create on CreateWorldScreen
-498 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-598 screenshot popup_1_ConfirmScreen
-598 press gui.yes on ConfirmScreen
-599 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-626 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-647 screen none in LOADING
-648 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-748 screenshot popup_2_
-749 screen none in PLAY
-769 weapon efn:hf_murasama
-1148 screenshot 04_hud_weapon
-1248 screenshot 05_hud_tool
-1259 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
-1328 screenshot 06_inventory
-1339 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
-1398 screenshot 07_pause
-1409 screen none in PLAY
-1508 screenshot 08_hud_weapon_again
-1608 screenshot 09_third_person
-1628 finished: complete
+300 screenshot 00_loading_overlay
+317 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+517 screenshot 01_title
+538 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+598 screenshot 02_create_world
+608 press selectWorld.create on CreateWorldScreen
+609 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+709 screenshot popup_1_ConfirmScreen
+709 press gui.yes on ConfirmScreen
+710 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+738 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+759 screen none in LOADING
+760 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+860 screenshot popup_2_
+861 screen none in PLAY
+885 weapon efn:hf_murasama
+1260 screenshot 04_hud_weapon
+1360 screenshot 05_hud_tool
+1371 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
+1440 screenshot 06_inventory
+1451 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
+1510 screenshot 07_pause
+1521 screen none in PLAY
+1620 screenshot 08_hud_weapon_again
+1720 screenshot 09_third_person
+1740 finished: complete
