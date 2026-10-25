@@ -1,11 +1,12 @@
 """OROR War x Nightfall import and patch ZIPs for a release that adds CurseForge files and override files.
 
   python3 -I package_pack.py <previous import zip> <new OROR jar> <old version> <new version> <resolved.json>
-                             <overlay dir> <notes .md> <out dir>
+                             <overlay dir> <notes .md> <out dir> [<profile name>]
 
 Import: every entry of the previous import is kept byte for byte, except
   - the OROR jar (replaced by the new one),
-  - manifest.json (new version; the additions of resolved.json appended as required files),
+  - manifest.json (new version, and the profile name if one is given; the additions of resolved.json appended as
+    required files),
   - README_FIRST_JA.md (the new notes go first),
   - files under the overlay dir, which are added or replace overrides/<same path>;
 and the notes are added as overrides/CHANGES_v<version>_JA.md.
@@ -24,7 +25,7 @@ def overlay_files(root):
     return found
 
 
-def main(previous, jar, old, new, resolved, overlay, notes, out):
+def main(previous, jar, old, new, resolved, overlay, notes, out, profile=None):
     old_jar = f'overrides/mods/oror_supreme_bosses-{old}.jar'
     new_jar = f'overrides/mods/oror_supreme_bosses-{new}.jar'
     text = open(notes, encoding='utf-8').read()
@@ -49,6 +50,8 @@ def main(previous, jar, old, new, resolved, overlay, notes, out):
                 if manifest['version'] != old:
                     sys.exit('manifest version is ' + manifest['version'])
                 manifest['version'] = new
+                if profile:
+                    manifest['name'] = profile
                 have = {f['projectID'] for f in manifest['files']}
                 for e in additions:
                     if e['projectID'] in have:
@@ -78,4 +81,4 @@ def main(previous, jar, old, new, resolved, overlay, notes, out):
 
 
 if __name__ == '__main__':
-    main(*sys.argv[1:9])
+    main(*sys.argv[1:10])
