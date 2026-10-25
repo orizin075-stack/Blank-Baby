@@ -68,12 +68,33 @@ final class ArmsTest {
             case 1880 -> Harness.openInventory(mc);
             case 1940 -> Harness.shotNow(mc, "18_arms_inventory");
             case 1950 -> Harness.closeScreen(mc);
+            case 1960 -> server(mc, p -> creatures(p, new String[] {"demiurgos", "eomaia", "enkou", "chaos"}));
+            case 2060 -> Harness.shotNow(mc, "19_creatures_a");
+            case 2070 -> server(mc, p -> creatures(p, new String[] {"teia", "kurma", "bahamut", "hephaistos"}));
+            case 2170 -> Harness.shotNow(mc, "20_creatures_b");
+            case 2180 -> server(mc, p -> creatures(p, new String[] {"yggdrasil", "mels"}));
+            case 2280 -> Harness.shotNow(mc, "21_creatures_c");
             default -> { }
         }
     }
 
     static boolean active(int t) {
-        return t >= 1100 && t <= 1950;
+        return t >= 1100 && t <= 2280;
+    }
+
+    /** The rebuilt non-human characters, frozen in a row facing the camera. */
+    private static void creatures(ServerPlayer player, String[] ids) {
+        int x = base.getX(), y = base.getY(), z = base.getZ();
+        run(player, "kill @e[type=!minecraft:player]");
+        run(player, String.format(Locale.ROOT, "fill %d %d %d %d %d %d minecraft:air", x - 14, y, z + 6, x + 14, y + 12, z + 24));
+        for (int k = 0; k < ids.length; k++) {
+            int cx = x + (ids.length == 1 ? 0 : -12 + k * 24 / (ids.length - 1));
+            String id = "oror_supreme_bosses:" + ids[k];
+            boolean known = BuiltInRegistries.ENTITY_TYPE.containsKey(ResourceLocation.parse(id));
+            Harness.noteNow("arms: creature " + id + (known ? "" : " is not registered"));
+            run(player, String.format(Locale.ROOT, "summon %s %d %d %d {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}", id, cx, y, z + 20));
+        }
+        run(player, String.format(Locale.ROOT, "tp %s %d %d %d facing %d %d %d", name, x, y + 4, z + 2, x, y + 3, z + 20));
     }
 
     private static void server(Minecraft mc, Consumer<ServerPlayer> work) {
@@ -107,7 +128,9 @@ final class ArmsTest {
     private static void arena(ServerPlayer player) {
         if (base == null) base = player.blockPosition();
         int x = base.getX(), y = base.getY(), z = base.getZ();
-        run(player, "kill @e[type=minecraft:zombie]");
+        run(player, "execute as " + name + " at @s run kill @e[type=!minecraft:player,distance=..96]");
+        run(player, "effect give " + name + " minecraft:resistance infinite 4 true");
+        run(player, "effect give " + name + " minecraft:saturation infinite 0 true");
         run(player, String.format(Locale.ROOT, "fill %d %d %d %d %d %d minecraft:smooth_stone", x - 14, y - 1, z - 12, x + 14, y - 1, z + 24));
         run(player, String.format(Locale.ROOT, "fill %d %d %d %d %d %d minecraft:air", x - 14, y, z - 12, x + 14, y + 12, z + 24));
         run(player, String.format(Locale.ROOT, "fill %d %d %d %d %d %d minecraft:stone", x - 1, y, z + 12, x + 1, y + 3, z + 13));

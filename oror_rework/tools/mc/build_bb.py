@@ -12,14 +12,17 @@ import sculpt as SC
 import bbpaint as BP
 import gaiapaint
 gaiapaint.enable()           # 0.17.27: Grimoire of Gaia / Ice and Fire painters
+import iapaint
+iapaint.enable()             # 0.17.27: creature eyes, mouths, teeth, wing skin (creatures_ia)
 import build3d as B3
 
 
 def recipes():
-    import chars3d, creatures3d, creatures_sc
+    import chars3d, creatures3d, creatures_sc, creatures_ia
     out = dict(chars3d.RECIPES)
     out.update(creatures3d.RECIPES)
     out.update(creatures_sc.RECIPES)
+    out.update(creatures_ia.RECIPES)         # 0.17.27: the non-human characters, rebuilt as cube models
     return out
 
 

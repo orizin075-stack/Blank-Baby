@@ -209,7 +209,7 @@ public final class Harness {
                 expected = null;
                 mc.setScreen(null);
             }
-            case 1980 -> finish(mc, "complete");
+            case 2300 -> finish(mc, "complete");
             default -> {
                 if (ArmsTest.active(play)) ArmsTest.step(mc, play);
             }

@@ -62,6 +62,8 @@ public final class NightfallCraftGui {
             if (event.getPackType() != PackType.CLIENT_RESOURCES) {
                 return;
             }
+            cover = false;
+            if (!NightfallMenuAssets.reload()) return;
             Path source = FMLPaths.CONFIGDIR.get().resolve("fancymenu/assets/nightfallcraft");
             if (!Files.isRegularFile(source.resolve("minecraft/gui/widgets.png"))) {
                 return;
@@ -96,7 +98,7 @@ public final class NightfallCraftGui {
         @SubscribeEvent
         public static void background(ScreenEvent.BackgroundRendered event) {
             Screen screen = event.getScreen();
-            if (!cover || Minecraft.getInstance().level != null || screen instanceof TitleScreen || screen instanceof LevelLoadingScreen
+            if (!NightfallMenuAssets.ready() || !cover || Minecraft.getInstance().level != null || screen instanceof TitleScreen || screen instanceof LevelLoadingScreen
                     || screen instanceof GenericMessageScreen) {
                 return;
             }

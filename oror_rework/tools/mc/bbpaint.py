@@ -684,7 +684,7 @@ def paint_surf(s, ctx):
     rgb = np.asarray(rgb, np.float32)
     rgb, alpha = details(rgb, alpha, f, s, ctx)
     # contact shadow from the volumetric occlusion, in two crisp steps
-    if s.info.get('ao', True) and mat.get('type') not in ('head', 'blink', 'hair_shell', 'energy', 'ring') and ctx.get('ao') is not None:
+    if s.info.get('ao', True) and mat.get('type') not in ('head', 'blink', 'hair_shell', 'energy', 'ring', 'eye') and ctx.get('ao') is not None:
         a = ctx['ao']
         k = np.where(a < 0.62, 0.8, np.where(a < 0.8, 0.9, 1.0)).astype(np.float32)
         rgb = ramp(rgb, k)

@@ -337,13 +337,14 @@ def m_scale(mat, f, s, ctx):
         topb = (ax[..., 1] > ax[..., 0]) & (ax[..., 1] >= ax[..., 2])
         a = np.where(side | topb, P[..., 2], P[..., 0])
         b = np.where(topb, P[..., 0], P[..., 1])
-        sw, sh = 2.0, 1.5
+        sw, sh = 2.0 * mat.get('scale_size', 1.0), 1.5 * mat.get('scale_size', 1.0)
         row = np.floor(b / sh)
         cu = ((a + (row % 2) * sw / 2) % sw) / sw
         cv = (b % sh) / sh
         sk = np.where(cv < 0.3, np.where((cu > 0.2) & (cu < 0.8), 1.2, 1.05),
                       np.where(cv < 0.7, np.where(cu < 0.15, 0.86, 1.0), 0.8))
         sk = np.where(N[..., 1] > 0.6, 1.08, sk)                  # the belly is plated, not scaled
+        sk = 1 + (sk - 1) * mat.get('contrast', 1.0)
         rgb = ramp(base, q(countershade(k, ctx) * sk))
     else:
         row = f.v // 3

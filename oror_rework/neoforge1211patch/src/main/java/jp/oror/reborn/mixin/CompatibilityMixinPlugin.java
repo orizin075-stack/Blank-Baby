@@ -18,6 +18,10 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 public final class CompatibilityMixinPlugin implements IMixinConfigPlugin {
     private static final Map<String, String> NEEDS = Map.ofEntries(
         Map.entry("OfflinePatreonMixin", "tenshilib"),
+        Map.entry("NightfallAAADepthMixin", "aaa_particles"),
+        Map.entry("NightfallMenuReadinessMixin", "fancymenu"),
+        Map.entry("NightfallMenuBootstrapMixin", "fancymenu"),
+        Map.entry("NightfallOptionalBookEntryMixin", "patchouli"),
         Map.entry("NightfallGuardInputMixin", "efn"),
         Map.entry("NightfallParryWeaponsMixin", "efn"),
         Map.entry("NightfallGradualHealMixin", "efn"),

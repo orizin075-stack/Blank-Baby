@@ -21,7 +21,8 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
  * while entering a world (a player saved in the vanilla mode), turns on Epic Fight's combat mode, and any weapon held is
  * added to Epic Fight's combat items so its own switching knows it next time.
  *
- * 0.17.26: only then, not every tick, so R still switches back to the vanilla mode until another item is taken.
+ * 0.17.27: local manual switches stop the entry reconciliation window. Selecting another hotbar slot also
+ * counts as taking a weapon, including a second stack of the same item.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses", value = Dist.CLIENT)
 public final class NightfallAutomaticCombatClient {
@@ -30,6 +31,7 @@ public final class NightfallAutomaticCombatClient {
     private static Set<Item> prepared;
     private static LocalPlayer player;
     private static Item held;
+    private static int heldSlot = -1;
     private static int ticks;
 
     @SubscribeEvent
@@ -42,11 +44,13 @@ public final class NightfallAutomaticCombatClient {
         if (mc.player != player) {
             player = mc.player;
             held = null;
+            heldSlot = -1;
             ticks = 0;
         }
         ticks++;
         ItemStack stack = mc.player.getMainHandItem();
-        boolean taken = stack.getItem() != held;
+        boolean taken = stack.getItem() != held || mc.player.getInventory().selected != heldSlot;
+        heldSlot = mc.player.getInventory().selected;
         held = stack.getItem();
         if (!mc.player.isAlive() || mc.player.isSpectator() || !(taken || ticks <= ENTERING_TICKS)) {
             return;
@@ -82,6 +86,13 @@ public final class NightfallAutomaticCombatClient {
             ClientConfig.miningCategorizedItems.add(Items.AIR);
         }
         prepared = items;
+    }
+
+    /** A local mode choice must also win during the initial server-mode reconciliation window. */
+    public static void manualVanillaMode(boolean synchronize) {
+        if (synchronize) {
+            ticks = ENTERING_TICKS + 1;
+        }
     }
 
     private NightfallAutomaticCombatClient() {
