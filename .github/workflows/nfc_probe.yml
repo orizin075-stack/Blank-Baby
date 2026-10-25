@@ -31,8 +31,6 @@ jobs:
           PY
           for f in x/packs/*/pack.mcmeta; do echo "== $f"; cat "$f"; echo; done
           find x/packs -maxdepth 3 | head -60
-          for c in $(cd x && find . -path '*mixin*' -name '*.class' | grep -E 'ScreenMixin|TitleScreenMixin|TabButtonMixin|WinScreen|SelectWorld' | grep -v '\$'); do
-            java -jar vf.jar "x/$c" src/ > /dev/null 2>&1
-          done
-          grep -rl -E 'AddPackFindersEvent|PackSource|Pack\.readMetaAndCreate|BUILT_IN|FORCED|fixedPosition|Pack\.Position' x --include='*.class' | head -10 | while read c; do java -jar vf.jar "$c" src/ > /dev/null 2>&1; done
-          for f in src/*.java; do echo "################ $f"; cat "$f"; done
+          find x/packs/tcr_assets x/packs/custom_models -type f | sed 's#^x/##' | head -80
+          java -jar vf.jar x/com/p1nero/tcrcore/client/gui/TCRMenuBackgroundRenderer.class src/ > /dev/null 2>&1
+          cat src/TCRMenuBackgroundRenderer.java
