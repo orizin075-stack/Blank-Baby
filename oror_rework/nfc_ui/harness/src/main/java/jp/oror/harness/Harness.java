@@ -294,6 +294,19 @@ public final class Harness {
                 lines.add(child.getClass().getName());
             }
         }
+        // The identifiers FancyMenu's layouts address these widgets by (it computes them on a 1000x1000 pass).
+        try {
+            Class<?> discoverer = Class.forName("de.keksuccino.fancymenu.customization.widget.ScreenWidgetDiscoverer");
+            for (Object meta : (List<?>) discoverer.getMethod("getWidgetsOfScreen", Screen.class).invoke(null, screen)) {
+                Class<?> type = meta.getClass();
+                AbstractWidget widget = (AbstractWidget) type.getMethod("getWidget").invoke(meta);
+                Object label = widget.getMessage().getContents() instanceof TranslatableContents text ? text.getKey() : widget.getMessage().getString();
+                lines.add("fancymenu id " + type.getMethod("getLongIdentifier").invoke(meta) + " universal "
+                        + type.getMethod("getUniversalIdentifier").invoke(meta) + " " + widget.getClass().getSimpleName() + " '" + label + "'");
+            }
+        } catch (Throwable error) {
+            lines.add("fancymenu ids unavailable: " + error);
+        }
         write(mc, name, lines);
     }
 
