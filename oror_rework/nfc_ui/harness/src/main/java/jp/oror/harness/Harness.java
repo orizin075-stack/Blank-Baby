@@ -201,7 +201,10 @@ public final class Harness {
                 expected = InventoryScreen.class;
                 mc.setScreen(new InventoryScreen(mc.player));
             }
-            case 1040 -> shot(mc, "10_fixed_weapons");
+            case 1040 -> {
+                shot(mc, "10_fixed_weapons");
+                untranslated(mc);
+            }
             case 1050 -> {
                 expected = null;
                 mc.setScreen(null);
@@ -257,13 +260,43 @@ public final class Harness {
         server.execute(() -> {
             ServerPlayer player = server.getPlayerList().getPlayer(id);
             if (player == null) return;
-            int slot = 9;
+            // Rows two and three: the cursor rests on row one, whose tooltip would cover the icons.
+            int slot = 18;
             for (String weapon : FIXED) {
                 Optional<Item> item = item(weapon);
                 note("fixed weapon " + weapon + (item.isPresent() ? "" : " is not registered"));
                 if (item.isPresent()) player.getInventory().setItem(slot++, new ItemStack(item.get()));
             }
         });
+    }
+
+    /** Items whose name has no translation in the current language or English, with the name a base item has. */
+    private static void untranslated(Minecraft mc) {
+        List<String> lines = new ArrayList<>();
+        lines.add("language " + mc.options.languageCode);
+        for (Item item : BuiltInRegistries.ITEM) {
+            String key = item.getDescriptionId();
+            if (net.minecraft.client.resources.language.I18n.exists(key)) continue;
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
+            StringBuilder line = new StringBuilder(id + " " + key);
+            for (String suffix : new String[]{"_e", "_2", "_alter"}) {
+                if (id.getPath().endsWith(suffix)) {
+                    String base = key.substring(0, key.length() - suffix.length());
+                    if (net.minecraft.client.resources.language.I18n.exists(base)) line.append(" | base ").append(base).append(" = ").append(net.minecraft.client.resources.language.I18n.get(base));
+                }
+            }
+            try {
+                List<String> tooltip = new ArrayList<>();
+                new ItemStack(item).getTooltipLines(Item.TooltipContext.of(mc.level), mc.player, net.minecraft.world.item.TooltipFlag.NORMAL)
+                        .forEach(component -> tooltip.add(component.getString()));
+                line.append(" | tooltip ").append(String.join(" / ", tooltip));
+            } catch (Throwable error) {
+                line.append(" | tooltip failed: ").append(error);
+            }
+            lines.add(line.toString());
+        }
+        note("untranslated item names: " + (lines.size() - 1));
+        write(mc, "untranslated-items.txt", lines);
     }
 
     /** Epic Fight's mode of the local player, by reflection (the harness is built without Epic Fight). */
