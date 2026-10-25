@@ -1,13 +1,13 @@
 # NightfallCraft 2.2.8.6 (Forge 1.20.1) itself, as the reference for OROR War x Nightfall's look: every file of its
-# manifest from CurseForge, its config overrides, and the OROR Forge port, started in a real client with a CI-only
-# harness mod that photographs the title screen, world creation, the HUD, the inventory and the pause menu.
+# manifest from CurseForge, its config overrides, and the OROR Forge port, started in a real client whose title screen
+# is photographed from the virtual display.
 # Results go to oror_rework/nfc_ui/out/ref on this branch.
 name: NightfallCraft reference screenshots
 
 on:
   push:
     branches: [claude/jolly-einstein-wvpjq1]
-    paths: ['oror_rework/nfc_ui/harness1201/**', '.github/workflows/nfc_ref.yml']
+    paths: ['.github/workflows/nfc_ref.yml']
   workflow_dispatch:
 
 permissions:
@@ -131,6 +131,7 @@ jobs:
       - name: Build the CI harness mod (Forge 1.20.1)
         working-directory: oror_rework/nfc_ui/harness1201
         run: |
+          # It also carries the stand-in for the Apex Hosting class TCR Core's title screen refers to.
           gradle build --console=plain 2>&1 | tail -n 40
           cp build/libs/oror_harness_1201-1.0.0.jar $RUNNER_TEMP/game/mods/
       - name: Install the client and a virtual display
@@ -144,18 +145,29 @@ jobs:
           cp -r $G/config $RUNNER_TEMP/config-input
           LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s '-screen 0 1600x900x24' glxinfo -B | tee $OUT/glxinfo.txt || true
       - name: Run the client
-        timeout-minutes: 60
+        timeout-minutes: 40
         run: |
           G=$RUNNER_TEMP/game
           export LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null
-          # A mod loading failure leaves NeoForge's error screen up; stop the client once a crash report is written.
-          ( while sleep 15; do
+          # The harness mod never logged a screen in earlier runs, so the title screen is photographed from the virtual
+          # display itself once FancyMenu has set it up, then the client is stopped.
+          Xvfb :99 -screen 0 1600x900x24 > /dev/null 2>&1 &
+          export DISPLAY=:99; sleep 3
+          mkdir -p $G/screenshots
+          ( while sleep 10; do
               if ls $G/crash-reports/*.txt > /dev/null 2>&1; then sleep 20; pkill -f forgeclient || pkill java; break; fi
+              if grep -q 'ScreenCustomizationLayer registered: title_screen' $G/logs/latest.log 2>/dev/null; then
+                for t in 30 60 120; do
+                  sleep $((t == 30 ? 30 : t == 60 ? 30 : 60)); import -window root png:$G/screenshots/ref_title_${t}s.png && echo "title shot ${t}s"
+                done
+                pkill -f forgeclient || pkill java; break
+              fi
             done ) &
-          timeout 55m xvfb-run -a -s '-screen 0 1600x900x24' $RUNNER_TEMP/venv/bin/portablemc start forge::1.20.1-47.4.28 \
+          timeout 35m $RUNNER_TEMP/venv/bin/portablemc start forge::1.20.1-47.4.28 \
             --main-dir $RUNNER_TEMP/mc --mc-dir $G -u OrorTester --resolution 1600x900 --jvm "$JAVA_HOME/bin/java" \
             --jvm-arg=-Xmx8G,-Xms2G > $RUNNER_TEMP/client.out 2>&1 || echo "client exit code $?" | tee $OUT/client-exit.txt
           tail -n 60 $RUNNER_TEMP/client.out
+          ls -la $G/screenshots
       - name: Collect screenshots, logs and written configs
         if: always()
         run: |
