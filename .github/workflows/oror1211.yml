@@ -44,6 +44,7 @@ jobs:
           # builds on (its compatibility build differs only in client config registration).
           curl -sSfL -o libs/nightfall.jar "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
           curl -sSfL -o "$RUNNER_TEMP/indestructible.jar" https://mediafilez.forgecdn.net/files/7932/288/indestructible-21.16.3-1.21.1.jar
+          cp "$RUNNER_TEMP/indestructible.jar" libs/
           sha256sum libs/nightfall.jar "$RUNNER_TEMP/indestructible.jar" | tee -a out/report.txt
       - name: Compile against NeoForge 1.21.1
         run: |

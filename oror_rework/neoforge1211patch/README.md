@@ -34,6 +34,7 @@ were made on 0.17.23 and are carried over; `out/oror_supreme_bosses-0.17.24.jar`
   check only, not every second; nothing is touched without Nightfall, whose classes are only loaded when it is.
 - `CompatibilityMixinPlugin`: the mixins on Nightfall's or Indestructible's classes are skipped without those mods; the
   config is required, so a profile without them stopped at start-up instead of saying what is missing.
+- `NightfallNativeParryFeedbackMixin` (that jar's source): damage without a direct entity is skipped.
 - `NightfallPatchSettings`: `compactHud` defaults to false. 0.17.22 hid every Ares HUD layer (stamina, guard and parry,
   mana) and drew a plain health row instead; the 0.17.25 pack also ships `compactHud=false`.
 - The rest of 0.17.25 is the pack around the jar: NightfallCraft's screens and combat feel, in `oror_rework/nfc_ui`.
