@@ -37,8 +37,8 @@ Minecraft 1.21.1 / NeoForge 21.1.262 / Java 21。いただいた 0.17.24（Nativ
   「中央下に1列のホットバー、その上に HP・防御力・スタミナ・マナのバー」（Ares HUD の HOTBAR_1X9）です。
   （config/oror-nightfall-patch.properties の compactHud=true で以前の表示に戻せます）
 - **タイトル画面・起動中のロード画面・ワールド読み込み画面**：NightfallCraft と同じ FancyMenu / Drippy Loading Screen の
-  レイアウトです。タイトル画面は NightfallCraft と同じく、Minecraft のロゴ・スプラッシュ文字・左下のバージョン表記・
-  著作権表示を出さず、左下に「終了・アクセシビリティ・Mod・言語・設定・Discord」のアイコンが並びます（1.21.1 では言語と
+  レイアウトです。タイトル画面は NightfallCraft と同じく、Minecraft のロゴ・スプラッシュ文字・左下のバージョン表記を出さず
+  （右下の Mojang の著作権表示は、1.21.1 の FancyMenu が必ず表示するため残ります）、左下に「終了・アクセシビリティ・Mod・言語・設定・Discord」のアイコンが並びます（1.21.1 では言語と
   アクセシビリティのボタンの内部名が変わり、そのままでは元の位置に残って文字と重なっていたのを直しました）。
   Create の設定ボタン（ゴーグル）と Ice and Fire の独自タイトル画面はタイトルに出しません（Create の設定は「Mod」から開けます）。
   アイコンにマウスを乗せた時の説明も日本語で出ます。
