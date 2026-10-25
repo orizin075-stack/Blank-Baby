@@ -116,13 +116,19 @@ function Install-Atomic([string]$From, [string]$To) {
     } else { [IO.File]::Move($stage, $To) }
 }
 
-# 0.17.25: NightfallCraft's title, loading and world-loading screens (config/fancymenu) use TCR Core's menu images.
+# 0.17.25: NightfallCraft's title, loading and world-loading screens (config/fancymenu) use TCR Core's menu images,
+# and OROR builds NightfallCraft's menu buttons, tabs, separators and background from a few more of them.
 # TCR Core has no 1.21.1 build, so the images are copied out of NightfallCraft's 1.20.1 TCR Core jar, each one checked
 # against install.json. A failure here only leaves the title screen without its images; it does not stop the setup.
 $MenuDir = Join-Path (Join-Path (Join-Path (Join-Path $Root 'config') 'fancymenu') 'assets') 'nightfallcraft'
 function Menu-Target([string]$Member) {
+    # TCR Core's own images keep their path below textures/; its widget sheet (OROR builds NightfallCraft's menu
+    # buttons from it) goes under minecraft/.
+    if ($Member.StartsWith('assets/tcrcore/textures/')) { $relative = $Member.Substring('assets/tcrcore/textures/'.Length) }
+    elseif ($Member.StartsWith('packs/tcr_assets/assets/minecraft/textures/')) { $relative = 'minecraft/' + $Member.Substring('packs/tcr_assets/assets/minecraft/textures/'.Length) }
+    else { throw ('Unexpected TCR Core image: ' + $Member) }
     $target = $MenuDir
-    foreach ($part in $Member.Substring('assets/tcrcore/textures/'.Length).Split('/')) { $target = Join-Path $target $part }
+    foreach ($part in $relative.Split('/')) { $target = Join-Path $target $part }
     return $target
 }
 function Valid-Menu {

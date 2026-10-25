@@ -24,7 +24,8 @@ nfcfetch: every file of NightfallCraft 2.2.8.6's manifest (names looked up by fi
   shaderpacks by the modlist category, for running NightfallCraft itself as the reference.
 setitems: writes that list into an epicfight-client.toml.
 menu: the TCR Core images NightfallCraft's FancyMenu layouts use, copied from the 1.20.1 jar to the paths the converted
-  layouts read ([source:local]/config/fancymenu/assets/nightfallcraft/...), with each image's SHA-256 for the installer.
+  layouts read ([source:local]/config/fancymenu/assets/nightfallcraft/...), plus the widget sheet, menu cover,
+  separators and tabs OROR builds NightfallCraft's menu sprites from, with each image's SHA-256 for the installer.
 """
 import concurrent.futures, hashlib, io, json, os, re, sys, time, tomllib, urllib.parse, urllib.request, zipfile
 
@@ -462,17 +463,34 @@ def menu(jar_path, customization, game, out):
     prefix = '[source:local]/config/fancymenu/assets/nightfallcraft/'
     wanted = set()
     for name in sorted(os.listdir(customization)):
-        wanted |= set(re.findall(re.escape(prefix) + r'([^\s]+)', open(os.path.join(customization, name), encoding='utf-8').read()))
+        text = open(os.path.join(customization, name), encoding='utf-8').read()
+        wanted |= {'assets/tcrcore/textures/' + p for p in re.findall(re.escape(prefix) + r'([^\s]+)', text)}
+    wanted |= set(GUI_IMAGES)
     jar = zipfile.ZipFile(jar_path)
     members = {}
-    for path in sorted(wanted):
-        data = jar.read('assets/tcrcore/textures/' + path)
-        target = os.path.join(game, 'config/fancymenu/assets/nightfallcraft', path)
+    for member in sorted(wanted):
+        data = jar.read(member)
+        target = os.path.join(game, 'config/fancymenu/assets/nightfallcraft', menu_target(member))
         os.makedirs(os.path.dirname(target), exist_ok=True)
         open(target, 'wb').write(data)
-        members['assets/tcrcore/textures/' + path] = hashlib.sha256(data).hexdigest()
+        members[member] = hashlib.sha256(data).hexdigest()
     json.dump(members, open(out, 'w', encoding='utf-8'), indent=1)
     print(len(members), 'menu images from', os.path.basename(jar_path))
+
+
+# TCR Core's images for NightfallCraft's menus outside the FancyMenu layouts (OROR's NightfallCraftGui builds the
+# 1.21.1 sprites from them): its widget sheet, menu cover, separators and tabs.
+GUI_IMAGES = ['packs/tcr_assets/assets/minecraft/textures/gui/widgets.png', 'assets/tcrcore/textures/menu/background_blurred.png',
+              'assets/tcrcore/textures/gui/header_separator.png', 'assets/tcrcore/textures/gui/footer_separator.png'] + [
+              f'assets/tcrcore/textures/gui/tab/{n}.png' for n in ('tab', 'tab_highlighted', 'tab_selected', 'tab_selected_highlighted')]
+
+
+def menu_target(member):
+    """Path under config/fancymenu/assets/nightfallcraft, as SETUP_NIGHTFALL.cmd's Menu-Target computes it."""
+    for prefix, to in (('assets/tcrcore/textures/', ''), ('packs/tcr_assets/assets/minecraft/textures/', 'minecraft/')):
+        if member.startswith(prefix):
+            return to + member[len(prefix):]
+    raise ValueError(member)
 
 
 if __name__ == '__main__':

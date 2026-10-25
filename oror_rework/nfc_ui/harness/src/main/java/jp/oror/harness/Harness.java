@@ -25,6 +25,7 @@ import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.gui.screens.options.OptionsScreen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,6 +61,7 @@ public final class Harness {
     private static Phase phase = Phase.TITLE;
     private static Screen seen;
     private static int onScreen, overlayTicks, total, play, popups;
+    private static boolean optionsShown;
     private static Class<? extends Screen> expected;
     private static final List<String> log = Collections.synchronizedList(new ArrayList<>());
 
@@ -107,10 +109,16 @@ public final class Harness {
             if (onScreen == 200) {
                 shot(mc, "01_title");
                 info(mc);
+            } else if (onScreen == 220 && !optionsShown) {
+                optionsShown = true;
+                mc.setScreen(new OptionsScreen(screen, mc.options));
             } else if (onScreen == 220) {
                 phase = Phase.CREATE;
                 CreateWorldScreen.openFresh(mc, screen);
             }
+        } else if (screen instanceof OptionsScreen) {
+            if (onScreen == 60) shot(mc, "01b_options");
+            else if (onScreen == 70) screen.onClose();
         } else if (screen != null) {
             popup(mc, screen);
         }
