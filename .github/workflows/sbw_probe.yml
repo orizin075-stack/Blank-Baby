@@ -47,12 +47,31 @@ jobs:
                   if files: print('== dir', d, len(files), sorted(files)[:12])
           PY
           find com -path '*gun*' -name '*.class' | sed 's/\$.*//' | sort -u | head -150
-      - name: Decompile the gun item classes
+      - name: Gun data files and assets of the Sentinel
+        run: |
+          cd $RUNNER_TEMP/x
+          for f in data/superbwarfare/sbw/guns/gun.example.jsonc data/superbwarfare/sbw/guns/sentinel.json data/superbwarfare/sbw/guns/taser.json \
+                   data/superbwarfare/sbw/guns/ntw_20.json data/superbwarfare/recipe/sentinel_smithing.json; do echo "=== $f"; cat "$f"; echo; done
+          find assets/superbwarfare -iname '*sentinel*' | head -20
+          ls assets/superbwarfare | head -30
+          grep -rl "sbw/guns" --include=*.class com | head
+      - name: Decompile energy, charge and ammo classes
         run: |
           cd $RUNNER_TEMP/x
           mkdir -p $RUNNER_TEMP/src
-          for pat in 'item/gun/GunItem.class' 'GunData.class' 'DefaultGunData.class' 'item/gun/special/*.class' 'item/gun/sniper/SentinelItem.class' 'init/ModItems.class'; do
-            for c in $(find com -path "*$pat" | head -6); do
-              echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | head -400
+          for pat in 'item/gun/GunGeoItem.class' 'EnergyStorageItem.class' 'ammo_consumer_strategy/EnergyAmmoStrategy.class' \
+                     'ammo_consumer_strategy/ItemAmmoStrategy.class' 'data/gun/AmmoConsumer.class' 'data/gun/subdata/Charge.class' \
+                     'client/renderer/gun/SentinelItemRenderer.class' 'client/model/item/SentinelItemModel.class'; do
+            for c in $(find com -path "*$pat" | head -2); do
+              echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import' | head -220
             done
+          done
+          echo "=== who registers item energy capabilities"
+          grep -rl "EnergyStorage" --include=*.class com | head -20
+          for c in $(grep -rl "registerItem" --include=*.class com | head -3); do
+            echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import' | grep -n -B3 -A12 "registerItem" | head -80
+          done
+          echo "=== data loader for guns"
+          for c in $(grep -rl "sbw/guns" --include=*.class com | head -2); do
+            echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import' | grep -n -B4 -A20 "sbw/guns" | head -80
           done
