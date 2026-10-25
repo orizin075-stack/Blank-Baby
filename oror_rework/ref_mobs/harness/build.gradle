@@ -1,0 +1,21 @@
+// CI-only mob gallery for the reference pack (Forge 1.20.1): photographs every mob of the reference mods.
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+}
+
+version = '1.0.0'
+base { archivesName = 'oror_ref_gallery' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}

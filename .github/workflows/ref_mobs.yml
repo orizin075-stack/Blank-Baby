@@ -1,0 +1,99 @@
+# The reference mobs for OROR's creature redesign, from the user's own reference pack (oror_rework/ref_mobs/manifest.json,
+# Forge 1.20.1-47.4.28): L_Ender's Cataclysm, Alex's Caves, Legendary Monsters, Monster Expansion and Witheria with
+# their libraries. Measures how their models and textures are built (tools/survey.py) and photographs every mob in a
+# real client (harness/: a stage in the sky, each mob frozen beside an armour stand for scale, front three-quarter and
+# side views, HUD hidden). Results go to oror_rework/ref_mobs/out on this branch; nothing from the jars is copied.
+name: Reference mob gallery
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['.github/workflows/ref_mobs.yml', 'oror_rework/ref_mobs/harness/**', 'oror_rework/ref_mobs/manifest.json',
+            'oror_rework/ref_mobs/tools/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ref-mobs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gallery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    defaults:
+      run:
+        shell: bash
+    env:
+      R: oror_rework/ref_mobs
+      OUT: oror_rework/ref_mobs/out
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.8'
+      - name: Fetch the reference pack
+        run: |
+          rm -rf "$OUT"; mkdir -p "$OUT"; G=$RUNNER_TEMP/game; mkdir -p $G/mods
+          python3 -I oror_rework/nfc_ui/tools/pack_tools.py nfcfetch $R/mods.json $G $OUT/files.json 2>&1 | tail -n 5
+          ls -la $G/mods
+      - name: Measure the models and textures
+        run: |
+          python3 -m venv $RUNNER_TEMP/py && $RUNNER_TEMP/py/bin/pip install -q numpy pillow
+          $RUNNER_TEMP/py/bin/python -I $R/tools/survey.py $RUNNER_TEMP/game/mods $OUT --javap "$JAVA_HOME/bin/javap" \
+            --only cataclysm,alexscaves,alexs,legendary,witheria,monster 2>&1 | tail -n 200
+      - name: Build the gallery harness
+        working-directory: oror_rework/ref_mobs/harness
+        run: |
+          gradle build --console=plain 2>&1 | tail -n 40
+          cp build/libs/oror_ref_gallery-1.0.0.jar $RUNNER_TEMP/game/mods/
+      - name: Install the client and a virtual display
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq xvfb mesa-utils libgl1-mesa-dri imagemagick > /dev/null
+          python3 -m venv $RUNNER_TEMP/venv && $RUNNER_TEMP/venv/bin/pip install -q portablemc==5.0.6
+          G=$RUNNER_TEMP/game
+          printf 'onboardAccessibility:false\npauseOnLostFocus:false\nrenderDistance:8\nsimulationDistance:6\nskipMultiplayerWarning:true\njoinedFirstServer:true\ntutorialStep:none\nsoundCategory_master:0.0\nguiScale:2\n' > $G/options.txt
+      - name: Run the client
+        timeout-minutes: 75
+        run: |
+          G=$RUNNER_TEMP/game
+          export LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null
+          ( while sleep 15; do
+              if ls $G/crash-reports/*.txt > /dev/null 2>&1; then sleep 20; pkill -f forgeclient || pkill java; break; fi
+            done ) &
+          timeout 70m xvfb-run -a -s '-screen 0 1600x900x24' $RUNNER_TEMP/venv/bin/portablemc start forge::1.20.1-47.4.28 \
+            --main-dir $RUNNER_TEMP/mc --mc-dir $G -u OrorTester --resolution 1600x900 --jvm "$JAVA_HOME/bin/java" \
+            --jvm-arg=-Xmx8G,-Xms2G > $RUNNER_TEMP/client.out 2>&1 || echo "client exit code $?" | tee $OUT/client-exit.txt
+          tail -n 60 $RUNNER_TEMP/client.out
+          ls $G/screenshots | wc -l
+      - name: Collect the photographs and logs
+        if: always()
+        run: |
+          G=$RUNNER_TEMP/game; S=$OUT/shots; mkdir -p $S
+          for f in $G/screenshots/*.png; do [ -f "$f" ] && convert "$f" -resize '960x>' -quality 80 "$S/$(basename "${f%.png}").jpg"; done
+          # one contact sheet per mod (front views), for a quick look at a whole bestiary
+          for ns in $(ls $S | sed -n 's/^[0-9]\{3\}+\([^+]*\)+.*_a\.jpg$/\1/p' | sort -u); do
+            montage -label '%t' $S/[0-9][0-9][0-9]+${ns}+*_a.jpg -tile 6x -geometry 320x180+2+2 -pointsize 11 -background '#202228' \
+              -fill '#dddddd' -quality 80 $OUT/sheet_${ns}.jpg || true
+          done
+          cp $G/harness/* $OUT/ 2>/dev/null || true
+          mkdir -p $OUT/crash-reports; cp $G/crash-reports/* $OUT/crash-reports/ 2>/dev/null || true
+          tail -n 300 $RUNNER_TEMP/client.out > $OUT/stdout-tail.txt 2>/dev/null || true
+          L=$G/logs/latest.log
+          [ -f $L ] && grep -n -E '\[harness\]|ERROR|FATAL|Exception|Caused by' $L | cut -c1-400 | head -n 3000 > $OUT/latest-filtered.log || true
+          du -sh $OUT; ls $S | wc -l
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$OUT"
+          git commit -m "Reference mob gallery ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
