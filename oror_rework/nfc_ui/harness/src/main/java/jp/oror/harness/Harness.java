@@ -16,6 +16,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.GenericMessageScreen;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
@@ -109,6 +110,7 @@ public final class Harness {
             if (onScreen == 200) {
                 shot(mc, "01_title");
                 info(mc);
+                widgets(mc, screen, "title-widgets.txt");
             } else if (onScreen == 220 && !optionsShown) {
                 optionsShown = true;
                 mc.setScreen(new OptionsScreen(screen, mc.options));
@@ -277,6 +279,22 @@ public final class Harness {
             write(mc, "result.txt", new ArrayList<>(log));
         }
         mc.stop();
+    }
+
+    /** Every widget of a screen: class, label (translation key when it has one), position and size, for layout ids. */
+    private static void widgets(Minecraft mc, Screen screen, String name) {
+        List<String> lines = new ArrayList<>();
+        lines.add("screen " + screen.width + "x" + screen.height);
+        for (GuiEventListener child : screen.children()) {
+            if (child instanceof AbstractWidget widget) {
+                Object label = widget.getMessage().getContents() instanceof TranslatableContents text ? text.getKey() : widget.getMessage().getString();
+                lines.add(widget.getClass().getName() + " '" + label + "' at " + widget.getX() + "," + widget.getY() + " size "
+                        + widget.getWidth() + "x" + widget.getHeight() + (widget.visible ? "" : " hidden"));
+            } else {
+                lines.add(child.getClass().getName());
+            }
+        }
+        write(mc, name, lines);
     }
 
     private static void note(String line) {
