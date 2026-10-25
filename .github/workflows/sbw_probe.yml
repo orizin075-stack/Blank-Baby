@@ -1,0 +1,58 @@
+# One-off probe: how Superb Warfare 0.8.9.2 (the pack's version) defines its guns, so OROR can add its own.
+# Prints item names, the gun classes and data files, and a few decompiled classes to the job log only; nothing from the
+# jar is committed.
+name: Superb Warfare gun probe
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['.github/workflows/sbw_probe.yml']
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: oror_rework/neoforge1211patch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Fetch Superb Warfare
+        run: |
+          python3 -I tools/cf_fetch.py pack/manifest-0.17.23.json pack/lock-0.17.23.json $RUNNER_TEMP/libs \
+            superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar
+          curl -sSfL -o $RUNNER_TEMP/vf.jar https://repo1.maven.org/maven2/org/vineflower/vineflower/1.10.1/vineflower-1.10.1.jar
+          mkdir -p $RUNNER_TEMP/x && cd $RUNNER_TEMP/x && unzip -q $RUNNER_TEMP/libs/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar
+      - name: Names, gun data and classes
+        run: |
+          cd $RUNNER_TEMP/x
+          python3 - <<'PY'
+          import json, os, re
+          for lang in ('en_us', 'ja_jp', 'zh_cn'):
+              p = f'assets/superbwarfare/lang/{lang}.json'
+              if not os.path.exists(p): continue
+              t = json.load(open(p, encoding='utf-8'))
+              hits = {k: v for k, v in t.items() if re.search(r'print|rail|laser|blue|charge|energy|blueprint', k + ' ' + v, re.I)}
+              print('==', p, len(t), 'matching:', len(hits))
+              for k, v in sorted(hits.items())[:120]: print(' ', k, '=', v)
+          names = json.load(open('assets/superbwarfare/lang/en_us.json', encoding='utf-8'))
+          print('== items', sorted(k[len('item.superbwarfare.'):] + '=' + v for k, v in names.items() if k.startswith('item.superbwarfare.') and k.count('.') == 2))
+          for root in ('data/superbwarfare',):
+              for d, _, files in sorted(os.walk(root)):
+                  if files: print('== dir', d, len(files), sorted(files)[:12])
+          PY
+          find com -path '*gun*' -name '*.class' | sed 's/\$.*//' | sort -u | head -150
+      - name: Decompile the gun item classes
+        run: |
+          cd $RUNNER_TEMP/x
+          mkdir -p $RUNNER_TEMP/src
+          for pat in 'item/gun/GunItem.class' 'GunData.class' 'DefaultGunData.class' 'item/gun/special/*.class' 'item/gun/sniper/SentinelItem.class' 'init/ModItems.class'; do
+            for c in $(find com -path "*$pat" | head -6); do
+              echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | head -400
+            done
+          done
