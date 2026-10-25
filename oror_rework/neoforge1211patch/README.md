@@ -38,6 +38,8 @@ were made on 0.17.23 and are carried over; `out/oror_supreme_bosses-0.17.24.jar`
 - `NightfallCraftGui` (new): NightfallCraft's menus. From the TCR Core images SETUP_NIGHTFALL.cmd copies, an
   always-on built-in pack with the 1.21.1 button, tab and separator sprites (cut from TCR Core's 1.20.1 widget sheet),
   and TCR Core's cover image behind menus opened outside a world; nothing without the images.
+- Translations (tcrcore, en/ja/zh) for the tooltips of NightfallCraft's title-screen icon buttons, whose FancyMenu
+  layout names TCR Core's keys.
 - `NightfallPatchSettings`: `compactHud` defaults to false. 0.17.22 hid every Ares HUD layer (stamina, guard and parry,
   mana) and drew a plain health row instead; the 0.17.25 pack also ships `compactHud=false`.
 - The rest of 0.17.25 is the pack around the jar: NightfallCraft's screens and combat feel, in `oror_rework/nfc_ui`.
