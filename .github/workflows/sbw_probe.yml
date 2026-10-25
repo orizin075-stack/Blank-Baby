@@ -47,6 +47,35 @@ jobs:
                   if files: print('== dir', d, len(files), sorted(files)[:12])
           PY
           find com -path '*gun*' -name '*.class' | sed 's/\$.*//' | sort -u | head -150
+      - name: Client gun resources, renderer base classes, capabilities, shooting hooks
+        run: |
+          cd $RUNNER_TEMP/x
+          for f in assets/superbwarfare/sbw/guns/sentinel.json assets/superbwarfare/sbw/guns/secondary_cataclysm.json assets/superbwarfare/models/item/sentinel.json \
+                   assets/superbwarfare/models/item/sentinel_icon.json assets/superbwarfare/models/item/sentinel_base.json assets/superbwarfare/models/displaysettings/sentinel.item.json; do
+            echo "=== $f"; cat "$f" | head -80; echo; done
+          ls assets/superbwarfare/geo | head -80
+          ls assets/superbwarfare/textures/item | head -60
+          ls assets/superbwarfare/textures/gun_icon | head -10
+          python3 - <<'PY'
+          import json
+          t = json.load(open('assets/superbwarfare/lang/en_us.json', encoding='utf-8-sig'))
+          print('== entities', sorted(k[len('entity.superbwarfare.'):] for k in t if k.startswith('entity.superbwarfare.')))
+          s = json.load(open('assets/superbwarfare/sounds.json', encoding='utf-8-sig'))
+          print('== sounds', len(s), sorted(k for k in s if any(w in k for w in ('charge', 'laser', 'energy', 'sentinel', 'cataclysm', 'railgun', 'annihilator', 'beam'))))
+          PY
+          mkdir -p $RUNNER_TEMP/src
+          for pat in 'client/renderer/CustomGunRenderer.class' 'client/model/item/CustomGunModel.class' 'DefaultGunResource.class' 'resource/gun/GunResource.class' \
+                     'init/ModCapabilities.class' 'item/gun/launcher/SecondaryCataclysmItem.class'; do
+            for c in $(find com -path "*$pat" | head -2); do
+              echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import' | head -260
+            done
+          done
+          echo "=== GunItem and GunData members"
+          javap -cp . -p com.atsuishio.superbwarfare.item.gun.GunItem | head -120
+          javap -cp . -p com.atsuishio.superbwarfare.data.gun.GunData | grep -i "charg\|canShoot\|shoot\|energy\|reload\|ammo" | head -60
+          javap -cp . -p com.atsuishio.superbwarfare.data.gun.ShootParameters | head -40
+          find com -name '*Laser*' -o -name '*Beam*' | head -20
+
       - name: Gun data files and assets of the Sentinel
         run: |
           cd $RUNNER_TEMP/x
