@@ -707,7 +707,7 @@ def paint_surf(s, ctx):
 # deliberate pixel art.
 NO_SNAP = ('eye', 'energy', 'rainbow', 'gel', 'ring', 'head', 'blink', 'hair_shell')
 SNAP_KEYS = ('color', 'belly', 'accent', 'tip', 'mark', 'edge', 'spots', 'star', 'lid', 'tongue', 'flowers', 'top', 'ore', 'sclera',
-             'vein', 'trim', 'pattern_colour')
+             'vein', 'trim', 'pattern_colour', 'rim', 'sheen')
 SNAP_LISTS = ('glints', 'bands', 'hues', 'stripes')
 _palettes = {}
 

@@ -105,7 +105,11 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f "$OUT"
+          # lay this run's results over the branch as it is now (an earlier run may have committed its own)
+          mv "$OUT" "$RUNNER_TEMP/out-new"
+          git fetch origin "${GITHUB_REF_NAME}"
+          git reset --hard "origin/${GITHUB_REF_NAME}"
+          rm -rf "$OUT"; mkdir -p "$(dirname "$OUT")"; mv "$RUNNER_TEMP/out-new" "$OUT"
+          git add -A -f "$OUT"
           git commit -m "Reference mob gallery ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
-          git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"

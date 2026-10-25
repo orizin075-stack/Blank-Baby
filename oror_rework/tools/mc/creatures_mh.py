@@ -1793,3 +1793,401 @@ def enkou():
         seg(b, (0, y, z - 1.0), lerp((0, y, z), tipl, 0.95), 0.5, 0.5, spine)
         cbox(b, tipl, (0.6, 0.6, 0.6), light)
     return r
+
+
+@recipe
+def teia():
+    # 光越天龍 テイア, rebuilt on Skrythe and Ignathos: a slim wyvern a few metres long whose wings are its forelimbs,
+    # sealed in dense unknown metal like a flying weapon: overlapping hull plates with glowing seams, a wedge head with
+    # a visor ridge and swept blades, long raptor legs with blade spurs; between its metal finger spars the photon
+    # membranes stream rainbow light, and light blades run past the finger tips; thrusters on its back.
+    r = rig('teia')
+    hull = M('carapace', '#d6dee8', accent='#7ff6ff')
+    plate = M('carapace', '#eef2f6', accent='#7ff6ff')
+    dark = M('carapace', '#56606e')
+    trim = M('carapace', '#9aa6b6', accent='#ff9af2')
+    claw = M('horn', '#e8eef4', tip='#7ff6ff', glow=True)
+    light = lambda c: M('energy', c, glow=True)
+    rainbow = ['#ff6a8a', '#ffb36a', '#ffe46a', '#7dff8a', '#6af0ff', '#8a9cff', '#d58aff']
+    root = r.bone('root', None, (0, 24, 0), anim='root')
+    body = r.bone('body', root, (0, 12, 2), anim='breath')
+    rbox(body, (-3.4, 7.6, -6.6), (3.4, 13.6, 0.6), hull, bevel=1.0)                 # chest
+    rbox(body, (-2.8, 8.2, 0.0), (2.8, 13.0, 7.0), hull, bevel=0.9)                  # waist
+    rbox(body, (-3.2, 8.0, 6.4), (3.2, 13.0, 11.0), hull, bevel=1.0)                 # hips
+    rbox(body, (-2.4, 13.2, -6.0), (2.4, 14.0, 6.0), dark, bevel=0.3)                # keel
+    cbox(body, (0, 10.4, -6.75), (2.2, 2.2, 0.5), light('#bffaff'), rot=(0, 0, 0.785))    # the light organ
+    for sx in (-1, 1):
+        box(body, (sx * 0.9, 8.0, -7.0), (sx * 3.2, 13.0, -6.4), plate, rot=(0, sx * 0.25, 0), pivot=(sx * 2, 10.4, -6.6))
+        for k, (z0, z1) in enumerate(((-6.4, -1.2), (-1.6, 4.0), (3.6, 10.6))):
+            box(body, (sx * 3.0, 8.4, z0), (sx * 3.6, 12.0, z1), plate, rot=(0, 0, sx * 0.12), pivot=(sx * 3.3, 10.2, 0))
+        box(body, (sx * 3.05, 12.1, -6.0), (sx * 3.15, 12.4, 10.2), light('#7ff6ff'))
+        # thrusters on the back
+        rbox(body, (sx * 1.6 - 1.0, 5.6, 0.0), (sx * 1.6 + 1.0, 7.6, 7.4), trim, bevel=0.4)
+        box(body, (sx * 1.6 - 1.2, 5.4, 6.4), (sx * 1.6 + 1.2, 7.8, 7.8), dark)
+        cbox(body, (sx * 1.6, 6.6, 7.9), (1.6, 1.6, 0.3), light('#bffaff'))
+    dorsal_plates(body, -6.0, 10.4, lambda z: 7.8 if z < 6.4 else 8.0, 7, lambda t: 4.8 - 1.4 * t, 1.1, plate, lean=0.5)
+    # neck and the wedge head
+    neck = r.bone('neck', body, (0, 9.4, -6.0), anim='sway', ax=1, amp=0.04, speed=0.05)
+    chain_boxes(neck, [(0, 9.6, -6.0), (0, 6.4, -9.4), (0, 3.4, -12.0), (0, 2.2, -13.6)], 3.4, 2.6, hull)
+    for k in range(3):
+        p = lerp((0, 7.8, -7.6), (0, 1.6, -12.6), k / 2)
+        box(neck, (-0.9, p[1] - 0.8, p[2] - 1.0), (0.9, p[1] + 0.2, p[2] + 1.0), plate, rot=(0.6, 0, 0), pivot=p)
+    head = r.bone('head', neck, (0, 2.6, -13.8), anim='head')
+    rbox(head, (-2.2, 0.0, -19.0), (2.2, 3.4, -13.4), hull, bevel=0.6)
+    rbox(head, (-1.7, 0.6, -24.2), (1.7, 2.9, -18.6), hull, bevel=0.5, faces={'bottom': M('mouth', '#2a3a48')})
+    box(head, (-1.1, 0.9, -25.6), (1.1, 2.6, -24.0), plate, faces={'bottom': M('mouth', '#2a3a48')})
+    box(head, (-0.7, -0.6, -24.0), (0.7, 0.3, -13.0), plate, rot=(-0.05, 0, 0), pivot=(0, 0, -18))
+    box(head, (-0.2, -0.65, -23.6), (0.2, -0.55, -14.0), light('#7ff6ff'))
+    for sx in (-1, 1):
+        side = 'left' if sx > 0 else 'right'
+        cbox(head, (sx * 2.2, 1.6, -17.8), (0.25, 1.7, 3.6), M('simple', '#0c1218'))
+        eye(head, (sx * 2.32, 1.6, -17.8), 3.2, 1.4, side, M('eye', '#7ff6ff', pupil='ring', mood='happy', lid='#2a3038', glow_amount=1.0))
+        box(head, (sx * 1.1, -0.6, -19.6), (sx * 1.9, 0.2, -6.0), plate, rot=(-0.22, sx * -0.16, sx * 0.25), pivot=(sx * 1.5, -0.2, -18.6))
+        box(head, (sx * 1.5, -0.3, -19.0), (sx * 1.6, -0.1, -6.6), light('#7ff6ff'), rot=(-0.22, sx * -0.16, sx * 0.25), pivot=(sx * 1.5, -0.2, -18.6))
+        box(head, (sx * 2.0, 2.0, -16.4), (sx * 2.6, 2.8, -9.4), trim, rot=(-0.1, sx * -0.3, 0), pivot=(sx * 2.3, 2.4, -15.8))
+        teeth(head, sx * 1.4, 2.9, -24.0, -19.0, 4, 0.45, M('tooth', '#f4f8ff'), down=True)
+    jaw = r.bone('jaw', head, (0, 3.0, -14.0), rot=(0.2, 0, 0), anim='jaw')
+    rbox(jaw, (-1.5, 2.9, -24.0), (1.5, 4.2, -14.0), dark, bevel=0.4, faces={'top': M('mouth', '#2a3a48')})
+    for sx in (-1, 1):
+        teeth(jaw, sx * 1.1, 3.0, -23.6, -19.4, 3, 0.4, M('tooth', '#f4f8ff'), down=False)
+    # long raptor legs with blade spurs
+    for sx in (-1, 1):
+        up, low = long_leg(r, body, 'leg_b' + ('r' if sx < 0 else 'l'), 'leg_l' if sx < 0 else 'leg_r', (sx * 3.2, 11.6, 8.6),
+                           (sx * 3.9, 15.6, 4.6), (sx * 3.9, 20.4, 10.4), (sx * 3.9, 22.4, 8.0), 2.0, hull, plate, claw)
+        box(low, (sx * 3.9 - 0.12, 15.4, 5.6), (sx * 3.9 + 0.12, 19.6, 9.6), light('#7ff6ff'), rot=(0.35, 0, 0), pivot=(sx * 3.9, 16, 6))
+    # the wings are the forelimbs: metal finger spars, photon membranes streaming rainbow, light blades past the tips
+    for sx in (-1, 1):
+        tips = [(sx * 12.0, -14.0, -5.0), (sx * 22.0, -11.0, 5.0), (sx * 27.0, -2.0, 14.0), (sx * 21.0, 7.0, 22.0)]
+        w = wing_arm(r, body, sx, (sx * 3.4, 8.4, -3.0), (sx * 10.0, 2.6, 1.0), (sx * 9.4, 23.0, -7.4), tips, '#cfefff', trim, claw,
+                     (sx * 3.2, 11.0, 10.0), accent='#ffffff', glow=True, skin_kw=dict(bands=rainbow, edge='#7ff6ff'), spar_w=1.3)
+        for k, (t, col) in enumerate(zip(tips, ['#ff6a8a', '#ffe46a', '#7dff8a', '#6af0ff'])):
+            seg(w, t, lerp((sx * 9.4, 23.0, -7.4), t, 1.35), 1.0, 0.3, light(col), up=(0, 0, 1))
+    # tail: slim plates, a cross of light at the end
+    ends = plated_tail(r, body, (0, 10.4, 10.6), [4.6, 4.6, 4.4, 4.0, 3.6, 3.2], [3.4, 2.9, 2.4, 2.0, 1.6, 1.2], hull, plate, claw,
+                       droop=0.12, spikes=False)
+    b, (x, y, z) = ends[-1]
+    box(b, (-0.15, y - 3.0, z - 2.0), (0.15, y + 3.0, z + 1.6), light('#7ff6ff'), rot=(0.5, 0, 0), pivot=(0, y, z))
+    box(b, (-3.0, y - 0.15, z - 2.0), (3.0, y + 0.15, z + 1.6), light('#ff9af2'))
+    return fit_height(r, ('wing',))
+
+
+def fur_spike(bone, base, tip, w, mat, tipmat=None):
+    """A thick lock of mane: a wide wedge tapering to a point, its tip in a lighter colour."""
+    seg(bone, base, lerp(base, tip, 0.65), w, w * 0.6, mat, up=(0, 0, 1), ext=w * 0.3)
+    seg(bone, lerp(base, tip, 0.55), tip, w * 0.55, w * 0.35, tipmat or mat, up=(0, 0, 1))
+
+
+def feather(bone, base, tip, width, colour, up=(0, -1, 0), **kw):
+    """One flight feather as a membrane: pointed tip, widest a third of the way out, a shaft down the middle."""
+    b, t = np.asarray(base, float), np.asarray(tip, float)
+    ax = _unit3(t - b)
+    side = _unit3(np.cross(ax, np.asarray(up, float)))
+    L = np.linalg.norm(t - b)
+    pts = [b + side * width * 0.25, b + ax * L * 0.35 + side * width * 0.5, b + ax * L * 0.8 + side * width * 0.32, t,
+           b + ax * L * 0.8 - side * width * 0.32, b + ax * L * 0.35 - side * width * 0.5, b - side * width * 0.25]
+    pts = [tuple(p) for p in pts]
+    return membrane(bone, [tuple(b)] + pts[1:], colour, veins3=[(tuple(b), tuple(t))], **kw)
+
+
+def feather_fan(r, parent, side, shoulder, elbow, wrist, tips, colour, arm_mat, secondaries=6, sec_len=11.0, name=None, amp=0.25,
+                speed=0.09, hand=None, primaries=None, prim_len=None, **kw):
+    """A great feathered wing as birds have it: shoulder, elbow, wrist and hand; long primaries rooted along the hand
+    and fanning from pointing outward at the tip to back at the wrist, overlapping into one surface with a scalloped
+    edge; secondaries rooted along the forearm pointing back; two rows of shorter coverts over them."""
+    sx = side
+    b = r.bone(name or ('wing_r' if sx < 0 else 'wing_l'), parent, shoulder, anim='sway', ax=2, amp=amp, speed=speed, phase=sx)
+    hand = hand or tips[0]
+    chain_boxes(b, [shoulder, elbow], 2.4, 2.0, arm_mat)
+    chain_boxes(b, [elbow, wrist], 2.0, 1.5, arm_mat)
+    chain_boxes(b, [wrist, hand], 1.5, 0.8, arm_mat)
+    cbox(b, elbow, (2.4, 2.4, 2.4), arm_mat)
+    cbox(b, wrist, (1.9, 1.9, 1.9), arm_mat)
+    W, Hh = np.asarray(wrist, float), np.asarray(hand, float)
+    outward = _unit3(Hh - W)
+    back = np.array([0.0, 0.25, 1.0])
+    n = primaries or 9
+    L = prim_len or 16.0
+    for k in range(n):
+        t = k / (n - 1)                                   # 0 at the hand tip .. 1 at the wrist
+        base = Hh + (W - Hh) * t * 0.92
+        d = _unit3(outward * (1 - t) * 1.2 + back * (0.35 + t))
+        length = L * (1.0 - 0.38 * t)
+        feather(b, tuple(base), tuple(base + d * length), 5.2 - 1.2 * t, colour, up=(0, 1, 0), **kw)
+    E = np.asarray(elbow, float)
+    for k in range(secondaries):
+        t = (k + 0.5) / secondaries
+        base = W + (E - W) * t
+        feather(b, tuple(base), tuple(base + back * sec_len * (1.0 - 0.15 * t)), 4.6, colour, up=(0, 1, 0), **kw)
+    for row, (ln, wd) in enumerate(((sec_len * 0.55, 3.8), (sec_len * 0.3, 3.0))):
+        m = secondaries + 3
+        for k in range(m):
+            t = (k + 0.5) / m
+            base = np.asarray(lerp(hand, shoulder, t * 0.95), float) + np.array([0.0, -0.3 * (row + 1), 0.0])
+            feather(b, tuple(base), tuple(base + back * ln), wd, colour, up=(0, 1, 0), **kw)
+    return b
+
+
+@recipe
+def eomaia():
+    # 始祖神獣 エオマイア, rebuilt in the reference forms: a front-heavy beast king (Netherite Monstrosity's arms,
+    # Leivekilth's crown) — massive serpent-scaled forelimbs with fish fins and great claws, a huge mane of thick
+    # locks standing out like a crown, a lion-wolf head with tusks and branching antlers lit gold at the tips, great
+    # feathered wings, a pair of insect legs folded at the flanks, a serpent's tail ending in a fish's fan.
+    r = rig('eomaia')
+    fur = M('fur', '#c99a52', tip='#ecc87e')
+    mane = M('fur', '#5e361a', tip='#a8682e')
+    maneT = M('fur', '#c8883a', tip='#ffd36a')
+    scales = M('shingle', '#2f6e5a', belly='#a8c89a', scale_size=0.9, glints=['#9ff0c8'], glint_rate=0.03)
+    ivory = M('horn', '#f6eacc', tip='#fffaf0')
+    antler = M('horn', '#8a6a44', tip='#ffd36a', glow=True)
+    chitin = M('carapace', '#2e2a3c', accent='#b48cff')
+    claw = M('horn', '#2a2420', tip='#6a5a50')
+    feather = M('feather', '#f4e6c8', tip='#e8a83a', glow=True)
+    covert = M('feather', '#d8bc88', tip='#f4e6c8')
+    finc = '#2e7a8a'
+    fk = dict(accent='#9ff0ff', edge='#9ff0ff', streaks=True)
+    root = r.bone('root', None, (0, 24, 0), anim='root')
+    body = r.bone('body', root, (0, 12, 2), anim='breath')
+    rbox(body, (-5.6, 5.6, -10.0), (5.6, 16.4, 0.0), fur, bevel=1.8)                 # deep chest
+    rbox(body, (-4.4, 7.4, -1.0), (4.4, 15.0, 7.0), fur, bevel=1.4)
+    rbox(body, (-4.2, 7.0, 6.0), (4.2, 14.0, 11.0), fur, bevel=1.3)
+    loft(body, [(-6, 15.6, 17.0, 7.6), (6, 14.8, 15.8, 6.8)], scales, step=2.0)       # serpent-scaled belly
+    # the mane: thick locks radiating out round the neck and shoulders, a crown of them
+    for ring, (rad0, rad1, z0, z1) in enumerate(((4.4, 10.6, -11.0, -7.0), (4.8, 9.0, -8.0, -3.0))):
+        n = 16 if ring == 0 else 12
+        for k in range(n):
+            a = (k / n) * 2 * math.pi + ring * 0.2
+            cx, cy = math.cos(a), math.sin(a)
+            base = (cx * rad0, 6.4 + cy * rad0 * 0.9, z0)
+            tip = (cx * rad1, 6.4 + cy * rad1 * 0.85 - 1.0, z1)
+            fur_spike(body, base, tip, 2.8 if k % 2 else 2.2, mane, maneT)
+    for k in range(6):
+        z = -2.0 + k * 2.2
+        fur_spike(body, (0, 6.0, z), (0, 2.6 - k * 0.2, z + 2.6), 1.8, mane, maneT)
+    neck = r.bone('neck', body, (0, 8.0, -9.5), anim='sway', ax=1, amp=0.03, speed=0.05)
+    chain_boxes(neck, [(0, 9.0, -9.0), (0, 5.4, -12.0), (0, 3.4, -13.6)], 5.2, 4.4, fur)
+    head = r.bone('head', neck, (0, 3.6, -13.8), anim='head')
+    rbox(head, (-3.6, -0.6, -20.0), (3.6, 5.4, -13.0), fur, bevel=1.0)                  # skull
+    rbox(head, (-2.4, 1.6, -25.4), (2.4, 5.0, -19.6), fur, bevel=0.7, faces={'bottom': M('mouth', '#4a1420')})   # wolf muzzle
+    box(head, (-1.1, 1.4, -25.8), (1.1, 2.6, -24.6), M('simple', '#1a1214'))
+    rbox(head, (-4.0, -1.8, -17.6), (4.0, 1.6, -12.6), mane, bevel=0.9)                 # mane over the brow
+    for sx in (-1, 1):
+        side = 'left' if sx > 0 else 'right'
+        box(head, (sx * 1.0, -1.4, -21.0), (sx * 3.8, -0.2, -16.6), mane, rot=(-0.22, 0, sx * 0.12), pivot=(sx * 2.4, -0.8, -18.6))
+        cbox(head, (sx * 3.6, 1.6, -18.4), (0.3, 1.8, 3.0), M('simple', '#1a1214'))
+        eye(head, (sx * 3.72, 1.6, -18.4), 3.0, 1.5, side, M('eye', '#ffc23a', pupil='slit', mood='fierce', lid='#5e361a', glow_amount=1.0))
+        box(head, (sx * 2.6, -3.0, -15.0), (sx * 4.0, 0.2, -13.2), fur, rot=(0, 0, sx * 0.35), pivot=(sx * 3.2, 0, -14))     # ears
+        # great branching antlers
+        main = [(sx * 2.4, -1.4, -15.4), (sx * 4.4, -5.6, -14.0), (sx * 6.6, -9.6, -12.6), (sx * 8.0, -13.4, -10.6), (sx * 8.4, -16.4, -8.4)]
+        horn(head, main, 1.6, 0.6, antler)
+        for (i0, d) in ((1, (sx * 1.0, -2.8, -4.0)), (2, (sx * 4.0, -1.0, -3.0)), (2, (sx * -0.6, -4.2, -2.0)), (3, (sx * 3.6, -2.4, -1.6)),
+                        (3, (sx * -1.0, -3.6, -0.8))):
+            p = main[i0]
+            horn(head, [p, (p[0] + d[0], p[1] + d[1], p[2] + d[2])], 0.9, 0.35, antler)
+        # tusks curving up out of the jaw, wolf fangs
+        horn(head, [(sx * 2.3, 4.6, -21.0), (sx * 3.2, 7.0, -24.0), (sx * 3.6, 6.6, -28.0), (sx * 3.2, 4.2, -30.6)], 1.3, 0.5, ivory)
+        box(head, (sx * 1.7 - 0.35, 5.0, -24.8), (sx * 1.7 + 0.35, 7.4, -24.1), M('tooth', '#f2ede2'))
+        teeth(head, sx * 2.0, 5.0, -23.8, -19.0, 3, 0.6, M('tooth', '#f2ede2'), down=True)
+    jaw = r.bone('jaw', head, (0, 5.2, -14.6), rot=(0.22, 0, 0), anim='jaw')
+    rbox(jaw, (-2.2, 5.0, -25.0), (2.2, 6.8, -14.6), fur, bevel=0.5, faces={'top': M('mouth', '#4a1420')})
+    for sx in (-1, 1):
+        box(jaw, (sx * 1.5 - 0.3, 3.2, -24.4), (sx * 1.5 + 0.3, 5.2, -23.8), M('tooth', '#f2ede2'))
+    rbox(jaw, (-2.8, 6.4, -20.0), (2.8, 9.6, -15.0), mane, bevel=0.8)                     # beard
+    # massive forelimbs: thick fur upper arm, serpent-scaled forearm with a fish fin, a great paw of claws
+    for sx in (-1, 1):
+        name = 'leg_f' + ('r' if sx < 0 else 'l')
+        up = r.bone(name, body, (sx * 5.0, 11.0, -6.0), anim='leg_r' if sx < 0 else 'leg_l')
+        rbox(up, (sx * 5.0 - 3.0, 8.0, -9.4), (sx * 5.0 + 3.0, 17.6, -2.6), fur, bevel=1.4)
+        low = r.bone(name + '_low', up, (sx * 5.4, 17.0, -6.4), anim='knee')
+        rbox(low, (sx * 5.4 - 2.4, 16.4, -8.8), (sx * 5.4 + 2.4, 22.0, -4.0), scales, bevel=0.9)
+        for k in range(3):
+            box(low, (sx * 5.4 - 2.6, 17.0 + k * 1.6, -9.0), (sx * 5.4 + 2.6, 17.6 + k * 1.6, -4.2), M('carapace', '#24584a'))
+        rbox(low, (sx * 5.4 - 2.8, 21.6, -10.6), (sx * 5.4 + 2.8, 24.0, -3.8), fur, bevel=0.6)    # paw
+        for k in range(4):
+            x = sx * 5.4 + (k - 1.5) * 1.35
+            chain_boxes(low, [(x, 22.6, -10.2), (x, 23.4, -12.0), (x, 24.0, -12.8)], 0.9, 0.4, claw)
+        membrane(low, [(sx * 7.6, 17.0, -5.0), (sx * 11.6, 15.0, -0.4)] + ragged((sx * 11.6, 15.0, -0.4), (sx * 7.6, 21.0, -4.6), 6, 1.2, (-sx, 0, -1), seed=4)
+                 + [(sx * 7.6, 21.0, -4.6)], finc, veins3=[((sx * 7.6, 18.0, -5.0), (sx * 11.0, 16.0, -1.0)), ((sx * 7.6, 20.0, -5.0), (sx * 10.4, 18.6, -1.6))], **fk)
+        hind_leg(r, body, 'leg_b' + ('r' if sx < 0 else 'l'), 'leg_l' if sx < 0 else 'leg_r', sx, (sx * 3.8, 12.0, 9.0),
+                 (sx * 4.4, 16.6, 6.0), (sx * 4.4, 20.6, 10.8), (sx * 4.4, 22.6, 9.0), 2.8, fur, scales, claw)
+        insect_leg(r, body, 'bug_' + ('r' if sx < 0 else 'l'), sx, (sx * 4.2, 12.0, 2.0), chitin, claw, phase=sx)
+    # great feathered wings
+    for sx in (-1, 1):
+        wrist = (sx * 18.0, -6.0, -2.0)
+        tips = [(sx * 22.0, -22.0, -6.0), (sx * 28.0, -20.0, 0.0), (sx * 33.0, -15.0, 6.0), (sx * 35.0, -8.0, 11.0), (sx * 33.0, -1.0, 15.0),
+                (sx * 29.0, 4.0, 17.0)]
+        feather_fan(r, body, sx, (sx * 4.6, 7.0, -5.0), (sx * 11.0, -1.0, -6.0), wrist, tips, '#f4e6c8', M('fur', '#e8d8b0', tip='#fff4dc'),
+                    secondaries=6, sec_len=13.0, accent='#d8b070', edge='#e8a83a', streaks=True)
+    # a serpent's tail ending in a fish's fan fin
+    tail_ctrl = [(11.0, 8.6, 12.4, 3.4), (16, 7.6, 11.0, 3.0), (21, 6.4, 9.6, 2.6), (26, 5.0, 8.0, 2.0), (30, 4.0, 6.8, 1.6)]
+    tb = tail_loft(r, body, tail_ctrl, [16, 21, 26], scales, amp=0.16, speed=0.07)
+    membrane(tb[-1], [(0, 5.4, 29.0), (0, -1.0, 34.0)] + ragged((0, -1.0, 34.0), (0, 11.0, 34.0), 8, 1.6, (0, 0, -1), jag=0.9, seed=6)
+             + [(0, 11.0, 34.0)], finc, veins3=[((0, 5.4, 29.5), (0, 0.0, 33.6)), ((0, 5.4, 29.5), (0, 5.4, 34.0)), ((0, 5.4, 29.5), (0, 10.0, 33.6))], **fk)
+    return fit_height(r, ('wing',))
+
+
+# ============================================================================================== divine forms
+# The user's direction after the reference rebuild: more detailed and divine (神々しい), nothing grotesque. Serene
+# closed-mouthed faces with glowing eyes, graceful necks and limbs, gold-trimmed ornament, flowing manes and
+# layered feathers, halos and glowing crowns.
+
+def bezier(p0, p1, p2, n):
+    p0, p1, p2 = (np.asarray(p, float) for p in (p0, p1, p2))
+    return [tuple((1 - t) ** 2 * p0 + 2 * (1 - t) * t * p1 + t * t * p2) for t in np.linspace(0, 1, n)]
+
+
+def lock(bone, p0, p1, p2, w0, w1, mat, tip=None, n=4):
+    """A flowing lock of mane or a curling horn: tapering boxes along a curve, the last one in the tip colour."""
+    pts = bezier(p0, p1, p2, n + 1)
+    for i in range(n):
+        t, t2 = i / n, (i + 1) / n
+        w = w0 + (w1 - w0) * (t + t2) / 2
+        seg(bone, pts[i], pts[i + 1], w, w * 0.7, tip if (tip is not None and i == n - 1) else mat, up=(0, 0, 1), ext=w * 0.35)
+
+
+def halo(bone, c, rad, mat, rays=12, ray_len=1.6, ray_mat=None, axis='z', motes=None):
+    """A ring of light behind a sacred head, short rays standing out from it, and motes floating round it."""
+    hoop(bone, c, rad, 0.45, mat, axis=axis, n=max(16, int(rad * 5)), depth=0.25)
+    cx, cy, cz = c
+    for k in range(rays):
+        a = k * 2 * math.pi / rays
+        u, v = math.cos(a), math.sin(a)
+        p0 = (cx + u * (rad + 0.4), cy + v * (rad + 0.4), cz) if axis == 'z' else (cx + u * (rad + 0.4), cy, cz + v * (rad + 0.4))
+        p1 = (cx + u * (rad + 0.4 + ray_len * (1.0 if k % 2 == 0 else 0.55)), cy + v * (rad + 0.4 + ray_len * (1.0 if k % 2 == 0 else 0.55)), cz) \
+            if axis == 'z' else (cx + u * (rad + 0.4 + ray_len), cy, cz + v * (rad + 0.4 + ray_len))
+        seg(bone, p0, p1, 0.35, 0.2, ray_mat or mat)
+    for p in motes or ():
+        cbox(bone, p, (0.5, 0.5, 0.5), mat, rot=(0.6, 0.7, 0))
+
+
+def jewel(bone, c, size, gem_mat, setting_mat, out='front'):
+    """A gem in a gold setting."""
+    cx, cy, cz = c
+    if out == 'front':
+        cbox(bone, (cx, cy, cz + 0.15), (size * 1.6, size * 1.6, 0.4), setting_mat, rot=(0, 0, 0.785))
+        cbox(bone, (cx, cy, cz - 0.1), (size, size, 0.5), gem_mat, rot=(0, 0, 0.785))
+    else:
+        cbox(bone, c, (size * 1.5, 0.4, size * 1.5), setting_mat, rot=(0, 0.785, 0))
+        cbox(bone, (cx, cy - 0.2, cz), (size, 0.5, size), gem_mat, rot=(0, 0.785, 0))
+
+
+def ribbon_fin(bone, root0, root1, flow, colour, edge, glow_c=None, n=6, seed=0, **kw):
+    """A translucent flowing fin like a sacred beast's flame tufts or a koi's tail: from the root line it streams
+    along `flow` (a vector), its free edge softly waved."""
+    r0, r1, fl = np.asarray(root0, float), np.asarray(root1, float), np.asarray(flow, float)
+    t0, t1 = r0 + fl * 1.0, r1 + fl * 0.75
+    wav = ragged(tuple(t0), tuple(t1), n, 0.6, _unit3(np.cross(fl, r1 - r0)) * 0 + _unit3((r0 + r1) / 2 - (t0 + t1) / 2), jag=0.3, seed=seed)
+    pts = [tuple(r0), tuple(t0)] + wav + [tuple(t1), tuple(r1)]
+    veins = [(tuple(lerp(r0, r1, k / 3)), tuple(lerp(t0, t1, k / 3))) for k in range(4)]
+    return membrane(bone, pts, colour, veins3=veins, accent=glow_c or edge, glow=bool(glow_c), edge=edge, **kw)
+
+
+@recipe
+def eomaia():
+    # 始祖神獣 エオマイア, divine design: the first beast and mother of all beasts as a sacred qilin-like king. A noble
+    # ivory lion body with a flowing golden mane, serpent scales as gold-edged scale bands on chest and legs, great
+    # white feathered wings edged in gold, deer antlers of gold crystal lit at every tip, small ivory tusks and a
+    # closed, serene mouth, wolf's fangs only hinted, translucent fish-fin ribbons streaming from wrists and ankles,
+    # a serpent tail ending in a koi's fan, a pair of tiny gold mantis legs folded at the breast like jewellery, and a
+    # halo of gold behind the head.
+    r = rig('eomaia')
+    fur = M('silk', '#fffaf0', sheen='#f6e2a8', sheen_glow=True)
+    mane = M('silk', '#ecbc58', sheen='#fff0c0')
+    mane2 = M('silk', '#f6d47a', sheen='#fffae0')
+    manetip = M('silk', '#fff6dc', sheen='#ffffff')
+    gold = M('metal', '#e8c060')
+    goldt = M('carapace', '#f0d080', trim='#fff4c8')
+    scales = M('shingle', '#e8d6a8', belly='#f6ecd2', scale_size=0.8, stripes=('#d8b060', 2.4, 0.18))
+    antler = M('horn', '#e8c060', tip='#fffbe0', glow=True)
+    ivory = M('horn', '#f8f0dc', tip='#ffffff')
+    teal = '#5ae0d0'
+    halo_m = M('energy', '#ffe8a0', glow=True, glow_amount=0.8)
+    root = r.bone('root', None, (0, 24, 0), anim='root')
+    body = r.bone('body', root, (0, 12, 2), anim='breath')
+    rbox(body, (-4.2, 7.0, -8.6), (4.2, 14.8, -1.0), fur, bevel=1.6)                 # chest
+    rbox(body, (-3.4, 7.8, -1.6), (3.4, 13.4, 5.6), fur, bevel=1.3)                  # waist
+    rbox(body, (-3.8, 7.4, 5.0), (3.8, 13.8, 10.2), fur, bevel=1.4)                  # haunch
+    # serpent scales: a gold-edged scale bib down the chest and a band under the belly
+    for k in range(5):
+        w = 3.4 - k * 0.45
+        box(body, (-w, 9.0 + k * 1.3, -9.2 + k * 0.15), (w, 10.6 + k * 1.3, -8.4 + k * 0.15), goldt, rot=(-0.12, 0, 0), pivot=(0, 9.8 + k * 1.3, -8.8))
+    loft(body, [(-6, 13.6, 14.9, 5.6), (6, 12.8, 13.9, 5.0)], scales, step=2.0)
+    # a jewelled collar at the base of the neck
+    hoop(body, (0, 7.6, -7.4), 3.3, 0.7, gold, axis='z', n=18, depth=0.8)
+    jewel(body, (0, 10.9, -8.2), 1.0, M('gem', teal, glow=True), gold)
+    # the mane: flowing golden locks from the crown down the neck and over the shoulders, all streaming back
+    # the mane over the shoulders: long locks streaming back over the withers
+    for k in range(7):
+        t = k / 6
+        for sx in (-1, 1):
+            x0 = sx * (1.0 + t * 2.6)
+            lock(body, (x0, 6.8 + t * 0.6, -7.4 + t * 1.2), (x0 * 1.6, 5.4, -3.6 + t), (x0 * 1.9, 8.6 + t * 1.6, 0.6 + t * 1.6), 2.4 - t * 0.5, 0.8,
+                 mane if k % 2 else mane2, tip=manetip, n=5)
+    neck = r.bone('neck', body, (0, 8.6, -7.6), anim='sway', ax=1, amp=0.03, speed=0.05)
+    chain_boxes(neck, [(0, 9.4, -7.4), (0, 5.6, -10.4), (0, 2.4, -12.8), (0, 0.6, -14.0)], 4.4, 3.4, fur)
+    for k in range(6):
+        p = lerp((0, 6.6, -9.0), (0, 0.4, -13.2), k / 5)
+        for sx in (-1, 1):
+            lock(neck, (sx * 0.8, p[1], p[2]), (sx * 3.2, p[1] - 1.4, p[2] + 2.6), (sx * 4.2, p[1] + 2.4, p[2] + 6.0), 2.2, 0.7,
+                 mane2 if k % 2 else mane, tip=manetip, n=4)
+    head = r.bone('head', neck, (0, 0.8, -14.0), anim='head')
+    rbox(head, (-2.6, -2.8, -18.8), (2.6, 1.8, -13.4), fur, bevel=0.8)                     # skull
+    rbox(head, (-1.8, -1.4, -23.2), (1.8, 1.5, -18.4), fur, bevel=0.6)                     # refined muzzle, mouth closed
+    box(head, (-1.75, 0.95, -23.1), (1.75, 1.05, -18.6), M('simple', '#8a6a5a'))             # the lip line
+    box(head, (-0.7, -1.5, -23.3), (0.7, -0.6, -22.6), M('simple', '#5a3a3a'))              # nose
+    box(head, (-1.0, -2.95, -21.0), (1.0, -2.75, -14.0), goldt)                             # gold brow ridge
+    jewel(head, (0, -1.6, -18.9), 0.9, M('gem', teal, glow=True), gold)                     # forehead gem
+    for k in range(5):
+        a = (k - 2) * 0.45
+        for sx in (-1, 1):
+            lock(head, (sx * (1.2 + abs(a)), -2.4 + abs(a) * 1.4, -14.6), (sx * (3.6 + abs(a) * 2), -3.6 + abs(a) * 2.6, -11.4),
+                 (sx * (4.6 + abs(a) * 2.4), -0.4 + abs(a) * 3.4, -7.6), 2.0, 0.6, mane if k % 2 else mane2, tip=manetip, n=4)
+    for sx in (-1, 1):
+        side = 'left' if sx > 0 else 'right'
+        eye(head, (sx * 2.62, -0.6, -17.6), 2.6, 1.3, side, M('eye', '#ffd34a', pupil='slit', mood='calm', lid='#c8a060', glow_amount=1.0))
+        box(head, (sx * 2.66, -1.5, -19.0), (sx * 2.7, -1.3, -16.2), gold)                    # gold liner over the eye
+        lock(head, (sx * 2.0, -2.6, -14.6), (sx * 3.6, -4.4, -13.8), (sx * 4.2, -4.0, -11.6), 1.6, 0.5, fur)   # ears swept back
+        # tall branching antlers of gold crystal, every tine lit
+        main = bezier((sx * 1.6, -2.8, -15.6), (sx * 4.6, -9.0, -15.0), (sx * 6.4, -14.6, -11.0), 6)
+        horn(head, main, 1.2, 0.45, antler)
+        for (i0, d) in ((1, (sx * -1.4, -3.2, -2.4)), (2, (sx * 2.8, -2.0, -2.2)), (3, (sx * -1.6, -3.4, -0.6)), (4, (sx * 2.6, -2.0, 0.6)),
+                        (4, (sx * -0.4, -3.0, 1.6))):
+            p = main[i0]
+            horn(head, [p, (p[0] + d[0] * 0.5, p[1] + d[1] * 0.6, p[2] + d[2] * 0.5), (p[0] + d[0], p[1] + d[1], p[2] + d[2])], 0.7, 0.3, antler)
+        # small ivory tusks curving up from the corners of the mouth; the wolf's fangs only as two points of ivory
+        lock(head, (sx * 1.7, 1.1, -21.2), (sx * 2.2, 1.6, -22.6), (sx * 2.0, 0.2, -23.4), 0.6, 0.25, ivory, n=2)
+        box(head, (sx * 1.0 - 0.2, 1.05, -22.9), (sx * 1.0 + 0.2, 1.8, -22.5), M('tooth', '#ffffff'))
+    jaw = r.bone('jaw', head, (0, 1.4, -14.0), rot=(0.0, 0, 0), anim='jaw')
+    rbox(jaw, (-1.6, 1.0, -22.8), (1.6, 2.6, -14.4), fur, bevel=0.5)
+    lock(jaw, (0, 2.6, -20.0), (0, 4.6, -19.2), (0, 6.0, -17.0), 1.6, 0.5, mane2, tip=M('fur', '#fff4d0'))   # a small beard tuft
+    halo(head, (0, -4.0, -11.0), 6.6, halo_m, rays=16, ray_len=1.4, axis='z',
+         motes=[(math.cos(a) * 8.6, -4.0 + math.sin(a) * 8.6, -11.0) for a in np.linspace(0, 2 * math.pi, 7)[:-1]])
+    # legs: slender, gold anklets, translucent fin ribbons streaming back from wrists and ankles, gold claws
+    claw = M('metal', '#e8c060')
+    for sx in (-1, 1):
+        up, low = fore_leg(r, body, 'leg_f' + ('r' if sx < 0 else 'l'), 'leg_r' if sx < 0 else 'leg_l', sx, (sx * 3.6, 12.4, -5.6),
+                           (sx * 3.9, 17.8, -6.4), (sx * 3.8, 22.4, -5.8), 2.0, fur, scales, claw)
+        hoop(low, (sx * 3.9, 20.2, -6.2), 1.25, 0.5, gold, axis='y', n=10, depth=0.5)
+        ribbon_fin(low, (sx * 3.9, 18.6, -5.2), (sx * 3.9, 20.6, -5.2), (sx * 0.8, 1.6, 6.0), '#bff6ee', teal, glow_c=teal, seed=1 + sx)
+        up, low = hind_leg(r, body, 'leg_b' + ('r' if sx < 0 else 'l'), 'leg_l' if sx < 0 else 'leg_r', sx, (sx * 3.6, 12.0, 8.6),
+                           (sx * 4.0, 16.4, 5.8), (sx * 4.0, 20.4, 10.4), (sx * 4.0, 22.6, 8.8), 2.4, fur, scales, claw)
+        hoop(low, (sx * 4.0, 19.6, 10.6), 1.1, 0.5, gold, axis='y', n=10, depth=0.5)
+        ribbon_fin(low, (sx * 4.0, 18.6, 11.0), (sx * 4.0, 20.6, 11.6), (sx * 0.6, 1.4, 6.0), '#bff6ee', teal, glow_c=teal, seed=3 + sx)
+        # a tiny pair of gold mantis legs folded at the breast, like jewellery
+        b = r.bone('bug_' + ('r' if sx < 0 else 'l'), body, (sx * 3.4, 11.0, -6.0), anim='sway', ax=0, amp=0.06, speed=0.08, phase=sx)
+        chain_boxes(b, [(sx * 3.4, 11.0, -6.0), (sx * 4.6, 9.4, -7.6), (sx * 4.2, 11.6, -8.8), (sx * 3.6, 12.6, -8.2)], 0.6, 0.3, gold)
+    # great feathered wings, white edged in gold, raised like a blessing
+    for sx in (-1, 1):
+        feather_fan(r, body, sx, (sx * 3.8, 7.6, -4.6), (sx * 10.0, -3.0, -3.0), (sx * 17.0, -10.0, -2.0), [(sx * 26.0, -21.0, -3.0)],
+                    '#fdfaf2', fur, hand=(sx * 26.0, -21.0, -3.0), primaries=10, prim_len=17.0, secondaries=9, sec_len=15.0,
+                    accent='#e8c060', edge='#e8c060')
+    # a serpent's tail with gold-edged scale bands, ending in a koi's fan
+    tail_ctrl = [(10.0, 8.4, 12.6, 3.4), (15, 7.8, 11.6, 3.0), (20, 6.8, 10.2, 2.6), (25, 5.4, 8.6, 2.0), (29, 4.4, 7.4, 1.6)]
+    tb = tail_loft(r, body, tail_ctrl, [15, 20, 25], scales, amp=0.16, speed=0.07)
+    for i, b in enumerate(tb):
+        z = 12.5 + i * 5
+        t, bt, w = section(tail_ctrl, z)
+        hoop(b, (0, (t + bt) / 2, z), w / 2 + 0.2, 0.4, gold, axis='z', n=12, depth=0.4)
+    ribbon_fin(tb[-1], (0, 4.4, 28.6), (0, 7.4, 28.6), (0, -6.0, 7.0), '#bff6ee', teal, glow_c=teal, seed=7)
+    ribbon_fin(tb[-1], (0, 4.4, 28.6), (0, 7.4, 28.6), (0, 6.0, 7.0), '#bff6ee', teal, glow_c=teal, seed=8)
+    return fit_height(r, ('wing',))

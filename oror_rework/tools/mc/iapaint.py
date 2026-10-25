@@ -369,11 +369,25 @@ def m_carapace(mat, f, s, ctx):
     scratch = (hm > 0.985) & side
     rgb[scratch] = ramp(base, 0.7)
     glow = None
+    trim = mat.get('trim')
+    if trim and W >= 4 and H >= 4:
+        # ornate gold edging one texel in from the rim (and a second inner line on big plates): divine armour
+        e = np.zeros((H, W), bool)
+        e[1, 1:-1] = e[-2, 1:-1] = True
+        e[1:-1, 1] = e[1:-1, -2] = True
+        if W >= 10 and H >= 10:
+            e[3, 3:-3] = e[-4, 3:-3] = True
+            e[3:-3, 3] = e[3:-3, -4] = True
+        rgb[e] = ramp(C(trim), np.where(f.v[e] < H / 2, 1.18, 0.92).astype(np.float32))
+        if mat.get('trim_glow'):
+            glow = np.zeros((H, W, 4), np.float32)
+            glow[e, :3] = C(trim)
+            glow[e, 3] = 150
     acc = mat.get('accent')
     if acc and side and H >= 5:
         mid = H // 2
         rgb[mid, 1:-1] = C(acc)
-        glow = np.zeros((H, W, 4), np.float32)
+        glow = glow if glow is not None else np.zeros((H, W, 4), np.float32)
         glow[mid, 1:-1, :3] = C(acc)
         glow[mid, 1:-1, 3] = 230
     return rgb, None, glow
@@ -474,4 +488,30 @@ def m_gel(mat, f, s, ctx):
     return rgb, alpha, glow
 
 
-PAINTERS.update({'shingle': m_shingle, 'carapace': m_carapace, 'hide': m_hide, 'strata': m_strata, 'gel': m_gel})
+def m_silk(mat, f, s, ctx):
+    """Clean, bright fur of a sacred beast: long fine strands laid along the body in model space, low contrast, lit
+    from above, with an occasional sheen strand (mat['sheen']) and a pale tip band (mat['tip'])."""
+    base = C(mat['color'])
+    if ctx.get('P') is None:
+        return ramp(base, np.ones((f.H, f.W), np.float32)), None, None
+    a, b, topb = _world_uv(ctx, f)
+    N = ctx['N']
+    row = np.floor(b * 2.0)
+    ph = _hash2(row, row * 0 + 3, 11) * 6.0
+    strand = np.sin(a * 1.7 + ph) > 0.55
+    k = np.where(strand, 1.06, 0.97).astype(np.float32)
+    k = k * (1.0 + 0.1 * -N[..., 1])
+    rgb = ramp(base, GP.q(k, 0.03))
+    sh = mat.get('sheen')
+    glow = None
+    if sh:
+        sm = strand & (_hash2(np.floor(a * 0.8), row, 19) > 0.86)
+        rgb[sm] = C(sh)
+        if mat.get('sheen_glow'):
+            glow = np.zeros((f.H, f.W, 4), np.float32)
+            glow[sm, :3] = C(sh)
+            glow[sm, 3] = 120
+    return rgb, None, glow
+
+
+PAINTERS.update({'shingle': m_shingle, 'carapace': m_carapace, 'hide': m_hide, 'strata': m_strata, 'gel': m_gel, 'silk': m_silk})
