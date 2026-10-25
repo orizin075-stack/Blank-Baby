@@ -209,9 +209,29 @@ public final class Harness {
                 expected = null;
                 mc.setScreen(null);
             }
-            case 1060 -> finish(mc, "complete");
-            default -> { }
+            case 1980 -> finish(mc, "complete");
+            default -> {
+                if (ArmsTest.active(play)) ArmsTest.step(mc, play);
+            }
         }
+    }
+
+    static void shotNow(Minecraft mc, String name) {
+        shot(mc, name);
+    }
+
+    static void noteNow(String line) {
+        note(line);
+    }
+
+    static void openInventory(Minecraft mc) {
+        expected = InventoryScreen.class;
+        mc.setScreen(new InventoryScreen(mc.player));
+    }
+
+    static void closeScreen(Minecraft mc) {
+        expected = null;
+        mc.setScreen(null);
     }
 
     /** Gives the player a NightfallCraft-like loadout and a still target in front, on the integrated server. */
