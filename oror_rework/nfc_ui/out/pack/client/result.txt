@@ -1,29 +1,48 @@
-158 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-358 screenshot 01_title
-379 screen net.minecraft.client.gui.screens.options.OptionsScreen in TITLE
-439 screenshot 01b_options
-450 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-650 screenshot 01_title
-671 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-731 screenshot 02_create_world
-741 press selectWorld.create on CreateWorldScreen
-742 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-842 screenshot popup_1_ConfirmScreen
-842 press gui.yes on ConfirmScreen
-843 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-864 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-884 screen none in LOADING
-885 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-985 screenshot popup_2_
-986 screen none in PLAY
-1038 weapon efn:hf_murasama
-1385 screenshot 04_hud_weapon
-1485 screenshot 05_hud_tool
-1496 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
-1565 screenshot 06_inventory
-1576 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
-1635 screenshot 07_pause
-1646 screen none in PLAY
-1745 screenshot 08_hud_weapon_again
-1845 screenshot 09_third_person
-1865 finished: complete
+260 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+460 screenshot 01_title
+481 screen net.minecraft.client.gui.screens.options.OptionsScreen in TITLE
+541 screenshot 01b_options
+552 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+752 screenshot 01_title
+773 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+833 screenshot 02_create_world
+843 press selectWorld.create on CreateWorldScreen
+844 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+944 screenshot popup_1_ConfirmScreen
+944 press gui.yes on ConfirmScreen
+945 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+975 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+996 screen none in LOADING
+997 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+1097 screenshot popup_2_
+1098 screen none in PLAY
+1143 weapon efn:hf_murasama
+1487 epic fight mode combat holding efn:hf_murasama: holding the weapon since equipping (expect combat)
+1497 screenshot 04_hud_weapon
+1597 screenshot 05_hud_tool
+1608 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
+1677 screenshot 06_inventory
+1688 screen net.minecraft.client.gui.screens.PauseScreen in PLAY
+1747 screenshot 07_pause
+1758 screen none in PLAY
+1857 screenshot 08_hud_weapon_again
+1957 screenshot 09_third_person
+1967 switched to the vanilla mode
+1997 epic fight mode vanilla holding efn:hf_murasama: same weapon after switching to the vanilla mode, as R does (expect vanilla)
+2042 epic fight mode combat holding efn:hf_murasama: after taking the weapon again (expect combat)
+2047 fixed weapon efn:nf_shortsword_e
+2047 fixed weapon efn:nf_shortsword_2_e
+2047 fixed weapon efn:exsiliumgladius_e
+2047 fixed weapon efn:fire_exsiliumgladius_e
+2047 fixed weapon efn:meen_spear_e
+2047 fixed weapon efn:air_tachi_e
+2047 fixed weapon efn:arc_tachi
+2047 fixed weapon efn:crimson_moon_e
+2047 fixed weapon efn:crescent_moon_e
+2047 fixed weapon efn:flag_bearer
+2047 fixed weapon efn:flag_bearer_e
+2047 fixed weapon efn:excalibur
+2078 screen net.minecraft.client.gui.screens.inventory.InventoryScreen in PLAY
+2137 screenshot 10_fixed_weapons
+2148 screen none in PLAY
+2157 finished: complete
