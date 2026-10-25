@@ -63,6 +63,9 @@ jobs:
           PY
           # TCRMeshes (boss models) stops any game that is not the official modpack install; it draws no HUD or menu.
           rm -f $G/mods/tcrmeshes-1.0.0.jar
+          # Sword Soaring 20.14.2.8 calls an Armourer's Workshop API class that 3.4.0-beta.3 no longer has; without
+          # Armourer's Workshop (cosmetics, no HUD or menus) it skips that path.
+          rm -f $G/mods/armourersworkshop-forge-1.20.1-3.4.0-beta.3.jar
           cp -r $U/nfc/config $G/config
           ls $G/mods | wc -l; ls $G/resourcepacks $G/shaderpacks
       - name: Build the CI harness mod (Forge 1.20.1)
