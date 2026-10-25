@@ -43,3 +43,15 @@ were made on 0.17.23 and are carried over; `out/oror_supreme_bosses-0.17.24.jar`
 - `NightfallPatchSettings`: `compactHud` defaults to false. 0.17.22 hid every Ares HUD layer (stamina, guard and parry,
   mana) and drew a plain health row instead; the 0.17.25 pack also ships `compactHud=false`.
 - The rest of 0.17.25 is the pack around the jar: NightfallCraft's screens and combat feel, in `oror_rework/nfc_ui`.
+
+## 0.17.26
+
+Built on the other 0.17.25 (`base/oror_supreme_bosses-0.17.25.jar`, made elsewhere on the 0.17.24 native-combat jar):
+that jar adds only Nightfall weapon model fixes (`assets/efn`: eleven `_e`/alias weapons that rendered as missing
+textures, Excalibur's item model, the flag bearer's inventory mesh), NightfallCraft's 433 Epic Fight combat items
+(`oror_combat_preferred025.json`) and automatic combat mode. Every class of my 0.17.25 above is carried over on it.
+
+- `NightfallAutomaticCombat`, `NightfallAutomaticCombatClient`: that jar forced combat mode on the server and the client
+  every tick while a weapon was held, so R did nothing until the weapon was put away. Combat mode is now turned on when
+  a weapon is taken and during the first three seconds in a world (a player saved in the vanilla mode), on the client;
+  Epic Fight sends the mode to the server. R switches back until another item is taken.
