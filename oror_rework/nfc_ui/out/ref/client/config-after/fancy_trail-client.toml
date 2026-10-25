@@ -57,3 +57,30 @@
 	#enable common air trail
 	isOpenAir = true
 
+[weapon_afterimage]
+	#Enable weapon 3D model ghost afterimages during attacks
+	#Default: true
+	enabled = true
+	#Number of ghost copies trailing behind the weapon
+	#Higher values = longer trail but more GPU work
+	#Range: 1 - 16
+	#Default: 5
+	#Range: 1 ~ 16
+	ghostCount = 5
+	#Maximum opacity of the ghost copies (oldest ghosts are most transparent)
+	#Range: 0.0 - 1.0
+	#Default: 0.4
+	#Range: 0.0 ~ 1.0
+	maxAlpha = 0.4
+	#Controls how quickly ghosts fade out
+	#1.0 = linear fade, 2.0 = quadratic (faster fade), 0.5 = square root (slower fade)
+	#Range: 0.5 - 5.0
+	#Default: 2.0
+	#Range: 0.5 ~ 5.0
+	fadeExponent = 2.0
+	#Maximum age of a ghost snapshot in ticks (20 ticks = 1 second)
+	#Range: 2 - 40
+	#Default: 10
+	#Range: 2 ~ 40
+	maxAgeTicks = 10
+

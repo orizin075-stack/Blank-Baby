@@ -30,6 +30,9 @@
 	turningLockDuringKillCam = true
 	#Kill Cam screen effect duration (use when time slow disabled)
 	killCamScreenEffectDuration = 30
+	#Overlay style (0 = red/blood, 1 = blue/purple)
+	#Range: 0 ~ 1
+	overlayStyle = 0
 
 ["Epic Fight Compat"]
 	#List of animation IDs that will trigger the kill cam time slow

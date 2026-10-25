@@ -1,300 +1,300 @@
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.handler$cpl000$wrapAnimatableTexture(TextureManager.java:1029)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280163_(GuiGraphics.java:346)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.lambda$renderBackground$0(ProgressBarElement.java:201)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.resource.ResourceSupplier.forRenderable(ResourceSupplier.java:155)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.renderBackground(ProgressBarElement.java:190)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.m_88315_(ProgressBarElement.java:77)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.AbstractElement.renderInternal(AbstractElement.java:324)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.layer.ScreenCustomizationLayer.onRenderPost(ScreenCustomizationLayer.java:440)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.lambda$registerListenerMethods$2(EventHandler.java:122)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler$ListenerContainer.notifyListener(EventHandler.java:209)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.postEvent(EventHandler.java:63)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.md0f8072$lambda$afterRenderDrippy$0$3(LoadingOverlay.java:1110)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.runMenuHandlerTaskDrippy(LoadingOverlay.java:1311)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.handler$cdn000$afterRenderDrippy(LoadingOverlay.java:1091)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.m_88315_(LoadingOverlay.java:148)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.handler$cef000$cancelForgeCustomLoadingOverlayRenderingDrippy(ForgeLoadingOverlay.java:527)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.m_88315_(ForgeLoadingOverlay.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:954)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
-[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/gui/loading_progress_bg.png
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
-	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture$TextureImage.m_118155_(SimpleTexture.java:83)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6335_(SimpleTexture.java:58)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6704_(SimpleTexture.java:29)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java:119)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280163_(GuiGraphics.java:346)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.lambda$renderBackground$0(ProgressBarElement.java:201)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.resource.ResourceSupplier.forRenderable(ResourceSupplier.java:155)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.renderBackground(ProgressBarElement.java:190)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.m_88315_(ProgressBarElement.java:77)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.AbstractElement.renderInternal(AbstractElement.java:324)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.layer.ScreenCustomizationLayer.onRenderPost(ScreenCustomizationLayer.java:440)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.lambda$registerListenerMethods$2(EventHandler.java:122)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler$ListenerContainer.notifyListener(EventHandler.java:209)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.postEvent(EventHandler.java:63)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.md0f8072$lambda$afterRenderDrippy$0$3(LoadingOverlay.java:1110)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.runMenuHandlerTaskDrippy(LoadingOverlay.java:1311)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.handler$cdn000$afterRenderDrippy(LoadingOverlay.java:1091)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.m_88315_(LoadingOverlay.java:148)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.handler$cef000$cancelForgeCustomLoadingOverlayRenderingDrippy(ForgeLoadingOverlay.java:527)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.m_88315_(ForgeLoadingOverlay.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:954)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
-[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/gui/loading_progress_fg.png
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
-	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
-	at TRANSFORMER/geckolib@4.8.4/software.bernie.geckolib.cache.texture.AnimatableTexture.m_6704_(AnimatableTexture.java:40)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.handler$cpl000$wrapAnimatableTexture(TextureManager.java:1029)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280163_(GuiGraphics.java:346)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.renderProgress(ProgressBarElement.java:161)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.m_88315_(ProgressBarElement.java:79)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.AbstractElement.renderInternal(AbstractElement.java:324)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.layer.ScreenCustomizationLayer.onRenderPost(ScreenCustomizationLayer.java:440)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.lambda$registerListenerMethods$2(EventHandler.java:122)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler$ListenerContainer.notifyListener(EventHandler.java:209)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.postEvent(EventHandler.java:63)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.md0f8072$lambda$afterRenderDrippy$0$3(LoadingOverlay.java:1110)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.runMenuHandlerTaskDrippy(LoadingOverlay.java:1311)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.handler$cdn000$afterRenderDrippy(LoadingOverlay.java:1091)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.m_88315_(LoadingOverlay.java:148)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.handler$cef000$cancelForgeCustomLoadingOverlayRenderingDrippy(ForgeLoadingOverlay.java:527)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.m_88315_(ForgeLoadingOverlay.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:954)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
-[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/gui/loading_progress_fg.png
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
-	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture$TextureImage.m_118155_(SimpleTexture.java:83)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6335_(SimpleTexture.java:58)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6704_(SimpleTexture.java:29)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java:119)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280163_(GuiGraphics.java:346)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.renderProgress(ProgressBarElement.java:161)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.m_88315_(ProgressBarElement.java:79)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.AbstractElement.renderInternal(AbstractElement.java:324)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.layer.ScreenCustomizationLayer.onRenderPost(ScreenCustomizationLayer.java:440)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.lambda$registerListenerMethods$2(EventHandler.java:122)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler$ListenerContainer.notifyListener(EventHandler.java:209)
-	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.postEvent(EventHandler.java:63)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.md0f8072$lambda$afterRenderDrippy$0$3(LoadingOverlay.java:1110)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.runMenuHandlerTaskDrippy(LoadingOverlay.java:1311)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.handler$cdn000$afterRenderDrippy(LoadingOverlay.java:1091)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.m_88315_(LoadingOverlay.java:148)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.handler$cef000$cancelForgeCustomLoadingOverlayRenderingDrippy(ForgeLoadingOverlay.java:527)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.m_88315_(ForgeLoadingOverlay.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:954)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
-[03:03:36] [Render thread] [WARN] Game took 46.67 seconds to start
-[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/menu/background_blurred.png
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
-	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
-	at TRANSFORMER/geckolib@4.8.4/software.bernie.geckolib.cache.texture.AnimatableTexture.m_6704_(AnimatableTexture.java:40)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.handler$cpl000$wrapAnimatableTexture(TextureManager.java:1029)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
-	at TRANSFORMER/tcrcore@2.8.7/com.p1nero.tcrcore.client.gui.TCRMenuBackgroundRenderer.renderRegion(TCRMenuBackgroundRenderer.java:70)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$haa001$tcr$replaceDirtBackground(Screen.java:8731)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280039_(Screen.java:371)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.mixinextras$bridge$m_280039_$122(Screen.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$gfg000$wrap_renderDirtBackground_in_renderBackground_FancyMenu(Screen.java:8296)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280273_(Screen.java:363)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.gui.LoadingErrorScreen.m_88315_(LoadingErrorScreen.java:83)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.mixinextras$bridge$m_88315_$120(Screen.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$gfg000$wrap_render_in_renderWithTooltip_FancyMenu(Screen.java:8260)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280264_(Screen.java:109)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.ForgeHooksClient.drawScreenInternal(ForgeHooksClient.java:428)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.ForgeHooksClient.drawScreen(ForgeHooksClient.java:421)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.mixinextras$bridge$drawScreen$278(GameRenderer.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.wrapOperation$ggc000$wrapRenderScreenFancyMenu(GameRenderer.java:15619)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:965)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
-[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/menu/background_blurred.png
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
-	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture$TextureImage.m_118155_(SimpleTexture.java:83)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6335_(SimpleTexture.java:58)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6704_(SimpleTexture.java:29)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java:119)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
-	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
-	at TRANSFORMER/tcrcore@2.8.7/com.p1nero.tcrcore.client.gui.TCRMenuBackgroundRenderer.renderRegion(TCRMenuBackgroundRenderer.java:70)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$haa001$tcr$replaceDirtBackground(Screen.java:8731)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280039_(Screen.java:371)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.mixinextras$bridge$m_280039_$122(Screen.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$gfg000$wrap_renderDirtBackground_in_renderBackground_FancyMenu(Screen.java:8296)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280273_(Screen.java:363)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.gui.LoadingErrorScreen.m_88315_(LoadingErrorScreen.java:83)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.mixinextras$bridge$m_88315_$120(Screen.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$gfg000$wrap_render_in_renderWithTooltip_FancyMenu(Screen.java:8260)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280264_(Screen.java:109)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.ForgeHooksClient.drawScreenInternal(ForgeHooksClient.java:428)
-	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.ForgeHooksClient.drawScreen(ForgeHooksClient.java:421)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.mixinextras$bridge$drawScreen$278(GameRenderer.java)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.wrapOperation$ggc000$wrapRenderScreenFancyMenu(GameRenderer.java:15619)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:965)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
-	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
-	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
+[03:12:20] [_stdout_] [INFO] at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?] {}
+[03:12:20] [_stdout_] [INFO] at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?] {}
+[03:12:20] [_stdout_] [INFO] at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?] {re:mixin,re:computing_frames}
+[03:12:20] [_stdout_] [INFO] at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?] {re:mixin,re:computing_frames}
+[03:12:20] [_stdout_] [INFO] at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?] {re:mixin}
+[03:12:20] [_stdout_] [INFO] -- System Details --
+[03:12:20] [_stdout_] [INFO] Details:
+[03:12:20] [_stdout_] [INFO] Minecraft Version: 1.20.1
+[03:12:20] [_stdout_] [INFO] Minecraft Version ID: 1.20.1
+[03:12:20] [_stdout_] [INFO] Operating System: Linux (amd64) version 6.17.0-1022-azure
+[03:12:20] [_stdout_] [INFO] Java Version: 17.0.20.1, Eclipse Adoptium
+[03:12:20] [_stdout_] [INFO] Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Eclipse Adoptium
+[03:12:20] [_stdout_] [INFO] Memory: 982174592 bytes (936 MiB) / 4013948928 bytes (3828 MiB) up to 8589934592 bytes (8192 MiB)
+[03:12:20] [_stdout_] [INFO] CPUs: 4
+[03:12:20] [_stdout_] [INFO] Processor Vendor: AuthenticAMD
+[03:12:20] [_stdout_] [INFO] Processor Name: AMD EPYC 7763 64-Core Processor
+[03:12:20] [_stdout_] [INFO] Identifier: AuthenticAMD Family 25 Model 1 Stepping 1
+[03:12:20] [_stdout_] [INFO] Microarchitecture: Zen 3
+[03:12:20] [_stdout_] [INFO] Frequency (GHz): -0.00
+[03:12:20] [_stdout_] [INFO] Number of physical packages: 1
+[03:12:20] [_stdout_] [INFO] Number of physical CPUs: 2
+[03:12:20] [_stdout_] [INFO] Number of logical CPUs: 4
+[03:12:20] [_stdout_] [INFO] Graphics card #0 name: hyperv_drmdrmfb
+[03:12:20] [_stdout_] [INFO] Graphics card #0 vendor: unknown
+[03:12:20] [_stdout_] [INFO] Graphics card #0 VRAM (MB): 0.00
+[03:12:20] [_stdout_] [INFO] Graphics card #0 deviceId: unknown
+[03:12:20] [_stdout_] [INFO] Graphics card #0 versionInfo: unknown
+[03:12:20] [_stdout_] [INFO] Virtual memory max (MB): 11066.84
+[03:12:20] [_stdout_] [INFO] Virtual memory used (MB): 7471.29
+[03:12:20] [_stdout_] [INFO] Swap memory total (MB): 3072.00
+[03:12:20] [_stdout_] [INFO] Swap memory used (MB): 0.00
+[03:12:20] [_stdout_] [INFO] JVM Flags: 2 total; -Xmx8G -Xms2G
+[03:12:20] [_stdout_] [INFO] Loaded Shaderpack: (off)
+[03:12:20] [_stdout_] [INFO] ModLauncher: 10.0.9+10.0.9+main.dcd20f30
+[03:12:20] [_stdout_] [INFO] ModLauncher launch target: forgeclient
+[03:12:20] [_stdout_] [INFO] ModLauncher naming: srg
+[03:12:20] [_stdout_] [INFO] ModLauncher services:
+[03:12:20] [_stdout_] [INFO] mixin-0.8.5.jar mixin PLUGINSERVICE
+[03:12:20] [_stdout_] [INFO] eventbus-6.2.33.jar eventbus PLUGINSERVICE
+[03:12:20] [_stdout_] [INFO] fmlloader-1.20.1-47.4.28.jar slf4jfixer PLUGINSERVICE
+[03:12:20] [_stdout_] [INFO] fmlloader-1.20.1-47.4.28.jar object_holder_definalize PLUGINSERVICE
+[03:12:20] [_stdout_] [INFO] fmlloader-1.20.1-47.4.28.jar runtime_enum_extender PLUGINSERVICE
+[03:12:20] [_stdout_] [INFO] fmlloader-1.20.1-47.4.28.jar capability_token_subclass PLUGINSERVICE
+[03:12:20] [_stdout_] [INFO] accesstransformers-8.0.4.jar accesstransformer PLUGINSERVICE
+[03:12:20] [_stdout_] [INFO] fmlloader-1.20.1-47.4.28.jar runtimedistcleaner PLUGINSERVICE
+[03:12:20] [_stdout_] [INFO] modlauncher-10.0.9.jar Preloading Tricks TRANSFORMATIONSERVICE
+[03:12:20] [_stdout_] [INFO] modlauncher-10.0.9.jar  TRANSFORMATIONSERVICE
+[03:12:20] [_stdout_] [INFO] modlauncher-10.0.9.jar mixin TRANSFORMATIONSERVICE
+[03:12:20] [_stdout_] [INFO] modlauncher-10.0.9.jar fml TRANSFORMATIONSERVICE
+[03:12:20] [_stdout_] [INFO] modlauncher-10.0.9.jar customskinloader-bootstrap TRANSFORMATIONSERVICE
+[03:12:20] [_stdout_] [INFO] modlauncher-10.0.9.jar lazyyyyy TRANSFORMATIONSERVICE
+[03:12:20] [_stdout_] [INFO] modlauncher-10.0.9.jar mixin-booster-org-sinytra-mixinbooster TRANSFORMATIONSERVICE
+[03:12:20] [_stdout_] [INFO] FML Language Providers:
+[03:12:20] [_stdout_] [INFO] minecraft@1.0
+[03:12:20] [_stdout_] [INFO] kotlinforforge@4.12.0
+[03:12:20] [_stdout_] [INFO] javafml@null
+[03:12:20] [_stdout_] [INFO] lowcodefml@null
+[03:12:20] [_stdout_] [INFO] Mod List:
+[03:12:20] [_stdout_] [INFO] smsn-forge-1.4.3-1.20.1.jar                       |Save My Shit Network          |smsn                          |1.4.3-1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ftb-essentials-forge-2001.2.4.jar                 |FTB Essentials                |ftbessentials                 |2001.2.4            |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Krypton Reno-forge-1.20.1-26.1.1-1.20.1.jar       |Krypton Reno                  |kreno                         |26.1.1-1.20.1       |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] bountiful_npc-forge-1.20.1-1.0.6.jar              |Bountiful Npc                 |bountiful_npc                 |1.0.6               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] player-animation-lib-forge-1.0.2-rc1+1.20.jar     |Player Animator               |playeranimator                |1.0.2-rc1+1.20      |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] globalshaderpackproperties-1.1.0-all.jar          |Global Shaderpack Properties  |globalshaderpackproperties    |1.1.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] CombatEvolution-2.3.1-Forge-1.20.1.jar            |Combat Evolution              |combat_evolution              |2.3.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] betterendcities-1.0.0-1.20.1.jar                  |Better End Cities Vanilla     |betterendcities               |1.0.0-1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] modernfix-forge-5.27.88+mc1.20.1.jar              |ModernFix                     |modernfix                     |5.27.88+mc1.20.1    |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] YungsApi-1.20-Forge-4.0.6.jar                     |YUNG's API                    |yungsapi                      |1.20-Forge-4.0.6    |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] VIX-1.20-1.3.6-all.jar                            |VIX                           |vix                           |1.20-1.3.6          |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Kambrik-6.1.1+1.20.1-forge.jar                    |Kambrik                       |kambrik                       |6.1.1+1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epicfight-skilltree-forge-20.2.9-1.20.1.jar       |Epic Fight: Skill Tree        |epicskills                    |20.2.9              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] multiplayer_boss_fight-forge1.20.1-1.0.3.jar      |Multiplayer Boss Attribute Mod|multiplayer_boss_fight        |1.0.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] balm-forge-1.20.1-7.3.44.jar                      |Balm                          |balm                          |7.3.44              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] JustEnoughResources-1.20.1-1.4.0.247.jar          |Just Enough Resources         |jeresources                   |1.4.0.247           |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] structure_layout_optimizer-forge-1.0.11.jar       |Structure Layout Optimizer    |structure_layout_optimizer    |1.0.11              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] YungsBetterNetherFortresses-1.20-Forge-2.0.6.jar  |YUNG's Better Nether Fortresse|betterfortresses              |1.20-Forge-2.0.6    |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] cloth-config-11.1.136-forge.jar                   |Cloth Config v10 API          |cloth_config                  |11.1.136            |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] sound-physics-remastered-forge-1.20.1-1.5.1.jar   |Sound Physics Remastered      |sound_physics_remastered      |1.20.1-1.5.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] oror_supreme_bosses-0.17.18.jar                   |OROR Reborn — 41 Supreme Entit|oror_supreme_bosses           |0.17.18             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] embeddium-0.3.31+mc1.20.1.jar                     |Embeddium                     |embeddium                     |0.3.31+mc1.20.1     |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] uniqueaccessories-2.0.1-forge-mc1.20.1.jar        |Unique Accessories            |uniqueaccessories             |2.0.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] structure_gel-1.20.1-2.16.2.jar                   |Structure Gel API             |structure_gel                 |2.16.2              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] killcam-1.0.4.jar                                 |KillCam                       |killcam                       |1.0.4               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] fantasy_armor-forge-1.2.4-1.20.1.jar              |Fantasy Armor                 |fantasy_armor                 |1.2.4-1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] fancytoasts-1.5.1-forge-1.20.1.jar                |FancyToasts                   |fancytoasts                   |1.5.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] jupiter-2.3.7-1.20.1-forge.jar                    |Jupiter                       |jupiter                       |2.3.7               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] resourcefulconfig-forge-1.20.1-2.1.3.jar          |Resourcefulconfig             |resourcefulconfig             |2.1.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] servercore-forge-1.5.2+1.20.1.jar                 |ServerCore                    |servercore                    |1.5.2+1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] spark-1.10.53-forge.jar                           |spark                         |spark                         |1.10.53             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] YouDied-1.20-3.0.0.17-forge.jar                   |You Died                      |you_died                      |3.0.0.17            |SIDED_SETU|Manifest: 15:a4:a3:0e:d2:f8:64:0c:a4:97:30:5f:48:ba:5f:69:f9:23:42:14:a8:5a:60:3a:b1:b1:29:1a:0a:37:3c:79
+[03:12:20] [_stdout_] [INFO] curios-forge-5.14.1+1.20.1.jar                    |Curios API                    |curios                        |5.14.1+1.20.1       |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] p1neros-dialogue-lib-2.3.0-mc1.20.1-forge.jar     |P1nero's Dialogue Lib         |p1nero_dl                     |2.3.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] oculus-mc1.20.1-1.8.0.jar                         |Oculus                        |oculus                        |1.8.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ApothicAttributes-1.20.1-1.3.7.jar                |Apothic Attributes            |attributeslib                 |1.3.7               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] transmog-mod.jar                                  |Mixin Booster                 |mixinbooster                  |0.1.3+1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] cumulus_menus-1.20.1-1.0.1-neoforge.jar           |Cumulus                       |cumulus_menus                 |1.20.1-1.0.1-neoforg|SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] indestructible-20.12.0.jar                        |Indestructible                |indestructible                |20.12.0             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] lang_amend-forge1.20.1-1.0.0-all.jar              |Language Amend                |lang_amend                    |1.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] conditional-mixin-forge-0.6.4.jar                 |conditional mixin             |conditional_mixin             |0.6.4               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] TRansition-1.0.26-1.20.1-forge-SNAPSHOT.jar       |TRansition                    |transition                    |1.0.26              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] YungsBetterEndIsland-1.20-Forge-2.0.6.jar         |YUNG's Better End Island      |betterendisland               |1.20-Forge-2.0.6    |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] oror_harness_1201-1.0.0.jar                       |OROR CI screenshot harness    |oror_harness                  |1.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] nitrogen_internals-1.20.1-1.0.12-neoforge.jar     |Nitrogen                      |nitrogen_internals            |1.20.1-1.0.12-neofor|SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] JadeAddons-1.20.1-Forge-5.5.1.jar                 |Jade Addons                   |jadeaddons                    |5.5.1+forge         |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epicfight_arachne-1.0.0.jar                       |EpicFight-Arachne             |epicfight_arachne             |1.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] PlayerRevive_FORGE_v2.0.31_mc1.20.1.jar           |PlayerRevive                  |playerrevive                  |2.0.31              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] EnchantingInfuser-v8.0.3-1.20.1-Forge.jar         |Enchanting Infuser            |enchantinginfuser             |8.0.3               |SIDED_SETU|Manifest: 9a:09:85:98:65:c4:8c:11:c5:49:f6:d6:33:23:39:df:8d:b4:ff:92:84:b8:bd:a5:83:9f:ac:7f:2a:d1:4b:6a
+[03:12:20] [_stdout_] [INFO] mezz_config-1.20.1-forge-0.6.8.jar                |MezzConfig                    |mezz_config                   |0.6.8               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] BEB-Forge-1.20.1-6.0.0.jar                        |Beautiful Enchanted Books     |beb                           |6.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] mowziesmobs-1.8.2.jar                             |Mowzie's Mobs                 |mowziesmobs                   |1.8.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] [1.20.1][forge47.1.0]mod_CutAllSMP_v2.5.2.jar     |CutAll SMP                    |cutallsmp                     |2.5.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] CustomSkinLoader-Common.jar                       |CustomSkinLoader              |customskinloader              |15.1                |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] jei-1.20.1-forge-15.71.0.224.jar                  |Just Enough Items             |jei                           |15.71.0.224         |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] lithostitched-forge-1.20.1-1.4.11.jar             |Lithostitched                 |lithostitched                 |1.4.11              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] irons_lib-1.20.1-2.2.0.jar                        |Iron's Lib                    |irons_lib                     |1.20.1-2.2.0        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] preloading_tricks                                 |preloading_tricks             |preloading_tricks             |1                   |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] AttributeFix-Forge-1.20.1-21.0.5.jar              |AttributeFix                  |attributefix                  |21.0.5              |SIDED_SETU|Manifest: eb:c4:b1:67:8b:f9:0c:db:dc:4f:01:b1:8e:61:64:39:4c:10:85:0b:a6:c4:c7:48:f0:fa:95:f2:cb:08:3a:e5
+[03:12:20] [_stdout_] [INFO] flerovium-forge-1.20.1-1.2.19-all.jar             |Flerovium                     |flerovium                     |1.2.19              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] fluid-tick-structure-processor-0.1.0.dirty-forge-1|FluidTickStructureProcessor   |fluid_tick_structure_processor|0.1.0.dirty         |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] falchionmoveset-20.14.0.jar                       |falchion moveset              |falchionmoveset               |20.14.0             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epic-fight-20.14.17-mc1.20.1-forge.jar            |Epic Fight                    |epicfight                     |20.14.17            |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] WeaponsOfMiracles-2.0.171-mc1.20.1-forge.jar      |Weapons of miracle            |wom                           |2.0.171             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] NaturesCompass-1.20.1-1.12.0-forge.jar            |Nature's Compass              |naturescompass                |1.20.1-1.12.0-forge |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] aaa_particles-forge-1.20.1-2.3.4.jar              |AAA Particles                 |aaa_particles                 |2.3.4               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] better_structure_block-forge1.20.1-2.1.0-all.jar  |Better Structure Block        |better_structure_block        |2.1.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] [1.20.1][forge47.1.0]mod_MineAllSMP_v2.6.6.jar    |MineAll SMP                   |mineallsmp                    |2.6.7               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] puzzlesaccessapi-forge-20.1.1.jar                 |Puzzles Access Api            |puzzlesaccessapi              |20.1.1              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] forge-1.20.1-47.4.28-universal.jar                |Forge                         |forge                         |47.4.28             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] DungeonsArise-1.20.x-2.1.58-release.jar           |When Dungeons Arise           |dungeons_arise                |2.1.58-1.20.x       |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] drippyloadingscreen_forge_3.1.5_MC_1.20.1.jar     |Drippy Loading Screen         |drippyloadingscreen           |3.1.5               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] tectonic-3.0.17-forge-1.20.1.jar                  |Tectonic                      |tectonic                      |3.0.17              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] client-1.20.1-20230612.114412-srg.jar             |Minecraft                     |minecraft                     |1.20.1              |SIDED_SETU|Manifest: a1:d4:5e:04:4f:d3:d6:e0:7b:37:97:cf:77:b0:de:ad:4a:47:ce:8c:96:49:5f:0a:cf:8c:ae:b2:6d:4b:8a:3f
+[03:12:20] [_stdout_] [INFO] better_create-1.0.0-forge-1.20.1.jar              |better create                 |better_create                 |1.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] smoothchunk-1.20.1-4.1.jar                        |Smoothchunk mod               |smoothchunk                   |1.20.1-4.1          |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] fast_tpa-forge1.20.1-1.3.0.jar                    |Fast TPA                      |fast_tpa                      |1.3.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] TerraBlender-forge-1.20.1-3.0.1.10.jar            |TerraBlender                  |terrablender                  |3.0.1.10            |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] fabric-api-base-0.4.31+ef105b4977.jar             |Fabric API Base               |fabric_api_base               |0.4.31+ef105b4977   |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] MouseTweaks-forge-mc1.20.1-2.25.1.jar             |Mouse Tweaks                  |mousetweaks                   |2.25.1              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] fdlib-1.0.9-1.20.1.jar                            |FDLib                         |fdlib                         |1.0.9               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Oh-The-Trees-Youll-Grow-forge-1.20.1-1.7.3.jar    |Oh The Trees You'll Grow      |ohthetreesyoullgrow           |1.7.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] halovecs-5.1.0-mc1.20.1.jar                       |Halovecs                      |halovecs                      |4.0.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] dodge_parry_reward-1.20.1forge-20.14.3.jar        |Dodge Parry Reward            |dodge_parry_reward            |20.14.3             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Corgilib-Forge-1.20.1-4.0.3.6.jar                 |CorgiLib                      |corgilib                      |4.0.3.6             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] kffmod-4.12.0.jar                                 |Kotlin For Forge              |kotlinforforge                |4.12.0              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] flywheel-forge-1.20.1-1.0.5.jar                   |Flywheel                      |flywheel                      |1.0.5               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Ponder-Forge-1.20.1-1.0.92.jar                    |Ponder                        |ponder                        |1.0.92              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] xaerominimap-forge-1.20.1-26.6.0.jar              |Xaero's Minimap               |xaerominimap                  |26.6.0              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] HungerStrike-1.20.1-8.0.0.jar                     |Hunger Strike                 |hungerstrike                  |8.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Zeta-1.0-31.jar                                   |Zeta                          |zeta                          |1.0-31              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] entityculling-forge-1.11.3-mc1.20.1.jar           |EntityCulling                 |entityculling                 |1.11.3              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ares_hud-2.1.0-forge-1.20.1.jar                   |Ares HUD                      |ares_hud                      |2.1.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Fancy-Trail-1.2.7-1.20.1-all.jar                  |Fancy Trail                   |fancy_trail                   |1.2.7               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] better_trident_model-forge1.20.1-1.2.0.jar        |BetterTridentModel            |better_trident_model          |1.2.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] extrasounds-1.5.6+1.20.1-forge.jar                |ExtraSounds Next              |extrasounds                   |1.5.6               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] tlc_forge-1.0.3-R-1.20.X.jar                      |The Lost Castle               |tlc                           |1.0.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] lootr-forge-1.20-0.7.35.94.jar                    |Lootr                         |lootr                         |0.7.35.94           |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ModernUI-Forge-1.20.1-3.12.0.1-universal.jar      |Modern UI                     |modernui                      |3.12.0.1            |SIDED_SETU|Manifest: 01:c4:52:25:b1:6e:5f:ac:fe:88:35:7e:cf:65:2f:69:1d:56:db:2b:93:f8:dd:7c:93:47:04:8c:e4:22:13:91
+[03:12:20] [_stdout_] [INFO] gnetum-2.5.1+1.20.1-forge.jar                     |Gnetum                        |gnetum                        |2.5.1+1.20.1-forge  |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] PuzzlesLib-v8.1.36-1.20.1-Forge.jar               |Puzzles Lib                   |puzzleslib                    |8.1.36              |SIDED_SETU|Manifest: 9a:09:85:98:65:c4:8c:11:c5:49:f6:d6:33:23:39:df:8d:b4:ff:92:84:b8:bd:a5:83:9f:ac:7f:2a:d1:4b:6a
+[03:12:20] [_stdout_] [INFO] Ash Of Sin-Lib-1.20.1-1.0.2.jar                   |Ash Of Sin: Lib               |ash_of_sin_lib                |1.0.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Ash Of Sin-Custom Anti Seat Entity-1.20.1-1.1.0.ja|Ash Of Sin: Custom Anti Seat E|ash_of_sin_custom_anti_seat_en|1.1.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] cosmeticarmorreworked-1.20.1-v1a.jar              |CosmeticArmorReworked         |cosmeticarmorreworked         |1.20.1-v1a          |SIDED_SETU|Manifest: 5e:ed:25:99:e4:44:14:c0:dd:89:c1:a9:4c:10:b5:0d:e4:b1:52:50:45:82:13:d8:d0:32:89:67:56:57:01:53
+[03:12:20] [_stdout_] [INFO] lazyyyyy-lexforge-mod-0.14.19.jar                 |Lazyyyyy                      |lazyyyyy                      |0.14.19             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epicfight-extra-1.2.1-mc1.20.1-forge-all.jar      |Epic Fight Extra              |epicfightx                    |1.2.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] 0Pack2Reload-Forge-1.20.1-1.0.1.jar               |0Pack2Reload                  |opack2reload                  |1.0.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] defaultoptions-forge-1.20.1-18.0.5.jar            |Default Options               |defaultoptions                |18.0.5              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] cristellib-1.1.6-forge.jar                        |Cristel Lib                   |cristellib                    |1.1.6               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] kuma-api-forge-20.1.12+1.20.1.jar                 |KumaAPI                       |kuma_api                      |20.1.12             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epic-fight-invincible-lib-20.14.8.2-mc1.20.1-forge|Epic Fight - Invincible       |invincible                    |20.14.8.2           |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] sword_soaring-20.14.2.8-mc1.20.1-forge.jar        |Epic Fight - Sword Soaring    |sword_soaring                 |20.14.2.8           |ERROR     |Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] geckolib-forge-1.20.1-4.8.4.jar                   |GeckoLib 4                    |geckolib                      |4.8.4               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epicfight_leonidas-1.0.1.jar                      |EpicFight-Leonidas            |epicfight_leonidas            |1.0.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ATi Structures Vanilla V1.4.7.jar                 |ATi Structures - Vanilla Editi|mr_ati_structuresvanillaeditio|1.4.5               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] aether-1.20.1-1.5.2-neoforge.jar                  |The Aether                    |aether                        |1.20.1-1.5.2-neoforg|SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] lost_aether_content-1.20.1-1.2.3.jar              |Aether: Lost Content          |lost_aether_content           |1.2.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] incontrol-1.20-9.5.0.jar                          |InControl                     |incontrol                     |1.20-9.5.0          |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] YungsBetterOceanMonuments-1.20-Forge-3.0.4.jar    |YUNG's Better Ocean Monuments |betteroceanmonuments          |1.20-Forge-3.0.4    |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] immersive_aircraft-1.5.0+1.20.1-forge.jar         |Immersive Aircraft            |immersive_aircraft            |1.5.0+1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] mimic-1.0.7.jar                                   |The Mimic                     |mimic                         |1.0.7               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] xaeroworldmap-forge-1.20.1-1.47.0.jar             |Xaero's World Map             |xaeroworldmap                 |1.47.0              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Prism-1.20.1-forge-1.0.5.jar                      |Prism                         |prism                         |1.0.5               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Placebo-1.20.1-8.6.3.jar                          |Placebo                       |placebo                       |8.6.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] citadel-2.6.3-1.20.1.jar                          |Citadel                       |citadel                       |2.6.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] alexsmobs-1.22.9.jar                              |Alex's Mobs                   |alexsmobs                     |1.22.9              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] iceandfire-2.1.13-1.20.1-beta-5.jar               |Ice and Fire                  |iceandfire                    |2.1.13-1.20.1       |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] domesticationinnovation-1.7.1-1.20.1.jar          |Domestication Innovation      |domesticationinnovation       |1.7.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Tab-Stats-1.20-1.0.5.jar                          |Tab Stats                     |tabstats                      |1.0.5               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] noworldgenwarning-1.0.1.jar                       |NoWorldgenWarning             |noworldgenwarning             |1.0.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Bookshelf-Forge-1.20.1-20.2.15.jar                |Bookshelf                     |bookshelf                     |20.2.15             |SIDED_SETU|Manifest: eb:c4:b1:67:8b:f9:0c:db:dc:4f:01:b1:8e:61:64:39:4c:10:85:0b:a6:c4:c7:48:f0:fa:95:f2:cb:08:3a:e5
+[03:12:20] [_stdout_] [INFO] biomespy-1.3.3-all.jar                            |BiomeSpy                      |biomespy                      |1.3.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] superbwarfare-0.8.9.2-mc1.20.1-65d985a64-all.jar  |Superb Warfare                |superbwarfare                 |0.8.9.2             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] bookofdragons-1.31-1.20.1.jar                     |bookofdragons                 |bookofdragons                 |1.31-1.20.1         |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] quick-pack-forge-1.5.1+1.20.1-all-srg.jar         |quick-pack                    |quick_pack                    |1.5.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] melody_forge_1.0.3_MC_1.20.1-1.20.4.jar           |Melody                        |melody                        |1.0.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] dummmmmmy-1.20-2.0.12-forge.jar                   |MmmMmmMmmMmm                  |dummmmmmy                     |1.20-2.0.11         |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] sodiumdynamiclights-forge-1.0.10-1.20.1.jar       |Sodium Dynamic Lights         |sodiumdynamiclights           |1.0.9               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] konkrete_forge_1.8.0_MC_1.20-1.20.1.jar           |Konkrete                      |konkrete                      |1.8.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] betterlockon-2.0.14-forge.jar                     |Better Lock On                |betterlockon                  |2.0.14-forge        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] zmedievalmusic-1.20.1-2.2.jar                     |medievalmusic mod             |medievalmusic                 |1.20.1-2.2          |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] lionfishapi-3.0.jar                               |LionfishAPI                   |lionfishapi                   |3.0                 |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Dodos Mobs 1.0.1 beta.jar                         |dodosmobs                     |dodosmobs                     |2.64                |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Bountiful-6.0.4+1.20.1-forge.jar                  |Bountiful                     |bountiful                     |6.0.4+1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] L_Enders_Cataclysm-3.31.jar                       |cataclysm                     |cataclysm                     |3.31                |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] cataclysm_dimension-forge1.20.1-1.6.2.jar         |Cataclysm Dimension           |cataclysm_dimension           |1.6.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Patchouli-1.20.1-85-FORGE.jar                     |Patchouli                     |patchouli                     |1.20.1-85-FORGE     |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] simplebedrockmodel-2.5.1-forge-mc1.20.1.jar       |SimpleBedrockModel            |simplebedrockmodel            |2.5.1-forge-mc1.20.1|SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] sbw-optimized-1.0.0.jar                           |SBW Optimized                 |sbwoptimized                  |1.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] CerbonsAPI-Forge-1.20.1-1.1.0.jar                 |Cerbons API                   |cerbons_api                   |1.1.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epic_ponder-1.0.0.jar                             |EpicFight-Ponder              |epic_fight_ponder             |1.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] architectury-9.2.14-forge.jar                     |Architectury                  |architectury                  |9.2.14              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ftb-library-forge-2001.2.13.jar                   |FTB Library                   |ftblibrary                    |2001.2.13           |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] aaa_particles_world-forge-1.20.1-2.0.0.jar        |AAA Particles: World          |aaa_particles_world           |2.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ftb-teams-forge-2001.3.2.jar                      |FTB Teams                     |ftbteams                      |2001.3.2            |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ftb-quests-forge-2001.4.22.jar                    |FTB Quests                    |ftbquests                     |2001.4.22           |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ftb-xmod-compat-forge-2.1.3.jar                   |FTB XMod Compat               |ftbxmodcompat                 |2.1.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] chatplus-forge-2.8.1.jar                          |ChatPlus                      |chatplus                      |2.8.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] cupboard-1.20.1-4.2.jar                           |Cupboard utilities            |cupboard                      |1.20.1-4.2          |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Clear-Water-2.1.jar                               |Clear Water                   |clearwater                    |2.1                 |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] modder_name_lib-1.20.1-forge-2026.08.31.jar       |ModderNameLib                 |modder_name_lib               |2026.08.31          |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] rebind_narrator-1.20.1-forge-2026.08.31.jar       |Rebind Narrator               |rebind_narrator               |2026.08.31          |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Towns-and-Towers-1.12-Fabric+Forge.jar            |Towns and Towers              |t_and_t                       |0.0NONE             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] FastEvent-1.20.1-1.1.1.jar                        |FastEvent                     |fast_event                    |1.1.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] entityrespawner-1.1.0.jar                         |Entity Respawner              |entityrespawner               |1.1.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] limitedchunks-1.20.1-4.1.jar                      |Limited Chunkloading          |limitedchunks                 |1.8                 |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Oh-The-Biomes-Weve-Gone-Forge-1.8.2.jar           |Oh The Biomes We've Gone      |biomeswevegone                |1.8.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] summoningrituals-forge-1.20.1-2.0.9.jar           |Summoning Rituals             |summoningrituals              |1.20.1-2.0.9        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] xaerolib-forge-1.20.1-1.7.3.jar                   |XaeroLib                      |xaerolib                      |1.7.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] tacz-1.20.1-1.1.8-hotfix2.jar                     |Timeless & Classics Guns: Zero|tacz                          |1.1.8-hotfix2       |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] tactical_breaching-tacz-sbw-forge-1.20.1-1.0.7.jar|TaCZ Tactical Breaching       |tacz_tactical_breaching       |1.0.7               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] TRender-1.0.17-1.20.1-forge-SNAPSHOT.jar          |TRender                       |trender                       |1.0.17              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] InvMove-0.9.3+1.20.1-Forge.jar                    |InvMove                       |invmove                       |0.9.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] create-1.20.1-6.0.8.jar                           |Create                        |create                        |6.0.8               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] beyonddimensions-1.20.1-forge-0.7.30.jar          |Beyond Dimensions             |beyonddimensions              |0.7.30              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] chloride-FORGE-mc1.20.1-v1.8.1.jar                |Chloride                      |chloride                      |1.8.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] waystones-forge-1.20.1-14.1.21.jar                |Waystones                     |waystones                     |14.1.21             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] TaxFreeLevels-1.4.25-forge-1.20.1.jar             |Tax Free Levels               |taxfreelevels                 |1.4.25              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] artifacts-forge-9.5.19.jar                        |Artifacts                     |artifacts                     |9.5.19              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] configured-forge-1.20.1-2.2.3.jar                 |Configured                    |configured                    |2.2.3               |SIDED_SETU|Manifest: 0d:78:5f:44:c0:47:0c:8c:e2:63:a3:04:43:d4:12:7d:b0:7c:35:37:dc:40:b1:c1:98:ec:51:eb:3b:3c:45:99
+[03:12:20] [_stdout_] [INFO] cinematiccataclysm-1.0.1-1.20.1.jar               |Cinematic Cataclysm           |cinematiccataclysm            |1.0.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] p1nero_bow-forge1.20.1-20.14.1.6.jar              |P1nero's Epic Fight Bow       |p1nero_bow                    |20.14.1.6           |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ItemBorders-1.20.1-forge-1.2.2.jar                |Item Borders                  |itemborders                   |1.2.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epic-knights-1.20.1-forge-10.15.jar               |Epic-Knights: Shields, Armor a|magistuarmory                 |10.15               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] playerrevive_compat-1.0.4-daf51f2.jar             |PlayerRevive tacz/sbw compitab|playerrevive_compat           |1.0.4               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] explorerscompass-edited-1.20.1-1.4.0-forge.jar    |Explorer's Compass            |explorerscompass              |1.20.1-1.3.3-forge  |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] spiral_tower_village-0.0.4.jar                    |Spiral Tower Village          |spiral_tower_village          |0.0.4               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Ash Of Sin-No More Invalid Statistic-1.20.1-1.1.0.|Ash Of Sin: No More Invalid St|ash_of_sin_no_more_invalid_sta|1.1.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] BOMD-Forge-1.20.1-1.1.2.jar                       |Bosses of Mass Destruction    |bosses_of_mass_destruction    |1.1.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] azurelib-neo-1.20.1-3.1.24.jar                    |AzureLib                      |azurelib                      |3.1.24              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] uranus-2.2.6-bugfix.2-1.20.1-forge.jar            |Uranus                        |uranus                        |2.2.6-bugfix.2      |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] TravelersTitles-1.20-Forge-4.0.2.jar              |Traveler's Titles             |travelerstitles               |1.20-Forge-4.0.2    |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] tudigong-forge1.20.1-1.4.1.jar                    |Tu Di Gong                    |tudigong                      |1.4.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Nightfall Enhance-1.1.6-all.jar                   |Nightfall Enhance             |efn_enhance                   |1.1.6               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] alexscaves-2.0.2.jar                              |Alex's Caves                  |alexscaves                    |2.0.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] EnchantmentDescriptions-Forge-1.20.1-17.1.21.jar  |EnchantmentDescriptions       |enchdesc                      |17.1.21             |SIDED_SETU|Manifest: eb:c4:b1:67:8b:f9:0c:db:dc:4f:01:b1:8e:61:64:39:4c:10:85:0b:a6:c4:c7:48:f0:fa:95:f2:cb:08:3a:e5
+[03:12:20] [_stdout_] [INFO] radiantgear-forge-2.2.0+1.20.1.jar                |Radiant Gear                  |radiantgear                   |2.2.0+1.20.1        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] moonlight-1.20-2.16.37-forge.jar                  |Moonlight Library             |moonlight                     |1.20-2.16.37        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] iss_scroll_description-1.0.0.jar                  |ISS-Scroll-Description        |iss_scroll_description        |1.0.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] mixinsquared-forge-0.2.0-beta.6.jar               |MixinSquared                  |mixinsquared                  |0.2.0-beta.6        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] visual_keybinder-1.20.1 - 0.1.12.jar              |Raw's Visual Keybinder        |visual_keybinder              |1.20.1 - 0.1.12     |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] pbf1-mc1.20.1-1.2.0.jar                           |P1nero's Battle Field1        |pbf1                          |1.2.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Jade-1.20.1-Forge-11.13.3.jar                     |Jade                          |jade                          |11.13.3+forge       |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] alex-mobs-tweaks-omni-1.3.6.jar                   |Alex Mobs: Tweaks             |amt                           |1.3.6               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] CreativeCore_FORGE_v2.12.40_mc1.20.1.jar          |CreativeCore                  |creativecore                  |2.12.40             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Ribbits-1.20.1-Forge-3.0.5.jar                    |Ribbits                       |ribbits                       |1.20.1-Forge-3.0.5  |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Iceberg-1.20.1-forge-1.1.25.jar                   |Iceberg                       |iceberg                       |1.1.25              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Quark-4.0-462.jar                                 |Quark                         |quark                         |4.0-462             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] supplementaries-1.20-3.1.44-forge.jar             |Supplementaries               |supplementaries               |1.20-3.1.44         |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] LegendaryTooltips-1.20.1-forge-1.4.5.jar          |Legendary Tooltips            |legendarytooltips             |1.4.5               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] efs_iss-1.0.3.jar                                 |Epic Fight Skill - Iron's Spel|efs_iss                       |1.0.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] epic_fight_avalon-20.12.6.5.jar                   |Epic fight - Avalon           |epic_fight_avalon             |20.12.6.5           |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] super_golem-20.12.2.jar                           |Epic fight - Super golem      |super_golem                   |20.12.2             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] wraithon-forge1.20.1-1.1.11.jar                   |wraithon                      |wraithon                      |1.1.11              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] super_warden-20.13.0.jar                          |Epic fight - Super Warden     |super_warden                  |20.13.0             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ycurrenci-2.1.0-forge-1.20.1.jar                  |Ycurrenci                     |ycurrenci                     |2.1.0               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] irons_spellbooks-1.20.1-3.16.3.jar                |Iron's Spells 'n Spellbooks   |irons_spellbooks              |1.20.1-3.16.3       |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] iss_ponder-forge1.20.1-1.0.3-all.jar              |Irons Spell Scroll Ponder     |iss_ponder                    |1.0.3               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] suppressionmod-1.1.1.jar                          |Suppression Mod               |suppressionmod                |1.1.1               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] jecharacters-1.20.1-forge-4.6.12.jar              |Just Enough Characters        |jecharacters                  |4.6.12              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] armourersworkshop-forge-1.20.1-3.4.0-beta.3.jar   |Armourer's Workshop           |armourers_workshop            |3.4.0-beta.3        |SIDED_SETU|Manifest: 58:d0:3b:4b:a0:4b:43:fb:59:0f:27:f5:39:d5:65:de:9a:24:ee:2e:15:48:b1:4f:78:1a:e1:ef:cd:a4:d9:0a
+[03:12:20] [_stdout_] [INFO] fancymenu_forge_3.9.14_MC_1.20.1.jar              |FancyMenu                     |fancymenu                     |3.9.14              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] coroutil-forge-1.20.1-1.3.7.jar                   |CoroUtil                      |coroutil                      |1.20.1-1.3.7        |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ferritecore-6.0.1-forge.jar                       |Ferrite Core                  |ferritecore                   |6.0.1               |SIDED_SETU|Manifest: 41:ce:50:66:d1:a0:05:ce:a1:0e:02:85:9b:46:64:e0:bf:2e:cf:60:30:9a:fe:0c:27:e0:63:66:9a:84:ce:8a
+[03:12:20] [_stdout_] [INFO] EpicFight Nightfall-3.4.2-all.jar                 |EpicFight Nightfall           |efn                           |3.4.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] p1nero_ec-20.14.0.9.jar                           |P1nero's Epic Cataclysm       |p1nero_ec                     |20.14.0.9           |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] tcr_bosses-1.1.12-all.jar                         |TCR Bosses                    |tcr_bosses                    |1.1.12              |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ba_bt-1.20.1-3.0.0-beta3.2.1.jar                  |Brass-Amber BattleTowers      |ba_bt                         |1.20.1-3.0.0-beta3.2|SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] tcrcore-2.8.7.jar                                 |TCR Core                      |tcrcore                       |2.8.7               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] yet_another_config_lib_v3-3.6.6+1.20.1-forge.jar  |YetAnotherConfigLib           |yet_another_config_lib_v3     |3.6.6+1.20.1-forge  |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Ash Of Sin-No More Too Many Structures-1.20.1-1.1.|Ash Of Sin: No More Too Many S|ash_of_sin_no_more_too_many_st|1.1.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] certain_questing_additions-forge-1.2.0.3+mc1.20.1.|Certain Questing Additions    |certain_questing_additions    |1.2.0.3             |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] packetfixer-3.3.2-1.18-1.20.4-merged.jar          |PacketFixer                   |packetfixer                   |3.3.2               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] expandability-9.0.4.jar                           |ExpandAbility                 |expandability                 |9.0.4               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] ModelLoader-1.0.4.jar                             |Model Loader0                 |modelloader                   |1.0.4               |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] trek-B0.6.2 (1).jar                               |Trek                          |mr_trek                       |1-B0.6.2            |SIDED_SETU|Manifest: NOSIGNATURE
+[03:12:20] [_stdout_] [INFO] Crash Report UUID: 8d534df9-7f6e-46ce-8ae2-c15f7e850821
+[03:12:20] [_stdout_] [INFO] FML: 47.4
+[03:12:20] [_stdout_] [INFO] Forge: net.minecraftforge:47.4.28
+[03:12:20] [_stdout_] [INFO] Flywheel Backend: flywheel:off
+[03:12:20] [Render thread] [INFO] [FANCYMENU] ScreenCustomizationLayer registered: net.minecraftforge.client.gui.LoadingErrorScreen
+[03:12:20] [Render thread] [WARN] Game took 107.834 seconds to start

@@ -1,0 +1,52 @@
+
+[protection]
+	#Whether mobs may break or modify blocks in the battle dimension.
+	allowMobGriefing = false
+	#Whether creative players may modify blocks and interact in the battle dimension.
+	allowCreativeModificationAndInteraction = true
+
+[bedrock]
+	#Generate a bedrock platform after the bundled dimension chunks are copied.
+	enabled = true
+	#Range: -64 ~ 320
+	minY = -5
+	#Range: -64 ~ 320
+	maxY = -1
+	#Horizontal radius around 0, 0, measured in blocks.
+	#Range: 0 ~ 4096
+	radius = 60
+
+[entityBoundary]
+	enabled = true
+	#Living entities below this Y coordinate are reset.
+	#Range: -2048.0 ~ 2048.0
+	minimumY = 2.9
+	#Maximum horizontal distance from 0, 0 before a living entity is reset.
+	#Range: 0.0 ~ 3.0E7
+	maximumHorizontalDistance = 41.0
+	#Range: -3.0E7 ~ 3.0E7
+	targetX = 0.0
+	#Range: -2048.0 ~ 2048.0
+	targetY = 0.0
+	#Range: -3.0E7 ~ 3.0E7
+	targetZ = 0.0
+
+[dimensionBackup]
+	#Back up and restore a configured block area instead of replacing live region files.
+	enabled = true
+	#Range: -30000000 ~ 30000000
+	fromX = -60
+	#Range: -2048 ~ 2048
+	fromY = -5
+	#Range: -30000000 ~ 30000000
+	fromZ = -60
+	#Range: -30000000 ~ 30000000
+	toX = 60
+	#Range: -2048 ~ 2048
+	toY = 80
+	#Range: -30000000 ~ 30000000
+	toZ = 60
+	#Number of 16x32x16 backup pieces processed per server tick.
+	#Range: 1 ~ 64
+	piecesPerTick = 2
+

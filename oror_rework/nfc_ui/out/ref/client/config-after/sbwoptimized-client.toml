@@ -1,0 +1,11 @@
+
+[rendering]
+	#Render Superb Warfare vehicles with VBOs (false = original Superb Warfare rendering)
+	vehicleVbo = true
+	#Parts with this many vertices or fewer (e.g. track links) are drawn the original way.
+	#For tiny parts, batching on the CPU is cheaper than an extra draw call.
+	#Range: 0 ~ 100000
+	smallChunkVertexThreshold = 128
+	#Without a shader pack, correct the face shading of VBO-drawn parts to match vanilla
+	fixVanillaLighting = true
+

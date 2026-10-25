@@ -1,0 +1,287 @@
+{
+  "formatVersion": 1,
+  "id": "builtin-thirst_additional",
+  "name": "THIRST_ADDITIONAL",
+  "baseStyle": "THIRST_ADDITIONAL",
+  "layout": {
+    "hotbarBounds": {
+      "relativeX": 0.3515625,
+      "relativeY": 0.93413174,
+      "baseScale": 0.7815815
+    },
+    "offhandBounds": {
+      "relativeX": 0.303125,
+      "relativeY": 0.93333334,
+      "baseScale": 0.7824444
+    },
+    "centerBounds": {
+      "relativeX": 0.3484375,
+      "relativeY": 0.8592814,
+      "baseScale": 0.6702424
+    },
+    "bossBarBounds": {
+      "relativeX": 0.31041667,
+      "relativeY": 0.011952192,
+      "baseScale": 1.0
+    },
+    "xpBounds": {
+      "relativeX": 0.459375,
+      "relativeY": 0.8592814,
+      "baseScale": 0.71096426
+    },
+    "statusValueBounds": {
+      "relativeX": 0.6796875,
+      "relativeY": 0.9520958,
+      "baseScale": 0.774776
+    },
+    "flaskBounds": {
+      "relativeX": 0.6578125,
+      "relativeY": 0.88323355,
+      "baseScale": 1.1501495
+    },
+    "temperatureBounds": {
+      "relativeX": 0.487655,
+      "relativeY": 0.80829597,
+      "baseScale": 0.71096426
+    },
+    "bodyDamageBounds": {
+      "relativeX": 0.65456676,
+      "relativeY": 0.90809625,
+      "baseScale": 0.6702424
+    },
+    "wetnessBounds": {
+      "relativeX": 0.49209854,
+      "relativeY": 0.78563577,
+      "baseScale": 0.71096426
+    },
+    "finalityHotbarLayout": "ONE_BY_NINE",
+    "centerHudLayoutMode": "MERGED",
+    "separateCenterHudInitialized": false,
+    "separateAuxiliaryHudInitialized": false,
+    "centerSlotBounds": [
+      {
+        "relativeX": 0.34791666,
+        "relativeY": 0.82317376,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 0.0,
+          "offsetY": -14.0
+        }
+      },
+      {
+        "relativeX": 0.5112883,
+        "relativeY": 0.82317376,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 117.0,
+          "offsetY": -14.0
+        }
+      },
+      {
+        "relativeX": 0.34791666,
+        "relativeY": 0.8605578,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 0.0,
+          "offsetY": 0.0
+        }
+      },
+      {
+        "relativeX": 0.5112883,
+        "relativeY": 0.8605578,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 117.0,
+          "offsetY": 0.0
+        }
+      },
+      {
+        "relativeX": 0.34791666,
+        "relativeY": 0.8979418,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 0.0,
+          "offsetY": 14.0
+        }
+      },
+      {
+        "relativeX": 0.5112883,
+        "relativeY": 0.8979418,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 117.0,
+          "offsetY": 14.0
+        }
+      },
+      {
+        "relativeX": 0.34791666,
+        "relativeY": 0.7857897,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 0.0,
+          "offsetY": -28.0
+        }
+      },
+      {
+        "relativeX": 0.5112883,
+        "relativeY": 0.7857897,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 117.0,
+          "offsetY": -28.0
+        }
+      }
+    ],
+    "dynamicBarBounds": [
+      {
+        "relativeX": 0.34791666,
+        "relativeY": 0.7857897,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 0.0,
+          "offsetY": -28.0
+        }
+      },
+      {
+        "relativeX": 0.5112883,
+        "relativeY": 0.7857897,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 117.0,
+          "offsetY": -28.0
+        }
+      },
+      {
+        "relativeX": 0.5112883,
+        "relativeY": 0.7484057,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 117.0,
+          "offsetY": -42.0
+        }
+      }
+    ],
+    "auxiliaryGroupBounds": [
+      {
+        "relativeX": 0.34791666,
+        "relativeY": 0.7857897,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 0.0,
+          "offsetY": -28.0
+        }
+      },
+      {
+        "relativeX": 0.5112883,
+        "relativeY": 0.7484057,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 117.0,
+          "offsetY": -42.0
+        }
+      },
+      {
+        "relativeX": 0.5112883,
+        "relativeY": 0.7857897,
+        "baseScale": 0.6702424,
+        "automaticAnchor": {
+          "originX": 0.3484375,
+          "originY": 0.8592814,
+          "offsetX": 117.0,
+          "offsetY": -28.0
+        }
+      }
+    ],
+    "mainHandOffsets": {
+      "x": 0,
+      "y": 1,
+      "xSelected": 0,
+      "ySelected": 0
+    },
+    "enHotbar": true,
+    "enCenter": true,
+    "enXp": true,
+    "enOffhand": true,
+    "enStatusVal": false,
+    "enFlask": true,
+    "staminaSource": "EPIC_FIGHT",
+    "manaSource": "IRONS_SPELLBOOKS",
+    "thirstBarMode": "MERGED",
+    "enHealthBar": true,
+    "enFoodBar": true,
+    "enStaminaBar": true,
+    "enTimeBar": false,
+    "enArmorBar": true,
+    "enStandaloneArmorBar": true,
+    "barSlots": [
+      "ARMOR",
+      "THIRST",
+      "HEALTH",
+      "FOOD",
+      "STAMINA",
+      "MANA",
+      "SYMBIOTE_STAMINA",
+      "SYMBIOTE_HUNGER"
+    ],
+    "paddingHoriz": 17,
+    "paddingVert": 2,
+    "paddingHorizGuiOffset": 0
+  },
+  "layers": {},
+  "display": {
+    "ares_hud:flask": {
+      "mode": "SHOW",
+      "animation": "FADE",
+      "holdTicks": 120,
+      "animationTicks": 10,
+      "distance": 40,
+      "direction": "DOWN",
+      "threshold": 0.3333333333333333,
+      "lowThresholds": {},
+      "changeThresholds": {},
+      "autoHide": true,
+      "followCenterHud": false,
+      "conditions": [
+        {
+          "source": "",
+          "condition": "COMBAT"
+        }
+      ],
+      "links": [],
+      "separateAutomaticLinks": true,
+      "automaticLinks": []
+    }
+  },
+  "dynamicDefaults175": false,
+  "displayScope": "SAME_ROW",
+  "hotbarDefaultsVersion": 0,
+  "displayMigrationVersion": 0,
+  "flaskDefaultsVersion": 2,
+  "overlayMessageDefaultsVersion": 1
+}
