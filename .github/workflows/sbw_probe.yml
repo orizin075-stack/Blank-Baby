@@ -28,79 +28,65 @@ jobs:
             superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar
           curl -sSfL -o $RUNNER_TEMP/vf.jar https://repo1.maven.org/maven2/org/vineflower/vineflower/1.10.1/vineflower-1.10.1.jar
           mkdir -p $RUNNER_TEMP/x && cd $RUNNER_TEMP/x && unzip -q $RUNNER_TEMP/libs/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar
-      - name: Names, gun data and classes
+      - name: Renderer builder, gun resources, the Taser's renderer and model
         run: |
           cd $RUNNER_TEMP/x
-          python3 - <<'PY'
-          import json, os, re
-          for lang in ('en_us', 'ja_jp', 'zh_cn'):
-              p = f'assets/superbwarfare/lang/{lang}.json'
-              if not os.path.exists(p): continue
-              t = json.load(open(p, encoding='utf-8-sig'))
-              hits = {k: v for k, v in t.items() if re.search(r'print|rail|laser|blue|charge|energy|blueprint', k + ' ' + v, re.I)}
-              print('==', p, len(t), 'matching:', len(hits))
-              for k, v in sorted(hits.items())[:120]: print(' ', k, '=', v)
-          names = json.load(open('assets/superbwarfare/lang/en_us.json', encoding='utf-8-sig'))
-          print('== items', sorted(k[len('item.superbwarfare.'):] + '=' + v for k, v in names.items() if k.startswith('item.superbwarfare.') and k.count('.') == 2))
-          for root in ('data/superbwarfare',):
-              for d, _, files in sorted(os.walk(root)):
-                  if files: print('== dir', d, len(files), sorted(files)[:12])
-          PY
-          find com -path '*gun*' -name '*.class' | sed 's/\$.*//' | sort -u | head -150
-      - name: Client gun resources, renderer base classes, capabilities, shooting hooks
+          mkdir -p $RUNNER_TEMP/src
+          dec() { rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$1" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import'; }
+          for pat in 'GunRendererBuilder*.class' 'resource/gun/GunAnimation.class' 'resource/gun/ModelResource.class' 'CustomRendererItem.class' \
+                     'renderer/gun/TaserItemRenderer.class' 'model/item/TaserItemModel.class' 'data/gun/ProjectileInfo.class' 'init/ModRarities.class'; do
+            for c in $(find com -path "*$pat" | head -4); do echo "=================== $c"; dec "$c" | head -300; done
+          done
+      - name: GunItem shooting, GunData canShoot and charge
         run: |
           cd $RUNNER_TEMP/x
-          for f in assets/superbwarfare/sbw/guns/sentinel.json assets/superbwarfare/sbw/guns/secondary_cataclysm.json assets/superbwarfare/models/item/sentinel.json \
-                   assets/superbwarfare/models/item/sentinel_icon.json assets/superbwarfare/models/item/sentinel_base.json assets/superbwarfare/models/displaysettings/sentinel.item.json; do
-            echo "=== $f"; cat "$f" | head -80; echo; done
-          ls assets/superbwarfare/geo | head -80
-          ls assets/superbwarfare/textures/item | head -60
-          ls assets/superbwarfare/textures/gun_icon | head -10
+          mkdir -p $RUNNER_TEMP/src
+          dec() { rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$1" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import'; }
+          echo "=================== GunItem (from getCustomHeadshot on)"
+          dec com/atsuishio/superbwarfare/item/gun/GunItem.class | awk '/fun getCustomHeadshot/{on=1} on' | head -900
+          echo "=================== GunData (selected functions)"
+          dec com/atsuishio/superbwarfare/data/gun/GunData.class | awk '/fun (canShoot|charging|tick|hasEnoughAmmoToShoot|shouldStartReloading|currentAvailableShots|reloadAmmo)\(/{on=1; n=0} on{print; if (++n > 70) on=0}' | head -500
+          echo "=== GunProp fields"
+          javap -cp . -p com.atsuishio.superbwarfare.data.gun.GunProp | grep 'static final' | sed 's/.*Prop<[^ ]* //' | tr '\n' ' ' | head -c 6000; echo
+          echo "=== who reads SHOOT_DELAY / charge"
+          for c in $(grep -rl --include=*.class 'SHOOT_DELAY\|ShootDelay' com | head -6); do
+            echo "--------- $c"; dec "$c" | grep -n -B6 -A16 'SHOOT_DELAY\|shootDelay\|charge\.' | head -120
+          done
+      - name: Arms and flare bones, the Taser's assets, tags, particles and damage
+        run: |
+          cd $RUNNER_TEMP/x
+          mkdir -p $RUNNER_TEMP/src
+          dec() { rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$1" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import'; }
+          c=$(find com -path '*AnimationHelper.class' | head -1); echo "=================== $c"
+          dec "$c" | awk '/(renderArms|handleShootFlare|hideAllAttachments)\(/{on=1; n=0} on{print; if (++n > 90) on=0}' | head -400
+          for f in assets/superbwarfare/sbw/guns/taser.json assets/superbwarfare/models/item/taser.json assets/superbwarfare/models/item/taser_base.json \
+                   assets/superbwarfare/models/displaysettings/taser.item.json data/superbwarfare/tags/item/gun.json data/superbwarfare/tags/item/animated/pistol.json \
+                   data/superbwarfare/tags/item/animated/sniper.json; do echo "=== $f"; cat "$f" 2>/dev/null | head -90; echo; done
           python3 - <<'PY'
           import json
-          t = json.load(open('assets/superbwarfare/lang/en_us.json', encoding='utf-8-sig'))
-          print('== entities', sorted(k[len('entity.superbwarfare.'):] for k in t if k.startswith('entity.superbwarfare.')))
-          s = json.load(open('assets/superbwarfare/sounds.json', encoding='utf-8-sig'))
-          print('== sounds', len(s), sorted(k for k in s if any(w in k for w in ('charge', 'laser', 'energy', 'sentinel', 'cataclysm', 'railgun', 'annihilator', 'beam'))))
+          for g in ('taser', 'sentinel'):
+              m = json.load(open(f'assets/superbwarfare/geo/{g}.geo.json', encoding='utf-8-sig'))
+              geo = m['minecraft:geometry'][0]
+              print('== geo', g, m.get('format_version'), geo['description'])
+              for b in geo['bones']:
+                  print('  bone', b['name'], 'parent', b.get('parent'), 'pivot', b.get('pivot'), 'rot', b.get('rotation'), 'cubes', len(b.get('cubes', [])))
+              a = json.load(open(f'assets/superbwarfare/animations/{g}.animation.json', encoding='utf-8-sig'))
+              for name, anim in a['animations'].items():
+                  print('  anim', name, 'len', anim.get('animation_length'), 'loop', anim.get('loop'), 'bones', sorted(anim.get('bones', {}))[:14])
+          a = json.load(open('assets/superbwarfare/animations/taser.animation.json', encoding='utf-8-sig'))
+          for name in a['animations']:
+              if 'idle' in name or 'fire' in name or 'shoot' in name:
+                  print('== taser', name, json.dumps(a['animations'][name])[:1500])
           PY
-          mkdir -p $RUNNER_TEMP/src
-          for pat in 'client/renderer/CustomGunRenderer.class' 'client/model/item/CustomGunModel.class' 'DefaultGunResource.class' 'resource/gun/GunResource.class' \
-                     'init/ModCapabilities.class' 'item/gun/launcher/SecondaryCataclysmItem.class'; do
-            for c in $(find com -path "*$pat" | head -2); do
-              echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import' | head -260
-            done
-          done
-          echo "=== GunItem and GunData members"
-          javap -cp . -p com.atsuishio.superbwarfare.item.gun.GunItem | head -120
-          javap -cp . -p com.atsuishio.superbwarfare.data.gun.GunData | grep -i "charg\|canShoot\|shoot\|energy\|reload\|ammo" | head -60
-          javap -cp . -p com.atsuishio.superbwarfare.data.gun.ShootParameters | head -40
-          find com -name '*Laser*' -o -name '*Beam*' | head -20
-
-      - name: Gun data files and assets of the Sentinel
-        run: |
-          cd $RUNNER_TEMP/x
-          for f in data/superbwarfare/sbw/guns/gun.example.jsonc data/superbwarfare/sbw/guns/sentinel.json data/superbwarfare/sbw/guns/taser.json \
-                   data/superbwarfare/sbw/guns/ntw_20.json data/superbwarfare/recipe/sentinel_smithing.json; do echo "=== $f"; cat "$f"; echo; done
-          find assets/superbwarfare -iname '*sentinel*' | head -20
-          ls assets/superbwarfare | head -30
-          grep -rl "sbw/guns" --include=*.class com | head
-      - name: Decompile energy, charge and ammo classes
-        run: |
-          cd $RUNNER_TEMP/x
-          mkdir -p $RUNNER_TEMP/src
-          for pat in 'item/gun/GunGeoItem.class' 'EnergyStorageItem.class' 'ammo_consumer_strategy/EnergyAmmoStrategy.class' \
-                     'ammo_consumer_strategy/ItemAmmoStrategy.class' 'data/gun/AmmoConsumer.class' 'data/gun/subdata/Charge.class' \
-                     'client/renderer/gun/SentinelItemRenderer.class' 'client/model/item/SentinelItemModel.class'; do
-            for c in $(find com -path "*$pat" | head -2); do
-              echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import' | head -220
-            done
-          done
-          echo "=== who registers item energy capabilities"
-          grep -rl "EnergyStorage" --include=*.class com | head -20
-          for c in $(grep -rl "registerItem" --include=*.class com | head -3); do
-            echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import' | grep -n -B3 -A12 "registerItem" | head -80
-          done
-          echo "=== data loader for guns"
-          for c in $(grep -rl "sbw/guns" --include=*.class com | head -2); do
-            echo "=================== $c"; rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$c" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java | grep -v '^import' | grep -n -B4 -A20 "sbw/guns" | head -80
-          done
+          ls assets/superbwarfare/textures/item | grep -i 'taser\|sentinel'
+          python3 -c "import struct;d=open('assets/superbwarfare/textures/item/taser.png','rb').read(24);print('taser.png', struct.unpack('>II', d[16:24]))"
+          python3 -c "import struct;d=open('assets/superbwarfare/textures/gun_icon/taser_icon.png','rb').read(24);print('taser_icon.png', struct.unpack('>II', d[16:24]))"
+          python3 -c "import struct;d=open('assets/superbwarfare/textures/item/taser_icon.png','rb').read(24);print('item/taser_icon.png', struct.unpack('>II', d[16:24]))" || true
+          echo "=== ParticleTool and ModDamageTypes"
+          javap -cp . -p com.atsuishio.superbwarfare.tools.ParticleTool | grep 'sendParticle' | head
+          javap -cp . -p com.atsuishio.superbwarfare.init.ModDamageTypes | grep -i 'public static' | head -40
+          echo "=== Taser bullet / energy item recipes"
+          ls data/superbwarfare/recipe | grep -i 'taser\|battery\|cell\|annihilator\|charging' | head
+          cat data/superbwarfare/recipe/cell.json 2>/dev/null; echo
+          cat data/superbwarfare/recipe/charging_station.json 2>/dev/null; echo
+          javap -cp . -p com.atsuishio.superbwarfare.block.entity.ChargingStationBlockEntity 2>/dev/null | grep -i 'static final\|CHARGE\|RATE' | head -20
