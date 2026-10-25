@@ -1,13 +1,8 @@
 language ja_jp
 gtbcs_spell_lib:gsl_test_echo item.gtbcs_spell_lib.gsl_test_echo | tooltip item.gtbcs_spell_lib.gsl_test_echo / item.traveloptics.random_imbue_curio.blood_unassigned.tooltip / Requires Experience Points! / GTBC's SpellLib
 gtbcs_spell_lib:gsl_example_item item.gtbcs_spell_lib.gsl_example_item | tooltip item.gtbcs_spell_lib.gsl_example_item / GTBC's SpellLib
-cataclysm:belt_of_monstrosity item.cataclysm.belt_of_monstrosity | tooltip item.cataclysm.belt_of_monstrosity / スロット： 腰 /  / 腰に装備したとき: / +2 タリスマンのスロット数 / L_Ender's Cataclysm 1.21.1
-cataclysm:blazing_bone item.cataclysm.blazing_bone | tooltip item.cataclysm.blazing_bone / L_Ender's Cataclysm 1.21.1
-cataclysm:urchin_spike item.cataclysm.urchin_spike | tooltip item.cataclysm.urchin_spike / L_Ender's Cataclysm 1.21.1
-cataclysm:blood_clot item.cataclysm.blood_clot | tooltip item.cataclysm.blood_clot / L_Ender's Cataclysm 1.21.1
 mowziesmobs:logo item.mowziesmobs.logo | tooltip item.mowziesmobs.logo / Mowzie's Mobs
 jeg:abstract_gun item.jeg.abstract_gun | tooltip item.jeg.abstract_gun / Damage: 6.0 / 弾薬: 0 / Ammo Type: Rifle Ammo / Armor Piercing: 4.00 / Headshot: 1.42x / Range: 67 blocks / Press Z to open the attachment screen / Press Inspect Gun to inspect / jegn
-jeg:gunsmith_manual item.jeg.gunsmith_manual | tooltip item.jeg.gunsmith_manual / item.jeg.gunsmith_manual.info / jegn
 tacz:modern_kinetic_gun item.tacz.modern_kinetic_gun | tooltip item.tacz.modern_kinetic_gun / Timeless & Classics Guns: Zero
 tacz:ammo item.tacz.ammo | tooltip item.tacz.ammo / TAC Zero デフォルトパック / Timeless & Classics Guns: Zero
 tacz:attachment item.tacz.attachment | tooltip item.tacz.attachment / Timeless & Classics Guns: Zero
@@ -15,11 +10,9 @@ tacz:workbench_a block.tacz.workbench_a | tooltip block.tacz.workbench_a / Timel
 tacz:workbench_b block.tacz.workbench_b | tooltip block.tacz.workbench_b / Timeless & Classics Guns: Zero
 tacz:workbench_c block.tacz.workbench_c | tooltip block.tacz.workbench_c / Timeless & Classics Guns: Zero
 tacz:ammo_box item.tacz.ammo_box | tooltip 鉄の弾薬箱 / - 弾薬: インベントリ内の弾薬箱を持ち上げてから、弾薬にカーソルを合わせて右クリックします。 / - 弾薬を取り除く: インベントリ内の弾薬箱を持ち、空のスロットを右クリックします。 / Timeless & Classics Guns: Zero
-epicfight:uchigatana_sheath item.epicfight.uchigatana_sheath | tooltip item.epicfight.uchigatana_sheath / Epic Fight
 invincible:debug item.invincible.debug | tooltip item.invincible.debug / epicfight.style.common /  / エピックファイト属性: /  1.5 衝撃ダメージ /  一振りで 3 体の敵を攻撃 / [左Shift] で生来のスキルを表示 / Epic Fight - Invincible
-invincible:custom_combo_demo item.invincible.custom_combo_demo | tooltip item.invincible.custom_combo_demo / One Handed /  / エピックファイト属性: /  3.5 衝撃ダメージ /  一振りで 1 体の敵を攻撃 /  2% Armor Negation / [左Shift] で生来のスキルを表示 / Epic Fight - Invincible
+invincible:custom_combo_demo item.invincible.custom_combo_demo | tooltip item.invincible.custom_combo_demo / One Handed /  / エピックファイト属性: /  1.5 衝撃ダメージ /  一振りで 1 体の敵を攻撃 /  3% Armor Negation / [左Shift] で生来のスキルを表示 / Epic Fight - Invincible
 invincible:custom_skill_demo item.invincible.custom_skill_demo | tooltip item.invincible.custom_skill_demo / Two Handed /  / エピックファイト属性: /  1.5 衝撃ダメージ /  一振りで 3 体の敵を攻撃 / Epic Fight - Invincible
-wom:satsujin_sheath item.wom.satsujin_sheath | tooltip item.wom.satsujin_sheath / Weapons of miracle
 wom:herrscher_aura item.wom.herrscher_aura | tooltip item.wom.herrscher_aura / Weapons of miracle
 wom:gesetz_handle item.wom.gesetz_handle | tooltip item.wom.gesetz_handle / Weapons of miracle
 wom:gesetz_aura item.wom.gesetz_aura | tooltip item.wom.gesetz_aura / Weapons of miracle
@@ -37,31 +30,8 @@ magistuarmory:steel_pavese block.magistuarmory.steel_pavise | tooltip 鋼のパ�
 magistuarmory:silver_pavese block.magistuarmory.silver_pavise | tooltip 銀のパヴィース / 最大防御ダメージ / kg 重量 / 移動速度が低下する / Shift+右クリックで地面に設置する / Epic Knights: Shields, Armor and Weapons
 magistuarmory:tin_pavese block.magistuarmory.tin_pavise | tooltip 錫のパヴィース / 最大防御ダメージ / kg 重量 / 移動速度が低下する / Shift+右クリックで地面に設置する / Epic Knights: Shields, Armor and Weapons
 magistuarmory:bronze_pavese block.magistuarmory.bronze_pavise | tooltip 青銅のパヴィース / 最大防御ダメージ / kg 重量 / 移動速度が低下する / Shift+右クリックで地面に設置する / Epic Knights: Shields, Armor and Weapons
-magistuarmory:cat_ears_decoration item.magistuarmory.cat_ears_decoration | tooltip item.magistuarmory.cat_ears_decoration / ヘルメットに取り付けるために使用されます / Epic Knights: Shields, Armor and Weapons
-tacz_bandits:bandit_spawn_egg item.tacz_bandits.bandit_spawn_egg | tooltip item.tacz_bandits.bandit_spawn_egg / TACZ Bandits
 apotheosis:gem item.apotheosis.gem | tooltip item.apotheosis.gem / Errored gem with no bonus! / Apotheosis
 fdlib:test_multiblock block.fdlib.test_multiblock | tooltip block.fdlib.test_multiblock / FDLib
 epic_fight_avalon:merlin_gg item.epic_fight_avalon.merlin_gg | tooltip item.epic_fight_avalon.merlin_gg / Epic fight - Avalon
-irons_spellbooks:legendary_spell_book item.irons_spellbooks.legendary_spell_book | tooltip item.irons_spellbooks.legendary_spell_book / スロット： 魔法書 / スペルスロットの数: 12  / Iron's Spells 'n Spellbooks
 irons_spellbooks:wizard_hat item.irons_spellbooks.wizard_hat | tooltip ウィザードの帽子 /  / 頭に装備したとき： / +3 防御力 / +125 マナの最大値 / +5% 魔法威力 / Iron's Spells 'n Spellbooks
-mob_weapon_api:laser_gatling item.mob_weapon_api.laser_gatling | tooltip item.mob_weapon_api.laser_gatling / Mob Weapon API
 efn:test item.efn.test | tooltip item.efn.test / EpicFight Nightfall
-efn:exsiliumgladius_e item.efn.exsiliumgladius_e | base item.efn.exsiliumgladius = §lエグザイルブレード・右 | tooltip item.efn.exsiliumgladius_e / §o§l追放の地より来たる神兵。双刃を揃えて初めて真の姿を現す /  / 利き手に持ったとき： /  9 攻撃力 /  1 攻撃速度 / EpicFight Nightfall
-efn:fire_exsiliumgladius_e item.efn.fire_exsiliumgladius_e | base item.efn.fire_exsiliumgladius = §c§lエグザイルブレード・左 | tooltip item.efn.fire_exsiliumgladius_e / §o§l追放の地より来たる神兵。双刃を揃えて初めて真の姿を現す /  / 利き手に持ったとき： /  9 攻撃力 /  1 攻撃速度 / EpicFight Nightfall
-efn:meen_spear_e item.efn.meen_spear_e | base item.efn.meen_spear = §i§l黄昏の残り火 | tooltip item.efn.meen_spear_e / §i§lネザライトのみで鍛造された異常に重い大槍。通常の槍術では到底扱えない /  / 利き手に持ったとき： /  11 攻撃力 /  1 攻撃速度 / EpicFight Nightfall
-efn:crimson_moon_e item.efn.crimson_moon_e | base item.efn.crimson_moon = §c§l真紅の月 | tooltip item.efn.crimson_moon_e / §c§l月は永遠に其処に在る /  / 利き手に持ったとき： /  8 攻撃力 /  1.4 攻撃速度 / EpicFight Nightfall
-efn:air_tachi_e item.efn.air_tachi_e | base item.efn.air_tachi = §c§o§l血狂乱 | tooltip item.efn.air_tachi_e / §c§o白骨が血錆に覆われた呪いの刃を握りしめている…… /  / 利き手に持ったとき： /  10 攻撃力 /  1.2 攻撃速度 / EpicFight Nightfall
-efn:arc_tachi item.efn.arc_tachi | tooltip item.efn.arc_tachi / Two Handed / §c§o白骨が血錆に覆われた呪いの刃を握りしめている…… /  / 利き手に持ったとき： /  10 攻撃力 /  1.20 攻撃速度 /  3 衝撃ダメージ /  一振りで 1 体の敵を攻撃 / [左Shift] で生来のスキルを表示 / EpicFight Nightfall
-efn:nf_shortsword_e item.efn.nf_shortsword_e | base item.efn.nf_shortsword = §i§l女皇の短剣 | tooltip item.efn.nf_shortsword_e /  / 利き手に持ったとき： /  7 攻撃力 /  1.6 攻撃速度 / EpicFight Nightfall
-efn:nf_shortsword_2_e item.efn.nf_shortsword_2_e | base item.efn.nf_shortsword_2 = §b§lルーンの短剣 | tooltip item.efn.nf_shortsword_2_e /  / 利き手に持ったとき： /  7 攻撃力 /  1.6 攻撃速度 / EpicFight Nightfall
-efn:crescent_moon_e item.efn.crescent_moon_e | base item.efn.crescent_moon = クレセントムーン (三日月) | tooltip item.efn.crescent_moon_e / §b§i§lこの刃は斬り伏せた亡霊を浄化することができる /  / 利き手に持ったとき： /  12 攻撃力 /  1 攻撃速度 / EpicFight Nightfall
-efn:flag_bearer item.efn.flag_bearer | tooltip item.efn.flag_bearer / 両手持ち：クレセントムーン / §b§i§lこの刃は斬り伏せた亡霊を浄化することができる /  / 利き手に持ったとき： /  12 攻撃力 /  1.00 攻撃速度 /  3 衝撃ダメージ /  一振りで 3 体の敵を攻撃 /  50% Armor Negation / [左Shift] で生来のスキルを表示 / EpicFight Nightfall
-efn:flag_bearer_e item.efn.flag_bearer_e | tooltip item.efn.flag_bearer_e / §b§i§lこの刃は斬り伏せた亡霊を浄化することができる /  / 利き手に持ったとき： /  12 攻撃力 /  1 攻撃速度 / EpicFight Nightfall
-efn:excalibur item.efn.excalibur | tooltip item.efn.excalibur / One Handed /  / 利き手に持ったとき： /  11 攻撃力 /  1.20 攻撃速度 /  一振りで 1 体の敵を攻撃 / [左Shift] で生来のスキルを表示 / EpicFight Nightfall
-epicfightx:great_tachi item.epicfightx.great_tachi | tooltip item.epicfightx.great_tachi / Two Handed /  / 利き手に持ったとき： /  8 攻撃力 /  1.20 攻撃速度 /  3.1 衝撃ダメージ /  一振りで 5 体の敵を攻撃 /  30% Armor Negation / [左Shift] で生来のスキルを表示 / Epic Fight Extra
-epicfightx:yoto item.epicfightx.yoto | tooltip item.epicfightx.yoto / Two Handed /  / 利き手に持ったとき： /  8 攻撃力 /  1.20 攻撃速度 /  3.1 衝撃ダメージ /  一振りで 5 体の敵を攻撃 /  30% Armor Negation / [左Shift] で生来のスキルを表示 / Epic Fight Extra
-epicfightx:efx_uchigatana item.epicfightx.efx_uchigatana | tooltip item.epicfightx.efx_uchigatana / epicfight.style.katana /  / 5秒間何も操作しないと打刀を鞘に収め、次の攻撃が強化される。 /  / 利き手に持ったとき： /  7 攻撃力 /  2.00 攻撃速度 /  1.1 衝撃ダメージ /  一振りで 2 体の敵を攻撃 / [左Shift] で生来のスキルを表示 / Epic Fight Extra
-epicfightx:efx_uchigatana_sheath item.epicfightx.efx_uchigatana_sheath | tooltip item.epicfightx.efx_uchigatana_sheath / Epic Fight Extra
-epicfightx:uchigatana_sheath_alter item.epicfightx.uchigatana_sheath_alter | tooltip item.epicfightx.uchigatana_sheath_alter / Epic Fight Extra
-epicfightx:efx_uchigatana_sheath_alter item.epicfightx.efx_uchigatana_sheath_alter | tooltip item.epicfightx.efx_uchigatana_sheath_alter / Epic Fight Extra
-p1nero_bow:oblivionis item.p1nero_bow.oblivionis | tooltip item.p1nero_bow.oblivionis / Ranged /  / エピックファイト属性: /  一振りで 1 体の敵を攻撃 / P1nero's Epic Fight Bow
