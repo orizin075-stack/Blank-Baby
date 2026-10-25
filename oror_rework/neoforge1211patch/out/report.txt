@@ -5,6 +5,14 @@ fetched geckolib-neoforge-1.21.1-4.9.3.jar 634531 https://mediafilez.forgecdn.ne
 fetched player-animation-lib-forge-2.0.4+1.21.1.jar 203149 https://mediafilez.forgecdn.net/files/7389/814/player-animation-lib-forge-2.0.4%2B1.21.1.jar
 fetched curios-neoforge-9.5.1+1.21.1.jar 410690 https://mediafilez.forgecdn.net/files/6529/130/curios-neoforge-9.5.1%2B1.21.1.jar
 fetched dodge_parry_reward-1.21.1-1.0.0.jar 283238 https://mediafilez.forgecdn.net/files/8671/97/dodge_parry_reward-1.21.1-1.0.0.jar
+fetched superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 41619226 https://mediafilez.forgecdn.net/files/9019/824/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar
+fetched kotlinforforge-5.12.0-all.jar 7279276 https://mediafilez.forgecdn.net/files/8335/665/kotlinforforge-5.12.0-all.jar
+software/bernie/geckolib/animatable/GeoAnimatable.class
+software/bernie/geckolib/animatable/GeoItem.class
+software/bernie/geckolib/animation/AnimationState.class
+software/bernie/geckolib/cache/object/GeoBone.class
+software/bernie/geckolib/model/GeoModel.class
+software/bernie/geckolib/renderer/GeoItemRenderer.class
 ec66e0b42a0f8561ebbf57af356dfd237be170297cc5e5e712de0bec34a7fa4c  libs/nightfall.jar
 efa161747dcb3cfb0f20defc43d14c2ca3e64003150f1957623c06ccdbac6dd0  /home/runner/work/_temp/indestructible.jar
 == assets/efn/lang/en_us.json 417
@@ -56,48 +64,50 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/1757c8b1fbfc6b638504e1f6cceb05893f7389d5/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.36s
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.46s
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
-[1m*** Started working on [4mdownloadServer[23;0m[23;0m
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.37s
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.55s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.68s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.87s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.04s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.45s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.64s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.75s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.10s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.77s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.93s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.13s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.44s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 4.20s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.53s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.43s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 4.24s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.00s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 4.33s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.44s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.30s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.69s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.64s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.24s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 3.85s
-Total runtime: 22.58s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 6.81s
+Total runtime: 32.14s
 
 
 > Task :compileJava
+warning: unknown enum constant DeprecationLevel.ERROR
+  reason: class file for kotlin.DeprecationLevel not found
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/compat/NightfallCraftGui.java:58: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
                                                                             ^
@@ -107,12 +117,20 @@ Total runtime: 22.58s
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/compat/NightfallCraftGui.java:97: warning: [removal] BackgroundRendered in ScreenEvent has been deprecated and marked for removal
         public static void background(ScreenEvent.BackgroundRendered event) {
                                                  ^
-3 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1792920327868.json
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/arms/OrorArms.java:20: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = OrorArms.ID, bus = EventBusSubscriber.Bus.MOD)
+                                         ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/arms/OrorArms.java:20: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = OrorArms.ID, bus = EventBusSubscriber.Bus.MOD)
+                                                                 ^
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+6 warnings
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1792922100325.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 1m 6s
+BUILD SUCCESSFUL in 1m 12s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -160,6 +178,15 @@ modId="minecraft"
 -- com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch
   public void setParry(boolean);
   public void setParryCounter(int);
+== Superb Warfare charging station (the OROR guns hold 1,000,000 and 600,000 FE)
+  protected static final int SLOT_FUEL = 0;
+  protected static final int SLOT_CHARGE = 1;
+  public static final int MAX_DATA_COUNT = 4;
+  public static final int MAX_ENERGY;
+  public static final int DEFAULT_FUEL_TIME;
+  public static final int CHARGE_SPEED;
+  public static final int CHARGE_OTHER_SPEED;
+  public static final int CHARGE_RADIUS;
 == EpicFightCapabilities.getEntityPatch (null entity?)
-replaced 8 old class files; added 13 compiled; overlaid 138 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json', 'assets/cataclysm/lang/en_us.json (new)', 'assets/cataclysm/lang/ja_jp.json (new)', 'assets/efn/lang/en_us.json (new)', 'assets/efn/lang/ja_jp.json (new)', 'assets/efn/lang/zh_cn.json (new)', 'assets/epicfight/lang/en_us.json (new)', 'assets/epicfight/lang/ja_jp.json (new)', 'assets/epicfightx/lang/en_us.json (new)', 'assets/epicfightx/lang/ja_jp.json (new)', 'assets/irons_spellbooks/lang/en_us.json (new)', 'assets/irons_spellbooks/lang/ja_jp.json (new)', 'assets/jeg/lang/en_us.json (new)', 'assets/jeg/lang/ja_jp.json (new)', 'assets/magistuarmory/lang/en_us.json (new)', 'assets/magistuarmory/lang/ja_jp.json (new)', 'assets/mob_weapon_api/lang/en_us.json (new)', 'assets/mob_weapon_api/lang/ja_jp.json (new)', 'assets/p1nero_bow/lang/en_us.json (new)', 'assets/p1nero_bow/lang/ja_jp.json (new)', 'assets/tacz_bandits/lang/en_us.json (new)', 'assets/tacz_bandits/lang/ja_jp.json (new)', 'assets/wom/lang/en_us.json (new)', 'assets/wom/lang/ja_jp.json (new)']
-f72191b26b8482f89c3920fc4603ecd914d8c079f672346b3ab88563940e2559  out/oror_supreme_bosses-0.17.27.jar
+replaced 8 old class files; added 33 compiled; overlaid 177 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json', 'assets/cataclysm/lang/en_us.json (new)', 'assets/cataclysm/lang/ja_jp.json (new)', 'assets/efn/lang/en_us.json (new)', 'assets/efn/lang/ja_jp.json (new)', 'assets/efn/lang/zh_cn.json (new)', 'assets/epicfight/lang/en_us.json (new)', 'assets/epicfight/lang/ja_jp.json (new)', 'assets/epicfightx/lang/en_us.json (new)', 'assets/epicfightx/lang/ja_jp.json (new)', 'assets/irons_spellbooks/lang/en_us.json (new)', 'assets/irons_spellbooks/lang/ja_jp.json (new)', 'assets/jeg/lang/en_us.json (new)', 'assets/jeg/lang/ja_jp.json (new)', 'assets/magistuarmory/lang/en_us.json (new)', 'assets/magistuarmory/lang/ja_jp.json (new)', 'assets/mob_weapon_api/lang/en_us.json (new)', 'assets/mob_weapon_api/lang/ja_jp.json (new)', 'assets/p1nero_bow/lang/en_us.json (new)', 'assets/p1nero_bow/lang/ja_jp.json (new)', 'assets/tacz_bandits/lang/en_us.json (new)', 'assets/tacz_bandits/lang/ja_jp.json (new)', 'assets/wom/lang/en_us.json (new)', 'assets/wom/lang/ja_jp.json (new)']
+b467576e4cc41569362a997b9a2ad38331a8a575dece9dda8f11e1ed6c9fe7af  out/oror_supreme_bosses-0.17.27.jar
