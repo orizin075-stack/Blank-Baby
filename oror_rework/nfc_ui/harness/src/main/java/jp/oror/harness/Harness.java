@@ -2,6 +2,7 @@ package jp.oror.harness;
 
 import com.mojang.blaze3d.platform.GlUtil;
 import com.mojang.logging.LogUtils;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,6 +56,9 @@ public final class Harness {
             "gui.acknowledge", "selectWorld.backupJoinSkipButton");
     private static final String[] WEAPONS = {"efn:hf_murasama", "efn:yamato_dmc", "efn:excalibur", "epicfight:iron_longsword",
             "epicfight:iron_tachi", "minecraft:iron_sword"};
+    private static final String[] FIXED = {"efn:nf_shortsword_e", "efn:nf_shortsword_2_e", "efn:exsiliumgladius_e",
+            "efn:fire_exsiliumgladius_e", "efn:meen_spear_e", "efn:air_tachi_e", "efn:arc_tachi", "efn:crimson_moon_e",
+            "efn:crescent_moon_e", "efn:flag_bearer", "efn:flag_bearer_e", "efn:excalibur"};
     private static final int LIMIT = 36000;
 
     private enum Phase { TITLE, CREATE, LOADING, PLAY, DONE }
@@ -161,6 +165,7 @@ public final class Harness {
         }
         switch (++play) {
             case 20 -> equip(mc);
+            case 390 -> mode(mc, "holding the weapon since equipping (expect combat)");
             case 400 -> shot(mc, "04_hud_weapon");
             case 410 -> mc.player.getInventory().selected = 8;
             case 500 -> shot(mc, "05_hud_tool");
@@ -183,7 +188,25 @@ public final class Harness {
             case 760 -> shot(mc, "08_hud_weapon_again");
             case 770 -> mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
             case 860 -> shot(mc, "09_third_person");
-            case 880 -> finish(mc, "complete");
+            case 870 -> {
+                mc.options.setCameraType(CameraType.FIRST_PERSON);
+                vanillaMode(mc);
+            }
+            case 900 -> mode(mc, "same weapon after switching to the vanilla mode, as R does (expect vanilla)");
+            case 905 -> mc.player.getInventory().selected = 8;
+            case 925 -> mc.player.getInventory().selected = 0;
+            case 945 -> mode(mc, "after taking the weapon again (expect combat)");
+            case 950 -> fixedWeapons(mc);
+            case 980 -> {
+                expected = InventoryScreen.class;
+                mc.setScreen(new InventoryScreen(mc.player));
+            }
+            case 1040 -> shot(mc, "10_fixed_weapons");
+            case 1050 -> {
+                expected = null;
+                mc.setScreen(null);
+            }
+            case 1060 -> finish(mc, "complete");
             default -> { }
         }
     }
@@ -224,6 +247,54 @@ public final class Harness {
             }
         });
         mc.player.getInventory().selected = 0;
+    }
+
+    /** The Nightfall weapons whose models the other 0.17.25 repaired, in the main inventory for one screenshot. */
+    private static void fixedWeapons(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null) return;
+        UUID id = mc.player.getUUID();
+        server.execute(() -> {
+            ServerPlayer player = server.getPlayerList().getPlayer(id);
+            if (player == null) return;
+            int slot = 9;
+            for (String weapon : FIXED) {
+                Optional<Item> item = item(weapon);
+                note("fixed weapon " + weapon + (item.isPresent() ? "" : " is not registered"));
+                if (item.isPresent()) player.getInventory().setItem(slot++, new ItemStack(item.get()));
+            }
+        });
+    }
+
+    /** Epic Fight's mode of the local player, by reflection (the harness is built without Epic Fight). */
+    private static Object patch(Minecraft mc) throws ReflectiveOperationException {
+        Class<?> capabilities = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
+        Class<?> local = Class.forName("yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch");
+        for (Method method : capabilities.getMethods()) {
+            if (method.getName().equals("getEntityPatch") && method.getParameterCount() == 2) return method.invoke(null, mc.player, local);
+        }
+        return null;
+    }
+
+    private static void mode(Minecraft mc, String when) {
+        try {
+            Object patch = patch(mc);
+            Object combat = patch == null ? "no patch" : patch.getClass().getMethod("isEpicFightMode").invoke(patch);
+            note("epic fight mode " + (Boolean.TRUE.equals(combat) ? "combat" : Boolean.FALSE.equals(combat) ? "vanilla" : combat)
+                    + " holding " + BuiltInRegistries.ITEM.getKey(mc.player.getMainHandItem().getItem()) + ": " + when);
+        } catch (Throwable error) {
+            note("epic fight mode unavailable: " + error);
+        }
+    }
+
+    private static void vanillaMode(Minecraft mc) {
+        try {
+            Object patch = patch(mc);
+            if (patch != null) patch.getClass().getMethod("toVanillaMode", boolean.class).invoke(patch, true);
+            note("switched to the vanilla mode");
+        } catch (Throwable error) {
+            note("cannot switch to the vanilla mode: " + error);
+        }
     }
 
     private static Optional<Item> item(String id) {
