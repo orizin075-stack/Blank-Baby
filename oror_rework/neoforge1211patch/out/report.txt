@@ -56,45 +56,45 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/1757c8b1fbfc6b638504e1f6cceb05893f7389d5/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.37s
-[1m*** Started working on [4mdownloadServer[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.36s
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
+  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
   ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
  [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.37s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.58s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.68s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 0.75s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.04s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.58s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.64s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.82s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.99s
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.09s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.10s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.77s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.93s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.42s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.53s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 4.33s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 4.24s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 4.15s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 4.33s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.31s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.30s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.68s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.64s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 4.69s
-Total runtime: 23.05s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 3.85s
+Total runtime: 22.58s
 
 
 > Task :compileJava
@@ -108,11 +108,11 @@ Total runtime: 23.05s
         public static void background(ScreenEvent.BackgroundRendered event) {
                                                  ^
 3 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1792915886352.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1792920327868.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 55s
+BUILD SUCCESSFUL in 1m 6s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -161,5 +161,5 @@ modId="minecraft"
   public void setParry(boolean);
   public void setParryCounter(int);
 == EpicFightCapabilities.getEntityPatch (null entity?)
-replaced 8 old class files; added 13 compiled; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json', 'assets/cataclysm/lang/en_us.json (new)', 'assets/cataclysm/lang/ja_jp.json (new)', 'assets/efn/lang/en_us.json (new)', 'assets/efn/lang/ja_jp.json (new)', 'assets/efn/lang/zh_cn.json (new)', 'assets/epicfight/lang/en_us.json (new)', 'assets/epicfight/lang/ja_jp.json (new)', 'assets/epicfightx/lang/en_us.json (new)', 'assets/epicfightx/lang/ja_jp.json (new)', 'assets/irons_spellbooks/lang/en_us.json (new)', 'assets/irons_spellbooks/lang/ja_jp.json (new)', 'assets/jeg/lang/en_us.json (new)', 'assets/jeg/lang/ja_jp.json (new)', 'assets/magistuarmory/lang/en_us.json (new)', 'assets/magistuarmory/lang/ja_jp.json (new)', 'assets/mob_weapon_api/lang/en_us.json (new)', 'assets/mob_weapon_api/lang/ja_jp.json (new)', 'assets/p1nero_bow/lang/en_us.json (new)', 'assets/p1nero_bow/lang/ja_jp.json (new)', 'assets/tacz_bandits/lang/en_us.json (new)', 'assets/tacz_bandits/lang/ja_jp.json (new)', 'assets/wom/lang/en_us.json (new)', 'assets/wom/lang/ja_jp.json (new)']
-9ae9d577576f796e34b4d2871e5f848a61e61fd3d8835f854099ab837ac4df68  out/oror_supreme_bosses-0.17.26.jar
+replaced 8 old class files; added 13 compiled; overlaid 138 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json', 'assets/cataclysm/lang/en_us.json (new)', 'assets/cataclysm/lang/ja_jp.json (new)', 'assets/efn/lang/en_us.json (new)', 'assets/efn/lang/ja_jp.json (new)', 'assets/efn/lang/zh_cn.json (new)', 'assets/epicfight/lang/en_us.json (new)', 'assets/epicfight/lang/ja_jp.json (new)', 'assets/epicfightx/lang/en_us.json (new)', 'assets/epicfightx/lang/ja_jp.json (new)', 'assets/irons_spellbooks/lang/en_us.json (new)', 'assets/irons_spellbooks/lang/ja_jp.json (new)', 'assets/jeg/lang/en_us.json (new)', 'assets/jeg/lang/ja_jp.json (new)', 'assets/magistuarmory/lang/en_us.json (new)', 'assets/magistuarmory/lang/ja_jp.json (new)', 'assets/mob_weapon_api/lang/en_us.json (new)', 'assets/mob_weapon_api/lang/ja_jp.json (new)', 'assets/p1nero_bow/lang/en_us.json (new)', 'assets/p1nero_bow/lang/ja_jp.json (new)', 'assets/tacz_bandits/lang/en_us.json (new)', 'assets/tacz_bandits/lang/ja_jp.json (new)', 'assets/wom/lang/en_us.json (new)', 'assets/wom/lang/ja_jp.json (new)']
+f72191b26b8482f89c3920fc4603ecd914d8c079f672346b3ab88563940e2559  out/oror_supreme_bosses-0.17.27.jar
