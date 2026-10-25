@@ -1,5 +1,5 @@
 # One-off probe for 0.17.25: how TCR Core 2.8.7 (NightfallCraft's core mod, 1.20.1) changes menus and widgets.
-# Prints its screen/title/tab mixins (decompiled), its built-in pack registration and the sizes of its GUI images to
+# Prints its title, world-select and create-world screen mixins (decompiled), its built-in pack registration and the sizes of its GUI images to
 # the job log only; nothing from the jar is committed.
 name: TCR Core GUI probe
 
@@ -32,5 +32,9 @@ jobs:
           for f in x/packs/*/pack.mcmeta; do echo "== $f"; cat "$f"; echo; done
           find x/packs -maxdepth 3 | head -60
           find x/packs/tcr_assets x/packs/custom_models -type f | sed 's#^x/##' | head -80
-          java -jar vf.jar x/com/p1nero/tcrcore/client/gui/TCRMenuBackgroundRenderer.class src/ > /dev/null 2>&1
-          cat src/TCRMenuBackgroundRenderer.java
+          for n in TitleScreenMixin SelectWorldScreenMixin CreateWorldScreenMixin CreateWorldScreenMoreTabMixin WinScreenMixin; do
+            for c in $(find x -name "$n.class"); do
+              echo "== $c"; rm -rf src/*; java -jar vf.jar "$c" src/ > /dev/null 2>&1; cat src/*.java
+            done
+          done
+          grep -rl --include=*.class -a "TitleScreen" x/com | head -20
