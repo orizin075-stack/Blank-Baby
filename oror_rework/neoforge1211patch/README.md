@@ -55,3 +55,7 @@ textures, Excalibur's item model, the flag bearer's inventory mesh), NightfallCr
   every tick while a weapon was held, so R did nothing until the weapon was put away. Combat mode is now turned on when
   a weapon is taken and during the first three seconds in a world (a player saved in the vanilla mode), on the client;
   Epic Fight sends the mode to the server. R switches back until another item is taken.
+- Translations (efn, en/ja/zh): the repaired alias weapons had no names and showed raw keys; each gets Nightfall's own
+  name of the weapon whose model it reuses (read from the Nightfall jar by the build), Excalibur and the flag bearer a
+  plain one. Names (en/ja) for other mods' items that showed raw keys: Epic Fight Extra's great tachi, yoto,
+  uchigatana and sheaths, P1nero's Oblivionis, four Cataclysm materials and a few more.
