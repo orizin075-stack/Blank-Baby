@@ -1,300 +1,300 @@
-Skipping this key.
-Config file: /home/runner/work/_temp/game/config/jei/jei-client.ini
-Line #253: "	ButtonNavigationVisibility = ENABLED"
-[14:06:43] [modloading-worker-0] [ERROR] 'BookmarkList' is not a valid config category.
-Skipping this key.
-Config file: /home/runner/work/_temp/game/config/jei/jei-client.ini
-Line #258: "	DrawBackground = false"
-[14:06:43] [modloading-worker-0] [WARN] Legacy MezzConfig source '/home/runner/work/_temp/game/config/jei/jei-client.ini' had 49 problem(s); usable values will be imported and the source will remain unchanged.
-[14:06:43] [modloading-worker-0] [INFO] Migrated legacy config file '/home/runner/work/_temp/game/config/jei/jei-client.ini' to '/home/runner/work/_temp/game/config/jei/client/jei-client.ini'; the source was preserved and backed up at '/home/runner/work/_temp/game/config/jei/jei-client.ini.bak.1'.
-[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: GeckolibCompat
-[14:06:43] [modloading-worker-0] [WARN] Azure Lib version 3 is not supported yet.
-[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: IRISCompat
-[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: IceAndFireCompat
-[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: CuriosCompat
-[14:06:43] [modloading-worker-0] [INFO] Registering C2S receiver with id aaa_particles:main/2b101225a0983c178c43c737d76def52
-[14:06:43] [modloading-worker-0] [INFO] Registering S2C receiver with id aaa_particles:main/2b101225a0983c178c43c737d76def52
-[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: PlayerAnimatorCompat
-[14:06:43] [modloading-worker-0] [INFO] Registering C2S receiver with id aaa_particles:main/878ba3ad853235668eff51eb0a40c900
-[14:06:43] [modloading-worker-0] [INFO] Registering S2C receiver with id aaa_particles:main/878ba3ad853235668eff51eb0a40c900
-[14:06:43] [modloading-worker-0] [INFO] Loaded mod compat: PlayerReviveCompat
-[14:06:43] [modloading-worker-0] [INFO] Registering C2S receiver with id aaa_particles:main/878ba3ad853235668eff51eb0a40c900
-[14:06:43] [modloading-worker-0] [INFO] Registering S2C receiver with id aaa_particles:main/878ba3ad853235668eff51eb0a40c900
-[14:06:43] [modloading-worker-0] [INFO] Registering C2S receiver with id aaa_particles:main/9b5bc39f00d53db2acf81d859b596583
-[14:06:43] [modloading-worker-0] [INFO] Registering S2C receiver with id aaa_particles:main/9b5bc39f00d53db2acf81d859b596583
-[14:06:43] [modloading-worker-0] [INFO] Installing Effekseer native library at /home/runner/work/_temp/game/libEffekseerNativeForJava.so
-[14:06:43] [modloading-worker-0] [WARN] java.lang.UnsatisfiedLinkError: /home/runner/work/_temp/game/libEffekseerNativeForJava.so: libOpenGL.so.0: cannot open shared object file: No such file or directory
-	at java.base/jdk.internal.loader.NativeLibraries.load(Native Method)
-	at java.base/jdk.internal.loader.NativeLibraries$NativeLibraryImpl.open(NativeLibraries.java:388)
-	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:232)
-	at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:174)
-	at java.base/java.lang.ClassLoader.loadLibrary(ClassLoader.java:2394)
-	at java.base/java.lang.Runtime.load0(Runtime.java:755)
-	at java.base/java.lang.System.load(System.java:1970)
-	at TRANSFORMER/aaa_particles@2.3.4/mod.chloeprime.aaaparticles.client.AAAParticlesClient.installNativeLibrary(AAAParticlesClient.java:61)
-	at TRANSFORMER/aaa_particles@2.3.4/mod.chloeprime.aaaparticles.client.AAAParticlesClient.init(AAAParticlesClient.java:28)
-	at TRANSFORMER/aaa_particles@2.3.4/mod.chloeprime.aaaparticles.forge.AAAParticlesForge.<init>(AAAParticlesForge.java:19)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
-	at LAYER PLUGIN/javafmllanguage@1.20.1-47.4.28/net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:77)
-	at LAYER PLUGIN/fmlcore@1.20.1-47.4.28/net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$5(ModContainer.java:126)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796)
-	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
-	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
-	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
-	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
-	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
-[14:06:43] [modloading-worker-0] [INFO] [DRIPPY LOADING SCREEN] Loading v3.1.5 in client-side mode on FORGE!
-[14:06:43] [modloading-worker-0] [INFO] Forge mod loading, version 47.4.28, for MC 1.20.1 with MCP 20230612.114412
-[14:06:43] [modloading-worker-0] [INFO] MinecraftForge v47.4.28 Initialized
-[14:06:43] [modloading-worker-0] [INFO] Sending ConfigManager...
-[14:06:43] [modloading-worker-0] [INFO] Sending ConfigManager took 3.152 milliseconds
-[14:06:43] [modloading-worker-0] [INFO] [yalter.mousetweaks.Logger:Log:6]: [Mouse Tweaks] Main.initialize()
-[14:06:43] [modloading-worker-0] [INFO] [yalter.mousetweaks.Logger:Log:6]: [Mouse Tweaks] Initialized.
-[14:06:43] [modloading-worker-0] [INFO] Kotlin For Forge Enabled!
-[14:06:43] [modloading-worker-0] [INFO] Halovecs mod initialized
-[14:06:43] [modloading-worker-0] [INFO] Xaero's Minimap: World Map found!
-[14:06:43] [modloading-worker-0] [INFO] No Optifine!
-[14:06:43] [modloading-worker-0] [INFO] Xaero's Minimap: No Vivecraft!
-[14:06:43] [modloading-worker-0] [INFO] Xaero's Minimap: Iris found!
-[14:06:43] [modloading-worker-0] [INFO] Xaero's Minimap: Waystones found!
-[14:06:44] [modloading-worker-0] [INFO] Registering common data for channel xaerominimap:main!
-[14:06:44] [modloading-worker-0] [INFO] Constructing common components for puzzleslib:main
-[14:06:44] [modloading-worker-0] [INFO] Registering client data for channel xaerominimap:main!
-[14:06:44] [modloading-worker-0] [INFO] Loading primary common config for channel xaerominimap:main!
-[14:06:44] [modloading-worker-0] [INFO] Loading server config profiles for channel xaerominimap:main!
-[14:06:44] [modloading-worker-0] [INFO] Loading primary client config for channel xaerominimap:main!
-[14:06:44] [modloading-worker-0] [INFO] Loading client config profiles for channel xaerominimap:main!
-[14:06:44] [modloading-worker-0] [INFO] Constructing client components for puzzleslib:main
-[14:06:44] [modloading-worker-0] [INFO] UI manager initialized
-[14:06:44] [modloading-worker-0] [INFO] [AntiSeat] migrated legacy config custom_anti_seat_entity.toml into custom_anti_seat_entity.json
-[14:06:44] [modloading-worker-0] [INFO] [AntiSeat] default config written to /home/runner/work/_temp/game/config/ash_of_sin/custom_anti_seat_entity.json
-[14:06:44] [modloading-worker-0] [INFO] Doing super early config setup for zeta
-[14:06:44] [DefaultDispatcher-worker-3] [INFO] Transformed net/minecraft/client/renderer/entity/layers/CapeLayer with [customskinloader:render-patch/cape-layer.render.v2]
-[14:06:44] [DefaultDispatcher-worker-3] [INFO] Transformed ModLauncher target net/minecraft/client/renderer/entity/layers/CapeLayer with [customskinloader:render-patch/cape-layer.render.v2]
-[14:06:44] [modloading-worker-0] [INFO] Registering config for defaultoptions:common (COMMON) with 3 properties.
-[14:06:44] [modloading-worker-0] [INFO] Registering common data for channel xaeroworldmap:main!
-[14:06:44] [modloading-worker-0] [INFO] Registering client data for channel xaeroworldmap:main!
-[14:06:44] [modloading-worker-0] [INFO] Loading primary common config for channel xaeroworldmap:main!
-[14:06:44] [modloading-worker-0] [INFO] Loading server config profiles for channel xaeroworldmap:main!
-[14:06:44] [modloading-worker-0] [INFO] Loading primary client config for channel xaeroworldmap:main!
-[14:06:44] [modloading-worker-0] [INFO] Loading client config profiles for channel xaeroworldmap:main!
-[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:pufferfish_bucket is now minecraft:bucket.
-[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:salmon_bucket is now minecraft:bucket.
-[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:cod_bucket is now minecraft:bucket.
-[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:tropical_fish_bucket is now minecraft:bucket.
-[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:axolotl_bucket is now minecraft:bucket.
-[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:powder_snow_bucket is now minecraft:bucket.
-[14:06:45] [modloading-worker-0] [INFO] Fixing MC-151457. Crafting remainder for minecraft:tadpole_bucket is now minecraft:bucket.
-[14:06:45] [modloading-worker-0] [INFO] Registering Book of Dragons configuration...
-[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'cliff' with 2 dragons
-[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'cave' with 2 dragons
-[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'glade' with 2 dragons
-[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'wetland' with 1 dragons
-[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded archetype 'barrens' with 2 dragons
-[14:06:45] [modloading-worker-0] [INFO] [RoostConfig] Loaded 5 roost archetypes: [cave, glade, cliff, wetland, barrens]
-[14:06:45] [modloading-worker-0] [INFO] Loaded dragon variants from config: /home/runner/work/_temp/game/config/bookofdragons/dragon_variants.json
-[14:06:45] [modloading-worker-0] [INFO] Configuration system initialized successfully!
-[14:06:45] [modloading-worker-0] [INFO] [MELODY] Loading Melody background audio library..
-[14:06:45] [modloading-worker-0] [INFO] Created TextLayoutEngine
-[14:06:45] [modloading-worker-0] [INFO] Initialized Modern UI text engine
-[14:06:45] [modloading-worker-0] [INFO] Initialized Modern UI client
-[14:06:45] [modloading-worker-0] [INFO] Initialized Modern UI
-[14:06:45] [modloading-worker-0] [INFO] [KONKRETE] Successfully initialized!
-[14:06:45] [modloading-worker-0] [INFO] [KONKRETE] Server-side libs ready to use!
-[14:06:45] [modloading-worker-0] [WARN] org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: Critical injection failure: @Redirect annotation on tacticalBreaching$includeBreachableBlocks could not find any targets matching 'tick' in com.atsuishio.superbwarfare.entity.projectile.ProjectileEntity. No refMap loaded. [ -> redirect$ecp000$tacticalBreaching$includeBreachableBlocks()Ljava/util/function/Predicate; -> Parse]
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.validateTargets(InjectionInfo.java:656)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.findTargets(InjectionInfo.java:587)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.readAnnotation(InjectionInfo.java:330)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:316)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:308)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.RedirectInjectionInfo.<init>(RedirectInjectionInfo.java:44)
-	at jdk.internal.reflect.GeneratedConstructorAccessor35.newInstance(Unknown Source)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo$InjectorEntry.create(InjectionInfo.java:149)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.parse(InjectionInfo.java:708)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.prepareInjections(MixinTargetContext.java:1329)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.prepareInjections(MixinApplicatorStandard.java:1053)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:395)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:327)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.TargetClassContext.apply(TargetClassContext.java:421)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:403)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131)
-	at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:156)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-	at TRANSFORMER/superbwarfare@0.8.9.2/com.atsuishio.superbwarfare.init.ModEntities$PROJECTILE$1.<init>(ModEntities.kt)
-	at TRANSFORMER/superbwarfare@0.8.9.2/com.atsuishio.superbwarfare.init.ModEntities$PROJECTILE$1.<clinit>(ModEntities.kt)
-	at TRANSFORMER/superbwarfare@0.8.9.2/com.atsuishio.superbwarfare.init.ModEntities.<clinit>(ModEntities.kt:148)
-	at TRANSFORMER/superbwarfare@0.8.9.2/com.atsuishio.superbwarfare.Mod.<init>(Mod.kt:66)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
-	at LAYER PLUGIN/thedarkcolour.kotlinforforge.kfflang@4.12.0/thedarkcolour.kotlinforforge.KotlinModContainer.constructMod(KotlinModContainer.kt:64)
-	at LAYER PLUGIN/fmlcore@1.20.1-47.4.28/net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$5(ModContainer.java:126)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)
-	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796)
-	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
-	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
-	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
-	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
-	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
-[14:06:46] [modloading-worker-0] [INFO] [SBW Optimized] Initialized.
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftblibrary:edit_nbt
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftblibrary:edit_nbt_response
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftblibrary:sync_known_server_registries
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftblibrary:edit_config
-[14:06:46] [modloading-worker-0] [INFO] Setting ALSOFT_CONF via native putenv: ALSOFT_CONF=/tmp/sbw-openal17054728867431515012.conf
-[14:06:46] [modloading-worker-0] [INFO] ALSOFT_CONF set successfully
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:sync_teams
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:sync_message_history
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:open_gui
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:open_my_team_gui
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:update_settings
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:update_settings_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:send_message
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:send_message_response
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbteams:update_presence
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:create_party
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbteams:player_gui_operation
-[14:06:46] [modloading-worker-0] [INFO] Initializing ChatPlus
-[14:06:46] [modloading-worker-0] [INFO] Loading languages...
-[14:06:46] [modloading-worker-0] [INFO] Loaded 110 languages
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_quests
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_team_data
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:update_task_progress
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:submit_task
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:claim_reward
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:claim_reward_response
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_editing_mode
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:get_emergency_items
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:create_other_team_data
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:claim_all_rewards
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:claim_choice_reward
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:display_completion_toast
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:display_reward_toast
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:display_item_reward_toast
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:custom_reward_toast
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:toggle_pinned
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:toggle_pinned_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:toggle_chapter_pinned
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:toggle_chapter_pinned_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:toggle_editing_mode
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:force_save
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:update_team_data
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:set_custom_image
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:object_started
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:object_completed
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:object_started_reset
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:object_completed_reset
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_lock
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:reset_reward
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:team_data_changed
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:task_screen_config_req
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:task_screen_config_resp
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:give_item_to_player
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:reorder_item
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:change_progress
-[14:06:46] [modloading-worker-0] [INFO] Loaded config for: cupboard.json
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:create_object
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:create_object_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:create_task_at
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:delete_object
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:delete_object_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:edit_object
-[14:06:46] [modloading-worker-0] [INFO] Config Directory: /home/runner/work/_temp/game/config/chatplus
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:edit_object_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:move_chapter
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:move_chapter_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:move_quest
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:move_quest_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:change_chapter_group
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:change_chapter_group_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:move_chapter_group
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:move_chapter_group_response
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_reward_blocking
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:copy_quest
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:copy_chapter_image
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:sync_structures_request
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_structures_response
-[14:06:46] [modloading-worker-0] [INFO] Registering C2S receiver with id ftbquests:request_team_data
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:sync_editor_permission
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:open_quest_book
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:clear_display_cache
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:reorder_item_response
-[14:06:46] [modloading-worker-0] [INFO] Registering S2C receiver with id ftbquests:clear_repeat_cooldown
-[14:06:46] [modloading-worker-0] [INFO] ChatRenderer init
-[14:06:46] [modloading-worker-0] [INFO] x: 0, y: -81, width: 242, height: 117
-[14:06:46] [modloading-worker-0] [INFO] Create ChatWindow()
-[14:06:46] [modloading-worker-0] [INFO] SpeechToText initialized
-[14:06:46] [modloading-worker-0] [INFO] Config Loaded
-[14:06:46] [ChatPlusMicrophoneThread] [INFO] SpeechToText Thread started
-[14:06:46] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone items
-[14:06:46] [modloading-worker-0] [INFO] Registering common data for channel xaerolib:main!
-[14:06:46] [modloading-worker-0] [INFO] Registering client data for channel xaerolib:main!
-[14:06:46] [modloading-worker-0] [INFO] Loading primary common config for channel xaerolib:main!
-[14:06:46] [modloading-worker-0] [INFO] Loading server config profiles for channel xaerolib:main!
-[14:06:46] [modloading-worker-0] [INFO] Loading primary client config for channel xaerolib:main!
-[14:06:46] [modloading-worker-0] [INFO] Loading client config profiles for channel xaerolib:main!
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Blocks
-[14:06:47] [modloading-worker-0] [INFO] Done Initializing ChatPlus
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Wood
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Block Entities
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Entities
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Creative Tabs
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Sounds
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Block Predicate
-[14:06:47] [UI thread] [INFO] UI thread initialized in 2936ms
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone State Providers
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Tree Decorators
-[14:06:47] [modloading-worker-0] [WARN] Unsupported Superb Warfare version 0.8.9.2; compatibility disabled.
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Custom Features
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Structure Pieces
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Custom Structure Types
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Configured Features
-[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Overworld Vegetation Configured Features
-ERROR (VoskAPI:Model():model.cc:122) Folder '/home/runner/work/_temp/game/config/chatplus/models/' does not contain model files. Make sure you specified the model path properly in Model constructor. If you are not sure about relative path, use absolute path specification.
-[14:06:47] [ChatPlusMicrophoneThread] [ERROR] java.io.IOException: Failed to create a model
-[14:06:47] [modloading-worker-0] [INFO] [dev.tr7zw.trender.gui.impl.client.LibGuiClient:onInitializeClient:37]: [TRender] Initializing Client...
-[14:06:47] [modloading-worker-0] [INFO] Create 6.0.8 initializing! Commit hash: 1a1a9a2819b4f89f78caec41b55ed8cb222fa24b
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Tree Configured Features
-[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Vanilla Configured Features
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes You'll Go Overworld Configured Features
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Placed Features
-[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Overworld Tree Placed Features
-[14:06:47] [modloading-worker-0] [INFO] Chloride is here, lets make your experience taste-able
-[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Overworld Vegetation Placed Features
-[14:06:47] [modloading-worker-0] [INFO] Creating and Registering Vanilla Placed Features
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Custom Surface Rules
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Template Pools
-[14:06:47] [modloading-worker-0] [INFO] Disabled ModernFix perf.resourcepacks
-[14:06:47] [modloading-worker-0] [WARN] Cancelled mixin org.embeddedt.modernfix.common.mixin.perf.resourcepacks.ForgePathPackResourcesMixin. Check debug logs for more information.
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biome's We've Gone Village Template Pools
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Poi Types
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Villager Professions
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Custom Structure Processors
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone villager types
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Schedules
-[14:06:47] [modloading-worker-0] [INFO] Discovered 11 common integration modules and 2 client integration modules
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Memory Module Types
-[14:06:47] [modloading-worker-0] [INFO] Registering Oh The Biomes We've Gone Sensor Types
-[14:06:47] [modloading-worker-0] [INFO] Registering config for waystones:common (COMMON) with 46 properties.
-[14:06:47] [modloading-worker-0] [ERROR] [TCRMeshes] : This mod is exclusively for 'the Casket of Reveries' modpack. If you wish to use this mod or models, please request authorization from P1nero (gaylordfocker@foxmail.com).
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.handler$cpl000$wrapAnimatableTexture(TextureManager.java:1029)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280163_(GuiGraphics.java:346)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.lambda$renderBackground$0(ProgressBarElement.java:201)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.resource.ResourceSupplier.forRenderable(ResourceSupplier.java:155)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.renderBackground(ProgressBarElement.java:190)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.m_88315_(ProgressBarElement.java:77)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.AbstractElement.renderInternal(AbstractElement.java:324)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.layer.ScreenCustomizationLayer.onRenderPost(ScreenCustomizationLayer.java:440)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.lambda$registerListenerMethods$2(EventHandler.java:122)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler$ListenerContainer.notifyListener(EventHandler.java:209)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.postEvent(EventHandler.java:63)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.md0f8072$lambda$afterRenderDrippy$0$3(LoadingOverlay.java:1110)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.runMenuHandlerTaskDrippy(LoadingOverlay.java:1311)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.handler$cdn000$afterRenderDrippy(LoadingOverlay.java:1091)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.m_88315_(LoadingOverlay.java:148)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.handler$cef000$cancelForgeCustomLoadingOverlayRenderingDrippy(ForgeLoadingOverlay.java:527)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.m_88315_(ForgeLoadingOverlay.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:954)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
+[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/gui/loading_progress_bg.png
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture$TextureImage.m_118155_(SimpleTexture.java:83)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6335_(SimpleTexture.java:58)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6704_(SimpleTexture.java:29)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java:119)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280163_(GuiGraphics.java:346)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.lambda$renderBackground$0(ProgressBarElement.java:201)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.resource.ResourceSupplier.forRenderable(ResourceSupplier.java:155)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.renderBackground(ProgressBarElement.java:190)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.m_88315_(ProgressBarElement.java:77)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.AbstractElement.renderInternal(AbstractElement.java:324)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.layer.ScreenCustomizationLayer.onRenderPost(ScreenCustomizationLayer.java:440)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.lambda$registerListenerMethods$2(EventHandler.java:122)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler$ListenerContainer.notifyListener(EventHandler.java:209)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.postEvent(EventHandler.java:63)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.md0f8072$lambda$afterRenderDrippy$0$3(LoadingOverlay.java:1110)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.runMenuHandlerTaskDrippy(LoadingOverlay.java:1311)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.handler$cdn000$afterRenderDrippy(LoadingOverlay.java:1091)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.m_88315_(LoadingOverlay.java:148)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.handler$cef000$cancelForgeCustomLoadingOverlayRenderingDrippy(ForgeLoadingOverlay.java:527)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.m_88315_(ForgeLoadingOverlay.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:954)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
+[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/gui/loading_progress_fg.png
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
+	at TRANSFORMER/geckolib@4.8.4/software.bernie.geckolib.cache.texture.AnimatableTexture.m_6704_(AnimatableTexture.java:40)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.handler$cpl000$wrapAnimatableTexture(TextureManager.java:1029)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280163_(GuiGraphics.java:346)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.renderProgress(ProgressBarElement.java:161)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.m_88315_(ProgressBarElement.java:79)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.AbstractElement.renderInternal(AbstractElement.java:324)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.layer.ScreenCustomizationLayer.onRenderPost(ScreenCustomizationLayer.java:440)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.lambda$registerListenerMethods$2(EventHandler.java:122)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler$ListenerContainer.notifyListener(EventHandler.java:209)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.postEvent(EventHandler.java:63)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.md0f8072$lambda$afterRenderDrippy$0$3(LoadingOverlay.java:1110)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.runMenuHandlerTaskDrippy(LoadingOverlay.java:1311)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.handler$cdn000$afterRenderDrippy(LoadingOverlay.java:1091)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.m_88315_(LoadingOverlay.java:148)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.handler$cef000$cancelForgeCustomLoadingOverlayRenderingDrippy(ForgeLoadingOverlay.java:527)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.m_88315_(ForgeLoadingOverlay.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:954)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
+[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/gui/loading_progress_fg.png
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture$TextureImage.m_118155_(SimpleTexture.java:83)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6335_(SimpleTexture.java:58)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6704_(SimpleTexture.java:29)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java:119)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280163_(GuiGraphics.java:346)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.renderProgress(ProgressBarElement.java:161)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.elements.progressbar.ProgressBarElement.m_88315_(ProgressBarElement.java:79)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.element.AbstractElement.renderInternal(AbstractElement.java:324)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.customization.layer.ScreenCustomizationLayer.onRenderPost(ScreenCustomizationLayer.java:440)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.lambda$registerListenerMethods$2(EventHandler.java:122)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler$ListenerContainer.notifyListener(EventHandler.java:209)
+	at TRANSFORMER/fancymenu@3.9.14/de.keksuccino.fancymenu.util.event.acara.EventHandler.postEvent(EventHandler.java:63)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.md0f8072$lambda$afterRenderDrippy$0$3(LoadingOverlay.java:1110)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.runMenuHandlerTaskDrippy(LoadingOverlay.java:1311)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.handler$cdn000$afterRenderDrippy(LoadingOverlay.java:1091)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.LoadingOverlay.m_88315_(LoadingOverlay.java:148)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.handler$cef000$cancelForgeCustomLoadingOverlayRenderingDrippy(ForgeLoadingOverlay.java:527)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.loading.ForgeLoadingOverlay.m_88315_(ForgeLoadingOverlay.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:954)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
+[03:03:36] [Render thread] [WARN] Game took 46.67 seconds to start
+[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/menu/background_blurred.png
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
+	at TRANSFORMER/geckolib@4.8.4/software.bernie.geckolib.cache.texture.AnimatableTexture.m_6704_(AnimatableTexture.java:40)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.handler$cpl000$wrapAnimatableTexture(TextureManager.java:1029)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
+	at TRANSFORMER/tcrcore@2.8.7/com.p1nero.tcrcore.client.gui.TCRMenuBackgroundRenderer.renderRegion(TCRMenuBackgroundRenderer.java:70)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$haa001$tcr$replaceDirtBackground(Screen.java:8731)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280039_(Screen.java:371)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.mixinextras$bridge$m_280039_$122(Screen.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$gfg000$wrap_renderDirtBackground_in_renderBackground_FancyMenu(Screen.java:8296)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280273_(Screen.java:363)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.gui.LoadingErrorScreen.m_88315_(LoadingErrorScreen.java:83)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.mixinextras$bridge$m_88315_$120(Screen.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$gfg000$wrap_render_in_renderWithTooltip_FancyMenu(Screen.java:8260)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280264_(Screen.java:109)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.ForgeHooksClient.drawScreenInternal(ForgeHooksClient.java:428)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.ForgeHooksClient.drawScreen(ForgeHooksClient.java:421)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.mixinextras$bridge$drawScreen$278(GameRenderer.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.wrapOperation$ggc000$wrapRenderScreenFancyMenu(GameRenderer.java:15619)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:965)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
+[03:03:36] [Render thread] [WARN] java.io.FileNotFoundException: tcrcore:textures/menu/background_blurred.png
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215590_(ResourceProvider.java:21)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.packs.resources.ResourceProvider.m_215593_(ResourceProvider.java:21)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture$TextureImage.m_118155_(SimpleTexture.java:83)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6335_(SimpleTexture.java:58)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.SimpleTexture.m_6704_(SimpleTexture.java:29)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118515_(TextureManager.java:96)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118495_(TextureManager.java:66)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.texture.TextureManager.m_118506_(TextureManager.java:119)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem._setShaderTexture(RenderSystem.java:1232)
+	at TRANSFORMER/minecraft@1.20.1/com.mojang.blaze3d.systems.RenderSystem.setShaderTexture(RenderSystem.java:1225)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280444_(GuiGraphics.java:354)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280312_(GuiGraphics.java:350)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.GuiGraphics.m_280411_(GuiGraphics.java:342)
+	at TRANSFORMER/tcrcore@2.8.7/com.p1nero.tcrcore.client.gui.TCRMenuBackgroundRenderer.renderRegion(TCRMenuBackgroundRenderer.java:70)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$haa001$tcr$replaceDirtBackground(Screen.java:8731)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280039_(Screen.java:371)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.mixinextras$bridge$m_280039_$122(Screen.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$gfg000$wrap_renderDirtBackground_in_renderBackground_FancyMenu(Screen.java:8296)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280273_(Screen.java:363)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.gui.LoadingErrorScreen.m_88315_(LoadingErrorScreen.java:83)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.mixinextras$bridge$m_88315_$120(Screen.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.wrapOperation$gfg000$wrap_render_in_renderWithTooltip_FancyMenu(Screen.java:8260)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.gui.screens.Screen.m_280264_(Screen.java:109)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.ForgeHooksClient.drawScreenInternal(ForgeHooksClient.java:428)
+	at TRANSFORMER/forge@47.4.28/net.minecraftforge.client.ForgeHooksClient.drawScreen(ForgeHooksClient.java:421)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.mixinextras$bridge$drawScreen$278(GameRenderer.java)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.wrapOperation$ggc000$wrapRenderScreenFancyMenu(GameRenderer.java:15619)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.renderer.GameRenderer.m_109093_(GameRenderer.java:965)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91383_(Minecraft.java:1146)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.Minecraft.m_91374_(Minecraft.java:718)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.client.main.Main.main(Main.java:218)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99)
+	at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.28/net.minecraftforge.fml.loading.targets.CommonClientLaunchHandler.lambda$makeService$0(CommonClientLaunchHandler.java:25)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+	at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
