@@ -9,8 +9,8 @@ Import: every entry of the previous import is kept byte for byte, except
   - README_FIRST_JA.md (the new notes go first),
   - files under the overlay dir, which are added or replace overrides/<same path>;
 and the notes are added as overrides/CHANGES_v<version>_JA.md.
-Patch: the new jar under mods/, the overlay's config/ and oror-install/ files, and the notes, for a profile that keeps
-its mods (the added CurseForge files need the new import).
+Patch: the new jar (and the previous import's Indestructible compatibility jar) under mods/, the overlay's config/ and
+oror-install/ files, and the notes, for a profile that keeps its mods (the added CurseForge files need the new import).
 """
 import json, os, sys, zipfile
 
@@ -62,8 +62,12 @@ def main(previous, jar, old, new, resolved, overlay, notes, out):
             dst.writestr('overrides/' + path, data)
         dst.writestr(f'overrides/CHANGES_v{new}_JA.md', text.encode('utf-8'))
     patch_zip = os.path.join(out, f'OROR_War_Nightfall_v{new}_Patch.zip')
-    with zipfile.ZipFile(patch_zip, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as dst:
+    with zipfile.ZipFile(previous) as src, zipfile.ZipFile(patch_zip, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as dst:
         dst.writestr(f'mods/oror_supreme_bosses-{new}.jar', payload)
+        # The native-combat line needs its Indestructible compatibility build; a profile updated from 0.17.23 lacks it.
+        for name in src.namelist():
+            if name.startswith('overrides/mods/indestructible-') and name.endswith('.jar'):
+                dst.writestr(name[len('overrides/'):], src.read(name))
         for path, data in sorted(files.items()):
             if path.startswith(('config/', 'oror-install/')):
                 dst.writestr(path, data)
