@@ -35,6 +35,9 @@ were made on 0.17.23 and are carried over; `out/oror_supreme_bosses-0.17.24.jar`
 - `CompatibilityMixinPlugin`: the mixins on Nightfall's or Indestructible's classes are skipped without those mods; the
   config is required, so a profile without them stopped at start-up instead of saying what is missing.
 - `NightfallNativeParryFeedbackMixin` (that jar's source): damage without a direct entity is skipped.
+- `NightfallCraftGui` (new): NightfallCraft's menus. From the TCR Core images SETUP_NIGHTFALL.cmd copies, an
+  always-on built-in pack with the 1.21.1 button, tab and separator sprites (cut from TCR Core's 1.20.1 widget sheet),
+  and TCR Core's cover image behind menus opened outside a world; nothing without the images.
 - `NightfallPatchSettings`: `compactHud` defaults to false. 0.17.22 hid every Ares HUD layer (stamina, guard and parry,
   mana) and drew a plain health row instead; the 0.17.25 pack also ships `compactHud=false`.
 - The rest of 0.17.25 is the pack around the jar: NightfallCraft's screens and combat feel, in `oror_rework/nfc_ui`.
