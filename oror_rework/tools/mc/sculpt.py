@@ -527,7 +527,11 @@ def bake(rig, painter, seed=11, ao=True):
     for s, (P, N, cov) in zip(sc.surfs, ctxs):
         A = occ.ao(P, N) if occ is not None and s.info.get('ao', True) else np.ones(P.shape[:2], np.float32)
         rng = np.random.default_rng(zlib.crc32(f'{seed}/{s.bone.name}/{s.name}/{s.info.get("face", "")}'.encode()))
-        rgb, alpha, glow = painter(s, dict(P=P, N=N, cov=cov, ao=A, rng=rng, td=sc.td))
+        ctx = dict(P=P, N=N, cov=cov, ao=A, rng=rng, td=sc.td)
+        if s.info.get('spots'):
+            # eyes, dots and lines are placed in the model's own (bone-local) coordinates
+            ctx['PL'], ctx['NL'], _ = raster_attrs(s, np.asarray(s.V, float), _unit(np.asarray(s.N, float)))
+        rgb, alpha, glow = painter(s, ctx)
         H, W = s.size[1], s.size[0]
         rgba = np.zeros((H, W, 4), np.float32)
         rgba[..., :3] = rgb

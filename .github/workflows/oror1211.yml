@@ -96,7 +96,7 @@ jobs:
         run: |
           BASE=$(sed -n 's/^base_version=//p' gradle.properties); NEW=$(sed -n 's/^release_version=//p' gradle.properties)
           python3 -I tools/patch_jar.py base/oror_supreme_bosses-$BASE.jar build/classes/java/main lang \
-            out/oror_supreme_bosses-$NEW.jar $BASE $NEW 2>&1 | tee -a out/report.txt
+            out/oror_supreme_bosses-$NEW.jar $BASE $NEW overlay 2>&1 | tee -a out/report.txt
           sha256sum out/oror_supreme_bosses-$NEW.jar | tee -a out/report.txt
       - name: Commit the result
         if: always()

@@ -10,6 +10,8 @@ import figure_bb
 sys.modules['figure'] = figure_bb          # recipes import Humanoid & helpers from 'figure'
 import sculpt as SC
 import bbpaint as BP
+import gaiapaint
+gaiapaint.enable()           # 0.17.27: Grimoire of Gaia / Ice and Fire painters
 import build3d as B3
 
 

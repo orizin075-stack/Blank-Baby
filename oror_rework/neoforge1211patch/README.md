@@ -59,3 +59,13 @@ textures, Excalibur's item model, the flag bearer's inventory mesh), NightfallCr
   name of the weapon whose model it reuses (read from the Nightfall jar by the build), Excalibur and the flag bearer a
   plain one. Names (en/ja) for other mods' items that showed raw keys: Epic Fight Extra's great tachi, yoto,
   uchigatana and sheaths, P1nero's Oblivionis, four Cataclysm materials and a few more.
+
+## 0.17.27
+
+- `overlay/`: every character's texture, glow layer and mesh, rebuilt with `oror_rework/tools/mc` (`build_bb.py <dir>`,
+  then `textures/*.png` -> `overlay/assets/oror_supreme_bosses/textures/entity/`, `meshes/*.bin` -> `.../meshes/`).
+  `tools/patch_jar.py` writes the overlay over the base jar. The painters are new (`gaiaface.py`, `gaiapaint.py`): faces
+  and bodies after Grimoire of Gaia (big eyes with a lash flick, iris ramp, catchlight and blush; hair in lit locks with
+  pointed ends; rounded shading), creatures after Ice and Fire (scales laid out in model space, countershading,
+  veined membranes, ridged horns), and the eyes of the lofted creatures, which no painter drew since v0.17.0.
+  `rigs.json` is unchanged; meshes differ only where transparent texels changed.
