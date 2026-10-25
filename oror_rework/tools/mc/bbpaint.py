@@ -719,7 +719,7 @@ def _palette(mat):
         cols = []
         base = mat.get('color')
         if isinstance(base, str):
-            cols += [ramp(C(base), k) for k in (0.52, 0.68, 0.84, 1.0, 1.16, 1.34)]
+            cols += [ramp(C(base), k) for k in (0.5, 0.62, 0.74, 0.86, 1.0, 1.12, 1.26, 1.42)]
         for k in SNAP_KEYS[1:]:
             v = mat.get(k)
             if isinstance(v, str) and v.startswith('#'):

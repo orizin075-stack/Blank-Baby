@@ -11,15 +11,16 @@ Model space: pixels, y down (ground y = 24), the front is -z.
 """
 import math
 import numpy as np
+import bb
 from paint import M
 from creatures_ia import (rig as _rig, box, rbox, cbox, seg, chain_boxes, eye, teeth, teeth_x, fin, ball, hoop, sea_fin_bone,
                           recipe as _unused)
 
 
-def rig(key, td=1):
-    """One texel per model pixel and every texel on its material's palette: the reference mods (Cataclysm, Alex's Caves,
-    Legendary Monsters) paint at vanilla density with 14-32 colours per boss texture; OROR's earlier 2 texels per pixel
-    and painted gradients gave 250-960."""
+def rig(key, td=2):
+    """Two texels per model pixel for fine detail on big bosses, every texel on its material's palette: the reference
+    mods (Cataclysm, Alex's Caves, Legendary Monsters) paint a boss with 14-32 colours per texture; OROR's earlier
+    painted gradients gave 250-960."""
     r = _rig(key, td=td)
     r.snap = True
     return r
@@ -1442,4 +1443,353 @@ def yggdrasil():
         a = k * 2 * math.pi / 9 + 0.1
         rr = 15.0 + (k % 2) * 3.0
         world_orb(crown, (math.cos(a) * rr, top + 9.5 + (k % 3) * 1.4, math.sin(a) * rr), 2.2, kind)
+    return r
+
+
+# ============================================================================================ reference forms
+# After the reference gallery (oror_rework/ref_mobs): the reference bosses are built from a few big, simple volumes
+# with dramatic appendages: wings that are the forelimbs with thick finger spars and ragged membranes (Monster
+# Expansion's Skrythe), tall rows of spikes (Leivekilth), a box head with a cavernous toothed mouth and ragged sail
+# fins (Alex's Caves' Hullbreaker), long thin legs with big talons (Ignathos), slab armour plates (Rakoth).
+
+def _unit3(v):
+    v = np.asarray(v, float)
+    return v / (np.linalg.norm(v) or 1.0)
+
+
+def membrane(bone, pts, colour, veins3=(), accent=None, glow=False, **kw):
+    """A membrane through 3D points (the first is its root): a plate in the plane of the first three points, cut to the
+    polygon of all of them, painted by the wingskin painter in its own plane coordinates."""
+    P = [np.asarray(p, float) for p in pts]
+    o = P[0]
+    u = _unit3(P[1] - o)
+    n = _unit3(np.cross(u, P[2] - o))
+    v = np.cross(n, u)
+    uv = [((p - o) @ u, (p - o) @ v) for p in P]
+    a = [q[0] for q in uv]
+    b = [q[1] for q in uv]
+    a0, a1, b0, b1 = min(a), max(a), min(b), max(b)
+    veins = [(((np.asarray(p0) - o) @ u), ((np.asarray(p0) - o) @ v), ((np.asarray(p1) - o) @ u), ((np.asarray(p1) - o) @ v))
+             for p0, p1 in veins3]
+    mat = M('wingskin', colour, poly=uv, frame=(tuple(o), tuple(u), tuple(v)), veins=veins, accent=accent, glow=glow, **kw)
+    c = o + u * (a0 + a1) / 2 + v * (b0 + b1) / 2
+    R = np.stack([u, n, v], 1)
+    return bb.obox(bone, c, (a1 - a0, 0.0, b1 - b0), R, mat)
+
+
+def ragged(p0, p1, n, depth, side, jag=0.35, seed=0):
+    """Points along an edge from p0 to p1 that scallop inward by `depth` (toward `side`, a direction) between the ends,
+    with small jags: the trailing edge of a wyvern's membrane or a fish's fin."""
+    rng = np.random.default_rng(seed)
+    p0, p1, side = np.asarray(p0, float), np.asarray(p1, float), _unit3(side)
+    out = []
+    for k in range(1, n):
+        t = k / n
+        q = p0 + (p1 - p0) * t + side * depth * math.sin(math.pi * t)
+        q = q + side * depth * jag * (rng.random() - 0.5) * (1 if k % 2 else -1)
+        out.append(tuple(q))
+    return out
+
+
+def wing_arm(r, parent, side, shoulder, elbow, wrist, tips, membrane_c, spar, claw, body_pt, name=None, accent=None,
+             glow=False, skin_kw=None, spar_w=1.6, amp=0.12, speed=0.06):
+    """A wyvern's wing that is its forelimb: shoulder, elbow raised, wrist planted on the ground with a thumb claw,
+    thick finger spars radiating up and back to `tips`, and a ragged membrane between each pair of fingers and from
+    the last finger back to the flank (`body_pt`)."""
+    sx = side
+    b = r.bone(name or ('wing_r' if sx < 0 else 'wing_l'), parent, shoulder, anim='sway', ax=2, amp=amp, speed=speed, phase=sx)
+    chain_boxes(b, [shoulder, elbow], spar_w * 1.5, spar_w * 1.25, spar)
+    chain_boxes(b, [elbow, wrist], spar_w * 1.25, spar_w, spar)
+    for j in (elbow, wrist):
+        cbox(b, j, (spar_w * 1.6,) * 3, spar)
+    # thumb claw and the knuckle it walks on
+    seg(b, wrist, (wrist[0] + sx * 0.4, wrist[1] + 1.6, wrist[2] - 1.6), 0.9, 0.9, claw, up=(0, 0, -1))
+    for k, t in enumerate(tips):
+        mid = lerp(wrist, t, 0.42)
+        chain_boxes(b, [wrist, mid, t], spar_w * 0.95, spar_w * 0.4, spar)
+        cbox(b, mid, (spar_w * 1.05,) * 3, spar)
+    kw = dict(skin_kw or {})
+    for k in range(len(tips)):
+        a = tips[k]
+        nxt = tips[k + 1] if k + 1 < len(tips) else body_pt
+        inward = _unit3(np.asarray(wrist, float) - (np.asarray(a, float) + np.asarray(nxt, float)) / 2)
+        edge = ragged(a, nxt, 7, np.linalg.norm(np.asarray(nxt) - np.asarray(a)) * 0.22, inward, seed=k + 3)
+        pts = [wrist, a] + edge + [nxt]
+        veins = [(wrist, lerp(wrist, lerp(a, nxt, 0.5), 0.8))]
+        membrane(b, pts, membrane_c, veins3=veins, accent=accent, glow=glow, **kw)
+    return b
+
+
+def crystal(bone, base, tip, w, mat, cap=None):
+    """A tall thin prism (Leivekilth's ice spikes, Demiurgos's gems): a square shaft tapering to a point."""
+    seg(bone, base, lerp(base, tip, 0.7), w, w, mat, up=(0, 0, 1), ext=w * 0.3)
+    seg(bone, lerp(base, tip, 0.6), tip, w * 0.6, w * 0.6, cap or mat, up=(0, 0, 1))
+
+
+def talon_foot(bone, ankle, toe_dir, w, skin, claw, n=3):
+    """A big bird-of-prey foot: three long toes spread forward with hooked talons, one back toe."""
+    ax, ay, az = ankle
+    for k in range(n):
+        spread = (k - (n - 1) / 2) * 0.55
+        dx, dz = math.sin(spread) * 3.2, -math.cos(spread) * 3.2
+        knuckle = (ax + dx * 0.55, ay + 0.6, az + dz * 0.55)
+        toe = (ax + dx, ay + 1.2, az + dz)
+        chain_boxes(bone, [(ax, ay, az), knuckle, toe], w * 0.55, w * 0.42, skin)
+        chain_boxes(bone, [toe, (toe[0] + dx * 0.35, ay + 2.0, toe[2] + dz * 0.35)], w * 0.38, w * 0.15, claw)
+    chain_boxes(bone, [(ax, ay, az), (ax, ay + 1.4, az + 2.0), (ax, ay + 2.0, az + 2.8)], w * 0.4, w * 0.15, claw)
+
+
+def long_leg(r, parent, name, anim, hip, knee, ankle, foot, w, skin, plate, claw):
+    """Monster Expansion's long, thin wyvern leg: a muscular thigh, a long shin back to a high ankle, a long foot."""
+    up = r.bone(name, parent, hip, anim=anim)
+    rbox(up, (hip[0] - w * 0.75, hip[1] - w, hip[2] - w * 1.1), (hip[0] + w * 0.75, hip[1] + w * 0.9, hip[2] + w * 1.0), skin, bevel=w * 0.3)
+    seg(up, hip, knee, w * 1.15, w * 1.3, skin, up=(0, 0, -1), ext=w * 0.4)
+    low = r.bone(name + '_low', up, knee, anim='knee')
+    seg(low, knee, ankle, w * 0.6, w * 0.7, skin, up=(0, 0, 1), ext=w * 0.3)
+    box(low, (knee[0] - w * 0.36, knee[1] + 0.4, knee[2] + w * 0.32), (knee[0] + w * 0.36, ankle[1] - 0.5, knee[2] + w * 0.6), plate,
+        rot=(-0.4, 0, 0), pivot=knee)
+    seg(low, ankle, foot, w * 0.5, w * 0.5, skin, up=(0, 0, -1), ext=w * 0.25)
+    talon_foot(low, foot, (0, 0, -1), w * 1.3, skin, claw)
+    return up, low
+
+
+@recipe
+def demiurgos():
+    # 空創龍王 デミウルゴス, rebuilt on Monster Expansion's Skrythe: a wyvern whose wings are its forelimbs, walking on
+    # its wrists, with enormous ragged membranes (the black-scaled small dragon of the lore: five metres, rainbow gem
+    # glints in jet scales, mystery more than mass), a long neck, a long-snouted head under a crest of tall gems, long
+    # thin hind legs with big talons, a long tail ending in a gem cluster. Rows of rainbow crystals along the spine
+    # replace scattered glints; the membranes hold a night sky.
+    r = rig('demiurgos')
+    gems = ['#ff6ad5', '#6af0ff', '#ffe46a', '#7dff8a', '#b48cff']
+    gem = lambda k: M('gem', gems[k % len(gems)], glow=True)
+    skin = M('shingle', '#2a2636', belly='#4a4064', scale_size=1.3)
+    plate = M('carapace', '#1c1a26', accent='#b48cff')
+    spar = M('carapace', '#141018')
+    claw = M('horn', '#2a2438', tip='#e6d2ff', glow=True)
+    root = r.bone('root', None, (0, 24, 0), anim='root')
+    body = r.bone('body', root, (0, 12, 2), anim='breath')
+    rbox(body, (-4.0, 7.6, -6.5), (4.0, 15.0, 1.0), skin, bevel=1.4)
+    rbox(body, (-3.4, 8.6, 0.0), (3.4, 14.2, 8.0), skin, bevel=1.2)
+    rbox(body, (-3.8, 8.2, 7.0), (3.8, 14.0, 12.0), skin, bevel=1.2)
+    for z0, z1 in ((-6.0, 0.0), (0.4, 7.6)):
+        box(body, (-2.8, 14.2, z0), (2.8, 15.2, z1), M('carapace', '#4a4064'))
+    # a row of rainbow crystals along the spine, tallest over the shoulders (Leivekilth's spike row)
+    for k, (z, h, lean) in enumerate(((-5.0, 6.5, -1), (-2.2, 5.0, 1), (0.8, 3.8, -1), (3.6, 2.8, 1), (6.4, 2.2, -1), (9.2, 1.8, 1))):
+        y0 = 7.8 if z < 7 else 8.4
+        crystal(body, (lean * 0.8, y0, z), (lean * 2.0, y0 - h, z + h * 0.5), 0.9 + h * 0.1, gem(k))
+    neck = r.bone('neck', body, (0, 9.5, -5.5), anim='sway', ax=1, amp=0.04, speed=0.05)
+    chain_boxes(neck, [(0, 10.5, -5.5), (0, 6.5, -9.5), (0, 3.0, -12.5), (0, 1.5, -14.5)], 4.2, 3.0, skin)
+    for k in range(4):
+        p = lerp((0, 8.5, -7.5), (0, 0.6, -14.0), k / 3)
+        crystal(neck, p, (0, p[1] - 3.2 + k * 0.3, p[2] + 1.8), 0.8, gem(k + 2))
+    head = r.bone('head', neck, (0, 1.6, -14.8), anim='head')
+    rbox(head, (-2.3, -1.2, -20.0), (2.3, 2.8, -13.6), skin, bevel=0.6)                       # skull
+    rbox(head, (-1.7, -0.2, -24.6), (1.7, 2.4, -19.6), skin, bevel=0.5, faces={'bottom': M('mouth', '#43101c')})   # long snout
+    box(head, (-1.0, -0.6, -24.2), (1.0, -0.1, -15.0), plate)                                   # nose ridge
+    for sx in (-1, 1):
+        side = 'left' if sx > 0 else 'right'
+        box(head, (sx * 1.0, -1.8, -20.5), (sx * 2.8, -0.8, -16.4), plate, rot=(-0.25, 0, sx * 0.15), pivot=(sx * 2, -1.2, -18.5))
+        cbox(head, (sx * 2.25, 0.6, -18.2), (0.3, 1.4, 2.6), M('simple', '#0c0a10'))
+        eye(head, (sx * 2.38, 0.6, -18.2), 2.6, 1.2, side, M('eye', '#d29cff', pupil='slit', mood='fierce', lid='#1c1a28', glow_amount=1.0))
+        horn(head, [(sx * 1.6, -1.0, -15.0), (sx * 2.6, -3.6, -12.4), (sx * 3.2, -5.6, -9.0), (sx * 3.0, -6.4, -5.6)], 1.4, 0.35, claw)
+        teeth(head, sx * 1.35, 2.4, -24.2, -19.8, 4, 0.5, M('tooth', '#efe6d2'), down=True)
+    for k in range(3):                                                                         # the crown of gems
+        crystal(head, (0, -1.1, -17.5 + k * 1.6), (0, -5.0 - k * 0.8, -15.0 + k * 1.8), 0.9, gem(k))
+    jaw = r.bone('jaw', head, (0, 2.6, -14.4), rot=(0.14, 0, 0), anim='jaw')
+    rbox(jaw, (-1.5, 2.4, -24.0), (1.5, 3.8, -14.4), M('carapace', '#4a4064'), bevel=0.4, faces={'top': M('mouth', '#43101c')})
+    for sx in (-1, 1):
+        teeth(jaw, sx * 1.15, 2.5, -23.6, -19.6, 3, 0.45, M('tooth', '#efe6d2'), down=False)
+    # long thin hind legs with talons
+    for sx in (-1, 1):
+        long_leg(r, body, 'leg_b' + ('r' if sx < 0 else 'l'), 'leg_l' if sx < 0 else 'leg_r', (sx * 3.6, 12.0, 9.0),
+                 (sx * 4.4, 16.0, 4.6), (sx * 4.4, 20.6, 11.0), (sx * 4.4, 22.4, 8.6), 2.2, skin, plate, claw)
+    # the wings are the forelimbs: walking on the wrists, the fingers fanned up and back, a night sky in the membranes
+    wing_kw = dict(stars=0.03, streaks='#ff9ae8')
+    for sx in (-1, 1):
+        wing_arm(r, body, sx, (sx * 3.8, 9.0, -3.5), (sx * 11.0, 3.0, 1.5), (sx * 10.5, 23.0, -8.0),
+                 [(sx * 13.0, -15.0, -4.0), (sx * 24.0, -12.0, 6.0), (sx * 30.0, -2.0, 15.0), (sx * 24.0, 8.0, 24.0)],
+                 '#261c48', spar, claw, (sx * 3.6, 12.0, 11.0), accent='#b48cff', glow=True, skin_kw=wing_kw, spar_w=1.5)
+    # a long tail of tapering boxes, crystals along it, a gem cluster at the end
+    ends = plated_tail(r, body, (0, 11.0, 11.5), [5.0, 5.0, 4.8, 4.6, 4.4, 4.0], [3.6, 3.0, 2.5, 2.0, 1.6, 1.2], skin, plate,
+                       claw, droop=0.2, spikes=False)
+    for i, (b, q) in enumerate(ends[:-1]):
+        crystal(b, (0, q[1] - 1.2, q[2] - 1.5), (0, q[1] - 3.4 + i * 0.3, q[2] - 0.2), 0.7, gem(i))
+    b, (x, y, z) = ends[-1]
+    for k, (dx, dy, dz, sz) in enumerate(((0, 0, 1.8, 2.2), (1.0, -1.0, 0.9, 1.5), (-1.0, -0.8, 1.0, 1.4), (0, 1.1, 0.7, 1.2))):
+        cbox(b, (x + dx, y + dy, z + dz), (sz, sz * 1.7, sz), gem(k), rot=(0.4, 0.7, 0.3 * k))
+    return fit_height(r, ('wing',))
+
+
+def ragged_fin(bone, root0, root1, tip, colour, depth=0.1, accent=None, glow=False, n=11, seed=0, rays=3, **kw):
+    """A fin standing on the line root0-root1 and reaching `tip`: straight leading edge, ragged scalloped trailing edge,
+    a few rays from the root (Hullbreaker's sail fins)."""
+    r0, r1, t = (np.asarray(p, float) for p in (root0, root1, tip))
+    inward = _unit3((r0 + r1) / 2 - (t + r1) / 2)
+    edge = ragged(t, r1, n, np.linalg.norm(r1 - t) * min(depth, 0.12), inward, jag=1.4, seed=seed)
+    veins = [(tuple(lerp(r0, r1, (k + 0.5) / (rays + 1))), tuple(lerp(t, r1, (k + 1) / (rays + 1)))) for k in range(rays)]
+    return membrane(bone, [tuple(r0), tuple(t)] + edge + [tuple(r1)], colour, veins3=veins, accent=accent, glow=glow, **kw)
+
+
+def sail_fin(bone, r0, r1, height, lean, colour, spine_mat=None, light_mat=None, n_rays=4, seed=0, **kw):
+    """A broad sail fin on the base r0-r1 (Hullbreaker): it rises `height` (along -y, leaning back by `lean`), its top
+    edge scalloped between ray tips that end in spines and lights."""
+    r0, r1 = np.asarray(r0, float), np.asarray(r1, float)
+    up = np.array([0.0, -height, lean])
+    tops = []
+    for k in range(n_rays + 1):
+        t = k / n_rays
+        h = 1.0 - 0.45 * t                                    # tallest at the front, falling away behind
+        tops.append(lerp(r0, r1, t * 0.85 + 0.05) + up * h)
+    pts = [tuple(r0)]
+    for k in range(n_rays):
+        a, b = np.asarray(tops[k]), np.asarray(tops[k + 1])
+        pts.append(tuple(a))
+        mid = (a + b) / 2 + np.array([0.0, height * 0.16, 0.0])
+        pts.append(tuple(mid))
+    pts.append(tuple(tops[-1]))
+    pts.append(tuple(r1))
+    veins = [(tuple(lerp(r0, r1, k / n_rays * 0.85 + 0.05)), tuple(tops[k])) for k in range(n_rays + 1)]
+    membrane(bone, pts, colour, veins3=veins, **kw)
+    for k, t in enumerate(tops):
+        base = lerp(r0, r1, k / n_rays * 0.85 + 0.05)
+        if spine_mat is not None:
+            seg(bone, base, t, 0.5, 0.5, spine_mat)
+            spike(bone, t, (t[0], t[1] - 1.6, t[2] + 1.0), 0.45, spine_mat)
+        if light_mat is not None:
+            cbox(bone, t, (0.55, 0.55, 0.55), light_mat)
+    return tops
+
+
+def dots(bone, pts, size, mat):
+    for p in pts:
+        cbox(bone, p, (size, size, size), mat)
+
+
+@recipe
+def enkou():
+    # 災極海獣 淵煌, rebuilt on Alex's Caves' Hullbreaker and Cataclysm's Leviathan: a great box of a head that is
+    # mostly mouth, three rows of teeth in it, pale blue light-organ eyes in armoured sockets; a body stepping down in
+    # big boxes clad in rows of obsidian scale plates, to a long tail and a shark's crescent fluke; the lore's shark
+    # edge in one huge ragged dorsal fin, an orca's white belly and paddle fins, an ancient dragon's horns, brow
+    # spikes and whiskers; a lateral line of glowing dots and ragged sail fins down the back.
+    r = rig('enkou')
+    glowc = '#8fe8ff'
+    hide = M('shingle', '#121824', belly='#d6e2ea', countershade=(16.6, 0.8), scale_size=1.1)
+    dark = M('shingle', '#0c1018', belly='#d6e2ea', scale_size=0.9)
+    white = M('carapace', '#d6e2ea')
+    plate = M('carapace', '#1a2232', accent=glowc)
+    scute = M('carapace', '#202a3a')
+    hornm = M('horn', '#182030', tip=glowc, glow=True)
+    spine = M('horn', '#0e1420', tip='#5a7a9a')
+    tooth = M('tooth', '#f4efe4')
+    mouth = M('mouth', '#2a0a12')
+    light = M('energy', glowc, glow=True)
+    fin_c = '#1c2a40'
+    root = r.bone('root', None, (0, 24, 0), anim='root', hover=1.2, speed=0.05)
+    body = r.bone('body', root, (0, 13, 0), anim='sway', ax=1, amp=0.05, speed=0.06)
+    # body: three big boxes stepping down toward the tail
+    segs = [(-6.4, 6.0, 19.6, -10.0, 3.0), (-5.4, 7.0, 18.6, 2.4, 11.0), (-4.0, 8.4, 17.0, 10.4, 17.0)]
+    for (x0, y0, y1, z0, z1) in segs:
+        rbox(body, (x0, y0, z0), (-x0, y1, z1), hide, bevel=1.4)
+    box(body, (-5.0, 19.4, -9.0), (5.0, 19.9, 10.0), white)                                     # white belly
+    for k in range(9):                                                                          # belly grooves
+        box(body, (-4.6, 19.85, -8.4 + k * 2.0), (4.6, 19.95, -7.8 + k * 2.0), M('carapace', '#a8b8c4'))
+    # armour: overlapping obsidian scale plates in two rows down each side of the back, a ridge of spikes between
+    for (x0, y0, y1, z0, z1) in segs:
+        for row, yy in enumerate((y0 + 0.4, y0 + 2.6)):
+            n = int((z1 - z0) / 2.2)
+            for k in range(n):
+                z = z0 + 1.0 + k * 2.2
+                for sx in (-1, 1):
+                    xx = sx * (-x0 - 0.6 - row * 0.6)
+                    box(body, (xx - 1.2, yy - 0.7, z - 1.1), (xx + 1.2, yy + 0.6, z + 1.3), scute, rot=(0.35, 0, -sx * (0.5 + row * 0.35)),
+                        pivot=(xx, yy, z))
+    for z in np.arange(-9.0, 17.0, 1.6):
+        if -6.5 < z < 3.5 or 4.0 < z < 10.8 or 11.0 < z < 16.8:
+            continue
+        y = 6.0 if z < 3 else (7.0 if z < 10.5 else 8.4)
+        spike(body, (0, y, z), (0, y - 1.6, z + 0.9), 0.6, spine)
+    for sx in (-1, 1):
+        box(body, (sx * 6.38, 14.0, -8.0), (sx * 6.5, 18.6, -1.0), white)                            # orca flank patch
+        for k in range(4):                                                                          # gill slits
+            box(body, (sx * 6.36, 9.6, -9.2 + k * 1.3), (sx * 6.5, 14.6, -8.7 + k * 1.3), M('simple', '#04060a'))
+        dots(body, [(sx * (6.45 if z < 3 else (5.45 if z < 10.5 else 4.05)), 11.6 + z * 0.05, z) for z in np.arange(-6.0, 17.0, 1.4)], 0.45, light)
+        dots(body, [(sx * 6.45, 9.0, z) for z in np.arange(-4.0, 2.5, 1.8)], 0.4, light)
+    # a shark's dorsal fin: tall, broad at the root, its trailing edge curved like a sickle; then two broad ragged
+    # sail fins down the back (Hullbreaker)
+    fk = dict(accent='#4a6a8e', edge='#5a86b0', streaks=True)
+    tip = (0, -13.0, 4.0)
+    falcate = ragged(tip, (0, 6.2, 4.6), 9, 3.0, (0, 0, -1), jag=0.5, seed=1)
+    membrane(body, [(0, 6.2, -9.0), tip] + falcate + [(0, 6.2, 4.6)], fin_c,
+             veins3=[((0, 6.2, z), lerp((0, 6.2, z), tip, 0.85)) for z in (-6.0, -3.0, 0.0)], **fk)
+    for z in (-6.0, -3.0, 0.0):
+        seg(body, (0, 6.2, z), lerp((0, 6.2, z), tip, 0.85), 0.45, 0.45, spine)
+    spike(body, tip, (0, -15.2, 5.6), 0.55, spine)
+    cbox(body, tip, (0.6, 0.6, 0.6), light)
+    sail_fin(body, (0, 7.2, 5.0), (0, 7.2, 11.0), 8.5, 3.0, fin_c, spine, light, n_rays=4, seed=2, **fk)
+    sail_fin(body, (0, 8.6, 11.4), (0, 8.6, 16.6), 6.5, 2.6, fin_c, spine, light, n_rays=3, seed=3, **fk)
+    for sx in (-1, 1):
+        fb = r.bone('fin_' + ('r' if sx < 0 else 'l'), body, (sx * 6.2, 17.6, -6.0), anim='sway', ax=2, amp=0.14, speed=0.08, phase=sx)
+        ptip = (sx * 18.0, 23.0, 5.0)
+        edge = ragged(ptip, (sx * 6.2, 17.6, 0.5), 8, 2.0, (0, 0, -1), jag=0.8, seed=5 + sx)
+        membrane(fb, [(sx * 6.2, 17.6, -9.0), (sx * 12.0, 20.6, -5.0), ptip] + edge + [(sx * 6.2, 17.6, 0.5)], fin_c,
+                 veins3=[((sx * 6.2, 17.6, z), lerp((sx * 6.2, 17.6, z), ptip, 0.8)) for z in (-7.0, -4.0, -1.0)], **fk)
+        for z in (-7.0, -4.0, -1.0):
+            seg(fb, (sx * 6.2, 17.6, z), lerp((sx * 6.2, 17.6, z), ptip, 0.8), 0.45, 0.45, spine)
+        cbox(fb, ptip, (0.6, 0.6, 0.6), light)
+        pb = r.bone('pelvic_' + ('r' if sx < 0 else 'l'), body, (sx * 5.0, 18.2, 9.0), anim='sway', ax=2, amp=0.1, speed=0.08, phase=-sx)
+        membrane(pb, [(sx * 5.0, 18.2, 7.0), (sx * 9.5, 21.8, 12.0)] + ragged((sx * 9.5, 21.8, 12.0), (sx * 5.0, 18.2, 11.0), 5, 1.0,
+                 (0, 0, -1), seed=8 + sx) + [(sx * 5.0, 18.2, 11.0)], fin_c, **fk)
+    # head: a big box that is mostly mouth
+    head = r.bone('head', body, (0, 13, -10), anim='head')
+    rbox(head, (-6.0, 5.4, -24.0), (6.0, 13.0, -9.6), dark, bevel=1.4, faces={'bottom': mouth})        # upper skull
+    rbox(head, (-5.2, 6.0, -27.4), (5.2, 12.0, -23.0), dark, bevel=1.2, faces={'bottom': mouth})       # overhanging snout
+    box(head, (-5.6, 12.6, -25.6), (5.6, 13.2, -10.0), mouth)                                          # roof of the mouth
+    box(head, (-1.2, 4.8, -27.0), (1.2, 5.6, -11.0), plate)                                            # skull ridge
+    for k in range(5):
+        spike(head, (0, 4.9, -24.0 + k * 3.0), (0, 3.4 - k * 0.2, -22.8 + k * 3.0), 0.7, spine)
+    for sx in (-1, 1):
+        side = 'left' if sx > 0 else 'right'
+        # armoured eye socket: a heavy brow with spikes over a pale blue light organ
+        box(head, (sx * 3.0, 4.8, -20.6), (sx * 6.6, 6.4, -14.0), plate, rot=(-0.1, 0, sx * 0.25), pivot=(sx * 5.0, 5.6, -17.0))
+        for k in range(3):
+            spike(head, (sx * (5.6 + k * 0.2), 5.0, -19.6 + k * 2.2), (sx * (7.4 + k * 0.3), 4.0, -18.4 + k * 2.2), 0.6, spine)
+        cbox(head, (sx * 6.0, 8.4, -17.0), (0.3, 3.0, 4.2), M('simple', '#04060a'))
+        eye(head, (sx * 6.12, 8.4, -17.0), 3.6, 2.4, side, M('eye', '#bff4ff', pupil='round', mood='fierce', lid='#0a0e16', glow_amount=1.0))
+        box(head, (sx * 5.9, 10.6, -21.0), (sx * 6.5, 12.6, -11.0), plate, rot=(0, sx * 0.05, 0))        # cheek plate
+        dots(head, [(sx * 6.55, 11.6, z) for z in (-20.0, -18.6, -17.2, -15.8, -14.4, -13.0)], 0.4, light)
+        dots(head, [(sx * 5.25, 7.0, z) for z in (-26.4, -25.0)], 0.5, light)                          # snout lights
+        box(head, (sx * 2.0 - 0.5, 5.95, -27.45), (sx * 2.0 + 0.5, 7.0, -27.35), M('simple', '#04060a'))  # nostrils
+        horn(head, [(sx * 4.6, 5.8, -14.0), (sx * 6.2, 3.4, -10.0), (sx * 7.0, 2.4, -5.0), (sx * 6.6, 2.4, -0.5)], 2.2, 0.5, hornm)
+        horn(head, [(sx * 5.8, 9.0, -12.0), (sx * 8.4, 8.2, -8.6), (sx * 9.6, 8.6, -5.2)], 1.4, 0.4, hornm)
+        for row in range(3):
+            teeth(head, sx * (5.0 - row * 1.1), 13.0, -26.0 + row * 1.4, -11.0, 11 - row * 2, 1.0 - row * 0.22, tooth, down=True)
+    teeth_x(head, -26.8, 12.0, -4.4, 4.4, 7, 1.1, tooth, down=True)
+    jaw = r.bone('jaw', head, (0, 13.4, -10.5), rot=(0.42, 0, 0), anim='jaw')
+    rbox(jaw, (-5.6, 13.4, -26.0), (5.6, 17.6, -10.5), white, bevel=1.2, faces={'top': mouth})
+    box(jaw, (-3.6, 17.4, -25.6), (3.6, 18.2, -16.0), plate)                                       # chin plate
+    for sx in (-1, 1):
+        for row in range(2):
+            teeth(jaw, sx * (4.6 - row * 1.1), 13.4, -25.0 + row * 1.4, -12.0, 10 - row * 2, 0.95 - row * 0.22, tooth, down=False)
+        box(jaw, (sx * 5.5, 14.0, -25.0), (sx * 5.8, 17.0, -12.0), plate)
+        bb_ = r.bone('barbel_' + ('r' if sx < 0 else 'l'), jaw, (sx * 3.6, 17.4, -24.0), anim='sway', ax=0, amp=0.2, speed=0.07, phase=sx)
+        chain_boxes(bb_, [(sx * 3.6, 17.4, -24.0), (sx * 4.4, 21.0, -23.0), (sx * 4.0, 25.0, -21.0), (sx * 3.0, 27.0, -18.0)], 0.9, 0.4,
+                    M('horn', '#182030', tip=glowc, glow=True))
+    teeth_x(jaw, -25.6, 13.4, -4.0, 4.0, 6, 1.0, tooth, down=False)
+    # tail: tapering boxes with scale plates, glowing dots, a crescent fluke with rays
+    ends = plated_tail(r, body, (0, 12.6, 16.6), [5.0, 4.6, 4.2, 3.8, 3.4], [6.6, 5.2, 4.0, 3.0, 2.2], hide, plate, spine, droop=0.02, spikes=True,
+                       amp=0.16, speed=0.07)
+    for i, (b, q) in enumerate(ends):
+        x, y, z = q
+        dots(b, [(sx * (3.3 - i * 0.55), y - 0.6, z - 2.0) for sx in (-1, 1)], 0.42, light)
+    b, (x, y, z) = ends[-1]
+    # the crescent fluke: a tall upper lobe and a shorter lower one, both broad at the root
+    for lobe, (h, back) in ((-1, (14.0, 7.0)), (1, (9.0, 5.5))):
+        tipl = (0, y + lobe * h, z + back)
+        edge = ragged(tipl, (0, y, z + 2.4), 7, 1.6, (0, 0, -1), jag=0.8, seed=9 + lobe)
+        membrane(b, [(0, y, z - 2.0), tipl] + edge + [(0, y, z + 2.4)], fin_c,
+                 veins3=[((0, y, z - 1.0), lerp((0, y, z), tipl, 0.9)), ((0, y, z + 0.6), lerp((0, y, z + 1.0), tipl, 0.8))], **fk)
+        seg(b, (0, y, z - 1.0), lerp((0, y, z), tipl, 0.95), 0.5, 0.5, spine)
+        cbox(b, tipl, (0.6, 0.6, 0.6), light)
     return r

@@ -144,8 +144,15 @@ def m_wingskin(mat, f, s, ctx):
     poly = mat.get('poly')
     if P is None or poly is None:
         return ramp(base, np.ones((H, W), np.float32)), None, None
-    ia, ib = ['xyz'.index(c) for c in mat.get('axes', 'xz')]
-    a, b = P[..., ia], P[..., ib]
+    fr = mat.get('frame')
+    if fr is not None:
+        # a membrane in any plane: local coordinates along the frame's two in-plane axes
+        o, u, v = (np.asarray(x, np.float32) for x in fr)
+        d = P - o
+        a, b = d @ u, d @ v
+    else:
+        ia, ib = ['xyz'.index(c) for c in mat.get('axes', 'xz')]
+        a, b = P[..., ia], P[..., ib]
     inside = _inside(a, b, poly)
     span = np.asarray(poly, float)
     lo, hi = span.min(0), span.max(0)
@@ -156,7 +163,7 @@ def m_wingskin(mat, f, s, ctx):
     glow = None
     texel = 1.0 / max(1, ctx.get('td', 2))
     for (x0, y0, x1, y1) in mat.get('veins', []):
-        vm = _near_segment(a, b, (x0, y0), (x1, y1), texel * 0.9)
+        vm = _near_segment(a, b, (x0, y0), (x1, y1), texel * 0.55)
         if acc:
             rgb[vm] = C(acc)
             if mat.get('glow'):
@@ -165,6 +172,17 @@ def m_wingskin(mat, f, s, ctx):
                 glow[vm, 3] = 170
         else:
             rgb[vm] = ramp(base, 0.66)
+    streak = mat.get('streaks')
+    if streak:
+        # brush strokes running out from the root, lighter and darker, as on Monster Expansion's wing membranes
+        ang = np.arctan2(b - span[0][1], a - span[0][0])
+        h1 = _hash2(np.floor(ang * 40.0), np.floor(t * 9.0), 17)
+        h2 = _hash2(np.floor(ang * 60.0 + 3), np.floor(t * 14.0), 23)
+        rgb = np.where((h1 > 0.72)[..., None], ramp(base, 1.28), rgb)
+        rgb = np.where((h2 > 0.9)[..., None], ramp(base, 0.78), rgb)
+        if isinstance(streak, str):
+            hm = _hash2(np.floor(ang * 30.0 + 7), np.floor(t * 7.0), 31) > 0.93
+            rgb = np.where(hm[..., None], C(streak), rgb)
     bands = mat.get('bands')
     if bands:
         # photon flow (Teia): rainbow bands streaming out from the wing root, bright and glowing
@@ -191,6 +209,8 @@ def m_wingskin(mat, f, s, ctx):
         glow = glow if glow is not None else np.zeros((H, W, 4), np.float32)
         glow[edge, :3] = C(mat['edge'])
         glow[edge, 3] = 200
+    if mat.get('glow') and glow is None:
+        glow = np.zeros((H, W, 4), np.float32)          # only the veins glow, never the whole membrane
     return rgb, inside.astype(np.float32), glow
 
 
