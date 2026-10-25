@@ -44,7 +44,23 @@ jobs:
           # NightfallCraft 2.2.8.6's manifest does not load as published: fcp wants superbwarfare exactly 0.8.9 (0.8.9.2),
           # tcr_bosses wants indestructible 20.13+ (20.12.0 is the newest), find_me wants apricityui (absent). None of
           # them draws the HUD or the menus, so the reference run leaves them out.
-          rm -f $G/mods/fcp-1.2.1.jar $G/mods/tcr_bosses-1.1.12-all.jar $G/mods/findme-1.20.1-forge-1.3.3.jar
+          rm -f $G/mods/fcp-1.2.1.jar $G/mods/findme-1.20.1-forge-1.3.3.jar
+          # TCR Core needs tcr_bosses' classes, so tcr_bosses stays; for this local run only, its indestructible
+          # requirement is relaxed to the newest file CurseForge still has (20.12.0). Nothing here is distributed.
+          python3 -I - $G/mods/tcr_bosses-1.1.12-all.jar <<'PY'
+          import re, shutil, sys, zipfile
+          path = sys.argv[1]; tmp = path + '.tmp'
+          with zipfile.ZipFile(path) as src, zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as dst:
+              for info in src.infolist():
+                  data = src.read(info)
+                  if info.filename == 'META-INF/mods.toml':
+                      text = data.decode('utf-8')
+                      text, n = re.subn(r'(modId\s*=\s*"indestructible"[^\[]*?versionRange\s*=\s*")\[20\.13\.0,\)', r'\g<1>[20.12.0,)', text, flags=re.S)
+                      print('indestructible range relaxed:', n)
+                      data = text.encode('utf-8')
+                  dst.writestr(info, data)
+          shutil.move(tmp, path)
+          PY
           # TCRMeshes (boss models) stops any game that is not the official modpack install; it draws no HUD or menu.
           rm -f $G/mods/tcrmeshes-1.0.0.jar
           cp -r $U/nfc/config $G/config
