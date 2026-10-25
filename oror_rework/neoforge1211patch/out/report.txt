@@ -7,6 +7,33 @@ fetched curios-neoforge-9.5.1+1.21.1.jar 410690 https://mediafilez.forgecdn.net/
 fetched dodge_parry_reward-1.21.1-1.0.0.jar 283238 https://mediafilez.forgecdn.net/files/8671/97/dodge_parry_reward-1.21.1-1.0.0.jar
 ec66e0b42a0f8561ebbf57af356dfd237be170297cc5e5e712de0bec34a7fa4c  libs/nightfall.jar
 efa161747dcb3cfb0f20defc43d14c2ca3e64003150f1957623c06ccdbac6dd0  /home/runner/work/_temp/indestructible.jar
+== assets/efn/lang/en_us.json 417
+  item.efn.air_tachi = "§c§o§lBloodlust"
+  item.efn.crescent_moon = "CrescentMoon"
+  item.efn.crimson_moon = "§c§lCRIMSON_MOON"
+  item.efn.exsiliumgladius = "§lEXSILIUMGLADIUS-R"
+  item.efn.fire_exsiliumgladius = "§c§lEXSILIUMGLADIUS-L"
+  item.efn.meen_spear = "§i§l[Duskfire]"
+  item.efn.nf_shortsword = "§i§lEmpress Shortblade"
+  item.efn.nf_shortsword_2 = "§b§lRunic Shortsword"
+== assets/efn/lang/ja_jp.json 412
+  item.efn.air_tachi = "§c§o§l血狂乱"
+  item.efn.crescent_moon = "クレセントムーン (三日月)"
+  item.efn.crimson_moon = "§c§l真紅の月"
+  item.efn.exsiliumgladius = "§lエグザイルブレード・右"
+  item.efn.fire_exsiliumgladius = "§c§lエグザイルブレード・左"
+  item.efn.meen_spear = "§i§l黄昏の残り火"
+  item.efn.nf_shortsword = "§i§l女皇の短剣"
+  item.efn.nf_shortsword_2 = "§b§lルーンの短剣"
+== assets/efn/lang/zh_cn.json 414
+  item.efn.air_tachi = "§c§o§l血癫狂"
+  item.efn.crescent_moon = "傩面偃月"
+  item.efn.crimson_moon = "§c§l赤月"
+  item.efn.exsiliumgladius = "§l放逐之刃-右"
+  item.efn.fire_exsiliumgladius = "§c§l放逐之刃-左"
+  item.efn.meen_spear = "§6§i§l黄昏之火"
+  item.efn.nf_shortsword = "§i§l女皇短刃"
+  item.efn.nf_shortsword_2 = "§b§l魔纹短剑"
 
 Welcome to Gradle 8.14.3!
 
@@ -29,45 +56,45 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/1757c8b1fbfc6b638504e1f6cceb05893f7389d5/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.28s
-[1m*** Started working on [4mdownloadClient[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.41s
 [1m*** Started working on [4mdownloadServer[23;0m[23;0m
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
-  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
+[1m*** Started working on [4mdownloadClient[23;0m[23;0m
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.29s
+  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.49s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.48s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.90s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 0.63s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.39s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.45s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.79s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.27s
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 2.46s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.83s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.11s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.04s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.67s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.09s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.09s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 3.88s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 5.66s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 3.58s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.43s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.12s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.68s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.36s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.09s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 2.86s
-Total runtime: 18.81s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 6.66s
+Total runtime: 30.50s
 
 
 > Task :compileJava
@@ -81,11 +108,11 @@ Total runtime: 18.81s
         public static void background(ScreenEvent.BackgroundRendered event) {
                                                  ^
 3 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1792914319753.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1792915640071.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 45s
+BUILD SUCCESSFUL in 1m 14s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -135,4 +162,4 @@ modId="minecraft"
   public void setParryCounter(int);
 == EpicFightCapabilities.getEntityPatch (null entity?)
 replaced 8 old class files; added 13 compiled; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json', 'assets/tcrcore/lang/ja_jp.json', 'assets/tcrcore/lang/zh_cn.json', 'assets/tcrcore/lang/en_us.json']
-99ca1057c36f42c00a11d569f2b6c2f4d9699a90d14d281aa96a657affdad11c  out/oror_supreme_bosses-0.17.26.jar
+46df37cb390dbb25c90840a2be2af7eec3512e67f8ccb75fe1ec88c9e8da66c4  out/oror_supreme_bosses-0.17.26.jar
