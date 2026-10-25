@@ -1059,3 +1059,358 @@ def mels():
                      shard, rot=(0, a, -t * 0.5))
             cbox(ring, (x, y, z), (0.12, 4.2, 0.12), edge, rot=(0, a, 0))
     return r
+
+
+def machine_ball(bone, c, rad, hull, band, seam=None, n=None):
+    """An opaque machine sphere: octagonal slices of hull, a raised band round the equator, glowing seams."""
+    sphere(bone, c, rad, hull, n=n, octa=True)
+    cx, cy, cz = c
+    hoop(bone, c, rad * 1.02, max(0.5, rad * 0.16), band, axis='y', n=max(12, int(rad * 4)), depth=max(0.4, rad * 0.14))
+    if seam is not None:
+        for k in range(4):
+            a = k * math.pi / 2 + math.pi / 4
+            box(bone, (cx + math.cos(a) * rad * 0.74 - 0.12, cy - rad * 0.7, cz + math.sin(a) * rad * 0.74 - 0.12),
+                (cx + math.cos(a) * rad * 0.74 + 0.12, cy + rad * 0.7, cz + math.sin(a) * rad * 0.74 + 0.12), seam)
+
+
+@recipe
+def hephaistos():
+    # 典域工廠 ヘファイストス: a machine god born of transcendent technology that treats every substance and structure,
+    # life, godhood and the universe itself as something to design and build. A spherical machine with a cubic core
+    # neither crystal nor any known metal; round it float machine spheres of every size, each an observation device,
+    # a machine tool, a furnace, a hangar or a weapon, parting, joining and changing shape, so the whole is never the
+    # same twice. No face, no hands or feet: the machines that circle it are its eyes and arms.
+    r = rig('hephaistos')
+    hull = M('metal', '#4a5462')
+    dark = M('metal', '#262c34')
+    brass = M('metal', '#b48a3e')
+    seam = M('energy', '#ff9a3a', glow=True, glow_amount=0.8)
+    cyan = M('energy', '#8ff4ff', glow=True)
+    root = r.bone('root', None, (0, 24, 0), anim='root', hover=1.5, speed=0.05)
+    c = (0.0, 11.0, 0.0)
+    # the core: a cube of crystal-metal, turning slowly, seen through the gap between the two hemispheres
+    core = r.bone('core', root, c, anim='spin', speed=0.03, cast=0.0)
+    cbox(core, c, (5.6, 5.6, 5.6), M('gem', '#bff6ff', glow=True), rot=(0.615, 0.785, 0))
+    cbox(core, c, (6.2, 0.4, 6.2), cyan, rot=(0.615, 0.785, 0))
+    cbox(core, c, (0.4, 6.2, 6.2), cyan, rot=(0.615, 0.785, 0))
+    # the shell: an upper and a lower hemisphere of plated metal that breathe apart round the core
+    top = r.bone('shell_top', root, c, anim='sway', ax=1, amp=0.0, speed=0.05)
+    bot = r.bone('shell_bottom', root, c, anim='sway', ax=1, amp=0.0, speed=0.05)
+    R = 8.0
+    n = 12
+    t = 2 * R / n
+    for i in range(n):
+        y0 = c[1] - R + i * t
+        ym = y0 + t / 2
+        if abs(ym - c[1]) < t * 1.1:
+            continue                                    # the open equator: the core shows through
+        e = (ym - c[1]) / R
+        h = R * math.sqrt(max(0.05, 1 - e * e))
+        b = h * 0.29
+        bone = top if ym < c[1] else bot
+        mat = hull if i % 3 else dark
+        box(bone, (-h, y0, -h + b), (h, y0 + t, h - b), mat)
+        box(bone, (-h + b, y0, -h), (h - b, y0 + t, h), mat)
+    for bone, y in ((top, c[1] - t * 1.1), (bot, c[1] + t * 1.1)):
+        hoop(bone, (0, y, 0), R * 0.98, 0.9, brass, axis='y', n=28, depth=0.7)     # brass rims at the gap
+        for k in range(8):
+            a = k * math.pi / 4
+            cbox(bone, (math.cos(a) * R * 0.99, y, math.sin(a) * R * 0.99), (0.6, 0.5, 0.6), seam)
+    # panel seams and vents
+    for k in range(6):
+        a = k * math.pi / 3
+        for bone, y0, y1 in ((top, c[1] - R * 0.86, c[1] - t * 1.4), (bot, c[1] + t * 1.4, c[1] + R * 0.86)):
+            box(bone, (math.cos(a) * R * 0.86 - 0.1, y0, math.sin(a) * R * 0.86 - 0.1),
+                (math.cos(a) * R * 0.86 + 0.1, y1, math.sin(a) * R * 0.86 + 0.1), seam, rot=(0, -a, 0),
+                pivot=(math.cos(a) * R * 0.86, (y0 + y1) / 2, math.sin(a) * R * 0.86))
+    rbox(top, (-2.2, c[1] - R - 1.2, -2.2), (2.2, c[1] - R + 0.6, 2.2), brass, bevel=0.5)          # crown hatch
+    cbox(top, (0, c[1] - R - 1.3, 0), (1.2, 0.3, 1.2), cyan)
+    rbox(bot, (-2.6, c[1] + R - 0.6, -2.6), (2.6, c[1] + R + 1.0, 2.6), dark, bevel=0.5)          # forge outlet below
+    cbox(bot, (0, c[1] + R + 1.05, 0), (3.4, 0.2, 3.4), seam)
+    # orbits: rings of travel and the machines that ride them
+    orbit_a = r.bone('orbit_a', root, c, anim='spin', speed=0.025, cast=0.0)
+    orbit_b = r.bone('orbit_b', root, c, rot=(0.5, 0, 0.35), anim='spin', speed=-0.018, cast=0.0)
+    orbit_c = r.bone('orbit_c', root, c, rot=(-0.4, 0, -0.5), anim='spin', speed=0.032, cast=0.0)
+    hoop(orbit_a, c, 15.0, 0.25, M('energy', '#ffb060', glow=True, glow_amount=0.5), axis='y', n=40, depth=0.15)
+    def at(a, rad):
+        return (math.cos(a) * rad, c[1], math.sin(a) * rad)
+    # 1 observation sphere: a great lens, its rings and a glowing iris (the god's eye is a machine)
+    x, y, z = at(0.0, 15.0)
+    machine_ball(orbit_a, (x, y, z), 3.0, hull, brass, n=6)
+    for k, (rr, m) in enumerate(((2.4, dark), (1.8, brass), (1.2, M('gem', '#ff9a3a', glow=True)), (0.5, M('simple', '#1a0c04')))):
+        cbox(orbit_a, (x - 3.0 - 0.15 * k, y, z), (0.3, rr * 2, rr * 2), m)
+    # 2 machine-tool sphere with a jointed manipulator arm and a three-fingered claw
+    x, y, z = at(math.pi * 2 / 3, 15.0)
+    machine_ball(orbit_a, (x, y, z), 2.6, hull, brass, n=6)
+    p0 = (x, y + 2.0, z)
+    p1 = (x * 0.8, y + 6.0, z * 0.8)
+    p2 = (x * 0.62, y + 4.0, z * 0.62)
+    chain_boxes(orbit_a, [p0, p1], 1.2, 1.0, dark)
+    chain_boxes(orbit_a, [p1, p2], 1.0, 0.8, dark)
+    for j in (p0, p1):
+        cbox(orbit_a, j, (1.6, 1.6, 1.6), brass)
+    for k in range(3):
+        a = k * 2 * math.pi / 3
+        seg(orbit_a, p2, (p2[0] + math.cos(a) * 1.0, p2[1] + 1.8, p2[2] + math.sin(a) * 1.0), 0.45, 0.45, brass)
+    # 3 furnace sphere: a glowing grate and a short stack
+    x, y, z = at(math.pi * 4 / 3, 15.0)
+    machine_ball(orbit_a, (x, y, z), 3.2, dark, brass, seam=seam, n=6)
+    for k in range(4):
+        box(orbit_a, (x - 3.3, y - 1.5 + k * 0.9, z - 1.6), (x - 3.0, y - 1.1 + k * 0.9, z + 1.6), seam)
+    seg(orbit_a, (x, y - 3.0, z), (x, y - 6.0, z), 1.2, 1.2, dark)
+    cbox(orbit_a, (x, y - 6.2, z), (1.4, 0.3, 1.4), seam)
+    # 4 hangar sphere on the tilted orbit: a lit hatch, small drones beside it
+    x, y, z = at(0.8, 12.0)
+    machine_ball(orbit_b, (x, y, z), 3.4, hull, brass, n=6)
+    box(orbit_b, (x - 2.0, y - 2.0, z - 3.5), (x + 2.0, y + 2.0, z - 3.3), dark)
+    for k in range(3):
+        box(orbit_b, (x - 1.6, y - 1.4 + k * 1.3, z - 3.55), (x + 1.6, y - 1.2 + k * 1.3, z - 3.5), cyan)
+    for k in range(3):
+        sphere(orbit_b, (x + 4.0 + k * 1.8, y - 2.0 + k * 1.4, z - 2.0), 0.7, hull, n=3, octa=True)
+        cbox(orbit_b, (x + 4.0 + k * 1.8, y - 2.0 + k * 1.4, z - 2.75), (0.5, 0.5, 0.2), cyan)
+    # 5 weapon sphere on the other tilted orbit: twin barrels and a charging muzzle
+    x, y, z = at(3.6, 13.0)
+    machine_ball(orbit_c, (x, y, z), 3.0, dark, brass, n=6)
+    for dy in (-0.9, 0.9):
+        seg(orbit_c, (x, y + dy, z - 2.0), (x, y + dy, z - 8.0), 1.0, 1.0, hull)
+        cbox(orbit_c, (x, y + dy, z - 8.1), (1.3, 1.3, 0.4), brass)
+        cbox(orbit_c, (x, y + dy, z - 8.35), (0.6, 0.6, 0.1), cyan)
+    # small satellites
+    for k in range(5):
+        a = k * 2 * math.pi / 5 + 0.3
+        sphere(orbit_c, (math.cos(a) * 18.0, c[1] + math.sin(a * 2) * 2.0, math.sin(a) * 18.0), 1.0, hull, n=4, octa=True)
+    return r
+
+
+@recipe
+def nun():
+    # 天変万化 ヌン: a shapeshifter travelling to know everything in the world, taking any form and the nature of
+    # whatever it becomes. Its usual shape is a black, writhing, viscous mass of magic matter with no clear skeleton,
+    # no face and no limbs, between liquid and shadow; on need it becomes an emperor or a vagrant, an old man or a
+    # child, a beast or a bird, a sword, a staff, an old book, a shadow in the wind. Here: the black mass with an oily
+    # sheen, drips and a puddle, feelers that sway, and half-made shapes of things it has been rising out of it (a
+    # hand, a bird's wing, a crown, a book). One feeler, arm_r, holds its jester's staff.
+    r = rig('nun')
+    ink = M('oilslick', '#100c16', hues=['#7a3ad0', '#2ab0c0'])
+    ink2 = M('oilslick', '#1a1424', hues=['#c03a8a', '#3ad08a'])
+    gloss = M('energy', '#c8b8ff', glow=True, glow_amount=0.35)
+    gold = M('metal', '#8a7034')
+    root = r.bone('root', None, (0, 24, 0), anim='root', hover=0.0, speed=0.06)
+    mass = r.bone('mass', root, (0, 24, 0), anim='liquid', amp=0.08)
+    # the mass: overlapping lumps, heavier at the bottom, slumping forward
+    for (x, y, z, rad, m) in ((0, 17.0, 0, 6.6, ink), (-3.4, 19.5, 1.6, 4.6, ink2), (3.6, 19.8, -1.2, 4.4, ink), (0.8, 12.4, -0.6, 4.4, ink2),
+                              (-1.6, 9.4, 0.4, 3.0, ink), (2.4, 21.6, 3.2, 3.0, ink2), (-4.4, 22.0, -2.6, 2.4, ink)):
+        sphere(mass, (x, y, z), rad, m, octa=True)
+    # the puddle it stands in, and drops running down
+    for (x, z, w, d) in ((0, 0, 17.0, 14.0), (-5.0, 4.0, 7.0, 6.0), (6.0, -3.0, 5.0, 6.0)):
+        rbox(mass, (x - w / 2, 23.6, z - d / 2), (x + w / 2, 24.0, z + d / 2), ink, bevel=1.2)
+    for k, (x, z, y0, l) in enumerate(((-6.0, -1.0, 17.0, 3.4), (5.8, 1.6, 18.0, 2.6), (2.0, -6.0, 15.0, 4.0), (-3.0, 5.6, 19.0, 2.2))):
+        seg(mass, (x, y0, z), (x, y0 + l, z), 0.9, 0.9, ink2)
+        cbox(mass, (x, y0 + l + 0.5, z), (1.3, 1.3, 1.3), ink2)
+    # sheen: a few glints of light on the black
+    for (x, y, z) in ((-2.0, 12.0, -4.6), (3.0, 15.0, -6.2), (-4.6, 17.5, -4.0), (1.0, 9.0, -2.6)):
+        cbox(mass, (x, y, z), (0.6, 0.3, 0.2), gloss)
+    # half-formed things surfacing: a hand reaching out of the left side, a crown sunk in the top, a book's corner
+    hand = r.bone('hand', mass, (6.4, 15.0, -2.0), anim='sway', ax=2, amp=0.1, speed=0.05)
+    seg(hand, (6.0, 15.0, -2.0), (9.0, 13.0, -3.0), 1.6, 1.2, ink)
+    for k in range(4):
+        seg(hand, (9.0, 13.0 - k * 0.1, -3.6 + k * 0.5), (10.6, 11.0 - k * 0.5, -4.2 + k * 0.6), 0.45, 0.45, ink2)
+    seg(hand, (8.6, 13.4, -3.6), (9.6, 12.0, -5.2), 0.45, 0.45, ink2)
+    hoop(mass, (0.4, 9.2, 0.0), 2.2, 0.6, gold, axis='y', n=12, depth=0.6)
+    for k in range(5):
+        a = k * 2 * math.pi / 5
+        seg(mass, (0.4 + math.cos(a) * 2.2, 8.8, math.sin(a) * 2.2), (0.4 + math.cos(a) * 2.3, 7.2, math.sin(a) * 2.3), 0.5, 0.5, gold)
+    box(mass, (-6.8, 19.0, -4.8), (-3.6, 19.9, -1.6), M('cloth', '#6a3a2a'), rot=(0.3, 0.4, 0.5), pivot=(-5.2, 19.4, -3.2))
+    box(mass, (-6.6, 18.9, -4.6), (-3.8, 19.0, -1.8), M('simple', '#e8dcc0'), rot=(0.3, 0.4, 0.5), pivot=(-5.2, 19.4, -3.2))
+    # a bird's wing rising from the back, its feathers dissolving into the mass
+    wing = r.bone('wing_r', mass, (-2.0, 12.0, 4.0), rot=(0.4, 0.5, 0.3), anim='sway', ax=2, amp=0.15, speed=0.06)
+    for k in range(6):
+        t = k / 5
+        seg(wing, (-2.0 - t * 1.0, 12.0 - t * 3.0, 4.0 + t * 1.2), (-2.0 - t * 1.0 - 6.0 + abs(t - 0.5) * 3.0, 12.0 - t * 3.0 - 6.5, 4.0 + t * 1.2 + 2.0),
+            1.1, 0.3, ink2 if k % 2 else ink)
+    # feelers: three swaying, and arm_r, which hangs at the right side with the staff in its tip
+    for i, (x, y, z, ang) in enumerate(((-5.4, 13.0, 3.0, -0.9), (4.6, 11.0, 4.4, 0.7), (0.0, 10.0, 6.0, 0.0))):
+        p = np.array([x, y, z])
+        bone = mass
+        for j in range(4):
+            bone = r.bone(f'feeler{i}_{j}', bone, tuple(p), anim='tail', i=j, amp=0.22, speed=0.07, ax=1)
+            q = p + np.array([math.sin(ang) * 2.2, -1.6 + j * 0.7, 2.0])
+            seg(bone, p, q, 1.3 - j * 0.25, 1.3 - j * 0.25, ink if j % 2 else ink2)
+            p = q
+    arm = r.bone('arm_r', mass, (-6.6, 14.0, -2.0), anim='arm_r', reach=7.5)
+    chain_boxes(arm, [(-6.6, 14.0, -2.0), (-7.4, 17.5, -2.4), (-7.0, 21.5, -2.0)], 2.0, 1.2, ink2)
+    cbox(arm, (-7.0, 21.5, -2.0), (1.8, 1.4, 1.8), ink)
+    return r
+
+
+def eyeball(r, parent, name, c, rad, iris, phase=0.0, pupil='round', look=(0.0, 0.0, -1.0)):
+    """A loose eyeball on its own bone: a white ball with veins, an iris disc and pupil turned toward `look`."""
+    b = r.bone(name, parent, c, anim='chaos', phase=phase)
+    sphere(b, c, rad, M('carapace', '#efe6ee'), n=max(3, int(rad * 1.6)), octa=True)
+    lx, ly, lz = look
+    n = math.sqrt(lx * lx + ly * ly + lz * lz) or 1.0
+    lx, ly, lz = lx / n, ly / n, lz / n
+    side = 'front' if abs(lz) >= max(abs(lx), abs(ly)) else ('left' if lx > 0 else 'right')
+    p = (c[0] + lx * rad * 0.98, c[1] + ly * rad * 0.98, c[2] + lz * rad * 0.98)
+    eye(b, p, rad * 1.25, rad * 1.25, side, M('eye', iris, pupil=pupil, mood='calm', lid='#d8c4d8', glow_amount=0.8), depth=0.3)
+    return b
+
+
+@recipe
+def chaos():
+    # 万象混沌 カオス: not a life, a monster, a god or a spirit: the chaos that spills when the world loses its
+    # coherence, given form. No stable body; seen again it has changed: a rainbow foetus filling the sky, a purple-
+    # black mass like a continent turned inside out, a cloud full of countless eyeballs, a beast wearing the sea, a
+    # dragon of city ruins, countless human arms from a flower field. Its stuff is flesh, buildings, land and space
+    # itself. At its heart sometimes a rainbow core appears, clear as a gem, cloudy as an oil film, holding a nebula's
+    # colours. Round it the ground turns to sea, cities hang upside down in the sky, fish pour from their windows.
+    r = rig('chaos')
+    flesh = M('oilslick', '#2a1438', hues=['#ff6ad5', '#6af0ff'])
+    flesh2 = M('oilslick', '#3a1e52', hues=['#ffe46a', '#7dff8a'])
+    cloud = M('void', '#5a3a7a')
+    root = r.bone('root', None, (0, 24, 0), anim='root', hover=2.0, speed=0.05)
+    body = r.bone('body', root, (0, 11, 0), anim='liquid', amp=0.04)
+    # the mass: a ring of lumps round an open heart, so the core shows through
+    for k in range(10):
+        a = k * 2 * math.pi / 10
+        x, y = math.cos(a) * 9.0, 10.0 + math.sin(a) * 8.0
+        z = 1.0 + math.sin(a * 3.0) * 1.5
+        sphere(body, (x, y, z), 4.2 + (k % 3) * 0.7, flesh if k % 2 else flesh2, octa=True)
+    for (x, y, z, rad) in ((0, 10.0, 6.0, 6.0), (-7.0, 3.0, 4.0, 3.4), (7.5, 17.0, 3.0, 3.6), (-8.0, 18.0, 4.0, 3.0)):
+        sphere(body, (x, y, z), rad, cloud, octa=True)
+    # the rainbow core in the heart
+    core = r.bone('core', root, (0, 10.0, -1.0), anim='pulse', amp=0.12, speed=0.09)
+    cbox(core, (0, 10.0, -1.0), (5.0, 5.0, 5.0), M('rainbow', '#ffffff'), rot=(0.615, 0.785, 0))
+    cbox(core, (0, 10.0, -1.0), (6.4, 0.6, 6.4), M('energy', '#ffe8ff', glow=True), rot=(0.615, 0.785, 0))
+    cbox(core, (0, 10.0, -1.0), (3.0, 3.0, 3.0), M('energy', '#ffffff', glow=True), rot=(0.2, 0.3, 0.5))
+    # countless eyeballs in the cloud, looking every way
+    irises = ['#7ff6ff', '#ffe46a', '#7dff8a', '#ff8a5a', '#b48cff', '#ff6ad5', '#6a8aff']
+    spots = [(-9.0, 5.0, -3.6, 2.4, (-0.3, 0, -1)), (8.4, 6.0, -3.8, 2.8, (0.3, 0.1, -1)), (-5.0, 16.4, -3.6, 2.0, (0, 0.4, -1)),
+             (5.0, 16.0, -4.0, 1.7, (0.2, 0, -1)), (-13.0, 11.0, 0.0, 1.8, (-1, 0, -0.2)), (13.0, 10.0, 0.0, 2.2, (1, 0, -0.2)),
+             (0.0, 1.0, -3.4, 2.4, (0, -0.3, -1)), (0.0, 19.6, -3.0, 1.6, (0, 0.6, -1)), (-4.0, 9.6, -4.6, 1.2, (0, 0, -1)),
+             (10.0, 1.6, 2.6, 1.5, (1, 0, 0.2)), (-10.4, 2.0, 2.0, 1.4, (-1, 0, 0.1)), (8.0, 19.0, -1.0, 1.3, (0.4, 0.5, -1)),
+             (4.4, 9.0, -5.0, 1.0, (0, 0, -1)), (-11.0, 17.0, 1.0, 1.2, (-1, 0.3, 0))]
+    for k, (x, y, z, rad, look) in enumerate(spots):
+        eyeball(r, body, f'eye{k + 1}', (x, y, z), rad, irises[k % len(irises)], phase=k * 0.9, pupil='slit' if k % 3 == 0 else 'round',
+                look=look)
+    # arms reaching out of a little flower field on the right flank
+    for k in range(4):
+        x0, y0, z0 = 10.4 + k * 0.4, 13.0 + k * 1.2, -2.0 + k * 1.6
+        arm = r.bone(f'arm{k}', body, (x0, y0, z0), anim='sway', ax=2, amp=0.18, speed=0.06, phase=k)
+        chain_boxes(arm, [(x0, y0, z0), (x0 + 3.4, y0 - 1.6 - k * 0.4, z0 - 0.6), (x0 + 6.0, y0 - 3.6 + k * 0.3, z0 - 1.2)], 1.3, 1.0,
+                    M('skin', '#d8b8a8'))
+        for f in range(4):
+            seg(arm, (x0 + 6.0, y0 - 3.6 + k * 0.3, z0 - 1.2), (x0 + 7.4, y0 - 4.0 + f * 0.5, z0 - 1.6 + f * 0.4), 0.3, 0.3, M('skin', '#d8b8a8'))
+    for k in range(10):
+        x, z = 7.0 + (k % 4) * 1.4, -3.0 + (k // 4) * 2.2
+        cbox(body, (x + 2.0, 8.4 - (k % 3) * 0.3, z), (0.9, 0.9, 0.9), M('simple', ['#ff7ab0', '#ffe46a', '#ffffff', '#9a7aff'][k % 4]))
+    # an upside-down town hanging in the sky round it, fish falling from its windows
+    orbit = r.bone('orbit', root, (0, 10, 0), anim='spin', speed=0.012, cast=0.0)
+    for k in range(5):
+        a = k * 2 * math.pi / 5 + 0.4
+        x, z = math.cos(a) * 17.0, math.sin(a) * 17.0
+        h = 3.0 + (k % 3) * 1.2
+        box(orbit, (x - 1.6, -4.0, z - 1.6), (x + 1.6, -4.0 + h, z + 1.6), M('carapace', '#d8cfc0'))           # walls, roof down
+        for step in range(3):
+            w = 2.0 - step * 0.6
+            box(orbit, (x - w, -4.0 + h + step * 0.6, z - w), (x + w, -4.0 + h + (step + 1) * 0.6, z + w), M('carapace', '#9a3a2a'))
+        for wy in range(int(h // 1.4)):
+            box(orbit, (x - 0.5, -3.4 + wy * 1.4, z - 1.65), (x + 0.5, -2.6 + wy * 1.4, z - 1.6), M('energy', '#ffd36a', glow=True))
+        cbox(orbit, (x, -5.0, z), (4.6, 1.6, 4.6), M('strata', '#7a6a5a', bands=['#7a6a5a', '#5a4a3a'], band=0.5))   # torn ground
+        box(orbit, (x - 2.3, -4.2, z - 2.3), (x + 2.3, -4.2, z + 2.3), M('leaf', '#5f9a3e'))                            # its grass, facing down
+        for f in range(2):
+            fy = -4.0 + h + 2.0 + f * 3.0
+            box(orbit, (x - 0.5 + f, fy - 0.6, z - 2.6), (x + 0.5 + f, fy + 0.6, z - 0.4), M('shingle', '#ff9a4a', belly='#ffe0b0', scale_size=0.5))
+            box(orbit, (x + f - 0.1, fy - 1.0, z - 0.4), (x + f + 0.1, fy + 1.0, z + 0.8), M('energy', '#ffb36a', glow=True, glow_amount=0.3))
+    return r
+
+
+def world_orb(bone, c, rad, kind):
+    """One of the nine worlds hanging in Yggdrasil's boughs: a small round world with its own look."""
+    looks = {'sea': ('#2f7ad0', '#e8f4ff'), 'fire': ('#e8541a', '#ffd36a'), 'ice': ('#bfe8ff', '#ffffff'), 'forest': ('#3f9a44', '#ffd6f0'),
+             'dark': ('#2a2238', '#b48cff'), 'light': ('#fff2b0', '#ffffff'), 'stone': ('#8a8274', '#d8c8a0'),
+             'sky': ('#8fd8ff', '#ffffff'), 'death': ('#4a5a5a', '#9ff0c8')}
+    base, acc = looks[kind]
+    sphere(bone, c, rad, M('gem', base, glow=kind in ('fire', 'light', 'dark')), n=4, octa=True)
+    cx, cy, cz = c
+    hoop(bone, c, rad * 1.25, 0.18, M('energy', acc, glow=True, glow_amount=0.6), axis='y', n=12, depth=0.12)
+    seg(bone, (cx, cy - rad, cz), (cx, cy - rad - 5.0, cz), 0.3, 0.3, M('wood', '#5a4030'))          # its stem
+
+
+@recipe
+def yggdrasil():
+    # 玖天神樹 イグドラシル: a tree so vast it pierces heaven and holds nine worlds within it, circulating and
+    # amplifying the world's natural mana. The trunk rises through the sea of clouds, the boughs spread to wrap the
+    # nine worlds, the roots reach the deep strata and bind themselves to the ley lines and spirit veins; every leaf
+    # and flower holds immense mana. No face: here the trunk with mana running up it in glowing veins, a ring of
+    # cloud round its middle, a crown of leaf with glowing blossoms, the nine worlds hanging in it, roots spread over
+    # the ground with ley lines burning in them.
+    r = rig('yggdrasil')
+    bark = M('wood', '#5a4030')
+    bark2 = M('wood', '#6e5038')
+    vein = M('energy', '#9fffd8', glow=True, glow_amount=0.8)
+    leaf = M('leaf', '#4f9a44', flowers='#ffd6f0')
+    leaf2 = M('leaf', '#3f8a3e', flowers='#fff2b0')
+    leaf3 = M('leaf', '#5aa84e')
+    cloud = M('carapace', '#f4f8fc')
+    root = r.bone('root', None, (0, 24, 0), anim='root')
+    trunk = r.bone('body', root, (0, 10, 0), anim='sway', ax=2, amp=0.01, speed=0.02)
+    # trunk: slices of bark twisting as they rise, flaring at the foot
+    n = 22
+    for i in range(n):
+        y1 = 24.0 - i * 2.8
+        y0 = y1 - 2.8
+        t = i / (n - 1)
+        w = 13.0 - 7.0 * t ** 0.7 + (4.0 if i == 0 else (2.0 if i == 1 else 0.0))
+        a = t * 1.2
+        cx, cz = math.sin(t * 3.0) * 1.2, math.cos(t * 2.4) * 0.8
+        box(trunk, (cx - w / 2, y0, cz - w / 2 + w * 0.15), (cx + w / 2, y1, cz + w / 2 - w * 0.15), bark if i % 2 else bark2, rot=(0, a, 0),
+            pivot=(cx, (y0 + y1) / 2, cz))
+        box(trunk, (cx - w / 2 + w * 0.15, y0, cz - w / 2), (cx + w / 2 - w * 0.15, y1, cz + w / 2), bark2 if i % 2 else bark, rot=(0, a, 0),
+            pivot=(cx, (y0 + y1) / 2, cz))
+        # mana veins climbing the bark on four sides
+        for k in range(4):
+            b = k * math.pi / 2 + a + t * 2.0
+            r0 = w / 2 + 0.02
+            box(trunk, (cx + math.cos(b) * r0 - 0.2, y0, cz + math.sin(b) * r0 - 0.2), (cx + math.cos(b) * r0 + 0.2, y1, cz + math.sin(b) * r0 + 0.2),
+                vein)
+    # roots: thick arms over the ground with ley lines burning in them
+    for k in range(7):
+        a = k * 2 * math.pi / 7 + 0.2
+        p0 = (math.cos(a) * 5.0, 21.0, math.sin(a) * 5.0)
+        p1 = (math.cos(a) * 11.0, 22.6, math.sin(a) * 11.0)
+        p2 = (math.cos(a + 0.2) * 17.0, 23.4, math.sin(a + 0.2) * 17.0)
+        chain_boxes(trunk, [p0, p1, p2], 4.2, 1.6, bark)
+        seg(trunk, (p1[0], 21.6, p1[2]), (p2[0], 22.8, p2[2]), 0.35, 0.35, vein, up=(0, -1, 0))
+    # the sea of clouds round the middle of the trunk
+    for k in range(12):
+        a = k * 2 * math.pi / 12
+        rr = 10.0 + (k % 3) * 1.4
+        sphere(trunk, (math.cos(a) * rr, -8.0 + (k % 2) * 1.2, math.sin(a) * rr), 2.6 + (k % 3) * 0.6, cloud, n=3, octa=True)
+    # boughs and the crown
+    top = 24.0 - n * 2.8
+    crown = r.bone('crown', trunk, (0, top, 0), anim='sway', ax=2, amp=0.02, speed=0.03)
+    boughs = []
+    for k in range(8):
+        a = k * 2 * math.pi / 8 + 0.3
+        p0 = (0, top + 6.0 - (k % 2) * 3.0, 0)
+        p1 = (math.cos(a) * 9.0, top - 2.0 - (k % 3), math.sin(a) * 9.0)
+        p2 = (math.cos(a + 0.25) * 17.0, top - 1.0 + (k % 2) * 3.0, math.sin(a + 0.25) * 17.0)
+        chain_boxes(crown, [p0, p1, p2], 3.0, 1.2, bark)
+        boughs.append(p2)
+    for k, (x, y, z) in enumerate(boughs + [(0, top - 9.0, 0), (6, top - 7.0, 5), (-6, top - 7.5, -4), (5, top - 6.0, -7), (-7, top - 6.5, 6)]):
+        rad = 6.5 if k < 8 else 7.5
+        sphere(crown, (x, y - 2.0, z), rad, (leaf, leaf2, leaf3)[k % 3], n=5, octa=True)
+    # glowing blossoms dotted over the crown
+    for k in range(26):
+        a = k * 2.399
+        rr = 6.0 + (k * 7 % 13)
+        cbox(crown, (math.cos(a) * rr, top - 6.0 - (k % 5) * 2.4, math.sin(a) * rr), (1.0, 1.0, 1.0),
+             M('energy', ('#ffd6f0', '#fff2b0', '#bff6ff')[k % 3], glow=True, glow_amount=0.9))
+    # the nine worlds hanging in the boughs
+    kinds = ['sea', 'fire', 'ice', 'forest', 'dark', 'light', 'stone', 'sky', 'death']
+    for k, kind in enumerate(kinds):
+        a = k * 2 * math.pi / 9 + 0.1
+        rr = 15.0 + (k % 2) * 3.0
+        world_orb(crown, (math.cos(a) * rr, top + 9.5 + (k % 3) * 1.4, math.sin(a) * rr), 2.2, kind)
+    return r

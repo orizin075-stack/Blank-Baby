@@ -170,15 +170,17 @@ public final class Harness {
         }
         // one mob at a time: summon, let it settle, front three-quarter shot, side shot, clear the stage
         step++;
-        if (index < 0 || step > 70) {
+        if (index < 0 || current == null || step > 70) {
             index++;
             step = 0;
             if (index >= ids.size()) {
-                write(mc, "gallery.tsv", new ArrayList<>(rows));
+                write(mc, "done.txt", List.of(String.valueOf(ids.size())));
                 finish(mc, "complete: " + ids.size() + " mobs");
                 return;
             }
             current = ids.get(index);
+            write(mc, "progress.txt", List.of(String.valueOf(index)));
+            if (index % 10 == 0) write(mc, "gallery-" + index + ".tsv", new ArrayList<>(rows));
             summon(mc, current);
             return;
         }
@@ -235,6 +237,17 @@ public final class Harness {
             }
             Collections.sort(out);
             note("mobs to show: " + out.size() + " " + out);
+            // a mob that took the last client down is skipped: start after the one in progress.txt
+            try {
+                Path progress = mc.gameDirectory.toPath().resolve("harness/progress.txt");
+                if (Files.exists(progress)) {
+                    index = Integer.parseInt(Files.readString(progress).trim());
+                    note("resuming after " + index + " (" + (index < out.size() ? out.get(index) : "?") + ")");
+                    rows.add(index + "\t" + (index < out.size() ? out.get(index) : "?") + "\tcrashed the client");
+                }
+            } catch (Exception error) {
+                note("cannot read progress: " + error);
+            }
             ids = out;
         });
     }
@@ -360,9 +373,9 @@ public final class Harness {
     private static void finish(Minecraft mc, String result) {
         phase = Phase.DONE;
         note("finished: " + result);
-        write(mc, "gallery.tsv", new ArrayList<>(rows));
+        write(mc, "gallery-session-" + System.currentTimeMillis() + ".tsv", new ArrayList<>(rows));
         synchronized (log) {
-            write(mc, "result.txt", new ArrayList<>(log));
+            write(mc, "result-" + System.currentTimeMillis() + ".txt", new ArrayList<>(log));
         }
         mc.stop();
     }

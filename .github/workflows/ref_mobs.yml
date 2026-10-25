@@ -17,12 +17,12 @@ permissions:
 
 concurrency:
   group: ref-mobs-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   gallery:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 240
     defaults:
       run:
         shell: bash
@@ -47,7 +47,7 @@ jobs:
         run: |
           python3 -m venv $RUNNER_TEMP/py && $RUNNER_TEMP/py/bin/pip install -q numpy pillow
           $RUNNER_TEMP/py/bin/python -I $R/tools/survey.py $RUNNER_TEMP/game/mods $OUT --javap "$JAVA_HOME/bin/javap" \
-            --only cataclysm,alexscaves,alexs,legendary,witheria,monster 2>&1 | tail -n 200
+            --only cataclysm,alexscaves,alexs,legendary,witheria,monster,aether,gaia,grimoire,chaos,orespawn,saint,dragon 2>&1 | tail -n 300
       - name: Build the gallery harness
         working-directory: oror_rework/ref_mobs/harness
         run: |
@@ -60,31 +60,43 @@ jobs:
           G=$RUNNER_TEMP/game
           printf 'onboardAccessibility:false\npauseOnLostFocus:false\nrenderDistance:8\nsimulationDistance:6\nskipMultiplayerWarning:true\njoinedFirstServer:true\ntutorialStep:none\nsoundCategory_master:0.0\nguiScale:2\n' > $G/options.txt
       - name: Run the client
-        timeout-minutes: 75
+        timeout-minutes: 170
         run: |
           G=$RUNNER_TEMP/game
           export LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null
-          ( while sleep 15; do
-              if ls $G/crash-reports/*.txt > /dev/null 2>&1; then sleep 20; pkill -f forgeclient || pkill java; break; fi
-            done ) &
-          timeout 70m xvfb-run -a -s '-screen 0 1600x900x24' $RUNNER_TEMP/venv/bin/portablemc start forge::1.20.1-47.4.28 \
-            --main-dir $RUNNER_TEMP/mc --mc-dir $G -u OrorTester --resolution 1600x900 --jvm "$JAVA_HOME/bin/java" \
-            --jvm-arg=-Xmx8G,-Xms2G > $RUNNER_TEMP/client.out 2>&1 || echo "client exit code $?" | tee $OUT/client-exit.txt
-          tail -n 60 $RUNNER_TEMP/client.out
+          # A mob that crashes the client is skipped: the harness keeps harness/progress.txt and a new client (new world)
+          # carries on after it, up to five sessions.
+          for attempt in 1 2 3 4 5; do
+            [ -f $G/harness/done.txt ] && break
+            echo "== session $attempt"
+            ( while sleep 15; do
+                if ls $G/crash-reports/*.txt > /dev/null 2>&1; then sleep 20; pkill -f forgeclient || pkill java; break; fi
+              done ) &
+            WATCH=$!
+            timeout 60m xvfb-run -a -s '-screen 0 1600x900x24' $RUNNER_TEMP/venv/bin/portablemc start forge::1.20.1-47.4.28 \
+              --main-dir $RUNNER_TEMP/mc --mc-dir $G -u OrorTester --resolution 1600x900 --jvm "$JAVA_HOME/bin/java" \
+              --jvm-arg=-Xmx8G,-Xms2G > $RUNNER_TEMP/client-$attempt.out 2>&1 || echo "session $attempt exit code $?" | tee -a $OUT/client-exit.txt
+            kill $WATCH 2>/dev/null || true
+            tail -n 30 $RUNNER_TEMP/client-$attempt.out
+            mkdir -p $RUNNER_TEMP/crashes; mv $G/crash-reports/*.txt $RUNNER_TEMP/crashes/ 2>/dev/null || true
+            rm -rf $G/saves/*
+            cat $G/harness/progress.txt 2>/dev/null || true
+          done
           ls $G/screenshots | wc -l
       - name: Collect the photographs and logs
         if: always()
         run: |
           G=$RUNNER_TEMP/game; S=$OUT/shots; mkdir -p $S
-          for f in $G/screenshots/*.png; do [ -f "$f" ] && convert "$f" -resize '960x>' -quality 80 "$S/$(basename "${f%.png}").jpg"; done
+          for f in $G/screenshots/*.png; do [ -f "$f" ] && convert "$f" -resize '800x>' -quality 76 "$S/$(basename "${f%.png}").jpg"; done
           # one contact sheet per mod (front views), for a quick look at a whole bestiary
           for ns in $(ls $S | sed -n 's/^[0-9]\{3\}+\([^+]*\)+.*_a\.jpg$/\1/p' | sort -u); do
             montage -label '%t' $S/[0-9][0-9][0-9]+${ns}+*_a.jpg -tile 6x -geometry 320x180+2+2 -pointsize 11 -background '#202228' \
               -fill '#dddddd' -quality 80 $OUT/sheet_${ns}.jpg || true
           done
           cp $G/harness/* $OUT/ 2>/dev/null || true
-          mkdir -p $OUT/crash-reports; cp $G/crash-reports/* $OUT/crash-reports/ 2>/dev/null || true
-          tail -n 300 $RUNNER_TEMP/client.out > $OUT/stdout-tail.txt 2>/dev/null || true
+          mkdir -p $OUT/crash-reports; cp $RUNNER_TEMP/crashes/* $G/crash-reports/* $OUT/crash-reports/ 2>/dev/null || true
+          for f in $RUNNER_TEMP/client-*.out; do tail -n 200 "$f" > $OUT/stdout-tail-$(basename "$f" .out).txt; done 2>/dev/null || true
+          cat $OUT/gallery-session-*.tsv 2>/dev/null | sort -n -u > $OUT/gallery.tsv || true
           L=$G/logs/latest.log
           [ -f $L ] && grep -n -E '\[harness\]|ERROR|FATAL|Exception|Caused by' $L | cut -c1-400 | head -n 3000 > $OUT/latest-filtered.log || true
           du -sh $OUT; ls $S | wc -l
