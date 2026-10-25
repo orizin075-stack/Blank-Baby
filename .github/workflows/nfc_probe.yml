@@ -1,36 +1,38 @@
-# One-off probes for 0.17.25. What NightfallCraft 2.2.8.6's UI mods and GUI packs carry for the HUD and the GUI
-# (vanilla GUI texture overrides, own GUI textures, built-in packs, HUD/screen mixins), next to the 1.21.1 builds the
-# pack uses now. Names only; results go to oror_rework/nfc_ui/out/probe_ui.
-name: NightfallCraft UI probe
+# One-off probe for 0.17.25: how TCR Core 2.8.7 (NightfallCraft's core mod, 1.20.1) changes menus and widgets.
+# Prints its screen/title/tab mixins (decompiled), its built-in pack registration and the sizes of its GUI images to
+# the job log only; nothing from the jar is committed.
+name: TCR Core GUI probe
 
 on:
   push:
     branches: [claude/jolly-einstein-wvpjq1]
-    paths: ['.github/workflows/nfc_probe.yml', 'oror_rework/nfc_ui/tools/probe_jars.py']
+    paths: ['.github/workflows/nfc_probe.yml']
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - name: NightfallCraft's UI files and the 1.21.1 ones
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Decompile TCR Core's GUI classes
         run: |
-          python3 -I oror_rework/nfc_ui/tools/probe_jars.py oror_rework/nfc_ui/out/probe_ui \
-            1325071:8671039 1477275:9120893 352491:6956345 664719:7564643 1452633:9172461 1258522:7340950 \
-            1307848:9015395 1377795:9076089 532127:4662781 1385997:7797342 1387898:8428466 1453870:7710887 \
-            1274526:7706756 1304607:7867343 \
-            1477275:9120920 664719:8605130 352491:8206075
-      - name: Commit
-        if: always()
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f oror_rework/nfc_ui/out/probe_ui
-          git commit -m "NightfallCraft UI probe ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          T=$RUNNER_TEMP/t; mkdir -p $T/x $T/src; cd $T
+          curl -sSfL -o tcr.jar https://mediafilez.forgecdn.net/files/8671/39/tcrcore-2.8.7.jar
+          curl -sSfL -o vf.jar https://repo1.maven.org/maven2/org/vineflower/vineflower/1.10.1/vineflower-1.10.1.jar
+          unzip -q tcr.jar -d x
+          python3 - <<'PY'
+          import struct, glob
+          for p in sorted(glob.glob('x/packs/*/assets/minecraft/textures/gui/*.png') + glob.glob('x/assets/tcrcore/textures/gui/**/*.png', recursive=True) + glob.glob('x/assets/tcrcore/textures/menu/*.png')):
+              b = open(p, 'rb').read(24); w, h = struct.unpack('>II', b[16:24]); print(f'{w}x{h}  {p[2:]}')
+          PY
+          for f in x/packs/*/pack.mcmeta; do echo "== $f"; cat "$f"; echo; done
+          find x/packs -maxdepth 3 | head -60
+          for c in $(cd x && find . -path '*mixin*' -name '*.class' | grep -E 'ScreenMixin|TitleScreenMixin|TabButtonMixin|WinScreen|SelectWorld' | grep -v '\$'); do
+            java -jar vf.jar "x/$c" src/ > /dev/null 2>&1
+          done
+          grep -rl -E 'AddPackFindersEvent|PackSource|Pack\.readMetaAndCreate|BUILT_IN|FORCED|fixedPosition|Pack\.Position' x --include='*.class' | head -10 | while read c; do java -jar vf.jar "$c" src/ > /dev/null 2>&1; done
+          for f in src/*.java; do echo "################ $f"; cat "$f"; done
