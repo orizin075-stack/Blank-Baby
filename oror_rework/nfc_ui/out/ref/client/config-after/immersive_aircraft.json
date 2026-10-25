@@ -32,8 +32,8 @@
   "requireShiftForRepair": false,
   "defaultCanEnter": true,
   "canEnter": {
-    "#immersive_aircraft:water_animals": false,
-    "minecraft:player": false
+    "minecraft:player": false,
+    "#immersive_aircraft:water_animals": false
   },
   "bombBayEntity": {
     "minecraft:egg": "minecraft:chicken"
@@ -44,16 +44,16 @@
     "minecraft:blaze_powder": 1200
   },
   "validDimensions": {
-    "minecraft:overworld": true,
     "minecraft:the_nether": true,
+    "minecraft:overworld": true,
     "minecraft:the_end": true
   },
   "gunpowderAmmunition": {
     "minecraft:gunpowder": 100
   },
   "arrowAmmunition": {
-    "minecraft:tipped_arrow": 100,
     "minecraft:spectral_arrow": 100,
+    "minecraft:tipped_arrow": 100,
     "minecraft:arrow": 100
   },
   "bombBayAmmunition": {

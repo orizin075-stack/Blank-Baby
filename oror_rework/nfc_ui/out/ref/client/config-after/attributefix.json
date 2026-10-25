@@ -187,6 +187,17 @@
         "value": 1
       }
     },
+    "irons_lib:healing_received": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1024,
+        "value": 1024
+      }
+    },
     "epicfight:execution_resistance": {
       "enabled": false,
       "min": {
@@ -220,6 +231,17 @@
         "value": 2147483647
       }
     },
+    "tacz:tacz.bullet_resistance": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1,
+        "value": 1
+      }
+    },
     "irons_spellbooks:casting_movespeed": {
       "enabled": false,
       "min": {
@@ -240,6 +262,28 @@
       "max": {
         "default": 100,
         "value": 100
+      }
+    },
+    "superbwarfare:bullet_resistance": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1,
+        "value": 1
+      }
+    },
+    "irons_lib:experience_gained": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1024,
+        "value": 1024
       }
     },
     "epicfight:offhand_impact": {
@@ -350,6 +394,17 @@
       "max": {
         "default": 1024,
         "value": 2147483647
+      }
+    },
+    "irons_lib:projectile_damage": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1024,
+        "value": 1024
       }
     },
     "minecraft:generic.attack_speed": {
@@ -471,6 +526,17 @@
       "max": {
         "default": 10,
         "value": 2147483647
+      }
+    },
+    "irons_lib:dodge_chance": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1024,
+        "value": 1024
       }
     },
     "irons_spellbooks:spell_resist": {
@@ -715,6 +781,17 @@
         "value": 2147483647
       }
     },
+    "irons_lib:arrow_damage": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1024,
+        "value": 1024
+      }
+    },
     "irons_spellbooks:fire_spell_power": {
       "enabled": false,
       "min": {
@@ -746,6 +823,17 @@
       "max": {
         "default": 100,
         "value": 100
+      }
+    },
+    "irons_lib:mining_speed": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1024,
+        "value": 1024
       }
     },
     "obscure_api:magic_damage": {
@@ -1078,6 +1166,17 @@
         "value": 2147483647
       }
     },
+    "irons_lib:armor_pierce": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1024,
+        "value": 1024
+      }
+    },
     "attributeslib:current_hp_damage": {
       "enabled": false,
       "min": {
@@ -1142,6 +1241,17 @@
       "max": {
         "default": 10,
         "value": 2147483647
+      }
+    },
+    "irons_lib:crit_damage": {
+      "enabled": false,
+      "min": {
+        "default": 0,
+        "value": 0
+      },
+      "max": {
+        "default": 1024,
+        "value": 1024
       }
     },
     "parcool:max_stamina": {

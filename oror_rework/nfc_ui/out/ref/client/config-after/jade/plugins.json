@@ -54,6 +54,16 @@
   "jadeaddons": {
     "equipment_requirement": ""
   },
+  "jadeaddons.create": {
+    "filter": true,
+    "backtank_capacity": true,
+    "goggles.requires_goggles": true,
+    "goggles": false,
+    "blaze_burner": true,
+    "exact_block": true,
+    "goggles.detailed": false,
+    "placard": true
+  },
   "beyonddimensions": {
     "net_info": true
   },
@@ -73,6 +83,14 @@
   },
   "waystones": {
     "waystone": true
+  },
+  "superbwarfare": {
+    "catapult_controller": true,
+    "dps_generator": true,
+    "vehicle_deployer": true,
+    "container_entity": true,
+    "c4_info": true,
+    "vehicle_info": true
   },
   "balm": {
     "jade": true

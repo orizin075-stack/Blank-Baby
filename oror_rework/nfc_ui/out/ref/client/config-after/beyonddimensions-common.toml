@@ -9,10 +9,10 @@ ui_reverse_button = "ENABLED"
 ui_search_button = "DISABLED"
 #决定打开菜单时是否显示合成槽
 #Allowed Values: ENABLED, DISABLED, SORT_DEFAULT, SORT_CREATIVE_TAB, SORT_MAX_STACK, SORT_QUANTITY, SORT_NAME, SORT_MODID, SORT_INSERTED_TIME, SORT_MODIFIED_TIME
-ui_craft_button = "ENABLED"
+ui_craft_button = "DISABLED"
 #决定工艺菜单关闭时，物品优先转移的方向；启用则优先向存储，关闭则优先向背包
 #Allowed Values: ENABLED, DISABLED, SORT_DEFAULT, SORT_CREATIVE_TAB, SORT_MAX_STACK, SORT_QUANTITY, SORT_NAME, SORT_MODID, SORT_INSERTED_TIME, SORT_MODIFIED_TIME
-ui_craft_return_button = "DISABLED"
+ui_craft_return_button = "ENABLED"
 #存储UI当前显示的总页数 (除非你知道你在做什么，否则不要手动修改)
 #Range: 2 ~ 99
 ui_page_num = 6
