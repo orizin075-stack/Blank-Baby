@@ -78,6 +78,88 @@ class Fig:
         rectangle is the face as seen from outside it; flip mirrors it (the side panel of one side for the other)."""
         self.decals.append(dict(bone=bone, part=part, face=face, rect=rect, flip=flip))
 
+    # ------------------------------------------------------------------ the front camera and sheet coordinates
+    def camera(self, yaw, pitch, scale, u0, v0):
+        """The front view's camera; parts can then be placed in sheet pixels with at() / ground()."""
+        self.cam = SH.Camera(yaw, pitch, scale, u0, v0)
+        return self.cam
+
+    def camera_at(self, yaw, pitch, scale, ug, vg, ground=(0.0, 24.0, 0.0)):
+        """Front camera placed so that the model point `ground` (by default the middle of the feet on the ground)
+        lands on sheet pixel (ug, vg)."""
+        c = SH.Camera(yaw, pitch, scale, 0, 0)
+        q = c.project(np.array([ground], float))[0]
+        return self.camera(yaw, pitch, scale, ug - q[0], vg - q[1])
+
+    def cam_tuple(self):
+        c = self.cam
+        return (c.yaw, c.pitch, c.scale, c.u0, c.v0)
+
+    def at(self, u, v, z=0.0):
+        return np.array(self.cam.unproject(u, v, z), float)
+
+    def xat(self, u, y, z=0.0):
+        """Model point at height y and depth z whose sheet column is u (feet: the depth from the ground plane is too
+        sensitive to the row at a low camera pitch)."""
+        R = self.cam.R
+        x = ((u - self.cam.u0) / self.cam.scale - R[0, 1] * y - R[0, 2] * z) / R[0, 0]
+        return np.array([x, y, z], float)
+
+    def ground(self, u, v, y=24.0):
+        return np.array(self.cam.unproject_y(u, v, y), float)
+
+    def silhouette(self, shape, skip=()):
+        """The model built so far, seen through the front camera (sheet pixels)."""
+        T, owner = SH.triangles(self.r)
+        if len(T) == 0:
+            return np.zeros(shape, bool)
+        return SH.raster(self.cam.project(T), shape) > -1e8
+
+    def width(self, du, k=0.6):
+        """Model width of a block whose front view is du sheet pixels wide, its depth being k times its width."""
+        c, s = abs(math.cos(math.radians(self.cam.yaw))), abs(math.sin(math.radians(self.cam.yaw)))
+        return du / self.cam.scale / (c + k * s)
+
+    def slabs(self, mask, v0, v1, bone_of, k=0.6, z=0.0, step=1.0, axis=None, min_w=1.0, name='slab', pick='axis',
+              dz=None):
+        """Stack horizontal slabs from sheet row v0 down to v1 whose front-view widths are the drawn silhouette's
+        (mask), each `step` model pixels tall and k times as deep as wide: a robe, a skirt or a fall of hair that
+        matches the sheet's outline exactly. bone_of(y) names the bone for a slab at model height y; axis(v) is
+        the sheet column of the body's centre line at row v (the run there is taken). dz(y): depth offset."""
+        rows_per = step * self.cam.scale * math.cos(math.radians(self.cam.pitch))
+        v = v0
+        out = []
+        prev = None
+        while v < v1 - 0.5:
+            va, vb = int(round(v)), int(round(min(v1, v + rows_per)))
+            band = mask[va:max(va + 1, vb)].any(0)
+            lab, n = ndimage.label(band)
+            if n == 0:
+                v += rows_per
+                continue
+            ua = axis(v) if callable(axis) else (axis if axis is not None else (prev if prev is not None else W2(band)))
+            ia = int(np.clip(round(ua), 0, len(band) - 1))
+            if lab[ia]:
+                j = lab[ia]
+            else:
+                cs = [(abs(np.nonzero(lab == i)[0].mean() - ua), i) for i in range(1, n + 1)]
+                j = min(cs)[1]
+            xs = np.nonzero(lab == j)[0]
+            u_lo, u_hi = xs.min(), xs.max() + 1
+            prev = (u_lo + u_hi) / 2
+            kk = k(v) if callable(k) else k
+            w = self.width(u_hi - u_lo, kk)
+            vm = (va + vb) / 2
+            zz = z + (dz(vm) if dz else 0.0)
+            c = self.at((u_lo + u_hi) / 2, vm, zz)
+            # the slab's front-view centre lands where the run's centre is; its height from the band
+            top = self.at((u_lo + u_hi) / 2, va, zz)[1]
+            bot = self.at((u_lo + u_hi) / 2, vb, zz)[1]
+            if w >= min_w and bot - top > 0.05:
+                out += self.box(bone_of(c[1]), (c[0], (top + bot) / 2, zz), (w, bot - top, kk * w), name=name)
+            v += rows_per
+        return out
+
     # ------------------------------------------------------------------ shapes
     def _bone(self, bone):
         return self.b[bone] if isinstance(bone, str) else bone
@@ -151,6 +233,28 @@ class Fig:
                 return [c - x * ww / 2 - y * dd / 2, c + x * ww / 2 - y * dd / 2, c + x * ww / 2 + y * dd / 2, c - x * ww / 2 + y * dd / 2]
             out += self.hexa(bone, rect(a2, w[i], d[i]) + rect(b2, w[i + 1], d[i + 1]), name=f'{name}{i}', mat=mat)
         return out
+
+
+_MASKS = {}
+
+
+def sheet_mask(name, boxes, drop=()):
+    """The drawn silhouette (as Sheet builds it), for recipes that take their shape from it."""
+    key = (name, tuple(map(tuple, boxes)), tuple(map(tuple, drop)))
+    if key not in _MASKS:
+        im = SH.load(name)
+        m = np.zeros(im.shape[:2], bool)
+        for b in boxes:
+            m |= SH.figure_mask(im, b)
+        for b in drop:
+            m[b[1]:b[3], b[0]:b[2]] = False
+        _MASKS[key] = m
+    return _MASKS[key]
+
+
+def W2(band):
+    xs = np.nonzero(band)[0]
+    return (xs.min() + xs.max()) / 2 if len(xs) else 0
 
 
 def box_corners(centre, size, R=None):
@@ -315,7 +419,7 @@ def part_of(s):
     return (s.mat or {}).get('group') or s.name.rstrip('0123456789_')
 
 
-def bake(fig, sheet, cams, min_facing=0.3):
+def bake(fig, sheet, cams, min_facing=0.15):
     """Paint every surface from the sheet views. A texel takes the view (or the mirror image across the character's
     plane of symmetry) that sees it most squarely; texels nothing sees take the colour of the nearest seen texel of
     the same part in 3D, so the far side of a tail or the inside of a sleeve keeps that part's colours."""
