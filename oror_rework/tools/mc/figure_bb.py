@@ -35,6 +35,23 @@ TEMPLATES = {
     'large': dict(top=-20.0, neck=(3.5, 1.5, 3.5), chest=(12.0, 8.0, 6.0), waist=(10.0, 3.0, 5.5), pelvis=(10.5, 4.5, 5.5),
                   arm=(4.5, 4.5), upper=8.0, fore=7.5, hand=3.0, sx=8.25, thigh=(5.0, 5.0), shin=(4.5, 4.5), lx=2.6,
                   foot=(4.5, 1.0, 6.0), bust=0.0),
+    # taller, balanced builds for the divine redesign: the same 8-pixel head on a longer body, legs about half the
+    # height, a visible neck and a narrow waist (a teen 5.5 heads, an adult woman 6, a man 6.3, a small child 4.5)
+    'maiden': dict(top=-20.0, neck=(2.2, 1.5, 2.2), chest=(6.6, 6.0, 3.4), waist=(5.0, 3.0, 2.9), pelvis=(6.4, 3.6, 3.4),
+                   arm=(2.2, 2.2), upper=7.0, fore=6.6, hand=2.2, sx=4.4, thigh=(3.0, 3.0), shin=(2.6, 2.6), lx=1.55,
+                   foot=(2.6, 1.0, 3.6), bust=0.8),
+    'goddess': dict(top=-24.0, neck=(2.4, 1.8, 2.4), chest=(7.0, 6.6, 3.6), waist=(5.2, 3.4, 3.0), pelvis=(6.8, 4.0, 3.6),
+                    arm=(2.3, 2.3), upper=7.8, fore=7.2, hand=2.4, sx=4.65, thigh=(3.2, 3.2), shin=(2.8, 2.8), lx=1.65,
+                    foot=(2.8, 1.0, 3.8), bust=0.9),
+    'lord': dict(top=-26.0, neck=(3.0, 2.0, 3.0), chest=(8.6, 7.2, 4.3), waist=(7.0, 3.4, 3.8), pelvis=(7.6, 4.0, 4.0),
+                 arm=(2.8, 2.8), upper=8.4, fore=7.8, hand=2.6, sx=5.7, thigh=(3.6, 3.6), shin=(3.2, 3.2), lx=1.9,
+                 foot=(3.2, 1.0, 4.4), bust=0.0),
+    'youth2': dict(top=-23.0, neck=(2.6, 1.8, 2.6), chest=(7.6, 6.6, 3.8), waist=(6.2, 3.2, 3.3), pelvis=(6.9, 3.8, 3.6),
+                   arm=(2.5, 2.5), upper=7.6, fore=7.0, hand=2.4, sx=5.05, thigh=(3.3, 3.3), shin=(2.9, 2.9), lx=1.75,
+                   foot=(3.0, 1.0, 4.0), bust=0.0),
+    'kid': dict(top=-13.0, neck=(2.0, 1.0, 2.0), chest=(5.8, 4.8, 3.0), waist=(4.8, 2.2, 2.7), pelvis=(5.4, 3.0, 3.0),
+                arm=(2.1, 2.1), upper=4.8, fore=4.4, hand=1.9, sx=3.95, thigh=(2.6, 2.6), shin=(2.4, 2.4), lx=1.35,
+                foot=(2.5, 1.0, 3.3), bust=0.0),
 }
 
 HS = 8.0
