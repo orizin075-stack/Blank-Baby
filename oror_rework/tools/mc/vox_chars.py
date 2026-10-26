@@ -67,13 +67,14 @@ def kokuhaku():
     white = v.tones(WHITE, 0.025, seed=3)
     navy = v.tones(NAVY, 0.05, seed=4)
     # ---- head: skull, the face drawn on its front; hair cap, fringe, side locks, back fall
-    v.box((-3.9, top + 0.1, -3.9), (3.9, chin, 3.9), SKIN, 'head')
+    skin_i = v.ci(SKIN)
+    v.box((-3.9, top + 0.1, -3.9), (3.9, chin, 3.9), lambda X, Y, Z: np.where(Z < -3.4, skin_i, hair(X, Y, Z)).astype(np.uint16), 'head')
     spec = dict(skin=SKIN, hair=HAIR, hair_dark=HAIR3, iris='#3a64cc', iris_dark='#1c2552', iris_light='#7fb0ff', accent='#f0c45a',
                 lash='#1c2040', eye='round', mouth='small', fringe='straight', fringe_depth=15, blush=True, blush_colour='#f6c4c8')
     face_img, _ = sface.face(spec)
     v.overlay('head', 'north', (-4.0, top, 4.0, chin), face_img)
     # hair cap: rounded over the crown, sides and back, open over the face
-    v.ellipsoid((0, top + 3.4, 0.6), (5.0, 4.0, 5.0), hair, 'head', cut=lambda X, Y, Z: ~((Z < -2.5) & (Y > top + 2.4) & (np.abs(X) < 3.6)))
+    v.ellipsoid((0, top + 3.0, 0.6), (5.0, 4.4, 5.0), hair, 'head', cut=lambda X, Y, Z: ~((Z < -2.5) & (Y > top + 2.4) & (np.abs(X) < 3.6)))
     v.ellipsoid((0, top + 6.0, 1.2), (4.7, 4.0, 4.6), hair, 'head', cut=lambda X, Y, Z: ~((Z < -2.0) & (Y > top + 2.0) & (np.abs(X) < 3.7)))
     # a few fringe strands standing off the forehead (the rest of the fringe is drawn on the face)
     for x, L in ((-3.4, 5.6), (-2.2, 3.2), (-0.4, 3.8), (1.4, 2.8), (3.3, 5.2)):
@@ -111,9 +112,12 @@ def kokuhaku():
     v.paint(lambda X, Y, Z: (Y > 1.7) & (Y < 2.3) & ((np.floor(X * 2 + Z * 2) % 3) == 0), GOLD)
     v.box((-0.9, 1.1, -3.0), (0.9, 2.9, -2.3), GOLD, 'torso')
     v.box((-0.4, 1.6, -3.3), (0.4, 2.4, -2.9), NAVY2, 'torso')
-    v.strand([(0.4, 2.9, -2.8), (0.4, 9.5, -3.4)], 0.9, 0.5, NAVY, 'hips')
+    # the white kimono shows below the obi, between the haori's edges; the strap hangs over it
+    v.plate([(-2.2, 3.0, -3.0), (2.2, 3.0, -3.0), (2.5, 11.0, -3.6), (-2.5, 11.0, -3.6)], 0.8, white, 'hips')
+    v.paint(lambda X, Y, Z: (np.abs(X) > 1.8) & (Y > 3.0) & (Y < 11.2) & (Z < -2.5), NAVY)
+    v.strand([(0.4, 2.9, -3.9), (0.4, 9.5, -4.4)], 0.9, 0.5, NAVY, 'hips')
     for y in (4.5, 7.0):
-        v.box((-0.1, y - 0.4, -3.6), (0.9, y + 0.4, -3.1), GOLD, 'hips')
+        v.box((-0.1, y - 0.4, -4.6), (0.9, y + 0.4, -4.1), GOLD, 'hips')
     # hakama: navy, pleated, to mid-shin, gold crests
     v.cone((0, 3.0, 0), (0, 18.6, 0.3), 3.3, 4.9, navy, 'hips', depth=0.78, folds=7, fold_amp=0.35)
     crest = ['..g..', '.gng.', 'gnnng', '.gng.', '..g..']
@@ -140,7 +144,6 @@ def kokuhaku():
     kamon = ['.ggg.', 'gnnng', 'gngng', 'gnnng', '.ggg.']
     for sx in (-1, 1):
         v.decal(kamon, (sx * 4.2, 12.0, -5.0), (1, 0, 0), (0, 1, 0), 0.5, (0, 0, -1), depth=3.0, keys={'g': GOLD, 'n': NAVY})
-    v.decal(kamon, (0, 0.5, 4.5), (-1, 0, 0), (0, 1, 0), 0.6, (0, 0, 1), depth=3.0, keys={'g': GOLD, 'n': NAVY})
     # tassels from the obi
     for sx in (-1, 1):
         v.strand([(sx * 3.0, 3.0, -3.6), (sx * 3.0, 7.0, -3.8)], 0.6, 0.6, NAVY, 'hips')
