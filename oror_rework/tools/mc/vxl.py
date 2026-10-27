@@ -272,6 +272,42 @@ class Vol:
                         self.col[tuple(i)] = self.ci(colour)
                         break
 
+    def front_paint(self, img, x0, x1, y0, y1, raise_keys=None, keymap=None, zmax=None):
+        """Colour the frontmost voxels (looking along +z) over the model rectangle x0..x1, y0..y1 from an image,
+        one image texel per voxel column. img: (H, W, 3) array, or a list of strings with keymap. Texels whose key
+        is in raise_keys also get a voxel added in front (a lash line standing off the face)."""
+        if isinstance(img, (list, tuple)):
+            H, W = len(img), len(img[0])
+        else:
+            H, W = img.shape[:2]
+        for r in range(H):
+            for c in range(W):
+                if isinstance(img, (list, tuple)):
+                    k = img[r][c]
+                    if k == '.':
+                        continue
+                    colour = keymap[k]
+                else:
+                    k = None
+                    colour = img[r, c]
+                x = x0 + (c + 0.5) * (x1 - x0) / W
+                y = y0 + (r + 0.5) * (y1 - y0) / H
+                ix = int(np.floor((x - self.lo[0]) * self.res))
+                iy = int(np.floor((y - self.lo[1]) * self.res))
+                if not (0 <= ix < self.shape[0] and 0 <= iy < self.shape[1]):
+                    continue
+                col = self.col[ix, iy]
+                nz = np.nonzero(col)[0]
+                if zmax is not None:
+                    nz = nz[self.ax[2][nz] <= zmax]
+                if not len(nz):
+                    continue
+                iz = nz[0]
+                self.col[ix, iy, iz] = self.ci(colour)
+                if raise_keys and k in raise_keys and iz > 0:
+                    self.col[ix, iy, iz - 1] = self.ci(colour)
+                    self.bone[ix, iy, iz - 1] = self.bone[ix, iy, iz]
+
     # ------------------------------------------------------------------ meshing
     def surfs(self, fig, tex=2, ao=True, light=None):
         """Greedy-meshed quads per bone added to fig's sculpt; each carries its texels in info['rgba']."""

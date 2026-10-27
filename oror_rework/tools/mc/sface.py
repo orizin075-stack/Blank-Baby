@@ -330,3 +330,38 @@ def enable():
     bbpaint.PAINTERS['slids'] = m_slids
     bbpaint.PAINTERS['sshell'] = m_sshell
     bbpaint.NO_SNAP = tuple(set(bbpaint.NO_SNAP) | {'sface', 'slids', 'sshell'})
+
+
+# ------------------------------------------------------------------------------------------- hand-drawn faces
+class Canvas:
+    """A face drawn texel by texel from a sheet's face close-up (32 x 32, the head's front at 4 texels a pixel).
+    Colours by key; draw with fill / put / row, then .rgb."""
+    def __init__(self, keys, base, n=N):
+        self.keys = {k: C(v) for k, v in keys.items()}
+        self.n = n
+        self.img = np.tile(self.keys[base], (n, n, 1))
+
+    def put(self, x, y, k):
+        if 0 <= x < self.n and 0 <= y < self.n:
+            self.img[y, x] = self.keys[k]
+
+    def fill(self, x0, y0, x1, y1, k):
+        """Inclusive rectangle."""
+        for y in range(max(0, y0), min(self.n, y1 + 1)):
+            for x in range(max(0, x0), min(self.n, x1 + 1)):
+                self.img[y, x] = self.keys[k]
+
+    def row(self, y, x0, s):
+        """A run of keys from column x0 ('.' leaves a texel as it is)."""
+        for i, k in enumerate(s):
+            if k != '.':
+                self.put(x0 + i, y, k)
+
+    def mirror_row(self, y, x0, s):
+        """The run and its mirror image on the other half of the face."""
+        self.row(y, x0, s)
+        self.row(y, self.n - x0 - len(s), s[::-1])
+
+    @property
+    def rgb(self):
+        return self.img.copy()
