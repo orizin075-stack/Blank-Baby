@@ -131,8 +131,9 @@ jobs:
         run: |
           set +e
           NEW=$(sed -n 's/^release_version=//p' gradle.properties)
+          # Nightfall from SETUP_NIGHTFALL's download; not the original Indestructible, which loads a client class on a
+          # dedicated server (the pack ships its fixed build in overrides; OROR's mixins for it skip themselves without it)
           extra=(libs/nightfall.jar)
-          ls "$RUNNER_TEMP/pack045" | grep -q -i '^indestructible' || extra+=("$RUNNER_TEMP/indestructible.jar")
           bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 1500 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
             'FLIGHT-RESULT' -- 'oror citadel selftest' 'oror war start 100 test' 'oror pilots test' -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
