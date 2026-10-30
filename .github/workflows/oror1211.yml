@@ -19,7 +19,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 75
     defaults:
       run:
         shell: bash
@@ -99,12 +99,35 @@ jobs:
             javap -c -p -cp libs/epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman.epicfight.world.capabilities.EpicFightCapabilities \
               | awk '/getEntityPatch\(net.minecraft.world.entity.Entity, java.lang.Class\)/{on=1} on{print; if(++n>14) exit}'
           } 2>&1 | tee -a out/report.txt
+      - name: Mixin targets in Minecraft (Grand Citadel)
+        run: |
+          {
+            set +e
+            for j in $(find build ~/.gradle/caches -name 'neoforge-*.jar' 2>/dev/null | grep -v -E 'sources|installer|userdev|universal' | head -20); do
+              if unzip -l "$j" 2>/dev/null | grep -q 'net/minecraft/world/level/chunk/ChunkGenerator.class'; then
+                echo "== $j"; javap -p -cp "$j" net.minecraft.world.level.chunk.ChunkGenerator | grep -E 'createStructures|tryGenerateStructure'
+                break
+              fi
+            done
+          } 2>&1 | tee -a out/report.txt
       - name: Make the release jar
         run: |
           BASE=$(sed -n 's/^base_version=//p' gradle.properties); NEW=$(sed -n 's/^release_version=//p' gradle.properties)
           python3 -I tools/patch_jar.py base/oror_supreme_bosses-$BASE.jar build/classes/java/main lang \
             out/oror_supreme_bosses-$NEW.jar $BASE $NEW overlay 2>&1 | tee -a out/report.txt
           sha256sum out/oror_supreme_bosses-$NEW.jar | tee -a out/report.txt
+      - name: Dedicated server - Grand Citadel generated with its court and garrison
+        run: |
+          set +e
+          NEW=$(sed -n 's/^release_version=//p' gradle.properties)
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 900 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' \
+            -- 'oror citadel selftest' -- out/oror_supreme_bosses-$NEW.jar libs/irons_spellbooks-1.21.1-3.16.3.jar \
+            libs/irons_lib-1.21.1-2.2.0.jar libs/geckolib-neoforge-1.21.1-4.9.3.jar libs/player-animation-lib-forge-2.0.4+1.21.1.jar \
+            libs/curios-neoforge-9.5.1+1.21.1.jar libs/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar libs/kotlinforforge-5.12.0-all.jar \
+            libs/epic-fight-21.17.3.1-mc1.21.1-neoforge.jar 2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
+          { grep -E 'CITADEL-SELFTEST|OROR Citadel|Exception|Error|WARN.*(citadel|Citadel|royal|Royal)|requires|Missing' "$RUNNER_TEMP/server/console.log" | head -300; } >> out/server_test.txt
+          tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
+          exit $rc
       - name: Commit the result
         if: always()
         working-directory: .

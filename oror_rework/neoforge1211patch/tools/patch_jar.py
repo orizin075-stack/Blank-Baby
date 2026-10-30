@@ -21,7 +21,7 @@ def main(base, classes, lang, out, old, new, overlay=None):
                 compiled[os.path.relpath(path, classes).replace(os.sep, '/')] = open(path, 'rb').read()
     outer = {name[:-len('.class')].split('$')[0] for name in compiled}
     fragments = {}
-    for ns in sorted(os.listdir(lang)):
+    for ns in sorted(os.listdir(lang)) if os.path.isdir(lang) else []:
         for f in sorted(os.listdir(os.path.join(lang, ns))):
             fragments[f'assets/{ns}/lang/{f}'] = json.load(open(os.path.join(lang, ns, f), encoding='utf-8'))
     files = {}
