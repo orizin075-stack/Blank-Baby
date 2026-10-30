@@ -59,8 +59,11 @@ public final class CitadelData {
     public record Chunk(PalettedContainer<BlockState>[] sections, List<CompoundTag> blockEntities, List<CompoundTag> entities) {
     }
 
-    /** Someone who stands at a post: a royal role (RoyalRole name) or VILLAGER, with the trade for townsfolk. */
-    public record Post(String role, int x, int y, int z, float yaw, String post, String profession) {
+    /**
+     * Someone who stands at a post: a royal role (RoyalRole name), VILLAGER with the trade for townsfolk, or TANK: a guard
+     * who brings out a Superb Warfare vehicle (vehicle, seats) and crews it the first time the guard acts.
+     */
+    public record Post(String role, int x, int y, int z, float yaw, String post, String profession, String vehicle, int seats) {
         public boolean villager() {
             return role.equals("VILLAGER");
         }
@@ -182,7 +185,8 @@ public final class CitadelData {
                     JsonObject o = el.getAsJsonObject();
                     Post post = new Post(o.get("role").getAsString(), o.get("x").getAsInt(), o.get("y").getAsInt(), o.get("z").getAsInt(),
                         o.get("yaw").getAsFloat(), o.has("post") ? o.get("post").getAsString() : "",
-                        o.has("profession") ? o.get("profession").getAsString() : "");
+                        o.has("profession") ? o.get("profession").getAsString() : "", o.has("vehicle") ? o.get("vehicle").getAsString() : "",
+                        o.has("seats") ? o.get("seats").getAsInt() : 0);
                     p.computeIfAbsent(ChunkPos.asLong(post.x() >> 4, post.z() >> 4), k -> new ArrayList<>()).add(post);
                 }
             } catch (IOException | RuntimeException e) {

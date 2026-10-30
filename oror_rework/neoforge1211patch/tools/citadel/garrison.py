@@ -30,10 +30,11 @@ def floor_ok(n):
     return not any(b in n for b in BAD_FLOOR)
 
 
-def stand(x, y, z, r=6, dy=2, taken=()):
-    """Nearest (x, feet y, z) to the anchor with a solid floor and two free blocks above."""
+def stand(x, y, z, r=6, dy=2, taken=(), room=0):
+    """Nearest (x, feet y, z) to the anchor with a solid floor and two free blocks above (a room-wide, four-high box for a vehicle)."""
     x0, z0, y0 = x - r - 1, z - r - 1, y - dy - 1
-    a, _ = world.load(save, x0, x + r + 2, z0, z + r + 2, y0, y + dy + 3)
+    a, _ = world.load(save, x0 - room, x + r + 2 + room, z0 - room, z + r + 2 + room, y0, y + dy + 5)
+    x0, z0 = x0 - room, z0 - room
     best = None
     for ox in range(-r, r + 1):
         for oz in range(-r, r + 1):
@@ -47,6 +48,9 @@ def stand(x, y, z, r=6, dy=2, taken=()):
                 side = sum(free(name(a, px + u, py, pz + v)) for u, v in ((1, 0), (-1, 0), (0, 1), (0, -1)))
                 if side < 2:
                     continue
+                if room and not all(free(name(a, px + u, py + h, pz + v)) and floor_ok(name(a, px + u, py - 1, pz + v))
+                                    for u in range(-room, room + 1) for v in range(-room, room + 1) for h in range(4)):
+                    continue
                 d = ox * ox + oz * oz + 4 * oy * oy
                 if best is None or d < best[0]:
                     best = (d, (x + ox, y + oy, z + oz))
@@ -57,8 +61,8 @@ entries = []
 taken = set()
 
 
-def put(role, x, y, z, yaw=0, r=6, dy=2, post=None, **extra):
-    p = stand(x, y, z, r, dy, taken)
+def put(role, x, y, z, yaw=0, r=6, dy=2, post=None, room=0, **extra):
+    p = stand(x, y, z, r, dy, taken, room)
     if p is None:
         print('no spot for', role, (x, y, z), file=sys.stderr)
         return
@@ -95,6 +99,11 @@ for ring in (115, 303, 472):
             gx = ax * inside + (s * 6 if az else 0)
             gz = az * inside + (s * 6 if ax else 0)
             put('GUARD', gx, 65, gz, yaw=yaw, r=5, post='gate')
+
+# The motor pool: a tank inside each outer gate, brought out and crewed by its guard the first time the guard acts.
+for ax, az, yaw in ((0, -1, 180), (0, 1, 0), (-1, 0, 90), (1, 0, -90)):
+    put('TANK', ax * 440 + (9 if az else 0), 65, az * 440 + (9 if ax else 0), yaw=yaw, r=8, post='motor_pool', room=2,
+        vehicle='m_1a_2', seats=2)
 
 # Casemates beside the gates and the outer redoubts.
 for i, p in enumerate(man['v6_defense_points']):

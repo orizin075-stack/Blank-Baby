@@ -1,0 +1,490 @@
+package jp.oror.reborn.vehicle;
+
+import java.util.List;
+import java.util.function.Consumer;
+import jp.oror.reborn.royal.RoyalMob;
+import jp.oror.reborn.royal.RoyalRegistry;
+import jp.oror.reborn.royal.RoyalRole;
+import jp.oror.reborn.royal.RoyalSovereign;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+
+/**
+ * Royal soldiers crew Superb Warfare vehicles and fight with them on their own. Superb Warfare already lets a mob in a
+ * seat aim that seat's turret or weapon station at the vehicle's AI target and fire when on target; this class is the
+ * driver and the pilot it lacks (its loiter autopilot runs on a player's client).
+ *
+ * Tanks and other ground vehicles drive at the crew's target to a stand-off distance and hold there while the gunner
+ * fires, back off when an enemy is too close, work themselves free when stuck, and return to their post when there is
+ * nothing to fight. Aircraft wait on their runway; with an enemy about they take off along it, climb, attack in diving
+ * runs (pulling up early enough), and when the sky has been clear for half a minute they fly back, line up with the
+ * runway, glide down, touch down, brake and park. Everything a vehicle needs to remember (mode, post, runway, flight
+ * log) is in its persistent data, so it survives saving.
+ */
+@EventBusSubscriber(modid = "oror_supreme_bosses")
+public final class RoyalPilots {
+    public static final String CREWED = "oror_crewed";
+    static final String KEY = "OrorPilot";
+    private static final double STANDOFF = 26, TOO_CLOSE = 10, CRUISE = 45, GLIDE = 0.1, GATE = 150;
+
+    private RoyalPilots() {
+    }
+
+    /** A vehicle of the given Superb Warfare id at a place, facing yaw, charged and armed, with seats royal soldiers aboard. */
+    public static Entity deploy(ServerLevel level, Vec3 at, float yaw, String id, int seats, Consumer<Mob> crewSink) {
+        if (!Sbw.present() || !Sbw.has(id)) {
+            return null;
+        }
+        Entity v = BuiltInRegistries.ENTITY_TYPE.get(Sbw.id(id)).create(level);
+        if (v == null) {
+            return null;
+        }
+        v.moveTo(at.x, at.y, at.z, yaw, 0F);
+        if (!level.addFreshEntity(v)) {
+            return null;
+        }
+        v.addTag(CREWED);
+        CompoundTag p = new CompoundTag();
+        p.putLong("Home", BlockPos.containing(at).asLong());
+        p.putFloat("Heading", yaw);
+        p.putDouble("RunwayY", at.y);
+        p.putString("Mode", "ground");
+        v.getPersistentData().put(KEY, p);
+        Sbw.charge(v);
+        arm(v);
+        for (int i = 0; i < seats; i++) {
+            RoyalMob m = RoyalRegistry.TYPES.get(i == 0 ? RoyalRole.IMPERIAL : RoyalRole.GUARD).create(level);
+            if (m == null) {
+                continue;
+            }
+            m.moveTo(at.x, at.y, at.z, yaw, 0F);
+            m.setPersistenceRequired();
+            level.addFreshEntity(m);
+            m.startRiding(v, true);
+            if (crewSink != null) {
+                crewSink.accept(m);
+            }
+        }
+        if ("AIRCRAFT".equals(Sbw.engine(v))) {
+            p.putString("Mode", runway(level, at, yaw) ? "parked" : "launch");
+        }
+        return v;
+    }
+
+    /** True if there is a straight, level strip of 150 blocks ahead to take off from (and land on). */
+    public static boolean runway(ServerLevel level, Vec3 at, float yaw) {
+        Vec3 f = Vec3.directionFromRotation(0, yaw);
+        Vec3 side = new Vec3(-f.z, 0, f.x);
+        int y = Mth.floor(at.y);
+        for (int d = 0; d <= 150; d += 3) {
+            for (int s = -2; s <= 2; s += 2) {
+                Vec3 q = at.add(f.scale(d)).add(side.scale(s));
+                int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(q.x), Mth.floor(q.z));
+                if (top > y + 1 || top < y - 3) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static void arm(Entity v) {
+        boolean air = "AIRCRAFT".equals(Sbw.engine(v)) || "HELICOPTER".equals(Sbw.engine(v));
+        String[][] load = air
+            ? new String[][]{{"small_shell_ap", "64"}, {"small_shell_ap", "64"}, {"small_shell_he", "64"}, {"large_anti_ground_missile", "4"}, {"small_rocket", "16"}}
+            : new String[][]{{"large_shell_he", "16"}, {"large_shell_ap", "16"}, {"rifle_ammo", "64"}, {"heavy_ammo", "64"}, {"large_shell_he", "16"}};
+        int slot = 0;
+        for (String[] l : load) {
+            if (BuiltInRegistries.ITEM.containsKey(Sbw.id(l[0]))) {
+                Item item = BuiltInRegistries.ITEM.get(Sbw.id(l[0]));
+                Sbw.call(v, "setItem", slot++, item.getDefaultInstance().copyWithCount(Math.min(item.getDefaultMaxStackSize(), Integer.parseInt(l[1]))));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void tick(EntityTickEvent.Post e) {
+        Entity v = e.getEntity();
+        if (v.level().isClientSide || !v.getTags().contains(CREWED) || !v.isAlive()) {
+            return;
+        }
+        CompoundTag p = v.getPersistentData().getCompound(KEY);
+        if (Sbw.wreck(v)) {
+            return;
+        }
+        if (v.tickCount % 1200 == 0) {
+            Sbw.charge(v);
+            arm(v);
+        }
+        log(v, p);
+        Mob driver = v.getFirstPassenger() instanceof Mob m ? m : null;
+        if (driver == null) {
+            Sbw.keys(v, false, false, false, false, false, "AIRCRAFT".equals(Sbw.engine(v)) && v.onGround());
+            Sbw.mouse(v, 0, 0);
+            return;
+        }
+        LivingEntity target = target(v);
+        if (v.tickCount % 10 == 0) {
+            Sbw.aim(v, target);
+            for (Entity rider : v.getPassengers()) {
+                if (rider instanceof Mob m && target != null && m.getTarget() != target) {
+                    m.setTarget(target);
+                }
+            }
+        }
+        String engine = Sbw.engine(v);
+        if (engine.equals("AIRCRAFT")) {
+            fly(v, p, target);
+        } else if (!engine.equals("HELICOPTER") && !engine.isEmpty()) {
+            drive(v, p, target);
+        }
+        v.getPersistentData().put(KEY, p);
+    }
+
+    /** The crew's enemy: any rider's living target, else (every second) the nearest hostile the royals would fight. */
+    private static LivingEntity target(Entity v) {
+        for (Entity rider : v.getPassengers()) {
+            if (rider instanceof Mob m && m.getTarget() != null && m.getTarget().isAlive() && !m.isAlliedTo(m.getTarget())) {
+                return m.getTarget();
+            }
+        }
+        if (v.tickCount % 20 != 7) {
+            return null;
+        }
+        boolean air = "AIRCRAFT".equals(Sbw.engine(v));
+        List<LivingEntity> near = v.level().getEntitiesOfClass(LivingEntity.class, v.getBoundingBox().inflate(air ? 160 : 64, air ? 96 : 24, air ? 160 : 64),
+            l -> l.isAlive() && RoyalSovereign.hostile(l) && !(l.getVehicle() != null && l.getVehicle() == v));
+        LivingEntity best = null;
+        double bestD = Double.MAX_VALUE;
+        for (LivingEntity l : near) {
+            double d = l.distanceToSqr(v);
+            if (d < bestD) {
+                bestD = d;
+                best = l;
+            }
+        }
+        if (best != null && v.getFirstPassenger() instanceof Mob m) {
+            m.setTarget(best);
+        }
+        return best;
+    }
+
+    // ------------------------------------------------------------------------------------------------ ground vehicles
+
+    private static void drive(Entity v, CompoundTag p, LivingEntity target) {
+        Vec3 pos = v.position();
+        Vec3 home = Vec3.atBottomCenterOf(BlockPos.of(p.getLong("Home")));
+        int unstick = p.getInt("Unstick");
+        if (unstick > 0) {
+            p.putInt("Unstick", unstick - 1);
+            boolean right = p.getBoolean("UnstickRight");
+            Sbw.keys(v, false, true, !right, right, false, false);
+            return;
+        }
+        Vec3 goal;
+        double hold;
+        boolean back = false;
+        if (target != null) {
+            Vec3 d = target.position().subtract(pos).multiply(1, 0, 1);
+            double dist = d.length();
+            if (dist < TOO_CLOSE) {
+                back = true;
+                goal = target.position();
+                hold = 0;
+            } else if (dist > STANDOFF + 8) {
+                goal = target.position().subtract(d.normalize().scale(STANDOFF));
+                hold = 3;
+            } else {
+                goal = target.position();
+                hold = Double.MAX_VALUE;
+            }
+            p.putString("Mode", "attack");
+        } else {
+            goal = home;
+            hold = 3;
+            p.putString("Mode", pos.distanceToSqr(home) > 16 ? "return" : "post");
+        }
+        Vec3 d = goal.subtract(pos).multiply(1, 0, 1);
+        double dist = d.length();
+        float err = Mth.wrapDegrees(yawTo(d) - v.getYRot());
+        boolean turn = Math.abs(err) > 8 && (dist > hold || hold == Double.MAX_VALUE && Math.abs(err) > 25);
+        boolean right = turn && err > 0, left = turn && err < 0;
+        boolean forward = !back && dist > hold && hold != Double.MAX_VALUE && Math.abs(err) < 55;
+        Sbw.keys(v, forward, back, left, right, forward && dist > 40, false);
+        // stuck: pressing forward without moving for two seconds backs it off at an angle for a second and a half
+        double speed = v.getDeltaMovement().horizontalDistance();
+        int still = forward && speed < 0.02 ? p.getInt("Still") + 1 : 0;
+        p.putInt("Still", still);
+        if (still > 40) {
+            p.putInt("Still", 0);
+            p.putInt("Unstick", 30);
+            p.putBoolean("UnstickRight", v.getRandom().nextBoolean());
+            p.putInt("Unsticks", p.getInt("Unsticks") + 1);
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------ aircraft
+
+    private static void fly(Entity v, CompoundTag p, LivingEntity target) {
+        String mode = p.getString("Mode");
+        long now = v.level().getGameTime();
+        float heading = p.getFloat("Heading");
+        Vec3 home = Vec3.atBottomCenterOf(BlockPos.of(p.getLong("Home")));
+        double runwayY = p.getDouble("RunwayY");
+        Vec3 f = Vec3.directionFromRotation(0, heading);
+        double speed = v.getDeltaMovement().length();
+        if (target != null) {
+            p.putLong("LastEnemy", now);
+        }
+        boolean quiet = now - p.getLong("LastEnemy") > 600;
+        switch (mode) {
+            case "parked" -> {
+                Sbw.keys(v, false, false, false, false, false, true);
+                Sbw.mouse(v, 0, 0);
+                if (target != null) {
+                    mode = "roll";
+                    p.putLong("Since", now);
+                }
+            }
+            case "launch" -> {
+                // no runway: a catapult start, straight into the climb
+                v.setPos(v.getX(), v.getY() + 30, v.getZ());
+                v.setDeltaMovement(f.scale(1.6));
+                Sbw.call(v, "setPower", 1.5F);
+                Sbw.call(v, "setEngineStart", true);
+                Sbw.call(v, "setEngineStartOver", true);
+                p.putBoolean("NoRunway", true);
+                mode = "climb";
+                p.putLong("Since", now);
+            }
+            case "roll" -> {
+                // take-off run along the runway, full power, kept on its centre line
+                Vec3 ahead = home.add(f.scale(200));
+                float err = Mth.wrapDegrees(yawTo(ahead.subtract(v.position())) - v.getYRot());
+                Sbw.keys(v, true, false, false, false, true, false);
+                Sbw.mouse(v, Mth.clamp(err / 6.0, -1, 1), 0);
+                if (!v.onGround() && v.getY() > runwayY + 2.5) {
+                    mode = "climb";
+                    p.putLong("Since", now);
+                    p.putBoolean("TookOff", true);
+                } else if (now - p.getLong("Since") > 500) {
+                    mode = "rollout";
+                    p.putInt("Aborts", p.getInt("Aborts") + 1);
+                }
+            }
+            case "climb" -> {
+                double cruise = cruise(v, home, target);
+                steer(v, target != null ? target.position() : home.add(f.scale(120)), cruise, true, -18);
+                if (v.getY() > cruise - 8 || now - p.getLong("Since") > 400) {
+                    mode = "patrol";
+                    p.putLong("Since", now);
+                }
+            }
+            case "patrol" -> {
+                double cruise = cruise(v, home, target);
+                if (target != null) {
+                    double h = target.position().subtract(v.position()).horizontalDistance();
+                    float err = Mth.wrapDegrees(yawTo(target.position().subtract(v.position())) - v.getYRot());
+                    if (h < 160 && Math.abs(err) < 20) {
+                        mode = "dive";
+                        p.putLong("Since", now);
+                    } else {
+                        steer(v, target.position(), cruise, true, 0);
+                    }
+                } else if (quiet && !p.getBoolean("NoRunway")) {
+                    mode = "return";
+                    p.putLong("Since", now);
+                } else {
+                    // circle the post
+                    Vec3 r = v.position().subtract(home).multiply(1, 0, 1);
+                    Vec3 tangent = r.lengthSqr() < 1 ? f : new Vec3(-r.z, 0, r.x).normalize();
+                    Vec3 aim = home.add(r.normalize().scale(90)).add(tangent.scale(60));
+                    steer(v, aim, cruise, false, 0);
+                }
+            }
+            case "dive" -> {
+                if (target == null) {
+                    mode = "patrol";
+                    break;
+                }
+                Vec3 to = target.getBoundingBox().getCenter().subtract(v.position());
+                double h = to.horizontalDistance();
+                float wantPitch = (float) Mth.clamp(Math.toDegrees(Math.atan2(-to.y, h)), -10, 35);
+                aimNose(v, yawTo(to), wantPitch, speed < 1.4);
+                if (h < 40 || v.getY() - target.getY() < 14 || now - p.getLong("Since") > 200) {
+                    mode = "pullup";
+                    p.putLong("Since", now);
+                    p.putInt("Runs", p.getInt("Runs") + 1);
+                }
+            }
+            case "pullup" -> {
+                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), cruise(v, home, target), true, -22);
+                if (now - p.getLong("Since") > 70) {
+                    mode = "patrol";
+                }
+            }
+            case "return" -> {
+                // to a point on the extended centre line, GATE blocks before the threshold
+                Vec3 gate = home.subtract(f.scale(GATE));
+                steer(v, gate, runwayY + 28, false, 0);
+                if (target != null) {
+                    mode = "patrol";
+                } else if (v.position().subtract(gate).horizontalDistance() < 30) {
+                    mode = "approach";
+                    p.putLong("Since", now);
+                }
+            }
+            case "approach" -> {
+                Vec3 touch = home.add(f.scale(25));
+                Vec3 rel = touch.subtract(v.position());
+                double along = rel.dot(f);
+                double glide = runwayY + 1.5 + Math.max(0, along) * GLIDE;
+                Vec3 aim = touch.add(f.scale(Math.max(20, -along)));
+                boolean slow = speed > 1.35, fast = speed < 0.9;
+                steerSpeed(v, aim, glide, fast, slow);
+                if (v.onGround()) {
+                    mode = "rollout";
+                    p.putLong("Since", now);
+                    p.putBoolean("Landed", true);
+                } else if (along < -120 || v.getY() > glide + 25 || now - p.getLong("Since") > 900) {
+                    mode = "return";
+                    p.putInt("GoArounds", p.getInt("GoArounds") + 1);
+                }
+            }
+            case "rollout" -> {
+                Sbw.keys(v, false, true, false, false, false, true);
+                Sbw.mouse(v, 0, 0);
+                if (speed < 0.05 || now - p.getLong("Since") > 400) {
+                    mode = "parked";
+                    p.putLong("Home", v.blockPosition().asLong());
+                    p.putFloat("Heading", v.getYRot());
+                    p.putDouble("RunwayY", v.getY());
+                }
+            }
+            default -> mode = "parked";
+        }
+        // terrain ahead: whatever the mode, never fly into the ground
+        if (!v.onGround() && !mode.equals("approach") && !mode.equals("rollout")) {
+            Vec3 ahead = v.position().add(v.getDeltaMovement().multiply(1, 0, 1).scale(30));
+            int ground = v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(ahead.x), Mth.floor(ahead.z));
+            if (v.getY() - ground < 12) {
+                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), ground + 40, true, -25);
+                p.putInt("TerrainSaves", p.getInt("TerrainSaves") + 1);
+            }
+        }
+        p.putString("Mode", mode);
+    }
+
+    private static double cruise(Entity v, Vec3 home, LivingEntity target) {
+        double base = Math.max(home.y, target == null ? home.y : target.getY());
+        int ground = v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, v.getBlockX(), v.getBlockZ());
+        return Math.max(base + CRUISE, ground + 30);
+    }
+
+    /** Toward a point at an altitude: yaw by the mouse's x, pitch from the altitude error by its y; minPitch < 0 forces a climb. */
+    private static void steer(Entity v, Vec3 point, double altitude, boolean fullPower, float minPitch) {
+        float wantPitch = (float) Mth.clamp(-(altitude - v.getY()) * 0.6, -22, 18);
+        if (minPitch < 0) {
+            wantPitch = Math.min(wantPitch, minPitch);
+        }
+        aimNose(v, yawTo(point.subtract(v.position())), wantPitch, fullPower || v.getDeltaMovement().length() < 1.2);
+    }
+
+    private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower) {
+        float wantPitch = (float) Mth.clamp(-(altitude - v.getY()) * 0.8, -12, 14);
+        float yawErr = Mth.wrapDegrees(yawTo(point.subtract(v.position())) - v.getYRot());
+        float pitchErr = wantPitch - v.getXRot();
+        Sbw.mouse(v, Mth.clamp(yawErr / 10.0, -2, 2), Mth.clamp(pitchErr / 3.0, -8, 8));
+        Sbw.keys(v, faster, slower, false, false, false, false);
+    }
+
+    private static void aimNose(Entity v, float wantYaw, float wantPitch, boolean power) {
+        float yawErr = Mth.wrapDegrees(wantYaw - v.getYRot());
+        float pitchErr = wantPitch - v.getXRot();
+        Sbw.mouse(v, Mth.clamp(yawErr / 10.0, -2, 2), Mth.clamp(pitchErr / 3.0, -8, 8));
+        Sbw.keys(v, power, false, false, false, power, false);
+    }
+
+    private static float yawTo(Vec3 d) {
+        return (float) (Mth.atan2(d.z, d.x) * Mth.RAD_TO_DEG) - 90F;
+    }
+
+    /** The flight and drive log: distance covered, time in the air, highest point above the runway. */
+    private static void log(Entity v, CompoundTag p) {
+        double moved = v.getDeltaMovement().horizontalDistance();
+        if (moved > 0.01) {
+            p.putDouble("Odometer", p.getDouble("Odometer") + moved);
+        }
+        if (!v.onGround()) {
+            p.putInt("Airborne", p.getInt("Airborne") + 1);
+            p.putDouble("MaxAlt", Math.max(p.getDouble("MaxAlt"), v.getY() - p.getDouble("RunwayY")));
+        }
+    }
+
+    /** One line of JSON about a vehicle for the battle and flight reports. */
+    public static String report(Entity v) {
+        CompoundTag p = v.getPersistentData().getCompound(KEY);
+        String id = BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath();
+        return String.format(java.util.Locale.ROOT,
+            "{\"id\":\"%s\",\"engine\":\"%s\",\"alive\":%b,\"health\":%.2f,\"mode\":\"%s\",\"odometer\":%.1f,\"airborne\":%d,\"maxAlt\":%.1f,"
+                + "\"tookOff\":%b,\"landed\":%b,\"runs\":%d,\"unsticks\":%d,\"goArounds\":%d,\"terrainSaves\":%d,\"crew\":%d}",
+            id, Sbw.engine(v), v.isAlive() && !Sbw.wreck(v), Sbw.health(v), p.getString("Mode"), p.getDouble("Odometer"), p.getInt("Airborne"),
+            p.getDouble("MaxAlt"), p.getBoolean("TookOff"), p.getBoolean("Landed"), p.getInt("Runs"), p.getInt("Unsticks"), p.getInt("GoArounds"),
+            p.getInt("TerrainSaves"), v.getPassengers().size());
+    }
+
+    /** Royal soldiers posted to a vehicle (OrorMotor in their data) bring it out and board it the first time they act. */
+    @SubscribeEvent
+    public static void motorPool(EntityTickEvent.Post e) {
+        if (!(e.getEntity() instanceof RoyalMob m) || m.level().isClientSide || m.tickCount % 20 != 1) {
+            return;
+        }
+        CompoundTag d = m.getPersistentData();
+        if (!d.contains("OrorMotor") || m.isPassenger() || !(m.level() instanceof ServerLevel level)) {
+            return;
+        }
+        String id = d.getString("OrorMotor");
+        int seats = Math.max(1, d.getInt("OrorMotorSeats"));
+        d.remove("OrorMotor");
+        Entity v = deploy(level, m.position(), m.getYRot(), id, seats - 1, null);
+        if (v != null) {
+            m.startRiding(v, true);
+            // the soldier who brought it drives; the others ride behind
+            if (v.getPassengers().size() > 1 && v.getFirstPassenger() != m) {
+                List<Entity> others = List.copyOf(v.getPassengers());
+                for (Entity o : others) {
+                    o.stopRiding();
+                }
+                m.startRiding(v, true);
+                for (Entity o : others) {
+                    if (o != m) {
+                        o.startRiding(v, true);
+                    }
+                }
+            }
+        }
+    }
+
+    /** Crewed vehicles near a point, for reports. */
+    public static List<Entity> near(ServerLevel level, Vec3 at, double r) {
+        return level.getEntities((Entity) null, new AABB(at, at).inflate(r), x -> x.getTags().contains(CREWED));
+    }
+
+    static EntityType<?> type(String id) {
+        return BuiltInRegistries.ENTITY_TYPE.get(Sbw.id(id));
+    }
+}

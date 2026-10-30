@@ -268,9 +268,13 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
             if (at.getY() <= level.getMinBuildHeight() || at.getY() >= level.getMaxBuildHeight() - 2) {
                 continue;
             }
-            Mob mob = post.villager() ? villager(level, at, post.profession()) : royal(level, post.role());
+            Mob mob = post.villager() ? villager(level, at, post.profession()) : royal(level, post.role().equals("TANK") ? "GUARD" : post.role());
             if (mob == null) {
                 continue;
+            }
+            if (!post.vehicle().isEmpty()) {
+                mob.getPersistentData().putString("OrorMotor", post.vehicle());
+                mob.getPersistentData().putInt("OrorMotorSeats", post.seats());
             }
             mob.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, post.yaw(), 0.0F);
             mob.setYHeadRot(post.yaw());

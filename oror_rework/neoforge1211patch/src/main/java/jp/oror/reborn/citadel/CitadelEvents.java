@@ -188,7 +188,10 @@ public final class CitadelEvents {
         for (ChunkPos p : chunks) {
             int sx = p.x - site.chunkX() - CitadelData.HALF, sz = p.z - site.chunkZ() - CitadelData.HALF;
             for (CitadelData.Post post : CitadelData.posts(sx, sz)) {
-                expected.merge(post.role(), 1, Integer::sum);
+                expected.merge(post.role().equals("TANK") ? "GUARD" : post.role(), 1, Integer::sum);
+                if (!post.vehicle().isEmpty()) {
+                    expected.merge("VEHICLE", 1, Integer::sum);
+                }
             }
         }
         BlockPos throne = site.throne();
@@ -230,8 +233,13 @@ public final class CitadelEvents {
                 atPost++;
             }
         }
-        String line = String.format(Locale.ROOT, "{\"royals\":%d,\"armed\":%d,\"nearPost\":%d,\"found\":%s,\"mspt\":%.2f}",
-            royals, armed, atPost, json(census(level, p.site)), e.getServer().getAverageTickTimeNanos() / 1e6);
+        List<String> vehicles = new ArrayList<>();
+        for (net.minecraft.world.entity.Entity v : level.getEntities((net.minecraft.world.entity.Entity) null, box,
+            x -> x.getTags().contains(jp.oror.reborn.vehicle.RoyalPilots.CREWED))) {
+            vehicles.add(jp.oror.reborn.vehicle.RoyalPilots.report(v));
+        }
+        String line = String.format(Locale.ROOT, "{\"royals\":%d,\"armed\":%d,\"nearPost\":%d,\"found\":%s,\"vehicles\":[%s],\"mspt\":%.2f}",
+            royals, armed, atPost, json(census(level, p.site)), String.join(",", vehicles), e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
     }
 
