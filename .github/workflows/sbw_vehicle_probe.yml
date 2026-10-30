@@ -51,22 +51,21 @@ jobs:
           grep -rl --include='*.class' -i 'loiter' com | head -20
           echo "=== control / pilot"
           grep -rl --include='*.class' -e 'getControllingPassenger' com | grep -i vehicle | head -30
-      - name: Engine, input, loiter and AI passengers (decompiled)
+      - name: The whole vehicle tick, and who uses loiter and AI targets (decompiled)
         run: |
           cd $RUNNER_TEMP/x
           mkdir -p $RUNNER_TEMP/src
           dec() { rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$1" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java $RUNNER_TEMP/src/*.kt 2>/dev/null | grep -v '^import'; }
-          echo "=================== VehicleEngineUtils"
-          dec com/atsuishio/superbwarfare/entity/vehicle/utils/VehicleEngineUtils.class | head -1600
-          echo "=================== LoiterCommandKt"
-          dec com/atsuishio/superbwarfare/command/LoiterCommandKt.class | head -200
-          echo "=================== VehicleEntity: selected members"
           dec com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.class > $RUNNER_TEMP/ve.txt
-          wc -l $RUNNER_TEMP/ve.txt
-          grep -n -E 'fun |public .*\(|protected .*\(' $RUNNER_TEMP/ve.txt | grep -i -E 'tick|travel|control|driver|passenger|input|loiter|power|engine|shoot|weapon|seat|aiPass|AI_|ride|gear|move' | head -200
-          for f in 'void tick()' 'void baseTick()' 'getControllingPassenger' 'getFirstPassenger' 'processInput' 'void travel' 'aiPassengerWeapon' 'AI_PASSENGER_WEAPON_TARGET_UUID' 'void vehicleShoot' 'canAddPassenger' 'positionRider' 'void loiter' 'updateLoiter'; do
-            echo "------ $f"; grep -n -F "$f" $RUNNER_TEMP/ve.txt | head -8
+          echo "=================== VehicleEntity.kt (whole)"; cat -n $RUNNER_TEMP/ve.txt | sed -n '1600,1700p;2860,3000p;3260,3830p;4100,4130p;4550,4670p'
+          echo "=================== classes using LoiterActive / AiPassengerWeaponTarget / AiTurretTarget / MouseMoveSpeed"
+          for k in getLoiterActive getAiPassengerWeaponTargetUUID getAiTurretTargetUUID setMouseMoveSpeedX MOUSE_SPEED_X; do
+            echo "-- $k"; grep -rl --include='*.class' "$k" com | head -20
           done
+          for c in $(grep -rl --include='*.class' getLoiterActive com | grep -v -E 'VehicleEntity.class|LoiterCommand' | head -4); do
+            echo "=================== $c"; dec $c | head -700
+          done
+      - name: Vehicle definitions (engine types and seats)
       - name: Vehicle definitions (engine types and seats)
         run: |
           cd $RUNNER_TEMP/x
