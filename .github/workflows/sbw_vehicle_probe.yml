@@ -51,3 +51,26 @@ jobs:
           grep -rl --include='*.class' -i 'loiter' com | head -20
           echo "=== control / pilot"
           grep -rl --include='*.class' -e 'getControllingPassenger' com | grep -i vehicle | head -30
+      - name: Engine, input, loiter and AI passengers (decompiled)
+        run: |
+          cd $RUNNER_TEMP/x
+          mkdir -p $RUNNER_TEMP/src
+          dec() { rm -rf $RUNNER_TEMP/src/*; java -jar $RUNNER_TEMP/vf.jar "$1" $RUNNER_TEMP/src/ > /dev/null 2>&1; cat $RUNNER_TEMP/src/*.java $RUNNER_TEMP/src/*.kt 2>/dev/null | grep -v '^import'; }
+          echo "=================== VehicleEngineUtils"
+          dec com/atsuishio/superbwarfare/entity/vehicle/utils/VehicleEngineUtils.class | head -1600
+          echo "=================== LoiterCommandKt"
+          dec com/atsuishio/superbwarfare/command/LoiterCommandKt.class | head -200
+          echo "=================== VehicleEntity: selected members"
+          dec com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.class > $RUNNER_TEMP/ve.txt
+          wc -l $RUNNER_TEMP/ve.txt
+          grep -n -E 'fun |public .*\(|protected .*\(' $RUNNER_TEMP/ve.txt | grep -i -E 'tick|travel|control|driver|passenger|input|loiter|power|engine|shoot|weapon|seat|aiPass|AI_|ride|gear|move' | head -200
+          for f in 'void tick()' 'void baseTick()' 'getControllingPassenger' 'getFirstPassenger' 'processInput' 'void travel' 'aiPassengerWeapon' 'AI_PASSENGER_WEAPON_TARGET_UUID' 'void vehicleShoot' 'canAddPassenger' 'positionRider' 'void loiter' 'updateLoiter'; do
+            echo "------ $f"; grep -n -F "$f" $RUNNER_TEMP/ve.txt | head -8
+          done
+      - name: Vehicle definitions (engine types and seats)
+        run: |
+          cd $RUNNER_TEMP/x
+          ls data/superbwarfare 2>/dev/null; find . -path '*vehicle*' -name '*.json' | head -60
+          for v in m_1a_2 t_90a ztz_99a a_10a j_16 ah_6 tom_6 mi_28 hpj_11 bmp_2 lav_150 yx_100; do
+            f=$(find . -path '*vehicle*' -name "$v.json" | head -1); echo "=== $v $f"; [ -n "$f" ] && python3 -c "import json,sys;d=json.load(open(sys.argv[1]));print(json.dumps(d)[:2500])" "$f"
+          done
