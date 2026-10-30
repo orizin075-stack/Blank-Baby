@@ -120,7 +120,7 @@ for f in man['exterior_fortresses']:
 TRADE = dict(house='', smith='weaponsmith', armorer='armorer', baker='farmer', butcher='butcher', tailor='shepherd',
              alchemy='cleric', jeweler='toolsmith', library='librarian', scribe='librarian', mapmaker='cartographer',
              stable='leatherworker', market='mason', guild='fletcher', inn='fisherman', tavern='fisherman')
-HOUSEHOLD = dict(house=3, inn=5, tavern=3, guild=3)
+from houses import HOUSEHOLD
 # Townsfolk: a family in each house (one of them a child), the innkeeper's household and guests, a master and a helper
 # in every other building; on the free floor cells of the rebuilt buildings (TOWN_BUILDINGS.json, written by repair.py),
 # the ground floor first, spread out.

@@ -119,6 +119,8 @@ POTS = ['potted_red_tulip', 'potted_fern', 'potted_blue_orchid', 'potted_azure_b
         'potted_cherry_sapling', 'potted_lily_of_the_valley', 'potted_allium']
 WOOLS = ['white_wool', 'red_wool', 'blue_wool', 'yellow_wool', 'green_wool', 'light_blue_wool', 'pink_wool', 'orange_wool', 'purple_wool']
 CROPS = [('wheat', 7), ('carrots', 7), ('potatoes', 7), ('beetroots', 3)]
+# who lives in a building (tools/citadel/garrison.py stands as many townsfolk in it): each gets a bed
+HOUSEHOLD = dict(house=3, inn=5, tavern=3, guild=3)
 # rooms deep enough get a partition across them: a front room and a back room with a door between
 DIVIDED = {'home', 'bakery', 'taproom', 'guildhall', 'bedroom', 'inn', 'dorm', 'shop', 'tailor', 'alchemy', 'jewel', 'scriptorium', 'maps'}
 BE_KINDS = {'chest', 'barrel', 'furnace', 'smoker', 'blast_furnace', 'brewing_stand', 'lectern', 'campfire', 'bed', 'enchanting_table',
@@ -252,8 +254,13 @@ def build(plot, kind, seed, front):
     if h.chimney:
         chimney(h, rng)
     flights = staircase(h)
+    # beds for the household: the rooms' own, and the rest in the top storey (in the ground floor of a one-storey house)
+    rooms = [room0 if s == 0 else room1 for s in range(floors)]
+    have = sum(ROOMS[r][0].count('bed') for r in rooms) + (2 if floors == 1 and 'bed' not in ROOMS[room0][0] else 0)
+    extra = [0] * floors
+    extra[-1] = max(0, HOUSEHOLD.get(kind, 2) - have)
     for s in range(floors):
-        furnish(h, s, room0 if s == 0 else room1, station if s == 0 else None, flights, rng)
+        furnish(h, s, rooms[s], station if s == 0 else None, flights, rng, extra[s])
     yard(h, yard_kind, rng)
     connect(h)
     return h
@@ -585,7 +592,7 @@ def staircase(h):
 
 
 # -------------------------------------------------------------------------------------------------------------- furniture
-def furnish(h, s, room, station, flights, rng):
+def furnish(h, s, room, station, flights, rng, extra_beds=0):
     W, D = h.W, h.D
     v0 = h.v0[s]
     fy = FLOOR0 + 4 * s
@@ -792,6 +799,7 @@ def furnish(h, s, room, station, flights, rng):
     if h.floors == 1 and 'bed' not in pieces:
         # a one-storey house: the beds go downstairs, after the trade's own pieces
         pieces[min(len(pieces), 3):min(len(pieces), 3)] = ['bed', 'bed']
+    pieces = ['bed'] * extra_beds + pieces
     for p in pieces:
         pref = ring
         if p == 'bed':
