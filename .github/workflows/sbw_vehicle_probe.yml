@@ -1,0 +1,53 @@
+# One-off probe: how Superb Warfare 0.8.9.2 (the pack's version) drives its tanks and aircraft, so OROR's soldiers can
+# crew and pilot them. Prints class lists, member signatures and selected decompiled methods to the job log only;
+# nothing from the jar is committed.
+name: Superb Warfare vehicle probe
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['.github/workflows/sbw_vehicle_probe.yml']
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: oror_rework/neoforge1211patch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Fetch Superb Warfare
+        run: |
+          python3 -I tools/cf_fetch.py pack/manifest-0.17.23.json pack/lock-0.17.23.json $RUNNER_TEMP/libs \
+            superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar
+          curl -sSfL -o $RUNNER_TEMP/vf.jar https://repo1.maven.org/maven2/org/vineflower/vineflower/1.10.1/vineflower-1.10.1.jar
+          mkdir -p $RUNNER_TEMP/x && cd $RUNNER_TEMP/x && unzip -q $RUNNER_TEMP/libs/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar
+      - name: Vehicle classes and entity ids
+        run: |
+          cd $RUNNER_TEMP/x
+          echo "=== vehicle classes (bytes)"
+          find com -path '*entity/vehicle*' -name '*.class' -printf '%s %p\n' | grep -v '\$' | sort -k2 | head -400
+          echo "=== entity ids (ModEntities strings)"
+          c=$(find com -name 'ModEntities.class' | head -1); echo $c
+          javap -c -p -cp . $(echo ${c%.class} | tr / .) | grep -o 'String [a-z0-9_]*' | sort -u | tr '\n' ' '; echo
+      - name: Base vehicle members
+        run: |
+          cd $RUNNER_TEMP/x
+          for k in VehicleEntity MobileVehicleEntity ArmedVehicleEntity AutoAimableEntity GeoVehicleEntity ContainerMobileVehicleEntity \
+                   LandArmorEntity AircraftEntity HelicopterEntity WeaponVehicleEntity TowerAI; do
+            for c in $(find com -path '*vehicle*' -name "$k.class" | head -2); do
+              echo "=================== $c"; javap -p -cp . $(echo ${c%.class} | tr / .) | head -400
+            done
+          done
+          echo "=== who has input fields (forwardInputDown etc.)"
+          grep -rl --include='*.class' -e 'forwardInputDown' -e 'ForwardInputDown' com | head -40
+          echo "=== loiter"
+          grep -rl --include='*.class' -i 'loiter' com | head -20
+          echo "=== control / pilot"
+          grep -rl --include='*.class' -e 'getControllingPassenger' com | grep -i vehicle | head -30
