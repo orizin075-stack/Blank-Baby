@@ -43,10 +43,6 @@ import org.slf4j.LoggerFactory;
 public final class CitadelEvents {
     public static final GrandCitadelFeature FEATURE = new GrandCitadelFeature();
     private static final Logger LOG = LoggerFactory.getLogger("OROR Citadel");
-    private static Pending pending;
-
-    private record Pending(CitadelSites.Site site, List<ChunkPos> chunks, long at, Map<String, Integer> expected) {
-    }
 
     private CitadelEvents() {
     }
@@ -71,7 +67,7 @@ public final class CitadelEvents {
     @SubscribeEvent
     public static void stopped(ServerStoppedEvent e) {
         CitadelSites.unbind();
-        pending = null;
+        test = null;
     }
 
     @SubscribeEvent
@@ -139,88 +135,126 @@ public final class CitadelEvents {
         for (RoyalMob m : level.getEntitiesOfClass(RoyalMob.class, box, RoyalMob::isAlive)) {
             n.merge(m.role().name(), 1, Integer::sum);
         }
-        for (Villager v : level.getEntitiesOfClass(Villager.class, box, v -> v.isAlive() && v.getTags().contains(GrandCitadelFeature.TAG))) {
+        for (Villager v : level.getEntitiesOfClass(Villager.class, box, v -> v.isAlive() && v.getTags().contains(CitadelGarrison.TAG))) {
             n.merge("VILLAGER", 1, Integer::sum);
         }
         return n;
     }
 
     /**
-     * For CI: finds the nearest natural citadel to the world origin, generates the chunks of the throne room, the north
-     * gates, a fortress and part of the town, and logs the site, the timings, the blocks of the throne and who stands
-     * where, against the garrison table. 200 ticks later it logs again (are they armed, still at their posts, MSPT).
+     * For CI: finds the nearest natural citadel to the world origin (off the server thread), forces the chunks of the
+     * throne room, the north gates, a fortress and part of the town to load, and once they have loaded and their people
+     * have taken their posts logs the site, the timings, the blocks of the throne and who stands where, against the
+     * garrison table (CITADEL-SELFTEST). 200 ticks later it logs again: are they armed, still at their posts, the tank
+     * crews, MSPT (CITADEL-SELFTEST-LATER). Nothing here blocks the server thread.
      */
     private static int selftest(CommandSourceStack src) {
-        ServerLevel level = src.getServer().overworld();
+        MinecraftServer server = src.getServer();
         long t0 = System.nanoTime();
-        CitadelSites.Site site = CitadelSites.nearest(BlockPos.ZERO, 4);
-        long t1 = System.nanoTime();
-        if (site == null) {
-            LOG.info("CITADEL-SELFTEST {\"site\":null}");
-            src.sendFailure(Component.literal("no citadel within 4 regions"));
-            return 0;
-        }
-        List<ChunkPos> chunks = new ArrayList<>();
-        int[][] spots = {{0, -32}, {0, -100}, {0, -288}, {0, -457}, {0, -570}, {-234, -234}, {-234, -193}, {-115, -29}, {0, 0}};
-        for (int[] s : spots) {
-            int cx = (s[0] + site.offsetX()) >> 4, cz = (s[1] + site.offsetZ()) >> 4;
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    ChunkPos p = new ChunkPos(cx + dx, cz + dz);
-                    if (!chunks.contains(p)) {
-                        chunks.add(p);
+        CompletableFuture.supplyAsync(() -> CitadelSites.nearest(BlockPos.ZERO, 4), Util.backgroundExecutor()).thenAcceptAsync(site -> {
+            ServerLevel level = server.overworld();
+            if (site == null) {
+                LOG.info("CITADEL-SELFTEST {\"site\":null}");
+                selftestDone = true;
+                return;
+            }
+            List<ChunkPos> chunks = new ArrayList<>();
+            int[][] spots = {{0, -32}, {0, -100}, {0, -288}, {0, -440}, {0, -570}, {-234, -234}, {-234, -193}, {-115, -29}, {0, 0}};
+            for (int[] s : spots) {
+                int cx = (s[0] + site.offsetX()) >> 4, cz = (s[1] + site.offsetZ()) >> 4;
+                for (int dx = -1; dx <= 1; dx++) {
+                    for (int dz = -1; dz <= 1; dz++) {
+                        ChunkPos p = new ChunkPos(cx + dx, cz + dz);
+                        if (!chunks.contains(p)) {
+                            chunks.add(p);
+                        }
                     }
                 }
             }
-        }
-        // also the apron and the land beyond on the north edge
-        for (int dz = -3; dz <= 0; dz++) {
-            chunks.add(new ChunkPos(site.chunkX() + CitadelData.HALF, site.chunkZ() + dz));
-        }
-        for (ChunkPos p : chunks) {
-            level.setChunkForced(p.x, p.z, true);
-        }
-        for (ChunkPos p : chunks) {
-            level.getChunk(p.x, p.z);
-        }
-        long t2 = System.nanoTime();
-        Map<String, Integer> expected = new TreeMap<>();
-        for (ChunkPos p : chunks) {
-            int sx = p.x - site.chunkX() - CitadelData.HALF, sz = p.z - site.chunkZ() - CitadelData.HALF;
-            for (CitadelData.Post post : CitadelData.posts(sx, sz)) {
-                expected.merge(post.role().equals("TANK") ? "GUARD" : post.role(), 1, Integer::sum);
-                if (!post.vehicle().isEmpty()) {
-                    expected.merge("VEHICLE", 1, Integer::sum);
-                }
+            for (int dz = -3; dz <= 0; dz++) {
+                chunks.add(new ChunkPos(site.chunkX() + CitadelData.HALF, site.chunkZ() + dz));
             }
-        }
-        BlockPos throne = site.throne();
-        String below = level.getBlockState(throne.below()).getBlock().getDescriptionId();
-        boolean dais = level.getBlockState(throne.below()).is(Blocks.GOLD_BLOCK) && level.getBlockState(throne).isAir();
-        Map<String, Integer> found = census(level, site);
-        RoyalMob king = level.getEntitiesOfClass(RoyalMob.class, new AABB(throne).inflate(3), m -> m.role().name().equals("KING")).stream().findFirst().orElse(null);
-        String line = String.format(Locale.ROOT, "{\"site\":[%d,%d,%d],\"forced\":%b,\"ground\":%d,\"dy\":%d,\"locateMs\":%.1f,\"chunks\":%d,"
-                + "\"generateMs\":%.1f,\"throne\":[%d,%d,%d],\"dais\":%b,\"underKing\":\"%s\",\"kingAtThrone\":%b,\"expected\":%s,\"found\":%s}",
-            site.center().getX(), site.center().getY(), site.center().getZ(), site.forced(), site.ground(), site.dy(), (t1 - t0) / 1e6,
-            chunks.size(), (t2 - t1) / 1e6, throne.getX(), throne.getY(), throne.getZ(), dais, below, king != null, json(expected), json(found));
-        LOG.info("CITADEL-SELFTEST {}", line);
-        src.sendSuccess(() -> Component.literal(line), false);
-        pending = new Pending(site, chunks, level.getGameTime() + 200, expected);
+            for (ChunkPos p : chunks) {
+                level.setChunkForced(p.x, p.z, true);
+            }
+            test = new Test(site, chunks, level.getGameTime(), (System.nanoTime() - t0) / 1e6);
+        }, server);
+        src.sendSuccess(() -> Component.literal("citadel selftest started"), false);
         return 1;
     }
 
+    private static final class Test {
+        final CitadelSites.Site site;
+        final List<ChunkPos> chunks;
+        final long started;
+        final double locateMs;
+        long loadedAt = -1, reportedAt = -1;
+        Map<String, Integer> expected;
+
+        Test(CitadelSites.Site site, List<ChunkPos> chunks, long started, double locateMs) {
+            this.site = site;
+            this.chunks = chunks;
+            this.started = started;
+            this.locateMs = locateMs;
+        }
+    }
+
+    private static volatile Test test;
+    public static volatile boolean selftestDone;
+
     @SubscribeEvent
     public static void tick(ServerTickEvent.Post e) {
-        Pending p = pending;
-        if (p == null) {
+        Test t = test;
+        if (t == null) {
             return;
         }
         ServerLevel level = e.getServer().overworld();
-        if (level.getGameTime() < p.at) {
+        long now = level.getGameTime();
+        if (t.loadedAt < 0) {
+            boolean all = t.chunks.stream().allMatch(p -> level.getChunkSource().getChunkNow(p.x, p.z) != null);
+            if (all || now - t.started > 6000) {
+                t.loadedAt = now;
+            }
             return;
         }
-        pending = null;
-        BlockPos a = p.site.toWorld(-CitadelData.HALF * 16, 0, -CitadelData.HALF * 16);
+        if (t.reportedAt < 0) {
+            // let the garrison queue fill the posts of the chunks that just loaded
+            if (now - t.loadedAt < 60 && CitadelGarrison.queued() > 0 || now - t.loadedAt < 20) {
+                return;
+            }
+            t.reportedAt = now;
+            t.expected = new TreeMap<>();
+            int loaded = 0;
+            for (ChunkPos p : t.chunks) {
+                if (level.getChunkSource().getChunkNow(p.x, p.z) == null) {
+                    continue;
+                }
+                loaded++;
+                int sx = p.x - t.site.chunkX() - CitadelData.HALF, sz = p.z - t.site.chunkZ() - CitadelData.HALF;
+                for (CitadelData.Post post : CitadelData.posts(sx, sz)) {
+                    t.expected.merge(post.role().equals("TANK") ? "GUARD" : post.role(), 1, Integer::sum);
+                }
+            }
+            CitadelSites.Site site = t.site;
+            BlockPos throne = site.throne();
+            String below = level.getBlockState(throne.below()).getBlock().getDescriptionId();
+            boolean dais = level.getBlockState(throne.below()).is(Blocks.GOLD_BLOCK) && level.getBlockState(throne).isAir();
+            RoyalMob king = level.getEntitiesOfClass(RoyalMob.class, new AABB(throne).inflate(3), m -> m.role().name().equals("KING"))
+                .stream().findFirst().orElse(null);
+            String line = String.format(Locale.ROOT, "{\"site\":[%d,%d,%d],\"forced\":%b,\"ground\":%d,\"dy\":%d,\"locateMs\":%.1f,"
+                    + "\"chunks\":%d,\"loaded\":%d,\"loadTicks\":%d,\"throne\":[%d,%d,%d],\"dais\":%b,\"underKing\":\"%s\",\"kingAtThrone\":%b,"
+                    + "\"spawned\":%d,\"expected\":%s,\"found\":%s}",
+                site.center().getX(), site.center().getY(), site.center().getZ(), site.forced(), site.ground(), site.dy(), t.locateMs,
+                t.chunks.size(), loaded, t.loadedAt - t.started, throne.getX(), throne.getY(), throne.getZ(), dais, below, king != null,
+                CitadelGarrison.spawned(), json(t.expected), json(census(level, site)));
+            LOG.info("CITADEL-SELFTEST {}", line);
+            return;
+        }
+        if (now - t.reportedAt < 200) {
+            return;
+        }
+        test = null;
+        BlockPos a = t.site.toWorld(-CitadelData.HALF * 16, 0, -CitadelData.HALF * 16);
         AABB box = new AABB(a.getX(), level.getMinBuildHeight(), a.getZ(), a.getX() + CitadelSites.SIZE * 16, level.getMaxBuildHeight(),
             a.getZ() + CitadelSites.SIZE * 16);
         int royals = 0, armed = 0, atPost = 0;
@@ -239,8 +273,12 @@ public final class CitadelEvents {
             vehicles.add(jp.oror.reborn.vehicle.RoyalPilots.report(v));
         }
         String line = String.format(Locale.ROOT, "{\"royals\":%d,\"armed\":%d,\"nearPost\":%d,\"found\":%s,\"vehicles\":[%s],\"mspt\":%.2f}",
-            royals, armed, atPost, json(census(level, p.site)), String.join(",", vehicles), e.getServer().getAverageTickTimeNanos() / 1e6);
+            royals, armed, atPost, json(census(level, t.site)), String.join(",", vehicles), e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
+        for (ChunkPos p : t.chunks) {
+            level.setChunkForced(p.x, p.z, false);
+        }
+        selftestDone = true;
     }
 
     private static String json(Map<String, Integer> m) {

@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 public final class PilotTest {
     private static final Logger LOG = LoggerFactory.getLogger("OROR Vehicles");
     private static Run run;
+    /** Set when a test has ended and its FLIGHT-RESULT is logged. */
+    public static volatile boolean resultLogged;
 
     private static final class Run {
         ServerLevel level;
@@ -151,6 +153,7 @@ public final class PilotTest {
                 r.tankTarget == null ? -1F : r.tankTarget.isAlive() ? r.tankTarget.getHealth() : 0F,
                 r.planeTarget == null ? "none" : r.planeTarget.isAlive() ? "alive" : "gone");
             LOG.info("FLIGHT-RESULT {}", line);
+            resultLogged = true;
             for (Entity x : new Entity[]{r.plane, r.tank, r.planeTarget, r.tankTarget}) {
                 if (x != null && x.isAlive()) {
                     x.getPassengers().forEach(Entity::discard);

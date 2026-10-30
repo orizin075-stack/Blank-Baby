@@ -135,9 +135,9 @@ jobs:
           # dedicated server (the pack ships its fixed build in overrides; OROR's mixins for it skip themselves without it)
           extra=(libs/nightfall.jar)
           bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 1500 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
-            'FLIGHT-RESULT' -- 'oror citadel selftest' 'oror war start 100 test' 'oror pilots test' -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
+            'FLIGHT-RESULT' 'CI-DONE' -- citadel,war,pilots -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
-          { grep -E 'CITADEL-SELFTEST|WAR-|FLIGHT-|OROR (Citadel|War|Vehicles)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
+          { grep -E 'CITADEL-SELFTEST|WAR-|FLIGHT-|CI-DONE|OROR (Citadel|War|Vehicles|CI)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
           exit $rc
       - name: Commit the result

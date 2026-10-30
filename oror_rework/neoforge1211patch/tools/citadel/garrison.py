@@ -23,7 +23,7 @@ def name(a, x, y, z):
 
 
 def free(n):
-    return n in FREE
+    return n in FREE or n.endswith('_carpet')
 
 
 def floor_ok(n):
@@ -117,13 +117,31 @@ for f in man['exterior_fortresses']:
     put('GUARD', f['x'] - 4, 66, f['z'] - 4, r=10, dy=4, post='fortress')
     put('ARCHMAGE', f['x'], 66, f['z'] + 6, r=10, dy=4, post='fortress')
 
-# Townsfolk: one villager in every building of the town, with the trade of the house.
 TRADE = dict(house='', smith='weaponsmith', armorer='armorer', baker='farmer', butcher='butcher', tailor='shepherd',
              alchemy='cleric', jeweler='toolsmith', library='librarian', scribe='librarian', mapmaker='cartographer',
-             stable='leatherworker', market='mason', guild='toolsmith', inn='fisherman', tavern='fisherman')
-for h in man['individual_town_architecture']:
-    put('VILLAGER', h['x'], 65, h['z'], r=min(h['size']) // 2 - 1, dy=1, post='town',
-        profession=TRADE.get(h['kind'], ''), house=h['kind'])
+             stable='leatherworker', market='mason', guild='fletcher', inn='fisherman', tavern='fisherman')
+HOUSEHOLD = dict(house=3, inn=5, tavern=3, guild=3)
+# Townsfolk: a family in each house (one of them a child), the innkeeper's household and guests, a master and a helper
+# in every other building; on the free floor cells of the rebuilt buildings (TOWN_BUILDINGS.json, written by repair.py),
+# the ground floor first, spread out.
+town = json.load(open(os.path.join(save, 'TOWN_BUILDINGS.json')))['buildings']
+for b in town:
+    many = HOUSEHOLD.get(b['kind'], 2)
+    spots = sorted(b['spots'], key=lambda p: (p[1], p[0], p[2]))
+    chosen = []
+    for p in spots:
+        if len(chosen) == many:
+            break
+        if all(abs(p[0] - q[0]) + abs(p[2] - q[2]) >= 3 or p[1] != q[1] for q in chosen):
+            chosen.append(p)
+    for p in spots:
+        if len(chosen) == many:
+            break
+        if p not in chosen:
+            chosen.append(p)
+    for k, (x, y, z) in enumerate(chosen):
+        put('VILLAGER', x, y, z, r=1, dy=0, post='town', profession=TRADE.get(b['kind'], '') if k == 0 else '', house=b['kind'],
+            **({'baby': True} if b['kind'] in ('house', 'inn') and k == many - 1 else {}))
 
 json.dump(dict(origin='save', entries=entries), open(out, 'w'), indent=None, separators=(',', ':'))
 from collections import Counter

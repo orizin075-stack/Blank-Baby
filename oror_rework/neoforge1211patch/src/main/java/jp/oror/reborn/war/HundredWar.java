@@ -54,6 +54,8 @@ public final class HundredWar {
     private static final Logger LOG = LoggerFactory.getLogger("OROR War");
     private static final int FIELD = 96, SEPARATION = 26, CELL = 16;
     private static War war;
+    /** Set when a battle has ended and its WAR-RESULT is logged. */
+    public static volatile boolean resultLogged;
 
     /** A side's soldiers: who still has to be brought in, who is on the field. */
     private static final class Army {
@@ -351,6 +353,7 @@ public final class HundredWar {
             WarMachines.report(w.machines), ticks / 20.0, w.msptSamples == 0 ? 0 : w.msptSum / w.msptSamples, w.msptMax, w.peakFighters,
             w.budget, w.test);
         LOG.info("WAR-RESULT {}", line);
+        resultLogged = true;
         announce(w, "百人戦終了：" + (winner == null ? "引き分け" : winner + "の勝利") + "（" + k.name + " 残り" + k.alive.size() + "/" + k.raised
             + "、" + h.name + " 残り" + h.alive.size() + "/" + h.raised + "、" + (int) (ticks / 20) + "秒）");
     }

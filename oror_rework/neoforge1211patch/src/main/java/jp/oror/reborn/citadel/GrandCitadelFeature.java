@@ -1,23 +1,14 @@
 package jp.oror.reborn.citadel;
 
-import jp.oror.reborn.royal.RoyalMob;
-import jp.oror.reborn.royal.RoyalRegistry;
-import jp.oror.reborn.royal.RoyalRole;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerData;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
@@ -31,16 +22,13 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 /**
  * Builds the Grand Citadel v12 into the world one chunk at a time, as each chunk of a site (CitadelSites) is generated:
- * the save's blocks, chests and dispensers lifted to the site's ground, its animals and monsters, and the people of the
- * kingdom at their posts (the villager king on the throne, the generals, the imperial guard and the court in the throne
- * room, the gate and casemate garrisons, a general with guards and a battle mage in each outer fortress, a villager in
- * every house).
+ * the save's blocks, chests and dispensers lifted to the site's ground, and its animals and monsters (the people of the
+ * kingdom take their posts when the chunk first loads: CitadelGarrison).
  * It runs last in each chunk (top layer modification), after the trees and other features, which it replaces.
  * Under the citadel the natural rock stays where the save had only dirt; valleys below its ground are filled. Around it a
  * two-chunk apron grades the land between the kingdom's ground and the natural terrain.
  */
 public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration> {
-    public static final String TAG = "oror_citadel";
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
     private static final BlockState DIRT = Blocks.DIRT.defaultBlockState();
     private static final BlockState STONE = Blocks.STONE.defaultBlockState();
@@ -250,7 +238,7 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
         }
     }
 
-    /** The save's animals and monsters of this chunk, and the people whose posts are in it. */
+    /** The save's animals and monsters of this chunk (its people come when it loads: CitadelGarrison). */
     private static void populate(WorldGenLevel level, CitadelSites.Site site, CitadelData.Chunk data, int sx, int sz) {
         for (CompoundTag saved : data.entities()) {
             CompoundTag tag = saved.copy();
@@ -263,56 +251,6 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
                 level.addFreshEntityWithPassengers(e);
             }
         }
-        for (CitadelData.Post post : CitadelData.posts(sx, sz)) {
-            BlockPos at = site.toWorld(post.x(), post.y(), post.z());
-            if (at.getY() <= level.getMinBuildHeight() || at.getY() >= level.getMaxBuildHeight() - 2) {
-                continue;
-            }
-            Mob mob = post.villager() ? villager(level, at, post.profession()) : royal(level, post.role().equals("TANK") ? "GUARD" : post.role());
-            if (mob == null) {
-                continue;
-            }
-            if (!post.vehicle().isEmpty()) {
-                mob.getPersistentData().putString("OrorMotor", post.vehicle());
-                mob.getPersistentData().putInt("OrorMotorSeats", post.seats());
-            }
-            mob.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, post.yaw(), 0.0F);
-            mob.setYHeadRot(post.yaw());
-            mob.setYBodyRot(post.yaw());
-            mob.setPersistenceRequired();
-            mob.addTag(TAG);
-            mob.getPersistentData().putString("OrorCitadelPost", post.post());
-            level.addFreshEntityWithPassengers(mob);
-        }
-    }
-
-    private static Mob royal(WorldGenLevel level, String role) {
-        RoyalRole r;
-        try {
-            r = RoyalRole.valueOf(role);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-        EntityType<RoyalMob> type = RoyalRegistry.TYPES.get(r);
-        return type == null ? null : type.create(level.getLevel());
-    }
-
-    private static Mob villager(WorldGenLevel level, BlockPos at, String profession) {
-        Villager v = EntityType.VILLAGER.create(level.getLevel());
-        if (v == null) {
-            return null;
-        }
-        VillagerData d = v.getVillagerData().setType(VillagerType.byBiome(level.getBiome(at)));
-        if (!profession.isEmpty()) {
-            VillagerProfession trade = BuiltInRegistries.VILLAGER_PROFESSION.get(ResourceLocation.withDefaultNamespace(profession));
-            if (trade != VillagerProfession.NONE) {
-                // a journeyman who has traded keeps the trade without a workstation
-                d = d.setProfession(trade).setLevel(2);
-                v.setVillagerXp(10);
-            }
-        }
-        v.setVillagerData(d);
-        return v;
     }
 
     /** Moves a saved entity (and its riders) to the site, with a new identity and no remembered places from the save. */

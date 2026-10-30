@@ -85,12 +85,16 @@ public final class CitadelSites {
     }
 
     private static volatile World world;
+    /** The 045 preview save's citadel, built at the origin on y 64 (that world has the save's build_manifest.json). */
+    private static volatile Site preview;
 
     private CitadelSites() {
     }
 
     /** Called when the overworld is created, before its first chunk is generated. */
     public static void bind(ServerLevel level) {
+        java.nio.file.Path manifest = level.getServer().getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).resolve("build_manifest.json");
+        preview = java.nio.file.Files.isRegularFile(manifest) ? new Site(-CitadelData.HALF, -CitadelData.HALF, CitadelData.GROUND, true) : null;
         Store store = level.getDataStorage().computeIfAbsent(Store.FACTORY, "oror_citadels");
         world = new World(level.getChunkSource().getGenerator(), level.getChunkSource().randomState(), level.getSeed(), level,
             level.getSeaLevel(), level.getChunkSource().getGeneratorState(), new ConcurrentHashMap<>(),
@@ -99,6 +103,20 @@ public final class CitadelSites {
 
     public static void unbind() {
         world = null;
+        preview = null;
+    }
+
+    /** The citadel whose people stand in chunk cx, cz: the preview save's, or a generated or placed one. */
+    public static Site garrisoned(ChunkGenerator generator, int cx, int cz) {
+        Site p = preview;
+        if (p != null && p.contains(cx, cz, 0)) {
+            return p;
+        }
+        return at(generator, cx, cz, 0);
+    }
+
+    public static Site preview() {
+        return preview;
     }
 
     public static boolean bound(ChunkGenerator generator) {
