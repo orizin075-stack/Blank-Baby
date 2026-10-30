@@ -66,7 +66,6 @@ jobs:
             echo "=================== $c"; dec $c | head -700
           done
       - name: Vehicle definitions (engine types and seats)
-      - name: Vehicle definitions (engine types and seats)
         run: |
           cd $RUNNER_TEMP/x
           ls data/superbwarfare 2>/dev/null; find . -path '*vehicle*' -name '*.json' | head -60
