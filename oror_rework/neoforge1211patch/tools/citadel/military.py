@@ -132,7 +132,8 @@ def helipad(a, ok, edits, stats, posts, cx, cz, heli, name):
     edits[(x0 - 1, 65, z0 - 1)] = 'minecraft:oak_fence'
     edits[(x0 - 1, 66, z0 - 1)] = 'minecraft:oak_fence'
     edits[(x0 - 1, 67, z0 - 1)] = 'minecraft:orange_wool'
-    posts.append(dict(role='PARKED', x=x0 + n // 2, y=65, z=z0 + n // 2, yaw=0.0, post='helipad', vehicle=heli, seats=0, exact=True))
+    # a pilot and a gunner: the helicopter lifts off when an enemy comes (RoyalPilots.hover) and settles back on its pad
+    posts.append(dict(role='TANK', x=x0 + n // 2, y=65, z=z0 + n // 2, yaw=0.0, post='helipad', vehicle=heli, seats=2, exact=True))
     stats['military']['helipads'] += 1
     stats['military_at'][name] = [x0, z0, n, n]
 
@@ -205,25 +206,35 @@ def outward(x, z):
     return (math.degrees(math.atan2(-x, z)) + 180) % 360 - 180
 
 
+# the turrets a soldier can sit in and work (the CI seat survey: a mortar, a rocket launcher or a laser tower has no
+# gunner's seat), by post: the wall's batteries take guns and interceptors in turn, the gate roads anti-tank missiles,
+# the casemates interceptors and field guns, the redoubts the heavy guns
+WALL_KINDS = ['mk_42', 'hpj_11', 'mle_1934', 'bl_132']
+ROAD_KINDS = ['tow']
+CASEMATE_KINDS = ['hpj_11', 'bl_132', 'mle_1934']
+REDOUBT_KINDS = ['annihilator', 'mk_42']
+
+
 def turrets(man):
-    """Turret posts: every eighth outer-wall battery (MK-42 guns and HPJ-11 interceptors in turn), every other
-    gate-road crossfire point (TOW), every third casemate (HPJ-11), every fourth redoubt (MK-42)."""
+    """Turret posts: every third outer-wall battery (64), every gate-road crossfire point, every casemate and every
+    redoubt, each kind of post with its own turrets in turn."""
     out = []
     walls = sorted((e for e in man['v7_emplacements'] if e['kind'] == 'wall_battery'), key=lambda e: math.atan2(e['z'], e['x']))
-    kinds = ['mk_42', 'hpj_11']
-    for i, e in enumerate(walls[::8]):
+    for i, e in enumerate(walls[::3]):
         out.append(dict(role='TANK', x=e['x'], y=e['y'], z=e['z'], yaw=outward(e['x'], e['z']), post='battery',
-                        vehicle=kinds[i % len(kinds)], seats=1, still=True))
+                        vehicle=WALL_KINDS[i % len(WALL_KINDS)], seats=1, still=True))
     roads = [e for e in man['v7_emplacements'] if e['kind'] == 'road_crossfire']
-    for e in roads[::2]:
+    for i, e in enumerate(roads):
         out.append(dict(role='TANK', x=e['x'], y=e['y'], z=e['z'], yaw=outward(e['x'], e['z']), post='crossfire',
-                        vehicle='tow', seats=1, still=True))
+                        vehicle=ROAD_KINDS[i % len(ROAD_KINDS)], seats=1, still=True))
     cas = [p for p in man['v6_defense_points'] if p['kind'] == 'siege_casemate']
-    for p in cas[::3]:
-        out.append(dict(role='TANK', x=p['x'], y=p['y'], z=p['z'], yaw=outward(p['x'], p['z']), post='casemate', vehicle='hpj_11', seats=1, still=True))
+    for i, p in enumerate(cas):
+        out.append(dict(role='TANK', x=p['x'], y=p['y'], z=p['z'], yaw=outward(p['x'], p['z']), post='casemate',
+                        vehicle=CASEMATE_KINDS[i % len(CASEMATE_KINDS)], seats=1, still=True))
     red = [p for p in man['v6_defense_points'] if p['kind'] == 'outer_redoubt']
-    for p in red[::4]:
-        out.append(dict(role='TANK', x=p['x'], y=p['y'], z=p['z'], yaw=outward(p['x'], p['z']), post='redoubt', vehicle='mk_42', seats=1, still=True))
+    for i, p in enumerate(red):
+        out.append(dict(role='TANK', x=p['x'], y=p['y'], z=p['z'], yaw=outward(p['x'], p['z']), post='redoubt',
+                        vehicle=REDOUBT_KINDS[i % len(REDOUBT_KINDS)], seats=1, still=True))
     return out
 
 

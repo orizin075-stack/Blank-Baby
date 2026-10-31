@@ -321,7 +321,7 @@ def storerooms(save, x0, x1, z0, z1, y0, y1, edits, bes, stats, placed, theme_of
     return out
 
 
-STORE_NAMES = {'armory': '武器庫', 'pantry': '食料庫', 'keep': '城の倉', 'royal': '王家の蔵', 'treasury': '王家の宝物庫', 'vault': '王家の禁庫'}
+STORE_NAMES = {'armory': '武器庫', 'pantry': '食料庫', 'keep': '城の倉', 'royal': '王家の蔵', 'treasury': '王家の宝物庫', 'vault': '王家の禁庫', 'vault_arms': '王家の禁庫・禁断の武具'}
 
 
 def stock_empty(save, cleared, edits, bes, stats):
@@ -370,7 +370,7 @@ def castle_stores(save, edits, bes, stats):
                 if 20 <= n <= 300 and min(wx, wz) >= 4 and not hall(round(c[0]), round(c[1]), round(c[2]))]
         return [min(near)[1]] if near else []
     trs = storerooms(save, tx - 60, tx + 61, tz - 60, tz + 61, ty - 17, ty + 25, edits, bes, stats, placed,
-                     lambda *a: 'treasury', budget=8, name=lambda t: STORE_NAMES[t], pick_rooms=nearest, spacing=2)
+                     lambda *a: 'treasury', budget=12, name=lambda t: STORE_NAMES[t], pick_rooms=nearest, spacing=2)
     stats['treasury_at'] = [list(t[:3]) for t in trs]
     stats['treasury_rooms'] = len({(x, z) for x, y, z, t in trs})
     return placed
@@ -382,15 +382,17 @@ def vault_hoard(save, man, edits, bes, stats):
     vx, vz = man['v9_true_treasury']
     _, found = world.load(save, vx - 3, vx + 4, vz - 3, vz + 4, 0, 30)
     n = 0
-    for be in found:
+    for be in sorted(found, key=lambda b: (b['x'], b['z'], b['y'])):
         if be['id'].endswith('chest'):
             x, y, z = be['x'], be['y'], be['z']
-            bes[(x, y, z)] = {'id': 'minecraft:chest', 'x': x, 'y': y, 'z': z, 'CustomName': json.dumps({'text': STORE_NAMES['vault']}, ensure_ascii=False),
-                              'Items': loot.items('vault', x * 31 + z * 17 + y)}
+            # the first two pedestals keep the forbidden arms, the others the hoard
+            theme = 'vault_arms' if n < 2 else 'vault'
+            bes[(x, y, z)] = {'id': 'minecraft:chest', 'x': x, 'y': y, 'z': z, 'CustomName': json.dumps({'text': STORE_NAMES[theme]}, ensure_ascii=False),
+                              'Items': loot.items(theme, x * 31 + z * 17 + y)}
             n += 1
             stats['stores']['vault'] += 1
     placed = [(x, y, z) for (x, y, z) in bes if abs(x - vx) <= 3 and abs(z - vz) <= 3]
-    storerooms(save, vx - 12, vx + 13, vz - 6, vz + 7, 2, 20, edits, bes, stats, placed, lambda *a: 'vault', budget=6,
+    storerooms(save, vx - 12, vx + 13, vz - 6, vz + 7, 2, 20, edits, bes, stats, placed, lambda *a: 'vault', budget=10,
                name=lambda t: STORE_NAMES[t], box=(vx - 9, vx + 3, vz - 2, vz + 3, 2, 20), spacing=3)
     stats['vault_pedestal_chests'] = n
 

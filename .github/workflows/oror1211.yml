@@ -139,6 +139,8 @@ jobs:
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
           { grep -E 'CITADEL-SELFTEST|WAR-|FLIGHT-|CI-DONE|OROR (Citadel|War|Vehicles|CI)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
+          # where the server thread spent the battle (JFR samples between the war's start and its result)
+          timeout 600 python3 -I tools/jfr_hot.py "$RUNNER_TEMP/server/rec.jfr" "$RUNNER_TEMP/server/console.log" > out/war_profile.txt 2>&1 || true
           exit $rc
       - name: Commit the result
         if: always()

@@ -2,7 +2,7 @@
 
 Anchors come from the castle itself (throne dais, gates, casemates, redoubts, fortresses from build_manifest.json);
 each is moved to the nearest spot with a solid floor and two free blocks above, never onto a trap plate."""
-import os, sys, json
+import math, os, sys, json
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 import world
@@ -79,8 +79,9 @@ put('KING', 0, 137, -32, yaw=0, r=1, dy=0, post='throne')
 for sx in (-1, 1):
     put('BODYGUARD', 6 * sx, 135, -33, yaw=0, r=2, dy=0, post='throne')
     put('BODYGUARD', 6 * sx, 135, -30, yaw=0, r=2, dy=0, post='throne')
+    put('BODYGUARD', 7 * sx, 135, -36, yaw=0, r=2, dy=0, post='throne')
     put('GENERAL', 9 * sx, 135, -27, yaw=0, r=2, dy=0, post='throne')
-    for z in (-27, -24, -21, -18):
+    for z in (-27, -24, -21, -18, -15, -12):
         put('IMPERIAL', 4 * sx, 135, z, yaw=90 * sx, r=1, dy=0, post='throne')
 put('ARCHMAGE', -9, 135, -21, yaw=-90, r=2, dy=0, post='throne')
 put('SAGE', 9, 135, -21, yaw=90, r=2, dy=0, post='throne')
@@ -96,9 +97,10 @@ for ring in (115, 303, 472):
     for ax, az, yaw in ((0, -1, 180), (0, 1, 0), (-1, 0, 90), (1, 0, -90)):
         inside = ring - 15
         for s in (-1, 1):
-            gx = ax * inside + (s * 6 if az else 0)
-            gz = az * inside + (s * 6 if ax else 0)
-            put('GUARD', gx, 65, gz, yaw=yaw, r=5, post='gate')
+            for off in (6, 10):
+                gx = ax * inside + (s * off if az else 0)
+                gz = az * inside + (s * off if ax else 0)
+                put('GUARD', gx, 65, gz, yaw=yaw, r=5, post='gate')
 
 # The motor pool: a tank inside each outer gate, brought out and crewed by its guard the first time the guard acts.
 for ax, az, yaw in ((0, -1, 180), (0, 1, 0), (-1, 0, 90), (1, 0, -90)):
@@ -109,6 +111,7 @@ for ax, az, yaw in ((0, -1, 180), (0, 1, 0), (-1, 0, 90), (1, 0, -90)):
 for i, p in enumerate(man['v6_defense_points']):
     role = 'GUARD' if p['kind'] == 'outer_redoubt' or i % 2 == 0 else 'MAGE'
     put(role, p['x'], p['y'], p['z'], r=7, dy=3, post=p['kind'])
+    put('GUARD', p['x'], p['y'], p['z'], r=8, dy=3, post=p['kind'])
 
 # The four fortresses outside the walls: a general with his guard and a battle mage.
 for f in man['exterior_fortresses']:
@@ -116,6 +119,26 @@ for f in man['exterior_fortresses']:
     put('GUARD', f['x'] + 4, 66, f['z'] + 4, r=10, dy=4, post='fortress')
     put('GUARD', f['x'] - 4, 66, f['z'] - 4, r=10, dy=4, post='fortress')
     put('ARCHMAGE', f['x'], 66, f['z'] + 6, r=10, dy=4, post='fortress')
+    put('GUARD', f['x'] + 6, 66, f['z'] - 4, r=10, dy=4, post='fortress')
+    put('GUARD', f['x'] - 6, 66, f['z'] + 4, r=10, dy=4, post='fortress')
+    put('MAGE', f['x'], 66, f['z'] - 6, r=10, dy=4, post='fortress')
+
+# The watchtowers: a guard on each.
+for wx, wz in man.get('exterior_watchtowers', []):
+    put('GUARD', wx, 66, wz, r=6, dy=4, post='watchtower')
+
+
+def wall_top(x, z, fallback):
+    """The walkway on top of the wall near x, z: the commonest high top of the columns around."""
+    a, _ = world.load(save, x - 6, x + 7, z - 6, z + 7, 64, 160)
+    tops = [int(np.nonzero(a[i, :, k])[0].max()) + 64 for i in range(13) for k in range(13) if a[i, :, k].any()]
+    return sorted(tops)[len(tops) // 3] if tops else fallback
+
+
+# Sentries on the outer wall's walkway, between the gun batteries.
+walls = sorted((e for e in man['v7_emplacements'] if e['kind'] == 'wall_battery'), key=lambda e: math.atan2(e['z'], e['x']))
+for e in walls[2::6]:
+    put('GUARD', e['x'], wall_top(e['x'], e['z'], e['y']) + 1, e['z'], r=7, dy=2, post='wall', room=1)
 
 TRADE = dict(house='', smith='weaponsmith', armorer='armorer', baker='farmer', butcher='butcher', tailor='shepherd',
              alchemy='cleric', jeweler='toolsmith', library='librarian', scribe='librarian', mapmaker='cartographer',
@@ -131,6 +154,8 @@ STATION_PROF = dict(composter='farmer', barrel='fisherman', fletching_table='fle
 town = json.load(open(os.path.join(save, 'TOWN_BUILDINGS.json')))['buildings']
 for b in town:
     many = household(b['kind'], b['id'])
+    # a guardhouse is the town watch's: guards live there, not townsfolk
+    role = 'GUARD' if b['kind'] == 'guardhouse' else 'VILLAGER'
     spots = sorted(b['spots'], key=lambda p: (p[1], p[0], p[2]))
     chosen = []
     for p in spots:
@@ -145,8 +170,18 @@ for b in town:
             chosen.append(p)
     for k, (x, y, z) in enumerate(chosen):
         trade = STATION_PROF.get(b.get('station') or '', TRADE.get(b['kind'], ''))
+        if role == 'GUARD':
+            put('GUARD', x, y, z, r=1, dy=0, post='watch')
+            continue
         put('VILLAGER', x, y, z, r=1, dy=0, post='town', profession=trade if k == 0 else '', house=b['kind'],
-            **({'baby': True} if (b['kind'] == 'house' and many == 3 or b['kind'] == 'inn') and k == many - 1 else {}))
+            **({'baby': True} if (b['kind'] == 'house' and many >= 4 or b['kind'] == 'inn') and k == many - 1 else {}))
+
+# The town watch on the streets: a guard at the front of every sixth building, on the street.
+for b in town[::6]:
+    x0, z0, x1, z1 = b['plot']
+    cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
+    sx, sz = dict(north=(cx, z0 - 2), south=(cx, z1 + 2), west=(x0 - 2, cz), east=(x1 + 2, cz))[b['front']]
+    put('GUARD', sx, 65, sz, r=4, dy=3, post='street')
 
 # The kingdom's vehicles and turrets (military.py): aircraft at the runways, helicopters on the pads, tanks in the
 # hangars stand where they were built; a turret goes on the nearest floor near its battery with room around it, and the
@@ -160,10 +195,7 @@ for p in (json.load(open(mil))['posts'] if os.path.exists(mil) else []):
         put(p['role'], p['x'], p['y'], p['z'], yaw=round(p['yaw'], 1), r=0, dy=0, post=p['post'], **extra)
     elif p['post'] == 'battery':
         # the battery's dispenser is in the wall's gallery: its gun goes on the walkway on top of the wall
-        a, _ = world.load(save, p['x'] - 6, p['x'] + 7, p['z'] - 6, p['z'] + 7, 64, 160)
-        tops = [int(np.nonzero(a[i, :, k])[0].max()) + 64 for i in range(13) for k in range(13) if a[i, :, k].any()]
-        top = sorted(tops)[len(tops) // 3] if tops else p['y']
-        put(p['role'], p['x'], top + 1, p['z'], yaw=round(p['yaw'], 1), r=7, dy=2, post=p['post'], room=1, **extra)
+        put(p['role'], p['x'], wall_top(p['x'], p['z'], p['y']) + 1, p['z'], yaw=round(p['yaw'], 1), r=7, dy=2, post=p['post'], room=1, **extra)
     else:
         put(p['role'], p['x'], p['y'], p['z'], yaw=round(p['yaw'], 1), r=6, dy=3, post=p['post'], room=1, **extra)
 

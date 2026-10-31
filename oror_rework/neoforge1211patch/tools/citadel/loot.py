@@ -5,9 +5,32 @@ floor, the royal treasury, the forbidden vault): each line of the theme is taken
 its bounds, into distinct random slots. Enchanted books carry one enchantment and potions one effect, chosen with the
 same seed. Values are Python data for anvil_edit (('byte', v) and ('short', v) for the narrow NBT numbers).
 """
-import random
+import json, random
 
 # item, least, most, chance
+# Superb Warfare's best (ids from the CI item dump): the kingdom's arsenal in the treasury, the most dangerous arms in
+# the forbidden vault
+SBW_TREASURY = [('superbwarfare:awm', 1, 1, .5), ('superbwarfare:m_98b', 1, 1, .4), ('superbwarfare:mk_14', 1, 1, .5),
+                ('superbwarfare:qbz_191', 1, 1, .5), ('superbwarfare:vector', 1, 1, .5), ('superbwarfare:svd', 1, 1, .4),
+                ('superbwarfare:rpk', 1, 1, .4), ('superbwarfare:m_60', 1, 1, .4), ('superbwarfare:devotion', 1, 1, .3),
+                ('superbwarfare:insidious', 1, 1, .3), ('superbwarfare:sentinel', 1, 1, .3), ('superbwarfare:bocek', 1, 1, .3),
+                ('superbwarfare:igla_9k38', 1, 1, .25), ('superbwarfare:rifle_ammo_box', 4, 12, .7), ('superbwarfare:sniper_ammo_box', 4, 12, .5),
+                ('superbwarfare:handgun_ammo_box', 4, 12, .4), ('superbwarfare:shotgun_ammo_box', 4, 12, .4),
+                ('superbwarfare:us_chest_iotv', 1, 1, .5), ('superbwarfare:us_helmet_pasgt', 1, 1, .5), ('superbwarfare:ru_chest_6b43', 1, 1, .4),
+                ('superbwarfare:ru_helmet_6b47', 1, 1, .4), ('superbwarfare:armor_plate', 8, 16, .6), ('superbwarfare:thermal_imaging_goggles', 1, 1, .4),
+                ('superbwarfare:mk_42_blueprint', 1, 1, .3), ('superbwarfare:hpj_11_blueprint', 1, 1, .3), ('superbwarfare:mle_1934_blueprint', 1, 1, .25),
+                ('superbwarfare:bl_132_blueprint', 1, 1, .25), ('superbwarfare:legendary_material_pack', 1, 4, .5),
+                ('superbwarfare:superb_material_pack', 1, 4, .4), ('superbwarfare:legendary_blueprint_data_chip', 1, 2, .4),
+                ('superbwarfare:heavy_armament_module', 1, 2, .3), ('superbwarfare:lucky_container', 1, 1, .3)]
+SBW_VAULT = [('superbwarfare:secondary_cataclysm', 1, 1, 1), ('superbwarfare:super_star_shooter', 1, 1, 1), ('superbwarfare:trachelium', 1, 1, .9),
+             ('superbwarfare:beast', 1, 1, .9), ('superbwarfare:minigun', 1, 1, .9), ('superbwarfare:javelin', 1, 1, .9),
+             ('superbwarfare:javelin_missile', 8, 16, .9), ('superbwarfare:aa_12', 1, 1, .8), ('superbwarfare:ql_1031', 1, 1, .8),
+             ('superbwarfare:creative_ammo_box', 1, 1, .7), ('superbwarfare:heavy_ammo', 64, 64, .8), ('superbwarfare:c4_bomb', 8, 16, .8),
+             ('superbwarfare:claymore_mine', 8, 16, .6), ('superbwarfare:hand_grenade', 16, 32, .7), ('superbwarfare:annihilator_blueprint', 1, 1, .6),
+             ('superbwarfare:javelin_blueprint', 1, 1, .5), ('superbwarfare:minigun_blueprint', 1, 1, .5),
+             ('sbwdroneconfig:heavy_bomber_drone', 1, 1, .5), ('sbwdroneconfig:ukrainian_bayraktar_tb2', 1, 1, .5), ('sbwdroneconfig:geranium_2', 2, 4, .5),
+             ('sbwdroneconfig:glide_bomb', 4, 8, .5)]
+
 THEMES = {
     # the town: a barrel's goods by the room it stands in
     'home': [('bread', 3, 12, .8), ('potato', 4, 16, .5), ('carrot', 4, 16, .5), ('apple', 2, 8, .5), ('wheat', 4, 16, .4),
@@ -75,6 +98,18 @@ THEMES = {
                  ('iceandfire:dragonsteel_lightning_ingot', 4, 12, .3), ('alexscaves:azure_neodymium_ingot', 8, 24, .35),
                  ('alexscaves:scarlet_neodymium_ingot', 8, 24, .35), ('alexscaves:pure_darkness', 1, 4, .25), ('apotheosis:godforged_pearl', 2, 6, .4),
                  ('apotheosis:arcane_sands', 8, 24, .4), ('waystones:warp_stone', 1, 1, .4), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .15)],
+    # the forbidden vault's armoury: the arms kept from the world because they are too dangerous to carry, the
+    # king-slayers first (the only blades that break the Villager King's field)
+    'vault_arms': [('forbidden:kingslayer_sword', 1, 1, 1), ('forbidden:kingslayer_bow', 1, 1, 1), ('forbidden:kingslayer_axe', 1, 1, .8),
+                   ('forbidden:kingslayer_crossbow', 1, 1, .8), ('forbidden:kingslayer_trident', 1, 1, .7),
+                   ('forbidden:kingslayer_rifle', 1, 1, 1), ('forbidden:kingslayer_cannon', 1, 1, .8),
+                   ('relic:legend', 1, 1, 1), ('relic:legend', 1, 1, 1), ('relic:legend', 1, 1, .8), ('relic:weapon', 1, 1, 1), ('relic:weapon', 1, 1, .9),
+                   ('relic:focus', 1, 1, .8), ('relic:charm', 1, 1, .8), ('totem_of_undying', 1, 1, 1), ('totem_of_undying', 1, 1, 1),
+                   ('enchanted_golden_apple', 32, 64, 1), ('netherite_helmet+', 1, 1, 1), ('netherite_chestplate+', 1, 1, 1),
+                   ('netherite_leggings+', 1, 1, 1), ('netherite_boots+', 1, 1, 1), ('arrow', 64, 64, 1), ('spectral_arrow', 64, 64, .8),
+                   ('oror_supreme_bosses:rewind_talisman', 1, 1, .8), ('oror_supreme_bosses:last_bloom', 1, 1, .8),
+                   ('oror_supreme_bosses:curse_residue', 4, 8, .7), ('oror_supreme_bosses:dragon_core', 1, 2, .8),
+                   ('irons_spellbooks:netherite_spell_book', 1, 1, .7), ('iceandfire:fire_dragon_heart', 1, 1, .5)],
     # the forbidden vault deep under the town: what the kingdom keeps from the world
     'vault': [('netherite_block', 2, 6, .9), ('netherite_ingot', 16, 32, .9), ('diamond_block', 24, 64, 1), ('emerald_block', 32, 64, .9),
               ('gold_block', 64, 64, .9), ('enchanted_golden_apple', 16, 32, 1), ('totem_of_undying', 1, 1, 1), ('totem_of_undying', 1, 1, .9),
@@ -96,6 +131,9 @@ THEMES = {
               ('alexscaves:pure_darkness', 4, 12, .6), ('alexscaves:azure_neodymium_ingot', 24, 64, .6), ('alexscaves:scarlet_neodymium_ingot', 24, 64, .6),
               ('apotheosis:godforged_pearl', 8, 24, .8), ('waystones:warp_stone', 1, 1, .7), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .5)],
 }
+THEMES['treasury'] = THEMES['treasury'] + SBW_TREASURY
+THEMES['vault_arms'] = THEMES['vault_arms'] + SBW_VAULT[:8]
+THEMES['vault'] = THEMES['vault'] + SBW_VAULT[8:] + SBW_TREASURY[:12]
 # relics of the 41 characters (oror_supreme_bosses:<name>_weapon / _focus / _charm / _legend)
 RELIC_OWNERS = ['ain_sof_aur', 'angra_mainyu', 'arcana', 'bahamut', 'berit', 'brutality', 'chaos', 'cursed_love', 'demiurgos', 'elseria', 'enkou',
                 'eomaia', 'fallen_savior', 'ferdinand', 'forbidden_arcana', 'gokuka', 'hakyoku', 'hephaistos', 'huang_linghua', 'innocence',
@@ -125,6 +163,30 @@ GREAT_BOOKS = [('mending', 1), ('protection', 4), ('sharpness', 5), ('efficiency
 POTIONS = ['healing', 'strong_healing', 'regeneration', 'strength', 'fire_resistance', 'swiftness', 'night_vision']
 
 
+# the forbidden vault's king-slayers (ForbiddenArms.java): OrorKingslayer in their custom data shatters the Villager King's
+# field on a hit; enchanted past every limit, named and described, and withering whoever holds them
+_KS_LORE = ['村人王の結界を一撃で砕く（10秒）', '王に刃を向けるたび、持ち主も血を流す', '握る者の命を蝕む（ウィザー・空腹）']
+FORBIDDEN = {
+    'kingslayer_sword': ('netherite_sword', '王殺しの剣「界断」', [('sharpness', 10), ('fire_aspect', 4), ('looting', 5), ('sweeping', 5),
+                                                          ('unbreaking', 10), ('mending', 1)]),
+    'kingslayer_axe': ('netherite_axe', '王殺しの斧「断罪」', [('sharpness', 10), ('efficiency', 10), ('unbreaking', 10), ('mending', 1)]),
+    'kingslayer_bow': ('bow', '王殺しの弓「天穿」', [('power', 10), ('punch', 4), ('flame', 1), ('infinity', 1), ('unbreaking', 10)]),
+    'kingslayer_crossbow': ('crossbow', '王殺しの弩「堕星」', [('piercing', 6), ('quick_charge', 5), ('multishot', 1), ('unbreaking', 10)]),
+    'kingslayer_trident': ('trident', '王殺しの三叉槍「海嘯」', [('impaling', 10), ('loyalty', 3), ('channeling', 1), ('unbreaking', 10)]),
+    'kingslayer_rifle': ('superbwarfare:ntw_20', '王殺しの対物銃「穿界」', []),
+    'kingslayer_cannon': ('superbwarfare:secondary_cataclysm', '王殺しの砲「終焉」', []),
+}
+
+
+def forbidden(key):
+    item, title, ench = FORBIDDEN[key]
+    tag = {'OrorKingslayer': ('byte', 1),
+           'Enchantments': [{'id': 'minecraft:' + e, 'lvl': ('short', l)} for e, l in ench],
+           'display': {'Name': json.dumps({'text': title, 'color': 'dark_red', 'italic': False, 'bold': True}, ensure_ascii=False),
+                       'Lore': [json.dumps({'text': line, 'color': 'red', 'italic': False}, ensure_ascii=False) for line in _KS_LORE]}}
+    return item, tag
+
+
 def item_id(name):
     return name if ':' in name else 'minecraft:' + name
 
@@ -135,13 +197,16 @@ def items(theme, seed):
     chosen = [l for l in lines if rng.random() < l[3]]
     if len(chosen) < 2:
         chosen = rng.sample(lines, 2)
-    rng.shuffle(chosen)
+    # the forbidden arms first, so that a full chest never leaves them out
+    chosen.sort(key=lambda l: (not l[0].startswith('forbidden:'), rng.random()))
     chosen = chosen[:27]
     slots = rng.sample(range(27), len(chosen))
     out = []
     for (name, lo, hi, _), slot in zip(chosen, slots):
         tag = None
-        if name.startswith('relic:'):
+        if name.startswith('forbidden:'):
+            name, tag = forbidden(name.split(':')[1])
+        elif name.startswith('relic:'):
             name = 'oror_supreme_bosses:' + rng.choice(RELIC_OWNERS) + '_' + name.split(':')[1]
         elif name == 'enchanted_book+':
             name = 'enchanted_book'
@@ -171,6 +236,11 @@ def mod_items():
     ids = set()
     for lines in THEMES.values():
         for name, *_ in lines:
+            if name.startswith('forbidden:'):
+                item = FORBIDDEN[name.split(':')[1]][0]
+                if ':' in item:
+                    ids.add(item)
+                continue
             if name.startswith('relic:'):
                 ids |= {'oror_supreme_bosses:%s_%s' % (o, name.split(':')[1]) for o in RELIC_OWNERS}
             elif ':' in name:

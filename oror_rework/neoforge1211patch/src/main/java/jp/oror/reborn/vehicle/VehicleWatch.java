@@ -55,7 +55,7 @@ public final class VehicleWatch {
     public static void crewDeath(LivingDeathEvent e) {
         LivingEntity dead = e.getEntity();
         Entity v = dead.getVehicle();
-        if (v != null && v.getTags().contains(RoyalPilots.CREWED) && budget()) {
+        if (v != null && v.getTags().contains(RoyalPilots.CREWED) && events()) {
             Entity by = e.getSource().getEntity(), direct = e.getSource().getDirectEntity();
             LOG.info("VEHICLE-CREW-DEATH {\"vehicle\":\"{}\",\"cause\":\"{}\",\"by\":\"{}\",\"direct\":\"{}\",\"y\":{}}",
                 id(v), e.getSource().getMsgId(), by == null ? "none" : id(by), direct == null ? "none" : id(direct), (int) dead.getY());
@@ -70,11 +70,13 @@ public final class VehicleWatch {
         int crewBefore = p.contains("LastCrew") ? p.getInt("LastCrew") : crew;
         p.putFloat("LastHealth", health);
         p.putInt("LastCrew", crew);
-        if (crew < crewBefore && budget()) {
+        if (crew < crewBefore && events()) {
             LOG.info("VEHICLE-CREW-LOST {\"vehicle\":\"{}\",\"mode\":\"{}\",\"crew\":{},\"was\":{},\"y\":{}}", id(v), p.getString("Mode"), crew, crewBefore,
                 (int) v.getY());
         }
-        if (health < before - 1.0E-4F && budget()) {
+        int hurtLines = p.getInt("HurtLines");
+        if (health < before - 0.01F && hurtLines < 30 && budget()) {
+            p.putInt("HurtLines", hurtLines + 1);
             Level level = v.level();
             long now = level.getGameTime();
             List<String> near = new ArrayList<>();
@@ -113,8 +115,15 @@ public final class VehicleWatch {
         }
     }
 
+    private static int events;
+
     private static boolean budget() {
-        return lines++ < 400;
+        return lines++ < 600;
+    }
+
+    /** Crew losses, deaths, falls and ends: a budget of their own, never used up by the damage lines. */
+    private static boolean events() {
+        return events++ < 300;
     }
 
     private static String id(Entity e) {

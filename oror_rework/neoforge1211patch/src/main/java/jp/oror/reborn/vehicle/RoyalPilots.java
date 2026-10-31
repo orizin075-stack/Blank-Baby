@@ -261,7 +261,9 @@ public final class RoyalPilots {
         // which way the right key turns this vehicle is learnt from the vehicle itself (SteerSign: +1 when it raises the
         // yaw), so the steering below holds for every kind of tracked or wheeled vehicle
         int sign = p.contains("SteerSign") ? p.getInt("SteerSign") : 1;
-        float err = Mth.wrapDegrees(yawTo(d) - v.getYRot()) * sign;
+        // and which way is its front: some models face backwards against their yaw (NoseBack, learnt in learnFacing)
+        float heading = v.getYRot() + (p.getBoolean("NoseBack") ? 180F : 0F);
+        float err = Mth.wrapDegrees(yawTo(d) - heading) * sign;
         boolean arrived = hold != Double.MAX_VALUE && dist <= hold;
         boolean forward, left = false, right = false;
         if (back) {
@@ -288,6 +290,7 @@ public final class RoyalPilots {
         }
         Sbw.keys(v, forward, back, left, right, forward && dist > 40 && Math.abs(err) < 30, false);
         learnSteering(v, p, left, right, back);
+        learnFacing(v, p, forward && !back);
         // stuck: pressing to move without moving, or turning without the heading changing, for two seconds backs it off
         // (or pulls it forward) at an angle for a second and a half
         double speed = v.getDeltaMovement().horizontalDistance();
@@ -303,6 +306,26 @@ public final class RoyalPilots {
             p.putBoolean("UnstickRight", v.getRandom().nextBoolean());
             p.putBoolean("UnstickForward", back || !forward && v.getRandom().nextBoolean());
             p.putInt("Unsticks", p.getInt("Unsticks") + 1);
+        }
+    }
+
+    /**
+     * Keeps NoseBack: while driven forward and moving, whether it moves along its yaw or against it; fifteen ticks
+     * more against than along (net) and the front is taken to be the other way.
+     */
+    private static void learnFacing(Entity v, CompoundTag p, boolean forward) {
+        Vec3 m = v.getDeltaMovement().multiply(1, 0, 1);
+        if (!forward || m.length() < 0.05) {
+            return;
+        }
+        double dot = m.normalize().dot(Vec3.directionFromRotation(0, v.getYRot()));
+        int score = Mth.clamp(p.getInt("FacingScore") + (dot < -0.5 ? 1 : dot > 0.5 ? -1 : 0), -40, 40);
+        p.putInt("FacingScore", score);
+        boolean back = p.getBoolean("NoseBack");
+        if (score >= 15 && !back || score <= -15 && back) {
+            p.putBoolean("NoseBack", !back);
+            p.putInt("FacingScore", 0);
+            p.putInt("FacingFlips", p.getInt("FacingFlips") + 1);
         }
     }
 
@@ -354,7 +377,7 @@ public final class RoyalPilots {
             }
             case "launch" -> {
                 // no runway: a catapult start, straight into the climb
-                v.setPos(v.getX(), v.getY() + 30, v.getZ());
+                v.setPos(v.getX(), Math.max(v.getY() + 30, groundAt(v, v.position()) + 30), v.getZ());
                 v.setDeltaMovement(f.scale(1.6));
                 Sbw.call(v, "setPower", 1.5F);
                 Sbw.call(v, "setEngineStart", true);
@@ -483,9 +506,12 @@ public final class RoyalPilots {
         if (!v.onGround() && !mode.equals("approach") && !mode.equals("rollout") && !mode.equals("parked")) {
             Vec3 m = v.getDeltaMovement();
             boolean danger = false;
-            for (int t = 10; t <= 40 && !danger; t += 10) {
-                Vec3 at = v.position().add(m.scale(t));
-                danger = at.y - groundAt(v, at) < 10;
+            for (float side : new float[]{0F, -25F, 25F}) {
+                Vec3 course = side == 0F ? m : m.yRot(side * Mth.DEG_TO_RAD);
+                for (int t = 5; t <= 50 && !danger; t += 5) {
+                    Vec3 at = v.position().add(course.scale(t));
+                    danger = at.y - groundAt(v, at) < (side == 0F ? 12 : 6);
+                }
             }
             if (danger) {
                 steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), v.getY() + 40, true,
@@ -512,7 +538,10 @@ public final class RoyalPilots {
         if (!p.contains("HeliStart")) {
             p.putLong("HeliStart", now);
             p.putDouble("HeliY0", pos.y);
+        }
+        if (now % 20 == 0) {
             Sbw.call(v, "setEngineStart", true);
+            Sbw.call(v, "setEngineStartOver", true);
         }
         long t = now - p.getLong("HeliStart");
         if (t < 60) {
@@ -522,8 +551,11 @@ public final class RoyalPilots {
             return;
         }
         if (t == 60) {
-            LOG.info(String.format(java.util.Locale.ROOT, "HELI-LIFT {\"id\":\"%s\",\"climbed\":%.2f,\"power\":%.2f,\"vy\":%.2f}",
-                BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath(), pos.y - p.getDouble("HeliY0"), Sbw.power(v), v.getDeltaMovement().y));
+            double climbed = pos.y - p.getDouble("HeliY0");
+            // a helicopter whose own controls did not lift it is flown by hand (Assist): its motion and heading set here
+            p.putBoolean("Assist", climbed < 0.5);
+            LOG.info(String.format(java.util.Locale.ROOT, "HELI-LIFT {\"id\":\"%s\",\"climbed\":%.2f,\"power\":%.2f,\"vy\":%.2f,\"assist\":%b}",
+                BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath(), climbed, Sbw.power(v), v.getDeltaMovement().y, climbed < 0.5));
         }
         double ground = groundAt(v, pos);
         Vec3 goal;
@@ -553,6 +585,20 @@ public final class RoyalPilots {
         boolean back = dist < 3 && v.getDeltaMovement().horizontalDistance() > 0.3;
         Sbw.heliKeys(v, forward, back, false, false, up, down);
         Sbw.mouse(v, Mth.clamp(err / 10.0, -2, 2), 0);
+        if (p.getBoolean("Assist")) {
+            // by hand: turn toward the enemy (or the pad) six degrees a tick, climb or sink to the height wanted, and
+            // move toward the goal once high enough, at most 0.7 blocks a tick, easing into each change
+            float turn = Mth.clamp(err, -6F, 6F);
+            v.setYRot(v.getYRot() + turn);
+            v.setYBodyRot(v.getYRot());
+            Vec3 flat = goal.subtract(pos).multiply(1, 0, 1);
+            Vec3 move = pos.y > ground + 6 && flat.length() > 2 ? flat.normalize().scale(Math.min(0.7, flat.length() * 0.05)) : Vec3.ZERO;
+            double climb = Mth.clamp((altitude - pos.y) * 0.08, -0.35, 0.4);
+            Vec3 want = new Vec3(move.x, climb, move.z);
+            v.setDeltaMovement(v.getDeltaMovement().scale(0.75).add(want.scale(0.25)));
+            v.hasImpulse = true;
+            v.fallDistance = 0;
+        }
         if (now % 40 == 0) {
             LOG.info(String.format(java.util.Locale.ROOT, "HELI-TRACK {\"t\":%d,\"mode\":\"%s\",\"y\":%.1f,\"want\":%.1f,\"ground\":%.0f,\"dist\":%.1f,"
                     + "\"err\":%.0f,\"speed\":%.2f,\"vy\":%.2f,\"power\":%.2f,\"keys\":\"%s%s%s%s\"}",
@@ -563,20 +609,44 @@ public final class RoyalPilots {
 
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Vehicles");
 
+    /** The top of the ground at a column; a column of a chunk not loaded counts as the ground under the vehicle. */
     private static int groundAt(Entity v, Vec3 at) {
-        return v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(at.x), Mth.floor(at.z));
+        int x = Mth.floor(at.x), z = Mth.floor(at.z);
+        if (!v.level().hasChunk(x >> 4, z >> 4)) {
+            x = Mth.floor(v.getX());
+            z = Mth.floor(v.getZ());
+            if (!v.level().hasChunk(x >> 4, z >> 4)) {
+                return v.level().getMinBuildHeight();
+            }
+        }
+        return v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
     }
 
     /** Cruising height: 45 above the post or the target, and 35 above the highest ground of the next 200 blocks ahead. */
     private static double cruise(Entity v, Vec3 home, LivingEntity target) {
         double base = Math.max(home.y, target == null ? home.y : target.getY());
-        Vec3 dir = v.getDeltaMovement().multiply(1, 0, 1);
-        dir = dir.lengthSqr() < 1.0E-4 ? Vec3.directionFromRotation(0, v.getYRot()) : dir.normalize();
-        int ground = groundAt(v, v.position());
-        for (int d = 40; d <= 200; d += 40) {
-            ground = Math.max(ground, groundAt(v, v.position().add(dir.scale(d))));
+        CompoundTag p = v.getPersistentData().getCompound(KEY);
+        // the highest ground all round (eight bearings out to 160 blocks) and 200 blocks ahead, kept for two seconds:
+        // a patrol circle or a turn at the enemy must not take it into a hillside
+        long now = v.level().getGameTime();
+        if (now - p.getLong("HighAt") > 40) {
+            Vec3 dir = v.getDeltaMovement().multiply(1, 0, 1);
+            dir = dir.lengthSqr() < 1.0E-4 ? Vec3.directionFromRotation(0, v.getYRot()) : dir.normalize();
+            int high = groundAt(v, v.position());
+            for (int d = 40; d <= 200; d += 40) {
+                high = Math.max(high, groundAt(v, v.position().add(dir.scale(d))));
+            }
+            for (int b = 0; b < 8; b++) {
+                Vec3 bearing = Vec3.directionFromRotation(0, b * 45F);
+                for (int d = 40; d <= 160; d += 40) {
+                    high = Math.max(high, groundAt(v, v.position().add(bearing.scale(d))));
+                }
+            }
+            p.putInt("High", high);
+            p.putLong("HighAt", now);
+            v.getPersistentData().put(KEY, p);
         }
-        return Math.max(base + CRUISE, ground + 35);
+        return Math.max(base + CRUISE, p.getInt("High") + 40);
     }
 
     /** Toward a point at an altitude: yaw by the mouse's x, pitch from the altitude error by its y; minPitch < 0 forces a climb. */
@@ -632,12 +702,12 @@ public final class RoyalPilots {
             "{\"id\":\"%s\",\"engine\":\"%s\",\"alive\":%b,\"health\":%.2f,\"mode\":\"%s\",\"odometer\":%.1f,\"airborne\":%d,\"maxAlt\":%.1f,"
                 + "\"tookOff\":%b,\"landed\":%b,\"runs\":%d,\"unsticks\":%d,\"goArounds\":%d,\"terrainSaves\":%d,\"crew\":%d,"
                 + "\"power\":%.2f,\"energy\":%s,\"target\":%b,\"y\":%.1f,\"ground\":%d,\"vy\":%.2f,\"speed\":%.2f,\"pitch\":%.1f,"
-                + "\"steerSign\":%d,\"steerFlips\":%d}",
+                + "\"steerSign\":%d,\"steerFlips\":%d,\"noseBack\":%b,\"facingFlips\":%d}",
             id, Sbw.engine(v), v.isAlive() && !Sbw.wreck(v), Sbw.health(v), p.getString("Mode"), p.getDouble("Odometer"), p.getInt("Airborne"),
             p.getDouble("MaxAlt"), p.getBoolean("TookOff"), p.getBoolean("Landed"), p.getInt("Runs"), p.getInt("Unsticks"), p.getInt("GoArounds"),
             p.getInt("TerrainSaves"), v.getPassengers().size(), Sbw.power(v), Sbw.call(v, "getEnergy"), p.hasUUID("Target"),
             v.getY(), groundAt(v, v.position()), v.getDeltaMovement().y, v.getDeltaMovement().length(), v.getXRot(),
-            p.contains("SteerSign") ? p.getInt("SteerSign") : 1, p.getInt("SteerFlips"));
+            p.contains("SteerSign") ? p.getInt("SteerSign") : 1, p.getInt("SteerFlips"), p.getBoolean("NoseBack"), p.getInt("FacingFlips"));
     }
 
     /** Royal soldiers posted to a vehicle (OrorMotor in their data) bring it out and board it the first time they act. */

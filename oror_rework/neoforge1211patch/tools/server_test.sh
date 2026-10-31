@@ -15,7 +15,7 @@ if [ ! -f run.sh ]; then
 fi
 echo 'eula=true' > eula.txt
 printf 'level-seed=%s\nonline-mode=false\nspawn-protection=0\nmax-tick-time=-1\nview-distance=4\nsimulation-distance=4\nsync-chunk-writes=false\n' "$seed" > server.properties
-printf -- '-Xmx6G\n-Doror.ci=%s\n' "$checks" > user_jvm_args.txt
+printf -- '-Xmx6G\n-Doror.ci=%s\n-XX:StartFlightRecording=filename=rec.jfr,settings=profile,dumponexit=true\n' "$checks" > user_jvm_args.txt
 rm -f console.log
 ./run.sh nogui < /dev/null > console.log 2>&1 &
 pid=$!

@@ -140,14 +140,16 @@ POTS = ['potted_red_tulip', 'potted_fern', 'potted_blue_orchid', 'potted_azure_b
 WOOLS = ['white_wool', 'red_wool', 'blue_wool', 'yellow_wool', 'green_wool', 'light_blue_wool', 'pink_wool', 'orange_wool', 'purple_wool']
 CROPS = [('wheat', 7), ('carrots', 7), ('potatoes', 7), ('beetroots', 3)]
 # who lives in a building (tools/citadel/garrison.py stands as many townsfolk in it): each gets a bed
-HOUSEHOLD = dict(house=3, inn=4, guardhouse=3)
+HOUSEHOLD = dict(house=4, inn=6, guardhouse=4, tavern=4, chapel=3, school=3, clinic=3)
 
 
 def household(kind, ident):
-    """How many live in building ident: a home two, or three with a child in every third home; an inn four; others two."""
+    """How many live in building ident: a home three, or four with a child in every third home; an inn six (the
+    innkeeper's family and guests); a guardhouse four of the watch; a tavern four; a chapel, school or clinic three;
+    every other shop three (the master, a journeyman, an apprentice)."""
     if kind == 'house':
-        return 3 if ident % 3 == 0 else 2
-    return HOUSEHOLD.get(kind, 2)
+        return 4 if ident % 3 == 0 else 3
+    return HOUSEHOLD.get(kind, 3)
 # rooms deep enough get a partition across them: a front room and a back room with a door between
 DIVIDED = {'home', 'bakery', 'taproom', 'guildhall', 'bedroom', 'inn', 'dorm', 'shop', 'tailor', 'alchemy', 'jewel', 'scriptorium', 'maps'}
 # what a room's barrels hold (loot.THEMES)
@@ -307,7 +309,7 @@ def build(plot, kind, seed, front, max_w=None, fence_sides='all', blocked=()):
     rooms = [room0 if s == 0 else room1 for s in range(floors)]
     have = sum(ROOMS[r][0].count('bed') for r in rooms) + (2 if floors == 1 and 'bed' not in ROOMS[room0][0] else 0)
     extra = [0] * floors
-    extra[-1] = max(0, HOUSEHOLD.get(kind, 2) - have)
+    extra[-1] = max(0, HOUSEHOLD.get(kind, 3) - have)
     h.station_placed = station is None
     for s in range(floors):
         furnish(h, s, rooms[s], station if s == 0 else None, flights, rng, extra[s])
