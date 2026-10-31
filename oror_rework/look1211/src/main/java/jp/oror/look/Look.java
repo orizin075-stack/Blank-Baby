@@ -134,6 +134,16 @@ public final class Look {
 
     private static void play(Minecraft mc, int t) {
         switch (t) {
+            case 2 -> {
+                IntegratedServer server = mc.getSingleplayerServer();
+                String name = mc.player.getGameProfile().getName();
+                if (server != null) {
+                    server.execute(() -> {
+                        command(server, "gamemode creative " + name);
+                        command(server, "effect give " + name + " minecraft:resistance infinite 4 true");
+                    });
+                }
+            }
             case 40 -> stage(mc);
             case 200 -> {
                 mc.options.hideGui = true;
@@ -305,6 +315,26 @@ public final class Look {
     }
 
     private static void popup(Minecraft mc, Screen screen) {
+        if (screen instanceof net.minecraft.client.gui.screens.DeathScreen && onScreen == 20) {
+            // why: the death message is one of the screen's components
+            for (java.lang.reflect.Field f : screen.getClass().getDeclaredFields()) {
+                if (net.minecraft.network.chat.Component.class.isAssignableFrom(f.getType())) {
+                    try {
+                        f.setAccessible(true);
+                        Object c = f.get(screen);
+                        note("death: " + (c instanceof net.minecraft.network.chat.Component comp ? comp.getString() : c));
+                    } catch (Exception e) {
+                        note("death message unreadable: " + e);
+                    }
+                }
+            }
+            shot(mc, "death_" + total);
+            if (mc.player != null) {
+                mc.player.respawn();
+            }
+            mc.setScreen(null);
+            return;
+        }
         if (onScreen == 100) {
             shot(mc, "popup_" + screen.getClass().getSimpleName());
             if (!press(screen, PROCEED)) {
