@@ -183,8 +183,9 @@ public final class Supply {
 
     static boolean low(Entity v) {
         int[] r = rounds(v);
-        // an aircraft turns for home at half its battery: the way back and the landing take a good share of it
-        double floor = "AIRCRAFT".equals(Sbw.engine(v)) ? 0.5 : 0.33;
+        // an aircraft keeps flying until a tenth of its battery is left: its landing does not work yet (048's CI: it
+        // reaches its runway but never sets down), and an early turn for home only lost it sooner
+        double floor = "AIRCRAFT".equals(Sbw.engine(v)) ? 0.1 : 0.33;
         return charge(v) < floor || r[1] > 0 && r[0] < Math.max(1, r[1] / 10);
     }
 
