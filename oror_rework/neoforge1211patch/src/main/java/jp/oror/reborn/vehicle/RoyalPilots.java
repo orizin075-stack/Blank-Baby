@@ -791,14 +791,27 @@ public final class RoyalPilots {
         float yawErr = Mth.wrapDegrees(yawTo(point.subtract(v.position())) - v.getYRot());
         float pitchErr = wantPitch - v.getXRot();
         Sbw.mouse(v, Mth.clamp(yawErr / 10.0, -2, 2), Mth.clamp(pitchErr / 3.0, -8, 8));
-        Sbw.keys(v, faster, slower, false, false, false, false);
+        boolean[] bank = bank(v, yawErr, agl);
+        Sbw.keys(v, faster, slower, bank[0], bank[1], false, false);
+    }
+
+    /**
+     * The roll keys for a turn: Superb Warfare's aircraft yaw at 0.3 degrees a tick with level wings and up to about
+     * 2.5 banked, so with the heading more than twelve degrees off it banks (to 45 degrees at most; it rolls level
+     * again by itself). Without it the CI aircraft circled its approach point 300 blocks out. Not near the ground.
+     */
+    private static boolean[] bank(Entity v, float yawErr, double agl) {
+        float roll = Sbw.call(v, "getRoll") instanceof Number n ? n.floatValue() : 0F;
+        boolean turn = !v.onGround() && agl > 12 && Math.abs(yawErr) > 12 && Math.abs(roll) < 45;
+        return new boolean[]{turn && yawErr < 0, turn && yawErr > 0};
     }
 
     private static void aimNose(Entity v, float wantYaw, float wantPitch, boolean power) {
         float yawErr = Mth.wrapDegrees(wantYaw - v.getYRot());
         float pitchErr = wantPitch - v.getXRot();
         Sbw.mouse(v, Mth.clamp(yawErr / 10.0, -2, 2), Mth.clamp(pitchErr / 3.0, -8, 8));
-        Sbw.keys(v, power, false, false, false, power, false);
+        boolean[] bank = bank(v, yawErr, v.getY() - groundAt(v, v.position()));
+        Sbw.keys(v, power, false, bank[0], bank[1], power, false);
     }
 
     private static float yawTo(Vec3 d) {
