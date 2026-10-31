@@ -258,43 +258,30 @@ public final class RoyalPilots {
         }
         Vec3 d = goal.subtract(pos).multiply(1, 0, 1);
         double dist = d.length();
-        // which way the right key turns this vehicle is learnt from the vehicle itself (SteerSign: +1 when it raises the
-        // yaw), so the steering below holds for every kind of tracked or wheeled vehicle
-        int sign = p.contains("SteerSign") ? p.getInt("SteerSign") : 1;
-        // and which way is its front: some models face backwards against their yaw (NoseBack, learnt in learnFacing)
+        // The heading is set here, a few degrees a tick, rather than by the turning keys: Superb Warfare's tracks keep
+        // turning after a key is let go and the CI tank swung 80 to 120 degrees past every correction and drove off
+        // its field. Its front may face against its yaw (NoseBack, learnt in learnFacing); the keys only drive it.
         float heading = v.getYRot() + (p.getBoolean("NoseBack") ? 180F : 0F);
-        // tracks keep turning after the key is let go (the CI tank overshot a 7 degree correction by 80 degrees): steer
-        // by where the nose will point in six ticks at its present rate of turn
-        float rate = Mth.wrapDegrees(v.getYRot() - p.getFloat("DriveYaw"));
-        p.putFloat("DriveYaw", v.getYRot());
-        float err = Mth.wrapDegrees(yawTo(d) - (heading + rate * 6F)) * sign;
+        float err = Mth.wrapDegrees(yawTo(d) - heading);
         boolean arrived = hold != Double.MAX_VALUE && dist <= hold;
-        boolean forward, left = false, right = false;
+        boolean forward;
         if (back) {
-            // too close: back off, the nose kept toward the enemy (reversing, the steering is the other way round)
+            // too close: back off, the nose kept toward the enemy
             forward = false;
-            right = err < -8;
-            left = err > 8;
         } else if (arrived || hold == Double.MAX_VALUE) {
-            // at the stand-off: face the enemy, a short pivot on the spot
+            // at the stand-off: face the enemy
             forward = false;
-            right = err > 8;
-            left = err < -8;
-        } else if (Math.abs(err) < 110) {
-            // drive in an arc toward the goal: tracks turn while they roll; a sharp turn at a crawl, so the arc is tight
-            double speedNow = v.getDeltaMovement().horizontalDistance();
-            forward = Math.abs(err) < 45 || speedNow < 0.12;
-            right = err > 6;
-            left = err < -6;
         } else {
-            // the goal is behind: a full turn while rolling forward at a crawl (tracks do not pivot well, and backing up
-            // blind takes a tank over walls and banks)
-            forward = v.getDeltaMovement().horizontalDistance() < 0.12;
-            right = err > 0;
-            left = err < 0;
+            // toward the goal; turn on the spot first when it is well off the nose
+            forward = Math.abs(err) < 50;
         }
-        Sbw.keys(v, forward, back, left, right, forward && dist > 40 && Math.abs(err) < 30, false);
-        learnSteering(v, p, left, right, back);
+        float turn = Mth.clamp(err, -4F, 4F);
+        if (Math.abs(err) > 1F) {
+            v.setYRot(v.getYRot() + turn);
+            v.setYBodyRot(v.getYRot());
+        }
+        boolean left = false, right = false;
+        Sbw.keys(v, forward, back, false, false, forward && dist > 40 && Math.abs(err) < 20, false);
         learnFacing(v, p, forward && !back);
         // stuck: pressing to move without moving, or turning without the heading changing, for two seconds backs it off
         // (or pulls it forward) at an angle for a second and a half
@@ -331,29 +318,6 @@ public final class RoyalPilots {
             p.putBoolean("NoseBack", !back);
             p.putInt("FacingScore", 0);
             p.putInt("FacingFlips", p.getInt("FacingFlips") + 1);
-        }
-    }
-
-    /**
-     * Keeps SteerSign: over the ticks the vehicle is steered one way, whether its yaw went the way the sign says; after
-     * twelve ticks of it going the other way the sign flips.
-     */
-    private static void learnSteering(Entity v, CompoundTag p, boolean left, boolean right, boolean back) {
-        float yaw = v.getYRot();
-        float turned = Mth.wrapDegrees(yaw - p.getFloat("SteerYaw"));
-        p.putFloat("SteerYaw", yaw);
-        if (left == right || Math.abs(turned) < 0.3F) {
-            return;
-        }
-        int sign = p.contains("SteerSign") ? p.getInt("SteerSign") : 1;
-        // forward: right should raise the yaw by the sign; reversing turns the other way round
-        int expected = (right ? 1 : -1) * (back ? -1 : 1) * sign;
-        int wrong = Math.signum(turned) == expected ? 0 : p.getInt("SteerWrong") + 1;
-        p.putInt("SteerWrong", wrong);
-        if (wrong >= 12) {
-            p.putInt("SteerSign", -sign);
-            p.putInt("SteerWrong", 0);
-            p.putInt("SteerFlips", p.getInt("SteerFlips") + 1);
         }
     }
 
@@ -511,9 +475,15 @@ public final class RoyalPilots {
         if (!v.onGround() && !mode.equals("approach") && !mode.equals("rollout") && !mode.equals("parked") && (now % 2 == 0 || p.getBoolean("Danger"))) {
             Vec3 m = v.getDeltaMovement();
             boolean danger = false;
+            // close by first (the CI aircraft flew into a hillside a few blocks ahead that the old 12-block-first probe
+            // stepped over), then out to two and a half seconds; against a block already, it climbs at once
+            danger = v.horizontalCollision;
             for (float side : new float[]{0F, -25F, 25F}) {
                 Vec3 course = side == 0F ? m : m.yRot(side * Mth.DEG_TO_RAD);
-                for (int t = 6; t <= 54 && !danger; t += 6) {
+                for (int t : new int[]{2, 4, 7, 10, 14, 19, 25, 32, 40, 50}) {
+                    if (danger) {
+                        break;
+                    }
                     Vec3 at = v.position().add(course.scale(t));
                     danger = at.y - groundAt(v, at) < (side == 0F ? 14 : 8);
                 }
@@ -664,7 +634,7 @@ public final class RoyalPilots {
             p.putLong("HighAt", now);
             v.getPersistentData().put(KEY, p);
         }
-        return Math.max(base + CRUISE, p.getInt("High") + 40);
+        return Math.max(base + CRUISE, p.getInt("High") + 50);
     }
 
     /** Toward a point at an altitude: yaw by the mouse's x, pitch from the altitude error by its y; minPitch < 0 forces a climb. */

@@ -175,8 +175,14 @@ public final class Look {
             case 4400 -> shot(mc, "21_throne_room_later");
             case 4420 -> {
                 king(mc);
-                finish(mc, "complete");
+                overCapital(mc, 0, 0, 150);
             }
+            case 6200 -> shot(mc, "22_capital_aerial");
+            case 6210 -> overCapital(mc, -560, -470, 40);
+            case 7800 -> shot(mc, "23_helipad");
+            case 7810 -> overCapital(mc, -430, -605, 45);
+            case 9400 -> shot(mc, "24_airbase");
+            case 9410 -> finish(mc, "complete");
             default -> {
             }
         }
@@ -282,6 +288,28 @@ public final class Look {
                 command(server, "gamemode spectator " + name);
             } catch (Throwable error) {
                 note("throne lookup failed: " + error);
+            }
+        });
+    }
+
+    /**
+     * Above the natural capital: dx, dz from its centre (the save's origin), height blocks over its ground, looking down
+     * at 60 degrees toward the south. Shows whether the outer belt (runways, helipads) is open sky.
+     */
+    private static void overCapital(Minecraft mc, int dx, int dz, int height) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        server.execute(() -> {
+            try {
+                Class<?> sites = Class.forName("jp.oror.reborn.citadel.CitadelSites");
+                Object site = sites.getMethod("capital").invoke(null);
+                Method center = site.getClass().getMethod("center");
+                center.setAccessible(true);
+                BlockPos c = (BlockPos) center.invoke(site);
+                command(server, String.format("tp %s %d %d %d 0 60", name, c.getX() + dx, c.getY() + height, c.getZ() + dz - height / 2));
+                note("over the capital at " + (c.getX() + dx) + " " + (c.getZ() + dz));
+            } catch (Throwable error) {
+                note("capital lookup failed: " + error);
             }
         });
     }
