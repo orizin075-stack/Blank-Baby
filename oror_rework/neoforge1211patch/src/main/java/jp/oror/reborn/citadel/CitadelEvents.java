@@ -309,14 +309,22 @@ public final class CitadelEvents {
             }
         }
         // the kingdom's vehicles and turrets by type: manned, and standing ready with no crew
-        Map<String, Integer> manned = new TreeMap<>(), ready = new TreeMap<>();
-        List<String> sample = new ArrayList<>();
+        Map<String, Integer> manned = new TreeMap<>(), ready = new TreeMap<>(), supply = new TreeMap<>();
+        List<String> sample = new ArrayList<>(), supplySample = new ArrayList<>();
+        java.util.Set<String> supplySeen = new java.util.HashSet<>();
         for (net.minecraft.world.entity.Entity v : level.getEntities((net.minecraft.world.entity.Entity) null, box,
             x -> x.getTags().contains(jp.oror.reborn.vehicle.RoyalPilots.CREWED))) {
             String id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath();
             (v.getPassengers().isEmpty() ? ready : manned).merge(id, 1, Integer::sum);
             if (sample.size() < 3 && !v.getPassengers().isEmpty()) {
                 sample.add(jp.oror.reborn.vehicle.RoyalPilots.report(v));
+            }
+            // the posts' supply: a station in reach of the vehicle, a depot beside it, what it carries
+            String sup = jp.oror.reborn.vehicle.Supply.report(level, v);
+            supply.merge(id + (sup.contains("\"charger\":true") ? "+station" : "") + (sup.contains("\"depots\":0") ? "" : "+depot"), 1, Integer::sum);
+            if (supplySample.size() < 12 && !supplySeen.contains(id)) {
+                supplySeen.add(id);
+                supplySample.add(sup);
             }
         }
         // the king ten seconds on: still on the throne (his feet on the dais, within a block of its centre), and seated
@@ -332,6 +340,8 @@ public final class CitadelEvents {
             royals, armed, atPost, json(census(level, t.site)), json(manned), json(ready), CitadelGarrison.parked(), kingAt, String.join(",", sample),
             e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
+        LOG.info("CITADEL-SUPPLY {\"posts\":{},\"kinds\":[{}],\"magnetScan\":{\"answered\":{},\"checked\":{}}}", json(supply),
+            String.join(",", supplySample), jp.oror.reborn.perf.MagnetScan.hits, jp.oror.reborn.perf.MagnetScan.probes);
         // released a few a tick: letting two hundred chunks of royals, townsfolk and vehicles unload in one go has
         // crashed the server's entity unloading (CI run 26)
         RELEASE.addAll(t.chunks);

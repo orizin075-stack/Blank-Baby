@@ -15,7 +15,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -64,8 +63,7 @@ public final class RoyalPilots {
         p.putDouble("RunwayY", at.y);
         p.putString("Mode", "ground");
         v.getPersistentData().put(KEY, p);
-        Sbw.charge(v);
-        arm(v);
+        Supply.stock(v);
         for (int i = 0; i < seats; i++) {
             RoyalMob m = RoyalRegistry.TYPES.get(i == 0 ? RoyalRole.IMPERIAL : RoyalRole.GUARD).create(level);
             if (m == null) {
@@ -105,20 +103,6 @@ public final class RoyalPilots {
         return true;
     }
 
-    private static void arm(Entity v) {
-        boolean air = "AIRCRAFT".equals(Sbw.engine(v)) || "HELICOPTER".equals(Sbw.engine(v));
-        String[][] load = air
-            ? new String[][]{{"small_shell_ap", "64"}, {"small_shell_ap", "64"}, {"small_shell_he", "64"}, {"large_anti_ground_missile", "4"}, {"small_rocket", "16"}}
-            : new String[][]{{"large_shell_he", "16"}, {"large_shell_ap", "16"}, {"rifle_ammo", "64"}, {"heavy_ammo", "64"}, {"large_shell_he", "16"}};
-        int slot = 0;
-        for (String[] l : load) {
-            if (BuiltInRegistries.ITEM.containsKey(Sbw.id(l[0]))) {
-                Item item = BuiltInRegistries.ITEM.get(Sbw.id(l[0]));
-                Sbw.call(v, "setItem", slot++, item.getDefaultInstance().copyWithCount(Math.min(item.getDefaultMaxStackSize(), Integer.parseInt(l[1]))));
-            }
-        }
-    }
-
     @SubscribeEvent
     public static void tick(EntityTickEvent.Post e) {
         Entity v = e.getEntity();
@@ -131,9 +115,13 @@ public final class RoyalPilots {
             v.getPersistentData().put(KEY, p);
             return;
         }
-        if (v.tickCount % 1200 == 0) {
-            Sbw.charge(v);
-            arm(v);
+        if (v.tickCount % 40 == 13 && v.level() instanceof ServerLevel sl) {
+            // the post's charging station and depot, not a top-up from nowhere (Supply)
+            Vec3 post = Vec3.atBottomCenterOf(BlockPos.of(p.getLong("Home")));
+            String engine = Sbw.engine(v);
+            boolean atPost = engine.equals("FIXED") || engine.equals("EMPTY") || engine.isEmpty()
+                || v.position().subtract(post).horizontalDistance() < (engine.equals("AIRCRAFT") ? 6 : 5) && v.onGround();
+            Supply.tick(sl, v, p, atPost);
         }
         log(v, p);
         Mob driver = v.getFirstPassenger() instanceof Mob m ? m : null;
@@ -142,14 +130,16 @@ public final class RoyalPilots {
             Sbw.mouse(v, 0, 0);
             return;
         }
-        LivingEntity target = target(v, p);
+        LivingEntity seen = target(v, p);
+        // short of power or shells it breaks off for its post: its gunner still fires at what he sees on the way
+        LivingEntity target = p.getBoolean("Resupply") ? null : seen;
         if (v.tickCount % 10 == 0) {
             // a ground vehicle holds its fire while the line to the target runs into the ground or a wall: its shells
             // would only blast a crater at its own tracks
-            Sbw.aim(v, target != null && (Sbw.engine(v).equals("AIRCRAFT") || lineOfFire(v, target)) ? target : null);
+            Sbw.aim(v, seen != null && (Sbw.engine(v).equals("AIRCRAFT") || lineOfFire(v, seen)) ? seen : null);
             for (Entity rider : v.getPassengers()) {
-                if (rider instanceof Mob m && target != null && m.getTarget() != target) {
-                    m.setTarget(target);
+                if (rider instanceof Mob m && seen != null && m.getTarget() != seen) {
+                    m.setTarget(seen);
                 }
             }
         }
@@ -275,6 +265,17 @@ public final class RoyalPilots {
             // toward the goal; turn on the spot first when it is well off the nose
             forward = Math.abs(err) < 50;
         }
+        // never over an edge or into deep water: the CI tank went after a drowned in the sea beyond its field, climbed the
+        // wall and sank 25 blocks; it now stops at the brink and fights from there
+        Vec3 nose = Vec3.directionFromRotation(0, heading);
+        if (forward && edge(v, nose)) {
+            forward = false;
+            p.putInt("EdgeStops", p.getInt("EdgeStops") + 1);
+        }
+        if (back && edge(v, nose.scale(-1))) {
+            back = false;
+            p.putInt("EdgeStops", p.getInt("EdgeStops") + 1);
+        }
         float turn = Mth.clamp(err, -4F, 4F);
         if (Math.abs(err) > 1F) {
             v.setYRot(v.getYRot() + turn);
@@ -299,6 +300,23 @@ public final class RoyalPilots {
             p.putBoolean("UnstickForward", back || !forward && v.getRandom().nextBoolean());
             p.putInt("Unsticks", p.getInt("Unsticks") + 1);
         }
+    }
+
+    /** A drop of more than two and a half blocks, or water two deep, within six blocks along dir past the hull's edge. */
+    private static boolean edge(Entity v, Vec3 dir) {
+        double y = v.getY(), half = v.getBbWidth() / 2;
+        for (double s : new double[]{1.5, 3.5, 6}) {
+            Vec3 q = v.position().add(dir.scale(half + s));
+            int g = groundAt(v, q);
+            if (g < y - 2.5) {
+                return true;
+            }
+            BlockPos top = BlockPos.containing(q.x, g - 1, q.z);
+            if (!v.level().getFluidState(top).isEmpty() && !v.level().getFluidState(top.below()).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -384,13 +402,13 @@ public final class RoyalPilots {
                     double h = target.position().subtract(v.position()).horizontalDistance();
                     float err = Mth.wrapDegrees(yawTo(target.position().subtract(v.position())) - v.getYRot());
                     // a run only from high enough to pull out of it
-                    if (h < 160 && h > 70 && Math.abs(err) < 20 && v.getY() - target.getY() > 40) {
+                    if (h < 160 && h > 70 && Math.abs(err) < 20 && v.getY() - target.getY() > 40 && pullOutRoom(v, target)) {
                         mode = "dive";
                         p.putLong("Since", now);
                     } else {
                         steer(v, target.position(), cruise, true, 0);
                     }
-                } else if (quiet && !p.getBoolean("NoRunway")) {
+                } else if ((quiet || p.getBoolean("Resupply")) && !p.getBoolean("NoRunway")) {
                     mode = "return";
                     p.putLong("Since", now);
                 } else {
@@ -462,10 +480,37 @@ public final class RoyalPilots {
                 Sbw.keys(v, false, true, false, false, false, true);
                 Sbw.mouse(v, 0, 0);
                 if (speed < 0.05 || now - p.getLong("Since") > 400) {
+                    mode = p.getBoolean("NoRunway") ? "parked" : "taxi";
+                    p.putLong("Since", now);
+                    if (p.getBoolean("NoRunway")) {
+                        p.putLong("Home", v.blockPosition().asLong());
+                        p.putFloat("Heading", v.getYRot());
+                        p.putDouble("RunwayY", v.getY());
+                    }
+                }
+            }
+            case "taxi" -> {
+                // the ground crew tow it back to its stand (where the station and the depot are) at a walking pace,
+                // nose round toward the way, and turn it down the runway again; what a minute of towing has not
+                // covered they cover by hand
+                Vec3 to = home.subtract(v.position()).multiply(1, 0, 1);
+                double d = to.length();
+                Sbw.keys(v, false, false, false, false, false, true);
+                Sbw.mouse(v, 0, 0);
+                if (d < 1.5 || now - p.getLong("Since") > 1200) {
+                    if (d >= 1.5) {
+                        v.setPos(home.x, Math.max(v.getY(), runwayY), home.z);
+                    }
+                    v.setYRot(heading);
+                    v.setDeltaMovement(Vec3.ZERO);
                     mode = "parked";
-                    p.putLong("Home", v.blockPosition().asLong());
-                    p.putFloat("Heading", v.getYRot());
-                    p.putDouble("RunwayY", v.getY());
+                    p.putInt("Taxis", p.getInt("Taxis") + 1);
+                } else {
+                    float err = Mth.wrapDegrees(yawTo(to) - v.getYRot());
+                    v.setYRot(v.getYRot() + Mth.clamp(err, -6F, 6F));
+                    Vec3 step = Math.abs(err) < 30 ? to.scale(Math.min(0.3, d) / d) : Vec3.ZERO;
+                    v.setDeltaMovement(step.x, v.getDeltaMovement().y, step.z);
+                    v.hasImpulse = true;
                 }
             }
             default -> mode = "parked";
@@ -490,7 +535,10 @@ public final class RoyalPilots {
             }
             p.putBoolean("Danger", danger);
             if (danger) {
-                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), v.getY() + 40, true,
+                // climb, and turn toward the lowest ground of the next 80 blocks: the citadel's A-10 pulled up from a run
+                // straight into a mountainside 50 blocks higher than itself
+                float away = escapeBearing(v);
+                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot() + away).scale(100)), v.getY() + 40, true,
                     speed < 1.0 ? -12 : -30);
                 if (mode.equals("dive") || mode.equals("patrol") || mode.equals("climb")) {
                     mode = "pullup";
@@ -503,35 +551,48 @@ public final class RoyalPilots {
     }
 
     /**
-     * Helicopters: lift off on the collective, hold 22 blocks over the ground (or the enemy), turn to face the enemy and
-     * fly at it to a stand-off of 35 blocks for the gunner, and with nothing to fight go back over the pad and settle on
-     * it. The first three seconds are a lift test (collective only), whose climb goes in the log.
+     * Helicopters, flown with Superb Warfare's own controls: its collective is the forward key (power up) and the down key
+     * (power down), with neither held the engine holds the climb or sink it has; the up key only toggles its hover mode
+     * (046 to 048 held it every tick, so the mode flickered, the power never rose above nothing and the CI helicopters
+     * never left their pads). The heading is turned here a few degrees a tick and the nose tilted to fly: dipped toward
+     * the goal (more the further it is), level over it, raised to brake. It lifts off when an enemy comes, holds 22 blocks
+     * over the ground (or the enemy), stands off 35 blocks from the enemy for its gunner, and with nothing to fight (or
+     * when short of power or rockets) flies back over its pad and settles on it, where the pad's station charges it and
+     * the crew load it from the depot. The first five seconds are a lift test, whose climb goes in the log.
      */
     private static void hover(Entity v, CompoundTag p, LivingEntity target) {
         long now = v.level().getGameTime();
         Vec3 pos = v.position();
         Vec3 home = Vec3.atBottomCenterOf(BlockPos.of(p.getLong("Home")));
+        boolean onPad = v.onGround() && pos.subtract(home).horizontalDistance() < 4;
+        if (target == null && onPad && !p.contains("HeliStart")) {
+            // parked on its pad with nothing to do: the collective held down until the engine stops (an idling rotor
+            // drinks the battery), while the pad's station charges it
+            Sbw.heliKeys(v, false, false, false, false, false, Sbw.power(v) > 0.0004F);
+            Sbw.mouse(v, 0, 0);
+            p.putString("Mode", "parked");
+            return;
+        }
         if (!p.contains("HeliStart")) {
             p.putLong("HeliStart", now);
             p.putDouble("HeliY0", pos.y);
         }
-        if (now % 20 == 0) {
-            Sbw.call(v, "setEngineStart", true);
-            Sbw.call(v, "setEngineStartOver", true);
+        if (Sbw.power(v) < 0.04F && now % 20 == 0) {
+            Sbw.call(v, "setEngineStart", true);         // the starter: the engine spools up to idle by itself
         }
         long t = now - p.getLong("HeliStart");
-        if (t < 60) {
+        if (t < 100) {
             p.putString("Mode", "lift-test");
-            Sbw.heliKeys(v, false, false, false, false, true, false);
+            Sbw.heliKeys(v, true, false, false, false, false, false);
             Sbw.mouse(v, 0, 0);
+            v.setXRot(0F);
             return;
         }
-        if (t == 60) {
+        if (t == 100) {
             double climbed = pos.y - p.getDouble("HeliY0");
-            // a helicopter whose own controls did not lift it is flown by hand (Assist): its motion and heading set here
-            p.putBoolean("Assist", climbed < 0.5);
-            LOG.info(String.format(java.util.Locale.ROOT, "HELI-LIFT {\"id\":\"%s\",\"climbed\":%.2f,\"power\":%.2f,\"vy\":%.2f,\"assist\":%b}",
-                BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath(), climbed, Sbw.power(v), v.getDeltaMovement().y, climbed < 0.5));
+            LOG.info(String.format(java.util.Locale.ROOT, "HELI-LIFT {\"id\":\"%s\",\"climbed\":%.2f,\"power\":%.3f,\"vy\":%.2f}",
+                BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath(), climbed, Sbw.power(v), v.getDeltaMovement().y));
+            p.putDouble("LiftClimbed", climbed);
         }
         double ground = groundAt(v, pos);
         Vec3 goal;
@@ -546,46 +607,48 @@ public final class RoyalPilots {
             p.putString("Mode", "attack");
         } else {
             goal = home;
-            boolean over = pos.subtract(home).horizontalDistance() < 4;
+            boolean over = pos.subtract(home).horizontalDistance() < 3;
             altitude = over ? home.y : Math.max(ground, home.y) + 22;
             face = home.subtract(pos);
             p.putString("Mode", over ? "settle" : "return");
+            if (onPad) {
+                p.remove("HeliStart");          // down: the engine is shut off on the next tick
+            }
         }
         // keep clear of the ground ahead too
         Vec3 ahead = pos.add(v.getDeltaMovement().multiply(20, 0, 20));
         altitude = Math.max(altitude, groundAt(v, ahead) + 12);
-        double dist = goal.subtract(pos).horizontalDistance();
-        float err = Mth.wrapDegrees(yawTo(face) - v.getYRot());
-        boolean up = pos.y < altitude - 1.5, down = pos.y > altitude + 2.5 && !(v.onGround());
-        boolean forward = dist > 6 && Math.abs(err) < 35 && pos.y > ground + 6;
-        boolean back = dist < 3 && v.getDeltaMovement().horizontalDistance() > 0.3;
-        Sbw.heliKeys(v, forward, back, false, false, up, down);
-        Sbw.mouse(v, Mth.clamp(err / 10.0, -2, 2), 0);
-        if (p.getBoolean("Assist")) {
-            // by hand: turn toward the enemy (or the pad) six degrees a tick, climb or sink to the height wanted, and
-            // move toward the goal once high enough, at most 0.7 blocks a tick, easing into each change
-            float turn = Mth.clamp(err, -6F, 6F);
-            v.setYRot(v.getYRot() + turn);
-            v.setYBodyRot(v.getYRot());
-            Vec3 flat = goal.subtract(pos).multiply(1, 0, 1);
-            Vec3 move = pos.y > ground + 6 && flat.length() > 2 ? flat.normalize().scale(Math.min(0.7, flat.length() * 0.05)) : Vec3.ZERO;
-            double climb = Mth.clamp((altitude - pos.y) * 0.08, -0.35, 0.4);
-            // a roof overhead (rising into a block): slide out sideways, toward the goal or along the heading
-            if (climb > 0 && v.verticalCollision && v.getDeltaMovement().y < 0.05) {
-                Vec3 out = flat.length() > 2 ? flat.normalize() : Vec3.directionFromRotation(0, v.getYRot());
-                move = out.scale(0.5);
-                p.putInt("Roofed", p.getInt("Roofed") + 1);
-            }
-            Vec3 want = new Vec3(move.x, climb, move.z);
-            v.setDeltaMovement(v.getDeltaMovement().scale(0.75).add(want.scale(0.25)));
-            v.hasImpulse = true;
-            v.fallDistance = 0;
+        Vec3 flat = goal.subtract(pos).multiply(1, 0, 1);
+        double dist = flat.length();
+        // the collective: climb or sink at a rate set by the height still to go
+        double vy = v.getDeltaMovement().y;
+        double wantVy = Mth.clamp((altitude - pos.y) * 0.06, -0.25, 0.3);
+        boolean up = vy < wantVy - 0.02, down = vy > wantVy + 0.04 && !v.onGround();
+        // the heading, toward the enemy (or the pad), and the nose: dipped to fly toward the goal once high enough
+        float err = Mth.wrapDegrees(yawTo(face.lengthSqr() < 1 ? flat : face) - v.getYRot());
+        if (Math.abs(err) > 1F) {
+            v.setYRot(v.getYRot() + Mth.clamp(err, -5F, 5F));
         }
+        Vec3 heading = Vec3.directionFromRotation(0, v.getYRot());
+        double along = v.getDeltaMovement().multiply(1, 0, 1).dot(heading);
+        Vec3 toGoal = dist > 0.01 ? flat.scale(1 / dist) : heading;
+        double wantSpeed = pos.y > ground + 6 && dist > 2 ? Math.min(0.9, dist * 0.04) * Math.max(0, toGoal.dot(heading)) : 0;
+        float pitch = (float) Mth.clamp((wantSpeed - along) * 30, -14, 16);
+        v.setXRot(pitch);
+        Sbw.call(v, "setZRot", 0F);
+        Sbw.heliKeys(v, up, false, false, false, false, down);
+        Sbw.mouse(v, 0, 0);
+        // sideways drift (the goal off the nose while turning) is damped
+        Vec3 m = v.getDeltaMovement();
+        Vec3 side = new Vec3(-heading.z, 0, heading.x);
+        double slip = m.dot(side);
+        v.setDeltaMovement(m.subtract(side.scale(slip * 0.15)));
+        v.fallDistance = 0;
         if (now % 40 == 0) {
             LOG.info(String.format(java.util.Locale.ROOT, "HELI-TRACK {\"t\":%d,\"mode\":\"%s\",\"y\":%.1f,\"want\":%.1f,\"ground\":%.0f,\"dist\":%.1f,"
-                    + "\"err\":%.0f,\"speed\":%.2f,\"vy\":%.2f,\"power\":%.2f,\"keys\":\"%s%s%s%s\"}",
+                    + "\"err\":%.0f,\"speed\":%.2f,\"vy\":%.2f,\"power\":%.3f,\"pitch\":%.0f,\"keys\":\"%s%s\"}",
                 t, p.getString("Mode"), pos.y, altitude, ground, dist, err, v.getDeltaMovement().horizontalDistance(), v.getDeltaMovement().y,
-                Sbw.power(v), forward ? "F" : "", back ? "B" : "", up ? "U" : "", down ? "D" : ""));
+                Sbw.power(v), pitch, up ? "U" : "", down ? "D" : ""));
         }
     }
 
@@ -604,6 +667,43 @@ public final class RoyalPilots {
             }
         }
         return chunk.getHeight(Heightmap.Types.MOTION_BLOCKING, x & 15, z & 15) + 1;
+    }
+
+    /**
+     * The turn (degrees off the present heading) toward the lowest ground over the next 80 blocks, of seven bearings out
+     * to either side and behind; a straight course wins a tie.
+     */
+    private static float escapeBearing(Entity v) {
+        float best = 0F;
+        double bestScore = Double.MAX_VALUE;
+        for (float off : new float[]{0F, -35F, 35F, -70F, 70F, -120F, 120F}) {
+            Vec3 dir = Vec3.directionFromRotation(0, v.getYRot() + off);
+            int high = Integer.MIN_VALUE;
+            for (int d = 10; d <= 80; d += 10) {
+                high = Math.max(high, groundAt(v, v.position().add(dir.scale(d))));
+            }
+            double score = high + Math.abs(off) * 0.08;
+            if (score < bestScore) {
+                bestScore = score;
+                best = off;
+            }
+        }
+        return best;
+    }
+
+    /** Room to pull out of a run at the target: no ground beyond it (120 blocks on) higher than 25 above it. */
+    private static boolean pullOutRoom(Entity v, LivingEntity target) {
+        Vec3 dir = target.position().subtract(v.position()).multiply(1, 0, 1);
+        if (dir.lengthSqr() < 1) {
+            return true;
+        }
+        dir = dir.normalize();
+        for (int d = 0; d <= 120; d += 15) {
+            if (groundAt(v, target.position().add(dir.scale(d))) > target.getY() + 25) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Cruising height: 45 above the post or the target, and 35 above the highest ground of the next 200 blocks ahead. */

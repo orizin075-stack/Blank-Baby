@@ -57,6 +57,7 @@ public final class CiDriver {
                 case "citadel" -> "oror citadel selftest";
                 case "war" -> "oror war start 100 test";
                 case "pilots" -> "oror pilots test";
+                case "villageflight" -> "oror villageflight test";
                 default -> null;
             };
             if (command != null) {
@@ -67,7 +68,7 @@ public final class CiDriver {
             return;
         }
         boolean done = next >= CHECKS.size() && CHECKS.stream().allMatch(CiDriver::finished);
-        if (done || t > 24000) {
+        if (done || t > 30000) {
             LOG.info("CI-DONE {\"complete\":{},\"ticks\":{}}", done, t);
             startedAt = -1;
             server.halt(false);
@@ -79,6 +80,7 @@ public final class CiDriver {
             case "citadel" -> CitadelEvents.selftestDone;
             case "war" -> HundredWar.resultLogged;
             case "pilots" -> PilotTest.resultLogged;
+            case "villageflight" -> jp.oror.reborn.VillageFlightTest.resultLogged;
             default -> true;
         };
     }

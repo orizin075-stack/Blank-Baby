@@ -7,6 +7,10 @@ watchtowers and fortresses, never on a road or under a structure):
   four helipads (a white-bordered pad with a yellow H and corner lights) with a helicopter each;
   four tank hangars (concrete sheds opening toward the kingdom, three bays with a crewed tank and two spare ones, a
   workbench, an anvil and the armory's chests);
+and the posts' supply (048): a charging station of Superb Warfare at every stand (it burns the coal blocks a hopper feeds
+it from the coal chest on top, and charges every vehicle within eight blocks) and a depot chest (王国軍の弾薬庫) with
+two loads of what the stand's vehicles fire, at the hangar bays, helipads, runway stands, motor pools and turret posts
+(a station only where a turret runs on power: the HPJ-11), and a station by each gate for the guards' electric guns;
 and chooses the kingdom's turret posts: MK-42 guns and HPJ-11 close-in weapon systems along the outer wall's
 batteries, TOW launchers at the gate roads' crossfire points, HPJ-11s at the inner casemates and MK-42 guns at the
 redoubts (turrets with a gunner's seat: a mortar, a rocket launcher or a laser tower has none, and a soldier cannot
@@ -67,7 +71,152 @@ def clear(a, edits, x0, z0, w, d, floor, top=100):
             edits[(x, 63, z)] = 'minecraft:stone'
 
 
-def runway(a, ok, edits, stats, posts, cx, cz, heading, name):
+# ---------------------------------------------------------------------------------------------------------- supply
+# What each kind carries, as jp.oror.reborn.vehicle.Supply.LOAD (Superb Warfare 0.8.9.2's vehicle definitions): a
+# depot holds two loads of each kind it serves.
+_TANK = [('large_shell_he', 32), ('large_shell_gs', 16), ('rifle_ammo', 64), ('heavy_ammo', 64)]
+_IFV = [('small_shell_he', 64), ('small_shell_gs', 64), ('medium_anti_ground_missile', 4), ('rifle_ammo', 64)]
+_GUN = [('large_shell_he', 32), ('large_shell_cm', 8)]
+LOAD = {'m_1a_2': _TANK, 't_90a': _TANK, 'ztz_99a': _TANK, 'bmp_2': _IFV, 'bradley': _IFV,
+        'mk_42': _GUN, 'mle_1934': _GUN, 'bl_132': _GUN, 'hpj_11': [('small_shell_ap', 64), ('small_shell_ap', 64)],
+        'tow': [('medium_anti_ground_missile', 4)] * 3,
+        'a_10a': [('small_shell_ap', 64), ('small_shell_ap', 64), ('small_rocket', 16), ('large_anti_ground_missile', 2),
+                  ('large_anti_ground_missile', 2), ('medium_aerial_bomb', 2)],
+        'ah_6': [('small_shell_he', 64), ('small_shell_he', 64), ('small_rocket', 16)],
+        'mi_28': [('small_shell_he', 64), ('small_rocket', 16), ('large_anti_ground_missile', 2), ('medium_anti_ground_missile', 4)]}
+POWERED = ('hpj_11',)            # turrets with a battery (the guns and the TOW launcher have none)
+CHEST = 'minecraft:chest[facing=%s,type=single,waterlogged=false]'
+
+
+def power(edits, bes, stats, x, y, z, coal=8):
+    """A post's power plant: a charging station (with two million FE in store and a stack of coal blocks in its fuel
+    slot), a hopper on it and a chest of coal blocks on the hopper."""
+    edits[(x, y, z)] = 'superbwarfare:charging_station[facing=north,show_range=false]'
+    # a modded block entity is not upgraded by the game's data fixers: its item stack also in 1.21's form (count)
+    bes[(x, y, z)] = {'id': 'superbwarfare:charging_station', 'x': x, 'y': y, 'z': z, 'Energy': 2000000, 'FuelTick': 0,
+                      'MaxFuelTick': 1600, 'ShowRange': ('byte', 0),
+                      'Items': [{'Slot': ('byte', 0), 'id': 'minecraft:coal_block', 'count': 64, 'Count': ('byte', 64)}]}
+    edits[(x, y + 1, z)] = 'minecraft:hopper[enabled=true,facing=down]'
+    bes[(x, y + 1, z)] = {'id': 'minecraft:hopper', 'x': x, 'y': y + 1, 'z': z, 'Items': [], 'TransferCooldown': 0}
+    edits[(x, y + 2, z)] = CHEST % 'north'
+    bes[(x, y + 2, z)] = {'id': 'minecraft:chest', 'x': x, 'y': y + 2, 'z': z, 'CustomName': '{"text":"発電所の石炭庫"}',
+                          'Items': [{'Slot': ('byte', i), 'id': 'minecraft:coal_block', 'Count': ('byte', 64)} for i in range(coal)]}
+    stats['military']['stations'] += 1
+
+
+def depot(edits, bes, stats, x, y, z, kinds, facing='north'):
+    """A depot chest (王国軍の弾薬庫) with two loads of what each of the kinds fires."""
+    items = []
+    for kind in kinds:
+        for name, n in LOAD.get(kind, []):
+            for _ in range(2):
+                if len(items) < 27:
+                    items.append({'Slot': ('byte', len(items)), 'id': 'superbwarfare:' + name, 'Count': ('byte', n)})
+    edits[(x, y, z)] = CHEST % facing
+    bes[(x, y, z)] = {'id': 'minecraft:chest', 'x': x, 'y': y, 'z': z, 'CustomName': '{"text":"王国軍の弾薬庫"}', 'Items': items}
+    stats['military']['depots'] += 1
+
+
+def _name(a, edits, x, y, z):
+    if (x, y, z) in edits:
+        return edits[(x, y, z)].split('[')[0]
+    i, j, k = x + 640, y - 64, z + 640
+    if not (0 <= i < a.shape[0] and 0 <= j < a.shape[1] and 0 <= k < a.shape[2]):
+        return None
+    return world.NAMES[a[i, j, k]]
+
+
+def _air(a, edits, x, y, z):
+    n = _name(a, edits, x, y, z)
+    return n is not None and (n in ('minecraft:air', 'minecraft:cave_air') or any(t in n for t in SOFT))
+
+
+def _floor(a, edits, x, y, z):
+    n = _name(a, edits, x, y, z)
+    return n is not None and not _air(a, edits, x, y, z) and 'water' not in n and 'lava' not in n and not n.endswith(
+        ('_slab', '_stairs', 'fence', '_wall', 'trapdoor', 'carpet', 'torch', 'lantern', 'chest', 'barrel', 'hopper', 'rail', 'sign', '_bed'))
+
+
+def spot(a, edits, taken, x, y, z, h, rmin, rmax):
+    """The nearest cell to x, y, z (rmin to rmax off, level, a block up, or up to three down: the gate roads' posts
+    stand three above their platform) on a floor with h blocks of air above it, none of them taken: for a depot (h 1)
+    or a power plant (h 3)."""
+    best = None
+    for dy in (0, 1, -1, -2, -3):
+        for dx in range(-rmax, rmax + 1):
+            for dz in range(-rmax, rmax + 1):
+                if max(abs(dx), abs(dz)) < rmin:
+                    continue
+                X, Y, Z = x + dx, y + dy, z + dz
+                if any((X, Y + k, Z) in taken for k in range(h)):
+                    continue
+                if _floor(a, edits, X, Y - 1, Z) and all(_air(a, edits, X, Y + k, Z) for k in range(h)):
+                    d = dx * dx + dz * dz + 4 * dy * dy
+                    if best is None or d < best[0]:
+                        best = (d, X, Y, Z)
+    return best and best[1:]
+
+
+def supply_posts(a, edits, bes, stats, posts, taken):
+    """A depot beside every turret post (its gunner loads from it) and a power plant by the HPJ-11s; a depot and a
+    plant by each motor pool's tank. The turrets' own places and a block round them are kept clear."""
+    for p in posts:
+        if p.get('still'):
+            for dx in range(-1, 2):
+                for dz in range(-1, 2):
+                    for k in range(3):
+                        taken.add((p['x'] + dx, p['y'] + k, p['z'] + dz))
+    for p in posts:
+        if not p.get('still') or p['vehicle'] not in LOAD:
+            continue
+        c = spot(a, edits, taken, p['x'], p['y'], p['z'], 1, 2, 5)
+        if c:
+            depot(edits, bes, stats, *c, [p['vehicle']])
+            taken.add(c)
+        else:
+            stats['military']['depot_missing'] += 1
+        if p['vehicle'] in POWERED:
+            c = spot(a, edits, taken, p['x'], p['y'], p['z'], 3, 2, 6)
+            if c:
+                power(edits, bes, stats, *c, coal=4)
+                taken.update((c[0], c[1] + k, c[2]) for k in range(3))
+            else:
+                stats['military']['station_missing'] += 1
+
+
+def gate_power(a, edits, bes, stats, taken):
+    """A power plant by each gate of the three rings (both sides of the road, where its guards stand): their electric
+    guns are recharged from its store. And a plant and a depot by the motor pool's tank inside each outer gate."""
+    for ring in (115, 303, 472):
+        for ax, az in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+            inside = ring - 15
+            for sgn in (-1, 1):
+                gx = ax * inside + (sgn * 8 if az else 0)
+                gz = az * inside + (sgn * 8 if ax else 0)
+                c = spot(a, edits, taken, gx, 65, gz, 3, 2, 7)
+                if c:
+                    power(edits, bes, stats, *c, coal=4)
+                    taken.update((c[0], c[1] + k, c[2]) for k in range(3))
+                    stats['military']['gate_stations'] += 1
+                else:
+                    stats['military']['station_missing'] += 1
+    for ax, az in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+        tx, tz = ax * 440 + (9 if az else 0), az * 440 + (9 if ax else 0)
+        for dx in range(-3, 4):
+            for dz in range(-3, 4):
+                for k in range(4):
+                    taken.add((tx + dx, 65 + k, tz + dz))
+        c = spot(a, edits, taken, tx, 65, tz, 3, 4, 7)
+        if c:
+            power(edits, bes, stats, *c)
+            taken.update((c[0], c[1] + k, c[2]) for k in range(3))
+        c = spot(a, edits, taken, tx, 65, tz, 1, 4, 8)
+        if c:
+            depot(edits, bes, stats, *c, ['m_1a_2'])
+            taken.add(c)
+
+
+def runway(a, ok, edits, bes, stats, posts, cx, cz, heading, name):
     """A runway of 240 x 15 along x (heading east or west from its start), its apron, its aircraft."""
     L, W, M = 240, 15, 3
     spot = find(ok, cx, cz, L, W + 2 * M + 22, reach=50)
@@ -102,6 +251,12 @@ def runway(a, ok, edits, stats, posts, cx, cz, heading, name):
         edits[(x, 64, z)] = 'minecraft:sea_lantern'
     posts.append(dict(role='TANK', x=start, y=65, z=zc, yaw=YAW[heading], post='airbase', vehicle='a_10a', seats=1, exact=True))
     posts.append(dict(role='PARKED', x=ax0 + 11, y=65, z=az0 + 9, yaw=YAW[heading], post='airbase', vehicle='a_10a', seats=0, exact=True))
+    # the stands' supply: a power plant and a depot in the grass beside the crewed aircraft's stand (it is towed back
+    # there after landing), and on the apron by the spare
+    power(edits, bes, stats, start, 65, zc - 9)
+    depot(edits, bes, stats, start - 2 if heading == 'east' else start + 2, 65, zc - 9, ['a_10a'])
+    power(edits, bes, stats, ax0 + 11, 65, az0 + 1)
+    depot(edits, bes, stats, ax0 + 13, 65, az0 + 1, ['a_10a'])
     stats['military']['runways'] += 1
     stats['military_at'][name] = [x0, z0, L, W + 2 * M + 22]
 
@@ -109,7 +264,7 @@ def runway(a, ok, edits, stats, posts, cx, cz, heading, name):
 H_SHAPE = ['X...X', 'X...X', 'XXXXX', 'X...X', 'X...X']
 
 
-def helipad(a, ok, edits, stats, posts, cx, cz, heli, name):
+def helipad(a, ok, edits, bes, stats, posts, cx, cz, heli, name):
     n = 13
     spot = find(ok, cx, cz, n, n)
     if not spot:
@@ -132,6 +287,9 @@ def helipad(a, ok, edits, stats, posts, cx, cz, heli, name):
     edits[(x0 - 1, 65, z0 - 1)] = 'minecraft:oak_fence'
     edits[(x0 - 1, 66, z0 - 1)] = 'minecraft:oak_fence'
     edits[(x0 - 1, 67, z0 - 1)] = 'minecraft:orange_wool'
+    # the pad's supply: a power plant at the middle of its west edge, its depot at the middle of the east edge
+    power(edits, bes, stats, x0, 65, z0 + n // 2)
+    depot(edits, bes, stats, x0 + n - 1, 65, z0 + n // 2, [heli], facing='west')
     # a pilot and a gunner: the helicopter lifts off when an enemy comes (RoyalPilots.hover) and settles back on its pad
     posts.append(dict(role='TANK', x=x0 + n // 2, y=65, z=z0 + n // 2, yaw=0.0, post='helipad', vehicle=heli, seats=2, exact=True))
     stats['military']['helipads'] += 1
@@ -187,11 +345,19 @@ def hangar(a, ok, edits, bes, stats, posts, cx, cz, opening, tanks, name):
         crewed = i == 1
         posts.append(dict(role='TANK' if crewed else 'PARKED', x=x, y=65, z=z, yaw=YAW[opening], post='hangar', vehicle=tanks[i],
                           seats=2 if crewed else 0, exact=True))
-    # the workshop along the back wall: chests of the armory, a crafting table, an anvil
+    # a power plant behind each bay (six blocks from its vehicle: within its station's reach)
+    for u in (4, 12, 20):
+        x, z = world_of(u, D - 3)
+        power(edits, bes, stats, x, 65, z)
+    # the workshop along the back wall: chests of the armory, a depot for each bay, a crafting table, an anvil
+    bay_of = {5: tanks[0], 11: tanks[1], 20: tanks[2]}
     for k, u in enumerate(range(2, W - 2, 3)):
         x, z = world_of(u, D - 2)
         if k % 3 == 2:
             edits[(x, 65, z)] = 'minecraft:crafting_table' if k % 2 else 'minecraft:anvil[facing=north]'
+            continue
+        if u in bay_of:
+            depot(edits, bes, stats, x, 65, z, [bay_of[u]], facing=opening)
             continue
         edits[(x, 65, z)] = 'minecraft:chest[facing=%s,type=single,waterlogged=false]' % {'south': 'south', 'north': 'north', 'east': 'east', 'west': 'west'}[opening]
         bes[(x, 65, z)] = {'id': 'minecraft:chest', 'x': x, 'y': 65, 'z': z, 'CustomName': '{"text":"格納庫の武器庫"}',
@@ -249,13 +415,13 @@ def build(save, man, edits, bes, stats):
     belt = (np.abs(xs)[:, None] >= 522) | (np.abs(xs)[None, :] >= 522)
     ok &= belt
     posts = []
-    runway(a, ok, edits, stats, posts, -430, -605, 'east', 'airbase_nw')
-    runway(a, ok, edits, stats, posts, 430, 605, 'west', 'airbase_se')
+    runway(a, ok, edits, bes, stats, posts, -430, -605, 'east', 'airbase_nw')
+    runway(a, ok, edits, bes, stats, posts, 430, 605, 'west', 'airbase_se')
     # keep the next sites off what was just built
     for (x0, z0, w, d) in stats['military_at'].values():
         ok[x0 + 640 - 4:x0 + 640 + w + 4, z0 + 640 - 4:z0 + 640 + d + 4] = False
     for i, (cx, cz, heli) in enumerate(((-560, -470, 'ah_6'), (-480, -560, 'mi_28'), (560, 470, 'ah_6'), (480, 560, 'mi_28'))):
-        helipad(a, ok, edits, stats, posts, cx, cz, heli, 'helipad_%d' % i)
+        helipad(a, ok, edits, bes, stats, posts, cx, cz, heli, 'helipad_%d' % i)
         x0, z0, w, d = stats['military_at'].get('helipad_%d' % i, (0, 0, 0, 0))
         if w:
             ok[x0 + 640 - 3:x0 + 640 + w + 3, z0 + 640 - 3:z0 + 640 + d + 3] = False
@@ -267,4 +433,7 @@ def build(save, man, edits, bes, stats):
             ok[x0 + 640 - 4:x0 + 640 + w + 4, z0 + 640 - 4:z0 + 640 + d + 4] = False
     posts += turrets(man)
     stats['military']['turrets'] = sum(1 for p in posts if p.get('still'))
+    taken = set()
+    supply_posts(a, edits, bes, stats, posts, taken)
+    gate_power(a, edits, bes, stats, taken)
     return posts

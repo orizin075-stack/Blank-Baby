@@ -129,4 +129,13 @@ public final class VehicleWatch {
     private static String id(Entity e) {
         return BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath();
     }
+
+    private static int supplyLines;
+
+    /** A supply line of the log (loads, returns for supply, releases): a budget of its own. */
+    static void event(Entity v, String line) {
+        if (supplyLines++ < 200) {
+            LOG.info(line);
+        }
+    }
 }

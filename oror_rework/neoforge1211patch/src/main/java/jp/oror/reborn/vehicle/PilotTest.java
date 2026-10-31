@@ -50,7 +50,8 @@ public final class PilotTest {
         final List<String> modes = new ArrayList<>();
         final List<ChunkPos> forced = new ArrayList<>();
         double tankClosest = Double.MAX_VALUE;
-        boolean targetGone;
+        boolean targetGone, drained, planeDrained;
+        String supplyBefore = "", planeBefore = "";
     }
 
     private PilotTest() {
@@ -91,8 +92,9 @@ public final class PilotTest {
         // runway: 230 x 9 of stone, cleared 14 blocks up, heading east (yaw -90); south of it a paved field for the tank's
         // drive to its target (the test is of the driving, not of whatever ground or water is there)
         for (int x = -10; x < 220; x++) {
-            for (int z = -4; z <= (x < 90 ? 44 : 4); z++) {
+            for (int z = -9; z <= (x < 90 ? 44 : 4); z++) {
                 level.setBlock(new BlockPos(origin.getX() + x, y - 1, origin.getZ() + z), Blocks.SMOOTH_STONE.defaultBlockState(), 2);
+                level.setBlock(new BlockPos(origin.getX() + x, y - 2, origin.getZ() + z), Blocks.STONE.defaultBlockState(), 2);
                 for (int h = 0; h < 14; h++) {
                     level.setBlock(new BlockPos(origin.getX() + x, y + h, origin.getZ() + z), Blocks.AIR.defaultBlockState(), 2);
                 }
@@ -123,6 +125,15 @@ public final class PilotTest {
             }
         }
         r.heli = Sbw.has("ah_6") ? RoyalPilots.deploy(level, start.add(-4, 0, 16), -90F, "ah_6", 2, null) : null;
+        // the posts' supply, as the citadel's: a charging station (coal-fed) and a depot beside the tank's start, the
+        // helicopter's pad and the aircraft's stand at the runway's west end
+        BlockPos o = BlockPos.containing(start);
+        Supply.placeStation(level, o.offset(-6, 0, 30), 2_000_000, 16);
+        Supply.placeDepot(level, o.offset(-6, 0, 34), "m_1a_2");
+        Supply.placeStation(level, o.offset(-9, 0, 12), 2_000_000, 16);
+        Supply.placeDepot(level, o.offset(1, 0, 12), "ah_6");
+        Supply.placeStation(level, o.offset(0, 0, -9), 2_000_000, 16);
+        Supply.placeDepot(level, o.offset(-3, 0, -9), "a_10a");
         survey(level, start);
         // a cow at war with a pillager (a mob without hands under the smart-mob combat): no bow, no arrows, its own spring
         Vec3 pen = start.add(-100, 0, -60);
@@ -196,7 +207,9 @@ public final class PilotTest {
      * aircraft flew into its sides, the tank slid off its edge and the helicopter rose under an overhang.
      */
     private static BlockPos flattest(ServerLevel level, BlockPos from) {
-        int[][] offsets = {{800, 0}, {0, 800}, {-800, 0}, {0, -800}, {1200, 600}, {-1200, -600}, {600, -1200}, {-600, 1200}};
+        int[][] offsets = {{800, 0}, {0, 800}, {-800, 0}, {0, -800}, {1200, 600}, {-1200, -600}, {600, -1200}, {-600, 1200},
+            {900, 900}, {-900, 900}, {900, -900}, {-900, -900}, {1300, 0}, {0, 1300}, {-1300, 0}, {0, -1300}, {1600, 800}, {-1600, -800},
+            {800, -1600}, {-800, 1600}};
         jp.oror.reborn.citadel.CitadelSites.Site capital = jp.oror.reborn.citadel.CitadelSites.capital();
         BlockPos best = from.offset(800, 0, 0);
         double bestScore = Double.MAX_VALUE;
@@ -217,7 +230,7 @@ public final class PilotTest {
                     wet |= h <= level.getSeaLevel();
                 }
             }
-            double score = hi - lo + (wet ? 40 : 0);
+            double score = hi - lo + (wet ? 400 : 0);
             LOG.info("PILOT-SITE {} {} spread {} wet {}", c.getX(), c.getZ(), hi - lo, wet);
             if (score < bestScore) {
                 bestScore = score;
@@ -292,14 +305,54 @@ public final class PilotTest {
             }
             r.tankClosest = Math.min(r.tankClosest, r.tank.distanceTo(r.tankTarget));
         }
+        if (r.heli != null && r.planeTarget != null && r.planeTarget.isAlive() && t % 20 == 0 && t >= 200) {
+            // the helicopter's orders: the aircraft's target down the runway (it lifts off, stands off and fires)
+            for (Entity rider : r.heli.getPassengers()) {
+                if (rider instanceof Mob m) {
+                    m.setTarget(r.planeTarget);
+                }
+            }
+        }
         if (!r.targetGone && r.planeTarget != null && (!r.planeTarget.isAlive() || t > 900)) {
             r.targetGone = true;
             r.modes.add("[" + t + ",\"target-gone:" + (r.planeTarget.isAlive() ? "removed" : "killed") + "\",0]");
             r.planeTarget.discard();
         }
+        // the supply test: at 70 s the tank and the helicopter, at 100 s the aircraft, are left with a fifth of their
+        // battery and no shells; each should go back to its post, be charged by its station and loaded from its depot
+        if (!r.drained && t >= 1400) {
+            r.drained = true;
+            StringBuilder b = new StringBuilder();
+            for (Entity x : new Entity[]{r.tank, r.heli}) {
+                if (x != null && x.isAlive()) {
+                    Supply.drain(x, 0.2);
+                    b.append(b.length() > 0 ? "," : "").append(Supply.report(r.level, x));
+                }
+            }
+            r.supplyBefore = b.toString();
+            LOG.info("SUPPLY-DRAIN [{}]", r.supplyBefore);
+        }
+        if (!r.planeDrained && t >= 2000 && r.plane != null && r.plane.isAlive()) {
+            r.planeDrained = true;
+            Supply.drain(r.plane, 0.2);
+            r.planeBefore = Supply.report(r.level, r.plane);
+            LOG.info("SUPPLY-DRAIN [{}]", r.planeBefore);
+        }
         boolean landed = r.plane != null && r.plane.getPersistentData().getCompound("OrorPilot").getBoolean("Landed")
-            && r.lastMode.equals("parked");
-        if (landed || t > 3600 || r.plane == null || !r.plane.isAlive()) {
+            && r.lastMode.equals("parked") && t > 4000;
+        if (landed || t > 4800 || r.plane == null || !r.plane.isAlive()) {
+            StringBuilder after = new StringBuilder();
+            for (Entity x : new Entity[]{r.tank, r.heli, r.plane}) {
+                if (x != null && x.isAlive()) {
+                    net.minecraft.nbt.CompoundTag xp = x.getPersistentData().getCompound("OrorPilot");
+                    Vec3 home = Vec3.atBottomCenterOf(BlockPos.of(xp.getLong("Home")));
+                    String rep = Supply.report(r.level, x);
+                    after.append(after.length() > 0 ? "," : "").append(rep, 0, rep.length() - 1).append(String.format(Locale.ROOT,
+                        ",\"mode\":\"%s\",\"fromPost\":%.1f,\"resupplying\":%b,\"resupplies\":%d,\"reloaded\":%d}", xp.getString("Mode"),
+                        x.position().subtract(home).horizontalDistance(), xp.getBoolean("Resupply"), xp.getInt("Resupplies"), xp.getInt("Reloaded")));
+                }
+            }
+            LOG.info("SUPPLY-TEST {\"before\":[{}{}{}],\"after\":[{}]}", r.supplyBefore, r.planeBefore.isEmpty() ? "" : ",", r.planeBefore, after);
             String line = String.format(Locale.ROOT, "{\"seconds\":%.1f,\"plane\":%s,\"modes\":[%s],\"tank\":%s,\"tankClosest\":%.1f,"
                     + "\"tankTargetHealth\":%.1f,\"planeTarget\":\"%s\"}",
                 t / 20.0, r.plane == null ? "null" : RoyalPilots.report(r.plane), String.join(",", r.modes),

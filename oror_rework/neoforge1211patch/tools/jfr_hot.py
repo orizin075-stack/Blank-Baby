@@ -22,6 +22,12 @@ PACKAGES = ['jp.oror', 'yesman.epicfight', 'com.nameless', 'io.redspace', 'com.h
 proc = subprocess.Popen(['jfr', 'print', '--events', 'jdk.ExecutionSample', '--stack-depth', '48', rec], stdout=subprocess.PIPE, text=True,
                         errors='replace')
 self_n, incl_n, pkg_n = collections.Counter(), collections.Counter(), collections.Counter()
+# what these spend their time in: the frame each calls (the next one up the stack), per sample
+FOCUS = ['jp.oror.reborn.royal.RoyalMob.battle', 'jp.oror.reborn.royal.RoyalMob.customServerAiStep', 'jp.oror.reborn.VillagerLife.tick',
+         'com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.baseTick', 'net.minecraft.world.entity.ai.navigation.PathNavigation.createPath',
+         'jp.oror.reborn.war.HundredWar.tick', 'com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension']
+callee = {f: collections.Counter() for f in FOCUS}
+caller = {f: collections.Counter() for f in FOCUS}
 total = 0
 event = None
 for line in proc.stdout:
@@ -46,6 +52,13 @@ for line in proc.stdout:
                 incl_n[f] += 1
             for p in {next((p for p in PACKAGES if f.startswith(p)), None) for f in frames} - {None}:
                 pkg_n[p] += 1
+            for fo in FOCUS:
+                if fo in frames:
+                    i = len(frames) - 1 - frames[::-1].index(fo)       # the outermost call of it
+                    callee[fo][frames[i - 1] if i > 0 else '(self)'] += 1
+                    # who called it: the first frame below it that is not the game's or the JDK's plumbing
+                    up = [f for f in frames[i + 1:i + 8] if not f.startswith(('java.', 'jdk.', 'it.unimi'))]
+                    caller[fo][up[1] if len(up) > 1 and up[0].endswith(('getChunk', 'handler$')) else (up[0] if up else '?')] += 1
         event = None
     else:
         frame = re.sub(r'\s+line:.*$', '', s)
@@ -76,3 +89,13 @@ for f, n in incl_n.most_common():
         k += 1
         if k >= 40:
             break
+print('\n== what the busiest calls spend their time in (callee, share of all samples) and who calls them')
+for fo in FOCUS:
+    n = sum(callee[fo].values())
+    if not n:
+        continue
+    print(f'{n / max(1, total):6.1%}  {fo}')
+    for f, k in callee[fo].most_common(10):
+        print(f'        {k / max(1, total):6.1%}  -> {f}')
+    for f, k in caller[fo].most_common(5):
+        print(f'        {k / max(1, total):6.1%}  <- {f}')
