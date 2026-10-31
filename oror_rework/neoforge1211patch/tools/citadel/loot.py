@@ -56,7 +56,7 @@ THEMES = {
     'royal': [('gold_ingot', 16, 48, .9), ('gold_block', 2, 8, .6), ('diamond', 6, 16, .7), ('emerald_block', 2, 8, .5), ('golden_apple', 2, 6, .6),
               ('enchanted_book+', 1, 1, .7), ('enchanted_golden_apple', 1, 2, .25), ('experience_bottle', 16, 48, .5), ('potion', 1, 1, .4),
               ('oror_supreme_bosses:mana_crystal', 1, 4, .3), ('oror_supreme_bosses:purifying_dew', 1, 3, .3),
-              ('irons_spellbooks:arcane_essence', 8, 24, .4), ('irons_spellbooks:rare_ink', 2, 6, .3), ('apotheosis:rare_material', 4, 12, .3),
+              ('irons_spellbooks:arcane_essence', 8, 24, .4), ('irons_spellbooks:rare_ink', 2, 6, .3), ('apotheosis:arcane_sands', 2, 6, .3),
               ('iceandfire:silver_ingot', 6, 16, .3), ('iceandfire:sapphire_gem', 2, 6, .3), ('waystones:warp_stone', 1, 1, .15)],
     # the royal treasury under the throne: the kingdom's wealth
     'treasury': [('gold_block', 32, 64, 1), ('diamond_block', 8, 24, .9), ('emerald_block', 16, 48, .9), ('netherite_ingot', 4, 12, .8),
@@ -73,8 +73,8 @@ THEMES = {
                  ('irons_spellbooks:upgrade_orb', 1, 3, .4), ('irons_spellbooks:netherite_spell_book', 1, 1, .15),
                  ('iceandfire:dragonsteel_fire_ingot', 4, 12, .4), ('iceandfire:dragonsteel_ice_ingot', 4, 12, .4),
                  ('iceandfire:dragonsteel_lightning_ingot', 4, 12, .3), ('alexscaves:azure_neodymium_ingot', 8, 24, .35),
-                 ('alexscaves:scarlet_neodymium_ingot', 8, 24, .35), ('alexscaves:pure_darkness', 1, 4, .25), ('apotheosis:mythic_material', 4, 12, .4),
-                 ('apotheosis:epic_material', 8, 24, .4), ('waystones:warp_stone', 1, 1, .4), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .15)],
+                 ('alexscaves:scarlet_neodymium_ingot', 8, 24, .35), ('alexscaves:pure_darkness', 1, 4, .25), ('apotheosis:godforged_pearl', 2, 6, .4),
+                 ('apotheosis:arcane_sands', 8, 24, .4), ('waystones:warp_stone', 1, 1, .4), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .15)],
     # the forbidden vault deep under the town: what the kingdom keeps from the world
     'vault': [('netherite_block', 2, 6, .9), ('netherite_ingot', 16, 32, .9), ('diamond_block', 24, 64, 1), ('emerald_block', 32, 64, .9),
               ('gold_block', 64, 64, .9), ('enchanted_golden_apple', 16, 32, 1), ('totem_of_undying', 1, 1, 1), ('totem_of_undying', 1, 1, .9),
@@ -94,7 +94,7 @@ THEMES = {
               ('iceandfire:dragonsteel_ice_ingot', 12, 32, .7), ('iceandfire:dragonsteel_lightning_ingot', 12, 32, .7),
               ('iceandfire:fire_dragon_heart', 1, 1, .4), ('iceandfire:ice_dragon_heart', 1, 1, .4), ('iceandfire:lightning_dragon_heart', 1, 1, .4),
               ('alexscaves:pure_darkness', 4, 12, .6), ('alexscaves:azure_neodymium_ingot', 24, 64, .6), ('alexscaves:scarlet_neodymium_ingot', 24, 64, .6),
-              ('apotheosis:mythic_material', 16, 48, .8), ('waystones:warp_stone', 1, 1, .7), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .5)],
+              ('apotheosis:godforged_pearl', 8, 24, .8), ('waystones:warp_stone', 1, 1, .7), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .5)],
 }
 # relics of the 41 characters (oror_supreme_bosses:<name>_weapon / _focus / _charm / _legend)
 RELIC_OWNERS = ['ain_sof_aur', 'angra_mainyu', 'arcana', 'bahamut', 'berit', 'brutality', 'chaos', 'cursed_love', 'demiurgos', 'elseria', 'enkou',

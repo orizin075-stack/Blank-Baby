@@ -93,6 +93,9 @@ public final class RoyalPilots {
         for (int d = 0; d <= 150; d += 3) {
             for (int s = -2; s <= 2; s += 2) {
                 Vec3 q = at.add(f.scale(d)).add(side.scale(s));
+                if (!level.hasChunk(Mth.floor(q.x) >> 4, Mth.floor(q.z) >> 4)) {
+                    continue;           // not loaded yet: a built runway is taken on trust
+                }
                 int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(q.x), Mth.floor(q.z));
                 if (top > y + 1 || top < y - 3) {
                     return false;
@@ -504,7 +507,12 @@ public final class RoyalPilots {
         if (minPitch < 0) {
             wantPitch = Math.min(wantPitch, minPitch);
         }
-        aimNose(v, yawTo(point.subtract(v.position())), wantPitch, fullPower || v.getDeltaMovement().length() < 1.2);
+        // a slow aircraft stalls: nose down to gather speed again (unless the ground is close below)
+        double speed = v.getDeltaMovement().length();
+        if (speed < 1.5 && !v.onGround() && v.getY() - groundAt(v, v.position()) > 20) {
+            wantPitch = Math.max(wantPitch, speed < 0.8 ? 15 : 6);
+        }
+        aimNose(v, yawTo(point.subtract(v.position())), wantPitch, true);
     }
 
     private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower) {

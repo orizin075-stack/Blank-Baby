@@ -238,9 +238,10 @@ def pick(x, rng):
 
 
 # ------------------------------------------------------------------------------------------------------------------ build
-def build(plot, kind, seed, front, max_w=None, fence_sides='all'):
+def build(plot, kind, seed, front, max_w=None, fence_sides='all', blocked=()):
     """plot: (x0, z0, x1, z1), the inclusive ground rectangle; front: the side of the plot on the street; max_w: the widest
-    the house may be (a plot shared with neighbours); fence_sides: 'all', or 'front' for a plot between neighbours."""
+    the house may be (a plot shared with neighbours); fence_sides: 'all', or 'front' for a plot between neighbours;
+    blocked: world (x, z) cells of the plot that are not to be built on (paving, wells and stalls left standing)."""
     rng = random.Random(seed)
     x0, z0, x1, z1 = plot
     style_name = rng.choice(sorted(STYLES))
@@ -275,6 +276,12 @@ def build(plot, kind, seed, front, max_w=None, fence_sides='all'):
         D -= 1 - D % 2
     f = street - setback
     r0 = (min(along_r) + max(along_r)) // 2 - W // 2
+    if blocked:
+        W, D, f, r0 = clear_spot(blocked, F, R, street, far, min(along_r), max(along_r), W, D, f, r0)
+        if floors > 2 and W < 11:
+            floors = 2
+        if W < 9 and floors > 1:
+            floors = 1
     h = House((f * F[0] + r0 * R[0], f * F[1] + r0 * R[1]), front, rng)
     h.style, h.kind, h.W, h.D, h.floors, h.loot, h.station = style_name, kind, W, D, floors, loot_table, station
     h.fence_sides = fence_sides
@@ -301,11 +308,47 @@ def build(plot, kind, seed, front, max_w=None, fence_sides='all'):
     have = sum(ROOMS[r][0].count('bed') for r in rooms) + (2 if floors == 1 and 'bed' not in ROOMS[room0][0] else 0)
     extra = [0] * floors
     extra[-1] = max(0, HOUSEHOLD.get(kind, 2) - have)
+    h.station_placed = station is None
     for s in range(floors):
         furnish(h, s, rooms[s], station if s == 0 else None, flights, rng, extra[s])
+    if not h.station_placed:
+        # no room left for it inside: the workstation stands by the door under the eaves
+        su = h.door_u + 2 if h.door_u + 2 < W - 1 else h.door_u - 2
+        put_station(h, su, FLOOR0, -1, station, h.face('front'))
+        h.yard.add((su, -1))
+    # the cells left standing are taken: no tree, shed or bed of flowers on them
+    h.yard |= {h.local(x, z) for x, z in blocked}
     yard(h, yard_kind, rng)
     connect(h)
     return h
+
+
+def clear_spot(blocked, F, R, street, far, rmin, rmax, W, D, f, r0):
+    """The house moved across the plot or set back, then made narrower or shallower, until its walls, the step at the
+    door, a jetty and the chimney stand clear of the blocked cells; as it was when nothing fits."""
+    def cells(W, D, f, r0):
+        for u in range(-1, W + 1):
+            for v in range(-2, D + 1):
+                a, b = r0 + u, f - v
+                yield (a * R[0] + b * F[0], a * R[1] + b * F[1])
+
+    def ok(W, D, f, r0):
+        return not any(c in blocked for c in cells(W, D, f, r0))
+
+    if ok(W, D, f, r0):
+        return W, D, f, r0
+    sizes = sorted({(w, d) for w in range(W, 6, -2) for d in range(D, 6, -2)}, key=lambda s: (W - s[0]) + (D - s[1]))
+    centre = (rmin + rmax) // 2
+    for w, d in sizes:
+        rs = sorted(range(rmin + 1, rmax - w + 1), key=lambda r: abs(r + w // 2 - centre))
+        fs = sorted(range(far + d, street - 1), key=lambda g: abs(g - f))
+        for g in fs:
+            if street - g < 3 or g - d < far:
+                continue
+            for r in rs:
+                if ok(w, d, g, r):
+                    return w, d, g, r
+    return W, D, f, r0
 
 
 # ------------------------------------------------------------------------------------------------------------------ shell
@@ -758,6 +801,7 @@ def furnish(h, s, room, station, flights, rng, extra_beds=0):
         top = None
         if piece == 'station':
             put_station(h, u, y, v, station, face, GOODS.get(room, 'storage'))
+            h.station_placed = True
         elif piece == 'bed':
             color = st['beds'][len([1 for a in access if len(a) == 2]) % 2]
             head_face = h.face(wall)

@@ -7,10 +7,11 @@ watchtowers and fortresses, never on a road or under a structure):
   four helipads (a white-bordered pad with a yellow H and corner lights) with a helicopter each;
   four tank hangars (concrete sheds opening toward the kingdom, three bays with a crewed tank and two spare ones, a
   workbench, an anvil and the armory's chests);
-and chooses the kingdom's turret posts: MK-42 guns, HPJ-11 close-in weapon systems and laser towers along the outer
-wall's batteries, TOW launchers at the gate roads' crossfire points, mortars at the inner casemates and Type 63 rocket
-launchers at the redoubts. It returns the posts (vehicles to stand, crews to man them) for garrison.py, which writes
-them with the garrison (MILITARY.json in the repaired save).
+and chooses the kingdom's turret posts: MK-42 guns and HPJ-11 close-in weapon systems along the outer wall's
+batteries, TOW launchers at the gate roads' crossfire points, HPJ-11s at the inner casemates and MK-42 guns at the
+redoubts (turrets with a gunner's seat: a mortar, a rocket launcher or a laser tower has none, and a soldier cannot
+work it). It returns the posts (vehicles to stand, crews to man them) for garrison.py, which writes them with the
+garrison (MILITARY.json in the repaired save).
 """
 import collections, math
 import numpy as np
@@ -205,11 +206,11 @@ def outward(x, z):
 
 
 def turrets(man):
-    """Turret posts: every eighth outer-wall battery (MK-42 guns, HPJ-11 interceptors, laser towers in turn), every other
-    gate-road crossfire point (TOW), every third casemate (mortars), every fourth redoubt (Type 63)."""
+    """Turret posts: every eighth outer-wall battery (MK-42 guns and HPJ-11 interceptors in turn), every other
+    gate-road crossfire point (TOW), every third casemate (HPJ-11), every fourth redoubt (MK-42)."""
     out = []
     walls = sorted((e for e in man['v7_emplacements'] if e['kind'] == 'wall_battery'), key=lambda e: math.atan2(e['z'], e['x']))
-    kinds = ['mk_42', 'hpj_11', 'mk_42', 'laser_tower']
+    kinds = ['mk_42', 'hpj_11']
     for i, e in enumerate(walls[::8]):
         out.append(dict(role='TANK', x=e['x'], y=e['y'], z=e['z'], yaw=outward(e['x'], e['z']), post='battery',
                         vehicle=kinds[i % len(kinds)], seats=1, still=True))
@@ -219,10 +220,10 @@ def turrets(man):
                         vehicle='tow', seats=1, still=True))
     cas = [p for p in man['v6_defense_points'] if p['kind'] == 'siege_casemate']
     for p in cas[::3]:
-        out.append(dict(role='TANK', x=p['x'], y=p['y'], z=p['z'], yaw=outward(p['x'], p['z']), post='casemate', vehicle='mortar', seats=1, still=True))
+        out.append(dict(role='TANK', x=p['x'], y=p['y'], z=p['z'], yaw=outward(p['x'], p['z']), post='casemate', vehicle='hpj_11', seats=1, still=True))
     red = [p for p in man['v6_defense_points'] if p['kind'] == 'outer_redoubt']
     for p in red[::4]:
-        out.append(dict(role='TANK', x=p['x'], y=p['y'], z=p['z'], yaw=outward(p['x'], p['z']), post='redoubt', vehicle='type_63', seats=1, still=True))
+        out.append(dict(role='TANK', x=p['x'], y=p['y'], z=p['z'], yaw=outward(p['x'], p['z']), post='redoubt', vehicle='mk_42', seats=1, still=True))
     return out
 
 

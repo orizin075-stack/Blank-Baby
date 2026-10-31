@@ -143,11 +143,11 @@ public final class CitadelSites {
 
     /** The capital: of the places 800 to 960 blocks from the spawn along a side of the kingdom, the best land; never on generated chunks. */
     private static Site chooseCapital(World w, BlockPos spawn, java.nio.file.Path regions) {
-        Site best = null, fallback = null;
-        double bestScore = Double.MAX_VALUE, fallbackScore = Double.MAX_VALUE;
-        for (int r = 800; r <= FAR; r += 40) {
-            for (int step = 0; step < 64; step++) {
-                double a = step * Math.PI * 2 / 64;
+        // a coarse look at every candidate (4 x 4 samples of the ground's height and biome), then the full survey of the best eight
+        List<double[]> coarse = new ArrayList<>();
+        for (int r = 820; r <= FAR; r += 70) {
+            for (int step = 0; step < 48; step++) {
+                double a = step * Math.PI * 2 / 48;
                 int x = spawn.getX() + (int) Math.round(Math.cos(a) * r), z = spawn.getZ() + (int) Math.round(Math.sin(a) * r);
                 if (Math.max(Math.abs(x - spawn.getX()), Math.abs(z - spawn.getZ())) < NEAR) {
                     continue;
@@ -156,20 +156,49 @@ public final class CitadelSites {
                 if (nearStronghold(w, probe) || generated(regions, probe)) {
                     continue;
                 }
-                double[] score = new double[1];
-                Integer ground = survey(w, probe.chunkX(), probe.chunkZ(), false, score);
-                if (ground != null && score[0] < bestScore) {
-                    bestScore = score[0];
-                    best = new Site(probe.chunkX(), probe.chunkZ(), ground, false);
-                }
-                if (score[0] < fallbackScore) {
-                    // the least bad place, kept in case no place is good: its ground follows the land
-                    fallbackScore = score[0];
-                    fallback = new Site(probe.chunkX(), probe.chunkZ(), survey(w, probe.chunkX(), probe.chunkZ(), true), false);
-                }
+                coarse.add(new double[]{glance(w, probe.chunkX(), probe.chunkZ()), probe.chunkX(), probe.chunkZ()});
+            }
+        }
+        coarse.sort((p, q) -> Double.compare(p[0], q[0]));
+        Site best = null, fallback = null;
+        double bestScore = Double.MAX_VALUE, fallbackScore = Double.MAX_VALUE;
+        for (double[] c : coarse.subList(0, Math.min(8, coarse.size()))) {
+            Site probe = new Site((int) c[1], (int) c[2], 0, false);
+            double[] score = new double[1];
+            Integer ground = survey(w, probe.chunkX(), probe.chunkZ(), false, score);
+            if (ground != null && score[0] < bestScore) {
+                bestScore = score[0];
+                best = new Site(probe.chunkX(), probe.chunkZ(), ground, false);
+            }
+            if (score[0] < fallbackScore) {
+                // the least bad place, kept in case no place is good: its ground follows the land
+                fallbackScore = score[0];
+                fallback = new Site(probe.chunkX(), probe.chunkZ(), survey(w, probe.chunkX(), probe.chunkZ(), true), false);
             }
         }
         return best != null ? best : fallback;
+    }
+
+    /** A quick score of a site's land (lower is better): the spread of 4 x 4 heights, water and oceans counted heavily. */
+    private static double glance(World w, int cx, int cz) {
+        int n = 4;
+        int[] h = new int[n * n];
+        int wet = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int x = cx * 16 + 60 + i * (SIZE * 16 - 120) / (n - 1);
+                int z = cz * 16 + 60 + j * (SIZE * 16 - 120) / (n - 1);
+                int floor = w.generator.getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, w.height, w.random);
+                h[i * n + j] = floor;
+                Holder<Biome> biome = w.generator.getBiomeSource().getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(floor),
+                    QuartPos.fromBlock(z), w.random.sampler());
+                if (floor < w.seaLevel - 1 || biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_RIVER)) {
+                    wet++;
+                }
+            }
+        }
+        Arrays.sort(h);
+        return (h[h.length - 2] - h[1]) + wet * 12 + Math.max(0, h[h.length / 2] - 100) * 2;
     }
 
     /** True if any chunk of the site or its apron is in the world's region files already. */

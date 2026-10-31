@@ -181,7 +181,9 @@ def rebuild_town(save, man, edits, bes, stats):
                 turn += 1
                 kind = houses.FACILITIES[(turn // 3) % len(houses.FACILITIES)] if turn % 3 == 0 else 'house'
             seed = 7919 * h['id'] + 17 + 104729 * k
-            house = houses.build(sub, kind, seed, face, max_w=max(7, max_w), fence_sides='all' if len(subs) == 1 else 'front')
+            blocked = {(x, z) for x in range(sub[0], sub[2] + 1) for z in range(sub[1], sub[3] + 1) if (x, z) not in writable}
+            house = houses.build(sub, kind, seed, face, max_w=max(7, max_w), fence_sides='all' if len(subs) == 1 else 'front',
+                                 blocked=blocked)
             lost = 0
             for (x, y, z), st in house.blocks.items():
                 if (x, z) in writable:
@@ -195,6 +197,7 @@ def rebuild_town(save, man, edits, bes, stats):
             stats['kinds'][kind] += 1
             stats['house_blocks'] += len(house.blocks) - lost
             stats['house_blocks_off_plot'] += lost
+            stats['houses_on_paving'] += any(0 <= u < house.W and 0 <= v < house.D for u, v in map(lambda c: house.local(*c), blocked))
             stats['styles'][house.style] += 1
             stats['roofs'][house.roof_kind] += 1
             cx, cz = (sub[0] + sub[2]) // 2, (sub[1] + sub[3]) // 2

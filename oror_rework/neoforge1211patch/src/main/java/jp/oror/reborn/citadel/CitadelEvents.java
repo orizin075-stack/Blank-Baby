@@ -181,9 +181,10 @@ public final class CitadelEvents {
             }
             // one post of each of the kingdom's installations: a runway, a helipad, a hangar, the turrets of each kind
             java.util.Set<String> kinds = new java.util.TreeSet<>(List.of("airbase", "helipad", "hangar", "battery", "crossfire", "casemate", "redoubt"));
+            java.util.Set<String> vehicles = new java.util.TreeSet<>();
             for (List<CitadelData.Post> posts : CitadelData.posts().values()) {
                 for (CitadelData.Post post : posts) {
-                    if (kinds.remove(post.post())) {
+                    if (kinds.remove(post.post()) | (!post.vehicle().isEmpty() && vehicles.add(post.vehicle()))) {
                         ChunkPos p = new ChunkPos((post.x() + site.offsetX()) >> 4, (post.z() + site.offsetZ()) >> 4);
                         for (int dx = -1; dx <= 1; dx++) {
                             for (int dz = -1; dz <= 1; dz++) {
