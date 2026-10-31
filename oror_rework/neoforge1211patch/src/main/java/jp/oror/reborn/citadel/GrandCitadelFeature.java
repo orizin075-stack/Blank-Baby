@@ -91,7 +91,11 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
                 }
                 for (int z = 0; z < 16; z++) {
                     for (int x = 0; x < 16; x++) {
-                        BlockState st = section == null ? DIRT : section.get(x, y, z);
+                        // a section the save does not have: below the kingdom's ground it is one the extraction left out
+                        // (all dirt and bedrock: the natural ground stays), above it the open sky (the save stores no empty
+                        // sections over its buildings); it used to be filled with dirt up to the template's top, burying
+                        // the outer belt (runways, helipads, hangars) and roofing the town over
+                        BlockState st = section == null ? (wy > ground ? AIR : DIRT) : section.get(x, y, z);
                         p.set(bx + x, wy, bz + z);
                         if (st.is(Blocks.DIRT) || st.is(Blocks.BEDROCK)) {
                             underground(chunk, p, wy, ground, natural[x * 16 + z], section != null);
@@ -99,6 +103,15 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
                             put(chunk, p, st);
                         }
                     }
+                }
+            }
+        }
+        // the natural terrain above the template's top (a hill higher than the save reached) is cleared too
+        int top = CitadelData.SECTIONS * 16 + dy;
+        for (int z = 0; z < 16; z++) {
+            for (int x = 0; x < 16; x++) {
+                for (int wy = Math.max(top, minY); wy <= natural[x * 16 + z] && wy < maxY; wy++) {
+                    put(chunk, p.set(bx + x, wy, bz + z), AIR);
                 }
             }
         }

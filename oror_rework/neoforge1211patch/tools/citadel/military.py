@@ -212,7 +212,8 @@ def outward(x, z):
 WALL_KINDS = ['mk_42', 'hpj_11', 'mle_1934', 'bl_132']
 ROAD_KINDS = ['tow']
 CASEMATE_KINDS = ['hpj_11', 'bl_132', 'mle_1934']
-REDOUBT_KINDS = ['annihilator', 'mk_42']
+# (the Annihilator is no turret of the kingdom's: too terrible to field, it is kept in the forbidden vault)
+REDOUBT_KINDS = ['mk_42', 'mle_1934']
 
 
 def turrets(man):

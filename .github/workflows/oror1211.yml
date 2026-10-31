@@ -127,6 +127,11 @@ jobs:
             > out/pack_fetch.txt 2>&1 || true
           tail -3 out/pack_fetch.txt
           ls "$RUNNER_TEMP/pack045" | grep -i -E 'indestructible|falchion|nightfall|efn' || true
+          # Alex's Caves' per-entity magnetism and seed holder (a tenth of the battle's server thread by the profile)
+          AC=$(ls "$RUNNER_TEMP"/pack045/*.jar | grep -i alexscaves | head -n 1)
+          { echo "== $AC"; javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil | grep -E 'static'
+            javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder | grep -E 'setDimension|static'
+            unzip -l "$AC" | grep -i -E 'mixin.*(Entity|Level)' | head -n 20; } >> out/report.txt 2>&1 || true
       - name: Dedicated server - Grand Citadel with its court and garrison, the hundred-man battle, tanks and aircraft
         run: |
           set +e
@@ -140,7 +145,9 @@ jobs:
           { grep -E 'CITADEL-SELFTEST|WAR-|FLIGHT-|CI-DONE|OROR (Citadel|War|Vehicles|CI)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
           # where the server thread spent the battle (JFR samples between the war's start and its result)
-          timeout 600 python3 -I tools/jfr_hot.py "$RUNNER_TEMP/server/rec.jfr" "$RUNNER_TEMP/server/console.log" > out/war_profile.txt 2>&1 || true
+          J="$RUNNER_TEMP/server/war.jfr"; [ -s "$J" ] || J="$RUNNER_TEMP/server/rec.jfr"
+          timeout 600 python3 -I tools/jfr_hot.py "$J" "$RUNNER_TEMP/server/console.log" > out/war_profile.txt 2>&1 || true
+          cat "$RUNNER_TEMP/server/jfr_dump.txt" >> out/war_profile.txt 2>/dev/null || true
           exit $rc
       - name: Commit the result
         if: always()

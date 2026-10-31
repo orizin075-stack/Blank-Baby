@@ -100,9 +100,10 @@ THEMES = {
                  ('apotheosis:arcane_sands', 8, 24, .4), ('waystones:warp_stone', 1, 1, .4), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .15)],
     # the forbidden vault's armoury: the arms kept from the world because they are too dangerous to carry, the
     # king-slayers first (the only blades that break the Villager King's field)
-    'vault_arms': [('forbidden:kingslayer_sword', 1, 1, 1), ('forbidden:kingslayer_bow', 1, 1, 1), ('forbidden:kingslayer_axe', 1, 1, .8),
-                   ('forbidden:kingslayer_crossbow', 1, 1, .8), ('forbidden:kingslayer_trident', 1, 1, .7),
-                   ('forbidden:kingslayer_rifle', 1, 1, 1), ('forbidden:kingslayer_cannon', 1, 1, .8),
+    'vault_arms': [('forbidden:kingslayer_sword', 1, 1, 1), ('forbidden:kingslayer_bow', 1, 1, 1), ('forbidden:kingslayer_axe', 1, 1, 1),
+                   ('forbidden:kingslayer_crossbow', 1, 1, 1), ('forbidden:kingslayer_trident', 1, 1, 1),
+                   ('forbidden:kingslayer_rifle', 1, 1, 1), ('forbidden:kingslayer_cannon', 1, 1, 1),
+                   ('superbwarfare:annihilator_blueprint', 1, 1, 1),
                    ('relic:legend', 1, 1, 1), ('relic:legend', 1, 1, 1), ('relic:legend', 1, 1, .8), ('relic:weapon', 1, 1, 1), ('relic:weapon', 1, 1, .9),
                    ('relic:focus', 1, 1, .8), ('relic:charm', 1, 1, .8), ('totem_of_undying', 1, 1, 1), ('totem_of_undying', 1, 1, 1),
                    ('enchanted_golden_apple', 32, 64, 1), ('netherite_helmet+', 1, 1, 1), ('netherite_chestplate+', 1, 1, 1),
@@ -198,7 +199,7 @@ def items(theme, seed):
     if len(chosen) < 2:
         chosen = rng.sample(lines, 2)
     # the forbidden arms first, so that a full chest never leaves them out
-    chosen.sort(key=lambda l: (not l[0].startswith('forbidden:'), rng.random()))
+    chosen.sort(key=lambda l: (not l[0].startswith('forbidden:'), l[3] < 1, rng.random()))
     chosen = chosen[:27]
     slots = rng.sample(range(27), len(chosen))
     out = []

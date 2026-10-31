@@ -263,7 +263,11 @@ public final class RoyalPilots {
         int sign = p.contains("SteerSign") ? p.getInt("SteerSign") : 1;
         // and which way is its front: some models face backwards against their yaw (NoseBack, learnt in learnFacing)
         float heading = v.getYRot() + (p.getBoolean("NoseBack") ? 180F : 0F);
-        float err = Mth.wrapDegrees(yawTo(d) - heading) * sign;
+        // tracks keep turning after the key is let go (the CI tank overshot a 7 degree correction by 80 degrees): steer
+        // by where the nose will point in six ticks at its present rate of turn
+        float rate = Mth.wrapDegrees(v.getYRot() - p.getFloat("DriveYaw"));
+        p.putFloat("DriveYaw", v.getYRot());
+        float err = Mth.wrapDegrees(yawTo(d) - (heading + rate * 6F)) * sign;
         boolean arrived = hold != Double.MAX_VALUE && dist <= hold;
         boolean forward, left = false, right = false;
         if (back) {
@@ -277,14 +281,15 @@ public final class RoyalPilots {
             right = err > 8;
             left = err < -8;
         } else if (Math.abs(err) < 110) {
-            // drive in an arc toward the goal: tracks turn while they roll
-            forward = true;
+            // drive in an arc toward the goal: tracks turn while they roll; a sharp turn at a crawl, so the arc is tight
+            double speedNow = v.getDeltaMovement().horizontalDistance();
+            forward = Math.abs(err) < 45 || speedNow < 0.12;
             right = err > 6;
             left = err < -6;
         } else {
-            // the goal is behind: a full turn while rolling forward (tracks do not pivot well, and backing up blind
-            // takes a tank over walls and banks)
-            forward = true;
+            // the goal is behind: a full turn while rolling forward at a crawl (tracks do not pivot well, and backing up
+            // blind takes a tank over walls and banks)
+            forward = v.getDeltaMovement().horizontalDistance() < 0.12;
             right = err > 0;
             left = err < 0;
         }

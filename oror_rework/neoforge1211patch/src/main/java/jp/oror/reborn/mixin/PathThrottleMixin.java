@@ -44,7 +44,8 @@ public abstract class PathThrottleMixin {
         // mob, 2 + a fifth of the distance farther off), and never more often than once a second while on the way
         double far = Math.sqrt(this.mob.distanceToSqr(x, y, z));
         double slack = 2.0 + far * 0.2;
-        if (!this.isDone() && target != null && now - this.oror$searchedAt < 20 && target.distToCenterSqr(x, y, z) < slack * slack) {
+        long window = far > 24 ? 40 : 20;
+        if (!this.isDone() && target != null && now - this.oror$searchedAt < window && target.distToCenterSqr(x, y, z) < slack * slack) {
             this.setSpeedModifier(speed);
             return true;
         }

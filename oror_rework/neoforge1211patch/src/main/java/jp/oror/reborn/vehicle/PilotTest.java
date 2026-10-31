@@ -100,9 +100,13 @@ public final class PilotTest {
         }
         // a low wall round the tank's field (off the runway), so a tank that turns the wrong way stays on it
         for (int x = -11; x <= 90; x++) {
-            for (int z = 5; z <= 45; z++) {
-                if (x == -11 || x == 90 || z == 5 || z == 45) {
-                    level.setBlock(new BlockPos(origin.getX() + x, y, origin.getZ() + z), Blocks.STONE_BRICK_WALL.defaultBlockState(), 2);
+            // the north wall four blocks off the runway's edge, clear of an aircraft's wing on its take-off run
+            for (int z = 9; z <= 45; z++) {
+                if (x == -11 || x == 90 || z == 9 || z == 45) {
+                    // three high: a tank climbs a single block
+                    for (int h = 0; h < 3; h++) {
+                        level.setBlock(new BlockPos(origin.getX() + x, y + h, origin.getZ() + z), Blocks.STONE_BRICKS.defaultBlockState(), 2);
+                    }
                 }
             }
         }

@@ -21,6 +21,12 @@ rm -f console.log
 pid=$!
 for i in $(seq 1 "$wait"); do
   kill -0 $pid 2>/dev/null || break
+  # the flight recording of the hundred-man battle, taken as soon as it is over (a server killed at the end leaves none)
+  if [ ! -f war.jfr ] && grep -q 'WAR-RESULT' console.log 2>/dev/null; then
+    jpid=$(jcmd -l 2>/dev/null | grep -v -i jcmd | awk '{print $1}' | head -n 1)
+    [ -n "$jpid" ] && jcmd "$jpid" JFR.dump filename="$PWD/war.jfr" > jfr_dump.txt 2>&1 || true
+    touch war.jfr
+  fi
   sleep 1
 done
 kill -9 $pid 2>/dev/null || true
