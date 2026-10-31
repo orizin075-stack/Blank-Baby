@@ -137,7 +137,7 @@ public final class RoyalPilots {
             Sbw.mouse(v, 0, 0);
             return;
         }
-        LivingEntity target = target(v);
+        LivingEntity target = target(v, p);
         if (v.tickCount % 10 == 0) {
             Sbw.aim(v, target);
             for (Entity rider : v.getPassengers()) {
@@ -155,17 +155,33 @@ public final class RoyalPilots {
         v.getPersistentData().put(KEY, p);
     }
 
-    /** The crew's enemy: any rider's living target, else (every second) the nearest hostile the royals would fight. */
-    private static LivingEntity target(Entity v) {
+    /**
+     * The crew's enemy: any rider's living target, else the one the vehicle went after last (a soldier drops a target
+     * beyond his own follow range, the vehicle keeps it while it lives, stays within reach and was seen in the last
+     * twenty seconds), else (every second) the nearest hostile the royals would fight.
+     */
+    private static LivingEntity target(Entity v, CompoundTag p) {
+        long now = v.level().getGameTime();
+        boolean air = "AIRCRAFT".equals(Sbw.engine(v));
         for (Entity rider : v.getPassengers()) {
             if (rider instanceof Mob m && m.getTarget() != null && m.getTarget().isAlive() && !m.isAlliedTo(m.getTarget())) {
+                p.putUUID("Target", m.getTarget().getUUID());
+                p.putLong("TargetSeen", now);
                 return m.getTarget();
             }
         }
+        if (p.hasUUID("Target") && v.level() instanceof ServerLevel level && now - p.getLong("TargetSeen") < 400
+            && level.getEntity(p.getUUID("Target")) instanceof LivingEntity kept && kept.isAlive()
+            && kept.distanceToSqr(v) < (air ? 220 * 220 : 96 * 96)) {
+            if (v.tickCount % 20 == 7) {
+                p.putLong("TargetSeen", now);
+            }
+            return kept;
+        }
+        p.remove("Target");
         if (v.tickCount % 20 != 7) {
             return null;
         }
-        boolean air = "AIRCRAFT".equals(Sbw.engine(v));
         List<LivingEntity> near = v.level().getEntitiesOfClass(LivingEntity.class, v.getBoundingBox().inflate(air ? 160 : 64, air ? 96 : 24, air ? 160 : 64),
             l -> l.isAlive() && RoyalSovereign.hostile(l) && !(l.getVehicle() != null && l.getVehicle() == v));
         LivingEntity best = null;
@@ -177,8 +193,12 @@ public final class RoyalPilots {
                 best = l;
             }
         }
-        if (best != null && v.getFirstPassenger() instanceof Mob m) {
-            m.setTarget(best);
+        if (best != null) {
+            p.putUUID("Target", best.getUUID());
+            p.putLong("TargetSeen", now);
+            if (v.getFirstPassenger() instanceof Mob m) {
+                m.setTarget(best);
+            }
         }
         return best;
     }
@@ -461,10 +481,11 @@ public final class RoyalPilots {
         String id = BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath();
         return String.format(java.util.Locale.ROOT,
             "{\"id\":\"%s\",\"engine\":\"%s\",\"alive\":%b,\"health\":%.2f,\"mode\":\"%s\",\"odometer\":%.1f,\"airborne\":%d,\"maxAlt\":%.1f,"
-                + "\"tookOff\":%b,\"landed\":%b,\"runs\":%d,\"unsticks\":%d,\"goArounds\":%d,\"terrainSaves\":%d,\"crew\":%d}",
+                + "\"tookOff\":%b,\"landed\":%b,\"runs\":%d,\"unsticks\":%d,\"goArounds\":%d,\"terrainSaves\":%d,\"crew\":%d,"
+                + "\"power\":%.2f,\"energy\":%s,\"target\":%b}",
             id, Sbw.engine(v), v.isAlive() && !Sbw.wreck(v), Sbw.health(v), p.getString("Mode"), p.getDouble("Odometer"), p.getInt("Airborne"),
             p.getDouble("MaxAlt"), p.getBoolean("TookOff"), p.getBoolean("Landed"), p.getInt("Runs"), p.getInt("Unsticks"), p.getInt("GoArounds"),
-            p.getInt("TerrainSaves"), v.getPassengers().size());
+            p.getInt("TerrainSaves"), v.getPassengers().size(), Sbw.power(v), Sbw.call(v, "getEnergy"), p.hasUUID("Target"));
     }
 
     /** Royal soldiers posted to a vehicle (OrorMotor in their data) bring it out and board it the first time they act. */
