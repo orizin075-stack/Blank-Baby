@@ -121,6 +121,10 @@ TRADE = dict(house='', smith='weaponsmith', armorer='armorer', baker='farmer', b
              alchemy='cleric', jeweler='toolsmith', library='librarian', scribe='librarian', mapmaker='cartographer',
              stable='leatherworker', market='mason', guild='fletcher', inn='fisherman', tavern='fisherman')
 from houses import HOUSEHOLD
+# the profession a workstation gives (a family home's trade comes from the workstation it was built with)
+STATION_PROF = dict(composter='farmer', barrel='fisherman', fletching_table='fletcher', loom='shepherd', cartography_table='cartographer',
+                    smoker='butcher', blast_furnace='armorer', grindstone='weaponsmith', smithing_table='toolsmith', brewing_stand='cleric',
+                    lectern='librarian', cauldron='leatherworker', stonecutter='mason')
 # Townsfolk: a family in each house (one of them a child), the innkeeper's household and guests, a master and a helper
 # in every other building; on the free floor cells of the rebuilt buildings (TOWN_BUILDINGS.json, written by repair.py),
 # the ground floor first, spread out.
@@ -140,7 +144,8 @@ for b in town:
         if p not in chosen:
             chosen.append(p)
     for k, (x, y, z) in enumerate(chosen):
-        put('VILLAGER', x, y, z, r=1, dy=0, post='town', profession=TRADE.get(b['kind'], '') if k == 0 else '', house=b['kind'],
+        trade = STATION_PROF.get(b.get('station') or '', TRADE.get(b['kind'], ''))
+        put('VILLAGER', x, y, z, r=1, dy=0, post='town', profession=trade if k == 0 else '', house=b['kind'],
             **({'baby': True} if b['kind'] in ('house', 'inn') and k == many - 1 else {}))
 
 json.dump(dict(origin='save', entries=entries), open(out, 'w'), indent=None, separators=(',', ':'))

@@ -19,6 +19,7 @@ Coordinates inside a house are local: u to the right along the front, v from the
 mapped to the world by the plot's front direction; facings ('front', 'back', 'left', 'right') are mapped with them.
 """
 import random
+import loot
 
 GROUND = 64
 FLOOR0 = GROUND + 1
@@ -123,6 +124,12 @@ CROPS = [('wheat', 7), ('carrots', 7), ('potatoes', 7), ('beetroots', 3)]
 HOUSEHOLD = dict(house=3, inn=5, tavern=3, guild=3)
 # rooms deep enough get a partition across them: a front room and a back room with a door between
 DIVIDED = {'home', 'bakery', 'taproom', 'guildhall', 'bedroom', 'inn', 'dorm', 'shop', 'tailor', 'alchemy', 'jewel', 'scriptorium', 'maps'}
+# what a room's barrels hold (loot.THEMES)
+GOODS = {'home': 'home', 'bedroom': 'bedroom', 'study': 'library', 'forge': 'forge', 'jewel': 'jewel', 'bakery': 'bakery', 'butchery': 'butchery',
+         'tailor': 'tailor', 'alchemy': 'alchemy', 'library': 'library', 'scriptorium': 'library', 'maps': 'maps', 'stable': 'stable',
+         'loft': 'stable', 'shop': 'market', 'storage': 'storage', 'guildhall': 'guild', 'dorm': 'bedroom', 'taproom': 'taproom', 'inn': 'bedroom'}
+# a family home's trade: one of these workstations on its ground floor, so one of the family has a job
+HOME_TRADES = ['composter', 'fletching_table', 'loom', 'cartography_table', 'smithing_table', 'lectern', 'stonecutter']
 BE_KINDS = {'chest', 'barrel', 'furnace', 'smoker', 'blast_furnace', 'brewing_stand', 'lectern', 'campfire', 'bed', 'enchanting_table',
             'jukebox', 'decorated_pot'}
 
@@ -210,7 +217,9 @@ def build(plot, kind, seed, front):
     x0, z0, x1, z1 = plot
     style_name = rng.choice(sorted(STYLES))
     st = STYLES[style_name]
-    station, loot, ws, ds, fl, room0, room1, yard_kind = TRADES.get(kind, TRADES['house'])
+    station, loot_table, ws, ds, fl, room0, room1, yard_kind = TRADES.get(kind, TRADES['house'])
+    if station is None and kind == 'house':
+        station = random.Random(seed * 31 + 7).choice(HOME_TRADES)
     W = rng.choice(range(ws[0], ws[1] + 1, 2))
     D = rng.choice(range(ds[0], ds[1] + 1, 2))
     floors = rng.randint(fl[0], fl[1])
@@ -235,7 +244,7 @@ def build(plot, kind, seed, front):
     f = street - setback
     r0 = (min(along_r) + max(along_r)) // 2 - W // 2
     h = House((f * F[0] + r0 * R[0], f * F[1] + r0 * R[1]), front, rng)
-    h.style, h.kind, h.W, h.D, h.floors, h.loot = style_name, kind, W, D, floors, loot
+    h.style, h.kind, h.W, h.D, h.floors, h.loot, h.station = style_name, kind, W, D, floors, loot_table, station
     h.umin, h.umax = min(along_r) - r0, max(along_r) - r0
     h.vmin, h.vmax = f - street, f - far
     h.yard = set()                     # local (u, v) cells of the yard already used
@@ -572,11 +581,11 @@ def staircase(h):
         h.set(cells[3], fy + 4, v, 'air')
         # the cupboard under the steps
         room = h.face('front' if s % 2 == 0 else 'back')
-        h.set(cells[2], fy + 1, v, props('barrel', facing='up', open='false'), be='barrel')
-        h.set(cells[3], fy + 1, v, props('barrel', facing=room, open='false'), be='barrel')
+        h.set(cells[2], fy + 1, v, props('barrel', facing='up', open='false'), be=('fill', 'barrel', 'storage'))
+        h.set(cells[3], fy + 1, v, props('barrel', facing=room, open='false'), be=('fill', 'barrel', 'storage'))
         h.set(cells[3], fy + 2, v, wood + '_planks')
-        h.set(cells[4], fy + 1, v, props('barrel', facing=room, open='false'), be='barrel')
-        h.set(cells[4], fy + 2, v, props('barrel', facing=room, open='false'), be='barrel')
+        h.set(cells[4], fy + 1, v, props('barrel', facing=room, open='false'), be=('fill', 'barrel', 'storage'))
+        h.set(cells[4], fy + 2, v, props('barrel', facing=room, open='false'), be=('fill', 'barrel', 'storage'))
         h.set(cells[4], fy + 3, v, wood + '_planks')
         # the rail upstairs: beside the opening on the room side and at its end
         rail_v = v - 1 if s % 2 == 0 else v + 1
@@ -715,7 +724,7 @@ def furnish(h, s, room, station, flights, rng, extra_beds=0):
         u, v = c
         top = None
         if piece == 'station':
-            put_station(h, u, y, v, station, face)
+            put_station(h, u, y, v, station, face, GOODS.get(room, 'storage'))
         elif piece == 'bed':
             color = st['beds'][len([1 for a in access if len(a) == 2]) % 2]
             head_face = h.face(wall)
@@ -728,11 +737,11 @@ def furnish(h, s, room, station, flights, rng, extra_beds=0):
         elif piece == 'chest':
             h.set(u, y, v, props('chest', facing=face, type='single', waterlogged='false'), be=('chest', h.loot))
         elif piece in ('barrel', 'barrel_pot', 'barrel_candle', 'barrel_lantern', 'nightstand'):
-            h.set(u, y, v, props('barrel', facing='up', open='false'), be='barrel')
+            h.set(u, y, v, props('barrel', facing='up', open='false'), be=goods)
             top = {'barrel_pot': 'pot', 'barrel_candle': 'candle', 'barrel_lantern': 'lantern', 'nightstand': 'lantern'}.get(piece)
         elif piece == 'keg':
-            h.set(u, y, v, props('barrel', facing=face, open='false'), be='barrel')
-            h.set(u, y + 1, v, props('barrel', facing=face, open='false'), be='barrel')
+            h.set(u, y, v, props('barrel', facing=face, open='false'), be=goods)
+            h.set(u, y + 1, v, props('barrel', facing=face, open='false'), be=goods)
         elif piece in ('counter_pot', 'counter_candle', 'counter_cake'):
             h.set(u, y, v, stairs(wood + '_stairs', h.face(wall), 'top'))
             top = {'counter_pot': 'pot', 'counter_candle': 'candle', 'counter_cake': 'cake'}[piece]
@@ -741,7 +750,7 @@ def furnish(h, s, room, station, flights, rng, extra_beds=0):
                 h.set(u, y, v, 'bookshelf')
                 h.set(u, y + 1, v, 'bookshelf')
             else:
-                h.set(u, y, v, props('barrel', facing=face, open='false'), be='barrel')
+                h.set(u, y, v, props('barrel', facing=face, open='false'), be=('fill', 'barrel', 'bedroom'))
                 h.set(u, y + 1, v, wood + '_planks')
         elif piece == 'shelf_pot':
             h.set(u, y, v, 'bookshelf')
@@ -796,6 +805,9 @@ def furnish(h, s, room, station, flights, rng, extra_beds=0):
     # pieces against the walls: the room's own, then filler until about three in four wall cells are taken
     ring = sorted((c for c in inside if walls_of(c)), key=lambda c: rng.random())
     pieces = [p for p in walls if p != 'station' or station]
+    if station and 'station' not in pieces:
+        pieces.insert(0, 'station')
+    goods = ('fill', 'barrel', GOODS.get(room, 'storage'))
     if h.floors == 1 and 'bed' not in pieces:
         # a one-storey house: the beds go downstairs, after the trade's own pieces
         pieces[min(len(pieces), 3):min(len(pieces), 3)] = ['bed', 'bed']
@@ -841,7 +853,7 @@ def dress(h, u, y, v, top, rng):
         h.set(u, y, v, props('cake', bites='0'))
 
 
-def put_station(h, u, y, v, station, face):
+def put_station(h, u, y, v, station, face, goods='storage'):
     if station in ('smoker', 'blast_furnace', 'furnace'):
         h.set(u, y, v, props(station, facing=face, lit='false'), be=station)
     elif station == 'lectern':
@@ -857,7 +869,7 @@ def put_station(h, u, y, v, station, face):
     elif station == 'composter':
         h.set(u, y, v, props('composter', level='4'))
     elif station == 'barrel':
-        h.set(u, y, v, props('barrel', facing='up', open='false'), be='barrel')
+        h.set(u, y, v, props('barrel', facing='up', open='false'), be=('fill', 'barrel', goods))
     else:
         h.set(u, y, v, station)
 
@@ -1174,7 +1186,7 @@ def shed(h, spot, rng):
               rng.choice([props('composter', level='2'), log('hay_block'), props('barrel', facing='up', open='false')])]
     rng.shuffle(pieces)
     for (u, v), piece in zip(inner, pieces):
-        be = ('chest', h.loot) if piece.startswith('minecraft:chest') else 'barrel' if 'barrel' in piece else None
+        be = ('chest', h.loot) if piece.startswith('minecraft:chest') else ('fill', 'barrel', 'shed') if 'barrel' in piece else None
         h.set(u, GROUND + 1, v, piece, be=be)
     h.set(u0 + 2, GROUND + 3, v0 + 1, props('lantern', hanging='true', waterlogged='false'))
     h.set(u0 + 2, GROUND, v0 - 1, 'cobblestone')
@@ -1309,7 +1321,7 @@ def trade_yard(h, kind, rng):
                 continue
             colours = rng.choice([('red_wool', 'white_wool'), ('blue_wool', 'white_wool'), ('yellow_wool', 'green_wool')])
             for i in range(3):
-                h.set(u0 + i, GROUND + 1, v, props('barrel', facing='up', open='false'), be='barrel')
+                h.set(u0 + i, GROUND + 1, v, props('barrel', facing='up', open='false'), be=('fill', 'barrel', 'market'))
                 dress(h, u0 + i, GROUND + 2, v, rng.choice(['pot', 'candle', 'pot']), rng)
                 for j in (-1, 0, 1):
                     h.set(u0 + i, GROUND + 4, v + j, colours[(i + j) % 2])
@@ -1446,12 +1458,16 @@ def solid(n):
 
 
 def entities(h, loot_seed=0):
-    """Block entity compounds (1.20.1 format, Python values; ('long', v) for a long) for the blocks that need one."""
+    """Block entity compounds (1.20.1 format, Python values; ('long', v) for a long) for the blocks that need one: chests with
+    their trade's village loot table, barrels stocked with the goods of their room (loot.THEMES)."""
     out = {}
     for p, be in h.bes.items():
         if p not in h.blocks:
             continue
-        if isinstance(be, tuple):
+        if isinstance(be, tuple) and be[0] == 'fill':
+            out[p] = {'id': 'minecraft:' + be[1], 'x': p[0], 'y': p[1], 'z': p[2],
+                      'Items': loot.items(be[2], (p[0] * 73856093) ^ (p[1] * 19349663) ^ (p[2] * 83492791) ^ loot_seed)}
+        elif isinstance(be, tuple):
             kind, table = be
             out[p] = {'id': 'minecraft:' + kind, 'x': p[0], 'y': p[1], 'z': p[2], 'LootTable': 'minecraft:chests/village/' + table,
                       'LootTableSeed': ('long', (p[0] * 3129871 ^ p[2] * 116129781 ^ p[1] ^ loot_seed) & 0x7FFFFFFFFFFF)}

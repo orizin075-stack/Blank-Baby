@@ -4,7 +4,7 @@ edits maps (x, y, z) to a block state: a name ('minecraft:stone') or a name with
 ('minecraft:lantern[hanging=true,waterlogged=false]'). Each changed section is re-encoded with a compact palette; changed
 chunks lose their heightmaps (rebuilt on load) and the block entities of replaced blocks, and keep isLightOn 0 so the
 game relights them. bes maps (x, y, z) to a new block entity (a dict of Python values: ints are written as ints,
-('long', v) as a long). Untouched region files are copied as they are.
+('byte', v), ('short', v), ('long', v) and ('float', v) as those). Untouched region files are copied as they are.
 """
 import os, shutil, struct, time, zlib
 import numpy as np
@@ -57,8 +57,19 @@ def encode(pal, idx):
     return {'palette': pal, 'data': ('L', tuple(int(v) for v in longs.view(np.int64)))}
 
 
-def be_nbt(be):
-    return {k: (Typed(4, v[1]) if isinstance(v, tuple) and v[0] == 'long' else v) for k, v in be.items()}
+NARROW = {'byte': 1, 'short': 2, 'long': 4, 'float': 5}
+
+
+def be_nbt(v):
+    """Python block entity data as NBT: ('byte' | 'short' | 'long' | 'float', v) for the numbers that are not ints,
+    nested through compounds and lists."""
+    if isinstance(v, tuple) and len(v) == 2 and v[0] in NARROW:
+        return Typed(NARROW[v[0]], v[1])
+    if isinstance(v, dict):
+        return {k: be_nbt(x) for k, x in v.items()}
+    if isinstance(v, list):
+        return [be_nbt(x) for x in v]
+    return v
 
 
 def edit_chunk(nbt, chunk_edits, chunk_bes=None):

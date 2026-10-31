@@ -17,7 +17,7 @@ blocks up, else a sea lantern set into a low plain ceiling, else an invisible li
 import sys, os, json, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
-import world, anvil_edit
+import world, anvil_edit, loot
 from scipy import ndimage
 
 TRANSPARENT = ('air', 'glass', 'pane', 'fence', '_wall', 'slab', 'stairs', 'ladder', 'torch', 'lantern', 'chain', 'carpet', 'rail',
@@ -146,10 +146,199 @@ def rebuild_town(save, man, edits, bes, stats):
         stats['house_blocks_off_plot'] += lost
         stats['styles'][house.style] += 1
         stats['roofs'][house.roof_kind] += 1
-        town.append(dict(id=h['id'], kind=h['kind'], x=h['x'], z=h['z'], front=front, plot=list(plot), style=house.style,
+        town.append(dict(id=h['id'], kind=h['kind'], x=h['x'], z=h['z'], front=front, plot=list(plot), style=house.style, station=house.station,
                          width=house.W, depth=house.D, floors=house.floors, roof=house.roof_kind,
                          spots=[list(p) for p in house.spots if (p[0], p[2]) in writable]))
     return cleared, town
+
+
+PASSABLE = ('air', 'door', 'trapdoor', 'stairs', 'slab', 'carpet', 'ladder', 'light', 'torch', 'lantern', 'chain', 'rail', 'flower', 'grass',
+            'fern', 'button', 'lever', 'sign', 'banner', 'scaffolding', 'vine', 'snow')
+TRAPS = ('pressure_plate', 'tripwire', 'redstone', 'dispenser', 'observer', 'piston', 'tnt', 'magma', 'cobweb', 'water', 'lava')
+RING = ((1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1))
+THRONE = (0, 135, -32)        # the king's feet cell on the dais
+FACING = {(1, 0): 'east', (-1, 0): 'west', (0, 1): 'south', (0, -1): 'north'}
+
+
+def storerooms(save, x0, x1, z0, z1, y0, y1, edits, bes, stats, placed, theme_of, budget=3, name=None, box=None, pick_rooms=None, spacing=6):
+    """Chests in the rooms of a box: every walled, roofed room of 12+ floor cells gets one to budget chests (one per 45
+    cells), in corners first, on cells that are not a way through (the free cells around stay joined without them),
+    never next to a door, a trap or a pressure plate, six blocks from every other chest. theme_of(x, y, z, room size,
+    room id) names the loot (None: no chest in that room); pick_rooms, given [(room id, cells, world centre, (width along
+    x, width along z))], keeps some of the rooms. Returns the chests placed."""
+    a, _ = world.load(save, x0, x1, z0, z1, y0, y1)
+    for (x, y, z), st in edits.items():
+        if x0 <= x < x1 and z0 <= z < z1 and y0 <= y < y1:
+            a[x - x0, y - y0, z - z0] = world.gid(st.split('[')[0])
+    air, transparent, emit, plain, soft = tables()
+    n = len(world.NAMES)
+    passable = np.array([any(t in world.NAMES[i] for t in PASSABLE) for i in range(n)])
+    trap = np.array([any(t in world.NAMES[i] for t in TRAPS) for i in range(n)])
+    isair = air[a]
+    opaque = ~transparent[a]
+    covered = np.zeros_like(isair)
+    run = np.full((a.shape[0], a.shape[2]), 999, np.int32)
+    for y in range(a.shape[1] - 1, -1, -1):
+        run = np.where(opaque[:, y, :], 0, run + 1)
+        covered[:, y, :] = run <= 24
+    floor = np.zeros_like(isair)
+    floor[:, 1:, :] = opaque[:, :-1, :] & ~soft[a[:, :-1, :]]
+    head = np.zeros_like(isair)
+    head[:, :-1, :] = isair[:, 1:, :]
+    walk = isair & floor & head & covered
+    if box is not None:
+        bx0, bx1, bz0, bz1, by0, by1 = box
+        keep = np.zeros_like(walk)
+        keep[bx0 - x0:bx1 - x0, by0 - y0:by1 - y0, bz0 - z0:bz1 - z0] = True
+        walk &= keep
+    way = passable[a]
+    near_trap = trap[a]
+    st = np.zeros((3, 3, 3), bool)
+    st[1, 1, 1] = st[0, 1, 1] = st[2, 1, 1] = st[1, 1, 0] = st[1, 1, 2] = True
+    lab, nrooms = ndimage.label(walk, structure=st)
+    if nrooms == 0:
+        return []
+    sizes = ndimage.sum(walk, lab, index=np.arange(1, nrooms + 1))
+    allowed = None
+    if pick_rooms is not None:
+        centres = ndimage.center_of_mass(walk, lab, index=np.arange(1, nrooms + 1))
+        spans = [(sl[0].stop - sl[0].start, sl[2].stop - sl[2].start) for sl in ndimage.find_objects(lab)]
+        allowed = set(pick_rooms([(i + 1, int(sizes[i]), (c[0] + x0, c[1] + y0, c[2] + z0), spans[i]) for i, c in enumerate(centres)]))
+    X, Y, Z = a.shape
+    cands = collections.defaultdict(list)
+    for x, y, z in zip(*np.nonzero(walk & (lab > 0))):
+        if x < 1 or z < 1 or x >= X - 1 or z >= Z - 1 or sizes[lab[x, y, z] - 1] < (9 if allowed else 12):
+            continue
+        if allowed is not None and lab[x, y, z] not in allowed:
+            continue
+        walls = [(dx, dz) for dx, dz in FACING if opaque[x + dx, y, z + dz] and not way[x + dx, y, z + dz]]
+        if not walls:
+            continue
+        # no door, trap or plate around it, on the floor or at head height
+        if any(near_trap[x + dx, yy, z + dz] or 'door' in world.NAMES[a[x + dx, yy, z + dz]]
+               for dx, dz in RING for yy in (y - 1, y, y + 1) if 0 <= yy < Y):
+            continue
+        # not a way through: the passable cells around it stay one group without it
+        free = [way[x + dx, y, z + dz] and head[x + dx, y, z + dz] or walk[x + dx, y, z + dz] for dx, dz in RING]
+        groups, seen = 0, set()
+        for i in range(8):
+            if free[i] and i not in seen:
+                groups += 1
+                todo = [i]
+                while todo:
+                    j = todo.pop()
+                    if j in seen:
+                        continue
+                    seen.add(j)
+                    for k in ((j + 1) % 8, (j - 1) % 8):
+                        if free[k] and k not in seen:
+                            todo.append(k)
+        orth_free = [free[i] for i in (0, 2, 4, 6)]
+        if groups != 1 or not any(orth_free):
+            continue
+        cands[lab[x, y, z]].append((len(walls), x, y, z, [d for d, f in zip(((1, 0), (0, 1), (-1, 0), (0, -1)), orth_free) if f]))
+    rng = np.random.default_rng(abs(x0 * 7 + z0 * 13 + y0))
+    out = []
+    for room, cs in sorted(cands.items()):
+        size = int(sizes[room - 1])
+        cs.sort(key=lambda c: (-c[0], rng.random()))
+        want = budget if allowed is not None else min(budget, max(1, size // 45))
+        for walls_n, x, y, z, opens in cs:
+            if want <= 0:
+                break
+            wx, wy, wz = int(x + x0), int(y + y0), int(z + z0)
+            theme = theme_of(wx, wy, wz, size, room)
+            if theme is None:
+                break
+            if any(abs(wx - px) + abs(wz - pz) + 2 * abs(wy - py) < spacing for px, py, pz in placed):
+                continue
+            facing = FACING[opens[0]]
+            edits[(wx, wy, wz)] = f'minecraft:chest[facing={facing},type=single,waterlogged=false]'
+            be = {'id': 'minecraft:chest', 'x': wx, 'y': wy, 'z': wz,
+                  'Items': loot.items(theme, (wx * 73856093) ^ (wy * 19349663) ^ (wz * 83492791))}
+            if name:
+                be['CustomName'] = json.dumps({'text': name(theme)}, ensure_ascii=False)
+            bes[(wx, wy, wz)] = be
+            placed.append((wx, wy, wz))
+            stats['stores'][theme] += 1
+            out.append((wx, wy, wz, theme))
+            want -= 1
+    return out
+
+
+STORE_NAMES = {'armory': '武器庫', 'pantry': '食料庫', 'keep': '城の倉', 'royal': '王家の蔵', 'treasury': '王家の宝物庫', 'vault': '王家の禁庫'}
+
+
+def stock_empty(save, cleared, edits, bes, stats):
+    """Chests and barrels the save left empty (mostly the old mines' barrels) get goods: mining supplies underground,
+    stores above ground; the town's are rebuilt and stocked by houses.py."""
+    import anvil
+    for f in sorted(os.listdir(os.path.join(save, 'region'))):
+        for lx, lz, ln, nbt in anvil.chunks(os.path.join(save, 'region', f)):
+            for be in nbt.get('block_entities', []):
+                kind = be['id'].split(':')[1]
+                p = (be['x'], be['y'], be['z'])
+                if kind not in ('chest', 'barrel') or be.get('Items') or 'LootTable' in be or p[1] >= 64 and (p[0], p[2]) in cleared or p in bes:
+                    continue
+                theme = 'mine' if p[1] < 60 else 'storage'
+                new = {'id': be['id'], 'x': p[0], 'y': p[1], 'z': p[2], 'Items': loot.items(theme, p[0] * 31 + p[1] * 7 + p[2] * 131)}
+                if be.get('CustomName'):
+                    new['CustomName'] = be['CustomName']
+                bes[p] = new
+                stats['stores']['restocked ' + theme] += 1
+
+
+def castle_stores(save, edits, bes, stats):
+    """The castle's storerooms: the inner ward's rooms get chests, the treasury beside the throne room is filled."""
+    placed = []
+    tx, ty, tz = THRONE
+
+    def hall(x, y, z):
+        # the throne hall stays as it is: the court stands there
+        return ty - 1 <= y <= ty + 6 and abs(x - tx) <= 13 and tz - 5 <= z <= tz + 21
+
+    def theme_of(x, y, z, size, room):
+        if hall(x, y, z):
+            return None
+        if abs(y - ty) <= 12 and abs(x - tx) + abs(z - tz) <= 45:
+            return 'royal'
+        if y >= 96:
+            return 'keep'
+        return 'armory' if (x // 24 + z // 24 + room) % 2 else 'pantry'
+    for qx0, qx1 in ((-136, 0), (0, 136)):
+        for qz0, qz1 in ((-136, 0), (0, 136)):
+            storerooms(save, qx0, qx1, qz0, qz1, 64, 192, edits, bes, stats, placed, theme_of, name=lambda t: STORE_NAMES[t])
+    # the royal treasury: the real room (20 to 300 floor cells, four or more across both ways) nearest the throne, the hall
+    # left out; in the citadel this is the raised chamber of the undercroft right under the throne, up a ladder from it
+    def nearest(rooms):
+        near = [(abs(c[0] - tx) + abs(c[2] - tz) + 3 * abs(c[1] - ty), r) for r, n, c, (wx, wz) in rooms
+                if 20 <= n <= 300 and min(wx, wz) >= 4 and not hall(round(c[0]), round(c[1]), round(c[2]))]
+        return [min(near)[1]] if near else []
+    trs = storerooms(save, tx - 60, tx + 61, tz - 60, tz + 61, ty - 17, ty + 25, edits, bes, stats, placed,
+                     lambda *a: 'treasury', budget=8, name=lambda t: STORE_NAMES[t], pick_rooms=nearest, spacing=2)
+    stats['treasury_at'] = [list(t[:3]) for t in trs]
+    stats['treasury_rooms'] = len({(x, z) for x, y, z, t in trs})
+    return placed
+
+
+def vault_hoard(save, man, edits, bes, stats):
+    """The forbidden vault (v9_true_treasury, deep under the town): its four pedestal chests hold the kingdom's hoard,
+    and its chamber gets more along the walls."""
+    vx, vz = man['v9_true_treasury']
+    _, found = world.load(save, vx - 3, vx + 4, vz - 3, vz + 4, 0, 30)
+    n = 0
+    for be in found:
+        if be['id'].endswith('chest'):
+            x, y, z = be['x'], be['y'], be['z']
+            bes[(x, y, z)] = {'id': 'minecraft:chest', 'x': x, 'y': y, 'z': z, 'CustomName': json.dumps({'text': STORE_NAMES['vault']}, ensure_ascii=False),
+                              'Items': loot.items('vault', x * 31 + z * 17 + y)}
+            n += 1
+            stats['stores']['vault'] += 1
+    placed = [(x, y, z) for (x, y, z) in bes if abs(x - vx) <= 3 and abs(z - vz) <= 3]
+    storerooms(save, vx - 12, vx + 13, vz - 6, vz + 7, 2, 20, edits, bes, stats, placed, lambda *a: 'vault', budget=6,
+               name=lambda t: STORE_NAMES[t], box=(vx - 9, vx + 3, vz - 2, vz + 3, 2, 20), spacing=3)
+    stats['vault_pedestal_chests'] = n
+
 
 
 def castle_walls(save, x0, x1, z0, z1, edits, stats, ymin=74):
@@ -453,6 +642,7 @@ def main(save, out, report=None):
     stats['styles'] = collections.Counter()
     stats['roofs'] = collections.Counter()
     stats['lights'] = collections.Counter()
+    stats['stores'] = collections.Counter()
     cleared, town = rebuild_town(save, man, edits, bes, stats)
     print('town', stats['houses'], 'buildings,', stats['house_blocks'], 'blocks', dict(stats['styles']), dict(stats['roofs']), flush=True)
     rest = {}
@@ -467,6 +657,11 @@ def main(save, out, report=None):
     for p, st in rest.items():
         if (p[0], p[2]) not in cleared:
             edits[p] = st
+    # the castle's storerooms and treasury, the vault's hoard
+    castle_stores(save, edits, bes, stats)
+    vault_hoard(save, man, edits, bes, stats)
+    stock_empty(save, cleared, edits, bes, stats)
+    print('stores', dict(stats['stores']), 'treasury rooms', stats['treasury_rooms'], flush=True)
     # the castle: the inner ward, in four quarters with an overlap
     for qx0, qx1 in ((-136, 0), (0, 136)):
         for qz0, qz1 in ((-136, 0), (0, 136)):

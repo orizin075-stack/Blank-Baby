@@ -24,11 +24,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * /oror pilots test: a flight and drive check on a dedicated server. 800 blocks east of the caller it lays a stone runway,
- * parks a crewed ground-attack aircraft at its west end and a crewed tank beside it, and stands two still pillagers as
- * targets (one 160 blocks down the runway for the aircraft, one 60 blocks off for the tank). The aircraft should take
- * off, attack, and once its target is gone (killed, or taken away after 45 seconds) fly back and land; the tank should
- * drive up and fire. Every change of mode is logged with its time, and FLIGHT-RESULT sums it up.
+ * /oror pilots test: a flight and drive check on a dedicated server. 800 blocks east of the caller it lays a stone runway
+ * with a paved field beside it, parks a crewed ground-attack aircraft at the runway's west end and a crewed tank on the
+ * field, and stands two still pillagers as targets (one 160 blocks down the runway for the aircraft, one 60 blocks off
+ * for the tank). The aircraft should take off, attack, and once its target is gone (killed, or taken away after 45
+ * seconds) fly back and land; the tank should drive up and fire. Every change of mode is logged with its time, and
+ * FLIGHT-RESULT sums it up.
  * /oror pilots status lists the crewed vehicles within 300 blocks.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
@@ -84,9 +85,10 @@ public final class PilotTest {
             }
         }
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, origin.getX(), origin.getZ());
-        // runway: 230 x 9 of stone, cleared 14 blocks up, heading east (yaw -90)
+        // runway: 230 x 9 of stone, cleared 14 blocks up, heading east (yaw -90); south of it a paved field for the tank's
+        // drive to its target (the test is of the driving, not of whatever ground or water is there)
         for (int x = -10; x < 220; x++) {
-            for (int z = -4; z <= 4; z++) {
+            for (int z = -4; z <= (x < 90 ? 44 : 4); z++) {
                 level.setBlock(new BlockPos(origin.getX() + x, y - 1, origin.getZ() + z), Blocks.SMOOTH_STONE.defaultBlockState(), 2);
                 for (int h = 0; h < 14; h++) {
                     level.setBlock(new BlockPos(origin.getX() + x, y + h, origin.getZ() + z), Blocks.AIR.defaultBlockState(), 2);
@@ -96,8 +98,7 @@ public final class PilotTest {
         Vec3 start = new Vec3(origin.getX() + 0.5, y, origin.getZ() + 0.5);
         r.plane = RoyalPilots.deploy(level, start, -90F, Sbw.has("a_10a") ? "a_10a" : "j_16", 1, null);
         Vec3 tankAt = start.add(0, 0, 30);
-        int ty = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) tankAt.x, (int) tankAt.z);
-        r.tank = RoyalPilots.deploy(level, new Vec3(tankAt.x, ty, tankAt.z), -90F, "m_1a_2", 2, null);
+        r.tank = RoyalPilots.deploy(level, tankAt, -90F, "m_1a_2", 2, null);
         r.planeTarget = target(level, start.add(160, 0, 0));
         r.tankTarget = target(level, tankAt.add(60, 0, 8));
         r.started = level.getGameTime();
