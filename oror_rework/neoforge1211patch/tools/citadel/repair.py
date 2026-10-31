@@ -466,6 +466,64 @@ def castle_walls(save, x0, x1, z0, z1, edits, stats, ymin=74):
     stats['castle_wall_cells'] += filled
 
 
+def castle_cover(save, edits, stats, x0=-60, x1=60, z0=-40, z1=50):
+    """The palace's two light wells (x -43 to -17 and 16 to 43, z -16 to 31) were left without a roof by the generator:
+    from above, two great holes in the castle's roof with the top floor's rooms, galleries and a stairwell open to the
+    sky (048, reported broken). Each is roofed in the castle's deepslate tiles, hipped from two blocks above the
+    highest thing inside, one block up a block, flat on top eight up with a ridge of glass to light the rooms below;
+    where a wall round it is lower than the roof's edge it is built up in quartz bricks to meet it."""
+    a, _ = world.load(save, x0, x1, z0, z1, 64, 192)
+    for (x, y, z), st in edits.items():
+        if x0 <= x < x1 and z0 <= z < z1 and 64 <= y < 192:
+            a[x - x0, y - 64, z - z0] = world.gid(st.split('[')[0])
+    names = world.NAMES
+    air = np.array([n in ('minecraft:air', 'minecraft:cave_air', 'minecraft:light') for n in names] + [False] * 64)
+    solid = ~air[a]
+    top = np.where(solid.any(axis=1), solid.shape[1] - 1 - np.argmax(solid[:, ::-1, :], axis=1), 0) + 64
+    roofmats = [world.IDS[n] for n in ('minecraft:deepslate_tiles', 'minecraft:deepslate_tile_stairs') if n in world.IDS]
+    hasroof = np.isin(a, roofmats).any(axis=1)
+    xs, zs = np.arange(x0, x1), np.arange(z0, z1)
+    zone = (np.abs(xs)[:, None] <= 43) & (zs[None, :] >= -17) & (zs[None, :] <= 33)
+    hole = zone & ~hasroof & (top < 140) & (top > 70)
+    lab, n = ndimage.label(hole)
+    stair = 'minecraft:deepslate_tile_stairs[facing=%s,half=bottom,shape=straight,waterlogged=false]'
+    steps = (('east', 1, 0), ('west', -1, 0), ('south', 0, 1), ('north', 0, -1))
+    for i in range(1, n + 1):
+        m = lab == i
+        if m.sum() < 300:
+            continue
+        base = int(top[m].max()) + 2
+        dist = ndimage.distance_transform_cdt(np.pad(m, 1), metric='chessboard')[1:-1, 1:-1]
+        xs_, zs_ = np.nonzero(m)
+        long_x = xs_.max() - xs_.min() >= zs_.max() - zs_.min()
+        mid = (zs_.min() + zs_.max()) // 2 if long_x else (xs_.min() + xs_.max()) // 2
+        for ci, ck in zip(xs_, zs_):
+            d = int(dist[ci, ck])
+            h = base + min(d - 1, 8)
+            x, z = int(ci) + x0, int(ck) + z0
+            if d - 1 < 8:
+                face = 'north'
+                for f, dx, dz in steps:
+                    ni, nk = ci + dx, ck + dz
+                    if 0 <= ni < m.shape[0] and 0 <= nk < m.shape[1] and m[ni, nk] and dist[ni, nk] > d:
+                        face = f
+                        break
+                edits[(x, h, z)] = stair % face
+                if h - 1 >= base:
+                    edits[(x, h - 1, z)] = 'minecraft:deepslate_tiles'
+            else:
+                ridge = (ck if long_x else ci) in (mid, mid + 1)
+                edits[(x, h, z)] = 'minecraft:glass' if ridge else 'minecraft:deepslate_tiles'
+            stats['castle_cover_cells'] += 1
+        # the walls round it built up to the roof's edge where they are lower
+        ring = ndimage.binary_dilation(m) & ~m & ~hasroof
+        for ci, ck in zip(*np.nonzero(ring)):
+            for y in range(int(top[ci, ck]) + 1, base + 1):
+                edits[(int(ci) + x0, y, int(ck) + z0)] = 'minecraft:quartz_bricks'
+                stats['castle_cover_walls'] += 1
+        stats['castle_covered'] += 1
+
+
 def castle_roofs(save, x0, x1, z0, z1, edits, stats):
     """Holes in the castle's tiled roofs (the generator skipped columns, e.g. two along the east wing's outer slope):
     in every row along x and along z, a gap of up to three columns between roof on both sides is filled at the height
@@ -706,6 +764,9 @@ def main(save, out, report=None):
     rest = {}
     fixtures(save, rest, stats)
     print('fixtures', stats['fixtures'], flush=True)
+    castle_cover(save, rest, stats)
+    print('castle cover', stats['castle_covered'], 'wells,', stats['castle_cover_cells'], 'roof cells,', stats['castle_cover_walls'], 'wall cells',
+          flush=True)
     castle_roofs(save, -100, 100, -100, 100, rest, stats)
     castle_walls(save, -110, 110, -110, 110, rest, stats)
     print('castle', stats['castle_roof_cells'], 'roof cells,', stats['castle_openings'], 'openings,', stats['castle_wall_cells'], 'wall cells', flush=True)

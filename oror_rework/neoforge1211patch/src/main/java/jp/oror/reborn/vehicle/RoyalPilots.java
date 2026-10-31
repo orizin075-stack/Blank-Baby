@@ -449,9 +449,19 @@ public final class RoyalPilots {
                 }
             }
             case "return" -> {
-                // to a point on the extended centre line, GATE blocks before the threshold
+                // to a point on the extended centre line, GATE blocks before the threshold, high enough over the ground
+                // on the way (at a fixed 28 over the runway the CI aircraft, sent home short of power, was pushed off
+                // its way by every hill until it flew into one 860 blocks out)
                 Vec3 gate = home.subtract(f.scale(GATE));
-                steer(v, gate, runwayY + 28, false, 0);
+                Vec3 way = gate.subtract(v.position()).multiply(1, 0, 1);
+                way = way.lengthSqr() < 1 ? f : way.normalize();
+                int high = groundAt(v, v.position());
+                for (int d = 30; d <= 150; d += 30) {
+                    if (v.position().add(way.scale(d)).subtract(gate).horizontalDistanceSqr() > 60 * 60) {
+                        high = Math.max(high, groundAt(v, v.position().add(way.scale(d))));
+                    }
+                }
+                steer(v, gate, Math.max(runwayY + 28, high + 30), false, 0);
                 if (target != null) {
                     mode = "patrol";
                 } else if (v.position().subtract(gate).horizontalDistance() < 30) {
@@ -615,14 +625,18 @@ public final class RoyalPilots {
                 p.remove("HeliStart");          // down: the engine is shut off on the next tick
             }
         }
-        // keep clear of the ground ahead too
-        Vec3 ahead = pos.add(v.getDeltaMovement().multiply(20, 0, 20));
-        altitude = Math.max(altitude, groundAt(v, ahead) + 12);
+        // keep clear of the ground ahead too, except when settling onto the pad (the CI helicopter hovered twelve blocks
+        // over its pad for two minutes, never landing)
+        boolean settling = target == null && pos.subtract(home).horizontalDistance() < 3;
+        if (!settling) {
+            Vec3 ahead = pos.add(v.getDeltaMovement().multiply(20, 0, 20));
+            altitude = Math.max(altitude, groundAt(v, ahead) + 12);
+        }
         Vec3 flat = goal.subtract(pos).multiply(1, 0, 1);
         double dist = flat.length();
-        // the collective: climb or sink at a rate set by the height still to go
+        // the collective: climb or sink at a rate set by the height still to go, gently in the last six blocks down
         double vy = v.getDeltaMovement().y;
-        double wantVy = Mth.clamp((altitude - pos.y) * 0.06, -0.25, 0.3);
+        double wantVy = Mth.clamp((altitude - pos.y) * 0.06, pos.y - ground < 6 ? -0.1 : -0.25, 0.3);
         boolean up = vy < wantVy - 0.02, down = vy > wantVy + 0.04 && !v.onGround();
         // the heading, toward the enemy (or the pad), and the nose: dipped to fly toward the goal once high enough
         float err = Mth.wrapDegrees(yawTo(face.lengthSqr() < 1 ? flat : face) - v.getYRot());

@@ -340,8 +340,7 @@ public final class CitadelEvents {
             royals, armed, atPost, json(census(level, t.site)), json(manned), json(ready), CitadelGarrison.parked(), kingAt, String.join(",", sample),
             e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
-        LOG.info("CITADEL-SUPPLY {\"posts\":{},\"kinds\":[{}],\"magnetScan\":{\"answered\":{},\"checked\":{}}}", json(supply),
-            String.join(",", supplySample), jp.oror.reborn.perf.MagnetScan.hits, jp.oror.reborn.perf.MagnetScan.probes);
+        LOG.info("CITADEL-SUPPLY {\"posts\":{},\"kinds\":[{}]}", json(supply), String.join(",", supplySample));
         // released a few a tick: letting two hundred chunks of royals, townsfolk and vehicles unload in one go has
         // crashed the server's entity unloading (CI run 26)
         RELEASE.addAll(t.chunks);

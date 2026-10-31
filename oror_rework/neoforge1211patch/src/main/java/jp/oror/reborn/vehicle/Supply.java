@@ -73,29 +73,83 @@ public final class Supply {
         return BuiltInRegistries.ITEM.containsKey(id) ? BuiltInRegistries.ITEM.get(id) : null;
     }
 
-    private static Container hold(Entity v) {
-        return v instanceof Container c && c.getContainerSize() > 0 ? c : null;
+    /**
+     * A vehicle's hold: Superb Warfare's vehicles keep theirs behind plain getContainerSize, getItem and setItem methods
+     * (not Minecraft's Container), so it is reached through Sbw.call; null for a vehicle without one.
+     */
+    interface Hold {
+        int size();
+
+        ItemStack get(int slot);
+
+        void set(int slot, ItemStack stack);
+
+        void changed();
+    }
+
+    static Hold hold(Entity v) {
+        if (v instanceof Container c && c.getContainerSize() > 0) {
+            return new Hold() {
+                public int size() {
+                    return c.getContainerSize();
+                }
+
+                public ItemStack get(int slot) {
+                    return c.getItem(slot);
+                }
+
+                public void set(int slot, ItemStack stack) {
+                    c.setItem(slot, stack);
+                }
+
+                public void changed() {
+                    c.setChanged();
+                }
+            };
+        }
+        if (!(Sbw.call(v, "getContainerSize") instanceof Number n) || n.intValue() <= 0) {
+            return null;
+        }
+        int size = n.intValue();
+        return new Hold() {
+            public int size() {
+                return size;
+            }
+
+            public ItemStack get(int slot) {
+                return Sbw.call(v, "getItem", slot) instanceof ItemStack st ? st : ItemStack.EMPTY;
+            }
+
+            public void set(int slot, ItemStack stack) {
+                Sbw.call(v, "setItem", slot, stack);
+            }
+
+            public void changed() {
+                Sbw.call(v, "setChanged");
+            }
+        };
     }
 
     /** A new vehicle from the kingdom's works: charged, and loaded with what its weapons fire. */
     public static void stock(Entity v) {
         Sbw.charge(v);
-        Container c = hold(v);
+        Hold c = hold(v);
         if (c == null) {
             return;
         }
         int slot = 0;
         for (String[] l : load(v)) {
             Item item = item(l[0]);
-            if (item != null && slot < c.getContainerSize()) {
-                c.setItem(slot++, new ItemStack(item, Math.min(item.getDefaultMaxStackSize(), Integer.parseInt(l[1]))));
+            if (item != null && slot < c.size()) {
+                c.set(slot++, new ItemStack(item, Math.min(item.getDefaultMaxStackSize(), Integer.parseInt(l[1]))));
             }
         }
+        c.changed();
     }
 
     /** How many rounds of its own ammunition the vehicle has aboard, and how many a full load is (bounded by its hold). */
     static int[] rounds(Entity v) {
-        Container c = hold(v);
+        Hold c = hold(v);
         if (c == null) {
             return new int[]{0, 0};
         }
@@ -103,7 +157,7 @@ public final class Supply {
         List<Item> kinds = new ArrayList<>();
         for (String[] l : load(v)) {
             Item item = item(l[0]);
-            if (item == null || slots >= c.getContainerSize()) {
+            if (item == null || slots >= c.size()) {
                 continue;
             }
             slots++;
@@ -112,8 +166,8 @@ public final class Supply {
                 kinds.add(item);
             }
         }
-        for (int i = 0; i < c.getContainerSize(); i++) {
-            ItemStack s = c.getItem(i);
+        for (int i = 0; i < c.size(); i++) {
+            ItemStack s = c.get(i);
             if (!s.isEmpty() && kinds.contains(s.getItem())) {
                 have += s.getCount();
             }
@@ -174,7 +228,7 @@ public final class Supply {
      * room or on a part-used stack of the same shells). Returns the rounds moved.
      */
     static int reload(ServerLevel level, Entity v) {
-        Container hold = hold(v);
+        Hold hold = hold(v);
         if (hold == null) {
             return 0;
         }
@@ -187,16 +241,16 @@ public final class Supply {
         int slots = 0;
         for (String[] l : load(v)) {
             Item item = item(l[0]);
-            if (item != null && slots++ < hold.getContainerSize()) {
+            if (item != null && slots++ < hold.size()) {
                 want.merge(item, Math.min(item.getDefaultMaxStackSize(), Integer.parseInt(l[1])), Integer::sum);
             }
         }
         for (Map.Entry<Item, Integer> w : want.entrySet()) {
             Item item = w.getKey();
             int have = 0;
-            for (int i = 0; i < hold.getContainerSize(); i++) {
-                if (hold.getItem(i).is(item)) {
-                    have += hold.getItem(i).getCount();
+            for (int i = 0; i < hold.size(); i++) {
+                if (hold.get(i).is(item)) {
+                    have += hold.get(i).getCount();
                 }
             }
             int need = w.getValue() - have;
@@ -223,23 +277,25 @@ public final class Supply {
                 }
             }
         }
+        if (moved > 0) {
+            hold.changed();
+        }
         return moved;
     }
 
-    private static int insert(Container c, ItemStack stack) {
-        for (int i = 0; i < c.getContainerSize() && !stack.isEmpty(); i++) {
-            ItemStack s = c.getItem(i);
+    private static int insert(Hold c, ItemStack stack) {
+        for (int i = 0; i < c.size() && !stack.isEmpty(); i++) {
+            ItemStack s = c.get(i);
             if (!s.isEmpty() && ItemStack.isSameItemSameComponents(s, stack) && s.getCount() < s.getMaxStackSize()) {
                 int n = Math.min(stack.getCount(), s.getMaxStackSize() - s.getCount());
-                s.grow(n);
-                c.setItem(i, s);
+                c.set(i, s.copyWithCount(s.getCount() + n));
                 stack.shrink(n);
             }
         }
-        for (int i = 0; i < c.getContainerSize() && !stack.isEmpty(); i++) {
-            if (c.getItem(i).isEmpty()) {
+        for (int i = 0; i < c.size() && !stack.isEmpty(); i++) {
+            if (c.get(i).isEmpty()) {
                 int n = Math.min(stack.getCount(), stack.getMaxStackSize());
-                c.setItem(i, stack.copyWithCount(n));
+                c.set(i, stack.copyWithCount(n));
                 stack.shrink(n);
             }
         }
@@ -437,11 +493,12 @@ public final class Supply {
         if (Sbw.call(v, "getMaxEnergy") instanceof Number max && max.intValue() > 0) {
             Sbw.call(v, "setEnergy", (int) (max.intValue() * share));
         }
-        Container c = hold(v);
+        Hold c = hold(v);
         if (c != null) {
-            for (int i = 0; i < c.getContainerSize(); i++) {
-                c.setItem(i, ItemStack.EMPTY);
+            for (int i = 0; i < c.size(); i++) {
+                c.set(i, ItemStack.EMPTY);
             }
+            c.changed();
         }
     }
 

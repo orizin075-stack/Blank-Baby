@@ -1,11 +1,12 @@
 """military.py: the kingdom's Superb Warfare installations, built into the citadel save by repair.py.
 
-build(save, man, edits, bes, stats) lays out, on open level land of the outer belt (outside the outer moat, clear of the
-watchtowers and fortresses, never on a road or under a structure):
-  two airbases (north-west and south-east): a 240-block concrete runway with a centre line, threshold bars and edge
+build(save, man, edits, bes, stats) lays out, inside the walls (048), on open level land never on a main road nor under
+a structure (the farm lanes and fields of the farm belt give way where needed):
+  two airbases in the farm belt between the outer wall and the inner moat (north and south): a 240-block concrete runway with a centre line, threshold bars and edge
   lights, a crewed attack aircraft at its start (it takes off down the runway) and a launch apron with a spare one;
-  four helipads (a white-bordered pad with a yellow H and corner lights) with a helicopter each;
-  four tank hangars (concrete sheds opening toward the kingdom, three bays with a crewed tank and two spare ones, a
+  four helipads (a white-bordered pad with a yellow H and corner lights) in the town's corners near the castle, with a
+  helicopter each;
+  four tank hangars in the farm belt (west and east) (concrete sheds opening toward the kingdom, three bays with a crewed tank and two spare ones, a
   workbench, an anvil and the armory's chests);
 and the posts' supply (048): a charging station of Superb Warfare at every stand (it burns the coal blocks a hopper feeds
 it from the coal chest on top, and charges every vehicle within eight blocks) and a depot chest (王国軍の弾薬庫) with
@@ -27,7 +28,7 @@ SOFT = ('grass', 'fern', 'flower', 'poppy', 'dandelion', 'tulip', 'daisy', 'alli
 YAW = {'east': -90.0, 'west': 90.0, 'south': 0.0, 'north': 180.0}
 
 
-def mask(save):
+def mask(save, lanes=False):
     """Buildable columns of the kingdom: no building above them (anything built at y 68 or higher that is not a tree, and
     four blocks around it: the watchtowers, fortresses and walls), not a road, not deep water. The small obstacles of the
     outer belt (trees, pits, buried cores, berms, rubble, puddles) are cleared where something is built."""
@@ -37,7 +38,9 @@ def mask(save):
     natural = np.array([n in ('air', 'cave_air') or any(t in n for t in SOFT) or n.endswith(('_leaves', '_log', '_wood')) for n in names])
     built = ~natural[a[:, 6:, :]].all(axis=1)                     # y 68 and up
     built = ndimage.binary_dilation(built, iterations=4)
-    road = np.array([n in ('cobblestone', 'polished_andesite', 'stone_bricks', 'gravel', 'dirt_path') for n in names])
+    # the farm lanes (dirt paths and gravel between the fields) may be paved over where lanes is set
+    road = np.array([n in (('cobblestone', 'polished_andesite', 'stone_bricks') if lanes else
+                           ('cobblestone', 'polished_andesite', 'stone_bricks', 'gravel', 'dirt_path')) for n in names])
     water = np.array([n == 'water' for n in names])
     deep = water[a[:, 2, :]] & water[a[:, 1, :]]                   # water at y 64 and 63: the moat, a lake
     ok = ~built & ~road[a[:, 2, :]] & ~deep
@@ -405,32 +408,54 @@ def turrets(man):
     return out
 
 
+# Inside the walls (048: the outer belt beyond the outer moat was no place for them): the two airbases and the four
+# hangars in the farm belt between the outer wall and the inner moat (some fields give way), the four helipads in the
+# town's corners inside the inner moat, near the castle.
+# each runway takes off outward, toward the outer wall: the landing approach comes in over the low fields, not over
+# the twenty-block outer wall
+AIRBASES = ((-250, -405, 'west', 'airbase_n'), (250, 405, 'east', 'airbase_s'))
+HANGARS = ((-405, -160, 'east'), (-405, 160, 'east'), (405, -160, 'west'), (405, 160, 'west'))
+HELIPADS = ((-235, -235, 'ah_6'), (235, -235, 'mi_28'), (235, 235, 'ah_6'), (-235, 235, 'mi_28'))
+
+
+def zones():
+    """The farm belt (between the outer wall's inside and the inner moat) and the town's ring (between the castle's
+    moat and the inner moat), as masks over the save's columns."""
+    xs = np.abs(np.arange(-640, 640))
+    ring = np.maximum(xs[:, None], xs[None, :])
+    return (ring >= 340) & (ring <= 470), (ring >= 160) & (ring <= 292)
+
+
 def build(save, man, edits, bes, stats):
     stats['military'] = collections.Counter()
     stats['military_missing'] = []
     stats['military_at'] = {}
-    ok, a = mask(save)
-    # nothing within the outer moat: the belt beyond |x| or |z| 520
-    xs = np.arange(-640, 640)
-    belt = (np.abs(xs)[:, None] >= 522) | (np.abs(xs)[None, :] >= 522)
-    ok &= belt
+    ok_town, a = mask(save)
+    ok_farm, _ = mask(save, lanes=True)
+    # nothing on what this repair has already built (the town's new houses, their yards and lights)
+    for (x, y, z), st in edits.items():
+        if y >= 65 and not st.startswith(('minecraft:air', 'minecraft:cave_air')) and -640 <= x < 640 and -640 <= z < 640:
+            ok_town[x + 640, z + 640] = ok_farm[x + 640, z + 640] = False
+    farm, town = zones()
+    ok_farm &= farm
+    ok_town &= town
     posts = []
-    runway(a, ok, edits, bes, stats, posts, -430, -605, 'east', 'airbase_nw')
-    runway(a, ok, edits, bes, stats, posts, 430, 605, 'west', 'airbase_se')
-    # keep the next sites off what was just built
-    for (x0, z0, w, d) in stats['military_at'].values():
-        ok[x0 + 640 - 4:x0 + 640 + w + 4, z0 + 640 - 4:z0 + 640 + d + 4] = False
-    for i, (cx, cz, heli) in enumerate(((-560, -470, 'ah_6'), (-480, -560, 'mi_28'), (560, 470, 'ah_6'), (480, 560, 'mi_28'))):
-        helipad(a, ok, edits, bes, stats, posts, cx, cz, heli, 'helipad_%d' % i)
-        x0, z0, w, d = stats['military_at'].get('helipad_%d' % i, (0, 0, 0, 0))
+
+    def keep_off(name, m):
+        x0, z0, w, d = stats['military_at'].get(name, (0, 0, 0, 0))
         if w:
-            ok[x0 + 640 - 3:x0 + 640 + w + 3, z0 + 640 - 3:z0 + 640 + d + 3] = False
+            for o in (ok_farm, ok_town):
+                o[x0 + 640 - m:x0 + 640 + w + m, z0 + 640 - m:z0 + 640 + d + m] = False
+    for cx, cz, heading, name in AIRBASES:
+        runway(a, ok_farm, edits, bes, stats, posts, cx, cz, heading, name)
+        keep_off(name, 4)
+    for i, (cx, cz, heli) in enumerate(HELIPADS):
+        helipad(a, ok_town, edits, bes, stats, posts, cx, cz, heli, 'helipad_%d' % i)
+        keep_off('helipad_%d' % i, 3)
     sets = [['m_1a_2', 't_90a', 'ztz_99a'], ['t_90a', 'm_1a_2', 'bmp_2'], ['ztz_99a', 'm_1a_2', 't_90a'], ['bradley', 't_90a', 'm_1a_2']]
-    for i, (cx, cz, opening) in enumerate(((-585, -110, 'east'), (-585, 110, 'east'), (585, -110, 'west'), (585, 110, 'west'))):
-        hangar(a, ok, edits, bes, stats, posts, cx, cz, opening, sets[i], 'hangar_%d' % i)
-        x0, z0, w, d = stats['military_at'].get('hangar_%d' % i, (0, 0, 0, 0))
-        if w:
-            ok[x0 + 640 - 4:x0 + 640 + w + 4, z0 + 640 - 4:z0 + 640 + d + 4] = False
+    for i, (cx, cz, opening) in enumerate(HANGARS):
+        hangar(a, ok_farm, edits, bes, stats, posts, cx, cz, opening, sets[i], 'hangar_%d' % i)
+        keep_off('hangar_%d' % i, 4)
     posts += turrets(man)
     stats['military']['turrets'] = sum(1 for p in posts if p.get('still'))
     taken = set()
