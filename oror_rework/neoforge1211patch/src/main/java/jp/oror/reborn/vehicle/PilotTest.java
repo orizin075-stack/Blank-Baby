@@ -77,7 +77,7 @@ public final class PilotTest {
         ServerLevel level = src.getLevel();
         Run r = new Run();
         r.level = level;
-        BlockPos origin = BlockPos.containing(src.getPosition()).offset(800, 0, 0);
+        BlockPos origin = flattest(level, BlockPos.containing(src.getPosition()));
         r.origin = origin;
         for (int dx = -12; dx <= 20; dx++) {
             for (int dz = -9; dz <= 9; dz++) {
@@ -184,6 +184,41 @@ public final class PilotTest {
             java.util.Collections.sort(items);
             LOG.info("ITEMS-{} {} [{}]", ns, items.size(), String.join(" ", items));
         }
+    }
+
+    /**
+     * The test ground: of eight places 800 to 1340 blocks from the caller (none near the capital), the flattest dry one,
+     * by twelve heights over the 230 x 55 blocks of runway and field. Hills around the strip made a trench of it before:
+     * aircraft flew into its sides, the tank slid off its edge and the helicopter rose under an overhang.
+     */
+    private static BlockPos flattest(ServerLevel level, BlockPos from) {
+        int[][] offsets = {{800, 0}, {0, 800}, {-800, 0}, {0, -800}, {1200, 600}, {-1200, -600}, {600, -1200}, {-600, 1200}};
+        jp.oror.reborn.citadel.CitadelSites.Site capital = jp.oror.reborn.citadel.CitadelSites.capital();
+        BlockPos best = from.offset(800, 0, 0);
+        double bestScore = Double.MAX_VALUE;
+        for (int[] o : offsets) {
+            BlockPos c = from.offset(o[0], 0, o[1]);
+            if (capital != null && capital.center().distSqr(new BlockPos(c.getX() + 110, capital.center().getY(), c.getZ() + 20)) < 1100 * 1100) {
+                continue;
+            }
+            int lo = Integer.MAX_VALUE, hi = Integer.MIN_VALUE;
+            boolean wet = false;
+            for (int dx : new int[]{-10, 60, 130, 210}) {
+                for (int dz : new int[]{-8, 20, 44}) {
+                    int h = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c.getX() + dx, c.getZ() + dz);
+                    lo = Math.min(lo, h);
+                    hi = Math.max(hi, h);
+                    wet |= h <= level.getSeaLevel();
+                }
+            }
+            double score = hi - lo + (wet ? 40 : 0);
+            LOG.info("PILOT-SITE {} {} spread {} wet {}", c.getX(), c.getZ(), hi - lo, wet);
+            if (score < bestScore) {
+                bestScore = score;
+                best = c;
+            }
+        }
+        return best;
     }
 
     private static boolean isA(Object o, String name) {

@@ -282,11 +282,11 @@ public final class RoyalPilots {
             right = err > 6;
             left = err < -6;
         } else {
-            // the goal is behind: a reversing turn brings the nose round
-            forward = false;
-            back = true;
-            left = err > 0;
-            right = err < 0;
+            // the goal is behind: a full turn while rolling forward (tracks do not pivot well, and backing up blind
+            // takes a tank over walls and banks)
+            forward = true;
+            right = err > 0;
+            left = err < 0;
         }
         Sbw.keys(v, forward, back, left, right, forward && dist > 40 && Math.abs(err) < 30, false);
         learnSteering(v, p, left, right, back);
@@ -619,14 +619,16 @@ public final class RoyalPilots {
     /** The top of the ground at a column; a column of a chunk not loaded counts as the ground under the vehicle. */
     private static int groundAt(Entity v, Vec3 at) {
         int x = Mth.floor(at.x), z = Mth.floor(at.z);
-        if (!v.level().hasChunk(x >> 4, z >> 4)) {
+        net.minecraft.world.level.chunk.LevelChunk chunk = v.level() instanceof ServerLevel sl ? sl.getChunkSource().getChunkNow(x >> 4, z >> 4) : null;
+        if (chunk == null) {
             x = Mth.floor(v.getX());
             z = Mth.floor(v.getZ());
-            if (!v.level().hasChunk(x >> 4, z >> 4)) {
+            chunk = v.level() instanceof ServerLevel sl ? sl.getChunkSource().getChunkNow(x >> 4, z >> 4) : null;
+            if (chunk == null) {
                 return v.level().getMinBuildHeight();
             }
         }
-        return v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
+        return chunk.getHeight(Heightmap.Types.MOTION_BLOCKING, x & 15, z & 15) + 1;
     }
 
     /** Cruising height: 45 above the post or the target, and 35 above the highest ground of the next 200 blocks ahead. */
