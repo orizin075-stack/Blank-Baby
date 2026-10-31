@@ -80,7 +80,7 @@ public final class PilotTest {
         r.level = level;
         BlockPos origin = flattest(level, BlockPos.containing(src.getPosition()));
         r.origin = origin;
-        for (int dx = -12; dx <= 20; dx++) {
+        for (int dx = -14; dx <= 20; dx++) {
             for (int dz = -9; dz <= 9; dz++) {
                 ChunkPos p = new ChunkPos((origin.getX() >> 4) + dx, (origin.getZ() >> 4) + dz);
                 if (level.setChunkForced(p.x, p.z, true)) {
@@ -97,6 +97,20 @@ public final class PilotTest {
                 level.setBlock(new BlockPos(origin.getX() + x, y - 2, origin.getZ() + z), Blocks.STONE.defaultBlockState(), 2);
                 for (int h = 0; h < 14; h++) {
                     level.setBlock(new BlockPos(origin.getX() + x, y + h, origin.getZ() + z), Blocks.AIR.defaultBlockState(), 2);
+                }
+            }
+        }
+        // the landing approach: 160 blocks of open ground before the runway's west end, under its glide path (the CI
+        // aircraft, sent home to land, went round 26 times over hills in its way until its battery ran out); as at
+        // the capital, where the runways are approached over the fields
+        for (int x = -170; x < -10; x++) {
+            for (int z = -12; z <= 12; z++) {
+                level.setBlock(new BlockPos(origin.getX() + x, y - 1, origin.getZ() + z), Blocks.GRASS_BLOCK.defaultBlockState(), 2);
+                for (int h = 0; h < 40; h++) {
+                    BlockPos q = new BlockPos(origin.getX() + x, y + h, origin.getZ() + z);
+                    if (!level.getBlockState(q).isAir()) {
+                        level.setBlock(q, Blocks.AIR.defaultBlockState(), 2);
+                    }
                 }
             }
         }
