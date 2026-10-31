@@ -64,45 +64,45 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/018296bcb207bea6fd25b05f08eee3942dcec406/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.47s
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.39s
+[1m*** Started working on [4mdownloadClient[23;0m[23;0m
 [1m*** Started working on [4mdownloadServer[23;0m[23;0m
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-[1m*** Started working on [4mdownloadClient[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.49s
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.51s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 1.02s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.93s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.39s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.33s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.82s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.69s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.13s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.34s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.66s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.32s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.18s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.76s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.02s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.41s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.07s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.32s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.41s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.35s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.70s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.68s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.15s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.20s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.40s
-Total runtime: 29.94s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.34s
+Total runtime: 30.36s
 
 
 > Task :compileJava
@@ -121,11 +121,11 @@ Total runtime: 29.94s
 Note: Some input files use or override a deprecated API.
 Note: Recompile with -Xlint:deprecation for details.
 4 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1793420399340.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_3-1793422580580.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 1m 11s
+BUILD SUCCESSFUL in 1m 15s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -187,5 +187,5 @@ modId="minecraft"
   public void createStructures(net.minecraft.core.RegistryAccess, net.minecraft.world.level.chunk.ChunkGeneratorStructureState, net.minecraft.world.level.StructureManager, net.minecraft.world.level.chunk.ChunkAccess, net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager);
   private boolean tryGenerateStructure(net.minecraft.world.level.levelgen.structure.StructureSet$StructureSelectionEntry, net.minecraft.world.level.StructureManager, net.minecraft.core.RegistryAccess, net.minecraft.world.level.levelgen.RandomState, net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager, long, net.minecraft.world.level.chunk.ChunkAccess, net.minecraft.world.level.ChunkPos, net.minecraft.core.SectionPos);
   private void lambda$createStructures$14(net.minecraft.world.level.StructureManager, net.minecraft.core.SectionPos, net.minecraft.world.level.chunk.ChunkAccess, net.minecraft.world.level.chunk.ChunkGeneratorStructureState, net.minecraft.world.level.ChunkPos, net.minecraft.core.RegistryAccess, net.minecraft.world.level.levelgen.RandomState, net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager, net.minecraft.core.Holder);
-replaced 0 old class files; added 27 compiled; overlaid 23 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json']
-3a6516bfef6c6c58bf7c831d781ba40ef0456799dcae676db1f18658ac59ec79  out/oror_supreme_bosses-0.17.39-046-preview.jar
+replaced 0 old class files; added 27 compiled; overlaid 25 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json']
+10e42ab864f0c3b4defd8ddfd71f61d305116972372ea8494b90c929dfcc86fe  out/oror_supreme_bosses-0.17.39-046-preview.jar
