@@ -269,6 +269,16 @@ public final class PilotTest {
             return;
         }
         long t = r.level.getGameTime() - r.started;
+        if (r.plane != null && t % 40 == 0 && r.plane.isAlive()) {
+            String m = r.plane.getPersistentData().getCompound("OrorPilot").getString("Mode");
+            if (m.equals("return") || m.equals("approach") || m.equals("rollout") || m.equals("taxi")) {
+                LOG.info(String.format(Locale.ROOT, "PLANE-TRACK {\"t\":%d,\"mode\":\"%s\",\"x\":%.0f,\"y\":%.1f,\"z\":%.0f,\"ground\":%d,"
+                        + "\"speed\":%.2f,\"vy\":%.2f,\"pitch\":%.1f,\"health\":%.2f}", t, m, r.plane.getX() - r.origin.getX(), r.plane.getY(),
+                    r.plane.getZ() - r.origin.getZ(), r.level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(r.plane.getX()),
+                        (int) Math.floor(r.plane.getZ())), r.plane.getDeltaMovement().length(), r.plane.getDeltaMovement().y, r.plane.getXRot(),
+                    Sbw.health(r.plane)));
+            }
+        }
         if (r.plane != null) {
             String mode = r.plane.getPersistentData().getCompound("OrorPilot").getString("Mode");
             if (!mode.equals(r.lastMode)) {

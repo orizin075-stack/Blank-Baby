@@ -476,12 +476,23 @@ public final class RoyalPilots {
                 double glide = runwayY + 1.5 + Math.max(0, along) * GLIDE;
                 Vec3 aim = touch.add(f.scale(Math.max(20, -along)));
                 boolean slow = speed > 1.35, fast = speed < 0.9;
-                steerSpeed(v, aim, glide, fast, slow);
+                // the ground ahead on the way down: where it rises into the glide path, go round again (the approach
+                // runs without the terrain guard, which would pull it up off every glide)
+                Vec3 m = v.getDeltaMovement().multiply(1, 0, 1);
+                boolean blocked = false;
+                if (m.lengthSqr() > 0.01 && along > 8) {
+                    for (int t = 5; t <= 40; t += 5) {
+                        Vec3 at = v.position().add(m.scale(t));
+                        double alongThere = touch.subtract(at).dot(f);
+                        blocked |= alongThere > 4 && groundAt(v, at) > runwayY + 1.5 + Math.max(0, alongThere) * GLIDE - 3;
+                    }
+                }
+                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()));
                 if (v.onGround()) {
                     mode = "rollout";
                     p.putLong("Since", now);
                     p.putBoolean("Landed", true);
-                } else if (along < -120 || v.getY() > glide + 25 || now - p.getLong("Since") > 900) {
+                } else if (blocked || along < -120 || v.getY() > glide + 25 || now - p.getLong("Since") > 900) {
                     mode = "return";
                     p.putInt("GoArounds", p.getInt("GoArounds") + 1);
                 }
@@ -765,8 +776,15 @@ public final class RoyalPilots {
         aimNose(v, yawTo(point.subtract(v.position())), wantPitch, true);
     }
 
-    private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower) {
-        float wantPitch = (float) Mth.clamp(-(altitude - v.getY()) * 0.8, -12, 14);
+    /**
+     * The landing glide: toward a point at a height, at most six degrees nose down (it dived at fourteen and flew into
+     * the ground short of the runway), held level in the last eight blocks and flared nose up in the last three.
+     */
+    private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower, double agl) {
+        float wantPitch = (float) Mth.clamp(-(altitude - v.getY()) * 0.8, -12, 6);
+        if (agl < 8) {
+            wantPitch = Math.min(wantPitch, agl < 3 ? -4F : 1F);
+        }
         float yawErr = Mth.wrapDegrees(yawTo(point.subtract(v.position())) - v.getYRot());
         float pitchErr = wantPitch - v.getXRot();
         Sbw.mouse(v, Mth.clamp(yawErr / 10.0, -2, 2), Mth.clamp(pitchErr / 3.0, -8, 8));

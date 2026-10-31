@@ -142,7 +142,10 @@ jobs:
           bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 1500 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
             'FLIGHT-RESULT' 'VILLAGE-FLIGHT {' 'CI-DONE' -- citadel,war,pilots,villageflight -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
-          { grep -E 'CITADEL-SELFTEST|WAR-|FLIGHT-|SUPPLY-|VILLAGE-FLIGHT|CI-DONE|OROR (Citadel|War|Vehicles|CI|Village)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
+          # the results first (the full list below is cut at 400 lines), then everything
+          grep -E 'CITADEL-SELFTEST|CITADEL-SUPPLY|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
+            | cut -c1-6000 >> out/server_test.txt || true
+          { grep -E 'CITADEL-SELFTEST|WAR-|FLIGHT-|SUPPLY-|VILLAGE-FLIGHT|PLANE-TRACK|CI-DONE|OROR (Citadel|War|Vehicles|CI|Village)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
           # where the server thread spent the battle (JFR samples between the war's start and its result)
           J="$RUNNER_TEMP/server/war.jfr"; [ -s "$J" ] || J="$RUNNER_TEMP/server/rec.jfr"
