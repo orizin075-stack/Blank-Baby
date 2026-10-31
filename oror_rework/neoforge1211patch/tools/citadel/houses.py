@@ -88,7 +88,18 @@ TRADES = {
     'guild': ('fletching_table', 'village_fletcher', (11, 13), (9, 9), (2, 2), 'guildhall', 'dorm', 'targets'),
     'inn': ('barrel', 'village_plains_house', (11, 13), (9, 11), (3, 3), 'taproom', 'inn', 'terrace'),
     'tavern': ('barrel', 'village_plains_house', (11, 13), (9, 9), (2, 2), 'taproom', 'bedroom', 'terrace'),
+    # the facilities the town's freed plots now hold
+    'chapel': ('brewing_stand', 'village_temple', (9, 11), (9, 11), (1, 1), 'chapel', 'bedroom', 'garden'),
+    'school': ('lectern', 'village_plains_house', (9, 11), (9, 9), (1, 2), 'classroom', 'study', 'garden'),
+    'clinic': ('brewing_stand', 'village_temple', (9, 11), (7, 9), (1, 2), 'clinic', 'bedroom', 'herbs'),
+    'warehouse': ('barrel', 'village_plains_house', (9, 11), (9, 9), (1, 1), 'warehouse', 'loft', 'garden'),
+    'bathhouse': ('cauldron', 'village_plains_house', (9, 11), (9, 9), (1, 1), 'bath', 'bedroom', 'garden'),
+    'guardhouse': ('smithing_table', 'village_weaponsmith', (9, 9), (7, 9), (1, 2), 'guardroom', 'dorm', 'targets'),
+    'mill': ('composter', 'village_plains_house', (9, 9), (7, 9), (1, 2), 'mill', 'loft', 'wheat'),
+    'florist': ('composter', 'village_plains_house', (7, 9), (7, 9), (1, 2), 'florist', 'bedroom', 'herbs'),
 }
+# what the town's extra buildings are, in turn: mostly homes, and every facility several times
+FACILITIES = ['chapel', 'school', 'clinic', 'warehouse', 'bathhouse', 'guardhouse', 'mill', 'florist', 'baker', 'tailor', 'tavern']
 # rooms: pieces against the walls (the first ones always, then filler picked at random), the centre piece, floor
 ROOMS = {
     'home': (['furnace', 'crafting_table', 'barrel_pot', 'cauldron', 'chest', 'shelf2'], ['barrel_candle', 'counter_pot', 'shelf_pot', 'plant', 'composter', 'barrel'], 'dining', None),
@@ -111,6 +122,14 @@ ROOMS = {
     'dorm': (['bed', 'bed', 'bed', 'chest', 'chest'], ['nightstand', 'barrel', 'plant'], 'rug', None),
     'taproom': (['station', 'keg', 'keg', 'keg', 'cauldron', 'jukebox'], ['keg', 'barrel_lantern', 'plant', 'counter_candle', 'chest'], 'tables', None),
     'inn': (['bed', 'nightstand', 'bed', 'nightstand', 'bed', 'chest'], ['bed', 'nightstand', 'plant', 'chest'], 'rug', None),
+    'chapel': (['station', 'shelf2', 'chest', 'plant', 'plant'], ['counter_candle', 'shelf_pot', 'plant', 'counter_candle'], 'pews', 'polished_andesite'),
+    'classroom': (['station', 'shelf2', 'shelf2', 'chest'], ['shelf2', 'shelf_pot', 'plant', 'barrel_candle'], 'desks', None),
+    'clinic': (['station', 'bed', 'bed', 'cauldron', 'chest'], ['shelf_pot', 'barrel_candle', 'plant', 'nightstand'], 'rug', 'white_concrete'),
+    'warehouse': (['station', 'keg', 'keg', 'keg', 'keg', 'chest', 'chest'], ['keg', 'hay', 'barrel', 'chest', 'wool'], 'crates', 'stone_bricks'),
+    'bath': (['station', 'cauldron', 'chest', 'plant'], ['plant', 'barrel_candle', 'wool', 'counter_candle'], 'pool', 'smooth_stone'),
+    'guardroom': (['station', 'anvil', 'chest', 'chest', 'grindstone'], ['barrel', 'target', 'barrel_lantern', 'chest'], 'work', 'stone_bricks'),
+    'mill': (['station', 'grindstone', 'hay', 'hay', 'barrel'], ['hay', 'composter', 'barrel', 'chest'], 'crates', None),
+    'florist': (['station', 'counter_pot', 'counter_pot', 'counter_pot', 'barrel'], ['plant', 'counter_pot', 'shelf_pot', 'plant'], 'flowers', None),
 }
 FLOWERS = ['poppy', 'dandelion', 'cornflower', 'oxeye_daisy', 'allium', 'azure_bluet', 'red_tulip', 'pink_tulip', 'white_tulip',
            'orange_tulip', 'lily_of_the_valley', 'blue_orchid']
@@ -121,11 +140,19 @@ POTS = ['potted_red_tulip', 'potted_fern', 'potted_blue_orchid', 'potted_azure_b
 WOOLS = ['white_wool', 'red_wool', 'blue_wool', 'yellow_wool', 'green_wool', 'light_blue_wool', 'pink_wool', 'orange_wool', 'purple_wool']
 CROPS = [('wheat', 7), ('carrots', 7), ('potatoes', 7), ('beetroots', 3)]
 # who lives in a building (tools/citadel/garrison.py stands as many townsfolk in it): each gets a bed
-HOUSEHOLD = dict(house=3, inn=5, tavern=3, guild=3)
+HOUSEHOLD = dict(house=3, inn=4, guardhouse=3)
+
+
+def household(kind, ident):
+    """How many live in building ident: a home two, or three with a child in every third home; an inn four; others two."""
+    if kind == 'house':
+        return 3 if ident % 3 == 0 else 2
+    return HOUSEHOLD.get(kind, 2)
 # rooms deep enough get a partition across them: a front room and a back room with a door between
 DIVIDED = {'home', 'bakery', 'taproom', 'guildhall', 'bedroom', 'inn', 'dorm', 'shop', 'tailor', 'alchemy', 'jewel', 'scriptorium', 'maps'}
 # what a room's barrels hold (loot.THEMES)
-GOODS = {'home': 'home', 'bedroom': 'bedroom', 'study': 'library', 'forge': 'forge', 'jewel': 'jewel', 'bakery': 'bakery', 'butchery': 'butchery',
+GOODS = {'chapel': 'library', 'classroom': 'library', 'clinic': 'alchemy', 'warehouse': 'storage', 'bath': 'home', 'guardroom': 'guild',
+         'mill': 'bakery', 'florist': 'market', 'home': 'home', 'bedroom': 'bedroom', 'study': 'library', 'forge': 'forge', 'jewel': 'jewel', 'bakery': 'bakery', 'butchery': 'butchery',
          'tailor': 'tailor', 'alchemy': 'alchemy', 'library': 'library', 'scriptorium': 'library', 'maps': 'maps', 'stable': 'stable',
          'loft': 'stable', 'shop': 'market', 'storage': 'storage', 'guildhall': 'guild', 'dorm': 'bedroom', 'taproom': 'taproom', 'inn': 'bedroom'}
 # a family home's trade: one of these workstations on its ground floor, so one of the family has a job
@@ -211,8 +238,9 @@ def pick(x, rng):
 
 
 # ------------------------------------------------------------------------------------------------------------------ build
-def build(plot, kind, seed, front):
-    """plot: (x0, z0, x1, z1), the inclusive ground rectangle; front: the side of the plot on the street."""
+def build(plot, kind, seed, front, max_w=None, fence_sides='all'):
+    """plot: (x0, z0, x1, z1), the inclusive ground rectangle; front: the side of the plot on the street; max_w: the widest
+    the house may be (a plot shared with neighbours); fence_sides: 'all', or 'front' for a plot between neighbours."""
     rng = random.Random(seed)
     x0, z0, x1, z1 = plot
     style_name = rng.choice(sorted(STYLES))
@@ -227,6 +255,10 @@ def build(plot, kind, seed, front):
         W = 9
     if floors > 2 and W < 11:
         floors = 2
+    if max_w is not None and W > max_w:
+        W = max(7, max_w - (1 - max_w % 2))
+        if W < 9 and floors > 1:
+            floors = 1
     # the plot along the front direction and across it
     F = DIRS[front]
     R = (-F[1], F[0])
@@ -245,6 +277,7 @@ def build(plot, kind, seed, front):
     r0 = (min(along_r) + max(along_r)) // 2 - W // 2
     h = House((f * F[0] + r0 * R[0], f * F[1] + r0 * R[1]), front, rng)
     h.style, h.kind, h.W, h.D, h.floors, h.loot, h.station = style_name, kind, W, D, floors, loot_table, station
+    h.fence_sides = fence_sides
     h.umin, h.umax = min(along_r) - r0, max(along_r) - r0
     h.vmin, h.vmax = f - street, f - far
     h.yard = set()                     # local (u, v) cells of the yard already used
@@ -953,6 +986,53 @@ def centre_piece(h, s, centre, inside, used, blocked, keep, access, ok, y, rng):
                     h.set(c[0], y, c[1], props('chest', facing=h.face('front'), type='single', waterlogged='false'), be=('chest', h.loot))
                 else:
                     h.set(c[0], y, c[1], piece)
+    elif centre == 'pews':
+        # rows of pews facing the altar at the back, an aisle down the middle from the door
+        for v in range(v0 + 2, D - 3, 2):
+            for u in range(1, W - 1):
+                if abs(u - h.door_u) <= 0 or u in (1, W - 2):
+                    continue
+                if claim([(u, v)]):
+                    h.set(u, y, v, stairs(wood + '_stairs', h.face('front')))
+        au = h.door_u
+        if claim([(au - 1, D - 2)]):
+            h.set(au - 1, y, D - 2, 'polished_andesite')
+            dress(h, au - 1, y + 1, D - 2, 'candle', rng)
+        if claim([(au + 1, D - 2)]):
+            h.set(au + 1, y, D - 2, 'polished_andesite')
+            dress(h, au + 1, y + 1, D - 2, 'candle', rng)
+        if claim([(au, D - 2)]):
+            h.set(au, y, D - 2, props('bell', attachment='floor', facing=h.face('front'), powered='false'), be='bell')
+    elif centre == 'desks':
+        # rows of desks with their chairs facing the teacher's wall at the back
+        for v in range(v0 + 2, D - 3, 2):
+            for u in range(2, W - 2, 2):
+                if u == h.door_u:
+                    continue
+                if claim([(u, v), (u, v - 1)]):
+                    h.set(u, y, v, stairs(wood + '_stairs', h.face('front'), 'top'))
+                    h.set(u, y, v - 1, stairs(wood + '_stairs', h.face('front')))
+    elif centre == 'pool':
+        # a sunken pool in the floor, its rim the room's floor
+        cells = [(u, v) for u in range(cu - 1, cu + 2) for v in range(cv - 1, cv + 1)]
+        if claim(cells):
+            for (u, v) in cells:
+                h.set(u, y - 1, v, 'water')
+                h.set(u, y - 2, v, 'smooth_stone')
+    elif centre == 'crates':
+        # stacks of barrels and crates down the middle
+        for u in range(2, W - 2, 2):
+            for v in (cv,):
+                if claim([(u, v)]):
+                    h.set(u, y, v, props('barrel', facing='up', open='false'), be=('fill', 'barrel', 'storage'))
+                    if rng.random() < 0.6:
+                        h.set(u, y + 1, v, props('barrel', facing='up', open='false'), be=('fill', 'barrel', 'storage'))
+    elif centre == 'flowers':
+        # a flower table in the middle: pots on a counter
+        for u in (cu - 1, cu, cu + 1):
+            if claim([(u, cv)]):
+                h.set(u, y, cv, stairs(wood + '_stairs', h.face('back'), 'top'))
+                h.set(u, y + 1, cv, rng.choice(POTS))
     elif centre == 'stalls':
         # fence stalls across the stable with a hay bale in each
         for u in range(2, W - 2, 3):
@@ -966,7 +1046,7 @@ def light_room(h, s, inside, blocked, used, rng):
     """hanging lanterns from the ceiling over free cells until every free floor cell has block light 8"""
     fy = FLOOR0 + 4 * s
     y_feet = fy + 1
-    for _ in range(8):
+    for _ in range(14):
         L = light(h, inside, s)
         dark = [c for c in inside - blocked - used if L.get(c, 0) < 8]
         if not dark:
@@ -1064,13 +1144,14 @@ def yard(h, kind, rng):
                 continue
             h.set(u, GROUND + 1, vmin, edge_mat)
             h.yard.add((u, vmin))
-        for v in range(vmin, vmax + 1):
-            for u in (umin, umax):
-                h.set(u, GROUND + 1, v, edge_mat)
-                h.yard.add((u, v))
-        for u in range(umin, umax + 1):
-            h.set(u, GROUND + 1, vmax, edge_mat)
-            h.yard.add((u, vmax))
+        if h.fence_sides == 'all':
+            for v in range(vmin, vmax + 1):
+                for u in (umin, umax):
+                    h.set(u, GROUND + 1, v, edge_mat)
+                    h.yard.add((u, v))
+            for u in range(umin, umax + 1):
+                h.set(u, GROUND + 1, vmax, edge_mat)
+                h.yard.add((u, vmax))
         # gate posts with lanterns at the path
         for u in (min(gap) - 1, max(gap) + 1):
             h.set(u, GROUND + 1, vmin, log(st['frame'] if st.get('frame') and 'log' in st['frame'] else 'stripped_oak_log'))

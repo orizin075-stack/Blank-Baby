@@ -130,12 +130,18 @@ def write_region(path, chunks):
         f.write(body)
 
 
-def apply(save_in, save_out, edits, bes=None):
+def apply(save_in, save_out, edits, bes=None, biome=None):
+    """biome, if given, becomes the biome of every chunk of the save."""
     if os.path.abspath(save_in) != os.path.abspath(save_out):
         if os.path.exists(save_out):
             shutil.rmtree(save_out)
         shutil.copytree(save_in, save_out)
     per_region = {}
+    if biome:
+        for f in os.listdir(os.path.join(save_out, 'region')):
+            if f.endswith('.mca'):
+                rx, rz = (int(v) for v in f[2:-4].split('.'))
+                per_region.setdefault((rx, rz), {})
     for (x, y, z), s in edits.items():
         per_region.setdefault((x >> 9, z >> 9), {}).setdefault((x >> 4, z >> 4), {})[(x, y, z)] = s
     be_chunks = {}
@@ -149,6 +155,9 @@ def apply(save_in, save_out, edits, bes=None):
             cx, cz = anvil.val(nbt['xPos']), anvil.val(nbt['zPos'])
             if (cx, cz) in chunk_map:
                 nbt = edit_chunk(nbt, chunk_map[(cx, cz)], be_chunks.get((cx, cz)))
+            if biome:
+                for sec in nbt.get('sections', []):
+                    sec['biomes'] = {'palette': [biome]}
             chunks[(lx, lz)] = nbt
         write_region(path, chunks)
     return sum(len(c) for c in per_region.values())

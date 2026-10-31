@@ -3,10 +3,6 @@ package jp.oror.reborn.citadel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -29,23 +25,23 @@ import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStr
 import net.minecraft.world.level.saveddata.SavedData;
 
 /**
- * Where Grand Citadels stand in a world. The overworld is cut into regions of 256 x 256 chunks; each region gets one
- * candidate place from the seed, tried up to four times, and keeps it only where the land under the whole 1,280-block
- * kingdom is dry and level enough (sampled from the terrain noise, so before anything is generated), away from the
- * world's spawn and from every stronghold. Operators can add more with /oror citadel place. Everything a worldgen
- * thread asks is a pure function of the seed, so the threads agree without the world being loaded.
+ * Where the Grand Citadel stands in a world: the kingdom's capital, one to a world, its centre 800 to 960 blocks from the
+ * world's spawn (along a side of the kingdom, so the spawn stays outside its walls) where the land under the whole
+ * 1,280-block kingdom is driest and most level (sampled from the terrain noise, so before anything is generated), never
+ * where a chunk has been generated already (an old world gets its capital on new land) and away from every stronghold.
+ * The choice is made once, when the world is first loaded with this version, and kept with the world (oror_citadels);
+ * every chunk of the kingdom is the Royal Capital biome (oror_supreme_bosses:royal_capital). Operators can add more with
+ * /oror citadel place. The 045 preview save's citadel at its origin is that world's capital.
  */
 public final class CitadelSites {
-    public static final int REGION = 256;
     public static final int SIZE = CitadelData.CHUNKS;
+    /** The capital's centre from the spawn: at least NEAR along one axis (the spawn outside the kingdom and its apron), at most FAR in all. */
+    public static final int NEAR = 780, FAR = 960;
     /** Chunks of graded land around the kingdom, between its ground and the natural terrain. */
     public static final int APRON = 2;
     /** Chunks around the kingdom where no other structure starts. */
     public static final int CLEAR = 6;
-    private static final int EDGE = 8;
-    private static final int ATTEMPTS = 4;
-    private static final int SPAWN_CLEAR = 24;
-    private static final long SALT = 0x4F524F52_43495441L;
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Citadel");
 
     /** A citadel: its north-west chunk and the y of its ground (the save's grass at y 64). */
     public record Site(int chunkX, int chunkZ, int ground, boolean forced) {
@@ -80,8 +76,7 @@ public final class CitadelSites {
     }
 
     private record World(ChunkGenerator generator, RandomState random, long seed, LevelHeightAccessor height, int seaLevel,
-                         ChunkGeneratorStructureState structures, Map<Long, Optional<Site>> regions, List<Site> forced,
-                         ChunkPos[][] strongholds) {
+                         ChunkGeneratorStructureState structures, Site capital, List<Site> forced, ChunkPos[][] strongholds) {
     }
 
     private static volatile World world;
@@ -91,14 +86,116 @@ public final class CitadelSites {
     private CitadelSites() {
     }
 
-    /** Called when the overworld is created, before its first chunk is generated. */
+    /**
+     * Called when the overworld is created, before its first chunk is generated: the world's capital, chosen now if the
+     * world has none yet. A new world's spawn is not set yet: it is taken where the game will look for it (the climate's
+     * spawn point), and checked once the server has started (spawnCheck).
+     */
     public static void bind(ServerLevel level) {
-        java.nio.file.Path manifest = level.getServer().getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).resolve("build_manifest.json");
-        preview = java.nio.file.Files.isRegularFile(manifest) ? new Site(-CitadelData.HALF, -CitadelData.HALF, CitadelData.GROUND, true) : null;
+        java.nio.file.Path root = level.getServer().getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT);
+        preview = java.nio.file.Files.isRegularFile(root.resolve("build_manifest.json"))
+            ? new Site(-CitadelData.HALF, -CitadelData.HALF, CitadelData.GROUND, true) : null;
         Store store = level.getDataStorage().computeIfAbsent(Store.FACTORY, "oror_citadels");
-        world = new World(level.getChunkSource().getGenerator(), level.getChunkSource().randomState(), level.getSeed(), level,
-            level.getSeaLevel(), level.getChunkSource().getGeneratorState(), new ConcurrentHashMap<>(),
-            new CopyOnWriteArrayList<>(store.sites), new ChunkPos[1][]);
+        World w = new World(level.getChunkSource().getGenerator(), level.getChunkSource().randomState(), level.getSeed(), level,
+            level.getSeaLevel(), level.getChunkSource().getGeneratorState(), null, new CopyOnWriteArrayList<>(store.sites), new ChunkPos[1][]);
+        Site capital = preview != null ? preview : store.capital;
+        if (capital == null) {
+            boolean initialized = level.getLevelData() instanceof net.minecraft.world.level.storage.ServerLevelData d && d.isInitialized();
+            BlockPos spawn = initialized ? level.getSharedSpawnPos() : w.random.sampler().findSpawnPosition();
+            long t0 = System.nanoTime();
+            capital = chooseCapital(w, spawn, root.resolve("region"));
+            if (capital != null) {
+                store.capital = capital;
+                store.setDirty();
+            }
+            LOG.info("Royal capital {} for spawn {} ({} ms)", capital == null ? "none" : capital.center(), spawn, (System.nanoTime() - t0) / 1000000);
+        }
+        world = new World(w.generator, w.random, w.seed, w.height, w.seaLevel, w.structures, capital, w.forced, w.strongholds);
+    }
+
+    /**
+     * Once the server has started: if the spawn the game settled on is inside the kingdom or more than a thousand
+     * blocks from its centre, the spawn moves to the road outside the kingdom's gate facing where it was.
+     */
+    public static void spawnCheck(ServerLevel level) {
+        World w = world;
+        if (w == null || w.capital == null || w.capital == preview) {
+            return;
+        }
+        BlockPos spawn = level.getSharedSpawnPos();
+        BlockPos c = w.capital.center();
+        int dx = spawn.getX() - c.getX(), dz = spawn.getZ() - c.getZ();
+        double d = Math.sqrt((double) dx * dx + (double) dz * dz);
+        int half = SIZE * 8 + (APRON + 1) * 16;
+        if (d <= 1000 && Math.max(Math.abs(dx), Math.abs(dz)) >= half) {
+            return;
+        }
+        int gx = c.getX(), gz = c.getZ();
+        if (Math.abs(dx) >= Math.abs(dz)) {
+            gx += Integer.signum(dx == 0 ? 1 : dx) * half;
+        } else {
+            gz += Integer.signum(dz) * half;
+        }
+        int gy = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gx, gz);
+        level.setDefaultSpawnPos(new BlockPos(gx, gy, gz), 0F);
+        LOG.info("World spawn moved from {} to the capital's gate {} {} {}", spawn, gx, gy, gz);
+    }
+
+    /** The capital: of the places 800 to 960 blocks from the spawn along a side of the kingdom, the best land; never on generated chunks. */
+    private static Site chooseCapital(World w, BlockPos spawn, java.nio.file.Path regions) {
+        Site best = null, fallback = null;
+        double bestScore = Double.MAX_VALUE, fallbackScore = Double.MAX_VALUE;
+        for (int r = 800; r <= FAR; r += 40) {
+            for (int step = 0; step < 64; step++) {
+                double a = step * Math.PI * 2 / 64;
+                int x = spawn.getX() + (int) Math.round(Math.cos(a) * r), z = spawn.getZ() + (int) Math.round(Math.sin(a) * r);
+                if (Math.max(Math.abs(x - spawn.getX()), Math.abs(z - spawn.getZ())) < NEAR) {
+                    continue;
+                }
+                Site probe = new Site((x >> 4) - CitadelData.HALF, (z >> 4) - CitadelData.HALF, 0, false);
+                if (nearStronghold(w, probe) || generated(regions, probe)) {
+                    continue;
+                }
+                double[] score = new double[1];
+                Integer ground = survey(w, probe.chunkX(), probe.chunkZ(), false, score);
+                if (ground != null && score[0] < bestScore) {
+                    bestScore = score[0];
+                    best = new Site(probe.chunkX(), probe.chunkZ(), ground, false);
+                }
+                if (score[0] < fallbackScore) {
+                    // the least bad place, kept in case no place is good: its ground follows the land
+                    fallbackScore = score[0];
+                    fallback = new Site(probe.chunkX(), probe.chunkZ(), survey(w, probe.chunkX(), probe.chunkZ(), true), false);
+                }
+            }
+        }
+        return best != null ? best : fallback;
+    }
+
+    /** True if any chunk of the site or its apron is in the world's region files already. */
+    private static boolean generated(java.nio.file.Path regions, Site s) {
+        int x0 = s.chunkX() - APRON, z0 = s.chunkZ() - APRON, x1 = s.chunkX() + SIZE + APRON, z1 = s.chunkZ() + SIZE + APRON;
+        for (int rx = Math.floorDiv(x0, 32); rx <= Math.floorDiv(x1 - 1, 32); rx++) {
+            for (int rz = Math.floorDiv(z0, 32); rz <= Math.floorDiv(z1 - 1, 32); rz++) {
+                java.nio.file.Path f = regions.resolve("r." + rx + "." + rz + ".mca");
+                if (!java.nio.file.Files.isRegularFile(f)) {
+                    continue;
+                }
+                try (java.io.InputStream in = java.nio.file.Files.newInputStream(f)) {
+                    byte[] header = in.readNBytes(4096);
+                    for (int i = 0; i + 3 < header.length; i += 4) {
+                        int cx = rx * 32 + (i / 4) % 32, cz = rz * 32 + (i / 4) / 32;
+                        boolean present = (header[i] | header[i + 1] | header[i + 2] | header[i + 3]) != 0;
+                        if (present && cx >= x0 && cx < x1 && cz >= z0 && cz < z1) {
+                            return true;
+                        }
+                    }
+                } catch (java.io.IOException e) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void unbind() {
@@ -130,14 +227,21 @@ public final class CitadelSites {
         if (w == null || w.generator != generator) {
             return null;
         }
+        if (w.capital != null && w.capital != preview && w.capital.contains(cx, cz, margin)) {
+            return w.capital;
+        }
         for (Site s : w.forced) {
             if (s.contains(cx, cz, margin)) {
                 return s;
             }
         }
-        int rx = Math.floorDiv(cx, REGION), rz = Math.floorDiv(cz, REGION);
-        Site s = w.regions.computeIfAbsent(ChunkPos.asLong(rx, rz), k -> Optional.ofNullable(choose(w, rx, rz))).orElse(null);
-        return s != null && s.contains(cx, cz, margin) ? s : null;
+        return null;
+    }
+
+    /** The world's capital (the preview save's citadel in that save), or null. */
+    public static Site capital() {
+        World w = world;
+        return w == null ? preview : w.capital;
     }
 
     /** True where other structures must not start: within CLEAR chunks of a citadel. */
@@ -145,36 +249,23 @@ public final class CitadelSites {
         return at(generator, pos.x, pos.z, CLEAR) != null;
     }
 
-    /** The nearest citadel to pos within radius regions, or null. Slow the first time a region is asked: run it off the server thread. */
+    /** The nearest citadel to pos: the capital or an operator's. */
     public static Site nearest(BlockPos pos, int radius) {
         World w = world;
         if (w == null) {
-            return null;
+            return preview;
+        }
+        List<Site> candidates = new ArrayList<>(w.forced);
+        if (w.capital != null) {
+            candidates.add(w.capital);
         }
         Site best = null;
         double bestD = Double.MAX_VALUE;
-        List<Site> candidates = new ArrayList<>(w.forced);
-        int rx0 = Math.floorDiv(pos.getX() >> 4, REGION), rz0 = Math.floorDiv(pos.getZ() >> 4, REGION);
-        for (int ring = 0; ring <= radius; ring++) {
-            for (int rx = rx0 - ring; rx <= rx0 + ring; rx++) {
-                for (int rz = rz0 - ring; rz <= rz0 + ring; rz++) {
-                    if (Math.max(Math.abs(rx - rx0), Math.abs(rz - rz0)) != ring) {
-                        continue;
-                    }
-                    int x = rx, z = rz;
-                    w.regions.computeIfAbsent(ChunkPos.asLong(x, z), k -> Optional.ofNullable(choose(w, x, z))).ifPresent(candidates::add);
-                }
-            }
-            for (Site s : candidates) {
-                double d = s.center().distSqr(pos);
-                if (d < bestD) {
-                    bestD = d;
-                    best = s;
-                }
-            }
-            // a site in the next ring is at least (ring) regions away
-            if (best != null && Math.sqrt(bestD) < ring * REGION * 16.0) {
-                break;
+        for (Site s : candidates) {
+            double d = s.center().distSqr(pos);
+            if (d < bestD) {
+                bestD = d;
+                best = s;
             }
         }
         return best;
@@ -189,15 +280,8 @@ public final class CitadelSites {
         int cx = (x >> 4) - CitadelData.HALF, cz = (z >> 4) - CitadelData.HALF;
         Integer ground = survey(w, cx, cz, true);
         Site site = new Site(cx, cz, ground, true);
-        int m = APRON + CLEAR;
-        for (int rx = Math.floorDiv(cx - m, REGION); rx <= Math.floorDiv(cx + SIZE + m, REGION); rx++) {
-            for (int rz = Math.floorDiv(cz - m, REGION); rz <= Math.floorDiv(cz + SIZE + m, REGION); rz++) {
-                int x0 = rx, z0 = rz;
-                Site other = w.regions.computeIfAbsent(ChunkPos.asLong(x0, z0), k -> Optional.ofNullable(choose(w, x0, z0))).orElse(null);
-                if (other != null && overlaps(site, other)) {
-                    return null;
-                }
-            }
+        if (w.capital != null && overlaps(site, w.capital)) {
+            return null;
         }
         for (Site other : w.forced) {
             if (overlaps(site, other)) {
@@ -215,33 +299,6 @@ public final class CitadelSites {
         int m = APRON + CLEAR;
         return a.chunkX - m < b.chunkX + SIZE + m && b.chunkX - m < a.chunkX + SIZE + m
             && a.chunkZ - m < b.chunkZ + SIZE + m && b.chunkZ - m < a.chunkZ + SIZE + m;
-    }
-
-    private static Site choose(World w, int rx, int rz) {
-        Random r = new Random(w.seed ^ SALT ^ rx * 341873128712L ^ rz * 132897987541L);
-        int span = REGION - 2 * EDGE - SIZE;
-        for (int attempt = 0; attempt < ATTEMPTS; attempt++) {
-            int cx = rx * REGION + EDGE + r.nextInt(span + 1);
-            int cz = rz * REGION + EDGE + r.nextInt(span + 1);
-            Site probe = new Site(cx, cz, 0, false);
-            if (probe.contains(0, 0, CLEAR + SPAWN_CLEAR) || nearStronghold(w, probe)) {
-                continue;
-            }
-            for (Site f : w.forced) {
-                if (overlaps(probe, f)) {
-                    probe = null;
-                    break;
-                }
-            }
-            if (probe == null) {
-                continue;
-            }
-            Integer ground = survey(w, cx, cz, false);
-            if (ground != null) {
-                return new Site(cx, cz, ground, false);
-            }
-        }
-        return null;
     }
 
     private static boolean nearStronghold(World w, Site s) {
@@ -275,6 +332,11 @@ public final class CitadelSites {
      * mountains, or the middle two thirds of the samples spread over more than 24 blocks.
      */
     private static Integer survey(World w, int cx, int cz, boolean forced) {
+        return survey(w, cx, cz, forced, new double[1]);
+    }
+
+    /** As survey, also giving score[0]: lower is better land (spread of the heights, and water counted heavily). */
+    private static Integer survey(World w, int cx, int cz, boolean forced, double[] score) {
         int n = 7;
         int[] h = new int[n * n];
         int wet = 0;
@@ -296,23 +358,29 @@ public final class CitadelSites {
         int median = h[h.length / 2];
         int ground = Math.max(w.seaLevel, median);
         ground = Math.min(ground, w.height.getMaxBuildHeight() - 16 * CitadelData.SECTIONS + CitadelData.GROUND - 8);
+        int lo = h[h.length / 6], hi = h[h.length * 5 / 6];
+        score[0] = (hi - lo) + wet * 12 + Math.max(0, median - 100) * 2;
         if (forced) {
             return ground;
         }
-        int lo = h[h.length / 6], hi = h[h.length * 5 / 6];
         if (wet > 5 || median < w.seaLevel - 1 || median > 118 || hi - lo > 24) {
             return null;
         }
         return ground;
     }
 
-    /** The operators' citadels of a world. */
+    /** A world's capital and its operators' citadels. */
     public static final class Store extends SavedData {
         static final Factory<Store> FACTORY = new Factory<>(Store::new, Store::load, null);
         final List<Site> sites = new ArrayList<>();
+        Site capital;
 
         static Store load(CompoundTag tag, HolderLookup.Provider registries) {
             Store s = new Store();
+            if (tag.contains("Capital", Tag.TAG_COMPOUND)) {
+                CompoundTag c = tag.getCompound("Capital");
+                s.capital = new Site(c.getInt("ChunkX"), c.getInt("ChunkZ"), c.getInt("Ground"), false);
+            }
             ListTag list = tag.getList("Sites", Tag.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++) {
                 CompoundTag t = list.getCompound(i);
@@ -332,6 +400,13 @@ public final class CitadelSites {
                 list.add(t);
             }
             tag.put("Sites", list);
+            if (capital != null) {
+                CompoundTag c = new CompoundTag();
+                c.putInt("ChunkX", capital.chunkX());
+                c.putInt("ChunkZ", capital.chunkZ());
+                c.putInt("Ground", capital.ground());
+                tag.put("Capital", c);
+            }
             return tag;
         }
     }

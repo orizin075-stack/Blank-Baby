@@ -149,7 +149,7 @@ public final class RoyalPilots {
         String engine = Sbw.engine(v);
         if (engine.equals("AIRCRAFT")) {
             fly(v, p, target);
-        } else if (!engine.equals("HELICOPTER") && !engine.isEmpty()) {
+        } else if (!engine.equals("HELICOPTER") && !engine.equals("FIXED") && !engine.equals("EMPTY") && !engine.isEmpty()) {
             drive(v, p, target);
         }
         v.getPersistentData().put(KEY, p);
@@ -240,7 +240,10 @@ public final class RoyalPilots {
         }
         Vec3 d = goal.subtract(pos).multiply(1, 0, 1);
         double dist = d.length();
-        float err = Mth.wrapDegrees(yawTo(d) - v.getYRot());
+        // which way the right key turns this vehicle is learnt from the vehicle itself (SteerSign: +1 when it raises the
+        // yaw), so the steering below holds for every kind of tracked or wheeled vehicle
+        int sign = p.contains("SteerSign") ? p.getInt("SteerSign") : 1;
+        float err = Mth.wrapDegrees(yawTo(d) - v.getYRot()) * sign;
         boolean arrived = hold != Double.MAX_VALUE && dist <= hold;
         boolean forward, left = false, right = false;
         if (back) {
@@ -266,6 +269,7 @@ public final class RoyalPilots {
             right = err < 0;
         }
         Sbw.keys(v, forward, back, left, right, forward && dist > 40 && Math.abs(err) < 30, false);
+        learnSteering(v, p, left, right, back);
         // stuck: pressing to move without moving, or turning without the heading changing, for two seconds backs it off
         // (or pulls it forward) at an angle for a second and a half
         double speed = v.getDeltaMovement().horizontalDistance();
@@ -281,6 +285,29 @@ public final class RoyalPilots {
             p.putBoolean("UnstickRight", v.getRandom().nextBoolean());
             p.putBoolean("UnstickForward", back || !forward && v.getRandom().nextBoolean());
             p.putInt("Unsticks", p.getInt("Unsticks") + 1);
+        }
+    }
+
+    /**
+     * Keeps SteerSign: over the ticks the vehicle is steered one way, whether its yaw went the way the sign says; after
+     * twelve ticks of it going the other way the sign flips.
+     */
+    private static void learnSteering(Entity v, CompoundTag p, boolean left, boolean right, boolean back) {
+        float yaw = v.getYRot();
+        float turned = Mth.wrapDegrees(yaw - p.getFloat("SteerYaw"));
+        p.putFloat("SteerYaw", yaw);
+        if (left == right || Math.abs(turned) < 0.3F) {
+            return;
+        }
+        int sign = p.contains("SteerSign") ? p.getInt("SteerSign") : 1;
+        // forward: right should raise the yaw by the sign; reversing turns the other way round
+        int expected = (right ? 1 : -1) * (back ? -1 : 1) * sign;
+        int wrong = Math.signum(turned) == expected ? 0 : p.getInt("SteerWrong") + 1;
+        p.putInt("SteerWrong", wrong);
+        if (wrong >= 12) {
+            p.putInt("SteerSign", -sign);
+            p.putInt("SteerWrong", 0);
+            p.putInt("SteerFlips", p.getInt("SteerFlips") + 1);
         }
     }
 
@@ -518,11 +545,13 @@ public final class RoyalPilots {
         return String.format(java.util.Locale.ROOT,
             "{\"id\":\"%s\",\"engine\":\"%s\",\"alive\":%b,\"health\":%.2f,\"mode\":\"%s\",\"odometer\":%.1f,\"airborne\":%d,\"maxAlt\":%.1f,"
                 + "\"tookOff\":%b,\"landed\":%b,\"runs\":%d,\"unsticks\":%d,\"goArounds\":%d,\"terrainSaves\":%d,\"crew\":%d,"
-                + "\"power\":%.2f,\"energy\":%s,\"target\":%b,\"y\":%.1f,\"ground\":%d,\"vy\":%.2f,\"speed\":%.2f,\"pitch\":%.1f}",
+                + "\"power\":%.2f,\"energy\":%s,\"target\":%b,\"y\":%.1f,\"ground\":%d,\"vy\":%.2f,\"speed\":%.2f,\"pitch\":%.1f,"
+                + "\"steerSign\":%d,\"steerFlips\":%d}",
             id, Sbw.engine(v), v.isAlive() && !Sbw.wreck(v), Sbw.health(v), p.getString("Mode"), p.getDouble("Odometer"), p.getInt("Airborne"),
             p.getDouble("MaxAlt"), p.getBoolean("TookOff"), p.getBoolean("Landed"), p.getInt("Runs"), p.getInt("Unsticks"), p.getInt("GoArounds"),
             p.getInt("TerrainSaves"), v.getPassengers().size(), Sbw.power(v), Sbw.call(v, "getEnergy"), p.hasUUID("Target"),
-            v.getY(), groundAt(v, v.position()), v.getDeltaMovement().y, v.getDeltaMovement().length(), v.getXRot());
+            v.getY(), groundAt(v, v.position()), v.getDeltaMovement().y, v.getDeltaMovement().length(), v.getXRot(),
+            p.contains("SteerSign") ? p.getInt("SteerSign") : 1, p.getInt("SteerFlips"));
     }
 
     /** Royal soldiers posted to a vehicle (OrorMotor in their data) bring it out and board it the first time they act. */
@@ -537,10 +566,20 @@ public final class RoyalPilots {
         }
         String id = d.getString("OrorMotor");
         int seats = Math.max(1, d.getInt("OrorMotorSeats"));
+        float yaw = d.contains("OrorMotorYaw") ? d.getFloat("OrorMotorYaw") : m.getYRot();
+        boolean still = d.getBoolean("OrorMotorStill");
         d.remove("OrorMotor");
-        Entity v = deploy(level, m.position(), m.getYRot(), id, seats - 1, null);
+        Entity v = deploy(level, m.position(), yaw, id, seats - 1, null);
         if (v != null) {
             m.startRiding(v, true);
+            if (still) {
+                // a turret's gunner: the turret aims and fires at the target the crew is given; he needs no mind of his own
+                for (Entity rider : v.getPassengers()) {
+                    if (rider instanceof net.minecraft.world.entity.Mob gunner) {
+                        gunner.setNoAi(true);
+                    }
+                }
+            }
             // the soldier who brought it drives; the others ride behind
             if (v.getPassengers().size() > 1 && v.getFirstPassenger() != m) {
                 List<Entity> others = List.copyOf(v.getPassengers());

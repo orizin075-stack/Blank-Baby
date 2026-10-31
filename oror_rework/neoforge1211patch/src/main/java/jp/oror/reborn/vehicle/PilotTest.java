@@ -95,6 +95,14 @@ public final class PilotTest {
                 }
             }
         }
+        // a low wall round the tank's field (off the runway), so a tank that turns the wrong way stays on it
+        for (int x = -11; x <= 90; x++) {
+            for (int z = 5; z <= 45; z++) {
+                if (x == -11 || x == 90 || z == 5 || z == 45) {
+                    level.setBlock(new BlockPos(origin.getX() + x, y, origin.getZ() + z), Blocks.STONE_BRICK_WALL.defaultBlockState(), 2);
+                }
+            }
+        }
         Vec3 start = new Vec3(origin.getX() + 0.5, y, origin.getZ() + 0.5);
         r.plane = RoyalPilots.deploy(level, start, -90F, Sbw.has("a_10a") ? "a_10a" : "j_16", 1, null);
         Vec3 tankAt = start.add(0, 0, 30);

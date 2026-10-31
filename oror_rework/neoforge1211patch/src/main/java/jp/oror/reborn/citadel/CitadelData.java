@@ -60,10 +60,12 @@ public final class CitadelData {
     }
 
     /**
-     * Someone who stands at a post: a royal role (RoyalRole name), VILLAGER with the trade for townsfolk (or a child), or TANK: a guard
-     * who brings out a Superb Warfare vehicle (vehicle, seats) and crews it the first time the guard acts.
+     * Someone who stands at a post: a royal role (RoyalRole name), VILLAGER with the trade for townsfolk (or a child), TANK: a guard
+     * who brings out a Superb Warfare vehicle or turret (vehicle, seats) and crews it the first time the guard acts (still: he
+     * stays in it as its gunner), or PARKED: a vehicle standing ready with no crew (the hangars' spare tanks, the helicopters).
      */
-    public record Post(String role, int x, int y, int z, float yaw, String post, String profession, String vehicle, int seats, boolean baby) {
+    public record Post(String role, int x, int y, int z, float yaw, String post, String profession, String vehicle, int seats, boolean baby,
+                       boolean still) {
         public boolean villager() {
             return role.equals("VILLAGER");
         }
@@ -186,7 +188,8 @@ public final class CitadelData {
                     Post post = new Post(o.get("role").getAsString(), o.get("x").getAsInt(), o.get("y").getAsInt(), o.get("z").getAsInt(),
                         o.get("yaw").getAsFloat(), o.has("post") ? o.get("post").getAsString() : "",
                         o.has("profession") ? o.get("profession").getAsString() : "", o.has("vehicle") ? o.get("vehicle").getAsString() : "",
-                        o.has("seats") ? o.get("seats").getAsInt() : 0, o.has("baby") && o.get("baby").getAsBoolean());
+                        o.has("seats") ? o.get("seats").getAsInt() : 0, o.has("baby") && o.get("baby").getAsBoolean(),
+                        o.has("still") && o.get("still").getAsBoolean());
                     p.computeIfAbsent(ChunkPos.asLong(post.x() >> 4, post.z() >> 4), k -> new ArrayList<>()).add(post);
                 }
             } catch (IOException | RuntimeException e) {

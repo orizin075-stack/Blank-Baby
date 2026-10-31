@@ -53,22 +53,80 @@ THEMES = {
     'keep': [('iron_ingot', 4, 12, .6), ('gold_ingot', 3, 9, .5), ('diamond', 1, 3, .15), ('emerald', 3, 10, .5), ('golden_apple', 1, 2, .3),
              ('ender_pearl', 1, 4, .3), ('book', 2, 6, .4), ('enchanted_book', 1, 1, .2), ('potion', 1, 1, .4), ('experience_bottle', 4, 12, .3),
              ('lapis_lazuli', 6, 18, .4), ('redstone', 8, 24, .3)],
-    'royal': [('gold_ingot', 8, 24, .8), ('gold_block', 1, 4, .5), ('diamond', 3, 8, .6), ('emerald', 8, 20, .6), ('golden_apple', 2, 4, .5),
-              ('enchanted_book', 1, 1, .6), ('enchanted_golden_apple', 1, 1, .15), ('experience_bottle', 8, 16, .5), ('potion', 1, 1, .4)],
-    'treasury': [('gold_block', 4, 12, .9), ('diamond', 8, 20, .8), ('diamond_block', 1, 3, .5), ('emerald_block', 2, 6, .7),
-                 ('gold_ingot', 16, 48, .8), ('enchanted_golden_apple', 1, 2, .4), ('enchanted_book', 1, 1, .8), ('enchanted_book', 1, 1, .5),
-                 ('totem_of_undying', 1, 1, .3), ('netherite_ingot', 1, 2, .3), ('amethyst_shard', 8, 24, .4)],
-    'vault': [('netherite_ingot', 2, 4, .9), ('netherite_scrap', 4, 8, .7), ('diamond_block', 2, 6, .9), ('emerald_block', 4, 10, .8),
-              ('gold_block', 8, 24, .9), ('enchanted_golden_apple', 2, 4, .8), ('totem_of_undying', 1, 1, .7), ('enchanted_book', 1, 1, .9),
-              ('enchanted_book', 1, 1, .9), ('enchanted_book', 1, 1, .6), ('echo_shard', 4, 12, .6), ('nether_star', 1, 1, .3), ('elytra', 1, 1, .2),
-              ('heart_of_the_sea', 1, 1, .3), ('trident', 1, 1, .2)],
+    'royal': [('gold_ingot', 16, 48, .9), ('gold_block', 2, 8, .6), ('diamond', 6, 16, .7), ('emerald_block', 2, 8, .5), ('golden_apple', 2, 6, .6),
+              ('enchanted_book+', 1, 1, .7), ('enchanted_golden_apple', 1, 2, .25), ('experience_bottle', 16, 48, .5), ('potion', 1, 1, .4),
+              ('oror_supreme_bosses:mana_crystal', 1, 4, .3), ('oror_supreme_bosses:purifying_dew', 1, 3, .3),
+              ('irons_spellbooks:arcane_essence', 8, 24, .4), ('irons_spellbooks:rare_ink', 2, 6, .3), ('apotheosis:rare_material', 4, 12, .3),
+              ('iceandfire:silver_ingot', 6, 16, .3), ('iceandfire:sapphire_gem', 2, 6, .3), ('waystones:warp_stone', 1, 1, .15)],
+    # the royal treasury under the throne: the kingdom's wealth
+    'treasury': [('gold_block', 32, 64, 1), ('diamond_block', 8, 24, .9), ('emerald_block', 16, 48, .9), ('netherite_ingot', 4, 12, .8),
+                 ('netherite_block', 1, 2, .3), ('enchanted_golden_apple', 4, 12, .8), ('totem_of_undying', 1, 1, .7), ('totem_of_undying', 1, 1, .4),
+                 ('elytra', 1, 1, .3), ('nether_star', 1, 3, .5), ('beacon', 1, 1, .3), ('heart_of_the_sea', 1, 1, .3), ('experience_bottle', 64, 64, .6),
+                 ('enchanted_book+', 1, 1, 1), ('enchanted_book+', 1, 1, .8), ('enchanted_book+', 1, 1, .6),
+                 ('netherite_sword+', 1, 1, .35), ('netherite_pickaxe+', 1, 1, .3), ('netherite_helmet+', 1, 1, .25), ('netherite_chestplate+', 1, 1, .25),
+                 ('netherite_leggings+', 1, 1, .25), ('netherite_boots+', 1, 1, .25), ('bow+', 1, 1, .2), ('trident+', 1, 1, .15),
+                 ('relic:charm', 1, 1, .5), ('relic:focus', 1, 1, .4),
+                 ('oror_supreme_bosses:villager_king_token', 1, 1, .25), ('oror_supreme_bosses:star_shard', 1, 4, .6),
+                 ('oror_supreme_bosses:dragon_core', 1, 1, .3), ('oror_supreme_bosses:mana_crystal', 2, 8, .7), ('oror_supreme_bosses:world_thread', 1, 2, .3),
+                 ('oror_supreme_bosses:rewind_talisman', 1, 1, .2), ('oror_supreme_bosses:last_bloom', 1, 1, .2), ('oror_supreme_bosses:purifying_dew', 2, 6, .5),
+                 ('irons_spellbooks:legendary_ink', 2, 6, .5), ('irons_spellbooks:epic_ink', 2, 8, .5), ('irons_spellbooks:arcane_essence', 16, 48, .7),
+                 ('irons_spellbooks:upgrade_orb', 1, 3, .4), ('irons_spellbooks:netherite_spell_book', 1, 1, .15),
+                 ('iceandfire:dragonsteel_fire_ingot', 4, 12, .4), ('iceandfire:dragonsteel_ice_ingot', 4, 12, .4),
+                 ('iceandfire:dragonsteel_lightning_ingot', 4, 12, .3), ('alexscaves:azure_neodymium_ingot', 8, 24, .35),
+                 ('alexscaves:scarlet_neodymium_ingot', 8, 24, .35), ('alexscaves:pure_darkness', 1, 4, .25), ('apotheosis:mythic_material', 4, 12, .4),
+                 ('apotheosis:epic_material', 8, 24, .4), ('waystones:warp_stone', 1, 1, .4), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .15)],
+    # the forbidden vault deep under the town: what the kingdom keeps from the world
+    'vault': [('netherite_block', 2, 6, .9), ('netherite_ingot', 16, 32, .9), ('diamond_block', 24, 64, 1), ('emerald_block', 32, 64, .9),
+              ('gold_block', 64, 64, .9), ('enchanted_golden_apple', 16, 32, 1), ('totem_of_undying', 1, 1, 1), ('totem_of_undying', 1, 1, .9),
+              ('totem_of_undying', 1, 1, .6), ('elytra', 1, 1, .6), ('nether_star', 2, 6, .9), ('beacon', 1, 2, .7), ('heart_of_the_sea', 1, 2, .6),
+              ('dragon_head', 1, 1, .2), ('enchanted_book+', 1, 1, 1), ('enchanted_book+', 1, 1, 1), ('enchanted_book+', 1, 1, .8),
+              ('enchanted_book+', 1, 1, .6), ('netherite_sword+', 1, 1, .7), ('netherite_axe+', 1, 1, .4), ('netherite_pickaxe+', 1, 1, .5),
+              ('netherite_helmet+', 1, 1, .5), ('netherite_chestplate+', 1, 1, .5), ('netherite_leggings+', 1, 1, .5), ('netherite_boots+', 1, 1, .5),
+              ('bow+', 1, 1, .4), ('crossbow+', 1, 1, .3), ('trident+', 1, 1, .4),
+              ('relic:weapon', 1, 1, .9), ('relic:legend', 1, 1, .8), ('relic:charm', 1, 1, .6), ('relic:focus', 1, 1, .6),
+              ('oror_supreme_bosses:villager_king_token', 1, 1, .4), ('oror_supreme_bosses:star_shard', 4, 12, .9),
+              ('oror_supreme_bosses:dragon_core', 1, 2, .7), ('oror_supreme_bosses:forge_core', 1, 2, .5), ('oror_supreme_bosses:world_thread', 1, 3, .6),
+              ('oror_supreme_bosses:rewind_talisman', 1, 1, .5), ('oror_supreme_bosses:last_bloom', 1, 1, .5), ('oror_supreme_bosses:curse_residue', 1, 4, .4),
+              ('oror_supreme_bosses:mana_crystal', 8, 24, .9), ('oror_supreme_bosses:azure_blade', 1, 1, .25), ('oror_supreme_bosses:star_staff', 1, 1, .25),
+              ('oror_supreme_bosses:reverie_rapier', 1, 1, .25), ('oror_supreme_bosses:dragon_coat', 1, 1, .2), ('oror_supreme_bosses:teia_boots', 1, 1, .2),
+              ('irons_spellbooks:legendary_ink', 8, 16, .9), ('irons_spellbooks:arcane_essence', 48, 64, .9), ('irons_spellbooks:upgrade_orb', 2, 6, .8),
+              ('irons_spellbooks:netherite_spell_book', 1, 1, .5), ('iceandfire:dragonsteel_fire_ingot', 12, 32, .7),
+              ('iceandfire:dragonsteel_ice_ingot', 12, 32, .7), ('iceandfire:dragonsteel_lightning_ingot', 12, 32, .7),
+              ('iceandfire:fire_dragon_heart', 1, 1, .4), ('iceandfire:ice_dragon_heart', 1, 1, .4), ('iceandfire:lightning_dragon_heart', 1, 1, .4),
+              ('alexscaves:pure_darkness', 4, 12, .6), ('alexscaves:azure_neodymium_ingot', 24, 64, .6), ('alexscaves:scarlet_neodymium_ingot', 24, 64, .6),
+              ('apotheosis:mythic_material', 16, 48, .8), ('waystones:warp_stone', 1, 1, .7), ('sophisticatedbackpacks:netherite_backpack', 1, 1, .5)],
 }
+# relics of the 41 characters (oror_supreme_bosses:<name>_weapon / _focus / _charm / _legend)
+RELIC_OWNERS = ['ain_sof_aur', 'angra_mainyu', 'arcana', 'bahamut', 'berit', 'brutality', 'chaos', 'cursed_love', 'demiurgos', 'elseria', 'enkou',
+                'eomaia', 'fallen_savior', 'ferdinand', 'forbidden_arcana', 'gokuka', 'hakyoku', 'hephaistos', 'huang_linghua', 'innocence',
+                'kokuhaku', 'kurma', 'lucifara', 'magna_mater', 'mary_sue', 'mels', 'merlinus', 'miyohime', 'nortia', 'nun', 'ouroboros',
+                'relentless_research', 'riha', 'savior', 'shinra', 'sweet_pact', 'taika', 'teia', 'tenki', 'valeria', 'yggdrasil']
+# the best enchantments of each piece of gear ('<item>+' in a theme)
+GEAR = {'netherite_sword': [('sharpness', 5), ('looting', 3), ('unbreaking', 3), ('mending', 1), ('fire_aspect', 2), ('sweeping', 3)],
+        'netherite_axe': [('sharpness', 5), ('efficiency', 5), ('unbreaking', 3), ('mending', 1)],
+        'netherite_pickaxe': [('efficiency', 5), ('fortune', 3), ('unbreaking', 3), ('mending', 1)],
+        'netherite_helmet': [('protection', 4), ('respiration', 3), ('aqua_affinity', 1), ('unbreaking', 3), ('mending', 1)],
+        'netherite_chestplate': [('protection', 4), ('unbreaking', 3), ('mending', 1)],
+        'netherite_leggings': [('protection', 4), ('unbreaking', 3), ('mending', 1)],
+        'netherite_boots': [('protection', 4), ('feather_falling', 4), ('depth_strider', 3), ('unbreaking', 3), ('mending', 1)],
+        'bow': [('power', 5), ('punch', 2), ('flame', 1), ('infinity', 1), ('unbreaking', 3)],
+        'crossbow': [('quick_charge', 3), ('multishot', 1), ('unbreaking', 3), ('mending', 1)],
+        'trident': [('loyalty', 3), ('impaling', 5), ('channeling', 1), ('unbreaking', 3), ('mending', 1)]}
 SINGLE = {'iron_sword', 'iron_pickaxe', 'iron_hoe', 'iron_shovel', 'shears', 'bow', 'crossbow', 'shield', 'saddle', 'iron_helmet', 'iron_chestplate',
-          'iron_leggings', 'iron_boots', 'enchanted_book', 'potion', 'writable_book', 'totem_of_undying', 'elytra', 'trident', 'cake', 'compass'}
+          'iron_leggings', 'iron_boots', 'enchanted_book', 'potion', 'writable_book', 'totem_of_undying', 'elytra', 'trident', 'cake', 'compass',
+          'beacon', 'heart_of_the_sea', 'dragon_head', 'netherite_sword', 'netherite_axe', 'netherite_pickaxe', 'netherite_helmet',
+          'netherite_chestplate', 'netherite_leggings', 'netherite_boots'}
 SIXTEEN = {'ender_pearl', 'honey_bottle', 'egg', 'snowball'}
 BOOKS = [('mending', 1), ('unbreaking', 3), ('protection', 4), ('sharpness', 5), ('efficiency', 5), ('fortune', 3), ('looting', 3),
          ('feather_falling', 4), ('power', 5), ('silk_touch', 1), ('respiration', 3), ('depth_strider', 3)]
+# the treasure books ('enchanted_book+'): the rarest enchantments at their highest level
+GREAT_BOOKS = [('mending', 1), ('protection', 4), ('sharpness', 5), ('efficiency', 5), ('fortune', 3), ('looting', 3), ('swift_sneak', 3),
+               ('soul_speed', 3), ('frost_walker', 2), ('silk_touch', 1), ('infinity', 1), ('feather_falling', 4), ('unbreaking', 3)]
 POTIONS = ['healing', 'strong_healing', 'regeneration', 'strength', 'fire_resistance', 'swiftness', 'night_vision']
+
+
+def item_id(name):
+    return name if ':' in name else 'minecraft:' + name
 
 
 def items(theme, seed):
@@ -77,16 +135,44 @@ def items(theme, seed):
     chosen = [l for l in lines if rng.random() < l[3]]
     if len(chosen) < 2:
         chosen = rng.sample(lines, 2)
-    slots = rng.sample(range(27), min(27, len(chosen)))
+    rng.shuffle(chosen)
+    chosen = chosen[:27]
+    slots = rng.sample(range(27), len(chosen))
     out = []
     for (name, lo, hi, _), slot in zip(chosen, slots):
+        tag = None
+        if name.startswith('relic:'):
+            name = 'oror_supreme_bosses:' + rng.choice(RELIC_OWNERS) + '_' + name.split(':')[1]
+        elif name == 'enchanted_book+':
+            name = 'enchanted_book'
+            ench, lvl = rng.choice(GREAT_BOOKS)
+            tag = {'StoredEnchantments': [{'id': 'minecraft:' + ench, 'lvl': ('short', lvl)}]}
+        elif name.endswith('+'):
+            name = name[:-1]
+            tag = {'Enchantments': [{'id': 'minecraft:' + e, 'lvl': ('short', l)} for e, l in GEAR.get(name, [])]}
         n = rng.randint(lo, hi)
-        n = 1 if name in SINGLE else min(n, 16) if name in SIXTEEN else min(n, 64)
-        stack = {'Slot': ('byte', slot), 'id': 'minecraft:' + name, 'Count': ('byte', n)}
-        if name == 'enchanted_book':
+        short = name.split(':')[-1]
+        single = short in SINGLE or name.startswith('oror_supreme_bosses:') and short.endswith(('_weapon', '_focus', '_charm', '_legend'))
+        n = 1 if single else min(n, 16) if short in SIXTEEN else min(n, 64)
+        stack = {'Slot': ('byte', slot), 'id': item_id(name), 'Count': ('byte', n)}
+        if name == 'enchanted_book' and tag is None:
             ench, lvl = rng.choice(BOOKS)
-            stack['tag'] = {'StoredEnchantments': [{'id': 'minecraft:' + ench, 'lvl': ('short', lvl)}]}
+            tag = {'StoredEnchantments': [{'id': 'minecraft:' + ench, 'lvl': ('short', lvl)}]}
         elif name == 'potion':
-            stack['tag'] = {'Potion': 'minecraft:' + rng.choice(POTIONS)}
+            tag = {'Potion': 'minecraft:' + rng.choice(POTIONS)}
+        if tag:
+            stack['tag'] = tag
         out.append(stack)
     return sorted(out, key=lambda s: s['Slot'][1])
+
+
+def mod_items():
+    """Every item of another namespace the themes can put in a container (relics of every owner), for the CI check."""
+    ids = set()
+    for lines in THEMES.values():
+        for name, *_ in lines:
+            if name.startswith('relic:'):
+                ids |= {'oror_supreme_bosses:%s_%s' % (o, name.split(':')[1]) for o in RELIC_OWNERS}
+            elif ':' in name:
+                ids.add(name)
+    return sorted(ids)

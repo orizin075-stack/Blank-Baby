@@ -120,17 +120,17 @@ for f in man['exterior_fortresses']:
 TRADE = dict(house='', smith='weaponsmith', armorer='armorer', baker='farmer', butcher='butcher', tailor='shepherd',
              alchemy='cleric', jeweler='toolsmith', library='librarian', scribe='librarian', mapmaker='cartographer',
              stable='leatherworker', market='mason', guild='fletcher', inn='fisherman', tavern='fisherman')
-from houses import HOUSEHOLD
+from houses import household
 # the profession a workstation gives (a family home's trade comes from the workstation it was built with)
 STATION_PROF = dict(composter='farmer', barrel='fisherman', fletching_table='fletcher', loom='shepherd', cartography_table='cartographer',
                     smoker='butcher', blast_furnace='armorer', grindstone='weaponsmith', smithing_table='toolsmith', brewing_stand='cleric',
                     lectern='librarian', cauldron='leatherworker', stonecutter='mason')
-# Townsfolk: a family in each house (one of them a child), the innkeeper's household and guests, a master and a helper
-# in every other building; on the free floor cells of the rebuilt buildings (TOWN_BUILDINGS.json, written by repair.py),
+# Townsfolk: a couple in each home (a child too in every third), the innkeeper's household and guests, two in every shop
+# and facility; on the free floor cells of the rebuilt buildings (TOWN_BUILDINGS.json, written by repair.py),
 # the ground floor first, spread out.
 town = json.load(open(os.path.join(save, 'TOWN_BUILDINGS.json')))['buildings']
 for b in town:
-    many = HOUSEHOLD.get(b['kind'], 2)
+    many = household(b['kind'], b['id'])
     spots = sorted(b['spots'], key=lambda p: (p[1], p[0], p[2]))
     chosen = []
     for p in spots:
@@ -146,7 +146,26 @@ for b in town:
     for k, (x, y, z) in enumerate(chosen):
         trade = STATION_PROF.get(b.get('station') or '', TRADE.get(b['kind'], ''))
         put('VILLAGER', x, y, z, r=1, dy=0, post='town', profession=trade if k == 0 else '', house=b['kind'],
-            **({'baby': True} if b['kind'] in ('house', 'inn') and k == many - 1 else {}))
+            **({'baby': True} if (b['kind'] == 'house' and many == 3 or b['kind'] == 'inn') and k == many - 1 else {}))
+
+# The kingdom's vehicles and turrets (military.py): aircraft at the runways, helicopters on the pads, tanks in the
+# hangars stand where they were built; a turret goes on the nearest floor near its battery with room around it, and the
+# guard posted with it mans it (still: he stays in it).
+mil = os.path.join(save, 'MILITARY.json')
+for p in (json.load(open(mil))['posts'] if os.path.exists(mil) else []):
+    extra = {k: p[k] for k in ('vehicle', 'seats') if k in p}
+    if p.get('still'):
+        extra['still'] = True
+    if p.get('exact'):
+        put(p['role'], p['x'], p['y'], p['z'], yaw=round(p['yaw'], 1), r=0, dy=0, post=p['post'], **extra)
+    elif p['post'] == 'battery':
+        # the battery's dispenser is in the wall's gallery: its gun goes on the walkway on top of the wall
+        a, _ = world.load(save, p['x'] - 6, p['x'] + 7, p['z'] - 6, p['z'] + 7, 64, 160)
+        tops = [int(np.nonzero(a[i, :, k])[0].max()) + 64 for i in range(13) for k in range(13) if a[i, :, k].any()]
+        top = sorted(tops)[len(tops) // 3] if tops else p['y']
+        put(p['role'], p['x'], top + 1, p['z'], yaw=round(p['yaw'], 1), r=7, dy=2, post=p['post'], room=1, **extra)
+    else:
+        put(p['role'], p['x'], p['y'], p['z'], yaw=round(p['yaw'], 1), r=6, dy=3, post=p['post'], room=1, **extra)
 
 json.dump(dict(origin='save', entries=entries), open(out, 'w'), indent=None, separators=(',', ':'))
 from collections import Counter

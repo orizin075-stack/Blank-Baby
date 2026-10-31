@@ -4,6 +4,9 @@ Town: the 112 town buildings were 17 to 25 blocks wide, up to four storeys, roof
 blocks per slope and nearly empty inside. Each is cleared from its plot and rebuilt by houses.py: smaller (7 to 13
 wide), in ten styles with gable or hipped roofs, furnished for its trade, lit, with a yard; TOWN_BUILDINGS.json in the
 repaired save lists what was built and where the townsfolk can stand (tools/citadel/garrison.py reads it).
+Every chunk becomes the Royal Capital biome (oror_supreme_bosses:royal_capital). The castle's rooms get storerooms, the
+undercroft under the throne the royal treasury, the forbidden vault its hoard (loot.py); the outer belt gets airbases,
+helipads and tank hangars, the walls and gates turret posts (military.py, MILITARY.json in the repaired save).
 Castle: the generator left several timber-framed facades without their panels (the west wing's whole outer side,
 holes in the east wing, bands of the keep) and skipped columns of its tiled roofs. Large openings where a roofed,
 floored room meets the sky are walled with the material around them (with glass windows), and short gaps in the roofs
@@ -17,7 +20,7 @@ blocks up, else a sea lantern set into a low plain ceiling, else an invisible li
 import sys, os, json, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
-import world, anvil_edit, loot
+import world, anvil_edit, loot, military
 from scipy import ndimage
 
 TRANSPARENT = ('air', 'glass', 'pane', 'fence', '_wall', 'slab', 'stairs', 'ladder', 'torch', 'lantern', 'chain', 'carpet', 'rail',
@@ -108,13 +111,51 @@ def town_plots(save, man):
     return out
 
 
+OPPOSITE = {'north': 'south', 'south': 'north', 'east': 'west', 'west': 'east'}
+
+
+def subplots(plot, front, ext):
+    """A plot cut for several buildings: two or three side by side along the street (by its width), and as many again
+    facing the road behind when there is one and the plot is deep enough. Returns [(sub-plot, front, max width)]."""
+    x0, z0, x1, z1 = plot
+    across_x = front in ('north', 'south')            # the street runs along x
+    width = (x1 - x0 + 1) if across_x else (z1 - z0 + 1)
+    depth = (z1 - z0 + 1) if across_x else (x1 - x0 + 1)
+    n = 1 if width < 26 else 2 if width < 40 else 3
+    back = ext[OPPOSITE[front]][1] == 'road' and depth >= 28
+    rows = [(front, 0, depth // 2 if back else depth)]
+    if back:
+        rows.append((OPPOSITE[front], depth // 2, depth - depth // 2))
+    out = []
+    for face, off, d in rows:
+        for i in range(n):
+            a0 = i * width // n
+            a1 = (i + 1) * width // n - 1
+            # the row's band along the depth: the street row is at the front side of the plot
+            if across_x:
+                zs = (z1 - off - d + 1, z1 - off) if front == 'south' else (z0 + off, z0 + off + d - 1)
+                if face != front:
+                    zs = (z0, z0 + d - 1) if front == 'south' else (z1 - d + 1, z1)
+                sub = (x0 + a0, zs[0], x0 + a1, zs[1])
+            else:
+                xs = (x1 - off - d + 1, x1 - off) if front == 'east' else (x0 + off, x0 + off + d - 1)
+                if face != front:
+                    xs = (x0, x0 + d - 1) if front == 'east' else (x1 - d + 1, x1)
+                sub = (xs[0], z0 + a0, xs[1], z0 + a1)
+            out.append((sub, face, (a1 - a0 + 1) - 4))
+    return out
+
+
 def rebuild_town(save, man, edits, bes, stats):
     """The town buildings rebuilt by houses.py on their plots: everything above the ground of the plot cleared (only on
-    the plot's grass and the old footprint, never a road, the moat or a field), the new house, its yard and its block
-    entities put in. Returns the cleared columns and, per building, what was built and where its townsfolk can stand."""
+    the plot's grass and the old footprint, never a road, the moat or a field), then the plot cut into two to six
+    sub-plots (subplots), the old building's trade on the first and homes and the town's facilities (chapels, schools,
+    clinics, warehouses, bathhouses, guardhouses, mills, florists, more bakers, tailors and taverns) on the others, each a
+    house with its yard. Returns the cleared columns and, per building, what was built and where its townsfolk stand."""
     import houses
     H = man['individual_town_architecture']
     cleared, town = set(), []
+    turn = 0
     for h, (plot, front, ext) in zip(H, town_plots(save, man)):
         x0, z0, x1, z1 = plot
         a, _ = world.load(save, x0, x1 + 1, z0, z1 + 1, 64, 200)
@@ -125,30 +166,41 @@ def rebuild_town(save, man, edits, bes, stats):
                 n = short(a[x - x0, 0, z - z0])
                 if n in YARD or (abs(x - h['x']) <= hw + 1 and abs(z - h['z']) <= hd + 1):
                     writable.add((x, z))
-        house = houses.build(plot, h['kind'], 7919 * h['id'] + 17, front)
         for (x, z) in writable:
             col = a[x - x0, :, z - z0]
             for yy in np.nonzero(col[1:])[0] + 1:
                 edits[(x, int(yy) + 64, z)] = 'minecraft:air'
             edits[(x, 64, z)] = 'minecraft:grass_block'
         cleared |= writable
-        lost = 0
-        for (x, y, z), st in house.blocks.items():
-            if (x, z) in writable:
-                edits[(x, y, z)] = st
+        subs = subplots(plot, front, ext)
+        for k, (sub, face, max_w) in enumerate(subs):
+            if k == 0:
+                kind = h['kind']
             else:
-                lost += 1
-        for p, be in houses.entities(house, h['id']).items():
-            if (p[0], p[2]) in writable:
-                bes[p] = be
-        stats['houses'] += 1
-        stats['house_blocks'] += len(house.blocks) - lost
-        stats['house_blocks_off_plot'] += lost
-        stats['styles'][house.style] += 1
-        stats['roofs'][house.roof_kind] += 1
-        town.append(dict(id=h['id'], kind=h['kind'], x=h['x'], z=h['z'], front=front, plot=list(plot), style=house.style, station=house.station,
-                         width=house.W, depth=house.D, floors=house.floors, roof=house.roof_kind,
-                         spots=[list(p) for p in house.spots if (p[0], p[2]) in writable]))
+                # every third extra building a facility, in turn, the others homes
+                turn += 1
+                kind = houses.FACILITIES[(turn // 3) % len(houses.FACILITIES)] if turn % 3 == 0 else 'house'
+            seed = 7919 * h['id'] + 17 + 104729 * k
+            house = houses.build(sub, kind, seed, face, max_w=max(7, max_w), fence_sides='all' if len(subs) == 1 else 'front')
+            lost = 0
+            for (x, y, z), st in house.blocks.items():
+                if (x, z) in writable:
+                    edits[(x, y, z)] = st
+                else:
+                    lost += 1
+            for p, be in houses.entities(house, h['id'] * 8 + k).items():
+                if (p[0], p[2]) in writable:
+                    bes[p] = be
+            stats['houses'] += 1
+            stats['kinds'][kind] += 1
+            stats['house_blocks'] += len(house.blocks) - lost
+            stats['house_blocks_off_plot'] += lost
+            stats['styles'][house.style] += 1
+            stats['roofs'][house.roof_kind] += 1
+            cx, cz = (sub[0] + sub[2]) // 2, (sub[1] + sub[3]) // 2
+            town.append(dict(id=h['id'] * 8 + k, plot_of=h['id'], kind=kind, x=cx, z=cz, front=face, plot=list(sub), style=house.style,
+                             station=house.station, width=house.W, depth=house.D, floors=house.floors, roof=house.roof_kind,
+                             spots=[list(p) for p in house.spots if (p[0], p[2]) in writable]))
     return cleared, town
 
 
@@ -640,6 +692,7 @@ def main(save, out, report=None):
     stats = collections.Counter(houses=0, house_blocks=0, house_blocks_off_plot=0, walkable=0, still_dark=0, castle_roof_cells=0,
                                 castle_openings=0, castle_wall_cells=0)
     stats['styles'] = collections.Counter()
+    stats['kinds'] = collections.Counter()
     stats['roofs'] = collections.Counter()
     stats['lights'] = collections.Counter()
     stats['stores'] = collections.Counter()
@@ -662,12 +715,17 @@ def main(save, out, report=None):
     vault_hoard(save, man, edits, bes, stats)
     stock_empty(save, cleared, edits, bes, stats)
     print('stores', dict(stats['stores']), 'treasury rooms', stats['treasury_rooms'], flush=True)
+    # the kingdom's airbases, helipads, hangars and turret posts
+    forces = military.build(save, man, edits, bes, stats)
+    print('military', dict(stats['military']), 'missing', stats['military_missing'], flush=True)
     # the castle: the inner ward, in four quarters with an overlap
     for qx0, qx1 in ((-136, 0), (0, 136)):
         for qz0, qz1 in ((-136, 0), (0, 136)):
             light_area(save, qx0 - 16, qx1 + 16, qz0 - 16, qz1 + 16, 64, 192, edits, stats)
             print('lit quarter', qx0, qz0, dict(stats['lights']), flush=True)
-    n = anvil_edit.apply(save, out, edits, bes)
+    n = anvil_edit.apply(save, out, edits, bes, biome='oror_supreme_bosses:royal_capital')
+    json.dump(dict(note='The kingdom\'s vehicles and turrets (tools/citadel/military.py); garrison.py stands them with the garrison.',
+                   posts=forces, sites=stats['military_at']), open(os.path.join(out, 'MILITARY.json'), 'w'), separators=(',', ':'))
     json.dump(dict(note='The town buildings as rebuilt by tools/citadel/houses.py: plot, front, style and the free floor cells '
                         '(feet positions) where townsfolk can stand.', buildings=town),
               open(os.path.join(out, 'TOWN_BUILDINGS.json'), 'w'), separators=(',', ':'))

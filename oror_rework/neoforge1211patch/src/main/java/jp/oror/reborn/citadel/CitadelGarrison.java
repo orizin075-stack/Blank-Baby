@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.Villager;
@@ -43,6 +44,7 @@ public final class CitadelGarrison {
     private static final Deque<long[]> QUEUE = new ArrayDeque<>();
     private static final Set<Long> QUEUED = new HashSet<>();
     private static int spawned;
+    private static int parked;
 
     private CitadelGarrison() {
     }
@@ -117,6 +119,11 @@ public final class CitadelGarrison {
         return spawned;
     }
 
+    /** Vehicles stood ready with no crew so far. */
+    public static int parked() {
+        return parked;
+    }
+
     public static int queued() {
         synchronized (QUEUE) {
             return QUEUE.size();
@@ -129,6 +136,15 @@ public final class CitadelGarrison {
         if (at.getY() <= level.getMinBuildHeight() || at.getY() >= level.getMaxBuildHeight() - 2) {
             return null;
         }
+        if (post.role().equals("PARKED")) {
+            Entity v = jp.oror.reborn.vehicle.RoyalPilots.deploy(level, net.minecraft.world.phys.Vec3.atBottomCenterOf(at), post.yaw(),
+                post.vehicle(), 0, null);
+            if (v != null) {
+                v.addTag(TAG);
+                parked++;
+            }
+            return null;
+        }
         Mob mob = post.villager() ? villager(level, at, post) : royal(level, post.role().equals("TANK") ? "GUARD" : post.role());
         if (mob == null) {
             return null;
@@ -136,6 +152,8 @@ public final class CitadelGarrison {
         if (!post.vehicle().isEmpty()) {
             mob.getPersistentData().putString("OrorMotor", post.vehicle());
             mob.getPersistentData().putInt("OrorMotorSeats", post.seats());
+            mob.getPersistentData().putFloat("OrorMotorYaw", post.yaw());
+            mob.getPersistentData().putBoolean("OrorMotorStill", post.still());
         }
         mob.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, post.yaw(), 0.0F);
         mob.setYHeadRot(post.yaw());

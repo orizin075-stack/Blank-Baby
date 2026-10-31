@@ -1,16 +1,20 @@
 package jp.oror.reborn.citadel;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -26,7 +30,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
  * kingdom take their posts when the chunk first loads: CitadelGarrison).
  * It runs last in each chunk (top layer modification), after the trees and other features, which it replaces.
  * Under the citadel the natural rock stays where the save had only dirt; valleys below its ground are filled. Around it a
- * two-chunk apron grades the land between the kingdom's ground and the natural terrain.
+ * two-chunk apron grades the land between the kingdom's ground and the natural terrain. Every chunk of the kingdom is the
+ * Royal Capital biome (no hostile mob spawns, the capital's own grass and sky).
  */
 public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration> {
     private static final BlockState AIR = Blocks.AIR.defaultBlockState();
@@ -35,6 +40,8 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
     private static final BlockState GRASS = Blocks.GRASS_BLOCK.defaultBlockState();
     /** How far into a neighbouring chunk this chunk's trees can reach, and how high above the ground. */
     private static final int SPILL = 6, SPILL_HEIGHT = 48;
+    public static final ResourceKey<Biome> CAPITAL = ResourceKey.create(Registries.BIOME,
+        ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "royal_capital"));
 
     public GrandCitadelFeature() {
         super(NoneFeatureConfiguration.CODEC);
@@ -56,6 +63,8 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
         } else {
             build(chunk, site, data);
             populate(level, site, data, sx, sz);
+            level.registryAccess().registryOrThrow(Registries.BIOME).getHolder(CAPITAL)
+                .ifPresent(capital -> chunk.fillBiomesFromNoise((x, y, z, sampler) -> capital, null));
         }
         tidyNeighbours(level, site, pos);
         return true;

@@ -1,4 +1,5 @@
-"""extract.py <save dir> <out dir>: the Grand Citadel v12 as compact per-region files for natural generation.
+"""extract.py <save dir> <out dir>: the Grand Citadel v12 as compact per-region files for natural generation, and
+treasure_items.json (the other namespaces' items its containers hold).
 
 Each output file r.<rx>.<rz>.bin holds the save's chunks of that region:
   'OCV12' version(1 byte) count(int) then per chunk: lx(byte) lz(byte) offset(int) length(int), then payloads.
@@ -56,4 +57,8 @@ for f in sorted(os.listdir(os.path.join(save, 'region'))):
     data = head + b''.join(blobs)
     open(os.path.join(out, f'r.{rx}.{rz}.bin'), 'wb').write(data)
     stats['bytes'] += len(data)
+# the items of other namespaces the citadel's containers can hold, for the CI check that each is registered
+import loot
+json.dump({'note': 'Items of other namespaces in the citadel containers (tools/citadel/loot.py); CI checks each is registered.',
+           'items': loot.mod_items()}, open(os.path.join(out, 'treasure_items.json'), 'w'), indent=0)
 print(json.dumps(stats))

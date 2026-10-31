@@ -65,6 +65,11 @@ public final class CitadelEvents {
     }
 
     @SubscribeEvent
+    public static void started(net.neoforged.neoforge.event.server.ServerStartedEvent e) {
+        CitadelSites.spawnCheck(e.getServer().overworld());
+    }
+
+    @SubscribeEvent
     public static void stopped(ServerStoppedEvent e) {
         CitadelSites.unbind();
         test = null;
@@ -174,6 +179,23 @@ public final class CitadelEvents {
             for (int dz = -3; dz <= 0; dz++) {
                 chunks.add(new ChunkPos(site.chunkX() + CitadelData.HALF, site.chunkZ() + dz));
             }
+            // one post of each of the kingdom's installations: a runway, a helipad, a hangar, the turrets of each kind
+            java.util.Set<String> kinds = new java.util.TreeSet<>(List.of("airbase", "helipad", "hangar", "battery", "crossfire", "casemate", "redoubt"));
+            for (List<CitadelData.Post> posts : CitadelData.posts().values()) {
+                for (CitadelData.Post post : posts) {
+                    if (kinds.remove(post.post())) {
+                        ChunkPos p = new ChunkPos((post.x() + site.offsetX()) >> 4, (post.z() + site.offsetZ()) >> 4);
+                        for (int dx = -1; dx <= 1; dx++) {
+                            for (int dz = -1; dz <= 1; dz++) {
+                                ChunkPos q = new ChunkPos(p.x + dx, p.z + dz);
+                                if (!chunks.contains(q)) {
+                                    chunks.add(q);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             for (ChunkPos p : chunks) {
                 level.setChunkForced(p.x, p.z, true);
             }
@@ -232,6 +254,9 @@ public final class CitadelEvents {
                 loaded++;
                 int sx = p.x - t.site.chunkX() - CitadelData.HALF, sz = p.z - t.site.chunkZ() - CitadelData.HALF;
                 for (CitadelData.Post post : CitadelData.posts(sx, sz)) {
+                    if (post.role().equals("PARKED")) {
+                        continue;
+                    }
                     t.expected.merge(post.role().equals("TANK") ? "GUARD" : post.role(), 1, Integer::sum);
                 }
             }
@@ -241,12 +266,16 @@ public final class CitadelEvents {
             boolean dais = level.getBlockState(throne.below()).is(Blocks.GOLD_BLOCK) && level.getBlockState(throne).isAir();
             RoyalMob king = level.getEntitiesOfClass(RoyalMob.class, new AABB(throne).inflate(3), m -> m.role().name().equals("KING"))
                 .stream().findFirst().orElse(null);
+            BlockPos spawn = level.getSharedSpawnPos();
+            String biome = level.getBiome(site.center()).unwrapKey().map(k -> k.location().toString()).orElse("?");
             String line = String.format(Locale.ROOT, "{\"site\":[%d,%d,%d],\"forced\":%b,\"ground\":%d,\"dy\":%d,\"locateMs\":%.1f,"
+                    + "\"spawn\":[%d,%d,%d],\"fromSpawn\":%.0f,\"biome\":\"%s\","
                     + "\"chunks\":%d,\"loaded\":%d,\"loadTicks\":%d,\"throne\":[%d,%d,%d],\"dais\":%b,\"underKing\":\"%s\",\"kingAtThrone\":%b,"
-                    + "\"spawned\":%d,\"expected\":%s,\"found\":%s}",
+                    + "\"spawned\":%d,\"expected\":%s,\"found\":%s,\"treasury\":%s,\"modItems\":%s}",
                 site.center().getX(), site.center().getY(), site.center().getZ(), site.forced(), site.ground(), site.dy(), t.locateMs,
-                t.chunks.size(), loaded, t.loadedAt - t.started, throne.getX(), throne.getY(), throne.getZ(), dais, below, king != null,
-                CitadelGarrison.spawned(), json(t.expected), json(census(level, site)));
+                spawn.getX(), spawn.getY(), spawn.getZ(), Math.sqrt(spawn.distSqr(new BlockPos(site.center().getX(), spawn.getY(), site.center().getZ()))),
+                biome, t.chunks.size(), loaded, t.loadedAt - t.started, throne.getX(), throne.getY(), throne.getZ(), dais, below, king != null,
+                CitadelGarrison.spawned(), json(t.expected), json(census(level, site)), treasury(level, t.chunks), modItems());
             LOG.info("CITADEL-SELFTEST {}", line);
             return;
         }
@@ -267,18 +296,76 @@ public final class CitadelEvents {
                 atPost++;
             }
         }
-        List<String> vehicles = new ArrayList<>();
+        // the kingdom's vehicles and turrets by type: manned, and standing ready with no crew
+        Map<String, Integer> manned = new TreeMap<>(), ready = new TreeMap<>();
+        List<String> sample = new ArrayList<>();
         for (net.minecraft.world.entity.Entity v : level.getEntities((net.minecraft.world.entity.Entity) null, box,
             x -> x.getTags().contains(jp.oror.reborn.vehicle.RoyalPilots.CREWED))) {
-            vehicles.add(jp.oror.reborn.vehicle.RoyalPilots.report(v));
+            String id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath();
+            (v.getPassengers().isEmpty() ? ready : manned).merge(id, 1, Integer::sum);
+            if (sample.size() < 3 && !v.getPassengers().isEmpty()) {
+                sample.add(jp.oror.reborn.vehicle.RoyalPilots.report(v));
+            }
         }
-        String line = String.format(Locale.ROOT, "{\"royals\":%d,\"armed\":%d,\"nearPost\":%d,\"found\":%s,\"vehicles\":[%s],\"mspt\":%.2f}",
-            royals, armed, atPost, json(census(level, t.site)), String.join(",", vehicles), e.getServer().getAverageTickTimeNanos() / 1e6);
+        String line = String.format(Locale.ROOT, "{\"royals\":%d,\"armed\":%d,\"nearPost\":%d,\"found\":%s,\"manned\":%s,\"ready\":%s,"
+                + "\"parked\":%d,\"vehicles\":[%s],\"mspt\":%.2f}",
+            royals, armed, atPost, json(census(level, t.site)), json(manned), json(ready), CitadelGarrison.parked(), String.join(",", sample),
+            e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
         for (ChunkPos p : t.chunks) {
             level.setChunkForced(p.x, p.z, false);
         }
         selftestDone = true;
+    }
+
+    /** The royal treasury's chests among the loaded chunks: how many, how many stacks, and the other namespaces' items in them. */
+    private static String treasury(ServerLevel level, List<ChunkPos> chunks) {
+        int chests = 0, stacks = 0;
+        java.util.TreeSet<String> mods = new java.util.TreeSet<>();
+        for (ChunkPos p : chunks) {
+            net.minecraft.world.level.chunk.LevelChunk c = level.getChunkSource().getChunkNow(p.x, p.z);
+            if (c == null) {
+                continue;
+            }
+            for (net.minecraft.world.level.block.entity.BlockEntity be : c.getBlockEntities().values()) {
+                if (be instanceof net.minecraft.world.level.block.entity.ChestBlockEntity chest && chest.getCustomName() != null
+                    && chest.getCustomName().getString().contains("宝物庫")) {
+                    chests++;
+                    for (int i = 0; i < chest.getContainerSize(); i++) {
+                        net.minecraft.world.item.ItemStack st = chest.getItem(i);
+                        if (!st.isEmpty()) {
+                            stacks++;
+                            ResourceLocation id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(st.getItem());
+                            if (!id.getNamespace().equals("minecraft")) {
+                                mods.add(id.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return String.format(Locale.ROOT, "{\"chests\":%d,\"stacks\":%d,\"modItems\":[%s]}", chests, stacks,
+            String.join(",", mods.stream().map(m -> "\"" + m + "\"").toList()));
+    }
+
+    /** Of the other namespaces' items the citadel's containers can hold (treasure_items.json), the ones not registered. */
+    private static String modItems() {
+        List<String> missing = new ArrayList<>();
+        int all = 0;
+        try (java.io.InputStream in = CitadelData.class.getResourceAsStream("/data/oror_supreme_bosses/citadel/v12/treasure_items.json")) {
+            if (in != null) {
+                for (com.google.gson.JsonElement el : com.google.gson.JsonParser.parseReader(
+                    new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject().getAsJsonArray("items")) {
+                    all++;
+                    if (!net.minecraft.core.registries.BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(el.getAsString()))) {
+                        missing.add("\"" + el.getAsString() + "\"");
+                    }
+                }
+            }
+        } catch (java.io.IOException | RuntimeException ex) {
+            LOG.error("treasure_items.json could not be read", ex);
+        }
+        return String.format(Locale.ROOT, "{\"listed\":%d,\"missing\":[%s]}", all, String.join(",", missing));
     }
 
     private static String json(Map<String, Integer> m) {
