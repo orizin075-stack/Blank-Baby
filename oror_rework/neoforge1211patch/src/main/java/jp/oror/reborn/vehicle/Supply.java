@@ -183,7 +183,9 @@ public final class Supply {
 
     static boolean low(Entity v) {
         int[] r = rounds(v);
-        return charge(v) < 0.33 || r[1] > 0 && r[0] < Math.max(1, r[1] / 10);
+        // an aircraft turns for home at half its battery: the way back and the landing take a good share of it
+        double floor = "AIRCRAFT".equals(Sbw.engine(v)) ? 0.5 : 0.33;
+        return charge(v) < floor || r[1] > 0 && r[0] < Math.max(1, r[1] / 10);
     }
 
     static boolean full(Entity v) {

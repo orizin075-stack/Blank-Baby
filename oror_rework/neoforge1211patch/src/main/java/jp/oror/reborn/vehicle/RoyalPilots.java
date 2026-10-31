@@ -461,10 +461,13 @@ public final class RoyalPilots {
                         high = Math.max(high, groundAt(v, v.position().add(way.scale(d))));
                     }
                 }
-                steer(v, gate, Math.max(runwayY + 28, high + 30), false, 0);
+                // at about half speed (at full throttle the CI aircraft orbited its gate 300 blocks out until its battery
+                // was flat), and from wherever it is after a minute of trying
+                double alt = Math.max(runwayY + 28, high + 30);
+                steerSpeed(v, gate, alt, speed < 1.8, speed > 2.6, 99);
                 if (target != null) {
                     mode = "patrol";
-                } else if (v.position().subtract(gate).horizontalDistance() < 30) {
+                } else if (v.position().subtract(gate).horizontalDistance() < 50 || now - p.getLong("Since") > 1200) {
                     mode = "approach";
                     p.putLong("Since", now);
                 }
