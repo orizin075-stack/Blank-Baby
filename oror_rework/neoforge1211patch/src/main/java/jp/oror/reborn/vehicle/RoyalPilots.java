@@ -356,8 +356,10 @@ public final class RoyalPilots {
                 }
             }
             case "pullup" -> {
-                // nose up at full power until climbing again and clear of the ground, then back to the patrol
-                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), cruise(v, home, target), true, -25);
+                // nose up at full power until climbing again and clear of the ground, then back to the patrol; a slow
+                // aircraft keeps its nose lower so as not to stall
+                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), cruise(v, home, target), true,
+                    speed < 1.0 ? -10 : -25);
                 long t = now - p.getLong("Since");
                 boolean clear = v.getDeltaMovement().y > 0 && v.getY() - groundAt(v, v.position()) > 30;
                 if (t > 40 && clear || t > 160) {
@@ -414,7 +416,8 @@ public final class RoyalPilots {
                 danger = at.y - groundAt(v, at) < 10;
             }
             if (danger) {
-                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), v.getY() + 40, true, -30);
+                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), v.getY() + 40, true,
+                    speed < 1.0 ? -12 : -30);
                 if (mode.equals("dive") || mode.equals("patrol") || mode.equals("climb")) {
                     mode = "pullup";
                     p.putLong("Since", now);
@@ -429,10 +432,16 @@ public final class RoyalPilots {
         return v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(at.x), Mth.floor(at.z));
     }
 
+    /** Cruising height: 45 above the post or the target, and 35 above the highest ground of the next 200 blocks ahead. */
     private static double cruise(Entity v, Vec3 home, LivingEntity target) {
         double base = Math.max(home.y, target == null ? home.y : target.getY());
-        int ground = v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, v.getBlockX(), v.getBlockZ());
-        return Math.max(base + CRUISE, ground + 30);
+        Vec3 dir = v.getDeltaMovement().multiply(1, 0, 1);
+        dir = dir.lengthSqr() < 1.0E-4 ? Vec3.directionFromRotation(0, v.getYRot()) : dir.normalize();
+        int ground = groundAt(v, v.position());
+        for (int d = 40; d <= 200; d += 40) {
+            ground = Math.max(ground, groundAt(v, v.position().add(dir.scale(d))));
+        }
+        return Math.max(base + CRUISE, ground + 35);
     }
 
     /** Toward a point at an altitude: yaw by the mouse's x, pitch from the altitude error by its y; minPitch < 0 forces a climb. */
@@ -482,10 +491,11 @@ public final class RoyalPilots {
         return String.format(java.util.Locale.ROOT,
             "{\"id\":\"%s\",\"engine\":\"%s\",\"alive\":%b,\"health\":%.2f,\"mode\":\"%s\",\"odometer\":%.1f,\"airborne\":%d,\"maxAlt\":%.1f,"
                 + "\"tookOff\":%b,\"landed\":%b,\"runs\":%d,\"unsticks\":%d,\"goArounds\":%d,\"terrainSaves\":%d,\"crew\":%d,"
-                + "\"power\":%.2f,\"energy\":%s,\"target\":%b}",
+                + "\"power\":%.2f,\"energy\":%s,\"target\":%b,\"y\":%.1f,\"ground\":%d,\"vy\":%.2f,\"speed\":%.2f,\"pitch\":%.1f}",
             id, Sbw.engine(v), v.isAlive() && !Sbw.wreck(v), Sbw.health(v), p.getString("Mode"), p.getDouble("Odometer"), p.getInt("Airborne"),
             p.getDouble("MaxAlt"), p.getBoolean("TookOff"), p.getBoolean("Landed"), p.getInt("Runs"), p.getInt("Unsticks"), p.getInt("GoArounds"),
-            p.getInt("TerrainSaves"), v.getPassengers().size(), Sbw.power(v), Sbw.call(v, "getEnergy"), p.hasUUID("Target"));
+            p.getInt("TerrainSaves"), v.getPassengers().size(), Sbw.power(v), Sbw.call(v, "getEnergy"), p.hasUUID("Target"),
+            v.getY(), groundAt(v, v.position()), v.getDeltaMovement().y, v.getDeltaMovement().length(), v.getXRot());
     }
 
     /** Royal soldiers posted to a vehicle (OrorMotor in their data) bring it out and board it the first time they act. */
