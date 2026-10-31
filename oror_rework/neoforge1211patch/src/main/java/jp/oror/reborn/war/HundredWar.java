@@ -34,6 +34,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,9 @@ public final class HundredWar {
     private static War war;
     /** Set when a battle has ended and its WAR-RESULT is logged. */
     public static volatile boolean resultLogged;
+    /** Tick time of the fighters by entity type during a battle (nanoseconds, entity ticks), and the tick each started. */
+    private static final Map<String, long[]> COST = new HashMap<>();
+    private static final Map<Integer, Long> TICKING = new HashMap<>();
 
     /** A side's soldiers: who still has to be brought in, who is on the field. */
     private static final class Army {
@@ -348,14 +352,56 @@ public final class HundredWar {
         long ticks = w.endedAt - w.started;
         String line = String.format(Locale.ROOT,
             "{\"size\":%d,\"winner\":\"%s\",\"kingdom\":{\"raised\":%d,\"alive\":%d,\"lost\":%d},\"host\":{\"raised\":%d,\"alive\":%d,\"lost\":%d},"
-                + "\"machines\":%s,\"seconds\":%.1f,\"msptAvg\":%.2f,\"msptMax\":%.2f,\"peakFighters\":%d,\"budget\":%d,\"test\":%b}",
+                + "\"machines\":%s,\"seconds\":%.1f,\"msptAvg\":%.2f,\"msptMax\":%.2f,\"peakFighters\":%d,\"budget\":%d,\"test\":%b,"
+                + "\"tickCost\":{%s},\"onField\":{%s}}",
             w.size, winner == null ? "draw" : winner, k.raised, k.alive.size(), k.lost, h.raised, h.alive.size(), h.lost,
             WarMachines.report(w.machines), ticks / 20.0, w.msptSamples == 0 ? 0 : w.msptSum / w.msptSamples, w.msptMax, w.peakFighters,
-            w.budget, w.test);
+            w.budget, w.test, costs(ticks), onField(w));
         LOG.info("WAR-RESULT {}", line);
         resultLogged = true;
         announce(w, "百人戦終了：" + (winner == null ? "引き分け" : winner + "の勝利") + "（" + k.name + " 残り" + k.alive.size() + "/" + k.raised
             + "、" + h.name + " 残り" + h.alive.size() + "/" + h.raised + "、" + (int) (ticks / 20) + "秒）");
+    }
+
+    /** Per fighter type: milliseconds of server tick it took on average, and microseconds per entity tick. */
+    private static String costs(long ticks) {
+        List<String> out = new ArrayList<>();
+        COST.entrySet().stream().sorted((a, b) -> Long.compare(b.getValue()[0], a.getValue()[0])).limit(10).forEach(en ->
+            out.add(String.format(Locale.ROOT, "\"%s\":[%.2f,%.0f]", en.getKey(), en.getValue()[0] / 1e6 / Math.max(1, ticks),
+                en.getValue()[0] / 1e3 / Math.max(1, en.getValue()[1]))));
+        COST.clear();
+        TICKING.clear();
+        return String.join(",", out);
+    }
+
+    /** What is on the field at the end, by entity type (the ten commonest): arrows, spells and shells included. */
+    private static String onField(War w) {
+        Map<String, Integer> n = new HashMap<>();
+        for (Entity e : w.level.getEntities((Entity) null, new net.minecraft.world.phys.AABB(w.center, w.center).inflate(FIELD, 64, FIELD), x -> true)) {
+            n.merge(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath(), 1, Integer::sum);
+        }
+        List<String> out = new ArrayList<>();
+        n.entrySet().stream().sorted((a, b) -> b.getValue() - a.getValue()).limit(10)
+            .forEach(en -> out.add("\"" + en.getKey() + "\":" + en.getValue()));
+        return String.join(",", out);
+    }
+
+    @SubscribeEvent
+    public static void beforeTick(EntityTickEvent.Pre e) {
+        if (war != null && war.endedAt < 0 && !e.getEntity().level().isClientSide && e.getEntity().getTags().contains(TAG)) {
+            TICKING.put(e.getEntity().getId(), System.nanoTime());
+        }
+    }
+
+    @SubscribeEvent
+    public static void afterTick(EntityTickEvent.Post e) {
+        Long t0 = TICKING.isEmpty() ? null : TICKING.remove(e.getEntity().getId());
+        if (t0 != null) {
+            long[] c = COST.computeIfAbsent(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getEntity().getType()).getPath(),
+                k -> new long[2]);
+            c[0] += System.nanoTime() - t0;
+            c[1]++;
+        }
     }
 
     /** After the battle the survivors and machines leave the field and the chunks are released. */
