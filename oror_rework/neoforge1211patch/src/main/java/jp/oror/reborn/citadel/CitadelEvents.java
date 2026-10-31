@@ -308,9 +308,17 @@ public final class CitadelEvents {
                 sample.add(jp.oror.reborn.vehicle.RoyalPilots.report(v));
             }
         }
+        // the king ten seconds on: still on the throne (his feet on the dais, within a block of its centre), and seated
+        BlockPos throne = t.site.throne();
+        RoyalMob king = level.getEntitiesOfClass(RoyalMob.class, new AABB(throne).inflate(24), m -> m.role().name().equals("KING")).stream()
+            .min(java.util.Comparator.comparingDouble(m -> m.distanceToSqr(throne.getX() + 0.5, throne.getY(), throne.getZ() + 0.5))).orElse(null);
+        String kingAt = king == null ? "null" : String.format(Locale.ROOT, "{\"distance\":%.2f,\"dy\":%.2f,\"onThrone\":%b,\"target\":%b}",
+            Math.sqrt(king.distanceToSqr(throne.getX() + 0.5, king.getY(), throne.getZ() + 0.5)), king.getY() - throne.getY(),
+            king.blockPosition().equals(throne) || king.distanceToSqr(throne.getX() + 0.5, throne.getY(), throne.getZ() + 0.5) < 1.5,
+            king.getTarget() != null);
         String line = String.format(Locale.ROOT, "{\"royals\":%d,\"armed\":%d,\"nearPost\":%d,\"found\":%s,\"manned\":%s,\"ready\":%s,"
-                + "\"parked\":%d,\"vehicles\":[%s],\"mspt\":%.2f}",
-            royals, armed, atPost, json(census(level, t.site)), json(manned), json(ready), CitadelGarrison.parked(), String.join(",", sample),
+                + "\"parked\":%d,\"king\":%s,\"vehicles\":[%s],\"mspt\":%.2f}",
+            royals, armed, atPost, json(census(level, t.site)), json(manned), json(ready), CitadelGarrison.parked(), kingAt, String.join(",", sample),
             e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
         for (ChunkPos p : t.chunks) {

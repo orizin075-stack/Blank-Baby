@@ -42,7 +42,7 @@ public final class PilotTest {
     private static final class Run {
         ServerLevel level;
         long started;
-        Entity plane, tank;
+        Entity plane, tank, heli;
         Mob planeTarget, tankTarget;
         String lastMode = "";
         final List<String> modes = new ArrayList<>();
@@ -107,6 +107,8 @@ public final class PilotTest {
         r.plane = RoyalPilots.deploy(level, start, -90F, Sbw.has("a_10a") ? "a_10a" : "j_16", 1, null);
         Vec3 tankAt = start.add(0, 0, 30);
         r.tank = RoyalPilots.deploy(level, tankAt, -90F, "m_1a_2", 2, null);
+        r.heli = Sbw.has("ah_6") ? RoyalPilots.deploy(level, start.add(-4, 0, 16), -90F, "ah_6", 2, null) : null;
+        survey(level, start);
         r.planeTarget = target(level, start.add(160, 0, 0));
         r.tankTarget = target(level, tankAt.add(60, 0, 8));
         r.started = level.getGameTime();
@@ -114,6 +116,59 @@ public final class PilotTest {
         LOG.info("FLIGHT-START {\"runway\":[{},{},{}],\"plane\":{},\"tank\":{}}", origin.getX(), y, origin.getZ(), r.plane != null, r.tank != null);
         src.sendSuccess(() -> Component.literal("飛行・走行試験を開始しました（" + origin.getX() + ", " + y + ", " + origin.getZ() + "）"), false);
         return 1;
+    }
+
+    /**
+     * For choosing the kingdom's turrets and the vault's arms: which Superb Warfare vehicles a soldier can sit in (each
+     * deployed once with a crew of one, its riders counted, then removed), and every item id of the war mods.
+     */
+    private static void survey(ServerLevel level, Vec3 start) {
+        String[] ids = {"mk_42", "hpj_11", "tow", "laser_tower", "mortar", "type_63", "mle_1934", "fh_77bw", "bl_132", "waveforce_tower",
+            "annihilator", "lav_ad", "lav_25", "lav_150", "sodayo_pick_up_tow", "sodayo_pick_up_hmg", "sodayo_pick_up_rocket", "yx_100",
+            "plz_05", "prism_tank", "kv_16", "tom_6", "ztz_99a", "bmp_2", "bradley", "t_90a", "m_1a_2", "ah_6", "mi_28", "a_10a", "j_16"};
+        List<String> rows = new ArrayList<>();
+        int i = 0;
+        for (String id : ids) {
+            if (!Sbw.has(id)) {
+                rows.add("{\"id\":\"" + id + "\",\"registered\":false}");
+                continue;
+            }
+            Vec3 at = start.add(-30 - 9 * (i % 12), 0, -40 - 14 * (i / 12));
+            i++;
+            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) at.x, (int) at.z);
+            Entity v = RoyalPilots.deploy(level, new Vec3(at.x, y, at.z), -90F, id, 1, null);
+            if (v == null) {
+                rows.add("{\"id\":\"" + id + "\",\"deployed\":false}");
+                continue;
+            }
+            Object max = Sbw.call(v, "getMaxPassengers");
+            rows.add(String.format(Locale.ROOT, "{\"id\":\"%s\",\"engine\":\"%s\",\"crew\":%d,\"seats\":%s,\"autoAim\":%b,\"class\":\"%s\"}",
+                id, Sbw.engine(v), v.getPassengers().size(), max, isA(v, "com.atsuishio.superbwarfare.entity.vehicle.base.AutoAimableEntity"),
+                v.getClass().getSimpleName()));
+            v.getPassengers().forEach(Entity::discard);
+            v.discard();
+        }
+        LOG.info("SEAT-SURVEY [{}]", String.join(",", rows));
+        for (String ns : new String[]{"superbwarfare", "sbwdroneconfig", "halovecs"}) {
+            List<String> items = new ArrayList<>();
+            for (net.minecraft.resources.ResourceLocation key : net.minecraft.core.registries.BuiltInRegistries.ITEM.keySet()) {
+                if (key.getNamespace().equals(ns)) {
+                    net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(key);
+                    net.minecraft.world.item.ItemStack stack = item.getDefaultInstance();
+                    items.add(key.getPath() + ":" + stack.getRarity().name().charAt(0) + (stack.isDamageableItem() ? "d" : "") + item.getClass().getSimpleName());
+                }
+            }
+            java.util.Collections.sort(items);
+            LOG.info("ITEMS-{} {} [{}]", ns, items.size(), String.join(" ", items));
+        }
+    }
+
+    private static boolean isA(Object o, String name) {
+        try {
+            return Class.forName(name).isInstance(o);
+        } catch (ClassNotFoundException | LinkageError e) {
+            return false;
+        }
     }
 
     private static Mob target(ServerLevel level, Vec3 at) {
@@ -158,12 +213,12 @@ public final class PilotTest {
             String line = String.format(Locale.ROOT, "{\"seconds\":%.1f,\"plane\":%s,\"modes\":[%s],\"tank\":%s,\"tankClosest\":%.1f,"
                     + "\"tankTargetHealth\":%.1f,\"planeTarget\":\"%s\"}",
                 t / 20.0, r.plane == null ? "null" : RoyalPilots.report(r.plane), String.join(",", r.modes),
-                r.tank == null ? "null" : RoyalPilots.report(r.tank), r.tankClosest,
+                r.tank == null ? "null" : RoyalPilots.report(r.tank) + ",\"heli\":" + (r.heli == null ? "null" : RoyalPilots.report(r.heli)), r.tankClosest,
                 r.tankTarget == null ? -1F : r.tankTarget.isAlive() ? r.tankTarget.getHealth() : 0F,
                 r.planeTarget == null ? "none" : r.planeTarget.isAlive() ? "alive" : "gone");
             LOG.info("FLIGHT-RESULT {}", line);
             resultLogged = true;
-            for (Entity x : new Entity[]{r.plane, r.tank, r.planeTarget, r.tankTarget}) {
+            for (Entity x : new Entity[]{r.plane, r.tank, r.heli, r.planeTarget, r.tankTarget}) {
                 if (x != null && x.isAlive()) {
                     x.getPassengers().forEach(Entity::discard);
                     x.discard();

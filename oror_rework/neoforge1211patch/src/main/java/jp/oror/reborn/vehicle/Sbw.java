@@ -74,6 +74,17 @@ public final class Sbw {
         call(v, "setUpInputDown", false);
     }
 
+    /** A helicopter's keys: the collective (up, down) besides forward, back, left and right. */
+    public static void heliKeys(Entity v, boolean forward, boolean back, boolean left, boolean right, boolean up, boolean down) {
+        call(v, "setForwardInputDown", forward);
+        call(v, "setBackInputDown", back);
+        call(v, "setLeftInputDown", left);
+        call(v, "setRightInputDown", right);
+        call(v, "setSprintInputDown", false);
+        call(v, "setUpInputDown", up);
+        call(v, "setDownInputDown", down);
+    }
+
     public static void mouse(Entity v, double x, double y) {
         call(v, "mouseInput", x, y);
     }

@@ -126,7 +126,9 @@ public final class RoyalPilots {
             return;
         }
         CompoundTag p = v.getPersistentData().getCompound(KEY);
+        VehicleWatch.watch(v, p);
         if (Sbw.wreck(v)) {
+            v.getPersistentData().put(KEY, p);
             return;
         }
         if (v.tickCount % 1200 == 0) {
@@ -142,7 +144,9 @@ public final class RoyalPilots {
         }
         LivingEntity target = target(v, p);
         if (v.tickCount % 10 == 0) {
-            Sbw.aim(v, target);
+            // a ground vehicle holds its fire while the line to the target runs into the ground or a wall: its shells
+            // would only blast a crater at its own tracks
+            Sbw.aim(v, target != null && (Sbw.engine(v).equals("AIRCRAFT") || lineOfFire(v, target)) ? target : null);
             for (Entity rider : v.getPassengers()) {
                 if (rider instanceof Mob m && target != null && m.getTarget() != target) {
                     m.setTarget(target);
@@ -152,6 +156,8 @@ public final class RoyalPilots {
         String engine = Sbw.engine(v);
         if (engine.equals("AIRCRAFT")) {
             fly(v, p, target);
+        } else if (engine.equals("HELICOPTER")) {
+            hover(v, p, target);
         } else if (!engine.equals("HELICOPTER") && !engine.equals("FIXED") && !engine.equals("EMPTY") && !engine.isEmpty()) {
             drive(v, p, target);
         }
@@ -204,6 +210,15 @@ public final class RoyalPilots {
             }
         }
         return best;
+    }
+
+    /** True if nothing solid is between the top of the vehicle and the target, nor within the last two blocks of it. */
+    static boolean lineOfFire(Entity v, LivingEntity target) {
+        Vec3 from = v.position().add(0, v.getBbHeight() * 0.85, 0);
+        Vec3 to = target.getBoundingBox().getCenter();
+        net.minecraft.world.phys.BlockHitResult hit = v.level().clip(new net.minecraft.world.level.ClipContext(from, to,
+            net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, v));
+        return hit.getType() == net.minecraft.world.phys.HitResult.Type.MISS || hit.getLocation().distanceTo(to) < 2.0;
     }
 
     // ------------------------------------------------------------------------------------------------ ground vehicles
@@ -484,6 +499,69 @@ public final class RoyalPilots {
         }
         p.putString("Mode", mode);
     }
+
+    /**
+     * Helicopters: lift off on the collective, hold 22 blocks over the ground (or the enemy), turn to face the enemy and
+     * fly at it to a stand-off of 35 blocks for the gunner, and with nothing to fight go back over the pad and settle on
+     * it. The first three seconds are a lift test (collective only), whose climb goes in the log.
+     */
+    private static void hover(Entity v, CompoundTag p, LivingEntity target) {
+        long now = v.level().getGameTime();
+        Vec3 pos = v.position();
+        Vec3 home = Vec3.atBottomCenterOf(BlockPos.of(p.getLong("Home")));
+        if (!p.contains("HeliStart")) {
+            p.putLong("HeliStart", now);
+            p.putDouble("HeliY0", pos.y);
+            Sbw.call(v, "setEngineStart", true);
+        }
+        long t = now - p.getLong("HeliStart");
+        if (t < 60) {
+            p.putString("Mode", "lift-test");
+            Sbw.heliKeys(v, false, false, false, false, true, false);
+            Sbw.mouse(v, 0, 0);
+            return;
+        }
+        if (t == 60) {
+            LOG.info(String.format(java.util.Locale.ROOT, "HELI-LIFT {\"id\":\"%s\",\"climbed\":%.2f,\"power\":%.2f,\"vy\":%.2f}",
+                BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath(), pos.y - p.getDouble("HeliY0"), Sbw.power(v), v.getDeltaMovement().y));
+        }
+        double ground = groundAt(v, pos);
+        Vec3 goal;
+        double altitude;
+        Vec3 face;
+        if (target != null) {
+            Vec3 off = pos.subtract(target.position()).multiply(1, 0, 1);
+            off = off.lengthSqr() < 1 ? Vec3.directionFromRotation(0, v.getYRot()).scale(-1) : off.normalize();
+            goal = target.position().add(off.scale(35));
+            altitude = Math.max(ground, target.getY()) + 22;
+            face = target.position().subtract(pos);
+            p.putString("Mode", "attack");
+        } else {
+            goal = home;
+            boolean over = pos.subtract(home).horizontalDistance() < 4;
+            altitude = over ? home.y : Math.max(ground, home.y) + 22;
+            face = home.subtract(pos);
+            p.putString("Mode", over ? "settle" : "return");
+        }
+        // keep clear of the ground ahead too
+        Vec3 ahead = pos.add(v.getDeltaMovement().multiply(20, 0, 20));
+        altitude = Math.max(altitude, groundAt(v, ahead) + 12);
+        double dist = goal.subtract(pos).horizontalDistance();
+        float err = Mth.wrapDegrees(yawTo(face) - v.getYRot());
+        boolean up = pos.y < altitude - 1.5, down = pos.y > altitude + 2.5 && !(v.onGround());
+        boolean forward = dist > 6 && Math.abs(err) < 35 && pos.y > ground + 6;
+        boolean back = dist < 3 && v.getDeltaMovement().horizontalDistance() > 0.3;
+        Sbw.heliKeys(v, forward, back, false, false, up, down);
+        Sbw.mouse(v, Mth.clamp(err / 10.0, -2, 2), 0);
+        if (now % 40 == 0) {
+            LOG.info(String.format(java.util.Locale.ROOT, "HELI-TRACK {\"t\":%d,\"mode\":\"%s\",\"y\":%.1f,\"want\":%.1f,\"ground\":%.0f,\"dist\":%.1f,"
+                    + "\"err\":%.0f,\"speed\":%.2f,\"vy\":%.2f,\"power\":%.2f,\"keys\":\"%s%s%s%s\"}",
+                t, p.getString("Mode"), pos.y, altitude, ground, dist, err, v.getDeltaMovement().horizontalDistance(), v.getDeltaMovement().y,
+                Sbw.power(v), forward ? "F" : "", back ? "B" : "", up ? "U" : "", down ? "D" : ""));
+        }
+    }
+
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Vehicles");
 
     private static int groundAt(Entity v, Vec3 at) {
         return v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(at.x), Mth.floor(at.z));
