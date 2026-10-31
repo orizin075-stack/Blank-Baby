@@ -465,9 +465,16 @@ public final class RoyalPilots {
                 // was flat), and from wherever it is after a minute of trying
                 double alt = Math.max(runwayY + 28, high + 30);
                 steerSpeed(v, gate, alt, speed < 1.8, speed > 2.6, 99);
+                // the approach only lined up: near the gate, off the centre line by less than 40 blocks and heading
+                // down the runway within 45 degrees (going round again leaves it here at least five seconds)
+                Vec3 side = new Vec3(-f.z, 0, f.x);
+                double offLine = Math.abs(v.position().subtract(home).dot(side));
+                float headingErr = Mth.wrapDegrees(v.getYRot() - heading);
+                boolean lined = offLine < 40 && Math.abs(headingErr) < 45;
                 if (target != null) {
                     mode = "patrol";
-                } else if (v.position().subtract(gate).horizontalDistance() < 50 || now - p.getLong("Since") > 1200) {
+                } else if (now - p.getLong("Since") > 100 && lined && (v.position().subtract(gate).horizontalDistance() < 80
+                    || now - p.getLong("Since") > 1200)) {
                     mode = "approach";
                     p.putLong("Since", now);
                 }
@@ -479,16 +486,12 @@ public final class RoyalPilots {
                 double glide = runwayY + 1.5 + Math.max(0, along) * GLIDE;
                 Vec3 aim = touch.add(f.scale(Math.max(20, -along)));
                 boolean slow = speed > 1.35, fast = speed < 0.9;
-                // the ground ahead on the way down: where it rises into the glide path, go round again (the approach
-                // runs without the terrain guard, which would pull it up off every glide)
-                Vec3 m = v.getDeltaMovement().multiply(1, 0, 1);
+                // the ground under the glide path (the runway's extended centre line, from here to the touch-down point):
+                // where it rises into the path, go round again. It was taken along the aircraft's heading while it was
+                // still turning in, over the hills beside the line, and the approach was given up every tick.
                 boolean blocked = false;
-                if (m.lengthSqr() > 0.01 && along > 8) {
-                    for (int t = 5; t <= 40; t += 5) {
-                        Vec3 at = v.position().add(m.scale(t));
-                        double alongThere = touch.subtract(at).dot(f);
-                        blocked |= alongThere > 4 && groundAt(v, at) > runwayY + 1.5 + Math.max(0, alongThere) * GLIDE - 3;
-                    }
+                for (double d = 10; d < Math.min(along, 200); d += 10) {
+                    blocked |= groundAt(v, touch.subtract(f.scale(d))) > runwayY + 1.5 + d * GLIDE - 3;
                 }
                 steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()));
                 if (v.onGround()) {
@@ -497,6 +500,7 @@ public final class RoyalPilots {
                     p.putBoolean("Landed", true);
                 } else if (blocked || along < -120 || v.getY() > glide + 25 || now - p.getLong("Since") > 900) {
                     mode = "return";
+                    p.putLong("Since", now);
                     p.putInt("GoArounds", p.getInt("GoArounds") + 1);
                 }
             }

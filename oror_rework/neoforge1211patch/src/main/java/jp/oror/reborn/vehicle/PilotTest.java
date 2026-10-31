@@ -80,7 +80,7 @@ public final class PilotTest {
         r.level = level;
         BlockPos origin = flattest(level, BlockPos.containing(src.getPosition()));
         r.origin = origin;
-        for (int dx = -14; dx <= 20; dx++) {
+        for (int dx = -16; dx <= 20; dx++) {
             for (int dz = -9; dz <= 9; dz++) {
                 ChunkPos p = new ChunkPos((origin.getX() >> 4) + dx, (origin.getZ() >> 4) + dz);
                 if (level.setChunkForced(p.x, p.z, true)) {
@@ -103,7 +103,7 @@ public final class PilotTest {
         // the landing approach: 160 blocks of open ground before the runway's west end, under its glide path (the CI
         // aircraft, sent home to land, went round 26 times over hills in its way until its battery ran out); as at
         // the capital, where the runways are approached over the fields
-        for (int x = -170; x < -10; x++) {
+        for (int x = -230; x < -10; x++) {
             for (int z = -12; z <= 12; z++) {
                 level.setBlock(new BlockPos(origin.getX() + x, y - 1, origin.getZ() + z), Blocks.GRASS_BLOCK.defaultBlockState(), 2);
                 for (int h = 0; h < 40; h++) {
