@@ -446,7 +446,7 @@ public final class Supply {
     }
 
     /** The JSON of a vehicle's supply for the reports. */
-    static String report(ServerLevel level, Entity v) {
+    public static String report(ServerLevel level, Entity v) {
         int[] r = rounds(v);
         Object tube = Sbw.call(v, "getLoaded");
         return String.format(java.util.Locale.ROOT, "{\"vehicle\":\"%s\",\"charge\":%.3f,\"rounds\":%d,\"full\":%d,\"charger\":%b,\"depots\":%d%s}", kind(v),
