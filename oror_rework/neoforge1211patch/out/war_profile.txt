@@ -1,11 +1,135 @@
-jfr print: file is empty '/home/runner/work/_temp/server/rec.jfr'
-war window 10:02:28 10:04:25
-server thread samples in the window 0
+war window 10:51:43 10:55:49
+server thread samples in the window 8897
 
 == packages anywhere in the stack (share of samples)
+100.0%  net.minecraft
+ 27.0%  net.neoforged
+ 21.0%  jp.oror
+ 12.0%  com.atsuishio
+  5.7%  io.redspace
+  1.4%  yesman.epicfight
+  0.7%  dev.shadowsoffire
+  0.1%  top.theillusivec4
+  0.0%  com.hm.efn
+  0.0%  software.bernie
 
 == on top of the stack (self)
+100.0%  state = "STATE_RUNNABLE"
 
 == anywhere in the stack (inclusive), mods only
+100.0%  state = "STATE_RUNNABLE"
+ 15.2%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.tickMagnetism
+ 12.4%  jp.oror.reborn.royal.RoyalMob.battle
+ 12.4%  jp.oror.reborn.royal.RoyalMob$1.tick
+ 11.0%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
+  9.1%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.baseTick
+  7.1%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyRepellingMagnets
+  6.2%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyAttractingMagnets
+  5.5%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.move
+  5.2%  io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob.rideTick
+  4.4%  dev.ryanhcode.sable.util.SubLevelInclusiveLevelEntityGetter.get
+  4.0%  com.scarasol.pillagers_gun.compat.tacz.TaczCompat$TaczGunAttackGoal.tick
+  3.0%  jp.oror.reborn.VillagerLife.tick
+  2.8%  jp.oror.reborn.VillagerLife.tradeWith
+  2.8%  jp.oror.reborn.VillagerLife.trade
+  2.5%  com.atsuishio.superbwarfare.entity.vehicle.A10Entity.baseTick
+  2.5%  com.mojang.serialization.Encoder.encodeStart
+  2.5%  com.mojang.serialization.Codec$2.encode
+  2.5%  com.mojang.serialization.Encoder$1.encode
+  2.1%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.vMove
+  2.1%  com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils.resolveObbWorldCollision
+  2.1%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.vCollide
+  2.0%  com.atsuishio.superbwarfare.data.gun.GunData.get
+  2.0%  com.bobmowzie.mowziesmobs.server.entity.effects.EntityFallingBlock.tick
+  1.7%  jp.oror.reborn.AdaptiveCombat.tick
+  1.6%  com.atsuishio.superbwarfare.data.PMC.get
+  1.5%  com.atsuishio.superbwarfare.entity.vehicle.base.ArtilleryEntity.baseTick
+  1.4%  jp.oror.reborn.war.HundredWar.tick
+  1.4%  jp.oror.reborn.war.HundredWar.direct
+  1.3%  com.atsuishio.superbwarfare.data.gun.GunData.<init>
+  1.3%  com.atsuishio.superbwarfare.init.ModSerializers$VEHICLE_GUN_DATA_MAP_SERIALIZER$1$1.copy
+  1.2%  com.atsuishio.superbwarfare.data.gun.GunData.copy
+  1.1%  com.atsuishio.superbwarfare.event.GunEventHandler.gunTick
+  0.9%  jp.oror.reborn.royal.RoyalMob.customServerAiStep
+  0.9%  com.atsuishio.superbwarfare.data.Prop.getDefault
+  0.7%  jp.oror.reborn.royal.RoyalGuns.tick
+  0.7%  com.atsuishio.superbwarfare.data.gun.GunProp.AMMO_CONSUMER$lambda$10
+  0.7%  com.mojang.serialization.DataResult$Success.flatMap
+  0.7%  com.atsuishio.superbwarfare.data.gun.AmmoConsumer.init
+  0.6%  com.mojang.serialization.MapCodec$MapCodecCodec.encode
+  0.6%  com.atsuishio.superbwarfare.tools.ServerSyncedEntityHandler.register
+  0.6%  com.atsuishio.superbwarfare.tools.ServerSyncedEntityHandler.register$default
+  0.6%  jp.oror.reborn.TerrainPlay.place
+  0.6%  malte0811.ferritecore.fastmap.FastMap.getKeyFor
+  0.6%  jp.oror.reborn.TerrainPlay.bridge
+  0.6%  malte0811.ferritecore.fastmap.FastMap.getValue
+  0.6%  malte0811.ferritecore.impl.FastMapEntryMap.get
+  0.6%  com.mojang.serialization.codecs.RecordCodecBuilder$2.encode
+  0.6%  com.mojang.serialization.MapCodec$2.encode
+  0.6%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.travel
+  0.6%  com.mojang.serialization.codecs.RecordCodecBuilder$Instance$4.encode
+  0.6%  com.mojang.serialization.codecs.FieldEncoder.encode
+  0.6%  com.atsuishio.superbwarfare.data.gun.GunProp$Companion.modifyProperty
+  0.6%  com.atsuishio.superbwarfare.data.PMC.modify
+  0.5%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.buildBvrSyncNbt
+  0.5%  com.atsuishio.superbwarfare.tools.BvrSyncExclusionKt.getBvrSyncNbt
+  0.5%  dev.shadowsoffire.apotheosis.AdventureEvents.enchLevels
+  0.5%  com.mojang.serialization.codecs.ListCodec.encode
+  0.5%  com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils.terrainCompact
+  0.5%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.terrainCompact
+  0.5%  com.gametechbc.gtbcs_geomancy_plus.entity.projectiles.chunker.ChunkerEntity.tick
+  0.4%  com.atsuishio.superbwarfare.data.gun.GunData.tick
+  0.4%  com.atsuishio.superbwarfare.entity.projectile.TaserBulletEntity.tick
+  0.4%  malte0811.ferritecore.impl.FastMapEntryMap.containsKey
+  0.4%  yesman.epicfight.api.event.impl.VanillaEntityEventHooks.preTick
+  0.4%  yesman.epicfight.platform.neoforge.event.NeoForgeEntityEvent.epicfight$entityTickPre
+  0.4%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.canShoot
+  0.4%  com.gametechbc.gtbcs_geomancy_plus.entity.projectiles.seismic_ride.SeismicRideEntity.tick
+  0.4%  jp.oror.reborn.vehicle.RoyalPilots.tick
+  0.4%  yesman.epicfight.world.entity.ai.goal.TargetChasingGoal.tick
 
 == anywhere in the stack (inclusive), Minecraft
+ 96.7%  net.minecraft.server.MinecraftServer.runServer
+ 96.3%  net.minecraft.server.MinecraftServer.lambda$spin$2
+ 93.5%  net.minecraft.server.MinecraftServer.tickServer
+ 92.5%  net.minecraft.server.level.ServerLevel.tick
+ 92.4%  net.minecraft.server.MinecraftServer.tickChildren
+ 92.1%  net.minecraft.server.dedicated.DedicatedServer.tickChildren
+ 80.4%  net.minecraft.server.level.ServerLevel.lambda$tick$2
+ 80.3%  net.minecraft.server.level.ServerLevel.tickNonPassenger
+ 80.2%  net.minecraft.world.level.entity.EntityTickList.forEach
+ 80.2%  net.minecraft.world.level.Level.guardEntityTick
+ 55.6%  net.minecraft.world.entity.Mob.tick
+ 55.5%  net.minecraft.world.entity.LivingEntity.tick
+ 34.8%  net.minecraft.world.entity.Mob.aiStep
+ 34.7%  net.minecraft.world.entity.LivingEntity.aiStep
+ 28.5%  net.minecraft.world.entity.Entity.tick
+ 26.1%  net.minecraft.world.entity.Mob.serverAiStep
+ 24.7%  net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
+ 24.6%  net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
+ 24.4%  net.minecraft.world.level.pathfinder.PathFinder.findPath
+ 23.2%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.getNeighbors
+ 21.7%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.findAcceptedNode
+ 18.7%  net.minecraft.world.entity.ai.navigation.PathNavigation.moveTo
+ 17.1%  net.minecraft.world.entity.ai.goal.GoalSelector.tickRunningGoals
+ 17.0%  net.minecraft.world.entity.ai.goal.WrappedGoal.tick
+ 16.7%  net.minecraft.world.level.Level.getChunk
+ 16.5%  net.minecraft.server.level.ServerChunkCache.getChunk
+ 15.8%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.getCachedPathType
+ 15.5%  net.minecraft.world.entity.Entity.handler$bim001$alexscaves$ac_tick
+ 15.0%  net.minecraft.world.level.LevelReader.getChunk
+ 14.4%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.getPathTypeOfMob
+ 14.4%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.lambda$getCachedPathType$1
+ 13.9%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.getPathType
+ 13.7%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.getPathTypeStatic
+ 13.6%  net.minecraft.world.level.Level.getBlockState
+ 12.9%  net.minecraft.world.entity.Entity.move
+ 12.3%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.checkNeighbourBlocks
+ 12.1%  net.minecraft.world.entity.ai.goal.GoalSelector.tick
+ 11.0%  net.minecraft.world.level.biome.MultiNoiseBiomeSource.setLastSampledDimension
+ 11.0%  net.minecraft.server.level.ServerChunkCache.handler$bik000$alexscaves$ac_getChunk
+ 10.2%  net.minecraft.world.level.pathfinder.WalkNodeEvaluator.getPathTypeWithinMobBB
+3440:
+Dumped recording, 35.9 MB written to:
+
+/home/runner/work/_temp/server/war.jfr
