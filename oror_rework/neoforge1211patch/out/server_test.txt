@@ -1,408 +1,408 @@
-[17:28:00] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST {"site":[-368,67,880],"forced":false,"ground":66,"dy":2,"locateMs":57726.5,"spawn":[0,134,0],"fromSpawn":954,"biome":"oror_supreme_bosses:royal_capital","chunks":184,"loaded":184,"loadTicks":1,"throne":[-368,139,848],"dais":true,"underKing":"block.minecraft.gold_block","kingAtThrone":true,"spawned":289,"expected":{"ARCHMAGE":2,"BODYGUARD":6,"GENERAL":4,"GUARD":50,"IMPERIAL":13,"KING":1,"MAGE":4,"SAGE":1,"VILLAGER":33},"found":{"ARCHMAGE":3,"BODYGUARD":6,"GENERAL":5,"GUARD":88,"IMPERIAL":24,"KING":1,"MAGE":7,"SAGE":1,"VILLAGER":161},"treasury":{"chests":10,"stacks":270,"modItems":["alexscaves:azure_neodymium_ingot","alexscaves:pure_darkness","alexscaves:scarlet_neodymium_ingot","apotheosis:arcane_sands","apotheosis:godforged_pearl","iceandfire:dragonsteel_fire_ingot","iceandfire:dragonsteel_ice_ingot","iceandfire:dragonsteel_lightning_ingot","irons_spellbooks:arcane_essence","irons_spellbooks:epic_ink","irons_spellbooks:legendary_ink","irons_spellbooks:netherite_spell_book","irons_spellbooks:upgrade_orb","oror_supreme_bosses:ain_sof_aur_focus","oror_supreme_bosses:dragon_core","oror_supreme_bosses:ferdinand_charm","oror_supreme_bosses:hakyoku_focus","oror_supreme_bosses:innocence_charm","oror_supreme_bosses:last_bloom","oror_supreme_bosses:mana_crystal","oror_supreme_bosses:merlinus_charm","oror_supreme_bosses:nortia_charm","oror_supreme_bosses:nortia_focus","oror_supreme_bosses:purifying_dew","oror_supreme_bosses:rewind_talisman","oror_supreme_bosses:star_shard","oror_supreme_bosses:sweet_pact_focus","oror_supreme_bosses:villager_king_token","oror_supreme_bosses:world_thread","superbwarfare:armor_plate","superbwarfare:awm","superbwarfare:bocek","superbwarfare:devotion","superbwarfare:handgun_ammo_box","superbwarfare:heavy_armament_module","superbwarfare:hpj_11_blueprint","superbwarfare:igla_9k38","superbwarfare:insidious","superbwarfare:legendary_blueprint_data_chip","superbwarfare:legendary_material_pack","superbwarfare:m_60","superbwarfare:m_98b","superbwarfare:mk_14","superbwarfare:mk_42_blueprint","superbwarfare:mle_1934_blueprint","superbwarfare:qbz_191","superbwarfare:rifle_ammo_box","superbwarfare:rpk","superbwarfare:ru_chest_6b43","superbwarfare:ru_helmet_6b47","superbwarfare:sentinel","superbwarfare:shotgun_ammo_box","superbwarfare:sniper_ammo_box","superbwarfare:superb_material_pack","superbwarfare:svd","superbwarfare:thermal_imaging_goggles","superbwarfare:us_chest_iotv","superbwarfare:us_helmet_pasgt","superbwarfare:vector","waystones:warp_stone"]},"modItems":{"listed":254,"missing":[]}}
-[17:28:19] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST-LATER {"royals":134,"armed":87,"nearPost":87,"found":{"ARCHMAGE":3,"BODYGUARD":6,"GENERAL":5,"GUARD":87,"IMPERIAL":24,"KING":1,"MAGE":7,"SAGE":1,"VILLAGER":161},"manned":{"ah_6":1,"bl_132":1,"hpj_11":2,"m_1a_2":3,"mi_28":1,"mk_42":1,"mle_1934":3,"t_90a":2,"tow":1},"ready":{"a_10a":1,"bmp_2":1,"bradley":1,"m_1a_2":2,"t_90a":2,"ztz_99a":2},"parked":9,"king":{"distance":0.21,"dy":0.00,"onThrone":true,"target":false},"vehicles":[{"id":"mk_42","engine":"FIXED","alive":true,"health":1.00,"mode":"ground","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":1,"power":0.00,"energy":2147483647,"target":false,"y":67.0,"ground":87,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"t_90a","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":67.0,"ground":78,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":67.0,"ground":78,"vy":-0.00,"speed":0.00,"pitch":3.8,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0}],"mspt":84.06}
-[17:28:19] [Server thread/INFO] [OROR Citadel/]: CITADEL-SUPPLY {"posts":{"a_10a+station+depot":1,"ah_6+station+depot":1,"bl_132+depot":1,"bmp_2+station+depot":1,"bradley+station+depot":1,"hpj_11+station+depot":2,"m_1a_2+station+depot":5,"mi_28+station+depot":1,"mk_42":1,"mle_1934+depot":3,"t_90a+station+depot":4,"tow+depot":1,"ztz_99a+station+depot":2},"kinds":[{"vehicle":"mk_42","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":0},{"vehicle":"m_1a_2","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":2},{"vehicle":"ztz_99a","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":2},{"vehicle":"t_90a","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":3},{"vehicle":"bmp_2","charge":1.000,"rounds":196,"full":196,"charger":true,"depots":2},{"vehicle":"ah_6","charge":1.000,"rounds":144,"full":144,"charger":true,"depots":1},{"vehicle":"mi_28","charge":1.000,"rounds":70,"full":86,"charger":true,"depots":1},{"vehicle":"a_10a","charge":1.000,"rounds":150,"full":150,"charger":true,"depots":1},{"vehicle":"hpj_11","charge":1.000,"rounds":128,"full":128,"charger":true,"depots":1},{"vehicle":"mle_1934","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":1},{"vehicle":"tow","charge":1.000,"rounds":0,"full":0,"charger":false,"depots":1,"loaded":true},{"vehicle":"bl_132","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":1}]}
-[17:32:08] [Server thread/INFO] [OROR War/]: WAR-RESULT {"size":100,"winner":"王国軍","kingdom":{"raised":50,"alive":41,"lost":9},"host":{"raised":50,"alive":7,"lost":43},"machines":[{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"attack","odometer":41.1,"airborne":123,"maxAlt":7.9,"tookOff":false,"landed":false,"runs":0,"unsticks":31,"goArounds":0,"terrainSaves":0,"crew":2,"power":-0.01,"energy":9805490,"target":true,"y":126.3,"ground":124,"vy":-0.06,"speed":0.07,"pitch":-3.9,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"a_10a","engine":"AIRCRAFT","alive":true,"health":1.00,"mode":"patrol","odometer":14451.8,"airborne":3598,"maxAlt":136.7,"tookOff":false,"landed":false,"runs":5,"unsticks":0,"goArounds":0,"terrainSaves":23,"crew":1,"power":3.00,"energy":7267693,"target":true,"y":212.9,"ground":90,"vy":0.06,"speed":3.96,"pitch":-0.8,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0}],"seconds":180.0,"msptAvg":57.79,"msptMax":2827.48,"peakFighters":100,"budget":2,"test":true,"tickCost":{"kingdom_guard":[3.66,194],"imperial_guard":[3.30,366],"royal_mage":[1.28,228],"vindicator":[1.12,185],"royal_bodyguard":[1.11,370],"pillager":[1.10,211],"royal_archmage":[0.70,176],"villager_general":[0.43,425],"ravager":[0.24,317],"evoker":[0.24,187]},"onField":{"item":39,"pillager":38,"vindicator":24,"kingdom_guard":18,"vex":15,"falling_block":15,"extended_sunstrike":13,"evoker_fangs":10,"imperial_guard":9,"arrow":7}}
-[17:36:57] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-TEST {"before":[{"vehicle":"m_1a_2","charge":0.200,"rounds":0,"full":176,"charger":false,"depots":0},{"vehicle":"ah_6","charge":0.200,"rounds":0,"full":144,"charger":true,"depots":1},{"vehicle":"a_10a","charge":0.200,"rounds":0,"full":150,"charger":false,"depots":0}],"after":[{"vehicle":"m_1a_2","charge":0.200,"rounds":0,"full":176,"charger":false,"depots":0,"mode":"return","fromPost":54.8,"resupplying":true,"resupplies":1,"reloaded":3},{"vehicle":"ah_6","charge":0.705,"rounds":144,"full":144,"charger":true,"depots":1,"mode":"parked","fromPost":0.2,"resupplying":false,"resupplies":0,"reloaded":173},{"vehicle":"a_10a","charge":0.150,"rounds":0,"full":150,"charger":false,"depots":0,"mode":"return","fromPost":191.2,"resupplying":true,"resupplies":1,"reloaded":0}]}
-[17:36:57] [Server thread/INFO] [OROR Vehicles/]: FLIGHT-RESULT {"seconds":240.1,"plane":{"id":"a_10a","engine":"AIRCRAFT","alive":false,"health":-0.32,"mode":"return","odometer":12216.6,"airborne":3565,"maxAlt":146.9,"tookOff":true,"landed":false,"runs":6,"unsticks":0,"goArounds":0,"terrainSaves":327,"crew":0,"power":0.00,"energy":1500982,"target":true,"y":104.0,"ground":90,"vy":-0.00,"speed":0.00,"pitch":-1.1,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},"modes":[[0,"parked",63],[7,"roll",63],[144,"pullup",65],[185,"patrol",99],[361,"dive",145],[374,"target-gone:killed",0],[375,"patrol",142],[605,"dive",146],[623,"pullup",142],[664,"patrol",144],[816,"dive",153],[846,"pullup",140],[887,"patrol",141],[958,"pullup",150],[999,"patrol",161],[1125,"dive",152],[1141,"pullup",154],[1182,"patrol",171],[1332,"dive",171],[1362,"pullup",156],[1403,"patrol",154],[1555,"dive",169],[1585,"pullup",154],[1626,"patrol",153],[1796,"dive",174],[1807,"pullup",171],[1848,"patrol",184],[1914,"pullup",163],[1955,"patrol",150],[2013,"return",155]],"tank":{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"return","odometer":55.1,"airborne":63,"maxAlt":3.9,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":2000000,"target":true,"y":63.4,"ground":63,"vy":-0.00,"speed":0.00,"pitch":-3.6,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},"heli":{"id":"ah_6","engine":"HELICOPTER","alive":true,"health":1.00,"mode":"parked","odometer":91.5,"airborne":426,"maxAlt":22.9,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":3525222,"target":false,"y":63.0,"ground":63,"vy":-0.00,"speed":0.00,"pitch":-0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},"tankClosest":36.8,"tankTargetHealth":0.0,"planeTarget":"gone"}
-[17:37:25] [Server thread/INFO] [OROR Village/]: VILLAGE-FLIGHT {"present":true,"seconds":13.0,"built":"airship,biplane,","phases":[[0,"none"],[5,"built:airship,biplane,"],[45,"board"],[205,"climb"],[259,"away"]],"maxAboard":2,"maxClimb":22.1,"maxOut":46.3,"flights":0,"crewStillAssigned":0,"flewOff":true}
-[17:37:25] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":8996}
-[m[33m[17:25:54.193] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
-[m[33m[17:25:57.126] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
-[m[33m[17:25:57.139] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
-[m[1;31m[17:25:57.825] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
-[m[33m[17:25:57.831] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
-[m[33m[17:25:57.831] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
-[m[33m[17:25:57.965] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
-[m[33m[17:25:57.966] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
-[m[33m[17:25:58.050] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
-[m[33m[17:25:58.051] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
-[m[33m[17:25:58.052] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
-[m[33m[17:25:58.053] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
-[m[33m[17:25:58.054] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
-[m[33m[17:25:58.055] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
-[m[33m[17:25:58.256] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[17:25:58.259] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
-[m[33m[17:25:58.304] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
-[m[33m[17:25:58.505] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[17:25:58.510] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
-[m[1;31m[17:25:58.829] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
-[m[33m[17:25:58.830] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
-[m[33m[17:25:58.858] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
-[m[33m[17:25:58.898] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
-[17:26:05] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+[17:42:41] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST {"site":[-368,67,880],"forced":false,"ground":66,"dy":2,"locateMs":43564.1,"spawn":[0,134,0],"fromSpawn":954,"biome":"oror_supreme_bosses:royal_capital","chunks":184,"loaded":184,"loadTicks":1,"throne":[-368,139,848],"dais":true,"underKing":"block.minecraft.gold_block","kingAtThrone":true,"spawned":282,"expected":{"ARCHMAGE":2,"BODYGUARD":6,"GENERAL":4,"GUARD":50,"IMPERIAL":13,"KING":1,"MAGE":4,"SAGE":1,"VILLAGER":33},"found":{"ARCHMAGE":3,"BODYGUARD":6,"GENERAL":5,"GUARD":88,"IMPERIAL":24,"KING":1,"MAGE":7,"SAGE":1,"VILLAGER":151},"treasury":{"chests":10,"stacks":270,"modItems":["alexscaves:azure_neodymium_ingot","alexscaves:pure_darkness","alexscaves:scarlet_neodymium_ingot","apotheosis:arcane_sands","apotheosis:godforged_pearl","iceandfire:dragonsteel_fire_ingot","iceandfire:dragonsteel_ice_ingot","iceandfire:dragonsteel_lightning_ingot","irons_spellbooks:arcane_essence","irons_spellbooks:epic_ink","irons_spellbooks:legendary_ink","irons_spellbooks:netherite_spell_book","irons_spellbooks:upgrade_orb","oror_supreme_bosses:ain_sof_aur_focus","oror_supreme_bosses:dragon_core","oror_supreme_bosses:ferdinand_charm","oror_supreme_bosses:hakyoku_focus","oror_supreme_bosses:innocence_charm","oror_supreme_bosses:last_bloom","oror_supreme_bosses:mana_crystal","oror_supreme_bosses:merlinus_charm","oror_supreme_bosses:nortia_charm","oror_supreme_bosses:nortia_focus","oror_supreme_bosses:purifying_dew","oror_supreme_bosses:rewind_talisman","oror_supreme_bosses:star_shard","oror_supreme_bosses:sweet_pact_focus","oror_supreme_bosses:villager_king_token","oror_supreme_bosses:world_thread","superbwarfare:armor_plate","superbwarfare:awm","superbwarfare:bocek","superbwarfare:devotion","superbwarfare:handgun_ammo_box","superbwarfare:heavy_armament_module","superbwarfare:hpj_11_blueprint","superbwarfare:igla_9k38","superbwarfare:insidious","superbwarfare:legendary_blueprint_data_chip","superbwarfare:legendary_material_pack","superbwarfare:m_60","superbwarfare:m_98b","superbwarfare:mk_14","superbwarfare:mk_42_blueprint","superbwarfare:mle_1934_blueprint","superbwarfare:qbz_191","superbwarfare:rifle_ammo_box","superbwarfare:rpk","superbwarfare:ru_chest_6b43","superbwarfare:ru_helmet_6b47","superbwarfare:sentinel","superbwarfare:shotgun_ammo_box","superbwarfare:sniper_ammo_box","superbwarfare:superb_material_pack","superbwarfare:svd","superbwarfare:thermal_imaging_goggles","superbwarfare:us_chest_iotv","superbwarfare:us_helmet_pasgt","superbwarfare:vector","waystones:warp_stone"]},"modItems":{"listed":254,"missing":[]}}
+[17:42:58] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST-LATER {"royals":135,"armed":88,"nearPost":88,"found":{"ARCHMAGE":3,"BODYGUARD":6,"GENERAL":5,"GUARD":88,"IMPERIAL":24,"KING":1,"MAGE":7,"SAGE":1,"VILLAGER":167},"manned":{"a_10a":1,"ah_6":1,"bl_132":1,"hpj_11":2,"m_1a_2":3,"mi_28":1,"mk_42":1,"mle_1934":3,"t_90a":2,"tow":1},"ready":{"a_10a":1,"bmp_2":1,"bradley":1,"m_1a_2":2,"t_90a":2,"ztz_99a":2},"parked":9,"king":{"distance":0.02,"dy":0.00,"onThrone":true,"target":false},"vehicles":[{"id":"mk_42","engine":"FIXED","alive":true,"health":1.00,"mode":"ground","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":1,"power":0.00,"energy":2147483647,"target":false,"y":67.0,"ground":87,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"t_90a","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":67.0,"ground":78,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":67.0,"ground":78,"vy":-0.00,"speed":0.00,"pitch":3.8,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0}],"mspt":49.45}
+[17:42:58] [Server thread/INFO] [OROR Citadel/]: CITADEL-SUPPLY {"posts":{"a_10a":1,"a_10a+station+depot":1,"ah_6+station+depot":1,"bl_132+depot":1,"bmp_2+station+depot":1,"bradley+station+depot":1,"hpj_11+station+depot":2,"m_1a_2+station+depot":5,"mi_28+station+depot":1,"mk_42":1,"mle_1934+depot":3,"t_90a+station+depot":4,"tow+depot":1,"ztz_99a+station+depot":2},"kinds":[{"vehicle":"mk_42","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":0},{"vehicle":"m_1a_2","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":2},{"vehicle":"ztz_99a","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":2},{"vehicle":"t_90a","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":3},{"vehicle":"bmp_2","charge":1.000,"rounds":196,"full":196,"charger":true,"depots":2},{"vehicle":"a_10a","charge":0.987,"rounds":128,"full":150,"charger":false,"depots":0},{"vehicle":"ah_6","charge":1.000,"rounds":144,"full":144,"charger":true,"depots":1},{"vehicle":"mi_28","charge":1.000,"rounds":70,"full":86,"charger":true,"depots":1},{"vehicle":"hpj_11","charge":1.000,"rounds":128,"full":128,"charger":true,"depots":1},{"vehicle":"mle_1934","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":1},{"vehicle":"tow","charge":1.000,"rounds":0,"full":0,"charger":false,"depots":1,"loaded":true},{"vehicle":"bl_132","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":1}]}
+[17:46:29] [Server thread/INFO] [OROR War/]: WAR-RESULT {"size":100,"winner":"王国軍","kingdom":{"raised":50,"alive":40,"lost":10},"host":{"raised":50,"alive":6,"lost":44},"machines":[{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"attack","odometer":38.1,"airborne":196,"maxAlt":11.9,"tookOff":false,"landed":false,"runs":0,"unsticks":30,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.25,"energy":9797947,"target":true,"y":125.6,"ground":123,"vy":-0.00,"speed":0.00,"pitch":-14.6,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"a_10a","engine":"AIRCRAFT","alive":true,"health":1.00,"mode":"patrol","odometer":14129.6,"airborne":3598,"maxAlt":116.4,"tookOff":false,"landed":false,"runs":2,"unsticks":0,"goArounds":0,"terrainSaves":11,"crew":1,"power":3.00,"energy":7267693,"target":true,"y":211.5,"ground":105,"vy":0.01,"speed":3.94,"pitch":-0.6,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0}],"seconds":180.0,"msptAvg":54.03,"msptMax":1016.59,"peakFighters":100,"budget":2,"test":true,"tickCost":{"imperial_guard":[3.36,363],"kingdom_guard":[2.31,130],"royal_bodyguard":[1.11,372],"royal_mage":[1.05,167],"vindicator":[0.76,168],"pillager":[0.66,165],"royal_archmage":[0.63,199],"villager_general":[0.37,375],"ravager":[0.31,241],"witch":[0.13,226]},"onField":{"item":46,"pillager":37,"vindicator":19,"kingdom_guard":17,"imperial_guard":9,"item_frame":7,"royal_mage":6,"villager":5,"vex":5,"ravager":4}}
+[17:51:00] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-TEST {"before":[{"vehicle":"m_1a_2","charge":0.200,"rounds":0,"full":176,"charger":true,"depots":1},{"vehicle":"ah_6","charge":0.200,"rounds":0,"full":144,"charger":true,"depots":1},{"vehicle":"a_10a","charge":0.200,"rounds":0,"full":150,"charger":false,"depots":0}],"after":[{"vehicle":"m_1a_2","charge":0.461,"rounds":176,"full":176,"charger":true,"depots":1,"mode":"post","fromPost":0.6,"resupplying":false,"resupplies":0,"reloaded":178},{"vehicle":"ah_6","charge":0.708,"rounds":144,"full":144,"charger":true,"depots":1,"mode":"parked","fromPost":1.0,"resupplying":false,"resupplies":0,"reloaded":171},{"vehicle":"a_10a","charge":0.152,"rounds":0,"full":150,"charger":false,"depots":0,"mode":"return","fromPost":89.0,"resupplying":true,"resupplies":1,"reloaded":0}]}
+[17:51:00] [Server thread/INFO] [OROR Vehicles/]: FLIGHT-RESULT {"seconds":240.1,"plane":{"id":"a_10a","engine":"AIRCRAFT","alive":false,"health":-0.34,"mode":"return","odometer":11768.9,"airborne":3485,"maxAlt":85.7,"tookOff":true,"landed":false,"runs":0,"unsticks":0,"goArounds":2,"terrainSaves":314,"crew":0,"power":0.00,"energy":1518942,"target":true,"y":97.0,"ground":97,"vy":-0.00,"speed":0.00,"pitch":-17.5,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},"modes":[[0,"parked",63],[7,"roll",63],[145,"pullup",65],[186,"patrol",99],[361,"dive",143],[369,"target-gone:killed",0],[370,"patrol",142],[2013,"return",148],[3204,"approach",98],[3205,"return",98],[3560,"approach",101],[3561,"return",100]],"tank":{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":1.4,"airborne":12,"maxAlt":2.2,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":4612009,"target":false,"y":63.0,"ground":63,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},"heli":{"id":"ah_6","engine":"HELICOPTER","alive":true,"health":1.00,"mode":"parked","odometer":82.3,"airborne":360,"maxAlt":22.8,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":3538053,"target":false,"y":63.0,"ground":63,"vy":-0.00,"speed":0.00,"pitch":-0.1,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},"tankClosest":60.5,"tankTargetHealth":0.0,"planeTarget":"gone"}
+[17:54:12] [Server thread/INFO] [OROR Village/]: VILLAGE-FLIGHT {"present":true,"seconds":180.1,"built":"airship,biplane,","phases":[[0,"none"],[5,"built:airship,biplane,"],[45,"board"],[965,"none"]],"maxAboard":1,"maxClimb":0.0,"maxOut":15.3,"flights":0,"crewStillAssigned":0,"flewOff":false}
+[17:54:12] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":12337}
+[m[33m[17:41:04.328] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
+[m[33m[17:41:06.912] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
+[m[33m[17:41:06.966] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
+[m[1;31m[17:41:07.531] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[17:41:07.536] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[17:41:07.536] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
+[m[33m[17:41:07.644] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[17:41:07.644] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[17:41:07.706] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[17:41:07.707] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[17:41:07.707] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[17:41:07.708] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[17:41:07.709] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[17:41:07.709] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[17:41:07.854] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[17:41:07.856] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[17:41:07.886] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[17:41:08.090] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[17:41:08.094] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[17:41:08.292] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[17:41:08.293] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[17:41:08.311] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[17:41:08.332] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[17:41:13] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
 java.nio.file.NoSuchFileException: ./config/jupiter.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[17:26:06] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+[17:41:14] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
 java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[17:26:16] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[17:26:26] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
-[17:26:27] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
+[17:41:23] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[17:41:29] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[17:41:30] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[17:41:30] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[17:41:30] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[17:41:30] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[17:41:31] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[17:26:36] [Server thread/INFO] [OROR Citadel/]: Royal capital BlockPos{x=-368, y=67, z=880} for spawn BlockPos{x=0, y=0, z=0} (8641 ms)
-[17:26:42] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
-[17:26:42] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[17:26:42] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[17:41:38] [Server thread/INFO] [OROR Citadel/]: Royal capital BlockPos{x=-368, y=67, z=880} for spawn BlockPos{x=0, y=0, z=0} (6525 ms)
+[17:41:42] [Worker-Main-2/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[17:41:42] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[17:41:43] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[17:41:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[17:41:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[17:41:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[17:41:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[17:41:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+[17:41:48] [Server thread/INFO] [OROR CI/]: CI checks: [citadel, war, pilots, villageflight]
+[17:41:49] [Server thread/ERROR] [ne.ne.fm.co.as.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
+[17:41:49] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.EpicFightBridge:patch:35]: [OROR_EPICFIGHT] entity patch lookup disabled: RuntimeException
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[17:26:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[17:26:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[17:26:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
-[17:26:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
-[17:26:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
-[17:26:49] [Server thread/INFO] [OROR CI/]: CI checks: [citadel, war, pilots, villageflight]
-[17:26:51] [Server thread/ERROR] [ne.ne.fm.co.as.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
-[17:26:51] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.EpicFightBridge:patch:35]: [OROR_EPICFIGHT] entity patch lookup disabled: RuntimeException
-[17:26:54] [Server thread/INFO] [OROR CI/]: CI running /oror citadel selftest
+[17:41:53] [Server thread/INFO] [OROR CI/]: CI running /oror citadel selftest
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[17:27:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:27:59] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:27:59] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST {"site":[-368,67,880],"forced":false,"ground":66,"dy":2,"locateMs":57726.5,"spawn":[0,134,0],"fromSpawn":954,"biome":"oror_supreme_bosses:royal_capital","chunks":184,"loaded":184,"loadTicks":1,"throne":[-368,139,848],"dais":true,"underKing":"block.minecraft.gold_block","kingAtThrone":true,"spawned":289,"expected":{"ARCHMAGE":2,"BODYGUARD":6,"GENERAL":4,"GUARD":50,"IMPERIAL":13,"KING":1,"MAGE":4,"SAGE":1,"VILLAGER":33},"found":{"ARCHMAGE":3,"BODYGUARD":6,"GENERAL":5,"GUARD":88,"IMPERIAL":24,"KING":1,"MAGE":7,"SAGE":1,"VILLAGER":161},"treasury":{"chests":10,"stacks":270,"modItems":["alexscaves:azure_neodymium_ingot","alexscaves:pure_darkness","alexscaves:scarlet_neodymium_ingot","apotheosis:arcane_sands","apotheosis:godforged_pearl","iceandfire:dragonsteel_fire_ingot","iceandfire:dragonsteel_ice_ingot","iceandfire:dragonsteel_lightning_ingot","irons_spellbooks:arcane_essence","irons_spellbooks:epic_ink","irons_spellbooks:legendary_ink","irons_spellbooks:netherite_spell_book","irons_spellbooks:upgrade_orb","oror_supreme_bosses:ain_sof_aur_focus","oror_supreme_bosses:dragon_core","oror_supreme_bosses:ferdinand_charm","oror_supreme_bosses:hakyoku_focus","oror_supreme_bosses:innocence_charm","oror_supreme_bosses:last_bloom","oror_supreme_bosses:mana_crystal","oror_supreme_bosses:merlinus_charm","oror_supreme_bosses:nortia_charm","oror_supreme_bosses:nortia_focus","oror_supreme_bosses:purifying_dew","oror_supreme_bosses:rewind_talisman","oror_supreme_bosses:star_shard","oror_supreme_bosses:sweet_pact_focus","oror_supreme_bosses:villager_king_token","oror_supreme_bosses:world_thread","superbwarfare:armor_plate","superbwarfare:awm","superbwarfare:bocek","superbwarfare:devotion","superbwarfare:handgun_ammo_box","superbwarfare:heavy_armament_module","superbwarfare:hpj_11_blueprint","superbwarfare:igla_9k38","superbwarfare:insidious","superbwarfare:legendary_blueprint_data_chip","superbwarfare:legendary_material_pack","superbwarfare:m_60","superbwarfare:m_98b","superbwarfare:mk_14","superbwarfare:mk_42_blueprint","superbwarfare:mle_1934_blueprint","superbwarfare:qbz_191","superbwarfare:rifle_ammo_box","superbwarfare:rpk","superbwarfare:ru_chest_6b43","superbwarfare:ru_helmet_6b47","superbwarfare:sentinel","superbwarfare:shotgun_ammo_box","superbwarfare:sniper_ammo_box","superbwarfare:superb_material_pack","superbwarfare:svd","superbwarfare:thermal_imaging_goggles","superbwarfare:us_chest_iotv","superbwarfare:us_helmet_pasgt","superbwarfare:vector","waystones:warp_stone"]},"modItems":{"listed":254,"missing":[]}}
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:00] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"tow","rounds":1,"aboard":0,"charge":1.00}
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:03] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:04] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:04] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:04] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:04] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:04] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:04] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:06] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:07] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:10] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"ah_6","rounds":14,"aboard":144,"charge":1.00}
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"bmp_2","rounds":1,"aboard":196,"charge":1.00}
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:13] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:15] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:15] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:15] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:15] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:15] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:15] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:18] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:18] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:18] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:18] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:18] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:18] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.Mk42Entity#getLoaded/0
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.M1A2Entity#getLoaded/0
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.Ztz99aEntity#getLoaded/0
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.T90aEntity#getLoaded/0
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity#getLoaded/0
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.A10Entity#getLoaded/0
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.base.AutoAimableEntity#getLoaded/0
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.Mle1934Entity#getLoaded/0
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.Bl132Entity#getLoaded/0
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:19] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST-LATER {"royals":134,"armed":87,"nearPost":87,"found":{"ARCHMAGE":3,"BODYGUARD":6,"GENERAL":5,"GUARD":87,"IMPERIAL":24,"KING":1,"MAGE":7,"SAGE":1,"VILLAGER":161},"manned":{"ah_6":1,"bl_132":1,"hpj_11":2,"m_1a_2":3,"mi_28":1,"mk_42":1,"mle_1934":3,"t_90a":2,"tow":1},"ready":{"a_10a":1,"bmp_2":1,"bradley":1,"m_1a_2":2,"t_90a":2,"ztz_99a":2},"parked":9,"king":{"distance":0.21,"dy":0.00,"onThrone":true,"target":false},"vehicles":[{"id":"mk_42","engine":"FIXED","alive":true,"health":1.00,"mode":"ground","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":1,"power":0.00,"energy":2147483647,"target":false,"y":67.0,"ground":87,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"t_90a","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":67.0,"ground":78,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":67.0,"ground":78,"vy":-0.00,"speed":0.00,"pitch":3.8,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0}],"mspt":84.06}
-[17:28:19] [Server thread/INFO] [OROR Citadel/]: CITADEL-SUPPLY {"posts":{"a_10a+station+depot":1,"ah_6+station+depot":1,"bl_132+depot":1,"bmp_2+station+depot":1,"bradley+station+depot":1,"hpj_11+station+depot":2,"m_1a_2+station+depot":5,"mi_28+station+depot":1,"mk_42":1,"mle_1934+depot":3,"t_90a+station+depot":4,"tow+depot":1,"ztz_99a+station+depot":2},"kinds":[{"vehicle":"mk_42","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":0},{"vehicle":"m_1a_2","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":2},{"vehicle":"ztz_99a","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":2},{"vehicle":"t_90a","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":3},{"vehicle":"bmp_2","charge":1.000,"rounds":196,"full":196,"charger":true,"depots":2},{"vehicle":"ah_6","charge":1.000,"rounds":144,"full":144,"charger":true,"depots":1},{"vehicle":"mi_28","charge":1.000,"rounds":70,"full":86,"charger":true,"depots":1},{"vehicle":"a_10a","charge":1.000,"rounds":150,"full":150,"charger":true,"depots":1},{"vehicle":"hpj_11","charge":1.000,"rounds":128,"full":128,"charger":true,"depots":1},{"vehicle":"mle_1934","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":1},{"vehicle":"tow","charge":1.000,"rounds":0,"full":0,"charger":false,"depots":1,"loaded":true},{"vehicle":"bl_132","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":1}]}
-[17:28:19] [Server thread/INFO] [OROR CI/]: CI running /oror war start 100 test
-[17:28:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
-[17:28:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
-[17:28:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
-[17:28:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
-[17:28:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
-[17:28:34] [Server thread/INFO] [OROR War/]: WAR-START {"size":100,"center":[0,125,0],"test":true}
-[17:28:34] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:34] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:34] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:34] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:34] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:34] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:35] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"bradley","rounds":2,"aboard":196,"charge":1.00}
-[17:28:35] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"mi_28","rounds":16,"aboard":86,"charge":1.00}
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:37] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:38] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:38] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:41] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"mi_28","rounds":4,"aboard":86,"charge":1.00}
-[17:28:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
-[17:28:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:38] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:38] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:39] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:40] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to set energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST {"site":[-368,67,880],"forced":false,"ground":66,"dy":2,"locateMs":43564.1,"spawn":[0,134,0],"fromSpawn":954,"biome":"oror_supreme_bosses:royal_capital","chunks":184,"loaded":184,"loadTicks":1,"throne":[-368,139,848],"dais":true,"underKing":"block.minecraft.gold_block","kingAtThrone":true,"spawned":282,"expected":{"ARCHMAGE":2,"BODYGUARD":6,"GENERAL":4,"GUARD":50,"IMPERIAL":13,"KING":1,"MAGE":4,"SAGE":1,"VILLAGER":33},"found":{"ARCHMAGE":3,"BODYGUARD":6,"GENERAL":5,"GUARD":88,"IMPERIAL":24,"KING":1,"MAGE":7,"SAGE":1,"VILLAGER":151},"treasury":{"chests":10,"stacks":270,"modItems":["alexscaves:azure_neodymium_ingot","alexscaves:pure_darkness","alexscaves:scarlet_neodymium_ingot","apotheosis:arcane_sands","apotheosis:godforged_pearl","iceandfire:dragonsteel_fire_ingot","iceandfire:dragonsteel_ice_ingot","iceandfire:dragonsteel_lightning_ingot","irons_spellbooks:arcane_essence","irons_spellbooks:epic_ink","irons_spellbooks:legendary_ink","irons_spellbooks:netherite_spell_book","irons_spellbooks:upgrade_orb","oror_supreme_bosses:ain_sof_aur_focus","oror_supreme_bosses:dragon_core","oror_supreme_bosses:ferdinand_charm","oror_supreme_bosses:hakyoku_focus","oror_supreme_bosses:innocence_charm","oror_supreme_bosses:last_bloom","oror_supreme_bosses:mana_crystal","oror_supreme_bosses:merlinus_charm","oror_supreme_bosses:nortia_charm","oror_supreme_bosses:nortia_focus","oror_supreme_bosses:purifying_dew","oror_supreme_bosses:rewind_talisman","oror_supreme_bosses:star_shard","oror_supreme_bosses:sweet_pact_focus","oror_supreme_bosses:villager_king_token","oror_supreme_bosses:world_thread","superbwarfare:armor_plate","superbwarfare:awm","superbwarfare:bocek","superbwarfare:devotion","superbwarfare:handgun_ammo_box","superbwarfare:heavy_armament_module","superbwarfare:hpj_11_blueprint","superbwarfare:igla_9k38","superbwarfare:insidious","superbwarfare:legendary_blueprint_data_chip","superbwarfare:legendary_material_pack","superbwarfare:m_60","superbwarfare:m_98b","superbwarfare:mk_14","superbwarfare:mk_42_blueprint","superbwarfare:mle_1934_blueprint","superbwarfare:qbz_191","superbwarfare:rifle_ammo_box","superbwarfare:rpk","superbwarfare:ru_chest_6b43","superbwarfare:ru_helmet_6b47","superbwarfare:sentinel","superbwarfare:shotgun_ammo_box","superbwarfare:sniper_ammo_box","superbwarfare:superb_material_pack","superbwarfare:svd","superbwarfare:thermal_imaging_goggles","superbwarfare:us_chest_iotv","superbwarfare:us_helmet_pasgt","superbwarfare:vector","waystones:warp_stone"]},"modItems":{"listed":254,"missing":[]}}
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:41] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:42] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"tow","rounds":1,"aboard":0,"charge":1.00}
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:44] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:45] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:45] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:45] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:45] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:45] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:45] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:47] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:48] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:48] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:48] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:48] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:48] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:48] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:49] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:50] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:53] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:53] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:53] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:53] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:53] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:53] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:53] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"ah_6","rounds":14,"aboard":144,"charge":1.00}
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"bmp_2","rounds":1,"aboard":196,"charge":1.00}
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:54] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:55] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:55] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:55] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:55] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:55] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:55] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:56] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:57] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.Mk42Entity#getLoaded/0
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.M1A2Entity#getLoaded/0
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.Ztz99aEntity#getLoaded/0
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.T90aEntity#getLoaded/0
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity#getLoaded/0
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.A10Entity#getLoaded/0
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.base.AutoAimableEntity#getLoaded/0
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.Mle1934Entity#getLoaded/0
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [OROR Vehicles/]: Superb Warfare has no com.atsuishio.superbwarfare.entity.vehicle.Bl132Entity#getLoaded/0
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:42:58] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST-LATER {"royals":135,"armed":88,"nearPost":88,"found":{"ARCHMAGE":3,"BODYGUARD":6,"GENERAL":5,"GUARD":88,"IMPERIAL":24,"KING":1,"MAGE":7,"SAGE":1,"VILLAGER":167},"manned":{"a_10a":1,"ah_6":1,"bl_132":1,"hpj_11":2,"m_1a_2":3,"mi_28":1,"mk_42":1,"mle_1934":3,"t_90a":2,"tow":1},"ready":{"a_10a":1,"bmp_2":1,"bradley":1,"m_1a_2":2,"t_90a":2,"ztz_99a":2},"parked":9,"king":{"distance":0.02,"dy":0.00,"onThrone":true,"target":false},"vehicles":[{"id":"mk_42","engine":"FIXED","alive":true,"health":1.00,"mode":"ground","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":1,"power":0.00,"energy":2147483647,"target":false,"y":67.0,"ground":87,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"t_90a","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":67.0,"ground":78,"vy":-0.00,"speed":0.00,"pitch":0.0,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0},{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":67.0,"ground":78,"vy":-0.00,"speed":0.00,"pitch":3.8,"steerSign":1,"steerFlips":0,"noseBack":false,"facingFlips":0}],"mspt":49.45}
+[17:42:58] [Server thread/INFO] [OROR Citadel/]: CITADEL-SUPPLY {"posts":{"a_10a":1,"a_10a+station+depot":1,"ah_6+station+depot":1,"bl_132+depot":1,"bmp_2+station+depot":1,"bradley+station+depot":1,"hpj_11+station+depot":2,"m_1a_2+station+depot":5,"mi_28+station+depot":1,"mk_42":1,"mle_1934+depot":3,"t_90a+station+depot":4,"tow+depot":1,"ztz_99a+station+depot":2},"kinds":[{"vehicle":"mk_42","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":0},{"vehicle":"m_1a_2","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":2},{"vehicle":"ztz_99a","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":2},{"vehicle":"t_90a","charge":1.000,"rounds":176,"full":176,"charger":true,"depots":3},{"vehicle":"bmp_2","charge":1.000,"rounds":196,"full":196,"charger":true,"depots":2},{"vehicle":"a_10a","charge":0.987,"rounds":128,"full":150,"charger":false,"depots":0},{"vehicle":"ah_6","charge":1.000,"rounds":144,"full":144,"charger":true,"depots":1},{"vehicle":"mi_28","charge":1.000,"rounds":70,"full":86,"charger":true,"depots":1},{"vehicle":"hpj_11","charge":1.000,"rounds":128,"full":128,"charger":true,"depots":1},{"vehicle":"mle_1934","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":1},{"vehicle":"tow","charge":1.000,"rounds":0,"full":0,"charger":false,"depots":1,"loaded":true},{"vehicle":"bl_132","charge":1.000,"rounds":40,"full":40,"charger":false,"depots":1}]}
+[17:42:58] [Server thread/INFO] [OROR CI/]: CI running /oror war start 100 test
+[17:43:07] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
+[17:43:07] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
+[17:43:07] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
+[17:43:07] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
+[17:43:07] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
+[17:43:08] [Server thread/INFO] [OROR War/]: WAR-START {"size":100,"center":[0,125,0],"test":true}
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:08] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:09] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:09] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"bradley","rounds":2,"aboard":196,"charge":1.00}
+[17:43:09] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"mi_28","rounds":16,"aboard":86,"charge":1.00}
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.tow', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:11] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:12] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-LOAD {"vehicle":"mi_28","rounds":4,"aboard":86,"charge":1.00}
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:14] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:16] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mk_42', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.bl_132', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get max energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
+[17:43:17] [Server thread/WARN] [co.at.su.Mod/]: Trying to get energy of vehicle translation{key='entity.superbwarfare.mle_1934', args=[]}, but it has no energy storage
