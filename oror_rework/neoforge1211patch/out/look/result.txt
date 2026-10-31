@@ -1,33 +1,39 @@
-263 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-364 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-424 press selectWorld.create
-425 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-525 screenshot popup_ConfirmScreen
-525 press gui.yes
-526 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-552 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-582 screen none in LOADING
-583 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-683 screenshot popup_
-684 screen none in PLAY
-729 stage at -186 115 187
-883 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 0 minecraft:air]
-943 screenshot 10_royals
-953 swing row 0: 8
-956 screenshot 11_royals_swing
-1043 screenshot 12_villagers
-1053 swing row 10: 6
-1056 screenshot 13_villagers_swing
-1063 swing row 10: 6
-1065 screenshot 13b_villagers_swing_early
-1143 screenshot 14_king_close
-1213 screenshot 15_general_close
-1283 screenshot 16_imperial_close
-1353 screenshot 17_royals_back
-1423 screenshot 18_trader_close
-1444 throne -992, 138, 160
-3243 screenshot 20_throne_room
-3283 king at -991.4 138.0 160.5 (throne -992, 138, 160, 0.14 blocks)
-5083 screenshot 21_throne_room_later
-5103 finished: complete
-5103 king at -991.5 138.0 160.3 (throne -992, 138, 160, 0.20 blocks)
+207 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+308 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+368 press selectWorld.create
+369 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+469 screenshot popup_ConfirmScreen
+469 press gui.yes
+470 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+496 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+518 screen none in LOADING
+519 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+619 screenshot popup_
+620 screen none in PLAY
+659 stage at 24 104 25
+819 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 0 minecraft:air, friendsandfoes:mauler -> com.faboslav.friendsandfoes.common.client.render.entity.renderer.MaulerEntityRenderer holding 0 minecraft:air]
+879 screenshot 10_royals
+889 swing row 0: 8
+892 screenshot 11_royals_swing
+979 screenshot 12_villagers
+991 swing row 10: 6
+992 screenshot 13_villagers_swing
+1001 screenshot 13b_villagers_swing_early
+1001 swing row 10: 6
+1079 screenshot 14_king_close
+1149 screenshot 15_general_close
+1219 screenshot 16_imperial_close
+1289 screenshot 17_royals_back
+1359 screenshot 18_trader_close
+1379 throne 224, 167, 768
+3179 screenshot 20_throne_room
+3219 king at 224.6 167.0 768.6 (throne 224, 167, 768, 0.15 blocks)
+5019 screenshot 21_throne_room_later
+5039 king at 224.4 167.0 768.4 (throne 224, 167, 768, 0.18 blocks)
+5039 over the capital at 224 800
+6819 screenshot 22_capital_aerial
+6881 over the capital at -336 330
+8419 screenshot 23_helipad
+8429 over the capital at -206 195
+10019 screenshot 24_airbase
+10029 finished: complete
