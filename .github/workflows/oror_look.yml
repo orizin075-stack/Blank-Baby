@@ -1,0 +1,100 @@
+# OROR War x Nightfall (NeoForge 1.21.1): the real client with the 045 pack and the latest OROR jar from
+# oror_rework/neoforge1211patch/out, driven by the CI-only look harness (oror_rework/look1211): the royals
+# and armed villagers on a stage in the sky, standing and mid-swing, and the capital's throne room with its king.
+# Screenshots and notes go to oror_rework/neoforge1211patch/out/look on this branch. Runs on a change to the harness.
+name: OROR look check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['oror_rework/look1211/**', '.github/workflows/oror_look.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oror-look-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  look:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      P: oror_rework/neoforge1211patch
+      OUT: oror_rework/neoforge1211patch/out/look
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.3'
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/pack045
+          key: pack045-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-045.json') }}
+      - name: The 045 pack's mods, Nightfall and the latest OROR jar
+        run: |
+          rm -rf "$OUT"; mkdir -p "$OUT"
+          G=$RUNNER_TEMP/game; mkdir -p $G/mods
+          python3 -I $P/tools/fetch_pack.py $P/pack/manifest-045.json "$RUNNER_TEMP/pack045" > $OUT/pack_fetch.txt 2>&1 || true
+          tail -3 $OUT/pack_fetch.txt
+          cp "$RUNNER_TEMP"/pack045/*.jar $G/mods/
+          rm -f $G/mods/oror_supreme_bosses-*.jar
+          NEW=$(sed -n 's/^release_version=//p' $P/gradle.properties)
+          cp $P/out/oror_supreme_bosses-$NEW.jar $G/mods/
+          curl -sSfL -o $G/mods/nightfall.jar "$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["nightfall"]["url"])' $P/pack/install-0.17.23.json)"
+          ls $G/mods | wc -l | tee $OUT/mods_count.txt
+          ls $G/mods > $OUT/mods.txt
+      - name: Build the look harness
+        working-directory: oror_rework/look1211
+        run: |
+          gradle build --console=plain 2>&1 | tail -n 30
+          cp build/libs/oror_look-1.0.0.jar $RUNNER_TEMP/game/mods/
+      - name: Install the client and a virtual display
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq xvfb mesa-utils libgl1-mesa-dri imagemagick > /dev/null
+          python3 -m venv $RUNNER_TEMP/venv && $RUNNER_TEMP/venv/bin/pip install -q portablemc==5.0.6
+          G=$RUNNER_TEMP/game
+          printf 'pauseOnLostFocus:false\nrenderDistance:8\nsimulationDistance:6\nskipMultiplayerWarning:true\njoinedFirstServer:true\ntutorialStep:none\nsoundCategory_master:0.0\nonboardAccessibility:false\n' > $G/options.txt
+      - name: Run the client
+        timeout-minutes: 85
+        run: |
+          G=$RUNNER_TEMP/game
+          export LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null
+          ( while sleep 15; do
+              if ls $G/crash-reports/*.txt > /dev/null 2>&1; then sleep 20; pkill -f forgeclient || pkill java; break; fi
+            done ) &
+          timeout 80m xvfb-run -a -s '-screen 0 1600x900x24' $RUNNER_TEMP/venv/bin/portablemc start neoforge::21.1.262 \
+            --main-dir $RUNNER_TEMP/mc --mc-dir $G -u OrorTester --resolution 1600x900 --jvm "$JAVA_HOME/bin/java" \
+            --jvm-arg=-Xmx10G,-Xms3G > $RUNNER_TEMP/client.out 2>&1 || echo "client exit code $?" | tee $OUT/client-exit.txt
+          tail -n 40 $RUNNER_TEMP/client.out
+      - name: Collect screenshots and notes
+        if: always()
+        run: |
+          G=$RUNNER_TEMP/game
+          for f in $G/screenshots/*.png; do [ -f "$f" ] && convert "$f" -resize '1280x>' -quality 84 "$OUT/$(basename "${f%.png}").jpg"; done
+          cp $G/look/* $OUT/ 2>/dev/null || true
+          mkdir -p $OUT/crash-reports; cp $G/crash-reports/* $OUT/crash-reports/ 2>/dev/null || true
+          tail -n 200 $RUNNER_TEMP/client.out > $OUT/stdout-tail.txt 2>/dev/null || true
+          L=$G/logs/latest.log
+          if [ -f $L ]; then
+            grep -n -E '\[look\]|OROR|ERROR|FATAL|Exception|Caused by|Mixin apply failed|InvalidInjection' $L | cut -c1-500 | head -n 3000 > $OUT/latest-filtered.log
+          fi
+          ls -la $OUT
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$OUT"
+          git commit -m "OROR look check ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

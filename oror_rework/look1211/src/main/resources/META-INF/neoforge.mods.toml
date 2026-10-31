@@ -1,0 +1,16 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "oror_look"
+version = "1.0.0"
+displayName = "OROR CI look check"
+description = "CI only: photographs the royals, armed villagers and the throne room in a fresh world, then quits."
+
+[[dependencies.oror_look]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "CLIENT"
