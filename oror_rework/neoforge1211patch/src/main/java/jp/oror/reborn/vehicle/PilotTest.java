@@ -43,7 +43,9 @@ public final class PilotTest {
         ServerLevel level;
         long started;
         Entity plane, tank, heli;
-        Mob planeTarget, tankTarget;
+        Mob planeTarget, tankTarget, cow, cowFoe;
+        BlockPos origin;
+        boolean handlessLogged;
         String lastMode = "";
         final List<String> modes = new ArrayList<>();
         final List<ChunkPos> forced = new ArrayList<>();
@@ -76,6 +78,7 @@ public final class PilotTest {
         Run r = new Run();
         r.level = level;
         BlockPos origin = BlockPos.containing(src.getPosition()).offset(800, 0, 0);
+        r.origin = origin;
         for (int dx = -12; dx <= 20; dx++) {
             for (int dz = -9; dz <= 9; dz++) {
                 ChunkPos p = new ChunkPos((origin.getX() >> 4) + dx, (origin.getZ() >> 4) + dz);
@@ -107,8 +110,28 @@ public final class PilotTest {
         r.plane = RoyalPilots.deploy(level, start, -90F, Sbw.has("a_10a") ? "a_10a" : "j_16", 1, null);
         Vec3 tankAt = start.add(0, 0, 30);
         r.tank = RoyalPilots.deploy(level, tankAt, -90F, "m_1a_2", 2, null);
+        // open sky over the helicopter's pad (the test ground lies among hills: nothing within 80 blocks above it)
+        for (int x = -9; x <= 1; x++) {
+            for (int z = 11; z <= 21; z++) {
+                for (int h = 14; h < 80; h++) {
+                    level.setBlock(new BlockPos(origin.getX() + x, y + h, origin.getZ() + z), Blocks.AIR.defaultBlockState(), 2);
+                }
+            }
+        }
         r.heli = Sbw.has("ah_6") ? RoyalPilots.deploy(level, start.add(-4, 0, 16), -90F, "ah_6", 2, null) : null;
         survey(level, start);
+        // a cow at war with a pillager (a mob without hands under the smart-mob combat): no bow, no arrows, its own spring
+        Vec3 pen = start.add(-100, 0, -60);
+        int py = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) pen.x, (int) pen.z);
+        r.cowFoe = target(level, new Vec3(pen.x + 9, py, pen.z));
+        net.minecraft.world.entity.animal.Cow cow = EntityType.COW.create(level);
+        if (cow != null && r.cowFoe != null) {
+            cow.moveTo(pen.x, py, pen.z, -90F, 0F);
+            cow.setPersistenceRequired();
+            level.addFreshEntity(cow);
+            cow.setTarget(r.cowFoe);
+            r.cow = cow;
+        }
         r.planeTarget = target(level, start.add(160, 0, 0));
         r.tankTarget = target(level, tankAt.add(60, 0, 8));
         r.started = level.getGameTime();
@@ -199,7 +222,33 @@ public final class PilotTest {
                 r.lastMode = mode;
             }
         }
+        if (r.cow != null && !r.handlessLogged && t >= 400) {
+            r.handlessLogged = true;
+            net.minecraft.nbt.CompoundTag mind = jp.oror.reborn.MobMind.data(r.cow);
+            LOG.info(String.format(Locale.ROOT, "HANDLESS-CHECK {\"cowAlive\":%b,\"mainHand\":\"%s\",\"chest\":\"%s\",\"shots\":%d,\"pounced\":%b,"
+                    + "\"strikes\":%d,\"foeHealth\":%.1f,\"selected\":\"%s\"}",
+                r.cow.isAlive(), net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(r.cow.getMainHandItem().getItem()),
+                net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(r.cow.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).getItem()),
+                mind.getInt("Shots"), mind.contains("NextPounce"), mind.getInt("Strikes"), r.cowFoe == null ? -1F : r.cowFoe.getHealth(),
+                mind.getString("Selected")));
+        }
         if (r.tank != null && r.tankTarget != null) {
+            // the tank's orders: this target, not whatever else its crew happens to see in the hills about
+            if (t % 20 == 0 && r.tankTarget.isAlive()) {
+                for (Entity rider : r.tank.getPassengers()) {
+                    if (rider instanceof Mob m) {
+                        m.setTarget(r.tankTarget);
+                    }
+                }
+            }
+            if (t % 40 == 0) {
+                net.minecraft.nbt.CompoundTag tp = r.tank.getPersistentData().getCompound("OrorPilot");
+                LOG.info(String.format(Locale.ROOT, "TANK-TRACK {\"t\":%d,\"x\":%.1f,\"y\":%.1f,\"z\":%.1f,\"yaw\":%.0f,\"toTarget\":%.1f,\"mode\":\"%s\","
+                        + "\"noseBack\":%b,\"facingScore\":%d,\"steerSign\":%d,\"speed\":%.2f}",
+                    t, r.tank.getX() - r.origin.getX(), r.tank.getY(), r.tank.getZ() - r.origin.getZ(), r.tank.getYRot(), r.tank.distanceTo(r.tankTarget),
+                    tp.getString("Mode"), tp.getBoolean("NoseBack"), tp.getInt("FacingScore"), tp.contains("SteerSign") ? tp.getInt("SteerSign") : 1,
+                    r.tank.getDeltaMovement().horizontalDistance()));
+            }
             r.tankClosest = Math.min(r.tankClosest, r.tank.distanceTo(r.tankTarget));
         }
         if (!r.targetGone && r.planeTarget != null && (!r.planeTarget.isAlive() || t > 900)) {
@@ -218,7 +267,7 @@ public final class PilotTest {
                 r.planeTarget == null ? "none" : r.planeTarget.isAlive() ? "alive" : "gone");
             LOG.info("FLIGHT-RESULT {}", line);
             resultLogged = true;
-            for (Entity x : new Entity[]{r.plane, r.tank, r.heli, r.planeTarget, r.tankTarget}) {
+            for (Entity x : new Entity[]{r.plane, r.tank, r.heli, r.planeTarget, r.tankTarget, r.cow, r.cowFoe}) {
                 if (x != null && x.isAlive()) {
                     x.getPassengers().forEach(Entity::discard);
                     x.discard();

@@ -79,10 +79,11 @@ put('KING', 0, 137, -32, yaw=0, r=1, dy=0, post='throne')
 for sx in (-1, 1):
     put('BODYGUARD', 6 * sx, 135, -33, yaw=0, r=2, dy=0, post='throne')
     put('BODYGUARD', 6 * sx, 135, -30, yaw=0, r=2, dy=0, post='throne')
-    put('BODYGUARD', 7 * sx, 135, -36, yaw=0, r=2, dy=0, post='throne')
+    put('BODYGUARD', 6 * sx, 135, -24, yaw=0, r=2, dy=0, post='throne')
     put('GENERAL', 9 * sx, 135, -27, yaw=0, r=2, dy=0, post='throne')
-    for z in (-27, -24, -21, -18, -15, -12):
+    for z in (-27, -24, -21, -18, -15):
         put('IMPERIAL', 4 * sx, 135, z, yaw=90 * sx, r=1, dy=0, post='throne')
+    put('IMPERIAL', 7 * sx, 135, -18, yaw=90 * sx, r=2, dy=0, post='throne')
 put('ARCHMAGE', -9, 135, -21, yaw=-90, r=2, dy=0, post='throne')
 put('SAGE', 9, 135, -21, yaw=90, r=2, dy=0, post='throne')
 

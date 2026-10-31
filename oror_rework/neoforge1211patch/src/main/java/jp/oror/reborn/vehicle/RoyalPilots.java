@@ -503,16 +503,17 @@ public final class RoyalPilots {
         }
         // terrain ahead: whatever the mode, never fly into the ground. Where the aircraft will be in one to two seconds
         // on its present course (climb or sink included) must stay ten blocks above the ground there.
-        if (!v.onGround() && !mode.equals("approach") && !mode.equals("rollout") && !mode.equals("parked")) {
+        if (!v.onGround() && !mode.equals("approach") && !mode.equals("rollout") && !mode.equals("parked") && (now % 2 == 0 || p.getBoolean("Danger"))) {
             Vec3 m = v.getDeltaMovement();
             boolean danger = false;
             for (float side : new float[]{0F, -25F, 25F}) {
                 Vec3 course = side == 0F ? m : m.yRot(side * Mth.DEG_TO_RAD);
-                for (int t = 5; t <= 50 && !danger; t += 5) {
+                for (int t = 6; t <= 54 && !danger; t += 6) {
                     Vec3 at = v.position().add(course.scale(t));
-                    danger = at.y - groundAt(v, at) < (side == 0F ? 12 : 6);
+                    danger = at.y - groundAt(v, at) < (side == 0F ? 14 : 8);
                 }
             }
+            p.putBoolean("Danger", danger);
             if (danger) {
                 steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), v.getY() + 40, true,
                     speed < 1.0 ? -12 : -30);
@@ -594,6 +595,12 @@ public final class RoyalPilots {
             Vec3 flat = goal.subtract(pos).multiply(1, 0, 1);
             Vec3 move = pos.y > ground + 6 && flat.length() > 2 ? flat.normalize().scale(Math.min(0.7, flat.length() * 0.05)) : Vec3.ZERO;
             double climb = Mth.clamp((altitude - pos.y) * 0.08, -0.35, 0.4);
+            // a roof overhead (rising into a block): slide out sideways, toward the goal or along the heading
+            if (climb > 0 && v.verticalCollision && v.getDeltaMovement().y < 0.05) {
+                Vec3 out = flat.length() > 2 ? flat.normalize() : Vec3.directionFromRotation(0, v.getYRot());
+                move = out.scale(0.5);
+                p.putInt("Roofed", p.getInt("Roofed") + 1);
+            }
             Vec3 want = new Vec3(move.x, climb, move.z);
             v.setDeltaMovement(v.getDeltaMovement().scale(0.75).add(want.scale(0.25)));
             v.hasImpulse = true;
@@ -633,16 +640,20 @@ public final class RoyalPilots {
             Vec3 dir = v.getDeltaMovement().multiply(1, 0, 1);
             dir = dir.lengthSqr() < 1.0E-4 ? Vec3.directionFromRotation(0, v.getYRot()) : dir.normalize();
             int high = groundAt(v, v.position());
-            for (int d = 40; d <= 200; d += 40) {
+            for (int d = 20; d <= 220; d += 20) {
                 high = Math.max(high, groundAt(v, v.position().add(dir.scale(d))));
             }
-            for (int b = 0; b < 8; b++) {
-                Vec3 bearing = Vec3.directionFromRotation(0, b * 45F);
-                for (int d = 40; d <= 160; d += 40) {
+            for (int b = 0; b < 16; b++) {
+                Vec3 bearing = Vec3.directionFromRotation(0, b * 22.5F);
+                for (int d = 25; d <= 175; d += 25) {
                     high = Math.max(high, groundAt(v, v.position().add(bearing.scale(d))));
                 }
             }
-            p.putInt("High", high);
+            // the high ground is remembered for thirty seconds: a peak once seen keeps the patrol above it
+            if (high >= p.getInt("High") || now - p.getLong("HighSince") > 600) {
+                p.putInt("High", high);
+                p.putLong("HighSince", now);
+            }
             p.putLong("HighAt", now);
             v.getPersistentData().put(KEY, p);
         }
