@@ -211,8 +211,8 @@ public final class RoyalPilots {
         int unstick = p.getInt("Unstick");
         if (unstick > 0) {
             p.putInt("Unstick", unstick - 1);
-            boolean right = p.getBoolean("UnstickRight");
-            Sbw.keys(v, false, true, !right, right, false, false);
+            boolean right = p.getBoolean("UnstickRight"), ahead = p.getBoolean("UnstickForward");
+            Sbw.keys(v, ahead, !ahead, !right, right, true, false);
             return;
         }
         Vec3 goal;
@@ -241,18 +241,45 @@ public final class RoyalPilots {
         Vec3 d = goal.subtract(pos).multiply(1, 0, 1);
         double dist = d.length();
         float err = Mth.wrapDegrees(yawTo(d) - v.getYRot());
-        boolean turn = Math.abs(err) > 8 && (dist > hold || hold == Double.MAX_VALUE && Math.abs(err) > 25);
-        boolean right = turn && err > 0, left = turn && err < 0;
-        boolean forward = !back && dist > hold && hold != Double.MAX_VALUE && Math.abs(err) < 55;
-        Sbw.keys(v, forward, back, left, right, forward && dist > 40, false);
-        // stuck: pressing forward without moving for two seconds backs it off at an angle for a second and a half
+        boolean arrived = hold != Double.MAX_VALUE && dist <= hold;
+        boolean forward, left = false, right = false;
+        if (back) {
+            // too close: back off, the nose kept toward the enemy (reversing, the steering is the other way round)
+            forward = false;
+            right = err < -8;
+            left = err > 8;
+        } else if (arrived || hold == Double.MAX_VALUE) {
+            // at the stand-off: face the enemy, a short pivot on the spot
+            forward = false;
+            right = err > 8;
+            left = err < -8;
+        } else if (Math.abs(err) < 110) {
+            // drive in an arc toward the goal: tracks turn while they roll
+            forward = true;
+            right = err > 6;
+            left = err < -6;
+        } else {
+            // the goal is behind: a reversing turn brings the nose round
+            forward = false;
+            back = true;
+            left = err > 0;
+            right = err < 0;
+        }
+        Sbw.keys(v, forward, back, left, right, forward && dist > 40 && Math.abs(err) < 30, false);
+        // stuck: pressing to move without moving, or turning without the heading changing, for two seconds backs it off
+        // (or pulls it forward) at an angle for a second and a half
         double speed = v.getDeltaMovement().horizontalDistance();
-        int still = forward && speed < 0.02 ? p.getInt("Still") + 1 : 0;
+        float yawNow = v.getYRot();
+        boolean trying = forward || back || left || right;
+        boolean moving = speed > 0.02 || Math.abs(Mth.wrapDegrees(yawNow - p.getFloat("LastYaw"))) > 0.4F;
+        p.putFloat("LastYaw", yawNow);
+        int still = trying && !moving ? p.getInt("Still") + 1 : 0;
         p.putInt("Still", still);
         if (still > 40) {
             p.putInt("Still", 0);
             p.putInt("Unstick", 30);
             p.putBoolean("UnstickRight", v.getRandom().nextBoolean());
+            p.putBoolean("UnstickForward", back || !forward && v.getRandom().nextBoolean());
             p.putInt("Unsticks", p.getInt("Unsticks") + 1);
         }
     }
