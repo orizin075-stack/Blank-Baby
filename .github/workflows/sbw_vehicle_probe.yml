@@ -65,22 +65,21 @@ jobs:
           for c in $(grep -rl --include='*.class' getLoiterActive com | grep -v -E 'VehicleEntity.class|LoiterCommand' | head -4); do
             echo "=================== $c"; dec $c | head -700
           done
-      - name: Tracked vehicles - how the driver's keys move them (decompiled, selected)
+      - name: Tracked vehicles - the Track engine and where driver input is reset (decompiled)
         run: |
           cd $RUNNER_TEMP/x
-          mkdir -p $RUNNER_TEMP/src2
-          java -jar $RUNNER_TEMP/vf.jar com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.class $RUNNER_TEMP/src2/ > /dev/null 2>&1
-          f=$(ls $RUNNER_TEMP/src2/* | head -1); grep -v '^import' "$f" > $RUNNER_TEMP/ve2.txt
-          echo "=== lines naming TRACK / track / Player / energy near input"
-          grep -n -E 'TRACK|[Tt]rackEngine|fun [a-zA-Z]*[Tt]rack|is Player|instanceof Player|InputDown = false|consumeEnergy|getEnergy\(\) [<>]|hasEnoughEnergy' $RUNNER_TEMP/ve2.txt | head -120
-          echo "=== bodies of the functions that handle TRACK"
-          for n in $(grep -n -E 'fun [a-zA-Z]*([Tt]rack|[Ll]and|[Gg]round|[Ww]heel)[a-zA-Z]*\(' $RUNNER_TEMP/ve2.txt | cut -d: -f1 | head -8); do
-            echo "----- from line $n"; sed -n "${n},$((n+110))p" $RUNNER_TEMP/ve2.txt
-          done
-          echo "=== where the engine type is switched on"
-          for n in $(grep -n -E 'when \(.*[Ee]ngine[Tt]ype|getEngineType\(\)' $RUNNER_TEMP/ve2.txt | cut -d: -f1 | head -6); do
-            echo "----- from line $n"; sed -n "$((n-5)),$((n+40))p" $RUNNER_TEMP/ve2.txt
-          done
+          echo "=== Track / engine-utility classes"
+          find com \( -name 'Track*.class' -o -name 'VehicleEngineUtils*.class' -o -name 'EngineInfo*.class' \) -printf '%s %p\n' | sort -k2
+          mkdir -p $RUNNER_TEMP/t1 $RUNNER_TEMP/t2 $RUNNER_TEMP/t3
+          t=$(find com -name 'Track.class' | head -1); echo "=================== $t"
+          java -jar $RUNNER_TEMP/vf.jar "$t" $RUNNER_TEMP/t1/ > /dev/null 2>&1; cat $RUNNER_TEMP/t1/* | grep -v '^import' | head -260
+          u=$(find com -name 'VehicleEngineUtils.class' | head -1); echo "=================== $u (functions naming track)"
+          java -jar $RUNNER_TEMP/vf.jar "$u" $RUNNER_TEMP/t2/ > /dev/null 2>&1
+          awk 'BEGIN{IGNORECASE=1} /^   (public |private |internal )?.*fun / {show = ($0 ~ /track|land|ground/)} show' $RUNNER_TEMP/t2/* | head -220
+          v=com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.class
+          java -jar $RUNNER_TEMP/vf.jar "$v" $RUNNER_TEMP/t3/ > /dev/null 2>&1
+          echo "=================== VehicleEntity: where inputs are reset or a Player is required"
+          grep -n -B6 -A3 -E 'InputDown\(false\)|InputDown = false|is Player\) \{|!\(.* is Player\)' $RUNNER_TEMP/t3/* | head -160
       - name: Vehicle definitions (engine types and seats)
         run: |
           cd $RUNNER_TEMP/x
