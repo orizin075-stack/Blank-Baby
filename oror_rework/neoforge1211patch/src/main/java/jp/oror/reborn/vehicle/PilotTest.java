@@ -205,7 +205,9 @@ public final class PilotTest {
             boolean wet = false;
             for (int dx : new int[]{-10, 60, 130, 210}) {
                 for (int dz : new int[]{-8, 20, 44}) {
-                    int h = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c.getX() + dx, c.getZ() + dz);
+                    // the generator's own height: the ground there before any chunk is made (a chunk not yet generated reads as empty)
+                    int h = level.getChunkSource().getGenerator().getBaseHeight(c.getX() + dx, c.getZ() + dz, Heightmap.Types.OCEAN_FLOOR_WG, level,
+                        level.getChunkSource().randomState());
                     lo = Math.min(lo, h);
                     hi = Math.max(hi, h);
                     wet |= h <= level.getSeaLevel();
