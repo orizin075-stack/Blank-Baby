@@ -299,7 +299,8 @@ public final class RoyalPilots {
                 if (target != null) {
                     double h = target.position().subtract(v.position()).horizontalDistance();
                     float err = Mth.wrapDegrees(yawTo(target.position().subtract(v.position())) - v.getYRot());
-                    if (h < 160 && Math.abs(err) < 20) {
+                    // a run only from high enough to pull out of it
+                    if (h < 160 && h > 70 && Math.abs(err) < 20 && v.getY() - target.getY() > 40) {
                         mode = "dive";
                         p.putLong("Since", now);
                     } else {
@@ -323,17 +324,23 @@ public final class RoyalPilots {
                 }
                 Vec3 to = target.getBoundingBox().getCenter().subtract(v.position());
                 double h = to.horizontalDistance();
-                float wantPitch = (float) Mth.clamp(Math.toDegrees(Math.atan2(-to.y, h)), -10, 35);
+                float wantPitch = (float) Mth.clamp(Math.toDegrees(Math.atan2(-to.y, h)), -10, 28);
                 aimNose(v, yawTo(to), wantPitch, speed < 1.4);
-                if (h < 40 || v.getY() - target.getY() < 14 || now - p.getLong("Since") > 200) {
+                // pull out with room to spare: the faster it sinks, the higher it starts
+                double sink = Math.max(0, -v.getDeltaMovement().y);
+                double clearance = v.getY() - Math.max(groundAt(v, v.position()), target.getY());
+                if (h < 35 || clearance < 24 + 16 * sink || now - p.getLong("Since") > 200) {
                     mode = "pullup";
                     p.putLong("Since", now);
                     p.putInt("Runs", p.getInt("Runs") + 1);
                 }
             }
             case "pullup" -> {
-                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), cruise(v, home, target), true, -22);
-                if (now - p.getLong("Since") > 70) {
+                // nose up at full power until climbing again and clear of the ground, then back to the patrol
+                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), cruise(v, home, target), true, -25);
+                long t = now - p.getLong("Since");
+                boolean clear = v.getDeltaMovement().y > 0 && v.getY() - groundAt(v, v.position()) > 30;
+                if (t > 40 && clear || t > 160) {
                     mode = "patrol";
                 }
             }
@@ -377,16 +384,29 @@ public final class RoyalPilots {
             }
             default -> mode = "parked";
         }
-        // terrain ahead: whatever the mode, never fly into the ground
-        if (!v.onGround() && !mode.equals("approach") && !mode.equals("rollout")) {
-            Vec3 ahead = v.position().add(v.getDeltaMovement().multiply(1, 0, 1).scale(30));
-            int ground = v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(ahead.x), Mth.floor(ahead.z));
-            if (v.getY() - ground < 12) {
-                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), ground + 40, true, -25);
+        // terrain ahead: whatever the mode, never fly into the ground. Where the aircraft will be in one to two seconds
+        // on its present course (climb or sink included) must stay ten blocks above the ground there.
+        if (!v.onGround() && !mode.equals("approach") && !mode.equals("rollout") && !mode.equals("parked")) {
+            Vec3 m = v.getDeltaMovement();
+            boolean danger = false;
+            for (int t = 10; t <= 40 && !danger; t += 10) {
+                Vec3 at = v.position().add(m.scale(t));
+                danger = at.y - groundAt(v, at) < 10;
+            }
+            if (danger) {
+                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot()).scale(100)), v.getY() + 40, true, -30);
+                if (mode.equals("dive") || mode.equals("patrol") || mode.equals("climb")) {
+                    mode = "pullup";
+                    p.putLong("Since", now);
+                }
                 p.putInt("TerrainSaves", p.getInt("TerrainSaves") + 1);
             }
         }
         p.putString("Mode", mode);
+    }
+
+    private static int groundAt(Entity v, Vec3 at) {
+        return v.level().getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(at.x), Mth.floor(at.z));
     }
 
     private static double cruise(Entity v, Vec3 home, LivingEntity target) {

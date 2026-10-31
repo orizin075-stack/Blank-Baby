@@ -15,8 +15,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Dedicated-server checks for CI, started by the JVM property oror.ci (a comma list of citadel, war, pilots): once the
- * server has started, each check's command runs on its own a few seconds apart, and when every check has logged its
- * result (or after twenty minutes) the server stops. Without the property this does nothing.
+ * server has started, the checks run one after another (each when the one before has logged its result, so their
+ * tick times are their own), and when every check has logged its result (or after twenty minutes of ticks) the server
+ * stops. Without the property this does nothing.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class CiDriver {
@@ -51,7 +52,7 @@ public final class CiDriver {
         }
         MinecraftServer server = e.getServer();
         long t = server.getTickCount() - startedAt;
-        if (next < CHECKS.size() && t >= 100 + next * 100L) {
+        if (next < CHECKS.size() && t >= 100 && (next == 0 || finished(CHECKS.get(next - 1)))) {
             String command = switch (CHECKS.get(next)) {
                 case "citadel" -> "oror citadel selftest";
                 case "war" -> "oror war start 100 test";
@@ -65,14 +66,20 @@ public final class CiDriver {
             next++;
             return;
         }
-        boolean done = next >= CHECKS.size()
-            && (!CHECKS.contains("citadel") || CitadelEvents.selftestDone)
-            && (!CHECKS.contains("war") || HundredWar.resultLogged)
-            && (!CHECKS.contains("pilots") || PilotTest.resultLogged);
+        boolean done = next >= CHECKS.size() && CHECKS.stream().allMatch(CiDriver::finished);
         if (done || t > 24000) {
             LOG.info("CI-DONE {\"complete\":{},\"ticks\":{}}", done, t);
             startedAt = -1;
             server.halt(false);
         }
+    }
+
+    private static boolean finished(String check) {
+        return switch (check) {
+            case "citadel" -> CitadelEvents.selftestDone;
+            case "war" -> HundredWar.resultLogged;
+            case "pilots" -> PilotTest.resultLogged;
+            default -> true;
+        };
     }
 }

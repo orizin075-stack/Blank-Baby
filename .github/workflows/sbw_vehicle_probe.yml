@@ -65,6 +65,22 @@ jobs:
           for c in $(grep -rl --include='*.class' getLoiterActive com | grep -v -E 'VehicleEntity.class|LoiterCommand' | head -4); do
             echo "=================== $c"; dec $c | head -700
           done
+      - name: Tracked vehicles - how the driver's keys move them (decompiled, selected)
+        run: |
+          cd $RUNNER_TEMP/x
+          mkdir -p $RUNNER_TEMP/src2
+          java -jar $RUNNER_TEMP/vf.jar com/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity.class $RUNNER_TEMP/src2/ > /dev/null 2>&1
+          f=$(ls $RUNNER_TEMP/src2/* | head -1); grep -v '^import' "$f" > $RUNNER_TEMP/ve2.txt
+          echo "=== lines naming TRACK / track / Player / energy near input"
+          grep -n -E 'TRACK|[Tt]rackEngine|fun [a-zA-Z]*[Tt]rack|is Player|instanceof Player|InputDown = false|consumeEnergy|getEnergy\(\) [<>]|hasEnoughEnergy' $RUNNER_TEMP/ve2.txt | head -120
+          echo "=== bodies of the functions that handle TRACK"
+          for n in $(grep -n -E 'fun [a-zA-Z]*([Tt]rack|[Ll]and|[Gg]round|[Ww]heel)[a-zA-Z]*\(' $RUNNER_TEMP/ve2.txt | cut -d: -f1 | head -8); do
+            echo "----- from line $n"; sed -n "${n},$((n+110))p" $RUNNER_TEMP/ve2.txt
+          done
+          echo "=== where the engine type is switched on"
+          for n in $(grep -n -E 'when \(.*[Ee]ngine[Tt]ype|getEngineType\(\)' $RUNNER_TEMP/ve2.txt | cut -d: -f1 | head -6); do
+            echo "----- from line $n"; sed -n "$((n-5)),$((n+40))p" $RUNNER_TEMP/ve2.txt
+          done
       - name: Vehicle definitions (engine types and seats)
         run: |
           cd $RUNNER_TEMP/x

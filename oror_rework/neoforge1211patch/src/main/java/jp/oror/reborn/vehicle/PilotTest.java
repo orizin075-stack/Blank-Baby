@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * /oror pilots test: a flight and drive check on a dedicated server. 800 blocks east of the caller it lays a stone runway,
  * parks a crewed ground-attack aircraft at its west end and a crewed tank beside it, and stands two still pillagers as
  * targets (one 160 blocks down the runway for the aircraft, one 60 blocks off for the tank). The aircraft should take
- * off, attack, and once its target is gone (killed, or taken away after 90 seconds) fly back and land; the tank should
+ * off, attack, and once its target is gone (killed, or taken away after 45 seconds) fly back and land; the tank should
  * drive up and fire. Every change of mode is logged with its time, and FLIGHT-RESULT sums it up.
  * /oror pilots status lists the crewed vehicles within 300 blocks.
  */
@@ -138,14 +138,14 @@ public final class PilotTest {
         if (r.tank != null && r.tankTarget != null) {
             r.tankClosest = Math.min(r.tankClosest, r.tank.distanceTo(r.tankTarget));
         }
-        if (!r.targetGone && r.planeTarget != null && (!r.planeTarget.isAlive() || t > 1800)) {
+        if (!r.targetGone && r.planeTarget != null && (!r.planeTarget.isAlive() || t > 900)) {
             r.targetGone = true;
             r.modes.add("[" + t + ",\"target-gone:" + (r.planeTarget.isAlive() ? "removed" : "killed") + "\",0]");
             r.planeTarget.discard();
         }
         boolean landed = r.plane != null && r.plane.getPersistentData().getCompound("OrorPilot").getBoolean("Landed")
             && r.lastMode.equals("parked");
-        if (landed || t > 7200 || r.plane == null || !r.plane.isAlive()) {
+        if (landed || t > 3600 || r.plane == null || !r.plane.isAlive()) {
             String line = String.format(Locale.ROOT, "{\"seconds\":%.1f,\"plane\":%s,\"modes\":[%s],\"tank\":%s,\"tankClosest\":%.1f,"
                     + "\"tankTargetHealth\":%.1f,\"planeTarget\":\"%s\"}",
                 t / 20.0, r.plane == null ? "null" : RoyalPilots.report(r.plane), String.join(",", r.modes),
