@@ -225,6 +225,17 @@ public final class CitadelEvents {
     private static volatile Test test;
     public static volatile boolean selftestDone;
 
+    private static final java.util.ArrayDeque<ChunkPos> RELEASE = new java.util.ArrayDeque<>();
+
+    @SubscribeEvent
+    public static void release(ServerTickEvent.Post e) {
+        net.minecraft.server.level.ServerLevel level = e.getServer().overworld();
+        for (int i = 0; i < 4 && !RELEASE.isEmpty(); i++) {
+            ChunkPos p = RELEASE.poll();
+            level.setChunkForced(p.x, p.z, false);
+        }
+    }
+
     @SubscribeEvent
     public static void tick(ServerTickEvent.Post e) {
         Test t = test;
@@ -321,9 +332,9 @@ public final class CitadelEvents {
             royals, armed, atPost, json(census(level, t.site)), json(manned), json(ready), CitadelGarrison.parked(), kingAt, String.join(",", sample),
             e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
-        for (ChunkPos p : t.chunks) {
-            level.setChunkForced(p.x, p.z, false);
-        }
+        // released a few a tick: letting two hundred chunks of royals, townsfolk and vehicles unload in one go has
+        // crashed the server's entity unloading (CI run 26)
+        RELEASE.addAll(t.chunks);
         selftestDone = true;
     }
 
