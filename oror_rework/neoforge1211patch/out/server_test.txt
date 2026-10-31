@@ -1,92 +1,104 @@
-[m[33m[03:47:57.878] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
-[m[33m[03:48:01.316] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
-[m[33m[03:48:01.326] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
-[m[1;31m[03:48:01.814] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
-[m[33m[03:48:01.820] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
-[m[33m[03:48:01.820] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
-[m[33m[03:48:01.952] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
-[m[33m[03:48:01.954] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
-[m[33m[03:48:02.024] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
-[m[33m[03:48:02.025] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
-[m[33m[03:48:02.025] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
-[m[33m[03:48:02.026] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
-[m[33m[03:48:02.027] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
-[m[33m[03:48:02.028] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
-[m[33m[03:48:02.218] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[03:48:02.220] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
-[m[33m[03:48:02.255] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
-[m[33m[03:48:02.448] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[03:48:02.453] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
-[m[1;31m[03:48:02.740] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
-[m[33m[03:48:02.741] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
-[m[33m[03:48:02.822] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
-[m[33m[03:48:02.851] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
-[03:48:10] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+[m[33m[04:21:40.597] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
+[m[33m[04:21:44.595] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
+[m[33m[04:21:44.631] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
+[m[1;31m[04:21:45.803] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[04:21:45.811] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[04:21:45.811] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
+[m[33m[04:21:46.000] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[04:21:46.002] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[04:21:46.120] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[04:21:46.122] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[04:21:46.123] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[04:21:46.124] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[04:21:46.125] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[04:21:46.127] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[04:21:46.409] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[04:21:46.413] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[04:21:46.474] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[04:21:46.819] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[04:21:46.827] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[04:21:47.362] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[04:21:47.363] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[04:21:47.406] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[04:21:47.465] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[04:21:56] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
 java.nio.file.NoSuchFileException: ./config/jupiter.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[03:48:12] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+[04:21:58] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
 java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[03:48:23] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[03:48:32] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[04:22:10] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[03:48:33] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
-[03:48:45] [Worker-Main-3/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
-[03:48:45] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[03:48:46] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
-[03:48:49] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[03:48:49] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[03:48:49] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
-[03:48:49] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
-[03:48:49] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[04:22:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[04:22:23] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[03:48:53] [Server thread/INFO] [OROR CI/]: CI checks: [citadel, war, pilots]
-[03:48:55] [Server thread/ERROR] [ne.ne.fm.co.as.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
-[03:48:55] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.EpicFightBridge:patch:35]: [OROR_EPICFIGHT] entity patch lookup disabled: RuntimeException
-[03:48:58] [Server thread/INFO] [OROR CI/]: CI running /oror citadel selftest
+[04:22:40] [Worker-Main-3/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[04:22:40] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[04:22:40] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[04:22:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[04:22:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[04:22:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[04:22:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[04:22:44] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+[04:22:49] [Server thread/INFO] [OROR CI/]: CI checks: [citadel, war, pilots]
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
+[04:22:57] [Server thread/ERROR] [ne.ne.fm.co.as.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
+[04:22:57] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.EpicFightBridge:patch:35]: [OROR_EPICFIGHT] entity patch lookup disabled: RuntimeException
+[04:23:00] [Server thread/INFO] [OROR CI/]: CI running /oror citadel selftest
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[03:50:28] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST {"site":[-11392,69,13168],"forced":false,"ground":68,"dy":4,"locateMs":87969.6,"chunks":79,"loaded":79,"loadTicks":1,"throne":[-11392,141,13136],"dais":true,"underKing":"block.minecraft.gold_block","kingAtThrone":true,"spawned":76,"expected":{"ARCHMAGE":2,"BODYGUARD":4,"GENERAL":4,"GUARD":11,"IMPERIAL":9,"KING":1,"MAGE":2,"SAGE":1,"VILLAGER":6},"found":{"ARCHMAGE":2,"BODYGUARD":4,"GENERAL":4,"GUARD":15,"IMPERIAL":12,"KING":1,"MAGE":4,"SAGE":1,"VILLAGER":34}}
-[03:50:37] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST-LATER {"royals":43,"armed":35,"nearPost":35,"found":{"ARCHMAGE":2,"BODYGUARD":4,"GENERAL":4,"GUARD":15,"IMPERIAL":12,"KING":1,"MAGE":4,"SAGE":1,"VILLAGER":34},"vehicles":[{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":69.0,"ground":196,"vy":-0.00,"speed":0.00,"pitch":-0.0}],"mspt":16.43}
-[03:50:37] [Server thread/INFO] [OROR CI/]: CI running /oror war start 100 test
-[03:51:00] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
-[03:51:00] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
-[03:51:00] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
-[03:51:00] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
-[03:51:00] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
-[03:51:01] [Server thread/INFO] [OROR War/]: WAR-START {"size":100,"center":[0,125,0],"test":true}
-[03:53:57] [Server thread/INFO] [OROR War/]: WAR-RESULT {"size":100,"winner":"王国軍","kingdom":{"raised":50,"alive":43,"lost":7},"host":{"raised":50,"alive":5,"lost":45},"machines":[{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"attack","odometer":12.9,"airborne":41,"maxAlt":9.3,"tookOff":false,"landed":false,"runs":0,"unsticks":6,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.45,"energy":9930612,"target":true,"y":132.0,"ground":124,"vy":-0.00,"speed":0.00,"pitch":-13.3},{"id":"a_10a","engine":"AIRCRAFT","alive":true,"health":1.00,"mode":"patrol","odometer":3853.0,"airborne":946,"maxAlt":85.4,"tookOff":false,"landed":false,"runs":1,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":1,"power":3.00,"energy":9304429,"target":false,"y":169.2,"ground":63,"vy":-0.00,"speed":4.21,"pitch":2.3}],"seconds":47.4,"msptAvg":177.61,"msptMax":5598.47,"peakFighters":100,"budget":2,"test":true,"tickCost":{"kingdom_guard":[11.98,560],"imperial_guard":[7.57,761],"royal_mage":[3.71,508],"pillager":[3.20,300],"vindicator":[2.12,341],"royal_bodyguard":[1.97,661],"royal_archmage":[1.78,481],"ravager":[1.34,805],"villager_general":[0.94,940],"evoker":[0.81,437]},"onField":{"falling_block":200,"arrow":168,"item":71,"pillager":40,"petrivise_pillar":40,"trident":36,"kingdom_guard":20,"tremor_spike":18,"gsl_screen_shake":17,"vindicator":17}}
-[03:53:57] [Server thread/INFO] [OROR CI/]: CI running /oror pilots test
-[03:54:15] [Server thread/INFO] [OROR Vehicles/]: FLIGHT-START {"runway":[800,63,0],"plane":true,"tank":true}
-[03:58:21] [Server thread/INFO] [OROR Vehicles/]: FLIGHT-RESULT {"seconds":180.1,"plane":{"id":"a_10a","engine":"AIRCRAFT","alive":true,"health":1.00,"mode":"patrol","odometer":14985.9,"airborne":3600,"maxAlt":116.7,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":24,"crew":1,"power":3.00,"energy":9999232,"target":true,"y":112.5,"ground":63,"vy":-0.01,"speed":4.25,"pitch":3.1},"modes":[[0,"launch",63],[1,"climb",93],[30,"patrol",100],[531,"dive",112],[543,"pullup",109],[584,"patrol",140],[901,"target-gone:removed",0],[1091,"dive",112],[1113,"pullup",104],[1154,"patrol",126],[1655,"dive",112],[1669,"pullup",109],[1710,"patrol",137],[2213,"dive",113],[2235,"pullup",104],[2276,"patrol",125],[2568,"pullup",112],[2609,"patrol",151],[2849,"dive",117],[2871,"pullup",107],[2912,"patrol",127],[3416,"dive",111],[3434,"pullup",105],[3475,"patrol",133]],"tank":{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"attack","odometer":1.2,"airborne":6,"maxAlt":11.9,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":-0.00,"energy":10000000,"target":true,"y":77.0,"ground":67,"vy":-0.00,"speed":0.00,"pitch":-22.7},"tankClosest":60.6,"tankTargetHealth":24.0,"planeTarget":"gone"}
-[03:58:21] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":6133}
+[04:25:02] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST {"site":[-11392,69,13168],"forced":false,"ground":68,"dy":4,"locateMs":119864.8,"chunks":79,"loaded":79,"loadTicks":1,"throne":[-11392,141,13136],"dais":true,"underKing":"block.minecraft.gold_block","kingAtThrone":true,"spawned":76,"expected":{"ARCHMAGE":2,"BODYGUARD":4,"GENERAL":4,"GUARD":11,"IMPERIAL":9,"KING":1,"MAGE":2,"SAGE":1,"VILLAGER":6},"found":{"ARCHMAGE":2,"BODYGUARD":4,"GENERAL":4,"GUARD":15,"IMPERIAL":12,"KING":1,"MAGE":4,"SAGE":1,"VILLAGER":34}}
+[04:25:11] [Server thread/INFO] [OROR Citadel/]: CITADEL-SELFTEST-LATER {"royals":43,"armed":35,"nearPost":35,"found":{"ARCHMAGE":2,"BODYGUARD":4,"GENERAL":4,"GUARD":15,"IMPERIAL":12,"KING":1,"MAGE":4,"SAGE":1,"VILLAGER":34},"vehicles":[{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"post","odometer":0.0,"airborne":0,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.00,"energy":10000000,"target":false,"y":69.0,"ground":196,"vy":-0.00,"speed":0.00,"pitch":-0.0}],"mspt":19.31}
+[04:25:11] [Server thread/INFO] [OROR CI/]: CI running /oror war start 100 test
+[04:25:41] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
+[04:25:41] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
+[04:25:41] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
+[04:25:41] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
+[04:25:41] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
+[04:25:42] [Server thread/INFO] [OROR War/]: WAR-START {"size":100,"center":[0,125,0],"test":true}
+[04:28:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
+[04:28:17] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
+[04:28:17] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
+[04:28:17] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
+[04:28:17] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
+[04:32:16] [Server thread/INFO] [OROR War/]: WAR-RESULT {"size":100,"winner":"王国軍","kingdom":{"raised":50,"alive":25,"lost":25},"host":{"raised":50,"alive":12,"lost":38},"machines":[{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"attack","odometer":36.8,"airborne":183,"maxAlt":32.3,"tookOff":false,"landed":false,"runs":0,"unsticks":24,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.19,"energy":9930349,"target":true,"y":144.8,"ground":129,"vy":-0.83,"speed":0.85,"pitch":-17.7},{"id":"a_10a","engine":"AIRCRAFT","alive":true,"health":1.00,"mode":"patrol","odometer":15015.0,"airborne":3598,"maxAlt":80.5,"tookOff":false,"landed":false,"runs":1,"unsticks":0,"goArounds":0,"terrainSaves":0,"crew":1,"power":3.00,"energy":9079168,"target":true,"y":169.9,"ground":82,"vy":0.00,"speed":4.21,"pitch":2.6}],"seconds":180.0,"msptAvg":97.67,"msptMax":8265.74,"peakFighters":100,"budget":2,"test":true,"tickCost":{"imperial_guard":[6.33,634],"kingdom_guard":[4.01,434],"royal_bodyguard":[1.65,551],"pillager":[1.59,199],"royal_mage":[1.32,395],"vindicator":[1.04,197],"royal_archmage":[0.98,427],"villager_general":[0.63,633],"ravager":[0.60,690],"evoker":[0.38,173]},"onField":{"item":56,"pillager":42,"vindicator":22,"small_magic_arrow":20,"arrow":10,"imperial_guard":9,"vex":8,"kingdom_guard":7,"item_frame":7,"evoker":5}}
+[04:32:16] [Server thread/INFO] [OROR CI/]: CI running /oror pilots test
+[04:32:39] [Server thread/INFO] [OROR Vehicles/]: FLIGHT-START {"runway":[800,63,0],"plane":true,"tank":true}
+[04:35:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-193, y=-45, z=-211}
+[04:35:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-183, y=-57, z=-210}
+[04:35:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-187, y=-49, z=-219}
+[04:35:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-189, y=-45, z=-211}
+[04:35:33] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-191, y=-45, z=-211}
+[04:35:33] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-183, y=-57, z=-201}
+[04:35:33] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-183, y=-58, z=-205}
+[04:36:54] [Server thread/INFO] [OROR Vehicles/]: FLIGHT-RESULT {"seconds":180.1,"plane":{"id":"a_10a","engine":"AIRCRAFT","alive":true,"health":1.00,"mode":"patrol","odometer":14985.0,"airborne":3600,"maxAlt":156.5,"tookOff":false,"landed":false,"runs":0,"unsticks":0,"goArounds":0,"terrainSaves":23,"crew":1,"power":3.00,"energy":9999232,"target":true,"y":160.8,"ground":63,"vy":0.00,"speed":4.23,"pitch":2.7},"modes":[[0,"launch",63],[1,"climb",93],[30,"patrol",100],[901,"target-gone:removed",0],[1188,"dive",160],[1197,"pullup",159],[1238,"patrol",191],[1716,"dive",161],[1728,"pullup",158],[1769,"patrol",189],[2278,"dive",160],[2297,"pullup",153],[2338,"patrol",174],[2840,"dive",159],[2852,"pullup",156],[2893,"patrol",188],[3397,"dive",160],[3408,"pullup",158],[3449,"patrol",187]],"tank":{"id":"m_1a_2","engine":"TRACK","alive":true,"health":1.00,"mode":"attack","odometer":91.2,"airborne":104,"maxAlt":0.0,"tookOff":false,"landed":false,"runs":0,"unsticks":9,"goArounds":0,"terrainSaves":0,"crew":2,"power":0.37,"energy":9999955,"target":true,"y":46.7,"ground":63,"vy":-0.00,"speed":0.09,"pitch":-15.6},"tankClosest":60.5,"tankTargetHealth":24.0,"planeTarget":"gone"}
+[04:36:54] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":9283}
