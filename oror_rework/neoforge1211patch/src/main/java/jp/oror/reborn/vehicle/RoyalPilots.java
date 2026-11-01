@@ -519,12 +519,14 @@ public final class RoyalPilots {
                 }
             }
             case "approach" -> {
-                Vec3 touch = home.add(f.scale(25));
+                // the touch-down point 40 blocks into the runway (050's CI aircraft, aiming at 25, put down 33 short of its
+                // start: on a capital's stands and fields), and the landing speed a little up (at 1.0 to 1.35 it sank)
+                Vec3 touch = home.add(f.scale(40));
                 Vec3 rel = touch.subtract(v.position());
                 double along = rel.dot(f);
                 double glide = runwayY + 1.5 + Math.max(0, along) * GLIDE;
                 Vec3 aim = touch.add(f.scale(Math.max(20, -along)));
-                boolean slow = speed > 1.35, fast = speed < 0.9;
+                boolean slow = speed > 1.7, fast = speed < 1.3;
                 // the ground under the glide path (the runway's extended centre line, from here to the touch-down point):
                 // where it rises into the path, go round again. It was taken along the aircraft's heading while it was
                 // still turning in, over the hills beside the line, and the approach was given up every tick.
