@@ -781,7 +781,7 @@ def fountains(save, edits, stats):
                     stats['fountain_floors'] += 1
 
 
-def detached(save, edits, stats):
+def detached(save, edits, stats, posts=()):
     """Blocks with nothing under or beside them all the way to the ground (049's audit, by 26-connected parts of the
     whole kingdom, water and the light blocks aside): the generator built the buttresses of the walls a block above the
     ground, set the roofs of the four outer fortresses' halls a block above and outside their walls, put platforms a
@@ -790,7 +790,8 @@ def detached(save, edits, stats):
     it filled with its own block); one within two blocks of a standing structure is joined to it (the cells between
     filled with that structure's block: a roof gets its wall plate); a tree's crown or a clod of earth wherever it hangs
     is taken away, and so is what can be neither set down nor joined; in the castle's ward only the large parts are
-    touched, its small ones (lights, fittings) are left as they are."""
+    touched, its small ones (lights, fittings) are left as they are. A part that a post stands on (the batteries'
+    platforms off the outer wall) is never taken away: it is held up on a pier of its own block to the ground."""
     from scipy import ndimage
     x0, x1, z0, z1, y0, y1 = -640, 640, -640, 640, 63, 200
     a, _ = world.load(save, x0, x1, z0, z1, y0, y1)
@@ -816,6 +817,8 @@ def detached(save, edits, stats):
     def put(cx, cy, cz, st):
         edits[(int(cx) + x0, int(cy) + y0, int(cz) + z0)] = st
         a[cx, cy, cz] = world.gid(st)
+
+    floors = {(p['x'] - x0, p['y'] - 1 - y0, p['z'] - z0) for p in posts}
 
     for i in range(1, n + 1):
         if grounded[i] or objs[i - 1] is None:
@@ -897,6 +900,17 @@ def detached(save, edits, stats):
         if joined and joined <= max(8, size):
             stats['detached_joined'] += 1
             stats['detached_join_blocks'] += joined
+            continue
+        if any((int(cx), int(cy), int(cz)) in floors for cx, cy, cz in cells):
+            # a post's floor: a pier under it, down to the ground
+            for cx, cy, cz in cells:
+                if cy == 0 or not empty[a[cx, cy - 1, cz]]:
+                    continue
+                yy = cy - 1
+                while yy >= 0 and empty[a[cx, yy, cz]]:
+                    put(cx, yy, cz, base)
+                    yy -= 1
+            stats['detached_piers'] += 1
             continue
         for cx, cy, cz in cells:
             put(cx, cy, cz, 'minecraft:air')
@@ -1002,7 +1016,7 @@ def gables(save, edits, stats, skip):
     stats['gable_cells'] = count
 
 
-def ranch_barns(save, man, edits, bes, stats):
+def ranch_barns(save, man, edits, bes, stats, cleared=frozenset()):
     """The eight ranches' barns are built anew as stables (049, the user's report: the generator's barns stood with their
     gables open and the middle of their roofs missing, hollow to the sky). The old barn's ground is cleared (its tall
     columns and a block round them) and a stable of the town's builder stands on it, its front toward the castle; the
@@ -1015,6 +1029,12 @@ def ranch_barns(save, man, edits, bes, stats):
         names = world.NAMES
         built = np.array([not (n.endswith(('air', '_leaves', '_log')) or n == 'minecraft:light') for n in names])
         tall = built[a[:, 6:, :]].any(axis=1)
+        # the town's rebuilt plots beside a ranch are no part of its barn (049's audit: three houses were cut into)
+        town = np.zeros_like(tall)
+        for (x, z) in cleared:
+            if x0 <= x < x0 + a.shape[0] and z0 <= z < z0 + a.shape[2]:
+                town[x - x0, z - z0] = True
+        tall &= ~town
         if not tall.any():
             continue
         from scipy import ndimage as nd
@@ -1026,6 +1046,8 @@ def ranch_barns(save, man, edits, bes, stats):
         # everything of the barn: the columns of its footprint, up from the floor
         for i in range(max(0, bx0), min(a.shape[0], bx1 + 1)):
             for j in range(max(0, bz0), min(a.shape[2], bz1 + 1)):
+                if town[i, j]:
+                    continue
                 col = a[i, :, j]
                 for yy in np.nonzero(col[1:])[0] + 1:
                     if names[col[yy]] != 'minecraft:air':
@@ -1033,8 +1055,9 @@ def ranch_barns(save, man, edits, bes, stats):
                 edits[(int(i) + x0, 64, int(j) + z0)] = 'minecraft:grass_block'
         plot = (int(bx0) + x0, int(bz0) + z0, int(bx1) + x0, int(bz1) + z0)
         front = ('west' if cx > 0 else 'east') if abs(cx) > abs(cz) else ('north' if cz > 0 else 'south')
-        house = houses.build(plot, 'stable', 104723 * (k + 1) + 31, front, fence_sides='front')
-        inside = lambda x, z: plot[0] <= x <= plot[2] and plot[1] <= z <= plot[3]
+        blocked = {(x, z) for x in range(plot[0], plot[2] + 1) for z in range(plot[1], plot[3] + 1) if (x, z) in cleared}
+        house = houses.build(plot, 'stable', 104723 * (k + 1) + 31, front, fence_sides='front', blocked=blocked)
+        inside = lambda x, z: plot[0] <= x <= plot[2] and plot[1] <= z <= plot[3] and (x, z) not in cleared
         for (x, y, z), st in house.blocks.items():
             if inside(x, z):
                 edits[(x, y, z)] = st
@@ -1199,15 +1222,16 @@ def main(save, out, report=None):
     stock_empty(save, cleared, edits, bes, stats)
     print('stores', dict(stats['stores']), 'treasury rooms', stats['treasury_rooms'], flush=True)
     # the ranches' barns built anew (before the military sites, which keep off what is built)
-    ranch_barns(save, man, edits, bes, stats)
+    ranch_barns(save, man, edits, bes, stats, cleared)
     print('ranch barns', stats['ranch_barns'], flush=True)
     # the kingdom's airbases, helipads, hangars and turret posts
     forces = military.build(save, man, edits, bes, stats, town)
     print('military', dict(stats['military']), 'missing', stats['military_missing'], flush=True)
     fountains(save, edits, stats)
-    detached(save, edits, stats)
+    detached(save, edits, stats, forces)
     print('detached', stats['detached_set_down'], 'set down (', stats['detached_filled'], 'blocks ),', stats['detached_joined'], 'joined (',
-          stats['detached_join_blocks'], 'blocks ),', stats['detached_removed'], 'taken away (', stats['detached_removed_blocks'], 'blocks )', flush=True)
+          stats['detached_join_blocks'], 'blocks ),', stats['detached_piers'], 'held up on piers,', stats['detached_removed'], 'taken away (',
+          stats['detached_removed_blocks'], 'blocks )', flush=True)
     skip = np.zeros((1280, 1280), bool)
     for x, z in cleared:
         if -640 <= x < 640 and -640 <= z < 640:
