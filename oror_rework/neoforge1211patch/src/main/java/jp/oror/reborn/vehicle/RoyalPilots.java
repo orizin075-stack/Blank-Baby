@@ -923,6 +923,17 @@ public final class RoyalPilots {
         if (agl < 8) {
             wantPitch = Math.min(wantPitch, agl < 3 ? -4F : 1F);
         }
+        // (051) the stall: on the way home and in to land the nose went up to 12 degrees whatever the speed, and at 0.5
+        // to 1.2 blocks a tick the CI aircraft fell into hillsides four runs in five; slow, it climbs gently or not at all
+        // and gathers speed nose down first (the flare near the ground aside)
+        double sp = v.getDeltaMovement().length();
+        if (!v.onGround() && agl > 8) {
+            if (sp < 1.2) {
+                wantPitch = Math.max(wantPitch, 3F);
+            } else if (sp < 1.6) {
+                wantPitch = Math.max(wantPitch, -3F);
+            }
+        }
         if (slower && bleed) {
             // too fast: no dive (the descent home only gathered speed: 4 blocks a tick for 2.2 asked, and the CI aircraft
             // came over the runway 27 blocks up at three times its landing speed); the nose a little up to bleed it off
