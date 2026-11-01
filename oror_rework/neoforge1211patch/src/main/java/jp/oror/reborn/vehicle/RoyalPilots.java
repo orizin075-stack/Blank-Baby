@@ -511,11 +511,14 @@ public final class RoyalPilots {
                 if (target != null) {
                     mode = "patrol";
                     p.remove("FinalLeg");
-                } else if (leg && lined && v.position().subtract(gate).horizontalDistance() < 80) {
+                } else if (leg && offLine < 15 && Math.abs(headingErr) < 20 && v.position().subtract(gate).horizontalDistance() < 80) {
+                    // the glide begun only well lined up: 37 blocks off the line, 051's CI aircraft came down across it
+                    // over the trees beside the cleared ground and struck them
                     mode = "approach";
                     p.putLong("Since", now);
                     p.remove("FinalLeg");
                 } else if (leg && pastGate > 60) {
+                    // past the gate without lining up well enough: round to the initial point again
                     p.remove("FinalLeg");          // past the gate without lining up: round to the initial point again
                 }
             }
