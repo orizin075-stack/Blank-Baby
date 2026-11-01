@@ -169,6 +169,12 @@ public final class Look {
             case 670 -> shot(mc, "17_royals_back");
             case 680 -> view(mc, 3, 0, 13, 0F, 4F);
             case 740 -> shot(mc, "18_trader_close");
+            case 742 -> arms(mc);
+            case 744 -> view(mc, 0, 0, 0, 0F, 8F);
+            case 752 -> shot(mc, "19_arms");
+            case 753 -> creatures(mc);
+            case 754 -> view(mc, 0, 3, -9, 0F, 10F);
+            case 759 -> shot(mc, "19b_creatures");
             case 760 -> throne(mc);
             case 2560 -> shot(mc, "20_throne_room");
             case 2600 -> king(mc);
@@ -247,6 +253,47 @@ public final class Look {
                 command(server, String.format(java.util.Locale.ROOT, "summon minecraft:%s %.1f %d %.1f {%s}", people[i], sx - 5 + i * 2, y + 1, sz + 16, data));
             }
             note("stage at " + x + " " + y + " " + z);
+        });
+    }
+
+    /**
+     * (051) The forbidden vault's arms on a row in front of the camera, shown as in an inventory slot: the five king-slayers,
+     * the vault's three blades, the railgun and the laser gun (the stage's people cleared away first).
+     */
+    private static void arms(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null) {
+            return;
+        }
+        String[] ids = {"kingslayer_sword", "kingslayer_axe", "kingslayer_bow", "kingslayer_crossbow", "kingslayer_trident", "azure_blade",
+            "star_staff", "reverie_rapier", "railgun", "laser_gun"};
+        server.execute(() -> {
+            command(server, "kill @e[tag=oror_look]");
+            for (int i = 0; i < ids.length; i++) {
+                command(server, String.format(java.util.Locale.ROOT, "summon minecraft:item_display %.2f %.2f %.2f "
+                        + "{item:{id:\"oror_supreme_bosses:%s\",count:1},item_display:\"gui\",billboard:\"center\",Tags:[\"oror_look\"],"
+                        + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[0.9f,0.9f,0.9f]}}",
+                    sx - 2.0 + (i % 5) * 1.0, sy + 1.9 - (i / 5) * 1.0, sz + 4.0, ids[i]));
+            }
+            note("arms on show");
+        });
+    }
+
+    /** (051) Three of OROR's creatures and three of its people, as 0.17.27-0.17.29 drew and modelled them. */
+    private static void creatures(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null) {
+            return;
+        }
+        String[] ids = {"bahamut", "kurma", "demiurgos", "valeria", "arcana", "teia"};
+        server.execute(() -> {
+            command(server, "kill @e[tag=oror_look]");
+            for (int i = 0; i < ids.length; i++) {
+                command(server, String.format(java.util.Locale.ROOT,
+                    "summon oror_supreme_bosses:%s %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"oror_look\"]}",
+                    ids[i], sx - 10 + (i % 3) * 10 + (i >= 3 ? 5 : 0), (int) sy, sz + (i >= 3 ? 4 : 14)));
+            }
+            note("creatures on show");
         });
     }
 
