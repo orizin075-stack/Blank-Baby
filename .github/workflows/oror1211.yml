@@ -162,5 +162,10 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f oror_rework/neoforge1211patch/out
           git commit -m "OROR 1.21.1 patch build ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
-          git pull --rebase origin "${GITHUB_REF_NAME}"
+          # another run's result landed first (a cancelled run's, say): this run's out/ wins (in a rebase "theirs" is
+          # the commit being replayed); the result was lost to such a conflict once
+          if ! git pull --rebase -X theirs origin "${GITHUB_REF_NAME}"; then
+            git checkout --theirs -- oror_rework/neoforge1211patch/out && git add -f oror_rework/neoforge1211patch/out
+            GIT_EDITOR=true git rebase --continue
+          fi
           git push origin "HEAD:${GITHUB_REF_NAME}"
