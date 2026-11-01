@@ -295,12 +295,12 @@ public final class PilotTest {
                 double along = rel.x * f.x + rel.z * f.z, off = rel.x * -f.z + rel.z * f.x;
                 Object roll = Sbw.call(r.plane, "getRoll");
                 LOG.info(String.format(Locale.ROOT, "PLANE-TRACK {\"t\":%d,\"mode\":\"%s%s\",\"x\":%.0f,\"y\":%.1f,\"z\":%.0f,\"ground\":%d,"
-                        + "\"speed\":%.2f,\"vy\":%.2f,\"pitch\":%.1f,\"yaw\":%.1f,\"roll\":%s,\"along\":%.0f,\"off\":%.0f,\"health\":%.2f}", t, m,
+                        + "\"speed\":%.2f,\"vy\":%.2f,\"pitch\":%.1f,\"yaw\":%.1f,\"roll\":%s,\"along\":%.0f,\"off\":%.0f,\"power\":%.2f,\"health\":%.2f}", t, m,
                     pp.getBoolean("FinalLeg") ? ":final-leg" : "", r.plane.getX() - r.origin.getX(), r.plane.getY(),
                     r.plane.getZ() - r.origin.getZ(), r.level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(r.plane.getX()),
                         (int) Math.floor(r.plane.getZ())), r.plane.getDeltaMovement().length(), r.plane.getDeltaMovement().y, r.plane.getXRot(),
                     Mth.wrapDegrees(r.plane.getYRot() - pp.getFloat("Heading")), roll instanceof Number n ? String.format(Locale.ROOT, "%.1f", n.floatValue()) : "0",
-                    along, off, Sbw.health(r.plane)));
+                    along, off, Sbw.power(r.plane), Sbw.health(r.plane)));
             }
         }
         if (r.plane != null) {

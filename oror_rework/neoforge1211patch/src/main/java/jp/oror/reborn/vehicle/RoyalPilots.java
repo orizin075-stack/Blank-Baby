@@ -502,7 +502,10 @@ public final class RoyalPilots {
                 // the line's ground, put a wing into the hill beside it)
                 double alt = leg && lined ? Math.max(runwayY + 24, Math.max(high, nearHigh(v)) + 20)
                     : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
-                steerSpeed(v, to, alt, speed < 1.6, speed > 2.2, 99, leg && lined ? 10F : 6F);
+                // lined up, slowed toward the landing speed already; the turns judged by the real height above the ground
+                // (they were told 99 and banked hard at nine blocks)
+                steerSpeed(v, to, alt, speed < (leg && lined ? 1.2 : 1.6), speed > (leg && lined ? 1.6 : 2.2),
+                    v.getY() - groundAt(v, v.position()), leg && lined ? 10F : 6F);
                 double pastGate = v.position().subtract(gate).dot(f);
                 if (target != null) {
                     mode = "patrol";
@@ -538,7 +541,7 @@ public final class RoyalPilots {
                     mode = "rollout";
                     p.putLong("Since", now);
                     p.putBoolean("Landed", true);
-                } else if (blocked || along < -120 || v.getY() > glide + 35 || now - p.getLong("Since") > 900) {
+                } else if (blocked || along < -30 || v.getY() > glide + 35 || now - p.getLong("Since") > 900) {
                     mode = "return";
                     p.putLong("Since", now);
                     p.remove("FinalLeg");
@@ -864,6 +867,11 @@ public final class RoyalPilots {
         if (agl < 8) {
             wantPitch = Math.min(wantPitch, agl < 3 ? -4F : 1F);
         }
+        if (slower) {
+            // too fast: no dive (the descent home only gathered speed: 4 blocks a tick for 2.2 asked, and the CI aircraft
+            // came over the runway 27 blocks up at three times its landing speed); the nose a little up to bleed it off
+            wantPitch = Math.min(wantPitch, -1F);
+        }
         float yawErr = Mth.wrapDegrees(yawTo(point.subtract(v.position())) - v.getYRot());
         // banked, Superb Warfare's aircraft turned well under a degree a tick at landing speeds (a circle 400 blocks
         // across: 049's CI aircraft flew round its initial point and never lined up with the runway); on the way home
@@ -885,7 +893,12 @@ public final class RoyalPilots {
      */
     private static boolean[] bank(Entity v, float yawErr, double agl) {
         float roll = Sbw.call(v, "getRoll") instanceof Number n ? n.floatValue() : 0F;
-        boolean turn = !v.onGround() && agl > 12 && Math.abs(yawErr) > 12 && Math.abs(roll) < 45;
+        // (050) the bank ran on past the key's release: 70 and 100 degrees over in a go-around nine blocks up, and the CI
+        // aircraft fell out of the sky; past 50 degrees it is rolled back toward level, and low down it banks less
+        if (!v.onGround() && Math.abs(roll) > 50) {
+            return new boolean[]{roll > 0, roll < 0};
+        }
+        boolean turn = !v.onGround() && agl > 15 && Math.abs(yawErr) > 12 && Math.abs(roll) < (agl > 40 ? 45 : 25);
         return new boolean[]{turn && yawErr < 0, turn && yawErr > 0};
     }
 
