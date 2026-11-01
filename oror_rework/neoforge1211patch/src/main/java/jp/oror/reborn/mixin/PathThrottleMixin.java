@@ -17,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * formation spot on every decision, and each ask runs a full search (a fifth of the server thread in the hundred-man
  * battle, by the CI's profile). A mob already on its way to (nearly) the same place, with a search less than a second
  * old, keeps its path; only the speed changes. A new destination, a finished path or a stale one searches again.
+ * A search that found no way is not run again for (nearly) the same place within a second (049: an enemy out of reach
+ * had every soldier after it search in vain on every decision).
  */
 @Mixin(PathNavigation.class)
 public abstract class PathThrottleMixin {
@@ -35,6 +37,30 @@ public abstract class PathThrottleMixin {
 
     @Unique
     private long oror$searchedAt = Long.MIN_VALUE;
+
+    /** The last search that found no way, and where to: asked again for (nearly) the same place within a second, no. */
+    @Unique
+    private long oror$failedAt = Long.MIN_VALUE;
+
+    @Unique
+    private double oror$fx, oror$fy, oror$fz;
+
+    @Unique
+    private boolean oror$stillNoWay(double x, double y, double z) {
+        long now = this.mob.level().getGameTime();
+        double dx = x - this.oror$fx, dy = y - this.oror$fy, dz = z - this.oror$fz;
+        return now - this.oror$failedAt < 20 && dx * dx + dy * dy + dz * dz < 9;
+    }
+
+    @Unique
+    private void oror$searched(boolean found, double x, double y, double z) {
+        if (!found) {
+            this.oror$failedAt = this.mob.level().getGameTime();
+            this.oror$fx = x;
+            this.oror$fy = y;
+            this.oror$fz = z;
+        }
+    }
 
     @Unique
     private boolean oror$keep(double x, double y, double z, double speed) {
@@ -55,15 +81,29 @@ public abstract class PathThrottleMixin {
 
     @Inject(method = "moveTo(DDDD)Z", at = @At("HEAD"), cancellable = true)
     private void oror$throttleToPoint(double x, double y, double z, double speed, CallbackInfoReturnable<Boolean> cir) {
-        if (this.oror$keep(x, y, z, speed)) {
+        if (this.oror$stillNoWay(x, y, z)) {
+            cir.setReturnValue(false);
+        } else if (this.oror$keep(x, y, z, speed)) {
             cir.setReturnValue(true);
         }
     }
 
+    @Inject(method = "moveTo(DDDD)Z", at = @At("RETURN"))
+    private void oror$searchedToPoint(double x, double y, double z, double speed, CallbackInfoReturnable<Boolean> cir) {
+        this.oror$searched(cir.getReturnValueZ(), x, y, z);
+    }
+
     @Inject(method = "moveTo(Lnet/minecraft/world/entity/Entity;D)Z", at = @At("HEAD"), cancellable = true)
     private void oror$throttleToEntity(Entity entity, double speed, CallbackInfoReturnable<Boolean> cir) {
-        if (this.oror$keep(entity.getX(), entity.getY(), entity.getZ(), speed)) {
+        if (this.oror$stillNoWay(entity.getX(), entity.getY(), entity.getZ())) {
+            cir.setReturnValue(false);
+        } else if (this.oror$keep(entity.getX(), entity.getY(), entity.getZ(), speed)) {
             cir.setReturnValue(true);
         }
+    }
+
+    @Inject(method = "moveTo(Lnet/minecraft/world/entity/Entity;D)Z", at = @At("RETURN"))
+    private void oror$searchedToEntity(Entity entity, double speed, CallbackInfoReturnable<Boolean> cir) {
+        this.oror$searched(cir.getReturnValueZ(), entity.getX(), entity.getY(), entity.getZ());
     }
 }

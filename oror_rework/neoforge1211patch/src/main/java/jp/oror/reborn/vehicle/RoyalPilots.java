@@ -37,7 +37,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class RoyalPilots {
     public static final String CREWED = "oror_crewed";
-    static final String KEY = "OrorPilot";
+    public static final String KEY = "OrorPilot";
     private static final double STANDOFF = 26, TOO_CLOSE = 10, CRUISE = 45, GLIDE = 0.1, GATE = 150;
 
     private RoyalPilots() {
@@ -62,6 +62,8 @@ public final class RoyalPilots {
         p.putFloat("Heading", yaw);
         p.putDouble("RunwayY", at.y);
         p.putString("Mode", "ground");
+        // which version stood it here: one from before the capital's update whose post is gone is retired (CitadelUpdate)
+        p.putInt("Rev", jp.oror.reborn.citadel.CitadelUpdate.REVISION);
         v.getPersistentData().put(KEY, p);
         Supply.stock(v);
         for (int i = 0; i < seats; i++) {
@@ -449,11 +451,19 @@ public final class RoyalPilots {
                 }
             }
             case "return" -> {
-                // to a point on the extended centre line, GATE blocks before the threshold, high enough over the ground
-                // on the way (at a fixed 28 over the runway the CI aircraft, sent home short of power, was pushed off
-                // its way by every hill until it flew into one 860 blocks out)
+                // home as aircraft come in to land: first to a point 400 blocks out on the runway's extended centre
+                // line, then along the line to the gate 150 blocks before the threshold, so that it reaches the gate
+                // lined up with the runway (flying straight at the gate it came in from wherever it was, never lined
+                // up, and circled until it struck a hill: 049's CI)
                 Vec3 gate = home.subtract(f.scale(GATE));
-                Vec3 way = gate.subtract(v.position()).multiply(1, 0, 1);
+                Vec3 ip = home.subtract(f.scale(GATE + 250));
+                boolean leg = p.getBoolean("FinalLeg");
+                if (!leg && v.position().subtract(ip).horizontalDistance() < 70) {
+                    p.putBoolean("FinalLeg", true);
+                    leg = true;
+                }
+                Vec3 to = leg ? gate : ip;
+                Vec3 way = to.subtract(v.position()).multiply(1, 0, 1);
                 way = way.lengthSqr() < 1 ? f : way.normalize();
                 int high = groundAt(v, v.position());
                 for (int d = 30; d <= 150; d += 30) {
@@ -461,22 +471,22 @@ public final class RoyalPilots {
                         high = Math.max(high, groundAt(v, v.position().add(way.scale(d))));
                     }
                 }
-                // at about half speed (at full throttle the CI aircraft orbited its gate 300 blocks out until its battery
-                // was flat), and from wherever it is after a minute of trying
                 double alt = Math.max(runwayY + 28, high + 30);
-                steerSpeed(v, gate, alt, speed < 1.8, speed > 2.6, 99);
-                // the approach only lined up: near the gate, off the centre line by less than 40 blocks and heading
-                // down the runway within 45 degrees (going round again leaves it here at least five seconds)
+                steerSpeed(v, to, alt, speed < 1.8, speed > 2.6, 99);
                 Vec3 side = new Vec3(-f.z, 0, f.x);
                 double offLine = Math.abs(v.position().subtract(home).dot(side));
                 float headingErr = Mth.wrapDegrees(v.getYRot() - heading);
                 boolean lined = offLine < 40 && Math.abs(headingErr) < 45;
+                double pastGate = v.position().subtract(gate).dot(f);
                 if (target != null) {
                     mode = "patrol";
-                } else if (now - p.getLong("Since") > 100 && lined && (v.position().subtract(gate).horizontalDistance() < 80
-                    || now - p.getLong("Since") > 1200)) {
+                    p.remove("FinalLeg");
+                } else if (leg && lined && v.position().subtract(gate).horizontalDistance() < 80) {
                     mode = "approach";
                     p.putLong("Since", now);
+                    p.remove("FinalLeg");
+                } else if (leg && pastGate > 60) {
+                    p.remove("FinalLeg");          // past the gate without lining up: round to the initial point again
                 }
             }
             case "approach" -> {
@@ -489,9 +499,12 @@ public final class RoyalPilots {
                 // the ground under the glide path (the runway's extended centre line, from here to the touch-down point):
                 // where it rises into the path, go round again. It was taken along the aircraft's heading while it was
                 // still turning in, over the hills beside the line, and the approach was given up every tick.
+                // groundAt is the first open block above the ground (the runway itself reads runwayY): the check took the
+                // level fields just short of the threshold for an obstacle (65 over a line at 64.5) and every approach
+                // was given up as soon as it began; anything up to two blocks over the runway's level is no obstacle
                 boolean blocked = false;
                 for (double d = 10; d < Math.min(along, 200); d += 10) {
-                    blocked |= groundAt(v, touch.subtract(f.scale(d))) > runwayY + 1.5 + d * GLIDE - 3;
+                    blocked |= groundAt(v, touch.subtract(f.scale(d))) > Math.max(runwayY + 2, runwayY + 1.5 + d * GLIDE - 3);
                 }
                 steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()));
                 if (v.onGround()) {
@@ -501,6 +514,7 @@ public final class RoyalPilots {
                 } else if (blocked || along < -120 || v.getY() > glide + 25 || now - p.getLong("Since") > 900) {
                     mode = "return";
                     p.putLong("Since", now);
+                    p.remove("FinalLeg");
                     p.putInt("GoArounds", p.getInt("GoArounds") + 1);
                 }
             }

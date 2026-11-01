@@ -665,6 +665,122 @@ def debris(save, edits, stats, tile=160):
     stats['debris'] = dict(removed.most_common(12))
 
 
+def strays(save, edits, stats, r=136):
+    """Single blocks left hanging in the castle with nothing on any of their six sides (048's audit: three-block
+    chevrons of dark prismarine over both gates of the inner ward, a sea lantern and roof tiles beside the roof walk's
+    corners) are taken away; a spiral stair's steps (touching only at their corners), lanterns, chains, candles and
+    the like are left."""
+    a, _ = world.load(save, -r, r, -r, r, 64, 192)
+    for (x, y, z), st in edits.items():
+        if -r <= x < r and -r <= z < r and 64 <= y < 192:
+            a[x + r, y - 64, z + r] = world.gid(st.split('[')[0])
+    names = world.NAMES
+    keep = ('stairs', 'lantern', 'chain', 'torch', 'candle', 'end_rod', 'light', 'bell', 'banner', 'button', 'sign', 'flower_pot', 'skull',
+            'head', 'rod', 'lever', 'bars', 'pane', 'fence', 'wall', 'vine', 'ladder')
+    solid = np.array([n not in ('minecraft:air', 'minecraft:cave_air') for n in names] + [False] * 64)[a]
+    p = np.pad(solid, 1)
+    nb = np.zeros(p.shape, np.int8)
+    for ax in (0, 1, 2):
+        for sh in (1, -1):
+            nb += np.roll(p, sh, axis=ax)
+    lone = (p & (nb == 0))[1:-1, 1:-1, 1:-1]
+    for i, j, k in np.argwhere(lone):
+        n = names[a[i, j, k]]
+        if j > 0 and not any(t in n for t in keep):
+            edits[(int(i) - r, int(j) + 64, int(k) - r)] = 'minecraft:air'
+            stats['castle_strays'] += 1
+
+
+def fountains(save, edits, stats):
+    """Water standing above the kingdom's ground with nothing to hold it (049's audit: the round fountains in the middle
+    of the four high roads, the plaza basins, ponds in the fields and some baths, 872 edges in all, had their water on
+    a plinth with no rim, and in the game it ran out over the streets): every open side of such water gets a rim of the
+    basin's own stone, open bottoms a floor; a fountain's top left hanging over its pool (nothing under it but water and
+    no part of it on the rim or the bank) stands on a pillar of its own stone."""
+    from scipy import ndimage
+    for x0, x1, z0, z1, y0, y1 in ((-640, 640, -640, 640, 64, 100), (-140, 140, -140, 140, 96, 192)):
+        a, _ = world.load(save, x0, x1, z0, z1, y0, y1)
+        for (x, y, z), st in edits.items():
+            if x0 <= x < x1 and z0 <= z < z1 and y0 <= y < y1:
+                a[x - x0, y - y0, z - z0] = world.gid(st.split('[')[0])
+        names = world.NAMES + [''] * 64
+        W = world.gid('minecraft:water')
+        isair = np.array([n in ('minecraft:air', 'minecraft:cave_air') for n in names])
+        soft = np.array([n == '' or isair[i] or n == 'minecraft:water' or any(t in n for t in ('grass', 'fern', 'flower', 'leaves', 'vine', 'torch',
+                         'lantern', 'carpet', 'slab', 'stairs', 'pane', 'bars', 'fence', 'wall', 'sign', 'banner', 'button', 'chain', 'candle'))
+                         for i, n in enumerate(names)])
+        water = a == W
+        air = isair[a]
+        lo = 1 if y0 == 64 else 0                      # y 64 is the ground's own level: moats, field ditches, ponds
+        floor_of = {}
+
+        def floor(i, j, k):
+            # the basin's stone under a water column
+            key = (i, k)
+            if key not in floor_of:
+                jj = j
+                while jj > 0 and a[i, jj, k] == W:
+                    jj -= 1
+                n = names[a[i, jj, k]]
+                floor_of[key] = n if not soft[a[i, jj, k]] and n.startswith('minecraft:') else 'minecraft:stone_bricks'
+            return floor_of[key]
+        # the floating tops first (they are taken out of the water before the rims are drawn)
+        for j in range(max(lo, 1) + 1, a.shape[1]):
+            top = ~soft[a[:, j, :]] & ~air[:, j, :]
+            over = top & water[:, j - 1, :]
+            lab, n = ndimage.label(over)
+            if not n:
+                continue
+            # a part of the top resting on anything but water (the rim, the bank, a bridge's abutment) holds it up
+            held = top & ~water[:, j - 1, :]
+            near_held = ndimage.binary_dilation(held) & over
+            keep = set(np.unique(lab[near_held])) - {0}
+            for c in range(1, n + 1):
+                if c in keep:
+                    continue
+                cells = np.argwhere(lab == c)
+                if len(cells) > 64:
+                    continue
+                if len(cells) <= 2:
+                    # a block or two adrift over a pool (a bookshelf over the inner court's) is no fountain's top: taken away
+                    for i, k in cells:
+                        edits[(int(i) + x0, j + y0, int(k) + z0)] = 'minecraft:air'
+                        a[i, j, k] = world.gid('minecraft:air')
+                        stats['fountain_loose'] += 1
+                    continue
+                for i, k in cells:
+                    st = names[a[i, j, k]]
+                    jj = j - 1
+                    while jj >= lo and a[i, jj, k] == W:
+                        edits[(int(i) + x0, jj + y0, int(k) + z0)] = st
+                        a[i, jj, k] = a[i, j, k]
+                        water[i, jj, k] = False
+                        jj -= 1
+                    stats['fountain_pillars'] += 1
+        for j in range(lo, a.shape[1]):
+            wl = water[:, j, :]
+            if not wl.any():
+                continue
+            for di, dk in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                src = np.argwhere(wl & np.roll(air[:, j, :], (-di, -dk), axis=(0, 1)))
+                for i, k in src:
+                    ni, nk = i + di, k + dk
+                    if not (0 <= ni < a.shape[0] and 0 <= nk < a.shape[2]) or not air[ni, j, nk]:
+                        continue
+                    st = floor(i, j, k)
+                    edits[(int(ni) + x0, j + y0, int(nk) + z0)] = st
+                    a[ni, j, nk] = world.gid(st)
+                    air[ni, j, nk] = False
+                    stats['fountain_rims'] += 1
+            if j > lo or y0 > 64:
+                for i, k in np.argwhere(wl & air[:, j - 1, :]) if j > 0 else []:
+                    st = floor(i, j, k)
+                    edits[(int(i) + x0, j - 1 + y0, int(k) + z0)] = st
+                    a[i, j - 1, k] = world.gid(st)
+                    air[i, j - 1, k] = False
+                    stats['fountain_floors'] += 1
+
+
 def propagate(L, T, iters=15):
     for _ in range(iters):
         M = L.copy()
@@ -771,6 +887,8 @@ def main(save, out, report=None):
     castle_walls(save, -110, 110, -110, 110, rest, stats)
     print('castle', stats['castle_roof_cells'], 'roof cells,', stats['castle_openings'], 'openings,', stats['castle_wall_cells'], 'wall cells', flush=True)
     debris(save, rest, stats)
+    strays(save, rest, stats)
+    print('strays', stats['castle_strays'], flush=True)
     print('debris', stats['debris_removed'], stats['debris'], flush=True)
     # the castle's own repairs, except on the town plots (those were about the old houses)
     for p, st in rest.items():
@@ -782,8 +900,11 @@ def main(save, out, report=None):
     stock_empty(save, cleared, edits, bes, stats)
     print('stores', dict(stats['stores']), 'treasury rooms', stats['treasury_rooms'], flush=True)
     # the kingdom's airbases, helipads, hangars and turret posts
-    forces = military.build(save, man, edits, bes, stats)
+    forces = military.build(save, man, edits, bes, stats, town)
     print('military', dict(stats['military']), 'missing', stats['military_missing'], flush=True)
+    fountains(save, edits, stats)
+    print('fountains', stats['fountain_rims'], 'rim blocks,', stats['fountain_floors'], 'floor blocks,', stats['fountain_pillars'], 'pillar cells,',
+          stats['fountain_loose'], 'loose blocks', flush=True)
     # the castle: the inner ward, in four quarters with an overlap
     for qx0, qx1 in ((-136, 0), (0, 136)):
         for qz0, qz1 in ((-136, 0), (0, 136)):
@@ -791,7 +912,7 @@ def main(save, out, report=None):
             print('lit quarter', qx0, qz0, dict(stats['lights']), flush=True)
     n = anvil_edit.apply(save, out, edits, bes, biome='oror_supreme_bosses:royal_capital')
     json.dump(dict(note='The kingdom\'s vehicles and turrets (tools/citadel/military.py); garrison.py stands them with the garrison.',
-                   posts=forces, sites=stats['military_at']), open(os.path.join(out, 'MILITARY.json'), 'w'), separators=(',', ':'))
+                   posts=forces, sites=stats['military_at'], headings=stats.get('military_heading', {})), open(os.path.join(out, 'MILITARY.json'), 'w'), separators=(',', ':'))
     json.dump(dict(note='The town buildings as rebuilt by tools/citadel/houses.py: plot, front, style and the free floor cells '
                         '(feet positions) where townsfolk can stand.', buildings=town),
               open(os.path.join(out, 'TOWN_BUILDINGS.json'), 'w'), separators=(',', ':'))

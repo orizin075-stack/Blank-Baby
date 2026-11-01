@@ -47,9 +47,16 @@ def mask(save, lanes=False):
     return ok, a[:, 2:, :]
 
 
-def find(ok, cx, cz, w, d, reach=60, step=2):
-    """The w x d rectangle (x span w, z span d) of buildable columns nearest cx, cz: its x0, z0 (save coordinates)."""
-    best = None
+def natural_name(n):
+    """Air, plants and trees: what the mask takes for unbuilt ground."""
+    n = n.split(':')[-1]
+    return n in ('air', 'cave_air') or any(t in n for t in SOFT) or n.endswith(('_leaves', '_log', '_wood'))
+
+
+def find(ok, cx, cz, w, d, reach=60, step=2, good=None):
+    """The w x d rectangle (x span w, z span d) of buildable columns nearest cx, cz (and passing good(x0, z0), when
+    given): its x0, z0 (save coordinates)."""
+    found = []
     for dx in range(-reach, reach + 1, step):
         for dz in range(-reach, reach + 1, step):
             x0, z0 = cx + dx - w // 2, cz + dz - d // 2
@@ -57,10 +64,11 @@ def find(ok, cx, cz, w, d, reach=60, step=2):
             if i0 < 2 or k0 < 2 or i0 + w > 1278 or k0 + d > 1278:
                 continue
             if ok[i0:i0 + w, k0:k0 + d].all():
-                dist = dx * dx + dz * dz
-                if best is None or dist < best[0]:
-                    best = (dist, x0, z0)
-    return best and best[1:]
+                found.append((dx * dx + dz * dz, x0, z0))
+    for _, x0, z0 in sorted(found):
+        if good is None or good(x0, z0):
+            return x0, z0
+    return None
 
 
 def clear(a, edits, x0, z0, w, d, floor, top=100):
@@ -220,48 +228,111 @@ def gate_power(a, edits, bes, stats, taken):
 
 
 def runway(a, ok, edits, bes, stats, posts, cx, cz, heading, name):
-    """A runway of 240 x 15 along x (heading east or west from its start), its apron, its aircraft."""
+    """A runway of 240 x 15 (heading east or west along x, north or south along z from its start end), its apron, its
+    aircraft and their supply. Its place is the nearest to cx, cz where the whole of it can be built and the ground
+    under its landing approach is low."""
     L, W, M = 240, 15, 3
-    spot = find(ok, cx, cz, L, W + 2 * M + 22, reach=50)
+    D = W + 2 * M + 22
+    along_x = heading in ('east', 'west')
+    f = 1 if heading in ('east', 'south') else -1
+    w, d = (L, D) if along_x else (D, L)
+    vc = M + W // 2                          # the centre line, across the site
+
+    def at(x0, z0, u, v):
+        # the column u blocks along the runway from its start end (the far end of a westward or northward one) and v
+        # across the site
+        uu = u if f > 0 else L - 1 - u
+        return (x0 + uu, z0 + v) if along_x else (x0 + v, z0 + uu)
+
+    def uv(x0, z0, x, z):
+        uu, v = (x - x0, z - z0) if along_x else (z - z0, x - x0)
+        return (uu if f > 0 else L - 1 - uu), v
+
+    def rect(x0, z0, u0, v0, lu, lv):
+        cs = [at(x0, z0, u, v) for u in (u0, u0 + lu - 1) for v in (v0, v0 + lv - 1)]
+        xs, zs = [c[0] for c in cs], [c[1] for c in cs]
+        return min(xs), min(zs), max(xs) - min(xs) + 1, max(zs) - min(zs) + 1
+
+    def high(x, z, dd):
+        # an obstacle under the glide dd blocks before the touch-down point: built above both the runway's level and
+        # the glide (the first open block over it higher than 67, the aircraft's 65 plus two, and than 3 under the
+        # glide of one in ten), as the aircraft judges it; trees do not count, they are felled below
+        col = a[x + 640, 1:, z + 640]                             # y 65 and up
+        nz = [int(j) for j in np.nonzero(col)[0] if not natural_name(world.NAMES[col[j]])]
+        return bool(nz) and max(nz) + 65 + 1 > max(67, 65 + 1.5 + dd * 0.1 - 3)
+
+    touch = 4 + 25                           # the touch-down point, 25 blocks on from the start
+
+    def approach_clear(x0, z0):
+        # the landing approach: the ground under a one-in-ten glide over the 200 blocks before the touch-down point
+        # must be low (048's audit: a dark-oak hall 32 blocks high stood in the south runway's way down)
+        for dd in range(10, 200, 4):
+            for dv in (-4, 0, 4):
+                x, z = at(x0, z0, touch - dd, vc + dv)
+                if -640 <= x < 640 and -640 <= z < 640 and high(x, z, dd):
+                    return False
+        return True
+    spot = find(ok, cx, cz, w, d, reach=80, step=4, good=approach_clear)
     if not spot:
         stats['military_missing'].append(name)
         return
     x0, z0 = spot
-    zc = z0 + M + W // 2                # the runway's centre line
-    start = x0 + 4 if heading == 'east' else x0 + L - 5
+    # the trees under the approach (the glide of one in ten over 200 blocks, eight to each side of the centre line)
+    # are felled where they reach into it
+    for dd in range(1, 200):
+        for dv in range(-8, 9):
+            x, z = at(x0, z0, touch - dd, vc + dv)
+            if not (-640 <= x < 640 and -640 <= z < 640):
+                continue
+            floor = max(66, int(65 + 1.5 + dd * 0.1 - 3))
+            for y in range(floor, 64 + a.shape[1]):
+                n = world.NAMES[a[x + 640, y - 64, z + 640]]
+                if n.endswith(('_leaves', '_log', '_wood')) and (x, y, z) not in edits:
+                    edits[(x, y, z)] = 'minecraft:air'
+                    stats['military']['approach_felled'] += 1
 
     def surface(x, z):
-        u = x - x0 if heading == 'east' else x0 + L - 1 - x       # distance from the start
-        if abs(z - zc) == W // 2:
+        u, v = uv(x0, z0, x, z)
+        if abs(v - vc) == W // 2:
             return 'minecraft:white_concrete'
-        if z == zc and u % 10 < 5 and 14 < u < L - 14:
+        if v == vc and u % 10 < 5 and 14 < u < L - 14:
             return 'minecraft:white_concrete'
-        if u < 10 and abs(z - zc) < W // 2 - 1 and (z - zc) % 2 == 0:
+        if u < 10 and abs(v - vc) < W // 2 - 1 and (v - vc) % 2 == 0:
             return 'minecraft:white_concrete'                    # threshold bars
         return 'minecraft:gray_concrete'
-    clear(a, edits, x0, z0 + M, L, W, surface)
-    clear(a, edits, x0, z0, L, M, 'minecraft:grass_block')
-    clear(a, edits, x0, z0 + M + W, L, M, 'minecraft:grass_block')
-    for x in range(x0, x0 + L, 12):
-        for z in (zc - W // 2 - 1, zc + W // 2 + 1):
+    clear(a, edits, *rect(x0, z0, 0, M, L, W), surface)
+    clear(a, edits, *rect(x0, z0, 0, 0, L, M), 'minecraft:grass_block')
+    clear(a, edits, *rect(x0, z0, 0, M + W, L, M), 'minecraft:grass_block')
+    for u in range(0, L, 12):
+        for v in (vc - W // 2 - 1, vc + W // 2 + 1):
+            x, z = at(x0, z0, u, v)
             edits[(x, 64, z)] = 'minecraft:sea_lantern'
     # the launch apron beside the start, with its spare aircraft
-    ax0 = x0 if heading == 'east' else x0 + L - 22
-    az0 = z0 + M + W + M
-    clear(a, edits, ax0, az0, 22, 19, lambda x, z: 'minecraft:yellow_concrete' if x in (ax0, ax0 + 21) or z in (az0, az0 + 18)
-          else 'minecraft:light_gray_concrete')
-    for x, z in ((ax0, az0), (ax0 + 21, az0), (ax0, az0 + 18), (ax0 + 21, az0 + 18)):
+    av0 = M + W + M
+    ax, az, aw, ad = rect(x0, z0, 0, av0, 22, 19)
+    edge = {at(x0, z0, u, v) for u in range(22) for v in range(av0, av0 + 19) if u in (0, 21) or v in (av0, av0 + 18)}
+    clear(a, edits, ax, az, aw, ad, lambda x, z: 'minecraft:yellow_concrete' if (x, z) in edge else 'minecraft:light_gray_concrete')
+    for u, v in ((0, av0), (21, av0), (0, av0 + 18), (21, av0 + 18)):
+        x, z = at(x0, z0, u, v)
         edits[(x, 64, z)] = 'minecraft:sea_lantern'
-    posts.append(dict(role='TANK', x=start, y=65, z=zc, yaw=YAW[heading], post='airbase', vehicle='a_10a', seats=1, exact=True))
-    posts.append(dict(role='PARKED', x=ax0 + 11, y=65, z=az0 + 9, yaw=YAW[heading], post='airbase', vehicle='a_10a', seats=0, exact=True))
-    # the stands' supply: a power plant and a depot in the grass beside the crewed aircraft's stand (it is towed back
-    # there after landing), and on the apron by the spare
-    power(edits, bes, stats, start, 65, zc - 9)
-    depot(edits, bes, stats, start - 2 if heading == 'east' else start + 2, 65, zc - 9, ['a_10a'])
-    power(edits, bes, stats, ax0 + 11, 65, az0 + 1)
-    depot(edits, bes, stats, ax0 + 13, 65, az0 + 1, ['a_10a'])
+    sx, sz = at(x0, z0, 4, vc)
+    px, pz = at(x0, z0, 11, av0 + 9)
+    posts.append(dict(role='TANK', x=sx, y=65, z=sz, yaw=YAW[heading], post='airbase', vehicle='a_10a', seats=1, exact=True))
+    posts.append(dict(role='PARKED', x=px, y=65, z=pz, yaw=YAW[heading], post='airbase', vehicle='a_10a', seats=0, exact=True))
+    # the stands' supply: a power plant and a depot nine blocks behind each aircraft's tail end of its stand, clear of
+    # its wings (they stood at the wingtip before: 048's audit) and of its way (it only ever rolls forward from the
+    # stand; it is towed back nose first); behind the crewed one the runway's end is paved out to them
+    clear(a, edits, *rect(x0, z0, -6, vc - 4, 7, 9), 'minecraft:gray_concrete')
+    facing = heading
+    for (u, v), kind in (((-5, vc - 2), 'power'), ((-5, vc + 2), 'depot'), ((2, av0 + 7), 'power'), ((2, av0 + 11), 'depot')):
+        x, z = at(x0, z0, u, v)
+        if kind == 'power':
+            power(edits, bes, stats, x, 65, z)
+        else:
+            depot(edits, bes, stats, x, 65, z, ['a_10a'], facing=facing)
     stats['military']['runways'] += 1
-    stats['military_at'][name] = [x0, z0, L, W + 2 * M + 22]
+    stats['military_at'][name] = [x0, z0, w, d]
+    stats.setdefault('military_heading', {})[name] = heading
 
 
 H_SHAPE = ['X...X', 'X...X', 'XXXXX', 'X...X', 'X...X']
@@ -413,7 +484,9 @@ def turrets(man):
 # town's corners inside the inner moat, near the castle.
 # each runway takes off outward, toward the outer wall: the landing approach comes in over the low fields, not over
 # the twenty-block outer wall
-AIRBASES = ((-250, -405, 'west', 'airbase_n'), (250, 405, 'east', 'airbase_s'))
+# (049: the south band of the farm belt has no place where a runway's approach is clear of its mills and barns; the
+# second runway runs north along the east band, its approach coming up from the south over the fields)
+AIRBASES = ((-250, -405, 'west', 'airbase_n'), (361, -278, 'north', 'airbase_e'))
 HANGARS = ((-405, -160, 'east'), (-405, 160, 'east'), (405, -160, 'west'), (405, 160, 'west'))
 HELIPADS = ((-235, -235, 'ah_6'), (235, -235, 'mi_28'), (235, 235, 'ah_6'), (-235, 235, 'mi_28'))
 
@@ -426,7 +499,7 @@ def zones():
     return (ring >= 340) & (ring <= 470), (ring >= 160) & (ring <= 292)
 
 
-def build(save, man, edits, bes, stats):
+def build(save, man, edits, bes, stats, town=None):
     stats['military'] = collections.Counter()
     stats['military_missing'] = []
     stats['military_at'] = {}
@@ -436,9 +509,9 @@ def build(save, man, edits, bes, stats):
     for (x, y, z), st in edits.items():
         if y >= 65 and not st.startswith(('minecraft:air', 'minecraft:cave_air')) and -640 <= x < 640 and -640 <= z < 640:
             ok_town[x + 640, z + 640] = ok_farm[x + 640, z + 640] = False
-    farm, town = zones()
-    ok_farm &= farm
-    ok_town &= town
+    farm_zone, town_zone = zones()
+    ok_farm &= farm_zone
+    ok_town &= town_zone
     posts = []
 
     def keep_off(name, m):
@@ -457,8 +530,32 @@ def build(save, man, edits, bes, stats):
         hangar(a, ok_farm, edits, bes, stats, posts, cx, cz, opening, sets[i], 'hangar_%d' % i)
         keep_off('hangar_%d' % i, 4)
     posts += turrets(man)
+    # a turret's post on its floor: the gate roads' crossfire points were given three blocks over their platform
+    for p in posts:
+        if p.get('still'):
+            while p['y'] > 65 and not _floor(a, edits, p['x'], p['y'] - 1, p['z']) and _air(a, edits, p['x'], p['y'] - 1, p['z']):
+                p['y'] -= 1
     stats['military']['turrets'] = sum(1 for p in posts if p.get('still'))
     taken = set()
     supply_posts(a, edits, bes, stats, posts, taken)
     gate_power(a, edits, bes, stats, taken)
+    guard_power(a, edits, bes, stats, taken, man, town or [])
     return posts
+
+
+def guard_power(a, edits, bes, stats, taken, man, town):
+    """A power plant for the guards' electric guns where they are posted besides the gates (048's audit: only the
+    gates had one): by each of the four fortresses outside the walls, each watchtower and each guardhouse in the
+    town (outside its door side)."""
+    places = [(f['x'], 66, f['z'], 3, 9) for f in man.get('exterior_fortresses', [])]
+    places += [(wx, 66, wz, 3, 8) for wx, wz in man.get('exterior_watchtowers', [])]
+    places += [(b['x'], 65, b['z'], (max(b['width'], b['depth']) + 1) // 2 + 1, (max(b['width'], b['depth']) + 1) // 2 + 5)
+               for b in town if b['kind'] == 'guardhouse']
+    for x, y, z, rmin, rmax in places:
+        c = spot(a, edits, taken, x, y, z, 3, rmin, rmax)
+        if c:
+            power(edits, bes, stats, *c, coal=4)
+            taken.update((c[0], c[1] + k, c[2]) for k in range(3))
+            stats['military']['guard_stations'] += 1
+        else:
+            stats['military']['station_missing'] += 1

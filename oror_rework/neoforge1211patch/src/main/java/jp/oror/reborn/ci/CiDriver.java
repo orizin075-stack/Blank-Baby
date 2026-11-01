@@ -55,6 +55,7 @@ public final class CiDriver {
         if (next < CHECKS.size() && t >= 100 && (next == 0 || finished(CHECKS.get(next - 1)))) {
             String command = switch (CHECKS.get(next)) {
                 case "citadel" -> "oror citadel selftest";
+                case "citadelupdate" -> "oror citadel update test";
                 case "war" -> "oror war start 100 test";
                 case "pilots" -> "oror pilots test";
                 case "villageflight" -> "oror villageflight test";
@@ -78,6 +79,7 @@ public final class CiDriver {
     private static boolean finished(String check) {
         return switch (check) {
             case "citadel" -> CitadelEvents.selftestDone;
+            case "citadelupdate" -> jp.oror.reborn.citadel.CitadelUpdate.testDone;
             case "war" -> HundredWar.resultLogged;
             case "pilots" -> PilotTest.resultLogged;
             case "villageflight" -> jp.oror.reborn.VillageFlightTest.resultLogged;

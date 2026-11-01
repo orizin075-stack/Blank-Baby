@@ -190,7 +190,13 @@ public final class Look {
             // the palace's roofs from the south-east, high up (the two light wells roofed over in 048)
             case 12610 -> atCapital(mc, 70, 115, 110, 150F, 32F);
             case 14200 -> shot(mc, "27_palace_roofs");
-            case 14210 -> finish(mc, "complete");
+            // 049: the second runway along the east band of the farm belt, from above
+            case 14210 -> overCapital(mc, 361, -278, 70);
+            case 15800 -> shot(mc, "28_airbase_east");
+            // a high road's fountain with its new rim (its water ran out over the street), looking north from the road
+            case 15810 -> atCapital(mc, 0, 7, -204, 180F, 28F);
+            case 17400 -> shot(mc, "29_road_fountain");
+            case 17410 -> finish(mc, "complete");
             default -> {
             }
         }
