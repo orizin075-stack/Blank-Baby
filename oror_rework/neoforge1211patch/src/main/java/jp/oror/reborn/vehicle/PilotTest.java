@@ -41,6 +41,7 @@ public final class PilotTest {
     public static volatile boolean resultLogged;
 
     private static final class Run {
+        float planeHealth = 1F;
         ServerLevel level;
         long started;
         Entity plane, tank, heli;
@@ -284,6 +285,20 @@ public final class PilotTest {
             return;
         }
         long t = r.level.getGameTime() - r.started;
+        if (r.plane != null && r.plane.isAlive()) {
+            // every loss of health, with how the aircraft was flying when it came
+            float h = Sbw.health(r.plane);
+            if (h < r.planeHealth - 0.01F) {
+                net.minecraft.nbt.CompoundTag pp = r.plane.getPersistentData().getCompound("OrorPilot");
+                Object roll = Sbw.call(r.plane, "getRoll");
+                LOG.info(String.format(Locale.ROOT, "PLANE-HURT {\"t\":%d,\"mode\":\"%s\",\"health\":%.2f,\"lost\":%.2f,\"y\":%.1f,\"ground\":%d,"
+                        + "\"onGround\":%b,\"speed\":%.2f,\"vy\":%.2f,\"pitch\":%.1f,\"roll\":%s,\"against\":%b}", t, pp.getString("Mode"), h,
+                    r.planeHealth - h, r.plane.getY(), r.level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(r.plane.getX()),
+                        (int) Math.floor(r.plane.getZ())), r.plane.onGround(), r.plane.getDeltaMovement().length(), r.plane.getDeltaMovement().y,
+                    r.plane.getXRot(), roll instanceof Number n ? String.format(Locale.ROOT, "%.1f", n.floatValue()) : "0", r.plane.horizontalCollision));
+            }
+            r.planeHealth = h;
+        }
         if (r.plane != null && t % 10 == 0 && r.plane.isAlive()) {
             net.minecraft.nbt.CompoundTag pp = r.plane.getPersistentData().getCompound("OrorPilot");
             String m = pp.getString("Mode");

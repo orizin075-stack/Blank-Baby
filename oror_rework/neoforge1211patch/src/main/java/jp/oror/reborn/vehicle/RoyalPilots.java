@@ -531,10 +531,10 @@ public final class RoyalPilots {
                 boolean low = v.getY() < runwayY + 1.5 + Math.max(0, along) * GLIDE - 2;
                 boolean slow = speed > 1.9 && !low, fast = speed < 1.5 || low;
                 if (v.getY() - groundAt(v, v.position()) < 6) {
-                    // the flare: power off for the touch-down (at 2.15 the CI aircraft came down hard enough to lose a third
-                    // of its health), the nose held up by the pitch rule near the ground
-                    fast = false;
-                    slow = true;
+                    // the flare: the speed held between 1.3 and 1.8 (at 2.15 it came down hard; with the power cut it fell
+                    // to 0.9, sank and came down as hard), the nose held up by the pitch rule near the ground
+                    fast = speed < 1.3;
+                    slow = speed > 1.8;
                 }
                 // the ground under the glide path (the runway's extended centre line, from here to the touch-down point):
                 // where it rises into the path, go round again. It was taken along the aircraft's heading while it was
