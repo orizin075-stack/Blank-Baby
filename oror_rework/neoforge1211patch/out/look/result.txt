@@ -1,0 +1,57 @@
+237 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+338 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+398 press selectWorld.create
+399 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+499 screenshot popup_ConfirmScreen
+499 press gui.yes
+500 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+532 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+556 screen none in LOADING
+557 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+657 screenshot popup_
+658 screen none in PLAY
+697 stage at 5 213 10
+857 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 0 minecraft:air, minecraft:rabbit -> net.minecraft.client.renderer.entity.RabbitRenderer holding 0 minecraft:air, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:bow, friendsandfoes:illusioner -> com.faboslav.friendsandfoes.common.client.render.entity.renderer.IllusionerEntityRenderer holding 1 minecraft:bow, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:bow, minecraft:rabbit -> net.minecraft.client.renderer.entity.RabbitRenderer holding 0 minecraft:air, minecraft:villager -> jp.oror.reborn.client.ArmedVillagers$VillagerArmed holding 1 minecraft:iron_sword]
+917 screenshot 10_royals
+927 swing row 0: 8
+930 screenshot 11_royals_swing
+1017 screenshot 12_villagers
+1027 swing row 10: 6
+1030 screenshot 13_villagers_swing
+1038 swing row 10: 6
+1039 screenshot 13b_villagers_swing_early
+1117 screenshot 14_king_close
+1187 screenshot 15_general_close
+1257 screenshot 16_imperial_close
+1327 screenshot 17_royals_back
+1397 screenshot 18_trader_close
+1399 arms on show
+1409 screenshot 19_arms
+1412 creatures on show
+1416 screenshot 19b_creatures
+1419 throne 880, 143, -400
+3217 screenshot 20_throne_room
+3260 king at 880.6 143.0 -399.6 (throne 880, 143, -400, 0.15 blocks)
+5057 screenshot 21_throne_room_later
+5077 king at 880.6 143.0 -399.4 (throne 880, 143, -400, 0.14 blocks)
+5077 over the capital at 880 -368
+6857 screenshot 22_capital_aerial
+6954 over the capital at 615 -607
+8457 screenshot 23_helipad
+8468 over the capital at 630 -745
+10057 screenshot 24_airbase
+10067 at the capital 615 81 -618
+11657 screenshot 25_helipad_supply
+11727 at the capital 475 76 -372
+13257 screenshot 26_hangar_supply
+13267 at the capital 950 186 -258
+14857 screenshot 27_palace_roofs
+14943 over the capital at 1241 -646
+16457 screenshot 28_airbase_east
+16467 at the capital 880 78 -572
+18057 screenshot 29_road_fountain
+18069 at the capital 1263 93 -581
+19657 screenshot 30_ranch_barn
+19671 at the capital 1385 111 -313
+21257 screenshot 31_fortress_east
+21267 finished: complete
