@@ -847,9 +847,13 @@ public final class RoyalPilots {
             wantPitch = Math.min(wantPitch, agl < 3 ? -4F : 1F);
         }
         float yawErr = Mth.wrapDegrees(yawTo(point.subtract(v.position())) - v.getYRot());
-        // (049 tried turning the heading a degree and a half a tick more than the banking does, for the circle 400
-        // blocks across in which the CI aircraft flew round its initial point; that aircraft went into the ground short
-        // of the runway, so it is left to its own turn until the landing is worked out)
+        // banked, Superb Warfare's aircraft turned well under a degree a tick at landing speeds (a circle 400 blocks
+        // across: 049's CI aircraft flew round its initial point and never lined up with the runway); on the way home
+        // and in to land, well clear of the ground (25 blocks), its heading is turned a degree and a half a tick more
+        if (!v.onGround() && v.getY() - groundAt(v, v.position()) > 25) {
+            v.setYRot(v.getYRot() + Mth.clamp(yawErr * 0.15F, -1.5F, 1.5F));
+            yawErr = Mth.wrapDegrees(yawTo(point.subtract(v.position())) - v.getYRot());
+        }
         float pitchErr = wantPitch - v.getXRot();
         Sbw.mouse(v, Mth.clamp(yawErr / 10.0, -2, 2), Mth.clamp(pitchErr / 3.0, -8, 8));
         boolean[] bank = bank(v, yawErr, agl);

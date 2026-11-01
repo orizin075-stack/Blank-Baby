@@ -13,6 +13,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -283,15 +284,23 @@ public final class PilotTest {
             return;
         }
         long t = r.level.getGameTime() - r.started;
-        if (r.plane != null && t % 40 == 0 && r.plane.isAlive()) {
-            String m = r.plane.getPersistentData().getCompound("OrorPilot").getString("Mode");
+        if (r.plane != null && t % 10 == 0 && r.plane.isAlive()) {
+            net.minecraft.nbt.CompoundTag pp = r.plane.getPersistentData().getCompound("OrorPilot");
+            String m = pp.getString("Mode");
             if (m.equals("return") || m.equals("approach") || m.equals("rollout") || m.equals("taxi")) {
+                // where it is against the runway: along its line from the start (negative: on the approach side) and off it
+                net.minecraft.world.phys.Vec3 home = net.minecraft.world.phys.Vec3.atBottomCenterOf(net.minecraft.core.BlockPos.of(pp.getLong("Home")));
+                net.minecraft.world.phys.Vec3 f = net.minecraft.world.phys.Vec3.directionFromRotation(0, pp.getFloat("Heading"));
+                net.minecraft.world.phys.Vec3 rel = r.plane.position().subtract(home);
+                double along = rel.x * f.x + rel.z * f.z, off = rel.x * -f.z + rel.z * f.x;
+                Object roll = Sbw.call(r.plane, "getRoll");
                 LOG.info(String.format(Locale.ROOT, "PLANE-TRACK {\"t\":%d,\"mode\":\"%s%s\",\"x\":%.0f,\"y\":%.1f,\"z\":%.0f,\"ground\":%d,"
-                        + "\"speed\":%.2f,\"vy\":%.2f,\"pitch\":%.1f,\"health\":%.2f}", t, m,
-                    r.plane.getPersistentData().getCompound("OrorPilot").getBoolean("FinalLeg") ? ":final-leg" : "", r.plane.getX() - r.origin.getX(), r.plane.getY(),
+                        + "\"speed\":%.2f,\"vy\":%.2f,\"pitch\":%.1f,\"yaw\":%.1f,\"roll\":%s,\"along\":%.0f,\"off\":%.0f,\"health\":%.2f}", t, m,
+                    pp.getBoolean("FinalLeg") ? ":final-leg" : "", r.plane.getX() - r.origin.getX(), r.plane.getY(),
                     r.plane.getZ() - r.origin.getZ(), r.level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(r.plane.getX()),
                         (int) Math.floor(r.plane.getZ())), r.plane.getDeltaMovement().length(), r.plane.getDeltaMovement().y, r.plane.getXRot(),
-                    Sbw.health(r.plane)));
+                    Mth.wrapDegrees(r.plane.getYRot() - pp.getFloat("Heading")), roll instanceof Number n ? String.format(Locale.ROOT, "%.1f", n.floatValue()) : "0",
+                    along, off, Sbw.health(r.plane)));
             }
         }
         if (r.plane != null) {
