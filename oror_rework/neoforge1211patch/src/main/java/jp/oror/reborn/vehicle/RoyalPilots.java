@@ -471,12 +471,16 @@ public final class RoyalPilots {
                         high = Math.max(high, groundAt(v, v.position().add(way.scale(d))));
                     }
                 }
-                double alt = Math.max(runwayY + 28, high + 30);
-                steerSpeed(v, to, alt, speed < 1.8, speed > 2.6, 99);
                 Vec3 side = new Vec3(-f.z, 0, f.x);
                 double offLine = Math.abs(v.position().subtract(home).dot(side));
                 float headingErr = Mth.wrapDegrees(v.getYRot() - heading);
                 boolean lined = offLine < 40 && Math.abs(headingErr) < 45;
+                // on the final leg, lined up, the ground under the line counts; anywhere else on the way, and in the
+                // turn at the initial point, the highest ground all round: the turn swings out wide of the straight
+                // line to the gate (049's CI aircraft, banked round at the initial point, struck a hillside 18 blocks
+                // higher than the line's ground). Slower than on patrol, so that the turn is tighter.
+                double alt = leg && lined ? Math.max(runwayY + 28, high + 30) : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
+                steerSpeed(v, to, alt, speed < 1.6, speed > 2.2, 99);
                 double pastGate = v.position().subtract(gate).dot(f);
                 if (target != null) {
                     mode = "patrol";
@@ -735,6 +739,23 @@ public final class RoyalPilots {
             }
         }
         return best;
+    }
+
+    /** The highest ground all round (sixteen bearings out to 150 blocks), looked at once a second. */
+    private static int areaHigh(Entity v, CompoundTag p) {
+        long now = v.level().getGameTime();
+        if (!p.contains("AreaHigh") || now - p.getLong("AreaAt") > 20) {
+            int high = groundAt(v, v.position());
+            for (int b = 0; b < 16; b++) {
+                Vec3 bearing = Vec3.directionFromRotation(0, b * 22.5F);
+                for (int d = 25; d <= 150; d += 25) {
+                    high = Math.max(high, groundAt(v, v.position().add(bearing.scale(d))));
+                }
+            }
+            p.putInt("AreaHigh", high);
+            p.putLong("AreaAt", now);
+        }
+        return p.getInt("AreaHigh");
     }
 
     /** Room to pull out of a run at the target: no ground beyond it (120 blocks on) higher than 25 above it. */
