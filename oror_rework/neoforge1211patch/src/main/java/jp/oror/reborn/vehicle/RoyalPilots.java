@@ -530,6 +530,12 @@ public final class RoyalPilots {
                 // put down 33, then 96 blocks short of its runway)
                 boolean low = v.getY() < runwayY + 1.5 + Math.max(0, along) * GLIDE - 2;
                 boolean slow = speed > 1.9 && !low, fast = speed < 1.5 || low;
+                if (v.getY() - groundAt(v, v.position()) < 6) {
+                    // the flare: power off for the touch-down (at 2.15 the CI aircraft came down hard enough to lose a third
+                    // of its health), the nose held up by the pitch rule near the ground
+                    fast = false;
+                    slow = true;
+                }
                 // the ground under the glide path (the runway's extended centre line, from here to the touch-down point):
                 // where it rises into the path, go round again. It was taken along the aircraft's heading while it was
                 // still turning in, over the hills beside the line, and the approach was given up every tick.
@@ -561,6 +567,18 @@ public final class RoyalPilots {
             case "rollout" -> {
                 Sbw.keys(v, false, true, false, false, false, true);
                 Sbw.mouse(v, 0, 0);
+                if (v.onGround()) {
+                    // down the runway: the heading eased back to the runway's and toward its centre line, the sideways
+                    // slide taken out (050's CI aircraft rolled out 17 blocks off the line, off a runway 15 wide)
+                    Vec3 side = new Vec3(-f.z, 0, f.x);
+                    double off = v.position().subtract(home).dot(side);
+                    float want = heading + (float) Mth.clamp(-off * 2, -10, 10);
+                    v.setYRot(v.getYRot() + Mth.clamp(Mth.wrapDegrees(want - v.getYRot()), -3F, 3F));
+                    Vec3 m = v.getDeltaMovement();
+                    double fwd = m.x * f.x + m.z * f.z;
+                    v.setDeltaMovement(f.x * fwd - side.x * off * 0.02, m.y, f.z * fwd - side.z * off * 0.02);
+                    v.hasImpulse = true;
+                }
                 if (speed < 0.05 || now - p.getLong("Since") > 400) {
                     mode = p.getBoolean("NoRunway") ? "parked" : "taxi";
                     p.putLong("Since", now);
