@@ -1,45 +1,49 @@
-264 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-365 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-425 press selectWorld.create
-426 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-526 screenshot popup_ConfirmScreen
-526 press gui.yes
-527 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-561 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-587 screen none in LOADING
-588 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-688 screenshot popup_
-689 screen none in PLAY
-734 stage at 16 189 1
-888 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 0 minecraft:air, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:flint_and_steel]
-948 screenshot 10_royals
-958 swing row 0: 8
-961 screenshot 11_royals_swing
-1048 screenshot 12_villagers
-1058 swing row 10: 6
-1061 screenshot 13_villagers_swing
-1069 swing row 10: 6
-1070 screenshot 13b_villagers_swing_early
-1148 screenshot 14_king_close
-1218 screenshot 15_general_close
-1288 screenshot 16_imperial_close
-1358 screenshot 17_royals_back
-1428 screenshot 18_trader_close
-1450 throne -784, 153, -128
-3248 screenshot 20_throne_room
-3288 king at -783.5 153.0 -127.5 (throne -784, 153, -128, 0.03 blocks)
-5088 screenshot 21_throne_room_later
-5108 king at -783.6 153.0 -127.7 (throne -784, 153, -128, 0.24 blocks)
-5108 over the capital at -784 -96
-6888 screenshot 22_capital_aerial
-6988 over the capital at -1049 -335
-8488 screenshot 23_helipad
-8498 over the capital at -1034 -473
-10088 screenshot 24_airbase
-10098 at the capital -1049 91 -346
-11688 screenshot 25_helipad_supply
-11699 at the capital -1173 84 -256
-13288 screenshot 26_hangar_supply
-13298 at the capital -714 196 14
-14888 screenshot 27_palace_roofs
-14898 finished: complete
+298 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+399 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+459 press selectWorld.create
+460 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+560 screenshot popup_ConfirmScreen
+560 press gui.yes
+561 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+599 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+625 screen none in LOADING
+626 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+726 screenshot popup_
+727 screen none in PLAY
+770 stage at -9 118 -8
+926 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 0 minecraft:air]
+986 screenshot 10_royals
+996 swing row 0: 8
+999 screenshot 11_royals_swing
+1086 screenshot 12_villagers
+1097 swing row 10: 6
+1099 screenshot 13_villagers_swing
+1108 screenshot 13b_villagers_swing_early
+1109 swing row 10: 6
+1186 screenshot 14_king_close
+1256 screenshot 15_general_close
+1326 screenshot 16_imperial_close
+1396 screenshot 17_royals_back
+1466 screenshot 18_trader_close
+1489 throne 800, 152, -144
+3286 screenshot 20_throne_room
+3328 king at 800.4 152.0 -143.7 (throne 800, 152, -144, 0.21 blocks)
+5126 screenshot 21_throne_room_later
+5147 king at 800.5 152.0 -143.5 (throne 800, 152, -144, 0.01 blocks)
+5147 over the capital at 800 -112
+6926 screenshot 22_capital_aerial
+7032 over the capital at 535 -351
+8526 screenshot 23_helipad
+8537 over the capital at 550 -489
+10126 screenshot 24_airbase
+10136 at the capital 535 90 -362
+11726 screenshot 25_helipad_supply
+11736 at the capital 411 83 -272
+13326 screenshot 26_hangar_supply
+13336 at the capital 870 195 -2
+14926 screenshot 27_palace_roofs
+15035 over the capital at 1161 -390
+16526 screenshot 28_airbase_east
+16536 at the capital 800 87 -316
+18126 screenshot 29_road_fountain
+18136 finished: complete
