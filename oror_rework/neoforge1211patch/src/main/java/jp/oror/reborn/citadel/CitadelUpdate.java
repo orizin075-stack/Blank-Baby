@@ -72,7 +72,7 @@ import org.slf4j.LoggerFactory;
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class CitadelUpdate {
     /** The template's revision: worlds updated to an earlier one are updated again. */
-    public static final int REVISION = 49;
+    public static final int REVISION = 50;
     private static final Logger LOG = LoggerFactory.getLogger("OROR Citadel");
     private static final String FILE = "/data/oror_supreme_bosses/citadel/v12/update.bin";
     /** Blocks looked at a tick. */

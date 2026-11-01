@@ -150,7 +150,7 @@ def main():
                 else:
                     bits = np.packbits(changed[sy], bitorder='little')
                     body += struct.pack('>bb', sy, 1) + bits.tobytes()
-    rev = int(os.environ.get('REVISION', '49'))
+    rev = int(os.environ.get('REVISION', '50'))
     raw = b'OCU1' + struct.pack('>ii', rev, chunks) + bytes(body)
     data = zlib.compress(raw, 9)
     open(out, 'wb').write(data)
