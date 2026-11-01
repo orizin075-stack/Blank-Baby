@@ -479,8 +479,12 @@ public final class RoyalPilots {
                 // turn at the initial point, the highest ground all round: the turn swings out wide of the straight
                 // line to the gate (049's CI aircraft, banked round at the initial point, struck a hillside 18 blocks
                 // higher than the line's ground). Slower than on patrol, so that the turn is tighter.
-                double alt = leg && lined ? Math.max(runwayY + 28, high + 30) : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
-                steerSpeed(v, to, alt, speed < 1.6, speed > 2.2, 99);
+                // lined up it comes down toward the gate's height (the glide there is 19 over the runway, a go-around at
+                // more than 35 over it), never nearer than 20 to the ground within 40 blocks (049's CI aircraft, down on
+                // the line's ground, put a wing into the hill beside it)
+                double alt = leg && lined ? Math.max(runwayY + 24, Math.max(high, nearHigh(v)) + 20)
+                    : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
+                steerSpeed(v, to, alt, speed < 1.6, speed > 2.2, 99, leg && lined ? 10F : 6F);
                 double pastGate = v.position().subtract(gate).dot(f);
                 if (target != null) {
                     mode = "patrol";
@@ -510,12 +514,13 @@ public final class RoyalPilots {
                 for (double d = 10; d < Math.min(along, 200); d += 10) {
                     blocked |= groundAt(v, touch.subtract(f.scale(d))) > Math.max(runwayY + 2, runwayY + 1.5 + d * GLIDE - 3);
                 }
-                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()));
+                // above the glide it may dive more steeply to it (at six degrees it reached the threshold still high)
+                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 6 ? 10F : 6F);
                 if (v.onGround()) {
                     mode = "rollout";
                     p.putLong("Since", now);
                     p.putBoolean("Landed", true);
-                } else if (blocked || along < -120 || v.getY() > glide + 25 || now - p.getLong("Since") > 900) {
+                } else if (blocked || along < -120 || v.getY() > glide + 35 || now - p.getLong("Since") > 900) {
                     mode = "return";
                     p.putLong("Since", now);
                     p.remove("FinalLeg");
@@ -741,6 +746,16 @@ public final class RoyalPilots {
         return best;
     }
 
+    /** The highest ground close by: under the aircraft and on eight bearings 20 and 40 blocks out. */
+    private static int nearHigh(Entity v) {
+        int high = groundAt(v, v.position());
+        for (int b = 0; b < 8; b++) {
+            Vec3 bearing = Vec3.directionFromRotation(0, b * 45F);
+            high = Math.max(high, Math.max(groundAt(v, v.position().add(bearing.scale(20))), groundAt(v, v.position().add(bearing.scale(40)))));
+        }
+        return high;
+    }
+
     /** The highest ground all round (sixteen bearings out to 150 blocks), looked at once a second. */
     private static int areaHigh(Entity v, CompoundTag p) {
         long now = v.level().getGameTime();
@@ -823,7 +838,11 @@ public final class RoyalPilots {
      * the ground short of the runway), held level in the last eight blocks and flared nose up in the last three.
      */
     private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower, double agl) {
-        float wantPitch = (float) Mth.clamp(-(altitude - v.getY()) * 0.8, -12, 6);
+        steerSpeed(v, point, altitude, faster, slower, agl, 6F);
+    }
+
+    private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower, double agl, float dive) {
+        float wantPitch = (float) Mth.clamp(-(altitude - v.getY()) * 0.8, -12, dive);
         if (agl < 8) {
             wantPitch = Math.min(wantPitch, agl < 3 ? -4F : 1F);
         }
