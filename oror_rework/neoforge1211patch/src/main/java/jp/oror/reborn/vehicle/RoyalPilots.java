@@ -469,6 +469,20 @@ public final class RoyalPilots {
                 }
             }
             case "return" -> {
+                if (v.onGround() && speed < 0.3) {
+                    // down in a field on the way home (a go-around too slow to climb): the ground crew tow it home
+                    if (p.getLong("GroundedAt") == 0) {
+                        p.putLong("GroundedAt", now);
+                    } else if (now - p.getLong("GroundedAt") > 40) {
+                        mode = "taxi";
+                        p.putLong("Since", now);
+                        p.remove("GroundedAt");
+                        p.remove("FinalLeg");
+                        p.putBoolean("Landed", true);
+                    }
+                } else {
+                    p.remove("GroundedAt");
+                }
                 // home as aircraft come in to land: first to a point 400 blocks out on the runway's extended centre
                 // line, then along the line to the gate 150 blocks before the threshold, so that it reaches the gate
                 // lined up with the runway (flying straight at the gate it came in from wherever it was, never lined
@@ -554,7 +568,8 @@ public final class RoyalPilots {
                 // above the glide it may dive more steeply to it (at six degrees it reached the threshold still high)
                 // (on the glide the dive is not held back for speed: so held, 050's second CI aircraft crossed its
                 // touch-down point 15 blocks up and went round until its time ran out)
-                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 6 ? 8F : 4F, false);
+                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 10 ? 12F : v.getY() > glide + 6 ? 8F : 4F,
+                    false);
                 if (v.onGround()) {
                     mode = "rollout";
                     p.putLong("Since", now);
