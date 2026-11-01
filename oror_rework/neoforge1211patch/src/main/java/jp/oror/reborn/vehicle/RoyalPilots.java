@@ -538,7 +538,9 @@ public final class RoyalPilots {
                     blocked |= groundAt(v, touch.subtract(f.scale(d))) > Math.max(runwayY + 2, runwayY + 1.5 + d * GLIDE - 3);
                 }
                 // above the glide it may dive more steeply to it (at six degrees it reached the threshold still high)
-                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 6 ? 10F : 6F);
+                // (on the glide the dive is not held back for speed: so held, 050's second CI aircraft crossed its
+                // touch-down point 15 blocks up and went round until its time ran out)
+                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 6 ? 10F : 6F, false);
                 if (v.onGround()) {
                     mode = "rollout";
                     p.putLong("Since", now);
@@ -865,11 +867,16 @@ public final class RoyalPilots {
     }
 
     private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower, double agl, float dive) {
+        steerSpeed(v, point, altitude, faster, slower, agl, dive, true);
+    }
+
+    /** bleed: too fast, hold the height (on the way home); on the glide the height comes first and only the power is cut. */
+    private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower, double agl, float dive, boolean bleed) {
         float wantPitch = (float) Mth.clamp(-(altitude - v.getY()) * 0.8, -12, dive);
         if (agl < 8) {
             wantPitch = Math.min(wantPitch, agl < 3 ? -4F : 1F);
         }
-        if (slower) {
+        if (slower && bleed) {
             // too fast: no dive (the descent home only gathered speed: 4 blocks a tick for 2.2 asked, and the CI aircraft
             // came over the runway 27 blocks up at three times its landing speed); the nose a little up to bleed it off
             wantPitch = Math.min(wantPitch, -1F);
