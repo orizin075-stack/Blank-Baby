@@ -171,44 +171,44 @@ public final class Look {
             case 740 -> shot(mc, "18_trader_close");
             case 742 -> arms(mc);
             case 744 -> view(mc, 0, 0, 0, 0F, 8F);
-            case 752 -> shot(mc, "19_arms");
-            case 753 -> creatures(mc);
-            case 754 -> view(mc, 0, 3, -9, 0F, 10F);
-            case 759 -> shot(mc, "19b_creatures");
-            case 760 -> throne(mc);
-            case 2560 -> shot(mc, "20_throne_room");
-            case 2600 -> king(mc);
-            case 4400 -> shot(mc, "21_throne_room_later");
-            case 4420 -> {
+            case 860 -> shot(mc, "19_arms");
+            case 862 -> creatures(mc);
+            case 864 -> view(mc, 0, 3, -9, 0F, 10F);
+            case 980 -> shot(mc, "19b_creatures");
+            case 1000 -> throne(mc);
+            case 2800 -> shot(mc, "20_throne_room");
+            case 2840 -> king(mc);
+            case 4640 -> shot(mc, "21_throne_room_later");
+            case 4660 -> {
                 king(mc);
                 overCapital(mc, 0, 0, 150);
             }
-            case 6200 -> shot(mc, "22_capital_aerial");
-            case 6210 -> overCapital(mc, -265, -239, 40);
-            case 7800 -> shot(mc, "23_helipad");
-            case 7810 -> overCapital(mc, -250, -377, 45);
-            case 9400 -> shot(mc, "24_airbase");
+            case 6440 -> shot(mc, "22_capital_aerial");
+            case 6450 -> overCapital(mc, -265, -239, 40);
+            case 8040 -> shot(mc, "23_helipad");
+            case 8050 -> overCapital(mc, -250, -377, 45);
+            case 9640 -> shot(mc, "24_airbase");
             // 048: the posts' supply, a helipad's power plant and depot, and a hangar's bays with theirs
-            case 9410 -> atCapital(mc, -265, 10, -250, 0F, 48F);
-            case 11000 -> shot(mc, "25_helipad_supply");
+            case 9650 -> atCapital(mc, -265, 10, -250, 0F, 48F);
+            case 11240 -> shot(mc, "25_helipad_supply");
             // 049: the west road's hangar, from the road in front of its apron
-            case 11010 -> atCapital(mc, -405, 5, -4, 180F, 14F);
-            case 12600 -> shot(mc, "26_hangar_supply");
+            case 11250 -> atCapital(mc, -405, 5, -4, 180F, 14F);
+            case 12840 -> shot(mc, "26_hangar_supply");
             // the palace's roofs from the south-east, high up (the two light wells roofed over in 048)
-            case 12610 -> atCapital(mc, 70, 115, 110, 150F, 32F);
-            case 14200 -> shot(mc, "27_palace_roofs");
+            case 12850 -> atCapital(mc, 70, 115, 110, 150F, 32F);
+            case 14440 -> shot(mc, "27_palace_roofs");
             // 049: the second runway along the east band of the farm belt, from above
-            case 14210 -> overCapital(mc, 361, -278, 70);
-            case 15800 -> shot(mc, "28_airbase_east");
+            case 14450 -> overCapital(mc, 361, -278, 70);
+            case 16040 -> shot(mc, "28_airbase_east");
             // a high road's fountain with its new rim (its water ran out over the street), looking north from the road
-            case 15810 -> atCapital(mc, 0, 7, -204, 180F, 28F);
-            case 17400 -> shot(mc, "29_road_fountain");
+            case 16050 -> atCapital(mc, 0, 7, -204, 180F, 28F);
+            case 17640 -> shot(mc, "29_road_fountain");
             // the sheep ranch's barn (its gables were open) and the east fortress's hall (its roof hung over its walls)
-            case 17410 -> atCapital(mc, 383, 22, -213, -135F, 30F);
-            case 19000 -> shot(mc, "30_ranch_barn");
-            case 19010 -> atCapital(mc, 505, 40, 55, -135F, 30F);
-            case 20600 -> shot(mc, "31_fortress_east");
-            case 20610 -> finish(mc, "complete");
+            case 17650 -> atCapital(mc, 383, 22, -213, -135F, 30F);
+            case 19240 -> shot(mc, "30_ranch_barn");
+            case 19250 -> atCapital(mc, 505, 40, 55, -135F, 30F);
+            case 20840 -> shot(mc, "31_fortress_east");
+            case 20850 -> finish(mc, "complete");
             default -> {
             }
         }
