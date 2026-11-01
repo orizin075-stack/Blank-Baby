@@ -504,7 +504,8 @@ public final class RoyalPilots {
                     : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
                 // lined up, slowed toward the landing speed already; the turns judged by the real height above the ground
                 // (they were told 99 and banked hard at nine blocks)
-                steerSpeed(v, to, alt, speed < (leg && lined ? 1.2 : 1.6), speed > (leg && lined ? 1.6 : 2.2),
+                // (lined up 1.5 to 2.0, as on the glide: at 1.15 the CI aircraft sank into the trees beside its line)
+                steerSpeed(v, to, alt, speed < (leg && lined ? 1.5 : 1.6), speed > (leg && lined ? 2.0 : 2.2),
                     v.getY() - groundAt(v, v.position()), leg && lined ? 10F : 6F);
                 double pastGate = v.position().subtract(gate).dot(f);
                 if (target != null) {
