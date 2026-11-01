@@ -148,7 +148,7 @@ jobs:
           { grep -E 'CITADEL-SELFTEST|CITADEL-UPDATE|WAR-|FLIGHT-|SUPPLY-|VILLAGE-FLIGHT|PLANE-TRACK|CI-DONE|OROR (Citadel|War|Vehicles|CI|Village)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
           # every line of the pilots' flights (the console's tail keeps only the end of the run)
-          grep -E 'PLANE-TRACK|HELI-TRACK|VEHICLE-|SUPPLY-|FLIGHT-|AA-' "$RUNNER_TEMP/server/console.log" > out/flight_log.txt || true
+          grep -E 'PLANE-TRACK|PLANE-HURT|HELI-TRACK|VEHICLE-|SUPPLY-|FLIGHT-|AA-' "$RUNNER_TEMP/server/console.log" > out/flight_log.txt || true
           # where the server thread spent the battle (JFR samples between the war's start and its result)
           J="$RUNNER_TEMP/server/war.jfr"; [ -s "$J" ] || J="$RUNNER_TEMP/server/rec.jfr"
           timeout 600 python3 -I tools/jfr_hot.py "$J" "$RUNNER_TEMP/server/console.log" > out/war_profile.txt 2>&1 || true
