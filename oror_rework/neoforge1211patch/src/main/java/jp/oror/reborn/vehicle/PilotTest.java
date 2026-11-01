@@ -39,6 +39,10 @@ public final class PilotTest {
     private static Run run;
     /** Set when a test has ended and its FLIGHT-RESULT is logged. */
     public static volatile boolean resultLogged;
+    /** The last test's runway (its west end, at the runway's level), for the landing series that follows it. */
+    static volatile BlockPos stripOrigin;
+    static volatile int stripY;
+    static volatile ServerLevel stripLevel;
 
     private static final class Run {
         float planeHealth = 1F;
@@ -129,6 +133,9 @@ public final class PilotTest {
             }
         }
         Vec3 start = new Vec3(origin.getX() + 0.5, y, origin.getZ() + 0.5);
+        stripOrigin = origin;
+        stripY = y;
+        stripLevel = level;
         r.plane = RoyalPilots.deploy(level, start, -90F, Sbw.has("a_10a") ? "a_10a" : "j_16", 1, null);
         Vec3 tankAt = start.add(0, 0, 30);
         r.tank = RoyalPilots.deploy(level, tankAt, -90F, "m_1a_2", 2, null);
