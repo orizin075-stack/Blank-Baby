@@ -548,7 +548,10 @@ public final class RoyalPilots {
                     mode = "rollout";
                     p.putLong("Since", now);
                     p.putBoolean("Landed", true);
-                } else if (blocked || along < -30 || v.getY() > glide + 35 || now - p.getLong("Since") > 900) {
+                } else if (blocked || along < -30 && v.getY() > runwayY + 6 || along < -140 || v.getY() > glide + 35
+                    || now - p.getLong("Since") > 900) {
+                    // past the touch-down point it goes round only if still well up, or 180 blocks into the runway: just
+                    // over it, it lands long (050's fourth CI aircraft went round 1.4 blocks over the runway)
                     mode = "return";
                     p.putLong("Since", now);
                     p.remove("FinalLeg");
