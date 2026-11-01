@@ -31,6 +31,11 @@ public final class ForbiddenArms {
     }
 
     public static boolean kingslayer(ItemStack stack) {
+        return KingslayerArms.is(stack) || marked(stack);
+    }
+
+    /** Carrying the mark in its custom data (the vault's king-slayers before 051 were vanilla arms so marked). */
+    public static boolean marked(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         return data != null && data.copyTag().getBoolean(KINGSLAYER);
     }

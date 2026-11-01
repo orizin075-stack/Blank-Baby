@@ -1,0 +1,42 @@
+{
+ "neoforge:conditions": [
+  {
+   "type": "neoforge:mod_loaded",
+   "modid": "superbwarfare"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "category": "equipment",
+ "pattern": [
+  "CKC",
+  "URA",
+  "PTP"
+ ],
+ "key": {
+  "C": {
+   "item": "superbwarfare:crystal_barrel"
+  },
+  "K": {
+   "item": "minecraft:beacon"
+  },
+  "U": {
+   "item": "superbwarfare:ancient_cpu"
+  },
+  "R": {
+   "item": "superbwarfare:legendary_material_pack"
+  },
+  "A": {
+   "item": "superbwarfare:crystal_action"
+  },
+  "P": {
+   "item": "superbwarfare:large_battery_pack"
+  },
+  "T": {
+   "item": "superbwarfare:crystal_trigger"
+  }
+ },
+ "result": {
+  "id": "oror_supreme_bosses:laser_gun",
+  "count": 1
+ }
+}

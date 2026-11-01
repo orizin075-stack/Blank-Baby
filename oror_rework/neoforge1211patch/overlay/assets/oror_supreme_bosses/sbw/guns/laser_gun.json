@@ -1,0 +1,24 @@
+{
+ "Animation": {
+  "Idle": "animation.laser_gun.idle",
+  "Fire": "animation.laser_gun.fire",
+  "Reload": "animation.laser_gun.reload",
+  "Run": "animation.laser_gun.run"
+ },
+ "Model": {
+  "Animation": "oror_supreme_bosses:animations/laser_gun.animation.json",
+  "Model": "oror_supreme_bosses:geo/laser_gun.geo.json",
+  "Texture": "oror_supreme_bosses:textures/item/laser_gun.png",
+  "LODModel": "oror_supreme_bosses:geo/laser_gun.geo.json",
+  "LODTexture": "oror_supreme_bosses:textures/item/laser_gun.png"
+ },
+ "Icon": "oror_supreme_bosses:textures/gun_icon/laser_gun_icon.png",
+ "FlarePosition": [
+  0,
+  0,
+  1.6375
+ ],
+ "FlareSize": 0.9,
+ "EnergyBarColor": "0xFF2A4A",
+ "HideCrosshairWhenZoom": false
+}

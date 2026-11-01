@@ -38,7 +38,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 public final class RoyalPilots {
     public static final String CREWED = "oror_crewed";
     public static final String KEY = "OrorPilot";
-    private static final double STANDOFF = 26, TOO_CLOSE = 10, CRUISE = 45, GLIDE = 0.1, GATE = 150;
+    private static final double STANDOFF = 26, TOO_CLOSE = 10, CRUISE = 45, GLIDE = 0.1, GATE = 200;
 
     private RoyalPilots() {
     }
@@ -488,7 +488,7 @@ public final class RoyalPilots {
                 // lined up with the runway (flying straight at the gate it came in from wherever it was, never lined
                 // up, and circled until it struck a hill: 049's CI)
                 Vec3 gate = home.subtract(f.scale(GATE));
-                Vec3 ip = home.subtract(f.scale(GATE + 250));
+                Vec3 ip = home.subtract(f.scale(GATE + 350));
                 Vec3 side = new Vec3(-f.z, 0, f.x);
                 double offLine = Math.abs(v.position().subtract(home).dot(side));
                 double alongPos = v.position().subtract(home).dot(f);
@@ -529,10 +529,12 @@ public final class RoyalPilots {
                 // lined up, slowed toward the landing speed already; the turns judged by the real height above the ground
                 // (they were told 99 and banked hard at nine blocks)
                 // (lined up 1.5 to 2.0, as on the glide: at 1.15 the CI aircraft sank into the trees beside its line)
-                // the power not let down below 0.45 there (0.7 elsewhere on the way home: at 0.7 it came down its final
-                // leg at 2.6, a third over its speed, and on to the glide too fast to come down)
+                // the power not let down below 0.3 there (0.7 elsewhere on the way home: at 0.7 it came down its final
+                // leg at 2.6, a third over its speed, and on to the glide too fast to come down), and too fast it comes
+                // down all the same (held level to slow first, 051's CI aircraft reached the gate 40 to 60 up); the gate
+                // 200 out and the initial point 550, for a straight final leg long enough to come down and slow down
                 steerSpeed(v, to, alt, speed < (leg && lined ? 1.5 : 1.6), speed > (leg && lined ? 2.0 : 2.2),
-                    v.getY() - groundAt(v, v.position()), leg && lined ? 10F : 6F, true, leg && lined ? 0.45F : 0.7F);
+                    v.getY() - groundAt(v, v.position()), leg && lined ? 10F : 6F, !(leg && lined), leg && lined ? 0.3F : 0.7F);
                 double pastGate = alongPos + GATE;
                 if (target != null) {
                     mode = "patrol";
@@ -988,7 +990,7 @@ public final class RoyalPilots {
         // (051) the power never let down below 0.7 on the way home (1.0 in a bank): the throttle answers slowly, and let
         // down to 0.37 in the descent onto the final leg it was still at 1.0 when 051's CI aircraft, slowed to 1.4 in
         // the next turn, sank into a hill. Not on the glide, where the power is the speed.
-        if (bleed && !v.onGround() && agl > 8) {
+        if (floor > 0 && !v.onGround() && agl > 8) {
             float roll = Sbw.call(v, "getRoll") instanceof Number n ? Math.abs(n.floatValue()) : 0F;
             if (Sbw.power(v) < (roll > 20 ? Math.max(floor, 1.0F) : floor)) {
                 faster = true;

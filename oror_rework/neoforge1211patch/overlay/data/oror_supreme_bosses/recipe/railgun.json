@@ -1,0 +1,42 @@
+{
+ "neoforge:conditions": [
+  {
+   "type": "neoforge:mod_loaded",
+   "modid": "superbwarfare"
+  }
+ ],
+ "type": "minecraft:crafting_shaped",
+ "category": "equipment",
+ "pattern": [
+  "BSB",
+  "ALT",
+  "PDP"
+ ],
+ "key": {
+  "B": {
+   "item": "superbwarfare:netherite_barrel"
+  },
+  "S": {
+   "item": "minecraft:nether_star"
+  },
+  "A": {
+   "item": "superbwarfare:netherite_action"
+  },
+  "L": {
+   "item": "superbwarfare:legendary_material_pack"
+  },
+  "T": {
+   "item": "superbwarfare:netherite_trigger"
+  },
+  "P": {
+   "item": "superbwarfare:large_battery_pack"
+  },
+  "D": {
+   "item": "oror_supreme_bosses:dragon_core"
+  }
+ },
+ "result": {
+  "id": "oror_supreme_bosses:railgun",
+  "count": 1
+ }
+}
