@@ -58,6 +58,7 @@ public final class CiDriver {
                 case "citadelupdate" -> "oror citadel update test";
                 case "war" -> "oror war start 100 test";
                 case "pilots" -> "oror pilots test";
+                case "aa" -> "oror aa test";
                 case "villageflight" -> "oror villageflight test";
                 default -> null;
             };
@@ -82,6 +83,7 @@ public final class CiDriver {
             case "citadelupdate" -> jp.oror.reborn.citadel.CitadelUpdate.testDone;
             case "war" -> HundredWar.resultLogged;
             case "pilots" -> PilotTest.resultLogged;
+            case "aa" -> jp.oror.reborn.vehicle.AntiAirTest.resultLogged;
             case "villageflight" -> jp.oror.reborn.VillageFlightTest.resultLogged;
             default -> true;
         };

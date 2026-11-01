@@ -161,9 +161,15 @@ public final class RoyalPilots {
      * beyond his own follow range, the vehicle keeps it while it lives, stays within reach and was seen in the last
      * twenty seconds), else (every second) the nearest hostile the royals would fight.
      */
+    /** Close-in guns against what flies: they look for it high up and take it before anything on the ground. */
+    static final java.util.Set<String> ANTI_AIR = java.util.Set.of("hpj_11");
+
     private static LivingEntity target(Entity v, CompoundTag p) {
         long now = v.level().getGameTime();
         boolean air = "AIRCRAFT".equals(Sbw.engine(v));
+        String engine = Sbw.engine(v);
+        boolean aa = ANTI_AIR.contains(Supply.kind(v));
+        boolean still = engine.equals("FIXED") || engine.equals("EMPTY") || engine.isEmpty();
         for (Entity rider : v.getPassengers()) {
             if (rider instanceof Mob m && m.getTarget() != null && m.getTarget().isAlive() && !m.isAlliedTo(m.getTarget())) {
                 p.putUUID("Target", m.getTarget().getUUID());
@@ -173,7 +179,7 @@ public final class RoyalPilots {
         }
         if (p.hasUUID("Target") && v.level() instanceof ServerLevel level && now - p.getLong("TargetSeen") < 400
             && level.getEntity(p.getUUID("Target")) instanceof LivingEntity kept && kept.isAlive()
-            && kept.distanceToSqr(v) < (air ? 220 * 220 : 96 * 96)) {
+            && kept.distanceToSqr(v) < (air ? 220 * 220 : aa ? 160 * 160 : 96 * 96)) {
             if (v.tickCount % 20 == 7) {
                 p.putLong("TargetSeen", now);
             }
@@ -183,12 +189,18 @@ public final class RoyalPilots {
         if (v.tickCount % 20 != 7) {
             return null;
         }
-        List<LivingEntity> near = v.level().getEntitiesOfClass(LivingEntity.class, v.getBoundingBox().inflate(air ? 160 : 64, air ? 96 : 24, air ? 160 : 64),
+        // (050) the guns on the walls looked only 24 blocks up and down, so nothing that flew was ever fired on: a
+        // turret looks 64 up and down, a close-in gun 128 all round
+        double reach = air ? 160 : aa ? 128 : still ? 96 : 64, high = air ? 96 : aa ? 128 : still ? 64 : 24;
+        List<LivingEntity> near = v.level().getEntitiesOfClass(LivingEntity.class, v.getBoundingBox().inflate(reach, high, reach),
             l -> l.isAlive() && RoyalSovereign.hostile(l) && !(l.getVehicle() != null && l.getVehicle() == v));
         LivingEntity best = null;
         double bestD = Double.MAX_VALUE;
         for (LivingEntity l : near) {
             double d = l.distanceToSqr(v);
+            if (aa && flying(v, l)) {
+                d -= 1.0E7;                       // what flies first
+            }
             if (d < bestD) {
                 bestD = d;
                 best = l;
@@ -202,6 +214,12 @@ public final class RoyalPilots {
             }
         }
         return best;
+    }
+
+    /** In the air: off the ground and more than four blocks over it (or riding something that flies). */
+    static boolean flying(Entity v, LivingEntity l) {
+        Entity body = l.getRootVehicle();
+        return !body.onGround() && body.getY() - groundAt(v, body.position()) > 4;
     }
 
     /** True if nothing solid is between the top of the vehicle and the target, nor within the last two blocks of it. */

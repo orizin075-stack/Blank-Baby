@@ -464,19 +464,64 @@ def outward(x, z):
 # the turrets a soldier can sit in and work (the CI seat survey: a mortar, a rocket launcher or a laser tower has no
 # gunner's seat), by post: the wall's batteries take guns and interceptors in turn, the gate roads anti-tank missiles,
 # the casemates interceptors and field guns, the redoubts the heavy guns
-WALL_KINDS = ['mk_42', 'hpj_11', 'mle_1934', 'bl_132']
+# (050: every other wall battery manned, half of them close-in guns against what flies)
+WALL_KINDS = ['hpj_11', 'mk_42', 'hpj_11', 'mle_1934', 'hpj_11', 'bl_132']
 ROAD_KINDS = ['tow']
 CASEMATE_KINDS = ['hpj_11', 'bl_132', 'mle_1934']
 # (the Annihilator is no turret of the kingdom's: too terrible to field, it is kept in the forbidden vault)
 REDOUBT_KINDS = ['mk_42', 'mle_1934']
 
 
+TREE = ('_leaves', '_log', '_wood', 'vine', 'azalea', 'mangrove_roots', 'bee_nest', 'cocoa')
+
+
+def fell(a, edits, stats, x0, z0, w, d, margin=8):
+    """Every tree and bush with a block within margin of the rectangle, whole (trunk and crown: no half trees left
+    hanging), taken away (050, the user's report: leaves reached over the runways)."""
+    from scipy import ndimage
+    pad = margin + 8
+    bx0, bz0 = max(-640, x0 - pad), max(-640, z0 - pad)
+    bx1, bz1 = min(640, x0 + w + pad), min(640, z0 + d + pad)
+    box = a[bx0 + 640:bx1 + 640, 1:, bz0 + 640:bz1 + 640]                 # y 65 and up
+    tree = np.array([n.endswith(TREE) or any(t in n for t in ('vine', 'azalea')) for n in world.NAMES])
+    m = tree[box]
+    for (x, y, z), st in edits.items():
+        if bx0 <= x < bx1 and bz0 <= z < bz1 and 65 <= y < 65 + box.shape[1]:
+            m[x - bx0, y - 65, z - bz0] = st.split('[')[0].endswith(TREE)
+    lab, n = ndimage.label(m, structure=np.ones((3, 3, 3), bool))
+    if not n:
+        return
+    near = np.zeros(m.shape[::2], bool)
+    near[max(0, x0 - margin - bx0):x0 + w + margin - bx0, max(0, z0 - margin - bz0):z0 + d + margin - bz0] = True
+    hit = set(np.unique(lab[near[:, None, :] & m])) - {0}
+    for i in hit:
+        for x, y, z in np.argwhere(lab == i):
+            edits[(int(x) + bx0, int(y) + 65, int(z) + bz0)] = 'minecraft:air'
+            stats['military']['trees_felled_blocks'] += 1
+
+
+def aa_site(a, ok, edits, stats, posts, cx, cz, name, reach=30):
+    """A close-in gun against what flies (HPJ-11) on a concrete pad of 5 x 5 at the buildable spot nearest cx, cz."""
+    spot_ = find(ok, cx, cz, 5, 5, reach=reach, step=1)
+    if not spot_:
+        stats['military_missing'].append(name)
+        return None
+    x0, z0 = spot_
+    clear(a, edits, x0, z0, 5, 5, lambda x, z: 'minecraft:yellow_concrete' if x in (x0, x0 + 4) and z in (z0, z0 + 4)
+          else 'minecraft:light_gray_concrete')
+    fell(a, edits, stats, x0, z0, 5, 5, margin=4)
+    posts.append(dict(role='TANK', x=x0 + 2, y=65, z=z0 + 2, yaw=outward(x0 + 2, z0 + 2), post='aa', vehicle='hpj_11', seats=1, still=True))
+    stats['military']['aa_sites'] += 1
+    stats['military_at'][name] = [x0, z0, 5, 5]
+    return x0, z0
+
+
 def turrets(man):
-    """Turret posts: every third outer-wall battery (64), every gate-road crossfire point, every casemate and every
-    redoubt, each kind of post with its own turrets in turn."""
+    """Turret posts: every other outer-wall battery (96; 050: every third before), every gate-road crossfire point,
+    every casemate and every redoubt, each kind of post with its own turrets in turn."""
     out = []
     walls = sorted((e for e in man['v7_emplacements'] if e['kind'] == 'wall_battery'), key=lambda e: math.atan2(e['z'], e['x']))
-    for i, e in enumerate(walls[::3]):
+    for i, e in enumerate(walls[::2]):
         out.append(dict(role='TANK', x=e['x'], y=e['y'], z=e['z'], yaw=outward(e['x'], e['z']), post='battery',
                         vehicle=WALL_KINDS[i % len(WALL_KINDS)], seats=1, still=True))
     roads = [e for e in man['v7_emplacements'] if e['kind'] == 'road_crossfire']
@@ -549,6 +594,29 @@ def build(save, man, edits, bes, stats, town=None):
     for i, (cx, cz, opening) in enumerate(HANGARS):
         hangar(a, ok_hangar, edits, bes, stats, posts, cx, cz, opening, sets[i], 'hangar_%d' % i)
         keep_off('hangar_%d' % i, 4)
+    # the trees round the airfields, the helipads and the hangars (and over the hangars' aprons) felled whole
+    for name, (x0, z0, w, d) in list(stats['military_at'].items()):
+        fell(a, edits, stats, x0, z0, w, d, margin=12 if name.startswith('airbase') else 6)
+    # (050, the user's word: more guns and a stronger defence against what flies) a close-in gun by each end of each
+    # runway, by each helipad and each hangar, and by the four inner gates of the town
+    aa = []
+    for name, (x0, z0, w, d) in list(stats['military_at'].items()):
+        if name.startswith('airbase'):
+            along_x = w > d
+            for k, t in enumerate((0.15, 0.85)):
+                if along_x:
+                    aa.append((ok_farm, x0 + int(w * t), z0 + (d + 8 if k else -8), name + '_aa%d' % k))
+                else:
+                    aa.append((ok_farm, x0 + (w + 8 if k else -8), z0 + int(d * t), name + '_aa%d' % k))
+        elif name.startswith('helipad'):
+            aa.append((ok_town, x0 + w + 6, z0 + d // 2, name + '_aa'))
+        elif name.startswith('hangar'):
+            aa.append((ok_hangar, x0 - 8, z0 - 8, name + '_aa'))
+    for gx, gz in ((0, -225), (0, 225), (-225, 0), (225, 0)):
+        aa.append((ok_town, gx + (14 if gz else 0), gz + (14 if gx else 0), 'gate_aa_%d_%d' % (gx, gz)))
+    for ok, cx, cz, name in aa:
+        if aa_site(a, ok, edits, stats, posts, cx, cz, name):
+            keep_off(name, 2)
     posts += turrets(man)
     # a turret's post on its floor: the gate roads' crossfire points were given three blocks over their platform
     for p in posts:
