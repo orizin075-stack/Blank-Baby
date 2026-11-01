@@ -559,7 +559,14 @@ public final class RoyalPilots {
                 double glide = runwayY + 1.5 + Math.max(0, along) * GLIDE;
                 // aimed at the centre line 60 blocks ahead of where it is along it: off the line it turns back to it at once
                 // (aimed at a point beyond the touch-down, 051's CI aircraft drifted 14 off and caught a wing in the trees)
-                Vec3 aim = home.add(f.scale(v.position().subtract(home).dot(f) + 60));
+                // (051) steered back to the line by how far off it is and how fast it slides off it, both: aimed at a point
+                // on the line ahead, 051's CI aircraft overshot the line, slid 16 blocks off the other side and caught a
+                // wing in the trees beside the approach, twice
+                Vec3 sideA = new Vec3(-f.z, 0, f.x);
+                double offA = v.position().subtract(home).dot(sideA);
+                double slide = v.getDeltaMovement().dot(sideA);
+                float want = heading - (float) Mth.clamp(offA * 1.5 + slide * 15.0, -15, 15);
+                Vec3 aim = v.position().add(Vec3.directionFromRotation(0, want).scale(80));
                 // below the glide it holds its speed and climbs back to it (at 1.0 to 1.8 it sank and 050's CI aircraft
                 // put down 33, then 96 blocks short of its runway)
                 boolean low = v.getY() < runwayY + 1.5 + Math.max(0, along) * GLIDE - 2;
