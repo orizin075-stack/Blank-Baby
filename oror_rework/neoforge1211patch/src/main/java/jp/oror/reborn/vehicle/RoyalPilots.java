@@ -489,12 +489,22 @@ public final class RoyalPilots {
                 // up, and circled until it struck a hill: 049's CI)
                 Vec3 gate = home.subtract(f.scale(GATE));
                 Vec3 ip = home.subtract(f.scale(GATE + 250));
+                Vec3 side = new Vec3(-f.z, 0, f.x);
+                double offLine = Math.abs(v.position().subtract(home).dot(side));
+                double alongPos = v.position().subtract(home).dot(f);
+                float headingErr = Mth.wrapDegrees(v.getYRot() - heading);
                 boolean leg = p.getBoolean("FinalLeg");
-                if (!leg && v.position().subtract(ip).horizontalDistance() < 70) {
+                // (051) the final leg begun as soon as it is out beyond the gate far enough to line up, not only at the
+                // initial point itself
+                if (!leg && (v.position().subtract(ip).horizontalDistance() < 70 || alongPos < -(GATE + 200) && offLine < 220)) {
                     p.putBoolean("FinalLeg", true);
                     leg = true;
                 }
-                Vec3 to = leg ? gate : ip;
+                // on the final leg it follows the extended centre line: it aims at the line 100 blocks ahead of where it is
+                // along it, so it comes onto the line and along it from wherever its turn put it. (Aimed at the gate
+                // itself, 051's CI aircraft, its turn at the initial point carried 146 blocks wide, came at the gate 40
+                // degrees across the line, missed lining up and circled the gate low and slow until it struck a hill.)
+                Vec3 to = leg ? home.add(f.scale(Math.min(alongPos + 100, 0))) : ip;
                 Vec3 way = to.subtract(v.position()).multiply(1, 0, 1);
                 way = way.lengthSqr() < 1 ? f : way.normalize();
                 int high = groundAt(v, v.position());
@@ -503,29 +513,27 @@ public final class RoyalPilots {
                         high = Math.max(high, groundAt(v, v.position().add(way.scale(d))));
                     }
                 }
-                Vec3 side = new Vec3(-f.z, 0, f.x);
-                double offLine = Math.abs(v.position().subtract(home).dot(side));
-                float headingErr = Mth.wrapDegrees(v.getYRot() - heading);
                 boolean lined = offLine < 40 && Math.abs(headingErr) < 45;
                 // on the final leg, lined up, the ground under the line counts; anywhere else on the way, and in the
                 // turn at the initial point, the highest ground all round: the turn swings out wide of the straight
                 // line to the gate (049's CI aircraft, banked round at the initial point, struck a hillside 18 blocks
                 // higher than the line's ground). Slower than on patrol, so that the turn is tighter.
-                // lined up it comes down toward the gate's height (the glide there is 19 over the runway, a go-around at
-                // more than 35 over it), never nearer than 20 to the ground within 40 blocks (049's CI aircraft, down on
-                // the line's ground, put a wing into the hill beside it)
-                double alt = leg && lined ? Math.max(runwayY + 24, Math.max(high, nearHigh(v)) + 20)
+                // lined up it comes down toward 30 over the runway (the glide at the gate is 19 over it, a go-around at
+                // more than 35 over it; at 24 it flew under the 25 blocks its heading is helped round at, and turned only
+                // by banking), never nearer than 20 to the ground within 40 blocks (049's CI aircraft, down on the
+                // line's ground, put a wing into the hill beside it)
+                double alt = leg && lined ? Math.max(runwayY + 30, Math.max(high, nearHigh(v)) + 20)
                     : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
                 // lined up, slowed toward the landing speed already; the turns judged by the real height above the ground
                 // (they were told 99 and banked hard at nine blocks)
                 // (lined up 1.5 to 2.0, as on the glide: at 1.15 the CI aircraft sank into the trees beside its line)
                 steerSpeed(v, to, alt, speed < (leg && lined ? 1.5 : 1.6), speed > (leg && lined ? 2.0 : 2.2),
                     v.getY() - groundAt(v, v.position()), leg && lined ? 10F : 6F);
-                double pastGate = v.position().subtract(gate).dot(f);
+                double pastGate = alongPos + GATE;
                 if (target != null) {
                     mode = "patrol";
                     p.remove("FinalLeg");
-                } else if (leg && offLine < 15 && Math.abs(headingErr) < 20 && v.position().subtract(gate).horizontalDistance() < 80) {
+                } else if (leg && offLine < 15 && Math.abs(headingErr) < 20 && pastGate > -80 && pastGate < 40) {
                     // the glide begun only well lined up: 37 blocks off the line, 051's CI aircraft came down across it
                     // over the trees beside the cleared ground and struck them
                     mode = "approach";
@@ -533,7 +541,7 @@ public final class RoyalPilots {
                     p.remove("FinalLeg");
                 } else if (leg && pastGate > 60) {
                     // past the gate without lining up well enough: round to the initial point again
-                    p.remove("FinalLeg");          // past the gate without lining up: round to the initial point again
+                    p.remove("FinalLeg");
                 }
             }
             case "approach" -> {
@@ -932,6 +940,16 @@ public final class RoyalPilots {
                 wantPitch = Math.max(wantPitch, 3F);
             } else if (sp < 1.6) {
                 wantPitch = Math.max(wantPitch, -3F);
+            }
+        }
+        // (051) the power never let down below 0.7 on the way home (1.0 in a bank): the throttle answers slowly, and let
+        // down to 0.37 in the descent onto the final leg it was still at 1.0 when 051's CI aircraft, slowed to 1.4 in
+        // the next turn, sank into a hill. Not on the glide, where the power is the speed.
+        if (bleed && !v.onGround() && agl > 8) {
+            float roll = Sbw.call(v, "getRoll") instanceof Number n ? Math.abs(n.floatValue()) : 0F;
+            if (Sbw.power(v) < (roll > 20 ? 1.0F : 0.7F)) {
+                faster = true;
+                slower = false;
             }
         }
         if (slower && bleed) {
