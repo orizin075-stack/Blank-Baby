@@ -781,6 +781,77 @@ def fountains(save, edits, stats):
                     stats['fountain_floors'] += 1
 
 
+def detached(save, edits, stats):
+    """Blocks with nothing under or beside them all the way to the ground (049's audit, by 26-connected parts of the
+    whole kingdom, water and the light blocks aside): the generator built the buttresses of the walls a block above the
+    ground, left the crowns of trees whose trunks it had cut hanging over the fields and the moats, the upper walls of the
+    four outer fortresses 22 blocks over their floors with nothing between, platforms along the outer wall, a roof's
+    ridge over the castle's south court. A part a block or two off the ground is set down on it (the gap under it filled
+    with its own block); one higher up is taken away, and so is a tree's crown or a clod of earth wherever it hangs; in
+    the castle's ward only the large parts are set down, its small ones (lights, fittings) are left as they are."""
+    from scipy import ndimage
+    x0, x1, z0, z1, y0, y1 = -640, 640, -640, 640, 63, 200
+    a, _ = world.load(save, x0, x1, z0, z1, y0, y1)
+    for (x, y, z), st in edits.items():
+        if x0 <= x < x1 and z0 <= z < z1 and y0 <= y < y1:
+            a[x - x0, y - y0, z - z0] = world.gid(st.split('[')[0])
+    names = world.NAMES + [''] * 64
+    empty = np.array([n in ('minecraft:air', 'minecraft:cave_air', 'minecraft:light', '') for n in names])
+    natural_kind = np.array([any(t in n for t in ('leaves', '_log', 'dirt', 'grass_block', 'podzol', 'moss', 'vine', '_wood'))
+                             for n in names])
+    full = np.array([not any(t in n for t in ('stairs', 'slab', 'wall', 'fence', 'pane', 'bars', 'chain', 'lantern', 'torch', 'door',
+                                                'trapdoor', 'button', 'sign', 'banner', 'carpet', 'chest', 'barrel', 'candle', 'rod'))
+                     and n != '' for n in names])
+    solid = ~empty[a]
+    lab, n = ndimage.label(solid, structure=np.ones((3, 3, 3), bool))
+    grounded = np.zeros(n + 1, bool)
+    grounded[np.unique(lab[:, 0, :])] = True
+    objs = ndimage.find_objects(lab)
+    for i in range(1, n + 1):
+        if grounded[i] or objs[i - 1] is None:
+            continue
+        sl = objs[i - 1]
+        m = lab[sl] == i
+        cells = np.argwhere(m) + [sl[0].start, sl[1].start, sl[2].start]
+        ids = a[cells[:, 0], cells[:, 1], cells[:, 2]]
+        size = len(cells)
+        ring = max(abs(int(cells[:, 0].mean()) + x0), abs(int(cells[:, 2].mean()) + z0))
+        # the gap under its lowest cells
+        low = cells[:, 1].min()
+        gap = 99
+        for cx, cy, cz in cells[cells[:, 1] == low][:64]:
+            g, yy = 0, cy - 1
+            while yy >= 0 and empty[a[cx, yy, cz]]:
+                g, yy = g + 1, yy - 1
+            gap = min(gap, g)
+        natural = natural_kind[ids].mean() > 0.6
+        castle = ring <= 140
+        if not natural and gap <= 2:
+            if castle and size < 100:
+                continue
+            # set down: under each cell with open air below, its own block (a full one: the part's commonest) to the ground
+            fulls = [k for k in ids if full[k]]
+            base = names[np.bincount(fulls).argmax()] if fulls else 'minecraft:stone_bricks'
+            for cx, cy, cz in cells:
+                if cy == 0 or not empty[a[cx, cy - 1, cz]]:
+                    continue
+                st = names[a[cx, cy, cz]] if full[a[cx, cy, cz]] else base
+                yy = cy - 1
+                while yy >= 0 and empty[a[cx, yy, cz]] and cy - yy <= 3:
+                    edits[(int(cx) + x0, int(yy) + y0, int(cz) + z0)] = st
+                    a[cx, yy, cz] = world.gid(st)
+                    yy -= 1
+                    stats['detached_filled'] += 1
+            stats['detached_set_down'] += 1
+        elif castle and not natural and size < 30:
+            continue
+        else:
+            for cx, cy, cz in cells:
+                edits[(int(cx) + x0, int(cy) + y0, int(cz) + z0)] = 'minecraft:air'
+            stats['detached_removed'] += 1
+            stats['detached_removed_blocks'] += size
+
+
 def propagate(L, T, iters=15):
     for _ in range(iters):
         M = L.copy()
@@ -903,6 +974,9 @@ def main(save, out, report=None):
     forces = military.build(save, man, edits, bes, stats, town)
     print('military', dict(stats['military']), 'missing', stats['military_missing'], flush=True)
     fountains(save, edits, stats)
+    detached(save, edits, stats)
+    print('detached', stats['detached_set_down'], 'set down (', stats['detached_filled'], 'blocks ),', stats['detached_removed'], 'taken away (',
+          stats['detached_removed_blocks'], 'blocks )', flush=True)
     print('fountains', stats['fountain_rims'], 'rim blocks,', stats['fountain_floors'], 'floor blocks,', stats['fountain_pillars'], 'pillar cells,',
           stats['fountain_loose'], 'loose blocks', flush=True)
     # the castle: the inner ward, in four quarters with an overlap

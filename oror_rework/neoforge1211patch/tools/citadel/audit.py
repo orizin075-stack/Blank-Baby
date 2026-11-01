@@ -288,6 +288,31 @@ for name_, site in mil['sites'].items():
                     find('military:approach-obstructed', (high[0][0], int(high[0][2]), high[0][1]), '%s: the ground under its glide path rises '
                          'to %d at %d %d' % (name_, high[0][2], high[0][0], high[0][1]))
 
+# ------------------------------------------------------------------------------------------------------- detached
+# parts with nothing under or beside them down to the ground (26-connected; water holds, light blocks are nothing):
+# the castle's small fittings aside, none should be left (049: buttresses a block off the ground, trees' crowns over
+# the fields, fortress walls and wall platforms hanging in the air)
+print('detached', flush=True)
+from scipy import ndimage as _nd
+_names = world.NAMES + [''] * 64
+_empty = np.array([n in ('minecraft:air', 'minecraft:cave_air', 'minecraft:light', '') for n in _names])
+_g = 63 - Y0
+_solid = ~_empty[a[:, _g:, :]]
+_lab, _n = _nd.label(_solid, structure=np.ones((3, 3, 3), bool))
+_grounded = np.zeros(_n + 1, bool)
+_grounded[np.unique(_lab[:, 0, :])] = True
+for _i, _sl in enumerate(_nd.find_objects(_lab), start=1):
+    if _grounded[_i] or _sl is None:
+        continue
+    _cells = np.argwhere(_lab[_sl] == _i) + [_sl[0].start, _sl[1].start, _sl[2].start]
+    _x, _y, _z = (int(v) for v in _cells[0])
+    _ring = max(abs(int(_cells[:, 0].mean()) + X0), abs(int(_cells[:, 2].mean()) + Z0))
+    if _ring <= 140 and len(_cells) < 100:
+        continue
+    find('detached:floating', (_x + X0, _y + _g + Y0, _z + Z0), '%d blocks with nothing under them to the ground, e.g. %s'
+         % (len(_cells), name(_x + X0, _y + _g + Y0, _z + Z0)))
+del _lab, _solid
+
 # ------------------------------------------------------------------------------------------------------- garrison
 print('garrison', flush=True)
 bad = collections.Counter()
