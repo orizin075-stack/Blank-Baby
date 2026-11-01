@@ -28,7 +28,7 @@ SOFT = ('grass', 'fern', 'flower', 'poppy', 'dandelion', 'tulip', 'daisy', 'alli
 YAW = {'east': -90.0, 'west': 90.0, 'south': 0.0, 'north': 180.0}
 
 
-def mask(save, lanes=False):
+def mask(save, lanes=False, allow=()):
     """Buildable columns of the kingdom: no building above them (anything built at y 68 or higher that is not a tree, and
     four blocks around it: the watchtowers, fortresses and walls), not a road, not deep water. The small obstacles of the
     outer belt (trees, pits, buried cores, berms, rubble, puddles) are cleared where something is built."""
@@ -40,7 +40,7 @@ def mask(save, lanes=False):
     built = ndimage.binary_dilation(built, iterations=4)
     # the farm lanes (dirt paths and gravel between the fields) may be paved over where lanes is set
     road = np.array([n in (('cobblestone', 'polished_andesite', 'stone_bricks') if lanes else
-                           ('cobblestone', 'polished_andesite', 'stone_bricks', 'gravel', 'dirt_path')) for n in names])
+                           ('cobblestone', 'polished_andesite', 'stone_bricks', 'gravel', 'dirt_path')) and n not in allow for n in names])
     water = np.array([n == 'water' for n in names])
     deep = water[a[:, 2, :]] & water[a[:, 1, :]]                   # water at y 64 and 63: the moat, a lake
     ok = ~built & ~road[a[:, 2, :]] & ~deep
@@ -437,6 +437,21 @@ def hangar(a, ok, edits, bes, stats, posts, cx, cz, opening, tanks, name):
         bes[(x, 65, z)] = {'id': 'minecraft:chest', 'x': x, 'y': 65, 'z': z, 'CustomName': '{"text":"格納庫の武器庫"}',
                            'Items': loot.items('armory', x * 31 + z * 7)}
         stats['military']['hangar_chests'] += 1
+    # the apron: from the doors out to the high road, the hangar's width paved and cleared (crops, kerbs, lamps)
+    road = {world.IDS.get(n) for n in ('minecraft:polished_andesite', 'minecraft:stone_bricks')} - {None}
+    reached = 0
+    for out in range(1, 31):
+        row = [world_of(u, -out) for u in range(W)]
+        if all(-640 <= x < 640 and -640 <= z < 640 and a[x + 640, 0, z + 640] in road and (x, 64, z) not in edits for x, z in row):
+            reached = out
+            break
+        for x, z in row:
+            if not (-640 <= x < 640 and -640 <= z < 640) or a[x + 640, 0, z + 640] in road and (x, 64, z) not in edits:
+                continue
+            edits[(x, 64, z)] = 'minecraft:polished_andesite' if out > 2 else 'minecraft:yellow_concrete'
+            for y in range(65, 72):
+                edits[(x, y, z)] = 'minecraft:air'
+    stats['military']['hangar_aprons'] += 1 if reached else 0
     stats['military']['hangars'] += 1
     stats['military_at'][name] = [x0, z0, w, d]
 
@@ -487,7 +502,10 @@ def turrets(man):
 # (049: the south band of the farm belt has no place where a runway's approach is clear of its mills and barns; the
 # second runway runs north along the east band, its approach coming up from the south over the fields)
 AIRBASES = ((-250, -405, 'west', 'airbase_n'), (361, -278, 'north', 'airbase_e'))
-HANGARS = ((-405, -160, 'east'), (-405, 160, 'east'), (405, -160, 'west'), (405, 160, 'west'))
+# (049, the user's report: the hangars opened onto the crops and their tanks drove out over the fields) each hangar stands
+# beside one of the four high roads through the farm belt with its doors to the road, and a paved apron from its doors
+# to the road
+HANGARS = ((-405, -28, 'south'), (405, 28, 'north'), (28, -405, 'west'), (-28, 405, 'east'))
 HELIPADS = ((-235, -235, 'ah_6'), (235, -235, 'mi_28'), (235, 235, 'ah_6'), (-235, 235, 'mi_28'))
 
 
@@ -505,19 +523,21 @@ def build(save, man, edits, bes, stats, town=None):
     stats['military_at'] = {}
     ok_town, a = mask(save)
     ok_farm, _ = mask(save, lanes=True)
+    ok_hangar, _ = mask(save, lanes=True, allow=('cobblestone',))       # the fields' kerbs may give way to a hangar
     # nothing on what this repair has already built (the town's new houses, their yards and lights)
     for (x, y, z), st in edits.items():
         if y >= 65 and not st.startswith(('minecraft:air', 'minecraft:cave_air')) and -640 <= x < 640 and -640 <= z < 640:
-            ok_town[x + 640, z + 640] = ok_farm[x + 640, z + 640] = False
+            ok_town[x + 640, z + 640] = ok_farm[x + 640, z + 640] = ok_hangar[x + 640, z + 640] = False
     farm_zone, town_zone = zones()
     ok_farm &= farm_zone
+    ok_hangar &= farm_zone
     ok_town &= town_zone
     posts = []
 
     def keep_off(name, m):
         x0, z0, w, d = stats['military_at'].get(name, (0, 0, 0, 0))
         if w:
-            for o in (ok_farm, ok_town):
+            for o in (ok_farm, ok_town, ok_hangar):
                 o[x0 + 640 - m:x0 + 640 + w + m, z0 + 640 - m:z0 + 640 + d + m] = False
     for cx, cz, heading, name in AIRBASES:
         runway(a, ok_farm, edits, bes, stats, posts, cx, cz, heading, name)
@@ -527,7 +547,7 @@ def build(save, man, edits, bes, stats, town=None):
         keep_off('helipad_%d' % i, 3)
     sets = [['m_1a_2', 't_90a', 'ztz_99a'], ['t_90a', 'm_1a_2', 'bmp_2'], ['ztz_99a', 'm_1a_2', 't_90a'], ['bradley', 't_90a', 'm_1a_2']]
     for i, (cx, cz, opening) in enumerate(HANGARS):
-        hangar(a, ok_farm, edits, bes, stats, posts, cx, cz, opening, sets[i], 'hangar_%d' % i)
+        hangar(a, ok_hangar, edits, bes, stats, posts, cx, cz, opening, sets[i], 'hangar_%d' % i)
         keep_off('hangar_%d' % i, 4)
     posts += turrets(man)
     # a turret's post on its floor: the gate roads' crossfire points were given three blocks over their platform

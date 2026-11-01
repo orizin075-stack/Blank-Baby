@@ -784,11 +784,13 @@ def fountains(save, edits, stats):
 def detached(save, edits, stats):
     """Blocks with nothing under or beside them all the way to the ground (049's audit, by 26-connected parts of the
     whole kingdom, water and the light blocks aside): the generator built the buttresses of the walls a block above the
-    ground, left the crowns of trees whose trunks it had cut hanging over the fields and the moats, the upper walls of the
-    four outer fortresses 22 blocks over their floors with nothing between, platforms along the outer wall, a roof's
-    ridge over the castle's south court. A part a block or two off the ground is set down on it (the gap under it filled
-    with its own block); one higher up is taken away, and so is a tree's crown or a clod of earth wherever it hangs; in
-    the castle's ward only the large parts are set down, its small ones (lights, fittings) are left as they are."""
+    ground, set the roofs of the four outer fortresses' halls a block above and outside their walls, put platforms a
+    block off the outer wall, left the crowns of trees whose trunks it had cut hanging over the fields and the moats and
+    a roof's ridge over the castle's south court. A part a block or two off the ground is set down on it (the gap under
+    it filled with its own block); one within two blocks of a standing structure is joined to it (the cells between
+    filled with that structure's block: a roof gets its wall plate); a tree's crown or a clod of earth wherever it hangs
+    is taken away, and so is what can be neither set down nor joined; in the castle's ward only the large parts are
+    touched, its small ones (lights, fittings) are left as they are."""
     from scipy import ndimage
     x0, x1, z0, z1, y0, y1 = -640, 640, -640, 640, 63, 200
     a, _ = world.load(save, x0, x1, z0, z1, y0, y1)
@@ -800,13 +802,21 @@ def detached(save, edits, stats):
     natural_kind = np.array([any(t in n for t in ('leaves', '_log', 'dirt', 'grass_block', 'podzol', 'moss', 'vine', '_wood'))
                              for n in names])
     full = np.array([not any(t in n for t in ('stairs', 'slab', 'wall', 'fence', 'pane', 'bars', 'chain', 'lantern', 'torch', 'door',
-                                                'trapdoor', 'button', 'sign', 'banner', 'carpet', 'chest', 'barrel', 'candle', 'rod'))
+                                                'trapdoor', 'button', 'sign', 'banner', 'carpet', 'chest', 'barrel', 'candle', 'rod',
+                                                'leaves', 'water', 'lava'))
                      and n != '' for n in names])
     solid = ~empty[a]
     lab, n = ndimage.label(solid, structure=np.ones((3, 3, 3), bool))
     grounded = np.zeros(n + 1, bool)
     grounded[np.unique(lab[:, 0, :])] = True
+    grounded[0] = False
     objs = ndimage.find_objects(lab)
+    ball = np.ones((3, 3, 3), bool)
+
+    def put(cx, cy, cz, st):
+        edits[(int(cx) + x0, int(cy) + y0, int(cz) + z0)] = st
+        a[cx, cy, cz] = world.gid(st)
+
     for i in range(1, n + 1):
         if grounded[i] or objs[i - 1] is None:
             continue
@@ -816,7 +826,6 @@ def detached(save, edits, stats):
         ids = a[cells[:, 0], cells[:, 1], cells[:, 2]]
         size = len(cells)
         ring = max(abs(int(cells[:, 0].mean()) + x0), abs(int(cells[:, 2].mean()) + z0))
-        # the gap under its lowest cells
         low = cells[:, 1].min()
         gap = 99
         for cx, cy, cz in cells[cells[:, 1] == low][:64]:
@@ -826,30 +835,156 @@ def detached(save, edits, stats):
             gap = min(gap, g)
         natural = natural_kind[ids].mean() > 0.6
         castle = ring <= 140
-        if not natural and gap <= 2:
-            if castle and size < 100:
-                continue
+        if castle and size < (100 if gap <= 2 else 30) and not natural:
+            continue
+        fulls = [k for k in ids if full[k]]
+        base = names[np.bincount(fulls).argmax()] if fulls else 'minecraft:stone_bricks'
+        if natural:
+            for cx, cy, cz in cells:
+                put(cx, cy, cz, 'minecraft:air')
+            stats['detached_removed'] += 1
+            stats['detached_removed_blocks'] += size
+            continue
+        if gap <= 2:
             # set down: under each cell with open air below, its own block (a full one: the part's commonest) to the ground
-            fulls = [k for k in ids if full[k]]
-            base = names[np.bincount(fulls).argmax()] if fulls else 'minecraft:stone_bricks'
             for cx, cy, cz in cells:
                 if cy == 0 or not empty[a[cx, cy - 1, cz]]:
                     continue
                 st = names[a[cx, cy, cz]] if full[a[cx, cy, cz]] else base
                 yy = cy - 1
                 while yy >= 0 and empty[a[cx, yy, cz]] and cy - yy <= 3:
-                    edits[(int(cx) + x0, int(yy) + y0, int(cz) + z0)] = st
-                    a[cx, yy, cz] = world.gid(st)
-                    yy -= 1
+                    put(cx, yy, cz, st)
                     stats['detached_filled'] += 1
+                    yy -= 1
             stats['detached_set_down'] += 1
-        elif castle and not natural and size < 30:
             continue
-        else:
-            for cx, cy, cz in cells:
-                edits[(int(cx) + x0, int(cy) + y0, int(cz) + z0)] = 'minecraft:air'
-            stats['detached_removed'] += 1
-            stats['detached_removed_blocks'] += size
+        # joined: the open cells next to the part (one step, then two) that touch a standing structure are filled with
+        # that structure's block
+        pad = 3
+        lo = np.maximum([q.start - pad for q in sl], 0)
+        hi = np.minimum([q.stop + pad for q in sl], a.shape)
+        box = tuple(slice(lo[k], hi[k]) for k in range(3))
+        mine = lab[box] == i
+        stand = grounded[lab[box]]
+        openb = empty[a[box]]
+        near_stand = ndimage.binary_dilation(stand, ball)
+        joined = 0
+        reach = mine
+        for step in (1, 2):
+            reach = ndimage.binary_dilation(reach, ball) & (openb | mine)
+            touch = reach & openb & near_stand
+            if touch.any():
+                for q in np.argwhere(touch):
+                    cx, cy, cz = q + lo
+                    # the structure's block beside it
+                    st = None
+                    for dx, dy, dz in ((0, -1, 0), (1, 0, 0), (-1, 0, 0), (0, 0, 1), (0, 0, -1), (0, 1, 0)):
+                        k = (cx + dx, cy + dy, cz + dz)
+                        if all(0 <= k[t] < a.shape[t] for t in range(3)) and grounded[lab[k]] and full[a[k]]:
+                            st = names[a[k]]
+                            break
+                    put(cx, cy, cz, st or base)
+                    joined += 1
+                if step == 2:
+                    # the cells of the first ring between them too
+                    first = ndimage.binary_dilation(mine, ball) & openb & ndimage.binary_dilation(touch, ball)
+                    for q in np.argwhere(first):
+                        cx, cy, cz = q + lo
+                        if empty[a[cx, cy, cz]]:
+                            put(cx, cy, cz, base)
+                            joined += 1
+                break
+        if joined and joined <= max(8, size):
+            stats['detached_joined'] += 1
+            stats['detached_join_blocks'] += joined
+            continue
+        for cx, cy, cz in cells:
+            put(cx, cy, cz, 'minecraft:air')
+        stats['detached_removed'] += 1
+        stats['detached_removed_blocks'] += size
+
+
+def gables(save, edits, stats, skip):
+    """The open ends of roofs outside the town and the castle (049, the user's report: the ranches' barns stood with
+    the triangles under their gables open, the barns hollow to the sky at both ends; so did the outer fortresses' halls):
+    where an opening four or more blocks above the ground leads in under a roof (opaque cover within 24 blocks above;
+    leaves are no roof) to a room at least three blocks deep, it is walled with the commonest block around it. Not over
+    a road (the gate passages stay open), not on the town's plots or the military sites (skip), never a door's height."""
+    x0, x1, z0, z1 = -640, 640, -640, 640
+    a, _ = world.load(save, x0, x1, z0, z1, 64, 160)
+    for (x, y, z), st in edits.items():
+        if x0 <= x < x1 and z0 <= z < z1 and 64 <= y < 160:
+            a[x - x0, y - 64, z - z0] = world.gid(st.split('[')[0])
+    names = world.NAMES + [''] * 64
+    air, transparent, emit, plain, soft = tables()
+    air = np.concatenate([air, np.ones(64, bool)])[:len(names)]
+    leafy = np.array([('leaves' in n or 'log' in n or 'wool' in n or 'carpet' in n) for n in names])
+    opaque = ~np.concatenate([transparent, np.ones(64, bool)])[:len(names)][a] & ~leafy[a]
+    isair = air[a]
+    covered = np.zeros_like(isair)
+    run = np.full((a.shape[0], a.shape[2]), 999, np.int32)
+    for y in range(a.shape[1] - 1, -1, -1):
+        run = np.where(opaque[:, y, :], 0, run + 1)
+        covered[:, y, :] = run <= 24
+    inner = isair & covered
+    outside = isair & ~covered
+    xs = np.abs(np.arange(x0, x1))
+    ring = np.maximum(xs[:, None], np.abs(np.arange(z0, z1))[None, :])
+    allowed = (ring > 292) & ~skip
+    road = np.isin(a[:, 0, :], [world.IDS[r] for r in ('minecraft:polished_andesite', 'minecraft:stone_bricks', 'minecraft:cobblestone',
+                                                     'minecraft:gravel', 'minecraft:dirt_path') if r in world.IDS])
+    allowed &= ~road
+    count = 0
+    for axis in (0, 2):
+        for sign in (1, -1):
+            nb = np.zeros_like(outside)
+            src = [slice(None)] * 3
+            dst = [slice(None)] * 3
+            if sign > 0:
+                dst[axis], src[axis] = slice(None, -1), slice(1, None)
+            else:
+                dst[axis], src[axis] = slice(1, None), slice(None, -1)
+            nb[tuple(dst)] = outside[tuple(src)]
+            face = inner & nb
+            face[:, :5, :] = False                               # four or more above the ground (y 69 up)
+            face &= allowed[:, None, :]
+            # three or more covered open cells inward
+            deep = face.copy()
+            for k in (1, 2, 3):
+                sh = np.zeros_like(inner)
+                s2 = [slice(None)] * 3
+                d2 = [slice(None)] * 3
+                if sign > 0:
+                    d2[axis], s2[axis] = slice(k, None), slice(None, -k)
+                else:
+                    d2[axis], s2[axis] = slice(None, -k), slice(k, None)
+                sh[tuple(d2)] = inner[tuple(s2)]
+                deep &= sh
+            # an opening of ten cells or more (a gable's triangle; not an arrow slit or a window)
+            st3 = np.zeros((3, 3, 3), bool)
+            st3[1, 1, 1] = st3[1, 0, 1] = st3[1, 2, 1] = True
+            if axis == 0:
+                st3[1, 1, 0] = st3[1, 1, 2] = True
+            else:
+                st3[0, 1, 1] = st3[2, 1, 1] = True
+            lab, nl = ndimage.label(deep, structure=st3)
+            sizes = np.bincount(lab.ravel())
+            big = sizes >= 10
+            big[0] = False
+            deep = big[lab]
+            for x, y, z in np.argwhere(deep):
+                around = collections.Counter()
+                for dx, dy, dz in ((0, -1, 0), (0, 1, 0), (1, 0, 0), (-1, 0, 0), (0, 0, 1), (0, 0, -1), (0, -2, 0)):
+                    q = (x + dx, y + dy, z + dz)
+                    if all(0 <= q[k] < a.shape[k] for k in range(3)) and opaque[q] and not leafy[a[q]]:
+                        around[int(a[q])] += 1
+                if not around:
+                    continue
+                st = names[around.most_common(1)[0][0]].split('[')[0]
+                edits[(int(x) + x0, int(y) + 64, int(z) + z0)] = st
+                a[x, y, z] = world.gid(st)
+                count += 1
+    stats['gable_cells'] = count
 
 
 def propagate(L, T, iters=15):
@@ -975,8 +1110,16 @@ def main(save, out, report=None):
     print('military', dict(stats['military']), 'missing', stats['military_missing'], flush=True)
     fountains(save, edits, stats)
     detached(save, edits, stats)
-    print('detached', stats['detached_set_down'], 'set down (', stats['detached_filled'], 'blocks ),', stats['detached_removed'], 'taken away (',
-          stats['detached_removed_blocks'], 'blocks )', flush=True)
+    print('detached', stats['detached_set_down'], 'set down (', stats['detached_filled'], 'blocks ),', stats['detached_joined'], 'joined (',
+          stats['detached_join_blocks'], 'blocks ),', stats['detached_removed'], 'taken away (', stats['detached_removed_blocks'], 'blocks )', flush=True)
+    skip = np.zeros((1280, 1280), bool)
+    for x, z in cleared:
+        if -640 <= x < 640 and -640 <= z < 640:
+            skip[x + 640, z + 640] = True
+    for x0, z0, w, d in stats['military_at'].values():
+        skip[max(0, x0 + 630):x0 + 650 + w, max(0, z0 + 630):z0 + 650 + d] = True
+    gables(save, edits, stats, skip)
+    print('gables', stats['gable_cells'], 'cells walled', flush=True)
     print('fountains', stats['fountain_rims'], 'rim blocks,', stats['fountain_floors'], 'floor blocks,', stats['fountain_pillars'], 'pillar cells,',
           stats['fountain_loose'], 'loose blocks', flush=True)
     # the castle: the inner ward, in four quarters with an overlap

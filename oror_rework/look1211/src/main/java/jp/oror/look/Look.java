@@ -185,7 +185,8 @@ public final class Look {
             // 048: the posts' supply, a helipad's power plant and depot, and a hangar's bays with theirs
             case 9410 -> atCapital(mc, -265, 10, -250, 0F, 48F);
             case 11000 -> shot(mc, "25_helipad_supply");
-            case 11010 -> atCapital(mc, -389, 3, -160, 90F, 10F);
+            // 049: the west road's hangar, from the road in front of its apron
+            case 11010 -> atCapital(mc, -405, 5, -4, 180F, 14F);
             case 12600 -> shot(mc, "26_hangar_supply");
             // the palace's roofs from the south-east, high up (the two light wells roofed over in 048)
             case 12610 -> atCapital(mc, 70, 115, 110, 150F, 32F);
@@ -196,7 +197,12 @@ public final class Look {
             // a high road's fountain with its new rim (its water ran out over the street), looking north from the road
             case 15810 -> atCapital(mc, 0, 7, -204, 180F, 28F);
             case 17400 -> shot(mc, "29_road_fountain");
-            case 17410 -> finish(mc, "complete");
+            // the sheep ranch's barn (its gables were open) and the east fortress's hall (its roof hung over its walls)
+            case 17410 -> atCapital(mc, 380, 18, -215, 135F, 25F);
+            case 19000 -> shot(mc, "30_ranch_barn");
+            case 19010 -> atCapital(mc, 540, 30, 30, -120F, 25F);
+            case 20600 -> shot(mc, "31_fortress_east");
+            case 20610 -> finish(mc, "complete");
             default -> {
             }
         }
