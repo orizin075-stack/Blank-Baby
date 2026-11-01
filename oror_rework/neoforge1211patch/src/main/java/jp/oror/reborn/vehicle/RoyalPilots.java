@@ -543,7 +543,9 @@ public final class RoyalPilots {
                 Vec3 rel = touch.subtract(v.position());
                 double along = rel.dot(f);
                 double glide = runwayY + 1.5 + Math.max(0, along) * GLIDE;
-                Vec3 aim = touch.add(f.scale(Math.max(20, -along)));
+                // aimed at the centre line 60 blocks ahead of where it is along it: off the line it turns back to it at once
+                // (aimed at a point beyond the touch-down, 051's CI aircraft drifted 14 off and caught a wing in the trees)
+                Vec3 aim = home.add(f.scale(v.position().subtract(home).dot(f) + 60));
                 // below the glide it holds its speed and climbs back to it (at 1.0 to 1.8 it sank and 050's CI aircraft
                 // put down 33, then 96 blocks short of its runway)
                 boolean low = v.getY() < runwayY + 1.5 + Math.max(0, along) * GLIDE - 2;
@@ -568,8 +570,7 @@ public final class RoyalPilots {
                 // above the glide it may dive more steeply to it (at six degrees it reached the threshold still high)
                 // (on the glide the dive is not held back for speed: so held, 050's second CI aircraft crossed its
                 // touch-down point 15 blocks up and went round until its time ran out)
-                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 10 ? 12F : v.getY() > glide + 6 ? 8F : 4F,
-                    false);
+                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 6 ? 8F : 4F, false);
                 if (v.onGround()) {
                     mode = "rollout";
                     p.putLong("Since", now);
