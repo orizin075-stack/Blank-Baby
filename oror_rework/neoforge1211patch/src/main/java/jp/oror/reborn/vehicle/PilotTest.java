@@ -309,7 +309,7 @@ public final class PilotTest {
         if (r.plane != null && t % 10 == 0 && r.plane.isAlive()) {
             net.minecraft.nbt.CompoundTag pp = r.plane.getPersistentData().getCompound("OrorPilot");
             String m = pp.getString("Mode");
-            if (m.equals("return") || m.equals("approach") || m.equals("rollout") || m.equals("taxi")) {
+            if (m.equals("return") || m.equals("approach") || m.equals("goaround") || m.equals("rollout") || m.equals("taxi")) {
                 // where it is against the runway: along its line from the start (negative: on the approach side) and off it
                 net.minecraft.world.phys.Vec3 home = net.minecraft.world.phys.Vec3.atBottomCenterOf(net.minecraft.core.BlockPos.of(pp.getLong("Home")));
                 net.minecraft.world.phys.Vec3 f = net.minecraft.world.phys.Vec3.directionFromRotation(0, pp.getFloat("Heading"));

@@ -518,17 +518,21 @@ public final class RoyalPilots {
                 // turn at the initial point, the highest ground all round: the turn swings out wide of the straight
                 // line to the gate (049's CI aircraft, banked round at the initial point, struck a hillside 18 blocks
                 // higher than the line's ground). Slower than on patrol, so that the turn is tighter.
-                // lined up it comes down toward 30 over the runway (the glide at the gate is 19 over it, a go-around at
-                // more than 35 over it; at 24 it flew under the 25 blocks its heading is helped round at, and turned only
-                // by banking), never nearer than 20 to the ground within 40 blocks (049's CI aircraft, down on the
-                // line's ground, put a wing into the hill beside it)
-                double alt = leg && lined ? Math.max(runwayY + 30, Math.max(high, nearHigh(v)) + 20)
+                // lined up it comes down toward 25 over the runway (the glide at the gate is 20 over it, a go-around at
+                // more than 35 over it), never nearer than 10 to the ground within 24 blocks (049's CI aircraft, down on
+                // the line's ground, put a wing into the hill beside it)
+                // (051) lined up, the ground that counts is under the line itself (12 blocks to either side) and close
+                // about the aircraft: the hills 40 blocks off the line held the CI aircraft 40 to 58 over the runway all
+                // down its final leg, and it reached the gate too high to come down to the runway
+                double alt = leg && lined ? Math.max(runwayY + 25, Math.max(lineHigh(v, home, f) + 18, closeHigh(v) + 10))
                     : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
                 // lined up, slowed toward the landing speed already; the turns judged by the real height above the ground
                 // (they were told 99 and banked hard at nine blocks)
                 // (lined up 1.5 to 2.0, as on the glide: at 1.15 the CI aircraft sank into the trees beside its line)
+                // the power not let down below 0.45 there (0.7 elsewhere on the way home: at 0.7 it came down its final
+                // leg at 2.6, a third over its speed, and on to the glide too fast to come down)
                 steerSpeed(v, to, alt, speed < (leg && lined ? 1.5 : 1.6), speed > (leg && lined ? 2.0 : 2.2),
-                    v.getY() - groundAt(v, v.position()), leg && lined ? 10F : 6F);
+                    v.getY() - groundAt(v, v.position()), leg && lined ? 10F : 6F, true, leg && lined ? 0.45F : 0.7F);
                 double pastGate = alongPos + GATE;
                 if (target != null) {
                     mode = "patrol";
@@ -583,14 +587,29 @@ public final class RoyalPilots {
                     mode = "rollout";
                     p.putLong("Since", now);
                     p.putBoolean("Landed", true);
-                } else if (blocked || along < -30 && v.getY() > runwayY + 6 || along < -140 || v.getY() > glide + 35
+                } else if (blocked || along < -60 && v.getY() > runwayY + 6 || along < -140 || v.getY() > glide + 35
                     || now - p.getLong("Since") > 900) {
-                    // past the touch-down point it goes round only if still well up, or 180 blocks into the runway: just
-                    // over it, it lands long (050's fourth CI aircraft went round 1.4 blocks over the runway)
-                    mode = "return";
+                    // past the touch-down point it goes round only if still well up 60 blocks on (100 into the runway), or
+                    // 180 blocks into the runway: just over it, it lands long (050's fourth CI aircraft went round 1.4
+                    // blocks over the runway)
+                    mode = "goaround";
                     p.putLong("Since", now);
                     p.remove("FinalLeg");
                     p.putInt("GoArounds", p.getInt("GoArounds") + 1);
+                }
+            }
+            case "goaround" -> {
+                // (051) the go-around: straight on along the runway's line at full power, wings level, climbing as its
+                // speed allows, to 40 over the runway before it turns for home again. The glide's power is all but off
+                // and comes back slowly: turned at once, 20 blocks up, 051's CI aircraft lost its speed in the turn and
+                // sank into the trees beside the runway
+                double at = Math.max(v.position().subtract(home).dot(f), 0);
+                Vec3 ahead = home.add(f.scale(at + 150));
+                double alt = Math.max(runwayY + 45, groundAt(v, ahead) + 30);
+                steerSpeed(v, ahead, alt, true, false, v.getY() - groundAt(v, v.position()), 6F, true, 1.5F);
+                if (v.getY() > runwayY + 38 && speed > 1.8 || now - p.getLong("Since") > 400) {
+                    mode = "return";
+                    p.putLong("Since", now);
                 }
             }
             case "rollout" -> {
@@ -667,6 +686,9 @@ public final class RoyalPilots {
                 // climb, and turn toward the lowest ground of the next 80 blocks: the citadel's A-10 pulled up from a run
                 // straight into a mountainside 50 blocks higher than itself
                 float away = escapeBearing(v);
+                if (mode.equals("goaround")) {
+                    away = Mth.clamp(away, -15F, 15F);   // climbing out low and slow: a wide turn would stall it
+                }
                 // the climb no steeper than the speed allows (pulled up at 27 degrees at 0.8, 050's CI aircraft stalled into
                 // a hillside it was climbing away from)
                 steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot() + away).scale(100)), v.getY() + 40, true,
@@ -826,12 +848,28 @@ public final class RoyalPilots {
         return best;
     }
 
-    /** The highest ground close by: under the aircraft and on eight bearings 20 and 40 blocks out. */
-    private static int nearHigh(Entity v) {
+    /**
+     * The highest ground under the runway's extended centre line and 12 blocks to either side of it, from abreast of the
+     * aircraft to 200 blocks on (short of the threshold): what a final leg flown along the line passes over.
+     */
+    private static int lineHigh(Entity v, Vec3 home, Vec3 f) {
+        Vec3 side = new Vec3(-f.z, 0, f.x);
+        double at = v.position().subtract(home).dot(f);
+        int high = groundAt(v, v.position());
+        for (double d = at; d <= Math.min(at + 200, -10); d += 20) {
+            for (int s = -12; s <= 12; s += 12) {
+                high = Math.max(high, groundAt(v, home.add(f.scale(d)).add(side.scale(s))));
+            }
+        }
+        return high;
+    }
+
+    /** The highest ground within a wing's reach and a little more: eight bearings at 12 and 24 blocks. */
+    private static int closeHigh(Entity v) {
         int high = groundAt(v, v.position());
         for (int b = 0; b < 8; b++) {
             Vec3 bearing = Vec3.directionFromRotation(0, b * 45F);
-            high = Math.max(high, Math.max(groundAt(v, v.position().add(bearing.scale(20))), groundAt(v, v.position().add(bearing.scale(40)))));
+            high = Math.max(high, Math.max(groundAt(v, v.position().add(bearing.scale(12))), groundAt(v, v.position().add(bearing.scale(24)))));
         }
         return high;
     }
@@ -925,8 +963,13 @@ public final class RoyalPilots {
         steerSpeed(v, point, altitude, faster, slower, agl, dive, true);
     }
 
-    /** bleed: too fast, hold the height (on the way home); on the glide the height comes first and only the power is cut. */
     private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower, double agl, float dive, boolean bleed) {
+        steerSpeed(v, point, altitude, faster, slower, agl, dive, bleed, bleed ? 0.7F : 0F);
+    }
+
+    /** bleed: too fast, hold the height (on the way home); on the glide the height comes first and only the power is cut. */
+    private static void steerSpeed(Entity v, Vec3 point, double altitude, boolean faster, boolean slower, double agl, float dive, boolean bleed,
+        float floor) {
         float wantPitch = (float) Mth.clamp(-(altitude - v.getY()) * 0.8, -12, dive);
         if (agl < 8) {
             wantPitch = Math.min(wantPitch, agl < 3 ? -4F : 1F);
@@ -947,7 +990,7 @@ public final class RoyalPilots {
         // the next turn, sank into a hill. Not on the glide, where the power is the speed.
         if (bleed && !v.onGround() && agl > 8) {
             float roll = Sbw.call(v, "getRoll") instanceof Number n ? Math.abs(n.floatValue()) : 0F;
-            if (Sbw.power(v) < (roll > 20 ? 1.0F : 0.7F)) {
+            if (Sbw.power(v) < (roll > 20 ? Math.max(floor, 1.0F) : floor)) {
                 faster = true;
                 slower = false;
             }
