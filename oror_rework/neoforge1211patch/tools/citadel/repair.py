@@ -908,8 +908,9 @@ def gables(save, edits, stats, skip):
     """The open ends of roofs outside the town and the castle (049, the user's report: the ranches' barns stood with
     the triangles under their gables open, the barns hollow to the sky at both ends; so did the outer fortresses' halls):
     where an opening four or more blocks above the ground leads in under a roof (opaque cover within 24 blocks above;
-    leaves are no roof) to a room at least three blocks deep, it is walled with the commonest block around it. Not over
-    a road (the gate passages stay open), not on the town's plots or the military sites (skip), never a door's height."""
+    leaves are no roof) to a room at least three blocks deep, and is a gable's triangle standing on the top of its end
+    wall, it is walled with the commonest block around it. The gate passages and the open galleries (open to the
+    ground or to their floor, square) stay as they are; not on the town's plots or the military sites (skip)."""
     x0, x1, z0, z1 = -640, 640, -640, 640
     a, _ = world.load(save, x0, x1, z0, z1, 64, 160)
     for (x, y, z), st in edits.items():
@@ -931,9 +932,6 @@ def gables(save, edits, stats, skip):
     xs = np.abs(np.arange(x0, x1))
     ring = np.maximum(xs[:, None], np.abs(np.arange(z0, z1))[None, :])
     allowed = (ring > 292) & ~skip
-    road = np.isin(a[:, 0, :], [world.IDS[r] for r in ('minecraft:polished_andesite', 'minecraft:stone_bricks', 'minecraft:cobblestone',
-                                                     'minecraft:gravel', 'minecraft:dirt_path') if r in world.IDS])
-    allowed &= ~road
     count = 0
     for axis in (0, 2):
         for sign in (1, -1):
@@ -968,10 +966,27 @@ def gables(save, edits, stats, skip):
             else:
                 st3[0, 1, 1] = st3[2, 1, 1] = True
             lab, nl = ndimage.label(deep, structure=st3)
-            sizes = np.bincount(lab.ravel())
-            big = sizes >= 10
-            big[0] = False
-            deep = big[lab]
+            keep = np.zeros(nl + 1, bool)
+            for c, sl in enumerate(ndimage.find_objects(lab), 1):
+                if sl is None:
+                    continue
+                cells = np.argwhere(lab[sl] == c) + [q.start for q in sl]
+                if len(cells) < 10:
+                    continue
+                # a gable: a triangle (each row narrower toward the top) standing on the end wall's top, not a gate
+                # passage or an open gallery (open down to the ground or the floor, square)
+                ys = cells[:, 1]
+                rows = sorted(set(ys.tolist()))
+                if len(rows) < 3:
+                    continue
+                width = {y: len(cells[ys == y]) for y in rows}
+                if width[rows[-1]] > 0.6 * width[rows[0]]:
+                    continue
+                bottom = cells[ys == rows[0]]
+                if rows[0] == 0 or np.mean([not isair[x, y - 1, z] for x, y, z in bottom]) < 0.6:
+                    continue
+                keep[c] = True
+            deep = keep[lab]
             for x, y, z in np.argwhere(deep):
                 around = collections.Counter()
                 for dx, dy, dz in ((0, -1, 0), (0, 1, 0), (1, 0, 0), (-1, 0, 0), (0, 0, 1), (0, 0, -1), (0, -2, 0)):
@@ -985,6 +1000,84 @@ def gables(save, edits, stats, skip):
                 a[x, y, z] = world.gid(st)
                 count += 1
     stats['gable_cells'] = count
+
+
+def ranch_barns(save, man, edits, bes, stats):
+    """The eight ranches' barns are built anew as stables (049, the user's report: the generator's barns stood with their
+    gables open and the middle of their roofs missing, hollow to the sky). The old barn's ground is cleared (its tall
+    columns and a block round them) and a stable of the town's builder stands on it, its front toward the castle; the
+    ranch's fences, pens and animals stay."""
+    import houses
+    for k, r in enumerate(man.get('ranches', [])):
+        cx, cz = r['x'], r['z']
+        x0, z0 = cx - 34, cz - 34
+        a, _ = world.load(save, x0, cx + 35, z0, cz + 35, 64, 120)
+        names = world.NAMES
+        built = np.array([not (n.endswith(('air', '_leaves', '_log')) or n == 'minecraft:light') for n in names])
+        tall = built[a[:, 6:, :]].any(axis=1)
+        if not tall.any():
+            continue
+        from scipy import ndimage as nd
+        lab, n = nd.label(tall)
+        sizes = nd.sum_labels(tall, lab, index=range(1, n + 1))
+        big = 1 + int(np.argmax(sizes))
+        xs, zs = np.nonzero(lab == big)
+        bx0, bx1, bz0, bz1 = xs.min() - 1, xs.max() + 1, zs.min() - 1, zs.max() + 1
+        # everything of the barn: the columns of its footprint, up from the floor
+        for i in range(max(0, bx0), min(a.shape[0], bx1 + 1)):
+            for j in range(max(0, bz0), min(a.shape[2], bz1 + 1)):
+                col = a[i, :, j]
+                for yy in np.nonzero(col[1:])[0] + 1:
+                    if names[col[yy]] != 'minecraft:air':
+                        edits[(int(i) + x0, int(yy) + 64, int(j) + z0)] = 'minecraft:air'
+                edits[(int(i) + x0, 64, int(j) + z0)] = 'minecraft:grass_block'
+        plot = (int(bx0) + x0, int(bz0) + z0, int(bx1) + x0, int(bz1) + z0)
+        front = ('west' if cx > 0 else 'east') if abs(cx) > abs(cz) else ('north' if cz > 0 else 'south')
+        house = houses.build(plot, 'stable', 104723 * (k + 1) + 31, front, fence_sides='front')
+        inside = lambda x, z: plot[0] <= x <= plot[2] and plot[1] <= z <= plot[3]
+        for (x, y, z), st in house.blocks.items():
+            if inside(x, z):
+                edits[(x, y, z)] = st
+        for q, be in houses.entities(house, 9000 + k).items():
+            if inside(q[0], q[2]):
+                bes[q] = be
+        stats['ranch_barns'] += 1
+
+
+def gable_ends(save, edits, stats, regions, roof='minecraft:dark_prismarine', wall='minecraft:stone_bricks', ymin=86):
+    """The open ends of the outer fortresses' halls (049, the user's report: their roofs' gables open to the sky): in the
+    end planes of each roof (its ridge along its longer side), the cells between its two slopes are walled."""
+    from scipy import ndimage as nd
+    rid = world.gid(roof)
+    for x0, z0, x1, z1 in regions:
+        a, _ = world.load(save, x0, x1, z0, z1, 64, 140)
+        for (x, y, z), st in edits.items():
+            if x0 <= x < x1 and z0 <= z < z1 and 64 <= y < 140:
+                a[x - x0, y - 64, z - z0] = world.gid(st.split('[')[0])
+        m = a == rid
+        m[:, :ymin - 64, :] = False
+        lab, n = nd.label(m, structure=np.ones((3, 3, 3), bool))
+        for i, sl in enumerate(nd.find_objects(lab), 1):
+            if sl is None:
+                continue
+            cells = np.argwhere(lab[sl] == i) + [q.start for q in sl]
+            if len(cells) < 60:
+                continue
+            ex, ez = np.ptp(cells[:, 0]), np.ptp(cells[:, 2])
+            ax, ac = (0, 2) if ex >= ez else (2, 0)      # ridge axis, across axis
+            for end in (cells[:, ax].min(), cells[:, ax].max()):
+                plane = cells[cells[:, ax] == end]
+                if not len(plane):
+                    continue
+                for y in sorted(set(plane[:, 1].tolist())):
+                    row = plane[plane[:, 1] == y][:, ac]
+                    lo, hi = row.min(), row.max()
+                    for v in range(lo + 1, hi):
+                        q = [0, 0, 0]
+                        q[ax], q[1], q[ac] = end, y, v
+                        if a[q[0], q[1], q[2]] == world.IDS.get('minecraft:air', -1):
+                            edits[(int(q[0]) + x0, int(q[1]) + 64, int(q[2]) + z0)] = wall
+                            stats['gable_end_cells'] += 1
 
 
 def propagate(L, T, iters=15):
@@ -1105,6 +1198,9 @@ def main(save, out, report=None):
     vault_hoard(save, man, edits, bes, stats)
     stock_empty(save, cleared, edits, bes, stats)
     print('stores', dict(stats['stores']), 'treasury rooms', stats['treasury_rooms'], flush=True)
+    # the ranches' barns built anew (before the military sites, which keep off what is built)
+    ranch_barns(save, man, edits, bes, stats)
+    print('ranch barns', stats['ranch_barns'], flush=True)
     # the kingdom's airbases, helipads, hangars and turret posts
     forces = military.build(save, man, edits, bes, stats, town)
     print('military', dict(stats['military']), 'missing', stats['military_missing'], flush=True)
@@ -1120,6 +1216,8 @@ def main(save, out, report=None):
         skip[max(0, x0 + 630):x0 + 650 + w, max(0, z0 + 630):z0 + 650 + d] = True
     gables(save, edits, stats, skip)
     print('gables', stats['gable_cells'], 'cells walled', flush=True)
+    gable_ends(save, edits, stats, [(f['x'] - 50, f['z'] - 50, f['x'] + 50, f['z'] + 50) for f in man.get('exterior_fortresses', [])])
+    print('fortress gable ends', stats['gable_end_cells'], 'cells', flush=True)
     print('fountains', stats['fountain_rims'], 'rim blocks,', stats['fountain_floors'], 'floor blocks,', stats['fountain_pillars'], 'pillar cells,',
           stats['fountain_loose'], 'loose blocks', flush=True)
     # the castle: the inner ward, in four quarters with an overlap
