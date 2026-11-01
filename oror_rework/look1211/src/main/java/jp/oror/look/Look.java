@@ -173,7 +173,7 @@ public final class Look {
             case 744 -> view(mc, 0, 0, 0, 0F, 8F);
             case 860 -> shot(mc, "19_arms");
             case 862 -> creatures(mc);
-            case 864 -> view(mc, 0, 3, -9, 0F, 10F);
+            case 864 -> view(mc, 0, 0, -3, 0F, 4F);
             case 980 -> shot(mc, "19b_creatures");
             case 1000 -> throne(mc);
             case 2800 -> shot(mc, "20_throne_room");
