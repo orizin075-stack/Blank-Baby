@@ -198,9 +198,9 @@ public final class Look {
             case 15810 -> atCapital(mc, 0, 7, -204, 180F, 28F);
             case 17400 -> shot(mc, "29_road_fountain");
             // the sheep ranch's barn (its gables were open) and the east fortress's hall (its roof hung over its walls)
-            case 17410 -> atCapital(mc, 380, 18, -215, 135F, 25F);
+            case 17410 -> atCapital(mc, 383, 22, -213, -135F, 30F);
             case 19000 -> shot(mc, "30_ranch_barn");
-            case 19010 -> atCapital(mc, 540, 30, 30, -120F, 25F);
+            case 19010 -> atCapital(mc, 505, 40, 55, -135F, 30F);
             case 20600 -> shot(mc, "31_fortress_east");
             case 20610 -> finish(mc, "complete");
             default -> {
