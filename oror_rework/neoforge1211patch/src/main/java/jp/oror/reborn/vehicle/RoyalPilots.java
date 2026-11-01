@@ -531,10 +531,11 @@ public final class RoyalPilots {
                 boolean low = v.getY() < runwayY + 1.5 + Math.max(0, along) * GLIDE - 2;
                 boolean slow = speed > 1.9 && !low, fast = speed < 1.5 || low;
                 if (v.getY() - groundAt(v, v.position()) < 6) {
-                    // the flare: the speed held between 1.3 and 1.8 (at 2.15 it came down hard; with the power cut it fell
-                    // to 0.9, sank and came down as hard), the nose held up by the pitch rule near the ground
-                    fast = speed < 1.3;
-                    slow = speed > 1.8;
+                    // the flare: power off for the touch-down (at 2.15 it came down hard enough to lose a third of its health;
+                    // holding 1.3 to 1.8 instead, it floated over the runway and went round), the nose held up by the pitch
+                    // rule near the ground
+                    fast = false;
+                    slow = true;
                 }
                 // the ground under the glide path (the runway's extended centre line, from here to the touch-down point):
                 // where it rises into the path, go round again. It was taken along the aircraft's heading while it was
@@ -638,8 +639,10 @@ public final class RoyalPilots {
                 // climb, and turn toward the lowest ground of the next 80 blocks: the citadel's A-10 pulled up from a run
                 // straight into a mountainside 50 blocks higher than itself
                 float away = escapeBearing(v);
+                // the climb no steeper than the speed allows (pulled up at 27 degrees at 0.8, 050's CI aircraft stalled into
+                // a hillside it was climbing away from)
                 steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot() + away).scale(100)), v.getY() + 40, true,
-                    speed < 1.0 ? -12 : -30);
+                    speed < 1.8 ? -10 : speed < 2.6 ? -18 : -30);
                 if (mode.equals("dive") || mode.equals("patrol") || mode.equals("climb")) {
                     mode = "pullup";
                     p.putLong("Since", now);
