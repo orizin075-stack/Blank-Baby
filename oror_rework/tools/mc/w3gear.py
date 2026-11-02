@@ -3,8 +3,9 @@ inventory keeps its 2D icon (textures/item/<id>.png, drawn by neoforge1211patch/
 not look like one flat sprite stretched in two places.
 
 Same toolkit and conventions as w3artifacts (u up the item's axis, v across, w depth; texels, 32 to the block; u = 0
-where the hand holds it). Holds: 'palm' (carried upright in the open hand), 'sword' (gripped by the handle: the key, the
-repair tool, the banner's pole), 'fist' (hanging from the hand). The gear that changes as it is used gets its states:
+where the hand holds it). Holds: 'palm' (carried upright in the open hand: the round things, the key, the book, the
+armour), 'sword' (gripped by the handle: the repair tool), 'staff' (the banner, upright in the fist). What is round is
+round (flasks, the core, the heart: sphere()), and things are held at about their own size beside the hand. The gear that changes as it is used gets its states:
 '_active' (at work) and '_recharging' (drained of colour); the last bloom '_closed' (a bud while it recharges).
 
   python3 w3gear.py <assets root> [ids...]     writes models/item/gear3d/<id>.obj, textures/item/gear3d/<id>.png
@@ -33,6 +34,22 @@ def grey(c, k=0.5, dark=0.6):
     return '#%02x%02x%02x' % (r, g, b)
 
 
+def sphere(g, u, r, mt, name='ball', v=0.0, w=0.0, squash=1.0, slices=None):
+    """A round body: octagonal slices stacked along the axis, each as wide as the sphere at its height (squash < 1
+    flattens it along the axis), so that what is round is round in the hand, not a box."""
+    m = mt.b() if isinstance(mt, Mt) else mt
+    c = g.group(u, v, w, name=name)
+    n = slices or max(3, int(round(r * 2 * squash / 1.5)))
+    h = 2 * r * squash / n
+    for i in range(n):
+        y = -r * squash + h * (i + 0.5)
+        rr = r * math.sqrt(max(0.0, 1 - (y / (r * squash)) ** 2))
+        if rr < 0.6:
+            continue
+        octo(c, y, h + 0.01, rr, m, f'{name}{i}')
+    return c
+
+
 # ----------------------------------------------------------------------------------------------------------- designs
 
 def g_star_shard(w, **o):
@@ -47,9 +64,17 @@ def g_star_shard(w, **o):
 
 
 def g_dragon_core(w, **o):
-    """A molten core held in a dragon's iron claws."""
-    a_orb(w, '#8f8499', '#3b3440', '#ff8a1c')
-
+    """A molten core held in four iron dragon's claws over a small iron stand."""
+    sphere(w, 5, 5.2, M('energy', '#ff8a1c'), 'core')
+    sphere(w, 5.5, 2.4, M('energy', '#fff0a0'), 'heat', w=2.6)
+    iron = Mt('metal', '#8f8499')
+    for k in range(4):
+        c = w.group(-1, 0, 0, rot=(90 * k + 45, 0, 0), name=f'claw{k}')
+        c.box(1.5, 5.8, 0, 6, 2.2, 2.2, iron.b(), rot=(0, 0, 30), name='c1')
+        c.box(6.5, 7.4, 0, 5, 2, 2, iron.b(), name='c2')
+        c.box(10.5, 6.2, 0, 4, 1.6, 1.6, Mt('metal', '#d2d9e2').b(), rot=(0, 0, -35), name='tip')
+    octo(w, -4, 4, 2.2, Mt('metal', '#3b3440'), 'stem')
+    cone(w, -8, 4, 5.0, 3.0, Mt('metal', '#3b3440'), steps=2, name='base')
 
 def g_forge_core(w, **o):
     """A brass cube of the forge's reckoning, turned on its corner, its circuits lit teal, a lens on top."""
@@ -63,18 +88,16 @@ def g_forge_core(w, **o):
 
 
 def g_curse_residue(w, **o):
-    """The black shards of a broken heart, a crimson light between them, its ichor dripping."""
+    """A broken black heart: two rounded lobes over a point, split by a crimson light, its ichor dripping."""
     dark = M('metal', '#1c0e22')
-    w.box(2, -3, 0, 12, 6, 6, dark, rot=(0, 0, 18), name='shard_l')
-    w.box(2, 3, 0, 12, 6, 6, dark, rot=(0, 0, -18), name='shard_r')
-    w.box(-5, 0, 0, 7, 6, 6, dark, rot=(0, 45, 0), name='point')
-    gem(w, 2, 0, 0, 3, '#ff3048', name='light')
-    crystal(w, 3, 0, 0, 10, 1, '#ff4656', name='crack')
-    for k, (u, v) in enumerate(((-8, 2), (-10, -2), (-12, 1))):
+    for s_ in (-1, 1):
+        sphere(w, 4, 4.4, dark, f'lobe{s_}', v=s_ * 3.4)
+    w.box(-1.5, 0, 0, 8, 8, 7, dark, rot=(0, 0, 45), name='point')
+    w.box(-3, 0, 0, 5, 5, 6, dark, rot=(0, 0, 45), name='tip')
+    crystal(w, 1, 0, 0, 12, 1, '#ff4656', name='crack')
+    gem(w, 3, 0, 2.6, 2, '#ff3048', name='light', facet=False)
+    for k, (u, v) in enumerate(((-7, 2), (-9, -2), (-11, 1))):
         w.box(u, v, 0, 2, 1, 1, M('gem', '#c0182a', glow=True), name=f'drip{k}')
-    for k in range(3):
-        w.box(12 + k * 2, (-1) ** k * 2, 0, 2, 2, 2, M('cloth', '#40344a', alpha=0.6), name=f'smoke{k}')
-
 
 def g_world_thread(w, **o):
     """A spool of shining thread between wooden flanges, its loose end running round in a ring."""
@@ -94,19 +117,26 @@ def g_rewind_talisman(w, **o):
 
 
 def g_purifying_dew(w, **o):
-    """A flask of the world tree's golden honey, stoppered with a leaf-wrapped cork."""
-    a_bottle(w, '#c48c48', '#7a5a3a', '#ffb830')
-    p = front_plate(w, 15, 24, -6, 6, w=0)
-    leaf(p, 17, 0, 0.6, 7, 2.5, Mt('cloth', '#4ca43a').p(d=0.5), 3)
-
+    """A round glass flask, the liquid filling it, a neck of glass and its stopper."""
+    sphere(w, 0, 6.6, M('gem', '#ffb830', glow=True), 'body')
+    sphere(w, 0, 7.1, M('gem', '#e8f4fa', glow=False, alpha=0.35), 'glass', slices=8)
+    w.box(2.5, -3.2, 3.6, 4, 1, 1, M('gem', '#ffffff', glow=True), rot=(0, 0, -30), name='shine')
+    octo(w, 8, 4, 2.0, Mt('metal', '#cfe4ec', bx={'glow': False}), 'neck')
+    octo(w, 10.2, 1, 2.6, Mt('metal', '#a2c0cc'), 'lip')
+    octo(w, 12, 3, 1.8, Mt('wood', '#7a5a3a'), 'cork')
+    w.box(13, 2, 0, 1, 5, 4, M('leaf', '#4ca43a'), rot=(0, 0, -30), name='leaf')
+    w.box(-2, 7.4, 0, 2, 1, 1, M('gem', '#ffc23a', glow=True), name='drop')
 
 def g_mana_crystal(w, **o):
-    """A flask of star-vein mana, blue and full of stars, stoppered with a crystal."""
-    a_bottle(w, '#9a8cf0', '#7a74d8', '#3a6aff')
-    crystal(w, 17, 0, 0, 6, 3, '#b0b4f4', name='stopper')
-    for k, (u, v, z) in enumerate(((0, -2, 3), (3, 2, -2), (-1, 3, 1))):
+    """A round glass flask, the liquid filling it, a neck of glass and its stopper."""
+    sphere(w, 0, 6.6, M('gem', '#3a6aff', glow=True), 'body')
+    sphere(w, 0, 7.1, M('gem', '#e8f4fa', glow=False, alpha=0.35), 'glass', slices=8)
+    w.box(2.5, -3.2, 3.6, 4, 1, 1, M('gem', '#ffffff', glow=True), rot=(0, 0, -30), name='shine')
+    octo(w, 8, 4, 2.0, Mt('metal', '#cfe4ec', bx={'glow': False}), 'neck')
+    octo(w, 10.2, 1, 2.6, Mt('metal', '#a2c0cc'), 'lip')
+    crystal(w, 12, 0, 0, 6, 3, '#b0b4f4', name='stopper')
+    for k, (u, v, z) in enumerate(((0, -2, 6.5), (3, 2, 5.5), (-2, 3, 5.8))):
         w.box(u, v, z, 1, 1, 1, M('gem', '#ffffff', glow=True), name=f'star{k}')
-
 
 def g_dungeon_key(w, **o):
     """An old iron key of the sealed realms, held by its bow: a gold ring round a crimson seal; the bit a notched ward."""
@@ -271,7 +301,7 @@ DESIGNS = {
     'forge_core': (g_forge_core, 'palm', {}), 'curse_residue': (g_curse_residue, 'palm', {}),
     'world_thread': (g_world_thread, 'palm', {}), 'rewind_talisman': (g_rewind_talisman, 'palm', {}),
     'purifying_dew': (g_purifying_dew, 'palm', {}), 'mana_crystal': (g_mana_crystal, 'palm', {}),
-    'dungeon_key': (g_dungeon_key, 'sword', {'length': 1.0}), 'field_guide': (g_field_guide, 'palm', {}),
+    'dungeon_key': (g_dungeon_key, 'palm', {}), 'field_guide': (g_field_guide, 'palm', {}),
     'forge_tool': (g_forge_tool, 'sword', {'length': 1.3}), 'dragon_coat': (g_dragon_coat, 'palm', {}),
     'teia_boots': (g_teia_boots, 'palm', {}), 'omniregistry_treasure': (g_omniregistry_treasure, 'palm', {}),
     'villager_king_token': (g_villager_king_token, 'palm', {}), 'focus_cell': (g_focus_cell, 'palm', {}),
@@ -280,8 +310,8 @@ DESIGNS = {
     'last_bloom': (g_last_bloom, 'palm', {}), 'last_bloom_closed': (g_last_bloom, 'palm', {'closed': True}),
     'parry_emblem': (g_parry_emblem, 'palm', {}), 'parry_emblem_active': (g_parry_emblem, 'palm', {'active': True}),
     'parry_emblem_recharging': (g_parry_emblem, 'palm', {'dim': True}),
-    'squad_banner': (g_squad_banner, 'sword', {'length': 1.9}), 'squad_banner_active': (g_squad_banner, 'sword', {'length': 1.9, 'active': True}),
-    'squad_banner_recharging': (g_squad_banner, 'sword', {'length': 1.9, 'dim': True}),
+    'squad_banner': (g_squad_banner, 'staff', {'length': 1.9}), 'squad_banner_active': (g_squad_banner, 'staff', {'length': 1.9, 'active': True}),
+    'squad_banner_recharging': (g_squad_banner, 'staff', {'length': 1.9, 'dim': True}),
 }
 # each item's states (the item property oror_supreme_bosses:state, GearLooks): 0.5 recharging, 1 at work
 STATES = {'dodge_talon': [(0.5, 'dodge_talon_recharging'), (1.0, 'dodge_talon_active')],
@@ -304,11 +334,17 @@ def length_blocks(quads):
 
 
 def display(hold, opt, quads):
-    if hold == 'sword':
+    if hold == 'staff':
+        n = length_blocks(quads)
+        d = Hd.derive_staff(round(opt['length'] / (n * 0.9375), 3), round(1.05 / n, 3))
+    elif hold == 'sword':
         tp = round(min(0.85, max(0.3, opt['length'] / (length_blocks(quads) * 0.9375))), 3)
         d = Hd.derive(scale_tp=tp, scale_fp=round(tp * 0.62, 3), hold='sword')
     else:
         d = Hd.derive(scale_tp=0.75, scale_fp=0.55, hold=hold)
+        # held up a little higher in first person, so that what is shown on the palm is seen whole
+        fp = d['firstperson_righthand']
+        fp['translation'] = [fp['translation'][0], fp['translation'][1] + 1.6, fp['translation'][2]]
     out = {'thirdperson_righthand': d['thirdperson_righthand'], 'firstperson_righthand': d['firstperson_righthand'],
            'ground': Hd.ground(quads), 'head': dict(rotation=[0, 180, 0], translation=[0, 13, 7], scale=[0.6, 0.6, 0.6]),
            'fixed': dict(rotation=[0, 180, 0], translation=[0, 0, 0], scale=[0.9, 0.9, 0.9])}
