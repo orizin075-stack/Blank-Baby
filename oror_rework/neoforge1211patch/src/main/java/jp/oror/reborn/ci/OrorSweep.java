@@ -232,6 +232,12 @@ public final class OrorSweep {
                 }
                 case "entities" -> entityTick(r, t, now);
                 case "items" -> itemTick(r, t, now);
+                case "print" -> {
+                    if (t >= 300) {
+                        SweepArms.check(r.level, BlockPos.containing(r.bench).offset(0, 0, -30));
+                        finish(r);
+                    }
+                }
                 default -> {
                 }
             }
@@ -375,7 +381,8 @@ public final class OrorSweep {
                 } catch (Throwable ex) {
                     LOG.info("SWEEP-ARMS {\"error\":\"{}\"}", esc(ex.toString()));
                 }
-                finish(r);
+                r.phase = "print";
+                r.phaseAt = now;
                 return;
             }
             r.item = r.items.get(r.nextItem++);

@@ -42,6 +42,10 @@ final class SweepArms {
     private SweepArms() {
     }
 
+    private static String steps = "";
+    private static int cartsLeft = -1;
+
+    /** The guns, and the Blueprinter's scan and print begun; check() looks at the print once it has had time to rise. */
     static void run(ServerLevel level, Player p, BlockPos base) {
         for (String[] g : new String[][]{{"railgun", "rail_slug"}, {"laser_gun", "focus_cell"}}) {
             try {
@@ -52,6 +56,15 @@ final class SweepArms {
         }
         try {
             blueprint(level, p, base);
+        } catch (Throwable ex) {
+            log("{\"blueprinter\":true,\"error\":\"%s\"}", esc(ex.toString()));
+        }
+    }
+
+    /** The print against the house (the Blueprinter lays its blocks over some seconds, not at once). */
+    static void check(ServerLevel level, BlockPos base) {
+        try {
+            compare(level, base);
         } catch (Throwable ex) {
             log("{\"blueprinter\":true,\"error\":\"%s\"}", esc(ex.toString()));
         }
@@ -195,6 +208,7 @@ final class SweepArms {
         p.getInventory().setItem(p.getInventory().selected, new ItemStack(bp));
         p.getInventory().setItem(21, new ItemStack(cart, 2));
         List<String> steps = new ArrayList<>();
+        int x0 = lo.getX();
         // the two corners, each looked at from where it can be seen
         face(p, Vec3.atBottomCenterOf(lo.offset(-2, 0, -3)), Vec3.atCenterOf(lo));
         steps.add("scan1:" + p.getMainHandItem().use(level, p, InteractionHand.MAIN_HAND).getResult());
@@ -205,7 +219,13 @@ final class SweepArms {
         face(p, Vec3.atBottomCenterOf(base), new Vec3(target.getX() + 0.5, target.getY() - 0.5, target.getZ() + 0.5));
         steps.add("preview:" + p.getMainHandItem().use(level, p, InteractionHand.MAIN_HAND).getResult());
         steps.add("print:" + p.getMainHandItem().use(level, p, InteractionHand.MAIN_HAND).getResult());
-        int cartsLeft = count(p, cart);
+        SweepArms.steps = steps.toString();
+        SweepArms.cartsLeft = count(p, cart);
+    }
+
+    private static void compare(ServerLevel level, BlockPos base) {
+        BlockPos lo = base.offset(5, 0, -6);
+        BlockPos target = base.offset(0, 0, 12);
         BlockPos origin = target.offset(-2, 0, -2);
         int same = 0, differ = 0, diamonds = 0, built = 0;
         for (int dx = 0; dx < 5; dx++) {

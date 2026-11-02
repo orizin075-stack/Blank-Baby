@@ -98,13 +98,21 @@ public final class OrorGameTests {
 
     /** As /test runall does: every test laid out in a grid from at, and the runner started (by reflection: its API moves). */
     private static void startRunner(ServerLevel level, BlockPos at) throws ReflectiveOperationException {
-        int y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, at.getX(), at.getZ()) + 2;
-        BlockPos corner = new BlockPos(at.getX(), y, at.getZ());
         for (int dx = -1; dx <= 8; dx++) {
             for (int dz = -1; dz <= 20; dz++) {
-                level.setChunkForced((corner.getX() >> 4) + dx, (corner.getZ() >> 4) + dz, true);
+                level.setChunkForced((at.getX() >> 4) + dx, (at.getZ() >> 4) + dz, true);
             }
         }
+        // on the ground (its chunk loaded first: unloaded, the height read was the world's floor, and the first run laid
+        // every test out at -62, under the deepslate), at noon held (the first run fell at night, and the villagers of
+        // the work tests were asleep)
+        level.getChunk(at.getX() >> 4, at.getZ() >> 4);
+        int y = Math.max(level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, at.getX(), at.getZ()),
+            level.getSeaLevel()) + 1;
+        BlockPos corner = new BlockPos(at.getX(), y, at.getZ());
+        level.setDayTime(6000);
+        level.getGameRules().getRule(net.minecraft.world.level.GameRules.RULE_DAYLIGHT).set(false, level.getServer());
+        level.setWeatherParameters(12000, 0, false, false);
         Class<?> retryType = Class.forName("net.minecraft.gametest.framework.RetryOptions");
         Object noRetries = retryType.getMethod("noRetries").invoke(null);
         java.lang.reflect.Constructor<?> infoMaker = null;
