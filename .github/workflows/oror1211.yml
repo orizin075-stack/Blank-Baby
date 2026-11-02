@@ -139,18 +139,18 @@ jobs:
           # Nightfall from SETUP_NIGHTFALL's download; not the original Indestructible, which loads a client class on a
           # dedicated server (the pack ships its fixed build in overrides; OROR's mixins for it skip themselves without it)
           extra=(libs/nightfall.jar)
-          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 2400 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
-            'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'SWEEP-RESULT' 'CI-DONE' -- arms,citadel,citadelupdate,war,pilots,landings,aa,villageflight,sweep -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 2700 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
+            'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'SWEEP-RESULT' 'GAMETEST-RESULT' 'CI-DONE' -- arms,citadel,citadelupdate,war,pilots,landings,aa,villageflight,sweep,gametests -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
           # the results first (the full list below is cut at 400 lines), then everything
-          grep -E 'SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
+          grep -E 'GAMETEST-RESULT|SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
             | cut -c1-6000 >> out/server_test.txt || true
           { grep -E 'CITADEL-SELFTEST|CITADEL-UPDATE|WAR-|FLIGHT-|SUPPLY-|VILLAGE-FLIGHT|PLANE-TRACK|CI-DONE|OROR (Citadel|War|Vehicles|CI|Village)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
           # every line of the pilots' flights (the console's tail keeps only the end of the run)
           grep -E 'PLANE-TRACK|PLANE-HURT|HELI-TRACK|VEHICLE-|SUPPLY-|FLIGHT-|LANDING-|AA-' "$RUNNER_TEMP/server/console.log" > out/flight_log.txt || true
           # every entity and item of OROR's own put to work (/oror sweep)
-          grep -E 'SWEEP-|STARTER-KIT' "$RUNNER_TEMP/server/console.log" > out/sweep_log.txt || true
+          grep -E 'SWEEP-|STARTER-KIT|GAMETEST|[Gg]ame[Tt]est|test.*(passed|failed)' "$RUNNER_TEMP/server/console.log" > out/sweep_log.txt || true
           # where the server thread spent the battle (JFR samples between the war's start and its result)
           J="$RUNNER_TEMP/server/war.jfr"; [ -s "$J" ] || J="$RUNNER_TEMP/server/rec.jfr"
           timeout 600 python3 -I tools/jfr_hot.py "$J" "$RUNNER_TEMP/server/console.log" > out/war_profile.txt 2>&1 || true
