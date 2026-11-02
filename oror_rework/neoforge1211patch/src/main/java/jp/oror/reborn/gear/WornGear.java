@@ -82,7 +82,9 @@ public final class WornGear {
         }
 
         static ItemStack first(LivingEntity e, Item item, boolean shownOnly) {
-            List<SlotResult> found = CuriosApi.getCuriosInventory(e).map(h -> h.findCurios(item)).orElse(List.of());
+            // by a predicate, not by the item: Curios keeps what it found for an item until the wearer next ticks, so a
+            // look before the item is put on would hide it until then
+            List<SlotResult> found = CuriosApi.getCuriosInventory(e).map(h -> h.findCurios((ItemStack st) -> st.is(item))).orElse(List.of());
             for (SlotResult r : found) {
                 if (!r.stack().isEmpty() && (!shownOnly || r.slotContext().visible() && !r.slotContext().cosmetic())) {
                     return r.stack();
