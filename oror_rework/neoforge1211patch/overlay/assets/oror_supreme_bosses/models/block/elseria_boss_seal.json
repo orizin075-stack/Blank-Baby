@@ -1,0 +1,91 @@
+{
+ "parent": "minecraft:block/block",
+ "render_type": "minecraft:cutout",
+ "textures": {
+  "particle": "oror_supreme_bosses:block/boss_seal/elseria_side",
+  "top": "oror_supreme_bosses:block/boss_seal/elseria_top",
+  "side": "oror_supreme_bosses:block/boss_seal/elseria_side",
+  "bottom": "oror_supreme_bosses:block/boss_seal_bottom",
+  "glow_top": "oror_supreme_bosses:block/boss_seal/elseria_top_glow",
+  "glow_side": "oror_supreme_bosses:block/boss_seal/elseria_side_glow"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "down": {
+     "texture": "#bottom",
+     "cullface": "down"
+    },
+    "up": {
+     "texture": "#top",
+     "cullface": "up"
+    },
+    "north": {
+     "texture": "#side",
+     "cullface": "north"
+    },
+    "south": {
+     "texture": "#side",
+     "cullface": "south"
+    },
+    "east": {
+     "texture": "#side",
+     "cullface": "east"
+    },
+    "west": {
+     "texture": "#side",
+     "cullface": "west"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "shade": false,
+   "neoforge_data": {
+    "block_light": 15,
+    "sky_light": 15
+   },
+   "faces": {
+    "up": {
+     "texture": "#glow_top",
+     "cullface": "up"
+    },
+    "north": {
+     "texture": "#glow_side",
+     "cullface": "north"
+    },
+    "south": {
+     "texture": "#glow_side",
+     "cullface": "south"
+    },
+    "east": {
+     "texture": "#glow_side",
+     "cullface": "east"
+    },
+    "west": {
+     "texture": "#glow_side",
+     "cullface": "west"
+    }
+   }
+  }
+ ]
+}

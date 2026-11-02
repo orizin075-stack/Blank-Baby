@@ -99,9 +99,11 @@ public final class WornGear {
             return ItemStack.EMPTY;
         }
 
-        /** The slot ids a player has (the CI's record of what Curios gave). */
+        /** The slot ids a player has, each with its number of slots (id:n). */
         static List<String> slots(LivingEntity e) {
-            return CuriosApi.getCuriosInventory(e).map(h -> new ArrayList<>(h.getCurios().keySet())).orElse(new ArrayList<>());
+            List<String> out = new ArrayList<>();
+            CuriosApi.getCuriosInventory(e).ifPresent(h -> h.getCurios().forEach((id, st) -> out.add(id + ":" + st.getSlots())));
+            return out;
         }
 
         static boolean wear(LivingEntity e, String slot, ItemStack s) {
@@ -110,11 +112,11 @@ public final class WornGear {
                     // an inventory never set up (a player that has not joined a level): its slots as they should be
                     h.reset();
                 }
-                if (h.getStacksHandler(slot).isEmpty()) {
+                if (h.getStacksHandler(slot).map(st -> st.getSlots() < 1).orElse(true)) {
                     return false;
                 }
                 h.setEquippedCurio(slot, 0, s);
-                return true;
+                return ItemStack.matches(h.getStacksHandler(slot).get().getStacks().getStackInSlot(0), s);
             }).orElse(false);
         }
     }
