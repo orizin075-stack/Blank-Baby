@@ -1,20 +1,127 @@
 {
-  "parent": "minecraft:item/handheld",
+ "loader": "neoforge:separate_transforms",
+ "gui_light": "front",
+ "textures": {
+  "particle": "oror_supreme_bosses:item/squad_banner"
+ },
+ "base": {
+  "loader": "neoforge:obj",
+  "model": "oror_supreme_bosses:models/item/gear3d/squad_banner.obj",
+  "flip_v": false,
+  "emissive_ambient": true,
+  "automatic_culling": false,
   "textures": {
-    "layer0": "oror_supreme_bosses:item/squad_banner"
+   "tex": "oror_supreme_bosses:item/gear3d/squad_banner",
+   "particle": "oror_supreme_bosses:item/squad_banner"
   },
-  "overrides": [
-    {
-      "predicate": {
-        "oror_supreme_bosses:state": 0.5
-      },
-      "model": "oror_supreme_bosses:item/squad_banner_recharging"
-    },
-    {
-      "predicate": {
-        "oror_supreme_bosses:state": 1.0
-      },
-      "model": "oror_supreme_bosses:item/squad_banner_active"
-    }
-  ]
+  "display": {
+   "thirdperson_righthand": {
+    "rotation": [
+     -10.0,
+     -90.0,
+     0.0
+    ],
+    "translation": [
+     -0.0,
+     -2.0,
+     1.5
+    ],
+    "scale": [
+     0.85,
+     0.85,
+     0.85
+    ]
+   },
+   "firstperson_righthand": {
+    "rotation": [
+     20.0,
+     -90.0,
+     0.0
+    ],
+    "translation": [
+     1.13,
+     -0.867,
+     -0.35
+    ],
+    "scale": [
+     0.527,
+     0.527,
+     0.527
+    ]
+   },
+   "ground": {
+    "rotation": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "translation": [
+     -1.501,
+     -1.933,
+     -0.0
+    ],
+    "scale": [
+     0.414,
+     0.414,
+     0.414
+    ]
+   },
+   "head": {
+    "rotation": [
+     0.0,
+     180.0,
+     0.0
+    ],
+    "translation": [
+     0.0,
+     13.0,
+     7.0
+    ],
+    "scale": [
+     0.6,
+     0.6,
+     0.6
+    ]
+   },
+   "fixed": {
+    "rotation": [
+     0.0,
+     180.0,
+     0.0
+    ],
+    "translation": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "scale": [
+     0.9,
+     0.9,
+     0.9
+    ]
+   }
+  }
+ },
+ "perspectives": {
+  "gui": {
+   "parent": "minecraft:item/generated",
+   "textures": {
+    "layer0": "oror_supreme_bosses:item/squad_banner"
+   }
+  }
+ },
+ "overrides": [
+  {
+   "predicate": {
+    "oror_supreme_bosses:state": 0.5
+   },
+   "model": "oror_supreme_bosses:item/squad_banner_recharging"
+  },
+  {
+   "predicate": {
+    "oror_supreme_bosses:state": 1.0
+   },
+   "model": "oror_supreme_bosses:item/squad_banner_active"
+  }
+ ]
 }

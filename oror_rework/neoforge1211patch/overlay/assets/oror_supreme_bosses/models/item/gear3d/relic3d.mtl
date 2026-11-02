@@ -1,0 +1,10 @@
+# relic item materials: 'glow' is full-bright through NeoForge's emissive_ambient
+newmtl base
+Ka 0 0 0
+Kd 1 1 1
+map_Kd #tex
+
+newmtl glow
+Ka 1 1 1
+Kd 1 1 1
+map_Kd #tex
