@@ -143,7 +143,7 @@ public final class Look {
             if (k == 0) {
                 duel(mc, DUELISTS[d]);
             } else if (k == 2) {
-                view(mc, 0, 1.2, 1.5, 0F, 12F);
+                view(mc, 0, 1.4, 1.2, 0F, 14F);
             }
             if (k >= 6 && k <= 190 && k % 10 == 6) {
                 engage(mc);
@@ -396,14 +396,19 @@ public final class Look {
             return;
         }
         server.execute(() -> {
-            command(server, "kill @e[tag=oror_look]");
-            command(server, "kill @e[type=minecraft:vindicator]");
+            ServerLevel level = server.overworld();
+            // the stage cleared: what earlier scenes set out (the royals' king survives /kill), and what they dropped
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 30, sy - 6, sz - 20, sx + 30, sy + 20, sz + 40),
+                x -> x.getTags().contains("oror_look") || x instanceof net.minecraft.world.entity.item.ItemEntity
+                    || x instanceof net.minecraft.world.entity.monster.Vindicator)) {
+                e.discard();
+            }
             command(server, String.format(java.util.Locale.ROOT,
-                "summon oror_supreme_bosses:%s %.1f %d %.1f {PersistenceRequired:1b,Rotation:[-90f,0f],Tags:[\"oror_look\"]}", who, sx - 3, (int) sy,
-                sz + 7));
-            command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vindicator %.1f %d %.1f {PersistenceRequired:1b,"
-                + "Rotation:[90f,0f],Tags:[\"oror_look\",\"oror_look_foe\"],HandItems:[{id:\"minecraft:iron_axe\",count:1},{}],"
-                + "attributes:[{id:\"minecraft:generic.max_health\",base:500}],Health:500f}", sx + 3, (int) sy, sz + 7));
+                "summon oror_supreme_bosses:%s %.1f %d %.1f {PersistenceRequired:1b,Rotation:[-90f,0f],Tags:[\"oror_look\",\"oror_look_hero\"]}", who,
+                sx - 1.8, (int) sy, sz + 6));
+            command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vindicator %.1f %d %.1f {PersistenceRequired:1b,Invulnerable:1b,"
+                + "Rotation:[90f,0f],Tags:[\"oror_look\",\"oror_look_foe\"],HandItems:[{id:\"minecraft:iron_axe\",count:1},{}]}", sx + 1.8, (int) sy,
+                sz + 6));
             note("duel: " + who);
         });
     }
@@ -425,7 +430,7 @@ public final class Look {
                 net.minecraft.world.entity.Mob m = (net.minecraft.world.entity.Mob) e;
                 if (e.getTags().contains("oror_look_foe")) {
                     foe = m;
-                } else if (hero == null) {
+                } else if (e.getTags().contains("oror_look_hero")) {
                     hero = m;
                 }
             }
@@ -435,8 +440,8 @@ public final class Look {
             }
             for (net.minecraft.world.entity.Mob m : List.of(hero, foe)) {
                 m.setHealth(m.getMaxHealth());
-                if (Math.abs(m.getX() - sx) > 10 || Math.abs(m.getZ() - (sz + 7)) > 8 || Math.abs(m.getY() - sy) > 6) {
-                    m.teleportTo(sx + (m == hero ? -3 : 3), sy, sz + 7);
+                if (Math.abs(m.getX() - sx) > 7 || Math.abs(m.getZ() - (sz + 6)) > 6 || Math.abs(m.getY() - sy) > 6) {
+                    m.teleportTo(sx + (m == hero ? -1.8 : 1.8), sy, sz + 6);
                 }
             }
             hero.setTarget(foe);
