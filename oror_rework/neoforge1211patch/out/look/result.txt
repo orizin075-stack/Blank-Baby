@@ -1,57 +1,91 @@
-177 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-278 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-338 press selectWorld.create
-339 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-439 screenshot popup_ConfirmScreen
-439 press gui.yes
-440 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-467 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-490 screen none in LOADING
-491 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-591 screenshot popup_
-592 screen none in PLAY
-635 stage at 30 105 132
-791 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 0 minecraft:air]
-851 screenshot 10_royals
-861 swing row 0: 8
-864 screenshot 11_royals_swing
-951 screenshot 12_villagers
-961 swing row 10: 6
-964 screenshot 13_villagers_swing
-973 screenshot 13b_villagers_swing_early
-974 swing row 10: 6
-1051 screenshot 14_king_close
-1121 screenshot 15_general_close
-1191 screenshot 16_imperial_close
-1261 screenshot 17_royals_back
-1331 screenshot 18_trader_close
-1334 arms on show
-1451 screenshot 19_arms
-1454 creatures on show
-1571 screenshot 19b_creatures
-1591 throne 976, 141, -16
-3391 screenshot 20_throne_room
-3432 king at 976.1 141.0 -15.7 (throne 976, 141, -16, 0.41 blocks)
-5231 screenshot 21_throne_room_later
-5251 king at 976.7 141.0 -15.6 (throne 976, 141, -16, 0.22 blocks)
-5251 over the capital at 976 16
-7031 screenshot 22_capital_aerial
-7106 over the capital at 711 -223
-8631 screenshot 23_helipad
-8642 over the capital at 726 -361
-10231 screenshot 24_airbase
-10241 at the capital 711 79 -234
-11831 screenshot 25_helipad_supply
-11887 at the capital 571 74 12
-13431 screenshot 26_hangar_supply
-13441 at the capital 1046 184 126
-15031 screenshot 27_palace_roofs
-15104 over the capital at 1337 -262
-16631 screenshot 28_airbase_east
-16641 at the capital 976 76 -188
-18231 screenshot 29_road_fountain
-18241 at the capital 1359 91 -197
-19831 screenshot 30_ranch_barn
-19922 at the capital 1481 109 71
-21431 screenshot 31_fortress_east
-21441 finished: complete
+300 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+401 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+461 press selectWorld.create
+462 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+562 screenshot popup_ConfirmScreen
+562 press gui.yes
+563 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+594 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+618 screen none in LOADING
+619 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+719 screenshot popup_
+720 screen none in PLAY
+749 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
+762 stage at 442 118 -243
+919 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef, minecraft:sheep -> net.minecraft.client.renderer.entity.SheepRenderer holding 0 minecraft:air]
+979 screenshot 10_royals
+989 swing row 0: 8
+992 screenshot 11_royals_swing
+1079 screenshot 12_villagers
+1089 swing row 10: 6
+1092 screenshot 13_villagers_swing
+1101 screenshot 13b_villagers_swing_early
+1101 swing row 10: 6
+1179 screenshot 14_king_close
+1249 screenshot 15_general_close
+1319 screenshot 16_imperial_close
+1389 screenshot 17_royals_back
+1459 screenshot 18_trader_close
+1463 arms on show
+1579 screenshot 19_arms
+1582 creatures on show
+1699 screenshot 19b_creatures
+1709 duel: royal_mage
+1769 screenshot 19c_royal_mage_0
+1775 screenshot 19c_royal_mage_1
+1781 screenshot 19c_royal_mage_2
+1787 screenshot 19c_royal_mage_3
+1793 screenshot 19c_royal_mage_4
+1799 screenshot 19c_royal_mage_5
+1805 screenshot 19c_royal_mage_6
+1811 screenshot 19c_royal_mage_7
+1817 screenshot 19c_royal_mage_8
+1823 screenshot 19c_royal_mage_9
+1910 duel: kingdom_guard
+1969 screenshot 19c_kingdom_guard_0
+1975 screenshot 19c_kingdom_guard_1
+1981 screenshot 19c_kingdom_guard_2
+1987 screenshot 19c_kingdom_guard_3
+1993 screenshot 19c_kingdom_guard_4
+1999 screenshot 19c_kingdom_guard_5
+2005 screenshot 19c_kingdom_guard_6
+2011 screenshot 19c_kingdom_guard_7
+2017 screenshot 19c_kingdom_guard_8
+2023 screenshot 19c_kingdom_guard_9
+2112 duel: valeria
+2169 screenshot 19c_valeria_0
+2175 screenshot 19c_valeria_1
+2181 screenshot 19c_valeria_2
+2187 screenshot 19c_valeria_3
+2193 screenshot 19c_valeria_4
+2199 screenshot 19c_valeria_5
+2205 screenshot 19c_valeria_6
+2211 screenshot 19c_valeria_7
+2217 screenshot 19c_valeria_8
+2223 screenshot 19c_valeria_9
+2319 throne 1328, 136, -640
+4119 screenshot 20_throne_room
+4162 king at 1328.5 136.0 -639.7 (throne 1328, 136, -640, 0.21 blocks)
+5959 screenshot 21_throne_room_later
+5979 king at 1328.6 136.0 -639.7 (throne 1328, 136, -640, 0.22 blocks)
+5979 over the capital at 1328 -608
+7759 screenshot 22_capital_aerial
+7851 over the capital at 1063 -847
+9359 screenshot 23_helipad
+9371 over the capital at 1078 -985
+10959 screenshot 24_airbase
+10969 at the capital 1063 74 -858
+12559 screenshot 25_helipad_supply
+12632 at the capital 923 69 -612
+14159 screenshot 26_hangar_supply
+14169 at the capital 1398 179 -498
+15759 screenshot 27_palace_roofs
+15849 over the capital at 1689 -886
+17359 screenshot 28_airbase_east
+17369 at the capital 1328 71 -812
+18959 screenshot 29_road_fountain
+18969 at the capital 1711 86 -821
+20559 screenshot 30_ranch_barn
+20591 at the capital 1833 104 -553
+22159 screenshot 31_fortress_east
+22169 finished: complete
