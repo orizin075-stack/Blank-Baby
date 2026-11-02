@@ -319,8 +319,9 @@ public final class Look {
         });
     }
 
-    /** (052) The items whose sprites were placeholders, redrawn: twenty in four rows, and an armour stand in the dragon
-     * coat and Teia's boots holding the forge's repair tool and the squad banner. */
+    /** (052) The items whose sprites were placeholders, redrawn: twenty in four rows as they are seen in the world (their
+     * 3D models; the inventory keeps the 2D icons), and an armour stand in the dragon coat and Teia's boots holding the
+     * forge's repair tool and the squad banner. */
     private static void gear(Minecraft mc) {
         IntegratedServer server = mc.getSingleplayerServer();
         if (server == null) {
@@ -334,7 +335,7 @@ public final class Look {
             command(server, "kill @e[type=minecraft:item]");
             for (int i = 0; i < ids.length; i++) {
                 command(server, String.format(java.util.Locale.ROOT, "summon minecraft:item_display %.2f %.2f %.2f "
-                        + "{item:{id:\"oror_supreme_bosses:%s\",count:1},item_display:\"gui\",billboard:\"center\",Tags:[\"oror_look\"],"
+                        + "{item:{id:\"oror_supreme_bosses:%s\",count:1},item_display:\"fixed\",Rotation:[200f,0f],Tags:[\"oror_look\"],"
                         + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[0.85f,0.85f,0.85f]}}",
                     sx - 2.0 + (i % 5) * 1.0, sy + 3.4 - (i / 5) * 1.0, sz + 5.0, ids[i]));
             }
