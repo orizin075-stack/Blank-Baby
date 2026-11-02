@@ -33,7 +33,8 @@ public final class Sidearm {
 
     @SubscribeEvent
     public static void tick(EntityTickEvent.Post e) {
-        if (!(e.getEntity() instanceof Mob m) || m.level().isClientSide || (m.tickCount + m.getId()) % 5 != 0 || m instanceof SupremeEntity) {
+        if (!(e.getEntity() instanceof Mob m) || m.level().isClientSide || (m.tickCount + m.getId()) % 5 != 0 || m instanceof SupremeEntity
+            || m.isPassenger()) {
             return;
         }
         CompoundTag d = m.getPersistentData();

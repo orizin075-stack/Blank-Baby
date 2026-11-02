@@ -28,7 +28,8 @@ import net.minecraft.world.phys.Vec3;
  * <li>farther, out of sight, or flying high above: the bow, drawn for a second and loosed with the drop allowed for,
  * kept at eight to twenty-eight blocks.</li>
  * </ul>
- * With no enemy, the sword and shield. A guard under the war's charge order keeps closing in whatever he holds.
+ * With no enemy, the sword and shield. A guard under the war's charge order keeps closing in whatever he holds; a
+ * guard aboard a machine (a tank, an aircraft, a gun post) is left to it, with his guns as before.
  */
 public final class RoyalArmory {
     enum Arm {
@@ -78,6 +79,12 @@ public final class RoyalArmory {
             return null;
         }
         State s = STATES.computeIfAbsent(mob, k -> new State());
+        if (mob.isPassenger()) {
+            // driving or crewing a machine (a tank, an aircraft, a gun post): his guns' own tick as ever, and his eyes
+            // left to the machine (an aircraft goes where its pilot looks); he takes up his arms again on getting down
+            s.arm = null;
+            return null;
+        }
         LivingEntity t = mob.getTarget();
         boolean fighting = t != null && t.isAlive() && mob.canAttack(t) && !(t instanceof Player p && (p.isCreative() || p.isSpectator()));
         Item gun = pistol();
@@ -167,7 +174,7 @@ public final class RoyalArmory {
             s.bowDelay--;
             return;
         }
-        if (!mob.getSensing().hasLineOfSight(t)) {
+        if (!mob.getSensing().hasLineOfSight(t) || mob.distanceTo(t) > 40) {
             if (mob.isUsingItem()) {
                 mob.stopUsingItem();
             }
