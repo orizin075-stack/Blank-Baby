@@ -132,7 +132,26 @@ public final class Look {
         }
     }
 
+    /** The duels (052): who fights, from tick 990, two hundred ticks apart. */
+    private static final String[] DUELISTS = {"valeria", "kokuhaku", "elseria", "kingdom_guard"};
+
     private static void play(Minecraft mc, int t) {
+        // (052) each duel: the character and an armed vindicator set on each other (and healed) every half second, the
+        // camera five blocks off, twenty-four frames six ticks apart from the fortieth tick
+        for (int d = 0; d < DUELISTS.length; d++) {
+            int k = t - (990 + d * 200);
+            if (k == 0) {
+                duel(mc, DUELISTS[d]);
+            } else if (k == 2) {
+                view(mc, 0, 1.2, 1.5, 0F, 12F);
+            }
+            if (k >= 6 && k <= 190 && k % 10 == 6) {
+                engage(mc);
+            }
+            if (k >= 40 && (k - 40) % 6 == 0 && (k - 40) / 6 < 24) {
+                shot(mc, String.format(java.util.Locale.ROOT, "19c_%s_%02d", DUELISTS[d], (k - 40) / 6));
+            }
+        }
         switch (t) {
             case 2 -> {
                 IntegratedServer server = mc.getSingleplayerServer();
@@ -186,110 +205,6 @@ public final class Look {
             case 862 -> creatures(mc);
             case 864 -> view(mc, 0, 0, -3, 0F, 4F);
             case 980 -> shot(mc, "19b_creatures");
-            case 990 -> duel(mc, "valeria");
-            case 992 -> view(mc, 0, 0.5, -3, 0F, 10F);
-            case 1030 -> shot(mc, "19c_valeria_00");
-            case 1035 -> shot(mc, "19c_valeria_01");
-            case 1040 -> shot(mc, "19c_valeria_02");
-            case 1045 -> shot(mc, "19c_valeria_03");
-            case 1050 -> shot(mc, "19c_valeria_04");
-            case 1055 -> shot(mc, "19c_valeria_05");
-            case 1060 -> shot(mc, "19c_valeria_06");
-            case 1065 -> shot(mc, "19c_valeria_07");
-            case 1070 -> shot(mc, "19c_valeria_08");
-            case 1075 -> shot(mc, "19c_valeria_09");
-            case 1080 -> shot(mc, "19c_valeria_10");
-            case 1085 -> shot(mc, "19c_valeria_11");
-            case 1090 -> shot(mc, "19c_valeria_12");
-            case 1095 -> shot(mc, "19c_valeria_13");
-            case 1100 -> shot(mc, "19c_valeria_14");
-            case 1105 -> shot(mc, "19c_valeria_15");
-            case 1110 -> shot(mc, "19c_valeria_16");
-            case 1115 -> shot(mc, "19c_valeria_17");
-            case 1120 -> shot(mc, "19c_valeria_18");
-            case 1125 -> shot(mc, "19c_valeria_19");
-            case 1130 -> shot(mc, "19c_valeria_20");
-            case 1135 -> shot(mc, "19c_valeria_21");
-            case 1140 -> shot(mc, "19c_valeria_22");
-            case 1145 -> shot(mc, "19c_valeria_23");
-            case 1190 -> duel(mc, "kokuhaku");
-            case 1192 -> view(mc, 0, 0.5, -3, 0F, 10F);
-            case 1230 -> shot(mc, "19c_kokuhaku_00");
-            case 1235 -> shot(mc, "19c_kokuhaku_01");
-            case 1240 -> shot(mc, "19c_kokuhaku_02");
-            case 1245 -> shot(mc, "19c_kokuhaku_03");
-            case 1250 -> shot(mc, "19c_kokuhaku_04");
-            case 1255 -> shot(mc, "19c_kokuhaku_05");
-            case 1260 -> shot(mc, "19c_kokuhaku_06");
-            case 1265 -> shot(mc, "19c_kokuhaku_07");
-            case 1270 -> shot(mc, "19c_kokuhaku_08");
-            case 1275 -> shot(mc, "19c_kokuhaku_09");
-            case 1280 -> shot(mc, "19c_kokuhaku_10");
-            case 1285 -> shot(mc, "19c_kokuhaku_11");
-            case 1290 -> shot(mc, "19c_kokuhaku_12");
-            case 1295 -> shot(mc, "19c_kokuhaku_13");
-            case 1300 -> shot(mc, "19c_kokuhaku_14");
-            case 1305 -> shot(mc, "19c_kokuhaku_15");
-            case 1310 -> shot(mc, "19c_kokuhaku_16");
-            case 1315 -> shot(mc, "19c_kokuhaku_17");
-            case 1320 -> shot(mc, "19c_kokuhaku_18");
-            case 1325 -> shot(mc, "19c_kokuhaku_19");
-            case 1330 -> shot(mc, "19c_kokuhaku_20");
-            case 1335 -> shot(mc, "19c_kokuhaku_21");
-            case 1340 -> shot(mc, "19c_kokuhaku_22");
-            case 1345 -> shot(mc, "19c_kokuhaku_23");
-            case 1390 -> duel(mc, "elseria");
-            case 1392 -> view(mc, 0, 0.5, -3, 0F, 10F);
-            case 1430 -> shot(mc, "19c_elseria_00");
-            case 1435 -> shot(mc, "19c_elseria_01");
-            case 1440 -> shot(mc, "19c_elseria_02");
-            case 1445 -> shot(mc, "19c_elseria_03");
-            case 1450 -> shot(mc, "19c_elseria_04");
-            case 1455 -> shot(mc, "19c_elseria_05");
-            case 1460 -> shot(mc, "19c_elseria_06");
-            case 1465 -> shot(mc, "19c_elseria_07");
-            case 1470 -> shot(mc, "19c_elseria_08");
-            case 1475 -> shot(mc, "19c_elseria_09");
-            case 1480 -> shot(mc, "19c_elseria_10");
-            case 1485 -> shot(mc, "19c_elseria_11");
-            case 1490 -> shot(mc, "19c_elseria_12");
-            case 1495 -> shot(mc, "19c_elseria_13");
-            case 1500 -> shot(mc, "19c_elseria_14");
-            case 1505 -> shot(mc, "19c_elseria_15");
-            case 1510 -> shot(mc, "19c_elseria_16");
-            case 1515 -> shot(mc, "19c_elseria_17");
-            case 1520 -> shot(mc, "19c_elseria_18");
-            case 1525 -> shot(mc, "19c_elseria_19");
-            case 1530 -> shot(mc, "19c_elseria_20");
-            case 1535 -> shot(mc, "19c_elseria_21");
-            case 1540 -> shot(mc, "19c_elseria_22");
-            case 1545 -> shot(mc, "19c_elseria_23");
-            case 1590 -> duel(mc, "berit");
-            case 1592 -> view(mc, 0, 0.5, -3, 0F, 10F);
-            case 1630 -> shot(mc, "19c_berit_00");
-            case 1635 -> shot(mc, "19c_berit_01");
-            case 1640 -> shot(mc, "19c_berit_02");
-            case 1645 -> shot(mc, "19c_berit_03");
-            case 1650 -> shot(mc, "19c_berit_04");
-            case 1655 -> shot(mc, "19c_berit_05");
-            case 1660 -> shot(mc, "19c_berit_06");
-            case 1665 -> shot(mc, "19c_berit_07");
-            case 1670 -> shot(mc, "19c_berit_08");
-            case 1675 -> shot(mc, "19c_berit_09");
-            case 1680 -> shot(mc, "19c_berit_10");
-            case 1685 -> shot(mc, "19c_berit_11");
-            case 1690 -> shot(mc, "19c_berit_12");
-            case 1695 -> shot(mc, "19c_berit_13");
-            case 1700 -> shot(mc, "19c_berit_14");
-            case 1705 -> shot(mc, "19c_berit_15");
-            case 1710 -> shot(mc, "19c_berit_16");
-            case 1715 -> shot(mc, "19c_berit_17");
-            case 1720 -> shot(mc, "19c_berit_18");
-            case 1725 -> shot(mc, "19c_berit_19");
-            case 1730 -> shot(mc, "19c_berit_20");
-            case 1735 -> shot(mc, "19c_berit_21");
-            case 1740 -> shot(mc, "19c_berit_22");
-            case 1745 -> shot(mc, "19c_berit_23");
             case 1800 -> throne(mc);
             case 3600 -> shot(mc, "20_throne_room");
             case 3640 -> king(mc);
@@ -427,10 +342,52 @@ public final class Look {
             command(server, String.format(java.util.Locale.ROOT,
                 "summon oror_supreme_bosses:%s %.1f %d %.1f {PersistenceRequired:1b,Rotation:[-90f,0f],Tags:[\"oror_look\"]}", who, sx - 3, (int) sy,
                 sz + 7));
-            command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vindicator %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,"
-                + "Rotation:[90f,0f],Tags:[\"oror_look\"],attributes:[{id:\"minecraft:generic.max_health\",base:500}],Health:500f}", sx + 3, (int) sy,
-                sz + 7));
+            command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vindicator %.1f %d %.1f {PersistenceRequired:1b,"
+                + "Rotation:[90f,0f],Tags:[\"oror_look\",\"oror_look_foe\"],HandItems:[{id:\"minecraft:iron_axe\",count:1},{}],"
+                + "attributes:[{id:\"minecraft:generic.max_health\",base:500}],Health:500f}", sx + 3, (int) sy, sz + 7));
             note("duel: " + who);
+        });
+    }
+
+    /**
+     * (052) The duel's two set on each other, healed, and brought back to the stage if they have wandered off it, so that
+     * the character keeps fighting (its techniques, big moves and guard) in front of the camera.
+     */
+    private static void engage(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null) {
+            return;
+        }
+        server.execute(() -> {
+            ServerLevel level = server.overworld();
+            net.minecraft.world.entity.Mob hero = null, foe = null;
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 24, sy - 4, sz - 16, sx + 24, sy + 12, sz + 30),
+                x -> x.getTags().contains("oror_look") && x instanceof net.minecraft.world.entity.Mob)) {
+                net.minecraft.world.entity.Mob m = (net.minecraft.world.entity.Mob) e;
+                if (e.getTags().contains("oror_look_foe")) {
+                    foe = m;
+                } else if (hero == null) {
+                    hero = m;
+                }
+            }
+            if (hero == null || foe == null) {
+                note("engage: hero " + (hero != null) + " foe " + (foe != null));
+                return;
+            }
+            for (net.minecraft.world.entity.Mob m : List.of(hero, foe)) {
+                m.setHealth(m.getMaxHealth());
+                if (Math.abs(m.getX() - sx) > 10 || Math.abs(m.getZ() - (sz + 7)) > 8 || Math.abs(m.getY() - sy) > 6) {
+                    m.teleportTo(sx + (m == hero ? -3 : 3), sy, sz + 7);
+                }
+            }
+            hero.setTarget(foe);
+            foe.setTarget(hero);
+            net.minecraft.nbt.CompoundTag data = hero.getPersistentData();
+            note("engage: " + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(hero.getType()).getPath() + " holds "
+                + net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(hero.getMainHandItem().getItem()).getPath() + " dist "
+                + String.format(java.util.Locale.ROOT, "%.1f", hero.distanceTo(foe)) + " move " + data.getString("ororMove") + " parries "
+                + data.getInt("OrorParries") + "/" + data.getInt("RoyalParries") + " blocks " + data.getInt("OrorBlocks") + "/"
+                + data.getInt("RoyalBlocks") + " cast " + data.getInt("OrorCastSequence"));
         });
     }
 
