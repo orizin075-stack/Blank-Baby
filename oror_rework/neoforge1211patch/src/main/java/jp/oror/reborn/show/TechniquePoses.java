@@ -142,6 +142,67 @@ public final class TechniquePoses {
             pose("root", 0.45, 0, 0, -2, "head", 0.3, 0, 0, "arm_r", -1.4, 0, 0.3, "arm_l", -1.4, 0, -0.3), "");
     }
 
+    // ------------------------------------------------------------------------------------------- the weapon's manner
+
+    /** The techniques worked with a hand (a sign, a seal, a draw), rather than with the weapon. */
+    private static final java.util.Set<String> HAND = java.util.Set.of("SEAL", "HEAL", "MANA", "TRANSMUTE", "REWIND", "COPY", "ADAPT", "CURSE",
+        "DRAIN", "PULL", "FATE", "LAW", "REPAIR", "GROW", "WEATHER");
+    private static Map<String, String> styles;
+
+    /** The character's weapon, grouped: blade, polearm, heavy, fist, whip, ranged, shield, chakram, magic. */
+    static String style(String character) {
+        if (styles == null) {
+            Map<String, String> m = new HashMap<>();
+            try (java.io.InputStream in = TechniquePoses.class.getResourceAsStream("/assets/oror_supreme_bosses/weapon_kinds.json")) {
+                if (in != null) {
+                    com.google.gson.JsonObject chars = com.google.gson.JsonParser.parseReader(new java.io.InputStreamReader(in,
+                        java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject().getAsJsonObject("characters");
+                    for (Map.Entry<String, com.google.gson.JsonElement> e : chars.entrySet()) {
+                        String kind = e.getValue().isJsonPrimitive() ? e.getValue().getAsString() : "magic";
+                        m.put(e.getKey(), switch (kind) {
+                            case "katana", "sword", "greatsword", "rapier", "scythe" -> "blade";
+                            case "polearm" -> "polearm";
+                            case "heavy", "toyhammer" -> "heavy";
+                            case "fist" -> "fist";
+                            case "whip" -> "whip";
+                            case "gatling", "cannon", "bow" -> "ranged";
+                            case "shield" -> "shield";
+                            case "chakram" -> "chakram";
+                            default -> "magic";
+                        });
+                    }
+                }
+            } catch (java.io.IOException | RuntimeException ex) {
+                // no styles: every character works as a caster
+            }
+            styles = m;
+        }
+        return styles.getOrDefault(character, "magic");
+    }
+
+    /** The weapon held at the ready while the other hand works a sign. */
+    private static final Map<String, float[]> READY = Map.of(
+        "blade", new float[]{-1.05F, -0.25F, 0.1F}, "polearm", new float[]{-0.75F, -0.3F, 0}, "heavy", new float[]{-0.35F, 0, 0.25F},
+        "fist", new float[]{-1.25F, -0.35F, -0.2F}, "whip", new float[]{-0.5F, 0, 0.35F}, "ranged", new float[]{-1.45F, 0, 0},
+        "shield", new float[]{-1.2F, 0.3F, 0}, "chakram", new float[]{-0.8F, 0.4F, 0.3F});
+
+    /** The weapon's manner laid over a technique worked with the weapon: windup and release offsets by role. */
+    private static final Map<String, Map<String, float[][]>> MANNER = new HashMap<>();
+
+    static {
+        MANNER.put("blade", Map.of("arm_r", new float[][]{{-0.4F, 0.5F, 0}, {0.1F, -0.6F, 0}}, "torso", new float[][]{{0, 0.3F, 0}, {0.1F, -0.35F, 0}}));
+        MANNER.put("polearm", Map.of("arm_r", new float[][]{{0.3F, 0.2F, 0}, {-0.35F, 0, 0}}, "arm_l", new float[][]{{0.3F, -0.2F, 0}, {-0.35F, 0, 0}},
+            "torso", new float[][]{{-0.15F, 0, 0}, {0.25F, 0, 0}}));
+        MANNER.put("heavy", Map.of("arm_r", new float[][]{{-1.0F, 0, 0}, {0.6F, 0, 0}}, "arm_l", new float[][]{{-1.0F, 0, 0}, {0.6F, 0, 0}},
+            "torso", new float[][]{{-0.25F, 0, 0}, {0.35F, 0, 0}}));
+        MANNER.put("fist", Map.of("arm_r", new float[][]{{0.4F, 0.3F, 0}, {-0.3F, -0.2F, 0}}, "torso", new float[][]{{0, 0.4F, 0}, {0.15F, -0.45F, 0}}));
+        MANNER.put("whip", Map.of("arm_r", new float[][]{{-0.7F, 0.7F, 0.4F}, {0.2F, -0.9F, -0.2F}}));
+        MANNER.put("ranged", Map.of("arm_r", new float[][]{{-0.2F, 0, 0}, {-0.3F, 0, 0}}, "arm_l", new float[][]{{-0.9F, 0.3F, 0}, {-1.1F, 0.3F, 0}},
+            "torso", new float[][]{{0, 0, 0}, {-0.12F, 0, 0}}));
+        MANNER.put("shield", Map.of("arm_l", new float[][]{{-1.1F, 0.4F, 0}, {-1.3F, 0.2F, -0.2F}}, "torso", new float[][]{{0.1F, 0, 0}, {0.2F, 0, 0}}));
+        MANNER.put("chakram", Map.of("arm_r", new float[][]{{0, 1.1F, 0.3F}, {0, -1.3F, 0.6F}}, "torso", new float[][]{{0, 0.5F, 0}, {0, -0.5F, 0}}));
+    }
+
     // ------------------------------------------------------------------------------------------------ the rig's parts
 
     private static final Map<Object, List<Ref>> PARTS = new WeakHashMap<>();
@@ -221,9 +282,34 @@ public final class TechniquePoses {
         for (Ref r : parts) {
             hasArms |= r.role().startsWith("arm");
         }
+        String style = style(show.character());
+        // a sign worked by a warrior: the weapon held ready in the right hand, the sign made with the left (mirrored)
+        boolean leftHand = !style.equals("magic") && HAND.contains(show.mechanic());
+        Map<String, float[][]> manner = HAND.contains(show.mechanic()) ? null : MANNER.get(style);
         for (Ref r : parts) {
-            float[] w = c.windup().get(r.role()), re = c.release().get(r.role());
+            String role = r.role();
+            boolean mirror = false;
+            if (leftHand && role.equals("arm_l")) {
+                role = "arm_r";
+                mirror = true;
+            }
+            float[] w = c.windup().get(role), re = c.release().get(role);
+            if (leftHand && r.role().equals("arm_r")) {
+                float[] ready = READY.getOrDefault(style, READY.get("blade"));
+                w = new float[]{ready[0], ready[1], ready[2], 0};
+                re = w;
+            }
+            if (mirror) {
+                w = w == null ? null : new float[]{w[0], -w[1], -w[2], w[3]};
+                re = re == null ? null : new float[]{re[0], -re[1], -re[2], re[3]};
+            }
             float x = 0, y = 0, z = 0, lift = 0;
+            float[][] m = manner == null ? null : manner.get(r.role());
+            if (m != null) {
+                x += m[0][0] * ww + m[1][0] * wr;
+                y += m[0][1] * ww + m[1][1] * wr;
+                z += m[0][2] * ww + m[1][2] * wr;
+            }
             if (w != null) {
                 x += w[0] * ww;
                 y += w[1] * ww;
@@ -252,7 +338,12 @@ public final class TechniquePoses {
                 default -> {
                 }
             }
-            float[] beat = beat(c.beat(), r, u, time, wr);
+            String beatRole = !leftHand ? r.role() : r.role().equals("arm_l") ? "arm_r" : r.role().equals("arm_r") ? "weapon" : r.role();
+            float[] beat = beat(c.beat(), new Ref(r.part(), beatRole, r.left(), r.index()), u, time, wr);
+            if (mirror) {
+                beat[1] = -beat[1];
+                beat[2] = -beat[2];
+            }
             r.part().xRot += x + beat[0];
             r.part().yRot += y + beat[1];
             r.part().zRot += z + beat[2];
