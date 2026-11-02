@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "oror_supreme_bosses:item/parry_emblem"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "oror_supreme_bosses:state": 0.5
+      },
+      "model": "oror_supreme_bosses:item/parry_emblem_recharging"
+    },
+    {
+      "predicate": {
+        "oror_supreme_bosses:state": 1.0
+      },
+      "model": "oror_supreme_bosses:item/parry_emblem_active"
+    }
+  ]
+}
