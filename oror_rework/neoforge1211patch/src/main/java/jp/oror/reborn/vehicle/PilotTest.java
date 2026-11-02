@@ -303,6 +303,23 @@ public final class PilotTest {
                     r.planeHealth - h, r.plane.getY(), r.level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(r.plane.getX()),
                         (int) Math.floor(r.plane.getZ())), r.plane.onGround(), r.plane.getDeltaMovement().length(), r.plane.getDeltaMovement().y,
                     r.plane.getXRot(), roll instanceof Number n ? String.format(Locale.ROOT, "%.1f", n.floatValue()) : "0", r.plane.horizontalCollision));
+                // (052) where it was hurt, and what was about it: the entities touching it, the solid blocks just ahead
+                StringBuilder near = new StringBuilder();
+                for (net.minecraft.world.entity.Entity o : r.level.getEntities(r.plane, r.plane.getBoundingBox().inflate(2.0),
+                    o -> !r.plane.hasPassenger(o))) {
+                    near.append(near.length() == 0 ? "" : ",").append(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(o.getType()).getPath())
+                        .append(String.format(Locale.ROOT, "@%.0f/%.0f/%.0f", o.getX(), o.getY(), o.getZ()));
+                }
+                net.minecraft.world.phys.Vec3 ahead = r.plane.position().add(r.plane.getDeltaMovement().normalize().scale(3));
+                int solid = 0;
+                for (net.minecraft.core.BlockPos q : net.minecraft.core.BlockPos.betweenClosed(net.minecraft.core.BlockPos.containing(ahead).offset(-2, -1, -2),
+                    net.minecraft.core.BlockPos.containing(ahead).offset(2, 3, 2))) {
+                    if (!r.level.getBlockState(q).getCollisionShape(r.level, q).isEmpty()) {
+                        solid++;
+                    }
+                }
+                LOG.info(String.format(Locale.ROOT, "PLANE-HURT-AT {\"t\":%d,\"at\":[%.1f,%.1f,%.1f],\"heading\":%.0f,\"near\":\"%s\",\"solidAhead\":%d}", t,
+                    r.plane.getX(), r.plane.getY(), r.plane.getZ(), r.plane.getYRot(), near, solid));
             }
             r.planeHealth = h;
         }
