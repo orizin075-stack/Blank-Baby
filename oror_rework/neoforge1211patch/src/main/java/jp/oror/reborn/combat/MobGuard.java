@@ -45,7 +45,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * of Epic Fight's Combat Evolution and Indestructible keep their own guard; every other mob (the vanilla ones, other
  * mods', OROR's characters) now guards by the royals' rules, scaled to what it is:
  * <ul>
- * <li>a boss (OROR's characters, the bosses' tag, two hundred health or more) raises its guard every 1.8 seconds,
+ * <li>a boss (OROR's characters, the bosses' tag: not health, which the pack's mob levels raise) raises its guard every 1.8 seconds,
  * with a deeper stamina, and turns arrows aside as well;</li>
  * <li>an armed mob (a weapon or a shield in hand) every 2.5 seconds; it parries arrows with a blade, and blocks them
  * with a shield;</li>
@@ -103,7 +103,7 @@ public final class MobGuard {
     }
 
     static Tier tier(Mob m) {
-        if (m instanceof SupremeEntity || m.getType().is(Tags.EntityTypes.BOSSES) || m.getMaxHealth() >= 200F) {
+        if (m instanceof SupremeEntity || m.getType().is(Tags.EntityTypes.BOSSES)) {
             return Tier.BOSS;
         }
         ItemStack main = m.getMainHandItem();
@@ -348,11 +348,9 @@ public final class MobGuard {
         if (m instanceof RoyalMob) {
             return "royal";
         }
-        if (guards(m)) {
-            return "oror " + tier(m).name().toLowerCase(java.util.Locale.ROOT);
-        }
         String patch = ModList.get().isLoaded("epicfight") ? Ef.patchClass(m) : "";
-        return "native " + (patch == null ? "?" : patch.substring(patch.lastIndexOf('.') + 1));
+        patch = patch == null ? "?" : patch.isEmpty() ? "no patch" : patch.substring(patch.lastIndexOf('.') + 1);
+        return (guards(m) ? "oror " + tier(m).name().toLowerCase(java.util.Locale.ROOT) : "native") + " [" + patch + "]";
     }
 
     /** What a mob has guarded (for the checks): parries, blocks, broken guards, and times it was parried. */

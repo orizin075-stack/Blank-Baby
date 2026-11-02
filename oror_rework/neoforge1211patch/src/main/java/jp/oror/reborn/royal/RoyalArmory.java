@@ -53,7 +53,7 @@ public final class RoyalArmory {
             looked = true;
             for (String id : new String[]{"superbwarfare:glock_17", "superbwarfare:taser"}) {
                 Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
-                if (item != Items.AIR && item.getClass().getName().contains("Gun")) {
+                if (item instanceof com.atsuishio.superbwarfare.item.gun.GunItem) {
                     pistol = item;
                     break;
                 }

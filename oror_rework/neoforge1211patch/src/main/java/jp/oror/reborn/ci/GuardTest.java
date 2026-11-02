@@ -54,8 +54,8 @@ public final class GuardTest {
     public static volatile boolean resultLogged;
 
     static final class Tester extends FakePlayer {
-        Tester(ServerLevel level) {
-            super(level, new GameProfile(UUID.fromString("0f0e0d0c-0b0a-4908-8706-050403020101"), "[OROR Guard]"));
+        Tester(ServerLevel level, int n) {
+            super(level, new GameProfile(UUID.fromString("0f0e0d0c-0b0a-4908-8706-0504030201" + String.format("%02x", n)), "[OROR Guard " + n + "]"));
         }
 
         void ready() {
@@ -70,7 +70,7 @@ public final class GuardTest {
         final List<Entity> made = new ArrayList<>();
         String phase = "load";
         long phaseAt;
-        Tester tester;
+        final List<Tester> testers = new ArrayList<>();
         final List<Mob> duelists = new ArrayList<>();
         final List<BlockPos> spots = new ArrayList<>();
         final Map<String, Object> result = new LinkedHashMap<>();
@@ -194,8 +194,6 @@ public final class GuardTest {
                     return;
                 }
                 BlockPos a = floor(r.level, r.origin);
-                r.tester = new Tester(r.level);
-                r.tester.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                 String[][] who = {{"minecraft:vindicator", "iron_axe"}, {"minecraft:wither_skeleton", "stone_sword"}, {"minecraft:zombie", ""},
                     {"minecraft:skeleton", "bow"}, {"minecraft:spider", ""}, {"minecraft:piglin_brute", "golden_axe"}};
                 for (int i = 0; i < who.length; i++) {
@@ -207,6 +205,9 @@ public final class GuardTest {
                         m.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100000, 10, false, false));
                         r.duelists.add(m);
                         r.spots.add(spot);
+                        Tester tester = new Tester(r.level, i);
+                        tester.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                        r.testers.add(tester);
                     }
                 }
                 next(r, "duel");
@@ -218,15 +219,16 @@ public final class GuardTest {
                     BlockPos spot = r.spots.get(i);
                     Vec3 me = new Vec3(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5);
                     Vec3 front = me.add(0, 0, 2);
+                    Tester tester = r.testers.get(i);
                     m.moveTo(me.x, me.y, me.z, m.getYRot(), 0);
                     m.setDeltaMovement(Vec3.ZERO);
                     face(m, front);
-                    m.setTarget(r.tester);
+                    tester.moveTo(front.x, front.y, front.z, 180F, 0);
+                    m.setTarget(tester);
                     m.setHealth(m.getMaxHealth());
                     if (t % 10 == (i * 2L) % 10 && t > 20) {
-                        r.tester.moveTo(front.x, front.y, front.z, 180F, 0);
-                        r.tester.ready();
-                        r.tester.attack(m);
+                        tester.ready();
+                        tester.attack(m);
                     }
                 }
                 if (t >= 260) {
@@ -236,7 +238,8 @@ public final class GuardTest {
                             + MobGuard.tally(m));
                     }
                     r.result.put("mobs", tallies);
-                    r.result.put("testerParried", r.tester.getPersistentData().getInt("OrorParried"));
+                    r.result.put("testersParried", r.testers.stream().mapToInt(x -> x.getPersistentData().getInt("OrorParried")).sum());
+                    r.result.put("strikes", r.testers.size() + " testers x 24");
                     // a player's parry against a mob: the zombie thrown back and staggered
                     Mob zombie = r.duelists.stream().filter(m -> m.getType() == EntityType.ZOMBIE).findFirst().orElse(null);
                     if (zombie != null) {
