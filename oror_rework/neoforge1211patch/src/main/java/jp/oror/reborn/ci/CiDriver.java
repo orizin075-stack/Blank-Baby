@@ -61,6 +61,7 @@ public final class CiDriver {
                 case "landings" -> "oror pilots landings";
                 case "arms" -> "oror arms test";
                 case "guards" -> "oror guards test";
+                case "worn" -> "oror worn test";
                 case "sweep" -> "oror sweep";
                 case "gametests" -> "oror gametests";
                 case "aa" -> "oror aa test";
@@ -91,6 +92,7 @@ public final class CiDriver {
             case "landings" -> jp.oror.reborn.vehicle.LandingTest.resultLogged;
             case "arms" -> jp.oror.reborn.royal.KingslayerArms.Remake.testLogged;
             case "guards" -> GuardTest.resultLogged;
+            case "worn" -> WornTest.resultLogged;
             case "sweep" -> OrorSweep.resultLogged;
             case "gametests" -> OrorGameTests.resultLogged;
             case "aa" -> jp.oror.reborn.vehicle.AntiAirTest.resultLogged;

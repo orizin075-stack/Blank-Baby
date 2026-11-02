@@ -3,8 +3,11 @@ inventory keeps its 2D icon (textures/item/<id>.png, drawn by neoforge1211patch/
 not look like one flat sprite stretched in two places.
 
 Same toolkit and conventions as w3artifacts (u up the item's axis, v across, w depth; texels, 32 to the block; u = 0
-where the hand holds it). Holds: 'palm' (carried upright in the open hand: the round things, the key, the book, the
-armour), 'sword' (gripped by the handle: the repair tool), 'staff' (the banner, upright in the fist). What is round is
+where the hand holds it). Holds, each as the thing would be held: 'palm' (shown upright on the open hand: the crystals,
+the cores, the flasks, the spool, the book, the coat), 'fist' (the talon worn on the hand as a claw; the token, the
+talisman and the boots hanging from the hand by their ribbon, chain and tops), 'shield' (the emblem worn on the forearm
+like a buckler), 'sword' (the repair tool gripped as a tool, the key held out as if to turn it), 'staff' (the banner
+upright in the fist, the flower held up by its stem). What is round is
 round (flasks, the core, the heart: sphere()), and things are held at about their own size beside the hand. The gear that changes as it is used gets its states:
 '_active' (at work) and '_recharging' (drained of colour); the last bloom '_closed' (a bud while it recharges).
 
@@ -226,7 +229,9 @@ def g_focus_cell(w, **o):
     octo(w, 11, 2, 1.6, Mt('metal', '#596170'), 'pin')
 
 def g_dodge_talon(w, active=False, dim=False, **o):
-    """A raptor's foot of iron, three talons, a cuff of feathers; at work, the wind wound round it."""
+    """A raptor's foot of iron, three talons, a cuff of feathers, worn on the hand: the cuff round the wrist, the
+    talons out past the knuckles; at work, the wind wound round it."""
+    w = w.group(0, 0, 0, rot=(0, 0, 180), name='worn')
     c = (lambda x: grey(x)) if dim else (lambda x: x)
     iron = Mt('metal', c('#8c95a4'))
     dark = Mt('metal', c('#3b3440'))
@@ -299,17 +304,17 @@ def g_squad_banner(w, active=False, dim=False, **o):
 DESIGNS = {
     'star_shard': (g_star_shard, 'palm', {}), 'dragon_core': (g_dragon_core, 'palm', {}),
     'forge_core': (g_forge_core, 'palm', {}), 'curse_residue': (g_curse_residue, 'palm', {}),
-    'world_thread': (g_world_thread, 'palm', {}), 'rewind_talisman': (g_rewind_talisman, 'palm', {}),
+    'world_thread': (g_world_thread, 'palm', {}), 'rewind_talisman': (g_rewind_talisman, 'fist', {}),
     'purifying_dew': (g_purifying_dew, 'palm', {}), 'mana_crystal': (g_mana_crystal, 'palm', {}),
-    'dungeon_key': (g_dungeon_key, 'palm', {}), 'field_guide': (g_field_guide, 'palm', {}),
+    'dungeon_key': (g_dungeon_key, 'sword', {'length': 0.55, 'fp_scale': 0.62}), 'field_guide': (g_field_guide, 'palm', {}),
     'forge_tool': (g_forge_tool, 'sword', {'length': 1.3}), 'dragon_coat': (g_dragon_coat, 'palm', {}),
-    'teia_boots': (g_teia_boots, 'palm', {}), 'omniregistry_treasure': (g_omniregistry_treasure, 'palm', {}),
-    'villager_king_token': (g_villager_king_token, 'palm', {}), 'focus_cell': (g_focus_cell, 'palm', {}),
-    'dodge_talon': (g_dodge_talon, 'palm', {}), 'dodge_talon_active': (g_dodge_talon, 'palm', {'active': True}),
-    'dodge_talon_recharging': (g_dodge_talon, 'palm', {'dim': True}),
-    'last_bloom': (g_last_bloom, 'palm', {}), 'last_bloom_closed': (g_last_bloom, 'palm', {'closed': True}),
-    'parry_emblem': (g_parry_emblem, 'palm', {}), 'parry_emblem_active': (g_parry_emblem, 'palm', {'active': True}),
-    'parry_emblem_recharging': (g_parry_emblem, 'palm', {'dim': True}),
+    'teia_boots': (g_teia_boots, 'fist', {}), 'omniregistry_treasure': (g_omniregistry_treasure, 'palm', {}),
+    'villager_king_token': (g_villager_king_token, 'fist', {}), 'focus_cell': (g_focus_cell, 'palm', {}),
+    'dodge_talon': (g_dodge_talon, 'fist', {}), 'dodge_talon_active': (g_dodge_talon, 'fist', {'active': True}),
+    'dodge_talon_recharging': (g_dodge_talon, 'fist', {'dim': True}),
+    'last_bloom': (g_last_bloom, 'staff', {'length': 0.75, 'fp_len': 0.45}), 'last_bloom_closed': (g_last_bloom, 'staff', {'length': 0.75, 'fp_len': 0.45, 'closed': True}),
+    'parry_emblem': (g_parry_emblem, 'shield', {}), 'parry_emblem_active': (g_parry_emblem, 'shield', {'active': True}),
+    'parry_emblem_recharging': (g_parry_emblem, 'shield', {'dim': True}),
     'squad_banner': (g_squad_banner, 'staff', {'length': 1.9}), 'squad_banner_active': (g_squad_banner, 'staff', {'length': 1.9, 'active': True}),
     'squad_banner_recharging': (g_squad_banner, 'staff', {'length': 1.9, 'dim': True}),
 }
@@ -336,15 +341,16 @@ def length_blocks(quads):
 def display(hold, opt, quads):
     if hold == 'staff':
         n = length_blocks(quads)
-        d = Hd.derive_staff(round(opt['length'] / (n * 0.9375), 3), round(1.05 / n, 3))
+        d = Hd.derive_staff(round(opt['length'] / (n * 0.9375), 3), round(opt.get('fp_len', 1.05) / n, 3))
     elif hold == 'sword':
         tp = round(min(0.85, max(0.3, opt['length'] / (length_blocks(quads) * 0.9375))), 3)
-        d = Hd.derive(scale_tp=tp, scale_fp=round(tp * 0.62, 3), hold='sword')
+        d = Hd.derive(scale_tp=tp, scale_fp=opt.get('fp_scale', round(tp * 0.62, 3)), hold='sword')
     else:
-        d = Hd.derive(scale_tp=0.75, scale_fp=0.55, hold=hold)
-        # held up a little higher in first person, so that what is shown on the palm is seen whole
+        d = Hd.derive(scale_tp={'palm': 0.75, 'fist': 0.7, 'shield': 0.6}[hold], scale_fp={'palm': 0.55, 'fist': 0.5, 'shield': 0.5}[hold], hold=hold)
+        # held up a little higher in first person, so that what is shown on the palm, or hangs from the hand, is seen
         fp = d['firstperson_righthand']
-        fp['translation'] = [fp['translation'][0], fp['translation'][1] + 1.6, fp['translation'][2]]
+        lift = {'palm': 1.6, 'fist': 3.0, 'shield': 0.0}[hold]
+        fp['translation'] = [fp['translation'][0], fp['translation'][1] + lift, fp['translation'][2]]
     out = {'thirdperson_righthand': d['thirdperson_righthand'], 'firstperson_righthand': d['firstperson_righthand'],
            'ground': Hd.ground(quads), 'head': dict(rotation=[0, 180, 0], translation=[0, 13, 7], scale=[0.6, 0.6, 0.6]),
            'fixed': dict(rotation=[0, 180, 0], translation=[0, 0, 0], scale=[0.9, 0.9, 0.9])}
@@ -374,6 +380,10 @@ def item_json(rid, disp):
     }
     if rid in STATES:
         m['overrides'] = [{'predicate': {f'{NS}:state': v}, 'model': f'{NS}:item/{mdl}'} for v, mdl in STATES[rid]]
+    import w3worn
+    if rid in w3worn.PIECES:
+        # worn on the body (w3worn.py), after the states so that being worn wins
+        m['overrides'] = m.get('overrides', []) + w3worn.worn_overrides(rid)
     return m
 
 
@@ -415,8 +425,72 @@ def preview(png, ids):
     sheet.save(png)
 
 
+# ------------------------------------------------------------------------------------------------- placed in the world
+# (052) some of the gear can be set down (PlacedGear): the item's model stood on the floor as a block, turned to face
+# whoever set it, its height in blocks
+PLACED = {'squad_banner': 2.3, 'last_bloom': 0.8, 'dragon_core': 0.9, 'star_shard': 0.8, 'forge_core': 0.95,
+          'omniregistry_treasure': 1.0}
+
+
+def block_obj(item_obj, height):
+    """The item's OBJ stood on the floor of a block: its foot at y = 0, centred, scaled to the height given (and no
+    wider than the block)."""
+    lines = open(item_obj).read().splitlines()
+    vs = [tuple(map(float, l.split()[1:4])) for l in lines if l.startswith('v ')]
+    xs, ys, zs = zip(*vs)
+    h = max(ys) - min(ys)
+    k = height / h
+    k = min(k, 0.94 / max(1e-6, max(xs) - min(xs)), 0.94 / max(1e-6, max(zs) - min(zs))) if height <= 1.2 else k
+    cx, cz, y0 = (max(xs) + min(xs)) / 2, (max(zs) + min(zs)) / 2, min(ys)
+    out = []
+    for l in lines:
+        if l.startswith('v '):
+            x, y, z = map(float, l.split()[1:4])
+            out.append('v %.4f %.4f %.4f' % (0.5 + (x - cx) * k, (y - y0) * k, 0.5 + (z - cz) * k))
+        else:
+            out.append(l)
+    return '\n'.join(out) + '\n'
+
+
+def export_blocks(root):
+    od = os.path.join(root, 'models', 'block', 'gear3d')
+    os.makedirs(od, exist_ok=True)
+    with open(os.path.join(od, 'relic3d.mtl'), 'w') as fh:
+        fh.write(F.MTL)
+    for rid, height in PLACED.items():
+        name = 'placed_' + rid
+        src = os.path.join(root, 'models', 'item', 'gear3d', rid + '.obj')
+        open(os.path.join(od, rid + '.obj'), 'w').write(block_obj(src, height))
+        model = {'loader': 'neoforge:obj', 'model': f'{NS}:models/block/gear3d/{rid}.obj', 'flip_v': False, 'emissive_ambient': True,
+                 'automatic_culling': False, 'render_type': 'minecraft:cutout',
+                 'textures': {'tex': f'{NS}:item/gear3d/{rid}', 'particle': f'{NS}:item/{rid}'}}
+        os.makedirs(os.path.join(root, 'models', 'block'), exist_ok=True)
+        json.dump(model, open(os.path.join(root, 'models', 'block', name + '.json'), 'w'), indent=1)
+        bs = {'variants': {f'facing={f}': {'model': f'{NS}:block/{name}', **({'y': y} if y else {})}
+                           for f, y in (('north', 180), ('east', 270), ('south', 0), ('west', 90))}}
+        os.makedirs(os.path.join(root, 'blockstates'), exist_ok=True)
+        json.dump(bs, open(os.path.join(root, 'blockstates', name + '.json'), 'w'), indent=1)
+        print('block', name, height, flush=True)
+
+
+def export_block_data(data_root):
+    """Loot tables: a placed piece of gear drops the item itself."""
+    lt = os.path.join(data_root, NS, 'loot_table', 'blocks')
+    os.makedirs(lt, exist_ok=True)
+    for rid in PLACED:
+        table = {'type': 'minecraft:block', 'pools': [{'rolls': 1, 'entries': [{'type': 'minecraft:item', 'name': f'{NS}:{rid}'}],
+                                                       'conditions': [{'condition': 'minecraft:survives_explosion'}]}]}
+        json.dump(table, open(os.path.join(lt, 'placed_' + rid + '.json'), 'w'), indent=1)
+    tag = os.path.join(data_root, 'minecraft', 'tags', 'block')
+    os.makedirs(tag, exist_ok=True)
+    json.dump({'replace': False, 'values': [f'{NS}:placed_star_shard']}, open(os.path.join(tag, 'enchantment_power_provider.json'), 'w'), indent=1)
+
+
 if __name__ == '__main__':
-    if sys.argv[1] == '--preview':
+    if sys.argv[1] == '--blocks':
+        export_blocks(sys.argv[2])
+        export_block_data(sys.argv[3])
+    elif sys.argv[1] == '--preview':
         preview(sys.argv[2], sys.argv[3:] or list(DESIGNS))
     else:
         export(sys.argv[1], sys.argv[2:] or list(DESIGNS))

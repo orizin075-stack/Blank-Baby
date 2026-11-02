@@ -122,6 +122,26 @@
     "oror_supreme_bosses:state": 1.0
    },
    "model": "oror_supreme_bosses:item/squad_banner_active"
+  },
+  {
+   "predicate": {
+    "oror_supreme_bosses:worn": 1
+   },
+   "model": "oror_supreme_bosses:item/worn_squad_banner"
+  },
+  {
+   "predicate": {
+    "oror_supreme_bosses:worn": 1,
+    "oror_supreme_bosses:state": 0.5
+   },
+   "model": "oror_supreme_bosses:item/worn_squad_banner_recharging"
+  },
+  {
+   "predicate": {
+    "oror_supreme_bosses:worn": 1,
+    "oror_supreme_bosses:state": 1.0
+   },
+   "model": "oror_supreme_bosses:item/worn_squad_banner_active"
   }
  ]
 }

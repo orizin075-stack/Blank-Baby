@@ -17,36 +17,36 @@
   "display": {
    "thirdperson_righthand": {
     "rotation": [
-     90.0,
-     90.0,
-     0.0
+     -120.0,
+     31.02,
+     -180.0
     ],
     "translation": [
      -0.0,
-     3.0,
-     -1.0
+     1.329,
+     0.418
     ],
     "scale": [
-     0.75,
-     0.75,
-     0.75
+     1.188,
+     1.188,
+     1.188
     ]
    },
    "firstperson_righthand": {
     "rotation": [
-     -0.0,
-     -19.29,
-     -0.0
+     -10.25,
+     20.49,
+     9.64
     ],
     "translation": [
-     -2.56,
-     4.16,
-     0.64
+     -0.64,
+     0.0,
+     -1.6
     ],
     "scale": [
-     0.55,
-     0.55,
-     0.55
+     0.668,
+     0.668,
+     0.668
     ]
    },
    "ground": {
@@ -116,6 +116,19 @@
     "oror_supreme_bosses:state": 0.5
    },
    "model": "oror_supreme_bosses:item/last_bloom_closed"
+  },
+  {
+   "predicate": {
+    "oror_supreme_bosses:worn": 1
+   },
+   "model": "oror_supreme_bosses:item/worn_last_bloom"
+  },
+  {
+   "predicate": {
+    "oror_supreme_bosses:worn": 1,
+    "oror_supreme_bosses:state": 0.5
+   },
+   "model": "oror_supreme_bosses:item/worn_last_bloom_recharging"
   }
  ]
 }
