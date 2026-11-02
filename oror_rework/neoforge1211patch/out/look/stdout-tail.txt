@@ -1,200 +1,200 @@
-[14:55:53] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1788) ~[java.net.http:?] {}
-[14:55:53] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:1386) ~[java.net.http:?] {}
-[14:55:53] [_stdout_] [INFO] [14:55:53] [NeoForge Version Check/INFO] [ne.ne.fm.VersionChecker/]: [create] Starting version check at https://api.modrinth.com/updates/create/forge_updates.json?neoforge=only
-[14:55:53] [_stdout_] [INFO] [14:55:53] [NeoForge Version Check/INFO] [ne.ne.fm.VersionChecker/]: [create] Found status: OUTDATED Current: 6.0.10 Target: 6.0.10+mc1.21.1
-[14:55:53] [_stdout_] [INFO] [14:55:53] [NeoForge Version Check/INFO] [ne.ne.fm.VersionChecker/]: [legendarytooltips] Starting version check at https://mc-update-check.anthonyhilyard.com/532127
-[14:55:53] [_stdout_] [INFO] [14:55:53] [Render thread/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
-[14:55:53] [_stdout_] [INFO] [14:55:53] [Render thread/INFO] [minecraft/RecipeManager]: Loaded 6766 recipes
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [minecraft/AdvancementTree]: Loaded 4796 advancements
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [ne.ne.ne.co.lo.LootModifierManager/]: Could not decode GlobalLootModifier with json id golemdungeons:fiery_pick_smelting - error: Unknown registry key in ResourceKey[minecraft:root / neoforge:global_loot_modifier_serializers]: twilightforest:fiery_pick_smelting
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [co.ia.ju.Jupiter/]: Cannot find suitable entry for key=sub_level_renderer, type=dev.ryanhcode.sable.sublevel.render.SubLevelRenderer$SelectedRenderer$2 in config=sable:CLIENT
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [co.ia.ju.Jupiter/]: Cannot find suitable entry for key=hotbarType, type=com.super_awesome_baby.ares_hud.client.config.HotbarType in config=ares_hud:CLIENT
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [co.ia.ju.Jupiter/]: Notice: Jupiter cannot resolve 7 empty List
-[14:55:54] [_stdout_] [INFO] since technical issue in Java, it is recommended to add a value in default value list.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.ia.ju.Jupiter/]: Config spec loading complete, found 63 configs from 45 mods.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.ia.ju.Jupiter/]: Cloth Config loading complete, found 1 configs from 1 mods.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.ia.ju.Jupiter/]: Successfully reload 35 server config(s).
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [Curios API/]: Loaded 22 curio slots
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [Curios API/]: Loaded 4 curio entities
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [jeg/]: Loaded 17 JEG vehicle data entries
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [jeg/]: Loaded 17 JEG vehicle assembly recipes
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Skill efn:example doesn't exist in the registry.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Skill epicfight:air_slash doesn't exist in the registry.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:orbit from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:uchigatana from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:dagger from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:satsujin from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:armor from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:antitheus from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:nova from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:evil_tachi from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:hoe from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:herrscher from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:staff from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:ender_blaster from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:shield from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:crossbow from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:axe from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:ruine from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:trident from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:greatsword from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:moonless from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:pickaxe from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:sword from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:spear from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:napoleon from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:torment from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:gesetz from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:shovel from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:fist from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:tachi from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:bow from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:blackstar from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:solar from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:agony from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:map from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:bokken from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling wom:clawed_gauntle from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [epicfight/]: Pulling epicfight:longsword from register
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.as.ep.EpicFightExtraMod/]: EFX: Replaced Epic Fight weapon type presets after default export
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for invincible:custom_combo_demo: Can't find weapon type: invincible:custom_weapon_demo
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for magistuarmory:silver_morgenstern: Can't find weapon type: minecraft:axe
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for minecraft:wooden_sword: No value present
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [Dungeon Crawl/]: Loading data...
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [Dungeon Crawl/]: Done.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [friendsandfoes/]: Loaded 1 moobloom variants
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:drownedboss for: minecraft:drowned
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:irongolemboss for: minecraft:iron_golem
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:snowgolemboss for: minecraft:snow_golem
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zombieboss for: minecraft:zombie
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:skeletonshieldboss for: minecraft:skeleton
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:pillagerboss for: minecraft:pillager
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:vexboss for: minecraft:vex
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evokerboss for: minecraft:evoker
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:dummyboss for: minecraft:zombie
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:vindicatorboss for: minecraft:vindicator
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witherskeletonshieldboss for: minecraft:wither_skeleton
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witherskeletonrangedboss for: minecraft:wither_skeleton
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:cavespiderboss for: minecraft:cave_spider
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zombietoxicboss for: minecraft:zombie
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:huskboss for: minecraft:husk
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evokersummoner for: minecraft:evoker
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:archmageboss for: minecraft:wandering_trader
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:guardianboss for: minecraft:guardian
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:endervindicatorboss for: minecraft:vindicator
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:shulkerboss for: minecraft:shulker
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zoglinboss for: minecraft:zoglin
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evilchickenboss for: minecraft:chicken
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:blazeboss for: minecraft:blaze
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witchboss for: minecraft:witch
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:phantomboss for: minecraft:phantom
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:madcowboss for: minecraft:mooshroom
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:rabbitboss for: minecraft:rabbit
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:piglinbruteboss for: minecraft:piglin_brute
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:ghastboss for: minecraft:ghast
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:strayboss for: minecraft:stray
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [placebo/]: Registered 30 gear_sets.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [placebo/]: Registered 36 wanderer_trades.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [placebo/]: Registered 37 brewing_mixes.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [Apotheosis : Enchantment/]: Registered 26 enchanting_stats.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 5 rarities.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 1 rarity_override.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 99 affixes.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 0 extra_gem_bonuses.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 21 gems.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 50 affix_loot_entries.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 23 apothic_invaders.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 9 rogue_spawners.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 4 apothic_elites.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 1 purity_weights.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 1 apothic_augments.
-[14:55:54] [_stdout_] [INFO] [14:55:54] [Render thread/INFO] [apotheosis/]: Registered 27 tier_augments.
-[14:55:55] [_stdout_] [INFO] [14:55:55] [Render thread/WARN] [minecraft/MappedRegistry]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:block] are present in data pack: cataclysm:needs_black_steel_tool, cataclysm:needs_monstrosity_tool
-[14:55:55] [_stdout_] [INFO] [14:55:55] [Render thread/WARN] [ModernFix/]: Initial datapack load took 4.771 s
-[14:55:55] [_stdout_] [INFO] [14:55:55] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: create_world_screen
-[14:55:55] [_stdout_] [INFO] [14:55:55] [Render thread/INFO] [defaultoptions/]: Default difficulty has been set to NORMAL.
-[14:55:55] [_stdout_] [INFO] [14:55:55] [Render thread/INFO] [jp.or.lo.Look/]: [look] screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-[14:55:58] [_stdout_] [INFO] [14:55:58] [Render thread/INFO] [jp.or.lo.Look/]: [look] press selectWorld.create
-[14:55:58] [_stdout_] [INFO] [14:55:58] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: confirm_screen
-[14:55:58] [_stdout_] [INFO] [14:55:58] [Render thread/INFO] [jp.or.lo.Look/]: [look] screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [jp.or.lo.Look/]: [look] screenshot popup_ConfirmScreen
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [jp.or.lo.Look/]: [look] press gui.yes
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/WARN] [co.ia.ur.Uranus/]: Suppressing EXPERIMENTAL level lifecycle
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/WARN] [co.ia.ur.Uranus/]: Suppressing EXPERIMENTAL level lifecycle
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [co.si.cr.Create/]: Created 224 recipes which will be injected into the game
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [co.si.cr.Create/]: Created 10 tags which will be injected into the game
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [tacz/GunPackFinder]: Start scanning for gun packs in /home/runner/work/_temp/game/tacz
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [tacz/GunPackFinder]: - tacz_default_gun, Main namespace: tacz
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [tacz/GunPackFinder]: Found 1 possible gunpack(s) and added them to resource set.
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: progress_screen
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Render thread/INFO] [co.gi.al.al.AlexsCaves/]: [AC] WorldGenOptionsMixin: Set world seed 9141789927485339806 in ACWorldSeedHolder (thread: Render thread)
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Server thread/INFO] [minecraft/IntegratedServer]: Starting integrated minecraft server version 1.21.1
-[14:56:03] [_stdout_] [INFO] [14:56:03] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] SurfaceRuleInitializer: Starting initialization...
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] OVERWORLD rules registered: true
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:the_nether
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: macabre:limbo
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: macabre:limbo (category: OVERWORLD)
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: irons_spellbooks:pocket_dimension
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:overworld
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: minecraft:overworld (category: OVERWORLD)
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: macabre:the_pit
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: macabre:the_pit (category: OVERWORLD)
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:the_end
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [citadel/]: [Citadel] SurfaceRuleInitializer: Initialization complete.
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: level_loading_screen
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [de.ry.sa.Sable/]: Creating physics pipeline for ResourceKey[minecraft:dimension / minecraft:overworld] using RapierPhysicsPipelineProvider
-[14:56:04] [_stdout_] [INFO] [14:56:04] [Server thread/INFO] [de.ry.sa.Sable/]: Using game directory relative Sable Rapier native directory /home/runner/work/_temp/game/.sable/natives
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [Curios API/]: Loaded 4 curio entities
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [jeg/]: Loaded 17 JEG vehicle data entries
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [jeg/]: Loaded 17 JEG vehicle assembly recipes
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Skill efn:example doesn't exist in the registry.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Skill epicfight:air_slash doesn't exist in the registry.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:longsword from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:gesetz from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:evil_tachi from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:ender_blaster from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:bow from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:tachi from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:napoleon from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:antitheus from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:crossbow from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:dagger from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:greatsword from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:solar from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:clawed_gauntle from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:moonless from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:bokken from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:uchigatana from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:hoe from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:blackstar from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:sword from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:ruine from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:armor from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:orbit from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:nova from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:torment from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:axe from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:spear from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:shield from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:map from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:agony from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:fist from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:shovel from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:herrscher from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:pickaxe from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:satsujin from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling epicfight:trident from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [epicfight/]: Pulling wom:staff from register
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.as.ep.EpicFightExtraMod/]: EFX: Replaced Epic Fight weapon type presets after default export
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for invincible:custom_combo_demo: Can't find weapon type: invincible:custom_weapon_demo
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: epicfight:cut is not a hit particle type in magistuarmory:pike
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for magistuarmory:silver_morgenstern: Can't find weapon type: minecraft:axe
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [epicfight/]: Error while deserializing datapack for minecraft:wooden_sword: No value present
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [Dungeon Crawl/]: Loading data...
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [Dungeon Crawl/]: Done.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [friendsandfoes/]: Loaded 1 moobloom variants
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:drownedboss for: minecraft:drowned
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:irongolemboss for: minecraft:iron_golem
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:snowgolemboss for: minecraft:snow_golem
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zombieboss for: minecraft:zombie
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:skeletonshieldboss for: minecraft:skeleton
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:pillagerboss for: minecraft:pillager
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:vexboss for: minecraft:vex
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evokerboss for: minecraft:evoker
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:dummyboss for: minecraft:zombie
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:vindicatorboss for: minecraft:vindicator
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witherskeletonshieldboss for: minecraft:wither_skeleton
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witherskeletonrangedboss for: minecraft:wither_skeleton
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:cavespiderboss for: minecraft:cave_spider
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zombietoxicboss for: minecraft:zombie
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:huskboss for: minecraft:husk
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evokersummoner for: minecraft:evoker
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:archmageboss for: minecraft:wandering_trader
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:guardianboss for: minecraft:guardian
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:endervindicatorboss for: minecraft:vindicator
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:shulkerboss for: minecraft:shulker
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:zoglinboss for: minecraft:zoglin
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:evilchickenboss for: minecraft:chicken
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:blazeboss for: minecraft:blaze
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:witchboss for: minecraft:witch
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:phantomboss for: minecraft:phantom
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:madcowboss for: minecraft:mooshroom
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:rabbitboss for: minecraft:rabbit
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:piglinbruteboss for: minecraft:piglin_brute
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:ghastboss for: minecraft:ghast
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [co.br.BrutalBosses/]: Loaded boss: brutalbosses:strayboss for: minecraft:stray
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [placebo/]: Registered 30 gear_sets.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [placebo/]: Registered 36 wanderer_trades.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [placebo/]: Registered 37 brewing_mixes.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [Apotheosis : Enchantment/]: Registered 26 enchanting_stats.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 5 rarities.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 1 rarity_override.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 99 affixes.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 0 extra_gem_bonuses.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 21 gems.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 50 affix_loot_entries.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 23 apothic_invaders.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 9 rogue_spawners.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 4 apothic_elites.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 1 purity_weights.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 1 apothic_augments.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [apotheosis/]: Registered 27 tier_augments.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [minecraft/MappedRegistry]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:block] are present in data pack: cataclysm:needs_black_steel_tool, cataclysm:needs_monstrosity_tool
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/WARN] [ModernFix/]: Initial datapack load took 3.102 s
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: create_world_screen
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [defaultoptions/]: Default difficulty has been set to NORMAL.
+[22:59:41] [_stdout_] [INFO] [22:59:41] [Render thread/INFO] [jp.or.lo.Look/]: [look] screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+[22:59:44] [_stdout_] [INFO] [22:59:44] [Render thread/INFO] [jp.or.lo.Look/]: [look] press selectWorld.create
+[22:59:44] [_stdout_] [INFO] [22:59:44] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: confirm_screen
+[22:59:44] [_stdout_] [INFO] [22:59:44] [Render thread/INFO] [jp.or.lo.Look/]: [look] screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+[22:59:48] [_stdout_] [INFO] [22:59:48] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[22:59:48] [_stdout_] [INFO] java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+[22:59:48] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:949) ~[java.net.http:?] {}
+[22:59:48] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133) ~[java.net.http:?] {}
+[22:59:48] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.openUrlString(VersionChecker.java:129) ~[loader-4.0.45.jar%2393!/:4.0] {}
+[22:59:48] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.process(VersionChecker.java:162) ~[loader-4.0.45.jar%2393!/:4.0] {}
+[22:59:48] [_stdout_] [INFO] at java.base/java.lang.Iterable.forEach(Iterable.java:75) [?:?] {}
+[22:59:48] [_stdout_] [INFO] at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.VersionChecker$1.run(VersionChecker.java:105) [loader-4.0.45.jar%2393!/:4.0] {}
+[22:59:48] [_stdout_] [INFO] Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+[22:59:48] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:68) ~[java.net.http:?] {}
+[22:59:48] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1788) ~[java.net.http:?] {}
+[22:59:48] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:1386) ~[java.net.http:?] {}
+[22:59:48] [_stdout_] [INFO] Caused by: java.net.ConnectException: HTTP connect timed out
+[22:59:48] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.ResponseTimerEvent.handle(ResponseTimerEvent.java:69) ~[java.net.http:?] {}
+[22:59:48] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl.purgeTimeoutsAndReturnNextDeadline(HttpClientImpl.java:1788) ~[java.net.http:?] {}
+[22:59:48] [_stdout_] [INFO] at java.net.http/jdk.internal.net.http.HttpClientImpl$SelectorManager.run(HttpClientImpl.java:1386) ~[java.net.http:?] {}
+[22:59:48] [_stdout_] [INFO] [22:59:48] [NeoForge Version Check/INFO] [ne.ne.fm.VersionChecker/]: [itemborders] Starting version check at https://mc-update-check.anthonyhilyard.com/513769
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [jp.or.lo.Look/]: [look] screenshot popup_ConfirmScreen
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [jp.or.lo.Look/]: [look] press gui.yes
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/WARN] [co.ia.ur.Uranus/]: Suppressing EXPERIMENTAL level lifecycle
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/WARN] [co.ia.ur.Uranus/]: Suppressing EXPERIMENTAL level lifecycle
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [co.si.cr.Create/]: Created 224 recipes which will be injected into the game
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [co.si.cr.Create/]: Created 10 tags which will be injected into the game
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [tacz/GunPackFinder]: Start scanning for gun packs in /home/runner/work/_temp/game/tacz
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [tacz/GunPackFinder]: - tacz_default_gun, Main namespace: tacz
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [tacz/GunPackFinder]: Found 1 possible gunpack(s) and added them to resource set.
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: progress_screen
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [co.gi.al.al.AlexsCaves/]: [AC] WorldGenOptionsMixin: Set world seed -3094684386493322414 in ACWorldSeedHolder (thread: Render thread)
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [minecraft/IntegratedServer]: Starting integrated minecraft server version 1.21.1
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] SurfaceRuleInitializer: Starting initialization...
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] OVERWORLD rules registered: true
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:overworld
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: minecraft:overworld (category: OVERWORLD)
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: irons_spellbooks:pocket_dimension
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:the_nether
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: macabre:the_pit
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: macabre:the_pit (category: OVERWORLD)
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: macabre:limbo
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: Initialized Citadel surface rules for dimension: macabre:limbo (category: OVERWORLD)
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: minecraft:the_end
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [citadel/]: [Citadel] SurfaceRuleInitializer: Initialization complete.
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Render thread/INFO] [de.ke.fa.cu.la.ScreenCustomizationLayerHandler/]: [FANCYMENU] ScreenCustomizationLayer registered: level_loading_screen
+[22:59:49] [_stdout_] [INFO] [22:59:49] [Server thread/INFO] [de.ry.sa.Sable/]: Creating physics pipeline for ResourceKey[minecraft:dimension / minecraft:overworld] using RapierPhysicsPipelineProvider
+[22:59:50] [_stdout_] [INFO] [22:59:50] [Server thread/INFO] [de.ry.sa.Sable/]: Using game directory relative Sable Rapier native directory /home/runner/work/_temp/game/.sable/natives
