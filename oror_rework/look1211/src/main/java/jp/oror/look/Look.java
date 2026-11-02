@@ -144,6 +144,17 @@ public final class Look {
                     });
                 }
             }
+            case 30 -> {
+                // (051) the starter kit given on first joining: what the player holds and wears
+                StringBuilder inv = new StringBuilder();
+                for (int i = 0; i < mc.player.getInventory().getContainerSize(); i++) {
+                    net.minecraft.world.item.ItemStack st = mc.player.getInventory().getItem(i);
+                    if (!st.isEmpty()) {
+                        inv.append(' ').append(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(st.getItem())).append('x').append(st.getCount());
+                    }
+                }
+                note("inventory after joining:" + inv);
+            }
             case 40 -> stage(mc);
             case 200 -> {
                 mc.options.hideGui = true;
