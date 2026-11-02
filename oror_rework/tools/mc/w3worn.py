@@ -182,7 +182,8 @@ def p_last_bloom(state=None):
     recharges."""
     rid = 'last_bloom_closed' if state == 'recharging' else 'last_bloom'
     iq, ia = item(rid)
-    return merge((placed(iq, 0.5, R3(0, 0, 90), (11.0, -9.0, 1.0), pivot=(1.0, 0.0, 0.0)), ia))
+    # outside a helmet too (its layer stands a pixel off the head): the flower's base 2.6 texels out from the head
+    return merge((placed(iq, 0.58, R3(0, 0, 90), (11.5, -10.6, 1.0), pivot=(1.0, 0.0, 0.0)), ia))
 
 
 PIECES = {  # id: (builder, the part it is worn on, its states)
