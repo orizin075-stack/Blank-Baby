@@ -72,11 +72,14 @@ public final class TechniqueEffects {
         if (level == null || mc.isPaused()) {
             if (level == null) {
                 TechniqueShow.ACTIVE.clear();
+                TechniqueShow.REACT.clear();
                 RELEASED.clear();
             }
             return;
         }
         long now = level.getGameTime();
+        // a guard's moments are poses only (their sparks are the server's): forgotten once over
+        TechniqueShow.REACT.values().removeIf(r -> now - r.start() > r.length() + 4 || now - r.start() < -40 || level.getEntity(r.entity()) == null);
         Iterator<TechniqueShow.Active> it = TechniqueShow.ACTIVE.values().iterator();
         while (it.hasNext()) {
             TechniqueShow.Active show = it.next();
@@ -147,6 +150,20 @@ public final class TechniqueEffects {
     // ------------------------------------------------------------------------------------------------------ the blow
 
     private static void release(ClientLevel level, Entity b, Entity target, int[] col, int since, String mechanic, RandomSource rnd) {
+        if (mechanic.startsWith("MOVE_")) {
+            // a big move draws its own sparks on the server; the blades' moves add their crescent, the blasts their
+            // shockwave, the barrier its dome, in the character's colours
+            String like = switch (mechanic) {
+                case "MOVE_DASH_SLASH", "MOVE_COMBO_RUSH", "MOVE_SPIN_SLASH", "MOVE_BLADE_WAVE", "MOVE_REAP" -> "SLASH";
+                case "MOVE_NOVA", "MOVE_LEAP_SLAM", "MOVE_GROUND_SPIKES", "MOVE_METEOR", "MOVE_UPPERCUT" -> "BURST";
+                case "MOVE_BARRIER" -> "GUARD";
+                default -> "";
+            };
+            if (!like.isEmpty()) {
+                release(level, b, target, col, since, like, rnd);
+            }
+            return;
+        }
         Vec3 c = chest(b);
         Vec3 look = Vec3.directionFromRotation(0, b.getYRot());
         Vec3 side = new Vec3(-look.z, 0, look.x);

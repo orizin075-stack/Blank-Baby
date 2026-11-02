@@ -146,6 +146,71 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
             AnimationUtils.bobArms(this.rightArm, this.leftArm, age);
         }
         swing(mob);
+        react(mob, age);
+    }
+
+    /**
+     * (052) A guard's moment (MobGuard, TechniqueShow): a parry sweeps the sword up and out across the blow (a shield
+     * thrown up into it), a block crosses the arms and sinks under it, a broken guard flings the arms wide and arches
+     * back, a parried royal is thrown back with the sword knocked high. In a second's snap, held, then eased home.
+     */
+    private void react(RoyalMob mob, float age) {
+        jp.oror.reborn.show.TechniqueShow.Active show = jp.oror.reborn.show.TechniqueShow.REACT.get(mob.getId());
+        if (show == null) {
+            return;
+        }
+        float time = mob.level().getGameTime() - show.start() + (age - (float) ((int) age));
+        float u = time / Math.max(1, show.length());
+        if (u < 0 || u > 1) {
+            return;
+        }
+        float w = u < 0.12F ? u / 0.12F : u < 0.45F ? 1F : 1F - (u - 0.45F) / 0.55F;
+        w = w * w * (3F - 2F * w);
+        boolean shield = mob.getOffhandItem().getItem() instanceof net.minecraft.world.item.ShieldItem;
+        switch (show.mechanic()) {
+            case "PARRY" -> {
+                if (shield) {
+                    this.leftArm.xRot = Mth.lerp(w, this.leftArm.xRot, -1.75F);
+                    this.leftArm.yRot = Mth.lerp(w, this.leftArm.yRot, 0.6F);
+                    this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, -0.6F);
+                } else {
+                    this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, -2.3F);
+                    this.rightArm.yRot = Mth.lerp(w, this.rightArm.yRot, 0.9F);
+                    this.rightArm.zRot = Mth.lerp(w, this.rightArm.zRot, 0.5F);
+                    this.body.yRot += 0.4F * w;
+                }
+                this.head.xRot -= 0.15F * w;
+            }
+            case "BLOCK" -> {
+                if (shield) {
+                    this.leftArm.xRot = Mth.lerp(w, this.leftArm.xRot, -1.55F);
+                    this.leftArm.yRot = Mth.lerp(w, this.leftArm.yRot, 0.5F);
+                } else {
+                    this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, -1.45F);
+                    this.rightArm.yRot = Mth.lerp(w, this.rightArm.yRot, -0.65F);
+                    this.leftArm.xRot = Mth.lerp(w, this.leftArm.xRot, -1.45F);
+                    this.leftArm.yRot = Mth.lerp(w, this.leftArm.yRot, 0.65F);
+                }
+                this.root.y += 0.8F * w;
+            }
+            case "BREAK" -> {
+                this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, -2.6F);
+                this.rightArm.zRot = Mth.lerp(w, this.rightArm.zRot, 0.7F);
+                this.leftArm.xRot = Mth.lerp(w, this.leftArm.xRot, -2.6F);
+                this.leftArm.zRot = Mth.lerp(w, this.leftArm.zRot, -0.7F);
+                this.head.xRot -= 0.5F * w;
+                this.body.xRot -= 0.3F * w;
+            }
+            case "PARRIED" -> {
+                this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, -2.5F);
+                this.rightArm.yRot = Mth.lerp(w, this.rightArm.yRot, 0.4F);
+                this.leftArm.zRot = Mth.lerp(w, this.leftArm.zRot, -0.6F);
+                this.head.xRot -= 0.3F * w;
+                this.body.xRot -= 0.25F * w;
+            }
+            default -> {
+            }
+        }
     }
 
     private static boolean shoots(ItemStack stack) {

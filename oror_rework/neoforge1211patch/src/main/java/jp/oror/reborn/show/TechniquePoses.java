@@ -10,7 +10,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 
 /**
- * (052) Each kind of technique danced its own way on the characters' rigs. A technique runs windup, blow, hold and
+ * (052) Each kind of technique, each big move, and a guard's moments (parry, block, a broken guard, being parried),
+ * danced its own way on the characters' rigs. A technique runs windup, blow, hold and
  * recovery: through the windup the body goes into the technique's gathering pose (W), on the moment it goes off it
  * snaps through to the striking pose (R), a touch past it and back, holds it, and eases home; a few techniques move
  * within the blow as well (alternating thrusts, a hammer's beat, a hand drawing a clock face backwards, a whirl). The
@@ -140,7 +141,125 @@ public final class TechniquePoses {
             pose("arm_r", -1.65, -0.1, 0, "arm_l", -0.4, 0, -0.3, "torso", 0.15, -0.3, 0), "");
         def("SWOOP", pose("root", -0.35, 0, 0, 3, "head", -0.4, 0, 0, "arm_r", -0.3, 0, 0.9, "arm_l", -0.3, 0, -0.9),
             pose("root", 0.45, 0, 0, -2, "head", 0.3, 0, 0, "arm_r", -1.4, 0, 0.3, "arm_l", -1.4, 0, -0.3), "");
+
+        // ---- a guard's moments (MobGuard): over in half a second, the blow taking the place of the windup
+        // parry: the weapon swept up and out across the blow, the body turning from it, leaning back off it
+        def("PARRY", pose("arm_r", -1.0, -0.3, 0, "torso", 0, -0.2, 0),
+            pose("arm_r", -2.3, 0.9, 0.5, "arm_l", -0.5, 0, -0.4, "torso", 0, 0.45, 0, "head", -0.15, 0, 0, "root", -0.15, 0, 0, 0,
+                "leg_l", -0.3, 0, 0), "");
+        def("PARRY_shield", pose("arm_l", -1.2, 0.3, 0),
+            pose("arm_l", -1.75, 0.6, 0.2, "arm_r", -0.6, 0, 0.25, "torso", 0, -0.3, 0, "head", 0.1, 0, 0, "root", -0.1, 0, 0, 0), "");
+        def("PARRY_heavy", pose("arm_r", -1.0, 0, 0, "arm_l", -1.0, 0, 0),
+            pose("arm_r", -1.9, -0.35, -0.2, "arm_l", -1.9, 0.35, 0.2, "torso", -0.2, 0, 0, "head", -0.2, 0, 0, "root", -0.15, 0, 0, 0), "");
+        def("PARRY_polearm", pose("arm_r", -1.0, 0.3, 0, "arm_l", -1.0, -0.3, 0),
+            pose("arm_r", -1.5, 0.6, 0.3, "arm_l", -1.5, -0.6, -0.3, "torso", 0, 0.35, 0, "root", -0.15, 0, 0, 0), "");
+        def("PARRY_fist", pose("arm_r", -1.2, -0.3, 0),
+            pose("arm_r", -2.0, -0.7, -0.1, "arm_l", -1.2, 0.3, 0, "torso", 0, -0.45, 0, "leg_r", -0.3, 0, 0), "");
+        def("PARRY_magic", pose("arm_r", -1.2, 0, 0),
+            pose("arm_r", -1.65, 0, -0.25, "arm_l", -1.0, 0.3, 0, "head", 0.1, 0, 0, "torso", -0.1, 0, 0, "root", -0.1, 0, 0, 0), "");
+        // block: arms (the weapon) across the body, feet planted, sunk under the blow and driven back a little
+        def("BLOCK", pose("arm_r", -1.3, -0.5, -0.2, "arm_l", -1.3, 0.5, 0.2),
+            pose("arm_r", -1.45, -0.65, -0.3, "arm_l", -1.45, 0.65, 0.3, "torso", 0.15, 0, 0, "head", 0.15, 0, 0, "leg_r", -0.3, 0, 0.1,
+                "leg_l", 0.3, 0, -0.1, "root", -0.12, 0, 0, -0.8), "");
+        def("BLOCK_shield", pose("arm_l", -1.3, 0.4, 0),
+            pose("arm_l", -1.55, 0.5, 0, "arm_r", -0.7, 0, 0.2, "torso", 0.15, 0, 0, "head", 0.1, 0, 0, "leg_r", -0.35, 0, 0,
+                "root", -0.1, 0, 0, -0.8), "");
+        // the guard broken: the arms flung wide and up, the body arched back, reeling
+        def("BREAK", pose("arm_r", -1.4, 0, 0.2, "arm_l", -1.4, 0, -0.2),
+            pose("arm_r", -2.6, 0, 0.7, "arm_l", -2.6, 0, -0.7, "torso", -0.45, 0, 0, "head", -0.5, 0, 0, "root", -0.3, 0, 0, -1,
+                "leg_l", -0.4, 0, 0), "tremble");
+        // parried: the weapon knocked up and back, the body thrown back off its feet a step
+        def("PARRIED", pose("arm_r", -1.6, 0, 0),
+            pose("arm_r", -2.5, 0.4, 0.45, "arm_l", -0.3, 0, -0.6, "torso", -0.35, 0.25, 0, "head", -0.3, 0, 0, "root", -0.25, 0, 0, 0,
+                "leg_l", -0.35, 0, 0), "");
+
+        // ---- the big moves (BossMoves): each danced its own way, over the moves' own motion
+        // a dash and a cut: crouched with the blade drawn low behind, a long lunge sweeping it across
+        def("MOVE_DASH_SLASH", pose("arm_r", 0.6, 0.6, 0.3, "torso", 0.35, 0.5, 0, "leg_r", -0.6, 0, 0, "leg_l", 0.4, 0, 0, "root", 0.3, 0, 0, -1),
+            pose("arm_r", -1.4, -1.4, 0, "arm_l", -0.3, 0, -0.6, "torso", 0.25, -0.8, 0, "leg_r", 0.5, 0, 0, "leg_l", -0.7, 0, 0,
+                "root", 0.35, 0, 0, 0), "");
+        // a blink and a stab: the point levelled, then thrust home at full stretch
+        def("MOVE_BLINK_STRIKE", pose("arm_r", -1.0, 0, 0, "arm_l", -0.4, 0, -0.3, "torso", 0.2, 0, 0, "head", 0.1, 0, 0),
+            pose("arm_r", -1.6, 0, 0, "arm_l", 0.3, 0, -0.3, "torso", 0.4, 0, 0, "root", 0.35, 0, 0, 0, "leg_r", -0.8, 0, 0, "leg_l", 0.6, 0, 0), "");
+        // a rush of cuts: three, back and forth
+        def("MOVE_COMBO_RUSH", pose("arm_r", -2.1, 0.8, 0.3, "arm_l", -0.7, 0, -0.3, "torso", 0, 0.5, 0, "leg_l", -0.3, 0, 0),
+            pose("arm_r", -1.3, -1.1, 0, "arm_l", -0.5, 0, -0.4, "torso", 0.2, -0.5, 0, "leg_r", -0.5, 0, 0, "leg_l", 0.4, 0, 0), "combo3");
+        // a whirlwind of the blade: held out flat and spun twice round
+        def("MOVE_SPIN_SLASH", pose("arm_r", -1.4, 0.9, 0.9, "arm_l", -0.5, 0, -1.0, "torso", 0, 0.7, 0, "root", 0, 0, 0, -1),
+            pose("arm_r", -1.5, 0, 1.4, "arm_l", -0.4, 0, -1.3, "head", -0.1, 0, 0), "spin2");
+        // a wave off the blade: both hands high overhead, brought down in one great cut
+        def("MOVE_BLADE_WAVE", pose("arm_r", -3.0, 0, 0.1, "arm_l", -3.0, 0, -0.1, "torso", -0.35, 0, 0, "head", -0.3, 0, 0, "root", 0, 0, 0, 1),
+            pose("arm_r", -0.6, 0, 0.05, "arm_l", -0.6, 0, -0.05, "torso", 0.55, 0, 0, "head", 0.2, 0, 0, "root", 0.25, 0, 0, -2,
+                "leg_r", -0.6, 0, 0, "leg_l", 0.4, 0, 0), "");
+        // a leap and a slam: crouched to spring, the arms swung up over the head in the air, and down with the landing
+        def("MOVE_LEAP_SLAM", pose("torso", 0.5, 0, 0, "leg_r", -0.6, 0, 0, "leg_l", -0.6, 0, 0, "arm_r", 0.6, 0, 0.2, "arm_l", 0.6, 0, -0.2,
+                "root", 0, 0, 0, -2),
+            pose("arm_r", -0.4, 0, 0.2, "arm_l", -0.4, 0, -0.2, "torso", 0.7, 0, 0, "head", 0.3, 0, 0, "leg_r", -0.9, 0, 0, "leg_l", 0.2, 0, 0,
+                "root", 0.3, 0, 0, -3), "leap");
+        // an uppercut: down low with the fist back, rising with it to the sky
+        def("MOVE_UPPERCUT", pose("arm_r", 0.5, 0, 0.2, "torso", 0.45, 0.3, 0, "leg_r", -0.4, 0, 0, "leg_l", -0.4, 0, 0, "root", 0, 0, 0, -2),
+            pose("arm_r", -2.9, 0, 0.2, "arm_l", -0.5, 0, -0.3, "torso", -0.3, -0.3, 0, "head", -0.4, 0, 0, "leg_l", -0.5, 0, 0, "root", 0, 0, 0, 3), "");
+        // spikes from the ground: the hand raised, driven down into the earth on one knee
+        def("MOVE_GROUND_SPIKES", pose("arm_r", -2.6, 0, 0.3, "arm_l", -0.6, 0, -0.3, "torso", -0.2, 0, 0, "head", -0.2, 0, 0),
+            pose("arm_r", -0.2, 0, 0.3, "arm_l", -0.4, 0, -0.4, "torso", 0.8, 0, 0, "head", 0.5, 0, 0, "leg_r", -1.2, 0, 0, "leg_l", 0.3, 0, 0,
+                "root", 0.2, 0, 0, -3), "");
+        // a nova: curled in about itself, then everything flung open, trembling with the light
+        def("MOVE_NOVA", pose("torso", 0.7, 0, 0, "arm_r", -1.2, -0.5, -0.3, "arm_l", -1.2, 0.5, 0.3, "leg_r", -0.5, 0, 0, "leg_l", -0.5, 0, 0,
+                "head", 0.4, 0, 0, "root", 0, 0, 0, -2),
+            pose("arm_r", -0.6, 0, 2.2, "arm_l", -0.6, 0, -2.2, "head", -0.6, 0, 0, "torso", -0.45, 0, 0, "leg_r", 0, 0, 0.35, "leg_l", 0, 0, -0.35,
+                "root", 0, 0, 0, 4), "tremble");
+        // a vortex: arms out, turning and turning, lifted on it
+        def("MOVE_VORTEX", pose("arm_r", -0.3, 0, 1.0, "arm_l", -0.3, 0, -1.0, "torso", 0, 0.4, 0),
+            pose("arm_r", -0.5, 0, 1.5, "arm_l", -0.5, 0, -1.5, "head", -0.3, 0, 0, "root", 0, 0, 0, 2), "spin3");
+        // a meteor called down: both arms to the sky, then thrust down at the enemy
+        def("MOVE_METEOR", pose("arm_r", -3.0, 0, 0.3, "arm_l", -3.0, 0, -0.3, "head", -0.7, 0, 0, "torso", -0.25, 0, 0, "root", 0, 0, 0, 2),
+            pose("arm_r", -1.2, 0, 0.2, "arm_l", -1.2, 0, -0.2, "torso", 0.4, 0, 0, "head", 0.1, 0, 0, "leg_r", -0.4, 0, 0), "");
+        // a beam: both hands drawn back to the hip, gathering, then thrust out together and held, shaking with it
+        def("MOVE_BEAM", pose("arm_r", 0.3, 0.6, 0.3, "arm_l", 0.3, -0.6, -0.3, "torso", 0, 0.5, 0, "leg_r", -0.3, 0, 0, "root", 0, 0, 0, -1),
+            pose("arm_r", -1.6, 0.15, 0, "arm_l", -1.6, -0.15, 0, "torso", 0.1, -0.2, 0, "leg_r", -0.4, 0, 0, "leg_l", 0.3, 0, 0), "tremble");
+        // orbs set loose: the hands raised at the sides, then conducting them in turn
+        def("MOVE_HOMING_ORBS", pose("arm_r", -1.0, 0, 0.9, "arm_l", -1.0, 0, -0.9, "head", -0.3, 0, 0, "root", 0, 0, 0, 1),
+            pose("arm_r", -1.5, 0, 0.4, "arm_l", -1.0, 0, -0.9, "head", -0.1, 0, 0, "root", 0, 0, 0, 2), "conduct");
+        // a rain of arrows: the bow raised to the sky and drawn, loosed again and again
+        def("MOVE_ARROW_RAIN", pose("arm_l", -2.6, 0.2, 0, "arm_r", -2.4, -0.5, 0, "head", -0.8, 0, 0, "torso", -0.25, 0, 0),
+            pose("arm_l", -2.7, 0.2, 0, "arm_r", -1.8, -0.7, 0, "head", -0.8, 0, 0, "torso", -0.25, 0, 0), "recoil");
+        // a barrage of bolts: thrust after thrust
+        def("MOVE_BOLT_BARRAGE", pose("arm_r", 0.4, 0, 0.2, "arm_l", 0.4, 0, -0.2, "torso", -0.15, 0, 0),
+            pose("arm_r", -1.6, 0, 0, "arm_l", -1.6, 0, 0, "torso", 0.15, 0, 0), "alternate");
+        // a storm of bullets: levelled and held on the enemy, shaken by every shot
+        def("MOVE_BULLET_STORM", pose("arm_r", -1.4, 0, 0, "arm_l", -1.4, 0.4, 0, "torso", 0.1, 0, 0),
+            pose("arm_r", -1.55, 0, 0, "arm_l", -1.5, 0.4, 0, "torso", 0.05, 0, 0, "leg_r", -0.3, 0, 0, "leg_l", 0.3, 0, 0), "recoil");
+        // a barrage of shells: braced wide, kicked back hard by each
+        def("MOVE_SHELL_BARRAGE", pose("arm_r", -1.2, 0, 0, "arm_l", -1.2, 0.3, 0, "torso", 0.25, 0, 0, "leg_r", -0.4, 0, 0.2, "leg_l", 0.4, 0, -0.2,
+                "root", 0, 0, 0, -1),
+            pose("arm_r", -1.7, 0, 0, "arm_l", -1.6, 0.3, 0, "torso", -0.1, 0, 0, "leg_r", -0.4, 0, 0.2, "leg_l", 0.4, 0, -0.2,
+                "root", 0, 0, 0, -1), "heavy_recoil");
+        // a barrier: the arms crossed, then spread with the palms out, raising the dome
+        def("MOVE_BARRIER", pose("arm_r", -1.3, -0.7, -0.3, "arm_l", -1.3, 0.7, 0.3, "head", 0.2, 0, 0),
+            pose("arm_r", -1.7, 0, 1.2, "arm_l", -1.7, 0, -1.2, "head", -0.2, 0, 0, "root", 0, 0, 0, 1), "");
+        // a chain: flung out overarm, then hauled back with the whole body
+        def("MOVE_CHAIN_PULL", pose("arm_r", -2.6, 0.4, 0.3, "arm_l", -0.6, 0, -0.3, "torso", 0, 0.5, 0),
+            pose("arm_r", -0.3, 0.6, 0.2, "arm_l", -0.5, 0.4, 0, "torso", -0.3, -0.5, 0, "root", -0.2, 0, 0, 0, "leg_l", -0.5, 0, 0), "");
+        // a reaping: the blade low and back, swept round low through a whole turn
+        def("MOVE_REAP", pose("arm_r", -0.6, 1.2, 0.6, "arm_l", -0.8, 1.0, 0, "torso", 0.3, 0.8, 0, "root", 0, 0, 0, -1.5),
+            pose("arm_r", -0.9, -1.6, 0.2, "arm_l", -0.9, -1.3, 0, "torso", 0.3, -0.9, 0, "root", 0, 0, 0, -1.5), "spin");
+        // a ricochet: drawn back and flicked across
+        def("MOVE_RICOCHET", pose("arm_r", -2.2, 0.6, 0.5, "arm_l", -0.8, 0.2, 0, "torso", 0, 0.4, 0),
+            pose("arm_r", -1.2, -1.0, 0, "arm_l", -0.5, 0.2, 0, "torso", 0, -0.5, 0), "");
+        // afterimages: low and running, weaving from side to side
+        def("MOVE_AFTERIMAGE", pose("torso", 0.5, 0, 0, "arm_r", 0.7, 0, 0.2, "arm_l", 0.7, 0, -0.2, "head", 0.2, 0, 0, "root", 0.2, 0, 0, -1.5),
+            pose("arm_r", -1.4, -1.0, 0, "arm_l", 0.6, 0, -0.3, "torso", 0.3, -0.6, 0, "root", 0.3, 0, 0, -1), "weave");
+        // a charge: the head down and the shoulder forward, the arms swept back, running
+        def("MOVE_CHARGE", pose("torso", 0.6, 0, 0, "head", 0.5, 0, 0, "arm_r", 0.6, 0, 0.2, "arm_l", 0.6, 0, -0.2, "leg_r", -0.5, 0, 0,
+                "root", 0.3, 0, 0, -1),
+            pose("torso", 0.7, 0, 0, "head", 0.4, 0, 0, "arm_r", -0.3, 0, 0.3, "arm_l", -0.3, 0, -0.3, "root", 0.45, 0, 0, -1), "run");
+        // a breath: the head thrown back to draw it in, the chest swelling, then thrust forward with it
+        def("MOVE_BREATH", pose("head", -0.8, 0, 0, "torso", -0.4, 0, 0, "arm_r", 0.5, 0, 0.3, "arm_l", 0.5, 0, -0.3, "root", 0, 0, 0, 1),
+            pose("head", 0.35, 0, 0, "torso", 0.35, 0, 0, "arm_r", 0.8, 0, 0.4, "arm_l", 0.8, 0, -0.4, "root", 0.2, 0, 0, 0), "tremble");
     }
+
+    /** A guard's moments: weapon-held poses of their own, so the weapon's manner is not laid over them. */
+    private static final java.util.Set<String> DEFENCE = java.util.Set.of("PARRY", "BLOCK", "BREAK", "PARRIED");
 
     // ------------------------------------------------------------------------------------------- the weapon's manner
 
@@ -252,7 +371,11 @@ public final class TechniquePoses {
 
     /** Lays the technique's pose over the rig. time: ticks since the technique began. */
     public static void apply(Object model, TechniqueShow.Active show, float time) {
-        Choreo c = CHOREO.getOrDefault(show.mechanic(), CHOREO.get("BOLT"));
+        String style0 = style(show.character());
+        Choreo c = CHOREO.get(show.mechanic() + "_" + (style0.equals("chakram") || style0.equals("whip") || style0.equals("ranged") ? "blade" : style0));
+        if (c == null) {
+            c = CHOREO.getOrDefault(show.mechanic(), CHOREO.get("BOLT"));
+        }
         float total = show.length();
         float t = time / total;
         if (t < 0 || t > 1) {
@@ -285,7 +408,7 @@ public final class TechniquePoses {
         String style = style(show.character());
         // a sign worked by a warrior: the weapon held ready in the right hand, the sign made with the left (mirrored)
         boolean leftHand = !style.equals("magic") && HAND.contains(show.mechanic());
-        Map<String, float[][]> manner = HAND.contains(show.mechanic()) ? null : MANNER.get(style);
+        Map<String, float[][]> manner = HAND.contains(show.mechanic()) || DEFENCE.contains(show.mechanic()) ? null : MANNER.get(style);
         for (Ref r : parts) {
             String role = r.role();
             boolean mirror = false;
@@ -401,6 +524,79 @@ public final class TechniquePoses {
             case "bob" -> {
                 if (r.role().equals("root")) {
                     v[3] = Mth.sin(time * 0.35F) * 1.2F * live;
+                }
+            }
+            case "combo3" -> {
+                // three cuts, back and forth, across the blow
+                float k = Mth.sin(Math.min(1F, u / 0.9F) * 3 * PI);
+                if (r.role().equals("arm_r")) {
+                    v[1] = 1.8F * k * live;
+                    v[0] = 0.3F * Math.abs(k) * live;
+                } else if (r.role().equals("torso")) {
+                    v[1] = 0.7F * k * live;
+                }
+            }
+            case "spin2", "spin3" -> {
+                if (r.role().equals("root")) {
+                    float turns = beat.equals("spin2") ? 2 : 3;
+                    v[1] = 2 * PI * turns * smooth(Math.min(1, u / (beat.equals("spin2") ? 0.7F : 0.85F)));
+                }
+            }
+            case "leap" -> {
+                // the arms swung up over the head in the air, and brought down with the landing
+                if (u < 0.4F) {
+                    float k = Mth.sin(u / 0.4F * PI);
+                    if (r.role().startsWith("arm")) {
+                        v[0] = -2.4F * k;
+                    } else if (r.role().equals("torso")) {
+                        v[0] = -0.7F * k;
+                    } else if (r.role().equals("root")) {
+                        v[3] = 3F * k;
+                    }
+                }
+            }
+            case "conduct" -> {
+                float a = time * 0.45F + (r.left() ? PI : 0);
+                if (r.role().startsWith("arm")) {
+                    v[0] = Mth.cos(a) * 0.3F * live;
+                    v[2] = Mth.sin(a) * 0.45F * live * (r.left() ? -1 : 1);
+                }
+            }
+            case "recoil" -> {
+                float k = Math.max(0, Mth.sin(time * 2.4F));
+                if (r.role().startsWith("arm")) {
+                    v[0] = 0.22F * k * live;
+                } else if (r.role().equals("torso")) {
+                    v[0] = -0.05F * k * live;
+                }
+            }
+            case "heavy_recoil" -> {
+                float k = Math.max(0, Mth.sin(time * 0.8F));
+                k = k * k;
+                if (r.role().startsWith("arm")) {
+                    v[0] = 0.55F * k * live;
+                } else if (r.role().equals("torso")) {
+                    v[0] = -0.18F * k * live;
+                } else if (r.role().equals("root")) {
+                    v[0] = -0.12F * k * live;
+                }
+            }
+            case "weave" -> {
+                if (r.role().equals("root")) {
+                    v[2] = Mth.sin(time * 0.7F) * 0.25F * live;
+                    v[1] = Mth.sin(time * 0.7F) * 0.4F * live;
+                }
+            }
+            case "run" -> {
+                float k = Mth.sin(time * 1.4F);
+                if (r.role().equals("leg_r")) {
+                    v[0] = 0.9F * k * live;
+                } else if (r.role().equals("leg_l")) {
+                    v[0] = -0.9F * k * live;
+                } else if (r.role().equals("arm_r")) {
+                    v[0] = -0.5F * k * live;
+                } else if (r.role().equals("arm_l")) {
+                    v[0] = 0.5F * k * live;
                 }
             }
             case "combo" -> {

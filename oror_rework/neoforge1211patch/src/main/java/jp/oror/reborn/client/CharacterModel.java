@@ -27,8 +27,19 @@ public final class CharacterModel extends RigModel<SupremeEntity> {
     @Override
     public void setupAnim(SupremeEntity e, float swing, float amount, float age, float yaw, float pitch) {
         float partial = age - (float) ((int) age);
-        // (052) a technique under way: its own dance (TechniquePoses) over the rig's idle and walk, instead of the shared
-        // motion its windup was given
+        // (052) a guard's moment (a parry, a block, the guard broken, parried): its pose for its half second, over
+        // whatever else the character was doing (a technique under way goes on afterwards)
+        jp.oror.reborn.show.TechniqueShow.Active react = jp.oror.reborn.show.TechniqueShow.REACT.get(e.getId());
+        if (react != null) {
+            float time = e.level().getGameTime() - react.start() + partial;
+            if (time >= 0 && time <= react.length()) {
+                this.animate(e, swing, amount, age, yaw, pitch, 0, 0F, e.action(), e.form());
+                jp.oror.reborn.show.TechniquePoses.apply(this, react, time);
+                return;
+            }
+        }
+        // (052) a technique or a big move under way: its own dance (TechniquePoses) over the rig's idle and walk,
+        // instead of the shared motion its windup was given
         jp.oror.reborn.show.TechniqueShow.Active show = jp.oror.reborn.show.TechniqueShow.ACTIVE.get(e.getId());
         if (show != null) {
             float time = e.level().getGameTime() - show.start() + partial;
