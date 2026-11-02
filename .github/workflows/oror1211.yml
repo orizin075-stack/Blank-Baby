@@ -110,6 +110,21 @@ jobs:
               fi
             done
           } 2>&1 | tee -a out/report.txt
+      - name: Iron's Spells 'n Spellbooks, for the royals' casting animations (051)
+        run: |
+          {
+            set +e
+            ISS=$(ls libs/irons_spellbooks-*.jar | head -n 1)
+            python3 -I tools/iss_probe.py "$ISS"
+            for c in AbstractSpellCastingMobRenderer AbstractSpellCastingMobModel AbstractSpellCastingMob; do
+              javap -p -cp "$ISS" io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.$c
+            done
+            unzip -l "$ISS" | grep -E 'abstract_spell_casting_mob/|render/.*(Layer|Geo)' | awk '{print $4}' | head -n 60
+            G=$(ls libs/geckolib-*.jar | head -n 1)
+            javap -p -cp "$G" software.bernie.geckolib.renderer.GeoEntityRenderer | head -n 60
+            javap -p -cp "$G" software.bernie.geckolib.model.GeoModel | head -n 40
+          } > out/iss_probe.txt 2>&1 || true
+          wc -l out/iss_probe.txt
       - name: Make the release jar
         run: |
           BASE=$(sed -n 's/^base_version=//p' gradle.properties); NEW=$(sed -n 's/^release_version=//p' gradle.properties)

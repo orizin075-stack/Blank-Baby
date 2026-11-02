@@ -186,40 +186,76 @@ public final class Look {
             case 862 -> creatures(mc);
             case 864 -> view(mc, 0, 0, -3, 0F, 4F);
             case 980 -> shot(mc, "19b_creatures");
-            case 1000 -> throne(mc);
-            case 2800 -> shot(mc, "20_throne_room");
-            case 2840 -> king(mc);
-            case 4640 -> shot(mc, "21_throne_room_later");
-            case 4660 -> {
+            case 990 -> duel(mc, "royal_mage");
+            case 992 -> view(mc, 0, 0.5, -3, 0F, 10F);
+            case 1050 -> shot(mc, "19c_royal_mage_0");
+            case 1056 -> shot(mc, "19c_royal_mage_1");
+            case 1062 -> shot(mc, "19c_royal_mage_2");
+            case 1068 -> shot(mc, "19c_royal_mage_3");
+            case 1074 -> shot(mc, "19c_royal_mage_4");
+            case 1080 -> shot(mc, "19c_royal_mage_5");
+            case 1086 -> shot(mc, "19c_royal_mage_6");
+            case 1092 -> shot(mc, "19c_royal_mage_7");
+            case 1098 -> shot(mc, "19c_royal_mage_8");
+            case 1104 -> shot(mc, "19c_royal_mage_9");
+            case 1190 -> duel(mc, "kingdom_guard");
+            case 1192 -> view(mc, 0, 0.5, -3, 0F, 10F);
+            case 1250 -> shot(mc, "19c_kingdom_guard_0");
+            case 1256 -> shot(mc, "19c_kingdom_guard_1");
+            case 1262 -> shot(mc, "19c_kingdom_guard_2");
+            case 1268 -> shot(mc, "19c_kingdom_guard_3");
+            case 1274 -> shot(mc, "19c_kingdom_guard_4");
+            case 1280 -> shot(mc, "19c_kingdom_guard_5");
+            case 1286 -> shot(mc, "19c_kingdom_guard_6");
+            case 1292 -> shot(mc, "19c_kingdom_guard_7");
+            case 1298 -> shot(mc, "19c_kingdom_guard_8");
+            case 1304 -> shot(mc, "19c_kingdom_guard_9");
+            case 1390 -> duel(mc, "valeria");
+            case 1392 -> view(mc, 0, 0.5, -3, 0F, 10F);
+            case 1450 -> shot(mc, "19c_valeria_0");
+            case 1456 -> shot(mc, "19c_valeria_1");
+            case 1462 -> shot(mc, "19c_valeria_2");
+            case 1468 -> shot(mc, "19c_valeria_3");
+            case 1474 -> shot(mc, "19c_valeria_4");
+            case 1480 -> shot(mc, "19c_valeria_5");
+            case 1486 -> shot(mc, "19c_valeria_6");
+            case 1492 -> shot(mc, "19c_valeria_7");
+            case 1498 -> shot(mc, "19c_valeria_8");
+            case 1504 -> shot(mc, "19c_valeria_9");
+            case 1600 -> throne(mc);
+            case 3400 -> shot(mc, "20_throne_room");
+            case 3440 -> king(mc);
+            case 5240 -> shot(mc, "21_throne_room_later");
+            case 5260 -> {
                 king(mc);
                 overCapital(mc, 0, 0, 150);
             }
-            case 6440 -> shot(mc, "22_capital_aerial");
-            case 6450 -> overCapital(mc, -265, -239, 40);
-            case 8040 -> shot(mc, "23_helipad");
-            case 8050 -> overCapital(mc, -250, -377, 45);
-            case 9640 -> shot(mc, "24_airbase");
+            case 7040 -> shot(mc, "22_capital_aerial");
+            case 7050 -> overCapital(mc, -265, -239, 40);
+            case 8640 -> shot(mc, "23_helipad");
+            case 8650 -> overCapital(mc, -250, -377, 45);
+            case 10240 -> shot(mc, "24_airbase");
             // 048: the posts' supply, a helipad's power plant and depot, and a hangar's bays with theirs
-            case 9650 -> atCapital(mc, -265, 10, -250, 0F, 48F);
-            case 11240 -> shot(mc, "25_helipad_supply");
+            case 10250 -> atCapital(mc, -265, 10, -250, 0F, 48F);
+            case 11840 -> shot(mc, "25_helipad_supply");
             // 049: the west road's hangar, from the road in front of its apron
-            case 11250 -> atCapital(mc, -405, 5, -4, 180F, 14F);
-            case 12840 -> shot(mc, "26_hangar_supply");
+            case 11850 -> atCapital(mc, -405, 5, -4, 180F, 14F);
+            case 13440 -> shot(mc, "26_hangar_supply");
             // the palace's roofs from the south-east, high up (the two light wells roofed over in 048)
-            case 12850 -> atCapital(mc, 70, 115, 110, 150F, 32F);
-            case 14440 -> shot(mc, "27_palace_roofs");
+            case 13450 -> atCapital(mc, 70, 115, 110, 150F, 32F);
+            case 15040 -> shot(mc, "27_palace_roofs");
             // 049: the second runway along the east band of the farm belt, from above
-            case 14450 -> overCapital(mc, 361, -278, 70);
-            case 16040 -> shot(mc, "28_airbase_east");
+            case 15050 -> overCapital(mc, 361, -278, 70);
+            case 16640 -> shot(mc, "28_airbase_east");
             // a high road's fountain with its new rim (its water ran out over the street), looking north from the road
-            case 16050 -> atCapital(mc, 0, 7, -204, 180F, 28F);
-            case 17640 -> shot(mc, "29_road_fountain");
+            case 16650 -> atCapital(mc, 0, 7, -204, 180F, 28F);
+            case 18240 -> shot(mc, "29_road_fountain");
             // the sheep ranch's barn (its gables were open) and the east fortress's hall (its roof hung over its walls)
-            case 17650 -> atCapital(mc, 383, 22, -213, -135F, 30F);
-            case 19240 -> shot(mc, "30_ranch_barn");
-            case 19250 -> atCapital(mc, 505, 40, 55, -135F, 30F);
-            case 20840 -> shot(mc, "31_fortress_east");
-            case 20850 -> finish(mc, "complete");
+            case 18250 -> atCapital(mc, 383, 22, -213, -135F, 30F);
+            case 19840 -> shot(mc, "30_ranch_barn");
+            case 19850 -> atCapital(mc, 505, 40, 55, -135F, 30F);
+            case 21440 -> shot(mc, "31_fortress_east");
+            case 21450 -> finish(mc, "complete");
             default -> {
             }
         }
@@ -305,6 +341,28 @@ public final class Look {
                     ids[i], sx - 10 + (i % 3) * 10 + (i >= 3 ? 5 : 0), (int) sy, sz + (i >= 3 ? 4 : 14)));
             }
             note("creatures on show");
+        });
+    }
+
+    /**
+     * (051) One fighter facing a vindicator across the stage (left and right of the camera), both with their AI: the
+     * shots that follow catch how it moves, casts and strikes.
+     */
+    private static void duel(Minecraft mc, String who) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null) {
+            return;
+        }
+        server.execute(() -> {
+            command(server, "kill @e[tag=oror_look]");
+            command(server, "kill @e[type=minecraft:vindicator]");
+            command(server, String.format(java.util.Locale.ROOT,
+                "summon oror_supreme_bosses:%s %.1f %d %.1f {PersistenceRequired:1b,Rotation:[-90f,0f],Tags:[\"oror_look\"]}", who, sx - 3, (int) sy,
+                sz + 7));
+            command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vindicator %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,"
+                + "Rotation:[90f,0f],Tags:[\"oror_look\"],attributes:[{id:\"minecraft:generic.max_health\",base:500}],Health:500f}", sx + 3, (int) sy,
+                sz + 7));
+            note("duel: " + who);
         });
     }
 
