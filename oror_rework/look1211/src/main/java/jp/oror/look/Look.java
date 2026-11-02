@@ -132,14 +132,14 @@ public final class Look {
         }
     }
 
-    /** The duels (052): who fights, from tick 990, two hundred ticks apart. */
+    /** The duels (052): who fights, from tick 1240, two hundred ticks apart. */
     private static final String[] DUELISTS = {"valeria", "kokuhaku", "elseria", "kingdom_guard"};
 
     private static void play(Minecraft mc, int t) {
         // (052) each duel: the character and an armed vindicator set on each other (and healed) every half second, the
         // camera five blocks off, twenty-four frames six ticks apart from the fortieth tick
         for (int d = 0; d < DUELISTS.length; d++) {
-            int k = t - (990 + d * 200);
+            int k = t - (1240 + d * 200);
             if (k == 0) {
                 duel(mc, DUELISTS[d]);
             } else if (k == 2) {
@@ -205,40 +205,50 @@ public final class Look {
             case 862 -> creatures(mc);
             case 864 -> view(mc, 0, 0, -3, 0F, 4F);
             case 980 -> shot(mc, "19b_creatures");
-            case 1800 -> throne(mc);
-            case 3600 -> shot(mc, "20_throne_room");
-            case 3640 -> king(mc);
-            case 5440 -> shot(mc, "21_throne_room_later");
-            case 5460 -> {
+            // (052) the redrawn gear: in a row, worn and held by an armour stand, then at work and recharging
+            case 990 -> gear(mc);
+            case 992 -> view(mc, 0, 1.6, -1.5, 0F, 2F);
+            case 1100 -> shot(mc, "32_gear");
+            case 1102 -> view(mc, 3.6, 0.9, 0.6, 0F, 6F);
+            case 1140 -> shot(mc, "33_gear_worn");
+            case 1142 -> gearAtWork(mc);
+            case 1144 -> view(mc, 0, 1.6, -1.5, 0F, 2F);
+            case 1152 -> shot(mc, "34_gear_at_work");
+            case 1202 -> shot(mc, "35_gear_recharging");
+            case 2050 -> throne(mc);
+            case 3850 -> shot(mc, "20_throne_room");
+            case 3890 -> king(mc);
+            case 5690 -> shot(mc, "21_throne_room_later");
+            case 5710 -> {
                 king(mc);
                 overCapital(mc, 0, 0, 150);
             }
-            case 7240 -> shot(mc, "22_capital_aerial");
-            case 7250 -> overCapital(mc, -265, -239, 40);
-            case 8840 -> shot(mc, "23_helipad");
-            case 8850 -> overCapital(mc, -250, -377, 45);
-            case 10440 -> shot(mc, "24_airbase");
+            case 7490 -> shot(mc, "22_capital_aerial");
+            case 7500 -> overCapital(mc, -265, -239, 40);
+            case 9090 -> shot(mc, "23_helipad");
+            case 9100 -> overCapital(mc, -250, -377, 45);
+            case 10690 -> shot(mc, "24_airbase");
             // 048: the posts' supply, a helipad's power plant and depot, and a hangar's bays with theirs
-            case 10450 -> atCapital(mc, -265, 10, -250, 0F, 48F);
-            case 12040 -> shot(mc, "25_helipad_supply");
+            case 10700 -> atCapital(mc, -265, 10, -250, 0F, 48F);
+            case 12290 -> shot(mc, "25_helipad_supply");
             // 049: the west road's hangar, from the road in front of its apron
-            case 12050 -> atCapital(mc, -405, 5, -4, 180F, 14F);
-            case 13640 -> shot(mc, "26_hangar_supply");
+            case 12300 -> atCapital(mc, -405, 5, -4, 180F, 14F);
+            case 13890 -> shot(mc, "26_hangar_supply");
             // the palace's roofs from the south-east, high up (the two light wells roofed over in 048)
-            case 13650 -> atCapital(mc, 70, 115, 110, 150F, 32F);
-            case 15240 -> shot(mc, "27_palace_roofs");
+            case 13900 -> atCapital(mc, 70, 115, 110, 150F, 32F);
+            case 15490 -> shot(mc, "27_palace_roofs");
             // 049: the second runway along the east band of the farm belt, from above
-            case 15250 -> overCapital(mc, 361, -278, 70);
-            case 16840 -> shot(mc, "28_airbase_east");
+            case 15500 -> overCapital(mc, 361, -278, 70);
+            case 17090 -> shot(mc, "28_airbase_east");
             // a high road's fountain with its new rim (its water ran out over the street), looking north from the road
-            case 16850 -> atCapital(mc, 0, 7, -204, 180F, 28F);
-            case 18440 -> shot(mc, "29_road_fountain");
+            case 17100 -> atCapital(mc, 0, 7, -204, 180F, 28F);
+            case 18690 -> shot(mc, "29_road_fountain");
             // the sheep ranch's barn (its gables were open) and the east fortress's hall (its roof hung over its walls)
-            case 18450 -> atCapital(mc, 383, 22, -213, -135F, 30F);
-            case 20040 -> shot(mc, "30_ranch_barn");
-            case 20050 -> atCapital(mc, 505, 40, 55, -135F, 30F);
-            case 21640 -> shot(mc, "31_fortress_east");
-            case 21650 -> finish(mc, "complete");
+            case 18700 -> atCapital(mc, 383, 22, -213, -135F, 30F);
+            case 20290 -> shot(mc, "30_ranch_barn");
+            case 20300 -> atCapital(mc, 505, 40, 55, -135F, 30F);
+            case 21890 -> shot(mc, "31_fortress_east");
+            case 21900 -> finish(mc, "complete");
             default -> {
             }
         }
@@ -306,6 +316,55 @@ public final class Look {
                     sx - 2.0 + (i % 5) * 1.0, sy + 1.9 - (i / 5) * 1.0, sz + 4.0, ids[i]));
             }
             note("arms on show");
+        });
+    }
+
+    /** (052) The items whose sprites were placeholders, redrawn: twenty in four rows, and an armour stand in the dragon
+     * coat and Teia's boots holding the forge's repair tool and the squad banner. */
+    private static void gear(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null) {
+            return;
+        }
+        String[] ids = {"star_shard", "dragon_core", "forge_core", "curse_residue", "world_thread", "rewind_talisman", "purifying_dew",
+            "mana_crystal", "dungeon_key", "field_guide", "forge_tool", "dragon_coat", "teia_boots", "omniregistry_treasure", "villager_king_token",
+            "focus_cell", "dodge_talon", "last_bloom", "parry_emblem", "squad_banner"};
+        server.execute(() -> {
+            command(server, "kill @e[tag=oror_look]");
+            command(server, "kill @e[type=minecraft:item]");
+            for (int i = 0; i < ids.length; i++) {
+                command(server, String.format(java.util.Locale.ROOT, "summon minecraft:item_display %.2f %.2f %.2f "
+                        + "{item:{id:\"oror_supreme_bosses:%s\",count:1},item_display:\"gui\",billboard:\"center\",Tags:[\"oror_look\"],"
+                        + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[0.85f,0.85f,0.85f]}}",
+                    sx - 2.0 + (i % 5) * 1.0, sy + 3.4 - (i / 5) * 1.0, sz + 5.0, ids[i]));
+            }
+            command(server, String.format(java.util.Locale.ROOT, "summon minecraft:armor_stand %.2f %d %.2f {ShowArms:1b,NoBasePlate:1b,"
+                + "Rotation:[180f,0f],Tags:[\"oror_look\"],ArmorItems:[{id:\"oror_supreme_bosses:teia_boots\",count:1},{},"
+                + "{id:\"oror_supreme_bosses:dragon_coat\",count:1},{}],HandItems:[{id:\"oror_supreme_bosses:forge_tool\",count:1},"
+                + "{id:\"oror_supreme_bosses:squad_banner\",count:1}],Pose:{RightArm:[-60f,0f,0f],LeftArm:[-30f,10f,-10f]}}", sx + 3.6, (int) sy,
+                sz + 3.2));
+            note("gear on show");
+        });
+    }
+
+    /** (052) The Nightfall gear put to work for the camera's player (its cooldowns started), so that its at-work and
+     * recharging looks are what the row shows next. */
+    private static void gearAtWork(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null) {
+            return;
+        }
+        server.execute(() -> {
+            ServerPlayer p = server.getPlayerList().getPlayers().isEmpty() ? null : server.getPlayerList().getPlayers().get(0);
+            if (p == null) {
+                return;
+            }
+            String[][] gear = {{"parry_emblem", "100"}, {"dodge_talon", "60"}, {"squad_banner", "600"}, {"last_bloom", "3600"}};
+            for (String[] g : gear) {
+                p.getCooldowns().addCooldown(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", g[0])), Integer.parseInt(g[1]));
+            }
+            note("gear at work");
         });
     }
 
