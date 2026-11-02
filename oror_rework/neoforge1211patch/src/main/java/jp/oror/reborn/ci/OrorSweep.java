@@ -368,6 +368,13 @@ public final class OrorSweep {
                 report(r);
             }
             if (r.nextItem >= r.items.size()) {
+                // the arms a right-click does not show: the guns fired, the Blueprinter scanning and printing a house
+                try {
+                    p.getInventory().clearContent();
+                    SweepArms.run(r.level, p, BlockPos.containing(r.bench).offset(0, 0, -30));
+                } catch (Throwable ex) {
+                    LOG.info("SWEEP-ARMS {\"error\":\"{}\"}", esc(ex.toString()));
+                }
                 finish(r);
                 return;
             }
