@@ -215,21 +215,25 @@ public final class Look {
             case 1144 -> view(mc, 0, 1.6, -1.5, 0F, 2F);
             case 1152 -> shot(mc, "34_gear_at_work");
             case 1202 -> shot(mc, "35_gear_recharging");
-            // (052) the gear worn (Curios): from in front and behind (third person), and the talon on the bare hand
-            case 1210 -> wornGear(mc, true);
-            case 1212 -> {
+            // (052) the gear worn (Curios): from in front and behind (third person), and the talon on the bare hand;
+            // between the gear's row and the duels (from 1240), the camera back in first person before they start
+            case 1204 -> wornGear(mc, true);
+            case 1206 -> {
                 view(mc, 0, 0, 2, 180F, 6F);
                 mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
             }
-            case 1260 -> shot(mc, "36_gear_worn_front");
-            case 1262 -> mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
-            case 1300 -> shot(mc, "37_gear_worn_back");
-            case 1302 -> {
+            case 1216 -> shot(mc, "36_gear_worn_front");
+            case 1218 -> mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            case 1226 -> shot(mc, "37_gear_worn_back");
+            case 1228 -> {
                 mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
                 view(mc, 0, 0, 2, 180F, 30F);
             }
-            case 1340 -> shot(mc, "38_gear_worn_hand");
-            case 1342 -> wornGear(mc, false);
+            case 1234 -> shot(mc, "38_gear_worn_hand");
+            case 1236 -> {
+                wornGear(mc, false);
+                mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            }
             case 2050 -> throne(mc);
             case 3850 -> shot(mc, "20_throne_room");
             case 3890 -> king(mc);
