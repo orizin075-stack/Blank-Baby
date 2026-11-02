@@ -215,6 +215,21 @@ public final class Look {
             case 1144 -> view(mc, 0, 1.6, -1.5, 0F, 2F);
             case 1152 -> shot(mc, "34_gear_at_work");
             case 1202 -> shot(mc, "35_gear_recharging");
+            // (052) the gear worn (Curios): from in front and behind (third person), and the talon on the bare hand
+            case 1210 -> wornGear(mc, true);
+            case 1212 -> {
+                view(mc, 0, 0, 2, 180F, 6F);
+                mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+            }
+            case 1260 -> shot(mc, "36_gear_worn_front");
+            case 1262 -> mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            case 1300 -> shot(mc, "37_gear_worn_back");
+            case 1302 -> {
+                mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+                view(mc, 0, 0, 2, 180F, 30F);
+            }
+            case 1340 -> shot(mc, "38_gear_worn_hand");
+            case 1342 -> wornGear(mc, false);
             case 2050 -> throne(mc);
             case 3850 -> shot(mc, "20_throne_room");
             case 3890 -> king(mc);
@@ -345,6 +360,44 @@ public final class Look {
                 + "{id:\"oror_supreme_bosses:squad_banner\",count:1}],Pose:{RightArm:[-60f,0f,0f],LeftArm:[-30f,10f,-10f]}}", sx + 3.6, (int) sy,
                 sz + 3.2));
             note("gear on show");
+        });
+    }
+
+    /** (052) The gear worn by the camera's player (through the patch's WornGear, Curios's slots): the rewind talisman
+     * round the neck, the parry emblem on the left arm, the dodge talon on the right hand, the squad banner on the back,
+     * the last bloom in the hair, all ready (their cooldowns cleared); or taken off again. */
+    private static void wornGear(Minecraft mc, boolean on) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null) {
+            return;
+        }
+        server.execute(() -> {
+            ServerPlayer p = server.getPlayerList().getPlayers().isEmpty() ? null : server.getPlayerList().getPlayers().get(0);
+            if (p == null) {
+                return;
+            }
+            if (on) {
+                command(server, "kill @e[tag=oror_look]");
+            }
+            String[][] gear = {{"necklace", "rewind_talisman"}, {"bracelet", "parry_emblem"}, {"hands", "dodge_talon"}, {"back", "squad_banner"},
+                {"head", "last_bloom"}};
+            int worn = 0;
+            try {
+                Method wear = Class.forName("jp.oror.reborn.gear.WornGear").getMethod("wear", LivingEntity.class, String.class,
+                    net.minecraft.world.item.ItemStack.class);
+                for (String[] g : gear) {
+                    net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
+                        net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", g[1]));
+                    p.getCooldowns().removeCooldown(item);
+                    if ((boolean) wear.invoke(null, p, g[0], on ? new net.minecraft.world.item.ItemStack(item) : net.minecraft.world.item.ItemStack.EMPTY)) {
+                        worn++;
+                    }
+                }
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                note("worn gear failed: " + ex);
+            }
+            p.setItemInHand(InteractionHand.MAIN_HAND, net.minecraft.world.item.ItemStack.EMPTY);
+            note((on ? "gear worn: " : "gear taken off: ") + worn + " of " + gear.length);
         });
     }
 
