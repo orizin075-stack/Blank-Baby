@@ -1,0 +1,441 @@
+== geo files 40
+   assets/irons_spellbooks/geo/abstract_casting_mob.geo.json
+   assets/irons_spellbooks/geo/archevoker.geo.json
+   assets/irons_spellbooks/geo/archevoker_armor.geo.json
+   assets/irons_spellbooks/geo/armor_stand.geo.json
+   assets/irons_spellbooks/geo/battlemage_armor.geo.json
+   assets/irons_spellbooks/geo/boots_of_speed.geo.json
+   assets/irons_spellbooks/geo/citadel_keeper.geo.json
+   assets/irons_spellbooks/geo/cryomancer_armor.geo.json
+   assets/irons_spellbooks/geo/cultist_armor.geo.json
+   assets/irons_spellbooks/geo/dead_king.geo.json
+   assets/irons_spellbooks/geo/electromancer_armor.geo.json
+   assets/irons_spellbooks/geo/fiery_dagger.geo.json
+   assets/irons_spellbooks/geo/ice_block_projectile.geo.json
+   assets/irons_spellbooks/geo/ice_spider.geo.json
+   assets/irons_spellbooks/geo/infernal_sorcerer.geo.json
+   assets/irons_spellbooks/geo/netherite_armor.geo.json
+   assets/irons_spellbooks/geo/paladin_chestplate.geo.json
+   assets/irons_spellbooks/geo/piglin_casting_mob.geo.json
+   assets/irons_spellbooks/geo/plagued_armor.geo.json
+   assets/irons_spellbooks/geo/priest_armor.geo.json
+   assets/irons_spellbooks/geo/pumpkin_armor.geo.json
+   assets/irons_spellbooks/geo/pyromancer_armor.geo.json
+   assets/irons_spellbooks/geo/root.geo.json
+   assets/irons_spellbooks/geo/scapegoat.geo.json
+   assets/irons_spellbooks/geo/shadowwalker_armor.geo.json
+   assets/irons_spellbooks/geo/skeleton_mob.geo.json
+   assets/irons_spellbooks/geo/spectral_hammer.geo.json
+   assets/irons_spellbooks/geo/spin_attack_model.geo.json
+   assets/irons_spellbooks/geo/statue/tyros_statue.geo.json
+   assets/irons_spellbooks/geo/summoned_claymore.geo.json
+   assets/irons_spellbooks/geo/summoned_rapier.geo.json
+   assets/irons_spellbooks/geo/summoned_sword.geo.json
+   assets/irons_spellbooks/geo/tarnished_armor.geo.json
+   assets/irons_spellbooks/geo/tyros.geo.json
+   assets/irons_spellbooks/geo/vanilla_armor.geo.json
+   assets/irons_spellbooks/geo/void_tentacle.geo.json
+   assets/irons_spellbooks/geo/wandering_magician_armor.geo.json
+   assets/irons_spellbooks/geo/wisp.geo.json
+   assets/irons_spellbooks/geo/wizard_armor.geo.json
+   assets/irons_spellbooks/geo/wizard_armor_hat.geo.json
+== GEO assets/irons_spellbooks/geo/abstract_casting_mob.geo.json {'identifier': 'geometry.unknown', 'texture_width': 64, 'texture_height': 64, 'visible_bounds_width': 5, 'visible_bounds_height': 5.5, 'visible_bounds_offset': [0, 2.25, 0]}
+   bone body parent None pivot [0, 12, 0] rot None cubes []
+   bone torso parent body pivot [0, 24, 0] rot None cubes [([-4, 12, -2], [8, 12, 4], [16, 32], 0.25), ([-4, 12, -2], [8, 12, 4], [16, 16], None)]
+   bone armorBipedBody parent torso pivot [0, 24, 0] rot None cubes [([-4, 12, -2], [8, 12, 4], {}, 1)]
+   bone head parent body pivot [0, 24, 0] rot None cubes [([-4, 24, -4], [8, 8, 8], [0, 0], None), ([-4, 24, -4], [8, 8, 8], [32, 0], 0.25)]
+   bone armorBipedHead parent head pivot [0, 24, 0] rot None cubes [([-4, 24, -4], [8, 8, 8], {}, 1)]
+   bone right_leg parent body pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], [0, 16], None), ([-4, 0, -2], [4, 12, 4], [0, 32], 0.25)]
+   bone armorBipedRightFoot2 parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 1)]
+   bone armorBipedRightLeg2 parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedRightLeg parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedRightFoot parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 1)]
+   bone left_leg parent body pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], [16, 48], None), ([0, 0, -2], [4, 12, 4], [0, 48], 0.25)]
+   bone armorBipedLeftFoot2 parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 1)]
+   bone armorBipedLeftLeg2 parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedLeftLeg parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedLeftFoot parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 1)]
+   bone right_arm parent body pivot [-5, 22, 0] rot None cubes [([-8, 12, -2], [4, 12, 4], [40, 16], None), ([-8, 12, -2], [4, 12, 4], [40, 32], 0.25)]
+   bone armorBipedRightArm parent right_arm pivot [-5, 22, 0] rot None cubes [([-8, 12, -2], [4, 12, 4], {}, 1)]
+   bone bipedHandRight parent right_arm pivot [-6, 13, -1] rot None cubes [([-6, 13, -1], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone rightItem parent right_arm pivot [-6, 12, 0] rot [-90, 0, 0] cubes [([-6, 12, 0], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone left_arm parent body pivot [5, 22, 0] rot None cubes [([4, 12, -2], [4, 12, 4], [32, 48], None), ([4, 12, -2], [4, 12, 4], {'north': {'uv': [52, 52], 'uv_size': [4, 12]}, 'east': {'uv': [48, 52], 'uv_size': [4, 12]}, 'south': {'uv': [60, 52], 'uv_size': [4, 12]}, 'west': {'uv': [56, 52], 'uv_size': [4, 12]}, 'up': {'uv': [52, 48], 'uv_size': [4, 4]}, 'down': {'uv': [56, 52], 'uv_size': [4, -4]}}, 0.25)]
+   bone armorBipedLeftArm parent left_arm pivot [5, 22, 0] rot None cubes [([4, 12, -2], [4, 12, 4], {}, 1)]
+   bone bipedHandLeft parent left_arm pivot [6, 12, -1] rot None cubes [([6, 12, -1], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone leftItem parent bipedHandLeft pivot [6, 12, 0] rot None cubes [([6, 12, 0], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+== GEO assets/irons_spellbooks/geo/piglin_casting_mob.geo.json {'identifier': 'geometry.unknown', 'texture_width': 64, 'texture_height': 64, 'visible_bounds_width': 5, 'visible_bounds_height': 5.5, 'visible_bounds_offset': [0, 2.25, 0]}
+   bone body parent None pivot [0, 12, 0] rot None cubes []
+   bone torso parent body pivot [0, 24, 0] rot None cubes [([-4, 12, -2], [8, 12, 4], [16, 32], 0.25), ([-4, 12, -2], [8, 12, 4], [16, 16], None)]
+   bone armorBipedBody parent torso pivot [0, 24, 0] rot None cubes [([-4, 12, -2], [8, 12, 4], {}, 1)]
+   bone head parent body pivot [0, 24, 0] rot None cubes [([-5, 24, -4], [10, 8, 8], [0, 0], None), ([-2, 24, -5], [4, 4, 1], [31, 1], None), ([-3, 24, -5], [1, 2, 1], [2, 4], None), ([2, 24, -5], [1, 2, 1], [2, 0], None)]
+   bone armorBipedHead parent head pivot [0, 24, 0] rot None cubes [([-4.75, 24, -4.75], [9.5, 8.3, 9], {}, 1)]
+   bone right_ear parent head pivot [-5, 30, 0] rot None cubes [([-6, 25, -2], [1, 5, 4], [39, 6], None)]
+   bone left_ear parent head pivot [5, 30, 0] rot None cubes [([5, 25, -2], [1, 5, 4], [51, 6], None), ([4, 24, 0], [3, 3, 0], [43, 3], None)]
+   bone right_leg parent body pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], [0, 16], None), ([-4, 0, -2], [4, 12, 4], [0, 32], 0.25)]
+   bone armorBipedRightFoot2 parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 1)]
+   bone armorBipedRightLeg2 parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedRightLeg parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedRightFoot parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 1)]
+   bone left_leg parent body pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], [16, 48], None), ([0, 0, -2], [4, 12, 4], [0, 48], 0.25)]
+   bone armorBipedLeftFoot2 parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 1)]
+   bone armorBipedLeftLeg2 parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedLeftLeg parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedLeftFoot parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 1)]
+   bone right_arm parent body pivot [-5, 22, 0] rot None cubes [([-8, 12, -2], [4, 12, 4], [40, 16], None), ([-8, 12, -2], [4, 12, 4], [40, 32], 0.25)]
+   bone armorBipedRightArm parent right_arm pivot [-5, 22, 0] rot None cubes [([-8, 12, -2], [4, 12, 4], {}, 1)]
+   bone bipedHandRight parent right_arm pivot [-6, 13, -1] rot None cubes [([-6, 13, -1], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone rightItem parent right_arm pivot [-6, 12, 0] rot [-90, 0, 0] cubes [([-6, 12, 0], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone left_arm parent body pivot [5, 22, 0] rot None cubes [([4, 12, -2], [4, 12, 4], [32, 48], None), ([4, 12, -2], [4, 12, 4], {'north': {'uv': [52, 52], 'uv_size': [4, 12]}, 'east': {'uv': [48, 52], 'uv_size': [4, 12]}, 'south': {'uv': [60, 52], 'uv_size': [4, 12]}, 'west': {'uv': [56, 52], 'uv_size': [4, 12]}, 'up': {'uv': [52, 48], 'uv_size': [4, 4]}, 'down': {'uv': [56, 52], 'uv_size': [4, -4]}}, 0.25)]
+   bone armorBipedLeftArm parent left_arm pivot [5, 22, 0] rot None cubes [([4, 12, -2], [4, 12, 4], {}, 1)]
+   bone bipedHandLeft parent left_arm pivot [6, 12, -1] rot None cubes [([6, 12, -1], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone leftItem parent bipedHandLeft pivot [6, 12, 0] rot None cubes [([6, 12, 0], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+== GEO assets/irons_spellbooks/geo/skeleton_mob.geo.json {'identifier': 'geometry.unknown', 'texture_width': 64, 'texture_height': 64, 'visible_bounds_width': 5, 'visible_bounds_height': 5.5, 'visible_bounds_offset': [0, 2.25, 0]}
+   bone body parent None pivot [0, 12, 0] rot None cubes []
+   bone torso parent body pivot [0, 24, 0] rot None cubes [([-4, 12, -2], [8, 12, 4], [16, 32], 0.25), ([-4, 12, -2], [8, 12, 4], [16, 16], None)]
+   bone armorBipedBody parent torso pivot [0, 24, 0] rot None cubes [([-4, 12, -2], [8, 12, 4], {}, 1)]
+   bone head parent body pivot [0, 24, 0] rot None cubes [([-4, 24, -4], [8, 8, 8], [0, 0], None), ([-4, 24, -4], [8, 8, 8], [32, 0], 0.25)]
+   bone armorBipedHead parent head pivot [0, 24, 0] rot None cubes [([-4, 24, -4], [8, 8, 8], {}, 1)]
+   bone right_leg parent body pivot [-2, 12, 0] rot None cubes [([-3, 0, -1], [2, 12, 2], [0, 16], None), ([-4, 0, -2], [4, 12, 4], [0, 32], 0.25)]
+   bone armorBipedRightFoot2 parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 1)]
+   bone armorBipedRightLeg2 parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedRightLeg parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedRightFoot parent right_leg pivot [-2, 12, 0] rot None cubes [([-4, 0, -2], [4, 12, 4], {}, 1)]
+   bone left_leg parent body pivot [2, 12, 0] rot None cubes [([1, 0, -1], [2, 12, 2], [0, 16], None), ([0, 0, -2], [4, 12, 4], [0, 32], 0.25)]
+   bone armorBipedLeftFoot2 parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 1)]
+   bone armorBipedLeftLeg2 parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedLeftLeg parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 0.5)]
+   bone armorBipedLeftFoot parent left_leg pivot [2, 12, 0] rot None cubes [([0, 0, -2], [4, 12, 4], {}, 1)]
+   bone right_arm parent body pivot [-5, 22, 0] rot None cubes [([-6, 12, -1], [2, 12, 2], [40, 16], None), ([-8, 12, -2], [4, 12, 4], [40, 32], 0.25)]
+   bone armorBipedRightArm parent right_arm pivot [-5, 22, 0] rot None cubes [([-8, 12, -2], [4, 12, 4], {}, 1)]
+   bone bipedHandRight parent right_arm pivot [-5, 13, 0] rot None cubes [([-28, 20, -1], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone rightItem parent right_arm pivot [-5, 13, 0] rot [-90, 0, 0] cubes [([-6, 13, 1], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone left_arm parent body pivot [5, 22, 0] rot None cubes [([4, 12, -1], [2, 12, 2], [40, 16], None), ([4, 12, -2], [4, 12, 4], [40, 32], 0.25)]
+   bone armorBipedLeftArm parent left_arm pivot [5, 22, 0] rot None cubes [([4, 12, -2], [4, 12, 4], {}, 1)]
+   bone bipedHandLeft parent left_arm pivot [5, 13, 0] rot None cubes [([5, 12, -1], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+   bone leftItem parent bipedHandLeft pivot [5, 13, 0] rot None cubes [([5, 12, 0], [0, 0, 0], {'north': {'uv': [0, 0], 'uv_size': [0, 0]}, 'east': {'uv': [0, 0], 'uv_size': [0, 0]}, 'south': {'uv': [0, 0], 'uv_size': [0, 0]}, 'west': {'uv': [0, 0], 'uv_size': [0, 0]}, 'up': {'uv': [0, 0], 'uv_size': [0, 0]}, 'down': {'uv': [0, 0], 'uv_size': [0, 0]}}, None)]
+== animation files 11
+== ANIM assets/irons_spellbooks/animations/casting_animations.json 79
+    charged_throw len 25 loop hold_on_last_frame bones ['left_arm', 'right_arm', 'torso']
+    long_cast_finish len 0.1875 loop None bones ['left_arm', 'right_arm']
+    instant_projectile len 0.1875 loop None bones ['body', 'left_arm', 'right_arm', 'torso']
+    blank len 0.0833 loop None bones ['head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    charged_throw_original len 1.2083 loop None bones ['left_arm', 'right_arm', 'torso']
+    continuous_thrust len 0.44 loop True bones ['left_arm', 'left_leg', 'rightItem', 'right_arm', 'right_leg', 'torso']
+    dead_king_rise len 15 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    dead_king_rest len 5 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    dead_king_die len 7.08 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    dead_king_idle len None loop True bones ['left_arm']
+    dead_king_slam len 2.4 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg']
+    dead_king_melee len 1.96 loop None bones ['bipedHandLeft', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg']
+    instant_slash len 0.28 loop None bones ['left_arm', 'right_arm', 'torso']
+    instant_self len 0.08 loop None bones ['right_arm']
+    charge_arrow len 2 loop hold_on_last_frame bones ['left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    long_cast len 5 loop True bones ['left_arm', 'right_arm', 'torso']
+    sword_double_slash len 2.16 loop None bones ['bipedHandRight', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    sword_lunge len 3.8 loop None bones ['bipedHandRight', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    sword_slash_stab len 1.88 loop None bones ['bipedHandRight', 'body', 'left_arm', 'left_leg', 'rightItem', 'right_arm', 'right_leg', 'torso']
+    sword_triple_slash len 3.28 loop None bones ['bipedHandRight', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    rise_from_ground_01 len 4 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    rise_from_ground_03 len 4 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    rise_from_ground_04 len 4 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    rise_from_ground_02 len 4 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    charged_throw_backup len 5.5 loop hold_on_last_frame bones ['bipedHandRight', 'left_arm', 'rightItem', 'right_arm', 'torso']
+    charge_spit len 25 loop hold_on_last_frame bones ['head', 'left_arm', 'right_arm', 'torso']
+    charge_spit_finish len 0.36 loop None bones ['head', 'left_arm', 'right_arm', 'torso']
+    continuous_overhead len 0.88 loop True bones ['head', 'left_arm', 'rightItem', 'right_arm', 'torso']
+    charge_black_hole len 30 loop None bones ['left_arm', 'right_arm']
+    charge_wavy len 25 loop None bones ['head', 'left_arm', 'right_arm', 'torso']
+    sword_single_upward len 1.28 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    sword_single_horizontal len 1.4 loop None bones ['left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    sword_single_horizontal_fast len 1.2 loop None bones ['bipedHandRight', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    sword_stab len 1.08 loop None bones ['bipedHandRight', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    sword_deflect_1 len 0.52 loop None bones ['bipedHandRight', 'right_arm']
+    overhead_two_handed_swing len 0.8333 loop None bones ['bipedHandLeft', 'bipedHandRight', 'body', 'head', 'leftItem', 'left_arm', 'left_leg', 'rightItem', 'right_arm', 'right_leg', 'torso']
+    touch_ground len 0.2917 loop None bones ['head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    horizontal_slash_one_handed len 0.72 loop None bones ['body', 'left_arm', 'left_leg', 'rightItem', 'right_arm', 'right_leg', 'torso']
+    katana_upslash len 0.4 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    charge_raised_hand len 5 loop None bones ['right_arm']
+    stomp len 0.6667 loop None bones ['head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    cross_arms len 1 loop None bones ['head', 'left_arm', 'right_arm']
+    cast_t_pose len 0.25 loop None bones ['left_arm', 'right_arm']
+    dead_king_double_swing len 2.56 loop None bones ['head', 'left_arm', 'right_arm', 'torso']
+    simple_sword_upward_swipe len 0.4583 loop None bones ['bipedHandRight', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    simple_sword_lunge_stab len 0.4167 loop None bones ['bipedHandRight', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    simple_sword_stab_alternate len 0.4583 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    simple_sword_horizontal_cross_swipe len 0.5 loop None bones ['bipedHandRight', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    self_cast_two_hands len 0.0833 loop None bones ['left_arm', 'right_arm']
+    summon_fiery_daggers len 1.2917 loop None bones ['head', 'left_arm', 'left_leg', 'right_leg', 'torso']
+    simple_sword_downstrike len 1.0417 loop None bones ['bipedHandRight', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    kneeling_prayer len 20 loop hold_on_last_frame bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg']
+    scythe_backpedal len 1.9583 loop None bones ['bipedHandRight', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_jump_combo len 2.25 loop None bones ['bipedHandRight', 'body', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_sideslash_downslash len 2.7083 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_downslash_pull len 3 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_downslash_sideslash len 2.875 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_low_rightward_sweep len 2 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    drain_heat_start len 1.8333 loop None bones ['left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    drain_heat_cast len 0.4167 loop None bones ['left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_full_spin_clockwise len 2.0417 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_horizontal_slash_spin len 2.2917 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_dagger_double_horizontal len 2.8333 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    fire_boss_break_stance len 9 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    continuous_thrust_one_handed len 0.44 loop True bones ['left_arm', 'left_leg', 'rightItem', 'right_arm', 'right_leg', 'torso']
+    fire_boss_death len 8 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    keeper_kneeling_rise len 1.25 loop None bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    fire_boss_spawn len 8.75 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    magma_throw len 2 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    new len None loop True bones ['body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_sideslash_downslash_sideslash len 3.125 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    scythe_sideslash_downslash_spinslash len 3.125 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    fire_boss_half_health_attack len 11.7917 loop None bones ['bipedHandRight', 'body', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    offhand_parry len 1 loop None bones ['left_arm', 'torso']
+    throw_item len 0.375 loop None bones ['right_arm']
+    scythe_dagger_combo_1 len 4.5417 loop None bones ['bipedHandLeft', 'bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    fire_boss_acrobatic_dagger_throw len 2.625 loop None bones ['bipedHandRight', 'body', 'head', 'left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    charge_one_handed_ray len 5 loop None bones ['left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+    shoot_one_handed_ray len 0.2083 loop None bones ['left_arm', 'left_leg', 'right_arm', 'right_leg', 'torso']
+== ANIM assets/irons_spellbooks/animations/ice_block_animations.json 2
+    ice_block_animations len 1.4 loop None bones ['bone2', 'bone3', 'bone4', 'bone5']
+    form len 1.4 loop hold_on_last_frame bones ['bone2', 'bone3', 'bone4', 'bone5']
+== ANIM assets/irons_spellbooks/animations/ice_spider.animation.json 7
+    attack_fang_basic len 1 loop None bones ['abdomen', 'fangLeft', 'fangRight', 'head', 'leftForeLeg', 'leftForeShoulder', 'rightForeLeg', 'rightForeShoulder', 'torso']
+    attack_right_swipe len 0.7083 loop None bones ['abdomen', 'head', 'rightForeLeg', 'rightForeShoulder', 'torso']
+    attack_grapple_pounce len 2.125 loop None bones ['abdomen', 'fangLeft', 'fangRight', 'head', 'leftBackLeg', 'leftBackMiddleLeg', 'leftForeLeg', 'leftForeMiddleLeg', 'leftForeShoulder', 'rightBackLeg', 'rightBackMiddleLeg', 'rightForeLeg', 'rightForeMiddleLeg', 'torso']
+    leap_back len 0.75 loop None bones ['leftBackLeg', 'leftForeLeg', 'rightBackLeg', 'rightForeLeg', 'torso']
+    attack_bite len 1.2083 loop None bones ['fangLeft', 'fangRight', 'head', 'leftForeLeg', 'leftForeShoulder', 'rightForeLeg', 'rightForeShoulder']
+    long_cast len 1.625 loop None bones ['head', 'leftForeLeg', 'leftForeShoulder', 'rightForeLeg', 'rightForeShoulder']
+    emerge_from_ground len 3 loop None bones ['head', 'torso']
+== ANIM assets/irons_spellbooks/animations/root_animations.json 2
+    root len 152.8 loop None bones ['arm1', 'arm2', 'arm3', 'arm4', 'bone1', 'bone10', 'bone11', 'bone12', 'bone2', 'bone3', 'bone4', 'bone5', 'bone6', 'bone7', 'bone8', 'bone9']
+    emerge len 60.08 loop None bones ['bone10', 'bone11', 'bone12', 'bone13', 'bone2', 'bone3', 'bone4', 'bone5', 'bone6', 'bone7', 'bone8', 'bone9', 'northBase1', 'northBase2', 'southBase1', 'southBase2', 'westbase1', 'westbase2']
+== ANIM assets/irons_spellbooks/animations/scapegoat_animations.animation.json 1
+    scapegoat_run_accent len 0.625 loop None bones ['leftFrontLeg', 'leftHindLeg', 'rightFrontLeg', 'rightHindLeg', 'root']
+== ANIM assets/irons_spellbooks/animations/spectral_hammer.animation.json 1
+    hammer_swing len 1 loop None bones ['body']
+== ANIM assets/irons_spellbooks/animations/spectral_hammer.json 1
+    hammer_swing len 1 loop None bones ['body']
+== ANIM assets/irons_spellbooks/animations/summoned_weapon_animations.json 6
+    summoned_sword_basic_swing len 1.9583 loop None bones ['bone']
+    summoned_sword_basic_dual_swing len 2.625 loop None bones ['bone']
+    summoned_sword_multistab len 2.0417 loop None bones ['bone']
+    summoned_sword_basic_downswing len 2.25 loop None bones ['bone']
+    summoned_sword_pommel_strike len 1.25 loop None bones ['bone']
+    claymore_taunt len 6 loop None bones ['bone']
+== ANIM assets/irons_spellbooks/animations/void_tentacle_animations.json 6
+    rise len 0.84 loop None bones ['root', 'segment_1', 'segment_2', 'segment_3']
+    flail len 3.72 loop None bones ['root', 'segment_1', 'segment_2', 'segment_3', 'segment_4']
+    retreat len 8.92 loop None bones ['root', 'segment_1', 'segment_2', 'segment_3']
+    flail2 len 3.64 loop None bones ['root', 'segment_1', 'segment_2', 'segment_3', 'segment_4']
+    flail3 len 3.32 loop None bones ['root', 'segment_1', 'segment_2', 'segment_3', 'segment_4']
+    idle len None loop True bones ['root', 'segment_1', 'segment_2', 'segment_3', 'segment_4']
+== ANIM assets/irons_spellbooks/animations/wisp.animation.json 1
+    animation.wisp.flying len 2.08333 loop True bones ['bone', 'left_wing', 'right_wing']
+== ANIM assets/irons_spellbooks/animations/wizard_armor_animation.json 1
+    idle len None loop True bones []
+Compiled from "AbstractSpellCastingMobRenderer.java"
+public abstract class io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMobRenderer extends io.redspace.ironsspellbooks.entity.mobs.HumanoidRenderer<io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob> {
+  private net.minecraft.resources.ResourceLocation textureResource;
+  public io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMobRenderer(net.minecraft.client.renderer.entity.EntityRendererProvider$Context, io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMobModel);
+  public static net.minecraft.world.item.ItemStack makePotion(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob);
+  public void render(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob, float, float, com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, int);
+  public net.minecraft.client.renderer.RenderType getRenderType(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob, net.minecraft.resources.ResourceLocation, net.minecraft.client.renderer.MultiBufferSource, float);
+  public net.minecraft.client.renderer.RenderType getRenderType(net.minecraft.world.entity.Mob, net.minecraft.resources.ResourceLocation, net.minecraft.client.renderer.MultiBufferSource, float);
+  public void render(net.minecraft.world.entity.Mob, float, float, com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, int);
+  public void render(net.minecraft.world.entity.Entity, float, float, com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, int);
+  public net.minecraft.client.renderer.RenderType getRenderType(net.minecraft.world.entity.Entity, net.minecraft.resources.ResourceLocation, net.minecraft.client.renderer.MultiBufferSource, float);
+  public net.minecraft.client.renderer.RenderType getRenderType(software.bernie.geckolib.animatable.GeoAnimatable, net.minecraft.resources.ResourceLocation, net.minecraft.client.renderer.MultiBufferSource, float);
+}
+Compiled from "AbstractSpellCastingMobModel.java"
+public abstract class io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMobModel extends software.bernie.geckolib.model.DefaultedEntityGeoModel<io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob> {
+  protected io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.TransformStack transformStack;
+  private long lastRenderedInstance;
+  public io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMobModel();
+  public net.minecraft.resources.ResourceLocation getModelResource(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob);
+  public abstract net.minecraft.resources.ResourceLocation getTextureResource(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob);
+  public net.minecraft.resources.ResourceLocation getAnimationResource(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob);
+  public void handleAnimations(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob, long, software.bernie.geckolib.animation.AnimationState<io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob>, float);
+  public void setCustomAnimations(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob, long, software.bernie.geckolib.animation.AnimationState<io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob>);
+  protected void bobBone(software.bernie.geckolib.cache.object.GeoBone, float, float);
+  protected org.joml.Vector2f getLimbSwing(io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob, net.minecraft.world.entity.WalkAnimationState, float);
+  public void setCustomAnimations(software.bernie.geckolib.animatable.GeoAnimatable, long, software.bernie.geckolib.animation.AnimationState);
+  public net.minecraft.resources.ResourceLocation getAnimationResource(software.bernie.geckolib.animatable.GeoAnimatable);
+  public net.minecraft.resources.ResourceLocation getTextureResource(software.bernie.geckolib.animatable.GeoAnimatable);
+  public net.minecraft.resources.ResourceLocation getModelResource(software.bernie.geckolib.animatable.GeoAnimatable);
+  public void handleAnimations(software.bernie.geckolib.animatable.GeoAnimatable, long, software.bernie.geckolib.animation.AnimationState, float);
+}
+Compiled from "AbstractSpellCastingMob.java"
+public abstract class io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob extends net.minecraft.world.entity.PathfinderMob implements software.bernie.geckolib.animatable.GeoEntity,io.redspace.ironsspellbooks.api.entity.IMagicEntity {
+  public static final net.minecraft.resources.ResourceLocation modelResource;
+  public static final net.minecraft.resources.ResourceLocation textureResource;
+  public static final net.minecraft.resources.ResourceLocation animationInstantCast;
+  private static final net.minecraft.network.syncher.EntityDataAccessor<java.lang.Boolean> DATA_CANCEL_CAST;
+  private static final net.minecraft.network.syncher.EntityDataAccessor<java.lang.Boolean> DATA_DRINKING_POTION;
+  private final io.redspace.ironsspellbooks.api.magic.MagicData playerMagicData;
+  private static final net.minecraft.world.entity.ai.attributes.AttributeModifier SPEED_MODIFIER_DRINKING;
+  private io.redspace.ironsspellbooks.api.spells.SpellData castingSpell;
+  private final java.util.HashMap<java.lang.String, io.redspace.ironsspellbooks.api.spells.AbstractSpell> spells;
+  private int drinkTime;
+  public boolean hasUsedSingleAttack;
+  private boolean recreateSpell;
+  private final software.bernie.geckolib.animatable.instance.AnimatableInstanceCache cache;
+  private io.redspace.ironsspellbooks.api.spells.AbstractSpell lastCastSpellType;
+  private io.redspace.ironsspellbooks.api.spells.AbstractSpell instantCastSpellType;
+  private boolean cancelCastAnimation;
+  private boolean animatingLegs;
+  private final software.bernie.geckolib.animation.AnimationController animationControllerOtherCast;
+  private final software.bernie.geckolib.animation.AnimationController animationControllerInstantCast;
+  private final software.bernie.geckolib.animation.AnimationController animationControllerLongCast;
+  protected io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.PathfinderMob>, net.minecraft.world.level.Level);
+  public boolean getHasUsedSingleAttack();
+  public void setHasUsedSingleAttack(boolean);
+  public void rideTick();
+  protected net.minecraft.world.entity.ai.control.LookControl createLookControl();
+  public io.redspace.ironsspellbooks.api.magic.MagicData getMagicData();
+  protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData$Builder);
+  public boolean isDrinkingPotion();
+  protected void setDrinkingPotion(boolean);
+  public boolean canBeLeashed();
+  public void startDrinkingPotion();
+  private void finishDrinkingPotion();
+  public void onSyncedDataUpdated(net.minecraft.network.syncher.EntityDataAccessor<?>);
+  public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag);
+  public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag);
+  public void cancelCast();
+  public void castComplete();
+  public void setSyncedSpellData(io.redspace.ironsspellbooks.capabilities.magic.SyncedSpellData);
+  protected void customServerAiStep();
+  public void initiateCastSpell(io.redspace.ironsspellbooks.api.spells.AbstractSpell, int);
+  public void notifyDangerousProjectile(net.minecraft.world.entity.projectile.Projectile);
+  public boolean isCasting();
+  public boolean setTeleportLocationBehindTarget(int);
+  public void setBurningDashDirectionData();
+  private void forceLookAtTarget(net.minecraft.world.entity.LivingEntity);
+  public software.bernie.geckolib.animatable.instance.AnimatableInstanceCache getAnimatableInstanceCache();
+  public void triggerAnim(java.lang.String, java.lang.String);
+  public double getBoneResetTime();
+  public void registerControllers(software.bernie.geckolib.animation.AnimatableManager$ControllerRegistrar);
+  private software.bernie.geckolib.animation.PlayState instantCastingPredicate(software.bernie.geckolib.animation.AnimationState);
+  private software.bernie.geckolib.animation.PlayState longCastingPredicate(software.bernie.geckolib.animation.AnimationState);
+  private software.bernie.geckolib.animation.PlayState otherCastingPredicate(software.bernie.geckolib.animation.AnimationState);
+  private void setStartAnimationFromSpell(software.bernie.geckolib.animation.AnimationController, io.redspace.ironsspellbooks.api.spells.AbstractSpell);
+  private void setFinishAnimationFromSpell(software.bernie.geckolib.animation.AnimationController, io.redspace.ironsspellbooks.api.spells.AbstractSpell);
+  public boolean isAnimating();
+  public boolean shouldBeExtraAnimated();
+  public boolean shouldAlwaysAnimateHead();
+  public boolean shouldAlwaysAnimateLegs();
+  public boolean shouldPointArmsWhileCasting();
+  public boolean bobBodyWhileWalking();
+  public boolean shouldSheathSword();
+  private void lambda$setFinishAnimationFromSpell$3();
+  private void lambda$setFinishAnimationFromSpell$2(software.bernie.geckolib.animation.AnimationController, software.bernie.geckolib.animation.RawAnimation);
+  private void lambda$setStartAnimationFromSpell$1();
+  private void lambda$setStartAnimationFromSpell$0(software.bernie.geckolib.animation.AnimationController, io.redspace.ironsspellbooks.api.spells.AbstractSpell, software.bernie.geckolib.animation.RawAnimation);
+  static {};
+}
+io/redspace/ironsspellbooks/entity/mobs/abstract_spell_casting_mob/
+io/redspace/ironsspellbooks/entity/mobs/abstract_spell_casting_mob/AbstractSpellCastingMob$1.class
+io/redspace/ironsspellbooks/entity/mobs/abstract_spell_casting_mob/AbstractSpellCastingMob.class
+io/redspace/ironsspellbooks/entity/mobs/abstract_spell_casting_mob/AbstractSpellCastingMobModel.class
+io/redspace/ironsspellbooks/entity/mobs/abstract_spell_casting_mob/AbstractSpellCastingMobRenderer.class
+io/redspace/ironsspellbooks/entity/mobs/abstract_spell_casting_mob/NeutralWizard.class
+io/redspace/ironsspellbooks/entity/mobs/abstract_spell_casting_mob/TransformStack.class
+io/redspace/ironsspellbooks/render/AngelWingsLayer.class
+io/redspace/ironsspellbooks/render/ArmorCapeLayer.class
+io/redspace/ironsspellbooks/render/ChargeSpellLayer$Geo.class
+io/redspace/ironsspellbooks/render/ChargeSpellLayer$Vanilla.class
+io/redspace/ironsspellbooks/render/ChargeSpellLayer.class
+io/redspace/ironsspellbooks/render/EchoingStrikesHologramLayer$Geo.class
+io/redspace/ironsspellbooks/render/EchoingStrikesHologramLayer$Vanilla.class
+io/redspace/ironsspellbooks/render/EchoingStrikesHologramLayer.class
+io/redspace/ironsspellbooks/render/EnergySwirlLayer$Geo.class
+io/redspace/ironsspellbooks/render/EnergySwirlLayer$Vanilla.class
+io/redspace/ironsspellbooks/render/EnergySwirlLayer.class
+io/redspace/ironsspellbooks/render/GeoLivingEntityRenderer.class
+io/redspace/ironsspellbooks/render/GeoSpinAttackLayer.class
+io/redspace/ironsspellbooks/render/GlowingEyesLayer$EyeType.class
+io/redspace/ironsspellbooks/render/GlowingEyesLayer$Geo.class
+io/redspace/ironsspellbooks/render/GlowingEyesLayer$Vanilla.class
+io/redspace/ironsspellbooks/render/GlowingEyesLayer.class
+io/redspace/ironsspellbooks/render/SpellTargetingLayer$Geo.class
+io/redspace/ironsspellbooks/render/SpellTargetingLayer$Vanilla.class
+io/redspace/ironsspellbooks/render/SpellTargetingLayer.class
+Compiled from "GeoEntityRenderer.java"
+public class software.bernie.geckolib.renderer.GeoEntityRenderer<T extends net.minecraft.world.entity.Entity & software.bernie.geckolib.animatable.GeoAnimatable> extends net.minecraft.client.renderer.entity.EntityRenderer<T> implements software.bernie.geckolib.renderer.GeoRenderer<T> {
+  protected final software.bernie.geckolib.renderer.layer.GeoRenderLayersContainer<T> renderLayers;
+  protected final software.bernie.geckolib.model.GeoModel<T> model;
+  protected T animatable;
+  protected float scaleWidth;
+  protected float scaleHeight;
+  protected org.joml.Matrix4f entityRenderTranslations;
+  protected org.joml.Matrix4f modelRenderTranslations;
+  public software.bernie.geckolib.renderer.GeoEntityRenderer(net.minecraft.client.renderer.entity.EntityRendererProvider$Context, net.minecraft.world.entity.EntityType<? extends T>);
+  public software.bernie.geckolib.renderer.GeoEntityRenderer(net.minecraft.client.renderer.entity.EntityRendererProvider$Context, software.bernie.geckolib.model.GeoModel<T>);
+  public software.bernie.geckolib.model.GeoModel<T> getGeoModel();
+  public T getAnimatable();
+  public long getInstanceId(T);
+  public net.minecraft.resources.ResourceLocation getTextureLocation(T);
+  public java.util.List<software.bernie.geckolib.renderer.layer.GeoRenderLayer<T>> getRenderLayers();
+  public software.bernie.geckolib.renderer.GeoEntityRenderer<T> addRenderLayer(software.bernie.geckolib.renderer.layer.GeoRenderLayer<T>);
+  public software.bernie.geckolib.renderer.GeoEntityRenderer<T> withScale(float);
+  public software.bernie.geckolib.renderer.GeoEntityRenderer<T> withScale(float, float);
+  public software.bernie.geckolib.util.Color getRenderColor(T, float, int);
+  public net.minecraft.client.renderer.RenderType getRenderType(T, net.minecraft.resources.ResourceLocation, net.minecraft.client.renderer.MultiBufferSource, float);
+  public void preRender(com.mojang.blaze3d.vertex.PoseStack, T, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, boolean, float, int, int, int);
+  public void render(T, float, float, com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, int);
+  public void actuallyRender(com.mojang.blaze3d.vertex.PoseStack, T, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.RenderType, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, boolean, float, int, int, int);
+  public void applyRenderLayers(com.mojang.blaze3d.vertex.PoseStack, T, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.RenderType, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, float, int, int);
+  public void renderFinal(com.mojang.blaze3d.vertex.PoseStack, T, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, float, int, int, int);
+  public void doPostRenderCleanup();
+  public void renderRecursively(com.mojang.blaze3d.vertex.PoseStack, T, software.bernie.geckolib.cache.object.GeoBone, net.minecraft.client.renderer.RenderType, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, boolean, float, int, int, int);
+  protected void applyRotations(T, com.mojang.blaze3d.vertex.PoseStack, float, float, float);
+  protected void applyRotations(T, com.mojang.blaze3d.vertex.PoseStack, float, float, float, float);
+  protected float getDeathMaxRotation(T);
+  public double getNameRenderCutoffDistance(T);
+  public boolean shouldShowName(T);
+  public int getPackedOverlay(T, float, float);
+  public boolean isShaking(T);
+  public <E extends net.minecraft.world.entity.Entity, M extends net.minecraft.world.entity.Mob> void renderLeash(M, float, com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, E);
+  private static void renderLeashPiece(com.mojang.blaze3d.vertex.VertexConsumer, org.joml.Matrix4f, float, float, float, int, int, int, int, float, float, float, float, int, boolean);
+  public void updateAnimatedTextureFrame(T);
+  public void fireCompileRenderLayersEvent();
+  public boolean firePreRenderEvent(com.mojang.blaze3d.vertex.PoseStack, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.MultiBufferSource, float, int);
+  public void firePostRenderEvent(com.mojang.blaze3d.vertex.PoseStack, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.MultiBufferSource, float, int);
+  public void updateAnimatedTextureFrame(software.bernie.geckolib.animatable.GeoAnimatable);
+  public void renderRecursively(com.mojang.blaze3d.vertex.PoseStack, software.bernie.geckolib.animatable.GeoAnimatable, software.bernie.geckolib.cache.object.GeoBone, net.minecraft.client.renderer.RenderType, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, boolean, float, int, int, int);
+  public void renderFinal(com.mojang.blaze3d.vertex.PoseStack, software.bernie.geckolib.animatable.GeoAnimatable, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, float, int, int, int);
+  public void preRender(com.mojang.blaze3d.vertex.PoseStack, software.bernie.geckolib.animatable.GeoAnimatable, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, boolean, float, int, int, int);
+  public void applyRenderLayers(com.mojang.blaze3d.vertex.PoseStack, software.bernie.geckolib.animatable.GeoAnimatable, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.RenderType, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, float, int, int);
+  public void actuallyRender(com.mojang.blaze3d.vertex.PoseStack, software.bernie.geckolib.animatable.GeoAnimatable, software.bernie.geckolib.cache.object.BakedGeoModel, net.minecraft.client.renderer.RenderType, net.minecraft.client.renderer.MultiBufferSource, com.mojang.blaze3d.vertex.VertexConsumer, boolean, float, int, int, int);
+  public long getInstanceId(software.bernie.geckolib.animatable.GeoAnimatable);
+  public int getPackedOverlay(software.bernie.geckolib.animatable.GeoAnimatable, float, float);
+  public software.bernie.geckolib.util.Color getRenderColor(software.bernie.geckolib.animatable.GeoAnimatable, float, int);
+  public net.minecraft.client.renderer.RenderType getRenderType(software.bernie.geckolib.animatable.GeoAnimatable, net.minecraft.resources.ResourceLocation, net.minecraft.client.renderer.MultiBufferSource, float);
+  public net.minecraft.resources.ResourceLocation getTextureLocation(software.bernie.geckolib.animatable.GeoAnimatable);
+  public software.bernie.geckolib.animatable.GeoAnimatable getAnimatable();
+  private static void lambda$actuallyRender$0(software.bernie.geckolib.animation.AnimationState, software.bernie.geckolib.constant.dataticket.DataTicket, java.lang.Object);
+}
+Compiled from "GeoModel.java"
+public abstract class software.bernie.geckolib.model.GeoModel<T extends software.bernie.geckolib.animatable.GeoAnimatable> {
+  private final software.bernie.geckolib.animation.AnimationProcessor<T> processor;
+  private software.bernie.geckolib.cache.object.BakedGeoModel currentModel;
+  private double animTime;
+  private double lastGameTickTime;
+  private long lastRenderedInstance;
+  public software.bernie.geckolib.model.GeoModel();
+  public net.minecraft.resources.ResourceLocation getModelResource(T, software.bernie.geckolib.renderer.GeoRenderer<T>);
+  public abstract net.minecraft.resources.ResourceLocation getModelResource(T);
+  public net.minecraft.resources.ResourceLocation getTextureResource(T, software.bernie.geckolib.renderer.GeoRenderer<T>);
+  public abstract net.minecraft.resources.ResourceLocation getTextureResource(T);
+  public abstract net.minecraft.resources.ResourceLocation getAnimationResource(T);
+  public net.minecraft.resources.ResourceLocation[] getAnimationResourceFallbacks(T);
+  public boolean crashIfBoneMissing();
+  public net.minecraft.client.renderer.RenderType getRenderType(T, net.minecraft.resources.ResourceLocation);
+  public software.bernie.geckolib.cache.object.BakedGeoModel getBakedModel(net.minecraft.resources.ResourceLocation);
+  public java.util.Optional<software.bernie.geckolib.cache.object.GeoBone> getBone(java.lang.String);
+  public software.bernie.geckolib.animation.Animation getAnimation(T, java.lang.String);
+  public software.bernie.geckolib.animation.AnimationProcessor<T> getAnimationProcessor();
+  public void addAdditionalStateData(T, long, java.util.function.BiConsumer<software.bernie.geckolib.constant.dataticket.DataTicket<T>, T>);
+  public void handleAnimations(T, long, software.bernie.geckolib.animation.AnimationState<T>, float);
+  public void setCustomAnimations(T, long, software.bernie.geckolib.animation.AnimationState<T>);
+  public void applyMolangQueries(software.bernie.geckolib.animation.AnimationState<T>, double);
+}
