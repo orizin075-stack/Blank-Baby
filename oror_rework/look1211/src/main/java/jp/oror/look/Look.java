@@ -226,13 +226,16 @@ public final class Look {
             case 1218 -> mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
             case 1226 -> shot(mc, "37_gear_worn_back");
             case 1228 -> {
+                // the hand is drawn in first person only with the GUI shown (F1 hides it too)
                 mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
-                view(mc, 0, 0, 2, 180F, 30F);
+                mc.options.hideGui = false;
+                view(mc, 0, 0, 2, 180F, 20F);
             }
             case 1234 -> shot(mc, "38_gear_worn_hand");
             case 1236 -> {
                 wornGear(mc, false);
                 mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+                mc.options.hideGui = true;
             }
             case 2050 -> throne(mc);
             case 3850 -> shot(mc, "20_throne_room");
@@ -357,6 +360,14 @@ public final class Look {
                         + "{item:{id:\"oror_supreme_bosses:%s\",count:1},item_display:\"fixed\",Rotation:[200f,0f],Tags:[\"oror_look\"],"
                         + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[0.85f,0.85f,0.85f]}}",
                     sx - 2.0 + (i % 5) * 1.0, sy + 3.4 - (i / 5) * 1.0, sz + 5.0, ids[i]));
+            }
+            // the redrawn boss seals and sealed gates, on the floor either side of the row
+            String[] blocks = {"bahamut_boss_seal", "elseria_boss_seal", "hephaistos_boss_seal", "teia_boss_seal", "yggdrasil_boss_seal",
+                "ouroboros_boss_seal", "sword_gate", "laboratory_gate", "tragedy_gate", "lucifara_boss_seal", "kokuhaku_boss_seal", "valeria_boss_seal"};
+            for (int i = 0; i < blocks.length; i++) {
+                int x = (int) Math.floor(sx) + (i < 6 ? -9 + i : 4 + (i - 6));
+                command(server, String.format(java.util.Locale.ROOT, "setblock %d %d %d oror_supreme_bosses:%s", x, (int) Math.floor(sy),
+                    (int) Math.floor(sz) + 7, blocks[i]));
             }
             command(server, String.format(java.util.Locale.ROOT, "summon minecraft:armor_stand %.2f %d %.2f {ShowArms:1b,NoBasePlate:1b,"
                 + "Rotation:[180f,0f],Tags:[\"oror_look\"],ArmorItems:[{id:\"oror_supreme_bosses:teia_boots\",count:1},{},"
