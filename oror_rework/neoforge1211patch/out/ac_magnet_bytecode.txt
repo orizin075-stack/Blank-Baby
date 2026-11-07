@@ -1,0 +1,526 @@
+== MagnetUtil.tickMagnetism
+  public static void tickMagnetism(net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_0
+       1: invokevirtual #120                // Method net/minecraft/world/entity/Entity.level:()Lnet/minecraft/world/level/Level;
+       4: getfield      #126                // Field net/minecraft/world/level/Level.isClientSide:Z
+       7: ifne          519
+      10: aload_0
+      11: invokevirtual #120                // Method net/minecraft/world/entity/Entity.level:()Lnet/minecraft/world/level/Level;
+      14: astore_2
+      15: aload_2
+      16: instanceof    #8                  // class net/minecraft/server/level/ServerLevel
+      19: ifeq          519
+      22: aload_2
+      23: checkcast     #8                  // class net/minecraft/server/level/ServerLevel
+      26: astore_1
+      27: iconst_5
+      28: istore_2
+      29: aload_0
+      30: invokevirtual #132                // Method net/minecraft/world/entity/Entity.blockPosition:()Lnet/minecraft/core/BlockPos;
+      33: aload_1
+      34: iload_2
+      35: invokestatic  #135                // Method getNearbyAttractingMagnets:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/server/level/ServerLevel;I)Ljava/util/stream/Stream;
+      38: invokeinterface #141,  1          // InterfaceMethod java/util/stream/Stream.toList:()Ljava/util/List;
+      43: astore_3
+      44: aload_0
+      45: invokevirtual #132                // Method net/minecraft/world/entity/Entity.blockPosition:()Lnet/minecraft/core/BlockPos;
+      48: aload_1
+      49: iload_2
+      50: invokestatic  #145                // Method getNearbyRepellingMagnets:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/server/level/ServerLevel;I)Ljava/util/stream/Stream;
+      53: invokeinterface #141,  1          // InterfaceMethod java/util/stream/Stream.toList:()Ljava/util/List;
+      58: astore        4
+      60: aload_0
+      61: invokestatic  #148                // Method getMagnetismStrengthMultiplier:(Lnet/minecraft/world/entity/Entity;)F
+      64: fstore        5
+      66: getstatic     #152                // Field net/minecraft/world/phys/Vec3.ZERO:Lnet/minecraft/world/phys/Vec3;
+      69: astore        6
+      71: aload_3
+      72: invokeinterface #158,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      77: astore        7
+      79: aload         7
+      81: invokeinterface #162,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      86: ifeq          244
+      89: aload         7
+      91: invokeinterface #168,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      96: checkcast     #42                 // class net/minecraft/core/BlockPos
+      99: astore        8
+     101: aload         8
+     103: invokestatic  #171                // Method net/minecraft/world/phys/Vec3.atCenterOf:(Lnet/minecraft/core/Vec3i;)Lnet/minecraft/world/phys/Vec3;
+     106: astore        9
+     108: aload_0
+     109: aload         9
+     111: invokevirtual #175                // Method net/minecraft/world/entity/Entity.distanceToSqr:(Lnet/minecraft/world/phys/Vec3;)D
+     114: invokestatic  #179                // Method java/lang/Math.sqrt:(D)D
+     117: iload_2
+     118: i2d
+     119: ddiv
+     120: dconst_0
+     121: dconst_1
+     122: invokestatic  #185                // Method net/minecraft/util/Mth.clamp:(DDD)D
+     125: dstore        10
+     127: aload         8
+     129: invokestatic  #171                // Method net/minecraft/world/phys/Vec3.atCenterOf:(Lnet/minecraft/core/Vec3i;)Lnet/minecraft/world/phys/Vec3;
+     132: aload_0
+     133: invokevirtual #191                // Method net/minecraft/world/entity/Entity.position:()Lnet/minecraft/world/phys/Vec3;
+     136: invokevirtual #195                // Method net/minecraft/world/phys/Vec3.subtract:(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
+     139: astore        12
+     141: aload         12
+     143: invokevirtual #199                // Method net/minecraft/world/phys/Vec3.length:()D
+     146: dconst_1
+     147: dcmpg
+     148: ifge          156
+     151: aload         12
+     153: goto          161
+     156: aload         12
+     158: invokevirtual #203                // Method net/minecraft/world/phys/Vec3.normalize:()Lnet/minecraft/world/phys/Vec3;
+     161: astore        13
+     163: aload_1
+     164: aload         8
+     166: invokevirtual #57                 // Method net/minecraft/server/level/ServerLevel.getBlockState:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+     169: astore        14
+     171: aload         14
+     173: getstatic     #61                 // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.SCARLET_NEODYMIUM_NODE:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     176: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     179: checkcast     #73                 // class net/minecraft/world/level/block/Block
+     182: invokevirtual #75                 // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/world/level/block/Block;)Z
+     185: ifne          205
+     188: aload         14
+     190: getstatic     #111                // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.AZURE_NEODYMIUM_NODE:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     193: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     196: checkcast     #73                 // class net/minecraft/world/level/block/Block
+     199: invokevirtual #75                 // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/world/level/block/Block;)Z
+     202: ifeq          210
+     205: ldc           #206                // float 0.4f
+     207: goto          211
+     210: fconst_1
+     211: fstore        15
+     213: aload         13
+     215: dconst_1
+     216: dload         10
+     218: dsub
+     219: ldc2_w        #207                // double 0.15000000596046448d
+     222: dmul
+     223: fload         15
+     225: f2d
+     226: dmul
+     227: invokevirtual #209                // Method net/minecraft/world/phys/Vec3.scale:(D)Lnet/minecraft/world/phys/Vec3;
+     230: astore        16
+     232: aload         6
+     234: aload         16
+     236: invokevirtual #213                // Method net/minecraft/world/phys/Vec3.add:(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
+     239: astore        6
+     241: goto          79
+     244: aload         4
+     246: invokeinterface #158,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+     251: astore        7
+     253: aload         7
+     255: invokeinterface #162,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     260: ifeq          418
+     263: aload         7
+     265: invokeinterface #168,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     270: checkcast     #42                 // class net/minecraft/core/BlockPos
+     273: astore        8
+     275: aload         8
+     277: invokestatic  #171                // Method net/minecraft/world/phys/Vec3.atCenterOf:(Lnet/minecraft/core/Vec3i;)Lnet/minecraft/world/phys/Vec3;
+     280: astore        9
+     282: aload_0
+     283: aload         9
+     285: invokevirtual #175                // Method net/minecraft/world/entity/Entity.distanceToSqr:(Lnet/minecraft/world/phys/Vec3;)D
+     288: invokestatic  #179                // Method java/lang/Math.sqrt:(D)D
+     291: iload_2
+     292: i2d
+     293: ddiv
+     294: dconst_0
+     295: dconst_1
+     296: invokestatic  #185                // Method net/minecraft/util/Mth.clamp:(DDD)D
+     299: dstore        10
+     301: aload_0
+     302: invokevirtual #191                // Method net/minecraft/world/entity/Entity.position:()Lnet/minecraft/world/phys/Vec3;
+     305: aload         8
+     307: invokestatic  #171                // Method net/minecraft/world/phys/Vec3.atCenterOf:(Lnet/minecraft/core/Vec3i;)Lnet/minecraft/world/phys/Vec3;
+     310: invokevirtual #195                // Method net/minecraft/world/phys/Vec3.subtract:(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;
+     313: astore        12
+     315: aload         12
+     317: invokevirtual #199                // Method net/minecraft/world/phys/Vec3.length:()D
+     320: dconst_1
+     321: dcmpg
+     322: ifge          330
+     325: aload         12
+     327: goto          335
+     330: aload         12
+     332: invokevirtual #203                // Method net/minecraft/world/phys/Vec3.normalize:()Lnet/minecraft/world/phys/Vec3;
+     335: astore        13
+     337: aload_1
+     338: aload         8
+     340: invokevirtual #57                 // Method net/minecraft/server/level/ServerLevel.getBlockState:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+     343: astore        14
+     345: aload         14
+     347: getstatic     #61                 // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.SCARLET_NEODYMIUM_NODE:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     350: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     353: checkcast     #73                 // class net/minecraft/world/level/block/Block
+== MagnetUtil.getNearbyAttractingMagnets
+  private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyAttractingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
+    Code:
+       0: aload_1
+       1: invokevirtual #7                  // Method net/minecraft/server/level/ServerLevel.getPoiManager:()Lnet/minecraft/world/entity/ai/village/poi/PoiManager;
+       4: astore_3
+       5: aload_3
+       6: invokedynamic #13,  0             // InvokeDynamic #0:test:()Ljava/util/function/Predicate;
+      11: invokestatic  #17                 // Method com/google/common/base/Predicates.alwaysTrue:()Lcom/google/common/base/Predicate;
+      14: aload_0
+      15: iload_2
+      16: getstatic     #23                 // Field net/minecraft/world/entity/ai/village/poi/PoiManager$Occupancy.ANY:Lnet/minecraft/world/entity/ai/village/poi/PoiManager$Occupancy;
+      19: invokevirtual #29                 // Method net/minecraft/world/entity/ai/village/poi/PoiManager.findAll:(Ljava/util/function/Predicate;Ljava/util/function/Predicate;Lnet/minecraft/core/BlockPos;ILnet/minecraft/world/entity/ai/village/poi/PoiManager$Occupancy;)Ljava/util/stream/Stream;
+      22: astore        4
+      24: new           #35                 // class java/util/ArrayList
+      27: dup
+      28: invokespecial #37                 // Method java/util/ArrayList."<init>":()V
+      31: astore        5
+      33: new           #38                 // class net/minecraft/core/BlockPos$MutableBlockPos
+      36: dup
+      37: invokespecial #40                 // Method net/minecraft/core/BlockPos$MutableBlockPos."<init>":()V
+      40: astore        6
+      42: iload_2
+      43: ineg
+      44: istore        7
+      46: iload         7
+      48: iload_2
+      49: if_icmpgt     189
+      52: iload_2
+      53: ineg
+      54: istore        8
+      56: iload         8
+      58: iload_2
+      59: if_icmpgt     183
+      62: iload_2
+      63: ineg
+      64: istore        9
+      66: iload         9
+      68: iload_2
+      69: if_icmpgt     177
+      72: aload         6
+      74: aload_0
+      75: invokevirtual #41                 // Method net/minecraft/core/BlockPos.getX:()I
+      78: iload         7
+      80: iadd
+      81: aload_0
+      82: invokevirtual #47                 // Method net/minecraft/core/BlockPos.getY:()I
+      85: iload         8
+      87: iadd
+      88: aload_0
+      89: invokevirtual #50                 // Method net/minecraft/core/BlockPos.getZ:()I
+      92: iload         9
+      94: iadd
+      95: invokevirtual #53                 // Method net/minecraft/core/BlockPos$MutableBlockPos.set:(III)Lnet/minecraft/core/BlockPos$MutableBlockPos;
+      98: pop
+      99: aload_1
+     100: aload         6
+     102: invokevirtual #57                 // Method net/minecraft/server/level/ServerLevel.getBlockState:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+     105: astore        10
+     107: aload         10
+     109: getstatic     #61                 // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.SCARLET_NEODYMIUM_NODE:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     112: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     115: checkcast     #73                 // class net/minecraft/world/level/block/Block
+     118: invokevirtual #75                 // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/world/level/block/Block;)Z
+     121: ifne          158
+     124: aload         10
+     126: getstatic     #81                 // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.SCARLET_NEODYMIUM_PILLAR:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     129: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     132: checkcast     #73                 // class net/minecraft/world/level/block/Block
+     135: invokevirtual #75                 // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/world/level/block/Block;)Z
+     138: ifne          158
+     141: aload         10
+     143: getstatic     #84                 // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.BLOCK_OF_SCARLET_NEODYMIUM:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     146: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     149: checkcast     #73                 // class net/minecraft/world/level/block/Block
+     152: invokevirtual #75                 // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/world/level/block/Block;)Z
+     155: ifeq          171
+     158: aload         5
+     160: aload         6
+     162: invokevirtual #87                 // Method net/minecraft/core/BlockPos$MutableBlockPos.immutable:()Lnet/minecraft/core/BlockPos;
+     165: invokeinterface #91,  2           // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+     170: pop
+     171: iinc          9, 1
+     174: goto          66
+     177: iinc          8, 1
+     180: goto          56
+     183: iinc          7, 1
+     186: goto          46
+     189: aload         4
+     191: aload         5
+     193: invokeinterface #97,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+     198: invokestatic  #101                // InterfaceMethod java/util/stream/Stream.concat:(Ljava/util/stream/Stream;Ljava/util/stream/Stream;)Ljava/util/stream/Stream;
+     201: invokeinterface #107,  1          // InterfaceMethod java/util/stream/Stream.distinct:()Ljava/util/stream/Stream;
+     206: areturn
+
+== MagnetUtil.getNearbyRepellingMagnets
+  private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyRepellingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
+    Code:
+       0: aload_1
+       1: invokevirtual #7                  // Method net/minecraft/server/level/ServerLevel.getPoiManager:()Lnet/minecraft/world/entity/ai/village/poi/PoiManager;
+       4: astore_3
+       5: aload_3
+       6: invokedynamic #110,  0            // InvokeDynamic #1:test:()Ljava/util/function/Predicate;
+      11: invokestatic  #17                 // Method com/google/common/base/Predicates.alwaysTrue:()Lcom/google/common/base/Predicate;
+      14: aload_0
+      15: iload_2
+      16: getstatic     #23                 // Field net/minecraft/world/entity/ai/village/poi/PoiManager$Occupancy.ANY:Lnet/minecraft/world/entity/ai/village/poi/PoiManager$Occupancy;
+      19: invokevirtual #29                 // Method net/minecraft/world/entity/ai/village/poi/PoiManager.findAll:(Ljava/util/function/Predicate;Ljava/util/function/Predicate;Lnet/minecraft/core/BlockPos;ILnet/minecraft/world/entity/ai/village/poi/PoiManager$Occupancy;)Ljava/util/stream/Stream;
+      22: astore        4
+      24: new           #35                 // class java/util/ArrayList
+      27: dup
+      28: invokespecial #37                 // Method java/util/ArrayList."<init>":()V
+      31: astore        5
+      33: new           #38                 // class net/minecraft/core/BlockPos$MutableBlockPos
+      36: dup
+      37: invokespecial #40                 // Method net/minecraft/core/BlockPos$MutableBlockPos."<init>":()V
+      40: astore        6
+      42: iload_2
+      43: ineg
+      44: istore        7
+      46: iload         7
+      48: iload_2
+      49: if_icmpgt     189
+      52: iload_2
+      53: ineg
+      54: istore        8
+      56: iload         8
+      58: iload_2
+      59: if_icmpgt     183
+      62: iload_2
+      63: ineg
+      64: istore        9
+      66: iload         9
+      68: iload_2
+      69: if_icmpgt     177
+      72: aload         6
+      74: aload_0
+      75: invokevirtual #41                 // Method net/minecraft/core/BlockPos.getX:()I
+      78: iload         7
+      80: iadd
+      81: aload_0
+      82: invokevirtual #47                 // Method net/minecraft/core/BlockPos.getY:()I
+      85: iload         8
+      87: iadd
+      88: aload_0
+      89: invokevirtual #50                 // Method net/minecraft/core/BlockPos.getZ:()I
+      92: iload         9
+      94: iadd
+      95: invokevirtual #53                 // Method net/minecraft/core/BlockPos$MutableBlockPos.set:(III)Lnet/minecraft/core/BlockPos$MutableBlockPos;
+      98: pop
+      99: aload_1
+     100: aload         6
+     102: invokevirtual #57                 // Method net/minecraft/server/level/ServerLevel.getBlockState:(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
+     105: astore        10
+     107: aload         10
+     109: getstatic     #111                // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.AZURE_NEODYMIUM_NODE:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     112: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     115: checkcast     #73                 // class net/minecraft/world/level/block/Block
+     118: invokevirtual #75                 // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/world/level/block/Block;)Z
+     121: ifne          158
+     124: aload         10
+     126: getstatic     #114                // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.AZURE_NEODYMIUM_PILLAR:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     129: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     132: checkcast     #73                 // class net/minecraft/world/level/block/Block
+     135: invokevirtual #75                 // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/world/level/block/Block;)Z
+     138: ifne          158
+     141: aload         10
+     143: getstatic     #117                // Field com/github/alexmodguy/alexscaves/server/block/ACBlockRegistry.BLOCK_OF_AZURE_NEODYMIUM:Lnet/neoforged/neoforge/registries/DeferredHolder;
+     146: invokevirtual #67                 // Method net/neoforged/neoforge/registries/DeferredHolder.get:()Ljava/lang/Object;
+     149: checkcast     #73                 // class net/minecraft/world/level/block/Block
+     152: invokevirtual #75                 // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/world/level/block/Block;)Z
+     155: ifeq          171
+     158: aload         5
+     160: aload         6
+     162: invokevirtual #87                 // Method net/minecraft/core/BlockPos$MutableBlockPos.immutable:()Lnet/minecraft/core/BlockPos;
+     165: invokeinterface #91,  2           // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+     170: pop
+     171: iinc          9, 1
+     174: goto          66
+     177: iinc          8, 1
+     180: goto          56
+     183: iinc          7, 1
+     186: goto          46
+     189: aload         4
+     191: aload         5
+     193: invokeinterface #97,  1           // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+     198: invokestatic  #101                // InterfaceMethod java/util/stream/Stream.concat:(Ljava/util/stream/Stream;Ljava/util/stream/Stream;)Ljava/util/stream/Stream;
+     201: invokeinterface #107,  1          // InterfaceMethod java/util/stream/Stream.distinct:()Ljava/util/stream/Stream;
+     206: areturn
+
+== MagnetUtil.isPulledByMagnets
+  public static boolean isPulledByMagnets(net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_0
+       1: instanceof    #589                // class net/minecraft/world/entity/item/ItemEntity
+       4: ifeq          38
+       7: aload_0
+       8: checkcast     #589                // class net/minecraft/world/entity/item/ItemEntity
+      11: astore_1
+      12: aload_1
+      13: invokevirtual #591                // Method net/minecraft/world/entity/item/ItemEntity.getItem:()Lnet/minecraft/world/item/ItemStack;
+      16: ifnull        36
+      19: aload_1
+      20: invokevirtual #591                // Method net/minecraft/world/entity/item/ItemEntity.getItem:()Lnet/minecraft/world/item/ItemStack;
+      23: getstatic     #570                // Field com/github/alexmodguy/alexscaves/server/misc/ACTagRegistry.MAGNETIC_ITEMS:Lnet/minecraft/tags/TagKey;
+      26: invokevirtual #573                // Method net/minecraft/world/item/ItemStack.is:(Lnet/minecraft/tags/TagKey;)Z
+      29: ifeq          36
+      32: iconst_1
+      33: goto          37
+      36: iconst_0
+      37: ireturn
+      38: aload_0
+      39: instanceof    #281                // class net/minecraft/world/entity/LivingEntity
+      42: ifeq          67
+      45: aload_0
+      46: checkcast     #281                // class net/minecraft/world/entity/LivingEntity
+      49: astore_2
+      50: aload_2
+      51: iconst_0
+      52: invokestatic  #595                // Method isDynamicallyMagnetic:(Lnet/minecraft/world/entity/LivingEntity;Z)Z
+      55: ifeq          67
+      58: aload_0
+      59: invokestatic  #599                // Method isSpectatorPlayer:(Lnet/minecraft/world/entity/Entity;)Z
+      62: ifne          67
+      65: iconst_1
+      66: ireturn
+      67: aload_0
+      68: instanceof    #602                // class net/minecraft/world/entity/item/FallingBlockEntity
+      71: ifeq          105
+      74: aload_0
+      75: checkcast     #602                // class net/minecraft/world/entity/item/FallingBlockEntity
+      78: astore_3
+      79: aload_3
+      80: invokevirtual #604                // Method net/minecraft/world/entity/item/FallingBlockEntity.getBlockState:()Lnet/minecraft/world/level/block/state/BlockState;
+      83: ifnull        103
+      86: aload_3
+      87: invokevirtual #604                // Method net/minecraft/world/entity/item/FallingBlockEntity.getBlockState:()Lnet/minecraft/world/level/block/state/BlockState;
+      90: getstatic     #607                // Field com/github/alexmodguy/alexscaves/server/misc/ACTagRegistry.MAGNETIC_BLOCKS:Lnet/minecraft/tags/TagKey;
+      93: invokevirtual #499                // Method net/minecraft/world/level/block/state/BlockState.is:(Lnet/minecraft/tags/TagKey;)Z
+      96: ifeq          103
+      99: iconst_1
+     100: goto          104
+     103: iconst_0
+     104: ireturn
+     105: aload_0
+     106: invokevirtual #610                // Method net/minecraft/world/entity/Entity.getType:()Lnet/minecraft/world/entity/EntityType;
+     109: getstatic     #614                // Field com/github/alexmodguy/alexscaves/server/misc/ACTagRegistry.MAGNETIC_ENTITIES:Lnet/minecraft/tags/TagKey;
+     112: invokevirtual #617                // Method net/minecraft/world/entity/EntityType.is:(Lnet/minecraft/tags/TagKey;)Z
+     115: ireturn
+
+== MagnetUtil.attachesToMagnets
+  public static boolean attachesToMagnets(net.minecraft.world.entity.Entity);
+    Code:
+       0: aload_0
+       1: instanceof    #281                // class net/minecraft/world/entity/LivingEntity
+       4: ifeq          29
+       7: aload_0
+       8: checkcast     #281                // class net/minecraft/world/entity/LivingEntity
+      11: astore_1
+      12: aload_1
+      13: iconst_1
+      14: invokestatic  #595                // Method isDynamicallyMagnetic:(Lnet/minecraft/world/entity/LivingEntity;Z)Z
+      17: ifeq          29
+      20: aload_1
+      21: invokevirtual #620                // Method net/minecraft/world/entity/LivingEntity.isShiftKeyDown:()Z
+      24: ifne          29
+      27: iconst_1
+      28: ireturn
+      29: aload_0
+      30: invokevirtual #610                // Method net/minecraft/world/entity/Entity.getType:()Lnet/minecraft/world/entity/EntityType;
+      33: getstatic     #614                // Field com/github/alexmodguy/alexscaves/server/misc/ACTagRegistry.MAGNETIC_ENTITIES:Lnet/minecraft/tags/TagKey;
+      36: invokevirtual #617                // Method net/minecraft/world/entity/EntityType.is:(Lnet/minecraft/tags/TagKey;)Z
+      39: ireturn
+
+== ACWorldSeedHolder
+Compiled from "ACWorldSeedHolder.java"
+public class com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder {
+  private static volatile long worldSeed;
+
+  private static volatile net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> currentDimension;
+
+  private static final java.lang.ThreadLocal<net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>> threadDimension;
+
+  private static volatile boolean initialized;
+
+  public com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static synchronized void setSeed(long);
+    Code:
+       0: lload_0
+       1: putstatic     #7                  // Field worldSeed:J
+       4: iconst_1
+       5: putstatic     #13                 // Field initialized:Z
+       8: return
+
+  public static long getSeed();
+    Code:
+       0: getstatic     #7                  // Field worldSeed:J
+       3: lreturn
+
+  public static synchronized void setDimension(net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>);
+    Code:
+       0: aload_0
+       1: putstatic     #17                 // Field currentDimension:Lnet/minecraft/resources/ResourceKey;
+       4: getstatic     #21                 // Field threadDimension:Ljava/lang/ThreadLocal;
+       7: aload_0
+       8: invokevirtual #25                 // Method java/lang/ThreadLocal.set:(Ljava/lang/Object;)V
+      11: return
+
+  public static net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> getDimension();
+    Code:
+       0: getstatic     #21                 // Field threadDimension:Ljava/lang/ThreadLocal;
+       3: invokevirtual #31                 // Method java/lang/ThreadLocal.get:()Ljava/lang/Object;
+       6: checkcast     #35                 // class net/minecraft/resources/ResourceKey
+       9: astore_0
+      10: aload_0
+      11: ifnull        18
+      14: aload_0
+      15: goto          21
+      18: getstatic     #17                 // Field currentDimension:Lnet/minecraft/resources/ResourceKey;
+      21: areturn
+
+  public static boolean isInitialized();
+    Code:
+       0: getstatic     #13                 // Field initialized:Z
+       3: ifeq          18
+       6: getstatic     #7                  // Field worldSeed:J
+       9: lconst_0
+      10: lcmp
+      11: ifeq          18
+      14: iconst_1
+      15: goto          19
+      18: iconst_0
+      19: ireturn
+
+  public static synchronized void reset();
+    Code:
+       0: lconst_0
+       1: putstatic     #7                  // Field worldSeed:J
+       4: getstatic     #37                 // Field net/minecraft/world/level/Level.OVERWORLD:Lnet/minecraft/resources/ResourceKey;
+       7: putstatic     #17                 // Field currentDimension:Lnet/minecraft/resources/ResourceKey;
+      10: getstatic     #21                 // Field threadDimension:Ljava/lang/ThreadLocal;
+      13: invokevirtual #42                 // Method java/lang/ThreadLocal.remove:()V
+      16: iconst_0
+      17: putstatic     #13                 // Field initialized:Z
+      20: return
+
+  static {};
+    Code:
+       0: lconst_0
+       1: putstatic     #7                  // Field worldSeed:J
+       4: getstatic     #37                 // Field net/minecraft/world/level/Level.OVERWORLD:Lnet/minecraft/resources/ResourceKey;
+       7: putstatic     #17                 // Field currentDimension:Lnet/minecraft/resources/ResourceKey;
+      10: new           #26                 // class java/lang/ThreadLocal
+      13: dup
+      14: invokespecial #45                 // Method java/lang/ThreadLocal."<init>":()V
+      17: putstatic     #21                 // Field threadDimension:Ljava/lang/ThreadLocal;
+      20: iconst_0
+      21: putstatic     #13                 // Field initialized:Z
+      24: return
+}
