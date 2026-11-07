@@ -711,30 +711,51 @@ def insect_wing(r, parent, sgn, at, length, width, glass, vein, name):
 UP, FWD, SIDE = (0, -1, 0), (0, 0, -1), (0, 0, 1)
 
 
+def open_sleeves(h, mat, drop=7.0):
+    """Wide sleeves that end above the wrist, so the hands come out free to hold his arms (a sleeve hanging over the
+    fist swallowed the hafts), their slack hanging in a deep pouch behind the forearm."""
+    aw, ad = h.T['arm']
+    for arm, fore in ((h.arm_r, h.fore_r), (h.arm_l, h.fore_l)):
+        x = arm.pivot[0]
+        box(arm, x - aw / 2 - 0.35, h.top - 0.2, -ad / 2 - 0.35, aw + 0.7, h.elbow_y - h.top + 0.4, ad + 0.7, dict(mat, trim=0),
+            name='sleeve_up', faces={'bottom': None})
+        L = h.wrist_y - h.elbow_y - 0.3
+        box(fore, x - aw / 2 - 0.5, h.elbow_y - 0.5, -ad / 2 - 0.5, aw + 1.0, L, ad + 1.0, mat, name='sleeve', info={'hem': True},
+            faces={'top': None})
+        box(fore, x - aw / 2 - 0.4, h.elbow_y + 0.5, ad / 2 + 0.5, aw + 0.8, L - 1.0 + drop * 0.55, 1.2 + drop * 0.3, mat,
+            name='sleeve_pouch', info={'hem': True})
+
+
+HOLD = 2.25 + 0.65            # half a large fist and half a haft: a shaft held upright against the fist's outer side
+
+
 def stance_arms(r, h, hand_y=None):
     """Baal Zebul's five arms (king_arms designs as slabs), each set on its own bones under the fists so KingRig can show
-    one set at a time (KingDeeds.switchStance; KingRig picks the set by what is in his hands):
-      clubs   雷霆棍 Yagrush (right) and Aymur (left), held by the haft's end, the heads high
-      scythe  蝿王の大鎌, two-handed near the butt, the crescent out forward over him
+    one set at a time (KingDeeds.switchStance; KingRig picks the set by what is in his hands). Nothing runs along the
+    forearm: the clubs leave the fist forward and up, the long arms stand upright against the fist's outer side, the
+    swords point forward and down.
+      clubs   雷霆棍 Yagrush (right) and Aymur (left), the heads forward and high
+      scythe  蝿王の大鎌, upright at his right side, the crescent out forward over him
       twin    the twin swords, Seraph (right) and Beelzebub (left), points forward and down
-      spear   雷槍, held a third of the way up, the head high
-      bow     虹の大弓, upright in the left fist, its back to the foe"""
+      spear   雷槍, upright at his right side, held a third of the way up
+      bow     虹の大弓, upright at his left side, its back to the foe"""
     hy = h.hand_y if hand_y is None else hand_y
     xr, xl = h.fore_r.pivot[0], h.fore_l.pivot[0]
-    cb = r.bone('arms_clubs_r', h.fore_r, (xr, hy, -0.2), rot=(0.75, 0, 0))
+    sr, sl = (-1 if xr < 0 else 1), (-1 if xl < 0 else 1)
+    cb = r.bone('arms_clubs_r', h.fore_r, (xr, hy, -0.2), rot=(1.15, 0, 0))
     KA.place(cb, 'yagrush', (xr, hy, -0.2), UP, SIDE, cross=57, nm='yagrush')
-    cb = r.bone('arms_clubs_l', h.fore_l, (xl, hy, -0.2), rot=(0.75, 0, 0))
+    cb = r.bone('arms_clubs_l', h.fore_l, (xl, hy, -0.2), rot=(1.15, 0, 0))
     KA.place(cb, 'aymur', (xl, hy, -0.2), UP, SIDE, cross=60, nm='aymur')
-    sc = r.bone('arms_scythe_r', h.fore_r, (xr, hy, -0.2), rot=(0.35, 0, 0))
-    KA.place(sc, 'scythe', (xr, hy, -0.2), UP, SIDE, nm='scythe')
+    sc = r.bone('arms_scythe_r', h.fore_r, (xr + sr * HOLD, hy, -0.2), rot=(0.22, 0, sr * 0.2))
+    KA.place(sc, 'scythe', (xr + sr * HOLD, hy, -0.2), UP, SIDE, nm='scythe')
     tr = r.bone('arms_twin_r', h.fore_r, (xr, hy, -0.2), rot=(-1.05, 0, 0))
     KA.place(tr, 'seraph', (xr, hy, -0.2), (0, 1, 0), SIDE, nm='seraph')
     tl = r.bone('arms_twin_l', h.fore_l, (xl, hy, -0.2), rot=(-1.05, 0, 0))
     KA.place(tl, 'beelzebub', (xl, hy, -0.2), (0, 1, 0), SIDE, nm='beelzebub')
-    sp = r.bone('arms_spear_r', h.fore_r, (xr, hy, -0.2), rot=(0.25, 0, 0))
-    KA.place(sp, 'spear', (xr, hy, -0.2), UP, SIDE, nm='spear')
-    bw = r.bone('arms_bow_l', h.fore_l, (xl, hy, -0.4), rot=(0.1, 0, 0))
-    KA.place(bw, 'bow', (xl, hy, -0.4), UP, FWD, nm='bow')
+    sp = r.bone('arms_spear_r', h.fore_r, (xr + sr * HOLD, hy, -0.2), rot=(0.2, 0, sr * 0.2))
+    KA.place(sp, 'spear', (xr + sr * HOLD, hy, -0.2), UP, SIDE, nm='spear')
+    bw = r.bone('arms_bow_l', h.fore_l, (xl + sl * HOLD, hy, -0.4), rot=(0.35, 0, sl * 0.14))
+    KA.place(bw, 'bow', (xl + sl * HOLD, hy, -0.4), UP, FWD, nm='bow')
 
 
 @recipe
@@ -886,7 +907,7 @@ def villager_king_divine():
     h.body(top_mat=P['linen_top'], bottom_mat=P['linen'], legs_mat=P['linen'], boots_mat=P['gold2'], arms_mat=P['sleeve'],
            hands_mat=P['black'], neck=None)
     h.robe(P['linen'], flare=4.2)                      # a garment down to the foot (Revelation 1:13)
-    h.kimono_sleeves(P['sleeve'], drop=7)
+    open_sleeves(h, P['sleeve'], drop=7)
     cw, ch, cd = h.T['chest']
     # girt about the breast with a golden girdle; black-and-gold armour over the linen
     bb.ccube(h.torso, (0, h.top + 6.2, 0), (cw + 1.0, 1.6, cd + 1.0), P['gold'], name='girdle')
