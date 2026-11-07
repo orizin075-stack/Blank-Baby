@@ -1,0 +1,84 @@
+server_test exit 1 (jar out/oror_supreme_bosses-0.17.39-052-preview.jar)
+117 jars, 0 failed
+[m[1;31m[02:36:54.414] [main/ERROR] [loading.ModSorter/LOADING]: Missing or unsupported mandatory dependencies:
+[02:37:00] [main/FATAL] [ne.ne.fm.ModLoader/CORE]: Error during pre-loading phase: Mod accessories requires owo 0.12.15.0+1.21 or above
+Currently, owo is not installed
+net.neoforged.neoforge.logging.CrashReportExtender$ModLoadingCrashException: Mod loading has failed
+	Failure message: Mod accessories requires owo 0.12.15.0+1.21 or above
+		Currently, owo is not installed
+	Exception message: <No associated exception found>
+net.neoforged.fml.ModLoadingException: Loading errors encountered:
+	- Mod accessories requires owo 0.12.15.0+1.21 or above
+	  Currently, owo is not installed
+--- mods loaded
+148
+LegendaryTooltips-1.21.1-neoforge-1.5.5.jar
+aether-1.21.1-1.5.10-neoforge.jar
+citadel-1.21.1-2.7.6.jar
+citadel-2.7.1-1.21.1.jar
+legendary_monsters-2.2.4 MC 1.21.1.jar
+refm-0.3.13-1.21.1.jar
+rimulib-1.2.2-neoforge.jar
+sword_soaring-21.14.2.5-mc1.21.1-neoforge.jar
+the-shooting-star-demo-1.5.2-neoforge.jar
+--- tail
+	Number of physical CPUs: 2
+	Number of logical CPUs: 4
+	Graphics card #0 name: hyperv_drmdrmfb
+	Graphics card #0 vendor: unknown
+	Graphics card #0 VRAM (MiB): 0.00
+	Graphics card #0 deviceId: unknown
+	Graphics card #0 versionInfo: unknown
+	Virtual memory max (MiB): 11063.45
+	Virtual memory used (MiB): 2015.64
+	Swap memory total (MiB): 3072.00
+	Swap memory used (MiB): 0.00
+	Space in storage for jna.tmpdir (MiB): <path not set>
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
+	Space in storage for io.netty.native.workdir (MiB): <path not set>
+	Space in storage for java.io.tmpdir (MiB): available: 84735.03, total: 147718.61
+	Space in storage for workdir (MiB): available: 84735.03, total: 147718.61
+	JVM Flags: 2 total; -Xmx6G -XX:StartFlightRecording=filename=rec.jfr,settings=profile,dumponexit=true
+	ModLauncher: 11.0.5+main.901c6ea8
+	ModLauncher launch target: forgeserver
+	ModLauncher services: 
+		sponge-mixin-0.16.4+mixin.0.8.7.jar mixin PLUGINSERVICE 
+		loader-4.0.45.jar slf4jfixer PLUGINSERVICE 
+		loader-4.0.45.jar runtime_enum_extender PLUGINSERVICE 
+		at-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE 
+		loader-4.0.45.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-11.0.5.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-11.0.5.jar fml TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		kotlinforforge@5.12.0
+		javafml@4.0
+		lowcodefml@4.0
+		minecraft@4.0
+	Mod List: 
+		server-1.21.1-20240808.144430-srg.jar             |Minecraft                     |minecraft                     |1.21.1              |Manifest: NOSIGNATURE
+		neoforge-21.1.262-universal.jar                   |NeoForge                      |neoforge                      |21.1.262            |Manifest: NOSIGNATURE
+[02:37:00] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
+net.neoforged.fml.ModLoadingException: Loading errors encountered:
+	- Mod accessories requires owo 0.12.15.0+1.21 or above
+	  Currently, owo is not installed
+	  
+
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:110) ~[loader-4.0.45.jar%2359!/:4.0] {}
+	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.internal.CommonModLoader.begin(CommonModLoader.java:49) ~[neoforge-21.1.262-universal.jar%23237!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.server.loading.ServerModLoader.load(ServerModLoader.java:34) ~[neoforge-21.1.262-universal.jar%23237!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:124) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:classloading}
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%2359!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:128) ~[loader-4.0.45.jar%2359!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonServerLaunchHandler.runService(CommonServerLaunchHandler.java:32) ~[loader-4.0.45.jar%2359!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.45.jar%2359!/:4.0] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.5.jar%2364!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.5.jar%2364!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.5.jar%2364!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.5.jar%2364!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.5.jar%2364!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.5.jar%2364!/:?] {}
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.5.jar%2364!/:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?] {}
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?] {}
