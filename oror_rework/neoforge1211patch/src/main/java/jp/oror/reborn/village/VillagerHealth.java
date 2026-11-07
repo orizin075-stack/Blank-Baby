@@ -13,7 +13,8 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 /**
  * (053) A villager's health when it takes up arms. It went from 20 to 256 + 128 per level (MobLevels.arm: 768 at level
  * 5, and more with its trade's share, over a thousand for a level-5 armourer), and stayed there: far too much for a
- * villager (the user). Now 30 at level 1, ten more a level (70 at level 5), 90 for an elite; its trade's share (a
+ * villager (the user). Now 40 at level 1, fifteen more a level (100 at level 5), 140 for an elite (first 30-70, then
+ * "a little more" (the user)); its trade's share (a
  * mason's +40%...) and a veteran's are still added on top. Villagers armed before 053 are brought down to it when they
  * are next loaded. Only villagers and wandering traders: the kingdom's people, the guards of Guard Villagers and the
  * other armed mobs keep theirs.
@@ -24,7 +25,7 @@ public final class VillagerHealth {
     }
 
     public static double armed(int level) {
-        return level >= 6 ? 90.0 : 20.0 + 10.0 * Math.max(1, Math.min(5, level));
+        return level >= 6 ? 140.0 : 40.0 + 15.0 * (Math.max(1, Math.min(5, level)) - 1);
     }
 
     /** After MobLevels.arm (and on loading): a villager's base health no more than its level's. */
