@@ -133,17 +133,17 @@ jobs:
           sha256sum out/oror_supreme_bosses-$NEW.jar | tee -a out/report.txt
       - uses: actions/cache@v4
         with:
-          path: ${{ runner.temp }}/pack045
-          key: pack045-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-045.json') }}
-      - name: The 045 pack's mods for the dedicated server
+          path: ${{ runner.temp }}/pack053
+          key: pack053-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-053.json') }}
+      - name: The 053 pack's mods for the dedicated server (045's and six of the user's 学びパック)
         run: |
           # as the 045 tests did: the whole pack but the client-only Sodium, FancyToasts, ChatPlus and ExtraSounds
-          python3 -I tools/fetch_pack.py pack/manifest-045.json "$RUNNER_TEMP/pack045" sodium fancytoasts chatplus extrasounds \
+          python3 -I tools/fetch_pack.py pack/manifest-053.json "$RUNNER_TEMP/pack053" sodium fancytoasts chatplus extrasounds \
             > out/pack_fetch.txt 2>&1 || true
           tail -3 out/pack_fetch.txt
-          ls "$RUNNER_TEMP/pack045" | grep -i -E 'indestructible|falchion|nightfall|efn' || true
+          ls "$RUNNER_TEMP/pack053" | grep -i -E 'indestructible|falchion|nightfall|efn' || true
           # Alex's Caves' per-entity magnetism and seed holder (a tenth of the battle's server thread by the profile)
-          AC=$(ls "$RUNNER_TEMP"/pack045/*.jar | grep -i alexscaves | head -n 1)
+          AC=$(ls "$RUNNER_TEMP"/pack053/*.jar | grep -i alexscaves | head -n 1)
           { echo "== $AC"; javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil | grep -E 'static'
             javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder | grep -E 'setDimension|static'
             unzip -l "$AC" | grep -i -E 'mixin.*(Entity|Level)' | head -n 20; } >> out/report.txt 2>&1 || true
@@ -155,7 +155,7 @@ jobs:
           # dedicated server (the pack ships its fixed build in overrides; OROR's mixins for it skip themselves without it)
           extra=(libs/nightfall.jar)
           bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 4500 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
-            'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'GUARD-RESULT' 'WORN-RESULT' 'SPELL-SWEEP-RESULT' 'MOBS-TRACE {' 'CAPITAL-LOAD {' 'SWEEP-RESULT' 'GAMETEST-RESULT' 'CI-DONE' -- arms,guards,worn,spells,mobs,citadel,citadelupdate,capitalload,war,pilots,landings,aa,villageflight,sweep,gametests -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
+            'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'GUARD-RESULT' 'WORN-RESULT' 'SPELL-SWEEP-RESULT' 'MOBS-TRACE {' 'CAPITAL-LOAD {' 'SWEEP-RESULT' 'GAMETEST-RESULT' 'CI-DONE' -- arms,guards,worn,spells,mobs,citadel,citadelupdate,capitalload,war,pilots,landings,aa,villageflight,sweep,gametests -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack053/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
           # the results first (the full list below is cut at 400 lines), then everything
           grep -E 'GAMETEST-RESULT|SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|GUARD-|WORN-|SPELL-SWEEP-RESULT|MOBS-TRACE|CAPITAL-LOAD|CRASHNET|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \

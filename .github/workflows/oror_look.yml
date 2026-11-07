@@ -38,15 +38,15 @@ jobs:
           gradle-version: '8.14.3'
       - uses: actions/cache@v4
         with:
-          path: ${{ runner.temp }}/pack045
-          key: pack045-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-045.json') }}
+          path: ${{ runner.temp }}/pack053
+          key: pack053-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-053.json') }}
       - name: The 045 pack's mods, Nightfall and the latest OROR jar
         run: |
           rm -rf "$OUT"; mkdir -p "$OUT"
           G=$RUNNER_TEMP/game; mkdir -p $G/mods
-          python3 -I $P/tools/fetch_pack.py $P/pack/manifest-045.json "$RUNNER_TEMP/pack045" > $OUT/pack_fetch.txt 2>&1 || true
+          python3 -I $P/tools/fetch_pack.py $P/pack/manifest-053.json "$RUNNER_TEMP/pack053" > $OUT/pack_fetch.txt 2>&1 || true
           tail -3 $OUT/pack_fetch.txt
-          cp "$RUNNER_TEMP"/pack045/*.jar $G/mods/
+          cp "$RUNNER_TEMP"/pack053/*.jar $G/mods/
           rm -f $G/mods/oror_supreme_bosses-*.jar
           NEW=$(sed -n 's/^release_version=//p' $P/gradle.properties)
           cp $P/out/oror_supreme_bosses-$NEW.jar $G/mods/
