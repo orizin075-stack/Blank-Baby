@@ -243,6 +243,10 @@ public final class RebelPact {
             e.setAmount(e.getAmount() * 10F);
             CompoundTag d = king.getPersistentData();
             d.putInt("OrorKingSlain", d.getInt("OrorKingSlain") + 1);
+        } else if (GodSlayer.has(by)) {
+            // (054) a god-slayer's blow breaks the field too (a later king, another kingdom's)
+            king.sovereign().incoming(1.0E30F);
+            e.setAmount(e.getAmount() * 5F);
         }
     }
 
@@ -323,6 +327,10 @@ public final class RebelPact {
                 o.add(KingCourt.offer(new ItemStack(Items.OMINOUS_BOTTLE), Items.EMERALD, 16, null, 0, 4));
                 o.add(KingCourt.offer(horn("illager"), Items.EMERALD_BLOCK, 8, null, 0, 3));
             }
+        }
+        if (favour(p) >= 60) {
+            // (054) their hidden grand magic, shown only to their truest friends
+            o.add(KingCourt.offer(BrokenPhantasm.scroll(), Items.EMERALD_BLOCK, 32, Items.NETHER_STAR, 1, 1));
         }
         if (favour(p) >= 30) {
             o.add(KingCourt.offer(lordCharm(), Items.EMERALD_BLOCK, 16, Items.TOTEM_OF_UNDYING, 1, 2));

@@ -112,60 +112,84 @@ public final class KingForms {
 
     // -------------------------------------------------------------------------------------------- coming back
 
-    /** He has come back from death into the given form (RoyalSovereign.onDeath, KingSovereignMixin). */
+    /**
+     * He has come back from death into the given form (RoyalSovereign.onDeath, KingSovereignMixin): stronger in every
+     * way (strengthen), armed for the form (arm), and the film of his return begins (KingCinema), which does its
+     * effects and its blow on his foes in its course.
+     */
     public static void reborn(RoyalMob king, int phase) {
         if (!(king.level() instanceof ServerLevel sl)) {
             return;
         }
-        CompoundTag d = king.getPersistentData();
-        d.putInt("OrorKingForm", phase);
-        String[] lines = switch (phase) {
-            case 1 -> new String[]{"村人王：……まだだ。王は、斃れぬ。", "村人王：我が名は――" + GARBLED_NAME.substring(0, 5) + "……"};
-            case 2 -> new String[]{GARBLED_KING + "：炎ハ、冥府ヨリ来タル。", GARBLED_KING + "：我ガ名ハ、" + GARBLED_NAME + "……"};
-            default -> new String[]{"――我が真名を知れ。", TRUE_NAME + "：我は" + TRUE_NAME + "。" + TRUE_TITLE + "なり。",
-                TRUE_NAME + "：雷よ、ヤグルシよ、アイムールよ。蝿どもよ。この者らを喰らえ。"};
-        };
-        for (ServerPlayer p : sl.players()) {
-            if (p.distanceToSqr(king) < 256 * 256) {
-                for (String line : lines) {
-                    p.sendSystemMessage(Component.literal(line).withStyle(phase >= 3 ? ChatFormatting.DARK_PURPLE : ChatFormatting.DARK_RED));
-                }
-            }
+        king.getPersistentData().putInt("OrorKingForm", phase);
+        strengthen(king, phase);
+        arm(king, phase);
+        KingCinema.start(king, sl, phase);
+        LOG.info("KING-FORM {\"phase\":{},\"name\":\"{}\",\"scale\":{}}", phase, bossName(phase).getString(), king.getScale());
+    }
+
+    static final net.minecraft.resources.ResourceLocation FORM_MOD =
+        net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "king_form");
+    /** By form: armour, toughness, attack (x base), speed (x base), knockback resistance, scale (+ to 1). Never less. */
+    static final double[][] FORM_STATS = {{0, 0, 0, 0, 0, 0}, {6, 4, 0.5, 0.10, 0.5, 0.5}, {12, 8, 1.0, 0.20, 0.8, 0.8}, {20, 12, 2.0, 0.30, 1.0, 1.2}};
+
+    /** (054) Each form is stronger in every way than the last, and greater: his hitbox grows with his scale. */
+    public static void strengthen(RoyalMob king, int phase) {
+        double[] v = FORM_STATS[Math.max(0, Math.min(3, phase))];
+        stat(king, net.minecraft.world.entity.ai.attributes.Attributes.ARMOR, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE, v[0]);
+        stat(king, net.minecraft.world.entity.ai.attributes.Attributes.ARMOR_TOUGHNESS, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE, v[1]);
+        stat(king, net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE,
+            net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE, v[2]);
+        stat(king, net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED,
+            net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE, v[3]);
+        stat(king, net.minecraft.world.entity.ai.attributes.Attributes.KNOCKBACK_RESISTANCE,
+            net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE, v[4]);
+        stat(king, net.minecraft.world.entity.ai.attributes.Attributes.SCALE, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE, v[5]);
+    }
+
+    private static void stat(LivingEntity e, net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> a,
+                             net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation op, double amount) {
+        net.minecraft.world.entity.ai.attributes.AttributeInstance in = e.getAttribute(a);
+        if (in == null) {
+            return;
         }
-        TechniqueShow.send(king, "move:king_revive", 0, 10, 40, -1);
-        switch (phase) {
-            case 1 -> {
-                burst(king, sl, 10.0, 20F, 1.6, false);
-                sl.sendParticles(ParticleTypes.EXPLOSION, king.getX(), king.getY() + 1, king.getZ(), 6, 2, 0.5, 2, 0);
-                sl.playSound(null, king.blockPosition(), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 3F, 0.7F);
-                call(king, sl, RoyalRole.IMPERIAL, 3);
-            }
-            case 2 -> {
-                burst(king, sl, 12.0, 30F, 1.2, true);
-                sl.sendParticles(ParticleTypes.FLAME, king.getX(), king.getY() + 1, king.getZ(), 300, 6, 1, 6, 0.08);
-                sl.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, king.getX(), king.getY() + 1, king.getZ(), 120, 4, 1, 4, 0.05);
-                sl.playSound(null, king.blockPosition(), SoundEvents.BLAZE_SHOOT, SoundSource.HOSTILE, 3F, 0.5F);
-                call(king, sl, RoyalRole.ARCHMAGE, 2);
-            }
-            default -> {
-                for (int i = 0; i < 8; i++) {
-                    double a = i * Math.PI / 4;
-                    bolt(sl, king.position().add(Math.cos(a) * 7, 0, Math.sin(a) * 7));
-                }
-                for (LivingEntity e : foes(king, sl, 24.0)) {
-                    e.hurt(king.damageSources().indirectMagic(king, king), 24F);
-                    swarm(king, e, sl.getGameTime() + 100);
-                }
-                sl.setWeatherParameters(0, 6000, true, true);
-                arm(king, 3);
-            }
+        net.minecraft.world.entity.ai.attributes.AttributeModifier m = in.getModifier(FORM_MOD);
+        if (m != null && m.amount() == amount) {
+            return;
         }
-        LOG.info("KING-FORM {\"phase\":{},\"name\":\"{}\"}", phase, bossName(phase).getString());
+        in.removeModifier(FORM_MOD);
+        if (amount != 0) {
+            in.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(FORM_MOD, amount, op));
+        }
+    }
+
+    /** The hero's command: his people about him are made stronger for twenty seconds. */
+    static void rally(RoyalMob king, ServerLevel sl) {
+        for (RoyalMob m : sl.getEntitiesOfClass(RoyalMob.class, king.getBoundingBox().inflate(24), x -> x != king && x.isAlive())) {
+            m.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 400, 1));
+            m.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 0));
+            m.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0));
+            sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, m.getX(), m.getY() + 1, m.getZ(), 10, 0.3, 0.6, 0.3, 0.1);
+        }
     }
 
     /** His hands in the form: the third puts the guns away for the two clubs of Baal. */
     public static void arm(RoyalMob king, int phase) {
+        if (phase < 1) {
+            return;
+        }
         if (phase < 3) {
+            var en = king.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+            ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);
+            sword.set(DataComponents.CUSTOM_NAME, Component.literal(phase == 1 ? "聖剣《黎明》" : "聖剣《黎明》（破損データ）")
+                .withStyle(phase == 1 ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE));
+            sword.enchant(en.getHolderOrThrow(Enchantments.SHARPNESS), 6 + phase * 2);
+            sword.enchant(en.getHolderOrThrow(Enchantments.FIRE_ASPECT), 2);
+            sword.set(DataComponents.RARITY, Rarity.EPIC);
+            king.setItemSlot(EquipmentSlot.MAINHAND, sword);
+            king.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
+            king.setDropChance(EquipmentSlot.MAINHAND, 0F);
+            king.setDropChance(EquipmentSlot.OFFHAND, 0F);
             return;
         }
         var ench = king.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
@@ -197,7 +221,10 @@ public final class KingForms {
             king.setCustomName(name(king, phase, now));
             king.setCustomNameVisible(true);
             KingCourt.bossBars(king, sl);
-            if (phase >= 3 && !(king.getMainHandItem().is(Items.MACE))) {
+            strengthen(king, phase);
+            if (phase >= 3 && !king.getMainHandItem().is(Items.MACE) && !king.getMainHandItem().is(Items.NETHERITE_HOE)) {
+                arm(king, phase);
+            } else if (phase >= 1 && phase < 3 && !king.getMainHandItem().is(Items.NETHERITE_SWORD)) {
                 arm(king, phase);
             }
         }
@@ -205,6 +232,12 @@ public final class KingForms {
         LivingEntity t = king.getTarget();
         if (t == null || !t.isAlive() || !foe(king, t)) {
             return;
+        }
+        if (KingCinema.playing(king)) {
+            return;
+        }
+        if (phase >= 1) {
+            KingDeeds.tick(king, sl, phase, t);
         }
         CompoundTag d = king.getPersistentData();
         double dist = king.distanceTo(t);
@@ -214,6 +247,7 @@ public final class KingForms {
             if (called < 6) {
                 TechniqueShow.send(king, "move:king_rally", 0, 6, 24, t.getId());
                 call(king, sl, RoyalRole.IMPERIAL, 2);
+                rally(king, sl);
             }
         }
         if (phase >= 2 && ready(d, "OrorKingFlame", now, 240)) {

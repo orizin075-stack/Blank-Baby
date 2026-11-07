@@ -27,6 +27,8 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -58,6 +60,11 @@ public final class KingStoryTest {
         void ready() {
             this.attackStrengthTicker = 200;
         }
+
+        @Override
+        public boolean isInvulnerableTo(net.minecraft.world.damagesource.DamageSource source) {
+            return false;
+        }
     }
 
     private static final class Run {
@@ -70,6 +77,9 @@ public final class KingStoryTest {
         final List<int[]> chunks = new ArrayList<>();
         long started;
         int stage;
+        int trial = -1;
+        long nextTrial = -1, after = -1;
+        final Map<String, Integer> hitsBefore = new LinkedHashMap<>();
     }
 
     private static Run run;
@@ -206,7 +216,7 @@ public final class KingStoryTest {
             out.put("alliesSpare", spare);
         }
         if (age == 80) {
-            // the field gives way to Azazel's likeness; the king dies for real and comes back in his first form
+            // the field gives way to Azazel's likeness; the king dies for real and comes back as the hero, in his film
             int came = RebelPact.summon(r.rebel, sl, "azazel");
             List<Mob> lord = sl.getEntitiesOfClass(Mob.class, new AABB(r.at).inflate(20), m -> m.getPersistentData().getBoolean(RebelLord.LORD));
             r.made.addAll(lord);
@@ -221,40 +231,120 @@ public final class KingStoryTest {
             r.king.hurt(r.king.damageSources().mobAttack(lord.isEmpty() ? r.king : lord.get(0)), 500F);
             out.put("revive", before + "->" + r.king.lifePhase());
             out.put("reviveAlive", r.king.isAlive());
+            out.put("film1", KingCinema.playing(r.king));
             out.put("name1", KingForms.name(r.king, 1, 0).getString());
-        }
-        if (age == 100) {
-            // the later forms, called directly; the third's arms and deeds against monsters
-            for (int phase = 2; phase <= 3; phase++) {
-                CompoundTag t = new CompoundTag();
-                t.putInt("Phase", phase);
-                r.king.sovereign().load(t);
-                KingForms.reborn(r.king, phase);
-                out.put("name" + phase, KingForms.name(r.king, phase, 0).getString());
+            for (Mob m : lord) {
+                m.discard();
             }
-            out.put("bossName3", KingForms.bossName(3).getString());
-            out.put("phase", r.king.lifePhase());
-            out.put("called", r.king.getPersistentData().getInt("OrorKingCalled"));
+        }
+        if (age == 90) {
+            float h = r.king.getHealth();
+            Mob z = spawn(r, EntityType.ZOMBIE, 3, 3);
+            r.king.hurt(r.king.damageSources().mobAttack(z), 50F);
+            out.put("filmUntouchable", r.king.getHealth() >= h);
+            z.discard();
+        }
+        if (age == 190) {
+            out.put("film1Done", !KingCinema.playing(r.king) && KingCinema.cinemas(r.king) >= 1 && !r.king.isNoAi());
+            out.put("scale1", Math.round(r.king.getScale() * 100) / 100.0);
+            out.put("armour1", r.king.getAttribute(Attributes.ARMOR).getModifier(KingForms.FORM_MOD) != null);
+            out.put("heroSword", r.king.getMainHandItem().is(Items.NETHERITE_SWORD));
+        }
+        if (age == 200) {
+            stage(r, 2);
+        }
+        if (age == 330) {
+            out.put("film2Done", KingCinema.cinemas(r.king) >= 2 && !r.king.isNoAi());
+            out.put("scale2", Math.round(r.king.getScale() * 100) / 100.0);
             for (int i = 0; i < 3; i++) {
-                spawn(r, EntityType.ZOMBIE, 4 + i, -4);
+                sturdy(spawn(r, EntityType.ZOMBIE, 3 + i, -3));
             }
         }
-        if (age > 100 && age < 400) {
+        if (age > 330 && age < 530) {
+            // the broken king fights: his broken hits, his phantoms, his error arm; the zombies strike at him too
             List<Zombie> zs = sl.getEntitiesOfClass(Zombie.class, new AABB(r.at).inflate(30), Zombie::isAlive);
             if (!zs.isEmpty() && (r.king.getTarget() == null || !r.king.getTarget().isAlive())) {
                 r.king.setTarget(zs.get(0));
             }
-            if (zs.isEmpty() && age % 40 == 0) {
-                spawn(r, EntityType.ZOMBIE, 3, -3);
+            if (age % 10 == 0 && !zs.isEmpty()) {
+                r.king.doHurtTarget(zs.get(0));
+                Zombie z = zs.get(zs.size() - 1);
+                r.king.hurt(r.king.damageSources().mobAttack(z), 4F);
+            }
+            if (zs.size() < 3 && age % 20 == 0) {
+                sturdy(spawn(r, EntityType.ZOMBIE, 3, -3));
             }
         }
-        if (age == 400) {
-            CompoundTag d = r.king.getPersistentData();
+        if (age == 530) {
+            CompoundTag c = r.king.getPersistentData().getCompound(KingDeeds.COUNT);
+            CompoundTag h = r.king.getPersistentData().getCompound(KingDeeds.HITS);
+            out.put("missOut", c.getInt("miss_out"));
+            out.put("missIn", c.getInt("miss_in"));
+            out.put("lagHits", h.getInt("lag_hit"));
+            out.put("phantoms", h.getInt("phantom"));
+            out.put("errorArm", h.getInt("error_arm"));
+            stage(r, 3);
+        }
+        if (age == 700) {
+            out.put("film3Done", KingCinema.cinemas(r.king) >= 3 && !r.king.isNoAi());
+            out.put("scale3", Math.round(r.king.getScale() * 100) / 100.0);
+            out.put("bossName3", KingForms.bossName(3).getString());
+            out.put("name3", KingForms.name(r.king, 3, 0).getString());
+            out.put("phase", r.king.lifePhase());
+            out.put("called", r.king.getPersistentData().getInt("OrorKingCalled"));
             out.put("mainhand", net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(r.king.getMainHandItem().getItem()).toString());
-            out.put("offhand", net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(r.king.getOffhandItem().getItem()).toString());
-            out.put("bolts", d.getInt("OrorKingBolts"));
-            out.put("swarms", d.getInt("OrorKingSwarms"));
-            out.put("slams", d.getInt("OrorKingSlams"));
+            r.trial = 0;
+            r.nextTrial = age;
+        }
+        if (r.trial >= 0 && r.trial <= KingDeeds.DEEDS.size() && age >= r.nextTrial) {
+            // every deed, done on sturdy zombies set at its range
+            if (r.trial == KingDeeds.DEEDS.size()) {
+                CompoundTag h = r.king.getPersistentData().getCompound(KingDeeds.HITS);
+                CompoundTag c = r.king.getPersistentData().getCompound(KingDeeds.COUNT);
+                StringBuilder missed = new StringBuilder();
+                int landed = 0;
+                for (KingDeeds.Deed d : KingDeeds.DEEDS) {
+                    int n = h.getInt(d.id());
+                    out.put("deed_" + d.id(), n);
+                    if (n > 0) {
+                        landed++;
+                    } else {
+                        missed.append(d.id()).append(' ');
+                    }
+                }
+                out.put("deedsLanded", landed);
+                out.put("deedsMissed", missed.toString().trim());
+                out.put("stances", c.getInt("stance_demon") + "/" + c.getInt("stance_divine"));
+                out.put("bolts", r.king.getPersistentData().getInt("OrorKingBolts"));
+                out.put("swarms", r.king.getPersistentData().getInt("OrorKingSwarms"));
+                r.trial = -1;
+                r.after = age + 10;
+            } else {
+                KingDeeds.Deed d = KingDeeds.DEEDS.get(r.trial);
+                for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(r.at).inflate(40), Zombie::isAlive)) {
+                    z.discard();
+                }
+                double dist = Math.max(3.0, Math.min(14.0, (d.min() + Math.min(d.max(), 16)) / 2.0));
+                r.king.teleportTo(r.at.getX() + 0.5, r.at.getY(), r.at.getZ() + 0.5);
+                Mob a = sturdy(spawn(r, EntityType.ZOMBIE, dist, 0));
+                sturdy(spawn(r, EntityType.ZOMBIE, dist, 1.5));
+                r.king.setTarget(a);
+                if (d.id().equals("plague") || d.id().equals("reap") || d.id().equals("vortex") || d.id().equals("brand")) {
+                    KingDeeds.switchStance(r.king, sl, 2);
+                } else if (d.stance() == 1) {
+                    KingDeeds.switchStance(r.king, sl, 1);
+                }
+                KingDeeds.perform(r.king, sl, d.id(), a);
+                r.nextTrial = age + d.windup() + switch (d.id()) {
+                    case "rollback", "brand" -> 75;
+                    case "gaze" -> 50;
+                    case "ghosts", "judgment", "driver" -> 45;
+                    default -> 30;
+                };
+                r.trial++;
+            }
+        }
+        if (r.after > 0 && age == r.after) {
             // the rebel lord, his crown; kept, presented
             Mob lord = RebelLord.court(sl, r.at.offset(-15, 0, 12), true);
             out.put("lord", lord != null && lord.getPersistentData().getBoolean(RebelLord.LORD));
@@ -263,7 +353,7 @@ public final class KingStoryTest {
                 lord.hurt(r.keeper.damageSources().playerAttack(r.keeper), 100000F);
             }
         }
-        if (age == 410) {
+        if (r.after > 0 && age == r.after + 10) {
             List<ItemEntity> crowns = sl.getEntitiesOfClass(ItemEntity.class, new AABB(r.at).inflate(40), i -> RebelLord.isCrown(i.getItem()));
             out.put("crownDropped", crowns.size());
             r.keeper.getInventory().add(RebelLord.crown());
@@ -280,7 +370,80 @@ public final class KingStoryTest {
                 c.discard();
             }
         }
-        if (age == 420) {
+        if (r.after > 0 && age >= r.after + 20 && age < r.after + 30 && !Boolean.TRUE.equals(out.get("godSlayer"))) {
+            // Baal Zebul's last death at the rebel's hand: the rebel and those who fought him become god-slayers
+            for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(r.at).inflate(40), Zombie::isAlive)) {
+                z.discard();
+            }
+            if (r.king.isAlive()) {
+                r.rebel.ready();
+                r.king.sovereign().healTo(1F);
+                r.king.sovereign().incoming(1.0E30F);
+                r.king.hurt(r.rebel.damageSources().playerAttack(r.rebel), 1000F);
+            }
+            out.put("kingDead", !r.king.isAlive());
+            out.put("godSlayer", GodSlayer.has(r.rebel));
+        }
+        if (r.after > 0 && age == r.after + 30) {
+            out.put("godSlayerHealth", r.rebel.getAttribute(Attributes.MAX_HEALTH).getValue());
+            GodSlayer.give(r.rebel, sl);
+            // its field takes a small blow whole; a great blow breaks it and the ceiling holds what goes through
+            r.rebel.setHealth(r.rebel.getMaxHealth());
+            Mob z = spawn(r, EntityType.ZOMBIE, 2, 2);
+            float h0 = r.rebel.getHealth();
+            r.rebel.hurt(r.rebel.damageSources().mobAttack(z), 20F);
+            out.put("fieldTook", r.rebel.getHealth() >= h0 && GodSlayer.fieldOf(r.rebel) < GodSlayer.CAPACITY);
+            r.rebel.invulnerableTime = 0;
+            float h1 = r.rebel.getHealth();
+            r.rebel.hurt(r.rebel.damageSources().mobAttack(z), 400F);
+            out.put("ceilingHeld", h1 - r.rebel.getHealth() <= r.rebel.getMaxHealth() * 0.25F + 0.01F && r.rebel.isAlive());
+            z.discard();
+            // a god struck by a god-slayer: a new king is weakened and his field breaks
+            RoyalMob god = RoyalRegistry.TYPES.get(RoyalRole.KING).create(sl);
+            god.moveTo(r.at.getX() + 6.5, r.at.getY(), r.at.getZ() + 6.5, 0F, 0F);
+            sl.addFreshEntity(god);
+            r.made.add(god);
+            r.rebel.ready();
+            god.hurt(r.rebel.damageSources().playerAttack(r.rebel), 10F);
+            out.put("godWeakened", god.hasEffect(MobEffects.WEAKNESS));
+            out.put("godBreached", god.atBreached());
+            god.discard();
+        }
+        if (r.after > 0 && age == r.after + 40) {
+            // the broken phantasm: a sword shatters into a blow many times over; a pickaxe tears out a sphere
+            r.keeper.getInventory().clearContent();
+            BrokenPhantasm.cast(r.keeper, sl);
+            out.put("phantasmActive", BrokenPhantasm.active(r.keeper));
+            r.keeper.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
+            Mob z = sturdy(spawn(r, EntityType.ZOMBIE, 1.5, -1.5));
+            float zh = z.getHealth();
+            r.keeper.ready();
+            r.keeper.attack(z);
+            out.put("phantasmBlow", Math.round(zh - z.getHealth()));
+            out.put("phantasmSwordGone", r.keeper.getMainHandItem().isEmpty());
+            z.discard();
+            BlockPos c = r.at.offset(8, 3, -8);
+            for (BlockPos q : BlockPos.betweenClosed(c.offset(-3, -3, -3), c.offset(3, 3, 3))) {
+                sl.setBlock(q, Blocks.STONE.defaultBlockState(), 2);
+            }
+            r.keeper.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_PICKAXE));
+            r.keeper.gameMode.destroyBlock(c);
+            int air = 0;
+            for (BlockPos q : BlockPos.betweenClosed(c.offset(-3, -3, -3), c.offset(3, 3, 3))) {
+                air += sl.getBlockState(q).isAir() ? 1 : 0;
+            }
+            out.put("phantasmDug", air);
+            out.put("phantasmPickGone", r.keeper.getMainHandItem().isEmpty());
+            out.put("tiers", BrokenPhantasm.tier(new ItemStack(Items.IRON_SWORD)) + "/" + BrokenPhantasm.tier(new ItemStack(Items.TRIDENT)) + "/"
+                + BrokenPhantasm.tier(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE)) + "/"
+                + net.minecraft.core.registries.BuiltInRegistries.ITEM.getOptional(ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "kokuhaku_weapon"))
+                .map(i -> BrokenPhantasm.tier(new ItemStack(i))).orElse(-1));
+            CompoundTag kept = KingCourt.kept(r.rebel);
+            kept.putInt(RebelPact.FAVOUR, 70);
+            KingCourt.keep(r.rebel, kept);
+            out.put("phantasmOffered", RebelPact.offers(r.rebel, sl, "illager").stream().anyMatch(o -> BrokenPhantasm.isScroll(o.getResult())));
+        }
+        if (r.after > 0 && age == r.after + 50) {
             // the summoning chamber, dug under the nearest forest; one comes into the world on its circle
             BlockPos circle = SummoningChamber.build(sl, r.at);
             out.put("chamber", circle.toShortString());
@@ -288,6 +451,7 @@ public final class KingStoryTest {
             out.put("circleStone", sl.getBlockState(o).is(Blocks.CHISELED_DEEPSLATE));
             int containers = 0, filled = 0, workshops = 0, ladders = 0, iss = 0;
             boolean journal = false;
+            java.util.Set<String> kinds = new java.util.TreeSet<>();
             for (BlockPos p : BlockPos.betweenClosed(o.offset(-10, 0, -10), o.offset(10, 7, 10))) {
                 BlockEntity be = sl.getBlockEntity(p);
                 if (be instanceof Container c) {
@@ -301,6 +465,7 @@ public final class KingStoryTest {
                 if (st.is(Blocks.CRAFTING_TABLE) || st.is(Blocks.FURNACE) || st.is(Blocks.ANVIL) || st.is(Blocks.ENCHANTING_TABLE) || st.is(Blocks.BREWING_STAND)
                     || st.is(Blocks.SMITHING_TABLE)) {
                     workshops++;
+                    kinds.add(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(st.getBlock()).getPath());
                 }
                 if (net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(st.getBlock()).getNamespace().equals("irons_spellbooks")) {
                     iss++;
@@ -315,6 +480,7 @@ public final class KingStoryTest {
             out.put("containers", containers);
             out.put("filled", filled);
             out.put("workshops", workshops);
+            out.put("workshopKinds", String.join(" ", kinds));
             out.put("issBlocks", iss);
             out.put("journal", journal);
             out.put("ladders", ladders);
@@ -330,6 +496,25 @@ public final class KingStoryTest {
         }
     }
 
+    private static void stage(Run r, int phase) {
+        CompoundTag t = new CompoundTag();
+        t.putInt("Phase", phase);
+        r.king.sovereign().load(t);
+        KingForms.reborn(r.king, phase);
+        r.r.put("name" + phase, KingForms.name(r.king, phase, 0).getString());
+    }
+
+    /** A zombie that lives through many blows and does not burn. */
+    private static Mob sturdy(Mob m) {
+        var a = m.getAttribute(Attributes.MAX_HEALTH);
+        if (a != null) {
+            a.setBaseValue(1000);
+        }
+        m.setHealth(m.getMaxHealth());
+        m.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+        return m;
+    }
+
     private static void finish(Run r) {
         run = null;
         Map<String, Object> o = r.r;
@@ -338,11 +523,19 @@ public final class KingStoryTest {
         boolean war = Boolean.TRUE.equals(o.get("enemy")) && Boolean.TRUE.equals(o.get("enemyHostile")) && Boolean.TRUE.equals(o.get("friendStillPeace"));
         boolean rebels = Boolean.TRUE.equals(o.get("vindicatorSpares")) && num(o, "rebelFavour") >= 5 && num(o, "allies") == 3
             && Boolean.TRUE.equals(o.get("alliesSpare"));
-        boolean forms = Boolean.TRUE.equals(o.get("breachedByLord")) && "0->1".equals(o.get("revive")) && num(o, "phase") == 3
-            && "minecraft:mace".equals(o.get("mainhand")) && num(o, "bolts") > 0 && num(o, "swarms") > 0;
+        boolean forms = Boolean.TRUE.equals(o.get("breachedByLord")) && "0->1".equals(o.get("revive")) && Boolean.TRUE.equals(o.get("film1"))
+            && Boolean.TRUE.equals(o.get("filmUntouchable")) && Boolean.TRUE.equals(o.get("film1Done")) && Boolean.TRUE.equals(o.get("film2Done"))
+            && Boolean.TRUE.equals(o.get("film3Done")) && num(o, "phase") == 3 && Boolean.TRUE.equals(o.get("armour1")) && Boolean.TRUE.equals(o.get("heroSword"))
+            && o.get("scale1") instanceof Double s1 && o.get("scale2") instanceof Double s2 && o.get("scale3") instanceof Double s3 && s1 > 1.0 && s2 > s1 && s3 > s2;
+        boolean deeds = num(o, "deedsLanded") >= KingDeeds.DEEDS.size() - 1;
+        boolean broken = num(o, "missOut") + num(o, "lagHits") + num(o, "missIn") + num(o, "phantoms") + num(o, "errorArm") > 0;
+        boolean slayer = Boolean.TRUE.equals(o.get("godSlayer")) && Boolean.TRUE.equals(o.get("fieldTook")) && Boolean.TRUE.equals(o.get("ceilingHeld"))
+            && Boolean.TRUE.equals(o.get("godWeakened"));
+        boolean phantasm = Boolean.TRUE.equals(o.get("phantasmActive")) && num(o, "phantasmBlow") >= 50 && Boolean.TRUE.equals(o.get("phantasmSwordGone"))
+            && num(o, "phantasmDug") >= 10 && Boolean.TRUE.equals(o.get("phantasmPickGone"));
         boolean crown = num(o, "crownDropped") >= 1 && Boolean.TRUE.equals(o.get("keeperEnemy")) && Boolean.TRUE.equals(o.get("presented"))
             && num(o, "festival") >= 1;
-        boolean chamber = Boolean.TRUE.equals(o.get("circleStone")) && num(o, "filled") >= 8 && num(o, "workshops") >= 6 && num(o, "ladders") >= 8
+        boolean chamber = Boolean.TRUE.equals(o.get("circleStone")) && num(o, "filled") >= 8 && num(o, "workshops") >= 5 && num(o, "ladders") >= 8
             && num(o, "lying") >= 5 && Boolean.TRUE.equals(o.get("journal")) && Boolean.TRUE.equals(o.get("arrived"));
         o.put("passPeace", peace);
         o.put("passWar", war);
@@ -350,7 +543,11 @@ public final class KingStoryTest {
         o.put("passForms", forms);
         o.put("passCrown", crown);
         o.put("passChamber", chamber);
-        o.put("pass", peace && war && rebels && forms && crown && chamber);
+        o.put("passDeeds", deeds);
+        o.put("passBroken", broken);
+        o.put("passGodSlayer", slayer);
+        o.put("passPhantasm", phantasm);
+        o.put("pass", peace && war && rebels && forms && crown && chamber && deeds && broken && slayer && phantasm);
         StringBuilder b = new StringBuilder("{");
         o.forEach((k, v) -> b.append(b.length() > 1 ? "," : "").append('"').append(k).append("\":")
             .append(v instanceof String s ? "\"" + s.replace("\"", "'") + "\"" : String.valueOf(v)));

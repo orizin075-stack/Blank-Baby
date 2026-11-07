@@ -34,18 +34,27 @@ public final class RoyalRenderer extends MobRenderer<RoyalMob, RoyalModel> {
         }
     }
 
+    /** (054) The villager king's four rigs (KingFormRenderer), or null to draw him on this model as before. */
+    private final KingFormRenderer kingForms;
+
     public RoyalRenderer(Context context) {
         super(context, new RoyalModel(context.bakeLayer(LAYER)), 0.5F);
         this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
+        this.kingForms = KingFormRenderer.create(context);
     }
 
     @Override
     public void render(RoyalMob mob, float yaw, float partial, PoseStack pose, MultiBufferSource buffers, int light) {
-        super.render(mob, yaw, partial, pose, buffers, light);
+        if (mob.role() == RoyalRole.KING && this.kingForms != null) {
+            this.shadowRadius = 0.9F * mob.getScale();
+            this.kingForms.render(mob, yaw, partial, pose, buffers, light);
+        } else {
+            super.render(mob, yaw, partial, pose, buffers, light);
+        }
         if (mob.role() == RoyalRole.KING && mob.atField() > 0.0F && !mob.atBreached()) {
             double pulse = 0.04 * Math.sin((mob.tickCount + partial) * 0.12);
-            LevelRenderer.renderLineBox(pose, buffers.getBuffer(RenderType.lines()), -0.85 - pulse, -0.15, -0.85 - pulse, 0.85 + pulse, 2.5,
-                0.85 + pulse, 0.2F, 0.65F, 1.0F, 0.65F);
+            double w = mob.getBbWidth() * 0.5 + 0.3 + pulse, hgt = mob.getBbHeight() + 0.3;
+            LevelRenderer.renderLineBox(pose, buffers.getBuffer(RenderType.lines()), -w, -0.15, -w, w, hgt, w, 0.2F, 0.65F, 1.0F, 0.65F);
         }
     }
 
@@ -58,8 +67,9 @@ public final class RoyalRenderer extends MobRenderer<RoyalMob, RoyalModel> {
     @Override
     protected void scale(RoyalMob mob, PoseStack pose, float partial) {
         float size = switch (mob.role()) {
-            // (054) the king grows with each return: 1.12, 1.24, 1.38, 1.6
-            case KING -> new float[]{1.12F, 1.24F, 1.38F, 1.6F}[Math.max(0, Math.min(3, mob.lifePhase()))];
+            // (054) the king grows with each return by his scale attribute (KingForms.strengthen), which the
+            // living renderer applies itself
+            case KING -> 1.12F;
             case GENERAL, BODYGUARD -> 1.06F;
             case IMPERIAL -> 1.04F;
             default -> 1.0F;

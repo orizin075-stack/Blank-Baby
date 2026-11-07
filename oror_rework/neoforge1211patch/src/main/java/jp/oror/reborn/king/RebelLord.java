@@ -164,6 +164,10 @@ public final class RebelLord {
             return;
         }
         e.getDrops().add(new ItemEntity(dead.level(), dead.getX(), dead.getY() + 0.5, dead.getZ(), crown()));
+        // (054) one time in four his body yields the rebels' hidden grand magic
+        if (dead.getRandom().nextInt(4) == 0) {
+            e.getDrops().add(new ItemEntity(dead.level(), dead.getX(), dead.getY() + 0.5, dead.getZ(), BrokenPhantasm.scroll()));
+        }
         if (e.getSource().getEntity() instanceof ServerPlayer p) {
             if (RebelPact.friend(p)) {
                 RebelPact.addFavour(p, -RebelPact.favour(p));

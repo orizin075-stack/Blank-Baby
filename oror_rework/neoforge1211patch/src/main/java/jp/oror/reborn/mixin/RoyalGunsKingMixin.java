@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** (054) In his third form the villager king puts his guns away for the two clubs of Baal (KingForms.arm). */
+/** (054) From his first return the villager king puts his guns away: the hero's holy sword, then Baal's arms (KingForms.arm). */
 @Mixin(targets = "jp.oror.reborn.royal.RoyalGuns", remap = false)
 public abstract class RoyalGunsKingMixin {
     @Shadow(remap = false)
@@ -18,7 +18,7 @@ public abstract class RoyalGunsKingMixin {
 
     @Inject(method = "enabled()Z", at = @At("RETURN"), cancellable = true, remap = false)
     private void oror$clubs(CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValueZ() && this.mob.role() == RoyalRole.KING && this.mob.lifePhase() >= 3) {
+        if (cir.getReturnValueZ() && this.mob.role() == RoyalRole.KING && this.mob.lifePhase() >= 1) {
             cir.setReturnValue(false);
         }
     }
