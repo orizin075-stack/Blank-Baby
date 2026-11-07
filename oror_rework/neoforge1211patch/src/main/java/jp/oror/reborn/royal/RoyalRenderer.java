@@ -49,10 +49,17 @@ public final class RoyalRenderer extends MobRenderer<RoyalMob, RoyalModel> {
         }
     }
 
+    /** (054) The villager king's forms, one for each return from death (KingForms): their skins. */
+    private static final ResourceLocation[] KING_FORMS = {
+        ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "textures/entity/royal/villager_king_1.png"),
+        ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "textures/entity/royal/villager_king_2.png"),
+        ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "textures/entity/royal/villager_king_3.png")};
+
     @Override
     protected void scale(RoyalMob mob, PoseStack pose, float partial) {
         float size = switch (mob.role()) {
-            case KING -> 1.12F;
+            // (054) the king grows with each return: 1.12, 1.24, 1.38, 1.6
+            case KING -> new float[]{1.12F, 1.24F, 1.38F, 1.6F}[Math.max(0, Math.min(3, mob.lifePhase()))];
             case GENERAL, BODYGUARD -> 1.06F;
             case IMPERIAL -> 1.04F;
             default -> 1.0F;
@@ -62,6 +69,9 @@ public final class RoyalRenderer extends MobRenderer<RoyalMob, RoyalModel> {
 
     @Override
     public ResourceLocation getTextureLocation(RoyalMob mob) {
+        if (mob.role() == RoyalRole.KING && mob.lifePhase() > 0) {
+            return KING_FORMS[Math.min(3, mob.lifePhase()) - 1];
+        }
         return SKINS.get(mob.role());
     }
 

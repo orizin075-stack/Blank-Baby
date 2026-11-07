@@ -90,11 +90,13 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
     public void setupAnim(RoyalMob mob, float walk, float walkAmount, float age, float yaw, float pitch) {
         this.root.getAllParts().forEach(ModelPart::resetPose);
         Set<String> wears = WEARS.getOrDefault(mob.role(), Set.of());
+        // (054) the king's forms: pauldrons from his first return, a crest (of flame, of light) from his second
+        int form = mob.role() == RoyalRole.KING ? mob.lifePhase() : 0;
         this.hat.visible = wears.contains("hat");
         this.crown.visible = wears.contains("crown");
-        this.crest.visible = wears.contains("crest");
+        this.crest.visible = wears.contains("crest") || form >= 2;
         this.cape.visible = wears.contains("cape");
-        this.rightPauldron.visible = this.leftPauldron.visible = wears.contains("pauldrons");
+        this.rightPauldron.visible = this.leftPauldron.visible = wears.contains("pauldrons") || form >= 1;
 
         this.head.yRot = yaw * Mth.DEG_TO_RAD;
         this.head.xRot = pitch * Mth.DEG_TO_RAD;
@@ -147,6 +149,96 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
         }
         swing(mob);
         react(mob, age);
+        kingMove(mob, age);
+    }
+
+    /**
+     * (054) The villager king's deeds in his forms (KingForms, TechniqueShow "move:king_..."), each its own motion:
+     * his return (kneeling, then rising with the arms flung wide and the head thrown back), the rally (the right arm
+     * raised high, then swept forward), the hellfire ring (the arms crossed at the chest, then flung out), the leap (a
+     * crouch, then a spring), the thunder (both arms raised to the sky, then the right brought down at the enemy), the
+     * flies (the arms spread, palms up, swaying, then thrust forward) and the clubs (both raised over the head, then
+     * brought down together). A windup, a snap at the moment it goes off, held, then eased home.
+     */
+    private void kingMove(RoyalMob mob, float age) {
+        if (mob.role() != RoyalRole.KING) {
+            return;
+        }
+        jp.oror.reborn.show.TechniqueShow.Active show = jp.oror.reborn.show.TechniqueShow.ACTIVE.get(mob.getId());
+        if (show == null || !show.mechanic().startsWith("MOVE_KING_")) {
+            return;
+        }
+        float time = mob.level().getGameTime() - show.start() + (age - (float) ((int) age));
+        float len = Math.max(1, show.length());
+        float u = time / len;
+        if (u < 0 || u > 1) {
+            return;
+        }
+        float wind = Math.max(1, show.windup()) / len;
+        // 0..1 through the windup, then the strike's snap, eased home over the last third
+        float a = u < wind ? u / wind : 1F;
+        float b = u < wind ? 0F : Math.min(1F, (u - wind) / Math.max(0.05F, (1F - wind) * 0.25F));
+        float out = u > 0.7F ? 1F - (u - 0.7F) / 0.3F : 1F;
+        a = a * a * (3F - 2F * a) * out;
+        b = b * b * (3F - 2F * b) * out;
+        switch (show.mechanic()) {
+            case "MOVE_KING_REVIVE" -> {
+                this.root.y += 6F * a * (1F - b);
+                this.head.xRot = Mth.lerp(b, this.head.xRot + 0.6F * a, -0.7F);
+                this.rightArm.zRot = Mth.lerp(b, 0.2F * a, 1.6F);
+                this.leftArm.zRot = Mth.lerp(b, -0.2F * a, -1.6F);
+                this.rightArm.xRot = Mth.lerp(b, -0.3F * a, -0.4F);
+                this.leftArm.xRot = Mth.lerp(b, -0.3F * a, -0.4F);
+                this.body.xRot = Mth.lerp(b, 0.5F * a, -0.25F);
+            }
+            case "MOVE_KING_RALLY" -> {
+                this.rightArm.xRot = Mth.lerp(b, -2.9F * a, -1.4F);
+                this.rightArm.zRot = Mth.lerp(b, 0.2F * a, -0.1F);
+                this.leftArm.zRot = -0.3F * a;
+                this.head.xRot -= 0.3F * a;
+            }
+            case "MOVE_KING_FLAME" -> {
+                this.rightArm.xRot = Mth.lerp(b, -1.2F * a, -1.3F);
+                this.leftArm.xRot = Mth.lerp(b, -1.2F * a, -1.3F);
+                this.rightArm.yRot = Mth.lerp(b, -0.9F * a, 0.8F);
+                this.leftArm.yRot = Mth.lerp(b, 0.9F * a, -0.8F);
+                this.rightArm.zRot = Mth.lerp(b, 0F, 1.2F);
+                this.leftArm.zRot = Mth.lerp(b, 0F, -1.2F);
+                this.body.xRot += 0.2F * a * (1F - b);
+            }
+            case "MOVE_KING_BLINK" -> {
+                this.root.y += 4F * a * (1F - b);
+                this.body.xRot += 0.5F * a * (1F - b);
+                this.rightArm.xRot = Mth.lerp(b, 0.4F * a, -2.6F);
+                this.leftArm.xRot = Mth.lerp(b, 0.4F * a, -2.6F);
+            }
+            case "MOVE_KING_STORM" -> {
+                this.rightArm.xRot = Mth.lerp(b, -3.0F * a, -1.6F + this.head.xRot);
+                this.leftArm.xRot = Mth.lerp(b, -3.0F * a, -0.3F);
+                this.rightArm.zRot = Mth.lerp(b, 0.25F * a, 0F);
+                this.leftArm.zRot = Mth.lerp(b, -0.25F * a, -0.6F);
+                this.head.xRot = Mth.lerp(a * (1F - b), this.head.xRot, -0.8F);
+                this.body.xRot -= 0.15F * a * (1F - b);
+            }
+            case "MOVE_KING_SWARM" -> {
+                float sway = Mth.sin(age * 0.5F) * 0.25F * a;
+                this.rightArm.zRot = Mth.lerp(b, 1.3F * a, 0.3F);
+                this.leftArm.zRot = Mth.lerp(b, -1.3F * a, -0.3F);
+                this.rightArm.xRot = Mth.lerp(b, -0.6F * a + sway, -1.55F);
+                this.leftArm.xRot = Mth.lerp(b, -0.6F * a - sway, -1.55F);
+                this.body.yRot += sway;
+                this.head.xRot -= 0.25F * a;
+            }
+            case "MOVE_KING_SLAM" -> {
+                this.rightArm.xRot = Mth.lerp(b, -3.1F * a, -0.4F);
+                this.leftArm.xRot = Mth.lerp(b, -3.1F * a, -0.4F);
+                this.body.xRot = Mth.lerp(b, -0.3F * a, 0.55F);
+                this.root.y += 3F * b;
+                this.head.xRot += 0.3F * b;
+            }
+            default -> {
+            }
+        }
     }
 
     /**

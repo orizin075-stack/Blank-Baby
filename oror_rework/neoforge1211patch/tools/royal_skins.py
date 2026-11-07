@@ -38,6 +38,11 @@ WEARS = {
     'royal_mage': {'hat'},
     'royal_archmage': {'hat', 'cape'},
     'royal_sage': {'hat'},
+    # (053) the king's forms, one for each return from death (RoyalModel shows the pauldrons from the first, the crest
+    # from the second)
+    'villager_king_1': {'crown', 'cape', 'right_pauldron', 'left_pauldron'},
+    'villager_king_2': {'crown', 'cape', 'right_pauldron', 'left_pauldron', 'crest'},
+    'villager_king_3': {'crown', 'cape', 'right_pauldron', 'left_pauldron', 'crest'},
 }
 OPTIONAL = ('hat', 'crown', 'crest', 'right_pauldron', 'left_pauldron', 'cape')
 
@@ -457,6 +462,165 @@ def mage(s, cloth, trim, lining=None, hood_=True, beard=None, circlet=None):
         cape(s, cloth, lining, border=trim)
 
 
+# (053) the king's forms: he comes back from each death changed (the user: "the villager king changes his form each time
+# he revives, and arms himself more viciously")
+def crown_of(s, metal, metal_dark, gems, spikes=False):
+    s.fill('crown', metal, faces_=('front', 'back', 'left', 'right'), noise=10, edge=0.9)
+    for f in ('front', 'back', 'left', 'right'):
+        w, h = s.size('crown', f)
+        for fx in range(w):
+            if fx % 2 == 1 and not (spikes and fx % 4 == 1):
+                s.clear('crown', f, fx, 0)
+        for k, g in enumerate(gems):
+            s.px('crown', f, (w // 2 + (k - len(gems) // 2) * 2) % w, 1, g)
+        for fx in range(w):
+            s.px('crown', f, fx, h - 1, metal_dark)
+    for f in ('top', 'bottom'):
+        x, y, w, h = faces('crown')[f]
+        s.img[y:y + h, x:x + w] = 0
+
+
+def tatter(s, part, face, rows_from_bottom=2, every=3):
+    w, h = s.size(part, face)
+    for fx in range(w):
+        for k in range(rows_from_bottom):
+            if (fx * 7 + k * 3) % every == 0:
+                s.clear(part, face, fx, h - 1 - k)
+
+
+def cracks(s, part, glow, hot, density=9, faces_=('front', 'back', 'left', 'right')):
+    """Glowing fissures: short zig-zags of a hot colour with a brighter core, as of embers under a crust."""
+    for f in faces_:
+        w, h = s.size(part, f)
+        for _ in range(max(1, w * h // density)):
+            x, y = s.rng.randrange(w), s.rng.randrange(h)
+            for step in range(s.rng.randint(2, 4)):
+                s.px(part, f, x, y, glow if step else hot)
+                x = max(0, min(w - 1, x + s.rng.choice((-1, 0, 1))))
+                y = max(0, min(h - 1, y + 1))
+
+
+def stars(s, part, cols, density=11, faces_=('front', 'back', 'left', 'right')):
+    for f in faces_:
+        w, h = s.size(part, f)
+        for _ in range(max(1, w * h // density)):
+            s.px(part, f, s.rng.randrange(w), s.rng.randrange(h), s.rng.choice(cols))
+
+
+def king_1(s):
+    """The Iron-Blooded: back from the first realm in plate, the robe gone to dark crimson under it, a black-iron crown
+    with spikes and red stones, eyes like coals, the cape torn."""
+    steel, steel_dark, crimson, crimson_dark = (112, 112, 122), (66, 66, 76), (120, 16, 30), (78, 8, 18)
+    face(s, beard=(176, 176, 172), brow=(90, 90, 92), skin=(176, 128, 98), eyes=(230, 40, 30))
+    plate(s, 'body', steel, steel_dark, trim=crimson)
+    robe(s, crimson_dark, trim=steel, hem=steel_dark, centre=steel)
+    for f in ('front', 'back'):
+        w, h = s.size('robe', f)
+        for fy in range(0, 9):
+            for fx in range(w):
+                s.px('robe', f, fx, fy, steel if fy % 3 else [c * 1.15 for c in steel])
+        for fx in (1, 6):
+            s.px('robe', f, fx, 4, (190, 30, 30))
+    for p in ('right_arm', 'left_arm'):
+        plate(s, p, steel, steel_dark, trim=crimson)
+        hands(s, p, steel_dark)
+    for p in ('right_pauldron', 'left_pauldron'):
+        plate(s, p, steel, steel_dark, trim=GOLD_DARK)
+        s.fill(p, [c * 1.2 for c in steel], faces_=('top',), noise=4)
+        for f in ('front', 'back', 'left', 'right'):
+            s.px(p, f, 2, 0, (40, 40, 44))
+    for p in ('right_leg', 'left_leg'):
+        plate(s, p, steel_dark, (44, 44, 52))
+    crown_of(s, (70, 70, 78), (40, 40, 46), [(220, 30, 30), (150, 10, 20), (220, 30, 30)], spikes=True)
+    cape(s, crimson, crimson_dark, border=steel_dark)
+    tatter(s, 'cape', 'back', 2, 3)
+    w, h = s.size('cape', 'back')
+    s.stamp('cape', 'back', w // 2 - 3, 6, ['.KKKK.', 'KKKKKK', 'KRKKRK', '.KKKK.', '..KK..'], {'K': (30, 30, 34), 'R': (220, 30, 30)})
+
+
+def king_2(s):
+    """The Hellfire King: back from the second realm in obsidian plate cracked with embers, a crest of flame over a
+    blackened crown, ash-grey skin, burning eyes, a black cape edged with fire."""
+    obsidian, obsidian_dark, ember, flame = (34, 24, 42), (18, 12, 24), (255, 120, 20), (255, 210, 60)
+    face(s, beard=(56, 52, 50), brow=(30, 28, 28), skin=(132, 110, 100), eyes=(255, 150, 20))
+    for fx in (2, 5):
+        s.px('head', 'front', fx, 4, flame)
+    plate(s, 'body', obsidian, obsidian_dark, trim=ember)
+    cracks(s, 'body', ember, flame)
+    robe(s, (30, 20, 26), trim=ember, hem=(200, 60, 10), centre=(200, 70, 10))
+    cracks(s, 'robe', ember, flame, density=14)
+    for p in ('right_arm', 'left_arm'):
+        plate(s, p, obsidian, obsidian_dark, trim=ember)
+        cracks(s, p, ember, flame, density=12)
+        hands(s, p, (40, 30, 34))
+        s.rows(p, [11], ember)
+    for p in ('right_pauldron', 'left_pauldron'):
+        plate(s, p, obsidian, obsidian_dark, trim=ember)
+        cracks(s, p, ember, flame, density=6, faces_=('front', 'back', 'left', 'right', 'top'))
+    for p in ('right_leg', 'left_leg'):
+        plate(s, p, obsidian_dark, (10, 6, 12), trim=ember)
+        cracks(s, p, ember, flame, density=16)
+    # the crest: a tongue of flame, white-yellow at its root, red at its tip
+    for f in ('front', 'back', 'left', 'right', 'top'):
+        w, h = s.size('crest', f)
+        for fy in range(h):
+            for fx in range(w):
+                t = fy / max(1, h - 1)
+                col = (255, int(90 + 140 * t), int(10 + 60 * t))
+                if f in ('left', 'right') and (fx + fy) % 4 == 0 and fy < 2:
+                    s.clear('crest', f, fx, fy)
+                else:
+                    s.px('crest', f, fx, fy, col)
+    crown_of(s, (90, 60, 20), (50, 30, 10), [(255, 120, 20), (255, 210, 60), (255, 120, 20)], spikes=True)
+    cape(s, (22, 14, 20), (90, 20, 10), border=ember)
+    w, h = s.size('cape', 'back')
+    for fx in range(w):
+        s.px('cape', 'back', fx, h - 2, flame if fx % 2 else ember)
+    s.stamp('cape', 'back', w // 2 - 3, 5, ['..F...', '.FFF..', 'FFYFF.', 'FYYYF.', '.FFF..'], {'F': ember, 'Y': flame})
+
+
+def king_3(s):
+    """The Conqueror of the Three Realms: back from the third realm as something else, pale, white-bearded, eyes of
+    cold light, a robe of night full of stars and gold runes, a crown of light with a radiant crest, gold pauldrons."""
+    void, void_dark, cyan, violet = (26, 16, 48), (12, 6, 26), (90, 240, 255), (170, 90, 255)
+    face(s, beard=(242, 242, 252), brow=(220, 220, 236), skin=(206, 200, 216), eyes=cyan)
+    for fx in (2, 5):
+        s.px('head', 'front', fx, 4, (230, 255, 255))
+    s.fill('body', void, noise=4)
+    stars(s, 'body', [(255, 255, 255), cyan, violet])
+    robe(s, void, trim=GOLD, hem=cyan, centre=GOLD)
+    stars(s, 'robe', [(255, 255, 255), cyan, violet], density=9)
+    w, h = s.size('robe', 'front')
+    for fy in range(2, h - 2, 3):
+        s.px('robe', 'front', 1, fy, cyan)
+        s.px('robe', 'front', w - 2, fy, cyan)
+    for p in ('right_arm', 'left_arm'):
+        s.fill(p, void, noise=4)
+        stars(s, p, [(255, 255, 255), cyan], density=8)
+        s.rows(p, [0], GOLD)
+        hands(s, p, (206, 200, 216))
+        s.rows(p, [8], cyan)
+    for p in ('right_pauldron', 'left_pauldron'):
+        plate(s, p, GOLD, GOLD_DARK, trim=cyan)
+        for f in ('front', 'back', 'left', 'right'):
+            s.px(p, f, 2, 1, cyan)
+    legs(s, void_dark, (40, 30, 70))
+    for p in ('right_leg', 'left_leg'):
+        stars(s, p, [(255, 255, 255), violet], density=14)
+    # the crest: a blade of light standing over the crown
+    for f in ('front', 'back', 'left', 'right', 'top'):
+        w, h = s.size('crest', f)
+        for fy in range(h):
+            for fx in range(w):
+                t = fy / max(1, h - 1)
+                s.px('crest', f, fx, fy, (int(255 - 60 * t), int(255 - 20 * t), 255))
+    crown_of(s, (255, 214, 90), GOLD, [cyan, violet, cyan, violet], spikes=True)
+    cape(s, void, (60, 20, 110), border=GOLD)
+    stars(s, 'cape', [(255, 255, 255), cyan, violet], density=7, faces_=('back',))
+    w, h = s.size('cape', 'back')
+    s.stamp('cape', 'back', w // 2 - 3, 6, ['.GGG..', 'G.C.G.', 'GCGCG.', 'G.C.G.', '.GGG..'], {'G': GOLD, 'C': cyan})
+
+
 ROLES = {
     'villager_king': king,
     'villager_general': general,
@@ -466,6 +630,9 @@ ROLES = {
     'royal_mage': lambda s: mage(s, (44, 74, 168), (150, 200, 240)),
     'royal_archmage': lambda s: mage(s, (90, 30, 130), GOLD, lining=(50, 16, 74)),
     'royal_sage': lambda s: mage(s, (226, 222, 204), GOLD, hood_=False, beard=(240, 240, 236), circlet=GOLD),
+    'villager_king_1': king_1,
+    'villager_king_2': king_2,
+    'villager_king_3': king_3,
 }
 
 

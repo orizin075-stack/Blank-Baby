@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.UUID;
+import com.mojang.authlib.GameProfile;
 import jp.oror.reborn.combat.Guns;
 import jp.oror.reborn.mixin.MobGoalSelectorAccess;
 import net.minecraft.commands.CommandSourceStack;
@@ -17,7 +19,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -30,6 +35,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -45,7 +52,9 @@ import org.slf4j.LoggerFactory;
  * that came with a gun, and the hand-to-hand monsters handed the gun found most, in two lanes against an iron golem that
  * does not move: in the open twenty-four blocks off, and with a wall between them fourteen off (a way round on either
  * side). Fifteen seconds each: hits, how near it came, how far it walked, how long it stood while out of sight or reach,
- * the goals running half-way, and whether it still holds the gun at the end. GUN-CENSUS {...} and GUN-MOBS {...}.
+ * the goals running half-way, and whether it still holds the gun at the end. Then the duels: does a mob parry with a
+ * gun in its hand (the user: "think of whether they parry holding a gun too")? GUN-CENSUS {...}, GUN-MOBS {...} and
+ * GUN-PARRY {...}.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class GunMobTest {
@@ -66,6 +75,7 @@ public final class GunMobTest {
         int hits, still, pathTicks;
         String held = "", heldEnd = "";
         List<String> goals = new ArrayList<>();
+        List<String> allGoals = new ArrayList<>();
     }
 
     private static final class Run {
@@ -76,6 +86,29 @@ public final class GunMobTest {
         final List<Mob> census = new ArrayList<>();
         final List<Lane> lanes = new ArrayList<>();
         final List<int[]> chunks = new ArrayList<>();
+        final List<Duel> duels = new ArrayList<>();
+        final Map<String, ItemStack> gunOf = new LinkedHashMap<>();
+        ItemStack handed;
+        String lanesResult;
+    }
+
+    /** One mob held in its place with a gun in hand, struck with an iron sword from two blocks in front, every half second. */
+    static final class Duel {
+        String name;
+        Mob mob;
+        Tester tester;
+        Vec3 spot;
+        int strikes, landed, gunStrikes, gunLanded;
+    }
+
+    static final class Tester extends FakePlayer {
+        Tester(ServerLevel level, int n) {
+            super(level, new GameProfile(UUID.fromString("0f0e0d0c-0b0a-4908-8706-0504030202" + String.format("%02x", n & 0xff)), "[OROR Gun " + n + "]"));
+        }
+
+        void ready() {
+            this.attackStrengthTicker = 200;
+        }
     }
 
     private static Run run;
@@ -173,7 +206,7 @@ public final class GunMobTest {
     private static void census(Run r) {
         Map<String, Map<String, Integer>> held = new TreeMap<>();
         Map<String, Integer> guns = new TreeMap<>();
-        Map<String, ItemStack> gunOf = new LinkedHashMap<>();
+        Map<String, ItemStack> gunOf = r.gunOf;
         Map<String, Integer> gunCount = new TreeMap<>();
         for (Mob m : r.census) {
             String type = BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()).toString();
@@ -210,6 +243,7 @@ public final class GunMobTest {
         for (String type : gunOf.keySet()) {
             plan.add(new String[]{type, ""});
         }
+        r.handed = handed;
         if (handed != null) {
             for (String h : HANDED) {
                 plan.add(new String[]{"minecraft:" + h, "handed"});
@@ -243,9 +277,9 @@ public final class GunMobTest {
                 mob.moveTo(x + 0.5, r.at.getY(), r.at.getZ() + 0.5, 0F, 0F);
                 mob.finalizeSpawn(r.level, r.level.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.NATURAL, null);
                 if (!p[1].isEmpty()) {
-                    mob.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, handed.copy());
+                    mob.setItemSlot(EquipmentSlot.MAINHAND, handed.copy());
                 } else if (!Guns.held(mob.getMainHandItem()) && gunOf.containsKey(p[0])) {
-                    mob.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, gunOf.get(p[0]).copy());
+                    mob.setItemSlot(EquipmentSlot.MAINHAND, gunOf.get(p[0]).copy());
                 }
                 mob.setPersistenceRequired();
                 r.level.addFreshEntity(mob);
@@ -306,6 +340,10 @@ public final class GunMobTest {
             }
             return;
         }
+        if (r.phase == 2) {
+            duelTick(r, age);
+            return;
+        }
         for (Lane l : r.lanes) {
             Mob m = l.mob;
             if (!m.isAlive()) {
@@ -329,18 +367,21 @@ public final class GunMobTest {
             l.lz = m.getZ();
             if (age == TICKS / 2) {
                 TreeSet<String> running = new TreeSet<>();
+                TreeSet<String> all = new TreeSet<>();
                 for (WrappedGoal w : ((MobGoalSelectorAccess) m).oror$getGoals().getAvailableGoals()) {
+                    String n = w.getGoal().getClass().getName().replaceAll("^.*\\.", "");
+                    all.add(w.getPriority() + ":" + n);
                     if (w.isRunning()) {
-                        running.add(w.getGoal().getClass().getName().replaceAll("^.*\\.", ""));
+                        running.add(n);
                     }
                 }
                 l.goals.addAll(running);
+                l.allGoals.addAll(all);
             }
         }
         if (age < TICKS) {
             return;
         }
-        run = null;
         StringBuilder b = new StringBuilder("{");
         int ok = 0;
         for (Lane l : r.lanes) {
@@ -349,12 +390,116 @@ public final class GunMobTest {
             boolean fine = l.hits >= 1;
             ok += fine ? 1 : 0;
             b.append(b.length() > 1 ? "," : "").append('"').append(l.name).append("\":").append(String.format(Locale.ROOT,
-                "{\"held\":\"%s\",\"heldEnd\":\"%s\",\"hits\":%d,\"minDist\":%.1f,\"moved\":%.1f,\"stillTicks\":%d,\"pathTicks\":%d,\"alive\":%b,\"ok\":%b,\"goals\":%s}",
+                "{\"held\":\"%s\",\"heldEnd\":\"%s\",\"hits\":%d,\"minDist\":%.1f,\"moved\":%.1f,\"stillTicks\":%d,\"pathTicks\":%d,\"alive\":%b,\"ok\":%b,\"goals\":%s,\"allGoals\":%s}",
                 l.held, l.heldEnd, l.hits, l.minDist, l.moved, l.still, l.pathTicks, l.mob.isAlive(), fine,
-                l.goals.stream().map(s -> "\"" + s + "\"").toList()));
+                l.goals.stream().map(s -> "\"" + s + "\"").toList(), l.allGoals.stream().map(s -> "\"" + s + "\"").toList()));
         }
         b.append(",\"lanes\":").append(r.lanes.size()).append(",\"ok\":").append(ok).append('}');
         LOG.info("GUN-MOBS {}", b);
+        for (Entity x : r.level.getEntities((Entity) null, new AABB(r.at).inflate(400, 30, 60), x -> !(x instanceof Player))) {
+            x.discard();
+        }
+        duels(r);
+    }
+
+    /**
+     * The duels: does a mob parry with a gun in its hand? Each kind that came with a gun, the hand-to-hand monsters handed
+     * the gun found most, and a kingdom guard with its pistol (it changes to its sword within four blocks), each held in
+     * its place and struck from the front with an iron sword every half second, twenty-four times; a blow that took no
+     * health was turned aside, whoever's guard it was (OROR's, Epic Fight's add-ons', the royals' own).
+     */
+    private static void duels(Run r) {
+        List<String[]> who = new ArrayList<>();
+        for (String type : r.gunOf.keySet()) {
+            who.add(new String[]{type, ""});
+        }
+        if (r.handed != null) {
+            for (String h : HANDED) {
+                who.add(new String[]{"minecraft:" + h, "handed"});
+            }
+        }
+        who.add(new String[]{"oror_supreme_bosses:kingdom_guard", "pistol"});
+        int i = 0;
+        for (String[] w : who) {
+            EntityType<?> t = BuiltInRegistries.ENTITY_TYPE.get(ResourceLocation.parse(w[0]));
+            Entity ent = t.create(r.level);
+            if (!(ent instanceof Mob mob)) {
+                continue;
+            }
+            Vec3 spot = new Vec3(r.at.getX() + i * 8 + 0.5, r.at.getY(), r.at.getZ() + 0.5);
+            mob.moveTo(spot.x, spot.y, spot.z, 0F, 0F);
+            mob.finalizeSpawn(r.level, r.level.getCurrentDifficultyAt(mob.blockPosition()), MobSpawnType.NATURAL, null);
+            if (w[1].equals("handed")) {
+                mob.setItemSlot(EquipmentSlot.MAINHAND, r.handed.copy());
+            } else if (w[1].equals("pistol")) {
+                net.minecraft.world.item.Item glock = BuiltInRegistries.ITEM.get(ResourceLocation.parse("superbwarfare:glock_17"));
+                if (glock != net.minecraft.world.item.Items.AIR) {
+                    mob.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(glock));
+                }
+            } else if (!Guns.held(mob.getMainHandItem()) && r.gunOf.containsKey(w[0])) {
+                mob.setItemSlot(EquipmentSlot.MAINHAND, r.gunOf.get(w[0]).copy());
+            }
+            mob.setPersistenceRequired();
+            mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100000, 10, false, false));
+            r.level.addFreshEntity(mob);
+            Duel d = new Duel();
+            d.name = w[0].replace("minecraft:", "").replace("oror_supreme_bosses:", "") + (w[1].isEmpty() ? "" : "+" + (w[1].equals("handed") ? "gun" : w[1]));
+            d.mob = mob;
+            d.spot = spot;
+            d.tester = new Tester(r.level, i);
+            d.tester.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
+            r.duels.add(d);
+            i++;
+        }
+        r.phase = 2;
+        r.started = r.level.getGameTime();
+        LOG.info("GUN-PARRY-START {\"duels\":{}}", r.duels.size());
+    }
+
+    private static void duelTick(Run r, long age) {
+        for (int i = 0; i < r.duels.size(); i++) {
+            Duel d = r.duels.get(i);
+            Mob m = d.mob;
+            if (!m.isAlive()) {
+                continue;
+            }
+            Vec3 front = d.spot.add(0, 0, 2);
+            m.moveTo(d.spot.x, d.spot.y, d.spot.z, 0F, 0F);
+            m.setYHeadRot(0F);
+            m.setDeltaMovement(Vec3.ZERO);
+            d.tester.moveTo(front.x, front.y, front.z, 180F, 0F);
+            m.setTarget(d.tester);
+            if (age > 20 && age % 10 == (i * 2L) % 10 && d.strikes < 24) {
+                m.setHealth(m.getMaxHealth());
+                boolean gun = Guns.held(m.getMainHandItem());
+                float before = m.getHealth();
+                d.tester.ready();
+                d.tester.attack(m);
+                boolean landed = m.getHealth() < before;
+                d.strikes++;
+                d.landed += landed ? 1 : 0;
+                if (gun) {
+                    d.gunStrikes++;
+                    d.gunLanded += landed ? 1 : 0;
+                }
+                m.setHealth(m.getMaxHealth());
+            }
+        }
+        if (age < 280) {
+            return;
+        }
+        run = null;
+        StringBuilder b = new StringBuilder("{");
+        int parriedWithGun = 0;
+        for (Duel d : r.duels) {
+            parriedWithGun += d.gunStrikes - d.gunLanded;
+            b.append(b.length() > 1 ? "," : "").append('"').append(d.name).append("\":").append(String.format(Locale.ROOT,
+                "{\"held\":\"%s\",\"strikes\":%d,\"landed\":%d,\"strikesWithGun\":%d,\"turnedAsideWithGun\":%d,\"guard\":\"%s\",\"oror\":\"%s\"}",
+                id(d.mob.getMainHandItem()), d.strikes, d.landed, d.gunStrikes, d.gunStrikes - d.gunLanded, jp.oror.reborn.combat.MobGuard.describe(d.mob),
+                jp.oror.reborn.combat.MobGuard.tally(d.mob)));
+        }
+        b.append(",\"turnedAsideWithGun\":").append(parriedWithGun).append(",\"pass\":").append(parriedWithGun == 0).append('}');
+        LOG.info("GUN-PARRY {}", b);
         for (Entity x : r.level.getEntities((Entity) null, new AABB(r.at).inflate(400, 30, 60), x -> !(x instanceof Player))) {
             x.discard();
         }
