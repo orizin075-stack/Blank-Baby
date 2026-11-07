@@ -1,245 +1,274 @@
-170 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-271 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-331 press selectWorld.create
-332 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-432 screenshot popup_ConfirmScreen
-432 press gui.yes
-433 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-461 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-484 screen none in LOADING
-485 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-585 screenshot popup_
-586 screen none in PLAY
-615 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
-626 stage at 3 153 2
-785 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef]
-845 screenshot 10_royals
-856 swing row 0: 8
-858 screenshot 11_royals_swing
-945 screenshot 12_villagers
-955 swing row 10: 6
-958 screenshot 13_villagers_swing
-965 swing row 10: 6
-967 screenshot 13b_villagers_swing_early
-1045 screenshot 14_king_close
-1115 screenshot 15_general_close
-1185 screenshot 16_imperial_close
-1255 screenshot 17_royals_back
-1325 screenshot 18_trader_close
-1327 arms on show
-1445 screenshot 19_arms
-1447 creatures on show
-1565 screenshot 19b_creatures
-1576 gear on show
-1685 screenshot 32_gear
-1725 screenshot 33_gear_worn
-1727 gear at work
-1737 screenshot 34_gear_at_work
-1787 screenshot 35_gear_recharging
-1789 gear worn: 5 of 5
-1801 screenshot 36_gear_worn_front
-1811 screenshot 37_gear_worn_back
-1819 screenshot 38_gear_worn_hand
-1821 gear taken off: 5 of 5
-1826 duel: valeria
-1831 engage: valeria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-1842 engage: valeria holds valeria_weapon dist 2.3 move spin_slash parries 0/0 blocks 0/0 cast 0
-1851 engage: valeria holds valeria_weapon dist 0.5 move spin_slash parries 0/0 blocks 0/0 cast 0
-1861 engage: valeria holds valeria_weapon dist 0.8 move spin_slash parries 0/0 blocks 0/0 cast 0
-1865 screenshot 19c_valeria_00
-1871 screenshot 19c_valeria_01
-1871 engage: valeria holds valeria_weapon dist 1.6 move  parries 0/0 blocks 0/0 cast 0
-1877 screenshot 19c_valeria_02
-1881 engage: valeria holds valeria_weapon dist 2.5 move  parries 0/0 blocks 0/0 cast 0
-1883 screenshot 19c_valeria_03
-1889 screenshot 19c_valeria_04
-1891 engage: valeria holds valeria_weapon dist 3.8 move  parries 0/0 blocks 0/0 cast 1
-1895 screenshot 19c_valeria_05
-1901 screenshot 19c_valeria_06
-1901 engage: valeria holds valeria_weapon dist 3.9 move  parries 0/0 blocks 0/0 cast 2
-1907 screenshot 19c_valeria_07
-1911 engage: valeria holds valeria_weapon dist 2.2 move uppercut parries 0/0 blocks 0/0 cast 3
-1913 screenshot 19c_valeria_08
-1919 screenshot 19c_valeria_09
-1921 engage: valeria holds valeria_weapon dist 2.8 move uppercut parries 0/0 blocks 0/0 cast 4
-1925 screenshot 19c_valeria_10
-1931 screenshot 19c_valeria_11
-1931 engage: valeria holds valeria_weapon dist 2.5 move  parries 0/0 blocks 0/0 cast 5
-1937 screenshot 19c_valeria_12
-1941 engage: valeria holds valeria_weapon dist 1.8 move  parries 0/0 blocks 0/0 cast 6
-1943 screenshot 19c_valeria_13
-1949 screenshot 19c_valeria_14
-1953 engage: valeria holds valeria_weapon dist 2.8 move  parries 0/0 blocks 0/0 cast 7
-1955 screenshot 19c_valeria_15
-1961 screenshot 19c_valeria_16
-1961 engage: valeria holds valeria_weapon dist 2.1 move  parries 0/0 blocks 0/0 cast 8
-1967 screenshot 19c_valeria_17
-1971 engage: valeria holds valeria_weapon dist 1.8 move spin_slash parries 0/0 blocks 0/0 cast 9
-1973 screenshot 19c_valeria_18
-1979 screenshot 19c_valeria_19
-1981 engage: valeria holds valeria_weapon dist 0.7 move spin_slash parries 0/0 blocks 0/0 cast 10
-1985 screenshot 19c_valeria_20
-1991 screenshot 19c_valeria_21
-1991 engage: valeria holds valeria_weapon dist 0.1 move spin_slash parries 0/0 blocks 0/0 cast 11
-1997 screenshot 19c_valeria_22
-2001 engage: valeria holds valeria_weapon dist 5.5 move spin_slash parries 0/0 blocks 0/0 cast 12
-2003 screenshot 19c_valeria_23
-2011 engage: valeria holds valeria_weapon dist 3.1 move  parries 0/0 blocks 0/0 cast 13
-2025 duel: kokuhaku
-2031 engage: kokuhaku holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2041 engage: kokuhaku holds kokuhaku_weapon dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2051 engage: kokuhaku holds kokuhaku_weapon dist 3.3 move  parries 0/0 blocks 0/0 cast 0
-2061 engage: kokuhaku holds kokuhaku_weapon dist 3.9 move  parries 0/0 blocks 0/0 cast 0
-2065 screenshot 19c_kokuhaku_00
-2071 screenshot 19c_kokuhaku_01
-2071 engage: kokuhaku holds kokuhaku_weapon dist 1.8 move  parries 0/0 blocks 0/0 cast 0
-2077 screenshot 19c_kokuhaku_02
-2081 engage: kokuhaku holds kokuhaku_weapon dist 1.6 move  parries 0/0 blocks 0/0 cast 0
-2083 screenshot 19c_kokuhaku_03
-2089 screenshot 19c_kokuhaku_04
-2091 engage: kokuhaku holds kokuhaku_weapon dist 2.7 move  parries 0/0 blocks 0/0 cast 0
-2095 screenshot 19c_kokuhaku_05
-2101 screenshot 19c_kokuhaku_06
-2101 engage: kokuhaku holds kokuhaku_weapon dist 1.8 move  parries 0/0 blocks 0/0 cast 0
-2107 screenshot 19c_kokuhaku_07
-2111 engage: kokuhaku holds kokuhaku_weapon dist 6.9 move  parries 0/0 blocks 0/0 cast 0
-2113 screenshot 19c_kokuhaku_08
-2119 screenshot 19c_kokuhaku_09
-2121 engage: kokuhaku holds kokuhaku_weapon dist 8.0 move  parries 0/0 blocks 0/0 cast 0
-2125 screenshot 19c_kokuhaku_10
-2131 screenshot 19c_kokuhaku_11
-2131 engage: kokuhaku holds kokuhaku_weapon dist 0.8 move  parries 0/0 blocks 0/0 cast 0
-2137 screenshot 19c_kokuhaku_12
-2141 engage: kokuhaku holds kokuhaku_weapon dist 4.2 move  parries 0/0 blocks 0/0 cast 0
-2143 screenshot 19c_kokuhaku_13
-2149 screenshot 19c_kokuhaku_14
-2151 engage: kokuhaku holds kokuhaku_weapon dist 2.0 move  parries 0/0 blocks 0/0 cast 0
-2155 screenshot 19c_kokuhaku_15
-2161 screenshot 19c_kokuhaku_16
-2161 engage: kokuhaku holds kokuhaku_weapon dist 2.7 move  parries 0/0 blocks 0/0 cast 0
-2167 screenshot 19c_kokuhaku_17
-2171 engage: kokuhaku holds kokuhaku_weapon dist 4.8 move  parries 0/0 blocks 0/0 cast 0
-2173 screenshot 19c_kokuhaku_18
-2179 screenshot 19c_kokuhaku_19
-2181 engage: kokuhaku holds kokuhaku_weapon dist 3.1 move  parries 0/0 blocks 0/0 cast 0
-2185 screenshot 19c_kokuhaku_20
-2191 screenshot 19c_kokuhaku_21
-2191 engage: kokuhaku holds kokuhaku_weapon dist 1.4 move  parries 0/0 blocks 0/0 cast 0
-2197 screenshot 19c_kokuhaku_22
-2201 engage: kokuhaku holds kokuhaku_weapon dist 6.2 move  parries 0/0 blocks 0/0 cast 0
-2203 screenshot 19c_kokuhaku_23
-2211 engage: kokuhaku holds kokuhaku_weapon dist 4.6 move  parries 0/0 blocks 0/0 cast 0
-2225 duel: elseria
-2231 engage: elseria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2241 engage: elseria holds elseria_weapon dist 4.0 move nova parries 0/0 blocks 0/0 cast 0
-2251 engage: elseria holds elseria_weapon dist 3.6 move nova parries 0/0 blocks 0/0 cast 0
-2261 engage: elseria holds elseria_weapon dist 3.7 move nova parries 0/0 blocks 0/0 cast 0
-2265 screenshot 19c_elseria_00
-2271 screenshot 19c_elseria_01
-2271 engage: elseria holds elseria_weapon dist 4.5 move  parries 0/0 blocks 0/0 cast 0
-2277 screenshot 19c_elseria_02
-2281 engage: elseria holds elseria_weapon dist 3.9 move  parries 0/0 blocks 0/0 cast 0
-2283 screenshot 19c_elseria_03
-2289 screenshot 19c_elseria_04
-2291 engage: elseria holds elseria_weapon dist 4.5 move  parries 0/0 blocks 0/0 cast 2
-2295 screenshot 19c_elseria_05
-2301 screenshot 19c_elseria_06
-2301 engage: elseria holds elseria_weapon dist 4.7 move  parries 0/0 blocks 0/0 cast 3
-2307 screenshot 19c_elseria_07
-2311 engage: elseria holds elseria_weapon dist 9.6 move homing_orbs parries 0/0 blocks 0/0 cast 4
-2313 screenshot 19c_elseria_08
-2319 screenshot 19c_elseria_09
-2321 engage: elseria holds elseria_weapon dist 3.0 move homing_orbs parries 0/0 blocks 0/0 cast 6
-2325 screenshot 19c_elseria_10
-2331 screenshot 19c_elseria_11
-2331 engage: elseria holds elseria_weapon dist 3.5 move homing_orbs parries 0/0 blocks 0/0 cast 7
-2337 screenshot 19c_elseria_12
-2341 engage: elseria holds elseria_weapon dist 4.7 move homing_orbs parries 0/0 blocks 0/0 cast 9
-2343 screenshot 19c_elseria_13
-2349 screenshot 19c_elseria_14
-2351 engage: elseria holds elseria_weapon dist 3.6 move homing_orbs parries 0/0 blocks 0/0 cast 10
-2355 screenshot 19c_elseria_15
-2361 screenshot 19c_elseria_16
-2361 engage: elseria holds elseria_weapon dist 4.0 move homing_orbs parries 0/0 blocks 0/0 cast 12
-2367 screenshot 19c_elseria_17
-2371 engage: elseria holds elseria_weapon dist 3.3 move homing_orbs parries 0/0 blocks 0/0 cast 13
-2373 screenshot 19c_elseria_18
-2379 screenshot 19c_elseria_19
-2381 engage: elseria holds elseria_weapon dist 8.5 move  parries 0/0 blocks 0/0 cast 14
-2385 screenshot 19c_elseria_20
-2391 screenshot 19c_elseria_21
-2391 engage: elseria holds elseria_weapon dist 8.5 move  parries 0/0 blocks 0/0 cast 16
-2397 screenshot 19c_elseria_22
-2401 engage: elseria holds elseria_weapon dist 8.6 move  parries 0/0 blocks 0/0 cast 17
-2403 screenshot 19c_elseria_23
-2411 engage: elseria holds elseria_weapon dist 7.1 move  parries 0/0 blocks 0/0 cast 19
-2425 duel: kingdom_guard
-2431 engage: kingdom_guard holds diamond_sword dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2441 engage: kingdom_guard holds diamond_sword dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2451 engage: kingdom_guard holds diamond_sword dist 2.8 move  parries 0/0 blocks 0/0 cast 0
-2461 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2465 screenshot 19c_kingdom_guard_00
-2471 screenshot 19c_kingdom_guard_01
-2471 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2477 screenshot 19c_kingdom_guard_02
-2481 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2483 screenshot 19c_kingdom_guard_03
-2489 screenshot 19c_kingdom_guard_04
-2491 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2495 screenshot 19c_kingdom_guard_05
-2501 screenshot 19c_kingdom_guard_06
-2501 engage: kingdom_guard holds diamond_sword dist 2.7 move  parries 0/0 blocks 0/0 cast 0
-2507 screenshot 19c_kingdom_guard_07
-2511 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2513 screenshot 19c_kingdom_guard_08
-2519 screenshot 19c_kingdom_guard_09
-2521 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2525 screenshot 19c_kingdom_guard_10
-2531 screenshot 19c_kingdom_guard_11
-2531 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2537 screenshot 19c_kingdom_guard_12
-2541 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2543 screenshot 19c_kingdom_guard_13
-2549 screenshot 19c_kingdom_guard_14
-2551 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2555 screenshot 19c_kingdom_guard_15
-2561 screenshot 19c_kingdom_guard_16
-2561 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2567 screenshot 19c_kingdom_guard_17
-2571 engage: kingdom_guard holds diamond_sword dist 2.7 move  parries 0/0 blocks 0/0 cast 0
-2573 screenshot 19c_kingdom_guard_18
-2579 screenshot 19c_kingdom_guard_19
-2581 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2585 screenshot 19c_kingdom_guard_20
-2591 screenshot 19c_kingdom_guard_21
-2591 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2597 screenshot 19c_kingdom_guard_22
-2601 engage: kingdom_guard holds diamond_sword dist 1.6 move  parries 0/0 blocks 0/0 cast 0
-2603 screenshot 19c_kingdom_guard_23
-2611 engage: kingdom_guard holds diamond_sword dist 0.8 move  parries 0/0 blocks 0/0 cast 0
-2635 throne -480, 149, 784
-4435 screenshot 20_throne_room
-4475 king at -479.5 149.0 784.3 (throne -480, 149, 784, 0.20 blocks)
-6275 screenshot 21_throne_room_later
-6295 king at -479.5 149.0 784.5 (throne -480, 149, 784, 0.00 blocks)
-6295 over the capital at -480 816
-8075 screenshot 22_capital_aerial
-8147 over the capital at -745 577
-9675 screenshot 23_helipad
-9685 over the capital at -730 439
-11275 screenshot 24_airbase
-11285 at the capital -745 87 566
-12875 screenshot 25_helipad_supply
-12930 at the capital -885 82 812
-14475 screenshot 26_hangar_supply
-14486 at the capital -410 192 926
-16075 screenshot 27_palace_roofs
-16152 over the capital at -119 538
-17675 screenshot 28_airbase_east
-17685 at the capital -480 84 612
-19275 screenshot 29_road_fountain
-19285 at the capital -97 99 603
-20875 screenshot 30_ranch_barn
-20916 at the capital 25 117 871
-22475 screenshot 31_fortress_east
-22485 finished: complete
+239 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+340 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+400 press selectWorld.create
+401 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+501 screenshot popup_ConfirmScreen
+501 press gui.yes
+502 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+533 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+690 screen none in LOADING
+691 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+791 screenshot popup_
+792 screen none in PLAY
+821 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
+832 stage at 336 94 304
+991 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:bow]
+1051 screenshot 10_royals
+1061 swing row 0: 8
+1064 screenshot 11_royals_swing
+1151 screenshot 12_villagers
+1162 swing row 10: 6
+1164 screenshot 13_villagers_swing
+1171 swing row 10: 6
+1173 screenshot 13b_villagers_swing_early
+1251 screenshot 14_king_close
+1321 screenshot 15_general_close
+1391 screenshot 16_imperial_close
+1461 screenshot 17_royals_back
+1531 screenshot 18_trader_close
+1537 arms on show
+1651 screenshot 19_arms
+1654 creatures on show
+1771 screenshot 19b_creatures
+1782 gear on show
+1891 screenshot 32_gear
+1931 screenshot 33_gear_worn
+1934 gear at work
+1943 screenshot 34_gear_at_work
+1993 screenshot 35_gear_recharging
+1996 gear worn: 5 of 5
+2007 screenshot 36_gear_worn_front
+2017 screenshot 37_gear_worn_back
+2025 screenshot 38_gear_worn_hand
+2027 gear taken off: 5 of 5
+2031 duel: valeria
+2038 engage: valeria holds valeria_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2047 engage: valeria holds valeria_weapon dist 1.8 move ground_spikes parries 0/0 blocks 0/0 cast 0
+2057 engage: valeria holds valeria_weapon dist 3.3 move ground_spikes parries 0/0 blocks 0/0 cast 0
+2067 engage: valeria holds valeria_weapon dist 3.0 move ground_spikes parries 0/0 blocks 0/0 cast 0
+2071 screenshot 19c_valeria_00
+2077 screenshot 19c_valeria_01
+2077 engage: valeria holds valeria_weapon dist 8.0 move  parries 0/0 blocks 0/0 cast 0
+2083 screenshot 19c_valeria_02
+2087 engage: valeria holds valeria_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2089 screenshot 19c_valeria_03
+2095 screenshot 19c_valeria_04
+2097 engage: valeria holds valeria_weapon dist 1.2 move  parries 0/0 blocks 0/0 cast 1
+2101 screenshot 19c_valeria_05
+2107 engage: valeria holds valeria_weapon dist 1.0 move  parries 0/0 blocks 0/0 cast 2
+2107 screenshot 19c_valeria_06
+2113 screenshot 19c_valeria_07
+2117 engage: valeria holds valeria_weapon dist 2.2 move spin_slash parries 0/0 blocks 0/0 cast 3
+2119 screenshot 19c_valeria_08
+2125 screenshot 19c_valeria_09
+2127 engage: valeria holds valeria_weapon dist 3.1 move spin_slash parries 0/0 blocks 0/0 cast 4
+2131 screenshot 19c_valeria_10
+2137 screenshot 19c_valeria_11
+2137 engage: valeria holds valeria_weapon dist 3.1 move spin_slash parries 0/0 blocks 0/0 cast 5
+2143 screenshot 19c_valeria_12
+2147 engage: valeria holds valeria_weapon dist 3.6 move spin_slash parries 0/0 blocks 0/0 cast 6
+2149 screenshot 19c_valeria_13
+2155 screenshot 19c_valeria_14
+2157 engage: valeria holds valeria_weapon dist 3.7 move  parries 0/0 blocks 0/0 cast 7
+2161 screenshot 19c_valeria_15
+2167 screenshot 19c_valeria_16
+2167 engage: valeria holds valeria_weapon dist 1.7 move  parries 0/0 blocks 0/0 cast 8
+2173 screenshot 19c_valeria_17
+2178 engage: valeria holds valeria_weapon dist 1.0 move  parries 0/0 blocks 0/0 cast 9
+2179 screenshot 19c_valeria_18
+2185 screenshot 19c_valeria_19
+2187 engage: valeria holds valeria_weapon dist 2.7 move spin_slash parries 0/0 blocks 0/0 cast 10
+2191 screenshot 19c_valeria_20
+2197 screenshot 19c_valeria_21
+2197 engage: valeria holds valeria_weapon dist 3.1 move spin_slash parries 0/0 blocks 0/0 cast 11
+2203 screenshot 19c_valeria_22
+2207 engage: valeria holds valeria_weapon dist 5.5 move spin_slash parries 0/0 blocks 0/0 cast 12
+2209 screenshot 19c_valeria_23
+2217 engage: valeria holds valeria_weapon dist 3.5 move spin_slash parries 0/0 blocks 0/0 cast 13
+2231 duel: kokuhaku
+2237 engage: kokuhaku holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2247 engage: kokuhaku holds kokuhaku_weapon dist 3.9 move  parries 0/0 blocks 0/0 cast 0
+2257 engage: kokuhaku holds kokuhaku_weapon dist 6.1 move  parries 0/0 blocks 0/0 cast 0
+2267 engage: kokuhaku holds kokuhaku_weapon dist 2.8 move  parries 0/0 blocks 0/0 cast 0
+2271 screenshot 19c_kokuhaku_00
+2277 engage: kokuhaku holds kokuhaku_weapon dist 3.0 move  parries 0/0 blocks 0/0 cast 0
+2277 screenshot 19c_kokuhaku_01
+2283 screenshot 19c_kokuhaku_02
+2287 engage: kokuhaku holds kokuhaku_weapon dist 3.2 move  parries 0/0 blocks 0/0 cast 0
+2289 screenshot 19c_kokuhaku_03
+2295 screenshot 19c_kokuhaku_04
+2297 engage: kokuhaku holds kokuhaku_weapon dist 1.5 move  parries 0/0 blocks 0/0 cast 0
+2301 screenshot 19c_kokuhaku_05
+2307 screenshot 19c_kokuhaku_06
+2307 engage: kokuhaku holds kokuhaku_weapon dist 1.5 move  parries 0/0 blocks 0/0 cast 0
+2313 screenshot 19c_kokuhaku_07
+2318 engage: kokuhaku holds kokuhaku_weapon dist 6.3 move  parries 0/0 blocks 0/0 cast 0
+2319 screenshot 19c_kokuhaku_08
+2325 screenshot 19c_kokuhaku_09
+2327 engage: kokuhaku holds kokuhaku_weapon dist 4.8 move  parries 0/0 blocks 0/0 cast 0
+2331 screenshot 19c_kokuhaku_10
+2337 screenshot 19c_kokuhaku_11
+2337 engage: kokuhaku holds kokuhaku_weapon dist 2.0 move  parries 0/0 blocks 0/0 cast 0
+2343 screenshot 19c_kokuhaku_12
+2347 engage: kokuhaku holds kokuhaku_weapon dist 1.2 move  parries 0/0 blocks 0/0 cast 0
+2349 screenshot 19c_kokuhaku_13
+2355 screenshot 19c_kokuhaku_14
+2357 engage: kokuhaku holds kokuhaku_weapon dist 5.7 move  parries 0/0 blocks 0/0 cast 0
+2361 screenshot 19c_kokuhaku_15
+2367 screenshot 19c_kokuhaku_16
+2367 engage: kokuhaku holds kokuhaku_weapon dist 5.9 move  parries 0/0 blocks 0/0 cast 0
+2373 screenshot 19c_kokuhaku_17
+2377 engage: kokuhaku holds kokuhaku_weapon dist 3.9 move  parries 0/0 blocks 0/0 cast 0
+2379 screenshot 19c_kokuhaku_18
+2385 screenshot 19c_kokuhaku_19
+2387 engage: kokuhaku holds kokuhaku_weapon dist 3.1 move  parries 0/0 blocks 0/0 cast 0
+2391 screenshot 19c_kokuhaku_20
+2397 screenshot 19c_kokuhaku_21
+2397 engage: kokuhaku holds kokuhaku_weapon dist 3.7 move  parries 0/0 blocks 0/0 cast 0
+2403 screenshot 19c_kokuhaku_22
+2407 engage: kokuhaku holds kokuhaku_weapon dist 3.3 move  parries 0/0 blocks 0/0 cast 0
+2409 screenshot 19c_kokuhaku_23
+2417 engage: kokuhaku holds kokuhaku_weapon dist 3.1 move  parries 0/0 blocks 0/0 cast 0
+2432 duel: elseria
+2437 engage: elseria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2447 engage: elseria holds elseria_weapon dist 3.7 move nova parries 0/0 blocks 0/0 cast 0
+2457 engage: elseria holds elseria_weapon dist 2.4 move nova parries 0/0 blocks 0/0 cast 0
+2467 engage: elseria holds elseria_weapon dist 1.9 move nova parries 0/0 blocks 0/0 cast 0
+2471 screenshot 19c_elseria_00
+2477 screenshot 19c_elseria_01
+2477 engage: elseria holds elseria_weapon dist 2.6 move  parries 0/0 blocks 0/0 cast 0
+2483 screenshot 19c_elseria_02
+2487 engage: elseria holds elseria_weapon dist 2.5 move  parries 0/0 blocks 0/0 cast 0
+2489 screenshot 19c_elseria_03
+2495 screenshot 19c_elseria_04
+2497 engage: elseria holds elseria_weapon dist 2.1 move  parries 0/0 blocks 0/0 cast 2
+2501 screenshot 19c_elseria_05
+2507 screenshot 19c_elseria_06
+2507 engage: elseria holds elseria_weapon dist 2.4 move  parries 0/0 blocks 0/0 cast 3
+2513 screenshot 19c_elseria_07
+2517 engage: elseria holds elseria_weapon dist 6.5 move nova parries 0/0 blocks 0/0 cast 5
+2519 screenshot 19c_elseria_08
+2525 screenshot 19c_elseria_09
+2527 engage: elseria holds elseria_weapon dist 9.2 move nova parries 0/0 blocks 0/0 cast 6
+2531 screenshot 19c_elseria_10
+2537 screenshot 19c_elseria_11
+2537 engage: elseria holds elseria_weapon dist 9.3 move nova parries 0/0 blocks 0/0 cast 7
+2543 screenshot 19c_elseria_12
+2547 engage: elseria holds elseria_weapon dist 3.0 move  parries 0/0 blocks 0/0 cast 9
+2549 screenshot 19c_elseria_13
+2555 screenshot 19c_elseria_14
+2557 engage: elseria holds elseria_weapon dist 4.9 move  parries 0/0 blocks 0/0 cast 10
+2561 screenshot 19c_elseria_15
+2567 screenshot 19c_elseria_16
+2567 engage: elseria holds elseria_weapon dist 7.1 move  parries 0/0 blocks 0/0 cast 11
+2573 screenshot 19c_elseria_17
+2577 engage: elseria holds elseria_weapon dist 7.4 move  parries 0/0 blocks 0/0 cast 13
+2579 screenshot 19c_elseria_18
+2585 screenshot 19c_elseria_19
+2587 engage: elseria holds elseria_weapon dist 5.8 move beam parries 0/0 blocks 0/0 cast 15
+2591 screenshot 19c_elseria_20
+2597 screenshot 19c_elseria_21
+2597 engage: elseria holds elseria_weapon dist 8.5 move beam parries 0/0 blocks 0/0 cast 16
+2603 screenshot 19c_elseria_22
+2607 engage: elseria holds elseria_weapon dist 9.2 move beam parries 0/0 blocks 0/0 cast 17
+2609 screenshot 19c_elseria_23
+2617 engage: elseria holds elseria_weapon dist 7.9 move beam parries 0/0 blocks 0/0 cast 19
+2631 duel: kingdom_guard
+2637 engage: kingdom_guard holds diamond_sword dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2647 engage: kingdom_guard holds diamond_sword dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2657 engage: kingdom_guard holds diamond_sword dist 2.8 move  parries 0/0 blocks 0/0 cast 0
+2667 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
+2671 screenshot 19c_kingdom_guard_00
+2677 screenshot 19c_kingdom_guard_01
+2677 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
+2683 screenshot 19c_kingdom_guard_02
+2688 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
+2689 screenshot 19c_kingdom_guard_03
+2695 screenshot 19c_kingdom_guard_04
+2697 engage: kingdom_guard holds diamond_sword dist 2.6 move  parries 0/0 blocks 0/0 cast 0
+2701 screenshot 19c_kingdom_guard_05
+2707 screenshot 19c_kingdom_guard_06
+2707 engage: kingdom_guard holds diamond_sword dist 2.7 move  parries 0/0 blocks 0/0 cast 0
+2713 screenshot 19c_kingdom_guard_07
+2717 engage: kingdom_guard holds diamond_sword dist 2.8 move  parries 0/0 blocks 0/0 cast 0
+2719 screenshot 19c_kingdom_guard_08
+2725 screenshot 19c_kingdom_guard_09
+2727 engage: kingdom_guard holds diamond_sword dist 2.5 move  parries 0/0 blocks 0/0 cast 0
+2731 screenshot 19c_kingdom_guard_10
+2737 screenshot 19c_kingdom_guard_11
+2737 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
+2743 screenshot 19c_kingdom_guard_12
+2747 engage: kingdom_guard holds diamond_sword dist 1.4 move  parries 0/0 blocks 0/0 cast 0
+2749 screenshot 19c_kingdom_guard_13
+2755 screenshot 19c_kingdom_guard_14
+2757 engage: kingdom_guard holds diamond_sword dist 1.0 move  parries 0/0 blocks 0/0 cast 0
+2761 screenshot 19c_kingdom_guard_15
+2767 engage: kingdom_guard holds diamond_sword dist 1.2 move  parries 0/0 blocks 0/0 cast 0
+2767 screenshot 19c_kingdom_guard_16
+2773 screenshot 19c_kingdom_guard_17
+2777 engage: kingdom_guard holds diamond_sword dist 1.6 move  parries 0/0 blocks 0/0 cast 0
+2779 screenshot 19c_kingdom_guard_18
+2785 screenshot 19c_kingdom_guard_19
+2787 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
+2791 screenshot 19c_kingdom_guard_20
+2797 screenshot 19c_kingdom_guard_21
+2797 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
+2803 screenshot 19c_kingdom_guard_22
+2807 engage: kingdom_guard holds diamond_sword dist 2.4 move  parries 0/0 blocks 0/0 cast 0
+2809 screenshot 19c_kingdom_guard_23
+2817 engage: kingdom_guard holds diamond_sword dist 2.4 move  parries 0/0 blocks 0/0 cast 0
+2841 throne 560, 143, -816
+4641 screenshot 20_throne_room
+4681 king at 560.3 143.0 -815.7 (throne 560, 143, -816, 0.30 blocks)
+6481 screenshot 21_throne_room_later
+6501 king at 560.5 143.0 -815.5 (throne 560, 143, -816, 0.04 blocks)
+6501 over the capital at 560 -784
+8281 screenshot 22_capital_aerial
+8354 over the capital at 295 -1023
+9881 screenshot 23_helipad
+9891 over the capital at 310 -1161
+11481 screenshot 24_airbase
+11491 at the capital 295 81 -1034
+13081 screenshot 25_helipad_supply
+13137 at the capital 155 76 -788
+14681 screenshot 26_hangar_supply
+14691 at the capital 630 186 -674
+16281 screenshot 27_palace_roofs
+16362 over the capital at 921 -1062
+17881 screenshot 28_airbase_east
+17891 at the capital 560 78 -988
+19481 screenshot 29_road_fountain
+19491 at the capital 943 93 -997
+21081 screenshot 30_ranch_barn
+21103 at the capital 1065 111 -729
+22681 screenshot 31_fortress_east
+22751 king form 0: scale 1.00, health 1024/1024, holding 0 minecraft:air
+22751 king form 1: scale 1.50, health 1024/1024, holding 1 minecraft:netherite_sword
+22751 king form 2: scale 1.80, health 563/1024, holding 1 minecraft:netherite_sword
+22751 king form 2: scale 1.80, health 154/1024, holding 1 minecraft:netherite_sword
+22751 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:trident
+22751 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:bow
+22851 screenshot 40_king_forms
+22901 screenshot 41_king_regal
+22951 screenshot 42_king_hero
+23001 screenshot 43_king_broken_55
+23031 screenshot 43b_king_broken_15
+23066 screenshot 44_king_divine_spear
+23101 screenshot 45_king_divine_bow
+23151 screenshot 46_king_divine_back
+23164 king form 1 (film): scale 1.50, health 1024/1024, holding 1 minecraft:netherite_sword
+23191 screenshot 47_film_hero_kneel
+23211 screenshot 48_film_hero_pillar
+23248 screenshot 49_film_hero_flash
+23272 king form 2 (film): scale 1.80, health 1024/1024, holding 1 minecraft:netherite_sword
+23272 king form 2 (film): scale 1.80, health 1024/1024, holding 1 minecraft:netherite_sword
+23301 screenshot 50_film_glitch_a
+23341 screenshot 51_film_glitch_b
+23406 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
+23406 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
+23406 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
+23441 screenshot 52_film_divine_peel
+23481 screenshot 53_film_divine_rise
+23516 screenshot 54_film_divine_name
+23536 screenshot 55_film_divine_climax
+23591 finished: complete
