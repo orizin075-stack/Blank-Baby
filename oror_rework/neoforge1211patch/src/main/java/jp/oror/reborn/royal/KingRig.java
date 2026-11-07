@@ -16,8 +16,9 @@ import net.minecraft.world.item.Items;
  * <ul>
  * <li>his deeds' motions (TechniqueShow "move:king_*", KingDeeds), each a windup pose and a strike pose on his arms,
  * body, head and height, and his three returns from death danced out over their whole length (KingCinema);</li>
- * <li>Baal Zebul's two stances: the divine clubs (arms_divine_*) or the fly lord's scythe (arms_demon_*), by what is in
- * his main hand (a mace or a netherite hoe, KingDeeds.stance);</li>
+ * <li>Baal Zebul's five stances, one set of arms shown at a time by what is in his main hand (KingDeeds.stance): the
+ * thunder clubs (arms_clubs_*, a mace), the fly lord's scythe (arms_scythe_*, a netherite hoe), the twin swords
+ * (arms_twin_*, a netherite sword), the thunder spear (arms_spear_*, a trident), the rainbow bow (arms_bow_*, a bow);</li>
  * <li>the broken king's ruin: the stages of fused monsters (rot1_*, rot2_*, rot3_*) grown in below three quarters,
  * half and a quarter of his health, and his parts jerked out of place, the more the lower he is.</li>
  * </ul>
@@ -26,7 +27,17 @@ import net.minecraft.world.item.Items;
 public final class KingRig extends RigModel<RoyalMob> {
     private static Field partsField;
     private final Map<String, ModelPart> named = new HashMap<>();
-    private final List<ModelPart> divine = new ArrayList<>(), demon = new ArrayList<>();
+    private static final String[] STANCES = {"clubs", "scythe", "twin", "spear", "bow"};
+    /** Each stance's holding pose: right upper arm, right forearm, left upper arm, left forearm (x rotations; the
+     * weapons' bones in the rig are turned to stand right in it). Kept equal to king3d.HOLD_POSES. */
+    private static final float[][] HOLD = {
+        {-0.2F, -0.45F, -0.2F, -0.45F},
+        {-0.3F, -1.25F, 0F, 0F},
+        {-0.25F, -0.6F, -0.25F, -0.6F},
+        {-0.3F, -1.2F, 0F, 0F},
+        {0F, 0F, -0.3F, -1.25F}};
+    @SuppressWarnings("unchecked")
+    private final List<ModelPart>[] arms = new List[]{new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
     private final List<ModelPart>[] rot;
     private final List<ModelPart> jitter = new ArrayList<>();
     final boolean broken;
@@ -47,11 +58,12 @@ public final class KingRig extends RigModel<RoyalMob> {
         }
         for (Map.Entry<String, ModelPart> e : this.named.entrySet()) {
             String n = e.getKey();
-            if (n.startsWith("arms_divine")) {
-                this.divine.add(e.getValue());
-            } else if (n.startsWith("arms_demon")) {
-                this.demon.add(e.getValue());
-            } else if (n.startsWith("rot1_")) {
+            for (int i = 0; i < STANCES.length; i++) {
+                if (n.startsWith("arms_" + STANCES[i] + "_")) {
+                    this.arms[i].add(e.getValue());
+                }
+            }
+            if (n.startsWith("rot1_")) {
                 this.rot[0].add(e.getValue());
             } else if (n.startsWith("rot2_")) {
                 this.rot[1].add(e.getValue());
@@ -65,6 +77,24 @@ public final class KingRig extends RigModel<RoyalMob> {
                 this.jitter.add(p);
             }
         }
+    }
+
+    /** 0 clubs, 1 scythe, 2 twin swords, 3 spear, 4 bow (KingDeeds.stance less one). */
+    static int stance(RoyalMob e) {
+        var m = e.getMainHandItem();
+        if (m.is(Items.NETHERITE_HOE)) {
+            return 1;
+        }
+        if (m.is(Items.NETHERITE_SWORD)) {
+            return 2;
+        }
+        if (m.is(Items.TRIDENT)) {
+            return 3;
+        }
+        if (m.is(Items.BOW)) {
+            return 4;
+        }
+        return 0;
     }
 
     private ModelPart p(String n) {
@@ -81,9 +111,19 @@ public final class KingRig extends RigModel<RoyalMob> {
     public void setupAnim(RoyalMob e, float swing, float amount, float age, float yaw, float pitch) {
         this.animate(e, swing, amount, age, yaw, pitch, 0, 0F, 0, 0);
         // the stance
-        boolean scythe = e.getMainHandItem().is(Items.NETHERITE_HOE);
-        scale(this.divine, scythe ? 0F : 1F);
-        scale(this.demon, scythe ? 1F : 0F);
+        int st = stance(e);
+        for (int i = 0; i < this.arms.length; i++) {
+            scale(this.arms[i], i == st ? 1F : 0F);
+        }
+        if (!this.arms[st].isEmpty()) {
+            // the stance's holding pose (king3d.HOLD_POSES): each haft through the middle of the fist, square to the
+            // forearm, never along it
+            float[] h = HOLD[st];
+            add("arm_r", h[0], 0, 0);
+            add("fore_r", h[1], 0, 0);
+            add("arm_l", h[2], 0, 0);
+            add("fore_l", h[3], 0, 0);
+        }
         // the ruin
         if (this.broken) {
             float ruin = KingLook.ruin(e);
@@ -145,6 +185,19 @@ public final class KingRig extends RigModel<RoyalMob> {
         pose("REAP", new float[]{-2.4F, -1.4F, 0.3F, -1.2F, 0.6F, 0, 0, -1.0F, 0, 1F}, new float[]{-1.0F, 1.6F, 0, -0.8F, -0.4F, 0, 0.2F, 1.2F, 0, 2F});
         pose("VORTEX", new float[]{-2.0F, 0, 1.0F, -2.0F, 0, -1.0F, 0, 0, -0.5F, 0}, new float[]{-2.0F, 0, 1.0F, -2.0F, 0, -1.0F, 0, 6.28F, 0, 0});
         pose("BRAND", new float[]{-2.6F, 0.4F, 0, -0.3F, 0, -0.3F, -0.1F, 0, -0.4F, 0}, new float[]{-1.5F, -0.3F, 0, -0.3F, 0, -0.3F, 0.15F, 0, 0, 0});
+        // the nastier deeds: the hero's execution and sundering, the broken one's deletion, Baal Zebul's feast and the
+        // day of judgment; the twin swords', the spear's and the bow's
+        pose("EXECUTION", new float[]{-2.2F, 0, 0, -2.9F, 0, -0.2F, 0, -0.3F, 0, 0}, new float[]{-3.0F, 0, 0, -3.1F, 0, 0, 0.6F, 0, 0.3F, 2F});
+        pose("SUNDER", new float[]{-0.6F, 0, 0, -1.8F, 0.8F, 0, 0, 0.5F, 0, 0}, new float[]{-0.4F, 0, 0, -1.6F, -0.9F, 0, 0.3F, -0.6F, 0, 1F});
+        pose("VOID", new float[]{-1.6F, 0, 0.9F, -1.6F, 0, -0.9F, 0, 0, -0.3F, 0}, new float[]{-1.6F, 0, -0.4F, -1.6F, 0, 0.4F, 0.2F, 0, 0.4F, 0});
+        pose("FEAST", new float[]{-0.8F, 0, 1.6F, -0.8F, 0, -1.6F, -0.4F, 0, -0.8F, 0}, new float[]{-2.0F, 0, 0.6F, -2.0F, 0, -0.6F, 0.3F, 0, 0.5F, 0});
+        pose("DOOMSDAY", new float[]{-3.1F, 0, 0.5F, -3.1F, 0, -0.5F, -0.4F, 0, -1.0F, 0}, new float[]{-1.4F, 0, 1.6F, -1.4F, 0, -1.6F, 0.4F, 0, 0.6F, 2F});
+        pose("FLURRY", new float[]{-1.9F, -0.8F, 0, -1.9F, 0.8F, 0, 0.3F, 0, 0, 1F}, new float[]{-1.2F, 1.2F, 0, -1.2F, -1.2F, 0, 0.2F, 3.14F, 0, 0});
+        pose("CROSSSLASH", new float[]{-2.6F, 0.6F, 0.5F, -2.6F, -0.6F, -0.5F, -0.2F, 0, 0, 0}, new float[]{-0.6F, -0.9F, -0.4F, -0.6F, 0.9F, 0.4F, 0.4F, 0, 0.2F, 1F});
+        pose("LUNGE", new float[]{0.5F, 0, 0, -0.6F, 0, 0, -0.2F, 0.4F, 0, 1F}, new float[]{-1.6F, 0, 0, -0.9F, 0, 0, 0.5F, -0.2F, 0, 2F});
+        pose("JAVELIN", new float[]{-3.0F, 0, 0.4F, -0.9F, 0, -0.3F, -0.2F, -0.5F, 0, 0}, new float[]{-1.0F, 0, 0, -0.6F, 0, 0, 0.3F, 0.4F, 0, 0});
+        pose("RAIN", new float[]{-0.4F, 0, 0, -2.9F, 0, 0.2F, -0.3F, 0, -1.0F, 0}, new float[]{-0.4F, 0, 0, -2.9F, 0, 0.2F, -0.3F, 0, -1.0F, 0});
+        pose("TRIPLE", new float[]{-1.5F, 0.6F, 0, -1.6F, 0.3F, 0, 0, 0.6F, 0, 0}, new float[]{-1.5F, 0.2F, 0, -1.6F, 0.3F, 0, 0, 0.6F, 0, 0});
         pose("STANCE", new float[]{-3.0F, 0, 0.6F, -3.0F, 0, -0.6F, -0.3F, 0, -0.6F, 0}, new float[]{-1.2F, 0, 1.2F, -1.2F, 0, -1.2F, 0, 0, 0, 0});
     }
 

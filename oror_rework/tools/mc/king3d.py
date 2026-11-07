@@ -726,36 +726,56 @@ def open_sleeves(h, mat, drop=7.0):
             name='sleeve_pouch', info={'hem': True})
 
 
-HOLD = 2.25 + 0.65            # half a large fist and half a haft: a shaft held upright against the fist's outer side
+# Each stance's holding pose (KingRig.HOLD applies it in game: upper arm and forearm x rotations, right then left).
+# Every haft runs through the middle of the fist square to the forearm, never along it: the forearm is brought up
+# level for the long arms so their shafts stand upright in the fist; a little for the clubs and the swords.
+HOLD_POSES = {
+    'clubs': (-0.2, -0.45, -0.2, -0.45),
+    'scythe': (-0.3, -1.25, 0.0, 0.0),
+    'twin': (-0.25, -0.6, -0.25, -0.6),
+    'spear': (-0.3, -1.2, 0.0, 0.0),
+    'bow': (0.0, 0.0, -0.3, -1.25),
+}
+
+
+def hold_pose(stance):
+    """The holding pose as a preview pose (sculpt.render's pose)."""
+    ar, fr, al, fl = HOLD_POSES[stance]
+    return {'arm_r': (ar, 0, 0), 'fore_r': (fr, 0, 0), 'arm_l': (al, 0, 0), 'fore_l': (fl, 0, 0)}
 
 
 def stance_arms(r, h, hand_y=None):
     """Baal Zebul's five arms (king_arms designs as slabs), each set on its own bones under the fists so KingRig can show
-    one set at a time (KingDeeds.switchStance; KingRig picks the set by what is in his hands). Nothing runs along the
-    forearm: the clubs leave the fist forward and up, the long arms stand upright against the fist's outer side, the
-    swords point forward and down.
-      clubs   雷霆棍 Yagrush (right) and Aymur (left), the heads forward and high
-      scythe  蝿王の大鎌, upright at his right side, the crescent out forward over him
-      twin    the twin swords, Seraph (right) and Beelzebub (left), points forward and down
-      spear   雷槍, upright at his right side, held a third of the way up
-      bow     虹の大弓, upright at his left side, its back to the foe"""
+    one set at a time (KingDeeds.switchStance; KingRig picks the set by what is in his hands) and bring his arms into
+    its holding pose (HOLD_POSES). Each grip is in the middle of the fist; each weapon's bone is turned so that, in the
+    holding pose, it stands as it should:
+      clubs   雷霆棍 Yagrush (right) and Aymur (left), fists forward, the heads forward and high
+      scythe  蝿王の大鎌, the right forearm level, the haft upright in the fist, the crescent out forward over him
+      twin    the twin swords, Seraph (right) and Beelzebub (left), fists a little raised, the points forward
+      spear   雷槍, the right forearm level, the haft upright, held a third of the way up
+      bow     虹の大弓, the left forearm level, the bow upright in the fist, its back to the foe"""
     hy = h.hand_y if hand_y is None else hand_y
     xr, xl = h.fore_r.pivot[0], h.fore_l.pivot[0]
-    sr, sl = (-1 if xr < 0 else 1), (-1 if xl < 0 else 1)
-    cb = r.bone('arms_clubs_r', h.fore_r, (xr, hy, -0.2), rot=(1.15, 0, 0))
+
+    def lean(stance, side, world):
+        """The weapon bone's x rotation under the forearm for a wanted lean in the world (0 upright, + forward)."""
+        ar, fr, al, fl = HOLD_POSES[stance]
+        return world - ((ar + fr) if side == 'r' else (al + fl))
+
+    cb = r.bone('arms_clubs_r', h.fore_r, (xr, hy, -0.2), rot=(lean('clubs', 'r', 0.75), 0, 0))
     KA.place(cb, 'yagrush', (xr, hy, -0.2), UP, SIDE, cross=57, nm='yagrush')
-    cb = r.bone('arms_clubs_l', h.fore_l, (xl, hy, -0.2), rot=(1.15, 0, 0))
+    cb = r.bone('arms_clubs_l', h.fore_l, (xl, hy, -0.2), rot=(lean('clubs', 'l', 0.75), 0, 0))
     KA.place(cb, 'aymur', (xl, hy, -0.2), UP, SIDE, cross=60, nm='aymur')
-    sc = r.bone('arms_scythe_r', h.fore_r, (xr + sr * HOLD, hy, -0.2), rot=(0.22, 0, sr * 0.2))
-    KA.place(sc, 'scythe', (xr + sr * HOLD, hy, -0.2), UP, SIDE, nm='scythe')
-    tr = r.bone('arms_twin_r', h.fore_r, (xr, hy, -0.2), rot=(-1.05, 0, 0))
-    KA.place(tr, 'seraph', (xr, hy, -0.2), (0, 1, 0), SIDE, nm='seraph')
-    tl = r.bone('arms_twin_l', h.fore_l, (xl, hy, -0.2), rot=(-1.05, 0, 0))
-    KA.place(tl, 'beelzebub', (xl, hy, -0.2), (0, 1, 0), SIDE, nm='beelzebub')
-    sp = r.bone('arms_spear_r', h.fore_r, (xr + sr * HOLD, hy, -0.2), rot=(0.2, 0, sr * 0.2))
-    KA.place(sp, 'spear', (xr + sr * HOLD, hy, -0.2), UP, SIDE, nm='spear')
-    bw = r.bone('arms_bow_l', h.fore_l, (xl + sl * HOLD, hy, -0.4), rot=(0.35, 0, sl * 0.14))
-    KA.place(bw, 'bow', (xl + sl * HOLD, hy, -0.4), UP, FWD, nm='bow')
+    sc = r.bone('arms_scythe_r', h.fore_r, (xr, hy, -0.2), rot=(lean('scythe', 'r', 0.15), 0, 0))
+    KA.place(sc, 'scythe', (xr, hy, -0.2), UP, SIDE, nm='scythe')
+    tr = r.bone('arms_twin_r', h.fore_r, (xr, hy, -0.2), rot=(lean('twin', 'r', 1.85), 0, 0))
+    KA.place(tr, 'seraph', (xr, hy, -0.2), UP, SIDE, nm='seraph')
+    tl = r.bone('arms_twin_l', h.fore_l, (xl, hy, -0.2), rot=(lean('twin', 'l', 1.85), 0, 0))
+    KA.place(tl, 'beelzebub', (xl, hy, -0.2), UP, SIDE, nm='beelzebub')
+    sp = r.bone('arms_spear_r', h.fore_r, (xr, hy, -0.2), rot=(lean('spear', 'r', 0.1), 0, 0))
+    KA.place(sp, 'spear', (xr, hy, -0.2), UP, SIDE, nm='spear')
+    bw = r.bone('arms_bow_l', h.fore_l, (xl, hy, -0.2), rot=(lean('bow', 'l', 0.05), 0, 0))
+    KA.place(bw, 'bow', (xl, hy, -0.2), UP, FWD, nm='bow')
 
 
 @recipe
