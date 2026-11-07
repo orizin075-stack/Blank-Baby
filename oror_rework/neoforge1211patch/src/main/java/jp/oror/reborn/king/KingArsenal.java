@@ -596,8 +596,9 @@ public final class KingArsenal {
         }
         for (LivingEntity v : caught) {
             KingDeeds.line(sl, m.weapon == BROKEN ? KingDeeds.MAGENTA : KingDeeds.CRIMSON, v.getEyePosition(), king.getEyePosition(), 0.5);
-            if (m.weapon == BROKEN) {
-                // pulled back to where it stood a moment ago, or simply to him
+            if (m.weapon == BROKEN || !(v instanceof net.minecraft.world.entity.player.Player)) {
+                // the broken one's pull is a jump in place; a creature (not a player, who is drawn smoothly) is
+                // snatched to him outright
                 v.teleportTo(front.x, front.y, front.z);
             } else {
                 Vec3 in = front.subtract(v.position());

@@ -35,7 +35,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -95,6 +97,9 @@ public final class KingStoryTest {
         int stage;
         int trial = -1;
         boolean movesDone;
+        String lastId;
+        Mob lastDummy;
+        final StringBuilder notes = new StringBuilder();
         long nextTrial = -1, after = -1;
         final Map<String, Integer> hitsBefore = new LinkedHashMap<>();
     }
@@ -240,17 +245,35 @@ public final class KingStoryTest {
             out.put("likeness", came);
             out.put("breachedBefore", r.king.atBreached());
             kingState(r, "k0");
+            PROBE = new StringBuilder();
             if (!lord.isEmpty()) {
                 out.put("lordHit", r.king.hurt(r.king.damageSources().mobAttack(lord.get(0)), 10F));
             }
+            out.put("probeLord", PROBE.toString().trim());
             out.put("breachedByLord", r.king.atBreached());
             kingState(r, "k1");
             int before = r.king.lifePhase();
             r.king.sovereign().healTo(4F);
             r.king.invulnerableTime = 0;
+            PROBE = new StringBuilder();
             out.put("deathHit", r.king.hurt(r.king.damageSources().mobAttack(lord.isEmpty() ? r.king : lord.get(0)), 500F));
+            out.put("probeDeath", PROBE.toString().trim());
             kingState(r, "k2");
             out.put("revive", before + "->" + r.king.lifePhase());
+            if (r.king.lifePhase() == before) {
+                // the likeness's blow did not land (probeLord/probeDeath say where it was undone): the rebel's own
+                // killing blow through the broken field, as a player gives it
+                PROBE = new StringBuilder();
+                r.rebel.ready();
+                r.king.sovereign().healTo(4F);
+                r.king.sovereign().incoming(1.0E30F);
+                r.king.invulnerableTime = 0;
+                out.put("playerDeathHit", r.king.hurt(r.rebel.damageSources().playerAttack(r.rebel), 500F));
+                out.put("probePlayer", PROBE.toString().trim());
+                kingState(r, "k3");
+                out.put("reviveByPlayer", before + "->" + r.king.lifePhase());
+            }
+            PROBE = null;
             out.put("reviveAlive", r.king.isAlive());
             out.put("film1", KingCinema.playing(r.king));
             out.put("name1", KingForms.name(r.king, 1, 0).getString());
@@ -326,6 +349,7 @@ public final class KingStoryTest {
         if (!r.movesDone && r.trial >= deeds && r.trial < total && age >= r.nextTrial) {
             // then every one of his weapons' seventy motions, the same way
             KingArsenal.Move m = KingArsenal.MOVES.get(r.trial - deeds);
+            note(r, sl);
             for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(r.at).inflate(40), Zombie::isAlive)) {
                 z.discard();
             }
@@ -335,6 +359,8 @@ public final class KingStoryTest {
             sturdy(spawn(r, EntityType.ZOMBIE, dist, 1.5));
             r.king.setTarget(a);
             KingArsenal.perform(r.king, sl, m, a);
+            r.lastId = m.id();
+            r.lastDummy = a;
             if ((r.trial - deeds) % 10 == 0) {
                 LOG.info("KING-TRIAL {\"move\":\"{}\",\"n\":{}}", m.id(), r.trial - deeds);
             }
@@ -383,6 +409,8 @@ public final class KingStoryTest {
                 out.put("movesLanded", moves + "/" + KingArsenal.MOVES.size());
                 out.put("movesLandedN", moves);
                 out.put("movesMissed", mm.toString().trim());
+                note(r, sl);
+                out.put("trialNotes", r.notes.toString().trim());
                 out.put("echoes", c.getInt("echo"));
                 out.put("moveMisses", c.getInt("move_miss"));
                 out.put("stances", "clubs " + c.getInt("stance_clubs") + " scythe " + c.getInt("stance_scythe") + " twin " + c.getInt("stance_twin")
@@ -397,13 +425,16 @@ public final class KingStoryTest {
                     t.moveTo(r.at.getX() + 3.5, r.at.getY(), r.at.getZ() + 0.5, 90F, 0F);
                 }
             } else {
+                note(r, sl);
                 KingDeeds.Deed d = KingDeeds.DEEDS.get(r.trial);
+                r.lastId = d.id();
                 for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(r.at).inflate(40), Zombie::isAlive)) {
                     z.discard();
                 }
                 double dist = Math.max(3.0, Math.min(14.0, (d.min() + Math.min(d.max(), 16)) / 2.0));
                 r.king.teleportTo(r.at.getX() + 0.5, r.at.getY(), r.at.getZ() + 0.5);
                 Mob a = sturdy(spawn(r, EntityType.ZOMBIE, dist, 0));
+                r.lastDummy = a;
                 sturdy(spawn(r, EntityType.ZOMBIE, dist, 1.5));
                 r.king.setTarget(a);
                 if (d.stance() != 0) {
@@ -574,6 +605,21 @@ public final class KingStoryTest {
         }
     }
 
+    /** After a trial: if what was tried hit nothing, where the King had got to and where its dummy stood. */
+    private static void note(Run r, ServerLevel sl) {
+        if (r.lastId == null) {
+            return;
+        }
+        CompoundTag h = r.king.getPersistentData().getCompound(KingDeeds.HITS);
+        if (h.getInt(r.lastId) == 0) {
+            double moved = r.king.position().distanceTo(net.minecraft.world.phys.Vec3.atBottomCenterOf(r.at));
+            double zd = r.lastDummy != null ? r.lastDummy.distanceTo(r.king) : -1;
+            r.notes.append(String.format(java.util.Locale.ROOT, "%s(k%.1f,z%.1f,%s) ", r.lastId, moved, zd,
+                r.lastDummy == null ? "-" : r.lastDummy.isAlive() ? "a" : "d"));
+        }
+        r.lastId = null;
+    }
+
     /** One blow of an iron sword by the keeper on a fresh dummy; the health it took. */
     private static float swordBlow(Run r) {
         ItemStack sword = new ItemStack(Items.IRON_SWORD);
@@ -641,9 +687,61 @@ public final class KingStoryTest {
 
     static final String DUMMY = "OrorStoryDummy";
 
+    /** Where a blow on the King is undone: the cancel state seen at each priority (for the record). */
+    static StringBuilder PROBE;
+
+    private static void probe(LivingIncomingDamageEvent e, String at) {
+        if (PROBE != null && KingCourt.isKing(e.getEntity())) {
+            PROBE.append(at).append(e.isCanceled() ? 'x' : 'o').append(Math.round(e.getAmount())).append(' ');
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public static void probe1(LivingIncomingDamageEvent e) {
+        probe(e, "HIGHEST:");
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH, receiveCanceled = true)
+    public static void probe2(LivingIncomingDamageEvent e) {
+        probe(e, "HIGH:");
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void probe3(LivingIncomingDamageEvent e) {
+        probe(e, "NORMAL:");
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
+    public static void probe4(LivingIncomingDamageEvent e) {
+        probe(e, "LOW:");
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+    public static void probe5(LivingIncomingDamageEvent e) {
+        probe(e, "LOWEST:");
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void probePre(net.neoforged.neoforge.event.entity.living.LivingDamageEvent.Pre e) {
+        if (PROBE != null && KingCourt.isKing(e.getEntity())) {
+            PROBE.append("PRE:").append(Math.round(e.getNewDamage())).append(' ');
+        }
+    }
+
+    /** While his deeds are tried, the King takes no target of his own (his blows would knock the dummies about). */
+    @SubscribeEvent
+    public static void quietTarget(net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent e) {
+        if (run != null && e.getNewAboutToBeSetTarget() != null && KingCourt.isKing(e.getEntity())
+            && e.getEntity().getPersistentData().getBoolean(KingForms.QUIET)) {
+            e.setCanceled(true);
+        }
+    }
+
     /** A zombie that lives through many blows and does not burn. */
     private static Mob sturdy(Mob m) {
         m.getPersistentData().putBoolean(DUMMY, true);
+        // standing still: what a deed does to it is what the deed does, not where the dummy walked or was knocked
+        m.setNoAi(true);
         var a = m.getAttribute(Attributes.MAX_HEALTH);
         if (a != null) {
             a.setBaseValue(1000);
@@ -661,7 +759,7 @@ public final class KingStoryTest {
         boolean war = Boolean.TRUE.equals(o.get("enemy")) && Boolean.TRUE.equals(o.get("enemyHostile")) && Boolean.TRUE.equals(o.get("friendStillPeace"));
         boolean rebels = Boolean.TRUE.equals(o.get("vindicatorSpares")) && num(o, "rebelFavour") >= 5 && num(o, "allies") == 3
             && Boolean.TRUE.equals(o.get("alliesSpare"));
-        boolean forms = Boolean.TRUE.equals(o.get("breachedByLord")) && "0->1".equals(o.get("revive")) && Boolean.TRUE.equals(o.get("film1"))
+        boolean forms = Boolean.TRUE.equals(o.get("breachedByLord")) && ("0->1".equals(o.get("revive")) || "0->1".equals(o.get("reviveByPlayer"))) && Boolean.TRUE.equals(o.get("film1"))
             && Boolean.TRUE.equals(o.get("filmUntouchable")) && Boolean.TRUE.equals(o.get("film1Done")) && Boolean.TRUE.equals(o.get("film2Done"))
             && Boolean.TRUE.equals(o.get("film3Done")) && num(o, "phase") == 3 && Boolean.TRUE.equals(o.get("armour1")) && Boolean.TRUE.equals(o.get("heroSword"))
             && o.get("scale1") instanceof Double s1 && o.get("scale2") instanceof Double s2 && o.get("scale3") instanceof Double s3 && s1 > 1.0 && s2 > s1 && s3 > s2;
