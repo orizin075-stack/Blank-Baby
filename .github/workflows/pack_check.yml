@@ -1,0 +1,59 @@
+# Whether the pack with the mods added from the user's 学びパック (oror_rework/tools/cf/manifest-053.json: the 045 pack and the
+# seven of its mods that have Minecraft 1.21.1 NeoForge files) starts on a dedicated server with OROR's current jar:
+# missing dependencies, version clashes, crashes at start. Result: oror_rework/tools/cf/pack053_check.txt on this branch.
+name: Pack 053 start check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['oror_rework/tools/cf/manifest-053.json', '.github/workflows/pack_check.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+        working-directory: oror_rework/neoforge1211patch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: The pack's mods (053)
+        run: |
+          python3 -I tools/fetch_pack.py ../tools/cf/manifest-053.json "$RUNNER_TEMP/pack053" sodium fancytoasts chatplus extrasounds \
+            > "$RUNNER_TEMP/fetch.txt" 2>&1 || true
+          curl -sSfL -o "$RUNNER_TEMP/nightfall.jar" "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
+      - name: Start a server
+        run: |
+          set +e
+          JAR=$(ls out/oror_supreme_bosses-*.jar | sort -V | tail -n 1)
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 900 -- none -- "$JAR" "$RUNNER_TEMP/nightfall.jar" "$RUNNER_TEMP"/pack053/*.jar \
+            > "$RUNNER_TEMP/start.txt" 2>&1
+          rc=$?
+          {
+            echo "server_test exit $rc (jar $JAR)"
+            grep -E 'failed|missing|Missing|requires|Error|ERROR' "$RUNNER_TEMP/fetch.txt" | head -40
+            grep -E 'Done \(|CI-DONE|Mod loading has failed|ModLoadingException|requires .* or above|Missing or unsupported|is not installed|Incompatible|Exception|Caused by' "$RUNNER_TEMP/server/console.log" | head -120
+            echo '--- mods loaded'
+            grep -c 'Found mod file' "$RUNNER_TEMP/server/console.log" || true
+            ls "$RUNNER_TEMP/server/mods" | grep -i -E 'aether|legendary|refm|rapier|sword_soaring|rimulib|shooting|citadel' || true
+            echo '--- tail'
+            tail -n 60 "$RUNNER_TEMP/start.txt"
+          } > ../tools/cf/pack053_check.txt 2>&1
+      - name: Commit the result
+        if: always()
+        working-directory: .
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f oror_rework/tools/cf/pack053_check.txt
+          git commit -m "Pack 053 start check ${GITHUB_SHA::7} [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
