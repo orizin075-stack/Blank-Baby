@@ -18,6 +18,8 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ImposterProtoChunk;
+import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -230,7 +232,9 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
      * to the save's blocks there (the neighbour would otherwise keep it). (053) Not only trees and plants (a rock, ice
      * spikes, a geode's crystals, a giant mushroom...), ten blocks in rather than six, and up to the top of the save,
      * not 48 blocks over the ground: a tree on a hill grew into the palace's upper floors. Only where the block there now
-     * is one such natural block and the save's is another: what the kingdom built is never touched.
+     * is one such natural block and the save's is another: what the kingdom built is never touched. Under the ground only
+     * the kingdom's own blocks (the mine labyrinth) are put back, never the natural rock the save leaves there, and the
+     * hollow of a neighbour's geode only in a chunk no one has been in yet.
      */
     private static void tidyNeighbours(WorldGenLevel level, CitadelSites.Site site, ChunkPos pos) {
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
@@ -247,23 +251,37 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
                     continue;
                 }
                 ChunkAccess chunk = level.getChunk(ncx, ncz);
+                // still being made (no one has been in it): a hole a neighbour's geode left under the ground may be filled
+                boolean unvisited = chunk instanceof ProtoChunk && !(chunk instanceof ImposterProtoChunk);
                 // the strip of the neighbour next to this chunk
                 int xa = ox < 0 ? 16 - SPILL : 0, xb = ox > 0 ? SPILL : 16;
                 int za = oz < 0 ? 16 - SPILL : 0, zb = oz > 0 ? SPILL : 16;
                 int bx = ncx * 16, bz = ncz * 16;
-                for (int y = site.ground() + 1; y < top && y < chunk.getMaxBuildHeight(); y++) {
+                for (int y = Math.max(site.dy(), chunk.getMinBuildHeight()); y < top && y < chunk.getMaxBuildHeight(); y++) {
                     int sy = (y - site.dy()) >> 4;
                     if (sy < 0 || sy >= CitadelData.SECTIONS) {
                         continue;
                     }
                     PalettedContainer<BlockState> section = data.sections()[sy];
+                    boolean below = y <= site.ground();
+                    if (below && section == null) {
+                        // under the ground the save's missing sections are the natural ground (place): nothing to take back
+                        continue;
+                    }
                     for (int x = xa; x < xb; x++) {
                         for (int z = za; z < zb; z++) {
                             BlockState here = chunk.getBlockState(p.set(bx + x, y, bz + z));
-                            if (here.isAir() || !natural(here)) {
+                            boolean hole = below && unvisited && here.isAir();
+                            if (!hole && (here.isAir() || !natural(here))) {
                                 continue;
                             }
                             BlockState want = section == null ? AIR : section.get(x, (y - site.dy()) & 15, z);
+                            // (053) under the ground only what the kingdom built (the mine labyrinth's walls) is taken back:
+                            // a neighbour's geode had cut into them, its shell and the hollow inside (053's CI,
+                            // CAPITAL-INTEGRITY)
+                            if (below && (want.isAir() || natural(want))) {
+                                continue;
+                            }
                             if (want.getBlock() != here.getBlock() && !want.is(Blocks.DIRT) && !want.is(Blocks.BEDROCK)) {
                                 put(chunk, p, want);
                             }
