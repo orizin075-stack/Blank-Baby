@@ -273,20 +273,22 @@ public final class Look {
             // (054) the villager king's four forms on the stage: the regal king, the hero, the broken one near death
             // (every stage of his ruin), Baal Zebul with his divine clubs and with the fly lord's scythe; close up, and
             // the god from behind; then his three returns from death as films, with the screen's part shown
-            case 21900 -> view(mc, 0, 3, -9, 0F, 8F);
+            case 21900 -> view(mc, 0, 3, -12, 0F, 8F);
             case 21960 -> kingForms(mc);
             case 22060 -> shot(mc, "40_king_forms");
-            case 22070 -> view(mc, -12, 1.2, 3.5, 0F, 4F);
+            case 22070 -> view(mc, -15, 1.2, 3.5, 0F, 4F);
             case 22110 -> shot(mc, "41_king_regal");
-            case 22120 -> view(mc, -6, 1.8, 2.5, 0F, 6F);
+            case 22120 -> view(mc, -9, 1.8, 2.5, 0F, 6F);
             case 22160 -> shot(mc, "42_king_hero");
-            case 22170 -> view(mc, 0, 2.0, 2.0, 0F, 6F);
-            case 22210 -> shot(mc, "43_king_broken");
-            case 22220 -> view(mc, 6, 3.0, 0.5, 0F, 8F);
-            case 22260 -> shot(mc, "44_king_divine");
-            case 22270 -> view(mc, 12, 3.0, 0.5, 0F, 8F);
-            case 22310 -> shot(mc, "45_king_divine_scythe");
-            case 22320 -> view(mc, 6, 3.0, 19.5, 180F, 8F);
+            case 22170 -> view(mc, -3, 2.0, 2.0, 0F, 6F);
+            case 22210 -> shot(mc, "43_king_broken_55");
+            case 22215 -> view(mc, 3, 2.0, 2.0, 0F, 6F);
+            case 22240 -> shot(mc, "43b_king_broken_15");
+            case 22245 -> view(mc, 9, 3.0, 0.5, 0F, 8F);
+            case 22275 -> shot(mc, "44_king_divine_spear");
+            case 22280 -> view(mc, 15, 3.0, 0.5, 0F, 8F);
+            case 22310 -> shot(mc, "45_king_divine_bow");
+            case 22320 -> view(mc, 9, 3.0, 19.5, 180F, 8F);
             case 22360 -> shot(mc, "46_king_divine_back");
             case 22370 -> kingFilm(mc, 1);
             case 22400 -> shot(mc, "47_film_hero_kneel");
@@ -312,7 +314,9 @@ public final class Look {
         mc.options.hideGui = true;
         server.execute(() -> {
             command(server, "kill @e[tag=oror_look]");
-            double[] xs = {-12, -6, 0, 6, 12};
+            // the throne king, the hero, the broken one at 55% and at 15% of his life (falling apart), Baal Zebul with
+            // the spear and with the bow (the holding poses)
+            double[] xs = {-15, -9, -3, 3, 9, 15};
             for (int i = 0; i < xs.length; i++) {
                 command(server, String.format(java.util.Locale.ROOT,
                     "summon oror_supreme_bosses:villager_king %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"oror_look\",\"oror_king_%d\"]}",
@@ -322,7 +326,9 @@ public final class Look {
             for (Entity e : level.getEntities((Entity) null, new AABB(sx - 20, sy - 3, sz, sx + 20, sy + 12, sz + 20),
                 x -> x.getTags().stream().anyMatch(t -> t.startsWith("oror_king_")))) {
                 int i = e.getTags().stream().filter(t -> t.startsWith("oror_king_")).mapToInt(t -> Integer.parseInt(t.substring(10))).findFirst().orElse(0);
-                setForm(level, e, Math.min(3, i), i == 4, false);
+                int[] phase = {0, 1, 2, 2, 3, 3}, stance = {0, 0, 0, 0, 4, 5};
+                float[] life = {1F, 1F, 0.55F, 0.15F, 1F, 1F};
+                setForm(level, e, phase[Math.min(5, i)], stance[Math.min(5, i)], life[Math.min(5, i)], false);
             }
         });
     }
@@ -340,12 +346,13 @@ public final class Look {
             ServerLevel level = server.overworld();
             for (Entity e : level.getEntities((Entity) null, new AABB(sx - 5, sy - 3, sz + 5, sx + 5, sy + 12, sz + 15),
                 x -> x.getTags().contains("oror_king_film"))) {
-                setForm(level, e, phase, false, true);
+                setForm(level, e, phase, 0, 1F, true);
             }
         });
     }
 
-    private static void setForm(ServerLevel level, Entity e, int phase, boolean scythe, boolean film) {
+    private static void setForm(ServerLevel level, Entity e, int phase, int stance, float life, boolean film) {
+        boolean scythe = stance != 0;
         try {
             Class<?> mobC = Class.forName("jp.oror.reborn.royal.RoyalMob");
             Class<?> forms = Class.forName("jp.oror.reborn.king.KingForms");
@@ -362,12 +369,12 @@ public final class Look {
                 forms.getMethod("arm", mobC, int.class).invoke(null, e, phase);
             }
             if (scythe) {
-                Class.forName("jp.oror.reborn.king.KingDeeds").getMethod("switchStance", mobC, ServerLevel.class, int.class).invoke(null, e, level, 2);
+                Class.forName("jp.oror.reborn.king.KingDeeds").getMethod("switchStance", mobC, ServerLevel.class, int.class).invoke(null, e, level, stance);
             }
-            if (phase == 2 && !film) {
+            if (life < 1F && !film) {
                 java.lang.reflect.Field w = sov.getClass().getField("internalWrite");
                 w.setBoolean(sov, true);
-                ((LivingEntity) e).setHealth(((LivingEntity) e).getMaxHealth() * 0.15F);
+                ((LivingEntity) e).setHealth(((LivingEntity) e).getMaxHealth() * life);
                 w.setBoolean(sov, false);
             }
             note(String.format(java.util.Locale.ROOT, "king form %d%s%s: scale %.2f, health %.0f/%.0f, holding %s", phase, scythe ? " (scythe)" : "",
