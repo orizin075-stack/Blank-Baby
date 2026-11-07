@@ -270,9 +270,111 @@ public final class Look {
             case 20290 -> shot(mc, "30_ranch_barn");
             case 20300 -> atCapital(mc, 505, 40, 55, -135F, 30F);
             case 21890 -> shot(mc, "31_fortress_east");
-            case 21900 -> finish(mc, "complete");
+            // (054) the villager king's four forms on the stage: the regal king, the hero, the broken one near death
+            // (every stage of his ruin), Baal Zebul with his divine clubs and with the fly lord's scythe; close up, and
+            // the god from behind; then his three returns from death as films, with the screen's part shown
+            case 21900 -> view(mc, 0, 3, -9, 0F, 8F);
+            case 21960 -> kingForms(mc);
+            case 22060 -> shot(mc, "40_king_forms");
+            case 22070 -> view(mc, -12, 1.2, 3.5, 0F, 4F);
+            case 22110 -> shot(mc, "41_king_regal");
+            case 22120 -> view(mc, -6, 1.8, 2.5, 0F, 6F);
+            case 22160 -> shot(mc, "42_king_hero");
+            case 22170 -> view(mc, 0, 2.0, 2.0, 0F, 6F);
+            case 22210 -> shot(mc, "43_king_broken");
+            case 22220 -> view(mc, 6, 3.0, 0.5, 0F, 8F);
+            case 22260 -> shot(mc, "44_king_divine");
+            case 22270 -> view(mc, 12, 3.0, 0.5, 0F, 8F);
+            case 22310 -> shot(mc, "45_king_divine_scythe");
+            case 22320 -> view(mc, 6, 3.0, 19.5, 180F, 8F);
+            case 22360 -> shot(mc, "46_king_divine_back");
+            case 22370 -> kingFilm(mc, 1);
+            case 22400 -> shot(mc, "47_film_hero_kneel");
+            case 22420 -> shot(mc, "48_film_hero_pillar");
+            case 22457 -> shot(mc, "49_film_hero_flash");
+            case 22480 -> kingFilm(mc, 2);
+            case 22510 -> shot(mc, "50_film_glitch_a");
+            case 22550 -> shot(mc, "51_film_glitch_b");
+            case 22610 -> kingFilm(mc, 3);
+            case 22650 -> shot(mc, "52_film_divine_peel");
+            case 22690 -> shot(mc, "53_film_divine_rise");
+            case 22725 -> shot(mc, "54_film_divine_name");
+            case 22745 -> shot(mc, "55_film_divine_climax");
+            case 22800 -> finish(mc, "complete");
             default -> {
             }
+        }
+    }
+
+    /** (054) Five villager kings in a row on the stage, z + 10, each set to a form through OROR's own code. */
+    private static void kingForms(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        mc.options.hideGui = true;
+        server.execute(() -> {
+            command(server, "kill @e[tag=oror_look]");
+            double[] xs = {-12, -6, 0, 6, 12};
+            for (int i = 0; i < xs.length; i++) {
+                command(server, String.format(java.util.Locale.ROOT,
+                    "summon oror_supreme_bosses:villager_king %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"oror_look\",\"oror_king_%d\"]}",
+                    sx + xs[i], (int) sy, sz + 10, i));
+            }
+            ServerLevel level = server.overworld();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 20, sy - 3, sz, sx + 20, sy + 12, sz + 20),
+                x -> x.getTags().stream().anyMatch(t -> t.startsWith("oror_king_")))) {
+                int i = e.getTags().stream().filter(t -> t.startsWith("oror_king_")).mapToInt(t -> Integer.parseInt(t.substring(10))).findFirst().orElse(0);
+                setForm(level, e, Math.min(3, i), i == 4, false);
+            }
+        });
+    }
+
+    /** (054) One villager king on the stage, returning from death into the form: his film under way. */
+    private static void kingFilm(Minecraft mc, int phase) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        mc.options.hideGui = false;
+        view(mc, 0, 2.2, 1.0, 0F, 6F);
+        server.execute(() -> {
+            command(server, "kill @e[tag=oror_look]");
+            command(server, String.format(java.util.Locale.ROOT,
+                "summon oror_supreme_bosses:villager_king %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"oror_look\",\"oror_king_film\"]}",
+                sx, (int) sy, sz + 10));
+            ServerLevel level = server.overworld();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 5, sy - 3, sz + 5, sx + 5, sy + 12, sz + 15),
+                x -> x.getTags().contains("oror_king_film"))) {
+                setForm(level, e, phase, false, true);
+            }
+        });
+    }
+
+    private static void setForm(ServerLevel level, Entity e, int phase, boolean scythe, boolean film) {
+        try {
+            Class<?> mobC = Class.forName("jp.oror.reborn.royal.RoyalMob");
+            Class<?> forms = Class.forName("jp.oror.reborn.king.KingForms");
+            Object sov = mobC.getMethod("sovereign").invoke(e);
+            net.minecraft.nbt.CompoundTag t = new net.minecraft.nbt.CompoundTag();
+            t.putInt("Phase", phase);
+            sov.getClass().getMethod("load", net.minecraft.nbt.CompoundTag.class).invoke(sov, t);
+            float field = ((Number) sov.getClass().getMethod("field").invoke(sov)).floatValue();
+            mobC.getMethod("syncSovereign", float.class, int.class, boolean.class).invoke(e, field, phase, false);
+            if (film) {
+                forms.getMethod("reborn", mobC, int.class).invoke(null, e, phase);
+            } else {
+                forms.getMethod("strengthen", mobC, int.class).invoke(null, e, phase);
+                forms.getMethod("arm", mobC, int.class).invoke(null, e, phase);
+            }
+            if (scythe) {
+                Class.forName("jp.oror.reborn.king.KingDeeds").getMethod("switchStance", mobC, ServerLevel.class, int.class).invoke(null, e, level, 2);
+            }
+            if (phase == 2 && !film) {
+                java.lang.reflect.Field w = sov.getClass().getField("internalWrite");
+                w.setBoolean(sov, true);
+                ((LivingEntity) e).setHealth(((LivingEntity) e).getMaxHealth() * 0.15F);
+                w.setBoolean(sov, false);
+            }
+            note(String.format(java.util.Locale.ROOT, "king form %d%s%s: scale %.2f, health %.0f/%.0f, holding %s", phase, scythe ? " (scythe)" : "",
+                film ? " (film)" : "", ((LivingEntity) e).getScale(), ((LivingEntity) e).getHealth(), ((LivingEntity) e).getMaxHealth(),
+                ((LivingEntity) e).getMainHandItem()));
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("king form " + phase + ": " + ex);
         }
     }
 
