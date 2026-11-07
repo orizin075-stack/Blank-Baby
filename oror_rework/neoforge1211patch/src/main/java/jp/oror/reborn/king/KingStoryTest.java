@@ -323,7 +323,7 @@ public final class KingStoryTest {
             }
         }
         int deeds = KingDeeds.DEEDS.size(), total = deeds + KingArsenal.MOVES.size();
-        if (r.trial >= deeds && r.trial < total && age >= r.nextTrial) {
+        if (!r.movesDone && r.trial >= deeds && r.trial < total && age >= r.nextTrial) {
             // then every one of his weapons' seventy motions, the same way
             KingArsenal.Move m = KingArsenal.MOVES.get(r.trial - deeds);
             for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(r.at).inflate(40), Zombie::isAlive)) {
@@ -335,6 +335,9 @@ public final class KingStoryTest {
             sturdy(spawn(r, EntityType.ZOMBIE, dist, 1.5));
             r.king.setTarget(a);
             KingArsenal.perform(r.king, sl, m, a);
+            if ((r.trial - deeds) % 10 == 0) {
+                LOG.info("KING-TRIAL {\"move\":\"{}\",\"n\":{}}", m.id(), r.trial - deeds);
+            }
             r.nextTrial = age + m.windup() + 22 + switch (m.shape()) {
                 case LEAP, THROW -> 30;
                 case LOB -> m.count() * 8 + 20;

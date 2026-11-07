@@ -351,7 +351,7 @@ public final class KingForms {
 
     /** One the king fights: a player who has turned on the kingdom, a monster (never his own, a villager, a creative player). */
     public static boolean foe(RoyalMob king, LivingEntity e) {
-        if (e == king || !e.isAlive() || king.isAlliedTo(e)) {
+        if (e == king || !e.isAlive() || king.isAlliedTo(e) || KingSouls.his(e)) {
             return false;
         }
         if (e instanceof Player p) {
