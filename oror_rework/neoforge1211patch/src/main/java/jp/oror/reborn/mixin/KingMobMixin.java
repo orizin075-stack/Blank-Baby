@@ -1,5 +1,6 @@
 package jp.oror.reborn.mixin;
 
+import jp.oror.reborn.king.KingCourt;
 import jp.oror.reborn.king.KingForms;
 import jp.oror.reborn.royal.RoyalThreats;
 import net.minecraft.server.level.ServerBossEvent;
@@ -27,7 +28,7 @@ public abstract class KingMobMixin {
 
     @Inject(method = "startSeenByPlayer(Lnet/minecraft/server/level/ServerPlayer;)V", at = @At("TAIL"), remap = false)
     private void oror$onlyEnemies(ServerPlayer p, CallbackInfo ci) {
-        if (!RoyalThreats.hostilePlayer(p)) {
+        if (KingCourt.isKing((net.minecraft.world.entity.Entity) (Object) this) && !RoyalThreats.hostilePlayer(p)) {
             this.boss.removePlayer(p);
             this.atBoss.removePlayer(p);
         }
@@ -35,6 +36,8 @@ public abstract class KingMobMixin {
 
     @Inject(method = "syncSovereign(FIZ)V", at = @At("TAIL"), remap = false)
     private void oror$formName(float field, int phase, boolean breached, CallbackInfo ci) {
-        this.boss.setName(KingForms.bossName(phase));
+        if (KingCourt.isKing((net.minecraft.world.entity.Entity) (Object) this)) {
+            this.boss.setName(KingForms.bossName(phase));
+        }
     }
 }
