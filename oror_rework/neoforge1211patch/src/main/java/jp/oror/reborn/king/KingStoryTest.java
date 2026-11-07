@@ -250,6 +250,7 @@ public final class KingStoryTest {
                 out.put("lordHit", r.king.hurt(r.king.damageSources().mobAttack(lord.get(0)), 10F));
             }
             out.put("probeLord", PROBE.toString().trim());
+            out.put("probeListeners", listenersBetween());
             out.put("breachedByLord", r.king.atBreached());
             kingState(r, "k1");
             int before = r.king.lifePhase();
@@ -355,10 +356,19 @@ public final class KingStoryTest {
             }
             double dist = Math.max(2.5, Math.min(14.0, (m.min() + Math.min(m.max(), 16)) / 2.0));
             r.king.teleportTo(r.at.getX() + 0.5, r.at.getY(), r.at.getZ() + 0.5);
-            Mob a = sturdy(spawn(r, EntityType.ZOMBIE, dist, 0));
-            sturdy(spawn(r, EntityType.ZOMBIE, dist, 1.5));
-            r.king.setTarget(a);
-            KingArsenal.perform(r.king, sl, m, a);
+            // a blow behind him (the spear's butt) is tried on a dummy behind him
+            double side = (m.fx() & KingArsenal.BACK) != 0 ? -1 : 1;
+            Mob a = sturdy(spawn(r, EntityType.ZOMBIE, side * dist, 0));
+            sturdy(spawn(r, EntityType.ZOMBIE, side * dist, 1.5));
+            if (side < 0) {
+                // facing the other way: the blow is aimed at a foe before him, the dummy behind is struck
+                Mob front = sturdy(spawn(r, EntityType.ZOMBIE, dist, 0));
+                r.king.setTarget(front);
+                KingArsenal.perform(r.king, sl, m, front);
+            } else {
+                r.king.setTarget(a);
+                KingArsenal.perform(r.king, sl, m, a);
+            }
             r.lastId = m.id();
             r.lastDummy = a;
             if ((r.trial - deeds) % 10 == 0) {
@@ -693,6 +703,35 @@ public final class KingStoryTest {
     private static void probe(LivingIncomingDamageEvent e, String at) {
         if (PROBE != null && KingCourt.isKing(e.getEntity())) {
             PROBE.append(at).append(e.isCanceled() ? 'x' : 'o').append(Math.round(e.getAmount())).append(' ');
+        }
+    }
+
+    /** The incoming-damage listeners that run between the HIGH probe and the NORMAL probe, in order (the bus's own
+     * list, read by reflection; the one that undoes a blow on the King is among them). */
+    static String listenersBetween() {
+        try {
+            Class<?> helper = Class.forName("net.neoforged.bus.EventListenerHelper");
+            Object list = helper.getMethod("getListenerList", Class.class).invoke(null, LivingIncomingDamageEvent.class);
+            Object bus = net.neoforged.neoforge.common.NeoForge.EVENT_BUS;
+            java.lang.reflect.Field f = bus.getClass().getDeclaredField("busID");
+            f.setAccessible(true);
+            int id = f.getInt(bus);
+            Object[] ls = (Object[]) list.getClass().getMethod("getListeners", int.class).invoke(list, id);
+            StringBuilder b = new StringBuilder();
+            boolean on = false;
+            for (Object l : ls) {
+                String n = String.valueOf(l);
+                if (n.contains("probe2")) {
+                    on = true;
+                } else if (n.contains("probe3")) {
+                    break;
+                } else if (on) {
+                    b.append(n.length() > 160 ? n.substring(0, 160) : n).append(" | ");
+                }
+            }
+            return b.length() == 0 ? "none of " + ls.length : b.toString();
+        } catch (Throwable t) {
+            return "err " + t;
         }
     }
 

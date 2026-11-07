@@ -513,8 +513,14 @@ public final class KingArsenal {
                 return;
             }
             king.getNavigation().stop();
-            king.setDeltaMovement(fwd.x * speed, king.getDeltaMovement().y, fwd.z * speed);
-            king.hurtMarked = true;
+            // stepped, not pushed: a push can be lost (a big body, a leap's leftover fall), a step cannot
+            Vec3 step = fwd.scale(speed);
+            if (sl.noCollision(king, king.getBoundingBox().move(step))) {
+                king.teleportTo(king.getX() + step.x, king.getY(), king.getZ() + step.z);
+            } else {
+                king.setDeltaMovement(step.x, king.getDeltaMovement().y, step.z);
+                king.hurtMarked = true;
+            }
             sl.sendParticles(tint(m, k), king.getX(), king.getY() + king.getBbHeight() * 0.5, king.getZ(), 8, 0.5, 0.6, 0.5, 0);
             for (LivingEntity v : KingForms.foes(king, sl, m.b + king.getBbWidth() * 0.5)) {
                 if (struck.add(v)) {
