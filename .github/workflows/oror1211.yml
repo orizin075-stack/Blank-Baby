@@ -147,6 +147,13 @@ jobs:
           { echo "== $AC"; javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil | grep -E 'static'
             javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder | grep -E 'setDimension|static'
             unzip -l "$AC" | grep -i -E 'mixin.*(Entity|Level)' | head -n 20; } >> out/report.txt 2>&1 || true
+          # (053) what its magnet search reads, and which entities its magnetism moves (for the magnet cache)
+          { for m in tickMagnetism getNearbyAttractingMagnets getNearbyRepellingMagnets isPulledByMagnets attachesToMagnets; do
+              echo "== MagnetUtil.$m"; javap -c -p -cp "$AC" com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil \
+                | awk -v m="$m" 'index($0, " " m "(") && /static/ {on=1} on {print} on && /^$/ {on=0}' | head -n 160
+            done
+            echo "== ACWorldSeedHolder"; javap -c -p -cp "$AC" com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder | head -n 120
+          } > out/ac_magnet_bytecode.txt 2>&1 || true
       - name: Dedicated server - Grand Citadel with its court and garrison, the hundred-man battle, tanks and aircraft
         run: |
           set +e
@@ -158,7 +165,7 @@ jobs:
             'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'GUARD-RESULT' 'WORN-RESULT' 'SPELL-SWEEP-RESULT' 'MOBS-TRACE {' 'CAPITAL-LOAD {' 'SWEEP-RESULT' 'GAMETEST-RESULT' 'CI-DONE' -- arms,guards,worn,spells,mobs,citadel,citadelupdate,capitalload,war,pilots,landings,aa,villageflight,sweep,gametests -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack053/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
           # the results first (the full list below is cut at 400 lines), then everything
-          grep -E 'GAMETEST-RESULT|SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|GUARD-|WORN-|SPELL-SWEEP-RESULT|MOBS-TRACE|CAPITAL-LOAD|CRASHNET|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
+          grep -E 'GAMETEST-RESULT|SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|GUARD-|WORN-|SPELL-SWEEP-RESULT|MOBS-TRACE|CAPITAL-LOAD|CAPITAL-INTEGRITY|CRASHNET|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
             | cut -c1-6000 >> out/server_test.txt || true
           { grep -E 'CITADEL-SELFTEST|CITADEL-UPDATE|WAR-|FLIGHT-|SUPPLY-|VILLAGE-FLIGHT|PLANE-TRACK|CI-DONE|OROR (Citadel|War|Vehicles|CI|Village)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
@@ -174,6 +181,8 @@ jobs:
             > out/capital_profile.txt 2>&1 || true
           # (053) every spell the royals had, cast in turn: the sweep's lines and the errors between them
           awk '/SPELL-SWEEP-START/{on=1} on{print} /SPELL-SWEEP-RESULT/{on=0}' "$RUNNER_TEMP/server/console.log" > out/spell_log.txt || true
+          # (053) the capital as generated against its save, uncut (CitadelIntegrity)
+          grep -E 'CAPITAL-INTEGRITY' "$RUNNER_TEMP/server/console.log" | sed 's/},/},\n/g' > out/capital_integrity.txt || true
           cat "$RUNNER_TEMP/server/jfr_dump.txt" >> out/war_profile.txt 2>/dev/null || true
           exit $rc
       - name: Commit the result

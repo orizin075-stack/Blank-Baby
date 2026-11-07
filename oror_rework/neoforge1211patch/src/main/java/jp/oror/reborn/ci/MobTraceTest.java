@@ -17,6 +17,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
@@ -125,7 +127,7 @@ public final class MobTraceTest {
             l.golem.getAttribute(Attributes.MAX_HEALTH).setBaseValue(2000);
             l.golem.setHealth(2000F);
             r.level.addFreshEntity(l.golem);
-            mob.setTarget(l.golem);
+            aim(mob, l.golem);
             l.lx = mob.getX();
             l.lz = mob.getZ();
             r.lanes.add(l);
@@ -134,6 +136,17 @@ public final class MobTraceTest {
         run = r;
         LOG.info("MOBS-TRACE-START {\"lanes\":{}}", r.lanes.size());
         return 1;
+    }
+
+    /**
+     * Set on the golem: the target, and for a mob led by its brain (a piglin brute: it hunts players and wither
+     * skeletons, never a golem of its own accord) the brain's attack target too, which its fighting reads.
+     */
+    private static void aim(Mob m, IronGolem golem) {
+        m.setTarget(golem);
+        if (m.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED)) {
+            m.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, golem);
+        }
     }
 
     @SubscribeEvent
@@ -162,7 +175,7 @@ public final class MobTraceTest {
                 continue;
             }
             if (age % 10 == 0 && m.getTarget() != l.golem) {
-                m.setTarget(l.golem);
+                aim(m, l.golem);
             }
             double d = m.distanceTo(l.golem);
             l.minDist = Math.min(l.minDist, d);
