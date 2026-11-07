@@ -228,7 +228,7 @@ public final class RebelPact {
     // ---------------------------------------------------------------------------------- the king's field gives way
 
     /** The rebels' blows on the king: their picked soldiers' count eight times on his field; their lord's break it. */
-    @SubscribeEvent
+    @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.HIGHEST)
     public static void onKing(LivingIncomingDamageEvent e) {
         if (!KingCourt.isKing(e.getEntity()) || e.getEntity().level().isClientSide) {
             return;

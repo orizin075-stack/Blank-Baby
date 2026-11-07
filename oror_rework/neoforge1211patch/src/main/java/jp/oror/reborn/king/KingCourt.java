@@ -111,8 +111,18 @@ public final class KingCourt {
 
     // ---------------------------------------------------------------------------------------------------- war
 
-    /** One who strikes the king becomes his enemy. */
+    /**
+     * One who strikes the king becomes his enemy: seen first (the king's own guard and his field may cancel the blow
+     * after, and a blocked blow is still a blow), and a melee blow seen when it is swung (AttackEntityEvent).
+     */
     @SubscribeEvent
+    public static void swung(net.neoforged.neoforge.event.entity.player.AttackEntityEvent e) {
+        if (isKing(e.getTarget()) && e.getEntity() instanceof ServerPlayer p && !p.isCreative() && !p.isSpectator()) {
+            declare(p, (RoyalMob) e.getTarget());
+        }
+    }
+
+    @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.HIGHEST, receiveCanceled = true)
     public static void struck(LivingIncomingDamageEvent e) {
         if (!isKing(e.getEntity()) || e.getEntity().level().isClientSide) {
             return;

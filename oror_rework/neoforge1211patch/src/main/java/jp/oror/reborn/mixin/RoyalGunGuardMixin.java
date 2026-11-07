@@ -19,6 +19,12 @@ public abstract class RoyalGunGuardMixin {
     private void oror$noGuardWithGun(LivingIncomingDamageEvent e, CallbackInfoReturnable<Boolean> cir) {
         if (Guns.held(((net.minecraft.world.entity.LivingEntity) (Object) this).getMainHandItem())) {
             cir.setReturnValue(false);
+            return;
+        }
+        // (054) the rebel lord's blade (his, his likeness's, his vexes', his fangs') is not turned aside by the king
+        if (jp.oror.reborn.king.KingCourt.isKing((net.minecraft.world.entity.Entity) (Object) this)
+            && jp.oror.reborn.king.RebelLord.slayer(e.getSource().getEntity())) {
+            cir.setReturnValue(false);
         }
     }
 }

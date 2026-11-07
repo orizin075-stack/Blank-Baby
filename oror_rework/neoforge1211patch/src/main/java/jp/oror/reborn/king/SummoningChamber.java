@@ -110,6 +110,10 @@ public final class SummoningChamber {
         } catch (RuntimeException ex) {
             p.moveTo(circle.getX() + 0.5, circle.getY(), circle.getZ() + 0.5, 0F, 0F);
         }
+        if (p.blockPosition().distManhattan(circle) > 1) {
+            // a player without a real connection (the CI's stand-ins) is not moved by the teleport packet
+            p.moveTo(circle.getX() + 0.5, circle.getY(), circle.getZ() + 0.5, 0F, 0F);
+        }
         p.setRespawnPosition(sl.dimension(), circle, 0F, true, false);
         sl.sendParticles(ParticleTypes.PORTAL, p.getX(), p.getY() + 1, p.getZ(), 200, 1.5, 1.2, 1.5, 0.6);
         sl.sendParticles(ParticleTypes.ENCHANT, p.getX(), p.getY() + 0.2, p.getZ(), 200, 4, 0.2, 4, 1);
