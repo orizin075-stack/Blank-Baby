@@ -1,72 +1,96 @@
 server_test exit 1 (jar out/oror_supreme_bosses-0.17.39-052-preview.jar)
+filled 532610 -> 9215303 owo-lib-neoforge-0.12.15.6-beta.1+1.21.jar
 117 jars, 0 failed
-[m[1;31m[02:36:54.414] [main/ERROR] [loading.ModSorter/LOADING]: Missing or unsupported mandatory dependencies:
-[02:37:00] [main/FATAL] [ne.ne.fm.ModLoader/CORE]: Error during pre-loading phase: Mod accessories requires owo 0.12.15.0+1.21 or above
-Currently, owo is not installed
+[m[33m[02:41:57.831] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[02:41:57.956] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[02:41:57.957] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[02:41:58.024] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[02:41:58.025] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[02:41:58.026] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[02:41:58.027] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[02:41:58.028] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[02:41:58.028] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[02:41:58.272] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[02:41:58.275] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[02:41:58.324] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[02:41:58.440] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[02:41:58.443] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[33m[02:41:58.659] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[33m[02:41:58.806] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[02:41:58.810] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[02:41:58.832] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[02:41:58.864] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+java.nio.file.NoSuchFileException: ./config/jupiter.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
+java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
+Caused by: java.lang.ClassNotFoundException: yesman.epicfight.api.neoevent.EntityPatchRegistryEvent
 net.neoforged.neoforge.logging.CrashReportExtender$ModLoadingCrashException: Mod loading has failed
-	Failure message: Mod accessories requires owo 0.12.15.0+1.21 or above
-		Currently, owo is not installed
-	Exception message: <No associated exception found>
+	Caused by 0: java.lang.NoClassDefFoundError: yesman/epicfight/api/neoevent/EntityPatchRegistryEvent
+	Exception message: java.lang.ClassNotFoundException: yesman.epicfight.api.neoevent.EntityPatchRegistryEvent
 net.neoforged.fml.ModLoadingException: Loading errors encountered:
-	- Mod accessories requires owo 0.12.15.0+1.21 or above
-	  Currently, owo is not installed
 --- mods loaded
-148
+149
 LegendaryTooltips-1.21.1-neoforge-1.5.5.jar
 aether-1.21.1-1.5.10-neoforge.jar
 citadel-1.21.1-2.7.6.jar
-citadel-2.7.1-1.21.1.jar
 legendary_monsters-2.2.4 MC 1.21.1.jar
+owo-lib-neoforge-0.12.15.6-beta.1+1.21.jar
 refm-0.3.13-1.21.1.jar
 rimulib-1.2.2-neoforge.jar
 sword_soaring-21.14.2.5-mc1.21.1-neoforge.jar
 the-shooting-star-demo-1.5.2-neoforge.jar
+xaeroworldmap-neoforge-1.21.1-1.47.0.jar
 --- tail
-	Number of physical CPUs: 2
-	Number of logical CPUs: 4
-	Graphics card #0 name: hyperv_drmdrmfb
-	Graphics card #0 vendor: unknown
-	Graphics card #0 VRAM (MiB): 0.00
-	Graphics card #0 deviceId: unknown
-	Graphics card #0 versionInfo: unknown
-	Virtual memory max (MiB): 11063.45
-	Virtual memory used (MiB): 2015.64
-	Swap memory total (MiB): 3072.00
-	Swap memory used (MiB): 0.00
-	Space in storage for jna.tmpdir (MiB): <path not set>
-	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
-	Space in storage for io.netty.native.workdir (MiB): <path not set>
-	Space in storage for java.io.tmpdir (MiB): available: 84735.03, total: 147718.61
-	Space in storage for workdir (MiB): available: 84735.03, total: 147718.61
-	JVM Flags: 2 total; -Xmx6G -XX:StartFlightRecording=filename=rec.jfr,settings=profile,dumponexit=true
-	ModLauncher: 11.0.5+main.901c6ea8
-	ModLauncher launch target: forgeserver
-	ModLauncher services: 
-		sponge-mixin-0.16.4+mixin.0.8.7.jar mixin PLUGINSERVICE 
-		loader-4.0.45.jar slf4jfixer PLUGINSERVICE 
-		loader-4.0.45.jar runtime_enum_extender PLUGINSERVICE 
-		at-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE 
-		loader-4.0.45.jar runtimedistcleaner PLUGINSERVICE 
-		modlauncher-11.0.5.jar mixin TRANSFORMATIONSERVICE 
-		modlauncher-11.0.5.jar fml TRANSFORMATIONSERVICE 
-	FML Language Providers: 
-		kotlinforforge@5.12.0
-		javafml@4.0
-		lowcodefml@4.0
-		minecraft@4.0
-	Mod List: 
-		server-1.21.1-20240808.144430-srg.jar             |Minecraft                     |minecraft                     |1.21.1              |Manifest: NOSIGNATURE
-		neoforge-21.1.262-universal.jar                   |NeoForge                      |neoforge                      |21.1.262            |Manifest: NOSIGNATURE
-[02:37:00] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
+		rimulib-1.2.2-neoforge.jar                        |Rimulib                       |rimulib                       |1.2.2               |Manifest: NOSIGNATURE
+		ritchiesprojectilelib-2.1.2-mc.1.21.1-neoforge.jar|Ritchie's Projectile Library  |ritchiesprojectilelib         |2.1.2               |Manifest: NOSIGNATURE
+		sable-neoforge-1.21.1-2.0.6.jar                   |Sable                         |sable                         |2.0.6               |Manifest: NOSIGNATURE
+		sable-companion-common-1.21.1-1.6.0.jar           |Sable Companion               |sablecompanion                |1.6.0               |Manifest: NOSIGNATURE
+		SBW-Drone-Warfare-1.21.1-NeoForge-1.0.6.jar       |SBW Drone Warfare             |sbwdroneconfig                |1.0.6               |Manifest: NOSIGNATURE
+		SimpleBedrockModel-2.5.1.1-neoforge-mc1.21.1.jar  |SimpleBedrockModel            |simplebedrockmodel            |2.5.1.1-neoforge-mc1|Manifest: NOSIGNATURE
+		sophisticatedbackpacks-1.21.1-3.26.12.2208.jar    |Sophisticated Backpacks       |sophisticatedbackpacks        |3.26.12             |Manifest: NOSIGNATURE
+		sophisticatedcore-1.21.1-1.5.12.2400.jar          |Sophisticated Core            |sophisticatedcore             |1.5.12              |Manifest: NOSIGNATURE
+		sound-physics-remastered-neoforge-1.21.1-1.5.2.jar|Sound Physics Remastered      |sound_physics_remastered      |1.21.1-1.5.2        |Manifest: NOSIGNATURE
+		superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar       |Superb Warfare                |superbwarfare                 |0.8.9.2             |Manifest: NOSIGNATURE
+		suppressionmod-1.2.0.jar                          |Suppression Mod               |suppressionmod                |1.2.0               |Manifest: NOSIGNATURE
+		tacz_bandits-1.3.jar                              |TACZ Bandits                  |tacz_bandits                  |1.3                 |Manifest: NOSIGNATURE
+		tenshilib-1.21.1-2.3.1-neoforge.jar               |TenshiLib                     |tenshilib                     |1.21.1-2.3.1-neoforg|Manifest: NOSIGNATURE
+		aether-1.21.1-1.5.10-neoforge.jar                 |The Aether                    |aether                        |1.5.10              |Manifest: NOSIGNATURE
+		the-shooting-star-demo-1.5.2-neoforge.jar         |The Shooting Star (Demo)      |shooting_star_demo            |1.5.2-demo          |Manifest: NOSIGNATURE
+		tacz-neoforge-1.21.1-1.1.8-hotfix-r7.jar          |Timeless & Classics Guns: Zero|tacz                          |1.1.8-hotfix-r7     |Manifest: NOSIGNATURE
+		TRansition-1.0.26-1.21.1-neoforge-SNAPSHOT.jar    |TRansition                    |transition                    |1.0.26              |Manifest: NOSIGNATURE
+		treeharvester-1.21.1-10.2.jar                     |Tree Harvester                |treeharvester                 |10.2                |Manifest: NOSIGNATURE
+		TRender-1.0.17-1.21.1-neoforge-SNAPSHOT.jar       |TRender                       |trender                       |1.0.17              |Manifest: NOSIGNATURE
+		uranus-2.4.1-bugfix-1.21.1-neoforge.jar           |Uranus                        |uranus                        |2.4.1-bugfix        |Manifest: NOSIGNATURE
+		veil-neoforge-1.21.1-4.3.2.jar                    |Veil                          |veil                          |4.3.2               |Manifest: NOSIGNATURE
+		vix-1.0.9.jar                                     |VIX                           |vix                           |1.0.9               |Manifest: NOSIGNATURE
+		waystones-neoforge-1.21.1-21.1.46.jar             |Waystones                     |waystones                     |21.1.46             |Manifest: NOSIGNATURE
+		WeaponsOfMiracles-2.0.178.jar                     |Weapons of miracle            |wom                           |2.0.178             |Manifest: NOSIGNATURE
+		DungeonsArise-1.21.1-2.1.68-release.jar           |When Dungeons Arise           |dungeons_arise                |2.1.68              |Manifest: NOSIGNATURE
+		xaerominimap-neoforge-1.21.1-26.6.0.jar           |Xaero's Minimap               |xaerominimap                  |26.6.0              |Manifest: NOSIGNATURE
+		xaeroworldmap-neoforge-1.21.1-1.47.0.jar          |Xaero's World Map             |xaeroworldmap                 |1.47.0              |Manifest: NOSIGNATURE
+		xaerolib-neoforge-1.21.1-1.7.3.jar                |XaeroLib                      |xaerolib                      |1.7.3               |Manifest: NOSIGNATURE
+		yet_another_config_lib_v3-3.8.2+1.21.1-neoforge.ja|YetAnotherConfigLib           |yet_another_config_lib_v3     |3.8.2+1.21.1-neoforg|Manifest: NOSIGNATURE
+		YouDied-neoforge-1.21-4.0.0.19.jar                |You Died                      |you_died                      |4.0.0.19            |Manifest: 15:a4:a3:0e:d2:f8:64:0c:a4:97:30:5f:48:ba:5f:69:f9:23:42:14:a8:5a:60:3a:b1:b1:29:1a:0a:37:3c:79
+	Crash Report UUID: 80bb2e4b-7616-41d9-a08f-99b0f966e341
+	FML: 4.0.45
+	NeoForge: 21.1.262
+[02:42:08] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
 net.neoforged.fml.ModLoadingException: Loading errors encountered:
-	- Mod accessories requires owo 0.12.15.0+1.21 or above
-	  Currently, owo is not installed
-	  
+	- Epic Fight - Sword Soaring (sword_soaring) has failed to load correctly
+	  java.lang.NoClassDefFoundError: yesman/epicfight/api/neoevent/EntityPatchRegistryEvent
 
-	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:110) ~[loader-4.0.45.jar%2359!/:4.0] {}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.waitForFuture(ModLoader.java:281) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.dispatchParallelTask(ModLoader.java:244) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.constructMods(ModLoader.java:152) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:142) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
 	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.internal.CommonModLoader.begin(CommonModLoader.java:49) ~[neoforge-21.1.262-universal.jar%23237!/:?] {re:classloading}
 	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.server.loading.ServerModLoader.load(ServerModLoader.java:34) ~[neoforge-21.1.262-universal.jar%23237!/:?] {re:classloading}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:124) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:124) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:A}
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
 	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%2359!/:4.0] {}
