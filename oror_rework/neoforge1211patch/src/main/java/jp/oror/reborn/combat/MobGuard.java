@@ -62,7 +62,8 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * played Epic Fight's guard animation (a mob stands in it), a broken guard its two-second "neutralised" one, archers
  * raised a guard. Now a mob guards only against players' blows; a parried mob is stunned briefly (Epic Fight's short
  * stun); a block shows only the sparks and the pose on OROR's rigs, a parry and a broken guard Epic Fight's short guard
- * hit; a mob with a bow or a crossbow does not guard; a block without a shield halves a blow instead of undoing it.
+ * hit; a mob with a bow or a crossbow does not guard, nor one with a gun (the user: the mobs carry guns too); a block
+ * without a shield halves a blow instead of undoing it.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class MobGuard {
@@ -95,7 +96,7 @@ public final class MobGuard {
     /** Whether a mob guards by these rules (players, the royals, and the mobs of the guarding mods do not). */
     public static boolean guards(LivingEntity e) {
         if (!(e instanceof Mob m) || m instanceof RoyalMob || !m.isAlive() || m.isNoAi()
-            || m.getMainHandItem().getItem() instanceof net.minecraft.world.item.ProjectileWeaponItem) {
+            || m.getMainHandItem().getItem() instanceof net.minecraft.world.item.ProjectileWeaponItem || Guns.held(m.getMainHandItem())) {
             return false;
         }
         Boolean known = NATIVE.get(m.getType());
