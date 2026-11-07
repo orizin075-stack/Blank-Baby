@@ -39,7 +39,7 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
     private static final BlockState STONE = Blocks.STONE.defaultBlockState();
     private static final BlockState GRASS = Blocks.GRASS_BLOCK.defaultBlockState();
     /** How far into a neighbouring chunk this chunk's trees can reach, and how high above the ground. */
-    private static final int SPILL = 6, SPILL_HEIGHT = 48;
+    private static final int SPILL = 10;
     public static final ResourceKey<Biome> CAPITAL = ResourceKey.create(Registries.BIOME,
         ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "royal_capital"));
 
@@ -215,12 +215,26 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
             || st.is(Blocks.SNOW) || st.is(BlockTags.FLOWERS) || st.is(BlockTags.SAPLINGS);
     }
 
+    /** What a neighbour's decoration can leave in a chunk built before it (trees, rocks, ice, a geode's crystals). */
+    private static boolean natural(BlockState st) {
+        return vegetation(st) || st.is(BlockTags.BASE_STONE_OVERWORLD) || st.is(BlockTags.DIRT) || st.is(BlockTags.SAND)
+            || st.is(BlockTags.ICE) || st.is(Blocks.MOSSY_COBBLESTONE) || st.is(Blocks.COBBLESTONE) || st.is(Blocks.GRAVEL)
+            || st.is(Blocks.CLAY) || st.is(Blocks.SNOW_BLOCK) || st.is(Blocks.POWDER_SNOW) || st.is(Blocks.AMETHYST_BLOCK)
+            || st.is(Blocks.BUDDING_AMETHYST) || st.is(Blocks.AMETHYST_CLUSTER) || st.is(Blocks.CALCITE) || st.is(Blocks.SMOOTH_BASALT)
+            || st.is(Blocks.MUSHROOM_STEM) || st.is(Blocks.RED_MUSHROOM_BLOCK) || st.is(Blocks.BROWN_MUSHROOM_BLOCK) || st.is(Blocks.BAMBOO)
+            || st.is(Blocks.POINTED_DRIPSTONE) || st.is(Blocks.DRIPSTONE_BLOCK) || st.is(Blocks.MAGMA_BLOCK) || st.is(Blocks.OBSIDIAN);
+    }
+
     /**
-     * Trees and plants this chunk's own decoration grew across its border into chunks of the citadel are taken back to
-     * the save's blocks there (a neighbour built before this chunk was decorated would otherwise keep them).
+     * What this chunk's own decoration put across its border into chunks of the citadel built before it is taken back
+     * to the save's blocks there (the neighbour would otherwise keep it). (053) Not only trees and plants (a rock, ice
+     * spikes, a geode's crystals, a giant mushroom...), ten blocks in rather than six, and up to the top of the save,
+     * not 48 blocks over the ground: a tree on a hill grew into the palace's upper floors. Only where the block there now
+     * is one such natural block and the save's is another: what the kingdom built is never touched.
      */
     private static void tidyNeighbours(WorldGenLevel level, CitadelSites.Site site, ChunkPos pos) {
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        int top = site.dy() + CitadelData.SECTIONS * 16;
         for (int ox = -1; ox <= 1; ox++) {
             for (int oz = -1; oz <= 1; oz++) {
                 if (ox == 0 && oz == 0) {
@@ -237,20 +251,20 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
                 int xa = ox < 0 ? 16 - SPILL : 0, xb = ox > 0 ? SPILL : 16;
                 int za = oz < 0 ? 16 - SPILL : 0, zb = oz > 0 ? SPILL : 16;
                 int bx = ncx * 16, bz = ncz * 16;
-                for (int y = site.ground() + 1; y <= site.ground() + SPILL_HEIGHT; y++) {
+                for (int y = site.ground() + 1; y < top && y < chunk.getMaxBuildHeight(); y++) {
                     int sy = (y - site.dy()) >> 4;
-                    if (sy < 0 || sy >= CitadelData.SECTIONS || y >= chunk.getMaxBuildHeight()) {
+                    if (sy < 0 || sy >= CitadelData.SECTIONS) {
                         continue;
                     }
                     PalettedContainer<BlockState> section = data.sections()[sy];
                     for (int x = xa; x < xb; x++) {
                         for (int z = za; z < zb; z++) {
                             BlockState here = chunk.getBlockState(p.set(bx + x, y, bz + z));
-                            if (here.isAir() || !vegetation(here)) {
+                            if (here.isAir() || !natural(here)) {
                                 continue;
                             }
-                            BlockState want = section == null ? DIRT : section.get(x, (y - site.dy()) & 15, z);
-                            if (want != here && !vegetation(want)) {
+                            BlockState want = section == null ? AIR : section.get(x, (y - site.dy()) & 15, z);
+                            if (want.getBlock() != here.getBlock() && !want.is(Blocks.DIRT) && !want.is(Blocks.BEDROCK)) {
                                 put(chunk, p, want);
                             }
                         }

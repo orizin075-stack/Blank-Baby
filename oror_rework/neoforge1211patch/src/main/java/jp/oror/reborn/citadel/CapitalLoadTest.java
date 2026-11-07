@@ -164,6 +164,11 @@ public final class CapitalLoadTest {
         LOG.info(String.format(Locale.ROOT, "CAPITAL-LOAD {\"site\":[%d,%d],\"chunks\":%d,\"entities\":%d,\"msptAvg\":%.2f,\"msptP95\":%.2f,"
                 + "\"msptMax\":%.2f,\"tickMsPerType\":{%s}}", r.site.center().getX(), r.site.center().getZ(), r.chunks.size(), total, avg, p95, max,
             cost));
+        try {
+            LOG.info("CAPITAL-INTEGRITY {}", CitadelIntegrity.scan(r.level, r.site, r.chunks));
+        } catch (RuntimeException ex) {
+            LOG.error("CAPITAL-INTEGRITY failed", ex);
+        }
         for (ChunkPos p : r.chunks) {
             CitadelChunkLoading.force(r.level, p.x, p.z, false);
         }
