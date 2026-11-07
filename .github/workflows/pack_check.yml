@@ -28,6 +28,7 @@ jobs:
           java-version: '21'
       - name: The pack's mods (053)
         run: |
+          python3 -I ../tools/cf/cf_fill.py ../tools/cf/manifest-053.json > "$RUNNER_TEMP/fill.txt" 2>&1 || true
           python3 -I tools/fetch_pack.py ../tools/cf/manifest-053.json "$RUNNER_TEMP/pack053" sodium fancytoasts chatplus extrasounds \
             > "$RUNNER_TEMP/fetch.txt" 2>&1 || true
           curl -sSfL -o "$RUNNER_TEMP/nightfall.jar" "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
@@ -40,11 +41,12 @@ jobs:
           rc=$?
           {
             echo "server_test exit $rc (jar $JAR)"
+            cat "$RUNNER_TEMP/fill.txt"
             grep -E 'failed|missing|Missing|requires|Error|ERROR' "$RUNNER_TEMP/fetch.txt" | head -40
             grep -E 'Done \(|CI-DONE|Mod loading has failed|ModLoadingException|requires .* or above|Missing or unsupported|is not installed|Incompatible|Exception|Caused by' "$RUNNER_TEMP/server/console.log" | head -120
             echo '--- mods loaded'
             grep -c 'Found mod file' "$RUNNER_TEMP/server/console.log" || true
-            ls "$RUNNER_TEMP/server/mods" | grep -i -E 'aether|legendary|refm|rapier|sword_soaring|rimulib|shooting|citadel' || true
+            ls "$RUNNER_TEMP/server/mods" | grep -i -E 'aether|legendary|refm|rapier|sword_soaring|rimulib|shooting|citadel|owo|accessor' || true
             echo '--- tail'
             tail -n 60 "$RUNNER_TEMP/start.txt"
           } > ../tools/cf/pack053_check.txt 2>&1
@@ -54,6 +56,6 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f oror_rework/tools/cf/pack053_check.txt
+          git add -f oror_rework/tools/cf/pack053_check.txt oror_rework/tools/cf/manifest-053.json
           git commit -m "Pack 053 start check ${GITHUB_SHA::7} [skip ci]" || exit 0
           for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
