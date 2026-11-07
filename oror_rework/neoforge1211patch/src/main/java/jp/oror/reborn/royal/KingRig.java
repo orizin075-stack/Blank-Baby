@@ -40,6 +40,8 @@ public final class KingRig extends RigModel<RoyalMob> {
     private final List<ModelPart>[] arms = new List[]{new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
     private final List<ModelPart>[] rot;
     private final List<ModelPart> jitter = new ArrayList<>();
+    private final Map<Integer, ModelPart> weaponR = new HashMap<>(), weaponL = new HashMap<>();
+    private int stanceNow;
     final boolean broken;
 
     @SuppressWarnings("unchecked")
@@ -61,6 +63,7 @@ public final class KingRig extends RigModel<RoyalMob> {
             for (int i = 0; i < STANCES.length; i++) {
                 if (n.startsWith("arms_" + STANCES[i] + "_")) {
                     this.arms[i].add(e.getValue());
+                    (n.endsWith("_l") ? this.weaponL : this.weaponR).put(i, e.getValue());
                 }
             }
             if (n.startsWith("rot1_")) {
@@ -112,6 +115,7 @@ public final class KingRig extends RigModel<RoyalMob> {
         this.animate(e, swing, amount, age, yaw, pitch, 0, 0F, 0, 0);
         // the stance
         int st = stance(e);
+        this.stanceNow = st;
         for (int i = 0; i < this.arms.length; i++) {
             scale(this.arms[i], i == st ? 1F : 0F);
         }
@@ -231,6 +235,10 @@ public final class KingRig extends RigModel<RoyalMob> {
             default -> {
                 float[][] ps = POSES.get(show.mechanic());
                 if (ps == null) {
+                    // the arsenal's seventy motions and the later deeds (jp.oror.reborn.king.KingArsenal)
+                    ps = jp.oror.reborn.king.KingArsenal.poseFor(show.mechanic());
+                }
+                if (ps == null) {
                     return;
                 }
                 float len = Math.max(1, show.length());
@@ -241,8 +249,8 @@ public final class KingRig extends RigModel<RoyalMob> {
                 a = a * a * (3F - 2F * a) * out;
                 b = b * b * (3F - 2F * b) * out;
                 float[] w = ps[0], s = ps[1];
-                float[] v = new float[10];
-                for (int i = 0; i < 10; i++) {
+                float[] v = new float[14];
+                for (int i = 0; i < Math.min(14, w.length); i++) {
                     v[i] = Mth.lerp(b, w[i] * a, s[i]) * (u < wind ? 1F : out);
                 }
                 add("arm_r", v[0], v[1], v[2]);
@@ -252,6 +260,20 @@ public final class KingRig extends RigModel<RoyalMob> {
                 ModelPart root = p("root");
                 if (root != null) {
                     root.y += v[9];
+                }
+                // the forearms, and the weapons turned in the fists (a thrust levels the blade, a twirl spins the spear)
+                add("fore_r", v[10], 0, 0);
+                add("fore_l", v[11], 0, 0);
+                ModelPart wr = this.weaponR.get(this.stanceNow), wl = this.weaponL.get(this.stanceNow);
+                if (wr == null && wl == null) {
+                    wr = p("sword");
+                    wl = p("shield");
+                }
+                if (wr != null) {
+                    wr.xRot += v[12];
+                }
+                if (wl != null) {
+                    wl.xRot += v[13];
                 }
             }
         }

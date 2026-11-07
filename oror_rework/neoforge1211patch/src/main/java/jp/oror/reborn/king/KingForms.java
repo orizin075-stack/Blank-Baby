@@ -67,7 +67,10 @@ import org.slf4j.LoggerFactory;
 public final class KingForms {
     private static final Logger LOG = LoggerFactory.getLogger("OROR King");
     public static final String TRUE_NAME = "バアル＝ゼブル";
-    public static final String TRUE_TITLE = "天の王にして蝿の王";
+    public static final String TRUE_TITLE = "堕ちたる天の王にして蝿の王";
+    /** The hero's name (the user). */
+    public static final String HERO_NAME = "英雄王アルブ";
+    static final String BROKEN_NAME = "崩壊王アルブ";
     /** The true name, and the king's own, as UTF-8 read as Shift_JIS. */
     static final String GARBLED_NAME = "繝舌い繝ｫ＝繧ｼ繝悶Ν";
     static final String GARBLED_KING = "譚台ｺｺ邇";
@@ -86,25 +89,49 @@ public final class KingForms {
         int beat = (int) ((time / 20 + king.getId()) % 4);
         return switch (phase) {
             case 0 -> Component.literal("Lv.6 村人王").withStyle(ChatFormatting.GOLD);
-            case 1 -> Component.literal("Lv.6 村人" + (beat == 0 ? "邇" : "王") + "《").withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(GARBLED_NAME.substring(0, 5)).withStyle(ChatFormatting.DARK_RED))
-                .append(Component.literal("》").withStyle(ChatFormatting.GOLD));
-            case 2 -> Component.literal("Lv.6 ").withStyle(ChatFormatting.DARK_RED)
-                .append(Component.literal(beat % 2 == 0 ? GARBLED_KING : "村" + GARBLED_KING.substring(1)).withStyle(ChatFormatting.RED))
-                .append(Component.literal("《" + GARBLED_NAME.substring(0, 6)).withStyle(ChatFormatting.DARK_RED))
-                .append(Component.literal("ゼブ").withStyle(ChatFormatting.DARK_RED, ChatFormatting.OBFUSCATED))
-                .append(Component.literal("》").withStyle(ChatFormatting.DARK_RED));
+            case 1 -> Component.literal("Lv.6 " + HERO_NAME).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
+            case 2 -> brokenName(king, beat);
             default -> Component.literal("Lv.6 " + TRUE_NAME).withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD)
                 .append(Component.literal("［" + TRUE_TITLE + "］").withStyle(ChatFormatting.LIGHT_PURPLE));
         };
+    }
+
+    /**
+     * The broken one's name comes apart as his life goes (the user: a name gone to garbage): 崩壊王アルブ, its letters
+     * one by one gone to the garbage of his true name read in the wrong code, a letter or two flickering, until under a
+     * fifth of his life nothing of it is left but the garbage.
+     */
+    static Component brokenName(RoyalMob king, int beat) {
+        float ruin = 1F - king.getHealth() / Math.max(1F, king.getMaxHealth());
+        if (ruin >= 0.8F) {
+            return Component.literal("Lv.6 ").withStyle(ChatFormatting.DARK_RED)
+                .append(Component.literal(GARBLED_KING).withStyle(ChatFormatting.RED))
+                .append(Component.literal("《" + GARBLED_NAME + "》").withStyle(ChatFormatting.DARK_RED))
+                .append(Component.literal("ｮ").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.OBFUSCATED));
+        }
+        String base = BROKEN_NAME;
+        String junk = GARBLED_KING + GARBLED_NAME;
+        int n = Math.round(ruin * base.length() * 1.25F);
+        StringBuilder b = new StringBuilder(base);
+        java.util.Random rnd = new java.util.Random(king.getId() * 31L);
+        for (int i = 0; i < Math.min(n, base.length()); i++) {
+            int at = rnd.nextInt(base.length());
+            b.setCharAt(at, junk.charAt(rnd.nextInt(junk.length())));
+        }
+        net.minecraft.network.chat.MutableComponent c = Component.literal("Lv.6 ").withStyle(ChatFormatting.DARK_RED)
+            .append(Component.literal(b.toString()).withStyle(ChatFormatting.RED));
+        if (beat % 2 == 0 && ruin > 0.2F) {
+            c.append(Component.literal("繝").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.OBFUSCATED));
+        }
+        return c;
     }
 
     /** The boss bar's name in each form. */
     public static Component bossName(int phase) {
         MutableComponent c = switch (phase) {
             case 0 -> Component.literal("Lv.6 村人王");
-            case 1 -> Component.literal("Lv.6 村人王《" + GARBLED_NAME.substring(0, 5) + "》");
-            case 2 -> Component.literal("Lv.6 " + GARBLED_KING + "《" + GARBLED_NAME + "》");
+            case 1 -> Component.literal("Lv.6 " + HERO_NAME);
+            case 2 -> Component.literal("Lv.6 崩壊王《" + GARBLED_NAME + "》");
             default -> Component.literal("Lv.6 " + TRUE_NAME + "［" + TRUE_TITLE + "］");
         };
         return c.append(Component.literal("［復活 " + phase + "/3］"));
@@ -212,6 +239,9 @@ public final class KingForms {
     // ------------------------------------------------------------------------------------------------ every tick
 
     /** RoyalSovereign.tick's end (KingSovereignMixin): his name, and his deeds in the form. */
+    /** Set by the story test while it tries his deeds one by one: he does nothing of his own. */
+    public static final String QUIET = "OrorKingQuiet";
+
     public static void tick(RoyalMob king, int phase) {
         if (!(king.level() instanceof ServerLevel sl)) {
             return;
@@ -233,7 +263,7 @@ public final class KingForms {
         if (t == null || !t.isAlive() || !foe(king, t)) {
             return;
         }
-        if (KingCinema.playing(king)) {
+        if (KingCinema.playing(king) || king.getPersistentData().getBoolean(QUIET)) {
             return;
         }
         if (phase >= 1) {

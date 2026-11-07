@@ -204,7 +204,7 @@ public final class KingCinema {
             }
         }
         if (t == 20) {
-            title(sl, home, Component.literal("英雄王、再臨").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
+            title(sl, home, Component.literal(KingForms.HERO_NAME + "、再臨").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                 Component.literal("「民よ、見よ。王はここに立つ！」").withStyle(ChatFormatting.YELLOW), 60);
         }
         if (t >= 40 && t < 62 && t % 2 == 0) {
@@ -217,7 +217,7 @@ public final class KingCinema {
         }
         if (t == 60) {
             sound(sl, home, SoundEvents.RAID_HORN.value(), 4F, 1.2F);
-            say(sl, home, "英雄王：我が剣は民のために。我が盾は王国のために。", ChatFormatting.GOLD);
+            say(sl, home, KingForms.HERO_NAME + "：我が剣は民のために。我が盾は王国のために。", ChatFormatting.GOLD);
         }
         if (t == 75) {
             KingForms.call(king, sl, RoyalRole.IMPERIAL, 3);

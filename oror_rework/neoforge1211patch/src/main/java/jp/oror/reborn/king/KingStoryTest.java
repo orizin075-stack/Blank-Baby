@@ -55,6 +55,22 @@ public final class KingStoryTest {
     static final class Tester extends FakePlayer {
         Tester(ServerLevel level, int n) {
             super(level, new GameProfile(UUID.fromString("0f0e0d0c-0b0a-4908-8706-0504030203" + String.format("%02x", n)), "[OROR Story " + n + "]"));
+            unshield();
+        }
+
+        /** A fake player never ticks, so its sixty ticks of spawn protection never run out and every blow on it is
+         * refused before any handler sees it; take them away. */
+        boolean unshield() {
+            this.invulnerableTime = 0;
+            try {
+                java.lang.reflect.Field f = net.minecraft.server.level.ServerPlayer.class.getDeclaredField("spawnInvulnerableTime");
+                f.setAccessible(true);
+                f.setInt(this, 0);
+                return true;
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                LOG.warn("KING-STORY-UNSHIELD {}", ex.toString());
+                return false;
+            }
         }
 
         void ready() {
@@ -78,6 +94,7 @@ public final class KingStoryTest {
         long started;
         int stage;
         int trial = -1;
+        boolean movesDone;
         long nextTrial = -1, after = -1;
         final Map<String, Integer> hitsBefore = new LinkedHashMap<>();
     }
@@ -222,13 +239,17 @@ public final class KingStoryTest {
             r.made.addAll(lord);
             out.put("likeness", came);
             out.put("breachedBefore", r.king.atBreached());
+            kingState(r, "k0");
             if (!lord.isEmpty()) {
-                r.king.hurt(r.king.damageSources().mobAttack(lord.get(0)), 10F);
+                out.put("lordHit", r.king.hurt(r.king.damageSources().mobAttack(lord.get(0)), 10F));
             }
             out.put("breachedByLord", r.king.atBreached());
+            kingState(r, "k1");
             int before = r.king.lifePhase();
             r.king.sovereign().healTo(4F);
-            r.king.hurt(r.king.damageSources().mobAttack(lord.isEmpty() ? r.king : lord.get(0)), 500F);
+            r.king.invulnerableTime = 0;
+            out.put("deathHit", r.king.hurt(r.king.damageSources().mobAttack(lord.isEmpty() ? r.king : lord.get(0)), 500F));
+            kingState(r, "k2");
             out.put("revive", before + "->" + r.king.lifePhase());
             out.put("reviveAlive", r.king.isAlive());
             out.put("film1", KingCinema.playing(r.king));
@@ -295,10 +316,43 @@ public final class KingStoryTest {
             out.put("mainhand", net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(r.king.getMainHandItem().getItem()).toString());
             r.trial = 0;
             r.nextTrial = age;
+            // while the deeds are tried one by one he does nothing of his own, and the players stand well away
+            r.king.getPersistentData().putBoolean(KingForms.QUIET, true);
+            for (Tester t : List.of(r.friend, r.rebel, r.keeper)) {
+                t.moveTo(r.at.getX() + 0.5, r.at.getY() + 40, r.at.getZ() - 60.5, 0F, 0F);
+            }
         }
-        if (r.trial >= 0 && r.trial <= KingDeeds.DEEDS.size() && age >= r.nextTrial) {
+        int deeds = KingDeeds.DEEDS.size(), total = deeds + KingArsenal.MOVES.size();
+        if (r.trial >= deeds && r.trial < total && age >= r.nextTrial) {
+            // then every one of his weapons' seventy motions, the same way
+            KingArsenal.Move m = KingArsenal.MOVES.get(r.trial - deeds);
+            for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(r.at).inflate(40), Zombie::isAlive)) {
+                z.discard();
+            }
+            double dist = Math.max(2.5, Math.min(14.0, (m.min() + Math.min(m.max(), 16)) / 2.0));
+            r.king.teleportTo(r.at.getX() + 0.5, r.at.getY(), r.at.getZ() + 0.5);
+            Mob a = sturdy(spawn(r, EntityType.ZOMBIE, dist, 0));
+            sturdy(spawn(r, EntityType.ZOMBIE, dist, 1.5));
+            r.king.setTarget(a);
+            KingArsenal.perform(r.king, sl, m, a);
+            r.nextTrial = age + m.windup() + 22 + switch (m.shape()) {
+                case LEAP, THROW -> 30;
+                case LOB -> m.count() * 8 + 20;
+                case SHOT, MULTI -> m.count() * 6 + 5;
+                case ERUPT, WAVE, RING -> 25;
+                case DASH, PULL, BACKSTEP, CROSS -> 12;
+                default -> 0;
+            };
+            r.trial++;
+            if (r.trial == total) {
+                r.trial = deeds;
+                r.nextTrial = age + 200;
+                r.movesDone = true;
+            }
+        }
+        if (r.trial >= 0 && r.trial <= deeds && age >= r.nextTrial && (r.trial < deeds || r.movesDone)) {
             // every deed, done on sturdy zombies set at its range
-            if (r.trial == KingDeeds.DEEDS.size()) {
+            if (r.trial == deeds) {
                 CompoundTag h = r.king.getPersistentData().getCompound(KingDeeds.HITS);
                 CompoundTag c = r.king.getPersistentData().getCompound(KingDeeds.COUNT);
                 StringBuilder missed = new StringBuilder();
@@ -314,6 +368,20 @@ public final class KingStoryTest {
                 }
                 out.put("deedsLanded", landed);
                 out.put("deedsMissed", missed.toString().trim());
+                int moves = 0;
+                StringBuilder mm = new StringBuilder();
+                for (KingArsenal.Move m : KingArsenal.MOVES) {
+                    if (h.getInt(m.id()) > 0) {
+                        moves++;
+                    } else {
+                        mm.append(m.id()).append(' ');
+                    }
+                }
+                out.put("movesLanded", moves + "/" + KingArsenal.MOVES.size());
+                out.put("movesLandedN", moves);
+                out.put("movesMissed", mm.toString().trim());
+                out.put("echoes", c.getInt("echo"));
+                out.put("moveMisses", c.getInt("move_miss"));
                 out.put("stances", "clubs " + c.getInt("stance_clubs") + " scythe " + c.getInt("stance_scythe") + " twin " + c.getInt("stance_twin")
                     + " spear " + c.getInt("stance_spear") + " bow " + c.getInt("stance_bow"));
                 out.put("deleted", r.king.getPersistentData().getInt("OrorKingDeleted"));
@@ -321,6 +389,10 @@ public final class KingStoryTest {
                 out.put("swarms", r.king.getPersistentData().getInt("OrorKingSwarms"));
                 r.trial = -1;
                 r.after = age + 10;
+                r.king.getPersistentData().remove(KingForms.QUIET);
+                for (Tester t : List.of(r.friend, r.rebel, r.keeper)) {
+                    t.moveTo(r.at.getX() + 3.5, r.at.getY(), r.at.getZ() + 0.5, 90F, 0F);
+                }
             } else {
                 KingDeeds.Deed d = KingDeeds.DEEDS.get(r.trial);
                 for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(r.at).inflate(40), Zombie::isAlive)) {
@@ -389,6 +461,7 @@ public final class KingStoryTest {
             GodSlayer.give(r.rebel, sl);
             // its field takes a small blow whole; a great blow breaks it and the ceiling holds what goes through
             r.rebel.setHealth(r.rebel.getMaxHealth());
+            out.put("testerUnshielded", r.rebel.unshield());
             Mob z = spawn(r, EntityType.ZOMBIE, 2, 2);
             float h0 = r.rebel.getHealth();
             r.rebel.hurt(r.rebel.damageSources().mobAttack(z), 20F);
@@ -405,23 +478,25 @@ public final class KingStoryTest {
             r.made.add(god);
             r.rebel.ready();
             god.hurt(r.rebel.damageSources().playerAttack(r.rebel), 10F);
-            out.put("godWeakened", god.hasEffect(MobEffects.WEAKNESS));
+            out.put("godWeakenedEffect", god.hasEffect(MobEffects.WEAKNESS));
+            // the King throws off harmful effects; the curse on his armour and strength holds
+            out.put("godWeakened", god.hasEffect(MobEffects.WEAKNESS)
+                || god.getAttribute(Attributes.ARMOR).getModifier(GodSlayer.CURSE) != null);
             out.put("godBreached", god.atBreached());
             god.discard();
         }
         if (r.after > 0 && age == r.after + 40) {
             // the broken phantasm: a sword shatters into a blow many times over; a pickaxe tears out a sphere
             r.keeper.getInventory().clearContent();
+            // the sword's own blow first (a fake player never ticks, so its weapon's modifiers are put on by hand)
+            float base = swordBlow(r);
             BrokenPhantasm.cast(r.keeper, sl);
             out.put("phantasmActive", BrokenPhantasm.active(r.keeper));
-            r.keeper.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
-            Mob z = sturdy(spawn(r, EntityType.ZOMBIE, 1.5, -1.5));
-            float zh = z.getHealth();
-            r.keeper.ready();
-            r.keeper.attack(z);
-            out.put("phantasmBlow", Math.round(zh - z.getHealth()));
+            float blow = swordBlow(r);
+            out.put("phantasmBase", Math.round(base * 10) / 10.0);
+            out.put("phantasmBlow", Math.round(blow));
+            out.put("phantasmRatio", base > 0 ? Math.round(blow / base * 10) / 10.0 : -1.0);
             out.put("phantasmSwordGone", r.keeper.getMainHandItem().isEmpty());
-            z.discard();
             BlockPos c = r.at.offset(8, 3, -8);
             for (BlockPos q : BlockPos.betweenClosed(c.offset(-3, -3, -3), c.offset(3, 3, 3))) {
                 sl.setBlock(q, Blocks.STONE.defaultBlockState(), 2);
@@ -496,6 +571,53 @@ public final class KingStoryTest {
         }
     }
 
+    /** One blow of an iron sword by the keeper on a fresh dummy; the health it took. */
+    private static float swordBlow(Run r) {
+        ItemStack sword = new ItemStack(Items.IRON_SWORD);
+        r.keeper.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, sword);
+        List<net.minecraft.resources.ResourceLocation> put = new ArrayList<>();
+        sword.forEachModifier(net.minecraft.world.entity.EquipmentSlot.MAINHAND, (a, m) -> {
+            var in = r.keeper.getAttribute(a);
+            if (in != null && in.getModifier(m.id()) == null) {
+                in.addTransientModifier(m);
+                put.add(m.id());
+            }
+        });
+        Mob z = sturdy(spawn(r, EntityType.ZOMBIE, 1.5, -1.5));
+        float zh = z.getHealth();
+        r.keeper.ready();
+        r.keeper.attack(z);
+        float took = zh - z.getHealth();
+        z.discard();
+        for (var a : List.of(Attributes.ATTACK_DAMAGE, Attributes.ATTACK_SPEED)) {
+            var in = r.keeper.getAttribute(a);
+            if (in != null) {
+                for (var id : put) {
+                    in.removeModifier(id);
+                }
+            }
+        }
+        return took;
+    }
+
+    /** The King's state for the record: his health, field, phase, and the counts his sovereign keeps. */
+    private static void kingState(Run r, String tag) {
+        RoyalMob k = r.king;
+        CompoundTag d = k.getPersistentData();
+        StringBuilder b = new StringBuilder();
+        b.append("hp=").append(Math.round(k.getHealth() * 10) / 10.0).append('/').append(Math.round(k.getMaxHealth()))
+            .append(" field=").append(Math.round(k.sovereign().field())).append(" breached=").append(k.sovereign().breached())
+            .append(" phase=").append(k.lifePhase()).append(" inv=").append(k.isInvulnerable()).append(" noai=").append(k.isNoAi())
+            .append(" itime=").append(k.invulnerableTime).append(" alive=").append(k.isAlive());
+        for (String c : new String[]{"RoyalFieldBreaks", "RoyalFieldAbsorptions", "RoyalParries", "RoyalBlocks", "RoyalResurrections",
+            "RoyalDirectDeathBlocks", "RoyalInstantKillBlocks", "RoyalFatalNegations"}) {
+            if (d.getInt(c) > 0) {
+                b.append(' ').append(c.substring(5)).append('=').append(d.getInt(c));
+            }
+        }
+        r.r.put(tag, b.toString());
+    }
+
     private static void stage(Run r, int phase) {
         CompoundTag t = new CompoundTag();
         t.putInt("Phase", phase);
@@ -504,8 +626,21 @@ public final class KingStoryTest {
         r.r.put("name" + phase, KingForms.name(r.king, phase, 0).getString());
     }
 
+    /** The test's dummies are not let die (the King's own blows, his storms and his offense would kill them before the
+     * deed on trial lands): their death is refused and their health made whole. */
+    @SubscribeEvent
+    public static void dummy(net.neoforged.neoforge.event.entity.living.LivingDeathEvent e) {
+        if (e.getEntity().getPersistentData().getBoolean(DUMMY) && run != null) {
+            e.setCanceled(true);
+            e.getEntity().setHealth(e.getEntity().getMaxHealth());
+        }
+    }
+
+    static final String DUMMY = "OrorStoryDummy";
+
     /** A zombie that lives through many blows and does not burn. */
     private static Mob sturdy(Mob m) {
+        m.getPersistentData().putBoolean(DUMMY, true);
         var a = m.getAttribute(Attributes.MAX_HEALTH);
         if (a != null) {
             a.setBaseValue(1000);
@@ -528,10 +663,12 @@ public final class KingStoryTest {
             && Boolean.TRUE.equals(o.get("film3Done")) && num(o, "phase") == 3 && Boolean.TRUE.equals(o.get("armour1")) && Boolean.TRUE.equals(o.get("heroSword"))
             && o.get("scale1") instanceof Double s1 && o.get("scale2") instanceof Double s2 && o.get("scale3") instanceof Double s3 && s1 > 1.0 && s2 > s1 && s3 > s2;
         boolean deeds = num(o, "deedsLanded") >= KingDeeds.DEEDS.size() - 1;
+        boolean moves = num(o, "movesLandedN") >= KingArsenal.MOVES.size() - 3;
         boolean broken = num(o, "missOut") + num(o, "lagHits") + num(o, "missIn") + num(o, "phantoms") + num(o, "errorArm") > 0;
         boolean slayer = Boolean.TRUE.equals(o.get("godSlayer")) && Boolean.TRUE.equals(o.get("fieldTook")) && Boolean.TRUE.equals(o.get("ceilingHeld"))
             && Boolean.TRUE.equals(o.get("godWeakened"));
-        boolean phantasm = Boolean.TRUE.equals(o.get("phantasmActive")) && num(o, "phantasmBlow") >= 50 && Boolean.TRUE.equals(o.get("phantasmSwordGone"))
+        boolean phantasm = Boolean.TRUE.equals(o.get("phantasmActive")) && o.get("phantasmRatio") instanceof Double pr && pr >= 9.5
+            && Boolean.TRUE.equals(o.get("phantasmSwordGone"))
             && num(o, "phantasmDug") >= 10 && Boolean.TRUE.equals(o.get("phantasmPickGone"));
         boolean crown = num(o, "crownDropped") >= 1 && Boolean.TRUE.equals(o.get("keeperEnemy")) && Boolean.TRUE.equals(o.get("presented"))
             && num(o, "festival") >= 1;
@@ -544,10 +681,11 @@ public final class KingStoryTest {
         o.put("passCrown", crown);
         o.put("passChamber", chamber);
         o.put("passDeeds", deeds);
+        o.put("passMoves", moves);
         o.put("passBroken", broken);
         o.put("passGodSlayer", slayer);
         o.put("passPhantasm", phantasm);
-        o.put("pass", peace && war && rebels && forms && crown && chamber && deeds && broken && slayer && phantasm);
+        o.put("pass", peace && war && rebels && forms && crown && chamber && deeds && moves && broken && slayer && phantasm);
         StringBuilder b = new StringBuilder("{");
         o.forEach((k, v) -> b.append(b.length() > 1 ? "," : "").append('"').append(k).append("\":")
             .append(v instanceof String s ? "\"" + s.replace("\"", "'") + "\"" : String.valueOf(v)));

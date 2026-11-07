@@ -98,7 +98,10 @@ public final class KingDeeds {
 
     /** A deed: its name, the least form it needs, its stance (0 any; 1 clubs, 2 scythe, 3 twin swords, 4 spear, 5 bow),
      * its range, how often, its windup and length (ticks). */
-    record Deed(String id, int phase, int stance, double min, double max, int every, int windup, int length) {
+    record Deed(String id, int phase, int stance, double min, double max, int every, int windup, int length, int only) {
+        Deed(String id, int phase, int stance, double min, double max, int every, int windup, int length) {
+            this(id, phase, stance, min, max, every, windup, length, 0);
+        }
     }
 
     static final List<Deed> DEEDS = List.of(
@@ -127,7 +130,24 @@ public final class KingDeeds {
         new Deed("rain", 3, 5, 6, 48, 220, 14, 50),
         new Deed("triple", 3, 5, 3, 48, 100, 10, 20),
         new Deed("feast", 3, 0, 0, 16, 400, 10, 60),
-        new Deed("doomsday", 3, 0, 0, 48, 1200, 60, 100));
+        new Deed("doomsday", 3, 0, 0, 48, 1200, 60, 230),
+        // (054) the specials, the binding, the wrath of a god, the rest (KingWrath)
+        new Deed("dawn", 1, 0, 0, 22, 600, 30, 50),
+        new Deed("swords", 1, 0, 0, 32, 500, 16, 50),
+        new Deed("leapin", 1, 0, 14, 40, 160, 8, 26),
+        new Deed("summon", 1, 0, 0, 48, 900, 20, 30),
+        new Deed("backstep", 1, 0, 0, 3.5, 160, 0, 20),
+        new Deed("chains", 2, 0, 0, 16, 360, 12, 40),
+        new Deed("overflow", 2, 0, 0, 20, 500, 10, 50),
+        new Deed("panic", 2, 0, 0, 16, 700, 40, 60),
+        new Deed("veil", 3, 0, 0, 28, 900, 20, 40),
+        new Deed("soul", 3, 0, 0, 24, 700, 20, 30),
+        new Deed("halo", 3, 0, 4, 32, 300, 14, 40),
+        new Deed("feathers", 3, 0, 0, 24, 400, 16, 30),
+        new Deed("crucify", 3, 0, 0, 20, 600, 14, 70),
+        new Deed("creation", 3, 0, 0, 40, 1200, 20, 40),
+        new Deed("wormwood", 3, 0, 0, 40, 1000, 30, 100),
+        new Deed("bowls", 3, 0, 0, 40, 1400, 20, 170));
 
     private KingDeeds() {
     }
@@ -251,10 +271,46 @@ public final class KingDeeds {
         }
         double dist = king.distanceTo(t);
         int st = phase >= 3 ? stance(king) : 0;
+        // most of the time one of the ten motions of the weapon in his hands (KingArsenal); a third of the time, or when
+        // none of them fits, one of his great deeds
+        if (sl.random.nextInt(3) != 0 && arsenal(king, sl, phase, dist, now, t)) {
+            return;
+        }
+        if (greatDeed(king, sl, phase, st, dist, now, t)) {
+            return;
+        }
+        arsenal(king, sl, phase, dist, now, t);
+    }
+
+    private static boolean arsenal(RoyalMob king, ServerLevel sl, int phase, double dist, long now, LivingEntity t) {
+        KingArsenal.Move mv = KingArsenal.pick(king, KingArsenal.weapon(king, phase), dist, now, sl.random);
+        if (mv == null) {
+            return false;
+        }
+        KingArsenal.perform(king, sl, mv, t);
+        return true;
+    }
+
+    /** A deed his health allows: the gods' wrath only when he is brought low. */
+    static boolean allowed(RoyalMob king, String id) {
+        float f = king.getHealth() / Math.max(1F, king.getMaxHealth());
+        return switch (id) {
+            case "doomsday" -> f < 0.35F;
+            case "bowls" -> f < 0.5F;
+            case "wormwood" -> f < 0.6F;
+            default -> true;
+        };
+    }
+
+    private static boolean greatDeed(RoyalMob king, ServerLevel sl, int phase, int st, double dist, long now, LivingEntity t) {
+        CompoundTag d = king.getPersistentData();
         List<Deed> order = new ArrayList<>(DEEDS);
         Collections.shuffle(order, new java.util.Random(now ^ king.getId()));
         for (Deed deed : order) {
             if (deed.phase > phase || (deed.stance != 0 && deed.stance != st) || dist < deed.min || dist > deed.max) {
+                continue;
+            }
+            if (deed.only != 0 && deed.only != phase) {
                 continue;
             }
             if (now < d.getLong("OrorKingDeed_" + deed.id)) {
@@ -263,13 +319,14 @@ public final class KingDeeds {
             if (deed.max > 8 && !king.hasLineOfSight(t)) {
                 continue;
             }
-            if (deed.id.equals("doomsday") && king.getHealth() >= king.getMaxHealth() * 0.35F) {
+            if (!allowed(king, deed.id)) {
                 continue;
             }
             d.putLong("OrorKingDeed_" + deed.id, now + deed.every);
             perform(king, sl, deed.id, t);
-            return;
+            return true;
         }
+        return false;
     }
 
     static Deed deed(String id) {
@@ -319,6 +376,22 @@ public final class KingDeeds {
             case "triple" -> triple(king, sl, t, w);
             case "feast" -> feast(king, sl, w);
             case "doomsday" -> doomsday(king, sl, w);
+            case "dawn" -> KingWrath.dawn(king, sl, t, w);
+            case "swords" -> KingWrath.swords(king, sl, w);
+            case "leapin" -> KingWrath.leapIn(king, sl, t, w);
+            case "summon" -> KingWrath.summon(king, sl, w);
+            case "backstep" -> KingWrath.backstep(king, sl, t, w);
+            case "chains" -> KingWrath.chains(king, sl, w);
+            case "overflow" -> KingWrath.overflow(king, sl, t, w);
+            case "panic" -> KingWrath.panic(king, sl, w);
+            case "veil" -> KingWrath.veil(king, sl, w);
+            case "soul" -> KingWrath.soul(king, sl, w);
+            case "halo" -> KingWrath.halo(king, sl, t, w);
+            case "feathers" -> KingWrath.feathers(king, sl, w);
+            case "crucify" -> KingWrath.crucify(king, sl, w);
+            case "creation" -> KingWrath.creation(king, sl, w);
+            case "wormwood" -> KingWrath.wormwood(king, sl, w);
+            case "bowls" -> KingWrath.bowls(king, sl, w);
             default -> {
             }
         }
@@ -455,7 +528,7 @@ public final class KingDeeds {
 
     // -------------------------------------------------------------------------------------------- the broken one
 
-    private static void glitchAt(ServerLevel sl, Vec3 p) {
+    static void glitchAt(ServerLevel sl, Vec3 p) {
         for (DustParticleOptions o : new DustParticleOptions[]{MAGENTA, CYAN, BLACK}) {
             sl.sendParticles(o, p.x, p.y, p.z, 10, 0.4, 0.5, 0.4, 0.02);
         }
@@ -831,7 +904,7 @@ public final class KingDeeds {
     /** Who speaks: the hero, the broken one, Baal Zebul. */
     static String who(RoyalMob king) {
         int ph = king.lifePhase();
-        return ph >= 3 ? "バアル＝ゼブル" : ph == 2 ? "崩壊王" : "英雄王";
+        return ph >= 3 ? "バアル＝ゼブル" : ph == 2 ? "崩壊王" : ph == 1 ? "英雄王アルブ" : "村人王";
     }
 
     static double toSegment(Vec3 p, Vec3 a, Vec3 b) {
@@ -1017,21 +1090,27 @@ public final class KingDeeds {
                     p.causeFoodExhaustion(12F);
                 }
             }
-            if (drunk > 0F) {
-                king.heal(drunk);
+            // he drinks what he takes many times over, and a share of his own life for every foe he feeds on: he mends fast
+            int fed = KingForms.foes(king, sl, 16.0).size();
+            if (drunk > 0F || fed > 0) {
+                king.heal(drunk * 3F + king.getMaxHealth() * 0.02F * fed);
                 sl.sendParticles(CRIMSON, king.getX(), king.getY() + king.getBbHeight() * 0.6, king.getZ(), 30, 0.6, 0.8, 0.6, 0.05);
             }
             sound(sl, king.position(), SoundEvents.GENERIC_DRINK, 2F, 0.5F);
         });
     }
 
-    /** 審判の日 (Baal Zebul, under a third of his life): the sky goes dark and the heavens open for three seconds of
-     * warning; then every foe within forty-eight blocks in his sight is struck by the fire of heaven. Only those hidden
-     * from him (behind walls, under the earth) are spared. */
+    /**
+     * 審判の日 (Baal Zebul, under a third of his life; the user: light from the sky, and any touching it at the moment
+     * takes a thousand ten times over). The sky goes dark. Three times, pillars of light come down on every foe and about
+     * them: for a second and a half they are thin and pale (the warning), then at their moment they blaze, and any in one
+     * takes a thousand, ten times. Last, the great light: every foe still in his sight within forty-eight blocks is struck
+     * by the fire of heaven; only those hidden from him are spared.
+     */
     private static void doomsday(RoyalMob king, ServerLevel sl, int w) {
-        KingCinemaSay.near(sl, king, "バアル＝ゼブル：見よ、審判の日は来たれり。――我が目より隠れ得ぬ者に、災いあれ。", ChatFormatting.GOLD);
+        KingCinemaSay.near(sl, king, "バアル＝ゼブル：見よ、審判の日は来たれり。天の光に触れし者は、ことごとく滅ぶ。", ChatFormatting.GOLD);
         for (LivingEntity v : KingForms.foes(king, sl, 48)) {
-            v.addEffect(new MobEffectInstance(MobEffects.DARKNESS, w + 40, 0));
+            v.addEffect(new MobEffectInstance(MobEffects.DARKNESS, w + 200, 0));
         }
         sound(sl, king.position(), SoundEvents.END_PORTAL_SPAWN, 4F, 0.6F);
         each(sl, 0, Math.max(1, w / 4), 4, k -> {
@@ -1041,7 +1120,10 @@ public final class KingDeeds {
                 sound(sl, king.position(), SoundEvents.LIGHTNING_BOLT_THUNDER, 3F, 0.5F);
             }
         });
-        later(sl, w, () -> {
+        for (int wave = 0; wave < 3; wave++) {
+            later(sl, w + wave * 45, () -> pillars(king, sl));
+        }
+        later(sl, w + 3 * 45 + 20, () -> {
             for (LivingEntity v : KingForms.foes(king, sl, 48)) {
                 if (!king.hasLineOfSight(v)) {
                     sl.sendParticles(WHITE, v.getX(), v.getY() + v.getBbHeight() + 0.5, v.getZ(), 6, 0.3, 0.2, 0.3, 0);
@@ -1056,11 +1138,59 @@ public final class KingDeeds {
                     v.addEffect(new MobEffectInstance(MobEffects.GLOWING, 400, 0));
                 }
             }
-            for (int i = 0; i < 8; i++) {
-                double a = sl.random.nextDouble() * Math.PI * 2, r = 6 + sl.random.nextDouble() * 14;
-                KingForms.bolt(sl, king.position().add(Math.cos(a) * r, 0, Math.sin(a) * r));
-            }
             sound(sl, king.position(), SoundEvents.GENERIC_EXPLODE.value(), 4F, 0.5F);
+        });
+    }
+
+    /** One wave of the day of judgment's pillars: on every foe and about them, a warning, then the moment. */
+    private static void pillars(RoyalMob king, ServerLevel sl) {
+        if (!king.isAlive()) {
+            return;
+        }
+        List<Vec3> at = new ArrayList<>();
+        for (LivingEntity v : KingForms.foes(king, sl, 48)) {
+            at.add(v.position());
+            for (int i = 0; i < 2; i++) {
+                at.add(v.position().add(sl.random.nextGaussian() * 3, 0, sl.random.nextGaussian() * 3));
+            }
+        }
+        for (int i = 0; i < 6; i++) {
+            double a = sl.random.nextDouble() * Math.PI * 2, r = 3 + sl.random.nextDouble() * 21;
+            at.add(king.position().add(Math.cos(a) * r, 0, Math.sin(a) * r));
+        }
+        double R = 1.8;
+        each(sl, 0, 10, 3, k -> {
+            for (Vec3 p : at) {
+                ring(sl, WHITE, p, R, 0.1, 14);
+                for (double y = 0; y < 24; y += 2.0) {
+                    sl.sendParticles(ParticleTypes.END_ROD, p.x, p.y + y, p.z, 1, 0.05, 0, 0.05, 0);
+                }
+            }
+        });
+        later(sl, 30, () -> {
+            for (Vec3 p : at) {
+                for (double y = 0; y < 40; y += 0.6) {
+                    sl.sendParticles(ParticleTypes.END_ROD, p.x, p.y + y, p.z, 2, R * 0.4, 0, R * 0.4, 0);
+                }
+                sl.sendParticles(GOLD, p.x, p.y + 1, p.z, 30, R * 0.5, 1.5, R * 0.5, 0);
+                ring(sl, GOLD, p, R, 0.1, 24);
+            }
+            for (LivingEntity v : KingForms.foes(king, sl, 64)) {
+                for (Vec3 p : at) {
+                    double dx = v.getX() - p.x, dz = v.getZ() - p.z;
+                    if (Math.sqrt(dx * dx + dz * dz) <= R + v.getBbWidth() * 0.5 && v.getY() >= p.y - 3 && v.getY() <= p.y + 40) {
+                        // the moment: a thousand, ten times over
+                        for (int i = 0; i < 10 && v.isAlive(); i++) {
+                            v.invulnerableTime = 0;
+                            hit(king, "doomsday", v, 1000F, true);
+                        }
+                        count(king, COUNT, "doomsday_pillar");
+                        break;
+                    }
+                }
+            }
+            sound(sl, king.position(), SoundEvents.BEACON_ACTIVATE, 4F, 1.6F);
+            sound(sl, king.position(), SoundEvents.LIGHTNING_BOLT_THUNDER, 4F, 1.2F);
         });
     }
 
