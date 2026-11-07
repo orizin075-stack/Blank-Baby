@@ -382,19 +382,72 @@ def glitched(m, amount=1.0):
 
 
 # ---------------------------------------------------------------------------------------- the broken form's shape
+CRACKED = dict(accent='#d01030', pattern='cracks', pattern_glow=True, glow_amount=0.5)
+
+
 class Corrupt:
     """While it is in force, every ornament cube (bb.ccube) is corrupted as it is made: some left out, some gone to
-    the missing texture, the rest painted wrong; a third knocked out of place and askew. The body's own boxes stay."""
+    the missing texture, the rest painted wrong; a third knocked out of place and askew. With shatter > 0 the plates
+    (flat metal pieces) break instead, that share of them: split into shards with gaps between them, some shards gone
+    (holes), the rest lifted off and tilted, a dark core of nothing where the plate was, alight with red cracks.
+    The body's own boxes stay."""
 
-    def __init__(self, seed=7):
+    def __init__(self, seed=7, shatter=0.0):
         self.rng = np.random.default_rng(seed)
         self.orig = bb.ccube
+        self.shatter = shatter
+
+    def _shards(self, bone, center, size, mat, kw):
+        rng, orig = self.rng, self.orig
+        from rig import rot_zyx
+        s = np.asarray(size, float)
+        C = np.asarray(center, float)
+        rot = kw.get('rot')
+        R = rot_zyx(*rot) if rot is not None and any(abs(v) > 1e-9 for v in rot) else np.eye(3)
+        if rot is not None and kw.get('pivot') is not None:
+            p = np.asarray(kw['pivot'], float)
+            C = p + R @ (C - p)
+        thin = int(np.argmin(s))
+        a0, a1 = [a for a in range(3) if a != thin]
+        nrm = R[:, thin]
+        piv = np.asarray(getattr(bone, 'pivot', (0, 0, 0)), float)
+        out_sign = 1.0 if float(nrm @ (C - piv)) >= 0 else -1.0
+        nm = kw.get('name', 'plate')
+        # the core of nothing under the plate
+        core = s.copy()
+        core[thin] *= 0.55
+        core[a0] *= 0.82
+        core[a1] *= 0.82
+        bb.obox(bone, C - nrm * out_sign * s[thin] * 0.2, core, R, M('void', '#0a0010'), name=nm + '_void')
+        n0 = 2 if s[a0] < 4.5 else 3
+        n1 = 2 if s[a1] < 4.5 else 3
+        base = mat if mat.get('type') != 'metal' else M('metal', mat.get('color', SILVER), **CRACKED)
+        for i in range(n0):
+            for j in range(n1):
+                if rng.random() < 0.24:
+                    continue                        # a hole: the shard is gone
+                gap = 0.4 + rng.random() * 0.35
+                cell = s.copy()
+                cell[a0] = max(0.4, s[a0] / n0 - gap)
+                cell[a1] = max(0.4, s[a1] / n1 - gap)
+                off = np.zeros(3)
+                off[a0] = (i + 0.5) * s[a0] / n0 - s[a0] / 2 + rng.uniform(-0.25, 0.25)
+                off[a1] = (j + 0.5) * s[a1] / n1 - s[a1] / 2 + rng.uniform(-0.25, 0.25)
+                off[thin] = out_sign * rng.uniform(0.3, 1.4)
+                tilt = rot_zyx(*rng.uniform(-0.4, 0.4, 3))
+                m = M('missing', '#ff00ff') if rng.random() < 0.04 else base
+                bb.obox(bone, C + R @ off, cell, R @ tilt, m, name=nm + '_shard')
+        return []
 
     def __enter__(self):
         rng, orig = self.rng, self.orig
 
         def cc(bone, center, size, mat, **kw):
             t = mat.get('type')
+            sz = sorted(float(v) for v in size)
+            if self.shatter > 0 and t in ('metal', 'glitch') and sz[0] <= 1.4 and sz[1] >= 1.6 and sz[2] >= 2.4 \
+                    and rng.random() < self.shatter:
+                return self._shards(bone, center, size, mat, kw)
             roll = rng.random()
             if t not in ('energy', 'gem') and roll < 0.06:
                 return []
@@ -424,9 +477,12 @@ def villager_king_broken():
     r = Rig('villager_king_broken', height=44.0)
     P = mats_hero()
     P['visor'] = M('energy', '#ff2a4a')
+    # the plate cracked all over, red light in the cracks; the body boxes under it too
+    P['plate'] = M('metal', SILVER, **CRACKED)
+    P['plate_d'] = M('metal', SILVER_D, **CRACKED)
     P['plate2'] = glitched(P['plate2'], 0.3)
     P['steel'] = glitched(P['steel'], 0.3)
-    with Corrupt(11):
+    with Corrupt(11, shatter=0.85):
         h = knight(r, P, broken=True)
     # one eye's glow gone cyan
     bb.ccube(h.head, (1.6, h.head_top + 3.5, -5.5), (2.6, 0.8, 0.2), M('energy', '#2affff'), name='visor_cyan')
