@@ -24,6 +24,7 @@ import bb
 import sculpt as SC
 import trinkets as TK
 import bbpaint as BP
+import king_arms as KA
 from figure_bb import box, cbox
 
 RECIPES = {}
@@ -215,55 +216,54 @@ def tower_shield(bone, c, P, emblem=True, w=13.0, hgt=19.0, out=1):
         bb.ccube(sb, (sx + out * 0.3, y - 1.0, z), (0.3, 1.6, 1.6), P['sun'], name='shield_core')
 
 
-def greatsword(bone, at, P, L=31.0, broken=False):
-    """A holy greatsword held in the fist: the grip runs through the hand along the bone's +y, the pommel above the
-    fist, a wide gold crossguard with drooping quillons and a sun boss below it, then a broad bevelled steel blade
-    with a gold-inlaid fuller (faint runes) to a point. The blade stands edge-on in the hand: its edges toward the
-    front and the back (z), its flats to the sides (x), the cross in the same plane as the edges, as a sword is
-    held. The bone tilts it forward so its point rests near the ground.
-    Broken: the blade in floating pieces with gaps."""
-    x, y, z = at
-    # pommel (a small sun) and grip through the fist
-    bb.ccube(bone, (x, y - 3.4, z), (1.6, 1.6, 1.6), P['gold2'], name='pommel')
-    bb.ccube(bone, (x, y - 3.4, z), (0.7, 0.7, 2.2), P['gold2'], name='pommel_z')
-    bb.ccube(bone, (x, y - 3.4, z), (2.2, 0.7, 0.7), P['gold2'], name='pommel_x')
-    bb.ccube(bone, (x, y - 4.4, z), (0.8, 0.8, 0.8), P['gem'], name='pommel_gem')
-    bb.ccube(bone, (x, y - 0.2, z), (1.1, 5.0, 1.1), P['leather'], name='grip')
-    for k in (-1.8, 0.2, 2.0):
-        bb.ccube(bone, (x, y + k, z), (1.3, 0.35, 1.3), P['gold2'], name='grip_ring')
-    # crossguard, across the edges' plane
-    g = y + 2.7
-    bb.ccube(bone, (x, g, z), (1.5, 1.4, 10.0), P['gold'], name='guard')
-    for sgn in (-1, 1):
-        bb.ccube(bone, (x, g + 0.8, z + sgn * 5.6), (1.3, 1.1, 2.2), P['gold2'], rot=(sgn * -0.6, 0, 0), name='quillon')
-        bb.ccube(bone, (x, g + 1.8, z + sgn * 6.5), (1.1, 1.1, 1.1), P['gem'], name='quillon_tip')
-    bb.ccube(bone, (x, g + 0.3, z), (1.8, 2.6, 2.6), P['gold2'], name='guard_boss')
-    for sgn in (-1, 1):
-        bb.ccube(bone, (x + sgn * 0.75, g + 0.3, z), (0.4, 1.2, 1.2), P['sun'], name='guard_sun')
-    bb.ccube(bone, (x, g + 1.8, z), (1.1, 1.0, 3.4), P['gold2'], name='ricasso')
-    b0 = g + 2.3
+def glitch_px(seed, amount=1.0):
+    """A post-pass for a relief's pixels (king_arms.place): runs of columns slid up or down, blocks gone to the
+    missing texture, a few pixels torn out. The slab's walls follow the torn silhouette."""
+    def post(rgba, gl):
+        rng = np.random.default_rng(seed)
+        rgba, gl = rgba.copy(), gl.copy()
+        H, W = rgba.shape[:2]
+        for _ in range(int(4 * amount) + 1):
+            x0, w, sh = int(rng.integers(0, max(1, W - 8))), int(rng.integers(2, 7)), int(rng.integers(-3, 4))
+            rgba[:, x0:x0 + w] = np.roll(rgba[:, x0:x0 + w], sh, axis=0)
+            gl[:, x0:x0 + w] = np.roll(gl[:, x0:x0 + w], sh, axis=0)
+        ys, xs = np.nonzero(rgba[..., 3] > 0)
+        for _ in range(int(len(ys) * 0.012 * amount)):
+            k = int(rng.integers(0, len(ys)))
+            y0, x0 = ys[k], xs[k]
+            sz = int(rng.integers(2, 5))
+            blk = rgba[y0:y0 + sz, x0:x0 + sz]
+            on = blk[..., 3] > 0
+            cy, cx = np.indices(on.shape)
+            mag = ((cy + cx) % 2 == 0)
+            blk[on & mag, :3] = (255, 0, 255)
+            blk[on & ~mag, :3] = (0, 0, 0)
+            gl[y0:y0 + sz, x0:x0 + sz][on & mag] = (255, 0, 255, 255)
+        holes = rng.random(rgba.shape[:2]) < 0.015 * amount
+        rgba[holes, 3] = 0
+        return rgba, gl
+    return post
+
+
+def holy_sword(bone, hand, broken=False):
+    """聖剣《黎明》 (king_arms 'greatsword') in the fist: the grip through the hand along the bone's +y, the blade on
+    below it, edge-on (its width along z, its flats to the sides) as a sword is held; the bone tilts it forward.
+    Broken: the hilt whole in his hand, the blade in five floating, glitching pieces with gaps between them."""
+    U, V = (0, 1, 0), (0, 0, 1)
     if not broken:
-        segs = [(b0, b0 + L)]
-    else:
-        n = 6
-        segs = [(b0 + L * i / n + i * 1.2, b0 + L * (i + 1) / n + i * 1.2 - 0.4) for i in range(n)]
-    for i, (y0, y1) in enumerate(segs):
-        tb = bone if not broken else bone.rig.bone(f'blade_bit_{i}', bone, (x, (y0 + y1) / 2, z), anim='float', amp=0.35,
-                                                   speed=0.11, phase=i * 1.3)
-        last = i == len(segs) - 1
-        yy1 = y1 - (2.6 if last else 0)
-        cy, hh = (y0 + yy1) / 2, yy1 - y0
-        oz = (0.25 if i % 2 else -0.25) if broken else 0.0
-        rx = (0.08 * (i % 3 - 1)) if broken else 0.0
-        bb.ccube(tb, (x, cy, z + oz), (1.0, hh, 3.8), P['blade'], rot=(rx, 0, 0), name='blade')
-        for sgn in (-1, 1):
-            bb.ccube(tb, (x, cy, z + oz + sgn * 2.3), (0.55, hh, 0.9), P['edge'], rot=(rx, 0, 0), name='blade_edge')
-        for sgn in (-1, 1):
-            bb.ccube(tb, (x + sgn * 0.3, cy - 0.3, z + oz), (0.5, hh - 1.2, 0.9), P['fuller'], rot=(rx, 0, 0), name='fuller')
-        if last:
-            for k in range(3):
-                w = 4.4 - k * 1.35
-                bb.ccube(tb, (x, yy1 + 0.45 + k * 0.85, z + oz), (0.8 - k * 0.15, 0.9, w), P['edge'], name='blade_point')
+        KA.place(bone, 'greatsword', hand, U, V, nm='holy_sword')
+        return
+    KA.place(bone, 'greatsword', hand, U, V, clip=(-10, 31), post=glitch_px(5, 0.5), nm='holy_hilt')
+    L = KA.DESIGNS['greatsword']['length']
+    cuts = [31, 45, 59, 72, 85, 101]
+    x, y, z = hand
+    g = KA.DESIGNS['greatsword']['grip_u']
+    for i in range(len(cuts) - 1):
+        mid = y + ((cuts[i] + cuts[i + 1]) / 2 - g) * L / 100.0
+        tb = bone.rig.bone(f'blade_bit_{i}', bone, (x, mid, z), anim='float', amp=0.35 + 0.1 * i, speed=0.11, phase=i * 1.3)
+        gap = (i + 1) * 0.9
+        KA.place(tb, 'greatsword', (x + (0.3 if i % 2 else -0.3), y + gap, z + (0.4 if i % 2 else -0.3)), U, V,
+                 clip=(cuts[i], cuts[i + 1]), post=glitch_px(17 + i, 1.0), nm=f'holy_blade_{i}')
 
 
 # ------------------------------------------------------------------------------------------------------- forms
@@ -303,7 +303,7 @@ def knight(r, P, broken=False):
     sun_disc(cape, (0, h.top + 7.0, cd / 2 + 1.0), 2.2, P['gold2'], P['sun'], rays=12, depth=0.35, normal_z=1)
     h.fur_collar(P['fur'], shoulders=False)
     sb = r.bone('sword', h.fore_r, (h.fore_r.pivot[0], h.hand_y, -0.2), rot=(SWORD_TILT, 0, 0))
-    greatsword(sb, (h.fore_r.pivot[0], h.hand_y, -0.2), P, broken=broken)
+    holy_sword(sb, (h.fore_r.pivot[0], h.hand_y, -0.2), broken=broken)
     return h
 
 
@@ -652,108 +652,46 @@ def insect_wing(r, parent, sgn, at, length, width, glass, vein, name):
     return root
 
 
-def club(bone, at, shaft, bind, head_fn, L=21.0):
-    """A club held by the end of its haft: the haft rises from the fist along the bone's -y to the head."""
-    x, y, z = at
-    bb.ccube(bone, (x, y + 1.6, z), (1.4, 1.4, 1.4), bind, name='club_butt')
-    bb.ccube(bone, (x, y - L / 2 + 1.0, z), (1.3, L, 1.3), shaft, name='club_haft')
-    for k in range(6):
-        bb.ccube(bone, (x, y - 1.5 - k * 3.2, z), (1.7, 0.6, 1.7), bind, name='club_band')
-    head_fn(bone, (x, y - L + 0.5, z))
+UP, FWD, SIDE = (0, -1, 0), (0, 0, -1), (0, 0, 1)
 
 
-def yagrush_head(P, k=1.7):
-    """Yagrush, the Chaser (神器): a great head of jagged lightning, white-gold and alight, bound in a gold collar with
-    a sun at its throat; forks of lightning off its sides."""
-    def fn(bone, c):
-        x, y, z = c
-        bb.ccube(bone, (x, y + 0.4 * k, z), (2.4 * k, 1.6 * k, 2.4 * k), P['gold2'], name='yagrush_collar')
-        bb.ccube(bone, (x, y + 0.4 * k, z - 1.25 * k), (1.0 * k, 1.0 * k, 0.3), P['sun'], name='yagrush_sun')
-        pts = [(0, 0), (1.8, -2.4), (-0.7, -4.0), (2.0, -6.6), (-0.5, -8.2), (0.8, -10.8)]
-        for i in range(len(pts) - 1):
-            (a0, b0), (a1, b1) = pts[i], pts[i + 1]
-            cx, cy = x + (a0 + a1) / 2 * k, y + (b0 + b1) / 2 * k
-            L = (math.hypot(a1 - a0, b1 - b0) + 0.6) * k
-            ang = math.atan2(a1 - a0, -(b1 - b0))
-            bb.ccube(bone, (cx, cy, z), (1.8 * k, L, 1.2 * k), P['bolt'], rot=(0, 0, -ang), name='yagrush_bolt')
-            bb.ccube(bone, (cx, cy, z), (0.8 * k, L * 0.8, 1.5 * k), P['bolt_core'], rot=(0, 0, -ang), name='yagrush_core')
-        for sgn in (-1, 1):
-            for j in range(2):
-                bb.ccube(bone, (x + sgn * (1.8 + j * 1.2) * k, y - (1.2 + j * 3.0) * k, z), (0.6 * k, 2.8 * k, 0.6 * k), P['bolt'],
-                         rot=(0, 0, sgn * (0.6 + j * 0.3)), name='yagrush_fork')
-    return fn
-
-
-def aymur_head(P, k=1.6):
-    """Aymur, the Driver (神器): a heavy flanged head of gold round a core of white lightning, crowned with a sun."""
-    def fn(bone, c):
-        x, y, z = c
-        cy = y - 2.6 * k
-        bb.ccube(bone, (x, y + 0.2 * k, z), (2.0 * k, 1.2 * k, 2.0 * k), P['gold2'], name='aymur_collar')
-        bb.ccube(bone, (x, cy, z), (4.2 * k, 4.6 * k, 4.2 * k), P['gold'], name='aymur_head')
-        bb.ccube(bone, (x, cy, z), (4.8 * k, 3.0 * k, 3.0 * k), P['gold2'], name='aymur_flange')
-        bb.ccube(bone, (x, cy, z), (3.0 * k, 3.0 * k, 4.8 * k), P['gold2'], name='aymur_flange')
-        for sgn in (-1, 1):
-            bb.ccube(bone, (x + sgn * 2.45 * k, cy, z), (0.3, 1.6 * k, 1.6 * k), P['bolt_core'], name='aymur_core')
-            bb.ccube(bone, (x, cy, z + sgn * 2.45 * k), (1.6 * k, 1.6 * k, 0.3), P['bolt_core'], name='aymur_core')
-        for i in range(8):
-            a = i * math.pi / 4
-            bb.ccube(bone, (x + math.cos(a) * 2.9 * k, cy + (0.9 if i % 2 else -0.9) * k, z + math.sin(a) * 2.9 * k),
-                     (0.8 * k, 0.8 * k, 2.0 * k), P['gold2'], rot=(0, -a, 0), name='aymur_spike')
-        bb.ccube(bone, (x, cy - 3.2 * k, z), (1.0 * k, 2.2 * k, 1.0 * k), P['gold2'], name='aymur_crown')
-        bb.ccube(bone, (x, cy - 4.6 * k, z), (1.2 * k, 1.2 * k, 1.2 * k), P['sun'], name='aymur_sun')
-    return fn
-
-
-def fly_scythe(bone, at, P, L=36.0):
-    """The lord of the flies' great scythe (魔器): a black chitin haft longer than he is tall, ringed with gold; at its
-    head a cluster of red eyes and a great curved blade of black chitin, its inner edge a veined fly's wing glowing
-    crimson; barbs along its back. Held near the foot of the haft, the blade high over his shoulder."""
-    x, y, z = at
-    bb.ccube(bone, (x, y + 3.0, z), (1.6, 6.0, 1.6), P['chitin'], name='scythe_butt')
-    bb.ccube(bone, (x, y + 6.4, z), (2.2, 1.6, 2.2), P['gold2'], name='scythe_pommel')
-    bb.ccube(bone, (x, y - L / 2, z), (1.5, L, 1.5), P['chitin'], name='scythe_haft')
-    for k in range(7):
-        bb.ccube(bone, (x, y - 2.0 - k * 4.6, z), (2.0, 0.6, 2.0), P['gold2'], name='scythe_ring')
-    top = y - L
-    bb.ccube(bone, (x, top, z), (3.4, 3.4, 3.4), P['chitin'], name='scythe_socket')
-    for (dx, dy, dz, sz) in ((0, -0.6, -1.8, 1.2), (0.9, 0.5, -1.75, 0.9), (-0.9, 0.5, -1.75, 0.9), (0, 1.3, -1.7, 0.8), (1.2, -1.0, -1.6, 0.7)):
-        bb.ccube(bone, (x + dx, top + dy, z + dz), (sz, sz, 0.4), P['red_eye'], name='scythe_eye')
-    # the blade sweeps forward and down from the socket (along -z), in the haft's own plane: a broad black chitin
-    # blade, its cutting edge (below) glowing crimson, a veined fly's wing standing along its spine (above)
-    n = 10
-    prev = np.array([x, top + 0.5, z - 1.0])
-    for i in range(n):
-        t = (i + 1) / n
-        p = np.array([x, top + 0.5 + 9.0 * t ** 1.6, z - 1.0 - 22.0 * math.sin(t * 1.35)])
-        w = 6.0 * (1 - t) ** 0.65 + 0.7
-        mid = (prev + p) / 2
-        bb.beam(bone, prev, p, 1.1, w, P['chitin'], up=(0, 1, 0), name='scythe_blade')
-        bb.beam(bone, prev + np.array([0, w * 0.5 + 0.25, 0]), p + np.array([0, w * 0.5 + 0.25, 0]), 0.6, 0.7, P['edge'], up=(0, 1, 0),
-                name='scythe_edge')
-        bb.beam(bone, prev + np.array([0, -w * 0.5 - w * 0.35, 0]), p + np.array([0, -w * 0.5 - w * 0.35 * (1 - t), 0]), 0.25,
-                w * 0.7 * (1 - t) + 0.3, P['wing'], up=(0, 1, 0), name='scythe_wing')
-        if i % 3 == 1:
-            bb.ccube(bone, tuple(mid + np.array([0, -w * 0.5, 0])), (1.3, 1.4, 0.6), P['gold2'], name='scythe_barb')
-        prev = p
-    bb.ccube(bone, tuple(prev + np.array([0, 0.6, 0])), (0.9, 1.6, 1.6), P['edge'], name='scythe_point')
+def stance_arms(r, h, hand_y=None):
+    """Baal Zebul's five arms (king_arms designs as slabs), each set on its own bones under the fists so KingRig can show
+    one set at a time (KingDeeds.switchStance; KingRig picks the set by what is in his hands):
+      clubs   雷霆棍 Yagrush (right) and Aymur (left), held by the haft's end, the heads high
+      scythe  蝿王の大鎌, two-handed near the butt, the crescent out forward over him
+      twin    the twin swords, Seraph (right) and Beelzebub (left), points forward and down
+      spear   雷槍, held a third of the way up, the head high
+      bow     虹の大弓, upright in the left fist, its back to the foe"""
+    hy = h.hand_y if hand_y is None else hand_y
+    xr, xl = h.fore_r.pivot[0], h.fore_l.pivot[0]
+    cb = r.bone('arms_clubs_r', h.fore_r, (xr, hy, -0.2), rot=(0.75, 0, 0))
+    KA.place(cb, 'yagrush', (xr, hy, -0.2), UP, SIDE, cross=57, nm='yagrush')
+    cb = r.bone('arms_clubs_l', h.fore_l, (xl, hy, -0.2), rot=(0.75, 0, 0))
+    KA.place(cb, 'aymur', (xl, hy, -0.2), UP, SIDE, cross=60, nm='aymur')
+    sc = r.bone('arms_scythe_r', h.fore_r, (xr, hy, -0.2), rot=(0.35, 0, 0))
+    KA.place(sc, 'scythe', (xr, hy, -0.2), UP, SIDE, nm='scythe')
+    tr = r.bone('arms_twin_r', h.fore_r, (xr, hy, -0.2), rot=(-1.05, 0, 0))
+    KA.place(tr, 'seraph', (xr, hy, -0.2), (0, 1, 0), SIDE, nm='seraph')
+    tl = r.bone('arms_twin_l', h.fore_l, (xl, hy, -0.2), rot=(-1.05, 0, 0))
+    KA.place(tl, 'beelzebub', (xl, hy, -0.2), (0, 1, 0), SIDE, nm='beelzebub')
+    sp = r.bone('arms_spear_r', h.fore_r, (xr, hy, -0.2), rot=(0.25, 0, 0))
+    KA.place(sp, 'spear', (xr, hy, -0.2), UP, SIDE, nm='spear')
+    bw = r.bone('arms_bow_l', h.fore_l, (xl, hy, -0.4), rot=(0.1, 0, 0))
+    KA.place(bw, 'bow', (xl, hy, -0.4), UP, FWD, nm='bow')
 
 
 @recipe
 def _weapons_preview():
-    """(not shipped) the two stances' arms side by side."""
+    """(not shipped) the hero's sword and Baal Zebul's arms side by side, as slabs."""
     r = Rig('_weapons_preview')
-    P = dict(gold=M('metal', '#e8b640', accent='#fff0b8', pattern='filigree'), gold2=M('metal', '#f0c24a'), sun=M('gem', '#ffd75a', glow=True),
-             bolt=M('energy', '#fff2b0'), bolt_core=M('energy', '#ffffff'), haft=M('metal', '#f4efe2'),
-             chitin=M('metal', '#16121a', accent='#e8b640', pattern='gold_lines'), chitin_edge=M('metal', '#1a1520', edge_glow='#ff3a2a'), edge=M('energy', '#ff3a1a'),
-             wing=M('membrane', '#3a1418', accent='#ff5a3a', alpha=0.7), red_eye=M('energy', '#ff2a10'))
     root = r.bone('root', None, (0, 24, 0))
-    c1 = r.bone('c1', root, (-8, 20, 0))
-    club(c1, (-8, 20, 0), P['haft'], P['gold2'], yagrush_head(P))
-    c2 = r.bone('c2', root, (0, 20, 0))
-    club(c2, (0, 20, 0), P['haft'], P['gold2'], aymur_head(P))
-    c3 = r.bone('c3', root, (10, 20, 0))
-    fly_scythe(c3, (10, 20, 0), P)
+    spots = [('greatsword', -30, -8, (0, 1, 0), SIDE, None), ('yagrush', -20, 20, UP, SIDE, 57), ('aymur', -12, 20, UP, SIDE, 60),
+             ('scythe', 0, 22, UP, SIDE, None), ('seraph', 10, -4, (0, 1, 0), SIDE, None), ('beelzebub', 16, -4, (0, 1, 0), SIDE, None),
+             ('spear', 24, 12, UP, SIDE, None), ('bow', 32, 2, UP, FWD, None)]
+    for i, (n, x, y, U, V, cr) in enumerate(spots):
+        b = r.bone(f'w{i}', root, (x, y, 0), rot=(0, 1.5708, 0))
+        KA.place(b, n, (x, y, 0), U, V, cross=cr, nm=n)
     return r
 
 
@@ -883,6 +821,9 @@ def villager_king_divine():
         edge=M('energy', '#ff3a1a'),
         wing=M('membrane', '#3a1418', accent='#ff5a3a', alpha=0.7),
         red_eye=M('energy', '#ff2a10'),
+        white_blade=M('metal', '#eef1f8'), gold_edge=M('metal', '#fff3c4'),
+        black_blade=M('metal', '#1a1520', accent='#ff3a1a', pattern='gold_lines'), fuller=M('energy', '#ffd75a'),
+        grip=M('cloth', '#3a1a20'), tassel=M('cloth', '#c41a2a'), rainbow=M('rainbow', '#ffffff'),
     )
     P['haft'] = M('metal', '#f4efe2')
     h = Humanoid(r, 'large', skin='#f1dccb', accent='#e8b640', hover=3.0)
@@ -929,9 +870,9 @@ def villager_king_divine():
     h.halo(M('ring', '#ffcf5a', width=0.12, spikes=30), radius=10.5, y=h.head_top + 3.0, z=7.8, tilt=1.5, speed=0.008, name='corona')
     orbiters(r, h.head, (0, h.head_top - 6, 0), M('plane', '#fff4c0', shape='star', glow=True), count=7, radius=6.5, size=1.8,
              speed=0.03, name='seven_stars', bob=0.4)
-    # the wheels within a wheel behind him, their rims full of eyes (Ezekiel 1:16-18)
-    ophan(r, h.torso, (0, h.top + 2.0, cd / 2 + 9.0), 16.0, P['gold2'], P['sclera'], P['pupil'], 'z', 0.012, 'ophan_a')
-    ophan(r, h.torso, (0, h.top + 2.0, cd / 2 + 9.0), 14.5, P['gold'], P['sclera'], P['pupil'], 'x', -0.016, 'ophan_b')
+    # the wheels within a wheel at his feet, their rims full of eyes, going where he goes (Ezekiel 1:15-21)
+    ophan(r, h.root, (0, 17.0, 0.5), 8.6, P['gold2'], P['sclera'], P['pupil'], 'z', 0.03, 'ophan_a')
+    ophan(r, h.root, (0, 17.0, 0.5), 7.8, P['gold'], P['sclera'], P['pupil'], 'x', -0.04, 'ophan_b')
     # six wings (Isaiah 6:2): with twain he covered his face (black wings rising beside the head), with twain he did
     # fly (great burning wings, full of eyes), with twain he covered his feet (the fly's wings, folded down)
     for sgn in (-1, 1):
@@ -942,15 +883,10 @@ def villager_king_divine():
                      'veil_' + side, rest=(0.35, 0.25, 1.05), amp=0.05, tip_mat=P['dark_tip'])
         fw = insect_wing(r, h.hips, sgn, (sgn * 2.4, h.pelvis_top + 2.0, cd / 2 + 0.6), 19.0, 7.0, P['fly'], P['vein'], 'fly_' + side)
         fw.rot = (0.45, sgn * -0.35, sgn * -1.15)
-    # his two stances (KingDeeds switches them; RoyalRenderer shows one set by his main hand): the divine arms
-    # (神器), Yagrush and Aymur; the demon's arm (魔器), the lord of the flies' great scythe
-    for fore, side, head in ((h.fore_r, 'r', yagrush_head(P)), (h.fore_l, 'l', aymur_head(P))):
-        x = fore.pivot[0]
-        cb = r.bone('arms_divine_' + side, fore, (x, h.hand_y, -0.2), rot=(0.75, 0, 0))
-        club(cb, (x, h.hand_y, -0.2), P['haft'], P['gold2'], head)
-    x = h.fore_r.pivot[0]
-    sc = r.bone('arms_demon_r', h.fore_r, (x, h.hand_y, -0.2), rot=(0.35, 0, 0))
-    fly_scythe(sc, (x, h.hand_y, -0.2), P)
+    # his five arms, one set at a time (KingDeeds.switchStance; KingRig shows the set by what is in his main hand):
+    # the thunder clubs Yagrush and Aymur, the fly lord's scythe, the twin swords Seraph and Beelzebub, the thunder
+    # spear, the great bow of rainbow light
+    stance_arms(r, h)
     # lightning about him (Revelation 4:5) and the flies at his feet
     orbiters(r, h.torso, (0, h.top + 2, 0), M('plane', '#fff2b0', shape='star', glow=True), count=8, radius=21, size=2.4, speed=0.02,
              name='lightnings')
