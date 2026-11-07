@@ -1,0 +1,31 @@
+# Which mods of a CurseForge pack the user asked for (oror_rework/tools/cf/manabi-1.20.1.json: 学びパック, Minecraft 1.20.1
+# and Forge) have files for Minecraft 1.21.1 and NeoForge, the pack OROR Nightfall is built on. Result:
+# oror_rework/tools/cf/manabi_1211.txt on this branch.
+name: CurseForge 1.21.1 check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['oror_rework/tools/cf/**', '.github/workflows/cf_check.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Look up each mod's files on CurseForge
+        run: |
+          python3 -I oror_rework/tools/cf/cf_versions.py oror_rework/tools/cf/manabi-1.20.1.json oror_rework/tools/cf/ours-045.json \
+            | tee oror_rework/tools/cf/manabi_1211.txt
+      - name: Commit the result
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add oror_rework/tools/cf/manabi_1211.txt
+          git commit -m "CurseForge 1.21.1 check ${GITHUB_SHA::7} [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
