@@ -20,11 +20,26 @@ printf -- '-Xmx6G\n-Doror.ci=%s\n-Dneoforge.enableGameTest=true\n-Dneoforge.enab
 rm -f console.log
 ./run.sh nogui < /dev/null > console.log 2>&1 &
 pid=$!
+# (053) the server's JVM, for thread dumps and flight recordings
+jvm() { jcmd -l 2>/dev/null | grep -v -i -E 'jcmd|gradle' | awk '{print $1}' | head -n 1; }
+last=0; still=0
 for i in $(seq 1 "$wait"); do
   kill -0 $pid 2>/dev/null || break
+  # (053) a server that has logged nothing for three minutes has hung (the second and third 053 runs: in the game
+  # tests' chunks): every thread's stack, every three minutes, and after ten the server is stopped
+  size=$(stat -c %s console.log 2>/dev/null || echo 0)
+  if [ "$size" = "$last" ]; then still=$((still + 1)); else still=0; last=$size; fi
+  if [ $still -gt 0 ] && [ $((still % 180)) -eq 0 ]; then
+    j=$(jvm)
+    { echo "== nothing logged for ${still}s, $(date -u +%T)"; [ -n "$j" ] && jcmd "$j" Thread.print; } >> threads_stall.txt 2>&1 || true
+  fi
+  if [ $still -ge 600 ]; then
+    echo "== stopped: nothing logged for ${still}s" >> threads_stall.txt
+    break
+  fi
   # the flight recording of the hundred-man battle, taken as soon as it is over (a server killed at the end leaves none)
   if [ ! -f war.jfr ] && grep -q 'WAR-RESULT' console.log 2>/dev/null; then
-    jpid=$(jcmd -l 2>/dev/null | grep -v -i jcmd | awk '{print $1}' | head -n 1)
+    jpid=$(jvm)
     [ -n "$jpid" ] && jcmd "$jpid" JFR.dump filename="$PWD/war.jfr" > jfr_dump.txt 2>&1 || true
     touch war.jfr
   fi

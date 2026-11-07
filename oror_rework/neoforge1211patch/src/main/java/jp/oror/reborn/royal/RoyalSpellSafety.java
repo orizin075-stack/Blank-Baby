@@ -13,7 +13,8 @@ import java.util.Set;
  * spectral hammer...), and a guard casting one crashed the game (the user). Now only Iron's own spells for a fight,
  * of the kind Iron's own spellcasters use, are theirs. The list is checked in the CI by casting each of the old
  * catalogue's spells in turn (/oror spells test); a royal that still fails in its tick is taken away rather than the
- * game stopping (CrashNet).
+ * game stopping (CrashNet). Not Arrow Volley: a dozen arrows a cast, left lying where they fell (346 of them on the
+ * field of the third 053 CI's hundred-man battle, a load of their own).
  */
 public final class RoyalSpellSafety {
     /** Iron's Spells' fighting spells (their ids' paths), as its own spellcasting mobs use such spells. */
@@ -33,7 +34,7 @@ public final class RoyalSpellSafety {
         // blood
         "blood_slash", "wither_skull", "ray_of_siphoning", "devour", "blood_needles", "acupuncture", "raise_dead", "heartstop",
         // evocation
-        "fang_strike", "fang_ward", "summon_vex", "shield", "firecracker", "lob_creeper", "chain_creeper", "gust", "slow", "arrow_volley",
+        "fang_strike", "fang_ward", "summon_vex", "shield", "firecracker", "lob_creeper", "chain_creeper", "gust", "slow",
         // nature
         "poison_arrow", "poison_splash", "poison_breath", "acid_orb", "root", "stomp", "blight", "oakskin", "firefly_swarm",
         // eldritch

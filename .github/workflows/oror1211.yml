@@ -165,7 +165,7 @@ jobs:
             'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'GUARD-RESULT' 'WORN-RESULT' 'SPELL-SWEEP-RESULT' 'MOBS-TRACE {' 'CAPITAL-LOAD {' 'SWEEP-RESULT' 'GAMETEST-RESULT' 'CI-DONE' -- arms,guards,worn,spells,mobs,citadel,citadelupdate,capitalload,war,pilots,landings,aa,villageflight,sweep,gametests -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack053/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
           # the results first (the full list below is cut at 400 lines), then everything
-          grep -E 'GAMETEST-RESULT|SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|GUARD-|WORN-|SPELL-SWEEP-RESULT|MOBS-TRACE|CAPITAL-LOAD|CAPITAL-INTEGRITY|CRASHNET|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
+          grep -E 'GAMETEST-RESULT|SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|GUARD-|WORN-|SPELL-SWEEP-RESULT|MOBS-TRACE|CAPITAL-LOAD|CAPITAL-INTEGRITY|CRASHNET|OROR-TRADE-DROPPED|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
             | cut -c1-6000 >> out/server_test.txt || true
           { grep -E 'CITADEL-SELFTEST|CITADEL-UPDATE|WAR-|FLIGHT-|SUPPLY-|VILLAGE-FLIGHT|PLANE-TRACK|CI-DONE|OROR (Citadel|War|Vehicles|CI|Village)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
@@ -181,6 +181,8 @@ jobs:
             > out/capital_profile.txt 2>&1 || true
           # (053) every spell the royals had, cast in turn: the sweep's lines and the errors between them
           awk '/SPELL-SWEEP-START/{on=1} on{print} /SPELL-SWEEP-RESULT/{on=0}' "$RUNNER_TEMP/server/console.log" > out/spell_log.txt || true
+          # (053) every thread's stack if the server hung (tools/server_test.sh: nothing logged for three minutes)
+          rm -f out/threads_stall.txt; cp "$RUNNER_TEMP/server/threads_stall.txt" out/threads_stall.txt 2>/dev/null || true
           # (053) the capital as generated against its save, uncut (CitadelIntegrity)
           grep -E 'CAPITAL-INTEGRITY' "$RUNNER_TEMP/server/console.log" | sed 's/},/},\n/g' > out/capital_integrity.txt || true
           cat "$RUNNER_TEMP/server/jfr_dump.txt" >> out/war_profile.txt 2>/dev/null || true
