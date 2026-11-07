@@ -222,7 +222,7 @@ public final class KingForms {
             king.setCustomNameVisible(true);
             KingCourt.bossBars(king, sl);
             strengthen(king, phase);
-            if (phase >= 3 && !king.getMainHandItem().is(Items.MACE) && !king.getMainHandItem().is(Items.NETHERITE_HOE)) {
+            if (phase >= 3 && !KingDeeds.armed(king)) {
                 arm(king, phase);
             } else if (phase >= 1 && phase < 3 && !king.getMainHandItem().is(Items.NETHERITE_SWORD)) {
                 arm(king, phase);

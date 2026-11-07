@@ -314,7 +314,9 @@ public final class KingStoryTest {
                 }
                 out.put("deedsLanded", landed);
                 out.put("deedsMissed", missed.toString().trim());
-                out.put("stances", c.getInt("stance_demon") + "/" + c.getInt("stance_divine"));
+                out.put("stances", "clubs " + c.getInt("stance_clubs") + " scythe " + c.getInt("stance_scythe") + " twin " + c.getInt("stance_twin")
+                    + " spear " + c.getInt("stance_spear") + " bow " + c.getInt("stance_bow"));
+                out.put("deleted", r.king.getPersistentData().getInt("OrorKingDeleted"));
                 out.put("bolts", r.king.getPersistentData().getInt("OrorKingBolts"));
                 out.put("swarms", r.king.getPersistentData().getInt("OrorKingSwarms"));
                 r.trial = -1;
@@ -329,16 +331,14 @@ public final class KingStoryTest {
                 Mob a = sturdy(spawn(r, EntityType.ZOMBIE, dist, 0));
                 sturdy(spawn(r, EntityType.ZOMBIE, dist, 1.5));
                 r.king.setTarget(a);
-                if (d.id().equals("plague") || d.id().equals("reap") || d.id().equals("vortex") || d.id().equals("brand")) {
-                    KingDeeds.switchStance(r.king, sl, 2);
-                } else if (d.stance() == 1) {
-                    KingDeeds.switchStance(r.king, sl, 1);
+                if (d.stance() != 0) {
+                    KingDeeds.switchStance(r.king, sl, d.stance());
                 }
                 KingDeeds.perform(r.king, sl, d.id(), a);
                 r.nextTrial = age + d.windup() + switch (d.id()) {
-                    case "rollback", "brand" -> 75;
-                    case "gaze" -> 50;
-                    case "ghosts", "judgment", "driver" -> 45;
+                    case "rollback", "brand", "feast" -> 75;
+                    case "gaze", "void", "rain", "doomsday" -> 50;
+                    case "ghosts", "judgment", "driver", "execution", "javelin" -> 45;
                     default -> 30;
                 };
                 r.trial++;
