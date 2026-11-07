@@ -47,6 +47,10 @@ jobs:
           python3 -I $P/tools/fetch_pack.py $P/pack/manifest-053.json "$RUNNER_TEMP/pack053" > $OUT/pack_fetch.txt 2>&1 || true
           tail -3 $OUT/pack_fetch.txt
           cp "$RUNNER_TEMP"/pack053/*.jar $G/mods/
+          # (053) The Shooting Star (Demo) and its Rimulib stop at the title screen without a real graphics card ("Your
+          # graphics card can't run The Shooting Star", only "Exit game"): the runner draws in software, so they are left
+          # out here; the rest of the pack is looked at
+          rm -f $G/mods/the-shooting-star*.jar $G/mods/rimulib*.jar
           rm -f $G/mods/oror_supreme_bosses-*.jar
           NEW=$(sed -n 's/^release_version=//p' $P/gradle.properties)
           cp $P/out/oror_supreme_bosses-$NEW.jar $G/mods/
