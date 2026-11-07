@@ -62,7 +62,7 @@ def mats_hero():
         plume=M('cloth', '#ffffff', accent='#dfe6f2', pattern='stripes'),
         fur=M('fur', IVORY),
         glow=M('energy', SKY),
-        sun=M('gem', '#ffd75a', glow=True),
+        sun=M('gem', '#ff3a1a', glow=True),
         gem=M('gem', '#6cb8ff', glow=True),
         blade=M('metal', '#c9d2e0'),
         edge=M('metal', '#f2f6fc'),
@@ -436,7 +436,9 @@ class Corrupt:
                 off[thin] = out_sign * rng.uniform(0.3, 1.4)
                 tilt = rot_zyx(*rng.uniform(-0.4, 0.4, 3))
                 m = M('missing', '#ff00ff') if rng.random() < 0.04 else base
-                bb.obox(bone, C + R @ off, cell, R @ tilt, m, name=nm + '_shard')
+                # each shard on a bone of its own, so it can fall away as he breaks (KingRig: crumble_*)
+                cb = bone.rig.bone('crumble', bone, tuple(C + R @ off))
+                bb.obox(cb, C + R @ off, cell, R @ tilt, m, name=nm + '_shard')
         return []
 
     def __enter__(self):
@@ -463,6 +465,9 @@ class Corrupt:
                 r0 = kw.get('rot') or (0, 0, 0)
                 kw['rot'] = tuple(float(v) + float(rng.uniform(-0.35, 0.35)) for v in r0)
                 kw.pop('pivot', None)
+            if self.shatter > 0 and rng.random() < 0.55:
+                # the king's own pieces fall away too as he breaks
+                bone = bone.rig.bone('crumble', bone, tuple(c))
             return orig(bone, tuple(c), size, mat, **kw)
 
         bb.ccube = cc
@@ -884,6 +889,76 @@ def ophan(r, parent, center, R, rim, eye, iris, axis, speed, name, n=30, thick=1
     return b
 
 
+def broken_halo(r, h, center, R):
+    """The sun of his face broken: a ring of tarnished gold segments with three gone, those beside the gaps pushed out
+    of true, a black inner ring edged in crimson, crimson dripping from the breaks; the whole knocked askew."""
+    cx, cy, cz = center
+    hb = r.bone('halo_broken', h.head, (cx, cy, cz), rot=(0, 0, 0.38))
+    gold = M('metal', '#b98a2e', edge_glow='#ff3a1a')
+    black = M('metal', '#140a10', edge_glow='#ff2a2a')
+    n, gone = 20, {3, 4, 12}
+    rng = np.random.default_rng(13)
+    for i in range(n):
+        if i in gone:
+            continue
+        a = 2 * math.pi * i / n
+        near = (i + 1) % n in gone or (i - 1) % n in gone
+        rr = R + (rng.uniform(0.4, 1.2) if near else 0.0)
+        tw = rng.uniform(-0.35, 0.35) if near else 0.0
+        bb.ccube(hb, (cx + math.cos(a) * rr, cy + math.sin(a) * rr, cz + (0.4 if near else 0)), (2.4, 0.9, 0.6), gold,
+                 rot=(tw, tw * 0.5, a + math.pi / 2), name='halo_seg')
+        if i % 2 == 0:
+            bb.ccube(hb, (cx + math.cos(a) * (R - 1.5), cy + math.sin(a) * (R - 1.5), cz + 0.2), (1.8, 0.5, 0.4), black,
+                     rot=(0, 0, a + math.pi / 2), name='halo_inner')
+        if near and math.sin(a) > -0.3:
+            for k in range(3):
+                bb.ccube(hb, (cx + math.cos(a) * rr, cy + math.sin(a) * rr + 0.9 + k * 0.8, cz), (0.35, 0.7, 0.3),
+                         M('energy', '#c0101a'), name='halo_drip')
+
+
+def fallen(r, h, P):
+    """The fallen god's marks: black tears running from the six eyes of his mask and a crack across it; a chain
+    about him from shoulder to hip and shackles on his wrists with broken chains hanging from them; pale blue fire of
+    souls on his shoulders and about his crown, and souls drifting round him."""
+    head, top = h.head, h.head_top
+    fz = -4.0
+    tear = M('void', '#050208')
+    for sgn in (-1, 1):
+        for (dx, dy, L) in ((1.4, 3.4, 3.6), (2.7, 3.0, 2.6), (2.2, 4.4, 2.0)):
+            bb.ccube(head, (sgn * dx, top + dy + 0.5 + L / 2, fz - 0.72), (0.32, L, 0.18), tear, name='tear')
+            bb.ccube(head, (sgn * dx, top + dy + 0.6 + L, fz - 0.74), (0.42, 0.42, 0.2), M('energy', '#c0101a'), name='tear_drop')
+    for k in range(5):
+        bb.ccube(head, (-3.4 + k * 1.5, top + 2.3 + (k % 2) * 0.5, fz - 0.62), (1.6, 0.22, 0.12), tear, rot=(0, 0, 0.5 - (k % 2)), name='mask_crack')
+    iron = M('metal', '#3e3a44', accent='#7a7480', pattern='cracks')
+    cw, ch, cd = h.T['chest']
+    # a chain from the right shoulder down across the breast to the left hip, links turned each to the next
+    p0, p1 = np.array([-cw / 2 + 0.5, h.top + 0.8, -cd / 2 - 1.3]), np.array([cw / 2 + 0.6, h.top + 10.5, -cd / 2 - 1.1])
+    for k in range(9):
+        p = p0 + (p1 - p0) * k / 8
+        bb.ccube(h.torso, tuple(p), (1.3, 0.6, 0.5) if k % 2 else (0.5, 0.6, 1.2), iron, rot=(0, 0, 0.75), name='chain')
+    for fore, sgn in ((h.fore_r, -1), (h.fore_l, 1)):
+        x = fore.pivot[0]
+        bb.ccube(fore, (x, h.wrist_y + 0.2, 0), (5.2, 1.2, 5.2), iron, name='shackle')
+        hang = r.bone('chain_hang_' + ('r' if sgn < 0 else 'l'), fore, (x + sgn * 2.4, h.wrist_y + 0.6, 0), anim='sway', ax=0, amp=0.18,
+                      speed=0.07, phase=sgn)
+        for k in range(6):
+            bb.ccube(hang, (x + sgn * 2.4, h.wrist_y + 1.2 + k * 1.05, 0), (0.5, 1.1, 1.0) if k % 2 else (1.0, 1.1, 0.5), iron, name='chain_link')
+        bb.ccube(hang, (x + sgn * 2.4, h.wrist_y + 7.6, 0), (0.9, 0.8, 0.9), M('metal', '#2a2630', edge_glow='#7fe8ff'), name='chain_end')
+    soul = M('energy', '#8ff0ff', alpha=0.85)
+    for arm, sgn in ((h.arm_r, -1), (h.arm_l, 1)):
+        fl = r.bone('soulfire_' + ('r' if sgn < 0 else 'l'), arm, (arm.pivot[0] + sgn * 1.0, h.top - 3.0, 0), anim='float', amp=0.5, speed=0.2,
+                    phase=sgn)
+        for k in range(4):
+            bb.ccube(fl, (arm.pivot[0] + sgn * (1.0 + k * 0.3), h.top - 3.0 - k * 1.3, 0.3 * k), (1.6 - k * 0.3, 1.6, 1.6 - k * 0.3), soul,
+                     name='soulfire')
+    for k in range(6):
+        a = k * math.pi / 3
+        fl = r.bone(f'crownfire_{k}', head, (math.cos(a) * 3.2, top - 4.5, math.sin(a) * 3.2), anim='float', amp=0.4, speed=0.25, phase=k)
+        bb.ccube(fl, (math.cos(a) * 3.2, top - 4.5, math.sin(a) * 3.2), (0.8, 1.6, 0.8), soul, name='crownfire')
+    orbiters(r, h.torso, (0, h.top + 4, 0), [M('energy', '#8ff0ff'), M('energy', '#c8ffff')], count=10, radius=9, size=0.9, speed=-0.05,
+             name='souls', bob=1.2)
+
+
 @recipe
 def villager_king_divine():
     r = Rig('villager_king_divine', height=45.0)       # the horns, the wings and the wheels stand above and round it
@@ -893,7 +968,7 @@ def villager_king_divine():
         gold2=M('metal', '#f0c24a'),
         black=M('metal', '#1d1823', accent='#e8b640', pattern='gold_lines'),
         black_gold=M('metal', '#1a1520', edge_glow='#ffcf5a'),
-        linen=M('cloth', '#f7f3ea', accent='#e8b640', trim=2, pattern='runes', pattern_glow=True, glow_amount=0.7),
+        linen=M('cloth', '#e6dfcf', accent='#9a1020', trim=2, pattern='runes', pattern_glow=True, glow_amount=0.7),
         linen_top=M('cloth', '#f7f3ea', accent='#e8b640', seam=True),
         sleeve=M('cloth', '#1a1420', accent='#e8b640', trim=2),
         sun=M('gem', '#ffd75a', glow=True),
@@ -904,11 +979,11 @@ def villager_king_divine():
         bolt_core=M('energy', '#ffffff'),
         haft=M('metal', '#2a2230'),
         beard=M('metal', '#f2ede2'),
-        burning=M('energy', '#fff4d6', alpha=0.9, glow_amount=0.9),
-        burning_tip=M('energy', '#ff9a2a', alpha=0.92),
-        covert=M('energy', '#ffd77a', alpha=0.92),
-        dark=M('metal', '#1b1622', edge_glow='#ffcf5a'),
-        dark_tip=M('energy', '#ffbf2a', alpha=0.95),
+        burning=M('energy', '#efe2bf', alpha=0.9, glow_amount=0.8),
+        burning_tip=M('energy', '#5a0a12', alpha=0.95),
+        covert=M('energy', '#c9963a', alpha=0.92),
+        dark=M('metal', '#140f18', edge_glow='#ff3a2a'),
+        dark_tip=M('energy', '#a0101c', alpha=0.95),
         fly=M('membrane', '#4a4a30', accent='#c79cff', alpha=0.5),
         vein=M('metal', '#120e14'),
         horn=M('horn', '#16121a', tip='#ffcf5a', glow=True),
@@ -961,10 +1036,13 @@ def villager_king_divine():
     h.hair('#f7f3ea', style='long', length=18, tip='#ffe9b0', bangs='parted')
     demon_face(h, P)
     h.horns(P['horn'], kind='dragon', length=24, spread=1.0, base=3.4)
-    h.crown(P['gold2'], gems=P['ruby'], spikes=9, tall=4.0)
+    h.crown(M('metal', '#1a1418', edge_glow='#ff3a1a'), gems=P['ruby'], spikes=9, tall=4.0)
     # his countenance as the sun: a sun disc behind the head with a corona of rays; seven stars over him
-    h.halo(M('ring', '#fff6d8', width=0.22, inner=0.55), radius=8.0, y=h.head_top + 3.0, z=7.5, tilt=1.5, speed=0.0, name='sun_halo')
-    h.halo(M('ring', '#ffcf5a', width=0.12, spikes=30), radius=10.5, y=h.head_top + 3.0, z=7.8, tilt=1.5, speed=0.008, name='corona')
+    # (the user: more ominous, a supreme god twisted and fallen) the sun of his face cracked and knocked askew, a
+    # corona of crimson about it; black tears from his eyes; chains on him; pale blue fire of souls
+    broken_halo(r, h, (0, h.head_top + 3.0, 7.5), 8.0)
+    h.halo(M('ring', '#c8302a', width=0.12, spikes=30), radius=10.5, y=h.head_top + 3.0, z=7.8, tilt=1.5, speed=0.008, name='corona')
+    fallen(r, h, P)
     orbiters(r, h.head, (0, h.head_top - 6, 0), M('plane', '#fff4c0', shape='star', glow=True), count=7, radius=6.5, size=1.8,
              speed=0.03, name='seven_stars', bob=0.4)
     # the wheels within a wheel at his feet, their rims full of eyes, going where he goes (Ezekiel 1:15-21)
@@ -985,8 +1063,8 @@ def villager_king_divine():
     # spear, the great bow of rainbow light
     stance_arms(r, h)
     # lightning about him (Revelation 4:5) and the flies at his feet
-    orbiters(r, h.torso, (0, h.top + 2, 0), M('plane', '#fff2b0', shape='star', glow=True), count=8, radius=21, size=2.4, speed=0.02,
-             name='lightnings')
+    orbiters(r, h.torso, (0, h.top + 2, 0), [M('plane', '#ff4a2a', shape='star', glow=True), M('plane', '#9ff0ff', shape='star', glow=True)],
+             count=8, radius=21, size=2.4, speed=0.02, name='lightnings')
     orbiters(r, h.hips, (0, h.pelvis_y1 + 6, 0), [M('void', '#0c0a08'), M('void', '#1a1610'), M('energy', '#c79cff')], count=24, radius=11,
              size=0.6, speed=0.13, name='flies', bob=1.6)
     return r

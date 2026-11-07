@@ -40,6 +40,7 @@ public final class KingRig extends RigModel<RoyalMob> {
     private final List<ModelPart>[] arms = new List[]{new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
     private final List<ModelPart>[] rot;
     private final List<ModelPart> jitter = new ArrayList<>();
+    private final List<ModelPart> crumble = new ArrayList<>();
     private final Map<Integer, ModelPart> weaponR = new HashMap<>(), weaponL = new HashMap<>();
     private int stanceNow;
     final boolean broken;
@@ -65,6 +66,9 @@ public final class KingRig extends RigModel<RoyalMob> {
                     this.arms[i].add(e.getValue());
                     (n.endsWith("_l") ? this.weaponL : this.weaponR).put(i, e.getValue());
                 }
+            }
+            if (n.startsWith("crumble")) {
+                this.crumble.add(e.getValue());
             }
             if (n.startsWith("rot1_")) {
                 this.rot[0].add(e.getValue());
@@ -135,6 +139,7 @@ public final class KingRig extends RigModel<RoyalMob> {
             for (int i = 0; i < 3; i++) {
                 scale(this.rot[i], Mth.clamp((ruin - at[i]) / 0.08F, 0F, 1F));
             }
+            crumble(ruin, age);
             int bucket = (int) (age / 2F);
             float amp = 0.5F + ruin * 2.5F;
             scale(this.jitter, 1F);
@@ -151,12 +156,95 @@ public final class KingRig extends RigModel<RoyalMob> {
                     }
                 }
             }
+            pop(e, ruin, age);
         } else {
             for (List<ModelPart> l : this.rot) {
                 scale(l, 0F);
             }
         }
         move(e, age);
+    }
+
+    // ------------------------------------------------------------------------------------------------- the broken one
+
+    /**
+     * (054) The broken king falls apart as his life goes (the user: the broken parts and the king's parts both crumbling
+     * more and more): every piece of his shattered armour and of the king he was (crumble_*) has its own moment; past it
+     * the piece drops, turning, flickering, and is gone. Under a fifth of his life the monsters grown out of him come
+     * apart too, flickering in and out.
+     */
+    private void crumble(float ruin, float age) {
+        for (int i = 0; i < this.crumble.size(); i++) {
+            ModelPart m = this.crumble.get(i);
+            float th = 0.06F + (KingLook.hash(i * 7919 + 17, 3) & 1023) / 1023F * 0.84F;
+            float over = ruin - th;
+            if (over <= 0F) {
+                continue;
+            }
+            if (over > 0.1F) {
+                m.xScale = m.yScale = m.zScale = 0F;
+                continue;
+            }
+            float f = over / 0.1F;
+            m.y += f * f * 16F;
+            m.x += ((i % 5) - 2) * f * 1.5F;
+            m.xRot += f * 2.6F * ((i & 1) == 0 ? 1 : -1);
+            m.zRot += f * 1.8F;
+            if ((((int) age) + i) % 3 == 0) {
+                m.xScale = m.yScale = m.zScale = 0F;
+            }
+        }
+        if (ruin > 0.8F) {
+            int beat = (int) (age / 3F);
+            for (List<ModelPart> l : this.rot) {
+                for (int i = 0; i < l.size(); i++) {
+                    if ((KingLook.hash(i * 31 + l.size(), beat) & 7) < (int) ((ruin - 0.8F) * 25F)) {
+                        ModelPart m = l.get(i);
+                        m.xScale = m.yScale = m.zScale = 0F;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * (054) A box of tricks (the user): now and then, more often the lower he is, something springs out of him for a
+     * moment: a limb blown up to twice its size, his head turned right round, his whole body skipped a block aside or
+     * stretched tall, his arms flung up, his body folded the wrong way.
+     */
+    private void pop(RoyalMob e, float ruin, float age) {
+        int bucket = (int) (age / 10F);
+        int h = Math.abs(KingLook.hash(e.getId() * 131 + 7, bucket) % 1000003);
+        if ((h & 15) > 3 + (int) (ruin * 9F) || (age - bucket * 10F) > 4F) {
+            return;
+        }
+        ModelPart root = p("root");
+        switch ((h >> 4) % 6) {
+            case 0 -> {
+                if (!this.jitter.isEmpty()) {
+                    ModelPart m = this.jitter.get((h >> 8) % this.jitter.size());
+                    m.xScale *= 2.2F;
+                    m.yScale *= 2.2F;
+                    m.zScale *= 2.2F;
+                }
+            }
+            case 1 -> add("head", 0, (float) Math.PI, 0);
+            case 2 -> {
+                if (root != null) {
+                    root.x += ((h >> 10) % 2 == 0 ? 1 : -1) * 14F;
+                }
+            }
+            case 3 -> {
+                if (root != null) {
+                    root.yScale *= 1.6F;
+                }
+            }
+            case 4 -> {
+                add("arm_r", -3.0F, 0, 1.2F);
+                add("arm_l", -3.0F, 0, -1.2F);
+            }
+            default -> add("torso", -1.2F, 0, 0.8F);
+        }
     }
 
     // ------------------------------------------------------------------------------------------------- the moves
