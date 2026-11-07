@@ -265,7 +265,7 @@ public final class RebelPact {
             case "piglin" -> "ピグリンの闇市";
             case "ender" -> "エンダーマンの虚ろ市";
             default -> "叛逆者の武器庫";
-        }), offers(p, sl, f), (pl, o) -> addFavour(pl, 1));
+        }), "rebel_" + f, offers(p, sl, f), (pl, o) -> addFavour(pl, 1));
     }
 
     static ItemStack horn(String faction) {

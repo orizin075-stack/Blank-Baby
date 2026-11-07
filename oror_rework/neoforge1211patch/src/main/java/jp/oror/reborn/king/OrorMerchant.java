@@ -1,5 +1,6 @@
 package jp.oror.reborn.king;
 
+import net.minecraft.nbt.CompoundTag;
 import java.util.function.BiConsumer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -22,6 +23,43 @@ public final class OrorMerchant implements Merchant {
     public OrorMerchant(MerchantOffers offers, BiConsumer<Player, MerchantOffer> traded) {
         this.offers = offers;
         this.traded = traded;
+    }
+
+    /** The trades the player made today, by shop and offer: the offers are made anew each time the screen opens, their stock lasts the day. */
+    static final String STOCK = "OrorTradeStock";
+
+    static CompoundTag stock(Player p) {
+        CompoundTag s = KingCourt.kept(p).getCompound(STOCK);
+        long day = p.level().getDayTime() / 24000L;
+        if (!s.contains("Day") || s.getLong("Day") != day) {
+            s = new CompoundTag();
+            s.putLong("Day", day);
+        }
+        return s;
+    }
+
+    /** Opens the shop's screen for the player with what is left of today's stock; each trade is counted against it. */
+    public static void open(Player player, Component title, String shop, MerchantOffers offers, BiConsumer<Player, MerchantOffer> traded) {
+        CompoundTag s = stock(player);
+        for (int i = 0; i < offers.size(); i++) {
+            MerchantOffer of = offers.get(i);
+            for (int n = s.getInt(shop + i); n > 0 && !of.isOutOfStock(); n--) {
+                of.increaseUses();
+            }
+        }
+        open(player, title, offers, (p, of) -> {
+            int i = offers.indexOf(of);
+            if (i >= 0) {
+                CompoundTag k = KingCourt.kept(p);
+                CompoundTag st = stock(p);
+                st.putInt(shop + i, st.getInt(shop + i) + 1);
+                k.put(STOCK, st);
+                KingCourt.keep(p, k);
+            }
+            if (traded != null) {
+                traded.accept(p, of);
+            }
+        });
     }
 
     /** Opens the screen for the player, titled as given. */

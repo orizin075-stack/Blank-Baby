@@ -31,7 +31,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.WrittenBookContent;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.biome.Biome;
@@ -293,7 +292,7 @@ public final class SummoningChamber {
     }
 
     static ItemStack book(ServerLevel sl, net.minecraft.resources.ResourceKey<net.minecraft.world.item.enchantment.Enchantment> key, int level) {
-        return EnchantmentHelper.createBook(new EnchantmentInstance(sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(key), level));
+        return net.minecraft.world.item.EnchantedBookItem.createForEnchantment(new EnchantmentInstance(sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(key), level));
     }
 
     /** The east wall: chests and barrels, each kind of thing in its own. */

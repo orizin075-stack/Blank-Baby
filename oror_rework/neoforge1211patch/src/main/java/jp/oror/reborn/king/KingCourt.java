@@ -38,7 +38,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -198,7 +197,7 @@ public final class KingCourt {
         }
         bless(p, sl);
         grace(p, sl);
-        OrorMerchant.open(p, Component.literal("村人王の宝物庫"), offers(p, sl), KingCourt::traded);
+        OrorMerchant.open(p, Component.literal("村人王の宝物庫"), "king", offers(p, sl), KingCourt::traded);
     }
 
     /** His blessing, once a day: twenty minutes of his protection. */
@@ -301,7 +300,7 @@ public final class KingCourt {
     static ItemStack book(ServerLevel sl, ResourceKey<Enchantment> key, int level) {
         var ench = sl.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
         Holder<Enchantment> h = ench.getHolderOrThrow(key);
-        return EnchantmentHelper.createBook(new net.minecraft.world.item.enchantment.EnchantmentInstance(h, level));
+        return net.minecraft.world.item.EnchantedBookItem.createForEnchantment(new net.minecraft.world.item.enchantment.EnchantmentInstance(h, level));
     }
 
     static MerchantOffers offers(Player p, ServerLevel sl) {
