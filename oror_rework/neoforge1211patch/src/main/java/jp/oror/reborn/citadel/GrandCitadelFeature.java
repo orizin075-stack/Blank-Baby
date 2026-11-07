@@ -217,6 +217,11 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
             || st.is(Blocks.SNOW) || st.is(BlockTags.FLOWERS) || st.is(BlockTags.SAPLINGS);
     }
 
+    /** (053) Natural-looking blocks that under the capital's ground are the kingdom's work: the vault's obsidian, the mines' cobbles. */
+    private static boolean builtUnder(BlockState st) {
+        return st.is(Blocks.OBSIDIAN) || st.is(Blocks.COBBLESTONE) || st.is(Blocks.MOSSY_COBBLESTONE);
+    }
+
     /** What a neighbour's decoration can leave in a chunk built before it (trees, rocks, ice, a geode's crystals). */
     private static boolean natural(BlockState st) {
         return vegetation(st) || st.is(BlockTags.BASE_STONE_OVERWORLD) || st.is(BlockTags.DIRT) || st.is(BlockTags.SAND)
@@ -234,7 +239,7 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
      * not 48 blocks over the ground: a tree on a hill grew into the palace's upper floors. Only where the block there now
      * is one such natural block and the save's is another: what the kingdom built is never touched. Under the ground only
      * the kingdom's own blocks (the mine labyrinth) are put back, never the natural rock the save leaves there, and the
-     * hollow of a neighbour's geode only in a chunk no one has been in yet.
+     * hollow of a neighbour's geode (or its lava) only in a chunk no one has been in yet.
      */
     private static void tidyNeighbours(WorldGenLevel level, CitadelSites.Site site, ChunkPos pos) {
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
@@ -271,7 +276,7 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
                     for (int x = xa; x < xb; x++) {
                         for (int z = za; z < zb; z++) {
                             BlockState here = chunk.getBlockState(p.set(bx + x, y, bz + z));
-                            boolean hole = below && unvisited && here.isAir();
+                            boolean hole = below && unvisited && (here.isAir() || here.is(Blocks.LAVA));
                             if (!hole && (here.isAir() || !natural(here))) {
                                 continue;
                             }
@@ -279,7 +284,7 @@ public final class GrandCitadelFeature extends Feature<NoneFeatureConfiguration>
                             // (053) under the ground only what the kingdom built (the mine labyrinth's walls) is taken back:
                             // a neighbour's geode had cut into them, its shell and the hollow inside (053's CI,
                             // CAPITAL-INTEGRITY)
-                            if (below && (want.isAir() || natural(want))) {
+                            if (below && (want.isAir() || natural(want) && !builtUnder(want))) {
                                 continue;
                             }
                             if (want.getBlock() != here.getBlock() && !want.is(Blocks.DIRT) && !want.is(Blocks.BEDROCK)) {
