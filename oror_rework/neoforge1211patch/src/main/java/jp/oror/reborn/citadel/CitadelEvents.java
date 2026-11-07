@@ -198,7 +198,7 @@ public final class CitadelEvents {
                 }
             }
             for (ChunkPos p : chunks) {
-                level.setChunkForced(p.x, p.z, true);
+                CitadelChunkLoading.force(level, p.x, p.z, true);
             }
             test = new Test(site, chunks, level.getGameTime(), (System.nanoTime() - t0) / 1e6);
         }, server);
@@ -232,7 +232,7 @@ public final class CitadelEvents {
         net.minecraft.server.level.ServerLevel level = e.getServer().overworld();
         for (int i = 0; i < 4 && !RELEASE.isEmpty(); i++) {
             ChunkPos p = RELEASE.poll();
-            level.setChunkForced(p.x, p.z, false);
+            CitadelChunkLoading.force(level, p.x, p.z, false);
         }
     }
 

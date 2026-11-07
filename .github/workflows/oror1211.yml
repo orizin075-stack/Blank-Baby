@@ -19,7 +19,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 110
     defaults:
       run:
         shell: bash
@@ -154,11 +154,11 @@ jobs:
           # Nightfall from SETUP_NIGHTFALL's download; not the original Indestructible, which loads a client class on a
           # dedicated server (the pack ships its fixed build in overrides; OROR's mixins for it skip themselves without it)
           extra=(libs/nightfall.jar)
-          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 2700 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
-            'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'GUARD-RESULT' 'WORN-RESULT' 'SWEEP-RESULT' 'GAMETEST-RESULT' 'CI-DONE' -- arms,guards,worn,citadel,citadelupdate,war,pilots,landings,aa,villageflight,sweep,gametests -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 4500 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
+            'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'GUARD-RESULT' 'WORN-RESULT' 'SPELL-SWEEP-RESULT' 'MOBS-TRACE {' 'CAPITAL-LOAD {' 'SWEEP-RESULT' 'GAMETEST-RESULT' 'CI-DONE' -- arms,guards,worn,spells,mobs,citadel,citadelupdate,capitalload,war,pilots,landings,aa,villageflight,sweep,gametests -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack045/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
           # the results first (the full list below is cut at 400 lines), then everything
-          grep -E 'GAMETEST-RESULT|SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|GUARD-|WORN-|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
+          grep -E 'GAMETEST-RESULT|SWEEP-RESULT|SWEEP-KIT|KINGSLAYER-TEST|GUARD-|WORN-|SPELL-SWEEP-RESULT|MOBS-TRACE|CAPITAL-LOAD|CRASHNET|CITADEL-SELFTEST|CITADEL-SUPPLY|CITADEL-UPDATE|WAR-RESULT|FLIGHT-RESULT|SUPPLY-TEST|LANDING-TRIAL|LANDING-RESULT|AA-RESULT|VILLAGE-FLIGHT \{|CI-DONE' "$RUNNER_TEMP/server/console.log" \
             | cut -c1-6000 >> out/server_test.txt || true
           { grep -E 'CITADEL-SELFTEST|CITADEL-UPDATE|WAR-|FLIGHT-|SUPPLY-|VILLAGE-FLIGHT|PLANE-TRACK|CI-DONE|OROR (Citadel|War|Vehicles|CI|Village)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
@@ -169,6 +169,11 @@ jobs:
           # where the server thread spent the battle (JFR samples between the war's start and its result)
           J="$RUNNER_TEMP/server/war.jfr"; [ -s "$J" ] || J="$RUNNER_TEMP/server/rec.jfr"
           timeout 600 python3 -I tools/jfr_hot.py "$J" "$RUNNER_TEMP/server/console.log" > out/war_profile.txt 2>&1 || true
+          # (053) the capital in ordinary play (CAPITAL-LOAD), from the whole run's recording
+          timeout 600 python3 -I tools/jfr_hot.py "$RUNNER_TEMP/server/rec.jfr" "$RUNNER_TEMP/server/console.log" 'CAPITAL-LOAD-START' 'CAPITAL-LOAD {' \
+            > out/capital_profile.txt 2>&1 || true
+          # (053) every spell the royals had, cast in turn: the sweep's lines and the errors between them
+          awk '/SPELL-SWEEP-START/{on=1} on{print} /SPELL-SWEEP-RESULT/{on=0}' "$RUNNER_TEMP/server/console.log" > out/spell_log.txt || true
           cat "$RUNNER_TEMP/server/jfr_dump.txt" >> out/war_profile.txt 2>/dev/null || true
           exit $rc
       - name: Commit the result

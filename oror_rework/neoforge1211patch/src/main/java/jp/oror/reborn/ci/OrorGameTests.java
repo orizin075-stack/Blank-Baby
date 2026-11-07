@@ -53,7 +53,7 @@ public final class OrorGameTests {
         // NeoForge registers game tests and ticks them only outside production (GameTestHooks), so on a release server
         // the holders are registered here, the runner built and started here, and the ticker ticked from tick() below
         StringBuilder notes = new StringBuilder();
-        if (GameTestRegistry.getAllTestFunctions().isEmpty()) {
+        if (ValidationSupport.functions().isEmpty()) {
             for (String holder : HOLDERS) {
                 try {
                     Class<?> c = Class.forName("jp.oror.reborn." + holder + "GameTests");
@@ -63,7 +63,7 @@ public final class OrorGameTests {
                 }
             }
         }
-        total = GameTestRegistry.getAllTestFunctions().size();
+        total = ValidationSupport.functions().size();
         startedAt = lastAt = src.getServer().getTickCount();
         LOG.info("GAMETEST-START {\"tests\":{},\"notes\":\"{}\"}", total, esc(notes.toString()));
         if (total == 0) {
@@ -97,61 +97,10 @@ public final class OrorGameTests {
     private static boolean ticking;
 
     /** As /test runall does: every test laid out in a grid from at, and the runner started (by reflection: its API moves). */
+    /** (053) The other line's runner (ValidationSupport, in the base jar): the same grid of tests, without the ones that
+     * need TUKUYO running beside the server or a client (their names logged as GAMETEST-SKIP), its chunks let go after. */
     private static void startRunner(ServerLevel level, BlockPos at) throws ReflectiveOperationException {
-        for (int dx = -1; dx <= 8; dx++) {
-            for (int dz = -1; dz <= 20; dz++) {
-                level.setChunkForced((at.getX() >> 4) + dx, (at.getZ() >> 4) + dz, true);
-            }
-        }
-        // on the ground (its chunk loaded first: unloaded, the height read was the world's floor, and the first run laid
-        // every test out at -62, under the deepslate), at noon held (the first run fell at night, and the villagers of
-        // the work tests were asleep)
-        level.getChunk(at.getX() >> 4, at.getZ() >> 4);
-        int y = Math.max(level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, at.getX(), at.getZ()),
-            level.getSeaLevel()) + 1;
-        BlockPos corner = new BlockPos(at.getX(), y, at.getZ());
-        level.setDayTime(6000);
-        level.getGameRules().getRule(net.minecraft.world.level.GameRules.RULE_DAYLIGHT).set(false, level.getServer());
-        level.setWeatherParameters(12000, 0, false, false);
-        Class<?> retryType = Class.forName("net.minecraft.gametest.framework.RetryOptions");
-        Object noRetries = retryType.getMethod("noRetries").invoke(null);
-        java.lang.reflect.Constructor<?> infoMaker = null;
-        for (java.lang.reflect.Constructor<?> k : GameTestInfo.class.getConstructors()) {
-            Class<?>[] ps = k.getParameterTypes();
-            if (ps.length == 4 && ps[0] == TestFunction.class && ps[1] == Rotation.class && ps[3] == retryType) {
-                infoMaker = k;
-            }
-        }
-        if (infoMaker == null) {
-            throw new NoSuchMethodException("GameTestInfo(TestFunction, Rotation, ServerLevel, RetryOptions)");
-        }
-        List<GameTestInfo> infos = new ArrayList<>();
-        for (TestFunction fn : GameTestRegistry.getAllTestFunctions()) {
-            infos.add((GameTestInfo) infoMaker.newInstance(fn, Rotation.NONE, level, noRetries));
-        }
-        Class<?> gridType = Class.forName("net.minecraft.gametest.framework.StructureGridSpawner");
-        Object spawner = null;
-        for (java.lang.reflect.Constructor<?> k : gridType.getConstructors()) {
-            Class<?>[] ps = k.getParameterTypes();
-            if (ps.length == 2 && ps[0] == BlockPos.class && ps[1] == int.class) {
-                spawner = k.newInstance(corner, 8);
-            } else if (ps.length == 3 && ps[0] == BlockPos.class && ps[1] == int.class && ps[2] == boolean.class) {
-                spawner = k.newInstance(corner, 8, true);
-            }
-        }
-        if (spawner == null) {
-            throw new NoSuchMethodException("StructureGridSpawner(BlockPos, int)");
-        }
-        Class<?> builderType = Class.forName("net.minecraft.gametest.framework.GameTestRunner$Builder");
-        Object builder = builderType.getMethod("fromInfo", java.util.Collection.class, ServerLevel.class).invoke(null, infos, level);
-        for (java.lang.reflect.Method m : builderType.getMethods()) {
-            if (m.getName().equals("newStructureSpawner") && m.getParameterCount() == 1) {
-                builder = m.invoke(builder, spawner);
-            }
-        }
-        Object runner = builderType.getMethod("build").invoke(builder);
-        runner.getClass().getMethod("start").invoke(runner);
-        LOG.info("GAMETEST-RUNNER {\"tests\":{},\"at\":[{},{},{}]}", infos.size(), corner.getX(), corner.getY(), corner.getZ());
+        ValidationSupport.startRunner(level, at);
     }
 
     private static synchronized void record(GameTestInfo info, boolean ok) {

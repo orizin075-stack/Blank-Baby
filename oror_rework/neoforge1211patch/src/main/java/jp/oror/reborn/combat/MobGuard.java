@@ -56,6 +56,13 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * Fight's) now does to any mob, not only to Indestructible's (NightfallNativeParryFeedbackMixin). The guard is seen:
  * an Epic Fight humanoid plays its guard and parry animations, OROR's characters and the royals their own poses
  * (TechniqueShow), every mob strikes sparks and rings.
+ * <p>
+ * (053) Mobs looked wrong with it (the user: wither skeletons and others): it worked between mobs too (a golem and a
+ * zombie, the royals and the mobs, mobs in a brawl) and Epic Fight's long stun froze whoever was parried, every block
+ * played Epic Fight's guard animation (a mob stands in it), a broken guard its two-second "neutralised" one, archers
+ * raised a guard. Now a mob guards only against players' blows; a parried mob is stunned briefly (Epic Fight's short
+ * stun); a block shows only the sparks and the pose on OROR's rigs, a parry and a broken guard Epic Fight's short guard
+ * hit; a mob with a bow or a crossbow does not guard; a block without a shield halves a blow instead of undoing it.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class MobGuard {
@@ -87,7 +94,8 @@ public final class MobGuard {
 
     /** Whether a mob guards by these rules (players, the royals, and the mobs of the guarding mods do not). */
     public static boolean guards(LivingEntity e) {
-        if (!(e instanceof Mob m) || m instanceof RoyalMob || !m.isAlive() || m.isNoAi()) {
+        if (!(e instanceof Mob m) || m instanceof RoyalMob || !m.isAlive() || m.isNoAi()
+            || m.getMainHandItem().getItem() instanceof net.minecraft.world.item.ProjectileWeaponItem) {
             return false;
         }
         Boolean known = NATIVE.get(m.getType());
@@ -156,11 +164,10 @@ public final class MobGuard {
             return;
         }
         g = guard(m);
-        Tier tier = tier(m);
         if (g.stagger > 0) {
+            // staggered: the guard stays down (the mob was stopped once, when it staggered)
             g.stagger--;
             g.remaining = 0;
-            m.getNavigation().stop();
             return;
         }
         if (g.remaining > 0) {
@@ -169,11 +176,13 @@ public final class MobGuard {
             g.stamina = Math.max(0F, g.stamina - 0.08F);
             return;
         }
-        g.stamina = Math.min(tier.stamina, g.stamina + 0.4F);
         if (g.delay > 0) {
             g.delay--;
         }
-        if (g.delay == 0 && t != null && t.isAlive() && m.distanceTo(t) < 5F && m.getSensing().hasLineOfSight(t)) {
+        // only against a player (053): the guard is for the player's blows, not for mobs' brawls
+        if (g.delay == 0 && t instanceof Player && t.isAlive() && m.distanceToSqr(t) < 25.0 && m.getSensing().hasLineOfSight(t)) {
+            Tier tier = tier(m);
+            g.stamina = Math.min(tier.stamina, g.stamina + 0.4F * tier.cycle);
             g.remaining = tier.window;
             g.age = 0;
             g.delay = tier.cycle;
@@ -189,7 +198,7 @@ public final class MobGuard {
             return;
         }
         DamageSource src = e.getSource();
-        if (!(src.getEntity() instanceof LivingEntity attacker) || attacker == self || unblockable(src)) {
+        if (!(src.getEntity() instanceof Player attacker) || unblockable(src)) {
             return;
         }
         boolean projectile = src.getDirectEntity() instanceof Projectile;
@@ -226,6 +235,7 @@ public final class MobGuard {
             g.stamina = 0F;
             g.remaining = 0;
             g.stagger = 20;
+            m.getNavigation().stop();
             count(m, "OrorGuardBreaks");
             sl.playSound(null, m.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 0.8F, 0.9F);
             sl.sendParticles(ParticleTypes.CRIT, m.getX(), m.getEyeY() - 0.3, m.getZ(), 12, 0.35, 0.3, 0.35, 0.15);
@@ -245,7 +255,7 @@ public final class MobGuard {
                 parried(attacker, m.position());
             }
         } else {
-            if (tier == Tier.BARE && !shield(m)) {
+            if (tier != Tier.BOSS && !shield(m)) {
                 e.setAmount(amount * 0.5F);
             } else {
                 e.setCanceled(true);
@@ -391,7 +401,7 @@ public final class MobGuard {
                 }
                 Class<?> stunType = Class.forName("yesman.epicfight.world.damagesource.StunType");
                 for (Object c : stunType.getEnumConstants()) {
-                    if (((Enum<?>) c).name().equals("LONG")) {
+                    if (((Enum<?>) c).name().equals("SHORT")) {
                         stunLong = c;
                     }
                 }
@@ -444,8 +454,7 @@ public final class MobGuard {
                 Object anim = switch (kind) {
                     case "parry" -> ANIMS.getOrDefault((alternate++ & 1) == 0 ? "LONGSWORD_GUARD_ACTIVE_HIT1" : "LONGSWORD_GUARD_ACTIVE_HIT2",
                         ANIMS.get("SWORD_GUARD_HIT"));
-                    case "block" -> ANIMS.get("SWORD_GUARD_HIT");
-                    case "break" -> ANIMS.get("BIPED_COMMON_NEUTRALIZED");
+                    case "break" -> ANIMS.get("SWORD_GUARD_HIT");
                     default -> null;
                 };
                 if (anim != null) {

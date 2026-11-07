@@ -7,16 +7,19 @@ methods most often anywhere in it (inclusive), and the same grouped by mod packa
 import collections, re, subprocess, sys
 
 rec, console = sys.argv[1:3]
+# (053) the window between two console markers: the battle by default, or another (the capital's load: CAPITAL-LOAD-START
+# and CAPITAL-LOAD {)
+START, END = (sys.argv[3], sys.argv[4]) if len(sys.argv) > 4 else ('CI running /oror war start', 'WAR-RESULT')
 start = end = None
 for line in open(console, errors='replace'):
     m = re.match(r'\[(\d\d:\d\d:\d\d)\]', line)
     if not m:
         continue
-    if 'CI running /oror war start' in line:
+    if START in line:
         start = m.group(1)
-    elif 'WAR-RESULT' in line and start:
+    elif END in line and start:
         end = m.group(1)
-print('war window', start, end)
+print('window', START, '->', END, start, end)
 PACKAGES = ['jp.oror', 'yesman.epicfight', 'com.nameless', 'io.redspace', 'com.hm.efn', 'com.atsuishio', 'software.bernie', 'net.minecraft',
             'net.neoforged', 'com.github.alexthe666', 'dev.shadowsoffire', 'top.theillusivec4']
 proc = subprocess.Popen(['jfr', 'print', '--events', 'jdk.ExecutionSample', '--stack-depth', '48', rec], stdout=subprocess.PIPE, text=True,
@@ -25,7 +28,9 @@ self_n, incl_n, pkg_n = collections.Counter(), collections.Counter(), collection
 # what these spend their time in: the frame each calls (the next one up the stack), per sample
 FOCUS = ['jp.oror.reborn.royal.RoyalMob.battle', 'jp.oror.reborn.royal.RoyalMob.customServerAiStep', 'jp.oror.reborn.VillagerLife.tick',
          'com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.baseTick', 'net.minecraft.world.entity.ai.navigation.PathNavigation.createPath',
-         'jp.oror.reborn.war.HundredWar.tick', 'com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension']
+         'jp.oror.reborn.war.HundredWar.tick', 'com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension',
+         'com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.tickMagnetism', 'jp.oror.reborn.combat.MobGuard.tick',
+         'jp.oror.reborn.AdaptiveCombat.tick', 'net.minecraft.server.level.ServerLevel.tickChunk']
 callee = {f: collections.Counter() for f in FOCUS}
 caller = {f: collections.Counter() for f in FOCUS}
 total = 0

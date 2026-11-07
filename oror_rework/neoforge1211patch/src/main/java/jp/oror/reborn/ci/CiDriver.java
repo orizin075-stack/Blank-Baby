@@ -62,6 +62,9 @@ public final class CiDriver {
                 case "arms" -> "oror arms test";
                 case "guards" -> "oror guards test";
                 case "worn" -> "oror worn test";
+                case "spells" -> "oror spells test";
+                case "mobs" -> "oror mobs test";
+                case "capitalload" -> "oror capitalload test";
                 case "sweep" -> "oror sweep";
                 case "gametests" -> "oror gametests";
                 case "aa" -> "oror aa test";
@@ -76,7 +79,7 @@ public final class CiDriver {
             return;
         }
         boolean done = next >= CHECKS.size() && CHECKS.stream().allMatch(CiDriver::finished);
-        if (done || t > 42000) {
+        if (done || t > 64000) {
             LOG.info("CI-DONE {\"complete\":{},\"ticks\":{}}", done, t);
             startedAt = -1;
             server.halt(false);
@@ -93,6 +96,9 @@ public final class CiDriver {
             case "arms" -> jp.oror.reborn.royal.KingslayerArms.Remake.testLogged;
             case "guards" -> GuardTest.resultLogged;
             case "worn" -> WornTest.resultLogged;
+            case "spells" -> SpellSweep.resultLogged;
+            case "mobs" -> MobTraceTest.resultLogged;
+            case "capitalload" -> jp.oror.reborn.citadel.CapitalLoadTest.resultLogged;
             case "sweep" -> OrorSweep.resultLogged;
             case "gametests" -> OrorGameTests.resultLogged;
             case "aa" -> jp.oror.reborn.vehicle.AntiAirTest.resultLogged;
