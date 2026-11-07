@@ -124,6 +124,10 @@ CIで、10種類のモブ（ウィザースケルトン、スケルトン、ゾ�
   - Epic Fight のレイピアの技（Rapier moveset）
   - The Shooting Star と、それに必要な Rimulib
   - この6個を入れて、専用サーバーが起動することを確かめました。2回目以降のCIは、このパックで行っています。
+- The Shooting Star について（注意）：
+  - 1.21.1用は「Demo」版だけでした。重いシェーダーで描くMODです。
+  - グラフィックボード（またはドライバー）が対応していないと、タイトル画面で「Your graphics card can't run The Shooting Star (Demo)」と出て、「Exit game」しか押せません。CIの画面確認（グラフィックボードのない環境）では、この画面で止まりました。
+  - その画面が出たとき、または重いと感じたときは、インスタンスの mods フォルダから the-shooting-star-demo と rimulib の2つを外してください。ほかには影響しません。
 - 入れなかったもの：
   - Citadel：パックにすでに新しい版（2.7.6）が入っています。
   - Sword Soaring：古い Epic Fight（21.14）向けに作られていて、このパックの Epic Fight では起動時に落ちます。
