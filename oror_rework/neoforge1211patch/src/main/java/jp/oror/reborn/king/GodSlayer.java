@@ -282,6 +282,11 @@ public final class GodSlayer {
         }
     }
 
+    /** The field made whole again (the CI's check starts from a whole field). */
+    static void fieldWhole(Player p) {
+        FIELD.remove(p);
+    }
+
     /** The field's state (the CI's check). */
     public static double fieldOf(Player p) {
         double[] f = FIELD.get(p);

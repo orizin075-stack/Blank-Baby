@@ -374,7 +374,7 @@ public final class KingStoryTest {
             KingSouls.mark(r.king, r.soulA);
             KingSouls.mark(r.king, r.soulB);
         }
-        if (age > 700 && age <= 760 && age % 2 == 0 && r.striker != null) {
+        if (age > 700 && age <= 790 && age % 2 == 0 && r.striker != null) {
             r.king.invulnerableTime = 0;
             r.king.hurt(r.king.damageSources().mobAttack(r.striker), 2F);
         }
@@ -565,10 +565,23 @@ public final class KingStoryTest {
             // its field takes a small blow whole; a great blow breaks it and the ceiling holds what goes through
             r.rebel.setHealth(r.rebel.getMaxHealth());
             out.put("testerUnshielded", r.rebel.unshield());
+            // (055) what was left of the field after the fight (his flies and his creatures outlive him a while and
+            // wear it down); then his creatures cleared, the tester's effects off, the field whole, for a clean trial
+            out.put("fieldAfterFight", Math.round(GodSlayer.fieldOf(r.rebel)));
+            int cleared = 0;
+            for (Entity c : sl.getEntities((Entity) null, new AABB(r.at).inflate(60), KingSouls::his)) {
+                c.discard();
+                cleared++;
+            }
+            out.put("creaturesCleared", cleared);
+            r.rebel.removeAllEffects();
+            r.rebel.invulnerableTime = 0;
+            GodSlayer.fieldWhole(r.rebel);
             Mob z = spawn(r, EntityType.ZOMBIE, 2, 2);
             float h0 = r.rebel.getHealth();
             r.rebel.hurt(r.rebel.damageSources().mobAttack(z), 20F);
             out.put("fieldTook", r.rebel.getHealth() >= h0 && GodSlayer.fieldOf(r.rebel) < GodSlayer.CAPACITY);
+            out.put("fieldAfterBlow", Math.round(GodSlayer.fieldOf(r.rebel)));
             r.rebel.invulnerableTime = 0;
             float h1 = r.rebel.getHealth();
             r.rebel.hurt(r.rebel.damageSources().mobAttack(z), 400F);

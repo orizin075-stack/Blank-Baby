@@ -65,6 +65,9 @@ public final class KingSouls {
 
     private static final List<Veil> VEILS = new ArrayList<>();
 
+    /** (055) His flies and the king who loosed them: they go when he truly dies (not when he returns from death). */
+    private static final Map<Vex, RoyalMob> FLIES = new WeakHashMap<>();
+
     /** (055) Starved foes and until when: no healing of any kind. The user's pack takes hunger away (Hunger Strike:
      * the food bar stays put and food heals instead), so the hunger of the fly lord's feast, plague and veil is this. */
     private static final Map<LivingEntity, Long> STARVE = new WeakHashMap<>();
@@ -133,6 +136,7 @@ public final class KingSouls {
             fly.setLimitedLife(20 * 20);
             spawned(fly, "蝿の眷属", ChatFormatting.DARK_GRAY);
             sl.addFreshEntity(fly);
+            FLIES.put(fly, king);
             KingDeeds.count(king, KingDeeds.COUNT, "veil_flies");
             List<LivingEntity> fs = KingForms.foes(king, sl, 28);
             LivingEntity t = !fs.isEmpty() ? fs.get(sl.random.nextInt(fs.size())) : king.getTarget();
@@ -187,6 +191,21 @@ public final class KingSouls {
 
     @SubscribeEvent
     public static void tick(ServerTickEvent.Post e) {
+        if (!FLIES.isEmpty() && e.getServer().getTickCount() % 20 == 0) {
+            for (Iterator<Map.Entry<Vex, RoyalMob>> it = FLIES.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<Vex, RoyalMob> en = it.next();
+                Vex fly = en.getKey();
+                if (!fly.isAlive()) {
+                    it.remove();
+                } else if (!en.getValue().isAlive()) {
+                    if (fly.level() instanceof ServerLevel fl) {
+                        fl.sendParticles(ParticleTypes.SMOKE, fly.getX(), fly.getY() + 0.3, fly.getZ(), 6, 0.2, 0.2, 0.2, 0.01);
+                    }
+                    fly.discard();
+                    it.remove();
+                }
+            }
+        }
         if (MARKS.isEmpty() && VEILS.isEmpty()) {
             return;
         }
@@ -288,5 +307,6 @@ public final class KingSouls {
         MARKS.clear();
         VEILS.clear();
         STARVE.clear();
+        FLIES.clear();
     }
 }
