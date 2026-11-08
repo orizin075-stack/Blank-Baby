@@ -53,11 +53,21 @@ public final class MelsCastle {
         return e instanceof SupremeEntity b && b.spec != null && b.spec.id.equals("mels");
     }
 
-    /** No weapon in his hands (the liquid martial artist fights with his body). */
-    @SubscribeEvent
+    /** No weapon in his hands (the liquid martial artist fights with his body): let go as each tick begins and ends,
+     * whatever (the mob mind's weapon choice, a mod's equipment) put it there. */
+    @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.HIGHEST)
+    public static void unarmedBefore(EntityTickEvent.Pre e) {
+        letGo(e.getEntity());
+    }
+
+    @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.LOWEST)
     public static void unarmed(EntityTickEvent.Post e) {
-        if (isMels(e.getEntity()) && !e.getEntity().level().isClientSide && e.getEntity().tickCount % 10 == 0) {
-            SupremeEntity b = (SupremeEntity) e.getEntity();
+        letGo(e.getEntity());
+    }
+
+    private static void letGo(net.minecraft.world.entity.Entity e) {
+        if (isMels(e) && !e.level().isClientSide) {
+            SupremeEntity b = (SupremeEntity) e;
             for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND}) {
                 if (!b.getItemBySlot(slot).isEmpty()) {
                     b.setItemSlot(slot, ItemStack.EMPTY);

@@ -419,6 +419,13 @@ final class WazaActs {
                 continue;
             }
             int arc = w.arcs().length > 0 ? w.arcs()[i % w.arcs().length] : 0;
+            if (a == Math.max(0, h - 2) && c.target != null && c.target.isAlive()) {
+                // each swing turns to its enemy as it begins (a fighter faces what it cuts, wherever it now stands)
+                Vec3 d = c.target.position().subtract(c.b.position());
+                if (d.lengthSqr() > 1e-4) {
+                    c.dir = d.normalize();
+                }
+            }
             float u0 = Math.max(0, (a - (h - 2) - 1) / 2F), u1 = (a - (h - 2)) / 2F;
             // the tick's part of the swing in small steps (a whole turn is half a circle a tick): each step's blade
             // against the step before's, so that nothing between them is passed over

@@ -715,7 +715,9 @@ public final class KingStoryTest {
             return;
         }
         Mob az = r.lordAz;
-        for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(base).inflate(16), Zombie::isAlive)) {
+        // (057) the trial's ground cleared of every other mob (not only the last dummies): rebels and beasts that wandered in
+        // were striking the dummies and standing in the arts' way (two runs of four missed six arts so)
+        for (Mob z : sl.getEntitiesOfClass(Mob.class, new AABB(base).inflate(20), m -> m.isAlive() && m != az)) {
             z.discard();
         }
         if (r.az <= arts.size()) {
