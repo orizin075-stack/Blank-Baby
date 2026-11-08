@@ -265,6 +265,17 @@ public final class KingStoryTest {
                 // the likeness's blow did not land (probeLord/probeDeath say where it was undone): the rebel's own
                 // killing blow through the broken field, as a player gives it
                 PROBE = new StringBuilder();
+                // Iron's Spells' dodges (evasion, the abyssal shroud) undo a blow on a caster outright, the King too:
+                // they are taken off for this blow, which is to try his return from death itself
+                StringBuilder dodges = new StringBuilder();
+                for (net.minecraft.world.effect.MobEffectInstance ef : List.copyOf(r.king.getActiveEffects())) {
+                    var key = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getKey(ef.getEffect().value());
+                    if (key != null && (key.getPath().contains("evasion") || key.getPath().contains("abyssal_shroud"))) {
+                        dodges.append(key.getPath()).append(' ');
+                        r.king.removeEffect(ef.getEffect());
+                    }
+                }
+                out.put("dodgesTaken", dodges.toString().trim());
                 r.rebel.ready();
                 r.king.sovereign().healTo(4F);
                 r.king.sovereign().incoming(1.0E30F);
@@ -668,6 +679,10 @@ public final class KingStoryTest {
             .append(" field=").append(Math.round(k.sovereign().field())).append(" breached=").append(k.sovereign().breached())
             .append(" phase=").append(k.lifePhase()).append(" inv=").append(k.isInvulnerable()).append(" noai=").append(k.isNoAi())
             .append(" itime=").append(k.invulnerableTime).append(" alive=").append(k.isAlive());
+        for (net.minecraft.world.effect.MobEffectInstance ef : k.getActiveEffects()) {
+            var key = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getKey(ef.getEffect().value());
+            b.append(" fx:").append(key == null ? "?" : key.getPath()).append('/').append(ef.getAmplifier());
+        }
         for (String c : new String[]{"RoyalFieldBreaks", "RoyalFieldAbsorptions", "RoyalParries", "RoyalBlocks", "RoyalResurrections",
             "RoyalDirectDeathBlocks", "RoyalInstantKillBlocks", "RoyalFatalNegations"}) {
             if (d.getInt(c) > 0) {
