@@ -136,6 +136,28 @@ public final class KingCourt {
         }
     }
 
+    /**
+     * (054) His field broken, he is laid open: Iron's Spells' dodges (evasion, the abyssal shroud: a caster struck
+     * slips into shadow and the blow is undone, the shroud never spent) do not save him while his field is down. Without
+     * this a king who had cast the shroud could not be struck at all while it lasted, his field broken or not (the story
+     * test found his first death undone so). Run after every field-breaking hand (the rebel lord's, the king-slayer
+     * arms', a god-slayer's) and before Iron's Spells.
+     */
+    @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.HIGH)
+    public static void laidOpen(LivingIncomingDamageEvent e) {
+        if (!isKing(e.getEntity()) || e.getEntity().level().isClientSide || !(e.getEntity() instanceof RoyalMob king)
+            || king.sovereign() == null || !king.sovereign().breached()) {
+            return;
+        }
+        for (net.minecraft.world.effect.MobEffectInstance ef : java.util.List.copyOf(king.getActiveEffects())) {
+            var key = net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.getKey(ef.getEffect().value());
+            if (key != null && key.getNamespace().equals("irons_spellbooks")
+                && (key.getPath().equals("evasion") || key.getPath().equals("abyssal_shroud"))) {
+                king.removeEffect(ef.getEffect());
+            }
+        }
+    }
+
     /** The king hunts his enemies: the nearest within 128 blocks, his home no bound while he does. */
     static void hunt(RoyalMob king, ServerLevel sl, int phase) {
         if (king.tickCount % 20 != 7) {
