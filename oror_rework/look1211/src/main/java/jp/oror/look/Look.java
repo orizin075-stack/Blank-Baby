@@ -437,11 +437,7 @@ public final class Look {
         mc.options.hideGui = true;
         server.execute(() -> {
             ServerLevel level = server.overworld();
-            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 48, sy - 12, sz - 24, sx + 48, sy + 40, sz + 48),
-                x -> x.getTags().contains("oror_look") || x.getType().toString().contains("villager_king")
-                    || x instanceof net.minecraft.world.entity.monster.Vex)) {
-                e.discard();
-            }
+            clearStage(level);
             command(server, "weather clear 1000000");
             command(server, "time set noon");
             net.minecraft.world.entity.monster.Evoker ev = net.minecraft.world.entity.EntityType.EVOKER.create(level);
@@ -452,6 +448,7 @@ public final class Look {
             ev.setYHeadRot(180F);
             ev.setYBodyRot(180F);
             ev.setNoAi(true);
+            ev.setInvulnerable(true);
             ev.setPersistenceRequired();
             ev.addTag("oror_look");
             ev.addTag("oror_azazel");
@@ -465,11 +462,26 @@ public final class Look {
         });
     }
 
+    /**
+     * (056) Everything but the player taken off the stage: the soldiers, mages and creatures of the earlier scenes
+     * (in the first look at the new Azazel they were still there, and set on him the moment he stood: he was not seen).
+     */
+    private static void clearStage(ServerLevel level) {
+        for (Entity e : level.getEntities((Entity) null, new AABB(sx - 80, sy - 16, sz - 48, sx + 80, sy + 48, sz + 80),
+            x -> !(x instanceof net.minecraft.world.entity.player.Player) && !x.getTags().contains("oror_azazel")
+                && (x instanceof net.minecraft.world.entity.LivingEntity || x instanceof net.minecraft.world.entity.projectile.Projectile
+                    || x instanceof net.minecraft.world.entity.item.ItemEntity || x instanceof net.minecraft.world.entity.LightningBolt
+                    || x instanceof net.minecraft.world.entity.ExperienceOrb || x instanceof net.minecraft.world.entity.projectile.EvokerFangs))) {
+            e.discard();
+        }
+    }
+
     /** (056) One of Azazel's arts sent to him as the server sends it (its motion only: no one is struck). */
     private static void azazelArt(Minecraft mc, String id, int windup, int length) {
         IntegratedServer server = mc.getSingleplayerServer();
         server.execute(() -> {
             ServerLevel level = server.overworld();
+            clearStage(level);
             for (Entity e : level.getEntities((Entity) null, new AABB(sx - 5, sy - 3, sz + 5, sx + 5, sy + 12, sz + 15),
                 x -> x.getTags().contains("oror_azazel"))) {
                 try {
