@@ -1001,12 +1001,8 @@ public final class WazaWorld {
             }
         }
         // what a character has learned to answer is answered (only what it has seen: no resistance to everything)
-        if (t instanceof SupremeEntity b) {
-            String tag = tag(s);
-            if (learned(b, tag)) {
-                e.setAmount(e.getAmount() * 0.5F);
-            }
-            observe(b, tag, 1);
+        if (t instanceof SupremeEntity b && learned(b, tag(s))) {
+            e.setAmount(e.getAmount() * 0.5F);
         }
         // a mark from a character: its own next blow on the marked bites deeper
         if (by instanceof SupremeEntity b && hasStatus(t, "MARK_" + b.getId())) {
@@ -1033,6 +1029,17 @@ public final class WazaWorld {
         lastReached = t;
         lastReachedAmount = e.getAmount();
         WazaTest.incoming(e);
+    }
+
+    /**
+     * A blow seen, taken or not: a character learns from what is aimed at it, parried and blocked blows too (the
+     * design's 観測または被弾した攻撃タグを記録).
+     */
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+    public static void seen(LivingIncomingDamageEvent e) {
+        if (e.getEntity() instanceof SupremeEntity b && !b.level().isClientSide && e.getSource().getEntity() != b) {
+            observe(b, tag(e.getSource()), 1);
+        }
     }
 
     @SubscribeEvent

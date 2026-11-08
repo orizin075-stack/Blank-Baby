@@ -732,8 +732,17 @@ public final class KingStoryTest {
             az.setYHeadRot(-90F);
             Mob dummy = sturdy(spawn(r, EntityType.ZOMBIE, d, 24));
             dummy.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            dummy.getPersistentData().putBoolean("OrorAzDummy", true);
             az.setTarget(dummy);
+            // (057) what each art reached: its foes, every blow on the dummy (! refused), the dummy after it
+            if (AZPROBE == null) {
+                AZPROBE = new StringBuilder();
+            }
+            AZPROBE.append('[').append(a.id()).append(" d=").append(Math.round(dummy.distanceTo(az) * 10) / 10.0).append(" foes=")
+                .append(AzazelArts.foes(az, sl, 12).size()).append("] ");
             AzazelArts.perform(az, sl, a, dummy);
+            KingDeeds.later(sl, a.windup() + a.length(), () -> AZPROBE.append("<alive=").append(dummy.isAlive()).append(" hp=")
+                .append(Math.round(dummy.getHealth())).append(" at=").append(dummy.blockPosition().toShortString()).append("> "));
             if (a.id().equals("scapegoat")) {
                 KingDeeds.later(sl, a.windup() + 5, () -> az.hurt(az.damageSources().mobAttack(dummy), 20F));
             }
@@ -756,6 +765,7 @@ public final class KingStoryTest {
                 }
             }
             out.put("azazelHits", h.toString());
+            out.put("azazelProbe", AZPROBE == null ? "-" : AZPROBE.toString().replace("\"", "'"));
             out.put("azazelArts", landed);
             out.put("azazelMissed", missed.toString().trim());
             az.discard();
@@ -937,6 +947,16 @@ public final class KingStoryTest {
             return b.length() == 0 ? "none of " + ls.length : b.toString();
         } catch (Throwable t) {
             return "err " + t;
+        }
+    }
+
+    /** (057) the blows on Azazel's trial dummies, refused or not (KING-STORY azazelProbe) */
+    static StringBuilder AZPROBE;
+
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+    public static void azProbe(LivingIncomingDamageEvent e) {
+        if (AZPROBE != null && AZPROBE.length() < 4000 && e.getEntity().getPersistentData().getBoolean("OrorAzDummy")) {
+            AZPROBE.append(e.getSource().getMsgId()).append(e.isCanceled() ? "!" : ":").append(Math.round(e.getAmount())).append(' ');
         }
     }
 

@@ -72,7 +72,8 @@ public final class WazaTest {
         int effectsBefore;
         int hitsAtStart;
         int maxDeviceStage = -1;
-        boolean guardSeen;
+        boolean guardSeen, statusSeen;
+        int effectsMax;
         float guardStrength = -1;
         Arrow arrow;
         Signer agree, refuse;
@@ -82,6 +83,8 @@ public final class WazaTest {
     private static final List<Yard> YARDS = new ArrayList<>();
     private static final Map<Integer, Integer> DUMMY_HITS = new HashMap<>();
     private static final Map<String, int[]> TALLY = new LinkedHashMap<>();
+    /** blows on the dummies that were not the techniques' own (kinds and sources), for the record */
+    private static final Map<String, Integer> OTHER = new HashMap<>();
     private static final List<String> FAILED = new ArrayList<>();
     private static int tried, passed;
     private static long started = -1;
@@ -114,14 +117,18 @@ public final class WazaTest {
         int i = 0;
         TALLY.clear();
         FAILED.clear();
+        OTHER.clear();
         tried = passed = 0;
         for (String id : Waza.BY_CHARACTER.keySet()) {
             Yard y = new Yard();
             y.character = id;
-            BlockPos c = o.offset((i % 7) * 128, 0, (i / 7) * 128);
+            // a yard of three chunks by three, centred in its middle chunk (as little new land as will do: the
+            // first 057 run's 41 five-by-five yards were followed by an Ice and Fire world-generation crash)
+            BlockPos c0 = o.offset((i % 7) * 96, 0, (i / 7) * 96);
+            BlockPos c = new BlockPos(((c0.getX() >> 4) << 4) + 8, 0, ((c0.getZ() >> 4) << 4) + 8);
             i++;
-            for (int dx = -2; dx <= 2; dx++) {
-                for (int dz = -2; dz <= 2; dz++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
                     int cx = (c.getX() >> 4) + dx, cz = (c.getZ() >> 4) + dz;
                     level.setChunkForced(cx, cz, true);
                     y.chunks.add(new int[]{cx, cz});
@@ -129,8 +136,8 @@ public final class WazaTest {
             }
             int ground = Math.max(level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, c.getX(), c.getZ()), level.getSeaLevel() + 1) + 4;
             y.at = new BlockPos(c.getX(), ground, c.getZ());
-            for (int dx = -26; dx <= 26; dx++) {
-                for (int dz = -26; dz <= 26; dz++) {
+            for (int dx = -23; dx <= 23; dx++) {
+                for (int dz = -23; dz <= 23; dz++) {
                     level.setBlock(y.at.offset(dx, -1, dz), Blocks.STONE.defaultBlockState(), 2);
                     for (int h = 0; h < 14; h++) {
                         level.setBlock(y.at.offset(dx, h, dz), Blocks.AIR.defaultBlockState(), 2);
@@ -181,6 +188,10 @@ public final class WazaTest {
         }
         if (e.getEntity().getTags().contains("oror_waza_dummy")) {
             DUMMY_HITS.merge(e.getEntity().getId(), 1, Integer::sum);
+            if (!WazaActs.striking) {
+                Entity by = e.getSource().getEntity();
+                OTHER.merge(e.getSource().getMsgId() + "/" + (by == null ? "-" : by.getType().toShortString()), 1, Integer::sum);
+            }
             e.setCanceled(true);
         }
     }
@@ -241,7 +252,7 @@ public final class WazaTest {
                     return;
                 }
             }
-            if (y.character.equals("sweet_pact") && y.agree == null) {
+            if (y.agree == null && list.stream().anyMatch(x -> x.behaviour() == Waza.Behaviour.PACT)) {
                 y.agree = new Signer(level, 1);
                 y.refuse = new Signer(level, 2);
                 y.agree.moveTo(y.at.getX() - 3.5, y.at.getY(), y.at.getZ() - 2.5, 0F, 0F);
@@ -271,7 +282,7 @@ public final class WazaTest {
                 y.b.invulnerableTime = 0;
                 y.b.hurt(level.damageSources().mobAttack(y.dummy), 1);
             }
-            if (waited == prep - 15 && w.behaviour() == Waza.Behaviour.REWIND) {
+            if (waited == prep - 2 && w.behaviour() == Waza.Behaviour.REWIND) {
                 y.b.setHealth(y.b.getMaxHealth() * 0.5F);
             }
             if (waited >= prep && y.dummy != null) {
@@ -286,6 +297,8 @@ public final class WazaTest {
                 y.hitsAtStart = DUMMY_HITS.getOrDefault(y.dummy.getId(), 0);
                 y.maxDeviceStage = -1;
                 y.guardSeen = false;
+                y.statusSeen = false;
+                y.effectsMax = y.effectsBefore;
                 y.guardStrength = -1;
                 y.arrow = null;
                 y.cast = WazaEngine.start(y.b, w, y.dummy, true);
@@ -304,6 +317,11 @@ public final class WazaTest {
                 y.guardSeen = true;
                 y.guardStrength = g.strength;
             }
+        }
+        if (y.dummy != null) {
+            y.statusSeen |= WazaWorld.hasStatus(y.dummy, w.id()) && (WazaWorld.statusCount(y.dummy) >= 2
+                || y.dummy.getActiveEffects().size() > y.effectsBefore || y.dummy.getPersistentData().getLong("ororFreezeUntil") > c.start);
+            y.effectsMax = Math.max(y.effectsMax, y.dummy.getActiveEffects().size());
         }
         if (w.behaviour() == Waza.Behaviour.GUARD && e == w.windup() + 1 && y.arrow == null) {
             // an arrow from in front, at the guard
@@ -341,18 +359,17 @@ public final class WazaTest {
         int want = Math.max(1, w.hits().length);
         boolean fired = c.fired >= want;
         int dummyHits = y.dummy == null ? 0 : DUMMY_HITS.getOrDefault(y.dummy.getId(), 0) - y.hitsAtStart;
-        boolean reached = c.landed > 0 || dummyHits > 0;
+        // only the technique's own blows count (the dummy is struck by other things too: see WAZA-RESULT's other)
+        boolean reached = c.landed > 0;
         String why = "";
         boolean ok = switch (w.behaviour()) {
             case MELEE, PROJECTILE, BEAM, FIELD, SONG, GROWTH -> reached;
-            case CONTROL -> reached && y.dummy != null && WazaWorld.hasStatus(y.dummy, w.id());
-            case CURSE -> reached || c.notes.stream().anyMatch(n -> n.startsWith("mark:"));
-            case SUMMON -> c.notes.stream().anyMatch(n -> n.startsWith("summoned:") && !n.equals("summoned:0")) || reached;
+            case CONTROL -> reached && y.statusSeen;
+            case CURSE -> reached && c.notes.stream().anyMatch(n -> n.startsWith("mark:"));
+            case SUMMON -> c.notes.stream().anyMatch(n -> n.startsWith("summoned:") && !n.equals("summoned:0")) && reached;
             case MOVE -> y.startPos != null && y.b.position().distanceTo(y.startPos) >= 1.0;
             case GUARD -> y.guardSeen && (y.arrow == null || y.guardStrength >= 0);
-            case STATUS -> y.dummy != null && WazaWorld.hasStatus(y.dummy, w.id()) && (y.dummy.getActiveEffects().size() > y.effectsBefore
-                || WazaWorld.statusCount(y.dummy) >= 2 || y.dummy.getPersistentData().getLong("ororFreezeUntil") > c.start
-                || c.notes.contains("swap"));
+            case STATUS -> y.statusSeen || c.notes.contains("swap");
             case HEAL -> y.b.getHealth() > y.healthBefore && y.dummy != null && y.dummy.getHealth() <= y.dummyHealthBefore + 0.01F;
             case BUILD -> y.maxDeviceStage >= 3;
             case REWIND -> c.notes.stream().anyMatch(n -> n.equals("rewound:enemy") || n.startsWith("rewound:self ") && !n.equals("rewound:self 0"));
@@ -432,11 +449,14 @@ public final class WazaTest {
         StringBuilder t = new StringBuilder("{");
         TALLY.forEach((k, v) -> t.append(t.length() > 1 ? "," : "").append('"').append(k).append("\":[").append(v[0]).append(',').append(v[1]).append(']'));
         t.append('}');
-        LOG.info("WAZA-RESULT {\"techniques\":{},\"tried\":{},\"passed\":{},\"ticks\":{},\"byBehaviour\":{},\"failed\":\"{}\",\"pass\":{}}",
-            Waza.ALL.size(), tried, passed, now - started, t, String.join(" ", FAILED), tried == Waza.ALL.size() && passed == tried);
+        StringBuilder o = new StringBuilder();
+        OTHER.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).limit(12)
+            .forEach(x -> o.append(x.getKey()).append('=').append(x.getValue()).append(' '));
+        LOG.info("WAZA-RESULT {\"techniques\":{},\"tried\":{},\"passed\":{},\"ticks\":{},\"byBehaviour\":{},\"failed\":\"{}\",\"other\":\"{}\",\"pass\":{}}",
+            Waza.ALL.size(), tried, passed, now - started, t, String.join(" ", FAILED), o.toString().trim(), tried == Waza.ALL.size() && passed == tried);
         for (Yard y : YARDS) {
             cleanup(y);
-            for (Entity e : level.getEntities((Entity) null, new AABB(y.at).inflate(30, 16, 30), x -> !(x instanceof Player))) {
+            for (Entity e : level.getEntities((Entity) null, new AABB(y.at).inflate(24, 16, 24), x -> !(x instanceof Player))) {
                 e.discard();
             }
             for (int[] c : y.chunks) {

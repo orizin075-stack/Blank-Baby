@@ -62,6 +62,9 @@ final class WazaActs {
         return 40 + 30 * w.tier();
     }
 
+    /** True while a technique's own blow is being dealt (the CI check tells its blows from any other). */
+    static boolean striking;
+
     /** A blow from the technique: true when it reached the body (the damage listener saw it). */
     static boolean hurt(WazaEngine.Cast c, LivingEntity t, float amount) {
         SupremeEntity b = c.b;
@@ -70,7 +73,12 @@ final class WazaActs {
         }
         t.invulnerableTime = 0;
         WazaWorld.lastReached = null;
-        LorePowers.strike(b, t, amount, false);
+        striking = true;
+        try {
+            LorePowers.strike(b, t, amount, false);
+        } finally {
+            striking = false;
+        }
         boolean landed = WazaWorld.lastReached == t;
         if (landed) {
             c.landed++;
