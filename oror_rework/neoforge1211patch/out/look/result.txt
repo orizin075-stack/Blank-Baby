@@ -1,472 +1,439 @@
-311 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-412 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-472 press selectWorld.create
-473 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-573 screenshot popup_ConfirmScreen
-573 press gui.yes
-574 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+312 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+413 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+473 press selectWorld.create
+474 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+574 screenshot popup_ConfirmScreen
+574 press gui.yes
+575 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
 610 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-791 screen none in LOADING
-792 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-892 screenshot popup_
-893 screen none in PLAY
-922 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
-933 stage at -208 98 -128
-1092 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef]
-1152 screenshot 10_royals
-1162 swing row 0: 8
-1165 screenshot 11_royals_swing
-1252 screenshot 12_villagers
-1262 swing row 10: 6
-1265 screenshot 13_villagers_swing
-1272 swing row 10: 6
-1274 screenshot 13b_villagers_swing_early
-1352 screenshot 14_king_close
-1422 screenshot 15_general_close
-1492 screenshot 16_imperial_close
-1562 screenshot 17_royals_back
-1632 screenshot 18_trader_close
-1634 arms on show
-1752 screenshot 19_arms
-1756 creatures on show
-1872 screenshot 19b_creatures
-1883 gear on show
-1992 screenshot 32_gear
-2032 screenshot 33_gear_worn
-2035 gear at work
-2044 screenshot 34_gear_at_work
-2094 screenshot 35_gear_recharging
-2096 gear worn: 5 of 5
-2108 screenshot 36_gear_worn_front
-2118 screenshot 37_gear_worn_back
-2126 screenshot 38_gear_worn_hand
-2128 gear taken off: 5 of 5
-2133 duel: valeria
-2139 engage: valeria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2148 engage: valeria holds valeria_weapon dist 2.9 move ground_spikes parries 0/0 blocks 0/0 cast 0
-2158 engage: valeria holds valeria_weapon dist 3.4 move ground_spikes parries 0/0 blocks 0/0 cast 0
-2168 engage: valeria holds valeria_weapon dist 1.8 move ground_spikes parries 0/0 blocks 0/0 cast 0
-2172 screenshot 19c_valeria_00
-2178 screenshot 19c_valeria_01
-2178 engage: valeria holds valeria_weapon dist 2.1 move  parries 0/0 blocks 0/0 cast 0
-2184 screenshot 19c_valeria_02
-2188 engage: valeria holds valeria_weapon dist 1.1 move  parries 0/0 blocks 0/0 cast 0
-2190 screenshot 19c_valeria_03
-2196 screenshot 19c_valeria_04
-2200 engage: valeria holds valeria_weapon dist 0.5 move  parries 0/0 blocks 0/0 cast 1
-2202 screenshot 19c_valeria_05
-2208 screenshot 19c_valeria_06
-2208 engage: valeria holds valeria_weapon dist 1.1 move  parries 0/0 blocks 0/0 cast 2
-2214 screenshot 19c_valeria_07
-2218 engage: valeria holds valeria_weapon dist 1.1 move spin_slash parries 0/0 blocks 0/0 cast 3
-2220 screenshot 19c_valeria_08
-2226 screenshot 19c_valeria_09
-2228 engage: valeria holds valeria_weapon dist 0.4 move spin_slash parries 0/0 blocks 0/0 cast 4
-2232 screenshot 19c_valeria_10
-2238 screenshot 19c_valeria_11
-2238 engage: valeria holds valeria_weapon dist 1.3 move spin_slash parries 0/0 blocks 0/0 cast 5
-2244 screenshot 19c_valeria_12
-2248 engage: valeria holds valeria_weapon dist 2.0 move  parries 0/0 blocks 0/0 cast 6
-2250 screenshot 19c_valeria_13
-2256 screenshot 19c_valeria_14
-2258 engage: valeria holds valeria_weapon dist 2.7 move  parries 0/0 blocks 0/0 cast 7
-2262 screenshot 19c_valeria_15
-2268 screenshot 19c_valeria_16
-2268 engage: valeria holds valeria_weapon dist 4.0 move  parries 0/0 blocks 0/0 cast 8
-2274 screenshot 19c_valeria_17
-2278 engage: valeria holds valeria_weapon dist 5.1 move  parries 0/0 blocks 0/0 cast 9
-2280 screenshot 19c_valeria_18
-2286 screenshot 19c_valeria_19
-2289 engage: valeria holds valeria_weapon dist 4.5 move leap_slam parries 0/0 blocks 0/0 cast 10
-2292 screenshot 19c_valeria_20
-2298 screenshot 19c_valeria_21
-2298 engage: valeria holds valeria_weapon dist 4.0 move leap_slam parries 0/0 blocks 0/0 cast 11
-2304 screenshot 19c_valeria_22
-2308 engage: valeria holds valeria_weapon dist 6.2 move leap_slam parries 0/0 blocks 0/0 cast 12
-2310 screenshot 19c_valeria_23
-2318 engage: valeria holds valeria_weapon dist 3.4 move leap_slam parries 0/0 blocks 0/0 cast 13
-2332 duel: kokuhaku
-2338 engage: kokuhaku holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2348 engage: kokuhaku holds kokuhaku_weapon dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2358 engage: kokuhaku holds kokuhaku_weapon dist 3.9 move  parries 0/0 blocks 0/0 cast 0
-2368 engage: kokuhaku holds kokuhaku_weapon dist 4.8 move  parries 0/0 blocks 0/0 cast 0
-2372 screenshot 19c_kokuhaku_00
-2378 screenshot 19c_kokuhaku_01
-2378 engage: kokuhaku holds kokuhaku_weapon dist 2.1 move  parries 0/0 blocks 0/0 cast 0
-2384 screenshot 19c_kokuhaku_02
-2388 engage: kokuhaku holds kokuhaku_weapon dist 3.5 move  parries 0/0 blocks 0/0 cast 0
-2390 screenshot 19c_kokuhaku_03
-2396 screenshot 19c_kokuhaku_04
-2398 engage: kokuhaku holds kokuhaku_weapon dist 2.6 move  parries 0/0 blocks 0/0 cast 0
-2402 screenshot 19c_kokuhaku_05
-2408 screenshot 19c_kokuhaku_06
-2408 engage: kokuhaku holds kokuhaku_weapon dist 1.7 move  parries 0/0 blocks 0/0 cast 0
-2414 screenshot 19c_kokuhaku_07
-2418 engage: kokuhaku holds kokuhaku_weapon dist 6.9 move  parries 0/0 blocks 0/0 cast 0
-2420 screenshot 19c_kokuhaku_08
-2426 screenshot 19c_kokuhaku_09
-2428 engage: kokuhaku holds kokuhaku_weapon dist 5.2 move  parries 0/0 blocks 0/0 cast 0
-2432 screenshot 19c_kokuhaku_10
-2438 screenshot 19c_kokuhaku_11
-2438 engage: kokuhaku holds kokuhaku_weapon dist 2.2 move  parries 0/0 blocks 0/0 cast 0
-2444 screenshot 19c_kokuhaku_12
-2448 engage: kokuhaku holds kokuhaku_weapon dist 4.6 move  parries 0/0 blocks 0/0 cast 0
-2450 screenshot 19c_kokuhaku_13
-2456 screenshot 19c_kokuhaku_14
-2458 engage: kokuhaku holds kokuhaku_weapon dist 4.2 move  parries 0/0 blocks 0/0 cast 0
-2462 screenshot 19c_kokuhaku_15
-2468 screenshot 19c_kokuhaku_16
-2468 engage: kokuhaku holds kokuhaku_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2474 screenshot 19c_kokuhaku_17
-2478 engage: kokuhaku holds kokuhaku_weapon dist 5.0 move  parries 0/0 blocks 0/0 cast 0
-2480 screenshot 19c_kokuhaku_18
-2486 screenshot 19c_kokuhaku_19
-2488 engage: kokuhaku holds kokuhaku_weapon dist 1.6 move  parries 0/0 blocks 0/0 cast 0
-2492 screenshot 19c_kokuhaku_20
-2498 screenshot 19c_kokuhaku_21
-2498 engage: kokuhaku holds kokuhaku_weapon dist 1.6 move  parries 0/0 blocks 0/0 cast 0
-2504 screenshot 19c_kokuhaku_22
-2509 engage: kokuhaku holds kokuhaku_weapon dist 4.0 move  parries 0/0 blocks 0/0 cast 0
-2510 screenshot 19c_kokuhaku_23
-2518 engage: kokuhaku holds kokuhaku_weapon dist 3.1 move  parries 0/0 blocks 0/0 cast 0
-2532 duel: elseria
-2538 engage: elseria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2548 engage: elseria holds elseria_weapon dist 2.6 move nova parries 0/0 blocks 0/0 cast 0
-2558 engage: elseria holds elseria_weapon dist 1.7 move nova parries 0/0 blocks 0/0 cast 0
-2568 engage: elseria holds elseria_weapon dist 1.8 move nova parries 0/0 blocks 0/0 cast 0
-2572 screenshot 19c_elseria_00
-2578 screenshot 19c_elseria_01
-2578 engage: elseria holds elseria_weapon dist 5.1 move  parries 0/0 blocks 0/0 cast 0
-2584 screenshot 19c_elseria_02
-2588 engage: elseria holds elseria_weapon dist 6.3 move  parries 0/0 blocks 0/0 cast 1
-2590 screenshot 19c_elseria_03
-2596 screenshot 19c_elseria_04
-2598 engage: elseria holds elseria_weapon dist 5.9 move  parries 0/0 blocks 0/0 cast 2
-2602 screenshot 19c_elseria_05
-2608 screenshot 19c_elseria_06
-2608 engage: elseria holds elseria_weapon dist 5.7 move  parries 0/0 blocks 0/0 cast 3
-2614 screenshot 19c_elseria_07
-2618 engage: elseria holds elseria_weapon dist 11.5 move homing_orbs parries 0/0 blocks 0/0 cast 5
-2620 screenshot 19c_elseria_08
-2626 screenshot 19c_elseria_09
-2628 engage: elseria holds elseria_weapon dist 12.5 move homing_orbs parries 0/0 blocks 0/0 cast 6
-2632 screenshot 19c_elseria_10
-2638 screenshot 19c_elseria_11
-2638 engage: elseria holds elseria_weapon dist 10.6 move homing_orbs parries 0/0 blocks 0/0 cast 7
-2644 screenshot 19c_elseria_12
-2648 engage: elseria holds elseria_weapon dist 3.6 move homing_orbs parries 0/0 blocks 0/0 cast 9
-2650 screenshot 19c_elseria_13
-2656 screenshot 19c_elseria_14
-2661 engage: elseria holds elseria_weapon dist 2.6 move homing_orbs parries 0/0 blocks 0/0 cast 11
-2662 screenshot 19c_elseria_15
-2668 screenshot 19c_elseria_16
-2668 engage: elseria holds elseria_weapon dist 2.9 move homing_orbs parries 0/0 blocks 0/0 cast 12
-2674 screenshot 19c_elseria_17
-2678 engage: elseria holds elseria_weapon dist 2.8 move homing_orbs parries 0/0 blocks 0/0 cast 13
-2680 screenshot 19c_elseria_18
-2686 screenshot 19c_elseria_19
-2688 engage: elseria holds elseria_weapon dist 3.0 move  parries 0/0 blocks 0/0 cast 15
-2692 screenshot 19c_elseria_20
-2698 screenshot 19c_elseria_21
-2698 engage: elseria holds elseria_weapon dist 6.9 move  parries 0/0 blocks 0/0 cast 16
-2704 screenshot 19c_elseria_22
-2708 engage: elseria holds elseria_weapon dist 2.2 move  parries 0/0 blocks 0/0 cast 17
-2710 screenshot 19c_elseria_23
-2718 engage: elseria holds elseria_weapon dist 1.1 move  parries 0/0 blocks 0/0 cast 19
-2733 duel: kingdom_guard
-2738 engage: kingdom_guard holds diamond_sword dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2748 engage: kingdom_guard holds diamond_sword dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2758 engage: kingdom_guard holds diamond_sword dist 3.8 move  parries 0/0 blocks 0/0 cast 0
-2768 engage: kingdom_guard holds diamond_sword dist 2.9 move  parries 0/0 blocks 0/0 cast 0
-2772 screenshot 19c_kingdom_guard_00
-2778 screenshot 19c_kingdom_guard_01
-2778 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
-2784 screenshot 19c_kingdom_guard_02
-2788 engage: kingdom_guard holds diamond_sword dist 1.0 move  parries 0/0 blocks 0/0 cast 0
-2790 screenshot 19c_kingdom_guard_03
-2796 screenshot 19c_kingdom_guard_04
-2798 engage: kingdom_guard holds diamond_sword dist 1.0 move  parries 0/0 blocks 0/0 cast 0
-2802 screenshot 19c_kingdom_guard_05
-2808 screenshot 19c_kingdom_guard_06
-2808 engage: kingdom_guard holds diamond_sword dist 1.2 move  parries 0/0 blocks 0/0 cast 0
-2814 screenshot 19c_kingdom_guard_07
-2818 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
-2820 screenshot 19c_kingdom_guard_08
-2826 screenshot 19c_kingdom_guard_09
-2828 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
-2832 screenshot 19c_kingdom_guard_10
-2838 screenshot 19c_kingdom_guard_11
-2838 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
-2844 screenshot 19c_kingdom_guard_12
-2848 engage: kingdom_guard holds diamond_sword dist 1.2 move  parries 0/0 blocks 0/0 cast 0
-2850 screenshot 19c_kingdom_guard_13
-2856 screenshot 19c_kingdom_guard_14
-2858 engage: kingdom_guard holds diamond_sword dist 1.2 move  parries 0/0 blocks 0/0 cast 0
-2862 screenshot 19c_kingdom_guard_15
-2868 screenshot 19c_kingdom_guard_16
-2868 engage: kingdom_guard holds diamond_sword dist 1.2 move  parries 0/0 blocks 0/0 cast 0
-2874 screenshot 19c_kingdom_guard_17
-2879 engage: kingdom_guard holds diamond_sword dist 1.2 move  parries 0/0 blocks 0/0 cast 0
-2880 screenshot 19c_kingdom_guard_18
-2886 screenshot 19c_kingdom_guard_19
-2888 engage: kingdom_guard holds diamond_sword dist 1.1 move  parries 0/0 blocks 0/0 cast 0
-2892 screenshot 19c_kingdom_guard_20
-2898 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
-2898 screenshot 19c_kingdom_guard_21
-2904 screenshot 19c_kingdom_guard_22
-2908 engage: kingdom_guard holds diamond_sword dist 1.3 move  parries 0/0 blocks 0/0 cast 0
-2910 screenshot 19c_kingdom_guard_23
-2918 engage: kingdom_guard holds diamond_sword dist 1.2 move  parries 0/0 blocks 0/0 cast 0
-2942 throne 224, 164, 896
-4742 screenshot 20_throne_room
-4782 king at 224.4 164.0 896.4 (throne 224, 164, 896, 0.13 blocks)
-6582 screenshot 21_throne_room_later
-6602 king at 224.4 164.0 896.4 (throne 224, 164, 896, 0.12 blocks)
-6602 over the capital at 224 928
-8382 screenshot 22_capital_aerial
-8477 over the capital at -41 689
-9982 screenshot 23_helipad
-9993 over the capital at -26 551
-11582 screenshot 24_airbase
-11592 at the capital -41 102 678
-13182 screenshot 25_helipad_supply
-13260 at the capital -181 97 924
-14782 screenshot 26_hangar_supply
-14792 at the capital 294 207 1038
-16382 screenshot 27_palace_roofs
-16491 over the capital at 585 650
-17982 screenshot 28_airbase_east
-17993 at the capital 224 99 724
-19582 screenshot 29_road_fountain
-19593 at the capital 607 114 715
-21182 screenshot 30_ranch_barn
-21299 at the capital 729 132 983
-22782 screenshot 31_fortress_east
-22853 king form 0: scale 1.00, health 1024/1024, holding 0 minecraft:air
-22853 king form 1: scale 1.50, health 1024/1024, holding 1 minecraft:netherite_sword
-22853 king form 2: scale 1.80, health 563/1024, holding 1 minecraft:netherite_sword
-22952 screenshot 40_king_forms
-23002 screenshot 41_king_regal
-23052 screenshot 42_king_hero
-23102 screenshot 43_king_broken_55
-23132 screenshot 43b_king_broken_15
-23167 screenshot 44_king_divine_spear
-23202 screenshot 45_king_divine_bow
-23252 screenshot 46_king_divine_back
-23263 king form 1 (film): scale 1.50, health 1024/1024, holding 1 minecraft:netherite_sword
-23292 screenshot 47_film_hero_kneel
-23312 screenshot 48_film_hero_pillar
-23349 screenshot 49_film_hero_flash
-23373 king form 2 (film): scale 1.80, health 1024/1024, holding 1 minecraft:netherite_sword
-23373 king form 2 (film): scale 1.80, health 1024/1024, holding 1 minecraft:netherite_sword
-23402 screenshot 50_film_glitch_a
-23442 screenshot 51_film_glitch_b
-23503 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
-23503 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
-23503 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
-23542 screenshot 52_film_divine_peel
-23582 screenshot 53_film_divine_rise
-23617 screenshot 54_film_divine_name
-23637 screenshot 55_film_divine_climax
-23692 king moves planned to tick 25950
-23702 king form 1: scale 1.50, health 1024/1024, holding 1 minecraft:netherite_sword
-23752 screenshot 56_0_sword_hold
-23764 screenshot 56_0_sword_hold_side
-23788 screenshot 57_0_00_sword_sweep_w
-23792 screenshot 57_0_00_sword_sweep_s
-23818 screenshot 57_0_01_sword_return_w
-23822 screenshot 57_0_01_sword_return_s
-23854 screenshot 57_0_02_sword_cleave_w
-23858 screenshot 57_0_02_sword_cleave_s
-23884 screenshot 57_0_03_sword_rising_w
-23888 screenshot 57_0_03_sword_rising_s
-23918 screenshot 57_0_04_sword_thrust_w
-23922 screenshot 57_0_04_sword_thrust_s
-23946 screenshot 57_0_05_sword_bash_w
-23950 screenshot 57_0_05_sword_bash_s
-23984 screenshot 57_0_06_sword_spin_w
-23988 screenshot 57_0_06_sword_spin_s
-24016 screenshot 57_0_07_sword_leap_w
-24020 screenshot 57_0_07_sword_leap_s
-24046 screenshot 57_0_08_sword_dash_w
-24050 screenshot 57_0_08_sword_dash_s
-24082 screenshot 57_0_09_sword_wave_w
-24086 screenshot 57_0_09_sword_wave_s
-24124 king form 2: scale 1.80, health 614/1024, holding 1 minecraft:netherite_sword
-24124 king form 2: scale 1.80, health 614/1024, holding 1 minecraft:netherite_sword
-24172 screenshot 56_1_broken_hold
-24184 screenshot 56_1_broken_hold_side
-24206 screenshot 57_1_00_broken_shard_w
-24210 screenshot 57_1_00_broken_shard_s
-24240 screenshot 57_1_01_broken_lag_w
-24244 screenshot 57_1_01_broken_lag_s
-24270 screenshot 57_1_02_broken_blink_w
-24274 screenshot 57_1_02_broken_blink_s
-24302 screenshot 57_1_03_broken_multi_w
-24306 screenshot 57_1_03_broken_multi_s
-24338 screenshot 57_1_04_broken_rewind_w
-24342 screenshot 57_1_04_broken_rewind_s
-24370 screenshot 57_1_05_broken_blocks_w
-24374 screenshot 57_1_05_broken_blocks_s
-24400 screenshot 57_1_06_broken_grab_w
-24404 screenshot 57_1_06_broken_grab_s
-24432 screenshot 57_1_07_broken_echo_w
-24436 screenshot 57_1_07_broken_echo_s
-24466 screenshot 57_1_08_broken_hitbox_w
-24470 screenshot 57_1_08_broken_hitbox_s
-24496 screenshot 57_1_09_broken_nan_w
-24500 screenshot 57_1_09_broken_nan_s
-24542 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:mace
-24542 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:mace
-24542 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:mace
-24592 screenshot 56_2_clubs_hold
-24604 screenshot 56_2_clubs_hold_side
-24628 screenshot 57_2_00_clubs_smite_w
-24632 screenshot 57_2_00_clubs_smite_s
-24658 screenshot 57_2_01_clubs_flurry_w
-24662 screenshot 57_2_01_clubs_flurry_s
-24692 screenshot 57_2_02_clubs_rise_w
-24696 screenshot 57_2_02_clubs_rise_s
-24728 screenshot 57_2_03_clubs_quake_w
-24732 screenshot 57_2_03_clubs_quake_s
-24758 screenshot 57_2_04_clubs_spin_w
-24762 screenshot 57_2_04_clubs_spin_s
-24790 screenshot 57_2_05_clubs_throw_w
-24794 screenshot 57_2_05_clubs_throw_s
-24820 screenshot 57_2_06_clubs_cross_w
-24824 screenshot 57_2_06_clubs_cross_s
-24856 screenshot 57_2_07_clubs_leap_w
-24860 screenshot 57_2_07_clubs_leap_s
-24886 screenshot 57_2_08_clubs_chain_w
-24890 screenshot 57_2_08_clubs_chain_s
-24920 screenshot 57_2_09_clubs_shock_w
-24924 screenshot 57_2_09_clubs_shock_s
-24962 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:netherite_hoe
-24962 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:netherite_hoe
-24962 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_hoe
-24962 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_hoe
-25012 screenshot 56_3_scythe_hold
-25024 screenshot 56_3_scythe_hold_side
-25050 screenshot 57_3_00_scythe_reap_w
-25054 screenshot 57_3_00_scythe_reap_s
-25080 screenshot 57_3_01_scythe_return_w
-25084 screenshot 57_3_01_scythe_return_s
-25116 screenshot 57_3_02_scythe_neck_w
-25120 screenshot 57_3_02_scythe_neck_s
-25146 screenshot 57_3_03_scythe_hook_w
-25150 screenshot 57_3_03_scythe_hook_s
-25180 screenshot 57_3_04_scythe_spin_w
-25184 screenshot 57_3_04_scythe_spin_s
-25212 screenshot 57_3_05_scythe_throw_w
-25216 screenshot 57_3_05_scythe_throw_s
-25244 screenshot 57_3_06_scythe_wave_w
-25248 screenshot 57_3_06_scythe_wave_s
-25274 screenshot 57_3_07_scythe_soul_w
-25278 screenshot 57_3_07_scythe_soul_s
-25304 screenshot 57_3_08_scythe_low_w
-25308 screenshot 57_3_08_scythe_low_s
-25342 screenshot 57_3_09_scythe_leap_w
-25346 screenshot 57_3_09_scythe_leap_s
-25386 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:netherite_sword
-25386 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:netherite_sword
-25386 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-25386 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-25386 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-25432 screenshot 56_4_twin_hold
-25444 screenshot 56_4_twin_hold_side
-25465 screenshot 57_4_00_twin_double_w
-25469 screenshot 57_4_00_twin_double_s
-25499 screenshot 57_4_01_twin_cross_w
-25503 screenshot 57_4_01_twin_cross_s
-25530 screenshot 57_4_02_twin_stabs_w
-25534 screenshot 57_4_02_twin_stabs_s
-25564 screenshot 57_4_03_twin_whirl_w
-25568 screenshot 57_4_03_twin_whirl_s
-25598 screenshot 57_4_04_twin_leap_w
-25602 screenshot 57_4_04_twin_leap_s
-25628 screenshot 57_4_05_twin_slide_w
-25632 screenshot 57_4_05_twin_slide_s
-25658 screenshot 57_4_06_twin_rise_w
-25662 screenshot 57_4_06_twin_rise_s
-25696 screenshot 57_4_07_twin_xwave_w
-25700 screenshot 57_4_07_twin_xwave_s
-25722 screenshot 57_4_08_twin_behind_w
-25726 screenshot 57_4_08_twin_behind_s
-25756 screenshot 57_4_09_twin_hundred_w
-25760 screenshot 57_4_09_twin_hundred_s
-25803 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:trident
-25803 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:trident
-25803 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:trident
-25803 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:trident
-25803 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:trident
-25803 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:trident
-25852 screenshot 56_5_spear_hold
-25864 screenshot 56_5_spear_hold_side
-25888 screenshot 57_5_00_spear_thrust_w
-25892 screenshot 57_5_00_spear_thrust_s
-25918 screenshot 57_5_01_spear_double_w
-25922 screenshot 57_5_01_spear_double_s
-25954 screenshot 57_5_02_spear_sweep_w
-25958 screenshot 57_5_02_spear_sweep_s
-25982 screenshot 57_5_03_spear_butt_w
-25986 screenshot 57_5_03_spear_butt_s
-26018 screenshot 57_5_04_spear_twirl_w
-26022 screenshot 57_5_04_spear_twirl_s
-26052 screenshot 57_5_05_spear_dive_w
-26056 screenshot 57_5_05_spear_dive_s
-26082 screenshot 57_5_06_spear_rush_w
-26086 screenshot 57_5_06_spear_rush_s
-26116 screenshot 57_5_07_spear_throw_w
-26120 screenshot 57_5_07_spear_throw_s
-26148 screenshot 57_5_08_spear_bristle_w
-26152 screenshot 57_5_08_spear_bristle_s
-26178 screenshot 57_5_09_spear_heaven_w
-26182 screenshot 57_5_09_spear_heaven_s
-26227 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:bow
-26227 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:bow
-26227 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:bow
-26227 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:bow
-26227 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:bow
-26227 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:bow
-26227 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:bow
-26272 screenshot 56_6_bow_hold
-26284 screenshot 56_6_bow_hold_side
-26308 screenshot 57_6_00_bow_quick_w
-26312 screenshot 57_6_00_bow_quick_s
-26340 screenshot 57_6_01_bow_double_w
-26344 screenshot 57_6_01_bow_double_s
-26374 screenshot 57_6_02_bow_fan_w
-26378 screenshot 57_6_02_bow_fan_s
-26406 screenshot 57_6_03_bow_lob_w
-26410 screenshot 57_6_03_bow_lob_s
-26442 screenshot 57_6_04_bow_pierce_w
-26446 screenshot 57_6_04_bow_pierce_s
-26464 screenshot 57_6_05_bow_retreat_w
-26468 screenshot 57_6_05_bow_retreat_s
-26502 screenshot 57_6_06_bow_rainbow_w
-26506 screenshot 57_6_06_bow_rainbow_s
-26532 screenshot 57_6_07_bow_pin_w
-26536 screenshot 57_6_07_bow_pin_s
-26568 screenshot 57_6_08_bow_burst_w
-26572 screenshot 57_6_08_bow_burst_s
-26594 screenshot 57_6_09_bow_strike_w
-26598 screenshot 57_6_09_bow_strike_s
-26645 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:netherite_sword
-26645 king form 3 (scythe): scale 2.20, health 614/1024, holding 1 minecraft:netherite_sword
-26645 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-26645 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-26645 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-26645 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-26645 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-26645 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
-26677 veil of flies cast
-26677 veil of flies cast
-26677 veil of flies cast
-26677 veil of flies cast
-26677 veil of flies cast
-26677 veil of flies cast
-26677 veil of flies cast
-26677 veil of flies cast
-26732 screenshot 58_veil_above
-26782 screenshot 58_veil_ground
-26842 finished: complete
+814 screen none in LOADING
+815 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+915 screenshot popup_
+916 screen none in PLAY
+945 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
+959 stage at -1168 95 784
+1115 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef, minecraft:squid -> net.minecraft.client.renderer.entity.SquidRenderer holding 0 minecraft:air, minecraft:squid -> net.minecraft.client.renderer.entity.SquidRenderer holding 0 minecraft:air, minecraft:squid -> net.minecraft.client.renderer.entity.SquidRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air]
+1175 screenshot 10_royals
+1185 swing row 0: 8
+1188 screenshot 11_royals_swing
+1275 screenshot 12_villagers
+1286 swing row 10: 6
+1288 screenshot 13_villagers_swing
+1296 swing row 10: 6
+1297 screenshot 13b_villagers_swing_early
+1375 screenshot 14_king_close
+1445 screenshot 15_general_close
+1515 screenshot 16_imperial_close
+1585 screenshot 17_royals_back
+1655 screenshot 18_trader_close
+1664 arms on show
+1775 screenshot 19_arms
+1781 creatures on show
+1895 screenshot 19b_creatures
+1905 gear on show
+2015 screenshot 32_gear
+2055 screenshot 33_gear_worn
+2061 gear at work
+2067 screenshot 34_gear_at_work
+2117 screenshot 35_gear_recharging
+2120 gear worn: 5 of 5
+2131 screenshot 36_gear_worn_front
+2141 screenshot 37_gear_worn_back
+2149 screenshot 38_gear_worn_hand
+2152 gear taken off: 5 of 5
+2155 duel: valeria
+2161 engage: valeria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2171 engage: valeria holds valeria_weapon dist 2.9 move ground_spikes parries 0/0 blocks 0/0 cast 0
+2181 engage: valeria holds valeria_weapon dist 3.0 move ground_spikes parries 0/0 blocks 0/0 cast 0
+2191 engage: valeria holds valeria_weapon dist 3.3 move ground_spikes parries 0/0 blocks 0/0 cast 0
+2195 screenshot 19c_valeria_00
+2201 screenshot 19c_valeria_01
+2202 engage: valeria holds valeria_weapon dist 2.8 move  parries 0/0 blocks 0/0 cast 0
+2207 screenshot 19c_valeria_02
+2211 engage: valeria holds valeria_weapon dist 1.6 move  parries 0/0 blocks 0/0 cast 0
+2213 screenshot 19c_valeria_03
+2219 screenshot 19c_valeria_04
+2221 engage: valeria holds valeria_weapon dist 1.9 move  parries 0/0 blocks 0/0 cast 1
+2225 screenshot 19c_valeria_05
+2231 screenshot 19c_valeria_06
+2231 engage: valeria holds valeria_weapon dist 1.3 move  parries 0/0 blocks 0/0 cast 2
+2237 screenshot 19c_valeria_07
+2242 engage: valeria holds valeria_weapon dist 2.5 move spin_slash parries 0/0 blocks 0/0 cast 3
+2243 screenshot 19c_valeria_08
+2249 screenshot 19c_valeria_09
+2251 engage: valeria holds valeria_weapon dist 0.6 move spin_slash parries 0/0 blocks 0/0 cast 4
+2255 screenshot 19c_valeria_10
+2261 screenshot 19c_valeria_11
+2261 engage: valeria holds valeria_weapon dist 1.2 move spin_slash parries 0/0 blocks 0/0 cast 5
+2267 screenshot 19c_valeria_12
+2271 engage: valeria holds valeria_weapon dist 1.1 move  parries 0/0 blocks 0/0 cast 6
+2273 screenshot 19c_valeria_13
+2279 screenshot 19c_valeria_14
+2281 engage: valeria holds valeria_weapon dist 0.9 move  parries 0/0 blocks 0/0 cast 7
+2285 screenshot 19c_valeria_15
+2291 screenshot 19c_valeria_16
+2291 engage: valeria holds valeria_weapon dist 2.3 move  parries 0/0 blocks 0/0 cast 8
+2297 screenshot 19c_valeria_17
+2301 engage: valeria holds valeria_weapon dist 1.9 move  parries 0/0 blocks 0/0 cast 9
+2303 screenshot 19c_valeria_18
+2309 screenshot 19c_valeria_19
+2311 engage: valeria holds valeria_weapon dist 4.6 move spin_slash parries 0/0 blocks 0/0 cast 10
+2315 screenshot 19c_valeria_20
+2321 screenshot 19c_valeria_21
+2321 engage: valeria holds valeria_weapon dist 3.2 move spin_slash parries 0/0 blocks 0/0 cast 11
+2327 screenshot 19c_valeria_22
+2331 engage: valeria holds valeria_weapon dist 0.9 move spin_slash parries 0/0 blocks 0/0 cast 12
+2333 screenshot 19c_valeria_23
+2341 engage: valeria holds valeria_weapon dist 1.1 move spin_slash parries 0/0 blocks 0/0 cast 13
+2355 duel: kokuhaku
+2361 engage: kokuhaku holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2371 engage: kokuhaku holds kokuhaku_weapon dist 4.1 move  parries 0/0 blocks 0/0 cast 0
+2381 engage: kokuhaku holds kokuhaku_weapon dist 5.2 move  parries 0/0 blocks 0/0 cast 0
+2391 engage: kokuhaku holds kokuhaku_weapon dist 4.4 move  parries 0/0 blocks 0/0 cast 0
+2395 screenshot 19c_kokuhaku_00
+2401 screenshot 19c_kokuhaku_01
+2401 engage: kokuhaku holds kokuhaku_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2407 screenshot 19c_kokuhaku_02
+2411 engage: kokuhaku holds kokuhaku_weapon dist 1.5 move  parries 0/0 blocks 0/0 cast 0
+2413 screenshot 19c_kokuhaku_03
+2419 screenshot 19c_kokuhaku_04
+2422 engage: kokuhaku holds kokuhaku_weapon dist 1.3 move  parries 0/0 blocks 0/0 cast 0
+2425 screenshot 19c_kokuhaku_05
+2431 screenshot 19c_kokuhaku_06
+2431 engage: kokuhaku holds kokuhaku_weapon dist 1.1 move  parries 0/0 blocks 0/0 cast 0
+2437 screenshot 19c_kokuhaku_07
+2441 engage: kokuhaku holds kokuhaku_weapon dist 5.6 move  parries 0/0 blocks 0/0 cast 0
+2443 screenshot 19c_kokuhaku_08
+2449 screenshot 19c_kokuhaku_09
+2451 engage: kokuhaku holds kokuhaku_weapon dist 4.0 move  parries 0/0 blocks 0/0 cast 0
+2455 screenshot 19c_kokuhaku_10
+2461 screenshot 19c_kokuhaku_11
+2461 engage: kokuhaku holds kokuhaku_weapon dist 3.5 move  parries 0/0 blocks 0/0 cast 0
+2467 screenshot 19c_kokuhaku_12
+2471 engage: kokuhaku holds kokuhaku_weapon dist 3.8 move  parries 0/0 blocks 0/0 cast 0
+2473 screenshot 19c_kokuhaku_13
+2479 screenshot 19c_kokuhaku_14
+2481 engage: kokuhaku holds kokuhaku_weapon dist 1.4 move  parries 0/0 blocks 0/0 cast 0
+2485 screenshot 19c_kokuhaku_15
+2491 screenshot 19c_kokuhaku_16
+2491 engage: kokuhaku holds kokuhaku_weapon dist 1.0 move  parries 0/0 blocks 0/0 cast 0
+2497 screenshot 19c_kokuhaku_17
+2501 engage: kokuhaku holds kokuhaku_weapon dist 5.3 move  parries 0/0 blocks 0/0 cast 0
+2503 screenshot 19c_kokuhaku_18
+2509 screenshot 19c_kokuhaku_19
+2511 engage: kokuhaku holds kokuhaku_weapon dist 3.5 move  parries 0/0 blocks 0/0 cast 0
+2515 screenshot 19c_kokuhaku_20
+2521 screenshot 19c_kokuhaku_21
+2521 engage: kokuhaku holds kokuhaku_weapon dist 0.8 move  parries 0/0 blocks 0/0 cast 0
+2527 screenshot 19c_kokuhaku_22
+2531 engage: kokuhaku holds kokuhaku_weapon dist 4.8 move  parries 0/0 blocks 0/0 cast 0
+2533 screenshot 19c_kokuhaku_23
+2541 engage: kokuhaku holds kokuhaku_weapon dist 1.6 move  parries 0/0 blocks 0/0 cast 0
+2555 duel: elseria
+2561 engage: elseria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2571 engage: elseria holds elseria_weapon dist 3.3 move nova parries 0/0 blocks 0/0 cast 0
+2581 engage: elseria holds elseria_weapon dist 5.0 move nova parries 0/0 blocks 0/0 cast 0
+2591 engage: elseria holds elseria_weapon dist 4.8 move nova parries 0/0 blocks 0/0 cast 0
+2595 screenshot 19c_elseria_00
+2601 screenshot 19c_elseria_01
+2603 engage: elseria holds elseria_weapon dist 4.5 move  parries 0/0 blocks 0/0 cast 0
+2607 screenshot 19c_elseria_02
+2611 engage: elseria holds elseria_weapon dist 3.8 move  parries 0/0 blocks 0/0 cast 0
+2613 screenshot 19c_elseria_03
+2619 screenshot 19c_elseria_04
+2621 engage: elseria holds elseria_weapon dist 2.5 move  parries 0/0 blocks 0/0 cast 2
+2625 screenshot 19c_elseria_05
+2631 screenshot 19c_elseria_06
+2631 engage: elseria holds elseria_weapon dist 2.3 move  parries 0/0 blocks 0/0 cast 3
+2637 screenshot 19c_elseria_07
+2641 engage: elseria holds elseria_weapon dist 2.6 move nova parries 0/0 blocks 0/0 cast 5
+2643 screenshot 19c_elseria_08
+2649 screenshot 19c_elseria_09
+2651 engage: elseria holds elseria_weapon dist 4.1 move nova parries 0/0 blocks 0/0 cast 6
+2655 screenshot 19c_elseria_10
+2661 screenshot 19c_elseria_11
+2661 engage: elseria holds elseria_weapon dist 1.9 move nova parries 0/0 blocks 0/0 cast 8
+2667 screenshot 19c_elseria_12
+2671 engage: elseria holds elseria_weapon dist 4.1 move  parries 0/0 blocks 0/0 cast 9
+2673 screenshot 19c_elseria_13
+2679 screenshot 19c_elseria_14
+2681 engage: elseria holds elseria_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 10
+2685 screenshot 19c_elseria_15
+2691 screenshot 19c_elseria_16
+2691 engage: elseria holds elseria_weapon dist 5.5 move  parries 0/0 blocks 0/0 cast 12
+2697 screenshot 19c_elseria_17
+2701 engage: elseria holds elseria_weapon dist 6.9 move  parries 0/0 blocks 0/0 cast 13
+2703 screenshot 19c_elseria_18
+2709 screenshot 19c_elseria_19
+2711 engage: elseria holds elseria_weapon dist 7.0 move beam parries 0/0 blocks 0/0 cast 14
+2715 screenshot 19c_elseria_20
+2721 screenshot 19c_elseria_21
+2721 engage: elseria holds elseria_weapon dist 3.9 move beam parries 0/0 blocks 0/0 cast 16
+2727 screenshot 19c_elseria_22
+2731 engage: elseria holds elseria_weapon dist 5.5 move beam parries 0/0 blocks 0/0 cast 17
+2733 screenshot 19c_elseria_23
+2741 engage: elseria holds elseria_weapon dist 6.2 move beam parries 0/0 blocks 0/0 cast 19
+2756 duel: kingdom_guard
+2761 engage: kingdom_guard holds diamond_sword dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2773 engage: kingdom_guard holds diamond_sword dist 3.2 move  parries 0/0 blocks 0/0 cast 0
+2781 engage: kingdom_guard holds diamond_sword dist 2.1 move  parries 0/0 blocks 0/0 cast 0
+2791 engage: kingdom_guard holds diamond_sword dist 2.1 move  parries 0/0 blocks 0/0 cast 0
+2795 screenshot 19c_kingdom_guard_00
+2801 screenshot 19c_kingdom_guard_01
+2801 engage: kingdom_guard holds diamond_sword dist 1.5 move  parries 0/0 blocks 0/0 cast 0
+2807 screenshot 19c_kingdom_guard_02
+2811 engage: kingdom_guard holds diamond_sword dist 1.4 move  parries 0/0 blocks 0/0 cast 0
+2813 screenshot 19c_kingdom_guard_03
+2819 screenshot 19c_kingdom_guard_04
+2821 engage: kingdom_guard holds diamond_sword dist 1.4 move  parries 0/0 blocks 0/0 cast 0
+2825 screenshot 19c_kingdom_guard_05
+2831 screenshot 19c_kingdom_guard_06
+2831 engage: hero true foe false
+2837 screenshot 19c_kingdom_guard_07
+2841 engage: hero true foe false
+2843 screenshot 19c_kingdom_guard_08
+2849 screenshot 19c_kingdom_guard_09
+2851 engage: hero true foe false
+2855 screenshot 19c_kingdom_guard_10
+2861 screenshot 19c_kingdom_guard_11
+2861 engage: hero true foe false
+2867 screenshot 19c_kingdom_guard_12
+2871 engage: hero true foe false
+2873 screenshot 19c_kingdom_guard_13
+2879 screenshot 19c_kingdom_guard_14
+2881 engage: hero true foe false
+2885 screenshot 19c_kingdom_guard_15
+2891 screenshot 19c_kingdom_guard_16
+2891 engage: hero true foe false
+2897 screenshot 19c_kingdom_guard_17
+2902 engage: hero true foe false
+2903 screenshot 19c_kingdom_guard_18
+2909 screenshot 19c_kingdom_guard_19
+2911 engage: hero true foe false
+2915 screenshot 19c_kingdom_guard_20
+2921 screenshot 19c_kingdom_guard_21
+2921 engage: hero true foe false
+2927 screenshot 19c_kingdom_guard_22
+2931 engage: hero true foe false
+2933 screenshot 19c_kingdom_guard_23
+2941 engage: hero true foe false
+2966 throne 336, 139, 912
+4765 screenshot 20_throne_room
+4805 king at 336.2 139.0 912.5 (throne 336, 139, 912, 0.27 blocks)
+6605 screenshot 21_throne_room_later
+6625 king at 336.5 139.0 912.3 (throne 336, 139, 912, 0.20 blocks)
+6625 over the capital at 336 944
+8405 screenshot 22_capital_aerial
+8502 over the capital at 71 705
+10005 screenshot 23_helipad
+10015 over the capital at 86 567
+11605 screenshot 24_airbase
+11615 at the capital 71 77 694
+13205 screenshot 25_helipad_supply
+13287 at the capital -69 72 940
+14805 screenshot 26_hangar_supply
+14815 at the capital 406 182 1054
+16405 screenshot 27_palace_roofs
+16509 over the capital at 697 666
+18005 screenshot 28_airbase_east
+18015 at the capital 336 74 740
+19605 screenshot 29_road_fountain
+19616 at the capital 719 89 731
+21205 screenshot 30_ranch_barn
+21288 at the capital 841 107 999
+22805 screenshot 31_fortress_east
+22975 screenshot 40_king_forms
+23025 screenshot 41_king_regal
+23075 screenshot 42_king_hero
+23125 screenshot 43_king_broken_55
+23155 screenshot 43b_king_broken_15
+23190 screenshot 44_king_divine_spear
+23225 screenshot 45_king_divine_bow
+23275 screenshot 46_king_divine_back
+23286 king form 1 (film): scale 1.50, health 1024/1024, holding 1 minecraft:netherite_sword
+23315 screenshot 47_film_hero_kneel
+23335 screenshot 48_film_hero_pillar
+23372 screenshot 49_film_hero_flash
+23397 king form 2 (film): scale 1.80, health 1024/1024, holding 1 minecraft:netherite_sword
+23397 king form 2 (film): scale 1.80, health 1024/1024, holding 1 minecraft:netherite_sword
+23425 screenshot 50_film_glitch_a
+23465 screenshot 51_film_glitch_b
+23525 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
+23525 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
+23525 king form 3 (film): scale 2.20, health 1024/1024, holding 1 minecraft:mace
+23565 screenshot 52_film_divine_peel
+23605 screenshot 53_film_divine_rise
+23640 screenshot 54_film_divine_name
+23660 screenshot 55_film_divine_climax
+23715 azazel arts: java.lang.ClassNotFoundException: jp.oror.reborn.king.AzazelArts
+23715 king moves planned to tick 26030
+23729 king form 1: scale 1.50, health 1024/1024, holding 1 minecraft:netherite_sword
+23775 screenshot 56_0_sword_hold
+23787 screenshot 56_0_sword_hold_side
+23811 screenshot 57_0_00_sword_sweep_w
+23815 screenshot 57_0_00_sword_sweep_s
+23841 screenshot 57_0_01_sword_return_w
+23845 screenshot 57_0_01_sword_return_s
+23877 screenshot 57_0_02_sword_cleave_w
+23881 screenshot 57_0_02_sword_cleave_s
+23907 screenshot 57_0_03_sword_rising_w
+23911 screenshot 57_0_03_sword_rising_s
+23941 screenshot 57_0_04_sword_thrust_w
+23945 screenshot 57_0_04_sword_thrust_s
+23969 screenshot 57_0_05_sword_bash_w
+23973 screenshot 57_0_05_sword_bash_s
+24007 screenshot 57_0_06_sword_spin_w
+24011 screenshot 57_0_06_sword_spin_s
+24039 screenshot 57_0_07_sword_leap_w
+24043 screenshot 57_0_07_sword_leap_s
+24069 screenshot 57_0_08_sword_dash_w
+24073 screenshot 57_0_08_sword_dash_s
+24105 screenshot 57_0_09_sword_wave_w
+24109 screenshot 57_0_09_sword_wave_s
+24145 king form 2: scale 1.80, health 614/1024, holding 1 minecraft:netherite_sword
+24195 screenshot 56_1_broken_hold
+24207 screenshot 56_1_broken_hold_side
+24229 screenshot 57_1_00_broken_shard_w
+24233 screenshot 57_1_00_broken_shard_s
+24263 screenshot 57_1_01_broken_lag_w
+24267 screenshot 57_1_01_broken_lag_s
+24293 screenshot 57_1_02_broken_blink_w
+24297 screenshot 57_1_02_broken_blink_s
+24325 screenshot 57_1_03_broken_multi_w
+24329 screenshot 57_1_03_broken_multi_s
+24361 screenshot 57_1_04_broken_rewind_w
+24365 screenshot 57_1_04_broken_rewind_s
+24393 screenshot 57_1_05_broken_blocks_w
+24397 screenshot 57_1_05_broken_blocks_s
+24423 screenshot 57_1_06_broken_grab_w
+24427 screenshot 57_1_06_broken_grab_s
+24455 screenshot 57_1_07_broken_echo_w
+24459 screenshot 57_1_07_broken_echo_s
+24489 screenshot 57_1_08_broken_hitbox_w
+24493 screenshot 57_1_08_broken_hitbox_s
+24519 screenshot 57_1_09_broken_nan_w
+24523 screenshot 57_1_09_broken_nan_s
+24568 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:mace
+24615 screenshot 56_2_clubs_hold
+24627 screenshot 56_2_clubs_hold_side
+24651 screenshot 57_2_00_clubs_smite_w
+24655 screenshot 57_2_00_clubs_smite_s
+24681 screenshot 57_2_01_clubs_flurry_w
+24685 screenshot 57_2_01_clubs_flurry_s
+24715 screenshot 57_2_02_clubs_rise_w
+24719 screenshot 57_2_02_clubs_rise_s
+24751 screenshot 57_2_03_clubs_quake_w
+24755 screenshot 57_2_03_clubs_quake_s
+24781 screenshot 57_2_04_clubs_spin_w
+24785 screenshot 57_2_04_clubs_spin_s
+24813 screenshot 57_2_05_clubs_throw_w
+24817 screenshot 57_2_05_clubs_throw_s
+24843 screenshot 57_2_06_clubs_cross_w
+24847 screenshot 57_2_06_clubs_cross_s
+24879 screenshot 57_2_07_clubs_leap_w
+24883 screenshot 57_2_07_clubs_leap_s
+24909 screenshot 57_2_08_clubs_chain_w
+24913 screenshot 57_2_08_clubs_chain_s
+24943 screenshot 57_2_09_clubs_shock_w
+24947 screenshot 57_2_09_clubs_shock_s
+24987 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_hoe
+25035 screenshot 56_3_scythe_hold
+25047 screenshot 56_3_scythe_hold_side
+25073 screenshot 57_3_00_scythe_reap_w
+25077 screenshot 57_3_00_scythe_reap_s
+25103 screenshot 57_3_01_scythe_return_w
+25107 screenshot 57_3_01_scythe_return_s
+25139 screenshot 57_3_02_scythe_neck_w
+25143 screenshot 57_3_02_scythe_neck_s
+25169 screenshot 57_3_03_scythe_hook_w
+25173 screenshot 57_3_03_scythe_hook_s
+25203 screenshot 57_3_04_scythe_spin_w
+25207 screenshot 57_3_04_scythe_spin_s
+25235 screenshot 57_3_05_scythe_throw_w
+25239 screenshot 57_3_05_scythe_throw_s
+25267 screenshot 57_3_06_scythe_wave_w
+25271 screenshot 57_3_06_scythe_wave_s
+25297 screenshot 57_3_07_scythe_soul_w
+25301 screenshot 57_3_07_scythe_soul_s
+25327 screenshot 57_3_08_scythe_low_w
+25331 screenshot 57_3_08_scythe_low_s
+25365 screenshot 57_3_09_scythe_leap_w
+25369 screenshot 57_3_09_scythe_leap_s
+25406 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
+25455 screenshot 56_4_twin_hold
+25467 screenshot 56_4_twin_hold_side
+25488 screenshot 57_4_00_twin_double_w
+25492 screenshot 57_4_00_twin_double_s
+25522 screenshot 57_4_01_twin_cross_w
+25526 screenshot 57_4_01_twin_cross_s
+25553 screenshot 57_4_02_twin_stabs_w
+25557 screenshot 57_4_02_twin_stabs_s
+25587 screenshot 57_4_03_twin_whirl_w
+25591 screenshot 57_4_03_twin_whirl_s
+25621 screenshot 57_4_04_twin_leap_w
+25625 screenshot 57_4_04_twin_leap_s
+25651 screenshot 57_4_05_twin_slide_w
+25655 screenshot 57_4_05_twin_slide_s
+25681 screenshot 57_4_06_twin_rise_w
+25685 screenshot 57_4_06_twin_rise_s
+25719 screenshot 57_4_07_twin_xwave_w
+25723 screenshot 57_4_07_twin_xwave_s
+25745 screenshot 57_4_08_twin_behind_w
+25749 screenshot 57_4_08_twin_behind_s
+25779 screenshot 57_4_09_twin_hundred_w
+25783 screenshot 57_4_09_twin_hundred_s
+25826 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:trident
+25875 screenshot 56_5_spear_hold
+25887 screenshot 56_5_spear_hold_side
+25911 screenshot 57_5_00_spear_thrust_w
+25915 screenshot 57_5_00_spear_thrust_s
+25941 screenshot 57_5_01_spear_double_w
+25945 screenshot 57_5_01_spear_double_s
+25977 screenshot 57_5_02_spear_sweep_w
+25981 screenshot 57_5_02_spear_sweep_s
+26005 screenshot 57_5_03_spear_butt_w
+26009 screenshot 57_5_03_spear_butt_s
+26041 screenshot 57_5_04_spear_twirl_w
+26045 screenshot 57_5_04_spear_twirl_s
+26075 screenshot 57_5_05_spear_dive_w
+26079 screenshot 57_5_05_spear_dive_s
+26105 screenshot 57_5_06_spear_rush_w
+26109 screenshot 57_5_06_spear_rush_s
+26139 screenshot 57_5_07_spear_throw_w
+26143 screenshot 57_5_07_spear_throw_s
+26171 screenshot 57_5_08_spear_bristle_w
+26175 screenshot 57_5_08_spear_bristle_s
+26201 screenshot 57_5_09_spear_heaven_w
+26205 screenshot 57_5_09_spear_heaven_s
+26247 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:bow
+26295 screenshot 56_6_bow_hold
+26307 screenshot 56_6_bow_hold_side
+26331 screenshot 57_6_00_bow_quick_w
+26335 screenshot 57_6_00_bow_quick_s
+26363 screenshot 57_6_01_bow_double_w
+26367 screenshot 57_6_01_bow_double_s
+26397 screenshot 57_6_02_bow_fan_w
+26401 screenshot 57_6_02_bow_fan_s
+26429 screenshot 57_6_03_bow_lob_w
+26433 screenshot 57_6_03_bow_lob_s
+26465 screenshot 57_6_04_bow_pierce_w
+26469 screenshot 57_6_04_bow_pierce_s
+26487 screenshot 57_6_05_bow_retreat_w
+26491 screenshot 57_6_05_bow_retreat_s
+26525 screenshot 57_6_06_bow_rainbow_w
+26529 screenshot 57_6_06_bow_rainbow_s
+26555 screenshot 57_6_07_bow_pin_w
+26559 screenshot 57_6_07_bow_pin_s
+26591 screenshot 57_6_08_bow_burst_w
+26595 screenshot 57_6_08_bow_burst_s
+26617 screenshot 57_6_09_bow_strike_w
+26621 screenshot 57_6_09_bow_strike_s
+26666 king form 3 (scythe): scale 2.20, health 1024/1024, holding 1 minecraft:netherite_sword
+26697 veil of flies cast
+26755 screenshot 58_veil_above
+26805 screenshot 58_veil_ground
+26828 azazel on the stage: scale 1.00, name Lv.5 アザゼル［神に叛きし者］
+26875 screenshot 59_azazel_front
+26887 screenshot 59_azazel_side
+26899 screenshot 59_azazel_back
+26945 finished: complete
