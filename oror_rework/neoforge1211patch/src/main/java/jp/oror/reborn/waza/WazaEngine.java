@@ -56,6 +56,8 @@ public final class WazaEngine {
         public Vec3 aim;
         public Vec3 dir;
         public Vec3 moveTo;
+        /** where the caster stood as the technique began */
+        public Vec3 home;
         /** a move's checked destination and where it began */
         public Vec3 dest, from;
         public float yaw;
@@ -79,6 +81,7 @@ public final class WazaEngine {
             this.forced = forced;
             this.aim = target != null ? target.position() : b.position().add(b.getLookAngle().scale(4));
             this.yaw = b.getYRot();
+            this.home = b.position();
         }
 
         public int elapsed() {
@@ -209,6 +212,12 @@ public final class WazaEngine {
                 b.getNavigation().stop();
                 Vec3 v = b.getDeltaMovement();
                 b.setDeltaMovement(0, b.spec.airborne() ? 0 : Math.min(0, v.y), 0);
+                // and kept where the technique began: some characters' own passives carry them off (the sixth run:
+                // Arcana and Ain Sof Aur were taken seven blocks away mid-technique, out of its reach)
+                Cast c = br.cast;
+                if (c != null && c.home != null && c.w.behaviour() != Waza.Behaviour.REWIND && b.position().distanceToSqr(c.home) > 1.0) {
+                    b.teleportTo(c.home.x, c.home.y, c.home.z);
+                }
             }
         }
     }
