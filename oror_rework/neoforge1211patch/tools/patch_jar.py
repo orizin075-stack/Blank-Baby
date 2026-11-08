@@ -11,6 +11,11 @@ entries at the same paths, or are added. Every other entry is copied byte for by
 """
 import json, os, sys, zipfile
 
+# (057) entries the shipped jar carries that nothing reads any more, left out to keep the import zip under 30 MB: the
+# 034 kingdom (four 848 KB pieces), replaced by royal036 (GrandRealmStructure names only royal036/kingdom_<x>_<z>; no
+# template pool, class or data file names royal034)
+DROPPED = ('data/oror_supreme_bosses/structure/royal034/',)
+
 
 def main(base, classes, lang, out, old, new, overlay=None):
     compiled = {}
@@ -30,12 +35,15 @@ def main(base, classes, lang, out, old, new, overlay=None):
             for f in names:
                 path = os.path.join(root, f)
                 files[os.path.relpath(path, overlay).replace(os.sep, '/')] = open(path, 'rb').read()
-    replaced, merged, overlaid = [], [], 0
+    replaced, merged, overlaid, dropped = [], [], 0, []
     with zipfile.ZipFile(base) as src, zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as dst:
         for info in src.infolist():
             name = info.filename
             if name.endswith('.class') and name[:-len('.class')].split('$')[0] in outer:
                 replaced.append(name)
+                continue
+            if name.startswith(DROPPED):
+                dropped.append(name)
                 continue
             if name in files:
                 dst.writestr(info, files.pop(name))
@@ -61,7 +69,8 @@ def main(base, classes, lang, out, old, new, overlay=None):
         for name, table in sorted(fragments.items()):
             dst.writestr(name, (json.dumps(table, ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
             merged.append(name + ' (new)')
-    print('replaced', len(replaced), 'old class files; added', len(compiled), 'compiled; overlaid', overlaid, 'files; merged', merged)
+    print('replaced', len(replaced), 'old class files; added', len(compiled), 'compiled; overlaid', overlaid, 'files; merged', merged,
+          '; dropped', dropped)
 
 
 if __name__ == '__main__':

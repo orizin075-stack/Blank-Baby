@@ -38,6 +38,16 @@ public final class CharacterModel extends RigModel<SupremeEntity> {
                 return;
             }
         }
+        // (057) one of the character's 24 techniques (the 984): its own keyframed motion over the rig's idle and walk
+        jp.oror.reborn.waza.client.WazaClient.Play waza = jp.oror.reborn.waza.client.WazaClient.playing(e.getId());
+        if (waza != null) {
+            float time = e.level().getGameTime() - waza.start() + partial;
+            if (time >= 0 && time <= waza.w().length()) {
+                this.animate(e, swing, amount, age, yaw, pitch, 0, 0F, e.action(), e.form());
+                jp.oror.reborn.show.WazaPoses.apply(this, waza.w(), time, waza.seed());
+                return;
+            }
+        }
         // (052) a technique or a big move under way: its own dance (TechniquePoses) over the rig's idle and walk,
         // instead of the shared motion its windup was given
         jp.oror.reborn.show.TechniqueShow.Active show = jp.oror.reborn.show.TechniqueShow.ACTIVE.get(e.getId());

@@ -66,6 +66,7 @@ public final class CiDriver {
                 case "mobs" -> "oror mobs test";
                 case "gunmobs" -> "oror gunmobs test";
                 case "story" -> "oror story test";
+                case "waza" -> "oror waza test";
                 case "capitalload" -> "oror capitalload test";
                 case "sweep" -> "oror sweep";
                 case "gametests" -> "oror gametests";
@@ -102,6 +103,7 @@ public final class CiDriver {
             case "mobs" -> MobTraceTest.resultLogged;
             case "gunmobs" -> GunMobTest.resultLogged;
             case "story" -> jp.oror.reborn.king.KingStoryTest.resultLogged;
+            case "waza" -> jp.oror.reborn.waza.WazaTest.resultLogged;
             case "capitalload" -> jp.oror.reborn.citadel.CapitalLoadTest.resultLogged;
             case "sweep" -> OrorSweep.resultLogged;
             case "gametests" -> OrorGameTests.resultLogged;
