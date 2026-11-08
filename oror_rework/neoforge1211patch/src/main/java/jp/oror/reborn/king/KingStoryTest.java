@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -102,6 +103,10 @@ public final class KingStoryTest {
         /** (055) his field as it was before it was broken for the souls' and majesty's trials; the trials' dummies */
         CompoundTag field3;
         Mob soulA, soulB, striker;
+        /** (056) Azazel's arts tried one by one, then the certificate of rebellion */
+        int az = -1;
+        long azNext;
+        Mob lordAz;
         final StringBuilder notes = new StringBuilder();
         long nextTrial = -1, after = -1;
         final Map<String, Integer> hitsBefore = new LinkedHashMap<>();
@@ -683,8 +688,132 @@ public final class KingStoryTest {
             for (ItemEntity it : sl.getEntitiesOfClass(ItemEntity.class, new AABB(o).inflate(12, 4, 12))) {
                 it.discard();
             }
-            finish(r);
+            r.az = 0;
+            r.azNext = age + 20;
         }
+        if (r.az >= 0 && age >= r.azNext) {
+            azazelTrial(r, sl, age);
+        }
+    }
+
+    /** (056) Azazel's ten arts, each on a sturdy dummy at its distance; then the certificate of rebellion. */
+    private static void azazelTrial(Run r, ServerLevel sl, long age) {
+        Map<String, Object> out = r.r;
+        List<AzazelArts.Art> arts = AzazelArts.ARTS;
+        BlockPos base = r.at.offset(0, 0, 24);
+        if (r.az == 0) {
+            net.minecraft.world.entity.monster.Evoker ev = EntityType.EVOKER.create(sl);
+            ev.moveTo(base.getX() + 0.5, base.getY(), base.getZ() + 0.5, -90F, 0F);
+            RebelLord.makeLord(ev, false);
+            ev.setNoAi(true);
+            sl.addFreshEntity(ev);
+            r.made.add(ev);
+            r.lordAz = ev;
+            out.put("azazelScale", Math.round(ev.getScale() * 100) / 100.0);
+            r.az = 1;
+            r.azNext = age + 10;
+            return;
+        }
+        Mob az = r.lordAz;
+        for (Zombie z : sl.getEntitiesOfClass(Zombie.class, new AABB(base).inflate(16), Zombie::isAlive)) {
+            z.discard();
+        }
+        if (r.az <= arts.size()) {
+            AzazelArts.Art a = arts.get(r.az - 1);
+            double d = switch (a.id()) {
+                case "rend" -> 2.5;
+                case "fangs", "gust" -> 4.0;
+                case "disarm" -> 5.0;
+                case "dive" -> 3.0;
+                default -> 7.0;
+            };
+            az.teleportTo(base.getX() + 0.5, base.getY(), base.getZ() + 0.5);
+            az.setYRot(-90F);
+            az.setYHeadRot(-90F);
+            Mob dummy = sturdy(spawn(r, EntityType.ZOMBIE, d, 24));
+            dummy.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            az.setTarget(dummy);
+            AzazelArts.perform(az, sl, a, dummy);
+            if (a.id().equals("scapegoat")) {
+                KingDeeds.later(sl, a.windup() + 5, () -> az.hurt(az.damageSources().mobAttack(dummy), 20F));
+            }
+            if (a.id().equals("disarm")) {
+                KingDeeds.later(sl, a.windup() + 12, () -> out.put("azazelDisarmed", dummy.getMainHandItem().isEmpty()));
+            }
+            r.az++;
+            r.azNext = age + a.windup() + a.length() + 20;
+            return;
+        }
+        if (r.az == arts.size() + 1) {
+            CompoundTag h = az.getPersistentData().getCompound(AzazelArts.HITS);
+            int landed = 0;
+            StringBuilder missed = new StringBuilder();
+            for (String id : new String[]{"rend", "forge", "fangs", "gust", "scapegoat_bore", "dudael", "disarm", "dive", "chains", "rally"}) {
+                if (h.getInt(id) > 0) {
+                    landed++;
+                } else {
+                    missed.append(id).append(' ');
+                }
+            }
+            out.put("azazelHits", h.toString());
+            out.put("azazelArts", landed);
+            out.put("azazelMissed", missed.toString().trim());
+            az.discard();
+            r.az++;
+            r.azNext = age + 10;
+            return;
+        }
+        // the certificate of rebellion: three villagers made to seal, the recipe, the rebels' trust, the trader's map
+        Tester c = new Tester(sl, 5);
+        c.moveTo(base.getX() + 0.5, base.getY(), base.getZ() + 4.5, 0F, 0F);
+        c.setShiftKeyDown(true);
+        int seals = 0;
+        boolean onceOnly = true;
+        for (int i = 0; i < 3; i++) {
+            net.minecraft.world.entity.npc.Villager v = EntityType.VILLAGER.create(sl);
+            v.moveTo(base.getX() + 2.5 + i, base.getY(), base.getZ() + 6.5, 0F, 0F);
+            sl.addFreshEntity(v);
+            r.made.add(v);
+            c.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.PAPER, 2));
+            RebelCertificate.takeSeal(c, v, sl);
+            if (i == 0) {
+                int before = c.getInventory().countItem(RebelCertificate.SEAL);
+                RebelCertificate.takeSeal(c, v, sl);
+                onceOnly = c.getInventory().countItem(RebelCertificate.SEAL) == before;
+            }
+        }
+        seals = c.getInventory().countItem(RebelCertificate.SEAL);
+        out.put("certSeals", seals);
+        out.put("certSealOnce", onceOnly);
+        List<ItemStack> grid = List.of(new ItemStack(RebelCertificate.SEAL), new ItemStack(RebelCertificate.SEAL), new ItemStack(RebelCertificate.SEAL),
+            new ItemStack(Items.PAPER), new ItemStack(Items.INK_SAC), new ItemStack(Items.EMERALD));
+        var input = net.minecraft.world.item.crafting.CraftingInput.of(3, 2, grid);
+        ItemStack made = sl.getRecipeManager().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING, input, sl)
+            .map(rh -> rh.value().assemble(input, sl.registryAccess())).orElse(ItemStack.EMPTY);
+        out.put("certCrafted", RebelCertificate.isCertificate(made));
+        c.getInventory().clearContent();
+        out.put("certFriendBefore", RebelPact.friend(c));
+        c.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, made.isEmpty() ? new ItemStack(RebelCertificate.CERTIFICATE) : made);
+        out.put("certFriend", RebelPact.friend(c));
+        net.minecraft.world.entity.npc.WanderingTrader w = EntityType.WANDERING_TRADER.create(sl);
+        w.moveTo(base.getX() + 0.5, base.getY(), base.getZ() + 6.5, 180F, 0F);
+        sl.addFreshEntity(w);
+        r.made.add(w);
+        long t0 = System.nanoTime();
+        RebelCertificate.showTrader(c, w, sl);
+        out.put("certMapMillis", (System.nanoTime() - t0) / 1_000_000);
+        boolean map = false;
+        for (ItemStack s : c.getInventory().items) {
+            if (s.is(Items.FILLED_MAP) && s.getHoverName().getString().contains(RebelCertificate.MAP_NAME)) {
+                map = true;
+            }
+        }
+        out.put("certMap", map);
+        BlockPos city = RebelCertificate.rebelsCity(sl, w.blockPosition());
+        out.put("certCity", city == null ? "none" : city.toShortString());
+        c.discard();
+        r.az = -1;
+        finish(r);
     }
 
     /** After a trial: if what was tried hit nothing, where the King had got to and where its dummy stood. */
@@ -882,6 +1011,9 @@ public final class KingStoryTest {
         boolean moves = num(o, "movesLandedN") >= KingArsenal.MOVES.size() - 3;
         boolean broken = num(o, "missOut") + num(o, "lagHits") + num(o, "missIn") + num(o, "phantoms") + num(o, "errorArm") > 0
             && num(o, "missIn") > 0;
+        boolean azazel = num(o, "azazelArts") >= 10 && Boolean.TRUE.equals(o.get("azazelDisarmed"));
+        boolean certificate = num(o, "certSeals") == 3 && Boolean.TRUE.equals(o.get("certSealOnce")) && Boolean.TRUE.equals(o.get("certCrafted"))
+            && Boolean.FALSE.equals(o.get("certFriendBefore")) && Boolean.TRUE.equals(o.get("certFriend")) && Boolean.TRUE.equals(o.get("certMap"));
         boolean souls = Boolean.TRUE.equals(o.get("chainBroken")) && Boolean.TRUE.equals(o.get("soulBurning")) && num(o, "soulTaken") >= 1
             && Boolean.TRUE.equals(o.get("soulFreed")) && num(o, "majesty") >= 1 && num(o, "veilFlies") >= 12
             && Boolean.TRUE.equals(o.get("starveHeld"));
@@ -906,7 +1038,10 @@ public final class KingStoryTest {
         o.put("passGodSlayer", slayer);
         o.put("passPhantasm", phantasm);
         o.put("passSouls", souls);
-        o.put("pass", peace && war && rebels && forms && crown && chamber && deeds && moves && broken && slayer && phantasm && souls);
+        o.put("passAzazel", azazel);
+        o.put("passCertificate", certificate);
+        o.put("pass", peace && war && rebels && forms && crown && chamber && deeds && moves && broken && slayer && phantasm && souls && azazel
+            && certificate);
         StringBuilder b = new StringBuilder("{");
         o.forEach((k, v) -> b.append(b.length() > 1 ? "," : "").append('"').append(k).append("\":")
             .append(v instanceof String s ? "\"" + s.replace("\"", "'") + "\"" : String.valueOf(v)));

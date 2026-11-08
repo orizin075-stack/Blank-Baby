@@ -88,7 +88,8 @@ public final class RebelPact {
     }
 
     public static boolean friend(Player p) {
-        return p != null && KingCourt.enemy(p);
+        // the king's enemy, or (056) one who carries a certificate of rebellion sealed in villagers' blood
+        return p != null && (KingCourt.enemy(p) || RebelCertificate.carries(p));
     }
 
     public static int favour(Player p) {

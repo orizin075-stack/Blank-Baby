@@ -86,6 +86,8 @@ public final class TechniqueShow {
             character = b.spec.id;
         } else if (e instanceof RoyalMob) {
             character = "";
+        } else if (e instanceof net.minecraft.world.entity.monster.Evoker && p.kind().startsWith("move:azazel")) {
+            character = "azazel";          // (056) Azazel's moves (AzazelArts), drawn by AzazelRig
         } else {
             return;
         }

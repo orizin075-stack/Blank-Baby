@@ -400,8 +400,86 @@ public final class Look {
         PLAN.put(at + 90, () -> shot(mc, "58_veil_above"));
         PLAN.put(at + 92, () -> view(mc, 7, 1.2, 4, 20F, -4F));
         PLAN.put(at + 140, () -> shot(mc, "58_veil_ground"));
-        PLAN.put(at + 200, () -> finish(mc, "complete"));
-        note("king moves planned to tick " + (at + 200));
+        // (056) Azazel remade: alone on the stage, close up, then each of his ten arts at its windup and its blow
+        int az = at + 160;
+        PLAN.put(az, () -> soloAzazel(mc));
+        PLAN.put(az + 40, () -> view(mc, 2.6, 2.4, 10 - 5.2, 26.6F, 4F));
+        PLAN.put(az + 50, () -> shot(mc, "59_azazel_front"));
+        PLAN.put(az + 52, () -> view(mc, 6.5, 2.4, 10, 90F, 4F));
+        PLAN.put(az + 62, () -> shot(mc, "59_azazel_side"));
+        PLAN.put(az + 64, () -> view(mc, 0, 2.6, 16, 180F, 4F));
+        PLAN.put(az + 74, () -> shot(mc, "59_azazel_back"));
+        PLAN.put(az + 76, () -> view(mc, 4.0, 2.4, 10 - 6.0, 33.7F, 6F));
+        int k = 0;
+        try {
+            for (Object a : (List<?>) Class.forName("jp.oror.reborn.king.AzazelArts").getField("ARTS").get(null)) {
+                String id = (String) a.getClass().getMethod("id").invoke(a);
+                int windup = ((Number) a.getClass().getMethod("windup").invoke(a)).intValue();
+                int length = ((Number) a.getClass().getMethod("length").invoke(a)).intValue();
+                int t0 = az + 90 + k * 34;
+                int kk = k;
+                PLAN.put(t0, () -> azazelArt(mc, id, windup, length));
+                PLAN.put(t0 + Math.max(1, windup - 2), () -> shot(mc, String.format(java.util.Locale.ROOT, "60_%02d_azazel_%s_w", kk, id)));
+                PLAN.put(t0 + windup + 2, () -> shot(mc, String.format(java.util.Locale.ROOT, "60_%02d_azazel_%s_s", kk, id)));
+                k++;
+            }
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("azazel arts: " + ex);
+        }
+        int end = az + 90 + k * 34 + 30;
+        PLAN.put(end, () -> finish(mc, "complete"));
+        note("king moves planned to tick " + end);
+    }
+
+    /** (056) Azazel (an evoker made the rebel lord) alone on the stage, facing the camera's side. */
+    private static void soloAzazel(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        mc.options.hideGui = true;
+        server.execute(() -> {
+            ServerLevel level = server.overworld();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 48, sy - 12, sz - 24, sx + 48, sy + 40, sz + 48),
+                x -> x.getTags().contains("oror_look") || x.getType().toString().contains("villager_king")
+                    || x instanceof net.minecraft.world.entity.monster.Vex)) {
+                e.discard();
+            }
+            command(server, "weather clear 1000000");
+            command(server, "time set noon");
+            net.minecraft.world.entity.monster.Evoker ev = net.minecraft.world.entity.EntityType.EVOKER.create(level);
+            if (ev == null) {
+                return;
+            }
+            ev.moveTo(sx, (int) sy, sz + 10, 180F, 0F);
+            ev.setYHeadRot(180F);
+            ev.setYBodyRot(180F);
+            ev.setNoAi(true);
+            ev.setPersistenceRequired();
+            ev.addTag("oror_look");
+            ev.addTag("oror_azazel");
+            try {
+                Class.forName("jp.oror.reborn.king.RebelLord").getMethod("makeLord", net.minecraft.world.entity.Mob.class, boolean.class).invoke(null, ev, false);
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                note("azazel: " + ex);
+            }
+            level.addFreshEntity(ev);
+            note(String.format(java.util.Locale.ROOT, "azazel on the stage: scale %.2f, name %s", ev.getScale(), ev.getCustomName() == null ? "-" : ev.getCustomName().getString()));
+        });
+    }
+
+    /** (056) One of Azazel's arts sent to him as the server sends it (its motion only: no one is struck). */
+    private static void azazelArt(Minecraft mc, String id, int windup, int length) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            ServerLevel level = server.overworld();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 5, sy - 3, sz + 5, sx + 5, sy + 12, sz + 15),
+                x -> x.getTags().contains("oror_azazel"))) {
+                try {
+                    Class.forName("jp.oror.reborn.show.TechniqueShow").getMethod("send", Entity.class, String.class, int.class, int.class, int.class, int.class)
+                        .invoke(null, e, "move:azazel_" + id, 0, windup, length, -1);
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    note("azazel art " + id + ": " + ex);
+                }
+            }
+        });
     }
 
     /** (055) One villager king alone on the stage in a form and stance. */

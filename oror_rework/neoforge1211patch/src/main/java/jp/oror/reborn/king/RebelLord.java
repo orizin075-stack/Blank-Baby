@@ -108,6 +108,11 @@ public final class RebelLord {
         if (armor != null) {
             armor.setBaseValue(14);
         }
+        // (056) a fallen Watcher stands over the illagers: half again as tall (his rig, AzazelRig, is drawn to it)
+        AttributeInstance scale = m.getAttribute(Attributes.SCALE);
+        if (scale != null) {
+            scale.setBaseValue(likeness ? 1.3 : 1.45);
+        }
         m.setHealth(m.getMaxHealth());
         m.setCustomName(Component.literal(likeness ? "アザゼルの化身" : "Lv.5 アザゼル［神に叛きし者］").withStyle(ChatFormatting.DARK_PURPLE));
         m.setCustomNameVisible(true);

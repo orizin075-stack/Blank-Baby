@@ -5,6 +5,7 @@ glow textures and preview sheets.
 import json, os, sys
 import build_bb as BB
 import king3d
+import azazel3d   # (056) Azazel registers his recipe with king3d.RECIPES
 
 
 def main(outdir, names=None):

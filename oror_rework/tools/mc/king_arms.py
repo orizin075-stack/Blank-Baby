@@ -434,3 +434,47 @@ if __name__ == '__main__':
         x += j.width + 8
     c.save(out)
     print(c.size)
+
+
+# ------------------------------------------------------------------------------------------------ Azazel's
+@design('rebel_blade', half_width=14, grip_u=12, length=35)
+def d_rebel_blade(a):
+    """(056) 叛神剣 — Azazel's, the king-slayer: he who taught men the forge forged it against god. Black forge-iron,
+    jagged and notched, a molten seam of orange fire down it and cracks of the same glowing through; a guard of two
+    curled ram's horns round a violet eye; a grip of black leather bound with bronze; a goat's-skull pommel."""
+    iron, iron_l = mat('metal', '#1e1a20'), mat('metal', '#3a3238')
+    bronze, bronze_d = mat('metal', '#b8752a'), mat('metal', '#7a4a1a')
+    ember = mat('energy', '#ff7a1a', glow=0.95)
+    violet = mat('gem', '#9a3cff', glow=0.9)
+    # pommel: a goat's skull with little horns; the grip
+    a.ell(2.6, 0, 2.6, 2.2, mat('metal', '#d8cfc0'), 5)
+    a.dot(2.4, -0.9, mat('dark', '#120a10'), 6, r=0.6)
+    a.dot(2.4, 0.9, mat('dark', '#120a10'), 6, r=0.6)
+    for sgn in (-1, 1):
+        a.curve((3.4, sgn * 1.6), (5.0, sgn * 3.6), (3.0, sgn * 4.4), 0.9, bronze_d, 4, taper=(0.9, 0.3))
+    a.poly([(5, -1.6), (21, -1.5), (21, 1.5), (5, 1.6)], mat('cloth', '#1a1418', pattern='wrap'), 2)
+    for u in (7, 13, 19):
+        band(a, u, 3.8, bronze, 4, 1.3)
+    # the guard: two ram's horns curling out and back round a violet eye
+    a.poly([(21, -4.2), (25, -4.6), (25, 4.6), (21, 4.2)], iron_l, 4)
+    for sgn in (-1, 1):
+        a.curve((23, sgn * 4.0), (24, sgn * 11.5), (31, sgn * 12.5), 2.4, bronze, 3, taper=(2.4, 1.2))
+        a.curve((31, sgn * 12.5), (36, sgn * 11.0), (32, sgn * 7.5), 1.4, bronze_d, 3, taper=(1.4, 0.5))
+        for k in range(4):
+            a.stroke([(24 + k * 2.0, sgn * (6.0 + k * 1.3)), (25 + k * 2.0, sgn * (7.4 + k * 1.3))], 0.4, mat('dark', '#3a220c'), 4)
+    a.ell(23, 0, 2.8, 2.6, violet, 6)
+    a.dot(23, 0, mat('energy', '#f2dcff', glow=1.0), 7, r=0.8)
+    # the blade: broad at the guard, jagged notches along both edges, a hooked tip; the molten seam and its cracks
+    upper, lower = [(25, 4.6)], [(25, -4.6)]
+    for k in range(9):
+        u = 29 + k * 7.4
+        w = 5.2 - k * 0.32
+        upper += [(u, w), (u + 2.2, w + 1.4 - k * 0.06), (u + 3.6, w - 0.4)]
+        lower += [(u + 1.4, -w), (u + 3.2, -w - 1.1 + k * 0.05), (u + 4.8, -w + 0.3)]
+    pts = lower + [(94, -2.6), (100, 1.4), (95, 3.2)] + upper[::-1]
+    a.poly(pts, iron, 3)
+    a.poly([(25, 4.6), (25, 3.0), (94, 1.6), (100, 1.4), (95, 3.2)], iron_l, 4)       # the back edge catching the light
+    a.stroke([(27, 0), (60, 0.3), (88, -0.2), (97, 0.8)], 1.3, ember, 5)
+    a.stroke([(27, 0), (60, 0.3), (88, -0.2), (97, 0.8)], 0.5, mat('energy', '#fff0b0', glow=1.0, outline=False), 6)
+    for (u, v0, v1) in ((36, 0.3, 3.4), (45, 0.2, -3.6), (55, 0.3, 3.0), (66, 0.2, -3.2), (77, 0.0, 2.6), (84, -0.1, -2.4)):
+        a.stroke([(u, v0), (u + 2.6, (v0 + v1) / 2 + 0.6), (u + 3.6, v1)], 0.55, ember, 5)

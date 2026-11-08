@@ -52,6 +52,7 @@ WEAPONS = {  # KingArsenal weapon ids
     'twin': dict(rig='villager_king_divine', stance='twin'),
     'spear': dict(rig='villager_king_divine', stance='spear'),
     'bow': dict(rig='villager_king_divine', stance='bow'),
+    'azazel': dict(rig='azazel', stance=None),          # (056) the king-slayer blade hangs from his fist as the hero's
 }
 
 
@@ -546,8 +547,61 @@ dd('triple', K(al=(-1.57, 0.0, 0.0), fl=0.0, ar=(-1.6, -0.7, 0.0), fr=-1.7, t=(0
    beats=3, step=6, weapon='bow')
 
 
+# --------------------------------------------------------------------------------------------------------------------
+# (056) Azazel's ten (AzazelArts): strikes timed as the server lands them.
+# --------------------------------------------------------------------------------------------------------------------
+AZ = {}
+
+
+def az(id_, w, s, a=None, beats=1, step=5, recoil=False):
+    AZ['azazel_' + id_] = dict(weapon='azazel', w=w, s=s, a=a, beats=beats, step=step, recoil=recoil, length=None)
+
+
+az('rend',      # 叛神剣・三連: three cuts, six ticks apart, right to left and back
+   K(ar=(-2.4, 0.9, 0.5), fr=-0.5, Lr=-0.3, t=(-0.1, 0.6), al=(-0.8, 0.0, -0.4), fl=-0.6, dn=1),
+   K(ar=(-1.5, -1.2, 0.0), fr=-0.1, Lr=1.6, t=(0.2, -0.75), hy=-0.2, ll=-0.5, sl=0.4, dn=2),
+   a=K(ar=(-1.4, 1.2, 0.3), fr=-0.1, Lr=1.5, t=(0.2, 0.65), hy=0.2, lr=-0.5, sr=0.4, dn=2),
+   beats=3, step=6)
+az('forge',     # 鍛冶神の剣雨: the left hand to the sky calls the swords he forged; swept down, they fall
+   K(al=(-3.05, 0.0, -0.2), fl=0.0, ar=(-0.5, 0.2, 0.3), fr=-0.4, Lr=2.0, h=-0.7, t=(-0.3, 0.2)),
+   K(al=(-1.45, 0.0, 0.0), fl=0.0, ar=(-0.5, 0.2, 0.3), fr=-0.4, Lr=2.0, h=0.1, t=(0.3, -0.2), dn=1))
+az('fangs',     # 牙の大陣: the blade raised in both hands, plunged into the ground on one knee
+   K(ar=(-3.05, -0.2, 0.1), fr=-0.4, Lr=-0.4, al=(-3.05, 0.25, -0.1), fl=-0.5, t=(-0.3, 0.0), h=-0.4, dn=-1),
+   K(ar=(-0.8, 0.0, 0.0), fr=-0.3, Lr=PI, al=(-0.8, 0.15, 0.0), fl=-0.4, t=(0.6, 0.0), h=0.4, dn=5,
+     lr=-1.0, sr=1.4, ll=0.6, sl=1.6))
+az('gust',      # 蝕の羽ばたき: arms flung back with the wings, then swept forward with them
+   K(ar=(0.6, 0.0, 1.3), al=(0.6, 0.0, -1.3), fr=-0.3, fl=-0.3, Lr=2.4, t=(-0.4, 0.0), h=-0.5),
+   K(ar=(-1.4, -0.6, 0.3), al=(-1.4, 0.6, -0.3), fr=-0.2, fl=-0.2, Lr=1.6, t=(0.5, 0.0), dn=2, ll=-0.5, sl=0.4))
+az('scapegoat', # 贖罪の山羊: the left hand points the foe out; the fist drawn back to the breast takes its soul in pledge
+   K(al=(-1.6, 0.1, 0.0), fl=0.0, h=0.3, t=(0.1, 0.4), ar=(-0.4, 0.3, 0.3), fr=-0.5, Lr=2.2),
+   K(al=(-0.9, 0.5, 0.0), fl=-1.8, h=-0.2, t=(-0.1, -0.4), ar=(-0.4, 0.3, 0.3), fr=-0.5, Lr=2.2, dn=0.5))
+az('dudael',    # 荒野の岩: both arms raised, the stones of Dudael called down with them
+   K(ar=(-3.0, 0.2, 0.5), fr=-0.2, Lr=-0.2, al=(-3.0, -0.2, -0.5), fl=-0.2, h=-0.6, t=(-0.3, 0.0), dn=-1),
+   K(ar=(-0.6, -0.2, 0.2), fr=0.0, Lr=2.5, al=(-0.6, 0.2, -0.2), fl=0.0, t=(0.8, 0.0), h=0.4, dn=4, lr=-0.4, sr=0.7, ll=-0.4, sl=0.7))
+az('disarm',    # 禁断の知識: the left hand grasps the foe's weapon at a distance and tears it away
+   K(al=(-1.2, 0.3, 0.0), fl=-0.8, t=(0.0, 0.3), h=0.2, ar=(-0.5, 0.3, 0.3), fr=-0.5, Lr=2.2),
+   K(al=(-1.85, 0.0, 0.0), fl=0.0, t=(0.3, 0.45), ll=-0.5, sl=0.4, dn=1, ar=(-0.5, 0.3, 0.3), fr=-0.5, Lr=2.2),
+   a=K(al=(-0.4, 0.6, 0.3), fl=-1.6, t=(-0.3, -0.5), lr=0.4, dn=0.5, ar=(-0.6, 0.3, 0.3), fr=-0.5, Lr=2.0),
+   beats=2, step=8)
+az('dive',      # 堕天の急降下: crouched, up on the wings with the blade over his head, down on the foe
+   K(ar=(-1.0, 0.0, 0.3), fr=-0.6, Lr=1.4, al=(0.4, 0.0, -0.5), t=(0.4, 0.0), dn=6, lr=-0.8, sr=1.5, ll=-0.8, sl=1.5),
+   K(ar=(-3.05, 0.1, 0.3), fr=-0.3, Lr=-0.6, al=(-2.4, 0.0, -0.7), fl=-0.3, t=(-0.3, 0.0), h=-0.3, dn=-3,
+     lr=-1.0, sr=1.5, ll=-0.6, sl=1.6),
+   a=K(ar=(-0.6, 0.0, 0.0), fr=-0.1, Lr=2.6, al=(-0.6, 0.0, -0.5), fl=-0.4, t=(0.8, 0.0), h=0.3, dn=5,
+       lr=-0.85, sr=0.8, ll=0.55, sl=0.7),
+   beats=2, step=14)
+az('chains',    # 解かれた鎖: arms crossed as if bound, flung apart (the chains loosed), then the chains hauled in
+   K(ar=(-1.3, -1.0, 0.0), fr=-1.4, Lr=1.2, al=(-1.3, 1.0, 0.0), fl=-1.4, t=(0.4, 0.0), h=0.4, dn=2),
+   K(ar=(-0.8, 0.0, 1.6), fr=0.0, Lr=2.2, al=(-0.8, 0.0, -1.6), fl=0.0, t=(-0.4, 0.0), h=-0.6, dn=-0.5),
+   a=K(ar=(0.4, 0.4, 0.6), fr=-1.6, Lr=1.4, al=(0.4, -0.4, -0.6), fl=-1.6, t=(-0.5, 0.0), dn=1.5, ll=-0.6, sl=0.3, lr=0.4),
+   beats=2, step=16)
+az('rally',     # 叛逆の号令: the blade raised to heaven against it, the left fist up, a roar
+   K(ar=(-1.2, -0.8, -0.1), fr=-0.6, Lr=1.4, al=(-0.6, 0.0, -0.4), fl=-0.6, t=(0.3, -0.3), h=0.3, dn=1),
+   K(ar=(-3.1, 0.0, 0.2), fr=0.0, Lr=0.0, al=(-2.2, 0.0, -0.6), fl=-0.8, h=-0.6, t=(-0.3, 0.1), dn=-0.5))
+
 ALL = dict(M)
 ALL.update(D)
+ALL.update(AZ)
 
 
 # --------------------------------------------------------------------------------------------------------------------
