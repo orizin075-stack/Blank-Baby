@@ -30,9 +30,18 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      # Gradle 8.14.3 fetched here, from Gradle's own address and checked against its published checksum, with
+      # patient retries: its download (GitHub's release files behind services.gradle.org) answered 504 for a
+      # while, and setup-gradle gives up after two tries. setup-gradle then only keeps the caches.
+      - name: Gradle 8.14.3
+        run: |
+          d=https://services.gradle.org/distributions/gradle-8.14.3-bin.zip
+          curl -fsSL --retry 40 --retry-all-errors --retry-delay 15 --retry-max-time 1200 -o "$RUNNER_TEMP/gradle.zip" "$d"
+          sum=$(curl -fsSL --retry 40 --retry-all-errors --retry-delay 15 --retry-max-time 600 "$d.sha256")
+          echo "$sum  $RUNNER_TEMP/gradle.zip" | sha256sum -c -
+          unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP/gradle-dist"
+          echo "$RUNNER_TEMP/gradle-dist/gradle-8.14.3/bin" >> "$GITHUB_PATH"
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.14.3'
       - name: Fetch the pack's mod jars
         run: |
           mkdir -p out
