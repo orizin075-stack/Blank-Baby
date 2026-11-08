@@ -153,9 +153,11 @@ def bone_matrices(rig, pose=None):
     for b in rig.bones:
         pp = b.parent.pivot if b.parent else (0, 0, 0)
         rx, ry, rz = b.rot
-        dx, dy, dz = pose.get(b.name, (0, 0, 0))
+        p = pose.get(b.name, (0, 0, 0))
+        dx, dy, dz = p[:3]
+        tx, ty, tz = (tuple(p[3:6]) + (0, 0, 0))[:3]     # optional offset (pixels), as ModelPart x/y/z += in game
         M = np.eye(4)
-        M[:3, 3] = [b.pivot[i] - pp[i] for i in range(3)]
+        M[:3, 3] = [b.pivot[i] - pp[i] + (tx, ty, tz)[i] for i in range(3)]
         R = np.eye(4); R[:3, :3] = rot_zyx(rx + dx, ry + dy, rz + dz)
         S = np.diag([*b.scale, 1.0])
         local = M @ R @ S

@@ -321,6 +321,15 @@ public final class KingRig extends RigModel<RoyalMob> {
             case "MOVE_KING_REVIVE_GLITCH" -> reviveGlitch(e, u, age);
             case "MOVE_KING_REVIVE_DIVINE" -> reviveDivine(u, age);
             default -> {
+                // (055) the motions of jp.oror.reborn.king.KingMotions: one of his own for each of his seventy moves
+                // and for every deed that had none
+                jp.oror.reborn.king.KingMotions.Motion mo =
+                    jp.oror.reborn.king.KingMotions.get(show.mechanic().substring(10).toLowerCase(java.util.Locale.ROOT));
+                if (mo != null) {
+                    float[] hold = !this.arms[this.stanceNow].isEmpty() ? HOLD[this.stanceNow] : NO_HOLD;
+                    play(motion(mo, u * Math.max(1, show.length()), show.windup(), Math.max(1, show.length()), hold));
+                    return;
+                }
                 float[][] ps = POSES.get(show.mechanic());
                 if (ps == null) {
                     // the arsenal's seventy motions and the later deeds (jp.oror.reborn.king.KingArsenal)
@@ -365,6 +374,129 @@ public final class KingRig extends RigModel<RoyalMob> {
                 }
             }
         }
+    }
+
+    private static final float[] NO_HOLD = {0F, 0F, 0F, 0F};
+    /** KingMotions' slots that may hold whole turns (hips, torso and head turns, the weapons twirled in the fists). */
+    private static final int[] TURNS = {18, 7, 12, 13, 20};
+
+    /**
+     * (055) A motion at tick t of its length: from rest into the windup key (reached a moment before the first blow
+     * lands, at the windup tick, as the server lands it), then a swing into each strike key just as each blow lands
+     * (the strikes alternating with the second key if there is one, a pull back towards the windup between them when
+     * there is none or the motion asks it), a hold, and back to rest by the end (any whole turns dropped first, so a
+     * spin never unwinds). The arms' and forearms' x in the keys are absolute: the stance's hold comes off them here.
+     */
+    static float[] motion(jp.oror.reborn.king.KingMotions.Motion mo, float t, int windup, int length, float[] hold) {
+        int n = jp.oror.reborn.king.KingMotions.SLOTS;
+        float[] rest = new float[n];
+        float[] w = offHold(mo.windup(), hold), s = offHold(mo.strike(), hold);
+        float[] a = mo.alt() == null ? null : offHold(mo.alt(), hold);
+        int beats = Math.max(1, mo.beats());
+        float step = Math.max(1, mo.step());
+        float room = length - windup - 4F;
+        if (beats > 1 && (beats - 1) * step > room) {
+            step = Math.max(2F, room / (beats - 1));
+        }
+        float sw = Mth.clamp(windup / 3F, 2F, 4F);
+        List<Float> ts = new ArrayList<>();
+        List<float[]> ks = new ArrayList<>();
+        ts.add(0F);
+        ks.add(rest);
+        ts.add(Math.max(1F, windup - sw));
+        ks.add(w);
+        float[] prev = w;
+        float last = windup;
+        for (int k = 0; k < beats; k++) {
+            float hit = windup + k * step;
+            float[] key = a != null && (k & 1) == 1 ? a : s;
+            float swing = k == 0 ? sw : Math.min(sw, step * 0.6F);
+            if (k > 0 && (a == null || mo.recoil()) && step >= 4F) {
+                float[] r = lerp(prev, w, 0.6F);
+                ts.add(hit - step + Math.min(step * 0.35F, 2F));
+                ks.add(prev);
+                ts.add(hit - swing);
+                ks.add(r);
+                prev = r;
+            } else if (hit - swing > ts.get(ts.size() - 1)) {
+                ts.add(hit - swing);
+                ks.add(prev);
+            }
+            ts.add(hit);
+            ks.add(key);
+            prev = key;
+            last = hit;
+        }
+        float holdEnd = Math.min(length - 1F, last + Math.max(2F, (length - last) * 0.35F));
+        if (holdEnd > last) {
+            ts.add(holdEnd);
+            ks.add(prev);
+        }
+        float[] wrapped = prev.clone();
+        for (int i : TURNS) {
+            wrapped[i] = Mth.wrapDegrees(wrapped[i] * Mth.RAD_TO_DEG) * Mth.DEG_TO_RAD;
+        }
+        ts.add(Math.max(holdEnd, last));
+        ks.add(wrapped);
+        ts.add((float) Math.max(length, last + 2));
+        ks.add(rest);
+        if (t <= 0F) {
+            return rest;
+        }
+        for (int i = 0; i + 1 < ts.size(); i++) {
+            float t0 = ts.get(i), t1 = ts.get(i + 1);
+            if (t >= t0 && t < t1 && t1 > t0) {
+                return lerp(ks.get(i), ks.get(i + 1), smooth((t - t0) / (t1 - t0)));
+            }
+        }
+        return rest;
+    }
+
+    private static float[] offHold(float[] v, float[] hold) {
+        float[] o = v.clone();
+        o[0] -= hold[0];
+        o[10] -= hold[1];
+        o[3] -= hold[2];
+        o[11] -= hold[3];
+        return o;
+    }
+
+    private static float[] lerp(float[] p, float[] q, float f) {
+        float[] o = new float[p.length];
+        for (int i = 0; i < p.length; i++) {
+            o[i] = p[i] + (q[i] - p[i]) * f;
+        }
+        return o;
+    }
+
+    /** A motion's values onto his parts (KingMotions' slots). */
+    private void play(float[] v) {
+        add("arm_r", v[0], v[1], v[2]);
+        add("arm_l", v[3], v[4], v[5]);
+        add("torso", v[6], v[7], v[19]);
+        add("head", v[8], v[20], v[21]);
+        ModelPart root = p("root");
+        if (root != null) {
+            root.y += v[9];
+        }
+        add("fore_r", v[10], 0, 0);
+        add("fore_l", v[11], 0, 0);
+        ModelPart wr = this.weaponR.get(this.stanceNow), wl = this.weaponL.get(this.stanceNow);
+        if (this.arms[this.stanceNow].isEmpty()) {
+            wr = p("sword");
+            wl = p("shield");
+        }
+        if (wr != null) {
+            wr.xRot += v[12];
+        }
+        if (wl != null) {
+            wl.xRot += v[13];
+        }
+        add("leg_r", v[14], 0, 0);
+        add("leg_l", v[15], 0, 0);
+        add("shin_r", v[16], 0, 0);
+        add("shin_l", v[17], 0, 0);
+        add("hips", 0, v[18], 0);
     }
 
     private static float smooth(float t) {

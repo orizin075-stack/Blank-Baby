@@ -35,8 +35,10 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
  * <li>魂喰らい, the soul-eating: pale blue fire on the foe; while it burns, withering, weakness, slowness, heavy
  * hands, hunger, sickness and darkness go on; a foe that strikes him three times breaks the chain; one that lets it burn
  * its full fifteen seconds has its soul taken (ten blows each its whole life, half its levels).</li>
- * <li>蝿の帳, the veil of flies: for twelve seconds the ground for twenty-eight blocks about him is black with flies:
- * blind, dark, hungry, poisoned, eaten a little every second, and flies of his (vexes) loose in it.</li>
+ * <li>蝿の帳, the veil of flies: for twelve seconds the ground for twenty-eight blocks about him is black with flies
+ * (the user: a host of flies covering the whole field): a swarm of specks over all of it, thick clouds on every foe,
+ * blind, dark, hungry, poisoned, eaten a little every second, and flies of his (vexes) loosed in it, eight at once
+ * and four more every three seconds, up to twenty-four.</li>
  * <li>His creatures (the flies, the twisted angels, the black wings, the broken one's errors) are never his foes or his
  * targets, and they go when their time is up.</li>
  * </ul>
@@ -83,21 +85,30 @@ public final class KingSouls {
         return MARKS.containsKey(v);
     }
 
-    static void veil(RoyalMob king, ServerLevel sl, int ticks) {
+    public static void veil(RoyalMob king, ServerLevel sl, int ticks) {
         VEILS.add(new Veil(king, sl, sl.getGameTime() + ticks));
-        for (int i = 0; i < 8; i++) {
+        flies(king, sl, 8);
+    }
+
+    /** Flies of his loosed about him (up to twenty-four alive near him). */
+    private static void flies(RoyalMob king, ServerLevel sl, int n) {
+        int alive = sl.getEntitiesOfClass(Vex.class, king.getBoundingBox().inflate(40), KingSouls::his).size();
+        for (int i = 0; i < n && alive < 24; i++, alive++) {
             Vex fly = EntityType.VEX.create(sl);
             if (fly == null) {
                 continue;
             }
-            double a = i * Math.PI / 4;
+            double a = i * Math.PI * 2 / n + sl.random.nextDouble();
             fly.moveTo(king.getX() + Math.cos(a) * 3, king.getY() + 2.5, king.getZ() + Math.sin(a) * 3, 0F, 0F);
             fly.setOwner(king);
-            fly.setLimitedLife(20 * 24);
+            fly.setLimitedLife(20 * 20);
             spawned(fly, "蝿の眷属", ChatFormatting.DARK_GRAY);
             sl.addFreshEntity(fly);
-            if (king.getTarget() != null) {
-                fly.setTarget(king.getTarget());
+            KingDeeds.count(king, KingDeeds.COUNT, "veil_flies");
+            List<LivingEntity> fs = KingForms.foes(king, sl, 28);
+            LivingEntity t = !fs.isEmpty() ? fs.get(sl.random.nextInt(fs.size())) : king.getTarget();
+            if (t != null) {
+                fly.setTarget(t);
             }
         }
     }
@@ -126,8 +137,9 @@ public final class KingSouls {
         }
     }
 
-    /** A blow on him by a marked foe loosens its chain; three break it. */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    /** A blow on him by a marked foe loosens its chain; three break it (a blow his field takes or his majesty turns
+     * aside is still a blow that reached him). */
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
     public static void strikes(LivingIncomingDamageEvent e) {
         if (!KingCourt.isKing(e.getEntity()) || !(e.getSource().getEntity() instanceof LivingEntity by)) {
             return;
@@ -186,12 +198,27 @@ public final class KingSouls {
                 continue;
             }
             Vec3 c = vl.king.position();
-            if (now % 3 == 0) {
-                for (int i = 0; i < 40; i++) {
-                    double a = sl.random.nextDouble() * Math.PI * 2, r = Math.sqrt(sl.random.nextDouble()) * 28;
-                    sl.sendParticles(i % 3 == 0 ? KingDeeds.BLACK : ParticleTypes.SQUID_INK, c.x + Math.cos(a) * r, c.y + 0.3 + sl.random.nextDouble() * 4,
-                        c.z + Math.sin(a) * r, 1, 0.1, 0.1, 0.1, 0.01);
+            if (now % 2 == 0) {
+                // the swarm over the whole field: clouds of specks (one packet each) thrown down all over the ground
+                for (int i = 0; i < 14; i++) {
+                    double a = sl.random.nextDouble() * Math.PI * 2, r = Math.sqrt(sl.random.nextDouble()) * 27;
+                    sl.sendParticles(KingDeeds.BLACK, c.x + Math.cos(a) * r, c.y + 0.6 + sl.random.nextDouble() * 2.4, c.z + Math.sin(a) * r,
+                        28, 2.4, 0.9, 2.4, 0.02);
                 }
+                for (int i = 0; i < 5; i++) {
+                    double a = sl.random.nextDouble() * Math.PI * 2, r = Math.sqrt(sl.random.nextDouble()) * 27;
+                    sl.sendParticles(ParticleTypes.SQUID_INK, c.x + Math.cos(a) * r, c.y + 1 + sl.random.nextDouble() * 4, c.z + Math.sin(a) * r,
+                        10, 2.0, 1.2, 2.0, 0.01);
+                }
+            }
+            if (now % 6 == 0) {
+                // and thick on every foe in it
+                for (LivingEntity v : KingForms.foes(vl.king, sl, 28)) {
+                    sl.sendParticles(KingDeeds.BLACK, v.getX(), v.getY() + v.getBbHeight() * 0.6, v.getZ(), 45, 0.7, 0.8, 0.7, 0.03);
+                }
+            }
+            if (now % 60 == 0 && vl.until - now > 30) {
+                flies(vl.king, sl, 4);
             }
             if (now % 20 == 0) {
                 for (LivingEntity v : KingForms.foes(vl.king, sl, 28)) {

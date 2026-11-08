@@ -99,6 +99,9 @@ public final class KingStoryTest {
         boolean movesDone;
         String lastId;
         Mob lastDummy;
+        /** (055) his field as it was before it was broken for the souls' and majesty's trials; the trials' dummies */
+        CompoundTag field3;
+        Mob soulA, soulB, striker;
         final StringBuilder notes = new StringBuilder();
         long nextTrial = -1, after = -1;
         final Map<String, Integer> hitsBefore = new LinkedHashMap<>();
@@ -315,6 +318,10 @@ public final class KingStoryTest {
             for (int i = 0; i < 3; i++) {
                 sturdy(spawn(r, EntityType.ZOMBIE, 3 + i, -3));
             }
+            // (055) his field broken, as the rebel lord breaks it: then a third of the blows on him go through him
+            // (MISS); with his field whole it takes them before ever they reach him
+            r.king.sovereign().incoming(1.0E30F);
+            out.put("breached2", r.king.atBreached());
         }
         if (age > 330 && age < 530) {
             // the broken king fights: his broken hits, his phantoms, his error arm; the zombies strike at him too
@@ -325,6 +332,7 @@ public final class KingStoryTest {
             if (age % 10 == 0 && !zs.isEmpty()) {
                 r.king.doHurtTarget(zs.get(0));
                 Zombie z = zs.get(zs.size() - 1);
+                r.king.invulnerableTime = 0;
                 r.king.hurt(r.king.damageSources().mobAttack(z), 4F);
             }
             if (zs.size() < 3 && age % 20 == 0) {
@@ -349,13 +357,46 @@ public final class KingStoryTest {
             out.put("phase", r.king.lifePhase());
             out.put("called", r.king.getPersistentData().getInt("OrorKingCalled"));
             out.put("mainhand", net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(r.king.getMainHandItem().getItem()).toString());
-            r.trial = 0;
-            r.nextTrial = age;
-            // while the deeds are tried one by one he does nothing of his own, and the players stand well away
+            // while his souls, his majesty and then the deeds are tried he does nothing of his own, and the players
+            // stand well away
             r.king.getPersistentData().putBoolean(KingForms.QUIET, true);
             for (Tester t : List.of(r.friend, r.rebel, r.keeper)) {
                 t.moveTo(r.at.getX() + 0.5, r.at.getY() + 40, r.at.getZ() - 60.5, 0F, 0F);
             }
+            // (055) his field broken for a while (one blow in eight then turned aside by his majesty); two foes given
+            // the soul fire: one strikes him three times and is free, the other burns its fifteen seconds through
+            r.field3 = r.king.sovereign().save();
+            r.king.sovereign().incoming(1.0E30F);
+            out.put("breached3", r.king.atBreached());
+            r.soulA = sturdy(spawn(r, EntityType.ZOMBIE, 6, -4));
+            r.soulB = sturdy(spawn(r, EntityType.ZOMBIE, 6, 4));
+            r.striker = sturdy(spawn(r, EntityType.ZOMBIE, -6, 0));
+            KingSouls.mark(r.king, r.soulA);
+            KingSouls.mark(r.king, r.soulB);
+        }
+        if (age > 700 && age <= 760 && age % 2 == 0 && r.striker != null) {
+            r.king.invulnerableTime = 0;
+            r.king.hurt(r.king.damageSources().mobAttack(r.striker), 2F);
+        }
+        if ((age == 770 || age == 785 || age == 800) && r.soulB != null) {
+            r.king.invulnerableTime = 0;
+            r.king.hurt(r.king.damageSources().mobAttack(r.soulB), 1F);
+        }
+        if (age == 810 && r.soulA != null) {
+            out.put("majesty", r.king.getPersistentData().getCompound(KingDeeds.COUNT).getInt("majesty"));
+            out.put("chainBroken", !KingSouls.marked(r.soulB));
+            out.put("soulBurning", KingSouls.marked(r.soulA));
+            r.king.sovereign().load(r.field3);
+            out.put("fieldWhole", !r.king.atBreached());
+        }
+        if (age == 1020 && r.soulA != null) {
+            out.put("soulTaken", r.king.getPersistentData().getCompound(KingDeeds.COUNT).getInt("soul_taken"));
+            out.put("soulFreed", !KingSouls.marked(r.soulA));
+            for (Mob m : List.of(r.soulA, r.soulB, r.striker)) {
+                m.discard();
+            }
+            r.trial = 0;
+            r.nextTrial = age;
         }
         int deeds = KingDeeds.DEEDS.size(), total = deeds + KingArsenal.MOVES.size();
         if (!r.movesDone && r.trial >= deeds && r.trial < total && age >= r.nextTrial) {
@@ -439,6 +480,7 @@ public final class KingStoryTest {
                 out.put("deleted", r.king.getPersistentData().getInt("OrorKingDeleted"));
                 out.put("bolts", r.king.getPersistentData().getInt("OrorKingBolts"));
                 out.put("swarms", r.king.getPersistentData().getInt("OrorKingSwarms"));
+                out.put("veilFlies", c.getInt("veil_flies"));
                 r.trial = -1;
                 r.after = age + 10;
                 r.king.getPersistentData().remove(KingForms.QUIET);
@@ -819,7 +861,10 @@ public final class KingStoryTest {
             && o.get("scale1") instanceof Double s1 && o.get("scale2") instanceof Double s2 && o.get("scale3") instanceof Double s3 && s1 > 1.0 && s2 > s1 && s3 > s2;
         boolean deeds = num(o, "deedsLanded") >= KingDeeds.DEEDS.size() - 1;
         boolean moves = num(o, "movesLandedN") >= KingArsenal.MOVES.size() - 3;
-        boolean broken = num(o, "missOut") + num(o, "lagHits") + num(o, "missIn") + num(o, "phantoms") + num(o, "errorArm") > 0;
+        boolean broken = num(o, "missOut") + num(o, "lagHits") + num(o, "missIn") + num(o, "phantoms") + num(o, "errorArm") > 0
+            && num(o, "missIn") > 0;
+        boolean souls = Boolean.TRUE.equals(o.get("chainBroken")) && Boolean.TRUE.equals(o.get("soulBurning")) && num(o, "soulTaken") >= 1
+            && Boolean.TRUE.equals(o.get("soulFreed")) && num(o, "majesty") >= 1 && num(o, "veilFlies") >= 12;
         boolean slayer = Boolean.TRUE.equals(o.get("godSlayer")) && Boolean.TRUE.equals(o.get("fieldTook")) && Boolean.TRUE.equals(o.get("ceilingHeld"))
             && Boolean.TRUE.equals(o.get("godWeakened"));
         boolean phantasm = Boolean.TRUE.equals(o.get("phantasmActive")) && o.get("phantasmRatio") instanceof Double pr && pr >= 9.5
@@ -840,7 +885,8 @@ public final class KingStoryTest {
         o.put("passBroken", broken);
         o.put("passGodSlayer", slayer);
         o.put("passPhantasm", phantasm);
-        o.put("pass", peace && war && rebels && forms && crown && chamber && deeds && moves && broken && slayer && phantasm);
+        o.put("passSouls", souls);
+        o.put("pass", peace && war && rebels && forms && crown && chamber && deeds && moves && broken && slayer && phantasm && souls);
         StringBuilder b = new StringBuilder("{");
         o.forEach((k, v) -> b.append(b.length() > 1 ? "," : "").append('"').append(k).append("\":")
             .append(v instanceof String s ? "\"" + s.replace("\"", "'") + "\"" : String.valueOf(v)));
