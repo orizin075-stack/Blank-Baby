@@ -2,6 +2,7 @@ package jp.oror.reborn.royal;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import jp.oror.reborn.client.RigModel;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Evoker;
 import net.neoforged.api.distmarker.Dist;
@@ -47,6 +49,56 @@ public final class AzazelRenderer extends MobRenderer<Evoker, AzazelRig> {
     static boolean isAzazel(Evoker e) {
         Component n = e.getCustomName();
         return n != null && n.getString().contains("アザゼル");
+    }
+
+    /**
+     * The living renderer's own drawing, without the RenderLivingEvent it announces it with. Epic Fight answers that
+     * event for every evoker (it patches the evoker type): it cancels it and draws its own illager armature instead,
+     * with this renderer's texture, so the first look at the new Azazel showed an orange-striped man of boxes, without
+     * his wings, horns, crown or halo. Drawn here unannounced, he is drawn as his rig.
+     */
+    @Override
+    public void render(Evoker e, float yaw, float partial, PoseStack pose, MultiBufferSource buffers, int light) {
+        pose.pushPose();
+        this.model.attackTime = this.getAttackAnim(e, partial);
+        this.model.riding = e.isPassenger();
+        this.model.young = e.isBaby();
+        float body = Mth.rotLerp(partial, e.yBodyRotO, e.yBodyRot);
+        float head = Mth.rotLerp(partial, e.yHeadRotO, e.yHeadRot);
+        float netHead = Mth.wrapDegrees(head - body);
+        float pitch = Mth.wrapDegrees(Mth.lerp(partial, e.xRotO, e.getXRot()));
+        float size = e.getScale();
+        pose.scale(size, size, size);
+        float age = this.getBob(e, partial);
+        this.setupRotations(e, pose, age, body, partial, size);
+        pose.scale(-1.0F, -1.0F, 1.0F);
+        this.scale(e, pose, partial);
+        pose.translate(0.0F, -1.501F, 0.0F);
+        float speed = 0.0F;
+        float walked = 0.0F;
+        if (!e.isPassenger() && e.isAlive()) {
+            speed = Math.min(1.0F, e.walkAnimation.speed(partial));
+            walked = e.walkAnimation.position(partial);
+        }
+        this.model.prepareMobModel(e, walked, speed, partial);
+        this.model.setupAnim(e, walked, speed, age, netHead, pitch);
+        Minecraft mc = Minecraft.getInstance();
+        boolean visible = this.isBodyVisible(e);
+        boolean ghost = !visible && mc.player != null && !e.isInvisibleTo(mc.player);
+        RenderType type = this.getRenderType(e, visible, ghost, mc.shouldEntityAppearGlowing(e));
+        if (type != null) {
+            this.model.renderToBuffer(pose, buffers.getBuffer(type), light, getOverlayCoords(e, this.getWhiteOverlayProgress(e, partial)),
+                ghost ? 0x26FFFFFF : -1);
+        }
+        if (!e.isSpectator()) {
+            for (RenderLayer<Evoker, AzazelRig> layer : this.layers) {
+                layer.render(pose, buffers, light, e, walked, speed, partial, age, netHead, pitch);
+            }
+        }
+        pose.popPose();
+        if (this.shouldShowName(e)) {
+            this.renderNameTag(e, e.getDisplayName(), pose, buffers, light, partial);
+        }
     }
 
     @Override
