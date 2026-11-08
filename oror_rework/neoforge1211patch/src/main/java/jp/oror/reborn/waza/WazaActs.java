@@ -302,6 +302,7 @@ final class WazaActs {
             case CONTROL -> {
                 for (LivingEntity t : targets(c, w.range())) {
                     hurt(c, t, share(b, w));
+                    WazaWorld.status(t, w.id(), w.tier(), lasting(w), b, null, null);
                     controlVerbs(c, t);
                     WazaWorld.add(new WazaWorld.Line(c, t, 30, 0));
                 }
@@ -316,8 +317,10 @@ final class WazaActs {
             }
             case GROWTH -> {
                 for (WazaWorld.Thing t : WazaWorld.of(c, WazaWorld.GROWTH)) {
-                    if (t.stage >= 1 && t.stage <= 2) {
-                        for (LivingEntity e : enemiesNear(b, t.pos, Math.max(1.2F, t.radius))) {
+                    int st = t instanceof WazaWorld.Growth g ? g.stageNow() : t.stage;
+                    if (st >= 1 && st <= 2) {
+                        float r = st == 1 ? 1.2F : 1.8F + w.tier() * 0.4F;
+                        for (LivingEntity e : enemiesNear(b, t.pos, r)) {
                             if (hurt(c, e, share(b, w))) {
                                 hitVerbs(c, e);
                             }
@@ -344,6 +347,8 @@ final class WazaActs {
         switch (w.behaviour()) {
             case STATUS -> {
                 for (LivingEntity t : targets(c, Math.max(6, w.range()))) {
+                    // the technique's own effect, its strength and its end, on its target (the design's 固有効果ID)
+                    WazaWorld.status(t, w.id(), w.tier(), lasting(w), b, null, null);
                     statusVerbs(c, t);
                     fx(c, 10, t, t.getX(), t.getY() + t.getBbHeight() + 0.4, t.getZ(), 0);
                 }
@@ -397,19 +402,31 @@ final class WazaActs {
                 continue;
             }
             int arc = w.arcs().length > 0 ? w.arcs()[i % w.arcs().length] : 0;
-            float u0 = (a - (h - 2) - 1) / 2F, u1 = (a - (h - 2)) / 2F;
-            Vec3[] from = blade(c, arc, Math.max(0, u0)), to = blade(c, arc, u1);
+            float u0 = Math.max(0, (a - (h - 2) - 1) / 2F), u1 = (a - (h - 2)) / 2F;
+            // the tick's part of the swing in small steps (a whole turn is half a circle a tick): each step's blade
+            // against the step before's, so that nothing between them is passed over
+            int steps = arc >= 5 ? 10 : 5;
+            Vec3[][] path = new Vec3[steps + 1][];
+            for (int s = 0; s <= steps; s++) {
+                path[s] = blade(c, arc, u0 + (u1 - u0) * s / steps);
+            }
             int key = i * 100000;
-            for (LivingEntity e : enemiesNear(c.b, c.b.position(), w.range() + c.b.getBbWidth() + 2)) {
+            float far = w.range() + c.b.getBbWidth() + c.b.getBbHeight() * 0.3F + 2;
+            for (LivingEntity e : enemiesNear(c.b, c.b.position(), far)) {
                 if (c.struck.contains(key + e.getId())) {
                     continue;
                 }
                 AABB box = e.getBoundingBox().inflate(0.25);
                 boolean touched = false;
-                for (int k = 0; k <= 4 && !touched; k++) {
-                    double f = k / 4.0;
-                    Vec3 p0 = from[0].lerp(from[1], f), p1 = to[0].lerp(to[1], f);
-                    touched = box.contains(p0) || box.contains(p1) || box.clip(p0, p1).isPresent();
+                for (int s = 0; s < steps && !touched; s++) {
+                    Vec3[] from = path[s], to = path[s + 1];
+                    for (int k = 0; k <= 4 && !touched; k++) {
+                        double f = k / 4.0;
+                        Vec3 p0 = from[0].lerp(from[1], f), p1 = to[0].lerp(to[1], f);
+                        touched = box.contains(p0) || box.contains(p1) || box.clip(p0, p1).isPresent();
+                    }
+                    // and along the blade itself, where it is at the end of the step
+                    touched |= box.clip(to[0], to[1]).isPresent();
                 }
                 if (touched) {
                     c.struck.add(key + e.getId());
@@ -424,7 +441,8 @@ final class WazaActs {
     /** The blade at u (0 to 1 through its swing): from the shoulder to the tip. */
     private static Vec3[] blade(WazaEngine.Cast c, int arc, float u) {
         SupremeEntity b = c.b;
-        float reach = c.w.range() + b.getBbWidth() * 0.5F;
+        // a big body reaches further, and from higher up
+        float reach = c.w.range() + b.getBbWidth() * 0.5F + b.getBbHeight() * 0.25F;
         Vec3 fwd = new Vec3(c.dir.x, 0, c.dir.z);
         fwd = fwd.lengthSqr() < 1e-4 ? b.getLookAngle() : fwd.normalize();
         Vec3 side = new Vec3(-fwd.z, 0, fwd.x);
@@ -461,8 +479,8 @@ final class WazaActs {
             }
             case 5 -> { // about the feet: a ring spreading on the ground
                 double ang = u * Math.PI * 2;
-                tipDir = fwd.scale(Math.cos(ang)).add(side.scale(Math.sin(ang))).add(up.scale(-0.5));
-                shoulder = b.position().add(0, 0.3, 0);
+                tipDir = fwd.scale(Math.cos(ang)).add(side.scale(Math.sin(ang))).add(up.scale(-0.08));
+                shoulder = b.position().add(0, 0.5, 0);
             }
             case 6 -> { // a whole turn
                 double ang = Mth.lerp(u, -Math.PI, Math.PI);
@@ -507,7 +525,13 @@ final class WazaActs {
             float each = dmg / Math.max(1, pts.size());
             for (Vec3 at : pts) {
                 Vec3 g = ground(sl, at);
-                WazaWorld.Bolt bolt = new WazaWorld.Bolt(c, g.add(0, 14, 0), new Vec3(0, -1.2, 0), 0.6F + w.tier() * 0.25F, 30, i, each);
+                // from as high as there is open sky over the spot (up to twelve blocks): nothing starts inside a block
+                int up = 2;
+                while (up < 12 && sl.getBlockState(BlockPos.containing(g.add(0, up + 1, 0))).getCollisionShape(sl,
+                    BlockPos.containing(g.add(0, up + 1, 0))).isEmpty()) {
+                    up++;
+                }
+                WazaWorld.Bolt bolt = new WazaWorld.Bolt(c, g.add(0, up, 0), new Vec3(0, -1.2, 0), 0.6F + w.tier() * 0.25F, 30, i, each);
                 bolt.falls = true;
                 WazaWorld.add(bolt);
             }
@@ -761,10 +785,17 @@ final class WazaActs {
         }
     }
 
+    /** The verbs that leave something on the body for a while (a status technique always leaves one). */
+    private static final java.util.Set<String> LINGERING = java.util.Set.of("STOP", "GRAVITY", "SHRINK", "SILENCE", "BIND", "BURN", "FROST",
+        "POISON", "WITHER", "BLIND", "WEAKEN", "SLOW", "ARMORBREAK", "CONFUSE", "MARK", "FEAR");
+
     private static void statusVerbs(WazaEngine.Cast c, LivingEntity t) {
-        List<String> vs = c.w.verbs().stream().filter(v -> !isSupport(v)).toList();
-        if (vs.isEmpty()) {
-            vs = List.of("WEAKEN", "SLOW");
+        List<String> vs = new ArrayList<>(c.w.verbs().stream().filter(v -> !isSupport(v)).toList());
+        if (vs.stream().noneMatch(LINGERING::contains)) {
+            vs.add(vs.isEmpty() ? "SLOW" : "WEAKEN");
+            if (vs.size() == 1) {
+                vs.add("WEAKEN");
+            }
         }
         for (String v : vs) {
             enemyVerb(c, t, v, false);

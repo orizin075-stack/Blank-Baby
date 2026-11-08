@@ -212,10 +212,10 @@ public final class WazaTest {
 
     private static double dummyDistance(SupremeEntity b, Waza w) {
         return switch (w.behaviour()) {
-            case MELEE -> Math.max(1.2, w.range() * 0.6) + b.getBbWidth() * 0.5 + 0.3;
-            case GROWTH, FIELD -> 4;
-            default -> 5;
-        } + b.getBbWidth() * 0.25;
+            case MELEE -> Math.max(1.2, w.range() * 0.6) + b.getBbWidth() * 0.5;
+            case GROWTH, FIELD -> 4 + b.getBbWidth() * 0.25;
+            default -> 5 + b.getBbWidth() * 0.25;
+        };
     }
 
     private static void step(ServerLevel level, Yard y, long now) {
@@ -344,13 +344,15 @@ public final class WazaTest {
         boolean reached = c.landed > 0 || dummyHits > 0;
         String why = "";
         boolean ok = switch (w.behaviour()) {
-            case MELEE, PROJECTILE, BEAM, FIELD, SONG, GROWTH, CONTROL -> reached;
+            case MELEE, PROJECTILE, BEAM, FIELD, SONG, GROWTH -> reached;
+            case CONTROL -> reached && y.dummy != null && WazaWorld.hasStatus(y.dummy, w.id());
             case CURSE -> reached || c.notes.stream().anyMatch(n -> n.startsWith("mark:"));
             case SUMMON -> c.notes.stream().anyMatch(n -> n.startsWith("summoned:") && !n.equals("summoned:0")) || reached;
             case MOVE -> y.startPos != null && y.b.position().distanceTo(y.startPos) >= 1.0;
             case GUARD -> y.guardSeen && (y.arrow == null || y.guardStrength >= 0);
-            case STATUS -> y.dummy != null && (y.dummy.getActiveEffects().size() > y.effectsBefore || y.dummy.getPersistentData().getLong("ororFreezeUntil")
-                > c.start || c.notes.contains("swap") || y.dummy.hasEffect(MobEffects.GLOWING));
+            case STATUS -> y.dummy != null && WazaWorld.hasStatus(y.dummy, w.id()) && (y.dummy.getActiveEffects().size() > y.effectsBefore
+                || WazaWorld.statusCount(y.dummy) >= 2 || y.dummy.getPersistentData().getLong("ororFreezeUntil") > c.start
+                || c.notes.contains("swap"));
             case HEAL -> y.b.getHealth() > y.healthBefore && y.dummy != null && y.dummy.getHealth() <= y.dummyHealthBefore + 0.01F;
             case BUILD -> y.maxDeviceStage >= 3;
             case REWIND -> c.notes.stream().anyMatch(n -> n.equals("rewound:enemy") || n.startsWith("rewound:self ") && !n.equals("rewound:self 0"));

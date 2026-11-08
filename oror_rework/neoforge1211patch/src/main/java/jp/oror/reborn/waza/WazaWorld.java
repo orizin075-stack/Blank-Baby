@@ -306,9 +306,15 @@ public final class WazaWorld {
         /** grown by its first hit, so that the hit has a body to strike with (its hitbox changes with each stage) */
         Growth(WazaEngine.Cast c, Vec3 pos, int life, int firstHit) {
             super(GROWTH, c, pos, 0.6F, life);
-            this.leafAt = Math.max(1, firstHit / 2);
+            this.leafAt = firstHit <= 1 ? 0 : firstHit / 2;
             this.grownAt = Math.max(this.leafAt + 1, firstHit);
             this.witherAt = Math.max(this.grownAt + 4, life - 12);
+        }
+
+        /** Its stage as of this tick (sprout, leaf, grown, withering). */
+        int stageNow() {
+            int a = this.age();
+            return a < this.leafAt ? 0 : a < this.grownAt ? 1 : a < this.witherAt ? 2 : 3;
         }
 
         @Override
@@ -318,7 +324,7 @@ public final class WazaWorld {
                 remove(this);
                 return;
             }
-            int s = a < this.leafAt ? 0 : a < this.grownAt ? 1 : a < this.witherAt ? 2 : 3;
+            int s = this.stageNow();
             this.radius = switch (s) {
                 case 0 -> 0F;
                 case 1 -> 1.0F;
@@ -493,6 +499,15 @@ public final class WazaWorld {
         Map<String, Status> m = STATUS.get(t.getUUID());
         Status s = m == null ? null : m.get(effect);
         return s != null && s.until() > t.level().getGameTime();
+    }
+
+    public static int statusCount(LivingEntity t) {
+        Map<String, Status> m = STATUS.get(t.getUUID());
+        if (m == null) {
+            return 0;
+        }
+        long now = t.level().getGameTime();
+        return (int) m.values().stream().filter(s -> s.until() > now).count();
     }
 
     static void clearStatus(LivingEntity t, String effect) {
