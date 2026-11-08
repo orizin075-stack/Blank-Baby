@@ -97,12 +97,21 @@ jobs:
             grep -n -E '\[look\]|OROR|ERROR|FATAL|Exception|Caused by|Mixin apply failed|InvalidInjection' $L | cut -c1-500 | head -n 3000 > $OUT/latest-filtered.log
           fi
           ls -la $OUT
+      # Not from a cancelled run (its empty folder once landed first and made the next run's rebase fail).
+      # The results are laid on the branch's newest commit, so a commit pushed while the client ran cannot
+      # make the push fail: only the results folder is taken from this run.
       - name: Commit the results
-        if: always()
+        if: ${{ !cancelled() }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f "$OUT"
-          git commit -m "OROR look check ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          for i in 1 2 3 4; do
+            git fetch -q origin "${GITHUB_REF_NAME}"
+            git reset -q FETCH_HEAD
+            git add -A -f "$OUT"
+            git diff --cached --quiet && exit 0
+            git commit -q -m "OROR look check ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
