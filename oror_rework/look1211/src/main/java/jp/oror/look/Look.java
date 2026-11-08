@@ -372,7 +372,7 @@ public final class Look {
             PLAN.put(at + 50, () -> shot(mc, String.format(java.util.Locale.ROOT, "56_%d_%s_hold", weapon, nm)));
             PLAN.put(at + 52, () -> view(mc, 8 * k, dy, 10, 90F, 4F));
             PLAN.put(at + 62, () -> shot(mc, String.format(java.util.Locale.ROOT, "56_%d_%s_hold_side", weapon, nm)));
-            PLAN.put(at + 64, () -> view(mc, 6 * k, dy, 10 - 9 * k, 33.7F, 6F));
+            PLAN.put(at + 64, () -> view(mc, 4.6 * k, dy, 10 - 7 * k, 33.3F, 6F));
             int j = 0;
             for (Object m : moves) {
                 try {
@@ -409,12 +409,19 @@ public final class Look {
         IntegratedServer server = mc.getSingleplayerServer();
         mc.options.hideGui = true;
         server.execute(() -> {
-            command(server, "kill @e[tag=oror_look]");
-            command(server, "kill @e[type=minecraft:vex]");
+            // the kings of the earlier scenes taken away outright: /kill only sends them back from death (they
+            // return), and the divine one's storm stopped, so that one king alone stands in clear daylight
+            ServerLevel level = server.overworld();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 48, sy - 12, sz - 24, sx + 48, sy + 40, sz + 48),
+                x -> x.getTags().contains("oror_look") || x.getType().toString().contains("villager_king")
+                    || x instanceof net.minecraft.world.entity.monster.Vex || x instanceof net.minecraft.world.entity.LightningBolt)) {
+                e.discard();
+            }
+            command(server, "weather clear 1000000");
+            command(server, "time set noon");
             command(server, String.format(java.util.Locale.ROOT,
                 "summon oror_supreme_bosses:villager_king %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"oror_look\",\"oror_king_solo\"]}",
                 sx, (int) sy, sz + 10));
-            ServerLevel level = server.overworld();
             for (Entity e : level.getEntities((Entity) null, new AABB(sx - 5, sy - 3, sz + 5, sx + 5, sy + 12, sz + 15),
                 x -> x.getTags().contains("oror_king_solo"))) {
                 setForm(level, e, phase, stance, life, false);
