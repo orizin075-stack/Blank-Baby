@@ -48,21 +48,30 @@ public final class WazaVisuals {
 
     private static final Map<Theme, String[]> WORDS = new EnumMap<>(Map.ofEntries(
         Map.entry(Theme.SLASH, new String[]{"slash", "sweep", "blade", "cut", "swing", "crescent", "slice", "sword"}),
-        Map.entry(Theme.SPARK, new String[]{"spark", "crit", "hit", "impact", "flash", "shine", "twinkle"}),
-        Map.entry(Theme.FIRE, new String[]{"fire", "flame", "ember", "burn", "blaze", "lava", "magma", "inferno", "cinder", "heat"}),
-        Map.entry(Theme.FROST, new String[]{"snow", "frost", "ice", "freez", "cold", "blizzard", "chill", "icicle"}),
-        Map.entry(Theme.LIGHTNING, new String[]{"electr", "lightning", "thunder", "zap", "shock", "volt", "static", "plasma"}),
+        Map.entry(Theme.SPARK, new String[]{"spark", "crit", "hit", "impact", "shine", "twinkle", "glint"}),
+        Map.entry(Theme.FIRE, new String[]{"fire", "flame", "ember", "burn", "blaze", "lava", "magma", "cinder", "heat"}),
+        Map.entry(Theme.FROST, new String[]{"snow", "frost", "ice", "freez", "cold", "chill", "icicle"}),
+        Map.entry(Theme.LIGHTNING, new String[]{"electr", "zap", "shock", "volt", "static", "spark"}),
         Map.entry(Theme.POISON, new String[]{"poison", "acid", "toxic", "spore", "venom", "ooze", "slime"}),
-        Map.entry(Theme.DARK, new String[]{"dark", "shadow", "soul", "void", "curse", "necro", "wither", "abyss", "ghost", "doom", "sculk"}),
+        Map.entry(Theme.DARK, new String[]{"dark", "shadow", "soul", "curse", "necro", "wither", "ghost", "doom", "sculk", "ash"}),
         Map.entry(Theme.HOLY, new String[]{"holy", "light", "glow", "sparkle", "star", "wisp", "heal", "halo", "bless", "divine", "end_rod"}),
-        Map.entry(Theme.WATER, new String[]{"bubble", "water", "splash", "drip", "rain", "wave", "foam"}),
-        Map.entry(Theme.EARTH, new String[]{"rock", "stone", "debris", "sand", "earth", "crack", "rubble", "mud"}),
-        Map.entry(Theme.WIND, new String[]{"wind", "gust", "cloud", "air", "smoke", "swirl", "tornado", "poof", "sonic"}),
-        Map.entry(Theme.MAGIC, new String[]{"magic", "spell", "rune", "arcane", "enchant", "mana", "portal", "ring", "witch", "ender"}),
+        Map.entry(Theme.WATER, new String[]{"bubble", "water", "splash", "drip", "rain", "foam"}),
+        Map.entry(Theme.EARTH, new String[]{"rock", "stone", "debris", "sand", "earth", "rubble", "mud", "pebble"}),
+        Map.entry(Theme.WIND, new String[]{"wind", "gust", "air", "poof", "puff", "feather"}),
+        Map.entry(Theme.MAGIC, new String[]{"magic", "spell", "rune", "arcane", "enchant", "mana", "witch", "ender", "glyph"}),
         Map.entry(Theme.BLOOD, new String[]{"blood", "gore", "flesh"}),
-        Map.entry(Theme.NATURE, new String[]{"leaf", "leaves", "petal", "flower", "cherry", "pollen", "vine", "spore_blossom", "happy"})));
+        Map.entry(Theme.NATURE, new String[]{"leaf", "leaves", "petal", "flower", "cherry", "pollen", "vine", "happy"})));
+    /**
+     * Never these: what is not a mote but a scene (vortices, black holes, storms, clouds and fog, domes, waves, rings,
+     * beams, explosions, flashes, portals: in the first look at the new light a mod's vortex swallowed the stage and
+     * another's cloud whited it out), and what is not meant to be thrown about (items, blocks, vanilla's emitters).
+     */
     private static final Set<String> NEVER = Set.of("item", "block", "falling", "vibration", "shriek", "elder_guardian", "mob_appearance",
-        "dust_plume", "sonic_boom", "trial", "ominous", "barrier", "light_block", "entity_effect", "explosion_emitter", "sculk_charge", "camera", "screen");
+        "dust_plume", "sonic", "trial", "ominous", "barrier", "light_block", "entity_effect", "explosion", "sculk_charge", "camera", "screen",
+        "vortex", "hole", "storm", "tornado", "cloud", "fog", "mist", "haze", "dome", "wave", "ring", "beam", "laser", "aurora", "nova", "blast",
+        "sphere", "aura", "shield", "wall", "pillar", "flash", "sun", "moon", "sky", "giant", "large", "big", "huge", "massive", "boss", "crater",
+        "rift", "void", "abyss", "portal", "lightning", "thunder", "smoke", "swirl", "cyclone", "geyser", "eruption", "nuke", "meteor", "comet",
+        "trail", "streak", "ray", "column", "tower", "circle", "emitter", "burst", "shockwave", "quake", "tremor", "flare", "glare");
     private static Map<Theme, List<SimpleParticleType>> themes;
     private static final Set<ParticleType<?>> FAILED = new HashSet<>();
 
@@ -103,6 +112,9 @@ public final class WazaVisuals {
             out.put(t, l);
         }
         themes = out;
+        org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger("OROR Waza");
+        out.forEach((t, l) -> log.info("OROR WAZA-PARTICLES {} {}: {}", t, l.size(), l.stream().limit(16)
+            .map(x -> String.valueOf(BuiltInRegistries.PARTICLE_TYPE.getKey(x))).toList()));
     }
 
     /** How many particle types each theme found (mods' first): for the log. */
@@ -269,7 +281,7 @@ public final class WazaVisuals {
     public static void flash(long now, Vec3 at, int c, float size) {
         Shape s = add(Kind.FLASH, now, 4, c, 0xFFFFFF);
         s.at = at;
-        s.r0 = size;
+        s.r0 = Math.min(1.4F, size * 0.6F);
     }
 
     // --------------------------------------------------------------------------------------------------- drawing
