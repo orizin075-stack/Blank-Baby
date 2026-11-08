@@ -223,15 +223,31 @@ public final class WazaClient {
         }
     }
 
-    /** The technique's own moments on its caster: the gathering, the release, the hits and the ribbon, the fading. */
+    /** The technique's own moments on its caster: the gathering, the release, the hits and the blade's light, the fading. */
     private static void playTick(ClientLevel l, Entity e, Play p, int t) {
         Waza w = p.w();
         int wu = w.windup(), al = w.activeLength();
         float h = e.getBbHeight();
         Vec3 chest = e.position().add(0, h * 0.6, 0);
         float scale = 1 + w.tier() * 0.5F;
+        long now = l.getGameTime();
+        Waza.Behaviour beh = w.behaviour();
+        if (t == 0) {
+            // the circle of the working: on the ground under the caster, upright before it for a shot or a beam
+            boolean upright = beh == Waza.Behaviour.PROJECTILE || beh == Waza.Behaviour.BEAM;
+            Entity target = p.target() >= 0 ? l.getEntity(p.target()) : null;
+            Vec3 dir = target != null ? target.position().subtract(e.position()) : e.getLookAngle();
+            dir = new Vec3(dir.x, upright ? 0 : dir.y, dir.z);
+            float r = (beh == Waza.Behaviour.MELEE ? 0.9F : 1.3F) * (1 + w.tier() * 0.45F) + e.getBbWidth() * 0.5F;
+            if (beh != Waza.Behaviour.MELEE || w.tier() >= 1) {
+                WazaVisuals.circle(now, e.position(), r, wu + 6, w, upright, dir.lengthSqr() < 1e-6 ? new Vec3(0, 0, 1) : dir.normalize(), e.getId());
+            }
+            if (w.tier() >= 2 && !upright) {
+                WazaVisuals.circle(now, e.position(), r * 1.8F, wu + 10, w, false, null, e.getId());
+            }
+        }
         if (t < wu) {
-            // the gathering: motes drawn in toward the body, closer and quicker as the windup ends
+            // the gathering: the technique's own particles drawn in toward the body, quicker as the windup ends
             float u = t / (float) Math.max(1, wu);
             int n = 1 + w.tier();
             for (int k = 0; k < n; k++) {
@@ -239,19 +255,20 @@ public final class WazaClient {
                 double r = (1.6 - u) * scale;
                 Vec3 at = chest.add(Math.cos(a) * r, (R.nextDouble() - 0.5) * h * 0.8, Math.sin(a) * r);
                 Vec3 v = chest.subtract(at).scale(0.12);
-                put(l, dust(w, k % 2, 0.8F + w.tier() * 0.2F), at, v.x, v.y, v.z);
-            }
-            if (w.tier() >= 2 && t % 2 == 0) {
-                circle(l, dust(w, 1, 1.2F), e.position(), (1.2 + u) * scale, 10 + 4 * w.tier(), t * 0.2);
+                put(l, k % 2 == 0 ? dust(w, k % 3, 0.8F + w.tier() * 0.2F) : WazaVisuals.particle(w, k), at, v.x, v.y, v.z);
             }
             return;
         }
         int a = t - wu;
         if (a == 0) {
-            sound(l, e.position(), w.sounds()[1], 1.0F + (w.behaviour() == Waza.Behaviour.SONG ? (w.range() + 8) / 16F : 0),
-                1.0F + (p.seed() & 3) * 0.05F);
-            for (int k = 0; k < 6 + 4 * w.tier(); k++) {
-                put(l, named(w, 0), chest, (R.nextDouble() - 0.5) * 0.4, R.nextDouble() * 0.2, (R.nextDouble() - 0.5) * 0.4);
+            sound(l, e.position(), w.sounds()[1], 1.0F + (beh == Waza.Behaviour.SONG ? (w.range() + 8) / 16F : 0), 1.0F + (p.seed() & 3) * 0.05F);
+            WazaVisuals.burst(l, w, chest, 8 + 6 * w.tier(), 0.5);
+            WazaVisuals.flash(now, chest, w.colours()[0], 0.8F + 0.4F * w.tier());
+            if (w.tier() >= 2) {
+                WazaVisuals.ring(now, e.position(), 0.5F, 4 + 3 * w.tier(), 14, w.colours()[0], w.colours()[1], 0.4F);
+            }
+            if (beh == Waza.Behaviour.REWIND) {
+                WazaVisuals.clock(now, e.position(), w);
             }
         }
         for (int hit : w.hits()) {
@@ -259,49 +276,111 @@ public final class WazaClient {
                 sound(l, e.position(), w.sounds()[2], 0.8F, 1.0F + (hit % 4) * 0.06F);
             }
         }
-        if (a <= al && w.behaviour() == Waza.Behaviour.MELEE) {
+        if (a <= al && beh == Waza.Behaviour.MELEE) {
             ribbon(l, e, p, a);
         }
         if (a > al && (t & 1) == 0) {
             // the leftovers taken down: a few motes falling away
-            put(l, dust(w, 2, 0.6F), chest.add((R.nextDouble() - 0.5) * 1.2, (R.nextDouble() - 0.5) * h * 0.6, (R.nextDouble() - 0.5) * 1.2), 0,
-                -0.02, 0);
+            put(l, (t & 2) == 0 ? dust(w, 2, 0.6F) : WazaVisuals.particle(w, 1),
+                chest.add((R.nextDouble() - 0.5) * 1.2, (R.nextDouble() - 0.5) * h * 0.6, (R.nextDouble() - 0.5) * 1.2), 0, -0.02, 0);
         }
     }
 
-    /** The blade's ribbon: the tip's path through the two ticks before each hit, as the server sweeps it. */
+    /** Where the blade is at u (0 to 1) of a swing on path arc: its base and its tip, the same path the server sweeps. */
+    static Vec3[] blade(Entity e, Entity target, Waza w, int arc, double u) {
+        Vec3 flat = target != null ? target.position().subtract(e.position()) : e.getLookAngle();
+        flat = new Vec3(flat.x, 0, flat.z);
+        flat = flat.lengthSqr() < 1e-4 ? new Vec3(0, 0, 1) : flat.normalize();
+        Vec3 side = new Vec3(-flat.z, 0, flat.x);
+        Vec3 up = new Vec3(0, 1, 0);
+        Vec3 fwd = flat;
+        float reach = w.range() + e.getBbWidth() * 0.5F + e.getBbHeight() * 0.25F;
+        Vec3 shoulder = e.position().add(0, e.getBbHeight() * 0.62, 0);
+        if (target != null && arc != 5) {
+            Vec3 to = target.getBoundingBox().getCenter().subtract(shoulder);
+            if (to.lengthSqr() > 1e-4) {
+                fwd = to.normalize();
+                up = side.cross(fwd).normalize();
+                if (up.y < 0) {
+                    up = up.scale(-1);
+                }
+            }
+        }
+        Vec3 d;
+        switch (arc) {
+            case 1 -> {
+                double t = Mth.lerp(u, -1.1, 1.1);
+                d = fwd.scale(Math.cos(t * 0.8)).add(side.scale(Math.sin(t) * 0.9)).add(up.scale(-t * 0.6));
+            }
+            case 2 -> {
+                double t = Mth.lerp(u, -1.1, 1.1);
+                d = fwd.scale(Math.cos(t * 0.8)).add(side.scale(-Math.sin(t) * 0.9)).add(up.scale(t * 0.6));
+            }
+            case 3 -> {
+                d = fwd.add(up.scale(-0.05));
+                reach *= 0.45F + 0.55F * (float) u;
+            }
+            case 4 -> {
+                double t = Mth.lerp(u, -1.3, 0.9);
+                d = fwd.scale(Math.cos(t)).add(up.scale(-Math.sin(t)));
+            }
+            case 5 -> {
+                double ang = u * Math.PI * 2;
+                d = flat.scale(Math.cos(ang)).add(side.scale(Math.sin(ang))).add(0, -0.08, 0);
+                shoulder = e.position().add(0, 0.5, 0);
+            }
+            case 6 -> {
+                double ang = Mth.lerp(u, -Math.PI, Math.PI);
+                d = fwd.scale(Math.cos(ang)).add(side.scale(Math.sin(ang)));
+                shoulder = e.position().add(0, e.getBbHeight() * 0.45, 0);
+            }
+            default -> {
+                double t = Mth.lerp(u, -1.2, 1.2);
+                d = fwd.scale(Math.cos(t)).add(side.scale(Math.sin(t)));
+            }
+        }
+        d = d.normalize();
+        return new Vec3[]{shoulder.add(d.scale(reach * 0.25)), shoulder.add(d.scale(reach))};
+    }
+
+    /**
+     * The blade's light: as each swing begins (two ticks before its hit) its afterimage is laid along the whole path
+     * the server sweeps, revealed as the blade passes; at the hit, sparks of the technique's own particles along it,
+     * the sweep's crescent at its middle, and a great cut's wave sent out before it.
+     */
     private static void ribbon(ClientLevel l, Entity e, Play p, int a) {
         Waza w = p.w();
         int[] hits = w.hits();
         Entity target = p.target() >= 0 ? l.getEntity(p.target()) : null;
-        Vec3 fwd = target != null ? target.position().subtract(e.position()) : e.getLookAngle();
-        fwd = new Vec3(fwd.x, 0, fwd.z);
-        fwd = fwd.lengthSqr() < 1e-4 ? new Vec3(0, 0, 1) : fwd.normalize();
-        Vec3 side = new Vec3(-fwd.z, 0, fwd.x);
-        float reach = w.range() + e.getBbWidth() * 0.5F;
+        long now = l.getGameTime();
         for (int i = 0; i < hits.length; i++) {
-            if (a < hits[i] - 2 || a > hits[i] + 1) {
-                continue;
-            }
             int arc = w.arcs().length > 0 ? w.arcs()[i % w.arcs().length] : 0;
-            Vec3 shoulder = e.position().add(0, e.getBbHeight() * (arc == 5 ? 0.1 : arc == 6 ? 0.45 : 0.62), 0);
-            for (int k = 0; k <= 8; k++) {
-                double u = k / 8.0;
-                Vec3 d = switch (arc) {
-                    case 1 -> fwd.scale(Math.cos(Mth.lerp(u, -1.1, 1.1) * 0.8)).add(side.scale(Math.sin(Mth.lerp(u, -1.1, 1.1)) * 0.9))
-                        .add(0, -Mth.lerp(u, -1.1, 1.1) * 0.6, 0);
-                    case 2 -> fwd.scale(Math.cos(Mth.lerp(u, -1.1, 1.1) * 0.8)).add(side.scale(-Math.sin(Mth.lerp(u, -1.1, 1.1)) * 0.9))
-                        .add(0, Mth.lerp(u, -1.1, 1.1) * 0.6, 0);
-                    case 3 -> fwd.scale(0.4 + 0.6 * u);
-                    case 4 -> fwd.scale(Math.cos(Mth.lerp(u, -1.3, 0.9))).add(0, -Math.sin(Mth.lerp(u, -1.3, 0.9)), 0);
-                    case 5 -> fwd.scale(Math.cos(u * Mth.TWO_PI)).add(side.scale(Math.sin(u * Mth.TWO_PI)));
-                    case 6 -> fwd.scale(Math.cos(Mth.lerp(u, -Math.PI, Math.PI))).add(side.scale(Math.sin(Mth.lerp(u, -Math.PI, Math.PI))));
-                    default -> fwd.scale(Math.cos(Mth.lerp(u, -1.2, 1.2))).add(side.scale(Math.sin(Mth.lerp(u, -1.2, 1.2))));
-                };
-                Vec3 tip = shoulder.add(d.normalize().scale(arc == 3 ? reach * (0.4 + 0.6 * u) : reach));
-                put(l, dust(w, k % 2, 1.1F), tip, 0, 0, 0);
-                if (k % 3 == 0) {
-                    put(l, named(w, 1), tip, 0, 0, 0);
+            if (a == Math.max(0, hits[i] - 2)) {
+                int n = arc >= 5 ? 24 : 14;
+                Vec3[] base = new Vec3[n + 1], tip = new Vec3[n + 1];
+                for (int k = 0; k <= n; k++) {
+                    Vec3[] b = blade(e, target, w, arc, k / (double) n);
+                    base[k] = b[0];
+                    tip[k] = b[1];
+                }
+                WazaVisuals.trail(now, base, tip, w);
+            }
+            if (a == hits[i]) {
+                Vec3[] mid = blade(e, target, w, arc, 0.5);
+                put(l, ParticleTypes.SWEEP_ATTACK, mid[1], 0, 0, 0);
+                for (int k = 0; k <= 6; k++) {
+                    Vec3[] b = blade(e, target, w, arc, k / 6.0);
+                    put(l, WazaVisuals.particle(w, k), b[1], (R.nextDouble() - 0.5) * 0.1, 0.03, (R.nextDouble() - 0.5) * 0.1);
+                    if (k % 2 == 0) {
+                        put(l, dust(w, k % 3, 1.2F), b[0].lerp(b[1], 0.7), 0, 0, 0);
+                    }
+                }
+                if (w.tier() >= 2 || w.tier() >= 1 && (arc == 0 || arc == 1 || arc == 2)) {
+                    Vec3 dir = target != null ? target.position().subtract(e.position()) : e.getLookAngle();
+                    WazaVisuals.wave(now, e.position(), dir, w.range() * 0.6F + e.getBbWidth() * 0.5F, w);
+                }
+                if (arc == 4 || arc == 5) {
+                    WazaVisuals.ring(now, mid[1].add(0, -mid[1].y + e.getY(), 0), 0.3F, 2.5F + w.tier(), 10, w.colours()[0], w.colours()[1], 0.3F);
                 }
             }
         }
@@ -515,6 +594,51 @@ public final class WazaClient {
     private static void fx(ClientLevel l, WazaNet.Fx f) {
         Waza w = f.index() >= 0 ? Waza.of(f.index()) : null;
         Vec3 at = new Vec3(f.x(), f.y(), f.z());
+        long now = l.getGameTime();
+        Entity on = f.entity() >= 0 ? l.getEntity(f.entity()) : null;
+        if (w != null) {
+            // the shapes and the technique's own particles over the plain sparks
+            switch (f.kind()) {
+                case 0 -> {
+                    WazaVisuals.flash(now, at, w.colours()[0], 0.7F + 0.3F * w.tier());
+                    WazaVisuals.burst(l, w, at, 5 + 3 * w.tier(), 0.6);
+                }
+                case 1 -> {
+                    WazaVisuals.ring(now, new Vec3(at.x, at.y - 0.4, at.z), 0.2F, Math.max(1.2F, f.a() * 1.6F), 10, w.colours()[0], w.colours()[1], 0.3F);
+                    WazaVisuals.burst(l, w, at, 6 + 2 * w.tier(), 0.4);
+                }
+                case 2 -> WazaVisuals.ring(now, at.add(0, -0.8, 0), 0.4F, 2.2F, 10, 0xFF5030, 0xFFFFFF, 0.25F);
+                case 3 -> WazaVisuals.clock(now, at, w);
+                case 4 -> {
+                    WazaVisuals.circle(now, at.add(0, -1, 0), 1.4F, 24, w, false, null, f.entity());
+                    WazaVisuals.burst(l, w, at, 10, 0.3);
+                }
+                case 5 -> {
+                    WazaVisuals.ring(now, at.add(0, -0.5, 0), 0.2F, 1.6F, 16, w.colours()[0], 0xFFFFFF, 0.2F);
+                    WazaVisuals.burst(l, w, at, 6, 0.2);
+                }
+                case 7 -> {
+                    if (on != null) {
+                        WazaVisuals.sigil(now, on, w, 30);
+                    }
+                    WazaVisuals.burst(l, w, at, 10, 0.4);
+                }
+                case 8 -> WazaVisuals.ring(now, at.add(0, -1, 0), 0.3F, 1.8F, 20, 0xF2C230, 0xFFF0B0, 0.2F);
+                case 10 -> {
+                    if (on != null) {
+                        WazaVisuals.sigil(now, on, w, 24);
+                    }
+                }
+                case 11 -> {
+                    WazaVisuals.circle(now, at.add(0, -0.4, 0), 1.2F, 20, w, false, null, -1);
+                    WazaVisuals.burst(l, w, at, 8, 0.3);
+                }
+                case 12 -> WazaVisuals.ring(now, at, 0.3F, 3.5F, 9, w.colours()[0], 0xFFFFFF, 0.5F);
+                case 13 -> WazaVisuals.flash(now, at.add(0, 2, 0), w.colours()[0], 2.0F);
+                default -> {
+                }
+            }
+        }
         switch (f.kind()) {
             case 0 -> { // a hit
                 for (int k = 0; k < 8; k++) {
@@ -595,7 +719,7 @@ public final class WazaClient {
 
     @SubscribeEvent
     public static void render(RenderLevelStageEvent e) {
-        if (e.getStage() != RenderLevelStageEvent.Stage.AFTER_ENTITIES || PLAYS.isEmpty()) {
+        if (e.getStage() != RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
             return;
         }
         Minecraft mc = Minecraft.getInstance();
@@ -609,7 +733,6 @@ public final class WazaClient {
         MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
         VertexConsumer vc = buffers.getBuffer(RenderType.lightning());
         PoseStack ps = e.getPoseStack();
-        boolean any = false;
         for (Map.Entry<Integer, Play> en : PLAYS.entrySet()) {
             Play p = en.getValue();
             if (p.w().props() == 0) {
@@ -631,11 +754,16 @@ public final class WazaClient {
             ps.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-Mth.rotLerp(partial, le.yBodyRotO, le.yBodyRot)));
             props(ps.last().pose(), vc, p.w(), ent.getBbHeight(), ent.getBbWidth(), t, fade);
             ps.popPose();
-            any = true;
         }
-        if (any) {
-            buffers.endBatch(RenderType.lightning());
+        // the techniques' light: afterimages, waves, rings, circles, sigils; beams, fields, guards and circles in the world
+        Matrix4f world = ps.last().pose();
+        WazaVisuals.render(l, vc, world, cp, partial);
+        for (Obj o : OBJS.values()) {
+            if (o.kind == 1 || o.kind == 2 || o.kind == 3 || o.kind == 6 || o.kind == 8) {
+                WazaVisuals.renderThing(l, vc, world, cp, o, partial);
+            }
         }
+        buffers.endBatch(RenderType.lightning());
     }
 
     private static void quad(VertexConsumer vc, Matrix4f m, Vec3 a, Vec3 b, Vec3 c, Vec3 d, int argb) {

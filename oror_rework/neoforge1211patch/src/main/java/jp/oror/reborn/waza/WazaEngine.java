@@ -56,6 +56,8 @@ public final class WazaEngine {
         public Vec3 aim;
         public Vec3 dir;
         public Vec3 moveTo;
+        /** a move's checked destination and where it began */
+        public Vec3 dest, from;
         public float yaw;
         /** the hits so far, the blows that landed and their damage (read by the CI check) */
         public int fired;

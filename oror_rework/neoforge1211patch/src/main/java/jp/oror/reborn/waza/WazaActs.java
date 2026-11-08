@@ -382,6 +382,15 @@ final class WazaActs {
         }
         if (c.w.behaviour() == Waza.Behaviour.MOVE) {
             c.b.setDeltaMovement(c.b.getDeltaMovement().multiply(0.3, 1, 0.3));
+            // a dash or a leap that fell short (a wall of bodies, a heavy frame, the character's own pull) ends at the
+            // place it was checked for: footing, room and a loaded chunk, checked again now
+            if (c.dest != null && c.from != null && c.b.position().distanceTo(c.from) < 1.0) {
+                Vec3 ok = valid(c.b, c.dest);
+                if (ok != null) {
+                    c.b.teleportTo(ok.x, ok.y, ok.z);
+                    c.note("move:arrived");
+                }
+            }
         }
     }
 
@@ -629,7 +638,9 @@ final class WazaActs {
             return;
         }
         c.moveTo = dest;
+        c.dest = dest;
         Vec3 was = b.position();
+        c.from = was;
         if (w.kind().equals("BLINK") || w.kind().isEmpty()) {
             b.teleportTo(dest.x, dest.y, dest.z);
             c.note("move:blink");
@@ -859,6 +870,10 @@ final class WazaActs {
             }
             case "SWAP" -> {
                 LivingEntity other = enemiesNear(b, t.position(), 12).stream().filter(e -> e != t).findFirst().orElse(null);
+                // two enemies change places; only a technique aimed at one alone trades places with its caster
+                if (other == null && w.behaviour() != Waza.Behaviour.STATUS) {
+                    break;
+                }
                 Entity with = other != null ? other : b;
                 Vec3 a = t.position(), o = with.position();
                 if (valid(t, o) != null && (with == b || valid((LivingEntity) with, a) != null)) {
