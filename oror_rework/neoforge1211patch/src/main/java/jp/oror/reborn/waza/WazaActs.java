@@ -1234,15 +1234,29 @@ final class WazaActs {
     }
 
     static ServerPlayer pactPartner(SupremeEntity b, Waza w) {
+        long now = b.level().getGameTime();
         for (ServerPlayer sp : players(b, Math.max(6, w.range()))) {
-            {
-                boolean open = WazaWorld.contracts(b).stream().anyMatch(k -> k.player.equals(sp.getUUID()) && k.state == 0);
-                if (!open || w.kind().equals("COLLECT")) {
+            if (w.kind().equals("COLLECT")) {
+                if (WazaWorld.contracts(b).stream().anyMatch(k -> k.player.equals(sp.getUUID()) && k.state == 1 && !k.paid)) {
                     return sp;
                 }
+                continue;
             }
+            if (asked(b, sp, now)) {
+                continue;
+            }
+            return sp;
         }
         return null;
+    }
+
+    /**
+     * Whether this player was asked lately: a contract still waiting for the answer, one still owed, or one refused
+     * in the last minute (the screen is not pushed on a player again and again).
+     */
+    static boolean asked(SupremeEntity b, ServerPlayer sp, long now) {
+        return WazaWorld.contracts(b).stream().anyMatch(k -> k.player.equals(sp.getUUID())
+            && (k.state == 0 || k.state == 1 && !k.paid || k.state == 2 && now - k.expires + 400 < 1200));
     }
 
     private static String benefitText(Waza w) {
@@ -1285,7 +1299,11 @@ final class WazaActs {
             }
             default -> {
                 int offered = 0;
+                long now = b.level().getGameTime();
                 for (ServerPlayer sp : players(b, reach)) {
+                    if (!c.forced && asked(b, sp, now)) {
+                        continue;
+                    }
                     WazaWorld.offer(b, w, sp, benefitText(w), costText(w));
                     offered++;
                 }
