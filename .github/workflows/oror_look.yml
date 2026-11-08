@@ -84,7 +84,11 @@ jobs:
         if: always()
         run: |
           G=$RUNNER_TEMP/game
-          for f in $G/screenshots/*.png; do [ -f "$f" ] && convert "$f" -resize '1280x>' -quality 84 "$OUT/$(basename "${f%.png}").jpg"; done
+          for f in $G/screenshots/*.png; do
+            [ -f "$f" ] || continue
+            case "$(basename "$f")" in 57_*) R='800x>' ;; *) R='1280x>' ;; esac
+            convert "$f" -resize "$R" -quality 84 "$OUT/$(basename "${f%.png}").jpg"
+          done
           cp $G/look/* $OUT/ 2>/dev/null || true
           mkdir -p $OUT/crash-reports; cp $G/crash-reports/* $OUT/crash-reports/ 2>/dev/null || true
           tail -n 200 $RUNNER_TEMP/client.out > $OUT/stdout-tail.txt 2>/dev/null || true

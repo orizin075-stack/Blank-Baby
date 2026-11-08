@@ -135,7 +135,14 @@ public final class Look {
     /** The duels (052): who fights, from tick 1240, two hundred ticks apart. */
     private static final String[] DUELISTS = {"valeria", "kokuhaku", "elseria", "kingdom_guard"};
 
+    /** (055) What is to be done at a tick of the play (the King's moves' scenes, planned when they begin). */
+    private static final java.util.TreeMap<Integer, Runnable> PLAN = new java.util.TreeMap<>();
+
     private static void play(Minecraft mc, int t) {
+        Runnable planned = PLAN.remove(t);
+        if (planned != null) {
+            planned.run();
+        }
         // (052) each duel: the character and an armed vindicator set on each other (and healed) every half second, the
         // camera five blocks off, twenty-four frames six ticks apart from the fortieth tick
         for (int d = 0; d < DUELISTS.length; d++) {
@@ -302,7 +309,9 @@ public final class Look {
             case 22690 -> shot(mc, "53_film_divine_rise");
             case 22725 -> shot(mc, "54_film_divine_name");
             case 22745 -> shot(mc, "55_film_divine_climax");
-            case 22800 -> finish(mc, "complete");
+            // (055) close up, how he holds each arm; then each of his seventy moves caught at its windup and at its
+            // blow, one form and stance at a time; then the veil of flies over the field
+            case 22800 -> kingMoves(mc, 22810);
             default -> {
             }
         }
@@ -329,6 +338,121 @@ public final class Look {
                 int[] phase = {0, 1, 2, 2, 3, 3}, stance = {0, 0, 0, 0, 4, 5};
                 float[] life = {1F, 1F, 0.55F, 0.15F, 1F, 1F};
                 setForm(level, e, phase[Math.min(5, i)], stance[Math.min(5, i)], life[Math.min(5, i)], false);
+            }
+        });
+    }
+
+    /**
+     * (055) The King's moves, form by form: the hero's sword, the broken one's, then Baal Zebul's five arms. For each,
+     * one king alone on the stage (z + 10, facing the camera's side), close up from his right front and from his side
+     * as he holds it, then every move of that arm sent to him as the server sends it (TechniqueShow "move:king_<id>")
+     * and caught twice: in its windup and as its blow lands. Last the veil of flies, from above and from the ground.
+     */
+    private static void kingMoves(Minecraft mc, int from) {
+        List<Object> moves;
+        try {
+            moves = new ArrayList<>((List<?>) Class.forName("jp.oror.reborn.king.KingArsenal").getField("MOVES").get(null));
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("king moves: " + ex);
+            PLAN.put(from + 10, () -> finish(mc, "complete"));
+            return;
+        }
+        String[] names = {"sword", "broken", "clubs", "scythe", "twin", "spear", "bow"};
+        int at = from;
+        for (int w = 0; w < names.length; w++) {
+            final int weapon = w;
+            final String nm = names[w];
+            int phase = w == 0 ? 1 : w == 1 ? 2 : 3;
+            int stance = w >= 2 ? w - 1 : 0;
+            float life = w == 1 ? 0.6F : 1F;
+            double k = w == 0 ? 0.75 : w == 1 ? 0.9 : 1.1;
+            double dy = w == 0 ? 2.0 : w == 1 ? 2.4 : 3.0;
+            PLAN.put(at, () -> soloKing(mc, phase, stance, life));
+            PLAN.put(at + 40, () -> view(mc, 3.5 * k, dy, 10 - 6 * k, 30.3F, 6F));
+            PLAN.put(at + 50, () -> shot(mc, String.format(java.util.Locale.ROOT, "56_%d_%s_hold", weapon, nm)));
+            PLAN.put(at + 52, () -> view(mc, 8 * k, dy, 10, 90F, 4F));
+            PLAN.put(at + 62, () -> shot(mc, String.format(java.util.Locale.ROOT, "56_%d_%s_hold_side", weapon, nm)));
+            PLAN.put(at + 64, () -> view(mc, 6 * k, dy, 10 - 9 * k, 33.7F, 6F));
+            int j = 0;
+            for (Object m : moves) {
+                try {
+                    if (((Number) m.getClass().getMethod("weapon").invoke(m)).intValue() != w) {
+                        continue;
+                    }
+                    String id = (String) m.getClass().getMethod("id").invoke(m);
+                    int windup = ((Number) m.getClass().getMethod("windup").invoke(m)).intValue();
+                    int length = ((Number) m.getClass().getMethod("length").invoke(m)).intValue();
+                    int t0 = at + 80 + j * 32;
+                    int jj = j;
+                    PLAN.put(t0, () -> kingMove(mc, id, windup, length));
+                    PLAN.put(t0 + Math.max(1, windup - 2), () -> shot(mc, String.format(java.util.Locale.ROOT, "57_%d_%02d_%s_w", weapon, jj, id)));
+                    PLAN.put(t0 + windup + 2, () -> shot(mc, String.format(java.util.Locale.ROOT, "57_%d_%02d_%s_s", weapon, jj, id)));
+                    j++;
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    note("king move: " + ex);
+                }
+            }
+            at += 80 + j * 32 + 20;
+        }
+        PLAN.put(at, () -> soloKing(mc, 3, 3, 1F));
+        PLAN.put(at + 30, () -> kingVeil(mc));
+        PLAN.put(at + 32, () -> view(mc, 0, 14, -10, 0F, 38F));
+        PLAN.put(at + 90, () -> shot(mc, "58_veil_above"));
+        PLAN.put(at + 92, () -> view(mc, 7, 1.2, 4, 20F, -4F));
+        PLAN.put(at + 140, () -> shot(mc, "58_veil_ground"));
+        PLAN.put(at + 200, () -> finish(mc, "complete"));
+        note("king moves planned to tick " + (at + 200));
+    }
+
+    /** (055) One villager king alone on the stage in a form and stance. */
+    private static void soloKing(Minecraft mc, int phase, int stance, float life) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        mc.options.hideGui = true;
+        server.execute(() -> {
+            command(server, "kill @e[tag=oror_look]");
+            command(server, "kill @e[type=minecraft:vex]");
+            command(server, String.format(java.util.Locale.ROOT,
+                "summon oror_supreme_bosses:villager_king %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"oror_look\",\"oror_king_solo\"]}",
+                sx, (int) sy, sz + 10));
+            ServerLevel level = server.overworld();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 5, sy - 3, sz + 5, sx + 5, sy + 12, sz + 15),
+                x -> x.getTags().contains("oror_king_solo"))) {
+                setForm(level, e, phase, stance, life, false);
+            }
+        });
+    }
+
+    /** (055) A move sent to the king on the stage, as the server sends it when he does it. */
+    private static void kingMove(Minecraft mc, String id, int windup, int length) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            ServerLevel level = server.overworld();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 5, sy - 3, sz + 5, sx + 5, sy + 12, sz + 15),
+                x -> x.getTags().contains("oror_king_solo"))) {
+                try {
+                    Class.forName("jp.oror.reborn.show.TechniqueShow").getMethod("send", Entity.class, String.class, int.class, int.class, int.class, int.class)
+                        .invoke(null, e, "move:king_" + id, 0, windup, length, -1);
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    note("king move " + id + ": " + ex);
+                }
+            }
+        });
+    }
+
+    /** (055) Baal Zebul's veil of flies about the king on the stage. */
+    private static void kingVeil(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            ServerLevel level = server.overworld();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 5, sy - 3, sz + 5, sx + 5, sy + 12, sz + 15),
+                x -> x.getTags().contains("oror_king_solo"))) {
+                try {
+                    Class<?> mobC = Class.forName("jp.oror.reborn.royal.RoyalMob");
+                    Class.forName("jp.oror.reborn.king.KingSouls").getMethod("veil", mobC, ServerLevel.class, int.class).invoke(null, e, level, 240);
+                    note("veil of flies cast");
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    note("king veil: " + ex);
+                }
             }
         });
     }
