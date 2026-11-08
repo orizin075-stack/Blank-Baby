@@ -889,6 +889,8 @@ public final class KingDeeds {
             KingForms.swarm(king, v, now + 160);
             v.removeEffect(MobEffects.REGENERATION);
             v.addEffect(new MobEffectInstance(MobEffects.HUNGER, 160, 2));
+            // (055) the plague stops their healing, as the notes always said (it did not: nothing read the swarm)
+            KingSouls.starve(v, sl, 160);
             count(king, HITS, "plague");
         }
         sl.sendParticles(ParticleTypes.SQUID_INK, king.getX(), king.getY() + 1, king.getZ(), 200, 8, 1.5, 8, 0.05);
@@ -1089,6 +1091,8 @@ public final class KingDeeds {
                 if (v instanceof Player p) {
                     p.causeFoodExhaustion(12F);
                 }
+                // what he drinks of them is their food too: with hunger taken away in this pack, they heal by nothing
+                KingSouls.starve(v, sl, 200);
             }
             // he drinks what he takes many times over, and a share of his own life for every foe he feeds on: he mends fast
             int fed = KingForms.foes(king, sl, 16.0).size();

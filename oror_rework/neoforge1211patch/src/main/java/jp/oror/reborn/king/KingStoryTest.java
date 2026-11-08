@@ -388,6 +388,12 @@ public final class KingStoryTest {
             out.put("soulBurning", KingSouls.marked(r.soulA));
             r.king.sovereign().load(r.field3);
             out.put("fieldWhole", !r.king.atBreached());
+            // (055) starved (the feast, the plague, the veil): no healing at all for a while
+            KingSouls.starve(r.striker, sl, 100);
+            r.striker.setHealth(r.striker.getMaxHealth() - 6F);
+            float before = r.striker.getHealth();
+            r.striker.heal(5F);
+            out.put("starveHeld", r.striker.getHealth() <= before + 0.01F && KingSouls.starving(r.striker));
         }
         if (age == 1020 && r.soulA != null) {
             out.put("soulTaken", r.king.getPersistentData().getCompound(KingDeeds.COUNT).getInt("soul_taken"));
@@ -864,7 +870,8 @@ public final class KingStoryTest {
         boolean broken = num(o, "missOut") + num(o, "lagHits") + num(o, "missIn") + num(o, "phantoms") + num(o, "errorArm") > 0
             && num(o, "missIn") > 0;
         boolean souls = Boolean.TRUE.equals(o.get("chainBroken")) && Boolean.TRUE.equals(o.get("soulBurning")) && num(o, "soulTaken") >= 1
-            && Boolean.TRUE.equals(o.get("soulFreed")) && num(o, "majesty") >= 1 && num(o, "veilFlies") >= 12;
+            && Boolean.TRUE.equals(o.get("soulFreed")) && num(o, "majesty") >= 1 && num(o, "veilFlies") >= 12
+            && Boolean.TRUE.equals(o.get("starveHeld"));
         boolean slayer = Boolean.TRUE.equals(o.get("godSlayer")) && Boolean.TRUE.equals(o.get("fieldTook")) && Boolean.TRUE.equals(o.get("ceilingHeld"))
             && Boolean.TRUE.equals(o.get("godWeakened"));
         boolean phantasm = Boolean.TRUE.equals(o.get("phantasmActive")) && o.get("phantasmRatio") instanceof Double pr && pr >= 9.5

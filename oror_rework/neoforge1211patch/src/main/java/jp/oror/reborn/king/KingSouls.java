@@ -24,6 +24,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -64,6 +65,10 @@ public final class KingSouls {
 
     private static final List<Veil> VEILS = new ArrayList<>();
 
+    /** (055) Starved foes and until when: no healing of any kind. The user's pack takes hunger away (Hunger Strike:
+     * the food bar stays put and food heals instead), so the hunger of the fly lord's feast, plague and veil is this. */
+    private static final Map<LivingEntity, Long> STARVE = new WeakHashMap<>();
+
     private KingSouls() {
     }
 
@@ -79,6 +84,30 @@ public final class KingSouls {
     static void mark(RoyalMob king, LivingEntity v) {
         MARKS.put(v, new Mark(king));
         feed(king, v, 0);
+    }
+
+    /** Starves a foe for a while: it heals by nothing (regeneration, food, potions) until it is over. */
+    static void starve(LivingEntity v, ServerLevel sl, int ticks) {
+        long now = sl.getGameTime();
+        Long was = STARVE.get(v);
+        if (was == null || was < now + ticks) {
+            STARVE.put(v, now + ticks);
+        }
+        if (v instanceof ServerPlayer p && (was == null || was <= now)) {
+            p.displayClientMessage(Component.literal("飢え：しばらく回復できない").withStyle(ChatFormatting.DARK_RED), true);
+        }
+    }
+
+    public static boolean starving(LivingEntity v) {
+        Long until = STARVE.get(v);
+        return until != null && until > v.level().getGameTime();
+    }
+
+    @SubscribeEvent
+    public static void noHeal(LivingHealEvent e) {
+        if (!STARVE.isEmpty() && !e.getEntity().level().isClientSide && starving(e.getEntity())) {
+            e.setCanceled(true);
+        }
     }
 
     public static boolean marked(LivingEntity v) {
@@ -227,6 +256,7 @@ public final class KingSouls {
                     v.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 0));
                     v.addEffect(new MobEffectInstance(MobEffects.HUNGER, 60, 2));
                     v.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0));
+                    starve(v, sl, 40);
                     v.invulnerableTime = 0;
                     KingDeeds.hit(vl.king, "veil", v, 2F, true);
                 }
@@ -257,5 +287,6 @@ public final class KingSouls {
     public static void stopped(ServerStoppedEvent e) {
         MARKS.clear();
         VEILS.clear();
+        STARVE.clear();
     }
 }
