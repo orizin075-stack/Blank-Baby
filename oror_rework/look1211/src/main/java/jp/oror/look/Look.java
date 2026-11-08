@@ -404,6 +404,7 @@ public final class Look {
         int az = at + 160;
         PLAN.put(az, () -> soloAzazel(mc));
         PLAN.put(az + 40, () -> view(mc, 2.6, 2.4, 10 - 5.2, 26.6F, 4F));
+        PLAN.put(az + 46, () -> azazelSeen(mc));
         PLAN.put(az + 50, () -> shot(mc, "59_azazel_front"));
         PLAN.put(az + 52, () -> view(mc, 6.5, 2.4, 10, 90F, 4F));
         PLAN.put(az + 62, () -> shot(mc, "59_azazel_side"));
@@ -474,6 +475,18 @@ public final class Look {
                     || x instanceof net.minecraft.world.entity.ExperienceOrb || x instanceof net.minecraft.world.entity.projectile.EvokerFangs))) {
             e.discard();
         }
+    }
+
+    /** (056) What the client draws Azazel with (his name is seen by the client; his tags are not), and where he stands. */
+    private static void azazelSeen(Minecraft mc) {
+        List<String> lines = new ArrayList<>();
+        for (Entity e : mc.level.entitiesForRendering()) {
+            if (e.getCustomName() != null && e.getCustomName().getString().contains("アザゼル")) {
+                lines.add(String.format(java.util.Locale.ROOT, "%s at %.1f %.1f %.1f alive %s -> %s", e.getCustomName().getString(), e.getX() - sx,
+                    e.getY() - sy, e.getZ() - sz, e.isAlive(), mc.getEntityRenderDispatcher().getRenderer(e).getClass().getName()));
+            }
+        }
+        note("azazel seen: " + lines);
     }
 
     /** (056) One of Azazel's arts sent to him as the server sends it (its motion only: no one is struck). */
