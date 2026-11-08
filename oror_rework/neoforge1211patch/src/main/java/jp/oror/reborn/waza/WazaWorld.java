@@ -678,15 +678,49 @@ public final class WazaWorld {
         SEEN.computeIfAbsent(b.getId(), k -> new HashMap<>()).merge(tag, n, Integer::sum);
     }
 
+    /** A damage type's id (the character's own combat memory keeps these) as a kind of blow. */
+    static String tagOf(String damageType) {
+        String t = damageType.toLowerCase(java.util.Locale.ROOT);
+        if (t.contains("explosion") || t.contains("firework")) {
+            return "explosion";
+        }
+        if (t.contains("fire") || t.contains("lava") || t.contains("hot_floor")) {
+            return "fire";
+        }
+        if (t.contains("arrow") || t.contains("trident") || t.contains("thrown") || t.contains("projectile") || t.contains("bullet")) {
+            return "projectile";
+        }
+        if (t.contains("magic") || t.contains("wither") || t.contains("sonic") || t.contains("dragon_breath") || t.contains("spell")) {
+            return "magic";
+        }
+        if (t.contains("mob_attack") || t.contains("player_attack") || t.contains("sting") || t.contains("thorns")) {
+            return "melee";
+        }
+        return "other";
+    }
+
+    /** What the character has seen of each kind: its own sightings, and its combat memory (which keeps even the blows a
+     * lore-bound body takes without the usual damage being dealt). */
+    static Map<String, Integer> seenOf(SupremeEntity b) {
+        Map<String, Integer> all = new HashMap<>(SEEN.getOrDefault(b.getId(), Map.of()));
+        try {
+            for (Map.Entry<String, Integer> e : b.memory.entries().entrySet()) {
+                all.merge(tagOf(e.getKey()), e.getValue(), Math::max);
+            }
+        } catch (RuntimeException ignored) {
+        }
+        return all;
+    }
+
     /** A kind of blow taken at least twice and not yet answered (null: nothing to learn yet). */
     static String observedTag(SupremeEntity b) {
-        Map<String, Integer> m = SEEN.get(b.getId());
-        if (m == null) {
+        Map<String, Integer> m = seenOf(b);
+        if (m.isEmpty()) {
             return null;
         }
         long now = b.level().getGameTime();
         Map<String, Long> l = LEARNED.getOrDefault(b.getId(), Map.of());
-        return m.entrySet().stream().filter(e -> e.getValue() >= 2 && l.getOrDefault(e.getKey(), 0L) < now)
+        return m.entrySet().stream().filter(e -> e.getValue() >= 2 && !e.getKey().equals("other") && l.getOrDefault(e.getKey(), 0L) < now)
             .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(null);
     }
 

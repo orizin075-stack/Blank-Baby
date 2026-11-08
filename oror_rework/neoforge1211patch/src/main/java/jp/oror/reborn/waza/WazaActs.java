@@ -690,7 +690,8 @@ final class WazaActs {
         for (int k = 0; k < 9; k++) {
             Vec3 tryAt = k == 0 ? want : me.add(want.subtract(me).yRot((float) (k * 0.7 * ((k & 1) == 0 ? 1 : -1))).scale(1 - k * 0.07));
             Vec3 ok = valid(b, tryAt);
-            if (ok != null) {
+            // a move goes somewhere: a spot within two blocks of where it began is no move
+            if (ok != null && ok.distanceTo(me) >= 2) {
                 return ok;
             }
         }
@@ -811,9 +812,10 @@ final class WazaActs {
     }
 
     private static void controlVerbs(WazaEngine.Cast c, LivingEntity t) {
-        List<String> vs = c.w.verbs().stream().filter(v -> !isSupport(v)).toList();
-        if (vs.isEmpty()) {
-            vs = List.of("BIND");
+        // a hold is a state on the body (the design's 状態として付与): a pull or a throw alone still binds it a moment
+        List<String> vs = new ArrayList<>(c.w.verbs().stream().filter(v -> !isSupport(v)).toList());
+        if (vs.stream().noneMatch(LINGERING::contains)) {
+            vs.add("BIND");
         }
         for (String v : vs) {
             enemyVerb(c, t, v, false);
@@ -1171,15 +1173,18 @@ final class WazaActs {
         }
         float was = b.getHealth();
         if (s.health() > was) {
-            b.setHealth(Math.min(b.getMaxHealth(), was + (s.health() - was) * 0.6F));
+            // through heal(): a lore-bound body keeps its health in its soul, and heal() is how that is given back
+            b.heal((s.health() - was) * 0.6F);
         }
         Vec3 ok = valid(b, s.pos());
         Vec3 from = b.position();
+        double moved = 0;
         if (ok != null && ok.distanceTo(from) > 0.5) {
             b.teleportTo(ok.x, ok.y, ok.z);
+            moved = ok.distanceTo(from);
         }
         fx(c, 3, b, from.x, from.y, from.z, b.getHealth() - was);
-        c.note("rewound:self " + Math.round(b.getHealth() - was));
+        c.note("rewound:self " + Math.round(b.getHealth() - was) + " moved " + Math.round(moved));
     }
 
     // -------------------------------------------------------------------------------------------------------- learning

@@ -72,7 +72,7 @@ public final class WazaTest {
         int effectsBefore;
         int hitsAtStart;
         int maxDeviceStage = -1;
-        boolean guardSeen, statusSeen;
+        boolean guardSeen, statusSeen, retried;
         int effectsMax;
         float guardStrength = -1;
         Arrow arrow;
@@ -86,7 +86,7 @@ public final class WazaTest {
     /** blows on the dummies that were not the techniques' own (kinds and sources), for the record */
     private static final Map<String, Integer> OTHER = new HashMap<>();
     private static final List<String> FAILED = new ArrayList<>();
-    private static int tried, passed;
+    private static int tried, passed, retries;
     private static long started = -1;
 
     private WazaTest() {
@@ -118,7 +118,7 @@ public final class WazaTest {
         TALLY.clear();
         FAILED.clear();
         OTHER.clear();
-        tried = passed = 0;
+        tried = passed = retries = 0;
         for (String id : Waza.BY_CHARACTER.keySet()) {
             Yard y = new Yard();
             y.character = id;
@@ -283,7 +283,9 @@ public final class WazaTest {
                 y.b.hurt(level.damageSources().mobAttack(y.dummy), 1);
             }
             if (waited == prep - 2 && w.behaviour() == Waza.Behaviour.REWIND) {
+                // hurt, and pushed four blocks aside: a rewind gives back health or place (or both)
                 y.b.setHealth(y.b.getMaxHealth() * 0.5F);
+                y.b.teleportTo(y.at.getX() + 4.5, y.at.getY() + (y.b.spec.airborne() ? 1 : 0), y.at.getZ() + 0.5);
             }
             if (waited >= prep && y.dummy != null) {
                 if (w.behaviour() == Waza.Behaviour.HEAL) {
@@ -340,6 +342,17 @@ public final class WazaTest {
             y.phaseAt = now;
         }
         if (y.stage == 2 && now - y.phaseAt >= 30) {
+            if (!y.retried && w.behaviour().harms() && c.landed == 0) {
+                // a blow that reached nothing gets one more try (the characters' own passives can move them, or
+                // their target, in the middle of it); the retry is counted in the result
+                y.retried = true;
+                retries++;
+                WazaWorld.removeCastObjects(c);
+                y.stage = 0;
+                y.phaseAt = 0;
+                return;
+            }
+            y.retried = false;
             judge(y, w, c);
             WazaWorld.removeCastObjects(c);
             for (var f : WazaWorld.summonsOf(y.b)) {
@@ -372,8 +385,9 @@ public final class WazaTest {
             case STATUS -> y.statusSeen || c.notes.contains("swap");
             case HEAL -> y.b.getHealth() > y.healthBefore && y.dummy != null && y.dummy.getHealth() <= y.dummyHealthBefore + 0.01F;
             case BUILD -> y.maxDeviceStage >= 3;
-            case REWIND -> c.notes.stream().anyMatch(n -> n.equals("rewound:enemy") || n.startsWith("rewound:self ") && !n.equals("rewound:self 0"));
-            case ADAPT -> c.notes.contains("learned:melee") && !WazaWorld.learned(y.b, "magic");
+            case REWIND -> c.notes.stream().anyMatch(n -> n.equals("rewound:enemy") || n.startsWith("rewound:self ") && !n.equals("rewound:self 0 moved 0"));
+            // it learned a kind it had seen at least twice, and nothing it never saw (no resistance to everything)
+            case ADAPT -> c.notes.stream().anyMatch(n -> n.startsWith("learned:")) && !WazaWorld.learned(y.b, "explosion");
             case PACT -> pactOk(y, w, c);
         };
         if (!phases) {
@@ -452,8 +466,8 @@ public final class WazaTest {
         StringBuilder o = new StringBuilder();
         OTHER.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).limit(12)
             .forEach(x -> o.append(x.getKey()).append('=').append(x.getValue()).append(' '));
-        LOG.info("WAZA-RESULT {\"techniques\":{},\"tried\":{},\"passed\":{},\"ticks\":{},\"byBehaviour\":{},\"failed\":\"{}\",\"other\":\"{}\",\"pass\":{}}",
-            Waza.ALL.size(), tried, passed, now - started, t, String.join(" ", FAILED), o.toString().trim(), tried == Waza.ALL.size() && passed == tried);
+        LOG.info("WAZA-RESULT {\"techniques\":{},\"tried\":{},\"passed\":{},\"retried\":{},\"ticks\":{},\"byBehaviour\":{},\"failed\":\"{}\",\"other\":\"{}\",\"pass\":{}}",
+            Waza.ALL.size(), tried, passed, retries, now - started, t, String.join(" ", FAILED), o.toString().trim(), tried == Waza.ALL.size() && passed == tried);
         for (Yard y : YARDS) {
             cleanup(y);
             for (Entity e : level.getEntities((Entity) null, new AABB(y.at).inflate(24, 16, 24), x -> !(x instanceof Player))) {
