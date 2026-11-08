@@ -1182,7 +1182,7 @@ final class WazaActs {
     static List<ServerPlayer> players(SupremeEntity b, double reach) {
         List<ServerPlayer> l = new ArrayList<>();
         for (Player p : b.level().getEntitiesOfClass(Player.class, b.getBoundingBox().inflate(reach))) {
-            if (p instanceof ServerPlayer sp && !sp.isSpectator() && !sp.isCreative()) {
+            if (p instanceof ServerPlayer sp && !sp.isSpectator()) {
                 l.add(sp);
             }
         }

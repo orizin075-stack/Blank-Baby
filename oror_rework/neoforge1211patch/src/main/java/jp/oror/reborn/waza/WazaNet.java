@@ -22,13 +22,13 @@ public final class WazaNet {
     private WazaNet() {
     }
 
-    private static ResourceLocation id(String path) {
+    private static ResourceLocation rl(String path) {
         return ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", path);
     }
 
     /** A technique begins (phase TELEGRAPH at start), or ends: index -1 with reason (0 done, 1 cancelled, 2 death, 3 gone). */
     public record Show(int entity, int index, long seed, long start, int target, int reason) implements CustomPacketPayload {
-        public static final Type<Show> TYPE = new Type<>(id("waza_show"));
+        public static final Type<Show> TYPE = new Type<>(rl("waza_show"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Show> CODEC = StreamCodec.ofMember(Show::write, Show::read);
 
         private void write(RegistryFriendlyByteBuf b) {
@@ -56,7 +56,7 @@ public final class WazaNet {
      */
     public record Obj(int op, int id, int kind, int owner, int index, double x, double y, double z, float dx, float dy, float dz, float radius,
                       int life, int stage, long born) implements CustomPacketPayload {
-        public static final Type<Obj> TYPE = new Type<>(id("waza_obj"));
+        public static final Type<Obj> TYPE = new Type<>(rl("waza_obj"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Obj> CODEC = StreamCodec.ofMember(Obj::write, Obj::read);
 
         private void write(RegistryFriendlyByteBuf b) {
@@ -90,7 +90,7 @@ public final class WazaNet {
 
     /** A moment: a hit landed, a guard cracked or broke, a rewind, a countermeasure learned, a contract sealed. */
     public record Fx(int kind, int index, int entity, double x, double y, double z, float a) implements CustomPacketPayload {
-        public static final Type<Fx> TYPE = new Type<>(id("waza_fx"));
+        public static final Type<Fx> TYPE = new Type<>(rl("waza_fx"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Fx> CODEC = StreamCodec.ofMember(Fx::write, Fx::read);
 
         private void write(RegistryFriendlyByteBuf b) {
@@ -115,7 +115,7 @@ public final class WazaNet {
 
     /** A contract offered to this player: its terms, shown on screen, and nothing paid until the player agrees. */
     public record Offer(int contract, int index, int owner, String benefit, String cost, int seconds) implements CustomPacketPayload {
-        public static final Type<Offer> TYPE = new Type<>(id("waza_offer"));
+        public static final Type<Offer> TYPE = new Type<>(rl("waza_offer"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Offer> CODEC = StreamCodec.ofMember(Offer::write, Offer::read);
 
         private void write(RegistryFriendlyByteBuf b) {
@@ -139,7 +139,7 @@ public final class WazaNet {
 
     /** The player's answer to a contract (from the contract screen). */
     public record Answer(int contract, boolean accept) implements CustomPacketPayload {
-        public static final Type<Answer> TYPE = new Type<>(id("waza_answer"));
+        public static final Type<Answer> TYPE = new Type<>(rl("waza_answer"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Answer> CODEC = StreamCodec.ofMember(Answer::write, Answer::read);
 
         private void write(RegistryFriendlyByteBuf b) {

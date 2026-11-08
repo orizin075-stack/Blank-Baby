@@ -427,9 +427,130 @@ public final class Look {
         } catch (ReflectiveOperationException | RuntimeException ex) {
             note("azazel arts: " + ex);
         }
-        int end = az + 90 + k * 34 + 30;
+        int end = wazaScenes(mc, az + 90 + k * 34 + 30);
         PLAN.put(end, () -> finish(mc, "complete"));
         note("king moves planned to tick " + end);
+    }
+
+    /**
+     * (057) Of the 984 techniques, one of each of the seventeen behaviours (each on another character) and seven
+     * finishing ones of the great creatures: the character alone on the stage with a dummy before it, the technique
+     * started as the server starts it (WazaEngine.start), and caught at the end of its windup, at its first blow (or
+     * its release), and late in its active window.
+     */
+    private static final String[] WAZA = {"kokuhaku_01", "riha_01", "tenki_19", "nortia_02", "berit_05", "elseria_12", "huang_linghua_17",
+        "valeria_10", "ferdinand_01", "savior_01", "lucifara_13", "taika_23", "mary_sue_03", "gokuka_01", "merlinus_12", "cursed_love_12",
+        "elseria_11", "kurma_24", "teia_24", "bahamut_24", "demiurgos_24", "yggdrasil_24", "mels_24", "chaos_24"};
+
+    private static int wazaScenes(Minecraft mc, int from) {
+        int at = from;
+        java.util.Map<?, ?> book;
+        try {
+            book = (java.util.Map<?, ?>) Class.forName("jp.oror.reborn.waza.Waza").getField("BY_ID").get(null);
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("waza: " + ex);
+            return at;
+        }
+        int k = 0;
+        for (String id : WAZA) {
+            Object w = book.get(id);
+            if (w == null) {
+                note("waza: no " + id);
+                continue;
+            }
+            int windup, active, first;
+            String character;
+            try {
+                windup = ((Number) w.getClass().getMethod("windup").invoke(w)).intValue();
+                active = ((Number) w.getClass().getMethod("activeLength").invoke(w)).intValue();
+                int[] hits = (int[]) w.getClass().getMethod("hits").invoke(w);
+                first = hits.length > 0 ? hits[0] : Math.max(1, Math.round(active * 0.3F));
+                character = (String) w.getClass().getMethod("character").invoke(w);
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                note("waza " + id + ": " + ex);
+                continue;
+            }
+            int kk = k++;
+            int t0 = at;
+            PLAN.put(t0, () -> wazaStage(mc, character));
+            PLAN.put(t0 + 30, () -> wazaView(mc));
+            PLAN.put(t0 + 40, () -> wazaStart(mc, id));
+            PLAN.put(t0 + 40 + Math.max(1, windup - 1), () -> shot(mc, String.format(java.util.Locale.ROOT, "62_%02d_%s_w", kk, id)));
+            PLAN.put(t0 + 40 + windup + first + 1, () -> shot(mc, String.format(java.util.Locale.ROOT, "62_%02d_%s_s", kk, id)));
+            PLAN.put(t0 + 40 + windup + Math.max(first + 3, active - 2), () -> shot(mc, String.format(java.util.Locale.ROOT, "62_%02d_%s_a", kk, id)));
+            at = t0 + 40 + windup + active + 30;
+        }
+        note("waza scenes planned to tick " + at);
+        return at + 10;
+    }
+
+    private static net.minecraft.world.entity.Mob wazaCaster, wazaDummy;
+
+    /** (057) The character alone on the stage (z + 10, facing the camera's side), a husk before it. */
+    private static void wazaStage(Minecraft mc, String character) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        mc.options.hideGui = true;
+        server.execute(() -> {
+            ServerLevel level = server.overworld();
+            clearStage(level);
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 48, sy - 12, sz - 24, sx + 48, sy + 40, sz + 48),
+                x -> x.getTags().contains("oror_look") || x.getTags().contains("oror_azazel"))) {
+                e.discard();
+            }
+            command(server, "weather clear 1000000");
+            command(server, "time set noon");
+            try {
+                java.util.Map<?, ?> types = (java.util.Map<?, ?>) Class.forName("jp.oror.reborn.OrorReborn").getField("TYPES").get(null);
+                Object holder = types.get(character);
+                net.minecraft.world.entity.EntityType<?> type = (net.minecraft.world.entity.EntityType<?>) holder.getClass().getMethod("get").invoke(holder);
+                Entity e = type.create(level);
+                if (e instanceof net.minecraft.world.entity.Mob m) {
+                    m.moveTo(sx, (int) sy, sz + 10, 180F, 0F);
+                    m.setYHeadRot(180F);
+                    m.setYBodyRot(180F);
+                    m.setPersistenceRequired();
+                    m.addTag("oror_look");
+                    level.addFreshEntity(m);
+                    Class.forName("jp.oror.reborn.waza.WazaEngine").getMethod("testMode", Class.forName("jp.oror.reborn.SupremeEntity"), boolean.class)
+                        .invoke(null, m, true);
+                    wazaCaster = m;
+                }
+                net.minecraft.world.entity.Mob d = net.minecraft.world.entity.EntityType.HUSK.create(level);
+                if (d != null) {
+                    d.moveTo(sx, (int) sy, sz + 10 - 4.5 - (wazaCaster == null ? 0 : wazaCaster.getBbWidth() * 0.5), 0F, 0F);
+                    d.setNoAi(true);
+                    d.setPersistenceRequired();
+                    d.addTag("oror_look");
+                    d.addTag("oror_waza_dummy");
+                    level.addFreshEntity(d);
+                    wazaDummy = d;
+                }
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                note("waza stage " + character + ": " + ex);
+            }
+        });
+    }
+
+    /** (057) The camera at the character's right front, back far enough for its size. */
+    private static void wazaView(Minecraft mc) {
+        float h = wazaCaster == null ? 2F : wazaCaster.getBbHeight();
+        double back = 5 + h * 1.6;
+        view(mc, back * 0.55, 1.2 + h * 0.55, 10 - back * 0.85, 33F, 8F);
+    }
+
+    private static void wazaStart(Minecraft mc, String id) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            try {
+                Class<?> book = Class.forName("jp.oror.reborn.waza.Waza");
+                Object w = ((java.util.Map<?, ?>) book.getField("BY_ID").get(null)).get(id);
+                Class.forName("jp.oror.reborn.waza.WazaEngine").getMethod("start", Class.forName("jp.oror.reborn.SupremeEntity"), book,
+                    net.minecraft.world.entity.LivingEntity.class, boolean.class).invoke(null, wazaCaster, w, wazaDummy, true);
+                note("waza " + id + " started on " + (wazaCaster == null ? "-" : wazaCaster.getName().getString()));
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                note("waza start " + id + ": " + ex);
+            }
+        });
     }
 
     /** (056) Azazel (an evoker made the rebel lord) alone on the stage, facing the camera's side. */
@@ -1017,6 +1138,12 @@ public final class Look {
                 mc.player.respawn();
             }
             mc.setScreen(null);
+            return;
+        }
+        if (screen.getClass().getSimpleName().equals("PactScreen") && onScreen == 20) {
+            // (057) a contract offered: photographed, then refused by closing it (nothing is owed)
+            shot(mc, "62_pact_screen");
+            screen.onClose();
             return;
         }
         if (onScreen == 100) {
