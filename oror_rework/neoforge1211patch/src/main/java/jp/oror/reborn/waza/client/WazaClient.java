@@ -86,6 +86,10 @@ public final class WazaClient {
                 WazaNet.Show s = (WazaNet.Show) payload;
                 if (s.index() < 0) {
                     PLAYS.remove(s.entity());
+                    if (s.reason() >= 2) {
+                        // its caster died or left: everything it put into the world goes with it
+                        OBJS.values().removeIf(o -> o.owner == s.entity());
+                    }
                     return;
                 }
                 Waza w = Waza.of(s.index());
@@ -209,7 +213,9 @@ public final class WazaClient {
         for (Iterator<Map.Entry<Integer, Obj>> it = OBJS.entrySet().iterator(); it.hasNext(); ) {
             Obj o = it.next().getValue();
             int age = (int) (now - o.born);
-            if (o.w == null || age > o.life + 40) {
+            // a thing outlives neither its life nor its owner (an owner gone from the world can no longer be heard
+            // taking its things down: no one tracks it)
+            if (o.w == null || age > o.life + 40 || l.getEntity(o.owner) == null) {
                 it.remove();
                 continue;
             }
