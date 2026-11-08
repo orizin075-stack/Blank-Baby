@@ -69,6 +69,7 @@ final class WazaActs {
     static boolean hurt(WazaEngine.Cast c, LivingEntity t, float amount) {
         SupremeEntity b = c.b;
         if (t == b || !b.validEnemy(t) || amount <= 0) {
+            c.note("refused:" + (t == b ? "self" : !t.isAlive() ? "dead" : b.ally(t) ? "ally" : "invalid"));
             return false;
         }
         t.invulnerableTime = 0;
@@ -80,6 +81,9 @@ final class WazaActs {
             striking = false;
         }
         boolean landed = WazaWorld.lastReached == t;
+        if (!landed) {
+            c.note("unreached");
+        }
         if (landed) {
             c.landed++;
             c.dealt += WazaWorld.lastReachedAmount;
@@ -354,6 +358,10 @@ final class WazaActs {
         selfSupport(c);
         switch (w.behaviour()) {
             case STATUS -> {
+                if (targets(c, Math.max(6, w.range())).isEmpty()) {
+                    c.note("noTarget:" + (c.target == null ? "none" : !c.target.isAlive() ? "dead" : !b.validEnemy(c.target) ? "notEnemy"
+                        : "far " + Math.round(b.distanceTo(c.target))));
+                }
                 for (LivingEntity t : targets(c, Math.max(6, w.range()))) {
                     // the technique's own effect, its strength and its end, on its target (the design's 固有効果ID)
                     WazaWorld.status(t, w.id(), w.tier(), lasting(w), b, null, null);
@@ -458,6 +466,10 @@ final class WazaActs {
                         hitVerbs(c, e);
                     }
                 }
+            }
+            if (a == h && c.target != null && !c.struck.contains(key + c.target.getId())) {
+                c.note("miss d=" + Math.round(c.b.distanceTo(c.target) * 10) / 10.0 + (c.target.isAlive() ? "" : " dead")
+                    + (c.b.validEnemy(c.target) ? "" : " notEnemy"));
             }
         }
     }

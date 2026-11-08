@@ -395,6 +395,8 @@ public final class WazaTest {
         b.append("{\"id\":\"").append(w.id()).append("\",\"name\":\"").append(w.name()).append("\",\"tier\":").append(w.tier())
             .append(",\"behaviour\":\"").append(w.behaviour()).append("\",\"ok\":").append(pass).append(",\"fired\":").append(c.fired)
             .append(",\"landed\":").append(c.landed).append(",\"dummyHits\":").append(dummyHits).append(",\"dealt\":").append(Math.round(c.dealt))
+            .append(",\"dummy\":\"").append(y.dummy == null ? "none" : (y.dummy.isAlive() ? "alive" : "gone") + " d=" + Math.round(y.dummy.distanceTo(y.b) * 10) / 10.0)
+            .append("\",\"moved\":").append(y.startPos == null ? -1 : Math.round(y.b.position().distanceTo(y.startPos) * 10) / 10.0)
             .append(",\"why\":\"").append(v[1]).append("\",\"notes\":\"").append(String.join(" ", c.notes).replace("\"", "'")).append("\"}");
         LOG.info("WAZA-TRY {}", b);
         record(y, pass, v[1]);
