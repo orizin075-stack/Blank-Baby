@@ -199,16 +199,40 @@ public final class RelicClient {
         return "";
     }
 
-    /** A handful of the god's motes where a shape appears (a few dozen at most: the design's 40–100 a moment). */
+    /**
+     * A handful of the god's motes where a shape appears. The light is the shapes': the motes only dust it (six at most,
+     * one of them a mod's), and all of them together keep to a budget each tick, so a finisher's thirty cues do not
+     * bury the stage (the first look at 058 drowned it in the mods' particles).
+     */
+    private static long budgetTick;
+    private static int budget;
+
+    static boolean spend(ClientLevel l, int n) {
+        long now = l.getGameTime();
+        if (now != budgetTick) {
+            budgetTick = now;
+            budget = 40;
+        }
+        if (budget < n) {
+            return false;
+        }
+        budget -= n;
+        return true;
+    }
+
     private static void motes(ClientLevel l, Shape s) {
         String ch = characterOf(s.owner);
-        int n = Math.min(24, 6 + (int) (s.size * 2));
+        int n = Math.min(6, 2 + (int) s.size / 2);
+        if (!spend(l, n)) {
+            n = Math.min(n, Math.max(0, budget));
+            budget -= n;
+        }
         for (int i = 0; i < n; i++) {
-            ParticleOptions p = WazaVisuals.themed(theme(ch, i), (int) s.seed + i);
-            double r = Math.min(4.0, s.size) * R.nextDouble();
+            ParticleOptions p = WazaVisuals.mote(theme(ch, i), (int) s.seed + i, i == 0);
+            double r = Math.min(3.0, s.size) * R.nextDouble();
             double ang = R.nextDouble() * Math.PI * 2;
-            WazaVisuals.put(l, p, s.at.x + Math.cos(ang) * r, s.at.y + R.nextDouble() * 1.2, s.at.z + Math.sin(ang) * r, (R.nextDouble() - 0.5) * 0.08,
-                R.nextDouble() * 0.06, (R.nextDouble() - 0.5) * 0.08);
+            WazaVisuals.put(l, p, s.at.x + Math.cos(ang) * r, s.at.y + R.nextDouble() * 1.2, s.at.z + Math.sin(ang) * r, (R.nextDouble() - 0.5) * 0.06,
+                R.nextDouble() * 0.05, (R.nextDouble() - 0.5) * 0.06);
         }
     }
 
@@ -244,16 +268,17 @@ public final class RelicClient {
                 continue;
             }
             Vec3 hand = ent.getEyePosition().add(ent.getLookAngle().scale(0.8)).add(0, -0.4, 0);
-            for (int i = 0; i < (t.slot == 2 ? 4 : 2); i++) {
+            int n = t.slot == 2 ? 3 : 1;
+            for (int i = 0; i < n && spend(l, 1); i++) {
                 Vec3 from = hand.add((R.nextDouble() - 0.5) * 3, (R.nextDouble() - 0.5) * 2.4, (R.nextDouble() - 0.5) * 3);
                 Vec3 v = hand.subtract(from).scale(0.12);
-                WazaVisuals.put(l, WazaVisuals.themed(theme(t.character, i), t.index * 7 + i), from.x, from.y, from.z, v.x, v.y, v.z);
+                WazaVisuals.put(l, WazaVisuals.mote(theme(t.character, i), t.index * 7 + i, false), from.x, from.y, from.z, v.x, v.y, v.z);
             }
         }
         for (Thing t : THINGS.values()) {
-            if ((now + t.id) % 4 == 0) {
+            if ((now + t.id) % 6 == 0 && spend(l, 1)) {
                 double ang = R.nextDouble() * Math.PI * 2, r = t.kind.startsWith("field:") ? t.radius * Math.sqrt(R.nextDouble()) : 0.5;
-                WazaVisuals.put(l, WazaVisuals.themed(theme(characterOf(t.owner), t.id), t.id), t.at.x + Math.cos(ang) * r, t.at.y + 0.2,
+                WazaVisuals.put(l, WazaVisuals.mote(theme(characterOf(t.owner), t.id), t.id, true), t.at.x + Math.cos(ang) * r, t.at.y + 0.2,
                     t.at.z + Math.sin(ang) * r, 0, 0.04, 0);
             }
         }

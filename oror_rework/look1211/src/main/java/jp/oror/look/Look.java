@@ -580,9 +580,10 @@ public final class Look {
         public void render(net.minecraft.client.gui.GuiGraphics g, int mx, int my, float partial) {
             g.fill(0, 0, this.width, this.height, 0xFF202028);
             g.renderTooltip(this.font, this.stack, 6, 14);
-            if (++this.frames == 30) {
+            // the CI client draws only a few frames a second: the popup watcher closes a screen after 100 ticks
+            if (++this.frames == 6) {
                 shot(Minecraft.getInstance(), this.name);
-            } else if (this.frames == 45) {
+            } else if (this.frames == 10) {
                 Minecraft.getInstance().setScreen(null);
             }
         }

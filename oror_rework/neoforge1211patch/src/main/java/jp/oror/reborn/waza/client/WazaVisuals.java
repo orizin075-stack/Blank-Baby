@@ -198,6 +198,47 @@ public final class WazaVisuals {
         return ParticleTypes.END_ROD;
     }
 
+    /**
+     * (058) The relics' motes: small things only. A mod's particle passes only when its name says it is a mote (a spark,
+     * an ember, a flake, a wisp...): the slashes and cuts of the combat mods are scenes of their own (one judgement cut
+     * fills the screen), and the relics draw their own blades. With {@code mod} false only vanilla's are chosen.
+     */
+    private static final String[] SMALL = {"spark", "ember", "snow", "flake", "wisp", "star", "bubble", "leaf", "leaves", "feather", "ash",
+        "drop", "drip", "dust", "firefly", "electricity", "crit", "witch", "spell", "enchant", "petal", "pollen", "spore", "smallblood",
+        "bloodparticle", "acidparticle", "glow"};
+    private static Map<Theme, List<SimpleParticleType>> motes;
+
+    public static ParticleOptions mote(Theme t, int salt, boolean mod) {
+        sort();
+        synchronized (WazaVisuals.class) {
+            if (motes == null) {
+                Map<Theme, List<SimpleParticleType>> out = new EnumMap<>(Theme.class);
+                for (Theme th : Theme.values()) {
+                    List<SimpleParticleType> l = new ArrayList<>();
+                    for (SimpleParticleType p : themes.get(th)) {
+                        ResourceLocation id = BuiltInRegistries.PARTICLE_TYPE.getKey(p);
+                        String path = id == null ? "" : id.getPath();
+                        if (id != null && (id.getNamespace().equals("minecraft") || java.util.Arrays.stream(SMALL).anyMatch(path::contains))) {
+                            l.add(p);
+                        }
+                    }
+                    out.put(th, l);
+                }
+                motes = out;
+            }
+        }
+        List<SimpleParticleType> l = motes.get(t);
+        int start = Math.floorMod(salt, Math.max(1, l.size()));
+        for (int i = 0; i < l.size(); i++) {
+            SimpleParticleType p = l.get((start + i) % l.size());
+            ResourceLocation id = BuiltInRegistries.PARTICLE_TYPE.getKey(p);
+            if (!FAILED.contains(p) && (mod || id == null || id.getNamespace().equals("minecraft"))) {
+                return p;
+            }
+        }
+        return mod ? mote(t, salt, false) : ParticleTypes.END_ROD;
+    }
+
     /** Puts a particle, forgetting a type that cannot appear (a mod's particle with no provider on this client). */
     public static void put(ClientLevel l, ParticleOptions p, double x, double y, double z, double vx, double vy, double vz) {
         try {
