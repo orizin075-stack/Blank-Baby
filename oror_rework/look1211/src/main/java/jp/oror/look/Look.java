@@ -539,12 +539,11 @@ public final class Look {
             mc.options.hideGui = false;
         });
         PLAN.put(g + 20, () -> shot(mc, "71_relic_gauge"));
-        PLAN.put(g + 30, () -> mc.setScreen(new RelicTip(r("kokuhaku_weapon"))));
-        PLAN.put(g + 40, () -> shot(mc, "72_tooltip_weapon"));
-        PLAN.put(g + 45, () -> mc.setScreen(new RelicTip(r("kokuhaku_legend"))));
-        PLAN.put(g + 55, () -> shot(mc, "73_tooltip_legend"));
-        PLAN.put(g + 60, () -> mc.setScreen(new RelicTip(r("savior_charm"))));
-        PLAN.put(g + 70, () -> shot(mc, "74_tooltip_charm"));
+        // the play stands still while a screen is up: each tooltip screen takes its own picture and closes itself
+        PLAN.put(g + 30, () -> mc.setScreen(new RelicTip(r("kokuhaku_weapon"), "72_tooltip_weapon")));
+        PLAN.put(g + 32, () -> mc.setScreen(new RelicTip(r("kokuhaku_legend"), "73_tooltip_legend")));
+        PLAN.put(g + 34, () -> mc.setScreen(new RelicTip(r("savior_charm"), "74_tooltip_charm")));
+        PLAN.put(g + 36, () -> mc.setScreen(new RelicTip(r("riha_focus"), "75_tooltip_focus")));
         PLAN.put(g + 75, () -> {
             mc.setScreen(null);
             mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
@@ -568,16 +567,24 @@ public final class Look {
     /** A screen that shows only a relic's tooltip, as the inventory shows it (the tooltip event's lines too). */
     private static final class RelicTip extends Screen {
         private final net.minecraft.world.item.ItemStack stack;
+        private final String name;
+        private int frames;
 
-        RelicTip(net.minecraft.world.item.ItemStack stack) {
+        RelicTip(net.minecraft.world.item.ItemStack stack, String name) {
             super(net.minecraft.network.chat.Component.literal("relic"));
             this.stack = stack;
+            this.name = name;
         }
 
         @Override
         public void render(net.minecraft.client.gui.GuiGraphics g, int mx, int my, float partial) {
             g.fill(0, 0, this.width, this.height, 0xFF202028);
             g.renderTooltip(this.font, this.stack, 6, 14);
+            if (++this.frames == 30) {
+                shot(Minecraft.getInstance(), this.name);
+            } else if (this.frames == 45) {
+                Minecraft.getInstance().setScreen(null);
+            }
         }
 
         @Override
@@ -597,6 +604,8 @@ public final class Look {
         server.execute(() -> {
             ServerLevel level = server.overworld();
             clearStage(level);
+            // the throne scene left the player a spectator: a technique is never readied by one
+            command(server, "gamemode creative " + name);
             command(server, "weather clear 1000000");
             command(server, "time set noon");
             command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 8", name, sx, sy + 0.1, sz + 2));
