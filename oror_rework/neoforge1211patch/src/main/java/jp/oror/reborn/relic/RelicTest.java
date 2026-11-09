@@ -284,6 +284,11 @@ public final class RelicTest {
         l.dummy = dummy(l, dist, false);
         l.strong = dummy(l, dist + 1.0, true);
         l.p.moveTo(l.at.getX() + 0.5, l.at.getY(), l.at.getZ() + 0.5, 0F, 0F);
+        // the look is the head's: a technique that turned it (a blink behind, a swap) left the next one looking away
+        l.p.setYHeadRot(0F);
+        l.p.yHeadRotO = 0F;
+        l.p.yBodyRot = 0F;
+        l.p.setXRot(0F);
         l.p.setHealth(l.p.getMaxHealth());
         l.p.removeAllEffects();
         // the last job's units and fields go (eight at most to an owner: a lane would be full of them)
@@ -345,9 +350,16 @@ public final class RelicTest {
                 d.putLong("ororWornCharmAt", now);
                 l.p.setHealth(l.p.getMaxHealth());
                 l.p.invulnerableTime = 0;
-                // a blow by the other stand-in: a player's blow is not scaled by the difficulty (a mob's is halved on
-                // easy, which never takes the wearer low enough)
-                l.p.hurt(l.p.damageSources().playerAttack(l.signer), l.p.getMaxHealth() * 0.72F);
+                // a mob's blow that takes the wearer to 28% after the difficulty's scaling (halved and one more on
+                // easy, half again on hard); a stand-in's blow on a stand-in was refused (the first 058 runs)
+                float want = l.p.getMaxHealth() * 0.72F;
+                float blow = switch (level.getDifficulty()) {
+                    case EASY -> (want - 1.0F) * 2.0F;
+                    case HARD -> want / 1.5F;
+                    default -> want;
+                };
+                boolean took = l.p.hurt(l.p.damageSources().mobAttack(l.dummy), blow);
+                j.why = "blow=" + blow + " took=" + took;
             }
             case "legend" -> {
                 l.stageBefore = l.p.getPersistentData().getInt("ororArtCycle_" + j.id);
@@ -403,7 +415,7 @@ public final class RelicTest {
                 boolean fired = RelicCrisis.fired > l.crisis;
                 boolean alive = l.p.isAlive() && l.p.getHealth() > 0;
                 ok = fired && alive;
-                what = "fired=" + fired + " hp=" + (int) l.p.getHealth() + " units=" + units;
+                what = "fired=" + fired + " hp=" + (int) l.p.getHealth() + " units=" + units + " " + j.why;
                 LOG.info("RELIC-CHARM {} {} {}", ok ? "ok" : "NO", j.id, what);
                 l.p.setHealth(l.p.getMaxHealth());
             }

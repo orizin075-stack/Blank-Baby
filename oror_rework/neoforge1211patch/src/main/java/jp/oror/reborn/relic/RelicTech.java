@@ -1022,24 +1022,46 @@ public final class RelicTech {
         private Ef() {
         }
 
+        static String why = "";
+
         private static void look() {
             if (looked) {
                 return;
             }
             looked = true;
+            // each part found on its own (what is missing is named for the CI)
             try {
-                Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
+                animations = Class.forName("yesman.epicfight.gameasset.Animations");
+            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                why += " animations:" + ex;
+            }
+            try {
                 living = Class.forName("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
-                getPatch = caps.getMethod("getEntityPatch", Entity.class, Class.class);
                 for (Method m : living.getMethods()) {
                     if (m.getName().equals("playAnimationSynchronized") && m.getParameterCount() == 2 && m.getParameterTypes()[1] == float.class) {
                         play = m;
                     }
                 }
-                animations = Class.forName("yesman.epicfight.gameasset.Animations");
+                if (play == null) {
+                    why += " no playAnimationSynchronized";
+                }
             } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
-                broken = true;
+                why += " patch:" + ex;
             }
+            try {
+                Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
+                for (Method m : caps.getMethods()) {
+                    if (m.getName().equals("getEntityPatch") && m.getParameterCount() == 2 && m.getParameterTypes()[1] == Class.class) {
+                        getPatch = m;
+                    }
+                }
+                if (getPatch == null) {
+                    why += " no getEntityPatch";
+                }
+            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                why += " caps:" + ex;
+            }
+            broken = animations == null;
         }
 
         static Object anim(String name) {
@@ -1067,7 +1089,7 @@ public final class RelicTech {
             }
             try {
                 look();
-                if (broken || play == null) {
+                if (broken || play == null || getPatch == null) {
                     return null;
                 }
                 Object patch = getPatch.invoke(null, p, living);
@@ -1101,7 +1123,8 @@ public final class RelicTech {
                     }
                 }
             }
-            return found + "/" + all + " missing=" + MISSING;
+            look();
+            return found + "/" + all + " missing=" + MISSING + (why.isEmpty() ? "" : " why=" + why);
         }
     }
 

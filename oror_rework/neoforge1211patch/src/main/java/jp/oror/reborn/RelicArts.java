@@ -364,6 +364,11 @@ public final class RelicArts {
          }
          case "allies": {
             c.t = allies(p, num(o, "r", 16.0) * (double)c.reach);
+            // (058) the bearer is always one of its own friends (a stand-in player is in no level's list of entities)
+            if (!c.t.contains(p)) {
+               c.t = new ArrayList<>(c.t);
+               c.t.add(0, p);
+            }
             break;
          }
          case "self": {
