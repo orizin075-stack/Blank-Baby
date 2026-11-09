@@ -953,7 +953,14 @@ public final class WazaWorld {
                 if (en.getValue() == b.getId()) {
                     Entity f = sl.getEntity(en.getKey());
                     if (f != null) {
-                        f.discard();
+                        // (058) not now: the owner may be leaving with its chunk, and taking an entity out of a section
+                        // while the chunk's entities are walked crashed the server (ConcurrentModificationException in
+                        // PersistentEntitySectionManager.updateChunkStatus, the 058 CI's game tests); after the tick
+                        sl.getServer().tell(new net.minecraft.server.TickTask(sl.getServer().getTickCount(), () -> {
+                            if (!f.isRemoved()) {
+                                f.discard();
+                            }
+                        }));
                     }
                     SUMMONER.remove(en.getKey());
                     SUMMONED.remove(en.getKey());
