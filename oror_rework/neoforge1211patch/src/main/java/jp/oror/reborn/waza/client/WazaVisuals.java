@@ -203,9 +203,12 @@ public final class WazaVisuals {
      * an ember, a flake, a wisp...): the slashes and cuts of the combat mods are scenes of their own (one judgement cut
      * fills the screen), and the relics draw their own blades. With {@code mod} false only vanilla's are chosen.
      */
-    private static final String[] SMALL = {"spark", "ember", "snow", "flake", "wisp", "star", "bubble", "leaf", "leaves", "feather", "ash",
+    private static final String[] SMALL = {"spark", "ember", "snow", "flake", "wisp", "sparkle", "twinkle", "bubble", "leaf", "leaves", "feather", "ash",
         "drop", "drip", "dust", "firefly", "electricity", "crit", "witch", "spell", "enchant", "petal", "pollen", "spore", "smallblood",
         "bloodparticle", "acidparticle", "glow"};
+    /** Motes by name that are not: Epic Fight's spreading sparks, Superb Warfare's stars, jets and ground splashes. */
+    private static final String[] NOT_SMALL = {"zandatsu", "expansive", "contractive", "all_spark", "fire_star", "stun", "jet", "ground",
+        "harvest", "rainbow", "splash"};
     private static Map<Theme, List<SimpleParticleType>> motes;
 
     public static ParticleOptions mote(Theme t, int salt, boolean mod) {
@@ -218,13 +221,17 @@ public final class WazaVisuals {
                     for (SimpleParticleType p : themes.get(th)) {
                         ResourceLocation id = BuiltInRegistries.PARTICLE_TYPE.getKey(p);
                         String path = id == null ? "" : id.getPath();
-                        if (id != null && (id.getNamespace().equals("minecraft") || java.util.Arrays.stream(SMALL).anyMatch(path::contains))) {
+                        if (id != null && (id.getNamespace().equals("minecraft")
+                            || java.util.Arrays.stream(SMALL).anyMatch(path::contains) && java.util.Arrays.stream(NOT_SMALL).noneMatch(path::contains))) {
                             l.add(p);
                         }
                     }
                     out.put(th, l);
                 }
                 motes = out;
+                org.slf4j.LoggerFactory.getLogger("OROR Waza").info("OROR RELIC-MOTES {}", out.entrySet().stream()
+                    .map(en -> en.getKey() + "=" + en.getValue().stream().map(x -> String.valueOf(BuiltInRegistries.PARTICLE_TYPE.getKey(x))).toList())
+                    .toList());
             }
         }
         List<SimpleParticleType> l = motes.get(t);
