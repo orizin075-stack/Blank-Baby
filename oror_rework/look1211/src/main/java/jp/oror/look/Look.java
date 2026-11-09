@@ -427,7 +427,7 @@ public final class Look {
         } catch (ReflectiveOperationException | RuntimeException ex) {
             note("azazel arts: " + ex);
         }
-        int end = wazaScenes(mc, az + 90 + k * 34 + 30);
+        int end = relicScenes(mc, wazaScenes(mc, az + 90 + k * 34 + 30));
         PLAN.put(end, () -> finish(mc, "complete"));
         note("king moves planned to tick " + end);
     }
@@ -485,6 +485,153 @@ public final class Look {
     }
 
     private static net.minecraft.world.entity.Mob wazaCaster, wazaDummy;
+
+    /**
+     * (058) Of the 123 relic techniques, sixteen of many kinds (blade lines and waves, beams, words, thunder, the colour
+     * tag, wings and domes, spikes, rains of arrows, rings and clocks, trees, fists, units), each used by the player
+     * itself with the weapon in hand (seen from behind it), caught while readied (the warning and the gathering light),
+     * at its release, and later; then two tooltips of the rewritten relics, and the gauge over the hotbar.
+     */
+    private static final String[][] RELIC = {{"kokuhaku_weapon", "0"}, {"kokuhaku_weapon", "2"}, {"riha_weapon", "0"}, {"elseria_weapon", "1"},
+        {"valeria_weapon", "0"}, {"nortia_weapon", "0"}, {"savior_weapon", "2"}, {"kurma_weapon", "0"}, {"teia_weapon", "2"}, {"bahamut_weapon", "0"},
+        {"ouroboros_weapon", "2"}, {"yggdrasil_weapon", "2"}, {"demiurgos_weapon", "2"}, {"brutality_weapon", "2"}, {"lucifara_weapon", "1"},
+        {"chaos_weapon", "1"}};
+
+    private static int relicScenes(Minecraft mc, int from) {
+        int at = from;
+        Class<?> v9;
+        try {
+            v9 = Class.forName("jp.oror.reborn.relic.RelicV9");
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("relic: " + ex);
+            return at;
+        }
+        int k = 0;
+        for (String[] r : RELIC) {
+            int slot = Integer.parseInt(r[1]);
+            int windup, forming;
+            try {
+                Object[] ts = (Object[]) v9.getMethod("of", String.class).invoke(null, r[0]);
+                Object t = ts[slot];
+                windup = ((Number) t.getClass().getMethod("windup").invoke(t)).intValue();
+                forming = ((Number) t.getClass().getMethod("forming").invoke(t)).intValue();
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                note("relic " + r[0] + "#" + slot + ": " + ex);
+                continue;
+            }
+            int kk = k++;
+            int t0 = at;
+            String name = String.format(java.util.Locale.ROOT, "70_%02d_%s_%d", kk, r[0].replace("_weapon", ""), slot);
+            PLAN.put(t0, () -> relicStage(mc, r[0]));
+            PLAN.put(t0 + 25, () -> relicStart(mc, slot));
+            PLAN.put(t0 + 25 + Math.max(2, windup - 3), () -> shot(mc, name + "_ready"));
+            PLAN.put(t0 + 25 + windup + 4, () -> shot(mc, name + "_release"));
+            PLAN.put(t0 + 25 + windup + 14, () -> shot(mc, name + "_later"));
+            if (slot == 2) {
+                PLAN.put(t0 + 25 + windup + Math.max(24, forming), () -> shot(mc, name + "_finish"));
+            }
+            at = t0 + 25 + windup + Math.max(30, forming + 20) + 20;
+        }
+        // the gauge over the hotbar, then two rewritten tooltips (a weapon's, a legend's)
+        int g = at;
+        PLAN.put(g, () -> {
+            relicStage(mc, "kokuhaku_weapon");
+            mc.options.hideGui = false;
+        });
+        PLAN.put(g + 20, () -> shot(mc, "71_relic_gauge"));
+        PLAN.put(g + 30, () -> mc.setScreen(new RelicTip(r("kokuhaku_weapon"))));
+        PLAN.put(g + 40, () -> shot(mc, "72_tooltip_weapon"));
+        PLAN.put(g + 45, () -> mc.setScreen(new RelicTip(r("kokuhaku_legend"))));
+        PLAN.put(g + 55, () -> shot(mc, "73_tooltip_legend"));
+        PLAN.put(g + 60, () -> mc.setScreen(new RelicTip(r("savior_charm"))));
+        PLAN.put(g + 70, () -> shot(mc, "74_tooltip_charm"));
+        PLAN.put(g + 75, () -> {
+            mc.setScreen(null);
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            mc.options.hideGui = true;
+        });
+        note("relic scenes planned to tick " + (g + 80));
+        return g + 85;
+    }
+
+    private static net.minecraft.world.item.ItemStack r(String id) {
+        try {
+            Object items = Class.forName("jp.oror.reborn.CharacterRelics").getField("ITEMS").get(null);
+            Object holder = ((java.util.Map<?, ?>) items).get(id);
+            return new net.minecraft.world.item.ItemStack((net.minecraft.world.item.Item) holder.getClass().getMethod("get").invoke(holder));
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("relic item " + id + ": " + ex);
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
+    }
+
+    /** A screen that shows only a relic's tooltip, as the inventory shows it (the tooltip event's lines too). */
+    private static final class RelicTip extends Screen {
+        private final net.minecraft.world.item.ItemStack stack;
+
+        RelicTip(net.minecraft.world.item.ItemStack stack) {
+            super(net.minecraft.network.chat.Component.literal("relic"));
+            this.stack = stack;
+        }
+
+        @Override
+        public void render(net.minecraft.client.gui.GuiGraphics g, int mx, int my, float partial) {
+            g.fill(0, 0, this.width, this.height, 0xFF202028);
+            g.renderTooltip(this.font, this.stack, 6, 14);
+        }
+
+        @Override
+        public boolean isPauseScreen() {
+            return false;
+        }
+    }
+
+    /** (058) The player on the stage with the relic weapon, a husk ten blocks before it, seen from behind. */
+    private static void relicStage(Minecraft mc, String weapon) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        mc.options.hideGui = true;
+        mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+        mc.player.getAbilities().flying = false;
+        net.minecraft.world.item.ItemStack stack = r(weapon);
+        String name = mc.player.getGameProfile().getName();
+        server.execute(() -> {
+            ServerLevel level = server.overworld();
+            clearStage(level);
+            command(server, "weather clear 1000000");
+            command(server, "time set noon");
+            command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 8", name, sx, sy + 0.1, sz + 2));
+            ServerPlayer sp = server.getPlayerList().getPlayerByName(name);
+            if (sp != null) {
+                sp.getAbilities().flying = false;
+                sp.onUpdateAbilities();
+                sp.setItemInHand(InteractionHand.MAIN_HAND, stack.copy());
+                sp.setHealth(sp.getMaxHealth());
+            }
+            net.minecraft.world.entity.Mob d = net.minecraft.world.entity.EntityType.HUSK.create(level);
+            if (d != null) {
+                d.moveTo(sx, (int) sy, sz + 9, 180F, 0F);
+                d.setNoAi(true);
+                d.setPersistenceRequired();
+                d.addTag("oror_look");
+                level.addFreshEntity(d);
+            }
+        });
+    }
+
+    private static void relicStart(Minecraft mc, int slot) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        server.execute(() -> {
+            try {
+                ServerPlayer sp = server.getPlayerList().getPlayerByName(name);
+                Object ok = Class.forName("jp.oror.reborn.relic.RelicTech").getMethod("start", ServerPlayer.class, int.class, boolean.class)
+                    .invoke(null, sp, slot, true);
+                note("relic technique " + slot + " started: " + ok);
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                note("relic start: " + ex);
+            }
+        });
+    }
 
     /** (057) The character alone on the stage (z + 10, facing the camera's side), a husk before it. */
     private static void wazaStage(Minecraft mc, String character) {

@@ -183,6 +183,12 @@ public final class RelicTest {
             l.signer = new Tester(level, i * 2 + 1);
             l.p.moveTo(l.at.getX() + 0.5, l.at.getY(), l.at.getZ() + 0.5, 0F, 0F);
             l.signer.moveTo(l.at.getX() - 2.5, l.at.getY(), l.at.getZ() + 0.5, 0F, 0F);
+            // the other stand-in strikes the wearer in the charms' trials and takes their counters: it must outlast them
+            AttributeInstance mh = l.signer.getAttribute(Attributes.MAX_HEALTH);
+            if (mh != null) {
+                mh.setBaseValue(1000000.0);
+            }
+            l.signer.setHealth(1000000.0F);
             LANES_.add(l);
         }
         for (int i = 0; i < all.size(); i++) {
@@ -280,6 +286,8 @@ public final class RelicTest {
         l.p.moveTo(l.at.getX() + 0.5, l.at.getY(), l.at.getZ() + 0.5, 0F, 0F);
         l.p.setHealth(l.p.getMaxHealth());
         l.p.removeAllEffects();
+        // the last job's units and fields go (eight at most to an owner: a lane would be full of them)
+        RelicWorld.clearFor(level, l.p);
         CompoundTag d = l.p.getPersistentData();
         for (String k : new ArrayList<>(d.getAllKeys())) {
             if (k.startsWith("ororTech") || k.startsWith("ororCrisis") || k.startsWith("ororUlt") || k.startsWith("ororWorn")) {
@@ -337,7 +345,9 @@ public final class RelicTest {
                 d.putLong("ororWornCharmAt", now);
                 l.p.setHealth(l.p.getMaxHealth());
                 l.p.invulnerableTime = 0;
-                l.p.hurt(l.p.damageSources().mobAttack(l.dummy), l.p.getMaxHealth() * 0.72F);
+                // a blow by the other stand-in: a player's blow is not scaled by the difficulty (a mob's is halved on
+                // easy, which never takes the wearer low enough)
+                l.p.hurt(l.p.damageSources().playerAttack(l.signer), l.p.getMaxHealth() * 0.72F);
             }
             case "legend" -> {
                 l.stageBefore = l.p.getPersistentData().getInt("ororArtCycle_" + j.id);

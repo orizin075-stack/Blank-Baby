@@ -115,6 +115,16 @@ public final class RelicWorld {
         return n;
     }
 
+    /** Takes away this player's units and fields (the CI's lanes, between jobs). */
+    public static void clearFor(ServerLevel sl, Player p) {
+        for (Unit u : new ArrayList<>(UNITS.values())) {
+            if (u.owner.equals(p.getUUID())) {
+                remove(sl, u, false);
+            }
+        }
+        FIELDS.values().removeIf(f -> f.owner == p);
+    }
+
     public static List<String> unitKinds(Player p) {
         List<String> l = new ArrayList<>();
         UNITS.values().stream().filter(u -> u.owner.equals(p.getUUID())).forEach(u -> l.add(u.kind));

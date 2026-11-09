@@ -221,9 +221,12 @@ public final class RelicClient {
         if (l == null || mc.player == null) {
             return;
         }
+        RelicSpec held = CharacterRelics.of(mc.player.getMainHandItem());
+        boolean weapon = held != null && RelicV9.of(held.id) != null;
         for (int k = 0; k < 3; k++) {
             while (KEYS[k].consumeClick()) {
-                if (mc.screen == null) {
+                // only with a god-slaying weapon in hand (the keys are free for other things otherwise)
+                if (mc.screen == null && weapon) {
                     PacketDistributor.sendToServer(new RelicNet.Key(k));
                 }
             }
