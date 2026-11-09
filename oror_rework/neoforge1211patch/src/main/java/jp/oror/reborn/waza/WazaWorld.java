@@ -775,6 +775,11 @@ public final class WazaWorld {
 
     /** The player's answer: only an agreed contract ever costs anything. */
     public static void answer(ServerPlayer p, int id, boolean accept) {
+        if (id >= 1_000_000) {
+            // (058) a relic technique's contract (甘契の未怪), offered on the same screen
+            jp.oror.reborn.relic.RelicWorld.answer(p, id, accept);
+            return;
+        }
         Contract c = CONTRACTS.get(id);
         if (c == null || !c.player.equals(p.getUUID()) || c.state != 0 || p.level().getGameTime() > c.expires) {
             return;

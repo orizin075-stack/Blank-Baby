@@ -184,6 +184,20 @@ public final class WazaVisuals {
         return ParticleTypes.END_ROD;
     }
 
+    /** (058) A particle of one theme, chosen among the theme's by the salt (the relics' techniques, which are no Waza). */
+    public static ParticleOptions themed(Theme t, int salt) {
+        sort();
+        List<SimpleParticleType> l = themes.get(t);
+        int start = Math.floorMod(salt, l.size());
+        for (int i = 0; i < l.size(); i++) {
+            SimpleParticleType p = l.get((start + i) % l.size());
+            if (!FAILED.contains(p)) {
+                return p;
+            }
+        }
+        return ParticleTypes.END_ROD;
+    }
+
     /** Puts a particle, forgetting a type that cannot appear (a mod's particle with no provider on this client). */
     public static void put(ClientLevel l, ParticleOptions p, double x, double y, double z, double vx, double vy, double vz) {
         try {

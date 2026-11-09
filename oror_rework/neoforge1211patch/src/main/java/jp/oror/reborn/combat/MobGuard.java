@@ -207,6 +207,13 @@ public final class MobGuard {
         if (!melee && !projectile || !guards(m)) {
             return;
         }
+        // (058) a relic's art or technique is no blow a guard can take, nor is any blow on a guard a technique broke
+        // or a seal undid, while that lasts
+        long now = sl.getGameTime();
+        if (jp.oror.reborn.RelicArts.busy() || self.getPersistentData().getLong("ororSealUntil") > now
+            || self.getPersistentData().getLong("ororGuardBrokenUntil") > now) {
+            return;
+        }
         Guard g = guard(m);
         if (g.remaining <= 0 || g.stagger > 0) {
             // struck with the guard down: it goes up again sooner, for a later blow of the combo
