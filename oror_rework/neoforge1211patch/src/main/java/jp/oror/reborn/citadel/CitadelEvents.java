@@ -206,6 +206,46 @@ public final class CitadelEvents {
         return 1;
     }
 
+    /** (059, CI) What the world's entity manager holds of a chunk: its load status, its visibility, how many chunks
+     * wait to load or unload, and the chunk holder's full status (by reflection: for the log only). */
+    static String managerState(ServerLevel level, long chunk) {
+        StringBuilder b = new StringBuilder();
+        try {
+            java.lang.reflect.Field f = ServerLevel.class.getDeclaredField("entityManager");
+            f.setAccessible(true);
+            Object m = f.get(level);
+            for (String name : new String[]{"chunkLoadStatuses", "chunkVisibility"}) {
+                java.lang.reflect.Field g = m.getClass().getDeclaredField(name);
+                g.setAccessible(true);
+                Object map = g.get(m);
+                Object v = map.getClass().getMethod("get", long.class).invoke(map, chunk);
+                Object size = map.getClass().getMethod("size").invoke(map);
+                b.append(name).append('=').append(v).append(" (of ").append(size).append(") ");
+            }
+            for (String name : new String[]{"chunksToUnload", "loadingInbox"}) {
+                java.lang.reflect.Field g = m.getClass().getDeclaredField(name);
+                g.setAccessible(true);
+                Object c = g.get(m);
+                b.append(name).append('=').append(c.getClass().getMethod("size").invoke(c)).append(' ');
+            }
+        } catch (Throwable error) {
+            b.append("manager? ").append(error);
+        }
+        try {
+            Object map = level.getChunkSource().chunkMap;
+            java.lang.reflect.Method v = map.getClass().getDeclaredMethod("getVisibleChunkIfPresent", long.class);
+            v.setAccessible(true);
+            Object holder = v.invoke(map, chunk);
+            b.append("holder=").append(holder == null ? "none" : holder.getClass().getMethod("getFullStatus").invoke(holder));
+            if (holder != null) {
+                b.append(" level=").append(holder.getClass().getMethod("getTicketLevel").invoke(holder));
+            }
+        } catch (Throwable error) {
+            b.append(" holder? ").append(error);
+        }
+        return b.toString().trim();
+    }
+
     private static final class Test {
         final CitadelSites.Site site;
         final List<ChunkPos> chunks;
@@ -296,9 +336,10 @@ public final class CitadelEvents {
                 AABB box0 = new AABB(a0.getX(), level.getMinBuildHeight(), a0.getZ(), a0.getX() + CitadelSites.SIZE * 16, level.getMaxBuildHeight(),
                     a0.getZ() + CitadelSites.SIZE * 16);
                 BlockPos th = site.throne();
-                LOG.info("CITADEL-READY {\"throneChunkEntitiesLoaded\":{},\"throneEntityTicking\":{},\"throneBlockTicking\":{},\"whole\":{}}",
+                LOG.info("CITADEL-READY {\"throneChunkEntitiesLoaded\":{},\"throneEntityTicking\":{},\"throneBlockTicking\":{},\"whole\":{},\"manager\":\"{}\"}",
                     level.areEntitiesLoaded(net.minecraft.world.level.ChunkPos.asLong(th)), level.isPositionEntityTicking(th),
-                    level.shouldTickBlocksAt(th), level.getChunkSource().getChunkNow(th.getX() >> 4, th.getZ() >> 4) != null);
+                    level.shouldTickBlocksAt(th), level.getChunkSource().getChunkNow(th.getX() >> 4, th.getZ() >> 4) != null,
+                    managerState(level, net.minecraft.world.level.ChunkPos.asLong(th)));
                 LOG.info("CITADEL-TRACE {\"box\":\"{}\",\"allTagged\":{},\"boxRoyals\":{},\"traced\":{}}", box0,
                     CitadelGarrison.allTagged(level, box0), level.getEntitiesOfClass(RoyalMob.class, box0, RoyalMob::isAlive).size(),
                     CitadelGarrison.traced(level));
