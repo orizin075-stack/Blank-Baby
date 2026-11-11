@@ -295,7 +295,10 @@ public final class RelicTest {
         RelicWorld.clearFor(level, l.p);
         CompoundTag d = l.p.getPersistentData();
         for (String k : new ArrayList<>(d.getAllKeys())) {
-            if (k.startsWith("ororTech") || k.startsWith("ororCrisis") || k.startsWith("ororUlt") || k.startsWith("ororWorn")) {
+            // and the last job's windows: a guard, an undying or an adaptation left by a legend's stage refused the
+            // next charm's blow (the third 058 run)
+            if (k.startsWith("ororTech") || k.startsWith("ororCrisis") || k.startsWith("ororUlt") || k.startsWith("ororWorn")
+                || (k.startsWith("ororArt") || k.startsWith("ororRelic")) && k.endsWith("Until")) {
                 d.remove(k);
             }
         }
@@ -318,7 +321,7 @@ public final class RelicTest {
         l.units = RelicWorld.count(l.p, null);
         l.fields = RelicWorld.fields(l.p);
         l.offered = RelicWorld.contractsOffered;
-        l.crisis = RelicCrisis.fired;
+        l.crisis = RelicCrisis.FIRED_BY.getOrDefault(l.p.getUUID(), 0);
         l.ultimates = RelicUltimate.started;
         l.hpBefore = l.p.getHealth();
         switch (j.kind) {
@@ -360,6 +363,22 @@ public final class RelicTest {
                 };
                 boolean took = l.p.hurt(l.p.damageSources().mobAttack(l.dummy), blow);
                 j.why = "blow=" + blow + " took=" + took;
+                if (!took) {
+                    // what refused it, for the log; then once more with what stood in the way gone
+                    long t = level.getGameTime();
+                    StringBuilder w = new StringBuilder(" refusedBy=");
+                    for (String k : new ArrayList<>(d.getAllKeys())) {
+                        if (k.endsWith("Until") && d.getLong(k) > t) {
+                            w.append(k).append(',');
+                            d.remove(k);
+                        }
+                    }
+                    w.append(" invulnerableTo=").append(l.p.isInvulnerableTo(l.p.damageSources().mobAttack(l.dummy)))
+                        .append(" abilities=").append(l.p.getAbilities().invulnerable).append(" dummyAlive=").append(l.dummy.isAlive());
+                    l.p.invulnerableTime = 0;
+                    took = l.p.hurt(l.p.damageSources().mobAttack(l.dummy), blow);
+                    j.why += w + " again=" + took;
+                }
             }
             case "legend" -> {
                 l.stageBefore = l.p.getPersistentData().getInt("ororArtCycle_" + j.id);
@@ -412,7 +431,7 @@ public final class RelicTest {
                 LOG.info("RELIC-FOCUS {} {} {}", ok ? "ok" : "NO", j.id, what);
             }
             case "charm" -> {
-                boolean fired = RelicCrisis.fired > l.crisis;
+                boolean fired = RelicCrisis.FIRED_BY.getOrDefault(l.p.getUUID(), 0) > l.crisis;
                 boolean alive = l.p.isAlive() && l.p.getHealth() > 0;
                 ok = fired && alive;
                 what = "fired=" + fired + " hp=" + (int) l.p.getHealth() + " units=" + units + " " + j.why;

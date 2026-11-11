@@ -1013,23 +1013,30 @@ public final class RelicTech {
 
     /** Plays the first of these Epic Fight animations this Epic Fight has on the player (nothing without it). */
     static final class Ef {
-        private static Method getPatch, play;
-        private static Class<?> living, animations;
+        private static java.lang.invoke.MethodHandle getPatch, play;
+        private static Class<?> living, animations, entityPatch;
         private static boolean looked, broken;
         private static final Map<String, Object> FOUND = new HashMap<>();
         static final List<String> MISSING = new ArrayList<>();
+        static int played;
+        static String playWhy = "";
 
         private Ef() {
         }
 
         static String why = "";
 
+        /**
+         * Epic Fight's two methods, found by name and exact type through method handles. Reflection's lists of methods
+         * (getMethods, getMethod) load every type their class names, and on a dedicated server one of them is the
+         * client's LocalPlayer: the lookup threw there and no technique moved (the third 058 run).
+         */
         private static void look() {
             if (looked) {
                 return;
             }
             looked = true;
-            // each part found on its own (what is missing is named for the CI)
+            java.lang.invoke.MethodHandles.Lookup lk = java.lang.invoke.MethodHandles.publicLookup();
             try {
                 animations = Class.forName("yesman.epicfight.gameasset.Animations");
             } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
@@ -1037,22 +1044,14 @@ public final class RelicTech {
             }
             try {
                 living = Class.forName("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
-                for (Method m : living.getMethods()) {
-                    if (m.getName().equals("playAnimationSynchronized") && m.getParameterCount() == 2 && m.getParameterTypes()[1] == float.class) {
-                        play = m;
-                    }
-                }
-                if (play == null) {
-                    why += " no playAnimationSynchronized";
-                }
-            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
-                why += " patch:" + ex;
-            }
-            try {
+                entityPatch = Class.forName("yesman.epicfight.world.capabilities.entitypatch.EntityPatch");
                 Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
-                for (Method m : caps.getMethods()) {
-                    if (m.getName().equals("getEntityPatch") && m.getParameterCount() == 2 && m.getParameterTypes()[1] == Class.class) {
-                        getPatch = m;
+                for (Class<?> ret : new Class<?>[]{entityPatch, living, Object.class}) {
+                    try {
+                        getPatch = lk.findStatic(caps, "getEntityPatch", java.lang.invoke.MethodType.methodType(ret, Entity.class, Class.class));
+                        break;
+                    } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                        // another erasure of its return
                     }
                 }
                 if (getPatch == null) {
@@ -1061,12 +1060,50 @@ public final class RelicTech {
             } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
                 why += " caps:" + ex;
             }
-            broken = animations == null;
+            broken = animations == null || living == null;
+        }
+
+        /** playAnimationSynchronized(animation, float), its first parameter's type found from an animation itself. */
+        private static java.lang.invoke.MethodHandle play(Object anim) {
+            if (play != null || anim == null) {
+                return play;
+            }
+            java.lang.invoke.MethodHandles.Lookup lk = java.lang.invoke.MethodHandles.publicLookup();
+            java.util.ArrayDeque<Class<?>> todo = new java.util.ArrayDeque<>();
+            java.util.Set<Class<?>> seen = new java.util.HashSet<>();
+            todo.add(anim.getClass());
+            while (!todo.isEmpty() && play == null) {
+                Class<?> c = todo.poll();
+                if (c == null || !seen.add(c)) {
+                    continue;
+                }
+                try {
+                    play = lk.findVirtual(living, "playAnimationSynchronized", java.lang.invoke.MethodType.methodType(void.class, c, float.class));
+                } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                    if (c.getSuperclass() != null) {
+                        todo.add(c.getSuperclass());
+                    }
+                    Collections.addAll(todo, c.getInterfaces());
+                }
+            }
+            if (play == null) {
+                // the old way, by the list of methods: it works wherever the client's classes may be loaded
+                try {
+                    for (Method m : living.getMethods()) {
+                        if (m.getName().equals("playAnimationSynchronized") && m.getParameterCount() == 2 && m.getParameterTypes()[1] == float.class) {
+                            play = lk.unreflect(m);
+                        }
+                    }
+                } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                    why += " no playAnimationSynchronized for " + anim.getClass().getName() + " (" + ex.getClass().getSimpleName() + ")";
+                }
+            }
+            return play;
         }
 
         static Object anim(String name) {
             look();
-            if (broken || animations == null) {
+            if (broken) {
                 return null;
             }
             if (FOUND.containsKey(name)) {
@@ -1076,7 +1113,7 @@ public final class RelicTech {
             try {
                 Field f = animations.getField(name);
                 a = f.get(null);
-            } catch (ReflectiveOperationException | RuntimeException ex) {
+            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
                 MISSING.add(name);
             }
             FOUND.put(name, a);
@@ -1089,22 +1126,26 @@ public final class RelicTech {
             }
             try {
                 look();
-                if (broken || play == null || getPatch == null) {
+                if (broken || getPatch == null) {
                     return null;
                 }
-                Object patch = getPatch.invoke(null, p, living);
-                if (patch == null) {
+                Object patch = getPatch.invokeWithArguments(p, living);
+                if (patch == null || !living.isInstance(patch)) {
+                    playWhy = "no patch on " + p.getClass().getSimpleName();
                     return null;
                 }
                 for (String n : names) {
                     Object a = anim(n);
-                    if (a != null) {
-                        play.invoke(patch, a, 0.05F);
+                    java.lang.invoke.MethodHandle h = play(a);
+                    if (a != null && h != null) {
+                        h.invokeWithArguments(patch, a, 0.05F);
+                        played++;
                         return n;
                     }
                 }
-            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+            } catch (Throwable ex) {
                 // the swing goes unanimated
+                playWhy = String.valueOf(ex);
             }
             return null;
         }
@@ -1123,8 +1164,18 @@ public final class RelicTech {
                     }
                 }
             }
+            int moving = 0;
+            for (RelicV9.Tech t : RelicV9.TECHS) {
+                if (t.anim.stream().anyMatch(n -> anim(n) != null)) {
+                    moving++;
+                }
+            }
             look();
-            return found + "/" + all + " missing=" + MISSING + (why.isEmpty() ? "" : " why=" + why);
+            if (!broken && !FOUND.isEmpty()) {
+                FOUND.values().stream().filter(java.util.Objects::nonNull).findFirst().ifPresent(Ef::play);
+            }
+            return found + "/" + all + " techniques " + moving + "/" + RelicV9.TECHS.size() + " missing=" + MISSING + " handles=" + (getPatch != null)
+                + "/" + (play != null) + (why.isEmpty() ? "" : " why=" + why);
         }
     }
 

@@ -307,6 +307,22 @@ public final class WazaTest {
                     y.b.setHealth(y.b.getMaxHealth() * 0.5F);
                     y.dummy.setHealth(y.dummy.getMaxHealth() * 0.5F);
                 }
+                // what moved either of them while the technique was being made ready (the caster's own moves, a blow's
+                // push) is undone and noted: 英雄剣舞 swung at a dummy nine blocks off in every 058 run
+                String drift = null;
+                if (w.behaviour() != Waza.Behaviour.REWIND) {
+                    double want = dummyDistance(y.b, w);
+                    double bx = y.at.getX() + 0.5, bz = y.at.getZ() + 0.5;
+                    double bOff = Math.hypot(y.b.getX() - bx, y.b.getZ() - bz), dOff = Math.hypot(y.dummy.getX() - bx, y.dummy.getZ() - (bz + want));
+                    if (bOff > 1.0 || dOff > 1.0) {
+                        drift = "drift caster=" + Math.round(bOff * 10) / 10.0 + " dummy=" + Math.round(dOff * 10) / 10.0;
+                        y.b.teleportTo(bx, y.at.getY() + (y.b.spec.airborne() ? 1 : 0), bz);
+                        y.b.setDeltaMovement(Vec3.ZERO);
+                        y.dummy.teleportTo(bx, y.at.getY(), bz + want);
+                        y.dummy.setDeltaMovement(Vec3.ZERO);
+                        y.b.lookAt(y.dummy, 360, 360);
+                    }
+                }
                 y.startPos = y.b.position();
                 y.healthBefore = y.b.getHealth();
                 y.dummyHealthBefore = y.dummy.getHealth();
@@ -319,6 +335,9 @@ public final class WazaTest {
                 y.guardStrength = -1;
                 y.arrow = null;
                 y.cast = WazaEngine.start(y.b, w, y.dummy, true);
+                if (drift != null && y.cast != null) {
+                    y.cast.note(drift);
+                }
                 y.stage = 1;
                 y.phaseAt = now;
             }

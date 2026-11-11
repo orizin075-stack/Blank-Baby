@@ -44,6 +44,8 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class RelicCrisis {
     public static int fired;
+    /** How often each wearer's guard went off (the CI judges a charm by its own wearer, not by any lane's). */
+    public static final java.util.Map<java.util.UUID, Integer> FIRED_BY = new java.util.HashMap<>();
     public static final List<String> LOG = new ArrayList<>();
 
     private RelicCrisis() {
@@ -88,7 +90,15 @@ public final class RelicCrisis {
                 return;
             }
         }
-        // a rescue charm guards its wearer and the friends about it
+        // a rescue charm guards its wearer and the friends about it; the wearer first, found as itself (a stand-in
+        // player is in no list of the level's entities, and its own rescue never went off in the first 058 runs)
+        if (v instanceof Player self) {
+            RelicV9.Info info = charm(self);
+            if (info != null && info.crisis.get("k").getAsString().equals("rescue")) {
+                rescue(e, self, v, info, sl, now);
+                return;
+            }
+        }
         if (v instanceof Player || v.getPersistentData().hasUUID("ororRelicOwner")) {
             for (Player p : sl.getEntitiesOfClass(Player.class, v.getBoundingBox().inflate(20.0), q -> q == v || !RelicPowers.enemy(q, v))) {
                 RelicV9.Info info = charm(p);
@@ -114,6 +124,7 @@ public final class RelicCrisis {
         }
         spend(p, kind, now, c);
         fired++;
+        FIRED_BY.merge(p.getUUID(), 1, Integer::sum);
         LOG.add(info.id + " " + kind + " at " + now);
         Entity src = e.getSource().getEntity();
         int colour = colour(info);
@@ -179,6 +190,7 @@ public final class RelicCrisis {
         }
         spend(wearer, "rescue", now, c);
         fired++;
+        FIRED_BY.merge(wearer.getUUID(), 1, Integer::sum);
         LOG.add(info.id + " rescue " + (v == wearer ? "self" : "friend") + " at " + now);
         RelicTech.window(v, "ororTechReduce", now + c.get("span").getAsLong(), c.get("cut").getAsFloat());
         e.setAmount(e.getAmount() * (1.0F - c.get("cut").getAsFloat()));
