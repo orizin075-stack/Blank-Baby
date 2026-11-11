@@ -1,0 +1,58 @@
+328 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+429 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+489 press selectWorld.create
+490 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+590 screenshot popup_ConfirmScreen
+590 press gui.yes
+591 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+617 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+666 screen none in LOADING
+667 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+767 screenshot popup_
+768 screen none in PLAY
+797 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
+812 stage at 16 91 -16
+967 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef, minecraft:chicken -> net.minecraft.client.renderer.entity.ChickenRenderer holding 0 minecraft:air, minecraft:chicken -> net.minecraft.client.renderer.entity.ChickenRenderer holding 0 minecraft:air]
+1007 palace only: planned to tick 3460
+1018 throne 976, 78, -44
+2821 at the capital 976 79 22
+2877 screenshot 80_palace_hall
+2887 at the capital 976 80 -31
+2947 screenshot 81_palace_throne
+2957 at the capital 976 79 -37
+3017 screenshot 82_palace_throne_close
+3027 at the capital 976 69 98
+3087 screenshot 83_palace_south_stair
+3099 at the capital 976 77 54
+3157 screenshot 84_palace_front
+3169 at the capital 943 81 16
+3227 screenshot 85_palace_corner_stair
+3247 at the capital 952 76 -28
+3297 screenshot 86_palace_library
+3308 at the capital 1000 76 -28
+3367 screenshot 87_palace_war_room
+3377 at the capital 974 76 -49
+3437 screenshot 88_palace_treasury
+3450 at the capital 976 101 -34
+3507 screenshot 89_palace_chapel
+3518 at the capital 976 111 -36
+3577 screenshot 90_palace_bedchamber
+3592 at the capital 976 123 18
+3647 screenshot 91_palace_ballroom
+3657 at the capital 976 69 -128
+3717 screenshot 92_palace_north_stair
+3730 at the capital 995 76 0
+3787 screenshot 93_palace_gallery
+3797 at the capital 950 120 -16
+3857 screenshot 94_palace_ballroom_west
+3868 at the capital 936 84 -56
+3927 screenshot 95_palace_tower_passage
+3937 at the capital 934 100 -64
+3997 screenshot 96_palace_tower_stair
+4007 at the capital 934 140 -66
+4067 screenshot 97_palace_tower_top
+4080 at the capital 881 177 -10
+4137 screenshot 98_palace_roof_west
+4150 at the capital 1045 79 -28
+4207 screenshot 99_palace_east_hall_stair
+4227 finished: complete (palace only)
