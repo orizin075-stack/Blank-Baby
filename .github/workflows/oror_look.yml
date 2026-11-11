@@ -63,7 +63,7 @@ jobs:
           else
             rm -rf "$OUT"/crash-reports "$OUT"/result.txt "$OUT"/client-exit.txt
             if [ "$OROR_LOOK_ONLY" = relics ]; then rm -f "$OUT"/7[0-9]_*.jpg "$OUT"/popup_RelicTip.jpg; fi
-            if [ "$OROR_LOOK_ONLY" = palace ]; then rm -f "$OUT"/8[0-9]_palace_*.jpg "$OUT"/9[0-9]_palace_*.jpg; fi
+            if [ "$OROR_LOOK_ONLY" = palace ]; then rm -f "$OUT"/[789][0-9]_palace_*.jpg; fi
           fi
           mkdir -p "$OUT"
           G=$RUNNER_TEMP/game; mkdir -p $G/mods

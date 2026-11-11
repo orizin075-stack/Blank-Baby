@@ -6,7 +6,7 @@ tower 73 blocks over the town: the king sat at the top of a maze no one would wa
 blocks over the town on all four sides with no stair up to it.
 
 What it is now (all within the keep's own walls and roof, which stay; the town and the walls are untouched):
-* four grand staircases from the town up to the terrace, on the palace's four axes;
+* two grand staircases from the town up to the terrace, south (to the main door) and north (to the king's door);
 * the main door in the south front, into the audience hall: 29 wide, 72 long, 22 high, two rows of pillars, a red
   carpet to a three-step dais and the throne (gold, with a canopy of banners and a rose window behind it); the court
   stands about it (the king on the throne, bodyguards and the sage and archmage on the dais, generals at its foot,
@@ -20,6 +20,10 @@ What it is now (all within the keep's own walls and roof, which stay; the town a
   servants' rooms, storerooms and the bath (third floor); the great ballroom under the roof (fourth floor);
 * the chests of the old maze and hall (and their contents) are not lost: the richest go to the treasury, the rest to
   the armoury, the kitchen and the storerooms by what they hold.
+
+* (059b) the shell made whole: the slot between the rooms and the keep's wall walled (falls of up to 45 blocks), the
+  wings' middle roofed again at the keep's height (the maze's own low roofs went with it); the corner towers' ladders
+  replaced by stair turrets, with a passage in from the corner stair halls; the east hall's ladder by a stair.
 
 The garrison table (garrison.json) gets the court's new posts; CitadelData's throne moves with them.
 """
@@ -87,7 +91,8 @@ class Palace:
 
     def survey_chests(self):
         """Every container of the old maze and hall, with what it holds; dispensers (its traps) go."""
-        for x, y, z, be in self.t.block_entities_in(-R, R, Y0, YTOP, -R, R):
+        # the maze and hall within the walls, and the slot between them and the keep's wall (42), which seal() fills
+        for x, y, z, be in self.t.block_entities_in(-R - 1, R + 1, Y0, YTOP, -R - 1, R + 1):
             bid = anvil.val(be['id'])
             if bid not in ('minecraft:chest', 'minecraft:barrel', 'minecraft:trapped_chest'):
                 self.stats['dropped ' + bid] += 1
@@ -537,6 +542,11 @@ class Palace:
                         for y in range(G + i + 1, G + i + 4):
                             if y >= U1 - 1:
                                 self.put(x, y, z, AIR)
+                    # a balustrade on the open side (a string of upside-down steps with a rail on it), where the
+                    # flight stands two or more over the gallery's floor and under the upper storey's
+                    if 2 <= i <= 7:
+                        self.put(sx * 18, G + i, z, stairs('spruce', face, 'top'))
+                        self.put(sx * 18, G + i + 1, z, fence('spruce'))
         # the fourth floor: the ballroom under the roof, pillars and chandeliers
         for x in range(-30, 31, 10):
             for z in range(-30, 31, 10):
@@ -582,6 +592,7 @@ class Palace:
             h = G
             k = 0
             landings = {}
+            runs = {}
             while h <= F4:
                 cxz = order[k % 4]
                 for x in range(cxz[0], cxz[0] + 3):
@@ -607,6 +618,7 @@ class Palace:
                         else:
                             z = cxz[1] + 3 + i if dz > 0 else cxz[1] - 1 - i
                             x = cxz[0] + j
+                        runs.setdefault(h, set()).add((x, z))
                         if i < 4:
                             self.put(x, w - 1, z, stairs('quartz', face))
                             self.put(x, w - 2, z, stairs('quartz', OPPOSITE[face], 'top'))
@@ -616,6 +628,19 @@ class Palace:
                             self.put(x, y, z, AIR)
                 h += 5
                 k += 1
+            # the top storey: a floor over the well beyond its landing (open down to the flights below, 19 blocks),
+            # but over the last flight up to it
+            top_run = runs.get(F4 - 5, set())
+            lx, lz = landings[F4]
+            for x in range(x0, x0 + 11):
+                for z in range(z0, z0 + 11):
+                    if x0 + 3 <= x <= x0 + 7 and z0 + 3 <= z <= z0 + 7:
+                        continue
+                    if (x, z) in top_run or (lx <= x <= lx + 2 and lz <= z <= lz + 2):
+                        continue
+                    if self.get(x, F4 - 1, z) == AIR:
+                        self.put(x, F4 - 1, z, QS)
+                        self.stats['stair hall top floor'] += 1
             # doors: at the floors' heights, through an inner wall the landing touches
             for floor in (G, F2, F3, F4):
                 cxz = landings.get(floor)
@@ -630,6 +655,295 @@ class Palace:
                     self.fill(cxz[0], cxz[0] + 2, floor, floor + 3, iz, iz, AIR)
                     self.stats['stair doors'] += 1
             self.stats['stair halls'] += 1
+
+    # ------------------------------------------------------------------------------------------------ the shell made whole
+
+    def seal(self):
+        """The slot between the rooms and the keep's wall (x or z at 42, open from the ground floor to the roof: the old
+        maze's outer corridor beside it was walled; the rooms that end at 41 now are not, so one walking by an outer
+        wall of an upper floor fell up to 45 blocks into it, and on the east it opened into the old passages inside the
+        east wall): a wall of quartz bricks, the room's outer wall. Its glass (lit panes before sea lanterns) stays."""
+        n = 0
+        for x in range(-R - 1, R + 2):
+            for z in range(-R - 1, R + 2):
+                if max(abs(x), abs(z)) != R + 1:
+                    continue
+                for y in range(Y0, YTOP + 1):
+                    s = self.get(x, y, z)
+                    if 'glass' in s or (y < G and solid(s)):
+                        continue
+                    self.put(x, y, z, QB)
+                    n += 1
+        self.stats['slot blocks walled'] = n
+
+    def roof(self):
+        """The roof over the middle of the wings. The old palace had none there at the keep's height: the maze's own
+        top storeys made a lower stepped roof (121 to 135), which the clearing took away with the maze, and those parts
+        of the top floor stood open to the sky. They get the keep's roof as it is beside them (the row z 33: the
+        ceiling at 146, the eaves at 147 and the slope up to the ridge), wherever a column has no roof; the keep's
+        walls under it, which stop at 143 there, are taken up to 145 to meet the eaves."""
+        ZREF = 33
+        cols = 0
+        for x in range(-R - 7, R + 8):
+            for z in range(-16, 32):
+                if any(solid(self.get(x, y, z)) for y in range(146, 176)):
+                    continue
+                if abs(x) >= R + 3:
+                    # the keep's wall: up to 145 in its own stone
+                    top = self.get(x, 143, z)
+                    if solid(top):
+                        for y in (144, 145):
+                            if not solid(self.get(x, y, z)):
+                                self.put(x, y, z, top)
+                    continue
+                y0 = 146 if abs(x) <= R else 144
+                for y in range(y0, 176):
+                    ref = self.get(x, y, ZREF)
+                    if solid(ref) and not solid(self.get(x, y, z)):
+                        self.put(x, y, z, ref)
+                cols += 1
+        self.stats['roof columns'] = cols
+
+    # ------------------------------------------------------------------------------------------------ the corner towers
+
+    TOWER_FLOORS = (75, 87, 100, 113, 126, 139)   # the towers' plank floors (one walks a block over them)
+
+    def towers(self):
+        """The four round towers at the keep's corners (six storeys to the lookout under their spires) had only a ladder
+        up a slot by the keep's wall, and no way in: each gets a stair turret (a spiral of stairs round a solid core,
+        walled, a door on to each storey) and a passage from the corner stair hall's landing at 85 through the keep's
+        wall to its second storey. The old ladders go; so do the low quartz screens across the storeys."""
+        CAL = 'minecraft:calcite'
+        PLANK = 'minecraft:spruce_planks'
+        ring = [(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (2, 5), (3, 5), (4, 5), (5, 5), (5, 4), (5, 3), (5, 2), (5, 1), (4, 1), (3, 1), (2, 1)]
+        rise = [0, 1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 9, 10, 11, 12]
+        corners = {0, 4, 8, 12}
+        F = self.TOWER_FLOORS
+        bottom, top = F[0] + 1, F[-1] + 1
+        for sx, sz in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+            cx, cz = 46 * sx, 46 * sz
+            W = lambda i, j: (cx + sx * i, cz + sz * j)
+
+            def world_dir(di, dj):
+                dx, dz = sx * di, sz * dj
+                return {(1, 0): 'east', (-1, 0): 'west', (0, 1): 'south', (0, -1): 'north'}[(dx, dz)]
+            # the chests and barrels the turret will stand on, to be put back in the storeys' rooms
+            moved = []
+            xs = sorted(W(i, 0)[0] for i in (0, 6))
+            zs = sorted(W(0, j)[1] for j in (0, 6))
+            for x, y, z, be in self.t.block_entities_in(xs[0], xs[1], F[0], 150, zs[0], zs[1]):
+                if anvil.val(be['id']) in ('minecraft:chest', 'minecraft:barrel', 'minecraft:trapped_chest'):
+                    moved.append((y, anvil.val(be['id']), {k: v for k, v in be.items() if k not in ('x', 'y', 'z', 'keepPacked')}))
+            # the low quartz screens across the storeys (two blocks high, two out from the keep's corner)
+            for a in range(-8, 3):
+                for i, j in ((2, a), (a, 2)):
+                    if 0 <= i <= 6 and 0 <= j <= 6:
+                        continue
+                    x, z = W(i, j)
+                    for y in range(bottom, F[-1] + 11):
+                        if self.get(x, y, z) == 'minecraft:smooth_quartz':
+                            self.put(x, y, z, AIR)
+                            self.stats['tower screen blocks'] += 1
+            # the turret: its walls (where open), its core with lights, the spiral cleared then laid
+            for i in range(7):
+                for j in range(7):
+                    x, z = W(i, j)
+                    edge = i in (0, 6) or j in (0, 6)
+                    core = 2 <= i <= 4 and 2 <= j <= 4
+                    for y in range(bottom, top):
+                        if edge:
+                            if not solid(self.get(x, y, z)) or 'chest' in self.get(x, y, z) or 'barrel' in self.get(x, y, z):
+                                self.put(x, y, z, CAL)
+                        elif core:
+                            lamp = (i, j) in ((3, 2), (2, 3), (4, 3), (3, 4)) and (y - bottom) % 6 == 3
+                            self.put(x, y, z, SEA if lamp else CAL)
+                        else:
+                            self.put(x, y, z, AIR)
+                    if edge or core:
+                        self.put(x, F[-1], z, PLANK if not core else CAL)
+            # the top storey's floor over the turret, but for the head of the stair
+            for i, j in ring:
+                self.put(*self._xyz(W(i, j), F[-1]), PLANK)
+            # the spiral: twelve steps a turn (three along each side, a landing at each corner), from the bottom
+            # storey (76) to the top one (140); each step's underside a stair upside down
+            steps = 0
+            for lap in range(6):
+                for p, (i, j) in enumerate(ring):
+                    h = bottom + 12 * lap + rise[p]
+                    if h > top:
+                        break
+                    x, z = W(i, j)
+                    if p in corners:
+                        self.put(x, h - 1, z, DS)
+                    else:
+                        prev = ring[p - 1]
+                        face = world_dir(i - prev[0], j - prev[1])
+                        self.put(x, h - 1, z, stairs('polished_deepslate', face))
+                        if h - 2 >= bottom:
+                            self.put(x, h - 2, z, stairs('polished_deepslate', OPPOSITE[face], 'top'))
+                    # the shaft was cleared before the steps were laid: only the top storey's floor is in the way,
+                    # over the last steps (its opening, the head of the stair)
+                    for y in (h, h + 1, h + 2):
+                        if y == F[-1]:
+                            self.put(x, y, z, AIR)
+                    steps += 1
+                else:
+                    continue
+                break
+            # doors on to the storeys: through the turret's wall beside the step at the storey's height
+            doors = 0
+            for floor in F[:-1]:
+                w = floor + 1
+                for lap in range(6):
+                    for p, (i, j) in enumerate(ring):
+                        if bottom + 12 * lap + rise[p] != w:
+                            continue
+                        for di, dj in ((-1, 0), (0, -1)):
+                            wi, wj = i + di, j + dj
+                            if not (wi == 0 or wj == 0):
+                                continue
+                            ri, rj = wi + di, wj + dj      # the room's cell beyond the wall
+                            rx, rz = W(ri, rj)
+                            if solid(self.get(rx, floor, rz)) and not solid(self.get(rx, w, rz)) and not solid(self.get(rx, w + 1, rz)):
+                                x, z = W(wi, wj)
+                                self.put(x, floor, z, PLANK)
+                                for y in range(w, w + 3):
+                                    self.put(x, y, z, AIR)
+                                doors += 1
+            self.stats['tower doors'] += doors
+            # each storey's two halves (along the keep's two walls) joined round the turret's inner corner, through the
+            # outer corner of the keep's wall: the doors are on one half only above the second storey
+            for floor in F:
+                for i, j in ((-1, 0), (-1, -1), (0, -1)):
+                    x, z = W(i, j)
+                    self.put(x, floor, z, PLANK)
+                    for y in range(floor + 1, floor + 4):
+                        self.put(x, y, z, AIR)
+                self.stats['tower corner passages'] += 1
+            # the ladders: their slots walled up (or, beside an open storey, the floor made good)
+            for x in range(cx - 10, cx + 11):
+                for z in range(cz - 10, cz + 11):
+                    for y in range(F[0], 151):
+                        s = self.get(x, y, z)
+                        if 'ladder' not in s:
+                            continue
+                        facing = s.split('facing=')[1].split(',')[0].split(']')[0]
+                        bx, bz = {'north': (0, 1), 'south': (0, -1), 'east': (-1, 0), 'west': (1, 0)}[facing]
+                        walls = sum(1 for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)) if solid(self.get(x + dx, y, z + dz)))
+                        if walls >= 3:
+                            self.put(x, y, z, self.get(x + bx, y, z + bz))
+                        elif y in F:
+                            self.put(x, y, z, PLANK)
+                        else:
+                            self.put(x, y, z, AIR)
+                        self.stats['tower ladder blocks'] += 1
+            # the passage from the corner stair hall's landing at 85 (its outer corner) to the second storey (88)
+            for d in range(R + 1, 47):
+                x = sx * d
+                k = d - (R + 1)          # 0 the slot, 1..3 rising, 4 the last before the storey
+                w = 85 + min(3, k)
+                for z in (sz * 39, sz * 40, sz * 41):
+                    if 1 <= k <= 3:
+                        self.put(x, w - 1, z, stairs('quartz', 'west' if sx < 0 else 'east'))
+                    else:
+                        self.put(x, w - 1, z, QS)
+                    for y in range(w, w + 4):
+                        self.put(x, y, z, AIR)
+                    self.put(x, w + 4, z, QB)
+                for z in (sz * 38, sz * 42):
+                    for y in range(w - 1, w + 5):
+                        if not solid(self.get(x, y, z)):
+                            self.put(x, y, z, QB)
+            self.stats['tower passages'] += 1
+            # the chests back, against the walls of the storey they stood on
+            for y, bid, data in moved:
+                spot = self._tower_spot(W, y)
+                if spot is None:
+                    self.stats['tower chests without a place'] += 1
+                    continue
+                x, z, f = spot
+                if bid == 'minecraft:barrel':
+                    self.put(x, y, z, f'minecraft:barrel[facing={f},open=false]')
+                else:
+                    self.put(x, y, z, f'{bid}[facing={f},type=single,waterlogged=false]')
+                self.t.set_be(x, y, z, data)
+                self.stats['tower chests moved'] += 1
+            self.stats['tower stair steps'] += steps
+            self.stats['towers'] += 1
+
+    @staticmethod
+    def _xyz(xz, y):
+        return xz[0], y, xz[1]
+
+    def _tower_spot(self, W, y):
+        """A free place on a tower storey's floor against its outer wall, out of the doors' and passage's way."""
+        for r in range(9, 2, -1):
+            for i in range(-8, 9):
+                for j in range(-8, 9):
+                    if 0 <= i <= 7 and 0 <= j <= 7:
+                        continue
+                    if max(abs(i), abs(j)) != r or (i < 0 and j < 0):
+                        continue
+                    if (j < 0 and i <= 2) or (i < 0 and j <= 2):
+                        continue    # the corridors by the keep's corner (the doors and the passage come out there)
+                    x, z = W(i, j)
+                    if self.get(x, y, z) != AIR or self.get(x, y + 1, z) != AIR or not solid(self.get(x, y - 1, z)):
+                        continue
+                    for dx, dz, f in ((1, 0, 'west'), (-1, 0, 'east'), (0, 1, 'north'), (0, -1, 'south')):
+                        if self.get(x + dx, y, z + dz) == 'minecraft:calcite':
+                            return x, z, f
+        return None
+
+    # ------------------------------------------------------------------------------------------------ the east hall
+
+    def annex(self):
+        """The long hall east of the keep (x 59 to 83): three storeys (one walks at 77, 90 and 103), of which only the
+        middle one has a way out, joined by a ladder up a hole in each floor. A straight stair up its west wall instead,
+        two wide, thirteen steps a storey, with a balustrade where it stands four or more over the floor beside it.
+        The ladder left inside the east wall's old passages (sealed off from the rooms now) goes too."""
+        PLANK = 'minecraft:spruce_planks'
+        floors = {77: 76, 90: 89, 103: 102}   # walking height: the floor's top block
+        # the ladder, and the holes it went up through made good
+        for y in range(77, 106):
+            s = self.get(60, y, -31)
+            if 'ladder' in s:
+                self.put(60, y, -31, AIR)
+                self.stats['annex ladder blocks'] += 1
+        for y in (88, 89, 101, 102):
+            if self.get(60, y, -31) == AIR:
+                self.put(60, y, -31, PLANK)
+        for y in range(80, 130):
+            if 'ladder' in self.get(44, y, -33):
+                self.put(44, y, -33, AIR)
+                self.stats['east wall ladder blocks'] += 1
+        # what stands in the stair's way (the hall is empty there; anything else is counted, and kept)
+        in_way = 0
+        for k in range(1, 27):
+            z = -31 + k
+            for x in (59, 60, 61):
+                for y in range(76 + k, 80 + k):
+                    s = self.get(x, y, z)
+                    if solid(s) and 'planks' not in s:
+                        in_way += 1
+        self.stats['annex stair: blocks in the way'] = in_way
+        if in_way:
+            return
+        for k in range(1, 27):
+            z = -31 + k
+            tread = 76 + k
+            below = 76 if k <= 13 else 89     # the floor the flight rises from
+            for x in (59, 60):
+                self.put(x, tread, z, stairs('spruce', 'south'))
+                if tread - 1 > below:
+                    self.put(x, tread - 1, z, stairs('spruce', 'north', 'top'))
+                for y in range(tread + 1, tread + 4):
+                    self.put(x, y, z, AIR)
+            rise = tread - below
+            nxt = 89 if k <= 13 else 102      # the floor over the flight
+            if rise >= 4 and tread + 1 < nxt - 1:
+                self.put(61, tread, z, stairs('spruce', 'south', 'top'))
+                self.put(61, tread + 1, z, fence('spruce'))
+            self.stats['annex stair steps'] += 1
 
     # ------------------------------------------------------------------------------------------------ the treasury's way down
 
@@ -765,12 +1079,16 @@ class Palace:
     def build(self):
         self.survey_chests()
         self.clear()
+        self.seal()
+        self.roof()
         self.floors()
         self.room_walls()
         self.doors()
         self.hall()
         self.rooms()
         self.corner_stairs()
+        self.towers()
+        self.annex()
         self.vault_stair()
         self.approaches()
         self.place_chests()

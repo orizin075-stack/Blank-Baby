@@ -159,7 +159,13 @@ public final class Look {
                     {"86_palace_library", -24, 77, -12, 135F, 10F}, {"87_palace_war_room", 24, 77, -12, 225F, 10F},
                     {"88_palace_treasury", -2, 77, -33, 120F, 12F}, {"89_palace_chapel", 0, 102, -18, 180F, 6F},
                     {"90_palace_bedchamber", 0, 112, -20, 180F, 10F}, {"91_palace_ballroom", 0, 124, 34, 180F, 8F},
-                    {"92_palace_north_stair", 0, 70, -112, 0F, -4F}, {"93_palace_gallery", 17, 77, 30, 180F, 4F}};
+                    {"92_palace_north_stair", 0, 70, -112, 0F, -4F},
+                    // (059b) the gallery with its stair's balustrade, the top floor under its new roof, the corner
+                    // towers' way in and their stair turrets, the roof from outside, the east hall's stair
+                    {"93_palace_gallery", 19, 77, 16, 180F, 8F}, {"94_palace_ballroom_west", -26, 121, 0, 90F, -25F},
+                    {"95_palace_tower_passage", -40, 85, -40, 90F, 5F}, {"96_palace_tower_stair", -42, 101, -48, 90F, 12F},
+                    {"97_palace_tower_top", -42, 141, -50, 90F, 25F}, {"98_palace_roof_west", -95, 178, 6, -90F, 22F},
+                    {"99_palace_east_hall_stair", 69, 80, -12, 125F, 6F}};
                 for (Object[] v : tour) {
                     int dx = (Integer) v[1], y = (Integer) v[2], dz = (Integer) v[3];
                     float yaw = (Float) v[4], pitch = (Float) v[5];
