@@ -82,6 +82,10 @@ public final class WazaClient {
             return;
         }
         switch (what) {
+            case "athit" -> {
+                WazaNet.AtHit h = (WazaNet.AtHit) payload;
+                jp.oror.reborn.royal.ATFieldRenderer.hit(h.entity(), h.dx(), h.dy(), h.dz(), h.strength());
+            }
             case "show" -> {
                 WazaNet.Show s = (WazaNet.Show) payload;
                 if (s.index() < 0) {

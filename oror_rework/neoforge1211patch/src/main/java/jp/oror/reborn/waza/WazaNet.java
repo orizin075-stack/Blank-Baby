@@ -113,6 +113,30 @@ public final class WazaNet {
         }
     }
 
+    /** (059) A blow the villager king's AT field met: from which way, and how hard against the field's whole
+     * (ATFieldHits sends it, ATFieldRenderer draws where it struck). */
+    public record AtHit(int entity, float dx, float dy, float dz, float strength) implements CustomPacketPayload {
+        public static final Type<AtHit> TYPE = new Type<>(rl("at_field_hit"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, AtHit> CODEC = StreamCodec.ofMember(AtHit::write, AtHit::read);
+
+        private void write(RegistryFriendlyByteBuf b) {
+            b.writeVarInt(this.entity);
+            b.writeFloat(this.dx);
+            b.writeFloat(this.dy);
+            b.writeFloat(this.dz);
+            b.writeFloat(this.strength);
+        }
+
+        private static AtHit read(RegistryFriendlyByteBuf b) {
+            return new AtHit(b.readVarInt(), b.readFloat(), b.readFloat(), b.readFloat(), b.readFloat());
+        }
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     /** A contract offered to this player: its terms, shown on screen, and nothing paid until the player agrees. */
     public record Offer(int contract, int index, int owner, String benefit, String cost, int seconds) implements CustomPacketPayload {
         public static final Type<Offer> TYPE = new Type<>(rl("waza_offer"));
@@ -164,6 +188,7 @@ public final class WazaNet {
         r.playToClient(Obj.TYPE, Obj.CODEC, (p, ctx) -> ctx.enqueueWork(() -> client("obj", p)));
         r.playToClient(Fx.TYPE, Fx.CODEC, (p, ctx) -> ctx.enqueueWork(() -> client("fx", p)));
         r.playToClient(Offer.TYPE, Offer.CODEC, (p, ctx) -> ctx.enqueueWork(() -> client("offer", p)));
+        r.playToClient(AtHit.TYPE, AtHit.CODEC, (p, ctx) -> ctx.enqueueWork(() -> client("athit", p)));
         r.playToServer(Answer.TYPE, Answer.CODEC, (p, ctx) -> ctx.enqueueWork(() -> {
             if (ctx.player() instanceof ServerPlayer sp) {
                 WazaWorld.answer(sp, p.contract(), p.accept());

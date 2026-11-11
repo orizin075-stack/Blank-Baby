@@ -37,6 +37,12 @@ public abstract class KingSovereignMixin {
         }
     }
 
+    /** (059) Where a blow met his AT field, for the membrane drawn round him (ATFieldHits; the reckoning is untouched). */
+    @Inject(method = "beginHurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), remap = false)
+    private void oror$fieldStruck(DamageSource src, float amount, CallbackInfoReturnable<Boolean> cir) {
+        jp.oror.reborn.royal.ATFieldHits.struck(this.mob, src, amount);
+    }
+
     @Inject(method = "tick()V", at = @At("TAIL"), remap = false)
     private void oror$deeds(CallbackInfo ci) {
         KingForms.tick(this.mob, this.phase);

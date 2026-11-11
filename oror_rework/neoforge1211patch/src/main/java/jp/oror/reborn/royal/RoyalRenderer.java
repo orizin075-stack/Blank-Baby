@@ -51,10 +51,19 @@ public final class RoyalRenderer extends MobRenderer<RoyalMob, RoyalModel> {
         } else {
             super.render(mob, yaw, partial, pose, buffers, light);
         }
-        if (mob.role() == RoyalRole.KING && mob.atField() > 0.0F && !mob.atBreached()) {
-            double pulse = 0.04 * Math.sin((mob.tickCount + partial) * 0.12);
-            double w = mob.getBbWidth() * 0.5 + 0.3 + pulse, hgt = mob.getBbHeight() + 0.3;
-            LevelRenderer.renderLineBox(pose, buffers.getBuffer(RenderType.lines()), -w, -0.15, -w, w, hgt, w, 0.2F, 0.65F, 1.0F, 0.65F);
+        if (mob.role() == RoyalRole.KING) {
+            // (059) his field as a membrane of hexagons (ATFieldRenderer); the old light box only if that fails
+            boolean drawn;
+            try {
+                drawn = ATFieldRenderer.render(mob, partial, pose, buffers);
+            } catch (RuntimeException error) {
+                drawn = false;
+            }
+            if (!drawn && mob.atField() > 0.0F && !mob.atBreached()) {
+                double pulse = 0.04 * Math.sin((mob.tickCount + partial) * 0.12);
+                double w = mob.getBbWidth() * 0.5 + 0.3 + pulse, hgt = mob.getBbHeight() + 0.3;
+                LevelRenderer.renderLineBox(pose, buffers.getBuffer(RenderType.lines()), -w, -0.15, -w, w, hgt, w, 0.2F, 0.65F, 1.0F, 0.65F);
+            }
         }
     }
 
