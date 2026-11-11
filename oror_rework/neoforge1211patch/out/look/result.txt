@@ -1,0 +1,102 @@
+254 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+355 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+415 press selectWorld.create
+416 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+516 screenshot popup_ConfirmScreen
+516 press gui.yes
+517 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+546 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+568 screen none in LOADING
+569 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+669 screenshot popup_
+670 screen none in PLAY
+699 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
+713 stage at -672 105 32
+869 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef, irons_spellbooks:necromancer -> io.redspace.ironsspellbooks.entity.mobs.necromancer.NecromancerRenderer holding 0 minecraft:air]
+909 relic scenes planned to tick 2115
+909 relics only: planned to tick 2120
+959 relic technique 0 started: true
+976 screenshot 70_00_kokuhaku_0_ready
+983 screenshot 70_00_kokuhaku_0_release
+993 screenshot 70_00_kokuhaku_0_later
+1054 relic technique 2 started: true
+1078 screenshot 70_01_kokuhaku_2_ready
+1085 screenshot 70_01_kokuhaku_2_release
+1095 screenshot 70_01_kokuhaku_2_later
+1105 screenshot 70_01_kokuhaku_2_finish
+1172 relic technique 0 started: true
+1186 screenshot 70_02_riha_0_ready
+1193 screenshot 70_02_riha_0_release
+1203 screenshot 70_02_riha_0_later
+1264 relic technique 1 started: true
+1276 screenshot 70_03_elseria_1_ready
+1283 screenshot 70_03_elseria_1_release
+1293 screenshot 70_03_elseria_1_later
+1354 relic technique 0 started: true
+1374 screenshot 70_04_valeria_0_ready
+1381 screenshot 70_04_valeria_0_release
+1391 screenshot 70_04_valeria_0_later
+1452 relic technique 0 started: true
+1474 screenshot 70_05_nortia_0_ready
+1481 screenshot 70_05_nortia_0_release
+1491 screenshot 70_05_nortia_0_later
+1552 relic technique 2 started: true
+1577 screenshot 70_06_savior_2_ready
+1584 screenshot 70_06_savior_2_release
+1594 screenshot 70_06_savior_2_later
+1614 screenshot 70_06_savior_2_finish
+1679 relic technique 0 started: true
+1702 screenshot 70_07_kurma_0_ready
+1709 screenshot 70_07_kurma_0_release
+1719 screenshot 70_07_kurma_0_later
+1780 relic technique 2 started: true
+1814 screenshot 70_08_teia_2_ready
+1821 screenshot 70_08_teia_2_release
+1831 screenshot 70_08_teia_2_later
+1855 screenshot 70_08_teia_2_finish
+1921 relic technique 0 started: true
+1935 screenshot 70_09_bahamut_0_ready
+1942 screenshot 70_09_bahamut_0_release
+1952 screenshot 70_09_bahamut_0_later
+2013 relic technique 2 started: true
+2046 screenshot 70_10_ouroboros_2_ready
+2053 screenshot 70_10_ouroboros_2_release
+2063 screenshot 70_10_ouroboros_2_later
+2073 screenshot 70_10_ouroboros_2_finish
+2136 relic technique 2 started: true
+2176 screenshot 70_11_yggdrasil_2_ready
+2183 screenshot 70_11_yggdrasil_2_release
+2193 screenshot 70_11_yggdrasil_2_later
+2208 screenshot 70_11_yggdrasil_2_finish
+2273 relic technique 2 started: true
+2290 screenshot 70_12_demiurgos_2_ready
+2297 screenshot 70_12_demiurgos_2_release
+2307 screenshot 70_12_demiurgos_2_later
+2335 screenshot 70_12_demiurgos_2_finish
+2400 relic technique 2 started: true
+2435 screenshot 70_13_brutality_2_ready
+2442 screenshot 70_13_brutality_2_release
+2452 screenshot 70_13_brutality_2_later
+2488 screenshot 70_13_brutality_2_finish
+2553 relic technique 1 started: true
+2562 screenshot 70_14_lucifara_1_ready
+2569 screenshot 70_14_lucifara_1_release
+2579 screenshot 70_14_lucifara_1_later
+2640 relic technique 1 started: true
+2651 screenshot 70_15_chaos_1_ready
+2658 screenshot 70_15_chaos_1_release
+2668 screenshot 70_15_chaos_1_later
+2724 screenshot 71_relic_gauge
+2735 screen jp.oror.look.Look$RelicTip in PLAY
+2760 screenshot 72_tooltip_weapon
+2774 screen none in PLAY
+2776 screen jp.oror.look.Look$RelicTip in PLAY
+2796 screenshot 73_tooltip_legend
+2811 screen none in PLAY
+2813 screen jp.oror.look.Look$RelicTip in PLAY
+2832 screenshot 74_tooltip_charm
+2845 screen none in PLAY
+2847 screen jp.oror.look.Look$RelicTip in PLAY
+2864 screenshot 75_tooltip_focus
+2879 screen none in PLAY
+2927 finished: complete (relics only)
