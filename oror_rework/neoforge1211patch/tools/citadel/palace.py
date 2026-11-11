@@ -94,7 +94,10 @@ class Palace:
                 continue
             items = be.get('Items') or []
             loot = be.get('LootTable')
-            self.chests.append((self.theme(items, loot), items, loot))
+            name = str(anvil.val(be.get('CustomName', '')))
+            theme = 'treasury' if '宝物庫' in name else self.theme(items, loot)
+            # the whole block entity goes along (its name, its lock, its loot table), only its place changes
+            self.chests.append((theme, bid, {k: v for k, v in be.items() if k not in ('x', 'y', 'z', 'keepPacked')}))
         self.stats['chests surveyed'] = len(self.chests)
 
     @staticmethod
@@ -215,6 +218,10 @@ class Palace:
         self.fill(-3, 3, G + 7, G + 7, R + 1, 46, QC)
         for sx in (-1, 1):
             self.fill(sx * 3, sx * 3, G, G + 6, R + 1, 46, QP)
+        # the king's own door at the back, through the north front into his antechamber (to the north terrace and its
+        # stair down to the town)
+        self.fill(5, 7, G, G + 4, -49, -R - 1, AIR)
+        self.fill(5, 7, Y0, G - 1, -49, -R - 1, 'minecraft:stone_bricks')
 
     # ------------------------------------------------------------------------------------------------ the hall
 
@@ -337,13 +344,9 @@ class Palace:
                 bx, bz = {'south': (x, z - 1), 'north': (x, z + 1), 'east': (x - 1, z), 'west': (x + 1, z)}[f]
                 if self.get(bx, y, bz) == AIR:
                     continue
-                # nor beside one
-                ok = True
-                for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    nx, nz = bx + dx, bz + dz
-                    if (nx, nz) != (x, z) and self.get(nx, y, nz) == AIR and not (x0 <= nx <= x1 and z0 <= nz <= z1):
-                        ok = False
-                if not ok:
+                # nor beside one (the wall's cells to either side of this one, along the wall)
+                along = ((1, 0), (-1, 0)) if f in ('north', 'south') else ((0, 1), (0, -1))
+                if any(self.get(bx + dx, y, bz + dz) == AIR for dx, dz in along):
                     continue
             free.append((x, z, f))
         return free
@@ -729,12 +732,12 @@ class Palace:
 
     def place_chests(self):
         by = collections.defaultdict(list)
-        for theme, items, loot in self.chests:
-            by[theme].append((items, loot))
+        for theme, bid, data in self.chests:
+            by[theme].append((bid, data))
         fallback = ['store', 'armoury', 'kitchen', 'library', 'treasury']
         placed = 0
         for theme in ('treasury', 'armoury', 'kitchen', 'library', 'store'):
-            for items, loot in by[theme]:
+            for bid, data in by[theme]:
                 spot = None
                 for th in [theme] + fallback:
                     while self.places[th]:
@@ -749,13 +752,11 @@ class Palace:
                     self.stats['chests without a place'] += 1
                     continue
                 x, y, z, f = spot
-                self.put(x, y, z, f'minecraft:chest[facing={f},type=single,waterlogged=false]')
-                be = {'id': 'minecraft:chest'}
-                if items:
-                    be['Items'] = items
-                if loot is not None:
-                    be['LootTable'] = loot
-                self.t.set_be(x, y, z, be)
+                if bid == 'minecraft:barrel':
+                    self.put(x, y, z, f'minecraft:barrel[facing={f},open=false]')
+                else:
+                    self.put(x, y, z, f'{bid}[facing={f},type=single,waterlogged=false]')
+                self.t.set_be(x, y, z, data)
                 placed += 1
         self.stats['chests placed'] = placed
 

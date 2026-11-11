@@ -236,6 +236,8 @@ public final class RelicClient {
         String ch = characterOf(s.owner);
         int n = Math.min(20, 5 + (int) (s.size * 1.5F));
         int greatHere = 0;
+        // (059) none at the eye: a slash or a splash of blood a block from the camera filled the whole screen
+        Vec3 eye = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         for (int i = 0; i < n; i++) {
             ParticleOptions p = WazaVisuals.mote(theme(ch, i), (int) s.seed + i);
             if (WazaVisuals.great(p) && ++greatHere > 3) {
@@ -247,8 +249,12 @@ public final class RelicClient {
             }
             double r = Math.min(4.0, s.size) * R.nextDouble();
             double ang = R.nextDouble() * Math.PI * 2;
-            WazaVisuals.put(l, p, s.at.x + Math.cos(ang) * r, s.at.y + R.nextDouble() * 1.2, s.at.z + Math.sin(ang) * r, (R.nextDouble() - 0.5) * 0.08,
-                R.nextDouble() * 0.06, (R.nextDouble() - 0.5) * 0.08);
+            double px = s.at.x + Math.cos(ang) * r, py = s.at.y + R.nextDouble() * 1.2, pz = s.at.z + Math.sin(ang) * r;
+            double keep = WazaVisuals.great(p) ? 4.0 : 2.0;
+            if (eye.distanceToSqr(px, py, pz) < keep * keep) {
+                continue;
+            }
+            WazaVisuals.put(l, p, px, py, pz, (R.nextDouble() - 0.5) * 0.08, R.nextDouble() * 0.06, (R.nextDouble() - 0.5) * 0.08);
         }
     }
 

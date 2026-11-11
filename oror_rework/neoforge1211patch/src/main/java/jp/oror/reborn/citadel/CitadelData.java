@@ -49,7 +49,8 @@ public final class CitadelData {
     /** Minecraft 1.20.1, the version the save was written by. */
     public static final int DATA_VERSION = 3465;
     /** The king's seat on the gold dais of the throne room, in save coordinates. */
-    public static final int THRONE_X = 0, THRONE_Y = 137, THRONE_Z = -32;
+    // (059) the throne of the rebuilt audience hall (tools/citadel/palace.py), no longer at the top of a maze at y 137
+    public static final int THRONE_X = 0, THRONE_Y = 79, THRONE_Z = -28;
     private static final String ROOT = "/data/oror_supreme_bosses/citadel/v12/";
     private static final Logger LOG = LoggerFactory.getLogger("OROR Citadel");
     private static final Codec<PalettedContainer<BlockState>> SECTION = PalettedContainer.codecRW(

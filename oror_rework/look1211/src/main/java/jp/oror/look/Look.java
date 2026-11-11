@@ -146,6 +146,34 @@ public final class Look {
         if (planned != null) {
             planned.run();
         }
+        if (ONLY.equals("palace") && t >= 240) {
+            // (059) the rebuilt palace: its stairs from the town, the audience hall and the throne with the court, the
+            // rooms and floors over it (template coordinates less the ground: the capital's centre is at y 65)
+            if (t == 240) {
+                PLAN.put(250, () -> throne(mc));
+                int at = 2050;
+                Object[][] tour = {
+                    {"80_palace_hall", 0, 80, 38, 180F, 6F}, {"81_palace_throne", 0, 81, -15, 180F, 8F},
+                    {"82_palace_throne_close", 0, 80, -21, 180F, 4F}, {"83_palace_south_stair", 0, 70, 114, 180F, -4F},
+                    {"84_palace_front", 0, 78, 70, 180F, -2F}, {"85_palace_corner_stair", -33, 82, 32, 225F, 20F},
+                    {"86_palace_library", -24, 77, -12, 135F, 10F}, {"87_palace_war_room", 24, 77, -12, 225F, 10F},
+                    {"88_palace_treasury", -2, 77, -33, 120F, 12F}, {"89_palace_chapel", 0, 102, -18, 180F, 6F},
+                    {"90_palace_bedchamber", 0, 112, -20, 180F, 10F}, {"91_palace_ballroom", 0, 124, 34, 180F, 8F},
+                    {"92_palace_north_stair", 0, 70, -112, 0F, -4F}, {"93_palace_gallery", 17, 77, 30, 180F, 4F}};
+                for (Object[] v : tour) {
+                    int dx = (Integer) v[1], y = (Integer) v[2], dz = (Integer) v[3];
+                    float yaw = (Float) v[4], pitch = (Float) v[5];
+                    String name = (String) v[0];
+                    PLAN.put(at, () -> atCapital(mc, dx, y - 65, dz, yaw, pitch));
+                    PLAN.put(at + 60, () -> shot(mc, name));
+                    at += 70;
+                }
+                PLAN.put(at, () -> king(mc));
+                PLAN.put(at + 10, () -> finish(mc, "complete (palace only)"));
+                note("palace only: planned to tick " + (at + 10));
+            }
+            return;
+        }
         if (ONLY.equals("relics") && t >= 240) {
             // the stage stands and the player has joined (ticks 2 to 200): the capital's tour and the rest are left out
             if (t == 240) {

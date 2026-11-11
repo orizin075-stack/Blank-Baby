@@ -71,7 +71,9 @@ public final class WazaVisuals {
         "vortex", "hole", "storm", "tornado", "cloud", "fog", "mist", "haze", "dome", "wave", "ring", "beam", "laser", "aurora", "nova", "blast",
         "sphere", "aura", "shield", "wall", "pillar", "flash", "sun", "moon", "sky", "giant", "large", "big", "huge", "massive", "boss", "crater",
         "rift", "void", "abyss", "portal", "lightning", "thunder", "smoke", "swirl", "cyclone", "geyser", "eruption", "nuke", "meteor", "comet",
-        "trail", "streak", "ray", "column", "tower", "circle", "emitter", "burst", "shockwave", "quake", "tremor", "flare", "glare");
+        "trail", "streak", "ray", "column", "tower", "circle", "emitter", "burst", "shockwave", "quake", "tremor", "flare", "glare",
+        // (059) drawn as the magenta and black of a missing texture in the pack (Legendary Monsters' soul strike)
+        "soul_strike", "soul_shoot");
     private static Map<Theme, List<SimpleParticleType>> themes;
     private static final Set<ParticleType<?>> FAILED = new HashSet<>();
 
