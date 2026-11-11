@@ -52,7 +52,7 @@ public final class CitadelGarrison {
      * fourth 058 run the capital's royals were spawned and none were there a moment later) */
     private static int refused;
     /** (059) people's chunks waited for (announced before they were whole) and given up on (gone for a minute) */
-    private static int waited, dropped;
+    private static int waited, dropped, limbo;
     /** (059) the first people spawned and every one of the throne's, held to see where they are later (CI) */
     private static final java.util.List<Object[]> TRACE = new java.util.ArrayList<>();
     private static final Map<String, Integer> LEFT = new TreeMap<>();
@@ -109,14 +109,20 @@ public final class CitadelGarrison {
             if (ledger.done.contains(q[0])) {
                 continue;
             }
-            if (level.getChunkSource().getChunkNow((int) q[1], (int) q[2]) == null) {
-                // (059) the chunk's load is announced before the chunk is whole: it was dropped here then, and its people
-                // never came (since the fourth 058 run not one of the capital's in CI, the court missing in the game). It
-                // waits its turn again, a minute at most (a chunk that went away comes back with its own load).
+            // (059) people are put in a chunk only once the world holds the chunk's entities and ticks them: the load
+            // is announced before that, and those put in it in between were in no list of the world's (alive, at their
+            // posts, and in no one's sight, the king on his throne among them: the CI's capital in most runs since
+            // 8 November, and whatever loaded so in a game). A chunk not ready waits its turn again for as long as it
+            // stays loaded (one that went away comes back with its own load).
+            int cx = (int) q[1], cz = (int) q[2];
+            boolean whole = level.getChunkSource().getChunkNow(cx, cz) != null;
+            boolean ready = whole && level.areEntitiesLoaded(ChunkPos.asLong(cx, cz))
+                && level.isPositionEntityTicking(new BlockPos((cx << 4) + 8, level.getSeaLevel(), (cz << 4) + 8));
+            if (!ready) {
                 if (q[6] < 0) {
                     q[6] = now;
                 }
-                if (now - q[6] < 1200) {
+                if (whole || now - q[6] < 1200) {
                     synchronized (QUEUE) {
                         if (QUEUED.add(q[0])) {
                             QUEUE.add(q);
@@ -208,6 +214,9 @@ public final class CitadelGarrison {
             }
             return null;
         }
+        if (level.getEntity(mob.getUUID()) != mob) {
+            limbo++;
+        }
         synchronized (TRACE) {
             if (TRACE.size() < 12 || "throne".equals(post.post()) && TRACE.size() < 60) {
                 TRACE.add(new Object[]{mob, at, level.getGameTime()});
@@ -284,7 +293,7 @@ public final class CitadelGarrison {
     }
 
     public static String waits() {
-        return "{\"waited\":" + waited + ",\"dropped\":" + dropped + "}";
+        return "{\"waited\":" + waited + ",\"dropped\":" + dropped + ",\"untracked\":" + limbo + "}";
     }
 
     public static String left() {

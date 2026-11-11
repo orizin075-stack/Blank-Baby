@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.AABB;
@@ -87,7 +88,9 @@ public final class CourtKeeper {
     /** Counts the court and brings back who is missing; the number brought. */
     public static int keep(ServerLevel level, CitadelSites.Site site, long now, boolean force) {
         BlockPos t = site.throne();
-        if (!level.isLoaded(t) || !level.isLoaded(t.offset(48, 0, 48)) || !level.isLoaded(t.offset(-48, 0, -48))) {
+        if (!level.isLoaded(t) || !level.isLoaded(t.offset(48, 0, 48)) || !level.isLoaded(t.offset(-48, 0, -48))
+            || !level.isPositionEntityTicking(t) || !level.areEntitiesLoaded(ChunkPos.asLong(t))) {
+            // (059) not till the world holds and ticks the hall's entities (those put in before are in no one's sight)
             return 0;
         }
         if (!force && level.getNearestPlayer(t.getX(), t.getY(), t.getZ(), 160, false) == null) {
