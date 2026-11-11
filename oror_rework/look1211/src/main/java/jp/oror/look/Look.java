@@ -155,7 +155,7 @@ public final class Look {
                 Object[][] tour = {
                     {"80_palace_hall", 0, 80, 38, 180F, 6F}, {"81_palace_throne", 0, 81, -15, 180F, 8F},
                     {"82_palace_throne_close", 0, 80, -21, 180F, 4F}, {"83_palace_south_stair", 0, 70, 114, 180F, -4F},
-                    {"84_palace_front", 0, 78, 70, 180F, -2F}, {"85_palace_corner_stair", -33, 82, 32, 225F, 20F},
+                    {"84_palace_front", 0, 78, 70, 180F, -2F}, {"85_palace_corner_stair", -32, 75, 32, 0F, -14F},
                     {"86_palace_library", -24, 77, -12, 135F, 10F}, {"87_palace_war_room", 24, 77, -12, 225F, 10F},
                     {"88_palace_treasury", -2, 77, -33, 120F, 12F}, {"89_palace_chapel", 0, 102, -18, 180F, 6F},
                     {"90_palace_bedchamber", 0, 112, -20, 180F, 10F}, {"91_palace_ballroom", 0, 124, 34, 180F, 8F},
@@ -163,9 +163,8 @@ public final class Look {
                     // (059b) the gallery with its stair's balustrade, the top floor under its new roof, the corner
                     // towers' way in and their stair turrets, the roof from outside, the east hall's stair
                     {"93_palace_gallery", 19, 77, 16, 180F, 8F}, {"94_palace_ballroom_west", -26, 121, 0, 90F, -25F},
-                    {"95_palace_tower_passage", -40, 85, -40, 90F, 5F}, {"96_palace_tower_stair", -42, 101, -48, 90F, 12F},
-                    {"97_palace_tower_top", -42, 141, -50, 90F, 25F}, {"98_palace_roof_west", -95, 178, 6, -90F, 22F},
-                    {"99_palace_east_hall_stair", 69, 80, -12, 125F, 6F}};
+                    {"95_palace_tower_passage", -40, 85, -40, 90F, 5F}, {"96_palace_tower_stair", -47, 88, -47, 180F, -32F},
+                    {"97_palace_tower_top", -42, 141, -50, 90F, 25F}, {"98_palace_roof_west", -95, 178, 6, -90F, 22F}};
                 for (Object[] v : tour) {
                     int dx = (Integer) v[1], y = (Integer) v[2], dz = (Integer) v[3];
                     float yaw = (Float) v[4], pitch = (Float) v[5];
@@ -174,6 +173,12 @@ public final class Look {
                     PLAN.put(at + 60, () -> shot(mc, name));
                     at += 70;
                 }
+                // (059) the king's AT field struck (on this client only: nobody is hurt), the white cell, then the ring
+                PLAN.put(at, () -> atCapital(mc, 0, 80 - 65, -21, 180F, 4F));
+                PLAN.put(at + 50, () -> fieldHit(mc));
+                PLAN.put(at + 52, () -> shot(mc, "99_palace_at_field_struck"));
+                PLAN.put(at + 60, () -> shot(mc, "79_palace_at_field_ring"));
+                at += 70;
                 PLAN.put(at, () -> king(mc));
                 PLAN.put(at + 10, () -> finish(mc, "complete (palace only)"));
                 note("palace only: planned to tick " + (at + 10));
@@ -1292,6 +1297,34 @@ public final class Look {
                 note("capital lookup failed: " + error);
             }
         });
+    }
+
+    /** (059) Strikes the king's AT field as the server would tell it (ATFieldRenderer.hit): from the camera's side
+     * and two others, drawn on this client only. */
+    private static void fieldHit(Minecraft mc) {
+        try {
+            Class<?> royal = Class.forName("jp.oror.reborn.royal.RoyalMob");
+            Entity king = null;
+            for (Entity e : mc.level.entitiesForRendering()) {
+                if (royal.isInstance(e) && "KING".equals(String.valueOf(royal.getMethod("role").invoke(e)))) {
+                    king = e;
+                    break;
+                }
+            }
+            if (king == null) {
+                note("field: no king in sight");
+                return;
+            }
+            Method hit = Class.forName("jp.oror.reborn.royal.ATFieldRenderer").getMethod("hit", int.class, float.class, float.class, float.class, float.class);
+            net.minecraft.world.phys.Vec3 d = mc.player.getEyePosition().subtract(king.getBoundingBox().getCenter()).normalize();
+            hit.invoke(null, king.getId(), (float) d.x, (float) d.y, (float) d.z, 0.4F);
+            hit.invoke(null, king.getId(), (float) (d.x + 0.7), (float) (d.y + 0.4), (float) d.z, 0.2F);
+            hit.invoke(null, king.getId(), (float) (d.x - 0.6), (float) (d.y - 0.2), (float) (d.z + 0.3), 0.2F);
+            Object field = royal.getMethod("atField").invoke(king), breached = royal.getMethod("atBreached").invoke(king);
+            note("field: struck " + king.getId() + " field=" + field + " breached=" + breached + " dist=" + Math.round(mc.player.distanceTo(king)));
+        } catch (Throwable error) {
+            note("field hit failed: " + error);
+        }
     }
 
     /** Where the king is against his throne, from the server. */
