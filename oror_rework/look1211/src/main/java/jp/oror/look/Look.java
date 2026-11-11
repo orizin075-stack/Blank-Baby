@@ -138,10 +138,22 @@ public final class Look {
     /** (055) What is to be done at a tick of the play (the King's moves' scenes, planned when they begin). */
     private static final java.util.TreeMap<Integer, Runnable> PLAN = new java.util.TreeMap<>();
 
+    /** (058) One part only, from the workflow's input: "relics" goes from the stage straight to the relics' scenes. */
+    private static final String ONLY = String.valueOf(System.getenv("OROR_LOOK_ONLY")).trim();
+
     private static void play(Minecraft mc, int t) {
         Runnable planned = PLAN.remove(t);
         if (planned != null) {
             planned.run();
+        }
+        if (ONLY.equals("relics") && t >= 240) {
+            // the stage stands and the player has joined (ticks 2 to 200): the capital's tour and the rest are left out
+            if (t == 240) {
+                int end = relicScenes(mc, 260);
+                PLAN.put(end, () -> finish(mc, "complete (relics only)"));
+                note("relics only: planned to tick " + end);
+            }
+            return;
         }
         // (052) each duel: the character and an armed vindicator set on each other (and healed) every half second, the
         // camera five blocks off, twenty-four frames six ticks apart from the fortieth tick

@@ -6,6 +6,11 @@ name: OROR look check
 
 on:
   workflow_dispatch:
+    inputs:
+      only:
+        description: "Only one part of the look ('relics': the 058 relic techniques, gauge and tooltips); empty for all of it"
+        required: false
+        default: ''
   push:
     branches: [claude/jolly-einstein-wvpjq1]
     paths: ['oror_rework/look1211/**', '.github/workflows/oror_look.yml']
@@ -27,6 +32,8 @@ jobs:
     env:
       P: oror_rework/neoforge1211patch
       OUT: oror_rework/neoforge1211patch/out/look
+      # one part only (a manual run's input): the client's harness reads it, and the other parts' frames are kept
+      OROR_LOOK_ONLY: ${{ github.event.inputs.only }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -51,7 +58,13 @@ jobs:
           key: pack053-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-053.json') }}
       - name: The 045 pack's mods, Nightfall and the latest OROR jar
         run: |
-          rm -rf "$OUT"; mkdir -p "$OUT"
+          if [ -z "$OROR_LOOK_ONLY" ]; then
+            rm -rf "$OUT"
+          else
+            rm -rf "$OUT"/crash-reports "$OUT"/result.txt "$OUT"/client-exit.txt
+            if [ "$OROR_LOOK_ONLY" = relics ]; then rm -f "$OUT"/7[0-9]_*.jpg "$OUT"/popup_RelicTip.jpg; fi
+          fi
+          mkdir -p "$OUT"
           G=$RUNNER_TEMP/game; mkdir -p $G/mods
           python3 -I $P/tools/fetch_pack.py $P/pack/manifest-053.json "$RUNNER_TEMP/pack053" > $OUT/pack_fetch.txt 2>&1 || true
           tail -3 $OUT/pack_fetch.txt
