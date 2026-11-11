@@ -628,17 +628,30 @@ final class WazaActs {
         if (a < first) {
             return;
         }
+        // (059, V20's second check) a beam with its blows' moments given strikes at those (a share each); one without
+        // them burns every eight ticks while it holds. It burned every eight ticks always, and three of the V20
+        // design's short-interval beams lost their last blow to the end of the beam (valeria_18, arcana_19, demiurgos_23)
+        int[] hits = w.hits();
+        int blow = -1;
+        for (int i = 0; i < hits.length; i++) {
+            if (hits[i] == a) {
+                blow = i;
+            }
+        }
+        if (hits.length > 0 && blow < 0) {
+            return;
+        }
         Vec3 from = c.b.getEyePosition();
         float len = beamLength(c, from);
         Vec3 to = from.add(c.dir.scale(len));
         int applications = Math.max(1, (w.activeLength() - first + 7) / 8);
-        float each = whole(c.b, w) / applications;
+        float each = hits.length > 0 ? share(c.b, w) : whole(c.b, w) / applications;
         long now = c.b.level().getGameTime();
         for (LivingEntity e : c.b.level().getEntitiesOfClass(LivingEntity.class, new AABB(from, to).inflate(1.5),
             x -> x != c.b && c.b.validEnemy(x))) {
             if (e.getBoundingBox().inflate(0.5 + w.tier() * 0.25).clip(from, to).isPresent() || e.getBoundingBox().inflate(0.5).contains(from)) {
                 Long last = c.lastBeamHit.get(e.getId());
-                if (last == null || now - last >= 8) {
+                if (blow >= 0 || last == null || now - last >= 8) {
                     c.lastBeamHit.put(e.getId(), now);
                     if (hurt(c, e, each)) {
                         hitVerbs(c, e);
