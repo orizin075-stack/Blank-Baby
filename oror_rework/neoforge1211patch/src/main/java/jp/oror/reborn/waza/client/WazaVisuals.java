@@ -199,51 +199,48 @@ public final class WazaVisuals {
     }
 
     /**
-     * (058) The relics' motes: small things only. A mod's particle passes only when its name says it is a mote (a spark,
-     * an ember, a flake, a wisp...): the slashes and cuts of the combat mods are scenes of their own (one judgement cut
-     * fills the screen), and the relics draw their own blades. With {@code mod} false only vanilla's are chosen.
+     * (058) The relics' particles: the theme's own, the mods' first, as the 984 techniques use them (the user liked
+     * that look best: the combat mods' slashes and cuts, the blood, the glyphs). What differs is only how many: the
+     * great ones (a slash or a cut is a sprite as long as a body) are counted apart from the small, so that a finisher's
+     * thirty cues are a storm of them and not a wall.
      */
-    private static final String[] SMALL = {"spark", "ember", "snow", "flake", "wisp", "sparkle", "twinkle", "bubble", "leaf", "leaves", "feather", "ash",
-        "drop", "drip", "dust", "firefly", "electricity", "crit", "witch", "spell", "enchant", "petal", "pollen", "spore", "smallblood",
-        "bloodparticle", "acidparticle", "glow"};
-    /** Motes by name that are not: Epic Fight's spreading sparks, Superb Warfare's stars, jets and ground splashes. */
-    private static final String[] NOT_SMALL = {"zandatsu", "expansive", "contractive", "all_spark", "fire_star", "stun", "jet", "ground",
-        "harvest", "rainbow", "splash"};
-    private static Map<Theme, List<SimpleParticleType>> motes;
+    private static final Set<String> GREAT = Set.of("slash", "cut", "blade", "hit", "strike", "sweep", "burst", "brust", "judgement", "mortal",
+        "murasama", "yamato", "buster", "zandatsu", "expansive", "contractive", "glyph", "harvest", "appearance", "shoot");
+    private static final Map<ParticleType<?>, Boolean> IS_GREAT = new java.util.HashMap<>();
 
-    public static ParticleOptions mote(Theme t, int salt, boolean mod) {
+    public static ParticleOptions mote(Theme t, int salt) {
+        return themed(t, salt);
+    }
+
+    /** One of the theme's own from vanilla (the small ones a shape is dusted with beside its few great ones). */
+    public static ParticleOptions themedVanilla(Theme t, int salt) {
         sort();
-        synchronized (WazaVisuals.class) {
-            if (motes == null) {
-                Map<Theme, List<SimpleParticleType>> out = new EnumMap<>(Theme.class);
-                for (Theme th : Theme.values()) {
-                    List<SimpleParticleType> l = new ArrayList<>();
-                    for (SimpleParticleType p : themes.get(th)) {
-                        ResourceLocation id = BuiltInRegistries.PARTICLE_TYPE.getKey(p);
-                        String path = id == null ? "" : id.getPath();
-                        if (id != null && (id.getNamespace().equals("minecraft")
-                            || java.util.Arrays.stream(SMALL).anyMatch(path::contains) && java.util.Arrays.stream(NOT_SMALL).noneMatch(path::contains))) {
-                            l.add(p);
-                        }
-                    }
-                    out.put(th, l);
-                }
-                motes = out;
-                org.slf4j.LoggerFactory.getLogger("OROR Waza").info("OROR RELIC-MOTES {}", out.entrySet().stream()
-                    .map(en -> en.getKey() + "=" + en.getValue().stream().map(x -> String.valueOf(BuiltInRegistries.PARTICLE_TYPE.getKey(x))).toList())
-                    .toList());
-            }
-        }
-        List<SimpleParticleType> l = motes.get(t);
-        int start = Math.floorMod(salt, Math.max(1, l.size()));
+        List<SimpleParticleType> l = themes.get(t);
+        int start = Math.floorMod(salt, l.size());
         for (int i = 0; i < l.size(); i++) {
             SimpleParticleType p = l.get((start + i) % l.size());
             ResourceLocation id = BuiltInRegistries.PARTICLE_TYPE.getKey(p);
-            if (!FAILED.contains(p) && (mod || id == null || id.getNamespace().equals("minecraft"))) {
+            if (id != null && id.getNamespace().equals("minecraft") && !great(p) && !id.getPath().contains("ink") && !FAILED.contains(p)) {
                 return p;
             }
         }
-        return mod ? mote(t, salt, false) : ParticleTypes.END_ROD;
+        return ParticleTypes.END_ROD;
+    }
+
+    /** Whether this particle is one of the great ones (by the words of its name). */
+    public static boolean great(ParticleOptions p) {
+        return IS_GREAT.computeIfAbsent(p.getType(), type -> {
+            ResourceLocation id = BuiltInRegistries.PARTICLE_TYPE.getKey(type);
+            if (id == null) {
+                return false;
+            }
+            for (String w : id.getPath().split("[^a-z]+")) {
+                if (GREAT.contains(w) || w.endsWith("slash") || w.endsWith("cut")) {
+                    return true;
+                }
+            }
+            return false;
+        });
     }
 
     /** Puts a particle, forgetting a type that cannot appear (a mod's particle with no provider on this client). */

@@ -88,18 +88,46 @@ public final class BuildingGuard {
         return e instanceof Player || e instanceof Enemy;
     }
 
+    public static int blastsStopped, blocksSpared;
+
+    /**
+     * (058) No explosion takes a block of the capital or of a village, whoever set it off, and none of a god's, the
+     * king's or a rebel lord's takes a block anywhere (the user's broken buildings). Until now a player's or a hostile mob's explosion went
+     * through (049), and one whose centre lay outside a town took the houses at its edge. Block by block now: what lies
+     * in the capital or a village stays; the rest of the crater is as it was. What an explosion does to bodies is not
+     * touched.
+     */
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void blast(ExplosionEvent.Detonate e) {
         if (!(e.getLevel() instanceof ServerLevel sl) || e.getAffectedBlocks().isEmpty()) {
             return;
         }
         Entity direct = e.getExplosion().getDirectSourceEntity(), indirect = e.getExplosion().getIndirectSourceEntity();
-        if (hostile(indirect) || indirect == null && hostile(direct)) {
-            return;
-        }
-        BlockPos at = BlockPos.containing(e.getExplosion().center());
-        if (inCapital(at, 64) || inVillage(sl, at)) {
+        int before = e.getAffectedBlocks().size();
+        if (ororBeing(direct) || ororBeing(indirect)) {
             e.getAffectedBlocks().clear();
+        } else {
+            BlockPos at = BlockPos.containing(e.getExplosion().center());
+            CitadelSites.Site site = CitadelSites.nearest(at, 0);
+            VillageLedger.Village village = VillageLedger.get(sl).nearest(at);
+            if (site != null || village != null) {
+                e.getAffectedBlocks().removeIf(p -> inCapital(p, 64) || village != null && village.contains(p));
+            }
         }
+        int spared = before - e.getAffectedBlocks().size();
+        if (spared > 0) {
+            blastsStopped++;
+            blocksSpared += spared;
+        }
+    }
+
+    /** One of OROR's great beings (a god, the king, a rebel lord), or what it shot. */
+    private static boolean ororBeing(Entity e) {
+        if (e instanceof Projectile pr && pr.getOwner() != null) {
+            e = pr.getOwner();
+        }
+        return e instanceof jp.oror.reborn.SupremeEntity
+            || e instanceof jp.oror.reborn.royal.RoyalMob r && r.role() == jp.oror.reborn.royal.RoyalRole.KING
+            || e != null && e.getPersistentData().getBoolean("OrorRebelLord");
     }
 }

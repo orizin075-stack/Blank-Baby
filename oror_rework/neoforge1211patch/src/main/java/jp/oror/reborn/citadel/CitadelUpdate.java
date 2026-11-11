@@ -89,6 +89,8 @@ public final class CitadelUpdate {
         final CitadelSites.Site site;
         final Patch patch;
         int section, index, changed;
+        /** (058) Every block of the chunk, by the operator's order (a rebuild), not only the marked ones. */
+        boolean whole;
         final long started = System.nanoTime();
 
         Job(long key, int cx, int cz, CitadelSites.Site site, Patch patch) {
@@ -107,7 +109,7 @@ public final class CitadelUpdate {
     private static final Set<Long> QUEUED = new HashSet<>();
     private static final List<Object[]> MUSTER = new ArrayList<>();
     private static final List<Entity> RETIRE = new ArrayList<>();
-    public static int chunksUpdated, blocksChanged, containersEmptied, vehiclesRetired, vehiclesMustered;
+    public static int chunksUpdated, blocksChanged, containersEmptied, vehiclesRetired, vehiclesMustered, chunksRebuilt;
     private static Test test;
 
     private CitadelUpdate() {
@@ -190,11 +192,85 @@ public final class CitadelUpdate {
             return;
         }
         int sx = pos.x - site.chunkX() - CitadelData.HALF, sz = pos.z - site.chunkZ() - CitadelData.HALF;
+        consider(level, site, pos.x, pos.z, sx, sz);
+    }
+
+    /**
+     * (058) What a loaded chunk of a capital is due: nothing unless the world's operator asked. The update used to run
+     * by itself on every load, and on a capital another build of the mod had made or mended it wrote this template's
+     * blocks over part of it (the user's capital "broken from the middle", its containers emptied).
+     */
+    private static void consider(ServerLevel level, CitadelSites.Site site, int cx, int cz, int sx, int sz) {
+        Ledger ledger = Ledger.of(level);
+        long key = CitadelGarrison.key(site, sx, sz);
+        if (ledger.rebuild.contains(key)) {
+            CitadelData.Chunk data = CitadelData.chunk(sx, sz);
+            boolean any = false;
+            if (data != null) {
+                for (Object section : data.sections()) {
+                    any |= section != null;
+                }
+            }
+            if (any) {
+                Job j = new Job(key, cx, cz, site, whole(data));
+                j.whole = true;
+                enqueue(j);
+            } else {
+                // nothing of the template here (the natural land about the capital): nothing to rebuild
+                ledger.rebuild.remove(key);
+                ledger.setDirty();
+            }
+            return;
+        }
+        if (!ledger.auto) {
+            return;
+        }
         Patch patch = patches().get(ChunkPos.asLong(sx, sz));
         if (patch == null) {
             return;
         }
-        enqueue(new Job(CitadelGarrison.key(site, sx, sz), pos.x, pos.z, site, patch));
+        enqueue(new Job(key, cx, cz, site, patch));
+    }
+
+    private static final int[] ALL = new int[4096];
+
+    static {
+        for (int i = 0; i < 4096; i++) {
+            ALL[i] = i;
+        }
+    }
+
+    /** Every position of every section of a chunk of the template. */
+    private static Patch whole(CitadelData.Chunk data) {
+        int n = data.sections().length;
+        int[] sy = new int[n];
+        int[][] positions = new int[n][];
+        for (int i = 0; i < n; i++) {
+            sy[i] = i;
+            positions[i] = ALL;
+        }
+        return new Patch(sy, positions, Set.of(), n * 4096);
+    }
+
+    /** The loaded chunks about the players are looked at again (after the operator's order). */
+    private static int reconsider(ServerLevel level) {
+        int n = 0;
+        for (net.minecraft.server.level.ServerPlayer pl : level.players()) {
+            ChunkPos c = pl.chunkPosition();
+            for (int dx = -12; dx <= 12; dx++) {
+                for (int dz = -12; dz <= 12; dz++) {
+                    if (level.getChunkSource().getChunkNow(c.x + dx, c.z + dz) == null) {
+                        continue;
+                    }
+                    CitadelSites.Site site = CitadelSites.garrisoned(level.getChunkSource().getGenerator(), c.x + dx, c.z + dz);
+                    if (site != null) {
+                        consider(level, site, c.x + dx, c.z + dz, c.x + dx - site.chunkX() - CitadelData.HALF, c.z + dz - site.chunkZ() - CitadelData.HALF);
+                        n++;
+                    }
+                }
+            }
+        }
+        return n;
     }
 
     private static void enqueue(Job j) {
@@ -246,7 +322,7 @@ public final class CitadelUpdate {
             }
             Ledger ledger = Ledger.of(level);
             boolean loaded = level.getChunkSource().getChunkNow(j.cx, j.cz) != null;
-            if (ledger.done.contains(j.key) || !loaded) {
+            if ((ledger.done.contains(j.key) && !j.whole) || !loaded) {
                 drop(j);
                 continue;
             }
@@ -254,6 +330,10 @@ public final class CitadelUpdate {
             if (j.section >= j.patch.sy().length) {
                 drop(j);
                 ledger.done.add(j.key);
+                if (j.whole) {
+                    ledger.rebuild.remove(j.key);
+                    chunksRebuilt++;
+                }
                 ledger.setDirty();
                 chunksUpdated++;
                 blocksChanged += j.changed;
@@ -504,7 +584,75 @@ public final class CitadelUpdate {
     public static void commands(RegisterCommandsEvent e) {
         e.getDispatcher().register(Commands.literal("oror").then(Commands.literal("citadel").requires(s -> s.hasPermission(2))
             .then(Commands.literal("update").executes(c -> status(c.getSource()))
-                .then(Commands.literal("test").executes(c -> startTest(c.getSource()))))));
+                .then(Commands.literal("on").executes(c -> auto(c.getSource(), true)))
+                .then(Commands.literal("off").executes(c -> auto(c.getSource(), false)))
+                .then(Commands.literal("test").executes(c -> startTest(c.getSource()))))
+            .then(Commands.literal("rebuild").executes(c -> rebuild(c.getSource(), false))
+                .then(Commands.literal("confirm").executes(c -> rebuild(c.getSource(), true)))
+                .then(Commands.literal("cancel").executes(c -> cancelRebuild(c.getSource()))))));
+    }
+
+    private static int auto(CommandSourceStack src, boolean on) {
+        ServerLevel level = src.getServer().overworld();
+        Ledger ledger = Ledger.of(level);
+        ledger.auto = on;
+        ledger.setDirty();
+        int n = on ? reconsider(level) : 0;
+        src.sendSuccess(() -> Component.literal(on
+            ? "王都の自動更新を入にしました。読み込まれた王都のチャンクから、この版の型と違う「印のある」ブロックだけを書き換えます（いま対象 " + n
+                + " チャンク）。別の版で建てた・直した建物があると、部分的に上書きされることがあります。先にワールドのバックアップを取ってください。"
+            : "王都の自動更新を切にしました（既定）。王都のブロックは、命令しない限り書き換えません。").withStyle(ChatFormatting.GOLD), true);
+        return 1;
+    }
+
+    /**
+     * (058) The whole capital the operator stands in, set to this version's template, chunk by chunk as each is loaded:
+     * the way out for a capital broken across versions (halves of two templates side by side, buildings cut at chunk
+     * borders). Everything in the capital's own volume goes back to the template: asked twice.
+     */
+    private static int rebuild(CommandSourceStack src, boolean confirmed) {
+        ServerLevel level = src.getServer().overworld();
+        BlockPos at = BlockPos.containing(src.getPosition());
+        CitadelSites.Site site = CitadelSites.garrisoned(level.getChunkSource().getGenerator(), at.getX() >> 4, at.getZ() >> 4);
+        if (site == null) {
+            site = CitadelSites.capital();
+        }
+        if (site == null) {
+            src.sendFailure(Component.literal("この世界に王都が見つかりません。"));
+            return 0;
+        }
+        if (!confirmed) {
+            src.sendSuccess(() -> Component.literal("王都を、この版の型どおりに建て直します。王都の範囲にあるブロックはすべて型のとおりに戻ります（あなたが王都の中に建てた物・壊した所も戻ります。"
+                + "置き換わる場所の箱の中身は、その場に落ちます）。地下深くの自然の地面と、王都の外は変えません。ワールドのバックアップを取ってから、"
+                + "/oror citadel rebuild confirm を実行してください。建て直しは、王都を歩いて読み込まれたチャンクから順に進みます。").withStyle(ChatFormatting.GOLD), false);
+            return 1;
+        }
+        Ledger ledger = Ledger.of(level);
+        int n = 0;
+        for (int sx = -CitadelData.HALF; sx <= CitadelData.HALF; sx++) {
+            for (int sz = -CitadelData.HALF; sz <= CitadelData.HALF; sz++) {
+                // (which chunks the template has is known without reading them: they are read as each is rebuilt)
+                if (CitadelData.inSave(sx, sz) && ledger.rebuild.add(CitadelGarrison.key(site, sx, sz))) {
+                    n++;
+                }
+            }
+        }
+        ledger.setDirty();
+        int loaded = reconsider(level);
+        int total = n;
+        LOG.info("CITADEL-REBUILD ordered: {} chunks ({} loaded now)", total, loaded);
+        src.sendSuccess(() -> Component.literal("王都の建て直しを始めました：" + total + " チャンク。読み込まれた所から順に進みます（/oror citadel update で進み具合、"
+            + "/oror citadel rebuild cancel で中止）。").withStyle(ChatFormatting.GOLD), true);
+        return 1;
+    }
+
+    private static int cancelRebuild(CommandSourceStack src) {
+        Ledger ledger = Ledger.of(src.getServer().overworld());
+        int n = ledger.rebuild.size();
+        ledger.rebuild.clear();
+        ledger.setDirty();
+        src.sendSuccess(() -> Component.literal("王都の建て直しを中止しました（残り " + n + " チャンクはそのまま）。").withStyle(ChatFormatting.GOLD), true);
+        return 1;
     }
 
     private static int status(CommandSourceStack src) {
@@ -515,7 +663,8 @@ public final class CitadelUpdate {
             queued = QUEUE.size();
         }
         int total = patches().size();
-        src.sendSuccess(() -> Component.literal("王都の更新（" + REVISION + "版）: 更新の要るチャンク " + total + " のうち " + ledger.done.size()
+        src.sendSuccess(() -> Component.literal("自動更新：" + (ledger.auto ? "入" : "切（/oror citadel update on で入）") + "。建て直し待ち：" + ledger.rebuild.size()
+            + " チャンク（建て直し済み " + chunksRebuilt + "）。王都の更新（" + REVISION + "版）: 更新の要るチャンク " + total + " のうち " + ledger.done.size()
             + " を更新済み（待ち " + queued + "）。このセッションで " + blocksChanged + " ブロック、空にした王国の容器 " + containersEmptied
             + "、引き上げた車両 " + vehiclesRetired + "、新しい持ち場に出した車両 " + vehiclesMustered + "。残りは王都を歩くと読み込まれた所から更新されます。")
             .withStyle(ChatFormatting.GOLD), false);
@@ -737,6 +886,9 @@ public final class CitadelUpdate {
     static final class Ledger extends SavedData {
         static final Factory<Ledger> FACTORY = new Factory<>(Ledger::new, Ledger::load, null);
         final Set<Long> done = new HashSet<>();
+        /** (058) Chunks the operator ordered rebuilt, still to do; and whether the update runs by itself (off unless asked). */
+        final Set<Long> rebuild = new HashSet<>();
+        boolean auto;
 
         static Ledger of(ServerLevel level) {
             return level.getDataStorage().computeIfAbsent(FACTORY, "oror_citadel_update");
@@ -749,6 +901,10 @@ public final class CitadelUpdate {
                     l.done.add(k);
                 }
             }
+            for (long k : tag.getLongArray("Rebuild")) {
+                l.rebuild.add(k);
+            }
+            l.auto = tag.getBoolean("Auto");
             return l;
         }
 
@@ -756,6 +912,8 @@ public final class CitadelUpdate {
         public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
             tag.putInt("Revision", REVISION);
             tag.put("Done", new LongArrayTag(done.stream().mapToLong(Long::longValue).toArray()));
+            tag.put("Rebuild", new LongArrayTag(rebuild.stream().mapToLong(Long::longValue).toArray()));
+            tag.putBoolean("Auto", auto);
             return tag;
         }
     }

@@ -284,8 +284,13 @@ public final class BrokenPhantasm {
         int r = (int) Math.min(10, Math.max(2, Math.round(Math.cbrt(mult))));
         BlockPos c = e.getPos();
         int broke = 0;
+        // (058) never the capital's or a village's blocks: the burst took whole houses with it (the user's broken buildings)
+        jp.oror.reborn.VillageLedger.Village village = jp.oror.reborn.VillageLedger.get(sl).nearest(c);
         for (BlockPos q : BlockPos.betweenClosed(c.offset(-r, -r, -r), c.offset(r, r, r))) {
             if (q.distSqr(c) > r * r || q.equals(c)) {
+                continue;
+            }
+            if (jp.oror.reborn.village.BuildingGuard.inCapital(q, 64) || village != null && village.contains(q)) {
                 continue;
             }
             BlockState st = sl.getBlockState(q);

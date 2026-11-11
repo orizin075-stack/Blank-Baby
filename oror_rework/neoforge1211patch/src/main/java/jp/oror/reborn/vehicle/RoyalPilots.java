@@ -126,6 +126,13 @@ public final class RoyalPilots {
             Supply.tick(sl, v, p, atPost);
         }
         log(v, p);
+        if (v.level() instanceof ServerLevel care) {
+            String kind = Sbw.engine(v);
+            if (kind.equals("FIXED") || kind.equals("EMPTY") || kind.isEmpty()) {
+                // (058) a turret stays on its post and keeps a gunner
+                TurretCare.tick(care, v, p);
+            }
+        }
         Mob driver = v.getFirstPassenger() instanceof Mob m ? m : null;
         if (driver == null) {
             Sbw.keys(v, false, false, false, false, false, "AIRCRAFT".equals(Sbw.engine(v)) && v.onGround());
@@ -1086,6 +1093,11 @@ public final class RoyalPilots {
             return;
         }
         CompoundTag d = m.getPersistentData();
+        if (m.isNoAi() && !m.isPassenger() && m.getTags().contains(TurretCare.GUNNER)) {
+            // (058) a gunner whose gun is gone has his own mind again
+            m.setNoAi(false);
+            m.removeTag(TurretCare.GUNNER);
+        }
         if (!d.contains("OrorMotor") || m.isPassenger() || !(m.level() instanceof ServerLevel level)) {
             return;
         }
@@ -1093,8 +1105,21 @@ public final class RoyalPilots {
         int seats = Math.max(1, d.getInt("OrorMotorSeats"));
         float yaw = d.contains("OrorMotorYaw") ? d.getFloat("OrorMotorYaw") : m.getYRot();
         boolean still = d.getBoolean("OrorMotorStill");
+        // (058) at its post, not where the soldier stands by now: one who had stepped into his tower's ladder shaft
+        // brought his turret out at the bottom of it (the user's "turrets fallen into tubes")
+        Vec3 at = m.position();
+        if (d.contains("OrorMotorAt")) {
+            BlockPos post = BlockPos.of(d.getLong("OrorMotorAt"));
+            if (level.isLoaded(post) && post.distSqr(m.blockPosition()) <= 48 * 48) {
+                at = Vec3.atBottomCenterOf(post);
+            }
+        }
+        if (still && !TurretCare.floor(level, BlockPos.containing(at))) {
+            // nothing to stand it on yet (a hatch or a ladder under the post): he tries again
+            return;
+        }
         d.remove("OrorMotor");
-        Entity v = deploy(level, m.position(), yaw, id, seats - 1, null);
+        Entity v = deploy(level, at, yaw, id, seats - 1, null);
         if (v != null) {
             m.startRiding(v, true);
             if (still) {
@@ -1102,6 +1127,7 @@ public final class RoyalPilots {
                 for (Entity rider : v.getPassengers()) {
                     if (rider instanceof net.minecraft.world.entity.Mob gunner) {
                         gunner.setNoAi(true);
+                        gunner.addTag(TurretCare.GUNNER);
                     }
                 }
             }

@@ -154,6 +154,8 @@ public final class CitadelGarrison {
             mob.getPersistentData().putInt("OrorMotorSeats", post.seats());
             mob.getPersistentData().putFloat("OrorMotorYaw", post.yaw());
             mob.getPersistentData().putBoolean("OrorMotorStill", post.still());
+            // (058) where the machine belongs, whatever the soldier does before he brings it out
+            mob.getPersistentData().putLong("OrorMotorAt", at.asLong());
         }
         mob.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, post.yaw(), 0.0F);
         mob.setYHeadRot(post.yaw());

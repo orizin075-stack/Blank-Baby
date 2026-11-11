@@ -39,7 +39,7 @@ final class RelicShapes {
     }
 
     static int argb(int rgb, float alpha) {
-        return ((int) (Mth.clamp(alpha, 0, 1) * 170) << 24) | (rgb & 0xFFFFFF);
+        return ((int) (Mth.clamp(alpha, 0, 1) * 220) << 24) | (rgb & 0xFFFFFF);
     }
 
     static int lighter(int rgb, float f) {
@@ -72,6 +72,16 @@ final class RelicShapes {
             side = new Vec3(1, 0, 0);
         }
         side = side.normalize().scale(w * 0.5);
+        // a ribbon that runs past the eye would be a wedge across the whole screen (a wing's feather, a flash's ray, seen
+        // from behind the caster): it dims as either end nears the camera, and is not drawn at all right at it
+        double near = Math.min(a.length(), b.length());
+        if (near < 1.2) {
+            return;
+        }
+        if (near < 4.5) {
+            int al = (int) ((argb >>> 24) * (near - 1.2) / 3.3);
+            argb = (al << 24) | (argb & 0xFFFFFF);
+        }
         quad(vc, m, a.add(side), b.add(side), b.subtract(side), a.subtract(side), argb);
     }
 
@@ -100,8 +110,6 @@ final class RelicShapes {
             return;
         }
         Vec3 c = s.at.subtract(cp);
-        // what is drawn at the camera (the caster's own wings and flashes, in first person) dims, or it would fill the screen
-        fade *= (float) Mth.clamp(c.length() / 5.0, 0.2, 1.0);
         Vec3 d = s.dir.lengthSqr() < 1.0E-6 ? new Vec3(0, 0, 1) : s.dir.normalize();
         Vec3 up = new Vec3(0, 1, 0);
         int col = s.colour, hi = lighter(s.colour, 0.6F);
@@ -241,15 +249,15 @@ final class RelicShapes {
                 double r = s.size * (1.2 - 0.6 * t) * (0.9 + 0.1 * Math.sin(age));
                 for (int k = 0; k < 5; k++) {
                     double lon = k * Math.PI / 5 + age * 0.08;
-                    ring(vc, m, c, new Vec3(Math.cos(lon), 0, Math.sin(lon)), up, r, Math.min(0.2, r * 0.06), 24, argb(k == 0 ? 0xFFFFFF : col, fade * 0.5F), 0, Math.PI * 2);
+                    ring(vc, m, c, new Vec3(Math.cos(lon), 0, Math.sin(lon)), up, r, Math.min(0.3, r * 0.12), 24, argb(k == 0 ? 0xFFFFFF : col, fade * 0.6F), 0, Math.PI * 2);
                 }
             }
             case 12 -> { // flash: a star of rays
-                double r = s.size * (0.4 + 1.2 * t);
+                double r = Math.min(7.0, s.size * (0.4 + 1.2 * t));
                 for (int k = 0; k < 8; k++) {
                     double ang = k * Math.PI / 4 + hash(s.seed, 1);
                     Vec3 dir = new Vec3(Math.cos(ang), Math.sin(ang * 1.3) * 0.6, Math.sin(ang)).normalize();
-                    beam(vc, m, c, c.add(dir.scale(r * (k % 2 == 0 ? 1 : 0.6))), Math.min(0.22, 0.05 + s.size * 0.015), argb(k % 2 == 0 ? 0xFFFFFF : col, fade * 0.7F));
+                    beam(vc, m, c, c.add(dir.scale(r * (k % 2 == 0 ? 1 : 0.6))), Math.min(0.4, 0.12 + s.size * 0.05), argb(k % 2 == 0 ? 0xFFFFFF : col, fade));
                 }
             }
             case 13 -> { // wings: two fans of feathers behind
@@ -257,12 +265,13 @@ final class RelicShapes {
                 Vec3 back = c.subtract(f.scale(0.4)).add(0, 0.3, 0);
                 double open = Math.min(1, age / 8F) * (0.85 + 0.15 * Math.sin(age * 0.3));
                 for (int sgn = -1; sgn <= 1; sgn += 2) {
-                    for (int k = 0; k < 7; k++) {
-                        double ang = (0.15 + 0.14 * k) * Math.PI * open;
-                        Vec3 dir = sd.scale(sgn * Math.cos(ang)).add(up.scale(Math.sin(ang) * 0.9)).subtract(f.scale(0.25));
-                        double len = s.size * (1.4 - k * 0.09);
+                    for (int k = 0; k < 9; k++) {
+                        double ang = (0.15 + 0.11 * k) * Math.PI * open;
+                        // spread to the sides and up, a little forward of the back (never back toward one who follows)
+                        Vec3 dir = sd.scale(sgn * Math.cos(ang)).add(up.scale(Math.sin(ang) * 0.9)).add(f.scale(0.1));
+                        double len = Math.min(5.5, s.size * (1.6 - k * 0.08));
                         Vec3 tip = back.add(dir.scale(len));
-                        beam(vc, m, back, tip, 0.07 + 0.015 * (7 - k), argb(k % 3 == 0 ? hi : col, fade * 0.4F));
+                        beam(vc, m, back, tip, 0.2 + 0.03 * (9 - k), argb(k % 3 == 0 ? hi : col, fade * 0.6F));
                     }
                 }
             }

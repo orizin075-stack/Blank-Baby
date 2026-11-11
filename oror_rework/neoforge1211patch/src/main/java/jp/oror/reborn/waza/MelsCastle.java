@@ -112,6 +112,15 @@ public final class MelsCastle {
             }
             return false;
         }
+        // (058) not over what someone built: no castle in the capital or a village, none over a chest or any other block
+        // with something in it, none over a house (worked wood and stone, doors, beds, glass)
+        String taken = taken(sl, origin, size);
+        if (taken != null) {
+            if (p != null) {
+                p.displayClientMessage(Component.literal("ここには城を建てられない（" + taken + "）。何も建っていない土地で使ってください"), true);
+            }
+            return false;
+        }
         // the foundation: under every column of the footprint, stone bricks down to the ground (at most sixteen)
         BlockState stone = Blocks.STONE_BRICKS.defaultBlockState();
         for (int x = 0; x < size.getX(); x++) {
@@ -126,6 +135,40 @@ public final class MelsCastle {
         sl.playSound(null, centre, SoundEvents.BELL_RESONATE, SoundSource.BLOCKS, 2F, 0.8F);
         sl.playSound(null, centre, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 1F, 1F);
         return true;
+    }
+
+    /** What already stands where the fortress would (null if the ground is free). */
+    static String taken(ServerLevel sl, BlockPos origin, Vec3i size) {
+        BlockPos far = origin.offset(size.getX() - 1, size.getY() - 1, size.getZ() - 1);
+        for (BlockPos corner : new BlockPos[]{origin, far, new BlockPos(origin.getX(), origin.getY(), far.getZ()),
+            new BlockPos(far.getX(), origin.getY(), origin.getZ()), origin.offset(size.getX() / 2, 0, size.getZ() / 2)}) {
+            if (jp.oror.reborn.village.BuildingGuard.inCapital(corner, 64)) {
+                return "王都の中";
+            }
+            if (jp.oror.reborn.village.BuildingGuard.inVillage(sl, corner)) {
+                return "村の中";
+            }
+        }
+        int built = 0;
+        for (BlockPos q : BlockPos.betweenClosed(origin, far)) {
+            BlockState st = sl.getBlockState(q);
+            if (st.isAir()) {
+                continue;
+            }
+            if (st.hasBlockEntity()) {
+                return "箱などの中身のあるブロックがある";
+            }
+            if (st.is(net.minecraft.tags.BlockTags.PLANKS) || st.is(net.minecraft.tags.BlockTags.DOORS) || st.is(net.minecraft.tags.BlockTags.BEDS)
+                || st.is(net.minecraft.tags.BlockTags.WOOL) || st.is(net.minecraft.tags.BlockTags.STONE_BRICKS)
+                || st.is(net.minecraft.tags.BlockTags.STAIRS) || st.is(net.minecraft.tags.BlockTags.SLABS) || st.is(net.minecraft.tags.BlockTags.WALLS)
+                || st.is(net.minecraft.tags.BlockTags.FENCES) || st.is(net.minecraft.tags.BlockTags.TRAPDOORS)
+                || st.is(net.minecraft.tags.BlockTags.IMPERMEABLE)) {
+                if (++built >= 12) {
+                    return "建物がある";
+                }
+            }
+        }
+        return null;
     }
 
     static final class Castle extends Item {
