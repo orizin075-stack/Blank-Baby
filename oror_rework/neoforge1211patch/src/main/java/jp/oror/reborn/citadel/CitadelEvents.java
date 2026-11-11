@@ -283,11 +283,12 @@ public final class CitadelEvents {
             String line = String.format(Locale.ROOT, "{\"site\":[%d,%d,%d],\"forced\":%b,\"ground\":%d,\"dy\":%d,\"locateMs\":%.1f,"
                     + "\"spawn\":[%d,%d,%d],\"fromSpawn\":%.0f,\"biome\":\"%s\","
                     + "\"chunks\":%d,\"loaded\":%d,\"loadTicks\":%d,\"throne\":[%d,%d,%d],\"dais\":%b,\"underKing\":\"%s\",\"kingAtThrone\":%b,"
-                    + "\"spawned\":%d,\"refused\":%d,\"left\":%s,\"queued\":%d,\"expected\":%s,\"found\":%s,\"treasury\":%s,\"modItems\":%s}",
+                    + "\"spawned\":%d,\"refused\":%d,\"left\":%s,\"queued\":%d,\"waits\":%s,\"expected\":%s,\"found\":%s,\"treasury\":%s,\"modItems\":%s}",
                 site.center().getX(), site.center().getY(), site.center().getZ(), site.forced(), site.ground(), site.dy(), t.locateMs,
                 spawn.getX(), spawn.getY(), spawn.getZ(), Math.sqrt(spawn.distSqr(new BlockPos(site.center().getX(), spawn.getY(), site.center().getZ()))),
                 biome, t.chunks.size(), loaded, t.loadedAt - t.started, throne.getX(), throne.getY(), throne.getZ(), dais, below, king != null,
-                CitadelGarrison.spawned(), CitadelGarrison.refused(), CitadelGarrison.left(), CitadelGarrison.queued(), json(t.expected),
+                CitadelGarrison.spawned(), CitadelGarrison.refused(), CitadelGarrison.left(), CitadelGarrison.queued(), CitadelGarrison.waits(),
+                json(t.expected),
                 json(census(level, site)), treasury(level, t.chunks), modItems());
             LOG.info("CITADEL-SELFTEST {}", line);
             return;

@@ -51,6 +51,8 @@ public final class CitadelGarrison {
     /** (059) the garrison's people the world would not take, and those that left it, by why (for the CI check: since the
      * fourth 058 run the capital's royals were spawned and none were there a moment later) */
     private static int refused;
+    /** (059) people's chunks waited for (announced before they were whole) and given up on (gone for a minute) */
+    private static int waited, dropped;
     private static final Map<String, Integer> LEFT = new TreeMap<>();
     private static int traced;
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Citadel");
@@ -80,7 +82,7 @@ public final class CitadelGarrison {
         long k = key(site, sx, sz);
         synchronized (QUEUE) {
             if (QUEUED.add(k)) {
-                QUEUE.add(new long[]{k, pos.x, pos.z, site.chunkX(), site.chunkZ(), site.ground()});
+                QUEUE.add(new long[]{k, pos.x, pos.z, site.chunkX(), site.chunkZ(), site.ground(), -1L});
             }
         }
     }
@@ -88,6 +90,8 @@ public final class CitadelGarrison {
     @SubscribeEvent
     public static void tick(ServerTickEvent.Post e) {
         ServerLevel level = e.getServer().overworld();
+        long now = level.getGameTime();
+        int waits = 0;
         for (int n = 0; n < 4; n++) {
             long[] q;
             synchronized (QUEUE) {
@@ -100,7 +104,30 @@ public final class CitadelGarrison {
                 return;
             }
             Ledger ledger = Ledger.of(level);
-            if (ledger.done.contains(q[0]) || level.getChunkSource().getChunkNow((int) q[1], (int) q[2]) == null) {
+            if (ledger.done.contains(q[0])) {
+                continue;
+            }
+            if (level.getChunkSource().getChunkNow((int) q[1], (int) q[2]) == null) {
+                // (059) the chunk's load is announced before the chunk is whole: it was dropped here then, and its people
+                // never came (since the fourth 058 run not one of the capital's in CI, the court missing in the game). It
+                // waits its turn again, a minute at most (a chunk that went away comes back with its own load).
+                if (q[6] < 0) {
+                    q[6] = now;
+                }
+                if (now - q[6] < 1200) {
+                    synchronized (QUEUE) {
+                        if (QUEUED.add(q[0])) {
+                            QUEUE.add(q);
+                        }
+                    }
+                    waited++;
+                    if (++waits >= 8) {
+                        return;
+                    }
+                    n--;
+                } else {
+                    dropped++;
+                }
                 continue;
             }
             CitadelSites.Site site = new CitadelSites.Site((int) q[3], (int) q[4], (int) q[5], false);
@@ -216,6 +243,10 @@ public final class CitadelGarrison {
 
     public static int refused() {
         return refused;
+    }
+
+    public static String waits() {
+        return "{\"waited\":" + waited + ",\"dropped\":" + dropped + "}";
     }
 
     public static String left() {
