@@ -3,6 +3,8 @@ package jp.oror.reborn.citadel;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -52,7 +54,7 @@ public final class CitadelGarrison {
      * fourth 058 run the capital's royals were spawned and none were there a moment later) */
     private static int refused;
     /** (059) people's chunks waited for (announced before they were whole) and given up on (gone for a minute) */
-    private static int waited, dropped, limbo;
+    private static int waited, dropped, limbo, retried;
     /** (059) the first people spawned and every one of the throne's, held to see where they are later (CI) */
     private static final java.util.List<Object[]> TRACE = new java.util.ArrayList<>();
     private static final Map<String, Integer> LEFT = new TreeMap<>();
@@ -84,7 +86,7 @@ public final class CitadelGarrison {
         long k = key(site, sx, sz);
         synchronized (QUEUE) {
             if (QUEUED.add(k)) {
-                QUEUE.add(new long[]{k, pos.x, pos.z, site.chunkX(), site.chunkZ(), site.ground(), -1L});
+                QUEUE.add(new long[]{k, pos.x, pos.z, site.chunkX(), site.chunkZ(), site.ground(), -1L, 0L, 0L});
             }
         }
     }
@@ -109,25 +111,23 @@ public final class CitadelGarrison {
             if (ledger.done.contains(q[0])) {
                 continue;
             }
-            // (059) people are put in a chunk only once the world holds the chunk's entities and ticks them: the load
-            // is announced before that, and those put in it in between were in no list of the world's (alive, at their
-            // posts, and in no one's sight, the king on his throne among them: the CI's capital in most runs since
-            // 8 November, and whatever loaded so in a game). A chunk not ready waits its turn again for as long as it
-            // stays loaded (one that went away comes back with its own load).
+            if (q[8] > now) {
+                requeue(q);
+                if (++waits >= 8) {
+                    return;
+                }
+                n--;
+                continue;
+            }
+            // (059) a chunk's load is announced before the chunk is whole: its people wait their turn again (a chunk
+            // that went away comes back with its own load)
             int cx = (int) q[1], cz = (int) q[2];
-            boolean whole = level.getChunkSource().getChunkNow(cx, cz) != null;
-            boolean ready = whole && level.areEntitiesLoaded(ChunkPos.asLong(cx, cz))
-                && level.isPositionEntityTicking(new BlockPos((cx << 4) + 8, level.getSeaLevel(), (cz << 4) + 8));
-            if (!ready) {
+            if (level.getChunkSource().getChunkNow(cx, cz) == null) {
                 if (q[6] < 0) {
                     q[6] = now;
                 }
-                if (whole || now - q[6] < 1200) {
-                    synchronized (QUEUE) {
-                        if (QUEUED.add(q[0])) {
-                            QUEUE.add(q);
-                        }
-                    }
+                if (now - q[6] < 1200) {
+                    requeue(q);
                     waited++;
                     if (++waits >= 8) {
                         return;
@@ -140,12 +140,36 @@ public final class CitadelGarrison {
             }
             CitadelSites.Site site = new CitadelSites.Site((int) q[3], (int) q[4], (int) q[5], false);
             int sx = (int) q[1] - site.chunkX() - CitadelData.HALF, sz = (int) q[2] - site.chunkZ() - CitadelData.HALF;
+            // (059) and they must be in the world's lists once put in it: in most CI runs since 8 November the capital's
+            // people were alive at their posts and in no list of the world's (the entities of a chunk not yet held and
+            // ticked by the world: the king on his throne unseen, unmoving). Who is not is taken out again and the
+            // chunk's people try again later (twenty times at most, a few seconds apart); the chunk is done when they
+            // are all in the world.
+            List<Mob> put = new ArrayList<>();
+            boolean lost = false;
             for (CitadelData.Post post : CitadelData.posts(sx, sz)) {
+                if (q[7] > 0 && post.role().equals("PARKED")) {
+                    continue;   // the machines stood ready the first time
+                }
                 Mob mob = spawn(level, site, post);
                 if (mob != null) {
-                    spawned++;
+                    put.add(mob);
+                    if (level.getEntity(mob.getUUID()) != mob) {
+                        lost = true;
+                    }
                 }
             }
+            if (lost && q[7] < 20) {
+                for (Mob m : put) {
+                    m.discard();
+                }
+                retried++;
+                q[7]++;
+                q[8] = now + 60;
+                requeue(q);
+                continue;
+            }
+            spawned += put.size();
             ledger.done.add(q[0]);
             ledger.setDirty();
         }
@@ -288,12 +312,20 @@ public final class CitadelGarrison {
         }
     }
 
+    private static void requeue(long[] q) {
+        synchronized (QUEUE) {
+            if (QUEUED.add(q[0])) {
+                QUEUE.add(q);
+            }
+        }
+    }
+
     public static int refused() {
         return refused;
     }
 
     public static String waits() {
-        return "{\"waited\":" + waited + ",\"dropped\":" + dropped + ",\"untracked\":" + limbo + "}";
+        return "{\"waited\":" + waited + ",\"dropped\":" + dropped + ",\"untracked\":" + limbo + ",\"retried\":" + retried + "}";
     }
 
     public static String left() {

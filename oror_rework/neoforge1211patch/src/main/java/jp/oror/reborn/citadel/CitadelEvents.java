@@ -295,6 +295,10 @@ public final class CitadelEvents {
                 BlockPos a0 = site.toWorld(-CitadelData.HALF * 16, -CitadelData.GROUND, -CitadelData.HALF * 16);
                 AABB box0 = new AABB(a0.getX(), level.getMinBuildHeight(), a0.getZ(), a0.getX() + CitadelSites.SIZE * 16, level.getMaxBuildHeight(),
                     a0.getZ() + CitadelSites.SIZE * 16);
+                BlockPos th = site.throne();
+                LOG.info("CITADEL-READY {\"throneChunkEntitiesLoaded\":{},\"throneEntityTicking\":{},\"throneBlockTicking\":{},\"whole\":{}}",
+                    level.areEntitiesLoaded(net.minecraft.world.level.ChunkPos.asLong(th)), level.isPositionEntityTicking(th),
+                    level.shouldTickBlocksAt(th), level.getChunkSource().getChunkNow(th.getX() >> 4, th.getZ() >> 4) != null);
                 LOG.info("CITADEL-TRACE {\"box\":\"{}\",\"allTagged\":{},\"boxRoyals\":{},\"traced\":{}}", box0,
                     CitadelGarrison.allTagged(level, box0), level.getEntitiesOfClass(RoyalMob.class, box0, RoyalMob::isAlive).size(),
                     CitadelGarrison.traced(level));
