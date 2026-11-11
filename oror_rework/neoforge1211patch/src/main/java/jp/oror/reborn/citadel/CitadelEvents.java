@@ -283,11 +283,12 @@ public final class CitadelEvents {
             String line = String.format(Locale.ROOT, "{\"site\":[%d,%d,%d],\"forced\":%b,\"ground\":%d,\"dy\":%d,\"locateMs\":%.1f,"
                     + "\"spawn\":[%d,%d,%d],\"fromSpawn\":%.0f,\"biome\":\"%s\","
                     + "\"chunks\":%d,\"loaded\":%d,\"loadTicks\":%d,\"throne\":[%d,%d,%d],\"dais\":%b,\"underKing\":\"%s\",\"kingAtThrone\":%b,"
-                    + "\"spawned\":%d,\"expected\":%s,\"found\":%s,\"treasury\":%s,\"modItems\":%s}",
+                    + "\"spawned\":%d,\"refused\":%d,\"left\":%s,\"queued\":%d,\"expected\":%s,\"found\":%s,\"treasury\":%s,\"modItems\":%s}",
                 site.center().getX(), site.center().getY(), site.center().getZ(), site.forced(), site.ground(), site.dy(), t.locateMs,
                 spawn.getX(), spawn.getY(), spawn.getZ(), Math.sqrt(spawn.distSqr(new BlockPos(site.center().getX(), spawn.getY(), site.center().getZ()))),
                 biome, t.chunks.size(), loaded, t.loadedAt - t.started, throne.getX(), throne.getY(), throne.getZ(), dais, below, king != null,
-                CitadelGarrison.spawned(), json(t.expected), json(census(level, site)), treasury(level, t.chunks), modItems());
+                CitadelGarrison.spawned(), CitadelGarrison.refused(), CitadelGarrison.left(), CitadelGarrison.queued(), json(t.expected),
+                json(census(level, site)), treasury(level, t.chunks), modItems());
             LOG.info("CITADEL-SELFTEST {}", line);
             return;
         }
@@ -336,8 +337,9 @@ public final class CitadelEvents {
             king.blockPosition().equals(throne) || king.distanceToSqr(throne.getX() + 0.5, throne.getY(), throne.getZ() + 0.5) < 1.5,
             king.getTarget() != null);
         String line = String.format(Locale.ROOT, "{\"royals\":%d,\"armed\":%d,\"nearPost\":%d,\"found\":%s,\"manned\":%s,\"ready\":%s,"
-                + "\"parked\":%d,\"king\":%s,\"vehicles\":[%s],\"mspt\":%.2f}",
-            royals, armed, atPost, json(census(level, t.site)), json(manned), json(ready), CitadelGarrison.parked(), kingAt, String.join(",", sample),
+                + "\"parked\":%d,\"king\":%s,\"left\":%s,\"refused\":%d,\"vehicles\":[%s],\"mspt\":%.2f}",
+            royals, armed, atPost, json(census(level, t.site)), json(manned), json(ready), CitadelGarrison.parked(), kingAt, CitadelGarrison.left(),
+            CitadelGarrison.refused(), String.join(",", sample),
             e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
         LOG.info("CITADEL-SUPPLY {\"posts\":{},\"kinds\":[{}]}", json(supply), String.join(",", supplySample));

@@ -3,7 +3,9 @@ package jp.oror.reborn.citadel;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import jp.oror.reborn.royal.RoyalMob;
 import jp.oror.reborn.royal.RoyalRegistry;
 import jp.oror.reborn.royal.RoyalRole;
@@ -27,6 +29,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -45,6 +48,12 @@ public final class CitadelGarrison {
     private static final Set<Long> QUEUED = new HashSet<>();
     private static int spawned;
     private static int parked;
+    /** (059) the garrison's people the world would not take, and those that left it, by why (for the CI check: since the
+     * fourth 058 run the capital's royals were spawned and none were there a moment later) */
+    private static int refused;
+    private static final Map<String, Integer> LEFT = new TreeMap<>();
+    private static int traced;
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Citadel");
 
     private CitadelGarrison() {
     }
@@ -163,8 +172,58 @@ public final class CitadelGarrison {
         mob.setPersistenceRequired();
         mob.addTag(TAG);
         mob.getPersistentData().putString("OrorCitadelPost", post.post());
-        level.addFreshEntity(mob);
+        if (!level.addFreshEntity(mob)) {
+            refused++;
+            if (refused <= 5) {
+                LOG.info("GARRISON-REFUSED {} at {} (post {})", post.role(), at.toShortString(), post.post());
+            }
+            return null;
+        }
         return mob;
+    }
+
+    /** (059) Why the garrison's people leave the world (killed, discarded, changed, unloaded), and who did it, the first few. */
+    @SubscribeEvent
+    public static void left(EntityLeaveLevelEvent e) {
+        Entity en = e.getEntity();
+        if (e.getLevel().isClientSide() || !en.getTags().contains(TAG)) {
+            return;
+        }
+        Entity.RemovalReason r = en.getRemovalReason();
+        String k = (r == null ? "NONE" : r.name()) + (en instanceof Villager ? "/villager" : en instanceof RoyalMob ? "/royal" : "/other");
+        synchronized (LEFT) {
+            LEFT.merge(k, 1, Integer::sum);
+        }
+        if (traced < 6 && r != Entity.RemovalReason.UNLOADED_TO_CHUNK && r != Entity.RemovalReason.UNLOADED_WITH_PLAYER) {
+            traced++;
+            StringBuilder b = new StringBuilder();
+            for (StackTraceElement st : Thread.currentThread().getStackTrace()) {
+                if (b.length() > 1800) {
+                    break;
+                }
+                String c = st.getClassName();
+                if (c.startsWith("java.") || c.startsWith("jdk.") || c.contains("EventBus") || c.contains("eventbus")) {
+                    continue;
+                }
+                b.append(c.substring(c.lastIndexOf('.') + 1)).append('.').append(st.getMethodName()).append(':').append(st.getLineNumber()).append(" < ");
+            }
+            String hurt = en instanceof net.minecraft.world.entity.LivingEntity le && le.getLastDamageSource() != null
+                ? le.getLastDamageSource().getMsgId() + " hp=" + le.getHealth() : "-";
+            LOG.info("GARRISON-LEFT {} {} at {} post={} hurt={} by {}", k, net.minecraft.world.entity.EntityType.getKey(en.getType()),
+                en.blockPosition().toShortString(), en.getPersistentData().getString("OrorCitadelPost"), hurt, b);
+        }
+    }
+
+    public static int refused() {
+        return refused;
+    }
+
+    public static String left() {
+        synchronized (LEFT) {
+            StringBuilder b = new StringBuilder("{");
+            LEFT.forEach((k, v) -> b.append(b.length() > 1 ? "," : "").append('"').append(k).append("\":").append(v));
+            return b.append('}').toString();
+        }
     }
 
     private static Mob royal(ServerLevel level, String role) {
