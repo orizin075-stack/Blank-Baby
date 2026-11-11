@@ -53,6 +53,8 @@ public final class CitadelGarrison {
     private static int refused;
     /** (059) people's chunks waited for (announced before they were whole) and given up on (gone for a minute) */
     private static int waited, dropped;
+    /** (059) the first people spawned and every one of the throne's, held to see where they are later (CI) */
+    private static final java.util.List<Object[]> TRACE = new java.util.ArrayList<>();
     private static final Map<String, Integer> LEFT = new TreeMap<>();
     private static int traced;
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Citadel");
@@ -206,7 +208,43 @@ public final class CitadelGarrison {
             }
             return null;
         }
+        synchronized (TRACE) {
+            if (TRACE.size() < 12 || "throne".equals(post.post()) && TRACE.size() < 60) {
+                TRACE.add(new Object[]{mob, at, level.getGameTime()});
+            }
+        }
         return mob;
+    }
+
+    /** (059) Where the traced people are now: alive, tracked by the world, how far from their posts. */
+    public static String traced(ServerLevel level) {
+        StringBuilder b = new StringBuilder("[");
+        synchronized (TRACE) {
+            for (Object[] t : TRACE) {
+                Mob m = (Mob) t[0];
+                BlockPos at = (BlockPos) t[1];
+                Entity live = level.getEntity(m.getUUID());
+                b.append(b.length() > 1 ? "," : "").append(String.format(java.util.Locale.ROOT,
+                    "{\"type\":\"%s\",\"post\":\"%s\",\"at\":\"%s\",\"age\":%d,\"alive\":%b,\"removed\":\"%s\",\"tracked\":%b,\"same\":%b,"
+                        + "\"now\":\"%d %d %d\",\"off\":%.1f,\"hp\":%.1f,\"last\":\"%s\"}",
+                    EntityType.getKey(m.getType()).getPath(), m.getPersistentData().getString("OrorCitadelPost"), at.toShortString(),
+                    level.getGameTime() - (long) t[2], m.isAlive(), m.getRemovalReason(), live != null, live == m,
+                    m.getBlockX(), m.getBlockY(), m.getBlockZ(), Math.sqrt(m.blockPosition().distSqr(at)), m.getHealth(),
+                    m.getLastDamageSource() == null ? "-" : m.getLastDamageSource().getMsgId()));
+            }
+        }
+        return b.append(']').toString();
+    }
+
+    /** (059) The citadel's people in the box, counted over every entity of the level (not the box query). */
+    public static int allTagged(ServerLevel level, net.minecraft.world.phys.AABB box) {
+        int n = 0;
+        for (Entity e : level.getAllEntities()) {
+            if (e != null && e.getTags().contains(TAG) && box.contains(e.position())) {
+                n++;
+            }
+        }
+        return n;
     }
 
     /** (059) Why the garrison's people leave the world (killed, discarded, changed, unloaded), and who did it, the first few. */

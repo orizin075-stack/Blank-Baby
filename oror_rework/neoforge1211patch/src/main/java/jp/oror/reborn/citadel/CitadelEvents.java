@@ -291,6 +291,14 @@ public final class CitadelEvents {
                 json(t.expected),
                 json(census(level, site)), treasury(level, t.chunks), modItems());
             LOG.info("CITADEL-SELFTEST {}", line);
+            {
+                BlockPos a0 = site.toWorld(-CitadelData.HALF * 16, -CitadelData.GROUND, -CitadelData.HALF * 16);
+                AABB box0 = new AABB(a0.getX(), level.getMinBuildHeight(), a0.getZ(), a0.getX() + CitadelSites.SIZE * 16, level.getMaxBuildHeight(),
+                    a0.getZ() + CitadelSites.SIZE * 16);
+                LOG.info("CITADEL-TRACE {\"box\":\"{}\",\"allTagged\":{},\"boxRoyals\":{},\"traced\":{}}", box0,
+                    CitadelGarrison.allTagged(level, box0), level.getEntitiesOfClass(RoyalMob.class, box0, RoyalMob::isAlive).size(),
+                    CitadelGarrison.traced(level));
+            }
             return;
         }
         if (now - t.reportedAt < 200) {
@@ -343,6 +351,7 @@ public final class CitadelEvents {
             CitadelGarrison.refused(), String.join(",", sample),
             e.getServer().getAverageTickTimeNanos() / 1e6);
         LOG.info("CITADEL-SELFTEST-LATER {}", line);
+        LOG.info("CITADEL-TRACE-LATER {\"allTagged\":{},\"traced\":{}}", CitadelGarrison.allTagged(level, box), CitadelGarrison.traced(level));
         LOG.info("CITADEL-SUPPLY {\"posts\":{},\"kinds\":[{}]}", json(supply), String.join(",", supplySample));
         // released a few a tick: letting two hundred chunks of royals, townsfolk and vehicles unload in one go has
         // crashed the server's entity unloading (CI run 26)
