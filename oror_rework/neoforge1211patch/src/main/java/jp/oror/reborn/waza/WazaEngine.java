@@ -65,6 +65,9 @@ public final class WazaEngine {
         public int fired;
         public int landed;
         public float dealt;
+        /** (059, V20's second check) each blow that landed: the tick from the start, its damage, the target's
+         * invulnerability before it (cleared for the technique's own blows) */
+        public final List<String> hitLog = new ArrayList<>();
         public final List<String> notes = new ArrayList<>();
         public final Set<Integer> struck = new HashSet<>();
         public final Map<Integer, Long> lastBeamHit = new HashMap<>();

@@ -72,6 +72,7 @@ final class WazaActs {
             c.note("refused:" + (t == b ? "self" : !t.isAlive() ? "dead" : b.ally(t) ? "ally" : "invalid"));
             return false;
         }
+        int inv = t.invulnerableTime;
         t.invulnerableTime = 0;
         WazaWorld.lastReached = null;
         striking = true;
@@ -87,6 +88,7 @@ final class WazaActs {
         if (landed) {
             c.landed++;
             c.dealt += WazaWorld.lastReachedAmount;
+            c.hitLog.add((b.level().getGameTime() - c.start) + "t/" + Math.round(WazaWorld.lastReachedAmount * 10) / 10.0 + "/i" + inv);
             if (c.w.has("DRAIN")) {
                 b.heal(Math.min(b.getMaxHealth() * 0.05F, WazaWorld.lastReachedAmount * 0.3F));
             }

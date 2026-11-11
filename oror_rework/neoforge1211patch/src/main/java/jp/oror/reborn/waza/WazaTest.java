@@ -406,7 +406,33 @@ public final class WazaTest {
         return verdict(y, w, c)[0].equals("ok");
     }
 
+    /** (059) The V20 design's 36 techniques of short-interval hits (08_short_interval_36.csv): the second of its checks
+     * measures each of their blows (when it landed against the design's moment, its share of the damage, and the
+     * target's invulnerability, which would have swallowed it): SHORT36-TRY per technique, SHORT36-RESULT. */
+    static final java.util.Set<String> SHORT36 = java.util.Set.of(
+        "kokuhaku_01", "kokuhaku_18", "kokuhaku_21", "kokuhaku_24", "tenki_19", "chaos_01", "chaos_04", "chaos_07",
+        "chaos_16", "chaos_23", "mels_02", "mels_09", "mels_18", "hephaistos_02", "nortia_18", "nortia_19",
+        "nortia_21", "valeria_03", "valeria_18", "taika_02", "taika_13", "taika_21", "taika_22", "mary_sue_01",
+        "enkou_05", "kurma_19", "teia_01", "arcana_19", "hakyoku_01", "hakyoku_18", "magna_mater_08", "demiurgos_23",
+        "brutality_20", "fallen_savior_01", "fallen_savior_05", "fallen_savior_18");
+    private static final Map<String, Boolean> SHORT = new LinkedHashMap<>();
+
+    private static void judgeShort(Waza w, WazaEngine.Cast c) {
+        int[] hits = w.hits();
+        StringBuilder design = new StringBuilder();
+        for (int h : hits) {
+            design.append(design.length() > 0 ? ";" : "").append(w.windup() + h);
+        }
+        boolean all = c.landed >= hits.length;
+        SHORT.put(w.id(), all);
+        LOG.info("SHORT36-TRY {\"id\":\"{}\",\"hits\":{},\"landed\":{},\"all\":{},\"design\":\"{}\",\"blows\":\"{}\",\"dealt\":{}}",
+            w.id(), hits.length, c.landed, all, design, String.join(" ", c.hitLog), Math.round(c.dealt * 10) / 10.0);
+    }
+
     private static void judge(Yard y, Waza w, WazaEngine.Cast c) {
+        if (SHORT36.contains(w.id())) {
+            judgeShort(w, c);
+        }
         String[] v = verdict(y, w, c);
         boolean pass = v[0].equals("ok");
         int dummyHits = y.dummy == null ? 0 : DUMMY_HITS.getOrDefault(y.dummy.getId(), 0) - y.hitsAtStart;
@@ -629,6 +655,9 @@ public final class WazaTest {
         LOG.info("WAZA-RESULT {\"techniques\":{},\"tried\":{},\"passed\":{},\"retried\":{},\"ticks\":{},\"byBehaviour\":{},\"failed\":\"{}\",\"other\":\"{}\",\"mels\":\"{}\",\"pass\":{}}",
             Waza.ALL.size(), tried, passed, retries, now - started, t, String.join(" ", FAILED), o.toString().trim(), MELS.toString().replace("\"", "'"),
             tried == Waza.ALL.size() && passed == tried && Boolean.TRUE.equals(MELS.get("pass")));
+        long allHits = SHORT.values().stream().filter(Boolean::booleanValue).count();
+        LOG.info("SHORT36-RESULT {\"listed\":{},\"tried\":{},\"allHitsLanded\":{},\"short\":\"{}\"}", SHORT36.size(), SHORT.size(), allHits,
+            SHORT.entrySet().stream().filter(x -> !x.getValue()).map(Map.Entry::getKey).reduce((a, b) -> a + " " + b).orElse(""));
         for (Yard y : YARDS) {
             cleanup(y);
             for (Entity e : level.getEntities((Entity) null, new AABB(y.at).inflate(24, 16, 24), x -> !(x instanceof Player))) {
