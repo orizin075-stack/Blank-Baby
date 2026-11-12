@@ -64,45 +64,45 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/9aa86ea608c3ec777dcdc09e6c5a06c85b53599e/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.35s
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.32s
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
 [1m*** Started working on [4mdownloadServer[23;0m[23;0m
   ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.38s
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.32s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.78s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.57s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.05s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 0.88s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.70s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.54s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.68s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.92s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.63s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 2.82s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.61s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.42s
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.44s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.35s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 5.26s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 4.68s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 4.12s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 3.66s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.31s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.17s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.69s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.54s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.12s
-Total runtime: 24.77s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 2.87s
+Total runtime: 20.47s
 
 
 > Task :compileJava
@@ -227,11 +227,11 @@ Note: Recompile with -Xlint:deprecation for details.
 Note: /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/RelicArts.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 39 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1794466404550.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1794476936612.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 1m
+BUILD SUCCESSFUL in 1m 13s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -311,8 +311,8 @@ modId="minecraft"
   private static boolean lambda$updateChunkStatus$4(net.minecraft.world.level.entity.EntityAccess);
   public net.minecraft.world.item.trading.MerchantOffer getOffer(net.minecraft.world.entity.Entity, net.minecraft.util.RandomSource);
       32: invokevirtual #68                 // Method net/minecraft/server/level/ServerLevel.findNearestMapStructure:(Lnet/minecraft/tags/TagKey;Lnet/minecraft/core/BlockPos;IZ)Lnet/minecraft/core/BlockPos;
-replaced 141 old class files; added 346 compiled; overlaid 673 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json'] ; dropped ['data/oror_supreme_bosses/structure/royal034/kingdom_0_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_0_1.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_1.nbt']
-83a8ad8ea2c15b40872454e2d4e3b77433b1b8e20323375ad6c812610dd139c0  out/oror_supreme_bosses-0.17.39-059-preview.jar
+replaced 142 old class files; added 358 compiled; overlaid 673 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json'] ; dropped ['data/oror_supreme_bosses/structure/royal034/kingdom_0_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_0_1.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_1.nbt']
+bed34904e1acd6dc4248313507d56e9c5bd02fd80323a27fc3624659a31b5735  out/oror_supreme_bosses-0.17.39-059-preview.jar
 == /home/runner/work/_temp/pack053/alexscaves-2.0.10.jar
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyAttractingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyRepellingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
