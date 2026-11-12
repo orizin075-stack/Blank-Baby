@@ -24,6 +24,12 @@ What it is now (all within the keep's own walls and roof, which stay; the town a
 * (059b) the shell made whole: the slot between the rooms and the keep's wall walled (falls of up to 45 blocks), the
   wings' middle roofed again at the keep's height (the maze's own low roofs went with it); the corner towers' ladders
   replaced by stair turrets, with a passage in from the corner stair halls; the east hall's ladder by a stair.
+* (059c) the north stair goes on to the terrace (it ended a block under the terrace's edge, and the edge a block
+  under the terrace: two full-block rises, "the stair does not go on"; the old gate's sill across the top of the south
+  flight is taken away); the hall shut inside the north terrace's front
+  (its general and imperial guard in a room no one could reach) gets a door each side; whoever's post the palace now
+  fills (the north gate's guards in the stair's foot, the south's general and imperial guard in its bottom step) stands
+  on the nearest free spot.
 
 The garrison table (garrison.json) gets the court's new posts; CitadelData's throne moves with them.
 """
@@ -1039,6 +1045,37 @@ class Palace:
                 x, z = (s, az * d0) if ax == 0 else (ax * d0, s)
                 for y in range(top, top + 4):
                     self.put(x, y, z, AIR)
+            # (059c) on up to the terrace's own level: the flight ended a block under the terrace's edge and the edge a
+            # block under the terrace (the north side: walking heights 73, 74 over the hall in the terrace, 75), each a
+            # full block's rise the user found the stair "not going on" at. Where the way in rises a full block, the
+            # higher block's top becomes a step; a sill a block high that the way comes down from again within three
+            # blocks (the old gate's, across the top of the south flight) is taken away.
+            for s in range(-half + 1, half):
+                level, cols = top - 1, []
+                for d in range(d0, 46, -1):
+                    x, z = (s, az * d) if ax == 0 else (ax * d, s)
+                    near = [h for h in walk_height(x, z) if abs(h - level) <= 1]
+                    if not near:
+                        break
+                    level = min(near, key=lambda v: abs(v - level))
+                    cols.append((x, z, level))
+                level, i = top - 1, 0
+                while i < len(cols):
+                    x, z, h = cols[i]
+                    if h == level + 1:
+                        back = next((j for j in range(i + 1, min(i + 4, len(cols))) if cols[j][2] == level), None)
+                        if back is not None:
+                            for bx, bz, bh in cols[i:back]:
+                                self.put(bx, bh - 1, bz, AIR)
+                                self.stats['approach sill blocks taken away'] += 1
+                            i = back
+                            continue
+                        under = self.get(x, h - 1, z)
+                        if '_stairs' not in under and '_slab' not in under:
+                            self.put(x, h - 1, z, stairs('stone_brick', face))
+                            self.stats['approach ledge steps'] += 1
+                    level = h
+                    i += 1
             self.stats['approach stairs'] += 1
             self.stats['approach rise %d,%d' % (ax, az)] = rise
 
@@ -1091,8 +1128,27 @@ class Palace:
         self.annex()
         self.vault_stair()
         self.approaches()
+        self.guard_hall()
         self.place_chests()
         return self.stats
+
+    def guard_hall(self):
+        """(059c) The hall in the front of the north terrace (x within 10, z -92 to -72, its floor at 65), shut on
+        every side since the save: its general and imperial guard stood in a room no one could reach, and from the
+        town it was a hollow under the north stair. A door in each side wall from the street under the terrace's eaves,
+        with a step up to the hall's floor."""
+        for sx, face in ((-1, 'east'), (1, 'west')):
+            wx, ox = 11 * sx, 12 * sx
+            done = 0
+            for z in range(-83, -80):
+                if not solid(self.get(wx, 66, z)) or solid(self.get(ox, 66, z)) or solid(self.get(ox, 65, z)) \
+                        or not solid(self.get(ox, 64, z)) or solid(self.get(wx - sx, 66, z)):
+                    continue
+                for y in (66, 67, 68):
+                    self.put(wx, y, z, AIR)
+                self.put(ox, 65, z, stairs('stone_brick', face))
+                done += 1
+            self.stats['guard hall door widths'] += done
 
 
 SOFT = ('air', 'carpet', 'torch', 'lantern', 'button', 'pressure_plate', 'sign', 'banner', 'flower', 'short_grass', 'tall_grass',
@@ -1106,13 +1162,34 @@ def solid(s):
     return n not in ('air', 'cave_air') and not any(k in n for k in SOFT[1:])
 
 
-def posts(garrison_path, court):
-    """The garrison table with the old throne posts replaced by the new court."""
+def posts(garrison_path, court, t=None):
+    """The garrison table with the old throne posts replaced by the new court. (059c) Anyone whose post the rebuilt
+    palace now fills (the north gate's guards stood where its stair's foot is) stands on the nearest free spot."""
     g = json.load(open(garrison_path))
     old = [e for e in g['entries'] if e.get('post') == 'throne']
     g['entries'] = [e for e in g['entries'] if e.get('post') != 'throne'] + court
+    moved = 0
+    if t is not None:
+        def free(x, y, z):
+            return not solid(t.get(x, y, z)) and not solid(t.get(x, y + 1, z)) and solid(t.get(x, y - 1, z))
+        for e in g['entries']:
+            if e.get('vehicle') or e.get('post') == 'throne':
+                continue
+            x, y, z = e['x'], e['y'], e['z']
+            if not solid(t.get(x, y, z)) and not solid(t.get(x, y + 1, z)):
+                continue
+            best = None
+            for dx in range(-6, 7):
+                for dz in range(-6, 7):
+                    for dy in range(-2, 4):
+                        cost = abs(dx) + abs(dz) + 2 * abs(dy)
+                        if (best is None or cost < best[0]) and free(x + dx, y + dy, z + dz):
+                            best = (cost, x + dx, y + dy, z + dz)
+            if best:
+                e['x'], e['y'], e['z'] = best[1], best[2], best[3]
+                moved += 1
     json.dump(g, open(garrison_path, 'w'), indent=0)
-    return len(old), len(court)
+    return len(old), len(court), moved
 
 
 if __name__ == '__main__':
@@ -1122,9 +1199,10 @@ if __name__ == '__main__':
     stats = p.build()
     n = t.save(folder)
     gp = os.path.join(folder, 'garrison.json')
-    removed, added = posts(gp, p.posts)
+    removed, added, moved = posts(gp, p.posts, t)
     stats['chunks saved'] = n
     stats['throne posts'] = f'{removed} -> {added}'
+    stats['posts moved off blocks'] = moved
     out = dict(stats)
     print(json.dumps(out, ensure_ascii=False, indent=1))
     if len(sys.argv) > 2:
