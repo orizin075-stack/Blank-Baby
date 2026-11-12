@@ -169,12 +169,14 @@ public final class Look {
                     {"c15_capital_inner_wall_gate_n", 0, 91, -54, 180.0F, 20.6F}, {"c16_capital_inner_wall_gate_s", 0, 91, 54, 0.0F, 20.6F},
                     // (059d) the wall batteries on the outer wall's walk, the redoubts' guns on their decks, a
                     // redoubt's way in and its room's stair
-                    {"c17_capital_turret_battery_w", -455, 112, -38, 90.0F, 38.0F}, {"c18_capital_turret_battery_n", 323, 112, -458, 180.0F, 38.0F},
-                    {"c19_capital_turret_battery_s", 305, 112, 458, 0.0F, 38.0F}, {"c20_capital_turret_redoubt_w", -513, 85, -100, 90.0F, 37.0F},
+                    // (059e) the batteries at the walk's edge behind their embrasures; a casemate's gun at its port; the
+                    // ground a battery's gun sees over the wall
+                    {"c17_capital_turret_battery_w", -465, 109, -38, 90.0F, 25.0F}, {"c18_capital_turret_battery_n", 323, 109, -465, 180.0F, 25.0F},
+                    {"c19_capital_turret_battery_s", 305, 109, 465, 0.0F, 25.0F}, {"c33_capital_battery_gun_view_w", -478, 104, -38, 90.0F, 30.0F}, {"c20_capital_turret_redoubt_w", -513, 85, -100, 90.0F, 37.0F},
                     {"c21_capital_turret_redoubt_e", 513, 85, 100, -90.0F, 37.0F},
                     {"c31_capital_redoubt_door_w", -506, 68, -100, 90.0F, 4.0F}, {"c32_capital_redoubt_room_w", -525, 66, -101, 90.0F, 12.0F}, {"c22_capital_turret_aa_w", -405, 77, -42, 95.7F, 32.1F},
                     {"c23_capital_turret_aa_ne", 373, 77, -185, -116.6F, 32.1F}, {"c24_capital_turret_crossfire_w", -601, 78, -23, 92.9F, 32.2F},
-                    {"c25_capital_turret_crossfire_e", 601, 78, 23, -87.1F, 32.2F}, {"c26_capital_turret_casemate_w", -452, 105, -29, 92.9F, 63.2F},
+                    {"c25_capital_turret_crossfire_e", 601, 78, 23, -87.1F, 32.2F}, {"c26_capital_turret_casemate_w", -112, 70, -28, 90.0F, 8.0F},
                     {"c27_capital_roads_nw", -200, 175, -200, 180.0F, 80.0F}, {"c28_capital_roads_e", 380, 175, 0, 180.0F, 80.0F},
                     {"c29_capital_roads_s", 0, 175, 380, 180.0F, 80.0F}, {"c30_capital_roads_ne", 300, 175, -300, 180.0F, 80.0F}};
                 for (Object[] v : audit) {
