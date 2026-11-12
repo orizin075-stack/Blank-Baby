@@ -1,34 +1,34 @@
-193 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-294 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-354 press selectWorld.create
-355 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-455 screenshot popup_ConfirmScreen
-455 press gui.yes
-456 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-483 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-596 screen none in LOADING
-597 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-697 screenshot popup_
-698 screen none in PLAY
-727 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
-738 stage at -160 88 64
-897 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air]
-939 guard scene: 10 mobs
-995 screenshot g01_none_a
-1023 screenshot g01_none_b
-1043 guard guard: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1055 screenshot g02_guard_a
-1083 screenshot g02_guard_b
-1103 guard parry: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1115 screenshot g03_parry_a
-1143 screenshot g03_parry_b
-1163 guard block: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1175 screenshot g04_block_a
-1203 screenshot g04_block_b
-1223 guard break: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1235 screenshot g05_break_a
-1263 screenshot g05_break_b
-1283 guard parried: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1295 screenshot g06_parried_a
-1323 screenshot g06_parried_b
-1337 finished: complete (guard only)
+333 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+434 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+494 press selectWorld.create
+495 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+595 screenshot popup_ConfirmScreen
+595 press gui.yes
+596 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+635 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+688 screen none in LOADING
+689 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+789 screenshot popup_
+790 screen none in PLAY
+819 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
+836 stage at -32 91 -32
+989 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef, minecraft:squid -> net.minecraft.client.renderer.entity.SquidRenderer holding 0 minecraft:air, minecraft:squid -> net.minecraft.client.renderer.entity.SquidRenderer holding 0 minecraft:air, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air]
+1033 guard scene: 10 mobs
+1087 screenshot g01_none_a
+1115 screenshot g01_none_b
+1135 guard guard: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1147 screenshot g02_guard_a
+1175 screenshot g02_guard_b
+1200 guard parry: zombie=none [ZombiePatch] ef skeleton=none [SkeletonPatch] ef vindicator=none [VindicatorPatch] ef pillager=none [PillagerPatch] ef villager=none [no patch] husk=none [ZombiePatch] ef piglin_brute=none [PiglinBrutePatch] ef wither_skeleton=none [WitherSkeletonPatch] ef iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1207 screenshot g03_parry_a
+1235 screenshot g03_parry_b
+1257 guard block: zombie=none [ZombiePatch] ef skeleton=none [SkeletonPatch] ef vindicator=none [VindicatorPatch] ef pillager=none [PillagerPatch] ef villager=none [no patch] husk=none [ZombiePatch] ef piglin_brute=none [PiglinBrutePatch] ef wither_skeleton=none [WitherSkeletonPatch] ef iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1267 screenshot g04_block_a
+1295 screenshot g04_block_b
+1316 guard break: zombie=none [ZombiePatch] ef skeleton=none [SkeletonPatch] ef vindicator=none [VindicatorPatch] ef pillager=none [PillagerPatch] ef villager=none [no patch] husk=none [ZombiePatch] ef piglin_brute=none [PiglinBrutePatch] ef wither_skeleton=none [WitherSkeletonPatch] ef iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1327 screenshot g05_break_a
+1355 screenshot g05_break_b
+1378 guard parried: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1387 screenshot g06_parried_a
+1415 screenshot g06_parried_b
+1429 finished: complete (guard only)
