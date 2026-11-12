@@ -120,6 +120,8 @@ jobs:
                 echo "== $j"; javap -p -cp "$j" net.minecraft.world.level.chunk.ChunkGenerator | grep -E 'createStructures|tryGenerateStructure'
                 # (058) what SafeEntityUnloadMixin redirects: the call in processUnloads, and updateChunkStatus
                 javap -p -c -cp "$j" net.minecraft.world.level.entity.PersistentEntitySectionManager | grep -E 'processUnloads|updateChunkStatus|removeIf' | head -12
+                # (059d) what TreasureMapCacheMixin redirects: the structure search in a cartographer's map offer
+                javap -p -c -cp "$j" 'net.minecraft.world.entity.npc.VillagerTrades$TreasureMapForEmeralds' | grep -E 'getOffer|findNearestMapStructure' | head -6
                 break
               fi
             done
