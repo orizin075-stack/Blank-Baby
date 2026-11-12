@@ -70,6 +70,9 @@ PROPS = ['halo', 'crown', 'robe', 'tomes', 'orb1', 'orb2', 'fruit1', 'fruit2', '
 
 # ------------------------------------------------------------------------------------------------------ colours, sound
 COLOURS = [
+    # (059c) V20's own colour words (its 粒子・光・音の改稿), before the shorter names they contain
+    ('蒼白', 0xC8DCF0), ('王金', 0xF0C040), ('液金', 0xE0C060), ('毒色', 0x80C030), ('無彩色', 0xA8A8A8), ('影紺', 0x262A58),
+    ('火花', 0xFFE8B0), ('金属', 0xB4BCC6),
     ('白銀', 0xD8E0EA), ('淡蒼', 0x9FC4E8), ('銀', 0xC8CED6), ('黄金', 0xF2C230), ('白金', 0xF4EBC8), ('淡金', 0xEEDC9A),
     ('赤金', 0xE0803A), ('暗金', 0xA88A30), ('金', 0xE8B830), ('翡翠', 0x3CC48C), ('青緑', 0x30B0A8), ('虹', 0xF07AE8),
     ('黒紫', 0x40204E), ('青紫', 0x6A50D8), ('紫紺', 0x3A2470), ('薄紫', 0xB8A0E8), ('深紫', 0x4C1A6C), ('紫', 0x8A40C8),
@@ -78,6 +81,8 @@ COLOURS = [
     ('白', 0xF4F4F4), ('鋼', 0x8A949E), ('褐', 0x8A5A30), ('土', 0x9A7A50), ('岩', 0x7A6A58), ('緑', 0x50B050),
     ('生命光', 0x9AF07A), ('透明', 0xDDEEFF), ('液体銀', 0xB8C4D0), ('泡', 0xBEE8FF), ('霧', 0xC8D0D8), ('雷', 0xB890FF),
     ('炎', 0xFF7A20), ('火', 0xFF8A30), ('氷', 0xA8E8FF), ('毒', 0x7AC020), ('龍気', 0xF0D060), ('星', 0xFFF4B0),
+    # (059c) single characters V20 uses, last: the longer names that hold them (紫紺, 翡翠, 黄金) are taken first
+    ('紺', 0x2A3070), ('翠', 0x30C080), ('桃', 0xF0A0C0), ('銅', 0xC07840), ('灰', 0x8C8C8C), ('黄', 0xF0D040),
 ]
 SOUNDS = [  # (keyword, telegraph, release, hit) as vanilla sound event ids
     (r'鞘|刃|剣|斬|切断|刀', 'item.armor.equip_chain', 'entity.player.attack.sweep', 'entity.player.attack.strong'),
@@ -159,7 +164,7 @@ PRIMS = [
      P(arm_r=(-2.6, 0.8, 0.6), torso=(-0.15, 0.6, 0), head=(-0.2, 0, 0)), ''),
     ('horizontal', r'水平|薙|横一|横へ振', P(arm_r=(-1.5, 1.3, 0.2), torso=(0, 0.8, 0)),
      P(arm_r=(-1.5, -1.4, -0.1), torso=(0, -0.9, 0), root=(0, 0, 0, -0.5)), ''),
-    ('thrust', r'突き|刺突|突く|貫|切先|穿', P(arm_r=(-0.9, 0.2, 0.3), torso=(-0.1, 0.4, 0), leg_l=(0.3, 0, 0)),
+    ('thrust', r'突き|刺突|突く|貫|切先|穿|刺し|刺す', P(arm_r=(-0.9, 0.2, 0.3), torso=(-0.1, 0.4, 0), leg_l=(0.3, 0, 0)),
      P(arm_r=(-1.6, -0.1, 0), torso=(0.2, -0.3, 0), root=(0.25, 0, 0, -1), leg_r=(-0.8, 0, 0), leg_l=(0.5, 0, 0)), ''),
     ('overhead', r'振り下ろ|振りかぶ|真上から|唐竹|叩き割', P(arm_r=(-3.0, 0, 0.2), arm_l=(-2.8, 0, -0.2), torso=(-0.35, 0, 0), head=(-0.3, 0, 0)),
      P(arm_r=(-0.6, 0, 0.05), arm_l=(-0.6, 0, -0.05), torso=(0.55, 0, 0), root=(0.2, 0, 0, -2)), ''),
@@ -181,7 +186,7 @@ PRIMS = [
      P(arm_r=(-3.0, 0, 0.35), arm_l=(-3.0, 0, -0.35), head=(-0.6, 0, 0), torso=(-0.25, 0, 0), root=(0, 0, 0, 2)), ''),
     ('point', r'指を差|指差|指で|指先|指を|人差し指|示す', P(arm_r=(-0.8, 0.3, 0.3), head=(0.1, 0.2, 0)),
      P(arm_r=(-1.6, -0.15, 0), head=(0, -0.1, 0), torso=(0.05, -0.2, 0)), ''),
-    ('palms', r'両手|掌|手のひら|手を前', P(arm_r=(-0.9, 0.4, 0.3), arm_l=(-0.9, -0.4, -0.3), torso=(-0.15, 0, 0)),
+    ('palms', r'両手|掌|手のひら|手を前|収束', P(arm_r=(-0.9, 0.4, 0.3), arm_l=(-0.9, -0.4, -0.3), torso=(-0.15, 0, 0)),
      P(arm_r=(-1.55, -0.2, -0.15), arm_l=(-1.55, 0.2, 0.15), torso=(0.25, 0, 0), root=(0.12, 0, 0, 0)), ''),
     ('flick', r'弾き|弾い|弾く|払', P(arm_r=(-1.2, 0.6, 0.5), elbow=(-0.9, 0, 0)),
      P(arm_r=(-1.4, -0.8, -0.3), elbow=(-0.1, 0, 0)), ''),
@@ -195,7 +200,7 @@ PRIMS = [
      P(arm_r=(-1.0, -0.6, -0.2), torso=(0.2, -0.6, 0), leg_r=(-0.4, 0, 0)), ''),
     ('pull', r'引き寄|引っ張|手繰|引く|吸い寄', P(arm_r=(-1.7, 0, 0), arm_l=(-1.7, 0, 0), torso=(0.25, 0, 0)),
      P(arm_r=(-0.6, 0.3, 0.2), arm_l=(-0.6, -0.3, -0.2), torso=(-0.35, 0.3, 0), root=(-0.15, 0, 0, 0)), ''),
-    ('crouch', r'沈め|屈|低く|身を伏|しゃが|伏せ', P(torso=(0.6, 0, 0), knee=(1.2, 0, 0), leg_r=(-0.7, 0, 0), leg_l=(-0.7, 0, 0), root=(0, 0, 0, -3)),
+    ('crouch', r'沈め|屈|低く|身を伏|しゃが|伏せ|折り畳', P(torso=(0.6, 0, 0), knee=(1.2, 0, 0), leg_r=(-0.7, 0, 0), leg_l=(-0.7, 0, 0), root=(0, 0, 0, -3)),
      P(torso=(0.35, 0, 0), leg_r=(-0.4, 0, 0), leg_l=(-0.2, 0, 0), root=(0.2, 0, 0, -2)), ''),
     ('embrace', r'抱|包み|抱擁|包む', P(arm_r=(-0.8, 0, 1.3), arm_l=(-0.8, 0, -1.3), head=(-0.2, 0, 0)),
      P(arm_r=(-1.3, -0.9, -0.3), arm_l=(-1.3, 0.9, 0.3), torso=(0.2, 0, 0)), ''),
@@ -225,7 +230,7 @@ PRIMS = [
     ('grab', r'掴|握|捕まえ|鷲掴', P(arm_r=(-1.8, 0, 0.4), elbow=(-0.3, 0, 0)), P(arm_r=(-1.1, 0.4, -0.2), elbow=(-1.1, 0, 0), torso=(-0.2, 0.3, 0)), ''),
     ('dash', r'走|駆|滑|疾走|すり抜|擦れ違', P(torso=(0.35, 0, 0), arm_r=(0.6, 0, 0), arm_l=(0.6, 0, 0), root=(0.2, 0, 0, -1)),
      P(torso=(0.5, 0, 0), arm_r=(0.9, 0, 0.2), arm_l=(0.9, 0, -0.2), root=(0.3, 0, 0, -1)), 'run'),
-    ('sway', r'揺|舞|踊|ふわ|くるり', P(arm_r=(-0.6, 0, 0.9), arm_l=(-0.6, 0, -0.9), torso=(0, 0.3, 0.15)),
+    ('sway', r'揺|舞|踊|ふわ|くるり|分身', P(arm_r=(-0.6, 0, 0.9), arm_l=(-0.6, 0, -0.9), torso=(0, 0.3, 0.15)),
      P(arm_r=(-1.0, 0, 1.2), arm_l=(-0.3, 0, -0.5), torso=(0, -0.3, -0.15), root=(0, 0, 0, 1)), 'weave'),
     ('slam', r'叩きつ|叩き落|押し潰|振り下|地面へ叩', P(arm_r=(-3.0, 0, 0.3), arm_l=(-3.0, 0, -0.3), root=(0, 0, 0, 2)),
      P(arm_r=(-0.3, 0, 0.2), arm_l=(-0.3, 0, -0.2), torso=(0.7, 0, 0), root=(0.25, 0, 0, -3)), ''),
@@ -283,10 +288,12 @@ def add(a, b, f=1.0):
 
 
 def motion_of(t, model):
-    text = t['name'] + '。' + t['motion']
+    # (059c) the motion from V20's rewrite of it where the table has one (v20_motions.py); what the technique does is
+    # still read from the design's own description
+    text = t['name'] + '。' + t.get('motion_v20', t['motion'])
     seq = prims_of(text, t['behaviour'])
     emph = set()
-    for b in t['bones']:
+    for b in t.get('bones_v20', t['bones']):
         emph.update(BONE_ROLES.get(b, []))
     emph = emph or None
     tid = t['id']
