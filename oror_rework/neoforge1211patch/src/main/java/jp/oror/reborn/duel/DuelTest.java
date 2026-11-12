@@ -58,6 +58,8 @@ public final class DuelTest {
     private static final Logger LOG = LoggerFactory.getLogger("OROR Duel");
     public static volatile boolean resultLogged;
     private static final Map<String, Object> OUT = new LinkedHashMap<>();
+    /** What Duel Dominion told the tester, in order. */
+    private static final List<String> SAID = new java.util.ArrayList<>();
     private static final List<ChunkPos> FORCED = new ArrayList<>();
     private static final List<Entity> MADE = new ArrayList<>();
     private static ServerLevel level;
@@ -106,7 +108,20 @@ public final class DuelTest {
         for (BlockPos q : BlockPos.betweenClosed(site.offset(-10, 0, -10), site.offset(10, 7, 10))) {
             lv.setBlock(q, Blocks.AIR.defaultBlockState(), 2);
         }
-        fp = FakePlayerFactory.get(lv, new GameProfile(UUID.nameUUIDFromBytes("oror_duel_tester".getBytes()), "[Duel Tester]"));
+        // (059e) a tester that keeps what Duel Dominion tells it (a fake player drops every message): CI 22 and 23 could not
+        // call a sealed zombie out, and only Duel Dominion's own message says why
+        SAID.clear();
+        fp = new FakePlayer(lv, new GameProfile(UUID.nameUUIDFromBytes("oror_duel_tester".getBytes()), "[Duel Tester]")) {
+            @Override
+            public void sendSystemMessage(net.minecraft.network.chat.Component message) {
+                SAID.add(message.getString());
+            }
+
+            @Override
+            public void displayClientMessage(net.minecraft.network.chat.Component message, boolean overlay) {
+                SAID.add(message.getString());
+            }
+        };
         fp.moveTo(site.getX() + 0.5, site.getY(), site.getZ() + 0.5, 0F, 0F);
         if (fp.isCreative() || fp.isSpectator()) {
             fp.setGameMode(GameType.SURVIVAL);
@@ -268,6 +283,11 @@ public final class DuelTest {
         for (Map.Entry<String, Object> en : OUT.entrySet()) {
             s.append(",\"").append(en.getKey()).append("\":").append(en.getValue());
         }
+        s.append(",\"said\":[");
+        for (int i = 0; i < SAID.size() && i < 40; i++) {
+            s.append(i == 0 ? "" : ",").append('"').append(SAID.get(i).replace("\\", "/").replace('"', '\'').replace('\n', ' ')).append('"');
+        }
+        s.append(']');
         s.append(",\"pass\":").append(pass).append('}');
         LOG.info("DUEL-RESULT " + s);
         for (Entity x : MADE) {
