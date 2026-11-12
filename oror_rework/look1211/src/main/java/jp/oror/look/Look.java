@@ -159,7 +159,11 @@ public final class Look {
                     {"86_palace_library", -24, 77, -12, 135F, 10F}, {"87_palace_war_room", 24, 77, -12, 225F, 10F},
                     {"88_palace_treasury", -2, 77, -33, 120F, 12F}, {"89_palace_chapel", 0, 102, -18, 180F, 6F},
                     {"90_palace_bedchamber", 0, 112, -20, 180F, 10F}, {"91_palace_ballroom", 0, 124, 34, 180F, 8F},
-                    {"92_palace_north_stair", 0, 70, -112, 0F, -4F},
+                    // (059c) the north stair from the gate's mouth, from its side and from above; the guard hall's
+                    // new door; the south stair from the terrace down through its gate
+                    {"92_palace_north_stair", 0, 70, -106, 0F, -8F}, {"70_palace_north_stair_side", -24, 73, -96, -88F, 10F},
+                    {"71_palace_north_stair_above", 0, 84, -106, 0F, 38F}, {"72_palace_guard_hall_door", -20, 66, -82, -90F, -4F},
+                    {"73_palace_south_stair_down", 0, 78, 72, 0F, 28F},
                     // (059b) the gallery with its stair's balustrade, the top floor under its new roof, the corner
                     // towers' way in and their stair turrets, the roof from outside, the east hall's stair
                     {"93_palace_gallery", 19, 77, 16, 180F, 8F}, {"94_palace_ballroom_west", -26, 121, 0, 90F, -25F},
@@ -170,15 +174,18 @@ public final class Look {
                     float yaw = (Float) v[4], pitch = (Float) v[5];
                     String name = (String) v[0];
                     PLAN.put(at, () -> atCapital(mc, dx, y - 65, dz, yaw, pitch));
-                    PLAN.put(at + 60, () -> shot(mc, name));
-                    at += 70;
+                    // (059c) eight seconds for the chunks about a new spot to come and be drawn: three seconds after a
+                    // jump of 150 blocks the north stair's chunks were not drawn yet and the spectator saw through them
+                    // (shot 92 of 059b looked as if the stair stood over a hollow)
+                    PLAN.put(at + 160, () -> shot(mc, name));
+                    at += 170;
                 }
                 // (059) the king's AT field struck (on this client only: nobody is hurt), the white cell, then the ring
                 PLAN.put(at, () -> atCapital(mc, 0, 80 - 65, -21, 180F, 4F));
-                PLAN.put(at + 50, () -> fieldHit(mc));
-                PLAN.put(at + 52, () -> shot(mc, "99_palace_at_field_struck"));
-                PLAN.put(at + 60, () -> shot(mc, "79_palace_at_field_ring"));
-                at += 70;
+                PLAN.put(at + 150, () -> fieldHit(mc));
+                PLAN.put(at + 152, () -> shot(mc, "99_palace_at_field_struck"));
+                PLAN.put(at + 160, () -> shot(mc, "79_palace_at_field_ring"));
+                at += 170;
                 PLAN.put(at, () -> king(mc));
                 PLAN.put(at + 10, () -> finish(mc, "complete (palace only)"));
                 note("palace only: planned to tick " + (at + 10));
