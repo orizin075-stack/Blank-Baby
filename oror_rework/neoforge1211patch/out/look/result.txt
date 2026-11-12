@@ -1,202 +1,34 @@
-365 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-466 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-526 press selectWorld.create
-527 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-627 screenshot popup_ConfirmScreen
-627 press gui.yes
-628 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-667 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-690 screen none in LOADING
-691 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-791 screenshot popup_
-792 screen none in PLAY
-821 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
-838 stage at 16 94 -32
-991 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef]
-1031 mob sweep: 51 kinds [ain_sof_aur, angra_mainyu, arcana, bahamut, berit, brutality, chaos, cursed_love, demiurgos, dungeon_minion, elseria, enkou, eomaia, fallen_savior, familiar, ferdinand, forbidden_arcana, gokuka, hakyoku, hephaistos, huang_linghua, imperial_guard, innocence, kingdom_guard, kokuhaku, kurma, lucifara, magna_mater, mary_sue, mels, merlinus, miyohime, nortia, nun, ouroboros, relentless_research, riha, royal_archmage, royal_bodyguard, royal_mage, royal_sage, savior, shinra, sweet_pact, taika, teia, tenki, valeria, villager_general, villager_king, yggdrasil]
-1031 palace only: planned to tick 14330
-1043 throne -864, 82, 52
-2959 at the capital -864 108 -430
-2991 audit c01_capital_outer_wall_gate_n at -864, 108, -430 chunks 9 unbuilt 0 integrity {"compared":300606,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 31.0 max 106.8 entities 144 near 1 [minecraft:player=1]
-3001 screenshot c01_capital_outer_wall_gate_n
-3171 screenshot c02_capital_outer_wall_gate_e
-3187 at the capital -354 108 80
-3210 audit c02_capital_outer_wall_gate_e at -354, 108, 80 chunks 7 unbuilt 0 integrity {"compared":234270,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 44.3 max 898.9 entities 151 near 1 [minecraft:player=1]
-3341 screenshot c03_capital_outer_wall_gate_s
-3408 at the capital -864 108 590
-3408 audit c03_capital_outer_wall_gate_s at -864, 108, 590 chunks 6 unbuilt 0 integrity {"compared":200615,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 44.3 max 898.9 entities 149 near 1 [minecraft:player=1]
-3511 screenshot c04_capital_outer_wall_gate_w
-3600 at the capital -1374 108 80
-3600 audit c04_capital_outer_wall_gate_w at -1374, 108, 80 chunks 3 unbuilt 0 integrity {"compared":100311,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 44.3 max 898.9 entities 144 near 1 [minecraft:player=1]
-3681 screenshot c05_capital_outer_wall_corner_ne
-3773 at the capital -354 114 -430
-3773 audit c05_capital_outer_wall_corner_ne at -354, 114, -430 chunks 1 unbuilt 0 integrity {"compared":33548,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 44.3 max 898.9 entities 144 near 1 [minecraft:player=1]
-3839 at the capital -1374 114 590
-3841 audit c06_capital_outer_wall_corner_sw at -1374, 114, 590 chunks 1 unbuilt 0 integrity {"compared":33548,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 43.9 max 898.9 entities 146 near 1 [minecraft:player=1]
-3851 screenshot c06_capital_outer_wall_corner_sw
-4021 screenshot c07_capital_third_wall_gate_n
-4027 at the capital -864 102 -332
-4029 audit c07_capital_third_wall_gate_n at -864, 102, -332 chunks 6 unbuilt 0 integrity {"compared":200794,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 53.0 max 898.9 entities 151 near 1 [minecraft:player=1]
-4128 at the capital -452 102 80
-4191 screenshot c08_capital_third_wall_gate_e
-4208 audit c08_capital_third_wall_gate_e at -452, 102, 80 chunks 15 unbuilt 0 integrity {"compared":499413,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 91.4 max 3457.2 entities 146 near 3 [superbwarfare:bmp_2=1, minecraft:player=1, superbwarfare:t_90a=1]
-4307 at the capital -864 102 492
-4352 audit c09_capital_third_wall_gate_s at -864, 102, 492 chunks 12 unbuilt 0 integrity {"compared":413652,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 70.5 max 3457.2 entities 157 near 1 [minecraft:player=1]
-4361 screenshot c09_capital_third_wall_gate_s
-4491 at the capital -1276 102 80
-4523 audit c10_capital_third_wall_gate_w at -1276, 102, 80 chunks 9 unbuilt 0 integrity {"compared":300492,"differ":7,"nearPalace":0,"pairs":{"air->brown_mushroom":[7,[-387,65,15],[-387,65,19],[-400,65,28],[-397,65,29]]},"worstChunks":{"-25,1":6,"-25,0":1}} mspt 15.5 max 73.4 entities 175 near 1 [minecraft:player=1]
-4531 screenshot c10_capital_third_wall_gate_w
-4695 at the capital -452 108 -332
-4695 audit c11_capital_third_wall_corner_ne at -452, 108, -332 chunks 1 unbuilt 0 integrity {"compared":36238,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 22.1 max 73.4 entities 175 near 1 [minecraft:player=1]
-4701 screenshot c11_capital_third_wall_corner_ne
-4871 screenshot c12_capital_third_wall_corner_sw
-4906 at the capital -1276 108 492
-4906 audit c12_capital_third_wall_corner_sw at -1276, 108, 492 chunks 1 unbuilt 0 integrity {"compared":36238,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 22.1 max 73.4 entities 181 near 1 [minecraft:player=1]
-4999 at the capital -864 98 -162
-5033 audit c13_capital_second_wall_gate_n at -864, 98, -162 chunks 12 unbuilt 0 integrity {"compared":399062,"differ":2,"nearPalace":0,"pairs":{"air->brown_mushroom":[2,[-15,65,-227],[-15,66,-234]]},"worstChunks":{"-1,-15":2}} mspt 21.2 max 133.2 entities 175 near 49 [minecraft:villager=28, oror_supreme_bosses:kingdom_guard=11, minecraft:cow=3, minecraft:chicken=2, oror_supreme_bosses:villager_general=1, minecraft:player=1, superbwarfare:mle_1934=1, superbwarfare:hpj_11=1, oror_supreme_bosses:royal_mage=1]
-5041 screenshot c13_capital_second_wall_gate_n
-5197 at the capital -864 98 322
-5211 screenshot c14_capital_second_wall_gate_s
-5348 audit c14_capital_second_wall_gate_s at -864, 98, 322 chunks 9 unbuilt 0 integrity {"compared":302428,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 97.4 max 7339.3 entities 175 near 1 [minecraft:player=1]
-5348 at the capital -864 94 26
-5381 screenshot c15_capital_inner_wall_gate_n
-5394 audit c15_capital_inner_wall_gate_n at -864, 94, 26 chunks 81 unbuilt 0 integrity {"compared":2792961,"differ":124,"nearPalace":115,"pairs":{"grass_block->cave_air":[70,[-26,64,-92],[-25,64,-92],[-24,64,-92],[-30,64,-91]],"grass_block->stone":[14,[-26,64,-93],[-25,64,-93],[-29,64,-92],[-27,64,-92]],"grass_block->mossy_cobblestone":[11,[-64,64,-55],[-40,64,-2],[-40,64,-1],[-37,64,-1]],"air->brown_mushroom":[11,[-18,77,-111],[-19,77,-108],[-17,77,-107],[10,66,-80]],"grass_block->podzol":[6,[56,64,-96],[57,64,-96],[58,64,-96],[59,64,-96]],"water->tall_seagrass":[4,[76,60,-127],[77,60,-124],[76,61,-127],[77,61,-124]],"grass_block->gravel":[4,[-32,64,-90],[-32,64,-89],[-32,64,-88],[-32,64,-86]],"water->seagrass":[2,[78,60,-128],[75,60,-125]],"quartz_bricks->cave_air":[1,[-28,65,-91]],"lantern->air":[1,[-28,66,-91]]},"worstChunks":{"-2,-6":90,"2,-3":7,"3,-6":6,"4,-8":6,"-2,-7":3,"0,-3":3,"-3,-1":3,"-1,-6":2,"0,-5":1,"0,0":1,"2,-4":1,"-4,-4":1}} mspt 95.6 max 7339.3 entities 213 near 88 [minecraft:villager=28, oror_supreme_bosses:imperial_guard=15, oror_supreme_bosses:kingdom_guard=12, minecraft:item=11, oror_supreme_bosses:royal_bodyguard=6, oror_supreme_bosses:villager_general=3, minecraft:cow=3, minecraft:chicken=2, minecraft:player=1, oror_supreme_bosses:royal_archmage=1]
-5394 at the capital -864 94 134
-5551 screenshot c16_capital_inner_wall_gate_s
-5554 audit c16_capital_inner_wall_gate_s at -864, 94, 134 chunks 81 unbuilt 0 integrity {"compared":2793918,"differ":99,"nearPalace":40,"pairs":{"grass_block->podzol":[60,[-32,64,91],[-32,64,92],[-31,64,92],[-32,64,93]],"water->tall_seagrass":[14,[-49,60,125],[-52,60,126],[-54,60,127],[-49,61,125]],"water->seagrass":[13,[-51,60,126],[-53,60,127],[-52,60,127],[-49,60,127]],"grass_block->mossy_cobblestone":[12,[-51,64,30],[-52,64,31],[-51,64,31],[-50,64,31]]},"worstChunks":{"-1,1":30,"0,3":22,"-4,7":10,"4,7":10,"-2,5":8,"-3,7":6,"-4,1":4,"-3,-1":3,"0,1":2,"0,0":1,"-3,2":1,"-4,3":1,"2,7":1}} mspt 46.0 max 191.8 entities 391 near 222 [minecraft:falling_block=94, oror_supreme_bosses:kingdom_guard=37, minecraft:villager=31, oror_supreme_bosses:imperial_guard=18, minecraft:item=11, oror_supreme_bosses:royal_bodyguard=6, minecraft:cow=6, oror_supreme_bosses:villager_general=4, oror_supreme_bosses:royal_mage=3, minecraft:chicken=3]
-5602 at the capital -1329 112 42
-5713 audit c17_capital_turret_battery_w at -1329, 112, 42 chunks 62 unbuilt 0 integrity {"compared":2120544,"differ":129,"nearPalace":0,"pairs":{"grass_block->podzol":[97,[-485,64,-96],[-484,64,-96],[-483,64,-96],[-485,64,29]],"air->brown_mushroom":[17,[-467,65,-92],[-467,65,-89],[-468,65,-85],[-474,77,-92]],"wheat->air":[7,[-450,65,-76],[-449,65,-76],[-450,65,-75],[-449,65,-75]],"grass_block->mossy_cobblestone":[5,[-466,64,25],[-465,64,26],[-465,64,31],[-464,64,31]],"coarse_dirt->podzol":[3,[-462,64,-32],[-461,64,-32],[-462,64,-31]]},"worstChunks":{"-30,-6":41,"-27,-5":16,"-31,1":12,"-29,-5":12,"-29,0":11,"-30,1":11,"-29,-2":9,"-28,-2":6,"-30,-3":5,"-31,-6":3,"-29,1":2,"-30,-2":1}} mspt 38.8 max 99.4 entities 307 near 18 [oror_supreme_bosses:kingdom_guard=10, minecraft:item=4, minecraft:player=1, superbwarfare:bl_132=1, minecraft:horse=1, superbwarfare:hpj_11=1]
-5721 screenshot c17_capital_turret_battery_w
-5792 at the capital -541 112 -385
-5882 audit c18_capital_turret_battery_n at -541, 112, -385 chunks 12 unbuilt 0 integrity {"compared":428735,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 45.7 max 334.5 entities 323 near 2 [minecraft:player=1, oror_supreme_bosses:kingdom_guard=1]
-5891 screenshot c18_capital_turret_battery_n
-5998 at the capital -559 112 545
-6052 audit c19_capital_turret_battery_s at -559, 112, 545 chunks 9 unbuilt 0 integrity {"compared":323808,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 24.2 max 119.1 entities 331 near 2 [minecraft:player=1, oror_supreme_bosses:kingdom_guard=1]
-6061 screenshot c19_capital_turret_battery_s
-6071 at the capital -1342 107 42
-6223 audit c33_capital_battery_gun_view_w at -1342, 107, 42 chunks 81 unbuilt 0 integrity {"compared":2767506,"differ":143,"nearPalace":0,"pairs":{"grass_block->podzol":[110,[-485,64,-96],[-484,64,-96],[-483,64,-96],[-485,64,29]],"air->brown_mushroom":[16,[-467,65,-92],[-468,65,-85],[-474,77,-92],[-470,66,27]],"wheat->air":[7,[-450,65,-76],[-449,65,-76],[-450,65,-75],[-449,65,-75]],"grass_block->mossy_cobblestone":[5,[-466,64,25],[-465,64,26],[-465,64,31],[-464,64,31]],"coarse_dirt->podzol":[3,[-462,64,-32],[-461,64,-32],[-462,64,-31]],"beetroots->air":[1,[-449,65,-99]],"air->sand":[1,[-417,52,-1]]},"worstChunks":{"-30,-6":40,"-27,-5":16,"-26,-5":13,"-31,1":12,"-29,-5":12,"-29,0":11,"-30,1":11,"-29,-2":9,"-28,-2":6,"-30,-3":5,"-31,-6":3,"-29,1":2,"-29,-7":1,"-30,-2":1,"-27,-1":1}} mspt 45.2 max 98.1 entities 354 near 54 [oror_supreme_bosses:kingdom_guard=21, minecraft:sheep=9, minecraft:falling_block=6, minecraft:item=4, minecraft:chicken=3, superbwarfare:hpj_11=2, superbwarfare:mk_42=1, minecraft:player=1, superbwarfare:t_90a=1, oror_supreme_bosses:imperial_guard=1]
-6231 screenshot c33_capital_battery_gun_view_w
-6241 at the capital -1377 88 -20
-6392 audit c20_capital_turret_redoubt_w at -1377, 88, -20 chunks 66 unbuilt 0 integrity {"compared":2237197,"differ":74,"nearPalace":0,"pairs":{"grass_block->podzol":[56,[-520,64,-144],[-519,64,-144],[-518,64,-144],[-517,64,-144]],"air->brown_mushroom":[7,[-572,65,-126],[-569,65,-126],[-565,65,-125],[-559,65,-48]],"wheat->air":[7,[-450,65,-76],[-449,65,-76],[-450,65,-75],[-449,65,-75]],"air->sweet_berry_bush":[2,[-467,65,-148],[-467,65,-144]],"beetroots->air":[1,[-449,65,-99]],"air->spruce_leaves":[1,[-538,64,-144]]},"worstChunks":{"-30,-6":40,"-29,-5":12,"-33,-9":6,"-30,-3":5,"-31,-6":3,"-36,-8":3,"-30,-9":1,"-30,-10":1,"-35,-3":1,"-29,-7":1,"-34,-9":1}} mspt 48.9 max 94.9 entities 371 near 62 [oror_supreme_bosses:kingdom_guard=26, minecraft:sheep=9, minecraft:item=4, minecraft:chicken=3, superbwarfare:mk_42=2, oror_supreme_bosses:imperial_guard=2, oror_supreme_bosses:royal_mage=2, superbwarfare:m_1a_2=2, superbwarfare:hpj_11=2, minecraft:player=1]
-6401 screenshot c20_capital_turret_redoubt_w
-6464 at the capital -351 88 180
-6562 audit c21_capital_turret_redoubt_e at -351, 88, 180 chunks 22 unbuilt 0 integrity {"compared":739243,"differ":5,"nearPalace":0,"pairs":{"air->red_mushroom":[5,[448,65,75],[448,65,76],[449,65,76],[454,65,76]]},"worstChunks":{"28,4":5}} mspt 35.4 max 193.2 entities 354 near 14 [oror_supreme_bosses:kingdom_guard=7, superbwarfare:bmp_2=1, minecraft:cow=1, minecraft:player=1, superbwarfare:m_1a_2=1, superbwarfare:t_90a=1, superbwarfare:hpj_11=1, oror_supreme_bosses:imperial_guard=1]
-6571 screenshot c21_capital_turret_redoubt_e
-6581 at the capital -1370 71 -20
-6733 audit c31_capital_redoubt_door_w at -1370, 71, -20 chunks 81 unbuilt 0 integrity {"compared":2750529,"differ":75,"nearPalace":0,"pairs":{"grass_block->podzol":[56,[-520,64,-144],[-519,64,-144],[-518,64,-144],[-517,64,-144]],"wheat->air":[7,[-450,65,-76],[-449,65,-76],[-450,65,-75],[-449,65,-75]],"carrots->air":[5,[-449,65,-159],[-449,65,-158],[-449,65,-157],[-449,65,-156]],"air->brown_mushroom":[3,[-467,65,-92],[-468,65,-85],[-474,77,-92]],"air->sweet_berry_bush":[2,[-467,65,-148],[-467,65,-144]],"beetroots->air":[1,[-449,65,-99]],"air->spruce_leaves":[1,[-538,64,-144]]},"worstChunks":{"-30,-6":40,"-29,-5":12,"-33,-9":6,"-29,-10":5,"-30,-3":5,"-31,-6":3,"-30,-9":1,"-30,-10":1,"-29,-7":1,"-34,-9":1}} mspt 39.2 max 92.7 entities 387 near 79 [oror_supreme_bosses:kingdom_guard=27, minecraft:sheep=12, minecraft:item=10, minecraft:cow=8, minecraft:chicken=3, superbwarfare:hpj_11=3, superbwarfare:mk_42=2, oror_supreme_bosses:imperial_guard=2, oror_supreme_bosses:royal_mage=2, superbwarfare:m_1a_2=2]
-6741 screenshot c31_capital_redoubt_door_w
-6751 at the capital -1389 69 -21
-6907 audit c32_capital_redoubt_room_w at -1389, 69, -21 chunks 81 unbuilt 0 integrity {"compared":2750569,"differ":75,"nearPalace":0,"pairs":{"grass_block->podzol":[56,[-520,64,-144],[-519,64,-144],[-518,64,-144],[-517,64,-144]],"wheat->air":[7,[-450,65,-76],[-449,65,-76],[-450,65,-75],[-449,65,-75]],"carrots->air":[5,[-449,65,-159],[-449,65,-158],[-449,65,-157],[-449,65,-156]],"air->brown_mushroom":[3,[-467,65,-92],[-468,65,-85],[-474,77,-92]],"air->sweet_berry_bush":[2,[-467,65,-148],[-467,65,-144]],"beetroots->air":[1,[-449,65,-99]],"air->spruce_leaves":[1,[-538,64,-144]]},"worstChunks":{"-30,-6":40,"-29,-5":12,"-33,-9":6,"-29,-10":5,"-30,-3":5,"-31,-6":3,"-30,-9":1,"-30,-10":1,"-29,-7":1,"-34,-9":1}} mspt 36.4 max 80.3 entities 401 near 91 [oror_supreme_bosses:kingdom_guard=30, minecraft:sheep=14, minecraft:item=11, minecraft:cow=8, minecraft:falling_block=4, minecraft:chicken=3, superbwarfare:hpj_11=3, superbwarfare:mk_42=2, oror_supreme_bosses:imperial_guard=2, oror_supreme_bosses:royal_mage=2]
-6911 screenshot c32_capital_redoubt_room_w
-6921 at the capital -1269 80 38
-7073 audit c22_capital_turret_aa_w at -1269, 80, 38 chunks 81 unbuilt 0 integrity {"compared":2771540,"differ":227,"nearPalace":0,"pairs":{"grass_block->podzol":[110,[-477,64,-96],[-476,64,-96],[-475,64,-96],[-474,64,-96]],"coarse_dirt->podzol":[34,[-462,64,-32],[-461,64,-32],[-462,64,-31],[-373,64,-64]],"air->brown_mushroom":[16,[-467,65,-92],[-468,65,-85],[-474,77,-92],[-470,66,27]],"beetroots->air":[13,[-449,65,-99],[-359,65,-32],[-358,65,-32],[-357,65,-32]],"air->smooth_basalt":[12,[-349,19,1],[-349,19,2],[-348,19,3],[-347,19,4]],"air->calcite":[10,[-349,19,0],[-348,19,1],[-348,19,2],[-347,19,3]],"wheat->air":[8,[-450,65,-76],[-449,65,-76],[-450,65,-75],[-449,65,-75]],"air->gravel":[6,[-417,52,-57],[-417,52,-56],[-417,52,-55],[-417,52,-54]],"grass_block->mossy_cobblestone":[5,[-466,64,25],[-465,64,26],[-465,64,31],[-464,64,31]],"air->amethyst_block":[5,[-348,19,0],[-347,19,0],[-347,19,1],[-347,19,2]],"air->cave_vines":[2,[-348,21,-94],[-349,21,-80]],"air->cave_vines_plant":[2,[-348,22,-94],[-349,22,-80]],"air->sand":[1,[-417,52,-1]],"cobblestone->stone_bricks":[1,[-369,30,-70]],"cobblestone->mossy_stone_bricks":[1,[-369,30,-69]],"carrots->air":[1,[-381,65,31]]},"worstChunks":{"-30,-6":40,"-22,0":27,"-24,-4":17,"-27,-5":16,"-23,-2":13,"-26,-5":13,"-29,-5":12,"-23,-4":11,"-30,1":11,"-29,0":11,"-29,-2":9,"-22,-4":8,"-27,-4":6,"-28,-2":6,"-24,-1":5}} mspt 42.1 max 213.2 entities 397 near 83 [oror_supreme_bosses:kingdom_guard=25, minecraft:sheep=15, minecraft:item=12, minecraft:horse=5, minecraft:falling_block=4, minecraft:chicken=3, superbwarfare:hpj_11=3, superbwarfare:mk_42=2, oror_supreme_bosses:imperial_guard=2, superbwarfare:m_1a_2=2]
-7081 screenshot c22_capital_turret_aa_w
-7187 at the capital -491 80 -105
-7251 screenshot c23_capital_turret_aa_ne
-7294 audit c23_capital_turret_aa_ne at -491, 80, -105 chunks 21 unbuilt 0 integrity {"compared":705720,"differ":7,"nearPalace":0,"pairs":{"beetroots->air":[6,[382,65,-216],[383,65,-216],[382,65,-215],[383,65,-215]],"air->pumpkin":[1,[380,65,-177]]},"worstChunks":{"23,-14":6,"23,-12":1}} mspt 39.8 max 100.7 entities 376 near 2 [superbwarfare:a_10a=1, minecraft:player=1]
-7294 at the capital -1465 81 57
-7412 audit c24_capital_turret_crossfire_w at -1465, 81, 57 chunks 47 unbuilt 0 integrity {"compared":1540220,"differ":10,"nearPalace":0,"pairs":{"air->pumpkin":[7,[-622,65,-68],[-620,65,-68],[-616,65,-68],[-624,65,-67]],"air->brown_mushroom":[3,[-560,68,-2],[-558,68,-1],[-559,68,2]]},"worstChunks":{"-39,-5":7,"-35,-1":2,"-35,0":1}} mspt 29.2 max 75.0 entities 395 near 58 [oror_supreme_bosses:kingdom_guard=24, minecraft:sheep=6, minecraft:falling_block=4, minecraft:item=4, minecraft:chicken=3, superbwarfare:mk_42=2, oror_supreme_bosses:royal_mage=2, minecraft:horse=2, superbwarfare:hpj_11=2, minecraft:skeleton=1]
-7421 screenshot c24_capital_turret_crossfire_w
-7498 at the capital -263 81 103
-7581 audit c25_capital_turret_crossfire_e at -263, 81, 103 chunks 9 unbuilt 0 integrity {"compared":294918,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 28.8 max 74.4 entities 379 near 5 [oror_supreme_bosses:kingdom_guard=4, minecraft:player=1]
-7591 screenshot c25_capital_turret_crossfire_e
-7602 at the capital -976 73 52
-7761 screenshot c26_capital_turret_casemate_w
-7767 audit c26_capital_turret_casemate_w at -976, 73, 52 chunks 81 unbuilt 0 integrity {"compared":2788284,"differ":279,"nearPalace":8,"pairs":{"grass_block->podzol":[243,[-169,64,-18],[-168,64,-18],[-167,64,-18],[-169,64,-17]],"grass_block->mossy_cobblestone":[12,[-167,64,-33],[-166,64,-33],[-144,64,-34],[-64,64,-55]],"air->brown_mushroom":[9,[-158,65,-63],[-116,66,-33],[-123,66,-19],[-122,66,-18]],"water->spruce_log":[8,[-128,61,34],[-128,61,35],[-128,62,34],[-128,62,35]],"water->mossy_cobblestone":[5,[-128,61,25],[-128,62,24],[-128,62,25],[-128,62,26]],"water->podzol":[2,[-128,60,34],[-128,60,35]]},"worstChunks":{"-10,-1":67,"-9,-3":53,"-6,2":33,"-5,2":17,"-9,-4":14,"-10,0":13,"-9,0":13,"-5,1":13,"-8,2":10,"-11,-2":8,"-11,0":5,"-10,-2":5,"-8,1":5,"-4,1":4,"-3,-1":3}} mspt 43.8 max 178.3 entities 426 near 73 [minecraft:villager=29, oror_supreme_bosses:kingdom_guard=22, oror_supreme_bosses:imperial_guard=4, minecraft:item=3, oror_supreme_bosses:villager_general=2, minecraft:cow=2, minecraft:chicken=2, minecraft:horse=2, minecraft:player=1, minecraft:sheep=1]
-7847 at the capital -1064 178 -120
-7923 audit c27_capital_roads_nw at -1064, 178, -120 chunks 17 unbuilt 0 integrity {"compared":580025,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 36.8 max 653.9 entities 461 near 18 [minecraft:villager=16, minecraft:player=1, minecraft:chicken=1]
-7931 screenshot c27_capital_roads_nw
-7941 at the capital -484 178 80
-8094 audit c28_capital_roads_e at -484, 178, 80 chunks 81 unbuilt 0 integrity {"compared":2738508,"differ":18,"nearPalace":0,"pairs":{"potatoes->air":[10,[411,65,62],[412,65,62],[413,65,62],[414,65,62]],"air->sand":[4,[349,52,40],[350,52,40],[349,52,41],[350,52,41]],"water->seagrass":[2,[360,64,-31],[352,64,-29]],"air->brown_mushroom":[2,[312,65,-48],[311,65,-45]]},"worstChunks":{"25,3":10,"21,2":4,"22,-2":2,"19,-3":2}} mspt 32.5 max 191.1 entities 432 near 28 [minecraft:falling_block=10, oror_supreme_bosses:kingdom_guard=9, minecraft:cow=3, superbwarfare:bmp_2=1, minecraft:player=1, superbwarfare:m_1a_2=1, superbwarfare:t_90a=1, superbwarfare:hpj_11=1, oror_supreme_bosses:imperial_guard=1]
-8101 screenshot c28_capital_roads_e
-8112 at the capital -864 178 460
-8264 audit c29_capital_roads_s at -864, 178, 460 chunks 78 unbuilt 0 integrity {"compared":2636142,"differ":10,"nearPalace":0,"pairs":{"potatoes->air":[8,[63,65,412],[62,65,413],[63,65,413],[62,65,414]],"stone->gravel":[2,[-37,63,399],[-36,63,399]]},"worstChunks":{"3,25":7,"-3,24":2,"3,26":1}} mspt 37.1 max 104.8 entities 435 near 16 [minecraft:falling_block=5, oror_supreme_bosses:kingdom_guard=3, minecraft:chicken=2, minecraft:player=1, superbwarfare:m_1a_2=1, superbwarfare:t_90a=1, superbwarfare:bradley=1, superbwarfare:hpj_11=1, oror_supreme_bosses:imperial_guard=1]
-8271 screenshot c29_capital_roads_s
-8361 at the capital -564 178 -220
-8432 audit c30_capital_roads_ne at -564, 178, -220 chunks 9 unbuilt 0 integrity {"compared":408826,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 39.9 max 109.2 entities 937 near 1 [minecraft:player=1]
-8441 screenshot c30_capital_roads_ne
-8451 at the capital -864 83 118
-8611 screenshot 80_palace_hall
-8622 at the capital -864 84 65
-8781 screenshot 81_palace_throne
-8792 at the capital -864 83 59
-8951 screenshot 82_palace_throne_close
-8961 at the capital -864 73 194
-9121 screenshot 83_palace_south_stair
-9136 at the capital -864 81 150
-9291 screenshot 84_palace_front
-9304 at the capital -896 78 112
-9461 screenshot 85_palace_corner_stair
-9473 at the capital -888 80 68
-9631 screenshot 86_palace_library
-9647 at the capital -840 80 68
-9801 screenshot 87_palace_war_room
-9811 at the capital -866 80 47
-9971 screenshot 88_palace_treasury
-9982 at the capital -864 105 62
-10141 screenshot 89_palace_chapel
-10153 at the capital -864 115 60
-10311 screenshot 90_palace_bedchamber
-10321 at the capital -864 127 114
-10481 screenshot 91_palace_ballroom
-10492 at the capital -864 73 -26
-10651 screenshot 92_palace_north_stair
-10661 at the capital -888 76 -16
-10821 screenshot 70_palace_north_stair_side
-10831 at the capital -864 87 -26
-10991 screenshot 71_palace_north_stair_above
-11002 at the capital -884 69 -2
-11161 screenshot 72_palace_guard_hall_door
-11172 at the capital -864 81 152
-11331 screenshot 73_palace_south_stair_down
-11343 at the capital -845 80 96
-11501 screenshot 93_palace_gallery
-11513 at the capital -890 124 80
-11671 screenshot 94_palace_ballroom_west
-11681 at the capital -904 88 40
-11841 screenshot 95_palace_tower_passage
-11853 at the capital -911 91 33
-12011 screenshot 96_palace_tower_stair
-12021 at the capital -906 144 30
-12181 screenshot 97_palace_tower_top
-12191 at the capital -959 181 86
-12351 screenshot 98_palace_roof_west
-12361 at the capital -864 83 59
-12511 field: struck 4526 field=10000.0 breached=false dist=7
-12513 screenshot 99_palace_at_field_struck
-12521 screenshot 79_palace_at_field_ring
-12532 king at -863.6 82.0 52.3 (throne -864, 82, 52, 0.25 blocks)
-12562 audit throne at -864, 83, 59 chunks 81 unbuilt 0 integrity {"compared":2717794,"differ":152,"nearPalace":151,"pairs":{"grass_block->cave_air":[70,[-26,64,-92],[-25,64,-92],[-24,64,-92],[-30,64,-91]],"grass_block->podzol":[36,[-16,64,25],[-15,64,25],[-14,64,25],[-16,64,26]],"grass_block->mossy_cobblestone":[18,[-64,64,-55],[-51,64,30],[-52,64,31],[-51,64,31]],"grass_block->stone":[14,[-26,64,-93],[-25,64,-93],[-29,64,-92],[-27,64,-92]],"air->brown_mushroom":[8,[10,66,-80],[40,75,-36],[47,75,-35],[40,75,-33]],"grass_block->gravel":[4,[-32,64,-90],[-32,64,-89],[-32,64,-88],[-32,64,-86]],"quartz_bricks->cave_air":[1,[-28,65,-91]],"lantern->air":[1,[-28,66,-91]]},"worstChunks":{"-2,-6":90,"-1,1":30,"2,-3":7,"3,-6":6,"-4,1":4,"0,-3":3,"-3,-1":3,"-1,-6":2,"0,1":2,"0,-5":1,"0,0":1,"2,-4":1,"-3,2":1,"-4,-4":1}} mspt 35.3 max 197.4 entities 1078 near 184 [minecraft:falling_block=43, oror_supreme_bosses:kingdom_guard=40, minecraft:villager=31, oror_supreme_bosses:imperial_guard=18, minecraft:item=11, oror_supreme_bosses:royal_bodyguard=6, minecraft:cow=6, oror_supreme_bosses:royal_mage=4, oror_supreme_bosses:villager_general=4, superbwarfare:bl_132=3]
-12566 mob batch [ain_sof_aur, angra_mainyu, arcana, bahamut, berit, brutality, chaos]
-12701 screenshot m01_mobs_a
-12841 screenshot m01_mobs_b
-12854 audit mobs 1 at 16, 100, -38 chunks 0 unbuilt 0 integrity {"compared":0,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 50.8 max 164.8 entities 1048 near 188 [minecraft:item=29, minecraft:skeleton=23, iceandfire:pixie=15, minecraft:wolf=13, minecraft:zombie=12, minecraft:salmon=11, minecraft:pig=10, minecraft:chicken=9, minecraft:squid=8, minecraft:glow_squid=8]
-12874 mob batch [cursed_love, demiurgos, dungeon_minion, elseria, enkou, eomaia, fallen_savior]
-13021 screenshot m02_mobs_a
-13161 screenshot m02_mobs_b
-13172 audit mobs 2 at 16, 100, -38 chunks 0 unbuilt 0 integrity {"compared":0,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 45.8 max 149.2 entities 1058 near 189 [minecraft:item=27, minecraft:skeleton=23, iceandfire:pixie=15, minecraft:chicken=13, minecraft:wolf=13, minecraft:zombie=12, minecraft:salmon=11, minecraft:pig=10, minecraft:squid=8, minecraft:glow_squid=8]
-13192 mob batch [familiar, ferdinand, forbidden_arcana, gokuka, hakyoku, hephaistos, huang_linghua]
-13341 screenshot m03_mobs_a
-13481 screenshot m03_mobs_b
-13491 audit mobs 3 at 16, 100, -38 chunks 0 unbuilt 0 integrity {"compared":0,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 44.4 max 167.0 entities 1072 near 192 [minecraft:item=27, minecraft:skeleton=23, iceandfire:pixie=14, minecraft:chicken=13, minecraft:wolf=13, minecraft:zombie=12, minecraft:salmon=11, minecraft:pig=10, minecraft:squid=8, minecraft:glow_squid=8]
-13512 mob batch [imperial_guard, innocence, kingdom_guard, kokuhaku, kurma, lucifara, magna_mater]
-13661 screenshot m04_mobs_a
-13801 screenshot m04_mobs_b
-13811 audit mobs 4 at 16, 100, -38 chunks 0 unbuilt 0 integrity {"compared":0,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 39.7 max 82.3 entities 1066 near 192 [minecraft:item=29, minecraft:skeleton=23, iceandfire:pixie=14, minecraft:chicken=13, minecraft:wolf=13, minecraft:zombie=12, minecraft:salmon=11, minecraft:pig=10, minecraft:squid=8, minecraft:glow_squid=8]
-13833 mob batch [mary_sue, mels, merlinus, miyohime, nortia, nun, ouroboros]
-13981 screenshot m05_mobs_a
-14121 screenshot m05_mobs_b
-14131 audit mobs 5 at 16, 100, -38 chunks 0 unbuilt 0 integrity {"compared":0,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 46.0 max 106.6 entities 1065 near 191 [minecraft:item=28, minecraft:skeleton=22, iceandfire:pixie=14, minecraft:chicken=13, minecraft:wolf=13, minecraft:zombie=12, minecraft:salmon=11, minecraft:pig=10, minecraft:squid=8, minecraft:glow_squid=8]
-14151 mob batch [relentless_research, riha, royal_archmage, royal_bodyguard, royal_mage, royal_sage, savior]
-14301 screenshot m06_mobs_a
-14441 screenshot m06_mobs_b
-14452 audit mobs 6 at 16, 100, -38 chunks 0 unbuilt 0 integrity {"compared":0,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 42.5 max 86.0 entities 1066 near 192 [minecraft:item=29, minecraft:skeleton=22, iceandfire:pixie=14, minecraft:chicken=13, minecraft:wolf=13, minecraft:zombie=12, minecraft:salmon=11, minecraft:pig=10, minecraft:squid=8, minecraft:glow_squid=8]
-14472 mob batch [shinra, sweet_pact, taika, teia, tenki, valeria, villager_general]
-14621 screenshot m07_mobs_a
-14761 screenshot m07_mobs_b
-14771 audit mobs 7 at 16, 100, -38 chunks 0 unbuilt 0 integrity {"compared":0,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 41.2 max 140.4 entities 1056 near 190 [minecraft:item=27, minecraft:skeleton=22, iceandfire:pixie=14, minecraft:chicken=13, minecraft:wolf=13, minecraft:zombie=12, minecraft:salmon=11, minecraft:pig=10, minecraft:squid=8, minecraft:glow_squid=8]
-14793 mob batch [villager_king, yggdrasil]
-14941 screenshot m08_mobs_a
-15081 screenshot m08_mobs_b
-15093 audit mobs 8 at 16, 100, -38 chunks 0 unbuilt 0 integrity {"compared":0,"differ":0,"nearPalace":0,"pairs":{},"worstChunks":{}} mspt 40.4 max 82.6 entities 1097 near 231 [superbwarfare:projectile=44, minecraft:item=28, minecraft:skeleton=22, iceandfire:pixie=14, minecraft:chicken=13, minecraft:wolf=13, minecraft:zombie=12, minecraft:salmon=11, minecraft:pig=10, minecraft:squid=8]
-15121 finished: complete (palace only)
+193 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+294 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+354 press selectWorld.create
+355 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+455 screenshot popup_ConfirmScreen
+455 press gui.yes
+456 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+483 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+596 screen none in LOADING
+597 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+697 screenshot popup_
+698 screen none in PLAY
+727 inventory after joining: minecraft:cooked_beefx16 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1
+738 stage at -160 88 64
+897 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 16 minecraft:cooked_beef, minecraft:salmon -> net.minecraft.client.renderer.entity.SalmonRenderer holding 0 minecraft:air]
+939 guard scene: 10 mobs
+995 screenshot g01_none_a
+1023 screenshot g01_none_b
+1043 guard guard: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1055 screenshot g02_guard_a
+1083 screenshot g02_guard_b
+1103 guard parry: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1115 screenshot g03_parry_a
+1143 screenshot g03_parry_b
+1163 guard block: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1175 screenshot g04_block_a
+1203 screenshot g04_block_b
+1223 guard break: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1235 screenshot g05_break_a
+1263 screenshot g05_break_b
+1283 guard parried: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
+1295 screenshot g06_parried_a
+1323 screenshot g06_parried_b
+1337 finished: complete (guard only)
