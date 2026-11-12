@@ -63,7 +63,7 @@ public final class DuelTest {
     private static final List<ChunkPos> FORCED = new ArrayList<>();
     private static final List<Entity> MADE = new ArrayList<>();
     private static ServerLevel level;
-    private static long checkAt;
+    private static long checkAt, runAt;
     private static Entity calledGod;
     private static FakePlayer fp;
     private static BlockPos site;
@@ -127,15 +127,11 @@ public final class DuelTest {
             fp.setGameMode(GameType.SURVIVAL);
         }
         fp.getInventory().clearContent();
-        try {
-            run(lv);
-        } catch (Throwable ex) {
-            OUT.put("error", "\"" + ex.toString().replace('"', '\'') + "\"");
-            LOG.warn("DUEL-TEST failed with an exception", ex);
-            finish();
-            return 0;
-        }
-        checkAt = lv.getGameTime() + 40;
+        // (059e) the duels three seconds on, once the forced chunks hold entities: run in the tick they were forced, every
+        // mob Duel Dominion called out went into a chunk not yet taking entities (CI 24: "召喚：Zombie" said, and nothing
+        // there: "calledAt":"none", then "召喚済み個体が未読み込み"), and so did the night parade's spirit
+        runAt = lv.getGameTime() + 60;
+        checkAt = Long.MAX_VALUE;
         return 1;
     }
 
@@ -264,6 +260,19 @@ public final class DuelTest {
 
     @SubscribeEvent
     public static void tick(ServerTickEvent.Post e) {
+        if (level != null && runAt > 0 && level.getGameTime() >= runAt) {
+            runAt = 0;
+            try {
+                run(level);
+            } catch (Throwable ex) {
+                OUT.put("error", "\"" + ex.toString().replace('"', '\'') + "\"");
+                LOG.warn("DUEL-TEST failed with an exception", ex);
+                finish();
+                return;
+            }
+            checkAt = level.getGameTime() + 40;
+            return;
+        }
         if (level == null || level.getGameTime() < checkAt) {
             return;
         }

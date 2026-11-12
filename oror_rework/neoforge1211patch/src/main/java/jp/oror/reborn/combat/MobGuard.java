@@ -419,6 +419,14 @@ public final class MobGuard {
         if (!stunned) {
             attacker.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 16, 4, false, false, false));
             attacker.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 16, 2, false, false, false));
+        } else {
+            // (059e) Epic Fight's stun stops the mob dead and cancels its knockback (CI 24: "push 0.00"): the throw back
+            // given again after it, as a velocity of its own
+            double len = Math.sqrt(dx * dx + dz * dz);
+            if (len > 1.0E-4) {
+                attacker.setDeltaMovement(-dx / len * 0.55, attacker.onGround() ? 0.22 : attacker.getDeltaMovement().y, -dz / len * 0.55);
+                attacker.hurtMarked = true;
+            }
         }
         TechniqueShow.send(attacker, "parried", 0, 1, 18, -1);
     }
@@ -540,7 +548,12 @@ public final class MobGuard {
                 try {
                     play = lk.findVirtual(living, "playAnimationSynchronized", java.lang.invoke.MethodType.methodType(void.class, c, float.class));
                 } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
-                    todo.add(c.getSuperclass());
+                    // (059e) an interface's superclass (and Object's) is null, which an ArrayDeque refuses: the walk threw
+                    // at the animation's first interface, before it reached AssetAccessor, and no guard was ever animated
+                    // (CI 24: "ef 0" on every mob)
+                    if (c.getSuperclass() != null) {
+                        todo.add(c.getSuperclass());
+                    }
                     todo.addAll(java.util.List.of(c.getInterfaces()));
                 }
             }
