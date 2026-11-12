@@ -534,6 +534,9 @@ public final class CitadelUpdate {
     }
 
     /** Each vehicle post of the chunk without its vehicle (nor a soldier about to bring it out) gets one. */
+    /** The posts given a vehicle lately (world position, game time). */
+    private static final Map<Long, Long> MUSTERED = new java.util.HashMap<>();
+
     static int muster(ServerLevel level, CitadelSites.Site site, int sx, int sz) {
         List<CitadelData.Post> posts = new ArrayList<>();
         for (CitadelData.Post post : CitadelData.posts(sx, sz)) {
@@ -555,9 +558,16 @@ public final class CitadelUpdate {
             }
         }
         int n = 0;
+        long now = level.getGameTime();
+        if (MUSTERED.size() > 4096) {
+            MUSTERED.values().removeIf(t -> now - t > 1200);
+        }
         for (CitadelData.Post post : posts) {
             BlockPos at = site.toWorld(post.x(), post.y(), post.z());
-            boolean manned = false;
+            // a vehicle brought in the last minute may not be in the world yet (CitadelGarrison sends it in a moment
+            // later when the world is busy): its post is manned (CI 19-21: a second muster at once brought a second one)
+            Long when = MUSTERED.get(at.asLong());
+            boolean manned = when != null && now - when < 1200;
             for (BlockPos h : homes) {
                 double dx = h.getX() - at.getX(), dz = h.getZ() - at.getZ();
                 if (dx * dx + dz * dz <= 9 && Math.abs(h.getY() - at.getY()) <= 4) {
@@ -567,6 +577,7 @@ public final class CitadelUpdate {
             }
             if (!manned) {
                 CitadelGarrison.spawn(level, site, post);
+                MUSTERED.put(at.asLong(), now);
                 homes.add(at);
                 vehiclesMustered++;
                 n++;
@@ -864,7 +875,9 @@ public final class CitadelUpdate {
                     }
                 }
             }
-            int spilled = chest == null ? 0 : level.getEntitiesOfClass(ItemEntity.class, new AABB(chest).inflate(3)).size();
+            // the test barrel's own bread and iron (a fight's drops nearby are not the update's)
+            int spilled = chest == null ? 0 : level.getEntitiesOfClass(ItemEntity.class, new AABB(chest).inflate(3),
+                ie -> ie.getItem().is(Items.BREAD) || ie.getItem().is(Items.IRON_INGOT)).size();
             boolean ok = !waiting && mismatch == 0 && spilled == 0 && job.changed >= spoiled
                 && (!jp.oror.reborn.vehicle.Sbw.present() || staleOff && !staleAtPost && mustered == expectMuster && expectMuster > 0 && musteredAgain == 0);
             LOG.info("CITADEL-UPDATE {\"ok\":{},\"chunk\":[{},{}],\"marked\":{},\"spoiled\":{},\"changed\":{},\"mismatch\":{},\"firstBad\":\"{}\","

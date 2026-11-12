@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SupremeEntityRaidMixin {
     @Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), require = 0)
     private void oror$raidEnter(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        Raid.enter((SupremeEntity) (Object) this, source);
+        Raid.enter((SupremeEntity) (Object) this, source, amount);
     }
 
     @Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("RETURN"), require = 0)

@@ -48,8 +48,8 @@ import org.slf4j.LoggerFactory;
  * immunity, 5% for the rest) that takes half of every blow until it breaks; then the god is broken for ten seconds
  * (damage x1.5, caps x2.5); thirty seconds later the guard comes back, with a warning three seconds before (the
  * "予兆");</li>
- * <li>no blow takes more than 5% of the raid health (15% while broken), and no second more than 0.33 to 0.65% of it
- * (the bigger the god, the smaller the share), a quarter more for each other player who struck in the last ten seconds
+ * <li>no blow takes more than 5% of the raid health (15% while broken), and no second more than 0.33 to 0.5% of it
+ * (the bigger the god, the smaller the share), 20% more for each other player who struck in the last ten seconds
  * (up to six): a million-damage weapon or a stack of them cannot end a raid in a few blows;</li>
  * <li>healing is a share of the raid health (at most 4% at once, then nothing for thirty seconds), not the lore's
  * x10,000;</li>
@@ -92,6 +92,9 @@ public final class Raid {
     private static final Map<UUID, ArrayDeque<Hit>> RECENT = new HashMap<>();
     private static final Map<UUID, Map<UUID, Long>> STRIKERS = new HashMap<>();
     public static int started, ended, broken, revived, slain;
+    /** For the CI's raid check: the gods whose blows are logged one by one (RAID-HIT), and how many lines each has left. */
+    public static final Map<UUID, int[]> TRACE = new HashMap<>();
+    private static final Map<UUID, Float> ENTERED = new HashMap<>();
 
     private Raid() {
     }
@@ -164,10 +167,10 @@ public final class Raid {
         return ABSOLUTE.contains(id) ? 0.08F : GUARDED.contains(id) ? 0.07F : 0.05F;
     }
 
-    /** The share of the raid health one second may take: 0.65% for the smallest gods, 0.33% for the biggest. */
+    /** The share of the raid health one second may take: 0.5% for the smallest gods, 0.33% for the biggest. */
     static float secondShare(RaidTable.Entry t) {
         float s = (float) (0.0045 * Math.sqrt(30.0 / Math.max(1, t.times())));
-        return Math.max(0.0033F, Math.min(0.0065F, s));
+        return Math.max(0.0033F, Math.min(0.0050F, s));
     }
 
     /** True when the blow is a player's: the player, an arrow or spell of theirs, their pet or summon. */
@@ -189,7 +192,10 @@ public final class Raid {
     // ------------------------------------------------------------------------------------------------- SupremeEntity.hurt
 
     /** At the head of SupremeEntity.hurt: a player's blow starts a raid; while one is on, the god's lore gives way. */
-    public static void enter(SupremeEntity b, DamageSource s) {
+    public static void enter(SupremeEntity b, DamageSource s, float amount) {
+        if (!TRACE.isEmpty() && TRACE.containsKey(b.getUUID())) {
+            ENTERED.put(b.getUUID(), amount);
+        }
         boolean raid = false;
         if (!b.level().isClientSide && b.level() instanceof ServerLevel sl && !s.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             CompoundTag t = state(b);
@@ -312,8 +318,17 @@ public final class Raid {
                 used += h.damage();
             }
         }
-        float room = max * secondShare(entry) * group(b, now) * (brk ? BROKEN_CAPS : 1F) - used;
+        float grp = group(b, now);
+        float room = max * secondShare(entry) * grp * (brk ? BROKEN_CAPS : 1F) - used;
+        float before = dmg;
         dmg = Math.max(0F, Math.min(dmg, room));
+        int[] left = TRACE.isEmpty() ? null : TRACE.get(b.getUUID());
+        if (left != null && left[0]-- > 0) {
+            LOG.info(String.format(Locale.ROOT, "RAID-HIT {\"id\":\"%s\",\"t\":%d,\"entered\":%.1f,\"original\":%.1f,\"pre\":%.1f,\"capped\":%.1f,"
+                    + "\"room\":%.1f,\"applied\":%.1f,\"group\":%.2f,\"guard\":%.0f,\"broken\":%b,\"hp\":%.0f}", b.spec.id, now,
+                ENTERED.getOrDefault(b.getUUID(), -1F), e.getContainer().getOriginalDamage(), e.getNewDamage(), before, room, dmg, grp,
+                t.getFloat("Guard"), brk, hp));
+        }
         if (dmg <= 0F) {
             e.setNewDamage(0F);
             return;
@@ -372,7 +387,7 @@ public final class Raid {
         e.setNewDamage(Math.max(0F, b.getHealth() - target));
     }
 
-    /** One for a single player, a quarter more for each other player who struck in the last ten seconds (up to six). */
+    /** One for a single player, 20% more for each other player who struck in the last ten seconds (up to six). */
     static float group(SupremeEntity b, long now) {
         Map<UUID, Long> m = STRIKERS.get(b.getUUID());
         int n = 0;
@@ -380,7 +395,7 @@ public final class Raid {
             m.values().removeIf(at -> now - at > 200);
             n = m.size();
         }
-        return 1F + 0.25F * (Math.max(1, Math.min(6, n)) - 1);
+        return 1F + 0.2F * (Math.max(1, Math.min(6, n)) - 1);
     }
 
     static float shown(SupremeEntity b, float hp, float max) {

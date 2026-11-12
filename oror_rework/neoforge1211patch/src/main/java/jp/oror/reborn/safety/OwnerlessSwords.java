@@ -1,6 +1,8 @@
 package jp.oror.reborn.safety;
 
-import java.lang.reflect.Method;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -25,7 +27,10 @@ import org.slf4j.LoggerFactory;
 public final class OwnerlessSwords {
     private static final Logger LOG = LoggerFactory.getLogger("OROR Safety");
     private static final ResourceLocation SWORD = ResourceLocation.fromNamespaceAndPath("efn", "summoned_sword");
-    private static Method patchOf;
+    private static MethodHandle patchOf;
+    private static Class<?> livingPatch, entityPatch;
+    private static final java.util.Map<Class<?>, MethodHandle> OWNER = new java.util.HashMap<>();
+    private static final MethodHandle NO_OWNER = MethodHandles.constant(Object.class, null);
     private static boolean unusable, bypassJoin;
     public static int removed;
     public static volatile boolean testLogged;
@@ -48,37 +53,55 @@ public final class OwnerlessSwords {
         }
         try {
             if (patchOf == null) {
-                patchOf = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities")
-                    .getMethod("getEntityPatch", Entity.class, Class.class);
+                // looked up one method at a time (MethodHandles): asking Epic Fight's capabilities class for all its methods
+                // (Class.getMethod) loads every type they name, a client player among them, which a dedicated server
+                // refuses (CI 21: "Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist")
+                MethodHandles.Lookup lk = MethodHandles.publicLookup();
+                livingPatch = Class.forName("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
+                entityPatch = Class.forName("yesman.epicfight.world.capabilities.entitypatch.EntityPatch");
+                Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
+                for (Class<?> ret : new Class<?>[]{entityPatch, livingPatch, Object.class}) {
+                    try {
+                        patchOf = lk.findStatic(caps, "getEntityPatch", MethodType.methodType(ret, Entity.class, Class.class));
+                        break;
+                    } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                        // another erasure of its return
+                    }
+                }
+                if (patchOf == null) {
+                    unusable = true;
+                    LOG.warn("OWNERLESS-SWORDS no EpicFightCapabilities.getEntityPatch: left as it is");
+                    return false;
+                }
             }
-            Object patch = patchOf.invoke(null, e, Object.class);
+            Object patch = patchOf.invoke(e, entityPatch);
             if (patch == null) {
                 return false;
             }
-            Method owner = find(patch.getClass(), "getOwnerPatch");
-            if (owner == null) {
+            MethodHandle owner = OWNER.computeIfAbsent(patch.getClass(), OwnerlessSwords::ownerOf);
+            if (owner == NO_OWNER) {
                 unusable = true;
                 LOG.warn("OWNERLESS-SWORDS no getOwnerPatch on {}: left as it is", patch.getClass().getName());
                 return false;
             }
             return owner.invoke(patch) == null;
-        } catch (ReflectiveOperationException | RuntimeException | LinkageError ex) {
+        } catch (Throwable ex) {
             unusable = true;
             LOG.warn("OWNERLESS-SWORDS cannot read the sword's patch: left as it is ({})", ex.toString());
             return false;
         }
     }
 
-    private static Method find(Class<?> c, String name) {
-        for (Class<?> k = c; k != null; k = k.getSuperclass()) {
-            for (Method m : k.getDeclaredMethods()) {
-                if (m.getName().equals(name) && m.getParameterCount() == 0) {
-                    m.setAccessible(true);
-                    return m;
-                }
+    private static MethodHandle ownerOf(Class<?> c) {
+        MethodHandles.Lookup lk = MethodHandles.publicLookup();
+        for (Class<?> ret : new Class<?>[]{livingPatch, entityPatch, Object.class}) {
+            try {
+                return lk.findVirtual(c, "getOwnerPatch", MethodType.methodType(ret));
+            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                // another type of its return
             }
         }
-        return null;
+        return NO_OWNER;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
