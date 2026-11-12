@@ -50,6 +50,12 @@ public final class RoyalRenderer extends MobRenderer<RoyalMob, RoyalModel> {
             this.kingForms.render(mob, yaw, partial, pose, buffers, light);
         } else {
             super.render(mob, yaw, partial, pose, buffers, light);
+            // (059d) the casting roles' circles, light and sign (V20 07_royal_roles_8.md)
+            try {
+                RoyalRoleFx.render(mob, partial, pose, buffers);
+            } catch (RuntimeException ignored) {
+                // a frame without them
+            }
         }
         if (mob.role() == RoyalRole.KING) {
             // (059) his field as a membrane of hexagons (ATFieldRenderer); the old light box only if that fails

@@ -147,9 +147,146 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
             }
             AnimationUtils.bobArms(this.rightArm, this.leftArm, age);
         }
+        roleStyle(mob, walkAmount, age, casting);
         swing(mob);
+        roleSwing(mob);
         react(mob, age);
         kingMove(mob, age);
+    }
+
+    /**
+     * (059d) V20 07_royal_roles_8.md, each role's bearing. The general looks over his men at rest with his sword's
+     * point lowered, and gives his orders with the sword arm raised high and swept forward over the line (not with a
+     * mage's two raised hands). The bodyguard and the imperial guard hold their shields before them in a fight; the
+     * guard on his rounds turns his head now one way, now the other, and looks about when he stops. The mage casts from
+     * one hand reached toward the foe, the other hand held back; the archmage with both hands forward, turning slowly
+     * over the circles at his feet (RoyalRoleFx); the sage with the palm before the chest, the fingers' small work, the
+     * head a little bowed.
+     */
+    private void roleStyle(RoyalMob mob, float walkAmount, float age, boolean casting) {
+        boolean fighting = mob.isAggressive();
+        boolean shield = mob.getOffhandItem().getItem() instanceof net.minecraft.world.item.ShieldItem;
+        float still = 1F - Math.min(1F, walkAmount * 2F);
+        boolean armed = !mob.getMainHandItem().isEmpty();
+        switch (mob.role()) {
+            case GENERAL -> {
+                if (casting) {
+                    float c = 0.5F + 0.5F * Mth.sin(age * 0.18F);
+                    this.rightArm.zRot = 0.1F;
+                    this.rightArm.xRot = Mth.lerp(c, -2.9F, -1.35F);
+                    this.leftArm.zRot = -0.45F;
+                    this.leftArm.xRot = 0.15F;
+                    this.head.xRot -= 0.2F * (1F - c);
+                } else if (!fighting) {
+                    this.head.yRot += Mth.sin(age * 0.035F) * 0.55F * still;
+                    if (armed) {
+                        this.rightArm.xRot = 0.12F + this.rightArm.xRot * 0.3F;
+                        this.rightArm.zRot = 0.08F;
+                    }
+                }
+            }
+            case BODYGUARD, IMPERIAL -> {
+                if (casting) {
+                    this.rightArm.zRot = 0.1F;
+                    this.leftArm.zRot = -0.1F;
+                    this.rightArm.xRot = -2.4F + Mth.sin(age * 0.2F) * 0.2F;
+                    this.leftArm.xRot = shield ? -1.0F : -0.3F;
+                } else if (fighting && shield) {
+                    this.leftArm.xRot = -1.05F;
+                    this.leftArm.yRot = 0.55F;
+                    this.leftArm.zRot = 0F;
+                }
+                if (mob.role() == RoyalRole.IMPERIAL && fighting) {
+                    // the weight of the armour: a lower stance
+                    this.body.xRot += 0.08F;
+                    this.head.xRot -= 0.08F;
+                }
+            }
+            case GUARD -> {
+                if (casting) {
+                    this.rightArm.zRot = 0.1F;
+                    this.leftArm.zRot = -0.1F;
+                    this.rightArm.xRot = -2.2F;
+                } else if (fighting) {
+                    if (shield) {
+                        this.leftArm.xRot = -0.9F;
+                        this.leftArm.yRot = 0.4F;
+                    }
+                } else {
+                    float look = Mth.sin(age * 0.045F) + 0.35F * Mth.sin(age * 0.11F);
+                    this.head.yRot += look * (0.25F + 0.45F * still);
+                }
+            }
+            case MAGE -> {
+                if (casting) {
+                    float tremble = Mth.sin(age * 0.9F) * 0.03F;
+                    this.rightArm.zRot = 0F;
+                    this.rightArm.xRot = -Mth.HALF_PI + this.head.xRot + tremble;
+                    this.rightArm.yRot = this.head.yRot - 0.1F;
+                    this.leftArm.zRot = -0.35F;
+                    this.leftArm.xRot = -0.45F;
+                    this.leftArm.yRot = 0.2F;
+                }
+            }
+            case ARCHMAGE -> {
+                if (casting) {
+                    float turn = Mth.sin(age * 0.25F) * 0.18F;
+                    this.rightArm.zRot = 0.25F;
+                    this.leftArm.zRot = -0.25F;
+                    this.rightArm.xRot = -1.95F + turn;
+                    this.leftArm.xRot = -1.95F - turn;
+                    this.rightArm.yRot = this.head.yRot - 0.25F;
+                    this.leftArm.yRot = this.head.yRot + 0.25F;
+                    this.head.xRot += 0.15F;
+                }
+            }
+            case SAGE -> {
+                if (casting) {
+                    float work = Mth.sin(age * 0.8F) * 0.04F;
+                    this.rightArm.zRot = 0.05F;
+                    this.rightArm.xRot = -1.15F + work;
+                    this.rightArm.yRot = -0.3F + work;
+                    this.leftArm.zRot = -0.1F;
+                    this.leftArm.xRot = armed ? -0.55F : -0.25F;
+                    this.head.xRot += 0.18F;
+                }
+            }
+            default -> {
+            }
+        }
+    }
+
+    /**
+     * (059d) The blow by role: the general steps in on his right foot as he cuts; the bodyguard thrusts short and
+     * straight; the imperial guard's lunge is short and heavy, the body behind it; the rest swing as before.
+     */
+    private void roleSwing(RoyalMob mob) {
+        if (this.attackTime <= 0F || this.riding) {
+            return;
+        }
+        float s = Mth.sin(this.attackTime * Mth.PI);
+        switch (mob.role()) {
+            case GENERAL -> {
+                this.rightLeg.xRot = -0.6F * s;
+                this.leftLeg.xRot = 0.35F * s;
+                this.body.xRot += 0.12F * s;
+            }
+            case BODYGUARD -> {
+                this.rightArm.xRot = Mth.lerp(s, -1.0F, -1.6F);
+                this.rightArm.yRot = -0.05F;
+                this.rightArm.zRot = 0F;
+                this.rightArm.z -= 2.5F * s;
+                this.body.yRot *= 0.3F;
+            }
+            case IMPERIAL -> {
+                this.body.xRot += 0.25F * s;
+                this.rightLeg.xRot = -0.5F * s;
+                this.leftLeg.xRot = 0.2F * s;
+                this.root.z -= 1.5F * s;
+            }
+            default -> {
+            }
+        }
     }
 
     /**

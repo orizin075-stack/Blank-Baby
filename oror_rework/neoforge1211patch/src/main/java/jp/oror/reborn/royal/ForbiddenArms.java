@@ -26,6 +26,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class ForbiddenArms {
     public static final String KINGSLAYER = "OrorKingslayer";
+    /** (059d) On an arrow, a bolt, a thrown trident or a round: it left a king-slayer (V20 05_weapons_12.md). */
+    public static final String SHOT = "OrorKingslayerShot";
 
     private ForbiddenArms() {
     }
@@ -43,7 +45,16 @@ public final class ForbiddenArms {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void strike(LivingIncomingDamageEvent e) {
         if (!(e.getEntity() instanceof RoyalMob king) || king.role() != RoyalRole.KING || king.sovereign() == null
-            || !(e.getSource().getEntity() instanceof Player player) || !kingslayer(player.getMainHandItem())) {
+            || !(e.getSource().getEntity() instanceof Player player)) {
+            return;
+        }
+        // (059d) a shot is a king-slayer's by the arm it left, not by what the hand holds when it lands (V20: drawn from
+        // the king-slayer bow, then the hand changed, the arrow lost its power; a common arrow landing while the hand
+        // held the king-slayer sword had it)
+        net.minecraft.world.entity.Entity direct = e.getSource().getDirectEntity();
+        boolean slayer = direct instanceof net.minecraft.world.entity.projectile.Projectile shot ? shot.getPersistentData().getBoolean(SHOT)
+            : kingslayer(player.getMainHandItem());
+        if (!slayer) {
             return;
         }
         RoyalSovereign sovereign = king.sovereign();
@@ -59,6 +70,23 @@ public final class ForbiddenArms {
         }
         // the price of the forbidden arms
         player.hurt(player.damageSources().magic(), 4F);
+    }
+
+    /** (059d) A shot leaving a king-slayer (bow, crossbow, trident, gun: in the hand that launched it) carries its mark. */
+    @SubscribeEvent
+    public static void shot(net.neoforged.neoforge.event.entity.EntityJoinLevelEvent e) {
+        if (e.getLevel().isClientSide() || !(e.getEntity() instanceof net.minecraft.world.entity.projectile.Projectile pr)
+            || !(pr.getOwner() instanceof Player p) || pr.tickCount > 1 || pr.getPersistentData().contains(SHOT)) {
+            return;
+        }
+        ItemStack main = p.getMainHandItem(), off = p.getOffhandItem();
+        boolean slayer = launcher(main) ? kingslayer(main) : launcher(off) && kingslayer(off);
+        pr.getPersistentData().putBoolean(SHOT, slayer);
+    }
+
+    private static boolean launcher(ItemStack s) {
+        return s.getItem() instanceof net.minecraft.world.item.ProjectileWeaponItem || s.getItem() instanceof net.minecraft.world.item.TridentItem
+            || s.getItem().getClass().getName().contains("Gun");
     }
 
     @SubscribeEvent

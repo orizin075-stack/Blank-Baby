@@ -209,6 +209,10 @@ public final class RelicTest {
         }
         m.moveTo(l.at.getX() + 0.5 + (strong ? 1.5 : 0), l.at.getY(), l.at.getZ() + 0.5 + dist, 180F, 0F);
         m.finalizeSpawn(level, level.getCurrentDifficultyAt(m.blockPosition()), MobSpawnType.COMMAND, null);
+        // (059c) a grown one each time: one in twenty came a child, half as tall, and so not the same target
+        if (m instanceof net.minecraft.world.entity.monster.Zombie z) {
+            z.setBaby(false);
+        }
         m.setPersistenceRequired();
         m.setNoAi(true);
         m.addTag("oror_relic_dummy");

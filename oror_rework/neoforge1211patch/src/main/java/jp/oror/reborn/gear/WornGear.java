@@ -216,7 +216,11 @@ public final class WornGear {
         for (Vec3 dir : new Vec3[]{side, side.scale(-1), to.normalize().scale(-1)}) {
             for (double d = 3.0; d >= 1.0; d -= 0.5) {
                 Vec3 off = dir.scale(d);
-                if (sl.noCollision(p, p.getBoundingBox().move(off))) {
+                net.minecraft.world.phys.AABB box = p.getBoundingBox().move(off);
+                // (059d, V20 05_weapons_12.md) only where the wearer lands safely: room to stand, and (when standing) a
+                // floor within three blocks under it, not over a drop nor into water or lava
+                if (sl.noCollision(p, box) && (!p.onGround() || !sl.noCollision(p, box.expandTowards(0, -3.0, 0)))
+                    && !sl.containsAnyLiquid(box.expandTowards(0, -1.0, 0))) {
                     dest = p.position().add(off);
                     break;
                 }

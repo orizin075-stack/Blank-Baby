@@ -810,9 +810,15 @@ public final class RelicArts {
       List<LivingEntity> out = new ArrayList<>();
 
       for (LivingEntity e : p.level().getEntitiesOfClass(LivingEntity.class, new AABB(a, b).inflate(w + 1.0), ex -> RelicPowers.enemy(p, ex))) {
-         Vec3 q = e.position().add(0.0, (double)e.getBbWidth() * 0.5, 0.0).subtract(a);
-         double t = Math.max(0.0, Math.min(r, q.dot(d)));
-         if (q.subtract(d.scale(t)).length() <= w + (double)e.getBbWidth() * 0.5) {
+         // (059c) how near the line comes to the body itself: its box's nearest point to the line's point abreast of
+         // its middle (from a point at its feet a small one - a baby, a silverfish - right ahead lay outside a narrow line)
+         AABB box = e.getBoundingBox();
+         double t = Math.max(0.0, Math.min(r, box.getCenter().subtract(a).dot(d)));
+         Vec3 l = a.add(d.scale(t));
+         double nx = Math.max(box.minX, Math.min(box.maxX, l.x));
+         double ny = Math.max(box.minY, Math.min(box.maxY, l.y));
+         double nz = Math.max(box.minZ, Math.min(box.maxZ, l.z));
+         if (l.distanceToSqr(nx, ny, nz) <= w * w) {
             out.add(e);
          }
       }

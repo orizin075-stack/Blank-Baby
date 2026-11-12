@@ -162,8 +162,8 @@ public final class CapitalLoadTest {
             .forEach(en -> cost.append(cost.length() > 0 ? "," : "").append(String.format(Locale.ROOT, "\"%s\":[%.2f,%d]", en.getKey(),
                 en.getValue()[0] / 1e6 / Math.max(1, t.size()), count.getOrDefault(en.getKey(), 0))));
         LOG.info(String.format(Locale.ROOT, "CAPITAL-LOAD {\"site\":[%d,%d],\"chunks\":%d,\"entities\":%d,\"msptAvg\":%.2f,\"msptP95\":%.2f,"
-                + "\"msptMax\":%.2f,\"tickMsPerType\":{%s}}", r.site.center().getX(), r.site.center().getZ(), r.chunks.size(), total, avg, p95, max,
-            cost));
+                + "\"msptMax\":%.2f,\"turretMovesSkipped\":%d,\"tickMsPerType\":{%s}}", r.site.center().getX(), r.site.center().getZ(), r.chunks.size(),
+            total, avg, p95, max, jp.oror.reborn.perf.TurretRest.skipped, cost));
         try {
             LOG.info("CAPITAL-INTEGRITY {}", CitadelIntegrity.scan(r.level, r.site, r.chunks));
         } catch (RuntimeException ex) {

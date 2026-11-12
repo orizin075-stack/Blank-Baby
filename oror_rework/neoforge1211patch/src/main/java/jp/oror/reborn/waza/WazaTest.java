@@ -97,7 +97,14 @@ public final class WazaTest {
     private static final List<int[]> MELS_CHUNKS = new ArrayList<>();
     private static long started = -1;
 
+    /** The 41 characters' techniques (the royal actions after them are RoyalWazaTest's). */
+    private static final int GODS = 984;
+
     private WazaTest() {
+    }
+
+    private static boolean royal(String character) {
+        return character.startsWith("king") || character.startsWith("azazel");
     }
 
     @SubscribeEvent
@@ -131,6 +138,10 @@ public final class WazaTest {
         melsDone = false;
         MELS.clear();
         for (String id : Waza.BY_CHARACTER.keySet()) {
+            if (royal(id)) {
+                // (059d) the king's and Azazel's actions have their own check (RoyalWazaTest): no character casts them
+                continue;
+            }
             Yard y = new Yard();
             y.character = id;
             // a yard of three chunks by three, centred in its middle chunk (as little new land as will do: the
@@ -653,8 +664,8 @@ public final class WazaTest {
         OTHER.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).limit(12)
             .forEach(x -> o.append(x.getKey()).append('=').append(x.getValue()).append(' '));
         LOG.info("WAZA-RESULT {\"techniques\":{},\"tried\":{},\"passed\":{},\"retried\":{},\"ticks\":{},\"byBehaviour\":{},\"failed\":\"{}\",\"other\":\"{}\",\"mels\":\"{}\",\"pass\":{}}",
-            Waza.ALL.size(), tried, passed, retries, now - started, t, String.join(" ", FAILED), o.toString().trim(), MELS.toString().replace("\"", "'"),
-            tried == Waza.ALL.size() && passed == tried && Boolean.TRUE.equals(MELS.get("pass")));
+            GODS, tried, passed, retries, now - started, t, String.join(" ", FAILED), o.toString().trim(), MELS.toString().replace("\"", "'"),
+            tried == GODS && passed == tried && Boolean.TRUE.equals(MELS.get("pass")));
         long allHits = SHORT.values().stream().filter(Boolean::booleanValue).count();
         LOG.info("SHORT36-RESULT {\"listed\":{},\"tried\":{},\"allHitsLanded\":{},\"short\":\"{}\"}", SHORT36.size(), SHORT.size(), allHits,
             SHORT.entrySet().stream().filter(x -> !x.getValue()).map(Map.Entry::getKey).reduce((a, b) -> a + " " + b).orElse(""));
