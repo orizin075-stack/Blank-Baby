@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dueldominion:item/dominion_grimoire"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "oror_supreme_bosses:reading": 1
+      },
+      "model": "dueldominion:item/dominion_grimoire_open"
+    }
+  ]
+}

@@ -1,7 +1,5 @@
 package jp.oror.reborn.combat;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -64,6 +62,13 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * stun); a block shows only the sparks and the pose on OROR's rigs, a parry and a broken guard Epic Fight's short guard
  * hit; a mob with a bow or a crossbow does not guard, nor one with a gun (the user: the mobs carry guns too); a block
  * without a shield halves a blow instead of undoing it.
+ * <p>
+ * (059e) The user: "敵も味方もパリイシステム使わない". Parries had become too rare to see: a guard parried only in its
+ * first three ticks, and only players' blows were met. Now a mob guards against any foe in reach (the kingdom's soldiers
+ * and the mobs they fight, a player or not), the first half of its guard parries, and the royals parry likewise
+ * (RoyalGuardTimingMixin); the Indestructible mobs keep their own guard and parry whole again
+ * (NightfallEnemyParryWindowMixin, which cut their parry to the guard's first six ticks, is no longer applied). On a
+ * dedicated server Epic Fight is now read one method at a time, so its patches are found there too.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class MobGuard {
@@ -180,8 +185,9 @@ public final class MobGuard {
         if (g.delay > 0) {
             g.delay--;
         }
-        // only against a player (053): the guard is for the player's blows, not for mobs' brawls
-        if (g.delay == 0 && t instanceof Player && t.isAlive() && m.distanceToSqr(t) < 25.0 && m.getSensing().hasLineOfSight(t)) {
+        // (059e, the user: "敵も味方もパリイシステム使わない") against any foe in reach, a player or a mob: the kingdom's
+        // soldiers and the mobs they fight guard and parry each other too (053 had it for players' blows only)
+        if (g.delay == 0 && t != null && t.isAlive() && m.distanceToSqr(t) < 25.0 && m.getSensing().hasLineOfSight(t)) {
             Tier tier = tier(m);
             g.stamina = Math.min(tier.stamina, g.stamina + 0.4F * tier.cycle);
             g.remaining = tier.window;
@@ -199,7 +205,7 @@ public final class MobGuard {
             return;
         }
         DamageSource src = e.getSource();
-        if (!(src.getEntity() instanceof Player attacker) || unblockable(src)) {
+        if (!(src.getEntity() instanceof LivingEntity attacker) || attacker == self || unblockable(src)) {
             return;
         }
         boolean projectile = src.getDirectEntity() instanceof Projectile;
@@ -232,7 +238,8 @@ public final class MobGuard {
             return;
         }
         Tier tier = tier(m);
-        boolean perfect = g.age <= 2;
+        // (059e) the first half of the guard parries (it was its first three ticks: parries were rare enough to go unseen)
+        boolean perfect = g.age <= tier.window / 2;
         if (projectile && !(tier == Tier.BOSS || shield(m) || perfect && tier == Tier.ARMED)) {
             return;
         }
@@ -381,11 +388,14 @@ public final class MobGuard {
 
     /** Epic Fight, reached by name, so that this works the same across its versions (and without it). */
     static final class Ef {
-        private static Method getPatch, play, stun;
-        private static Class<?> humanoid, living;
-        private static Object stunLong;
+        // (059e) looked up one method at a time (MethodHandles): asking Epic Fight's classes for all their methods
+        // (Class.getMethod, getMethods) loads every type they name, the client's among them, which a dedicated server
+        // refuses; there every mob passed for one without a patch (the checks' "[no patch]") and no guard was animated
+        private static java.lang.invoke.MethodHandle getPatch, play, stun;
+        private static Class<?> humanoid, living, entityPatch;
+        private static Object stunShort;
         private static final Map<String, Object> ANIMS = new HashMap<>();
-        private static boolean looked, broken;
+        private static boolean looked, broken, playLooked;
         private static int alternate;
 
         private Ef() {
@@ -396,48 +406,81 @@ public final class MobGuard {
                 return;
             }
             looked = true;
+            java.lang.invoke.MethodHandles.Lookup lk = java.lang.invoke.MethodHandles.publicLookup();
             try {
                 Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
                 living = Class.forName("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
-                getPatch = caps.getMethod("getEntityPatch", net.minecraft.world.entity.Entity.class, Class.class);
+                entityPatch = Class.forName("yesman.epicfight.world.capabilities.entitypatch.EntityPatch");
                 humanoid = Class.forName("yesman.epicfight.world.capabilities.entitypatch.HumanoidMobPatch");
-                for (Method method : living.getMethods()) {
-                    if (method.getName().equals("playAnimationSynchronized") && method.getParameterCount() == 2
-                        && method.getParameterTypes()[1] == float.class) {
-                        play = method;
+                for (Class<?> ret : new Class<?>[]{entityPatch, living, Object.class}) {
+                    try {
+                        getPatch = lk.findStatic(caps, "getEntityPatch",
+                            java.lang.invoke.MethodType.methodType(ret, net.minecraft.world.entity.Entity.class, Class.class));
+                        break;
+                    } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                        // another erasure of its return
                     }
                 }
                 Class<?> stunType = Class.forName("yesman.epicfight.world.damagesource.StunType");
                 for (Object c : stunType.getEnumConstants()) {
                     if (((Enum<?>) c).name().equals("SHORT")) {
-                        stunLong = c;
+                        stunShort = c;
                     }
                 }
-                for (Method method : humanoid.getMethods()) {
-                    if (method.getName().equals("applyStun") && method.getParameterCount() == 2 && method.getParameterTypes()[0] == stunType) {
-                        stun = method;
+                for (Class<?> ret : new Class<?>[]{boolean.class, void.class}) {
+                    try {
+                        stun = lk.findVirtual(humanoid, "applyStun", java.lang.invoke.MethodType.methodType(ret, stunType, float.class));
+                        break;
+                    } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                        // the other return
                     }
                 }
                 Class<?> animations = Class.forName("yesman.epicfight.gameasset.Animations");
                 for (String name : new String[]{"LONGSWORD_GUARD_ACTIVE_HIT1", "LONGSWORD_GUARD_ACTIVE_HIT2", "SWORD_GUARD_HIT", "BIPED_COMMON_NEUTRALIZED"}) {
                     try {
-                        Field f = animations.getField(name);
-                        ANIMS.put(name, f.get(null));
-                    } catch (ReflectiveOperationException ex) {
+                        ANIMS.put(name, lk.findStaticGetter(animations, name, animations.getField(name).getType()).invoke());
+                    } catch (Throwable ex) {
                         // that animation is not in this version: its moment goes without it
                     }
                 }
+                broken = getPatch == null;
             } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
                 broken = true;
             }
         }
 
-        private static Object patch(LivingEntity e) throws ReflectiveOperationException {
+        /** playAnimationSynchronized(animation, float), its first parameter's type found from an animation itself. */
+        private static java.lang.invoke.MethodHandle play(Object anim) {
+            if (playLooked || anim == null) {
+                return play;
+            }
+            playLooked = true;
+            java.lang.invoke.MethodHandles.Lookup lk = java.lang.invoke.MethodHandles.publicLookup();
+            java.util.ArrayDeque<Class<?>> todo = new java.util.ArrayDeque<>();
+            java.util.Set<Class<?>> seen = new java.util.HashSet<>();
+            todo.add(anim.getClass());
+            while (!todo.isEmpty() && play == null) {
+                Class<?> c = todo.poll();
+                if (c == null || !seen.add(c)) {
+                    continue;
+                }
+                try {
+                    play = lk.findVirtual(living, "playAnimationSynchronized", java.lang.invoke.MethodType.methodType(void.class, c, float.class));
+                } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                    todo.add(c.getSuperclass());
+                    todo.addAll(java.util.List.of(c.getInterfaces()));
+                }
+            }
+            return play;
+        }
+
+        private static Object patch(LivingEntity e) throws Throwable {
             look();
             if (broken || getPatch == null || living == null) {
                 return null;
             }
-            return getPatch.invoke(null, e, living);
+            Object p = getPatch.invoke(e, living);
+            return living.isInstance(p) ? p : null;
         }
 
         /** The class of a mob's Epic Fight patch ("" without one, null if it may not have been given one yet). */
@@ -448,7 +491,7 @@ public final class MobGuard {
                     return m.tickCount > 40 ? "" : null;
                 }
                 return p.getClass().getName();
-            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+            } catch (Throwable ex) {
                 return "";
             }
         }
@@ -456,7 +499,7 @@ public final class MobGuard {
         static void play(LivingEntity m, String kind) {
             try {
                 Object p = patch(m);
-                if (p == null || play == null || !humanoid.isInstance(p)) {
+                if (p == null || !humanoid.isInstance(p)) {
                     return;
                 }
                 Object anim = switch (kind) {
@@ -465,10 +508,11 @@ public final class MobGuard {
                     case "break" -> ANIMS.get("SWORD_GUARD_HIT");
                     default -> null;
                 };
-                if (anim != null) {
-                    play.invoke(p, anim, 0.0F);
+                java.lang.invoke.MethodHandle h = play(anim);
+                if (anim != null && h != null) {
+                    h.invoke(p, anim, 0.0F);
                 }
-            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+            } catch (Throwable ex) {
                 // the moment goes unanimated
             }
         }
@@ -476,12 +520,12 @@ public final class MobGuard {
         static boolean stun(LivingEntity m) {
             try {
                 Object p = patch(m);
-                if (p == null || stun == null || stunLong == null || !humanoid.isInstance(p)) {
+                if (p == null || stun == null || stunShort == null || !humanoid.isInstance(p)) {
                     return false;
                 }
-                stun.invoke(p, stunLong, 1.0F);
+                stun.invoke(p, stunShort, 1.0F);
                 return true;
-            } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+            } catch (Throwable ex) {
                 return false;
             }
         }

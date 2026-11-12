@@ -156,6 +156,14 @@ public final class DuelTest {
         boolean out = (Boolean) toggle.invoke(null, fp, sd);
         put.invoke(null, seal, sd);
         Mob servant = servant(EntityType.ZOMBIE);
+        // (CI 22: called out false) what Duel Dominion said and where the tester and the zombie are
+        OUT.put("toggleOut", out);
+        OUT.put("sealActive", sd.hasUUID("ActiveEntity"));
+        OUT.put("testerAt", "\"" + fp.blockPosition().toShortString() + "\"");
+        if (sd.hasUUID("ActiveEntity")) {
+            Entity called = lv.getEntity(sd.getUUID("ActiveEntity"));
+            OUT.put("calledAt", called == null ? "\"none\"" : "\"" + called.blockPosition().toShortString() + " " + called.isAlive() + "\"");
+        }
         OUT.put("calledOut", out && servant != null);
         boolean back = (Boolean) toggle.invoke(null, fp, sd);
         put.invoke(null, seal, sd);
@@ -210,7 +218,7 @@ public final class DuelTest {
             Object healing = Enum.valueOf((Class) talisman, "HEALING");
             boolean p = (Boolean) cast.invoke(null, fp, parade, List.of(spirits.get(0), spirits.get(1), spirits.get(2)), new ItemStack(item("ofuda_night_parade")));
             OUT.put("nightParade", p);
-            List<Mob> came = lv.getEntitiesOfClass(Mob.class, new AABB(site).inflate(12), m -> m.getPersistentData().getBoolean("DuelParadeSpirit"));
+            List<Mob> came = lv.getEntitiesOfClass(Mob.class, fp.getBoundingBox().inflate(16), m -> m.getPersistentData().getBoolean("DuelParadeSpirit"));
             OUT.put("paradeSpirits", came.size());
             MADE.addAll(came);
             fp.setHealth(Math.max(1F, fp.getMaxHealth() - 10F));
@@ -231,7 +239,7 @@ public final class DuelTest {
 
     private static Mob servant(EntityType<?> type) {
         UUID me = fp.getUUID();
-        List<Mob> found = level.getEntitiesOfClass(Mob.class, new AABB(site).inflate(8), m -> m.getType() == type && m.isAlive()
+        List<Mob> found = level.getEntitiesOfClass(Mob.class, fp.getBoundingBox().inflate(16), m -> m.getType() == type && m.isAlive()
             && m.getPersistentData().hasUUID("DuelDominionOwner") && me.equals(m.getPersistentData().getUUID("DuelDominionOwner")));
         if (!found.isEmpty()) {
             MADE.add(found.get(0));

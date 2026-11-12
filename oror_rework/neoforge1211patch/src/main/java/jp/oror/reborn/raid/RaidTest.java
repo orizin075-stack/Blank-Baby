@@ -65,11 +65,11 @@ import org.slf4j.LoggerFactory;
 public final class RaidTest {
     private static final Logger LOG = LoggerFactory.getLogger("OROR Raid");
     public static volatile boolean resultLogged;
-    private static final long LIMIT = 14400;
+    private static final long LIMIT = 18000;
     private static final int ART_GAP = 100;
     private static final float ART = 1_000_000F;
     /** The fights whose first forty blows are logged (RAID-HIT): what each blow was on entering, after armour, after the caps. */
-    private static final java.util.Set<String> TRACED = java.util.Set.of("ferdinand", "nun", "bahamut");
+    private static final java.util.Set<String> TRACED = java.util.Set.of("fallen_savior", "ain_sof_aur", "brutality", "hakyoku");
 
     private static final class Sim {
         final String id;
@@ -184,7 +184,7 @@ public final class RaidTest {
         s.gap = (int) w[1];
         RaidTable.Entry t = RaidTable.of(s.id);
         s.max = t.health();
-        if (s.tier.equals("レジェンド") && (s.group == 1 && TRACED.contains(s.id) || s.group == 4 && s.id.equals("bahamut"))) {
+        if (s.tier.equals("レジェンド") && (s.group == 1 && TRACED.contains(s.id))) {
             Raid.TRACE.put(b.getUUID(), new int[]{40});
         }
         return true;

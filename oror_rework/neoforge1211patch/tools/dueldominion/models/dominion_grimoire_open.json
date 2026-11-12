@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dueldominion:item/dominion_grimoire_open"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [-55, 0, 0],
+      "translation": [0, 4, 1.5],
+      "scale": [0.75, 0.75, 0.75]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [-55, 0, 0],
+      "translation": [0, 4, 1.5],
+      "scale": [0.75, 0.75, 0.75]
+    },
+    "firstperson_righthand": {
+      "rotation": [-20, 0, 0],
+      "translation": [0, 3, 0],
+      "scale": [0.9, 0.9, 0.9]
+    },
+    "firstperson_lefthand": {
+      "rotation": [-20, 0, 0],
+      "translation": [0, 3, 0],
+      "scale": [0.9, 0.9, 0.9]
+    }
+  }
+}

@@ -274,27 +274,49 @@ def ofuda(kind):
 # ------------------------------------------------------------------------------------------------------- the rest
 
 def effigy():
+    """A katashiro in the shape of a person in kimono: a round head with its hair bun, long hanging furisode sleeves,
+    the collar crossed left over right, an obi, the skirts falling to a hem cut in shide zigzags; pure white washi with a
+    faint spirit-blue edge, an ink sign on the skirt and vermilion edges on the obi."""
     px = Px()
-    white, hi, lo = rgb('#f4f1ea'), rgb('#ffffff'), rgb('#d2cfc6')
-    px.disc(15.5, 6.5, 3.6, white)                                   # head
-    px.poly([(9, 11), (22, 11), (27, 13), (27, 15), (21, 15), (20, 24), (11, 24), (10, 15), (4, 15), (4, 13)], white)
-    # the folded, zigzag hem
+    white, hi, lo, fold = rgb('#f6f3ec'), rgb('#ffffff'), rgb('#d9d4c8'), rgb('#bdb6a6')
+    line = rgb('#8a8273')
+    px.disc(15.5, 6.8, 3.3, white)                                   # head
+    px.disc(15.5, 1.3, 1.2, white)                                   # the hair bun, apart from the head
+    px.rect(14, 9, 17, 9, white)                                     # neck
+    # shoulders, the long sleeves hanging, the body narrowing to the hem
+    px.poly([(9, 10), (22, 10), (27, 12), (28, 27), (23, 27), (21, 14), (20, 26), (11, 26), (10, 14), (8, 27), (3, 27), (4, 12)], white)
+    # the sleeves' rounded bottoms
+    px.pts([(3, 27), (28, 27), (3, 26), (28, 26)], (0, 0, 0, 0))
+    # the hem cut in shide zigzags
     for i, x in enumerate(range(11, 21)):
-        px.set(x, 25 + (i % 2), white)
-    px.rect(11, 24, 20, 25, white)
-    px.poly([(12, 25), (14, 29), (15, 25)], white)
-    px.poly([(16, 25), (17, 29), (19, 25)], white)
-    # shading: a fold down the middle and the shaded right side
-    for y in range(12, 25):
-        px.set(21 if y < 15 else 20, y, lo)
-        px.set(16, y, lo if y % 3 else white)
-    for x in range(5, 27):
-        px.set(x, 15, lo)
-    px.pts([(13, 4), (14, 4), (12, 5)], hi)
-    px.outline(rgb('#7f9bb5'))                                       # a faint spirit-blue edge
-    # an ink mark on the breast, a tiny vermilion dot below
-    px.pts([(15, 17), (16, 17), (15, 18), (15, 19), (16, 19), (17, 18)], INK)
-    px.set(16, 21, SEAL)
+        for y in range(26, 29 + (i % 2)):
+            px.set(x, y, white)
+    px.pts([(12, 29), (14, 29), (16, 29), (18, 29), (20, 29)], (0, 0, 0, 0))
+    # shading: the sleeves' openings, their shaded backs, the skirts' fold
+    for y in range(13, 27):
+        px.set(26, y, lo)
+        px.set(5, y, hi)
+        px.set(9, y, fold)
+        px.set(22, y, fold)
+    px.rect(4, 26, 8, 27, lo)
+    px.rect(23, 26, 27, 27, lo)
+    px.rect(8, 12, 9, 13, fold)                                       # the sleeves' openings at the wrist
+    px.rect(22, 12, 23, 13, fold)
+    for y in range(18, 27):
+        px.set(19, y, lo)
+    px.pts([(13, 5), (14, 5), (13, 6)], hi)
+    px.outline(rgb('#86a6c4'))                                       # a faint spirit-blue edge
+    # the collar crossed left over right, down to the obi
+    px.line(13, 10, 16, 15, line)
+    px.line(18, 10, 16, 13, line)
+    px.pts([(14, 10), (17, 10)], fold)
+    # the obi, vermilion-edged, and its knot
+    px.rect(11, 15, 20, 17, rgb('#ebe4d4'))
+    px.rect(11, 15, 20, 15, SEAL)
+    px.rect(11, 17, 20, 17, SEAL)
+    px.pts([(15, 16), (16, 16)], SEAL_LO)
+    # an ink sign on the skirt
+    px.pts([(14, 20), (15, 20), (16, 20), (17, 20), (15, 21), (15, 22), (14, 23), (16, 23), (17, 24), (15, 24)], INK)
     return px
 
 
@@ -335,28 +357,34 @@ def bound_hair():
 
 
 def soul_archive():
+    """The soul box (魂匣): a box of black lacquer seen from above and in front, gold maki-e clouds on its lid, a red
+    cord tied about it, and spirit light leaking blue from under the lid."""
     px = Px()
-    cover, hi, lo = rgb('#2c2f5a'), rgb('#454a85'), rgb('#1b1d3a')
-    px.rect(6, 4, 25, 28, cover)
-    px.rect(6, 4, 25, 4, hi)
-    px.rect(6, 4, 6, 28, hi)
-    px.rect(25, 5, 25, 28, lo)
-    px.rect(6, 28, 25, 28, lo)
-    # pages showing at the foot edge
-    px.rect(7, 29, 25, 29, rgb('#e8e0cc'))
-    # the stitched spine on the left: four holes and white thread
-    for y in (7, 12, 17, 22, 26):
-        px.set(8, y, rgb('#f1ece0'))
-        px.set(7, y, rgb('#f1ece0'))
-    px.rect(7, 5, 7, 27, rgb('#d9d2c2'))
-    # the title slip
-    px.rect(18, 6, 22, 18, PAPER)
-    px.rect(22, 6, 22, 18, PAPER_LO)
-    px.pts([(19, 8), (20, 8), (21, 8), (20, 9), (19, 11), (21, 11), (20, 12), (20, 14), (19, 15), (21, 16)], INK)
-    # a soul flame on the cover
-    px.poly([(12, 13), (15, 17), (14, 21), (10, 21), (9, 17), (11, 15)], rgb('#6fd3ff'))
-    px.poly([(12, 16), (13, 19), (12, 21), (11, 21), (11, 18)], rgb('#d8f6ff'))
-    px.outline(rgb('#0e0f1f'))
+    lac, lac_hi, lac_lo = rgb('#241a22'), rgb('#3e2f3b'), rgb('#120b10')
+    gold, gold_lo = rgb('#e2b54a'), rgb('#9b7424')
+    # the lid's top (a parallelogram) and the box's front
+    px.poly([(4, 9), (10, 4), (28, 4), (22, 9)], lac_hi)
+    px.rect(4, 9, 22, 12, lac)                                       # the lid's front rim
+    px.poly([(22, 9), (28, 4), (28, 7), (22, 12)], lac_lo)            # the lid's side
+    px.rect(5, 13, 21, 27, lac)                                      # the box's front
+    px.poly([(21, 13), (27, 8), (27, 22), (21, 27)], lac_lo)          # the box's side
+    # spirit light from under the lid
+    px.rect(5, 13, 21, 13, rgb('#7fdcff'))
+    px.pts([(22, 12), (23, 11), (24, 10), (25, 9), (26, 8)], rgb('#7fdcff'))
+    px.rect(6, 14, 20, 14, rgb('#2f6f8f'))
+    # gold maki-e: clouds on the lid, a band and a crest on the front
+    px.pts([(9, 7), (10, 6), (11, 6), (12, 7), (17, 6), (18, 5), (19, 5), (20, 6), (21, 6), (13, 8), (14, 8)], gold)
+    px.rect(4, 12, 22, 12, gold_lo)
+    px.ring(13, 20, 3.4, gold, 1.0)
+    px.pts([(13, 18), (12, 20), (14, 20), (13, 22)], gold)
+    px.pts([(6, 26), (7, 26), (19, 26), (20, 26)], gold_lo)
+    # the red cord tied across the front, its bow
+    px.rect(5, 17, 21, 17, SEAL)
+    px.pts([(21, 17), (22, 16), (23, 15), (24, 14), (25, 13), (26, 12), (27, 11)], SEAL)
+    px.poly([(11, 16), (8, 13), (8, 16)], SEAL)
+    px.poly([(15, 16), (18, 13), (18, 16)], SEAL)
+    px.pts([(9, 18), (10, 20), (16, 18), (17, 20)], SEAL_LO)
+    px.outline(rgb('#060305'))
     return px
 
 
@@ -384,6 +412,32 @@ def grimoire():
     px.rect(23, 14, 27, 17, gold)
     px.rect(23, 17, 27, 17, gold_lo)
     px.set(26, 15, rgb('#5c4210'))
+    px.outline(rgb('#170c1e'))
+    return px
+
+
+def grimoire_open():
+    """The grimoire held open (its model while it is read): two pages spread under the reader's eyes, ink lines and
+    the gold sigil, the purple leather showing round them."""
+    px = Px()
+    leather, gold = rgb('#4a2a5e'), rgb('#e3b341')
+    paper, paper_lo, ink = rgb('#efe4c8'), rgb('#cdbf9b'), rgb('#3a2a1e')
+    # the covers, open, seen a little from above
+    px.poly([(2, 10), (15, 7), (16, 25), (3, 27)], leather)
+    px.poly([(16, 7), (29, 10), (28, 27), (15, 25)], leather)
+    # the pages
+    px.poly([(4, 10), (15, 8), (15, 23), (5, 25)], paper)
+    px.poly([(16, 8), (27, 10), (26, 25), (16, 23)], paper)
+    for y in range(9, 24):
+        px.set(15, y, paper_lo)
+        px.set(16, y, paper_lo)
+    px.pts([(5, 26), (6, 26), (25, 26), (26, 26)], paper_lo)
+    # writing on the left page, the sigil on the right
+    for k, y in enumerate((12, 15, 18, 21)):
+        px.line(6, y + 1 - k // 2, 13, y - k // 2, ink)
+    px.ring(21.5, 16, 3.3, gold, 1.0)
+    px.pts([(21, 16), (22, 16), (21, 12), (22, 12), (21, 20), (22, 20)], gold)
+    px.pts([(21, 15), (22, 17)], rgb('#3fd9e8'))
     px.outline(rgb('#170c1e'))
     return px
 
@@ -445,6 +499,7 @@ def main():
     made['bound_hair'] = bound_hair()
     made['soul_archive'] = soul_archive()
     made['dominion_grimoire'] = grimoire()
+    made['dominion_grimoire_open'] = grimoire_open()
     made['undead_ash'] = ash()
     made['white_glove'] = glove()
     for name, px in made.items():

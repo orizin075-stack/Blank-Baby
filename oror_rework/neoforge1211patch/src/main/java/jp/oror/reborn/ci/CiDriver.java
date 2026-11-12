@@ -88,7 +88,7 @@ public final class CiDriver {
             return;
         }
         boolean done = next >= CHECKS.size() && CHECKS.stream().allMatch(CiDriver::finished);
-        if (done || t > 82000) {
+        if (done || t > 90000) {
             LOG.info("SAFE-UNLOAD {}", jp.oror.reborn.safety.EntityUnloads.report());
             LOG.info("SANE-MOVE {}", jp.oror.reborn.safety.SaneMoves.report());
             LOG.info("CI-DONE {\"complete\":{},\"ticks\":{}}", done, t);

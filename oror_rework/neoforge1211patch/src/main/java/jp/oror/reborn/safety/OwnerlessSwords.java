@@ -38,6 +38,7 @@ public final class OwnerlessSwords {
     private static Entity testSword;
     private static long testAt;
     private static boolean testJoinAdded;
+    private static net.minecraft.world.level.ChunkPos testChunk;
 
     private OwnerlessSwords() {
     }
@@ -147,6 +148,9 @@ public final class OwnerlessSwords {
                     return 1;
                 }
                 net.minecraft.core.BlockPos at = level.getSharedSpawnPos().offset(40, 0, 40);
+                // (CI 22: the second sword never ticked out there) its chunk loaded and ticking for the test
+                testChunk = new net.minecraft.world.level.ChunkPos(at);
+                level.setChunkForced(testChunk.x, testChunk.z, true);
                 at = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, at).above(2);
                 Entity first = type.get().create(level);
                 if (first != null) {
@@ -178,6 +182,10 @@ public final class OwnerlessSwords {
         boolean gone = testSword == null || testSword.isRemoved();
         LOG.info(String.format(java.util.Locale.ROOT, "OWNERLESS-SWORD-TEST {\"present\":true,\"readable\":%b,\"joinedWithoutOwner\":%b,"
             + "\"secondRemoved\":%b,\"removed\":%d,\"pass\":%b}", !unusable, testJoinAdded, gone, removed, !testJoinAdded && gone));
+        if (testChunk != null) {
+            testLevel.setChunkForced(testChunk.x, testChunk.z, false);
+            testChunk = null;
+        }
         testLevel = null;
         testSword = null;
         testLogged = true;

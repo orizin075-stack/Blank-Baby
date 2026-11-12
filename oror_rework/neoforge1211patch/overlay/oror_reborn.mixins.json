@@ -25,7 +25,6 @@
     "NightfallNativeParryFeedbackMixin",
     "NightfallEnemyRecoveryMixin",
     "NightfallMobEquipmentMixin",
-    "NightfallEnemyParryWindowMixin",
     "NightfallEnemyGoalsMixin",
     "NightfallEffectRateSaveMixin",
     "RoyalCombatOwnershipMixin",
@@ -69,7 +68,9 @@
     "SupremeEntityRaidMixin",
     "CombatMemoryRaidMixin",
     "DuelSealSanitizeMixin",
-    "BossPowersRaidMixin"
+    "BossPowersRaidMixin",
+    "DuelGrimoireMixin",
+    "RoyalGuardTimingMixin"
   ],
   "injectors": {
     "defaultRequire": 1
