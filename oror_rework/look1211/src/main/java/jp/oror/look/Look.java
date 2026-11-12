@@ -152,6 +152,37 @@ public final class Look {
             if (t == 240) {
                 PLAN.put(250, () -> throne(mc));
                 int at = 2050;
+                // (059c) the user: "the palace and the walls are missing in places", "a wall stops partway", "the turrets
+                // outside the wall are odd", "the roads are odd", "very heavy": the walls' gates and corners, a few turrets of
+                // each kind and the roads from above, each spot checked against the template (and for chunks the capital
+                // was never built in), the server's tick time and the entities about it
+                Object[][] audit = {
+                    {"c01_capital_outer_wall_gate_n", 0, 105, -510, 180.0F, 31.4F}, {"c02_capital_outer_wall_gate_e", 510, 105, 0, -90.0F, 31.4F},
+                    {"c03_capital_outer_wall_gate_s", 0, 105, 510, 0.0F, 31.4F}, {"c04_capital_outer_wall_gate_w", -510, 105, 0, 90.0F, 31.4F},
+                    {"c05_capital_outer_wall_corner_ne", 510, 111, -510, -135.0F, 26.7F},
+                    {"c06_capital_outer_wall_corner_sw", -510, 111, 510, 45.0F, 26.7F},
+                    {"c07_capital_third_wall_gate_n", 0, 99, -412, 180.0F, 27.0F}, {"c08_capital_third_wall_gate_e", 412, 99, 0, -90.0F, 27.0F},
+                    {"c09_capital_third_wall_gate_s", 0, 99, 412, 0.0F, 27.0F}, {"c10_capital_third_wall_gate_w", -412, 99, 0, 90.0F, 27.0F},
+                    {"c11_capital_third_wall_corner_ne", 412, 105, -412, -135.0F, 23.3F},
+                    {"c12_capital_third_wall_corner_sw", -412, 105, 412, 45.0F, 23.3F},
+                    {"c13_capital_second_wall_gate_n", 0, 95, -242, 180.0F, 23.9F}, {"c14_capital_second_wall_gate_s", 0, 95, 242, 0.0F, 23.9F},
+                    {"c15_capital_inner_wall_gate_n", 0, 91, -54, 180.0F, 20.6F}, {"c16_capital_inner_wall_gate_s", 0, 91, 54, 0.0F, 20.6F},
+                    {"c17_capital_turret_battery_w", -463, 84, -35, 95.7F, 44.3F}, {"c18_capital_turret_battery_n", 312, 77, -465, -147.1F, 31.9F},
+                    {"c19_capital_turret_battery_s", 294, 77, 461, -32.9F, 31.9F}, {"c20_capital_turret_redoubt_w", -509, 78, -94, 101.3F, 31.7F},
+                    {"c21_capital_turret_redoubt_e", 509, 78, 98, -78.7F, 31.7F}, {"c22_capital_turret_aa_w", -405, 77, -42, 95.7F, 32.1F},
+                    {"c23_capital_turret_aa_ne", 373, 77, -185, -116.6F, 32.1F}, {"c24_capital_turret_crossfire_w", -601, 78, -23, 92.9F, 32.2F},
+                    {"c25_capital_turret_crossfire_e", 601, 78, 23, -87.1F, 32.2F}, {"c26_capital_turret_casemate_w", -452, 105, -29, 92.9F, 63.2F},
+                    {"c27_capital_roads_nw", -200, 175, -200, 180.0F, 80.0F}, {"c28_capital_roads_e", 380, 175, 0, 180.0F, 80.0F},
+                    {"c29_capital_roads_s", 0, 175, 380, 180.0F, 80.0F}, {"c30_capital_roads_ne", 300, 175, -300, 180.0F, 80.0F}};
+                for (Object[] v : audit) {
+                    int dx = (Integer) v[1], y = (Integer) v[2], dz = (Integer) v[3];
+                    float yaw = (Float) v[4], pitch = (Float) v[5];
+                    String name = (String) v[0];
+                    PLAN.put(at, () -> atCapital(mc, dx, y - 65, dz, yaw, pitch));
+                    PLAN.put(at + 150, () -> audit(mc, name));
+                    PLAN.put(at + 160, () -> shot(mc, name));
+                    at += 170;
+                }
                 Object[][] tour = {
                     {"80_palace_hall", 0, 80, 38, 180F, 6F}, {"81_palace_throne", 0, 81, -15, 180F, 8F},
                     {"82_palace_throne_close", 0, 80, -21, 180F, 4F}, {"83_palace_south_stair", 0, 70, 114, 180F, -4F},
@@ -187,6 +218,26 @@ public final class Look {
                 PLAN.put(at + 160, () -> shot(mc, "79_palace_at_field_ring"));
                 at += 170;
                 PLAN.put(at, () -> king(mc));
+                PLAN.put(at + 5, () -> audit(mc, "throne"));
+                at += 20;
+                // (059c) "the mobs crash the game": every kind of OROR mob, seven at a time on the stage, set on armed
+                // vindicators and zombies with their AI on, the camera on them; what errs or crashes is in the log
+                List<String> kinds = mobKinds();
+                note("mob sweep: " + kinds.size() + " kinds " + kinds);
+                for (int b = 0; b * 7 < kinds.size(); b++) {
+                    List<String> batch = kinds.subList(b * 7, Math.min(kinds.size(), b * 7 + 7));
+                    int nb = b + 1;
+                    PLAN.put(at, () -> mobBatch(mc, batch));
+                    PLAN.put(at + 4, () -> view(mc, 0, 5, -6, 0F, 24F));
+                    for (int k = 20; k <= 300; k += 20) {
+                        PLAN.put(at + k, () -> setOn(mc));
+                    }
+                    PLAN.put(at + 150, () -> shot(mc, String.format(java.util.Locale.ROOT, "m%02d_mobs_a", nb)));
+                    PLAN.put(at + 290, () -> shot(mc, String.format(java.util.Locale.ROOT, "m%02d_mobs_b", nb)));
+                    PLAN.put(at + 300, () -> audit(mc, "mobs " + nb));
+                    at += 320;
+                }
+                PLAN.put(at, () -> clearMobs(mc));
                 PLAN.put(at + 10, () -> finish(mc, "complete (palace only)"));
                 note("palace only: planned to tick " + (at + 10));
             }
@@ -1303,6 +1354,171 @@ public final class Look {
             } catch (Throwable error) {
                 note("capital lookup failed: " + error);
             }
+        });
+    }
+
+    /** (059c) The living OROR kinds (not the placed gear, not projectiles), by name. */
+    private static List<String> mobKinds() {
+        List<String> out = new ArrayList<>();
+        for (var en : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.entrySet()) {
+            net.minecraft.resources.ResourceLocation id = en.getKey().location();
+            if (id.getNamespace().equals("oror_supreme_bosses") && en.getValue().getCategory() != net.minecraft.world.entity.MobCategory.MISC) {
+                out.add(id.getPath());
+            }
+        }
+        Collections.sort(out);
+        return out;
+    }
+
+    /** (059c) The stage cleared, then a batch of OROR mobs in a row with their AI and, facing them, armed vindicators and zombies. */
+    private static void mobBatch(Minecraft mc, List<String> batch) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            clearStageNow(server.overworld());
+            for (int i = 0; i < batch.size(); i++) {
+                command(server, String.format(java.util.Locale.ROOT,
+                    "summon oror_supreme_bosses:%s %.1f %d %.1f {PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"oror_look\",\"oror_look_hero\"]}",
+                    batch.get(i), sx - 9 + i * 3, (int) sy, sz + 8));
+            }
+            for (int i = 0; i < 6; i++) {
+                String foe = i % 2 == 0 ? "vindicator" : "zombie";
+                command(server, String.format(java.util.Locale.ROOT, "summon minecraft:%s %.1f %d %.1f {PersistenceRequired:1b,Rotation:[0f,0f],"
+                    + "Tags:[\"oror_look\",\"oror_look_foe\"],HandItems:[{id:\"minecraft:iron_axe\",count:1},{}]}", foe, sx - 8 + i * 3.2, (int) sy,
+                    sz + 15));
+            }
+            note("mob batch " + batch);
+        });
+    }
+
+    private static void clearStageNow(ServerLevel level) {
+        for (Entity e : level.getEntities((Entity) null, new AABB(sx - 40, sy - 30, sz - 30, sx + 40, sy + 30, sz + 50),
+            x -> !(x instanceof ServerPlayer))) {
+            e.discard();
+        }
+    }
+
+    private static void clearMobs(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> clearStageNow(server.overworld()));
+    }
+
+    /** (059c) The batch's mobs and their foes set on each other, healed, and brought back onto the stage. */
+    private static void setOn(Minecraft mc) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            ServerLevel level = server.overworld();
+            List<net.minecraft.world.entity.Mob> heroes = new ArrayList<>(), foes = new ArrayList<>();
+            for (Entity e : level.getEntities((Entity) null, new AABB(sx - 40, sy - 30, sz - 30, sx + 40, sy + 30, sz + 50),
+                x -> x.getTags().contains("oror_look") && x instanceof net.minecraft.world.entity.Mob)) {
+                (e.getTags().contains("oror_look_foe") ? foes : heroes).add((net.minecraft.world.entity.Mob) e);
+            }
+            for (int i = 0; i < heroes.size(); i++) {
+                net.minecraft.world.entity.Mob h = heroes.get(i);
+                if (Math.abs(h.getX() - sx) > 13 || Math.abs(h.getZ() - (sz + 10)) > 12 || Math.abs(h.getY() - sy) > 8) {
+                    h.teleportTo(sx - 9 + (i % 7) * 3, sy, sz + 8);
+                }
+                if (!foes.isEmpty()) {
+                    net.minecraft.world.entity.Mob f = foes.get(i % foes.size());
+                    h.setTarget(f);
+                    f.setTarget(h);
+                }
+            }
+            for (int i = 0; i < foes.size(); i++) {
+                net.minecraft.world.entity.Mob f = foes.get(i);
+                f.setHealth(f.getMaxHealth());
+                if (Math.abs(f.getX() - sx) > 13 || Math.abs(f.getZ() - (sz + 10)) > 12 || Math.abs(f.getY() - sy) > 8) {
+                    f.teleportTo(sx - 8 + (i % 6) * 3.2, sy, sz + 15);
+                }
+            }
+        });
+    }
+
+    /**
+     * (059c) Where the player is: the capital's chunks within four chunks compared with the template (CitadelIntegrity),
+     * those of them the capital was never built in (no Royal Capital biome at their middle), the server's mean tick time
+     * and the entities within 160 blocks by kind.
+     */
+    private static void audit(Minecraft mc, String label) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            StringBuilder b = new StringBuilder("audit " + label);
+            try {
+                ServerLevel level = server.overworld();
+                ServerPlayer pl = server.getPlayerList().getPlayers().get(0);
+                BlockPos at = pl.blockPosition();
+                b.append(" at ").append(at.toShortString());
+                Class<?> sites = Class.forName("jp.oror.reborn.citadel.CitadelSites");
+                Object site = sites.getMethod("capital").invoke(null);
+                Class<?> siteClass = Class.forName("jp.oror.reborn.citadel.CitadelSites$Site");
+                int chunkX = (Integer) siteClass.getMethod("chunkX").invoke(site), chunkZ = (Integer) siteClass.getMethod("chunkZ").invoke(site);
+                int ground = (Integer) siteClass.getMethod("ground").invoke(site);
+                net.minecraft.world.level.ChunkPos here = new net.minecraft.world.level.ChunkPos(at);
+                List<net.minecraft.world.level.ChunkPos> chunks = new ArrayList<>();
+                List<String> unbuilt = new ArrayList<>();
+                int loaded = 0;
+                for (int dx = -4; dx <= 4; dx++) {
+                    for (int dz = -4; dz <= 4; dz++) {
+                        int cx = here.x + dx, cz = here.z + dz;
+                        int sxx = cx - chunkX - 40, szz = cz - chunkZ - 40;
+                        if (sxx < -40 || sxx >= 40 || szz < -40 || szz >= 40) {
+                            continue;
+                        }
+                        net.minecraft.world.level.chunk.LevelChunk c = level.getChunkSource().getChunkNow(cx, cz);
+                        if (c == null) {
+                            continue;
+                        }
+                        loaded++;
+                        chunks.add(new net.minecraft.world.level.ChunkPos(cx, cz));
+                        var biome = level.getBiome(new BlockPos(cx * 16 + 8, ground + 1, cz * 16 + 8));
+                        if (!biome.unwrapKey().map(k -> k.location().toString().equals("oror_supreme_bosses:royal_capital")).orElse(false)) {
+                            unbuilt.add(sxx + "," + szz + "=" + biome.unwrapKey().map(k -> k.location().getPath()).orElse("?"));
+                        }
+                    }
+                }
+                b.append(" chunks ").append(loaded).append(" unbuilt ").append(unbuilt.size()).append(unbuilt.isEmpty() ? "" : " " + unbuilt);
+                Method scan = Class.forName("jp.oror.reborn.citadel.CitadelIntegrity").getMethod("scan", ServerLevel.class, siteClass, List.class);
+                String result = (String) scan.invoke(null, level, site, chunks);
+                b.append(" integrity ").append(result.length() > 1500 ? result.substring(0, 1500) : result);
+            } catch (Throwable error) {
+                b.append(" failed: ").append(error);
+            }
+            try {
+                long[] times;
+                try {
+                    times = (long[]) net.minecraft.server.MinecraftServer.class.getMethod("getTickTimesNanos").invoke(server);
+                } catch (NoSuchMethodException none) {
+                    java.lang.reflect.Field f = net.minecraft.server.MinecraftServer.class.getDeclaredField("tickTimesNanos");
+                    f.setAccessible(true);
+                    times = (long[]) f.get(server);
+                }
+                long sum = 0, max = 0;
+                for (long v : times) {
+                    sum += v;
+                    max = Math.max(max, v);
+                }
+                b.append(String.format(java.util.Locale.ROOT, " mspt %.1f max %.1f", sum / 1e6 / times.length, max / 1e6));
+            } catch (Throwable error) {
+                b.append(" mspt ?");
+            }
+            try {
+                ServerLevel level = server.overworld();
+                ServerPlayer pl = server.getPlayerList().getPlayers().get(0);
+                java.util.Map<String, Integer> kinds = new java.util.HashMap<>();
+                int all = 0, near = 0;
+                for (Entity e : level.getAllEntities()) {
+                    all++;
+                    if (e.distanceToSqr(pl) < 160 * 160) {
+                        near++;
+                        kinds.merge(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString(), 1, Integer::sum);
+                    }
+                }
+                List<java.util.Map.Entry<String, Integer>> top = new ArrayList<>(kinds.entrySet());
+                top.sort((x, y) -> y.getValue() - x.getValue());
+                b.append(" entities ").append(all).append(" near ").append(near).append(' ').append(top.subList(0, Math.min(10, top.size())));
+            } catch (Throwable error) {
+                b.append(" entities ?");
+            }
+            note(b.toString());
         });
     }
 
