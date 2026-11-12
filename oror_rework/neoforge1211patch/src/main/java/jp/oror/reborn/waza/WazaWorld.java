@@ -21,6 +21,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -65,7 +66,7 @@ public final class WazaWorld {
         public final int kind;
         public final WazaEngine.Cast cast;
         public final Waza w;
-        public final SupremeEntity owner;
+        public final Mob owner;
         public final ServerLevel level;
         public Vec3 pos;
         public Vec3 dir = Vec3.ZERO;
@@ -192,7 +193,7 @@ public final class WazaWorld {
             LivingEntity hit = null;
             double best = Double.MAX_VALUE;
             AABB sweep = new AABB(this.pos, next).inflate(this.radius + 1);
-            for (LivingEntity e : this.level.getEntitiesOfClass(LivingEntity.class, sweep, x -> x != this.owner && this.owner.validEnemy(x))) {
+            for (LivingEntity e : this.level.getEntitiesOfClass(LivingEntity.class, sweep, x -> x != this.owner && Casters.validEnemy(this.owner, x))) {
                 var clip = e.getBoundingBox().inflate(this.radius).clip(this.pos, next);
                 if (clip.isPresent()) {
                     double d = clip.get().distanceToSqr(this.pos);
@@ -334,7 +335,7 @@ public final class WazaWorld {
             this.stage(s);
             if (a % 10 == 0 && this.radius > 0) {
                 for (LivingEntity e : this.level.getEntitiesOfClass(LivingEntity.class, new AABB(this.pos, this.pos).inflate(this.radius, 2.5, this.radius),
-                    x -> x != this.owner && this.owner.validEnemy(x))) {
+                    x -> x != this.owner && Casters.validEnemy(this.owner, x))) {
                     WazaActs.growthTouch(this, e);
                 }
             }
@@ -478,7 +479,7 @@ public final class WazaWorld {
      * Gives a status. The same status again: the stronger stays; as strong, the later end; a weaker one does not
      * replace a stronger (the design's 再付与・重複の優先順位). Returns whether it took.
      */
-    public static boolean status(LivingEntity t, String effect, int strength, int ticks, SupremeEntity owner, Runnable apply, Runnable undo) {
+    public static boolean status(LivingEntity t, String effect, int strength, int ticks, Mob owner, Runnable apply, Runnable undo) {
         long until = t.level().getGameTime() + ticks;
         Map<String, Status> m = STATUS.computeIfAbsent(t.getUUID(), k -> new HashMap<>());
         Status was = m.get(effect);
@@ -540,7 +541,7 @@ public final class WazaWorld {
     // ------------------------------------------------------------------------------------------------- curses' marks
 
     public static final class Mark {
-        public final SupremeEntity owner;
+        public final Mob owner;
         public final Waza w;
         public final String trigger;
         public int stacks;
@@ -549,7 +550,7 @@ public final class WazaWorld {
         Vec3 lastPos;
         double walked;
 
-        Mark(SupremeEntity owner, Waza w, String trigger, long until, boolean removable, Vec3 at) {
+        Mark(Mob owner, Waza w, String trigger, long until, boolean removable, Vec3 at) {
             this.owner = owner;
             this.w = w;
             this.trigger = trigger;
@@ -562,7 +563,7 @@ public final class WazaWorld {
     static final Map<UUID, List<Mark>> MARKS = new HashMap<>();
 
     /** Lays a curse's mark (or one more stack of it); returns its stacks. */
-    static int mark(SupremeEntity owner, Waza w, LivingEntity t) {
+    static int mark(Mob owner, Waza w, LivingEntity t) {
         List<Mark> l = MARKS.computeIfAbsent(t.getUUID(), k -> new ArrayList<>());
         Mark m = l.stream().filter(x -> x.w == w && x.owner == owner).findFirst().orElse(null);
         long now = t.level().getGameTime();
@@ -641,7 +642,7 @@ public final class WazaWorld {
         return best == null ? q.peekFirst() : best;
     }
 
-    static boolean betterPast(SupremeEntity b, float by) {
+    static boolean betterPast(Mob b, float by) {
         ArrayDeque<Snap> q = HISTORY.get(b.getId());
         if (q == null) {
             return false;
@@ -674,7 +675,7 @@ public final class WazaWorld {
         return "other";
     }
 
-    public static void observe(SupremeEntity b, String tag, int n) {
+    public static void observe(Mob b, String tag, int n) {
         SEEN.computeIfAbsent(b.getId(), k -> new HashMap<>()).merge(tag, n, Integer::sum);
     }
 
@@ -701,10 +702,10 @@ public final class WazaWorld {
 
     /** What the character has seen of each kind: its own sightings, and its combat memory (which keeps even the blows a
      * lore-bound body takes without the usual damage being dealt). */
-    static Map<String, Integer> seenOf(SupremeEntity b) {
+    static Map<String, Integer> seenOf(Mob b) {
         Map<String, Integer> all = new HashMap<>(SEEN.getOrDefault(b.getId(), Map.of()));
         try {
-            for (Map.Entry<String, Integer> e : b.memory.entries().entrySet()) {
+            for (Map.Entry<String, Integer> e : Casters.memory(b).entrySet()) {
                 all.merge(tagOf(e.getKey()), e.getValue(), Math::max);
             }
         } catch (RuntimeException ignored) {
@@ -713,7 +714,7 @@ public final class WazaWorld {
     }
 
     /** A kind of blow taken at least twice and not yet answered (null: nothing to learn yet). */
-    static String observedTag(SupremeEntity b) {
+    static String observedTag(Mob b) {
         Map<String, Integer> m = seenOf(b);
         if (m.isEmpty()) {
             return null;
@@ -725,16 +726,16 @@ public final class WazaWorld {
     }
 
     /** For the CI check: what a character has seen and learned, forgotten. */
-    static void forgetLearning(SupremeEntity b) {
+    static void forgetLearning(Mob b) {
         SEEN.remove(b.getId());
         LEARNED.remove(b.getId());
     }
 
-    static void learn(SupremeEntity b, String tag, int ticks) {
+    static void learn(Mob b, String tag, int ticks) {
         LEARNED.computeIfAbsent(b.getId(), k -> new HashMap<>()).put(tag, b.level().getGameTime() + ticks);
     }
 
-    public static boolean learned(SupremeEntity b, String tag) {
+    public static boolean learned(Mob b, String tag) {
         Map<String, Long> l = LEARNED.get(b.getId());
         return l != null && l.getOrDefault(tag, 0L) > b.level().getGameTime();
     }
@@ -743,7 +744,7 @@ public final class WazaWorld {
 
     public static final class Contract {
         public final int id;
-        public final SupremeEntity owner;
+        public final Mob owner;
         public final UUID player;
         /** the player as it was offered (a player who logged out and back in is found again by its id) */
         final ServerPlayer offeredTo;
@@ -753,7 +754,7 @@ public final class WazaWorld {
         public boolean paid;
         public long payAt = -1;
 
-        Contract(int id, SupremeEntity owner, ServerPlayer player, Waza w, long expires) {
+        Contract(int id, Mob owner, ServerPlayer player, Waza w, long expires) {
             this.id = id;
             this.owner = owner;
             this.player = player.getUUID();
@@ -766,7 +767,7 @@ public final class WazaWorld {
     static final Map<Integer, Contract> CONTRACTS = new LinkedHashMap<>();
     private static int nextContract = 1;
 
-    static Contract offer(SupremeEntity owner, Waza w, ServerPlayer p, String benefit, String cost) {
+    static Contract offer(Mob owner, Waza w, ServerPlayer p, String benefit, String cost) {
         Contract c = new Contract(nextContract++, owner, p, w, owner.level().getGameTime() + 400);
         CONTRACTS.put(c.id, c);
         WazaNet.toPlayer(p, new WazaNet.Offer(c.id, w.index(), owner.getId(), benefit, cost, 20));
@@ -794,7 +795,7 @@ public final class WazaWorld {
         return p != null ? p : c.offeredTo != null && !c.offeredTo.isRemoved() ? c.offeredTo : null;
     }
 
-    public static List<Contract> contracts(SupremeEntity owner) {
+    public static List<Contract> contracts(Mob owner) {
         return CONTRACTS.values().stream().filter(c -> c.owner == owner).toList();
     }
 
@@ -803,13 +804,13 @@ public final class WazaWorld {
     private static final Map<UUID, Long> SUMMONED = new HashMap<>();
     private static final Map<UUID, Integer> SUMMONER = new HashMap<>();
 
-    static void summoned(SupremeEntity b, FamiliarEntity f, int life) {
+    static void summoned(Mob b, Mob f, int life) {
         f.addTag("oror_waza");
         SUMMONED.put(f.getUUID(), b.level().getGameTime() + life);
         SUMMONER.put(f.getUUID(), b.getId());
     }
 
-    public static int summons(SupremeEntity b) {
+    public static int summons(Mob b) {
         int n = 0;
         for (Map.Entry<UUID, Integer> e : SUMMONER.entrySet()) {
             if (e.getValue() == b.getId() && b.level() instanceof ServerLevel sl && sl.getEntity(e.getKey()) != null) {
@@ -819,11 +820,11 @@ public final class WazaWorld {
         return n;
     }
 
-    public static List<FamiliarEntity> summonsOf(SupremeEntity b) {
-        List<FamiliarEntity> l = new ArrayList<>();
+    public static List<Mob> summonsOf(Mob b) {
+        List<Mob> l = new ArrayList<>();
         if (b.level() instanceof ServerLevel sl) {
             for (Map.Entry<UUID, Integer> e : SUMMONER.entrySet()) {
-                if (e.getValue() == b.getId() && sl.getEntity(e.getKey()) instanceof FamiliarEntity f && f.isAlive()) {
+                if (e.getValue() == b.getId() && sl.getEntity(e.getKey()) instanceof Mob f && f.isAlive()) {
                     l.add(f);
                 }
             }
@@ -831,7 +832,7 @@ public final class WazaWorld {
         return l;
     }
 
-    public static int devices(SupremeEntity b) {
+    public static int devices(Mob b) {
         return (int) THINGS.values().stream().filter(t -> t.owner == b && t.kind == DEVICE).count();
     }
 
@@ -854,7 +855,7 @@ public final class WazaWorld {
         }
         if (now % 5 == 0) {
             // the past, for rewinding: the characters and whoever they fight
-            for (SupremeEntity b : WazaEngine.casters(sl)) {
+            for (Mob b : WazaEngine.casters(sl)) {
                 record(b, now);
                 if (b.getTarget() != null) {
                     record(b.getTarget(), now);
@@ -913,7 +914,7 @@ public final class WazaWorld {
             Map.Entry<UUID, Long> en = it.next();
             Entity f = sl.getEntity(en.getKey());
             Integer owner = SUMMONER.get(en.getKey());
-            boolean ownerGone = owner == null || !(sl.getEntity(owner) instanceof SupremeEntity s) || !s.isAlive();
+            boolean ownerGone = owner == null || !(sl.getEntity(owner) instanceof Mob s) || !s.isAlive();
             if (f != null && (now >= en.getValue() || ownerGone)) {
                 f.discard();
             }
@@ -942,7 +943,7 @@ public final class WazaWorld {
     }
 
     /** The owner died or left: its things, its summons, its marks' future and its contracts' claims go with it. */
-    static void ownerGone(SupremeEntity b) {
+    static void ownerGone(Mob b) {
         for (Thing t : new ArrayList<>(THINGS.values())) {
             if (t.owner == b) {
                 remove(t);

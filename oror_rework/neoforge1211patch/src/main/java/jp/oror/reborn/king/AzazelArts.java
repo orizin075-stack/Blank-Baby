@@ -93,6 +93,16 @@ public final class AzazelArts {
         return null;
     }
 
+    /** (059c) For the technique engine (Casters): he or his likeness. */
+    public static boolean isAzazel(LivingEntity e) {
+        return azazel(e);
+    }
+
+    /** (059c) For the technique engine (Casters): one he fights. */
+    public static boolean isFoe(Mob az, LivingEntity e) {
+        return foe(az, e);
+    }
+
     static boolean azazel(LivingEntity e) {
         return e instanceof Mob m && m.getPersistentData().getBoolean(RebelLord.LORD);
     }
@@ -152,12 +162,20 @@ public final class AzazelArts {
     /** Every quarter second: when he has a foe and is not at an art, one that fits the distance and is ready. */
     @SubscribeEvent
     public static void tick(EntityTickEvent.Post e) {
-        if (!(e.getEntity() instanceof Mob az) || !(az.level() instanceof ServerLevel sl) || az.tickCount % 5 != 0 || !azazel(az)
-            || !az.isAlive() || az.isNoAi()) {
+        if (!(e.getEntity() instanceof Mob az) || !(az.level() instanceof ServerLevel sl) || !azazel(az) || !az.isAlive()) {
             return;
         }
         long now = sl.getGameTime();
         CompoundTag d = az.getPersistentData();
+        // (059c) his V20 actions (04_azazel.md: his second form's 14, his third's 21 once half his life is gone;
+        // WazaEngine.drive): one under way goes on and his own arts wait; a new one may begin every other two and a
+        // half seconds while no art of his is under way
+        if (jp.oror.reborn.waza.WazaEngine.drive(az, !az.isNoAi() && now >= d.getLong(BUSY) && (now / 50) % 2 == 0)) {
+            return;
+        }
+        if (az.tickCount % 5 != 0 || az.isNoAi()) {
+            return;
+        }
         LivingEntity t = az.getTarget();
         if (now < d.getLong(BUSY) || now < d.getLong(NEXT) || t == null || !t.isAlive() || !foe(az, t) || t.distanceTo(az) > 40) {
             return;

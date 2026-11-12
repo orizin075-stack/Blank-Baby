@@ -132,6 +132,14 @@ public final class KingRig extends RigModel<RoyalMob> {
             add("arm_l", h[2], 0, 0);
             add("fore_l", h[3], 0, 0);
         }
+        // (059c) one of his form's V20 actions (Casters: king1..king4), its own keyframed motion over the stance
+        jp.oror.reborn.waza.client.WazaClient.Play waza = jp.oror.reborn.waza.client.WazaClient.playing(e.getId());
+        if (waza != null) {
+            float time = e.level().getGameTime() - waza.start() + (age - (float) ((int) age));
+            if (time >= 0 && time <= waza.w().length()) {
+                jp.oror.reborn.show.WazaPoses.apply(this, waza.w(), time, waza.seed());
+            }
+        }
         // the ruin
         if (this.broken) {
             float ruin = KingLook.ruin(e);

@@ -49,12 +49,12 @@ final class WazaActs {
     // ------------------------------------------------------------------------------------------------------- numbers
 
     /** The technique's whole damage (all its hits together). */
-    static float whole(SupremeEntity b, Waza w) {
-        return (float) (b.getAttributeValue(Attributes.ATTACK_DAMAGE) * RebornConfig.DAMAGE.get() * TIER_DAMAGE[w.tier()]);
+    static float whole(Mob b, Waza w) {
+        return Casters.whole(b, w, TIER_DAMAGE[w.tier()]);
     }
 
     /** One hit's share. */
-    static float share(SupremeEntity b, Waza w) {
+    static float share(Mob b, Waza w) {
         return whole(b, w) / Math.max(1, w.hits().length);
     }
 
@@ -67,9 +67,9 @@ final class WazaActs {
 
     /** A blow from the technique: true when it reached the body (the damage listener saw it). */
     static boolean hurt(WazaEngine.Cast c, LivingEntity t, float amount) {
-        SupremeEntity b = c.b;
-        if (t == b || !b.validEnemy(t) || amount <= 0) {
-            c.note("refused:" + (t == b ? "self" : !t.isAlive() ? "dead" : b.ally(t) ? "ally" : "invalid"));
+        Mob b = c.b;
+        if (t == b || !Casters.validEnemy(b, t) || amount <= 0) {
+            c.note("refused:" + (t == b ? "self" : !t.isAlive() ? "dead" : Casters.ally(b, t) ? "ally" : "invalid"));
             return false;
         }
         int inv = t.invulnerableTime;
@@ -77,7 +77,12 @@ final class WazaActs {
         WazaWorld.lastReached = null;
         striking = true;
         try {
-            LorePowers.strike(b, t, amount, false);
+            if (b instanceof SupremeEntity s) {
+                LorePowers.strike(s, t, amount, false);
+            } else {
+                // (059c) the king's and Azazel's blows as their own deeds deal them
+                t.hurt(c.w.behaviour() == Waza.Behaviour.MELEE ? b.damageSources().mobAttack(b) : b.damageSources().indirectMagic(b, b), amount);
+            }
         } finally {
             striking = false;
         }
@@ -101,21 +106,21 @@ final class WazaActs {
         WazaNet.toWatchers(c.b, new WazaNet.Fx(kind, c.w.index(), at == null ? -1 : at.getId(), x, y, z, a));
     }
 
-    static List<LivingEntity> enemiesNear(SupremeEntity b, Vec3 at, double r) {
+    static List<LivingEntity> enemiesNear(Mob b, Vec3 at, double r) {
         return b.level().getEntitiesOfClass(LivingEntity.class, new AABB(at, at).inflate(r, Math.max(3, r * 0.6), r),
-                e -> e != b && b.validEnemy(e) && e.position().distanceToSqr(at) <= r * r + 4)
+                e -> e != b && Casters.validEnemy(b, e) && e.position().distanceToSqr(at) <= r * r + 4)
             .stream().sorted(Comparator.comparingDouble(e -> e.position().distanceToSqr(at))).limit(24).toList();
     }
 
-    static List<LivingEntity> friendsNear(SupremeEntity b, double r) {
+    static List<LivingEntity> friendsNear(Mob b, double r) {
         List<LivingEntity> l = new ArrayList<>(b.level().getEntitiesOfClass(LivingEntity.class, b.getBoundingBox().inflate(r),
-            e -> e != b && e.isAlive() && b.ally(e) && e != b.getTarget()));
+            e -> e != b && e.isAlive() && Casters.ally(b, e) && e != b.getTarget()));
         l.add(0, b);
         return l;
     }
 
     /** The most hurt friend within reach (itself included), if any is below three quarters of its health. */
-    static LivingEntity neediest(SupremeEntity b, double r) {
+    static LivingEntity neediest(Mob b, double r) {
         return friendsNear(b, Math.max(4, r)).stream().filter(e -> e.getHealth() < e.getMaxHealth() * 0.75F)
             .min(Comparator.comparingDouble(e -> e.getHealth() / Math.max(1, e.getMaxHealth()))).orElse(null);
     }
@@ -123,7 +128,7 @@ final class WazaActs {
     /** The targets of a technique aimed at one enemy but able to reach a few: the target and the next nearest. */
     static List<LivingEntity> targets(WazaEngine.Cast c, double reach) {
         List<LivingEntity> l = new ArrayList<>();
-        if (c.target != null && c.target.isAlive() && c.b.validEnemy(c.target) && c.b.distanceTo(c.target) <= reach + 4) {
+        if (c.target != null && c.target.isAlive() && Casters.validEnemy(c.b, c.target) && c.b.distanceTo(c.target) <= reach + 4) {
             l.add(c.target);
         }
         int more = c.w.count() - 1 + (c.w.tier() >= 2 ? 2 : 0);
@@ -153,7 +158,7 @@ final class WazaActs {
 
     static void telegraphStart(WazaEngine.Cast c) {
         Waza w = c.w;
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         ServerLevel sl = (ServerLevel) b.level();
         Vec3 toward = c.target != null ? c.target.position().subtract(b.position()) : b.getLookAngle();
         c.dir = toward.lengthSqr() < 1e-4 ? b.getLookAngle() : toward.normalize();
@@ -214,7 +219,7 @@ final class WazaActs {
 
     static void begin(WazaEngine.Cast c) {
         Waza w = c.w;
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         ServerLevel sl = (ServerLevel) b.level();
         if (c.target != null) {
             Vec3 d = c.target.position().subtract(b.position());
@@ -278,7 +283,7 @@ final class WazaActs {
     /** One of the technique's hits, at the moment the design gives it. */
     static void event(WazaEngine.Cast c, int i) {
         Waza w = c.w;
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         if (i == 0) {
             selfSupport(c);
         }
@@ -300,9 +305,9 @@ final class WazaActs {
                 }
             }
             case SUMMON -> {
-                List<FamiliarEntity> mine = WazaWorld.summonsOf(b);
+                List<Mob> mine = WazaWorld.summonsOf(b);
                 float each = share(b, w) / Math.max(1, mine.size());
-                for (FamiliarEntity f : mine) {
+                for (Mob f : mine) {
                     LivingEntity t = enemiesNear(b, f.position(), 16).stream().findFirst().orElse(c.target);
                     if (t != null) {
                         Vec3 from = f.getBoundingBox().getCenter();
@@ -356,12 +361,12 @@ final class WazaActs {
     /** The moment a technique without hits does what it does. */
     static void release(WazaEngine.Cast c) {
         Waza w = c.w;
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         selfSupport(c);
         switch (w.behaviour()) {
             case STATUS -> {
                 if (targets(c, Math.max(6, w.range())).isEmpty()) {
-                    c.note("noTarget:" + (c.target == null ? "none" : !c.target.isAlive() ? "dead" : !b.validEnemy(c.target) ? "notEnemy"
+                    c.note("noTarget:" + (c.target == null ? "none" : !c.target.isAlive() ? "dead" : !Casters.validEnemy(b, c.target) ? "notEnemy"
                         : "far " + Math.round(b.distanceTo(c.target))));
                 }
                 for (LivingEntity t : targets(c, Math.max(6, w.range()))) {
@@ -471,14 +476,14 @@ final class WazaActs {
             }
             if (a == h && c.target != null && !c.struck.contains(key + c.target.getId())) {
                 c.note("miss d=" + Math.round(c.b.distanceTo(c.target) * 10) / 10.0 + (c.target.isAlive() ? "" : " dead")
-                    + (c.b.validEnemy(c.target) ? "" : " notEnemy"));
+                    + (Casters.validEnemy(c.b, c.target) ? "" : " notEnemy"));
             }
         }
     }
 
     /** The blade at u (0 to 1 through its swing): from the shoulder to the tip. */
     private static Vec3[] blade(WazaEngine.Cast c, int arc, float u) {
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         // a big body reaches further, and from higher up
         float reach = c.w.range() + b.getBbWidth() * 0.5F + b.getBbHeight() * 0.25F;
         Vec3 fwd = new Vec3(c.dir.x, 0, c.dir.z);
@@ -555,7 +560,7 @@ final class WazaActs {
 
     private static void shoot(WazaEngine.Cast c, int i) {
         Waza w = c.w;
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         ServerLevel sl = (ServerLevel) b.level();
         float dmg = share(b, w);
         if (falls(w)) {
@@ -648,7 +653,7 @@ final class WazaActs {
         float each = hits.length > 0 ? share(c.b, w) : whole(c.b, w) / applications;
         long now = c.b.level().getGameTime();
         for (LivingEntity e : c.b.level().getEntitiesOfClass(LivingEntity.class, new AABB(from, to).inflate(1.5),
-            x -> x != c.b && c.b.validEnemy(x))) {
+            x -> x != c.b && Casters.validEnemy(c.b, x))) {
             if (e.getBoundingBox().inflate(0.5 + w.tier() * 0.25).clip(from, to).isPresent() || e.getBoundingBox().inflate(0.5).contains(from)) {
                 Long last = c.lastBeamHit.get(e.getId());
                 if (blow >= 0 || last == null || now - last >= 8) {
@@ -665,7 +670,7 @@ final class WazaActs {
 
     private static void moveBegin(WazaEngine.Cast c) {
         Waza w = c.w;
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         Vec3 dest = destination(c);
         if (dest == null) {
             c.note("move:no-footing");
@@ -683,7 +688,7 @@ final class WazaActs {
                 b.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 0));
             }
             c.moveTo = null;
-        } else if (w.kind().equals("UP") && !b.spec.airborne()) {
+        } else if (w.kind().equals("UP") && !Casters.airborne(b)) {
             Vec3 d = dest.subtract(was);
             b.setDeltaMovement(d.x * 0.18, 0.75, d.z * 0.18);
             b.hurtMarked = true;
@@ -694,7 +699,7 @@ final class WazaActs {
     }
 
     private static void moveDuring(WazaEngine.Cast c, int a) {
-        if (c.moveTo == null || c.w.kind().equals("UP") && !c.b.spec.airborne()) {
+        if (c.moveTo == null || c.w.kind().equals("UP") && !Casters.airborne(c.b)) {
             return;
         }
         Vec3 d = c.moveTo.subtract(c.b.position());
@@ -707,13 +712,13 @@ final class WazaActs {
         if (v.length() > 1.4) {
             v = v.normalize().scale(1.4);
         }
-        c.b.setDeltaMovement(v.x, c.b.spec.airborne() ? v.y : Math.max(c.b.getDeltaMovement().y, Math.min(0.4, v.y)), v.z);
+        c.b.setDeltaMovement(v.x, Casters.airborne(c.b) ? v.y : Math.max(c.b.getDeltaMovement().y, Math.min(0.4, v.y)), v.z);
         c.b.hurtMarked = true;
     }
 
     /** Where the move goes, checked first: a loaded chunk, inside the border, room for the body, and footing. */
     private static Vec3 destination(WazaEngine.Cast c) {
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         Waza w = c.w;
         LivingEntity t = c.target;
         Vec3 me = b.position();
@@ -728,7 +733,7 @@ final class WazaActs {
             case "BACK" -> me.subtract(flat.scale(step));
             case "TOWARD" -> t != null ? t.position().subtract(flat.scale(gap)) : me.add(flat.scale(step));
             case "SIDE" -> me.add(side.scale(Math.min(step, 6))).add(flat.scale(1.5));
-            case "UP" -> me.add(flat.scale(Math.min(step, 5))).add(0, b.spec.airborne() ? 4 : 0, 0);
+            case "UP" -> me.add(flat.scale(Math.min(step, 5))).add(0, Casters.airborne(b) ? 4 : 0, 0);
             default -> t != null ? t.position().add(flat.yRot((float) ((c.seed % 360) * Mth.DEG_TO_RAD)).scale(3 + (c.seed & 3)))
                 : me.add(side.scale(4));
         };
@@ -749,7 +754,7 @@ final class WazaActs {
         if (!sl.hasChunkAt(p) || !sl.getWorldBorder().isWithinBounds(p) || at.y < sl.getMinBuildHeight() + 1 || at.y > sl.getMaxBuildHeight() - 3) {
             return null;
         }
-        boolean flies = b instanceof SupremeEntity s && (s.spec.airborne() || s.spec.aquatic());
+        boolean flies = b instanceof Mob m && (Casters.airborne(m) || Casters.aquatic(m));
         Vec3 spot = flies ? at : ground(sl, at.add(0, 2, 0));
         if (!flies && sl.getBlockState(BlockPos.containing(spot).below()).getCollisionShape(sl, BlockPos.containing(spot).below()).isEmpty()) {
             return null;
@@ -802,7 +807,7 @@ final class WazaActs {
 
     /** Healing: friends only (itself and its side), never past their health; a ward's excess becomes a small shield. */
     private static void heal(WazaEngine.Cast c) {
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         Waza w = c.w;
         List<LivingEntity> friends = friendsNear(b, Math.max(4, w.range())).stream()
             .sorted(Comparator.comparingDouble(e -> e.getHealth() / Math.max(1, e.getMaxHealth()))).toList();
@@ -811,7 +816,7 @@ final class WazaActs {
             if (n-- <= 0) {
                 break;
             }
-            if (!(f == b || b.ally(f)) || f == b.getTarget()) {
+            if (!(f == b || Casters.ally(b, f)) || f == b.getTarget()) {
                 continue;
             }
             float amount = f.getMaxHealth() * HEAL_SHARE[w.tier()];
@@ -879,7 +884,7 @@ final class WazaActs {
      * a push, a pull or a lift is a push of the body, never a change to the world.
      */
     static void enemyVerb(WazaEngine.Cast c, LivingEntity t, String v, boolean blow) {
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         Waza w = c.w;
         int d = lasting(w);
         int amp = w.tier() >= 2 ? 1 : 0;
@@ -997,7 +1002,7 @@ final class WazaActs {
             }
             case "REFLECT" -> {
                 for (Projectile p : b.level().getEntitiesOfClass(Projectile.class, b.getBoundingBox().inflate(5),
-                    q -> q.getOwner() instanceof LivingEntity o && b.validEnemy(o))) {
+                    q -> q.getOwner() instanceof LivingEntity o && Casters.validEnemy(b, o))) {
                     p.setDeltaMovement(p.getDeltaMovement().scale(-1.2));
                     p.setOwner(b);
                     p.hurtMarked = true;
@@ -1038,8 +1043,8 @@ final class WazaActs {
     /** A body in a field: an enemy is held, slowed, turned over...; a friend is helped. Every second while inside. */
     static void fieldTouch(WazaWorld.Field f, LivingEntity e, boolean entered, boolean second) {
         WazaEngine.Cast c = f.cast;
-        SupremeEntity b = f.owner;
-        if (e != b && b.validEnemy(e)) {
+        Mob b = f.owner;
+        if (e != b && Casters.validEnemy(b, e)) {
             for (String v : f.w.verbs()) {
                 switch (v) {
                     case "BIND", "PULL", "KNOCK", "STOP", "SWAP", "LIFT" -> {
@@ -1062,7 +1067,7 @@ final class WazaActs {
                     }
                 }
             }
-        } else if (e == b || b.ally(e)) {
+        } else if (e == b || Casters.ally(b, e)) {
             if (second) {
                 for (String v : f.w.verbs()) {
                     if (isSupport(v)) {
@@ -1079,14 +1084,14 @@ final class WazaActs {
 
     static void ringPass(WazaWorld.Ring r, LivingEntity e) {
         WazaEngine.Cast c = r.cast;
-        SupremeEntity b = r.owner;
-        if (e != b && b.validEnemy(e)) {
+        Mob b = r.owner;
+        if (e != b && Casters.validEnemy(b, e)) {
             hurt(c, e, r.damage);
             List<String> vs = r.w.verbs().stream().filter(v -> !isSupport(v)).toList();
             for (String v : vs.isEmpty() ? List.of("KNOCK") : vs) {
                 enemyVerb(c, e, v, true);
             }
-        } else if (e == b || b.ally(e)) {
+        } else if (e == b || Casters.ally(b, e)) {
             for (String v : r.w.verbs()) {
                 if (isSupport(v)) {
                     support(c, e, v);
@@ -1110,7 +1115,7 @@ final class WazaActs {
     // ------------------------------------------------------------------------------------------------------ summons
 
     private static void summon(WazaEngine.Cast c) {
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         ServerLevel sl = (ServerLevel) b.level();
         Waza w = c.w;
         int style;
@@ -1120,18 +1125,11 @@ final class WazaActs {
             style = 1;
         }
         int n = Math.min(4, Math.min(w.count(), 2) + w.tier() / 2);
-        java.util.Set<java.util.UUID> before = new java.util.HashSet<>();
-        for (FamiliarEntity f : sl.getEntitiesOfClass(FamiliarEntity.class, b.getBoundingBox().inflate(16))) {
-            before.add(f.getUUID());
-        }
-        FamiliarEntity.create(b, sl, style, n);
         int made = 0;
-        for (FamiliarEntity f : sl.getEntitiesOfClass(FamiliarEntity.class, b.getBoundingBox().inflate(16))) {
-            if (!before.contains(f.getUUID()) && b.getUUID().equals(f.creator)) {
-                WazaWorld.summoned(b, f, 200 + 100 * w.tier());
-                fx(c, 11, f, f.getX(), f.getY() + 0.5, f.getZ(), 0);
-                made++;
-            }
+        for (Mob f : Casters.summon(b, sl, style, n)) {
+            WazaWorld.summoned(b, f, 200 + 100 * w.tier());
+            fx(c, 11, f, f.getX(), f.getY() + 0.5, f.getZ(), 0);
+            made++;
         }
         c.note("summoned:" + made);
     }
@@ -1140,7 +1138,7 @@ final class WazaActs {
 
     static void deviceWork(WazaWorld.Device d, int a) {
         WazaEngine.Cast c = d.cast;
-        SupremeEntity b = d.owner;
+        Mob b = d.owner;
         Waza w = d.w;
         switch (d.what) {
             case "TURRET" -> {
@@ -1155,7 +1153,7 @@ final class WazaActs {
             }
             case "WALL" -> {
                 for (Projectile p : b.level().getEntitiesOfClass(Projectile.class, new AABB(d.pos, d.pos).inflate(3),
-                    q -> q.getOwner() instanceof LivingEntity o && b.validEnemy(o))) {
+                    q -> q.getOwner() instanceof LivingEntity o && Casters.validEnemy(b, o))) {
                     p.discard();
                 }
                 if (a % 20 == 0) {
@@ -1199,7 +1197,7 @@ final class WazaActs {
     // ------------------------------------------------------------------------------------------------------- rewind
 
     private static void rewind(WazaEngine.Cast c) {
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         Waza w = c.w;
         int back = 40 + 20 * w.tier();
         if (w.kind().equals("ENEMY") && c.target != null) {
@@ -1239,7 +1237,7 @@ final class WazaActs {
     // -------------------------------------------------------------------------------------------------------- learning
 
     private static void adapt(WazaEngine.Cast c) {
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         Waza w = c.w;
         String tag = WazaWorld.observedTag(b);
         if (tag != null) {
@@ -1272,7 +1270,7 @@ final class WazaActs {
     // ------------------------------------------------------------------------------------------------------ contracts
 
     /** The players within reach a contract can be offered to. */
-    static List<ServerPlayer> players(SupremeEntity b, double reach) {
+    static List<ServerPlayer> players(Mob b, double reach) {
         List<ServerPlayer> l = new ArrayList<>();
         for (Player p : b.level().getEntitiesOfClass(Player.class, b.getBoundingBox().inflate(reach))) {
             if (p instanceof ServerPlayer sp && !sp.isSpectator()) {
@@ -1287,7 +1285,7 @@ final class WazaActs {
         return l;
     }
 
-    static ServerPlayer pactPartner(SupremeEntity b, Waza w) {
+    static ServerPlayer pactPartner(Mob b, Waza w) {
         long now = b.level().getGameTime();
         for (ServerPlayer sp : players(b, Math.max(6, w.range()))) {
             if (w.kind().equals("COLLECT")) {
@@ -1308,7 +1306,7 @@ final class WazaActs {
      * Whether this player was asked lately: a contract still waiting for the answer, one still owed, or one refused
      * in the last minute (the screen is not pushed on a player again and again).
      */
-    static boolean asked(SupremeEntity b, ServerPlayer sp, long now) {
+    static boolean asked(Mob b, ServerPlayer sp, long now) {
         return WazaWorld.contracts(b).stream().anyMatch(k -> k.player.equals(sp.getUUID())
             && (k.state == 0 || k.state == 1 && !k.paid || k.state == 2 && now - k.expires + 400 < 1200));
     }
@@ -1322,7 +1320,7 @@ final class WazaActs {
     }
 
     private static void pact(WazaEngine.Cast c) {
-        SupremeEntity b = c.b;
+        Mob b = c.b;
         Waza w = c.w;
         double reach = Math.max(6, w.range());
         switch (w.kind()) {
@@ -1396,7 +1394,7 @@ final class WazaActs {
 
     /** A curse's mark goes off: its damage by its stacks, and what the curse carries (a withering, by default). */
     static void curseFires(WazaWorld.Mark m, LivingEntity t) {
-        SupremeEntity b = m.owner;
+        Mob b = m.owner;
         Waza w = m.w;
         WazaEngine.Cast c = WazaEngine.current(b);
         if (c == null || c.w != w) {

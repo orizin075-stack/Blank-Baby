@@ -259,6 +259,14 @@ public final class KingForms {
             }
         }
         KingCourt.hunt(king, sl, phase);
+        // (059c) his form's V20 actions (03_king_4_forms.md: 8, 18, 16 and 22 by form; WazaEngine.drive from the book
+        // Casters gives his form): one under way goes on and his other deeds wait for it; a new one may begin every
+        // other three seconds when he has a foe (the first form's are his calls to his guards and his people)
+        king.getPersistentData().putInt(jp.oror.reborn.waza.Casters.KING_FORM, phase);
+        if (!king.getPersistentData().getBoolean(QUIET) && !KingCinema.playing(king)
+            && jp.oror.reborn.waza.WazaEngine.drive(king, (now / 60) % 2 == 0)) {
+            return;
+        }
         LivingEntity t = king.getTarget();
         if (t == null || !t.isAlive() || !foe(king, t)) {
             return;

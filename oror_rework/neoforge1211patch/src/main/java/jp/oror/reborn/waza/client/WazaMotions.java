@@ -34,15 +34,24 @@ public final class WazaMotions {
         if (all != null) {
             return;
         }
-        Motion[] m = new Motion[984];
-        try (InputStream raw = WazaMotions.class.getResourceAsStream("/assets/oror_supreme_bosses/waza/waza_motions.bin");
-             DataInputStream in = new DataInputStream(new java.io.BufferedInputStream(raw))) {
+        // the 984's motions, then (059c) the king's and Azazel's V20 actions' after them (their indexes go on from 984)
+        Motion[] m = new Motion[jp.oror.reborn.waza.Waza.ALL.size()];
+        read("/assets/oror_supreme_bosses/waza/waza_motions.bin", m, 0);
+        read("/assets/oror_supreme_bosses/waza/waza_royal_motions.bin", m, 984);
+        all = m;
+    }
+
+    private static void read(String path, Motion[] m, int base) {
+        try (InputStream raw = WazaMotions.class.getResourceAsStream(path)) {
+            if (raw == null) {
+                return;
+            }
+            DataInputStream in = new DataInputStream(new java.io.BufferedInputStream(raw));
             byte[] magic = new byte[4];
             in.readFully(magic);
             int n = in.readUnsignedShort();
-            m = new Motion[n];
             for (int i = 0; i < n; i++) {
-                int idx = in.readUnsignedShort();
+                int idx = in.readUnsignedShort() + base;
                 int keys = in.readUnsignedByte();
                 int beat = in.readUnsignedByte();
                 int freq = in.readUnsignedByte();
@@ -63,7 +72,6 @@ public final class WazaMotions {
         } catch (Exception ex) {
             // without the table every technique still runs; the rig keeps its idle
         }
-        all = m;
     }
 
     /** The pose at time (ticks since the technique began), eased between keyframes. */

@@ -82,9 +82,26 @@ public record Waza(int index, String id, String character, int n, String name, i
         Map<String, List<Waza>> by = new HashMap<>();
         Map<String, Waza> ids = new HashMap<>();
         Map<String, String[]> style = new HashMap<>();
-        try (InputStream in = Waza.class.getResourceAsStream("/assets/oror_supreme_bosses/waza/waza984.json")) {
+        load("waza984.json", all, by, ids, style, true);
+        if (all.size() != 984 || by.size() != 41 || by.values().stream().anyMatch(l -> l.size() != 24)) {
+            throw new IllegalStateException("Expected 41 characters with 24 techniques each, got " + all.size() + " in " + by.size());
+        }
+        // (059c) the Villager King's four forms' and Azazel's V20 actions (tools/t984/v20_royal.py), after the 984
+        load("waza_royal.json", all, by, ids, style, false);
+        ALL = Collections.unmodifiableList(all);
+        BY_CHARACTER = Collections.unmodifiableMap(by);
+        BY_ID = Collections.unmodifiableMap(ids);
+        STYLE = Collections.unmodifiableMap(style);
+    }
+
+    private static void load(String file, List<Waza> all, Map<String, List<Waza>> by, Map<String, Waza> ids, Map<String, String[]> style,
+                             boolean required) {
+        try (InputStream in = Waza.class.getResourceAsStream("/assets/oror_supreme_bosses/waza/" + file)) {
             if (in == null) {
-                throw new IllegalStateException("Missing waza984.json");
+                if (!required) {
+                    return;
+                }
+                throw new IllegalStateException("Missing " + file);
             }
             JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
             for (JsonElement c : root.getAsJsonArray("characters")) {
@@ -92,7 +109,7 @@ public record Waza(int index, String id, String character, int n, String name, i
                 style.put(o.get("id").getAsString(), new String[]{o.get("name").getAsString(), o.get("direction").getAsString(),
                     o.get("sound").getAsString(), o.get("shape").getAsString()});
             }
-            int i = 0;
+            int i = all.size();
             for (JsonElement e : root.getAsJsonArray("techniques")) {
                 JsonArray a = e.getAsJsonArray();
                 int[] hits = ints(a.get(11).getAsJsonArray());
@@ -133,20 +150,16 @@ public record Waza(int index, String id, String character, int n, String name, i
                     a.get(4).getAsInt(), b, a.get(6).getAsInt(), a.get(7).getAsInt(), a.get(8).getAsInt(), a.get(9).getAsInt(),
                     a.get(10).getAsFloat(), hits, Collections.unmodifiableList(verbs), a.get(13).getAsString(), a.get(14).getAsInt(),
                     Math.max(1, Math.min(6, a.get(15).getAsInt())), colours, sounds, props, lk, ln, particles, ints(a.get(21).getAsJsonArray()));
+                if (a.size() > 22 && !a.get(22).isJsonNull()) {
+                    Casters.POWER.put(w.id(), a.get(22).getAsFloat());
+                }
                 all.add(w);
                 by.computeIfAbsent(w.character(), k -> new ArrayList<>()).add(w);
                 ids.put(w.id(), w);
             }
         } catch (Exception ex) {
-            throw new IllegalStateException("waza984.json: " + ex, ex);
+            throw new IllegalStateException(file + ": " + ex, ex);
         }
-        if (all.size() != 984 || by.size() != 41 || by.values().stream().anyMatch(l -> l.size() != 24)) {
-            throw new IllegalStateException("Expected 41 characters with 24 techniques each, got " + all.size() + " in " + by.size());
-        }
-        ALL = Collections.unmodifiableList(all);
-        BY_CHARACTER = Collections.unmodifiableMap(by);
-        BY_ID = Collections.unmodifiableMap(ids);
-        STYLE = Collections.unmodifiableMap(style);
     }
 
     private static int[] ints(JsonArray a) {

@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.Vec3;
@@ -45,7 +46,7 @@ public final class WazaEngine {
     /** A technique under way. */
     public static final class Cast {
         public final Waza w;
-        public final SupremeEntity b;
+        public final Mob b;
         public final long start;
         public final long seed;
         public final RandomSource random;
@@ -74,7 +75,7 @@ public final class WazaEngine {
         public final List<Integer> objects = new ArrayList<>();
         public boolean ended;
 
-        Cast(Waza w, SupremeEntity b, LivingEntity target, long start, long seed, boolean forced) {
+        Cast(Waza w, Mob b, LivingEntity target, long start, long seed, boolean forced) {
             this.w = w;
             this.b = b;
             this.target = target;
@@ -109,6 +110,8 @@ public final class WazaEngine {
         long nextAt;
         boolean oldTurn;
         boolean test;
+        /** (059c) the tick its cast was last stepped (drive may be called from more than one place a tick) */
+        long steppedAt = -1;
     }
 
     private static final Map<Integer, Brain> BRAINS = new HashMap<>();
@@ -118,22 +121,22 @@ public final class WazaEngine {
     private WazaEngine() {
     }
 
-    static Brain brain(SupremeEntity b) {
+    static Brain brain(Mob b) {
         return BRAINS.computeIfAbsent(b.getId(), k -> new Brain());
     }
 
     /** The characters in this level that have run (or are running) techniques. */
-    static List<SupremeEntity> casters(ServerLevel sl) {
-        List<SupremeEntity> l = new ArrayList<>();
+    static List<Mob> casters(ServerLevel sl) {
+        List<Mob> l = new ArrayList<>();
         for (int id : BRAINS.keySet()) {
-            if (sl.getEntity(id) instanceof SupremeEntity b && b.isAlive()) {
+            if (sl.getEntity(id) instanceof Mob b && b.isAlive()) {
                 l.add(b);
             }
         }
         return l;
     }
 
-    public static Cast current(SupremeEntity b) {
+    public static Cast current(Mob b) {
         Brain br = BRAINS.get(b.getId());
         return br == null ? null : br.cast;
     }
@@ -198,12 +201,61 @@ public final class WazaEngine {
             br.nextAt = now + 48;
             return;
         }
-        Waza w = choose(b, br, t, now);
+        Waza w = choose(b, br, t, now, mine);
         if (w != null) {
             start(b, br, w, t, now, false);
         } else {
             br.nextAt = now + 10;
         }
+    }
+
+    /**
+     * (059c) The Villager King's and Azazel's V20 actions, from their own ticks (KingForms.tick, AzazelArts.tick), every
+     * tick: an action under way goes on; otherwise, when may (their own deeds are not under way and it is the actions'
+     * turn), one that fits the moment is begun, from the book of the king's present form (Casters.character) or of
+     * Azazel's. True while one runs: their own deeds wait for it.
+     */
+    public static boolean drive(Mob b, boolean may) {
+        if (!(b.level() instanceof ServerLevel sl) || !b.isAlive()) {
+            return false;
+        }
+        Brain br = brain(b);
+        long now = sl.getGameTime();
+        if (br.cast != null) {
+            if (br.steppedAt != now) {
+                br.steppedAt = now;
+                step(br, br.cast, sl, now);
+            }
+            return br.cast != null;
+        }
+        String ch = Casters.character(b);
+        List<Waza> mine = ch == null ? null : Waza.BY_CHARACTER.get(ch);
+        if (mine == null || mine.isEmpty() || !may || br.test || b.isNoAi() || !RebornConfig.EXTRA_ABILITIES.get()) {
+            return false;
+        }
+        LivingEntity t = b.getTarget();
+        if (t == null || !Casters.validEnemy(b, t) || b.distanceToSqr(t) > 48 * 48) {
+            br.engagedAt = -1;
+            return false;
+        }
+        if (br.engagedAt < 0) {
+            br.engagedAt = now;
+        }
+        if (now < br.nextAt) {
+            return false;
+        }
+        Waza w = choose(b, br, t, now, mine);
+        if (w != null) {
+            start(b, br, w, t, now, false);
+            return true;
+        }
+        br.nextAt = now + 10;
+        return false;
+    }
+
+    /** For the CI check (and the king's and Azazel's own): no new technique of the book begins on its own. */
+    public static void hush(Mob b, boolean on) {
+        brain(b).test = on;
     }
 
     /** For the CI check: a character in its yard stays where it was put, but for its own moves. */
@@ -226,8 +278,10 @@ public final class WazaEngine {
     }
 
     /** The old abilities and the big moves wait while a technique is under way. */
-    private static void hold(SupremeEntity b, long now) {
-        b.cooldown = Math.max(b.cooldown, 6);
+    private static void hold(Mob b, long now) {
+        if (b instanceof SupremeEntity s) {
+            s.cooldown = Math.max(s.cooldown, 6);
+        }
         CompoundTag d = b.getPersistentData();
         if (d.getLong("ororMoveNext") < now + 12) {
             d.putLong("ororMoveNext", now + 12);
@@ -235,7 +289,7 @@ public final class WazaEngine {
     }
 
     /** Starts a technique (the CI check calls this with forced = true, which skips the cooldown). */
-    public static Cast start(SupremeEntity b, Waza w, LivingEntity target, boolean forced) {
+    public static Cast start(Mob b, Waza w, LivingEntity target, boolean forced) {
         Brain br = brain(b);
         if (br.cast != null) {
             cancel(b, br, 1);
@@ -243,7 +297,7 @@ public final class WazaEngine {
         return start(b, br, w, target, b.level().getGameTime(), forced);
     }
 
-    private static Cast start(SupremeEntity b, Brain br, Waza w, LivingEntity target, long now, boolean forced) {
+    private static Cast start(Mob b, Brain br, Waza w, LivingEntity target, long now, boolean forced) {
         long seed = b.getRandom().nextLong();
         Cast c = new Cast(w, b, target, now, seed, forced);
         br.cast = c;
@@ -260,7 +314,7 @@ public final class WazaEngine {
         int wu = w.windup(), al = w.activeLength(), rc = w.recovery();
         if (c.target != null && (!c.target.isAlive() || c.target.isRemoved())) {
             LivingEntity t = c.b.getTarget();
-            c.target = t != null && c.b.validEnemy(t) ? t : null;
+            c.target = t != null && Casters.validEnemy(c.b, t) ? t : null;
         }
         if (e < wu) {
             // frozen in the windup: the technique is lost (the opening the design's 対処 points at)
@@ -306,12 +360,12 @@ public final class WazaEngine {
         return Math.min(w.activeLength() - 1, Math.max(1, Math.round(w.active() * 0.3F)));
     }
 
-    private static void finish(SupremeEntity b, Brain br, Cast c, long now) {
+    private static void finish(Mob b, Brain br, Cast c, long now) {
         c.phase = Phase.COOLDOWN;
         c.ended = true;
         WazaActs.finish(c);
         int cd = c.w.cooldown();
-        if (b.lore()) {
+        if (Casters.lore(b)) {
             cd = Math.max(10, cd / 2);
         }
         br.ready[c.w.n()] = now + cd;
@@ -323,13 +377,13 @@ public final class WazaEngine {
             case 1 -> 12;
             default -> 20;
         };
-        br.nextAt = now + (b.lore() ? gap / 2 : gap);
+        br.nextAt = now + (Casters.lore(b) ? gap / 2 : gap);
         LAST.put(b.getId(), c);
         WazaNet.toWatchers(b, new WazaNet.Show(b.getId(), -1, 0, now, -1, 0));
     }
 
     /** Ends the technique under way early (1 cancelled, 2 death, 3 the caster left the world). */
-    static void cancel(SupremeEntity b, Brain br, int reason) {
+    static void cancel(Mob b, Brain br, int reason) {
         Cast c = br.cast;
         if (c == null) {
             return;
@@ -346,7 +400,7 @@ public final class WazaEngine {
 
     @SubscribeEvent
     public static void died(LivingDeathEvent e) {
-        if (e.getEntity() instanceof SupremeEntity b && !b.level().isClientSide) {
+        if (e.getEntity() instanceof Mob b && !b.level().isClientSide && (b instanceof SupremeEntity || BRAINS.containsKey(b.getId()))) {
             Brain br = BRAINS.get(b.getId());
             if (br != null) {
                 cancel(b, br, 2);
@@ -360,7 +414,7 @@ public final class WazaEngine {
         if (e.getLevel().isClientSide()) {
             return;
         }
-        if (e.getEntity() instanceof SupremeEntity b) {
+        if (e.getEntity() instanceof Mob b && (b instanceof SupremeEntity || BRAINS.containsKey(b.getId()))) {
             Brain br = BRAINS.remove(b.getId());
             if (br != null && br.cast != null) {
                 br.cast.ended = true;
@@ -384,13 +438,13 @@ public final class WazaEngine {
 
     // -------------------------------------------------------------------------------------------------------- choosing
 
-    private static Waza choose(SupremeEntity b, Brain br, LivingEntity t, long now) {
-        List<Waza> list = Waza.BY_CHARACTER.get(b.spec.id);
+    private static Waza choose(Mob b, Brain br, LivingEntity t, long now, List<Waza> list) {
+        String ch = Casters.character(b);
         double dist = b.distanceTo(t);
         boolean los = b.hasLineOfSight(t);
         float hp = b.getHealth() / Math.max(1, b.getMaxHealth());
         long battle = now - br.engagedAt;
-        Waza lastW = br.last > 0 ? Waza.of(b.spec.id, br.last) : null;
+        Waza lastW = br.last > 0 ? Waza.of(ch, br.last) : null;
         double total = 0;
         double[] weight = new double[list.size()];
         for (int i = 0; i < list.size(); i++) {
@@ -443,7 +497,7 @@ public final class WazaEngine {
     }
 
     /** How well the technique fits the moment (0: not now). */
-    private static double fitness(SupremeEntity b, Waza w, LivingEntity t, double dist, boolean los, float hp) {
+    private static double fitness(Mob b, Waza w, LivingEntity t, double dist, boolean los, float hp) {
         double reach = w.range() + b.getBbWidth() * 0.5 + t.getBbWidth() * 0.5;
         return switch (w.behaviour()) {
             case MELEE -> dist <= reach + 0.8 ? 1.2 : 0;
@@ -471,7 +525,7 @@ public final class WazaEngine {
     }
 
     /** Being hit, or about to be: hurt a moment ago, the enemy swinging close, or a shot flying at it. */
-    static boolean threatened(SupremeEntity b, LivingEntity t) {
+    static boolean threatened(Mob b, LivingEntity t) {
         if (b.hurtTime > 0 || b.tickCount - b.getLastHurtByMobTimestamp() < 30) {
             return true;
         }

@@ -52,6 +52,15 @@ public final class AzazelRig extends RigModel<Evoker> {
             add("arm_l", -2.5F - bob, 0F, -0.45F);
             add("head", -0.3F, 0F, 0F);
         }
+        // (059c) one of his V20 actions (Casters: azazel2, azazel3), its own keyframed motion
+        jp.oror.reborn.waza.client.WazaClient.Play waza = jp.oror.reborn.waza.client.WazaClient.playing(e.getId());
+        if (waza != null) {
+            float wt = e.level().getGameTime() - waza.start() + (age - (float) ((int) age));
+            if (wt >= 0 && wt <= waza.w().length()) {
+                jp.oror.reborn.show.WazaPoses.apply(this, waza.w(), wt, waza.seed());
+                return;
+            }
+        }
         TechniqueShow.Active show = TechniqueShow.ACTIVE.get(e.getId());
         if (show == null || !show.mechanic().startsWith("MOVE_AZAZEL_")) {
             return;

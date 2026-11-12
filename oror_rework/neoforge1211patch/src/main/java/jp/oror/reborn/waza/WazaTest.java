@@ -107,7 +107,7 @@ public final class WazaTest {
     }
 
     /** The players a character in a yard may offer a contract to (fake players are not in the level's list). */
-    static List<ServerPlayer> signers(SupremeEntity b) {
+    static List<ServerPlayer> signers(net.minecraft.world.entity.Mob b) {
         for (Yard y : YARDS) {
             if (y.b == b && y.agree != null) {
                 return List.of(y.agree, y.refuse);
