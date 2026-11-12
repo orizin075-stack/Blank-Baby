@@ -74,6 +74,9 @@ public final class CiDriver {
                 case "gametests" -> "oror gametests";
                 case "aa" -> "oror aa test";
                 case "villageflight" -> "oror villageflight test";
+                case "swords" -> "oror swords test";
+                case "crew" -> "oror crew test";
+                case "raid" -> "oror raid test";
                 default -> null;
             };
             if (command != null) {
@@ -84,7 +87,7 @@ public final class CiDriver {
             return;
         }
         boolean done = next >= CHECKS.size() && CHECKS.stream().allMatch(CiDriver::finished);
-        if (done || t > 64000) {
+        if (done || t > 82000) {
             LOG.info("SAFE-UNLOAD {}", jp.oror.reborn.safety.EntityUnloads.report());
             LOG.info("SANE-MOVE {}", jp.oror.reborn.safety.SaneMoves.report());
             LOG.info("CI-DONE {\"complete\":{},\"ticks\":{}}", done, t);
@@ -115,6 +118,9 @@ public final class CiDriver {
             case "gametests" -> OrorGameTests.resultLogged;
             case "aa" -> jp.oror.reborn.vehicle.AntiAirTest.resultLogged;
             case "villageflight" -> jp.oror.reborn.VillageFlightTest.resultLogged;
+            case "swords" -> jp.oror.reborn.safety.OwnerlessSwords.testLogged;
+            case "crew" -> jp.oror.reborn.vehicle.CrewTest.resultLogged;
+            case "raid" -> jp.oror.reborn.raid.RaidTest.resultLogged;
             default -> true;
         };
     }

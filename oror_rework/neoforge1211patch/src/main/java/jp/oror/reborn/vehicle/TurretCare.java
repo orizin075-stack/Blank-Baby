@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
  * <ul>
  * <li>is put back where it belongs if it lies below or beside it: the capital's own post for a turret of its kind
  * within three blocks, else its home; the floor under the post is mended first if it is open air;</li>
- * <li>empty for half a minute, takes the nearest idle guard as its gunner; with none about for five minutes, a new
- * guard comes (once in ten minutes at most).</li>
+ * <li>empty for ten seconds, takes the nearest guard as its gunner, a fighting one too (059e); with none about for a
+ * minute, a new guard comes (once in two minutes at most).</li>
  * </ul>
  */
 final class TurretCare {
@@ -136,30 +136,30 @@ final class TurretCare {
         }
         int n = p.getInt("Unmanned") + 1;
         p.putInt("Unmanned", n);
-        if (n < 3) {
-            return;
-        }
+        // (059e, the user: soldiers should get into empty turrets and shoot) the nearest guard takes it after ten
+        // seconds empty, a fighting one too (a fight is when a gun is wanted: before, only an idle guard came, so a
+        // turret stayed empty through every attack); from thirty-two blocks about
         RoyalMob pick = null;
-        double best = 24 * 24;
-        for (RoyalMob m : level.getEntitiesOfClass(RoyalMob.class, v.getBoundingBox().inflate(24, 12, 24),
-            x -> x.isAlive() && x.role() == RoyalRole.GUARD && !x.isPassenger() && !x.isNoAi() && x.getTarget() == null
+        double best = 32 * 32;
+        for (RoyalMob m : level.getEntitiesOfClass(RoyalMob.class, v.getBoundingBox().inflate(32, 16, 32),
+            x -> x.isAlive() && x.role() == RoyalRole.GUARD && !x.isPassenger() && !x.isNoAi()
                 && !x.getPersistentData().contains("OrorMotor"))) {
-            double d = m.distanceToSqr(v);
+            double d = m.distanceToSqr(v) * (m.getTarget() == null ? 1.0 : 0.8);
             if (d < best) {
                 best = d;
                 pick = m;
             }
         }
         long now = level.getGameTime();
-        if (pick == null && n >= 30 && now >= p.getLong("RecrewAt")) {
-            // no guard about for five minutes: one is sent (not again for ten)
+        if (pick == null && n >= 6 && now >= p.getLong("RecrewAt")) {
+            // no guard about for a minute: one is sent (not again for two)
             RoyalMob m = RoyalRegistry.TYPES.get(RoyalRole.GUARD).create(level);
             if (m != null) {
                 m.moveTo(v.getX(), v.getY(), v.getZ(), v.getYRot(), 0F);
                 m.setPersistenceRequired();
                 level.addFreshEntity(m);
                 pick = m;
-                p.putLong("RecrewAt", now + 12000);
+                p.putLong("RecrewAt", now + 2400);
             }
         }
         if (pick != null && pick.startRiding(v, true)) {

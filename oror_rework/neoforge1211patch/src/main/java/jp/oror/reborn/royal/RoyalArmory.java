@@ -25,15 +25,17 @@ import net.minecraft.world.phys.Vec3;
  * <ul>
  * <li>an enemy within four blocks (and not far above or below): the sword and shield, and the royals' guard;</li>
  * <li>an enemy in sight within fifteen blocks: the pistol, kept at seven to fourteen blocks;</li>
- * <li>farther, out of sight, or flying high above: the bow, drawn for a second and loosed with the drop allowed for,
- * kept at eight to twenty-eight blocks.</li>
+ * <li>(059e) farther, in sight, within sixty-four blocks (or flying high): a rifle (Superb Warfare's M4), kept at twelve
+ * to forty-eight blocks;</li>
+ * <li>out of sight, or with no Superb Warfare: the bow, drawn for a second and loosed with the drop allowed for, kept at
+ * eight to twenty-eight blocks.</li>
  * </ul>
- * With no enemy, the sword and shield. A guard under the war's charge order keeps closing in whatever he holds; a
+ * With no enemy, the pistol in hand (059e: the sword and shield before; with no Superb Warfare, still them). A guard under the war's charge order keeps closing in whatever he holds; a
  * guard aboard a machine (a tank, an aircraft, a gun post) is left to it, with his guns as before.
  */
 public final class RoyalArmory {
     enum Arm {
-        MELEE, GUN, BOW
+        MELEE, GUN, RIFLE, BOW
     }
 
     static final class State {
@@ -42,8 +44,8 @@ public final class RoyalArmory {
     }
 
     private static final Map<RoyalMob, State> STATES = new WeakHashMap<>();
-    private static Item pistol;
-    private static boolean looked;
+    private static Item pistol, rifle;
+    private static boolean looked, lookedRifle;
 
     private RoyalArmory() {
     }
@@ -61,6 +63,21 @@ public final class RoyalArmory {
             }
         }
         return pistol;
+    }
+
+    /** (059e) The rifle the guards carry for the long shot (null without Superb Warfare: the bow then). */
+    static Item rifle() {
+        if (!lookedRifle) {
+            lookedRifle = true;
+            for (String id : new String[]{"superbwarfare:m_4", "superbwarfare:ak_47", "superbwarfare:hk_416", "superbwarfare:qbz_95", "superbwarfare:sks"}) {
+                Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
+                if (item instanceof com.atsuishio.superbwarfare.item.gun.GunItem) {
+                    rifle = item;
+                    break;
+                }
+            }
+        }
+        return rifle;
     }
 
     /** The arm a guard holds now (for the checks): melee, gun or bow; "" for a royal who is not a guard. */
@@ -88,7 +105,9 @@ public final class RoyalArmory {
         LivingEntity t = mob.getTarget();
         boolean fighting = t != null && t.isAlive() && mob.canAttack(t) && !(t instanceof Player p && (p.isCreative() || p.isSpectator()));
         Item gun = pistol();
-        Arm want = Arm.MELEE;
+        Item longGun = rifle();
+        // (059e, the user: guards should carry guns) at rest the pistol, not the sword
+        Arm want = gun != null ? Arm.GUN : Arm.MELEE;
         double d = 0;
         if (fighting) {
             d = mob.distanceTo(t);
@@ -100,12 +119,15 @@ public final class RoyalArmory {
                 want = Arm.MELEE;
             } else if (gun != null && sight && d <= (s.arm == Arm.GUN ? 18 : 15) && !(high && d > 10)) {
                 want = Arm.GUN;
+            } else if (longGun != null && sight && d <= (s.arm == Arm.RIFLE ? 72 : 64)) {
+                // (059e) the rifle at range, and against what flies, in place of the bow
+                want = Arm.RIFLE;
             } else {
                 want = Arm.BOW;
             }
         }
         if (want != s.arm && s.swap <= 0) {
-            equip(mob, guns, want, gun);
+            equip(mob, guns, want, want == Arm.RIFLE ? longGun : gun);
             if (s.arm != null) {
                 mob.level().playSound(null, mob.blockPosition(), SoundEvents.ARMOR_EQUIP_IRON.value(), SoundSource.HOSTILE, 0.6F, 1.1F);
             }
@@ -118,7 +140,16 @@ public final class RoyalArmory {
         }
         mob.setAggressive(fighting);
         if (fighting && mob.tickCount % 5 == 0 && s.arm != Arm.MELEE && !RoyalWarOrders.charging(mob)) {
-            keep(mob, t, d, s.arm == Arm.GUN ? 7 : 8, s.arm == Arm.GUN ? 14 : 28);
+            keep(mob, t, d, s.arm == Arm.GUN ? 7 : s.arm == Arm.RIFLE ? 12 : 8, s.arm == Arm.GUN ? 14 : s.arm == Arm.RIFLE ? 48 : 28);
+        }
+        if (s.arm == Arm.RIFLE) {
+            // the rifle, fired as the armed mobs fire Superb Warfare's guns (its own reloads and rate of fire)
+            jp.oror.reborn.MobEquipmentUse.clock(mob);
+            if (fighting && s.swap <= 4 && mob.tickCount % 2 == 0 && mob.getSensing().hasLineOfSight(t) && mob.level() instanceof net.minecraft.server.level.ServerLevel sl) {
+                mob.getLookControl().setLookAt(t, 30F, 30F);
+                jp.oror.reborn.MobEquipmentUse.use(mob, t, sl, "gun");
+            }
+            return "";
         }
         if (s.arm == Arm.GUN) {
             // the half second of drawing the pistol, then his guns shoot it
@@ -141,7 +172,7 @@ public final class RoyalArmory {
                 mob.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
                 mob.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
             }
-            case GUN -> {
+            case GUN, RIFLE -> {
                 if (gun != null) {
                     mob.setItemSlot(EquipmentSlot.MAINHAND, guns.make(gun));
                 }
