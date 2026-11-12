@@ -69,6 +69,16 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * (RoyalGuardTimingMixin); the Indestructible mobs keep their own guard and parry whole again
  * (NightfallEnemyParryWindowMixin, which cut their parry to the guard's first six ticks, is no longer applied). On a
  * dedicated server Epic Fight is now read one method at a time, so its patches are found there too.
+ * <p>
+ * (059e, later) The user: "すべてのモブがパリイを使えるように あときちんとモーションを モブのモーションが機能してなかった".
+ * Every mob that fights now guards: the monsters, the villagers and the golems, wolves and whatever else strikes (an
+ * attack of its own); one with a bow, a crossbow or a gun raises its guard when its foe comes to arm's reach, and meets
+ * blows only, not shots; a villager with no target guards against whoever struck it last. The mobs of Combat Evolution
+ * and Indestructible guard by these rules too whenever their own guard is down (their own, when up, takes the blow as
+ * before). The guard is seen on every mob: its raising is told to the players (TechniqueShow "guard") with each moment,
+ * and GuardPoses draws them all on Minecraft's models (they were drawn only on OROR's characters and the royals); an
+ * Epic Fight humanoid plays Epic Fight's guard hit on a block as on a parry. A mob without the AI (a statue, a test's
+ * target) does not guard.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class MobGuard {
@@ -98,22 +108,54 @@ public final class MobGuard {
     /** Mob types whose Epic Fight patch guards on its own (Combat Evolution, Indestructible). */
     private static final Map<EntityType<?>, Boolean> NATIVE = new HashMap<>();
 
-    /** Whether a mob guards by these rules (players, the royals, and the mobs of the guarding mods do not). */
+    /**
+     * Whether a mob guards by these rules: (059e) every mob that fights (not players, nor the royals, who guard by
+     * their own hand, nor a mob without its AI). The mobs of the guarding mods do too, while their own guard is down.
+     */
     public static boolean guards(LivingEntity e) {
-        if (!(e instanceof Mob m) || m instanceof RoyalMob || !m.isAlive() || m.isNoAi()
-            || m.getMainHandItem().getItem() instanceof net.minecraft.world.item.ProjectileWeaponItem || Guns.held(m.getMainHandItem())) {
-            return false;
-        }
+        return e instanceof Mob m && !(m instanceof RoyalMob) && m.isAlive() && !m.isNoAi() && fighter(m);
+    }
+
+    /** A mob that fights: a monster, a villager, a golem, a mob that turns on whoever wrongs it, or any with an attack. */
+    static boolean fighter(Mob m) {
+        return m instanceof net.minecraft.world.entity.monster.Enemy || m instanceof net.minecraft.world.entity.npc.AbstractVillager
+            || m instanceof net.minecraft.world.entity.animal.AbstractGolem || m instanceof net.minecraft.world.entity.NeutralMob
+            || m.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE);
+    }
+
+    /** A mob that shoots (a bow, a crossbow, a gun): it guards only at arm's reach, and only against blows. */
+    static boolean ranged(Mob m) {
+        ItemStack main = m.getMainHandItem();
+        return main.getItem() instanceof net.minecraft.world.item.ProjectileWeaponItem || Guns.held(main);
+    }
+
+    /** Whether the mob's own mod (Combat Evolution, Indestructible) guards it: then its own guard, while up, takes the blow. */
+    static boolean nativeMob(Mob m) {
         Boolean known = NATIVE.get(m.getType());
         if (known == null) {
             String patch = ModList.get().isLoaded("epicfight") ? Ef.patchClass(m) : "";
             if (patch == null) {
-                return true;
+                return false;
             }
-            known = patch.contains("combat_evolution") || patch.contains("indestructible");
+            known = patch.contains("combat_evolution") || patch.contains("indestructible") || patch.contains("combatevolution");
             NATIVE.put(m.getType(), known);
         }
-        return !known;
+        return known;
+    }
+
+    /** A guarding mod's own guard up now (its patch blocking, or a shield raised the vanilla way). */
+    static boolean nativeGuardUp(Mob m) {
+        return m.isBlocking() || nativeMob(m) && Ef.blocking(m);
+    }
+
+    /** The foe a mob guards against: its target, or (one with none, a villager) whoever struck it in the last five seconds. */
+    static LivingEntity foe(Mob m) {
+        LivingEntity t = m.getTarget();
+        if (t == null || !t.isAlive()) {
+            LivingEntity last = m.getLastHurtByMob();
+            t = last != null && last.isAlive() && m.tickCount - m.getLastHurtByMobTimestamp() < 100 ? last : null;
+        }
+        return t;
     }
 
     static Tier tier(Mob m) {
@@ -162,8 +204,8 @@ public final class MobGuard {
             return;
         }
         Guard g = GUARDS.get(m);
-        LivingEntity t = m.getTarget();
-        if (g == null && (t == null || !t.isAlive())) {
+        LivingEntity t = foe(m);
+        if (g == null && t == null) {
             return;
         }
         if (!guards(m)) {
@@ -187,12 +229,19 @@ public final class MobGuard {
         }
         // (059e, the user: "敵も味方もパリイシステム使わない") against any foe in reach, a player or a mob: the kingdom's
         // soldiers and the mobs they fight guard and parry each other too (053 had it for players' blows only)
-        if (g.delay == 0 && t != null && t.isAlive() && m.distanceToSqr(t) < 25.0 && m.getSensing().hasLineOfSight(t)) {
+        // (059e) one that shoots raises it only when its foe is at arm's reach; one whose own mod's guard is up leaves it to that
+        if (g.delay == 0 && t != null && t.isAlive() && m.distanceToSqr(t) < (ranged(m) ? 12.25 : 25.0) && m.getSensing().hasLineOfSight(t)
+            && !nativeGuardUp(m)) {
             Tier tier = tier(m);
             g.stamina = Math.min(tier.stamina, g.stamina + 0.4F * tier.cycle);
             g.remaining = tier.window;
             g.age = 0;
             g.delay = tier.cycle;
+            // (059e) the guard seen going up (GuardPoses; OROR's characters keep their own idle between their moments)
+            if (!(m instanceof SupremeEntity)) {
+                TechniqueShow.send(m, "guard", 0, 1, tier.window + 2, t.getId());
+                count(m, "OrorGuardShown");
+            }
         }
     }
 
@@ -210,7 +259,7 @@ public final class MobGuard {
         }
         boolean projectile = src.getDirectEntity() instanceof Projectile;
         boolean melee = !projectile && src.getDirectEntity() == attacker;
-        if (!melee && !projectile || !guards(m)) {
+        if (!melee && !projectile || !guards(m) || projectile && ranged(m) || nativeGuardUp(m)) {
             return;
         }
         // (058) a relic's art or technique is no blow a guard can take, nor is any blow on a guard a technique broke
@@ -278,7 +327,9 @@ public final class MobGuard {
             count(m, "OrorBlocks");
             sl.playSound(null, m.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, 0.5F, 1.0F);
             sl.sendParticles(ParticleTypes.ELECTRIC_SPARK, contact.x, contact.y, contact.z, 6, 0.25, 0.2, 0.25, 0.02);
-            show(m, "block", 12, attacker);
+            // (059e) Epic Fight's short guard hit only where the blow is undone: a halved blow plays its own hit (053: a
+            // guard hit on every block left mobs standing in it through a brawl)
+            show(m, e.isCanceled() ? "block" : "block_soft", 12, attacker);
         }
     }
 
@@ -317,12 +368,16 @@ public final class MobGuard {
         d.putInt(key, d.getInt(key) + 1);
     }
 
-    /** The guard's moment, seen: Epic Fight's animation on its humanoids, the pose on OROR's own rigs. */
+    /**
+     * The guard's moment, seen: Epic Fight's animation on its humanoids, the pose on OROR's own rigs and (059e) on every
+     * other mob Minecraft draws (GuardPoses).
+     */
     private static void show(LivingEntity m, String kind, int length, LivingEntity other) {
-        if (ModList.get().isLoaded("epicfight")) {
-            Ef.play(m, kind);
+        if (ModList.get().isLoaded("epicfight") && Ef.play(m, kind)) {
+            count(m, "OrorGuardAnims");
         }
-        TechniqueShow.send(m, kind, 0, 1, length, other == null ? -1 : other.getId());
+        TechniqueShow.send(m, kind.equals("block_soft") ? "block" : kind, 0, 1, length, other == null ? -1 : other.getId());
+        count(m, "OrorGuardShown");
     }
 
     /**
@@ -368,6 +423,16 @@ public final class MobGuard {
         TechniqueShow.send(attacker, "parried", 0, 1, 18, -1);
     }
 
+    /**
+     * (059e) A guard's moment shown on a mob as a real one is (Epic Fight's animation where it animates the mob, the pose
+     * on Minecraft's models and OROR's rigs), without a blow: for the look client's guard scene.
+     */
+    public static boolean demo(LivingEntity m, String kind, int length) {
+        boolean ef = ModList.get().isLoaded("epicfight") && Ef.play(m, kind);
+        TechniqueShow.send(m, kind, 0, 1, length, -1);
+        return ef;
+    }
+
     /** How a mob guards (for the checks): by these rules and its tier, or by its own mod's guard (its patch). */
     public static String describe(Mob m) {
         if (m instanceof RoyalMob) {
@@ -375,13 +440,20 @@ public final class MobGuard {
         }
         String patch = ModList.get().isLoaded("epicfight") ? Ef.patchClass(m) : "";
         patch = patch == null ? "?" : patch.isEmpty() ? "no patch" : patch.substring(patch.lastIndexOf('.') + 1);
-        return (guards(m) ? "oror " + tier(m).name().toLowerCase(java.util.Locale.ROOT) : "native") + " [" + patch + "]";
+        return (guards(m) ? (nativeMob(m) ? "native+oror " : "oror ") + tier(m).name().toLowerCase(java.util.Locale.ROOT)
+            + (ranged(m) ? " ranged" : "") : "none") + " [" + patch + "]";
     }
 
     /** What a mob has guarded (for the checks): parries, blocks, broken guards, and times it was parried. */
     public static String tally(LivingEntity m) {
         CompoundTag d = m.getPersistentData();
         return d.getInt("OrorParries") + "/" + d.getInt("OrorBlocks") + "/" + d.getInt("OrorGuardBreaks") + "/" + d.getInt("OrorParried");
+    }
+
+    /** (059e) How its guard was seen (for the checks): moments told to the players, Epic Fight animations played. */
+    public static String motions(LivingEntity m) {
+        CompoundTag d = m.getPersistentData();
+        return "shown " + d.getInt("OrorGuardShown") + " ef " + d.getInt("OrorGuardAnims");
     }
 
     // ------------------------------------------------------------------------------------------------------- Epic Fight
@@ -436,7 +508,8 @@ public final class MobGuard {
                     }
                 }
                 Class<?> animations = Class.forName("yesman.epicfight.gameasset.Animations");
-                for (String name : new String[]{"LONGSWORD_GUARD_ACTIVE_HIT1", "LONGSWORD_GUARD_ACTIVE_HIT2", "SWORD_GUARD_HIT", "BIPED_COMMON_NEUTRALIZED"}) {
+                for (String name : new String[]{"LONGSWORD_GUARD_ACTIVE_HIT1", "LONGSWORD_GUARD_ACTIVE_HIT2", "SWORD_GUARD_ACTIVE_HIT1",
+                    "SWORD_GUARD_ACTIVE_HIT2", "SWORD_GUARD_HIT", "BIPED_HIT_SHIELD", "BIPED_COMMON_NEUTRALIZED"}) {
                     try {
                         ANIMS.put(name, lk.findStaticGetter(animations, name, animations.getField(name).getType()).invoke());
                     } catch (Throwable ex) {
@@ -496,24 +569,54 @@ public final class MobGuard {
             }
         }
 
-        static void play(LivingEntity m, String kind) {
+        /** Plays the moment's animation on an Epic Fight humanoid; whether one was played. */
+        static boolean play(LivingEntity m, String kind) {
             try {
                 Object p = patch(m);
                 if (p == null || !humanoid.isInstance(p)) {
-                    return;
+                    return false;
                 }
+                boolean shield = shield(m);
+                String[] parries = {"SWORD_GUARD_ACTIVE_HIT1", "LONGSWORD_GUARD_ACTIVE_HIT1", "SWORD_GUARD_ACTIVE_HIT2", "LONGSWORD_GUARD_ACTIVE_HIT2"};
                 Object anim = switch (kind) {
-                    case "parry" -> ANIMS.getOrDefault((alternate++ & 1) == 0 ? "LONGSWORD_GUARD_ACTIVE_HIT1" : "LONGSWORD_GUARD_ACTIVE_HIT2",
-                        ANIMS.get("SWORD_GUARD_HIT"));
+                    case "parry" -> shield && ANIMS.containsKey("BIPED_HIT_SHIELD") ? ANIMS.get("BIPED_HIT_SHIELD")
+                        : ANIMS.getOrDefault(parries[alternate++ & 3], ANIMS.get("SWORD_GUARD_HIT"));
+                    // (059e) a block too, as the blow it took would have been (Epic Fight's short guard hit, not its guard stance)
+                    case "block" -> shield && ANIMS.containsKey("BIPED_HIT_SHIELD") ? ANIMS.get("BIPED_HIT_SHIELD") : ANIMS.get("SWORD_GUARD_HIT");
                     case "break" -> ANIMS.get("SWORD_GUARD_HIT");
                     default -> null;
                 };
                 java.lang.invoke.MethodHandle h = play(anim);
                 if (anim != null && h != null) {
                     h.invoke(p, anim, 0.0F);
+                    return true;
                 }
             } catch (Throwable ex) {
                 // the moment goes unanimated
+            }
+            return false;
+        }
+
+        private static final Map<Class<?>, java.util.Optional<java.lang.invoke.MethodHandle>> BLOCKING = new HashMap<>();
+
+        /** Whether a guarding mod's patch has its guard up (its isBlocking(), where it has one). */
+        static boolean blocking(LivingEntity m) {
+            try {
+                Object p = patch(m);
+                if (p == null) {
+                    return false;
+                }
+                java.lang.invoke.MethodHandle h = BLOCKING.computeIfAbsent(p.getClass(), c -> {
+                    try {
+                        return java.util.Optional.of(java.lang.invoke.MethodHandles.publicLookup().findVirtual(c, "isBlocking",
+                            java.lang.invoke.MethodType.methodType(boolean.class)));
+                    } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+                        return java.util.Optional.empty();
+                    }
+                }).orElse(null);
+                return h != null && (boolean) h.invoke(p);
+            } catch (Throwable ex) {
+                return false;
             }
         }
 

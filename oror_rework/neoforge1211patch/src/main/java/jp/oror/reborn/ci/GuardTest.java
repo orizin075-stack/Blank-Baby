@@ -42,7 +42,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * (052) The guard check, /oror guards test: OROR's guard and parry on mobs that had none (a vindicator with an axe, a
- * wither skeleton with a sword, a bare-handed zombie, a skeleton with a bow, a spider, a piglin brute), each struck from the front by a fake
+ * wither skeleton with a sword, a bare-handed zombie, a skeleton with a bow, a spider, a piglin brute; (059e) a pillager with
+ * a crossbow, a villager with a sword, an iron golem and a wolf, and how each guard was seen), each struck from the front by a fake
  * player every half second for twelve seconds, counting its parries, blocks and broken guards and the tester's being
  * parried; a parried zombie's stagger; then a kingdom guard's weapons against an enemy held at two, ten and twenty-six
  * blocks and twelve blocks up (sword, pistol, bow, bow), what he holds and what he fires; then a village guard with a
@@ -194,10 +195,12 @@ public final class GuardTest {
                     return;
                 }
                 BlockPos a = floor(r.level, r.origin);
+                // (059e) every mob that fights guards now: an archer and a crossbowman at arm's reach, a villager, a golem, a wolf
                 String[][] who = {{"minecraft:vindicator", "iron_axe"}, {"minecraft:wither_skeleton", "stone_sword"}, {"minecraft:zombie", ""},
-                    {"minecraft:skeleton", "bow"}, {"minecraft:spider", ""}, {"minecraft:piglin_brute", "golden_axe"}};
+                    {"minecraft:skeleton", "bow"}, {"minecraft:spider", ""}, {"minecraft:piglin_brute", "golden_axe"}, {"minecraft:pillager", "crossbow"},
+                    {"minecraft:villager", "iron_sword"}, {"minecraft:iron_golem", ""}, {"minecraft:wolf", ""}};
                 for (int i = 0; i < who.length; i++) {
-                    BlockPos spot = a.offset(-15 + i * 8, 0, 0);
+                    BlockPos spot = a.offset(-15 + i * 5, 0, 0);
                     ItemStack held = who[i][1].isEmpty() ? ItemStack.EMPTY
                         : new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(who[i][1])));
                     Mob m = spawn(r, who[i][0], spot, held, 150);
@@ -235,7 +238,7 @@ public final class GuardTest {
                     Map<String, String> tallies = new LinkedHashMap<>();
                     for (Mob m : r.duelists) {
                         tallies.put(BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()).getPath(), MobGuard.describe(m) + " parry/block/break/parried "
-                            + MobGuard.tally(m));
+                            + MobGuard.tally(m) + " " + MobGuard.motions(m));
                     }
                     r.result.put("mobs", tallies);
                     r.result.put("testersParried", r.testers.stream().mapToInt(x -> x.getPersistentData().getInt("OrorParried")).sum());

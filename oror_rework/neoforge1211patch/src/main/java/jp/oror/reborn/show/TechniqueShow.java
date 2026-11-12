@@ -40,7 +40,7 @@ public final class TechniqueShow {
     public record Active(int entity, String character, String mechanic, int seq, int windup, int length, int target, long start) {
     }
 
-    /** kind: "tech", "move:<id>", "end" (a move ended early), or a guard's "parry", "block", "break", "parried". */
+    /** kind: "tech", "move:<id>", "end" (a move ended early), or a guard's "guard" (raised), "parry", "block", "break", "parried". */
     public record Payload(int entity, String kind, int seq, int windup, int length, int target, long start) implements CustomPacketPayload {
         public static final Type<Payload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "technique_show"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Payload> CODEC = StreamCodec.ofMember(Payload::write, Payload::read);
@@ -68,7 +68,9 @@ public final class TechniqueShow {
 
     /** The client's techniques and moves under way, by entity id (written by the network thread's queued work). */
     public static final Map<Integer, Active> ACTIVE = new ConcurrentHashMap<>();
-    /** The client's guard moments under way (parry, block, broken guard, parried), by entity id. */
+    /** (059e) A guard's moments, which any mob is drawn with (GuardPoses), not only the characters and the royals. */
+    public static final java.util.Set<String> GUARD_KINDS = java.util.Set.of("guard", "parry", "block", "break", "parried");
+    /** The client's guard moments under way (guard raised, parry, block, broken guard, parried), by entity id. */
     public static final Map<Integer, Active> REACT = new ConcurrentHashMap<>();
 
     private TechniqueShow() {
@@ -88,6 +90,8 @@ public final class TechniqueShow {
             character = "";
         } else if (e instanceof net.minecraft.world.entity.monster.Evoker && p.kind().startsWith("move:azazel")) {
             character = "azazel";          // (056) Azazel's moves (AzazelArts), drawn by AzazelRig
+        } else if (e instanceof LivingEntity && GUARD_KINDS.contains(p.kind())) {
+            character = "";                // (059e) any mob's guard, drawn by GuardPoses
         } else {
             return;
         }
