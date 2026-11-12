@@ -77,6 +77,7 @@ public final class CiDriver {
                 case "swords" -> "oror swords test";
                 case "crew" -> "oror crew test";
                 case "raid" -> "oror raid test";
+                case "duel" -> "oror duel test";
                 default -> null;
             };
             if (command != null) {
@@ -121,6 +122,7 @@ public final class CiDriver {
             case "swords" -> jp.oror.reborn.safety.OwnerlessSwords.testLogged;
             case "crew" -> jp.oror.reborn.vehicle.CrewTest.resultLogged;
             case "raid" -> jp.oror.reborn.raid.RaidTest.resultLogged;
+            case "duel" -> jp.oror.reborn.duel.DuelTest.resultLogged;
             default -> true;
         };
     }

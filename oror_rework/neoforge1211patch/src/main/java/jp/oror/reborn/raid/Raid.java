@@ -411,6 +411,17 @@ public final class Raid {
         b.setHealth(shown(b, hp, max));
     }
 
+    /** For the CI's checks: the raid health set outright (the raid must be on). */
+    public static void testHealth(SupremeEntity b, float hp) {
+        CompoundTag t = state(b);
+        if (t.getBoolean("On")) {
+            t.putFloat("Hp", Math.max(0F, Math.min(t.getFloat("Max"), hp)));
+            t.putFloat("Guard", 0F);
+            keep(b, t);
+            RECENT.remove(b.getUUID());
+        }
+    }
+
     /** SupremeEntity.immortal(): the raid's last fall is death. */
     public static boolean slainInRaid(SupremeEntity b) {
         return b.getPersistentData().getCompound(KEY).getBoolean("Final");
@@ -455,10 +466,22 @@ public final class Raid {
         if (!(e.getEntity() instanceof SupremeEntity b) || !(b.level() instanceof ServerLevel sl) || !b.isAlive()) {
             return;
         }
-        if (b.tickCount % 10 != 0 || !b.getPersistentData().contains(KEY)) {
+        if (!b.getPersistentData().contains(KEY)) {
             return;
         }
         CompoundTag t = state(b);
+        if (t.getBoolean("Final") && b.getHealth() > 0F) {
+            // its last fall was turned away (Duel Dominion's duel seals the god it defeats; a totem): the raid is over.
+            // Without this a god called back out of its seal would carry its raid's empty health and die at once.
+            b.getPersistentData().remove(KEY);
+            RECENT.remove(b.getUUID());
+            STRIKERS.remove(b.getUUID());
+            LOG.info("RAID cleared: {} lives on after its last fall (sealed or saved)", b.spec.id);
+            return;
+        }
+        if (b.tickCount % 10 != 0) {
+            return;
+        }
         long now = sl.getGameTime();
         float max = t.getFloat("Max");
         if (max <= 0F) {
