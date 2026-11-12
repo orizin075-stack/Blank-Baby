@@ -254,6 +254,12 @@ public final class Look {
             duelScene(mc, t);
             return;
         }
+        if (ONLY.equals("guard") && t >= 240) {
+            // (059e) the user: "すべてのモブがパリイを使えるように きちんとモーションを": ten kinds of mob in two rows of five,
+            // each of a guard's moments (raised, parry, block, broken, parried) shown on all of them at once
+            guardScene(mc, t);
+            return;
+        }
         if (ONLY.equals("relics") && t >= 240) {
             // the stage stands and the player has joined (ticks 2 to 200): the capital's tour and the rest are left out
             if (t == 240) {
@@ -1017,6 +1023,93 @@ public final class Look {
         }
     }
 
+    /** (059e) The mobs of the guard scene: a group of five on the left and five on the right, with what they hold. */
+    private static final String[][] GUARDERS = {
+        {"zombie", "iron_sword", ""}, {"skeleton", "bow", ""}, {"vindicator", "iron_axe", ""}, {"pillager", "crossbow", ""}, {"villager", "iron_sword", ""},
+        {"husk", "iron_sword", "shield"}, {"piglin_brute", "golden_axe", ""}, {"wither_skeleton", "stone_sword", ""}, {"iron_golem", "", ""}, {"wolf", "", ""}};
+    private static final String[] GUARD_MOMENTS = {"none", "guard", "parry", "block", "break", "parried"};
+
+    /**
+     * (059e) Each of a guard's moments on ten kinds of mob (MobGuard.demo: Epic Fight's animation where it animates the
+     * mob, the pose of GuardPoses on Minecraft's models), the left five and the right five each seen from the front.
+     */
+    private static void guardScene(Minecraft mc, int t) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null || mc.player == null) {
+            return;
+        }
+        if (t == 240) {
+            server.execute(() -> {
+                command(server, "time set noon");
+                command(server, "weather clear 1000000");
+                clearStageNow(server.overworld());
+                for (int i = 0; i < GUARDERS.length; i++) {
+                    String[] g = GUARDERS[i];
+                    double x = sx + (i < 5 ? -11 + i * 2.2 : 2.2 + (i - 5) * 2.2);
+                    StringBuilder hands = new StringBuilder("HandItems:[");
+                    hands.append(g[1].isEmpty() ? "{}" : "{id:\"minecraft:" + g[1] + "\",count:1}").append(",")
+                        .append(g[2].isEmpty() ? "{}" : "{id:\"minecraft:" + g[2] + "\",count:1}").append("]");
+                    command(server, String.format(java.util.Locale.ROOT, "summon minecraft:%s %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Invulnerable:1b,"
+                        + "Rotation:[0f,0f],Tags:[\"oror_look\",\"oror_look_guard\"],%s}", g[0], x, (int) sy, sz + 8, hands));
+                }
+                note("guard scene: " + GUARDERS.length + " mobs");
+            });
+            mc.options.hideGui = true;
+            return;
+        }
+        int step = (t - 270) / 60, at = (t - 270) % 60;
+        if (t < 270) {
+            return;
+        }
+        if (step >= GUARD_MOMENTS.length) {
+            if (t == 270 + GUARD_MOMENTS.length * 60 + 10) {
+                finish(mc, "complete (guard only)");
+            }
+            return;
+        }
+        String moment = GUARD_MOMENTS[step];
+        if (at == 0) {
+            view(mc, -6.6, 0.9, 14.0, 180F, 6F);
+        } else if (at == 16 || at == 44) {
+            demoGuard(mc, moment, at == 16);
+        } else if (at == 28) {
+            shot(mc, String.format(java.util.Locale.ROOT, "g%02d_%s_a", step + 1, moment));
+        } else if (at == 30) {
+            view(mc, 6.6, 0.9, 14.0, 180F, 6F);
+        } else if (at == 56) {
+            shot(mc, String.format(java.util.Locale.ROOT, "g%02d_%s_b", step + 1, moment));
+        }
+    }
+
+    /** Every mob of the guard scene shows the moment (forty ticks, for the frame to fall in its held part). */
+    private static void demoGuard(Minecraft mc, String moment, boolean log) {
+        if (moment.equals("none")) {
+            return;
+        }
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            StringBuilder b = new StringBuilder("guard " + moment + ":");
+            try {
+                Class<?> guard = Class.forName("jp.oror.reborn.combat.MobGuard");
+                java.lang.reflect.Method demo = guard.getMethod("demo", LivingEntity.class, String.class, int.class);
+                java.lang.reflect.Method describe = guard.getMethod("describe", net.minecraft.world.entity.Mob.class);
+                for (Entity e : server.overworld().getEntities((Entity) null, new AABB(sx - 20, sy - 4, sz, sx + 20, sy + 6, sz + 16),
+                    x -> x.getTags().contains("oror_look_guard"))) {
+                    if (e instanceof net.minecraft.world.entity.Mob m) {
+                        Object ef = demo.invoke(null, m, moment, 40);
+                        b.append(" ").append(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()).getPath())
+                            .append("=").append(describe.invoke(null, m)).append(Boolean.TRUE.equals(ef) ? " ef" : "");
+                    }
+                }
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                b.append(" error ").append(ex);
+            }
+            if (log) {
+                note(b.toString());
+            }
+        });
+    }
+
     private static void duelScene(Minecraft mc, int t) {
         IntegratedServer server = mc.getSingleplayerServer();
         if (server == null || mc.player == null) {
@@ -1491,6 +1584,11 @@ public final class Look {
             List<net.minecraft.world.entity.Mob> heroes = new ArrayList<>(), foes = new ArrayList<>();
             for (Entity e : level.getEntities((Entity) null, new AABB(sx - 40, sy - 30, sz - 30, sx + 40, sy + 30, sz + 50),
                 x -> x.getTags().contains("oror_look") && x instanceof net.minecraft.world.entity.Mob)) {
+                // (059e) the dead left to fall: a foe killed and then given its health back lay red and flat on the stage
+                // for the rest of the batch (the 059c frames), a corpse that never went
+                if (((net.minecraft.world.entity.Mob) e).isDeadOrDying()) {
+                    continue;
+                }
                 (e.getTags().contains("oror_look_foe") ? foes : heroes).add((net.minecraft.world.entity.Mob) e);
             }
             for (int i = 0; i < heroes.size(); i++) {
