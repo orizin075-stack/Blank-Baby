@@ -64,6 +64,7 @@ jobs:
             rm -rf "$OUT"/crash-reports "$OUT"/result.txt "$OUT"/client-exit.txt
             if [ "$OROR_LOOK_ONLY" = relics ]; then rm -f "$OUT"/7[0-9]_*.jpg "$OUT"/popup_RelicTip.jpg; fi
             if [ "$OROR_LOOK_ONLY" = palace ]; then rm -f "$OUT"/[789][0-9]_palace_*.jpg "$OUT"/c[0-9][0-9]_capital_*.jpg "$OUT"/m[0-9][0-9]_mobs_*.jpg; fi
+            if [ "$OROR_LOOK_ONLY" = duel ]; then rm -f "$OUT"/d[0-9][0-9]_*.jpg; fi
           fi
           mkdir -p "$OUT"
           G=$RUNNER_TEMP/game; mkdir -p $G/mods
@@ -77,6 +78,8 @@ jobs:
           rm -f $G/mods/oror_supreme_bosses-*.jar
           NEW=$(sed -n 's/^release_version=//p' $P/gradle.properties)
           cp $P/out/oror_supreme_bosses-$NEW.jar $G/mods/
+          # (059e) the user's Duel Dominion, as the import zip has it
+          cp $P/user_mods/*.jar $G/mods/
           curl -sSfL -o $G/mods/nightfall.jar "$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["nightfall"]["url"])' $P/pack/install-0.17.23.json)"
           ls $G/mods | wc -l | tee $OUT/mods_count.txt
           ls $G/mods > $OUT/mods.txt

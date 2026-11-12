@@ -248,6 +248,12 @@ public final class Look {
             }
             return;
         }
+        if (ONLY.equals("duel") && t >= 240) {
+            // (059e) the user's Duel Dominion: its items in the hotbar, the grimoire opened as a book (its cover swinging
+            // open, a page turned, an entry chosen) and the reader's pose seen from the front
+            duelScene(mc, t);
+            return;
+        }
         if (ONLY.equals("relics") && t >= 240) {
             // the stage stands and the player has joined (ticks 2 to 200): the capital's tour and the rest are left out
             if (t == 240) {
@@ -1008,6 +1014,76 @@ public final class Look {
                 ((LivingEntity) e).getMainHandItem()));
         } catch (ReflectiveOperationException | RuntimeException ex) {
             note("king form " + phase + ": " + ex);
+        }
+    }
+
+    private static void duelScene(Minecraft mc, int t) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null || mc.player == null) {
+            return;
+        }
+        String name = mc.player.getGameProfile().getName();
+        if (t == 240) {
+            StringBuilder e = new StringBuilder();
+            String[][] seals = {{"minecraft:zombie", "ゾンビ"}, {"minecraft:iron_golem", "アイアンゴーレム"}, {"oror_supreme_bosses:ferdinand", "文明遊匠 フェルディナント"},
+                {"minecraft:allay", "アレイ"}, {"minecraft:enderman", "エンダーマン"}, {"minecraft:wolf", "オオカミ"}, {"minecraft:skeleton", "スケルトン"},
+                {"minecraft:pillager", "ピリジャー"}, {"minecraft:blaze", "ブレイズ"}};
+            for (int i = 0; i < seals.length; i++) {
+                e.append(i == 0 ? "" : ",").append("{EntityId:\"").append(seals[i][0]).append("\",DisplayName:\"").append(seals[i][1])
+                    .append("\",Binding:[I;1,2,3,").append(i).append("],Owner:[I;9,9,9,9],Revision:0L,MobData:{}")
+                    .append(i == 1 ? ",ActiveEntity:[I;5,6,7,8]" : "").append(i == 4 ? ",RevivePending:1b" : "").append("}");
+            }
+            String book = "dueldominion:dominion_grimoire[minecraft:custom_data={Entries:[" + e + "],Selected:0}]";
+            String[] bar = {book, "dueldominion:spirit_effigy", "dueldominion:soul_archive", "dueldominion:bound_hair", "dueldominion:ofuda_healing",
+                "dueldominion:ofuda_calamity", "dueldominion:ofuda_night_parade", "dueldominion:white_glove", "dueldominion:undead_ash"};
+            server.execute(() -> {
+                command(server, "time set noon");
+                command(server, "weather clear 1000000");
+                command(server, "gamemode survival " + name);
+                for (int i = 0; i < bar.length; i++) {
+                    command(server, "item replace entity " + name + " hotbar." + i + " with " + bar[i]);
+                }
+            });
+            note("duel scene: hotbar given");
+        } else if (t == 262) {
+            mc.options.hideGui = false;
+            mc.player.getInventory().selected = 0;
+        } else if (t == 268) {
+            shot(mc, "d01_duel_hotbar");
+        } else if (t == 272) {
+            mc.gameMode.useItem(mc.player, net.minecraft.world.InteractionHand.MAIN_HAND);
+            note("duel scene: grimoire used, screen " + (mc.screen == null ? "none" : mc.screen.getClass().getName()));
+        } else if (t == 275) {
+            shot(mc, "d02_grimoire_opening");
+        } else if (t == 292) {
+            shot(mc, "d03_grimoire_open");
+        } else if (t == 296 && mc.screen != null) {
+            mc.screen.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT, 0, 0);
+        } else if (t == 299) {
+            shot(mc, "d04_grimoire_turning");
+        } else if (t == 310) {
+            shot(mc, "d05_grimoire_page2");
+        } else if (t == 312 && mc.screen != null) {
+            mc.screen.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT, 0, 0);
+        } else if (t == 324 && mc.screen != null) {
+            int w = mc.screen.width, h = mc.screen.height;
+            mc.screen.mouseClicked((w - 256) / 2.0 + 30, (h - 180) / 2.0 - 8 + 7 + 18 + 36 + 12, 0);
+        } else if (t == 328) {
+            shot(mc, "d06_grimoire_chosen");
+        } else if (t == 332) {
+            mc.setScreen(null);
+        } else if (t == 336) {
+            // the reading pose, seen from the front (the book in use, as while it is open)
+            mc.player.startUsingItem(net.minecraft.world.InteractionHand.MAIN_HAND);
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+            mc.options.hideGui = true;
+        } else if (t == 346) {
+            shot(mc, "d07_grimoire_reading_pose");
+        } else if (t == 350) {
+            mc.player.stopUsingItem();
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+        } else if (t == 356) {
+            finish(mc, "complete (duel only)");
         }
     }
 
