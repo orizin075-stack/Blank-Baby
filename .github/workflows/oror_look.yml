@@ -96,6 +96,8 @@ jobs:
         run: |
           G=$RUNNER_TEMP/game
           export LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null
+          # (059c) a flight recording of the game (the user: "very heavy"): where its threads spend their time
+          export JDK_JAVA_OPTIONS="-XX:StartFlightRecording=filename=$RUNNER_TEMP/look.jfr,settings=profile,dumponexit=true,maxsize=400m"
           ( while sleep 15; do
               if ls $G/crash-reports/*.txt > /dev/null 2>&1; then sleep 20; pkill -f forgeclient || pkill java; break; fi
             done ) &
@@ -113,6 +115,11 @@ jobs:
             convert "$f" -resize "$R" -quality 84 "$OUT/$(basename "${f%.png}").jpg"
           done
           cp $G/look/* $OUT/ 2>/dev/null || true
+          if [ -f $RUNNER_TEMP/look.jfr ]; then
+            "$JAVA_HOME/bin/jfr" print --events jdk.ExecutionSample --stack-depth 48 $RUNNER_TEMP/look.jfr > $RUNNER_TEMP/samples.txt 2>/dev/null || true
+            python3 -I $P/tools/jfr_top.py $RUNNER_TEMP/samples.txt > $OUT/jfr_top.txt 2>&1 || true
+            ls -la $RUNNER_TEMP/look.jfr
+          fi
           mkdir -p $OUT/crash-reports; cp $G/crash-reports/* $OUT/crash-reports/ 2>/dev/null || true
           tail -n 200 $RUNNER_TEMP/client.out > $OUT/stdout-tail.txt 2>/dev/null || true
           L=$G/logs/latest.log
