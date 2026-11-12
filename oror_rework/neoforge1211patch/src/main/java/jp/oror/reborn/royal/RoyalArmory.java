@@ -80,7 +80,7 @@ public final class RoyalArmory {
         return rifle;
     }
 
-    /** The arm a guard holds now (for the checks): melee, gun or bow; "" for a royal who is not a guard. */
+    /** The arm a guard holds now (for the checks): melee, gun, rifle or bow; "" for a royal who is not a guard. */
     public static String arm(RoyalMob mob) {
         State s = STATES.get(mob);
         return s == null || s.arm == null ? "" : s.arm.name().toLowerCase(java.util.Locale.ROOT);
@@ -143,13 +143,9 @@ public final class RoyalArmory {
             keep(mob, t, d, s.arm == Arm.GUN ? 7 : s.arm == Arm.RIFLE ? 12 : 8, s.arm == Arm.GUN ? 14 : s.arm == Arm.RIFLE ? 48 : 28);
         }
         if (s.arm == Arm.RIFLE) {
-            // the rifle, fired as the armed mobs fire Superb Warfare's guns (its own reloads and rate of fire)
-            jp.oror.reborn.MobEquipmentUse.clock(mob);
-            if (fighting && s.swap <= 4 && mob.tickCount % 2 == 0 && mob.getSensing().hasLineOfSight(t) && mob.level() instanceof net.minecraft.server.level.ServerLevel sl) {
-                mob.getLookControl().setLookAt(t, 30F, 30F);
-                jp.oror.reborn.MobEquipmentUse.use(mob, t, sl, "gun");
-            }
-            return "";
+            // the rifle, shot by his guns as the pistol is (its reloads and rate of fire), out to 72 blocks
+            // (RoyalGunsLoadoutMixin: his guns' guard range is 18). CI 21: through the armed mobs' gun use it never fired
+            return s.swap > 4 || longGun == null ? "" : BuiltInRegistries.ITEM.getKey(longGun).toString();
         }
         if (s.arm == Arm.GUN) {
             // the half second of drawing the pistol, then his guns shoot it
