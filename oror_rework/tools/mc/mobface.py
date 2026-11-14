@@ -85,6 +85,39 @@ def eye_x(side, c):
     return c if side == 0 else 7 - c
 
 
+def small_eyes(rgb, glow, spec, hair, top_texel, man):
+    """(059g, the user: "目も大きすぎる") eyes four texels wide and three tall: a one-texel lash, two of iris with
+    a single white catchlight; men's a white and an iris pixel under the lash."""
+    iris = spec.get('iris', '#5a3a2a')
+    iris_r = spec.get('heterochromia') or iris
+    lash = C(spec.get('line') or mix(shade(hair, 0.3), '#160c1a', 0.75))
+    shape = spec.get('shape') or spec.get('style', 'normal')
+    for side, ic in ((0, iris), (1, iris_r)):
+        x0 = 2 if side == 0 else 10                         # the eye's four columns
+        dark = C(mix(shade(ic, 0.6), '#1a0c22', 0.2))
+        I = C(ic)
+        y = top_texel
+        if shape in ('closed',):
+            rgb[y + 2, x0:x0 + 4] = lash
+            continue
+        rgb[y, x0:x0 + 4] = lash
+        if shape in ('sharp', 'fierce', 'slit'):
+            rgb[y - 1, (x0 if side == 0 else x0 + 3)] = lash          # the outer corner flicked up
+        if man:
+            rgb[y + 1:y + 3, x0:x0 + 4] = I
+            rgb[y + 1:y + 3, (x0 if side == 0 else x0 + 2):(x0 + 2 if side == 0 else x0 + 4)] = C('#f2f0f6')
+        else:
+            rgb[y + 1, x0:x0 + 4] = dark
+            rgb[y + 2, x0:x0 + 4] = I
+            if shape not in ('calm', 'sad', 'void', 'lowered'):
+                rgb[y + 1, x0 + (1 if side == 0 else 2)] = C('#ffffff')
+        if shape == 'slit':
+            rgb[y + 1:y + 3, x0 + (2 if side == 0 else 1)] = C('#0c0610')
+        if spec.get('glow_eyes'):
+            glow[y + 1:y + 3, x0:x0 + 4, :3] = I
+            glow[y + 1:y + 3, x0:x0 + 4, 3] = 230
+
+
 def face(spec, skin, hair, build='woman', bangs='bangs'):
     """(rgb 16x16x3, glow 16x16x4 or None) for the front of the head."""
     s, T = GF.skin_ramp(skin)
@@ -127,7 +160,8 @@ def face(spec, skin, hair, build='woman', bangs='bangs'):
     lid = T['s2']
     glow_eyes = bool(spec.get('glow_eyes'))
     highlight = spec.get('highlight', True)
-    for side, ic in ((0, iris), (1, iris_r)):
+    small_eyes(rgb, glow, spec, hair, 2 * top + (2 if not man else 0), man)
+    for side, ic in (() if True else ((0, iris), (1, iris_r))):
         light = spec.get('iris2') or '#%02x%02x%02x' % shade(ic, 1.4)
         pal = {
             'L': lash, 'l': lid, 'W': C('#f6f4fa'),
