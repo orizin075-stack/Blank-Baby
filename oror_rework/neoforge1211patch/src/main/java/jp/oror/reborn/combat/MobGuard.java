@@ -203,6 +203,10 @@ public final class MobGuard {
         if (!(e.getEntity() instanceof Mob m) || m.level().isClientSide) {
             return;
         }
+        if (m instanceof RoyalMob r) {
+            royalRaised(r);
+            return;
+        }
         Guard g = GUARDS.get(m);
         LivingEntity t = foe(m);
         if (g == null && t == null) {
@@ -237,12 +241,33 @@ public final class MobGuard {
             g.remaining = tier.window;
             g.age = 0;
             g.delay = tier.cycle;
-            // (059e) the guard seen going up (GuardPoses; OROR's characters keep their own idle between their moments)
-            if (!(m instanceof SupremeEntity)) {
-                TechniqueShow.send(m, "guard", 0, 1, tier.window + 2, t.getId());
-                count(m, "OrorGuardShown");
-            }
+            // (059e) the guard seen going up (GuardPoses; (059f) OROR's characters too, on their own rigs: CharacterModel
+            // leaves it out while a technique of theirs is under way)
+            TechniqueShow.send(m, "guard", 0, 1, tier.window + 2, t.getId());
+            count(m, "OrorGuardShown");
         }
+    }
+
+    private static final Map<RoyalMob, Long> ROYAL_RAISED = new WeakHashMap<>();
+
+    /** (059f) A royal's own guard (RoyalMob.defend's timer) just raised: shown on its rig, as every other mob's is. */
+    private static void royalRaised(RoyalMob r) {
+        if (!(((Object) r) instanceof jp.oror.reborn.mixin.RoyalGuardAccess a)) {
+            return;
+        }
+        int remaining = a.oror$guardRemaining();
+        if (remaining <= 0 || a.oror$guardAge() > 1) {
+            return;
+        }
+        long now = r.level().getGameTime();
+        Long last = ROYAL_RAISED.get(r);
+        if (last != null && now - last < 5) {
+            return;
+        }
+        ROYAL_RAISED.put(r, now);
+        LivingEntity t = r.getTarget();
+        TechniqueShow.send(r, "guard", 0, 1, remaining + 2, t == null ? -1 : t.getId());
+        count(r, "OrorGuardShown");
     }
 
     // ---------------------------------------------------------------------------------------------- meeting the blow
@@ -301,8 +326,7 @@ public final class MobGuard {
             g.stagger = 20;
             m.getNavigation().stop();
             count(m, "OrorGuardBreaks");
-            sl.playSound(null, m.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 0.8F, 0.9F);
-            sl.sendParticles(ParticleTypes.CRIT, m.getX(), m.getEyeY() - 0.3, m.getZ(), 12, 0.35, 0.3, 0.35, 0.15);
+            effects(sl, m, "break", m.getEyePosition().add(0, -0.3, 0), true);
             show(m, "break", 22, attacker);
             return;
         }
@@ -311,9 +335,7 @@ public final class MobGuard {
         if (perfect) {
             e.setCanceled(true);
             count(m, "OrorParries");
-            sl.playSound(null, m.blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 0.5F, 1.8F);
-            sl.sendParticles(ParticleTypes.FLASH, contact.x, contact.y, contact.z, 1, 0, 0, 0, 0);
-            sl.sendParticles(ParticleTypes.CRIT, contact.x, contact.y, contact.z, 10, 0.2, 0.2, 0.2, 0.25);
+            effects(sl, m, "parry", contact, true);
             show(m, "parry", 14, attacker);
             if (melee) {
                 parried(attacker, m.position());
@@ -325,12 +347,63 @@ public final class MobGuard {
                 e.setCanceled(true);
             }
             count(m, "OrorBlocks");
-            sl.playSound(null, m.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, 0.5F, 1.0F);
-            sl.sendParticles(ParticleTypes.ELECTRIC_SPARK, contact.x, contact.y, contact.z, 6, 0.25, 0.2, 0.25, 0.02);
+            effects(sl, m, "block", contact, true);
             // (059e) Epic Fight's short guard hit only where the blow is undone: a halved blow plays its own hit (053: a
             // guard hit on every block left mobs standing in it through a brawl)
             show(m, e.isCanceled() ? "block" : "block_soft", 12, attacker);
         }
+    }
+
+    /**
+     * (059f) A guard's moment heard and seen where the blow met it (contact), the same for every mob, the royals and
+     * OROR's characters included (the user: "パリイの時のエフェクトも確認"):
+     * <ul>
+     * <li>a parry: a bright flash and a ring of steel (the anvil's clang, high), a spray of crits thrown off the blade,
+     * a few sparks and the sweep of the deflecting edge;</li>
+     * <li>a block: the shield's knock, a burst of sparks, a little dust knocked off;</li>
+     * <li>a broken guard: the shield's crack, crits flung all about, a puff of smoke.</li>
+     * </ul>
+     */
+    static void effects(ServerLevel sl, LivingEntity m, String kind, Vec3 contact, boolean sound) {
+        switch (kind) {
+            case "parry" -> {
+                if (sound) {
+                    sl.playSound(null, m.blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 0.5F, 1.8F);
+                    sl.playSound(null, m.blockPosition(), SoundEvents.TRIDENT_HIT, SoundSource.HOSTILE, 0.7F, 1.4F);
+                }
+                sl.sendParticles(ParticleTypes.FLASH, contact.x, contact.y, contact.z, 1, 0, 0, 0, 0);
+                sl.sendParticles(ParticleTypes.CRIT, contact.x, contact.y, contact.z, 14, 0.2, 0.2, 0.2, 0.35);
+                sl.sendParticles(ParticleTypes.ELECTRIC_SPARK, contact.x, contact.y, contact.z, 8, 0.15, 0.15, 0.15, 0.25);
+                sl.sendParticles(ParticleTypes.SWEEP_ATTACK, contact.x, contact.y, contact.z, 1, 0, 0, 0, 0);
+            }
+            case "block" -> {
+                if (sound) {
+                    sl.playSound(null, m.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, 0.6F, 1.0F);
+                }
+                sl.sendParticles(ParticleTypes.ELECTRIC_SPARK, contact.x, contact.y, contact.z, 10, 0.25, 0.2, 0.25, 0.08);
+                sl.sendParticles(ParticleTypes.CRIT, contact.x, contact.y, contact.z, 4, 0.15, 0.15, 0.15, 0.1);
+                sl.sendParticles(ParticleTypes.POOF, contact.x, contact.y - 0.2, contact.z, 2, 0.1, 0.05, 0.1, 0.01);
+            }
+            case "break" -> {
+                if (sound) {
+                    sl.playSound(null, m.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 0.8F, 0.9F);
+                }
+                sl.sendParticles(ParticleTypes.CRIT, contact.x, contact.y, contact.z, 18, 0.35, 0.3, 0.35, 0.2);
+                sl.sendParticles(ParticleTypes.POOF, contact.x, contact.y, contact.z, 6, 0.3, 0.2, 0.3, 0.02);
+            }
+            default -> {
+            }
+        }
+    }
+
+    /** Where a blow met a mob's guard: between its eyes and its foe's chest, or a little before its face. */
+    static Vec3 contact(LivingEntity m, LivingEntity other) {
+        if (other != null) {
+            return m.getEyePosition().lerp(other.position().add(0, other.getBbHeight() * 0.6, 0), 0.35);
+        }
+        Vec3 look = m.getLookAngle().multiply(1, 0, 1);
+        look = look.lengthSqr() < 1.0E-6 ? Vec3.ZERO : look.normalize();
+        return m.getEyePosition().add(look.scale(Math.max(0.6, m.getBbWidth() * 0.7))).add(0, -0.2, 0);
     }
 
     /**
@@ -347,12 +420,18 @@ public final class MobGuard {
         LivingEntity attacker = e.getSource().getEntity() instanceof LivingEntity l ? l : null;
         if (parries > d.getInt("OrorShownParries")) {
             d.putInt("OrorShownParries", parries);
+            if (r.level() instanceof ServerLevel sl) {
+                effects(sl, r, "parry", contact(r, attacker), false);
+            }
             TechniqueShow.send(r, "parry", 0, 1, 14, attacker == null ? -1 : attacker.getId());
             if (attacker != null && attacker != r && e.getSource().getDirectEntity() == attacker) {
                 parried(attacker, r.position());
             }
         } else if (blocks > d.getInt("OrorShownBlocks")) {
             d.putInt("OrorShownBlocks", blocks);
+            if (r.level() instanceof ServerLevel sl) {
+                effects(sl, r, "block", contact(r, attacker), false);
+            }
             TechniqueShow.send(r, "block", 0, 1, 12, attacker == null ? -1 : attacker.getId());
         }
     }
@@ -438,6 +517,9 @@ public final class MobGuard {
     public static boolean demo(LivingEntity m, String kind, int length) {
         boolean ef = ModList.get().isLoaded("epicfight") && Ef.play(m, kind);
         TechniqueShow.send(m, kind, 0, 1, length, -1);
+        if (m.level() instanceof ServerLevel sl) {
+            effects(sl, m, kind, kind.equals("break") ? m.getEyePosition().add(0, -0.3, 0) : contact(m, null), true);
+        }
         return ef;
     }
 
@@ -455,6 +537,10 @@ public final class MobGuard {
     /** What a mob has guarded (for the checks): parries, blocks, broken guards, and times it was parried. */
     public static String tally(LivingEntity m) {
         CompoundTag d = m.getPersistentData();
+        if (m instanceof RoyalMob) {
+            // (059f) a royal counts its own (RoyalMob.defend)
+            return d.getInt("RoyalParries") + "/" + d.getInt("RoyalBlocks") + "/-/" + d.getInt("OrorParried");
+        }
         return d.getInt("OrorParries") + "/" + d.getInt("OrorBlocks") + "/" + d.getInt("OrorGuardBreaks") + "/" + d.getInt("OrorParried");
     }
 

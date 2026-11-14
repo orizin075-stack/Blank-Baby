@@ -394,9 +394,28 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
             return;
         }
         float w = u < 0.12F ? u / 0.12F : u < 0.45F ? 1F : 1F - (u - 0.45F) / 0.55F;
+        if (show.mechanic().equals("GUARD")) {
+            // (059f) the guard raised: up in two ticks and a half, held, lowered in the last three
+            float len = Math.max(1, show.length());
+            w = Math.min(Mth.clamp(time / 2.5F, 0F, 1F), Mth.clamp((len - time) / 3F, 0F, 1F));
+        }
         w = w * w * (3F - 2F * w);
         boolean shield = mob.getOffhandItem().getItem() instanceof net.minecraft.world.item.ShieldItem;
         switch (show.mechanic()) {
+            case "GUARD" -> {
+                // (059f) the guard raised: the shield lifted before the body, or the sword brought across it, blade up
+                if (shield) {
+                    this.leftArm.xRot = Mth.lerp(w, this.leftArm.xRot, -1.4F);
+                    this.leftArm.yRot = Mth.lerp(w, this.leftArm.yRot, 0.5F);
+                    this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, -0.55F);
+                } else {
+                    this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, -1.0F);
+                    this.rightArm.yRot = Mth.lerp(w, this.rightArm.yRot, -0.6F);
+                    this.leftArm.xRot = Mth.lerp(w, this.leftArm.xRot, -0.45F);
+                    this.leftArm.yRot = Mth.lerp(w, this.leftArm.yRot, 0.2F);
+                }
+                this.head.xRot += 0.15F * w;
+            }
             case "PARRY" -> {
                 if (shield) {
                     this.leftArm.xRot = Mth.lerp(w, this.leftArm.xRot, -1.75F);

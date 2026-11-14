@@ -198,10 +198,12 @@ public final class GuardTest {
                 // (059e) every mob that fights guards now: an archer and a crossbowman at arm's reach, a villager, a golem, a wolf
                 String[][] who = {{"minecraft:vindicator", "iron_axe"}, {"minecraft:wither_skeleton", "stone_sword"}, {"minecraft:zombie", ""},
                     {"minecraft:skeleton", "bow"}, {"minecraft:spider", ""}, {"minecraft:piglin_brute", "golden_axe"}, {"minecraft:pillager", "crossbow"},
-                    {"minecraft:villager", "iron_sword"}, {"minecraft:iron_golem", ""}, {"minecraft:wolf", ""}};
+                    {"minecraft:villager", "iron_sword"}, {"minecraft:iron_golem", ""}, {"minecraft:wolf", ""},
+                    // (059f) OROR's own: a god and a kingdom guard, with what they carry
+                    {"oror_supreme_bosses:ferdinand", "keep"}, {"oror_supreme_bosses:kingdom_guard", "keep"}};
                 for (int i = 0; i < who.length; i++) {
-                    BlockPos spot = a.offset(-15 + i * 5, 0, 0);
-                    ItemStack held = who[i][1].isEmpty() ? ItemStack.EMPTY
+                    BlockPos spot = a.offset(-15 + (i * 44) / 10, 0, 0);
+                    ItemStack held = who[i][1].equals("keep") ? null : who[i][1].isEmpty() ? ItemStack.EMPTY
                         : new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(who[i][1])));
                     Mob m = spawn(r, who[i][0], spot, held, 150);
                     if (m != null) {

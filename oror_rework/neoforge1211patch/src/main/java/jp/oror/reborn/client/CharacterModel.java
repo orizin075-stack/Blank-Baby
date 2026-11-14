@@ -30,6 +30,12 @@ public final class CharacterModel extends RigModel<SupremeEntity> {
         // (052) a guard's moment (a parry, a block, the guard broken, parried): its pose for its half second, over
         // whatever else the character was doing (a technique under way goes on afterwards)
         jp.oror.reborn.show.TechniqueShow.Active react = jp.oror.reborn.show.TechniqueShow.REACT.get(e.getId());
+        // (059f) the guard merely raised (MobGuard, every two seconds or so in a fight) does not cut into a technique
+        // under way: only a parry, a block, a broken guard or being parried do
+        if (react != null && react.mechanic().equals("GUARD")
+            && (jp.oror.reborn.waza.client.WazaClient.playing(e.getId()) != null || jp.oror.reborn.show.TechniqueShow.ACTIVE.containsKey(e.getId()))) {
+            react = null;
+        }
         if (react != null) {
             float time = e.level().getGameTime() - react.start() + partial;
             if (time >= 0 && time <= react.length()) {
