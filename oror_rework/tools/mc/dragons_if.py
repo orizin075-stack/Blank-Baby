@@ -47,6 +47,64 @@ def neck_chain(r, parent, pts, widths, mat, spikes=None, spike_h=1.6):
     return bone
 
 
+def if_wing(r, parent, side, shoulder, arm, fingers, membrane, spar, claw, rot, amp=0.24, speed=0.09, accent=None, glow=False,
+            ragged=False, shards=None):
+    """Ice and Fire's wing: a thick arm to the wrist, finger bones that run out past the membrane, a thumb claw, and a
+    membrane cut deep between the fingers (scallops reaching halfway back to the wrist), ragged at the edge for a
+    wild dragon; veins from the wrist, brush streaks."""
+    sx = side
+    b = r.bone('wing_r' if sx < 0 else 'wing_l', parent, shoulder, rot=(rot[0], rot[1] * sx, rot[2] * -sx), anim='sway', ax=2,
+               amp=amp, speed=speed)
+    x0, y, z0 = shoulder
+    Pt = lambda xz: (x0 + sx * xz[0], y, z0 + xz[1])
+    elbow, wrist = Pt(arm[0]), Pt(arm[1])
+    CI.chain_boxes(b, [(x0, y, z0), elbow, wrist], 2.6, 1.5, spar)
+    tips = [Pt(t) for t in fingers]
+    for t in tips:
+        d = np.subtract(t, wrist)
+        ext = tuple(np.add(t, d / np.linalg.norm(d) * 2.6))
+        CI.chain_boxes(b, [wrist, t, ext], 1.2, 0.35, spar)
+    CI.seg(b, wrist, (wrist[0] + sx * 0.5, y - 0.6, wrist[2] - 2.6), 0.8, 0.8, claw)                  # the thumb claw
+    body_end = Pt((1.6, fingers[-1][1] * 0.82))
+    outline = [(x0, z0), (elbow[0], elbow[2]), (wrist[0], wrist[2])]
+    scallops = []
+    for i, t in enumerate(tips):
+        outline.append((t[0], t[2]))
+        n = tips[i + 1] if i + 1 < len(tips) else body_end
+        mid = ((t[0] + n[0]) / 2, (t[2] + n[2]) / 2)
+        dip = 0.4
+        sc = (mid[0] * (1 - dip) + wrist[0] * dip, mid[1] * (1 - dip) + wrist[2] * dip)
+        if ragged:
+            q1 = (t[0] * 0.7 + sc[0] * 0.3 + sx * 0.6, t[2] * 0.7 + sc[1] * 0.3 + 0.8)
+            q2 = (n[0] * 0.7 + sc[0] * 0.3 - sx * 0.4, n[2] * 0.7 + sc[1] * 0.3 - 0.6)
+            outline += [q1, (q1[0] * 0.5 + sc[0] * 0.5 - sx * 0.8, q1[1] * 0.5 + sc[1] * 0.5 + 0.3), sc, q2]
+        else:
+            outline.append(sc)
+        scallops.append(sc)
+    outline.append((body_end[0], body_end[2]))
+    veins = [(wrist[0], wrist[2], t[0], t[2]) for t in tips] + [(elbow[0], elbow[2], body_end[0], body_end[2])]
+    veins += [(elbow[0], elbow[2], sc[0], sc[1]) for sc in scallops[-2:]]
+    xs, zs = [p[0] for p in outline], [p[1] for p in outline]
+    CI.box(b, (min(xs), y + 0.3, min(zs)), (max(xs), y + 0.3, max(zs)),
+           M('wingskin', membrane, poly=outline, axes='xz', veins=veins, accent=accent, glow=glow, streaks=True))
+    if shards:
+        for k, sc in enumerate(scallops):
+            CI.cbox(b, (sc[0], y + 1.2, sc[1]), (0.7, 2.4, 0.7), M('gem', shards[k % len(shards)], glow=True), rot=(0.2, 0.4, 0.1))
+    return b
+
+
+def side_spines(ends, mat, every=1, scale=1.0):
+    """Spines out to both sides of a tail's links (the fins down an Ice and Fire tail)."""
+    prev = None
+    for i, (bone, q) in enumerate(ends):
+        if prev is not None and i % every == 0 and i < len(ends) - 1:
+            m = (np.asarray(prev) + np.asarray(q)) / 2
+            w = max(0.8, 2.6 * (1 - i / len(ends))) * scale
+            for sx in (-1, 1):
+                CI.seg(bone, tuple(m + (sx * 0.4, 0, 0)), tuple(m + (sx * w * 1.4, -0.6, 1.4)), 0.5, 1.0, mat, up=(0, -1, 0))
+        prev = q
+
+
 def crown(head, at, s, mat):
     """The black dragon's crown: five tall horns fanning up and back from the back of the skull."""
     ax, ay, az = at
@@ -58,13 +116,14 @@ def crown(head, at, s, mat):
 
 
 def if_dragon(key, skin, belly, horn, spike, eye_m, membrane, spar, accent=None, wing_glow=False, crown_mat=None, gems=None,
-              seams=None, tail_tip=None):
+              seams=None, tail_tip=None, claw=None, ragged=False, shards=None, chest_gem=None, fins=None):
     r = CI.rig(key)
     mouth = M('mouth', '#4a1220')
     tooth = M('tooth', '#efe6d2')
-    claw = M('horn', '#d8cfb8')
+    claw = claw or M('horn', '#d8cfb8')
     root = r.bone('root', None, (0, 24, 0), anim='root')
-    body = r.bone('body', root, (0, 12.5, 2), anim='breath')
+    # the chest raised, as Ice and Fire's dragons stand
+    body = r.bone('body', root, (0, 12.5, 2), rot=(-0.14, 0, 0), anim='breath')
     # a deep chest, a narrower waist, the hips
     CI.rbox(body, (-5.2, 6.4, -11.5), (5.2, 17.0, -1.0), skin, bevel=1.3)
     CI.rbox(body, (-4.4, 7.6, -1.5), (4.4, 16.2, 9.0), skin, bevel=1.1)
@@ -97,47 +156,58 @@ def if_dragon(key, skin, belly, horn, spike, eye_m, membrane, spar, accent=None,
                (sx * 5.0, 22.6, 11.8), 3.8, 2.4, skin, foot=(3.0, 1.4, 3.6), claw=claw)
     # the great wings: five fingers, a span three times the body
     for sx in (-1, 1):
-        CI.wing(r, body, sx, (sx * 4.8, 7.8, -6.2), [(11.0, 1.5), (22.0, 5.0)],
-                [(38.0, 6.0), (35.0, 15.5), (29.0, 23.5), (20.5, 27.5), (11.5, 25.0)], membrane, spar, rot=(0.0, 0.14, 0.72),
-                amp=0.26, speed=0.09, accent=accent, glow=wing_glow)
+        if_wing(r, body, sx, (sx * 4.8, 7.6, -6.4), [(12.0, 2.0), (24.0, 4.0)],
+                [(41.0, 3.0), (39.0, 13.0), (33.0, 22.0), (24.0, 28.0), (13.5, 27.0)], membrane, spar, claw,
+                rot=(0.0, 0.3, 0.86), amp=0.24, speed=0.09, accent=accent, glow=wing_glow, ragged=ragged, shards=shards)
+    if chest_gem is not None:
+        CI.cbox(body, (0, 12.0, -11.7), (2.6, 3.2, 0.8), chest_gem, rot=(0, 0, 0.785))
+        CI.cbox(body, (0, 12.0, -11.5), (3.6, 4.2, 0.4), M('metal', '#d8b060'), rot=(0, 0, 0.785))
     # the tail: as long as the rest, spined to its end
     ends = CI.tail(r, body, (0, 11.8, 13.6), [5.6, 5.4, 5.2, 5.0, 4.8, 4.4, 4.0, 3.6, 3.2],
                    [4.4, 3.9, 3.4, 2.9, 2.5, 2.1, 1.7, 1.3, 1.0], skin, droop=0.1, lift=0.06, spikes=spike, amp=0.1, speed=0.06)
+    if fins is not None:
+        side_spines(ends, fins)
     tip_bone, (tx, ty, tz) = ends[-1]
     if tail_tip is not None:
         CI.cbox(tip_bone, (tx, ty, tz + 1.4), (0.6, 3.8, 3.0), tail_tip, rot=(0.0, 0.0, 0.0))
+    # the renderer fits `height` to the mob's hitbox: the head's top, not the raised wings' tips
+    r.height = 29.5
     return r
 
 
 @recipe
 def demiurgos():
-    # 空創龍王 デミウルゴス: a small black dragon (about five metres) set with rainbow gems; mysterious more than
-    # menacing. The black dragon of the user's reference: a crown of tall horns, black scales, a red maw; here the
-    # horns and spines are amethyst-tipped and the gems rainbow, the eyes amethyst under heavy brows.
-    skin = M('scale', '#201e2b', belly='#3e3656', scale_size=1.2, contrast=0.8)
-    belly = M('scale', '#3e3656', belly='#3e3656', scale_size=1.6, contrast=0.5)
-    horn = M('horn', '#2a2638', tip='#b48cff', glow=True)
-    spike = M('horn', '#2e2a3c', tip='#c8a8ff', glow=True)
-    crown_mat = M('gem', '#d8c8ff', glow=True)
-    eye_m = M('eye', '#c58cff', pupil='slit', mood='fierce', lid='#201e2b')
-    return if_dragon('demiurgos', skin, belly, horn, spike, eye_m, '#2a2036', M('horn', '#2a2638'), accent='#8f6ad8',
-                     crown_mat=crown_mat, gems=['#ff6ad5', '#6af0ff', '#ffe46a', '#7dff8a', '#a07dff'],
-                     tail_tip=M('gem', '#ff6ad5', glow=True))
+    # 空創龍王 デミウルゴス (the user's sheet 22 and the Ice and Fire photos): a black dragon, gold horns, gold claws and
+    # gold caps on the wing bones; wings like a starry night, violet to the edge, crystals hanging from it; rainbow
+    # crystals down the back and the tail; a great jewel in a gold frame on the chest; violet eyes; a ragged edge.
+    skin = M('scale', '#1c1a26', belly='#8e8aa0', scale_size=1.2, contrast=0.85)
+    belly = M('scale', '#8e8aa0', belly='#a8a4b8', scale_size=1.6, contrast=0.5)
+    gold = '#d8b060'
+    horn = M('horn', gold, tip='#fff0b8', glow=False)
+    spike = M('gem', '#c8a8ff', glow=True)
+    eye_m = M('eye', '#c060ff', pupil='slit', mood='fierce', lid='#1c1a26')
+    return if_dragon('demiurgos', skin, belly, horn, spike, eye_m, '#2a1e48', M('horn', '#1e1a28', tip=gold), accent='#a070ff',
+                     crown_mat=M('horn', gold, tip='#fff0b8'), gems=['#ff6ad5', '#6af0ff', '#ffe46a', '#7dff8a', '#a07dff'],
+                     tail_tip=M('gem', '#ff6ad5', glow=True), claw=M('horn', gold), ragged=True,
+                     shards=['#b48cff', '#6af0ff', '#ff6ad5'], chest_gem=M('gem', '#c08cff', glow=True),
+                     fins=M('gem', '#d8b8ff', glow=True))
 
 
 @recipe
 def teia():
-    # 光越天龍 テイア: a small dragon fused with machinery: a pale metal shell with cyan light seams, photon wings,
-    # thrusters on the back; cheerful big brother: bright eyes. Its wings are the crystal dragon's of the references
-    # (light through panes), its spines crystal.
-    skin = M('metal', '#c9d2dc', accent='#6ff6ff')
-    belly = M('metal', '#8c99a8')
-    horn = M('horn', '#e8eef4', tip='#6ff6ff', glow=True)
+    # 光越天龍 テイア (the user's sheet 17 and the Ice and Fire photos): a slender dragon of white armour plates trimmed in
+    # gold over a dark frame, cyan light in the joints, wings of prism-crystal blades, a crest of crystals, cyan crystal
+    # claws, a fan of crystal blades at the tail's end.
+    skin = M('metal', '#e4e8ee', accent='#d8b060')
+    belly = M('metal', '#6a707c')
+    horn = M('gem', '#9ff4ff', glow=True)
     spike = M('gem', '#bff6ff', glow=True)
-    eye_m = M('eye', '#7ff6ff', pupil='ring', mood='happy', lid='#c9d2dc')
-    return if_dragon('teia', skin, belly, horn, spike, eye_m, '#bfe8ff', M('metal', '#c9d2dc', accent='#6ff6ff'),
-                     accent='#ff9af2', wing_glow=True, seams=M('energy', '#6ff6ff', glow=True),
-                     tail_tip=M('energy', '#6ff6ff', glow=True))
+    eye_m = M('eye', '#5ff0ff', pupil='ring', mood='happy', lid='#e4e8ee')
+    return if_dragon('teia', skin, belly, horn, spike, eye_m, '#bfe8ff', M('metal', '#e4e8ee', accent='#d8b060'),
+                     accent='#ffb8f0', wing_glow=True, seams=M('energy', '#6ff6ff', glow=True),
+                     tail_tip=M('gem', '#9ff4ff', glow=True), claw=M('gem', '#7ff0ff', glow=True),
+                     shards=['#9ff4ff', '#e0b0ff', '#fff0a0'], crown_mat=M('gem', '#bff6ff', glow=True),
+                     fins=M('gem', '#c8f0ff', glow=True))
 
 
 @recipe
@@ -146,38 +216,45 @@ def kurma():
     # shoulders, a low head that is mostly jaw, rows of big white teeth, small eyes under heavy brows, reddish rock
     # hide with darker plates. The range of its legend is the ridge of stone plates on its back (crags, moss, snow).
     r = CI.rig('kurma')
-    hide = M('scale', '#8a5c42', belly='#b98a62', scale_size=1.8, contrast=0.7)
-    plate = M('rock', '#6a4836')
-    crag = M('rock', '#7e766a')
+    # the lore's hide: obsidian and granite, worn by weather, moss and grass in its cracks; green light in the seams
+    hide = M('scale', '#5c5a52', belly='#c8b89a', scale_size=1.8, contrast=0.75)
+    plate = M('rock', '#7e786c')
+    crag = M('rock', '#8a8478')
     moss = M('leaf', '#5a8a3a')
     snow = M('simple', '#eef2f4')
     tooth = M('tooth', '#f2ead8')
     mouth = M('mouth', '#5a1a1a')
-    claw = M('horn', '#e2d6bc')
+    claw = M('rock', '#d8d0bc')
+    vein = M('energy', '#5effa8', glow=True)
+    water = M('energy', '#8fd8ff', glow=False)
     root = r.bone('root', None, (0, 24, 0), anim='root')
     body = r.bone('body', root, (0, 12.0, 0), anim='breath')
     # a hulking body: the shoulders high and massive, the back sloping down to the hips
     CI.rbox(body, (-12.5, 1.5, -15.0), (12.5, 17.0, 1.5), hide, bevel=2.6)
     CI.rbox(body, (-10.5, 4.8, 0.5), (10.5, 16.2, 14.5), hide, bevel=2.2)
-    CI.rbox(body, (-9.5, 16.0, -13.0), (9.5, 17.6, 12.0), M('scale', '#b98a62', belly='#b98a62', scale_size=2.0))
-    # the ridge of stone plates down the back: the mountain range
-    ridge = [(-12.5, 1.5, 6.5, 6.0), (-7.0, 0.8, 7.5, 8.0), (-1.5, 1.2, 7.0, 7.0), (4.0, 3.0, 6.0, 5.5), (9.0, 4.6, 5.0, 4.0),
-             (13.0, 5.6, 3.8, 3.0)]
-    for i, (z, y, w, h) in enumerate(ridge):
-        CI.box(body, (-w / 2, y - h, z - 2.2), (w / 2, y + 0.6, z + 2.2), plate, rot=(0.25, 0, 0), pivot=(0, y, z))
-        if h >= 6.0:
-            # a crag on the plate: grey stone stepping up, moss on its shoulder, snow on the peak
-            CI.box(body, (-w / 3, y - h - 2.4, z - 1.4), (w / 3, y - h + 0.4, z + 1.4), crag)
-            CI.box(body, (-w / 3 - 0.3, y - h - 0.2, z - 1.6), (w / 3 + 0.3, y - h + 0.4, z + 1.6), moss)
-            CI.box(body, (-w / 6, y - h - 3.6, z - 0.8), (w / 6, y - h - 2.2, z + 0.8), snow)
-    for sx in (-1, 1):
-        for z, y, s in ((-10.0, 4.5, 4.5), (-3.0, 3.5, 4.0), (5.0, 6.5, 3.5)):          # side plates over the flanks
-            CI.box(body, (sx * 10.5 - 1.0, y, z - s / 2), (sx * 12.9, y + s, z + s / 2), plate, rot=(0, 0, sx * 0.35),
-                   pivot=(sx * 11.5, y, z))
-    # trees in the moss of the lower plates
-    for x, z in ((-3.5, 4.0), (3.0, 9.0)):
-        CI.box(body, (x - 0.5, -0.8, z - 0.5), (x + 0.5, 2.4, z + 0.5), M('wood', '#6a4a2a'))
-        CI.box(body, (x - 1.5, -3.8, z - 1.5), (x + 1.5, -0.6, z + 1.5), M('leaf', '#3f7f3a'))
+    CI.rbox(body, (-9.5, 16.0, -13.0), (9.5, 17.6, 12.0), M('scale', '#c8b89a', belly='#c8b89a', scale_size=2.0))
+    for sx in (-1, 1):                                                                   # the green seams of its veins
+        CI.box(body, (sx * 12.55, 8.0, -12.0), (sx * 12.65, 8.5, -2.0), vein)
+        CI.box(body, (sx * 10.55, 9.5, 2.0), (sx * 10.65, 10.0, 12.0), vein)
+    # the mountain range on its back: a shelf of earth and moss, peaks of grey stone with snow, a forest, a lake and
+    # a waterfall over the flank
+    CI.box(body, (-11.0, -0.2, -13.5), (11.0, 2.0, 13.0), M('leaf', '#4f7a34'))
+    CI.box(body, (-10.5, 1.8, -13.0), (10.5, 3.0, 12.5), M('rock', '#6a5a44'))
+    for (x, z, w, h) in ((-3.0, -6.0, 8.0, 15.0), (4.5, -1.0, 6.5, 11.0), (-5.5, 6.0, 5.5, 8.0), (5.0, 8.5, 4.5, 6.0)):
+        for k in range(4):
+            t = k / 4
+            hw = w * (1 - t * 0.75)
+            y0, y1 = -0.2 - h * t, -0.2 - h * (t + 0.25)
+            CI.box(body, (x - hw, y1, z - hw), (x + hw, y0, z + hw), crag)
+            if k == 0:
+                CI.box(body, (x - hw - 0.3, y0 - 1.0, z - hw - 0.3), (x + hw + 0.3, y0, z + hw + 0.3), moss)
+        CI.box(body, (x - w * 0.22, -0.2 - h - 1.0, z - w * 0.22), (x + w * 0.22, -0.2 - h * 0.78, z + w * 0.22), snow)
+    for (x, z) in ((-9.0, -10.0), (9.0, -9.0), (-9.5, 2.0), (9.5, 4.0), (0.5, 11.0), (-8.5, 10.5), (8.5, 12.0), (1.0, 4.0)):
+        CI.box(body, (x - 0.4, -2.2, z - 0.4), (x + 0.4, -0.2, z + 0.4), M('wood', '#5a3e24'))     # spruces
+        CI.box(body, (x - 1.4, -4.2, z - 1.4), (x + 1.4, -2.2, z + 1.4), M('leaf', '#2f5a2e'))
+        CI.box(body, (x - 0.8, -5.8, z - 0.8), (x + 0.8, -4.2, z + 0.8), M('leaf', '#356a34'))
+    CI.box(body, (1.0, -0.4, 2.0), (6.0, -0.1, 6.5), water)                                       # the lake
+    CI.box(body, (10.4, -0.1, 3.0), (10.9, 9.0, 5.5), water)                                      # its waterfall
     # the head: low and forward, a great maw
     neck = r.bone('neck', body, (0, 8.0, -14.0), anim='sway', ax=1, amp=0.03, speed=0.04)
     CI.rbox(neck, (-7.5, 3.5, -20.5), (7.5, 15.5, -12.5), hide, bevel=1.8)
@@ -195,7 +272,7 @@ def kurma():
         CI.box(head, (sx * 8.4, 5.0, -22.5), (sx * 9.6, 12.0, -18.5), plate)
     CI.teeth_x(head, -34.2, 11.6, -6.8, 6.8, 7, 1.5, tooth, down=True)
     jaw = r.bone('jaw', head, (0, 11.6, -20.0), rot=(0.34, 0, 0), anim='jaw')
-    CI.rbox(jaw, (-7.9, 11.6, -34.4), (7.9, 16.6, -19.6), M('scale', '#9a6a4c', belly='#b98a62', scale_size=1.8), bevel=1.3)
+    CI.rbox(jaw, (-7.9, 11.6, -34.4), (7.9, 16.6, -19.6), M('scale', '#66625a', belly='#c8b89a', scale_size=1.8), bevel=1.3)
     CI.box(jaw, (-7.0, 11.55, -33.6), (7.0, 11.65, -20.4), mouth)                        # the tongue's bed
     for sx in (-1, 1):
         CI.teeth(jaw, sx * 7.0, 11.6, -33.4, -21.5, 6, 1.3, tooth, down=False)
@@ -213,4 +290,5 @@ def kurma():
                (sx * 9.8, 22.6, 10.0), 6.2, 4.8, hide, foot=(6.2, 2.6, 5.8), claw=claw, toes=3)
     CI.tail(r, body, (0, 10.5, 14.0), [5.0, 4.6, 4.2, 3.6], [6.2, 5.0, 3.8, 2.6], hide, droop=0.3, spikes=plate, amp=0.08,
             speed=0.04)
+    r.height = 37.2                                  # as before: the range's peaks may rise over the hitbox
     return r
