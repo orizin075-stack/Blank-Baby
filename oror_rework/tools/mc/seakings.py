@@ -180,7 +180,7 @@ def enkou():
                 b = tb
         return b
     # ------------------------------------------------------------------ the hull, the mouth under the snout
-    hull(prof, -36.0, 41.0, 1.5, bone_at, hide, belly, 0.42, jaw=(-31.0, -16.0, 0.3, jaw, belly))
+    hull(prof, -36.0, 41.0, 2.0, bone_at, hide, belly, 0.42, jaw=(-31.0, -16.0, 0.3, jaw, belly))
     zm0, zm1 = -31.0, -16.5
     for z in np.arange(zm0, zm1, 1.5):                                                           # the mouth's dark inside
         w, h, y = prof(z + 0.75)
@@ -229,7 +229,7 @@ def enkou():
                     CI.seg(bone_at(q[2]), tuple(q), tuple(bq), 0.12, 0.35, vein, up=(sx, 0, 0))
                 p = q
     fleck = M('scale', '#5a7ab0', belly='#5a7ab0', scale_size=0.6, contrast=0.5)
-    for _ in range(70):
+    for _ in range(40):
         z = rnd.uniform(-30.0, 38.0)
         w, h, y = prof(z)
         sx = rnd.choice((-1, 1))
@@ -283,6 +283,7 @@ def enkou():
     plate_fin(tb, V(0, -8.5, 38.0), V(0, 0.8, 0.5), V(0, -0.15, 1.0), 13.0, 9, lambda t: 8.0 * (1 - t) ** 0.8 + 1.0,
               lambda t: 0.5 * t, fin, edge=edge, thick=1.4, jag=0.7, tip_mats=[crystal2, crystal])
     r.height = 24.0 - (top - H)
+    r.palette = True                    # 256-colour texture (build_bb.save_palette)
     return r
 
 
@@ -339,18 +340,21 @@ def bahamut():
                 b = tb
         return b
     # ------------------------------------------------------------------ the hull: blue above, the white grooved belly
-    hull(prof, -46.0, 45.0, 1.5, bone_at, blue, throat, 0.48, jaw=(-45.0, -20.0, 0.42, jaw, throat))
-    for z in np.arange(-44.0, 12.0, 1.5):                                                            # the grooves
-        w, h, y = prof(z + 0.75)
-        b = jaw if z < -20 else bone_at(z)
-        under = y + h / 2 + 0.16
-        for g in range(int(w * 0.8 // 2.2)):
-            x = -w * 0.4 + 1.1 + g * 2.2
-            CI.box(b, (x - 0.22, under - 0.1, z), (x + 0.22, under + 0.12, z + 1.6), groove)
+    hull(prof, -46.0, 45.0, 2.0, bone_at, blue, throat, 0.48, jaw=(-45.0, -20.0, 0.42, jaw, throat))
+    # the grooves: long lines under the throat and along the white flanks, each a few long pieces following the hull
+    zs = list(np.arange(-44.0, 12.1, 4.0))
+    for a_, b_ in zip(zs, zs[1:]):
+        w0, h0, y0 = prof(a_)
+        w1, h1, y1 = prof(b_)
+        bb = jaw if b_ <= -20 else bone_at(a_)
+        for g in range(7):
+            f = -0.33 + g * 0.11
+            CI.seg(bb, (w0 * f, y0 + h0 / 2 + 0.16, a_), (w1 * f, y1 + h1 / 2 + 0.16, b_), 0.45, 0.25, groove, up=(0, 1, 0), ext=0.1)
         for sx in (-1, 1):
             for g in range(4):
-                yy = y + h * 0.04 + g * h * 0.11
-                CI.box(b, (sx * (w / 2 + 0.16) - 0.12, yy, z), (sx * (w / 2 + 0.16) + 0.12, yy + 0.45, z + 1.6), groove)
+                fy = 0.04 + g * 0.11
+                CI.seg(bb, (sx * (w0 / 2 + 0.16), y0 + h0 * fy, a_), (sx * (w1 / 2 + 0.16), y1 + h1 * fy, b_), 0.45, 0.25, groove,
+                       up=(sx, 0, 0), ext=0.1)
     # gold embroidery along the line between the blue and the white, and diamonds
     for sx in (-1, 1):
         pts = []
@@ -464,4 +468,5 @@ def bahamut():
         feather_plane(tb, V(0, y, 41.0), V(sx * 1.0, -0.5, 0.35), V(0, 0, 1.0), 10, 20.0,
                       lambda t: 7.0 + 10.0 * math.sin(t * math.pi * 0.85), 3.2, fcols, edge=gold)
     r.height = 24.0 - (top - 16.0)
+    r.palette = True                    # 256-colour texture (build_bb.save_palette)
     return r

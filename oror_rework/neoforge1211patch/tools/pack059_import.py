@@ -2,7 +2,7 @@
 last one the user has (059e onwards): OROR's jar and the 059 notes replaced, the first-read note's latest lines added,
 the manifest's version moved on; every other entry copied as it was, byte for byte.
 
-OROR's jar is written with its small entries (under 16 KB: the many JSON models, lang files, classes) stored rather
+OROR's jar is written with its small entries (under 64 KB since 059g: the many JSON models, lang files, classes) stored rather
 than deflated, so that the import zip's own deflate takes them together: the same entries, checked by CRC, and the
 import zip about half a megabyte smaller (it must stay under 30,000,000 bytes).
 
@@ -23,7 +23,10 @@ FIRST_ADD = {
              '・059f：王都の中では火事が広がらず、敵モブがブロックを壊せません。崩壊王の「消去」で宮殿に穴が残る不具合を直し、\n'
              '  エラーを出したブロック（機械など）でサーバーが止まらないようにしました。\n'),
     '059g': ('・059g：ORORの人型30人の頭（顔と髪）を作り直しました。目は白目と瞳の2色、口・鼻なし、頬に淡いピンク、\n'
-             '  前髪は目の上まで、頬にかかる横髪。体・服・武器の形は前のままです。\n'),
+             '  前髪は目の上まで、頬にかかる横髪。体・服・武器の形は前のままです。\n'
+             '・059g：デミウルゴス・テイア・クールマ・淵煌・バハムートを、デザイン画に合わせて作り直しました。\n'
+             '・059g：王都の畑の上に立っていた塔・建物・台のある区画は畑をやめ、門のそばで壁や柵を向いていた砲10基の向きを直しました\n'
+             '  （今の世界には `/oror citadel update on` で反映、更新表57版）。\n'),
 }
 
 
@@ -35,8 +38,13 @@ def repack(data):
             d = zin.read(i.filename)
             ni = zipfile.ZipInfo(i.filename, date_time=i.date_time)
             ni.external_attr = i.external_attr
-            ni.compress_type = zipfile.ZIP_STORED if len(d) < 16384 else zipfile.ZIP_DEFLATED
-            z.writestr(ni, d)
+            # (059g) entries under 64 KB stored for the import zip's own deflate, the rest deflated at level 9
+            if len(d) < 65536:
+                ni.compress_type = zipfile.ZIP_STORED
+                z.writestr(ni, d)
+            else:
+                ni.compress_type = zipfile.ZIP_DEFLATED
+                z.writestr(ni, d, compresslevel=9)
     # the same entries, byte for byte
     zr = zipfile.ZipFile(io.BytesIO(buf.getvalue()))
     a = {i.filename: i.CRC for i in zin.infolist()}

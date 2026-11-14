@@ -46,7 +46,7 @@ def spike(bone, base, tip, w0, mat, w1=None):
     CI.chain_boxes(bone, [tuple(base), tuple(mid), tuple(tip)], w0, w1, mat)
 
 
-def scale_relief(bone, p0, p1, w, dep, mats, up, step=2.2, top=True, sides=True, bevel=2.0, seed=0):
+def scale_relief(bone, p0, p1, w, dep, mats, up, step=3.2, top=True, sides=True, bevel=2.0, seed=0):
     """Scales standing out of a bevelled segment from p0 to p1 (w across x, dep along up): rows of small plates in a
     brick pattern on both flanks and along the top, alternating two shades (sheet 22's rough scaled hide)."""
     p0, p1, n = np.asarray(p0, float), np.asarray(p1, float), np.asarray(up, float)
@@ -60,7 +60,7 @@ def scale_relief(bone, p0, p1, w, dep, mats, up, step=2.2, top=True, sides=True,
         s = (i + 0.5) * L / rows
         q = p0 + d * s
         if sides:
-            levels = max(1, int((dep - 2 * bevel) / 2.4))
+            levels = max(1, int((dep - 2 * bevel) / 3.4))
             for j in range(levels):
                 v = -(dep / 2 - bevel) + (j + 0.5 + (0.5 if i % 2 else 0.0)) * (dep - 2 * bevel) / (levels + 0.5)
                 for sx in (-1, 1):
@@ -350,7 +350,7 @@ def demiurgos():
         fwd = np.array([0.0, dn[2], -dn[1]]) * -1.0                                     # toward the throat
         fwd = fwd / np.linalg.norm(fwd)
         rseg(bone, p, q, widths[i], widths[i], skin, up=tuple(-fwd), bevel=widths[i] * 0.2, ext=widths[i] * 0.6)
-        scale_relief(bone, p + dn * 0.5, q - dn * 0.5, widths[i], widths[i], [skin, dark], tuple(-fwd), step=2.0, top=False,
+        scale_relief(bone, p + dn * 0.5, q - dn * 0.5, widths[i], widths[i], [skin, dark], tuple(-fwd), step=3.0, top=False,
                      bevel=widths[i] * 0.2, seed=i)
         CI.seg(bone, tuple(p + fwd * widths[i] * 0.47), tuple(q + fwd * widths[i] * 0.47), widths[i] * 0.72, 1.2, belly, up=tuple(fwd))
         back = -fwd
@@ -399,6 +399,7 @@ def demiurgos():
     for k, (dx, dy) in enumerate(((0, -1.0), (2.2, 0.6), (-2.2, 0.6))):
         spike(last, tip, tip + (dx, dy - 1.0, 6.5 - abs(dx) * 0.4), 1.6, crystals[k])
     r.height = 24.0 - head_top          # the renderer fits it to the hitbox: the head's top, not the wings' tips
+    r.palette = True                    # 256-colour texture (build_bb.save_palette)
     return r
 
 
@@ -544,6 +545,7 @@ def teia():
         a = -0.9 + k * 0.45
         spike(last, tip, tip + (math.sin(a) * 9.0, -2.0 - math.cos(a) * 3.0, 7.0 + math.cos(a) * 4.0), 2.0, blades[k])
     r.height = 75.0
+    r.palette = True                    # 256-colour texture (build_bb.save_palette)
     return r
 
 
@@ -618,7 +620,7 @@ def kurma():
                up=tuple(V(0, -1, 0) * 0.85 + out * 0.5), ext=0.6)
         hang(body, tuple(c + out * 3.6 + V(0, 2.0, 0)), 4, 2.0, 2.0, 9.0)
     # ------------------------------------------------------------------ the land on the shell: a height map in columns
-    CELL = 2.5
+    CELL = 3.0
     peaks = ((-2.0, -4.0, 30.0, 12.0), (9.0, 12.0, 20.0, 8.5), (-10.0, 14.0, 14.0, 7.0), (10.0, -14.0, 11.0, 6.0), (-12.0, -12.0, 8.0, 5.0))
     lake_c, lake_r = V(8.0, 0, 4.0), 6.0
     cells = {}
@@ -651,7 +653,7 @@ def kurma():
         lake = math.hypot(x - lake_c[0], z - lake_c[2]) < lake_r
         if lake:
             CI.box(body, (x - CELL / 2, top - 0.2, z - CELL / 2), (x + CELL / 2, top, z + CELL / 2), water)
-        elif not steep and rnd.random() < 0.2 and math.hypot(x - lake_c[0], z - lake_c[2]) > lake_r + 2.5:
+        elif not steep and rnd.random() < 0.22 and math.hypot(x - lake_c[0], z - lake_c[2]) > lake_r + 2.5:
             trees.append((x + rnd.uniform(-0.5, 0.5), top, z + rnd.uniform(-0.5, 0.5)))
     for (x, y, z) in trees:
         hh = rnd.uniform(0.8, 1.35)
@@ -744,4 +746,5 @@ def kurma():
             CI.box(bone, tuple(m + V(sx * w * 0.42 - 1.2, -w * 0.5 - 1.4, -1.6)), tuple(m + V(sx * w * 0.42 + 1.2, -w * 0.5 + 0.6, 1.6)), stone)
     tail_chain(r, body, (0, 0.0, 28.0), 8, 38.0, 13.0, 4.0, mossy, lambda t: 1.4 - 0.9 * t, extra=tail_extra)
     r.height = 24.0 - (RIM - 2.0 - 30.0 - 3.0)       # the hitbox to the mountain's top
+    r.palette = True                    # 256-colour texture (build_bb.save_palette)
     return r

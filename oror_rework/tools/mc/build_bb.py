@@ -23,9 +23,28 @@ def recipes():
     out.update(creatures3d.RECIPES)
     out.update(creatures_sc.RECIPES)
     out.update(creatures_ia.RECIPES)         # 0.17.27: the non-human characters, rebuilt as cube models
-    # (059g) dragons_if.py (Kurma) and dragon_iaf.py (Demiurgos, Teia) are works in progress after the user's
-    # references; the shipped models stay creatures_ia's until the user approves a remake
+    # (059g) the dragons and the sea kings remade after the user's design sheets and photos (dragons_sheet.py:
+    # Demiurgos, Teia, Kurma; seakings.py: Enkou, Bahamut) - the user: "見比べて同じものに見えるならそれでいいと思う"
+    import dragons_sheet, seakings
+    out.update(dragons_sheet.RECIPES)
+    out.update(seakings.RECIPES)
     return out
+
+
+def save_palette(im, path):
+    """An RGBA image as a palette PNG: its own colours when there are 256 or fewer, else the nearest 256."""
+    from PIL import Image
+    im = im.convert('RGBA')
+    cols = im.getcolors(256)
+    if cols:
+        index = {c: i for i, (_, c) in enumerate(cols)}
+        p = Image.new('P', im.size)
+        p.putdata([index[px] for px in im.getdata()])
+        p.putpalette([v for _, c in cols for v in c[:3]])
+        p.save(path, 'PNG', optimize=True, transparency=bytes(c[3] for _, c in cols))
+    else:
+        q = im.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE)
+        q.save(path, 'PNG', optimize=True)
 
 
 def build_one(name, fn, outdir, preview=True):
@@ -40,8 +59,14 @@ def build_one(name, fn, outdir, preview=True):
     tex, glow, size = SC.atlas(r)
     os.makedirs(os.path.join(outdir, 'textures'), exist_ok=True)
     os.makedirs(os.path.join(outdir, 'meshes'), exist_ok=True)
-    tex.save(os.path.join(outdir, 'textures', r.texture + '.png'))
-    glow.save(os.path.join(outdir, 'textures', r.texture + '_glow.png'))
+    if getattr(r, 'palette', False):
+        # (059g) the large remade models' textures as 256-colour palette PNGs (the game reads them as any PNG):
+        # a third of the bytes, so the import zip stays under its 30,000,000
+        save_palette(tex, os.path.join(outdir, 'textures', r.texture + '.png'))
+        save_palette(glow, os.path.join(outdir, 'textures', r.texture + '_glow.png'))
+    else:
+        tex.save(os.path.join(outdir, 'textures', r.texture + '.png'))
+        glow.save(os.path.join(outdir, 'textures', r.texture + '_glow.png'))
     quads = SC.export_mesh(r, os.path.join(outdir, 'meshes', r.key + '.bin'), size)
     j = r.to_json()
     j['size'] = list(size)
