@@ -216,7 +216,11 @@ public final class Look {
                     {"c23_capital_turret_aa_ne", 373, 77, -185, -116.6F, 32.1F}, {"c24_capital_turret_crossfire_w", -601, 78, -23, 92.9F, 32.2F},
                     {"c25_capital_turret_crossfire_e", 601, 78, 23, -87.1F, 32.2F}, {"c26_capital_turret_casemate_w", -112, 70, -28, 90.0F, 8.0F},
                     {"c27_capital_roads_nw", -200, 175, -200, 180.0F, 80.0F}, {"c28_capital_roads_e", 380, 175, 0, 180.0F, 80.0F},
-                    {"c29_capital_roads_s", 0, 175, 380, 180.0F, 80.0F}, {"c30_capital_roads_ne", 300, 175, -300, 180.0F, 80.0F}};
+                    {"c29_capital_roads_s", 0, 175, 380, 180.0F, 80.0F}, {"c30_capital_roads_ne", 300, 175, -300, 180.0F, 80.0F},
+                    // (059f) the outer gate's casemate gun taken up onto the walk (its port at the gate tower closed), an
+                    // anti-aircraft gun's stone pad in what was a carrot field, a battery's opened parapet from outside
+                    {"c34_capital_gate_battery_n", -29, 109, -463, 180.0F, 25.0F}, {"c35_capital_gate_outside_n", -29, 80, -520, 0.0F, 12.0F},
+                    {"c36_capital_aa_pad_field", -166, 82, -333, 180.0F, 48.0F}, {"c37_capital_battery_outside_w", -505, 108, -38, -90.0F, 8.0F}};
                 for (Object[] v : audit) {
                     int dx = (Integer) v[1], y = (Integer) v[2], dz = (Integer) v[3];
                     float yaw = (Float) v[4], pitch = (Float) v[5];
