@@ -46,6 +46,57 @@ def spike(bone, base, tip, w0, mat, w1=None):
     CI.chain_boxes(bone, [tuple(base), tuple(mid), tuple(tip)], w0, w1, mat)
 
 
+def scale_relief(bone, p0, p1, w, dep, mats, up, step=2.2, top=True, sides=True, bevel=2.0, seed=0):
+    """Scales standing out of a bevelled segment from p0 to p1 (w across x, dep along up): rows of small plates in a
+    brick pattern on both flanks and along the top, alternating two shades (sheet 22's rough scaled hide)."""
+    p0, p1, n = np.asarray(p0, float), np.asarray(p1, float), np.asarray(up, float)
+    L = float(np.linalg.norm(p1 - p0))
+    d = (p1 - p0) / L
+    n = n - (n @ d) * d
+    n = n / np.linalg.norm(n)
+    rows = max(1, int(L / step))
+    k = seed
+    for i in range(rows):
+        s = (i + 0.5) * L / rows
+        q = p0 + d * s
+        if sides:
+            levels = max(1, int((dep - 2 * bevel) / 2.4))
+            for j in range(levels):
+                v = -(dep / 2 - bevel) + (j + 0.5 + (0.5 if i % 2 else 0.0)) * (dep - 2 * bevel) / (levels + 0.5)
+                for sx in (-1, 1):
+                    c = q + n * v + V(sx * (w / 2 + 0.15), 0, 0)
+                    CI.seg(bone, tuple(c - d * 0.95), tuple(c + d * 0.95), 0.7, 1.7, mats[k % len(mats)], up=tuple(n))
+                    k += 1
+        if top:
+            for j, xo in enumerate((-w * 0.28, 0.0, w * 0.28) if i % 2 else (-w * 0.14, w * 0.14)):
+                c = q + n * (dep / 2 + 0.15) + V(xo, 0, 0)
+                CI.seg(bone, tuple(c - d * 0.95), tuple(c + d * 0.95), 1.9, 0.7, mats[k % len(mats)], up=tuple(n))
+                k += 1
+
+
+def shingles(bone, p0, p1, w, dep, mat, trim, up, rows=3, sides=True, top=True):
+    """Armour plates laid like scales over a segment (sheet 17): each row a little proud of the last and tipped out,
+    a gold edge along each plate's lower rim."""
+    p0, p1, n = np.asarray(p0, float), np.asarray(p1, float), np.asarray(up, float)
+    L = float(np.linalg.norm(p1 - p0))
+    d = (p1 - p0) / L
+    n = n - (n @ d) * d
+    n = n / np.linalg.norm(n)
+    for i in range(rows):
+        a = p0 + d * (L * i / rows)
+        b = p0 + d * (L * (i + 1) / rows + 0.8)
+        lift = 0.35 + 0.25 * i
+        if top:
+            CI.seg(bone, tuple(a + n * (dep / 2 + lift)), tuple(b + n * (dep / 2 + lift)), w * 0.8, 0.9, mat, up=tuple(n))
+            CI.seg(bone, tuple(b + n * (dep / 2 + lift) - d * 0.5), tuple(b + n * (dep / 2 + lift)), w * 0.8, 1.0, trim, up=tuple(n))
+        if sides:
+            for sx in (-1, 1):
+                c0 = a + V(sx * (w / 2 + lift), 0, 0) + n * dep * 0.12
+                c1 = b + V(sx * (w / 2 + lift), 0, 0) + n * dep * 0.12
+                CI.seg(bone, tuple(c0), tuple(c1), 0.9, dep * 0.62, mat, up=tuple(n))
+                CI.seg(bone, tuple(c1 - d * 0.5), tuple(c1), 1.0, dep * 0.62, trim, up=tuple(n))
+
+
 def leg3(r, parent, name, anim, pts, widths, mat, claw, toes=3, foot=(5.0, 2.4, 6.0), toe_len=3.0, dew=True, joint=None):
     """Hip/shoulder, knee/elbow, ankle/wrist, foot: the upper link (anim), the lower links (knee), a foot with toes."""
     up = r.bone(name, parent, tuple(pts[0]), anim=anim)
@@ -179,7 +230,7 @@ def wedge_head(r, parent, A, k, skin, jaw_skin, brow, eye_m, tooth, mouth, W=12.
     # the bridge of the nose: one plate from the brow to the nose's tip, following the slope, over the steps
     tb0, tb1 = 0.3, 0.985
     p0, p1 = V(0, ym - h_at(tb0) - 0.4, zb - L * tb0), V(0, ym - h_at(tb1) - 0.4, zb - L * tb1)
-    CI.seg(head, H(*p0), H(*p1), w_at(0.75) * 0.82 * k, 1.6 * k, ridge if ridge is not None else skin, up=(0, -1, 0), ext=0.6 * k)
+    CI.seg(head, H(*p0), H(*p1), w_at(0.75) * 0.6 * k, 1.4 * k, ridge if ridge is not None else skin, up=(0, -1, 0), ext=0.6 * k)
     te = 0.27                                                # the eye a little over a quarter of the way along
     ze, we, he = zb - L * te, w_at(te), h_at(te)
     for sx in (-1, 1):
@@ -242,79 +293,94 @@ def demiurgos():
     belly = M('scale', '#8a86a0', belly='#a8a4bc', scale_size=1.4, contrast=0.5)
     crystals = [M('gem', c, glow=True) for c in ('#b48cff', '#6af0ff', '#ff8ad8', '#ffe46a', '#9a7cff')]
     root = r.bone('root', None, (0, 24, 0), anim='root')
-    body = r.bone('body', root, (0, -9, 0), anim='breath')
-    # Proportions from the user's Ice and Fire photo (the ice dragon, side on, stalking low) and sheet 22 (standing),
-    # in shoulder heights (SH = 44 px here: the ground y = 24, the top of the shoulders y = -20): the body 1.35 SH from
-    # chest to rump, the chest 0.52 SH deep with half the leg showing under it, the hips a little lower and slimmer; a
-    # thick neck rising at 45 degrees, the head held forward, its top 1.35 SH up; the head 0.6 SH long; the upper legs
-    # 0.22 to 0.27 SH thick.
-    # ------------------------------------------------------------------ the body
-    rseg(body, V(0, -8.5, -29), V(0, -8.5, -9), 22.0, 23.0, skin, bevel=4.6)             # the chest
-    rseg(body, V(0, -9.5, -12), V(0, -9.5, 13), 19.0, 19.0, skin, bevel=3.8)             # the waist
-    rseg(body, V(0, -9.5, 10), V(0, -9.5, 30), 18.5, 17.0, skin, bevel=3.6)              # the hips
+    body = r.bone('body', root, (0, -10, -2), anim='breath')
+    # Measured on sheet 22 (in head lengths, HL = 27 px here): the body slopes down from high shoulders to low hips
+    # (the user: "直線じゃなくて＼な体つき"), about 2 HL along its line, tipped 22 degrees; the chest a little under 1 HL
+    # deep and wide; long forelegs from high shoulders, the hind legs folded under low hips; the neck rising from the
+    # top of the chest almost upright, the head held forward and a little down; the tail sweeping down to the ground.
+    ang = math.radians(22.0)
+    ax = V(0, math.sin(ang), math.cos(ang))                     # along the body, down and back
+    up = V(0, -math.cos(ang), math.sin(ang))                    # across it, toward the back
+    C0 = V(0, -16.0, -30.0)                                     # the front of the chest, on the body's line
+    P = lambda t, v=0.0: C0 + ax * t + up * v
+    segs = [(0.0, 21.0, 23.0, 26.0, 5.0), (18.0, 38.0, 19.5, 21.0, 4.0), (35.0, 54.0, 18.5, 18.0, 3.6)]
+    for t0, t1, w, dep, bv in segs:                             # the chest, the waist, the hips
+        rseg(body, P(t0), P(t1), w, dep, skin, up=tuple(up), bevel=bv)
+        scale_relief(body, P(t0 + 1.0), P(t1 - 1.0), w, dep, [skin, dark], tuple(up), bevel=bv, seed=int(t0))
     for sx in (-1, 1):
-        rseg(body, (sx * 8.0, -19.0, -24), (sx * 8.5, -16.5, -11), 7.5, 7.0, skin, bevel=1.6)     # the wing roots
-        rseg(body, (sx * 9.5, -12.0, -27), (sx * 11.0, -1.0, -16), 8.5, 10.0, skin, bevel=2.0)    # the shoulders
-        rseg(body, (sx * 8.5, -15.0, 14), (sx * 10.5, 0.0, 27), 9.5, 14.0, skin, bevel=2.4)       # the haunches
-    for k in range(12):                                                                 # belly plates, throat to groin
-        z = -28.0 + k * 4.6
-        yb = 2.5 - max(0.0, z + 8) * 0.075
-        CI.box(body, (-7.0 + k * 0.2, yb, z), (7.0 - k * 0.2, yb + 1.0, z + 4.0), belly)
-    # the chest jewel in a gold frame (sheet 22)
-    CI.cbox(body, (0, -8.0, -29.6), (7.0, 7.0, 1.2), M('metal', '#d8b060'), rot=(0, 0, 0.785))
-    CI.cbox(body, (0, -8.0, -30.1), (4.6, 4.6, 1.2), M('gem', '#c08cff', glow=True), rot=(0, 0, 0.785))
+        rseg(body, P(3.0, 11.0) + V(sx * 8.5, 0, 0), P(15.0, 11.0) + V(sx * 8.5, 0, 0), 7.5, 7.0, skin, up=tuple(up), bevel=1.6)  # the wing roots
+        rseg(body, P(2.0, 2.0) + V(sx * 10.0, 0, 0), P(13.0, -6.0) + V(sx * 11.0, 0, 0), 9.0, 10.0, skin, up=tuple(up), bevel=2.0)  # the shoulders
+        rseg(body, P(40.0, 3.0) + V(sx * 9.0, 0, 0), P(52.0, -4.0) + V(sx * 10.0, 0, 0), 10.0, 14.0, skin, up=tuple(up), bevel=2.4)  # the haunches
+    for k in range(12):                                         # belly plates, throat to groin, along the slope
+        t = 1.0 + k * 4.4
+        dep = 26.0 if t < 19 else (21.0 if t < 37 else 18.0)
+        wd = 14.0 - k * 0.45
+        c = P(t + 2.0, -dep / 2 - 0.3)
+        CI.seg(body, tuple(c - ax * 2.0), tuple(c + ax * 2.0), wd, 1.0, belly, up=tuple(up))
+    # the chest jewel in a gold frame (sheet 22), set in the front of the chest
+    jc = P(-0.3, 1.0)
+    CI.cbox(body, tuple(jc + V(0, 0, -0.4)), (7.0, 7.0, 1.2), M('metal', '#d8b060'), rot=(-ang, 0, 0.785))
+    CI.cbox(body, tuple(jc + V(0, 0, -0.9)), (4.6, 4.6, 1.2), M('gem', '#c08cff', glow=True), rot=(-ang, 0, 0.785))
     # rainbow crystal studs set in the shoulders, flanks and thighs (sheet 22)
-    for i, (x, y, z, sz) in enumerate(((11.6, -7.0, -22.0, 2.4), (11.4, -14.0, -15.0, 2.0), (9.8, -6.0, -3.0, 2.0), (9.6, -13.0, 7.0, 1.8),
-                                       (11.0, -8.0, 18.0, 2.4), (10.6, -3.0, 24.0, 1.8), (8.2, -16.0, 20.0, 1.6))):
+    for i, (t, v, x, sz) in enumerate(((6.0, -4.0, 11.6, 2.4), (12.0, 6.0, 11.4, 2.0), (22.0, -2.0, 10.0, 2.0), (28.0, 5.0, 9.8, 1.8),
+                                       (42.0, -2.0, 10.4, 2.4), (48.0, -6.0, 10.2, 1.8), (45.0, 7.0, 9.0, 1.6))):
         for sx in (-1, 1):
-            CI.cbox(body, (sx * x, y, z), (sz, sz * 1.5, sz), crystals[(i + (sx > 0)) % len(crystals)], rot=(0.3, 0.5 * sx, 0.4 * sx))
+            CI.cbox(body, tuple(P(t, v) + V(sx * x, 0, 0)), (sz, sz * 1.5, sz), crystals[(i + (sx > 0)) % len(crystals)],
+                    rot=(0.3, 0.5 * sx, 0.4 * sx))
     # rainbow crystals down the back, small gold spikes between them
     for k in range(10):
-        z = -24.0 + k * 5.6
-        yt = -20.0 + max(0.0, z) * 0.06
-        h = 6.5 - abs(k - 3.0) * 0.4
-        spike(body, (0, yt + 1.2, z), (0, yt - h, z + h * 0.55), 2.2, crystals[k % len(crystals)])
+        t = 3.0 + k * 5.2
+        dep = 26.0 if t < 19 else (21.0 if t < 37 else 18.0)
+        base = P(t, dep / 2 - 0.5)
+        h = 7.0 - abs(k - 2.5) * 0.45
+        spike(body, base, base + up * h + ax * (h * 0.5), 2.2, crystals[k % len(crystals)])
         if k % 2 == 0:
             for sx in (-1, 1):
-                spike(body, (sx * 5.0, yt + 2.0, z + 1.8), (sx * 6.6, yt - 2.4, z + 3.8), 1.4, gold)
-    # ------------------------------------------------------------------ the neck: thick, rising at 45 degrees, the head held forward
-    pts = [V(0, -14, -26), V(0, -20, -32), V(0, -25, -37.5), V(0, -28.5, -43.5)]
-    widths = [15.0, 13.4, 12.0]
+                b0 = P(t + 1.5, dep / 2 - 1.5) + V(sx * 5.2, 0, 0)
+                spike(body, b0, b0 + up * 3.6 + ax * 1.6 + V(sx * 1.6, 0, 0), 1.4, gold)
+    # ------------------------------------------------------------------ the neck: thick, rising from the top of the chest
+    base = P(4.0, 6.0)
+    pts = [base, base + V(0, -7.5, -4.5), base + V(0, -14.0, -9.5), base + V(0, -19.0, -15.5)]   # up, then forward
+    widths = [15.5, 13.8, 12.2]
     bone = body
     for i in range(3):
         bone = r.bone(f'neck{i + 1}', bone, tuple(pts[i]), anim='sway', ax=1, amp=0.03, speed=0.05, phase=0.6 * i)
         p, q = pts[i], pts[i + 1]
-        rseg(bone, p, q, widths[i], widths[i], skin, up=(0, 0, -1), bevel=widths[i] * 0.2, ext=widths[i] * 0.6)
-        d = (q - p) / np.linalg.norm(q - p)
-        fwd = np.array([0.0, d[2], -d[1]]) * -1.0                                       # toward the throat
+        dn = (q - p) / np.linalg.norm(q - p)
+        fwd = np.array([0.0, dn[2], -dn[1]]) * -1.0                                     # toward the throat
         fwd = fwd / np.linalg.norm(fwd)
+        rseg(bone, p, q, widths[i], widths[i], skin, up=tuple(-fwd), bevel=widths[i] * 0.2, ext=widths[i] * 0.6)
+        scale_relief(bone, p + dn * 0.5, q - dn * 0.5, widths[i], widths[i], [skin, dark], tuple(-fwd), step=2.0, top=False,
+                     bevel=widths[i] * 0.2, seed=i)
         CI.seg(bone, tuple(p + fwd * widths[i] * 0.47), tuple(q + fwd * widths[i] * 0.47), widths[i] * 0.72, 1.2, belly, up=tuple(fwd))
         back = -fwd
         m = (p + q) / 2 + back * widths[i] * 0.45
-        spike(bone, m, m + back * (6.0 - i * 0.6) + d * -2.5, 2.0, crystals[(i + 3) % len(crystals)])
-        spike(bone, m + d * 2.4, m + d * 2.4 + back * 3.4 + d * -1.5, 1.4, dark)
-    # ------------------------------------------------------------------ the head: the Ice and Fire block, tall to the nose
-    A = pts[-1] + V(0, 1.5, 2.0)
-    Ht = 9.5
-    wedge_head(r, bone, A, 1.0, skin, belly, dark, M('eye', '#c060ff', pupil='slit', mood='fierce', lid='#141220'),
-               M('tooth', '#f0e8d4'), M('mouth', '#5a1420'), W=13.0, L=27.0, Ht=Ht, tip_h=5.6, jaw_h=(6.0, 3.8), horns=gold, horn2=gold,
-               frill=dark, nose=gold, taper=0.4)
+        spike(bone, m, m + back * (6.0 - i * 0.6) + dn * 1.5, 2.0, crystals[(i + 3) % len(crystals)])
+        spike(bone, m + dn * 2.4, m + dn * 2.4 + back * 3.4 + dn * 1.0, 1.4, dark)
+    # ------------------------------------------------------------------ the head: the Ice and Fire block, held forward
+    A = pts[-1] + V(0, 1.5, 1.0)
+    Ht = 8.6
+    head, _ = wedge_head(r, bone, A, 1.0, skin, belly, dark, M('eye', '#c060ff', pupil='slit', mood='fierce', lid='#141220'),
+                         M('tooth', '#f0e8d4'), M('mouth', '#5a1420'), W=10.0, L=27.0, Ht=Ht, tip_h=4.6, jaw_h=(5.0, 3.2), horns=gold,
+                         horn2=gold, frill=dark, nose=gold, taper=0.4, ridge=dark)
     head_top = A[1] + (1.0 - Ht)
-    # ------------------------------------------------------------------ the legs: thick, a little under half showing
+    # ------------------------------------------------------------------ the legs: long forelegs, the hind legs folded under
     for sx in (-1, 1):
         sd = 'r' if sx < 0 else 'l'
+        sh = P(8.0, -3.0) + V(sx * 10.5, 0, 0)
         leg3(r, body, 'leg_f' + sd, 'leg_r' if sx < 0 else 'leg_l',
-             [V(sx * 10.5, -9.0, -20.0), V(sx * 12.0, 5.0, -14.5), V(sx * 12.0, 19.5, -20.0), V(sx * 12.0, 21.6, -21.0)],
-             [9.6, 7.4, 5.8], skin, gold, toes=4, foot=(8.0, 3.0, 8.0), toe_len=3.0)
+             [sh, V(sx * 12.0, sh[1] + 15.0, sh[2] + 5.0), V(sx * 12.0, 19.5, sh[2] - 1.0), V(sx * 12.0, 21.6, sh[2] - 2.0)],
+             [10.0, 7.6, 6.0], skin, gold, toes=4, foot=(8.4, 3.0, 8.4), toe_len=3.2)
+        hp = P(46.0, -2.0) + V(sx * 10.0, 0, 0)
         leg3(r, body, 'leg_b' + sd, 'leg_l' if sx < 0 else 'leg_r',
-             [V(sx * 10.0, -9.0, 21.0), V(sx * 12.0, 4.0, 13.0), V(sx * 12.0, 15.5, 26.5), V(sx * 12.0, 21.6, 23.5)],
-             [12.0, 7.8, 5.8], skin, gold, toes=3, foot=(8.0, 3.0, 8.5), toe_len=3.4)
+             [hp, V(sx * 12.5, hp[1] + 7.0, hp[2] - 9.0), V(sx * 12.5, 16.5, hp[2] + 4.0), V(sx * 12.5, 21.6, hp[2] + 1.0)],
+             [12.5, 8.2, 6.0], skin, gold, toes=3, foot=(8.4, 3.0, 9.0), toe_len=3.6)
     # ------------------------------------------------------------------ the wings: huge, starry, raised over the back
     memb = M('wingskin', '#2a1e48', accent='#8a60ff', streaks='#c8a0ff', stars=0.012, edge='#d8b060')
     for sx in (-1, 1):
         # (sheet 22) the arm runs up to a high wrist, the fingers fan back and down from it, the membrane hangs
         # from them to the back like a curtain; the plane leans out to the side and back
-        membrane_wing(r, body, sx, (sx * 8.0, -19.5, -17.0), ('plane', (0.5, -1.0, 0.1), (1.0, 0.45, 0.3)),
+        membrane_wing(r, body, sx, tuple(P(9.0, 13.0) + V(sx * 8.0, 0, 0)), ('plane', (0.5, -1.0, 0.1), (1.0, 0.45, 0.3)),
                       [(22.0, -6.0), (42.0, -3.0)], [(58.0, 12.0), (50.0, 30.0), (37.0, 44.0), (22.0, 50.0), (6.0, 46.0)],
                       (-13.0, 8.0), M('scale', '#1c1a26', belly='#1c1a26'), gold, memb, cap=gold, ragged=True,
                       arm_w=(5.0, 3.0))
@@ -327,8 +393,9 @@ def demiurgos():
         if i % 2 == 1 and i < 12:
             for sx in (-1, 1):
                 spike(bone, m + (sx * w * 0.42, 0, 0), m + (sx * (w * 0.42 + max(1.5, w * 0.4)), -0.6, 1.6), max(0.7, w * 0.16), gold)
-    last, tip = tail_chain(r, body, (0, -12.0, 28.0), 15, 76.0, 14.0, 2.0, skin,
-                           lambda t: 0.8 - 1.4 * t, extra=tail_extra)
+    # the tail sweeps on down the body's line, then runs low over the ground
+    last, tip = tail_chain(r, body, tuple(P(52.0, 0.0)), 15, 78.0, 14.0, 2.0, skin,
+                           lambda t: 2.4 * (1.0 - t / 0.35) if t < 0.35 else -0.25, extra=tail_extra)
     for k, (dx, dy) in enumerate(((0, -1.0), (2.2, 0.6), (-2.2, 0.6))):
         spike(last, tip, tip + (dx, dy - 1.0, 6.5 - abs(dx) * 0.4), 1.6, crystals[k])
     r.height = 24.0 - head_top          # the renderer fits it to the hitbox: the head's top, not the wings' tips
@@ -339,7 +406,8 @@ def demiurgos():
 @recipe
 def teia():
     r = CI.rig('teia', td=1)
-    plate = M('metal', '#e8ecf2', accent='#d8b060')
+    plate = M('scale', '#f2f4f8', belly='#e0e4ec', scale_size=1.3, contrast=0.45)     # white scales ("鱗")
+    shell = M('metal', '#f0f2f6', accent='#d8b060')                                  # the armour plates laid over them
     frame = M('metal', '#4a505c')
     gold = M('metal', '#d8b060')
     light = M('energy', '#6ff6ff', glow=True)
@@ -370,14 +438,18 @@ def teia():
         rseg(body, (sx * 6.6, -17.5, 13.0), (sx * 8.0, -4.0, 25.0), 6.0, 9.0, plate, bevel=1.6)      # the haunch plates
         CI.cbox(body, (sx * 8.6, -11.0, 19.0), (0.8, 2.6, 2.6), light)
         CI.box(body, (sx * 6.4 - 0.3, -6.0, -6.0), (sx * 6.4 + 0.3, -5.2, 10.0), light)              # the cyan seam
+    # armour plates laid like scales over the chest, the waist and the hips (sheet 17)
+    shingles(body, V(0, -10.0, -25), V(0, -10.0, -7), 16.0, 20.0, shell, gold, (0, -1, 0), rows=4)
+    shingles(body, V(0, -11.0, -7), V(0, -11.0, 10), 12.5, 15.0, shell, gold, (0, -1, 0), rows=4)
+    shingles(body, V(0, -10.5, 10), V(0, -10.5, 26), 14.5, 16.0, shell, gold, (0, -1, 0), rows=3)
     for k in range(9):                                                                       # crystal fins down the back
         z = -18.0 + k * 5.0
         spike(body, (0, -19.5, z), (0, -25.5 + k * 0.4, z + 3.0), 1.8, blades[k % len(blades)])
-    # ------------------------------------------------------------------ the neck: long and slim, reaching up and forward
-    pts = [V(0, -17, -21), V(0, -25, -25), V(0, -33, -28.5), V(0, -40, -32), V(0, -45.5, -36)]
-    widths = [10.0, 9.0, 8.2, 7.6]
+    # ------------------------------------------------------------------ the neck: as long as the head (sheet 17), upright
+    pts = [V(0, -17, -21), V(0, -24.5, -24), V(0, -31, -27), V(0, -36, -30.5)]
+    widths = [11.0, 10.0, 9.2]
     bone = body
-    for i in range(4):
+    for i in range(3):
         bone = r.bone(f'neck{i + 1}', bone, tuple(pts[i]), anim='sway', ax=1, amp=0.03, speed=0.05, phase=0.6 * i)
         p, q = pts[i], pts[i + 1]
         CI.seg(bone, tuple(p), tuple(q), widths[i] * 0.7, widths[i] * 0.7, frame, up=(0, 0, -1), ext=widths[i] * 0.3)
@@ -390,6 +462,7 @@ def teia():
                frame, up=tuple(fwd))
         rseg(bone, q - d * 1.6, q - d * 0.9, widths[i] + 0.5, widths[i] + 0.5, gold, up=(0, 0, -1), bevel=widths[i] * 0.22)
         spike(bone, m - fwd * widths[i] * 0.45, m - fwd * (widths[i] * 0.45 + 4.0 - i * 0.4) - d * 2.0, 1.4, blades[i % len(blades)])
+        shingles(bone, p, q, widths[i], widths[i], shell, gold, tuple(-fwd), rows=2)
     for sx in (-1, 1):                                                                       # the crystal ruff at the neck's root
         for j in range(3):
             spike(body, (sx * 5.0, -17.0 + j * 2.2, -21.0), (sx * 9.5, -20.0 + j * 2.5, -16.5 + j * 1.2), 1.6, blades[j])
@@ -404,25 +477,25 @@ def teia():
             spike(head, H(*base), H(*tip), 2.0, blades[j % len(blades)])
 
     wedge_head(r, bone, pts[-1] + V(0, 1.2, 1.5), 1.0, plate, frame, plate, M('eye', '#5ff0ff', pupil='ring', mood='calm', lid='#e8ecf2'),
-               M('tooth', '#e8f4ff'), M('mouth', '#2a3a48'), W=9.0, L=23.0, Ht=7.6, tip_h=4.0, jaw_h=(4.2, 2.4), taper=0.36,
+               M('tooth', '#e8f4ff'), M('mouth', '#2a3a48'), W=7.2, L=23.0, Ht=6.6, tip_h=3.4, jaw_h=(3.6, 2.0), taper=0.36,
                visor_trim=gold, nose=None, crest=teia_crest)
     # ------------------------------------------------------------------ the legs: long and straight, armoured
     for sx in (-1, 1):
         sd = 'r' if sx < 0 else 'l'
         for front in (True, False):
             if front:
-                pts = [V(sx * 7.6, -10.0, -15.0), V(sx * 8.4, 4.0, -11.5), V(sx * 8.2, 16.0, -14.5), V(sx * 8.2, 21.4, -15.5)]
-                wd, name, anim = [7.6, 5.8, 4.6], 'leg_f' + sd, 'leg_r' if sx < 0 else 'leg_l'
+                pts = [V(sx * 8.0, -10.0, -17.0), V(sx * 8.8, 3.0, -13.5), V(sx * 8.6, 16.0, -16.5), V(sx * 8.6, 21.4, -17.5)]
+                wd, name, anim = [8.4, 6.6, 5.2], 'leg_f' + sd, 'leg_r' if sx < 0 else 'leg_l'
             else:
-                pts = [V(sx * 7.6, -10.0, 19.0), V(sx * 8.6, 2.0, 12.0), V(sx * 8.2, 14.0, 22.0), V(sx * 8.2, 21.4, 19.5)]
-                wd, name, anim = [9.6, 6.0, 4.6], 'leg_b' + sd, 'leg_l' if sx < 0 else 'leg_r'
+                pts = [V(sx * 8.0, -10.0, 17.0), V(sx * 9.0, 2.0, 10.0), V(sx * 8.6, 14.0, 20.0), V(sx * 8.6, 21.4, 17.5)]
+                wd, name, anim = [11.0, 7.2, 5.2], 'leg_b' + sd, 'leg_l' if sx < 0 else 'leg_r'
             up, low = leg3(r, body, name, anim, pts, wd, frame, claw, toes=3, foot=(5.6, 2.8, 5.8), toe_len=2.0, dew=False)
             # white armour shells over the dark limb, gold at their edges, cyan light at the joint
             d0 = (pts[1] - pts[0]) / np.linalg.norm(pts[1] - pts[0])
-            rseg(up, pts[0] + d0 * 0.5, pts[1] - d0 * 1.6, wd[0] + 1.6, wd[0] * 1.15 + 1.6, plate, up=(0, 0, -1), bevel=1.4)
+            rseg(up, pts[0] + d0 * 0.5, pts[1] - d0 * 1.6, wd[0] + 1.6, wd[0] * 1.15 + 1.6, shell, up=(0, 0, -1), bevel=1.4)
             rseg(up, pts[1] - d0 * 2.2, pts[1] - d0 * 1.4, wd[0] + 2.0, wd[0] * 1.15 + 2.0, gold, up=(0, 0, -1), bevel=0.8)
             d1 = (pts[2] - pts[1]) / np.linalg.norm(pts[2] - pts[1])
-            rseg(low, pts[1] + d1 * 1.6, pts[2] - d1 * 1.2, wd[1] + 1.4, wd[1] + 1.4, plate, up=(0, 0, -1), bevel=1.0)
+            rseg(low, pts[1] + d1 * 1.6, pts[2] - d1 * 1.2, wd[1] + 1.4, wd[1] + 1.4, shell, up=(0, 0, -1), bevel=1.0)
             rseg(low, pts[1] + d1 * 1.2, pts[1] + d1 * 2.0, wd[1] + 1.8, wd[1] + 1.8, gold, up=(0, 0, -1), bevel=0.6)
             CI.cbox(low, tuple(pts[1] + V(sx * (wd[1] * 0.5 + 0.6), 0, 0)), (0.8, 2.0, 2.0), light)
             CI.cbox(low, tuple(pts[2] + V(sx * (wd[2] * 0.5 + 0.5), 0, 0)), (0.8, 1.6, 1.6), light)
@@ -437,7 +510,7 @@ def teia():
         CI.seg(bone, tuple(t), tuple(p + d * L), w * 0.5, 0.6, cols[2], up=(0, -1, 0), ext=0.4)
 
     for sx in (-1, 1):
-        x0, y, z0 = sx * 6.5, -19.5, -14.0
+        x0, y, z0 = sx * 7.0, -19.5, -16.0
         b = r.bone('wing_r' if sx < 0 else 'wing_l', body, (x0, y, z0), rot=plane_rot(sx, (0.6, -1.0, 0.1), (1.0, 0.2, 0.35)),
                    anim='sway', ax=2, amp=0.2, speed=0.07)
         P = lambda u, v: V(x0 + sx * u, y, z0 + v)
