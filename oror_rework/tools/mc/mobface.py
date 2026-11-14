@@ -211,7 +211,8 @@ def face(spec, skin, hair, build='woman', bangs='bangs'):
                     rgb[y, 2 * lx:2 * lx + 2] = bc
     # blush: a pink pixel under each eye's outer column (faint on every girl, stronger with 'blush')
     eye_bottom = top + len(tpl)
-    if not man and not spec.get('no_blush'):
+    # (059g, the user: "ほっぺも見直し 画像みたいなのにして") no blush: the references' cheeks are plain skin
+    if spec.get('blush_force'):
         strong = bool(spec.get('blush'))
         b = C(mix(s, '#ff5c80', 0.42 if strong else 0.22))
         for side in (0, 1):
