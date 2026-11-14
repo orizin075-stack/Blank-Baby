@@ -102,12 +102,9 @@ def face8(spec, skin, hair, build):
         if shape == 'sharp':
             f[2, 1] = f[2, 6] = bc
     marks = spec.get('marks')
-    if marks and not isinstance(marks, (list, tuple)):
-        mc = C(marks)
-        f[6, 1] = f[6, 6] = mc
-        g[6, 1, :3] = g[6, 6, :3] = mc
-        g[6, 1, 3] = g[6, 6, 3] = 200
-    elif marks:
+    # (a marks colour alone draws nothing on the face: two glowing squares on the cheeks read as heavy blush, which the
+    # references do not have; those characters keep their marks on the clothes and arms)
+    if marks and isinstance(marks, (list, tuple)):
         mc = C(spec.get('iris2') or iris)
         f[2, 3:5] = mc
         g[2, 3:5, :3], g[2, 3:5, 3] = mc, 255
@@ -120,7 +117,6 @@ def face8(spec, skin, hair, build):
         f[3, 4:8] = mc                                           # a ring round the right eye, its chain down
         f[5, 4:8] = mc
         f[4, 4] = f[4, 7] = mc
-        f[6, 7] = f[7, 7] = mc
     if spec.get('scar'):
         f[3, 2] = f[4, 1] = f[5, 1] = C(mix(skin, '#8a2a2a', 0.45))
     return f, g
