@@ -57,6 +57,8 @@ def main():
             SC.Sculpt(r)
         B3.drop_props(r)
         B3.cubes_to_surfaces(r)
+        import headswap
+        headswap.prepare(r)
         SC.bake(r, BP.paint_surf)
         tex, glow, size = SC.atlas(r)
         t = Image.new('RGB', (530, 284), (30, 32, 40))

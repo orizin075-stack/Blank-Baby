@@ -34,6 +34,8 @@ def build_one(name, fn, outdir, preview=True):
         SC.Sculpt(r)
     dropped = B3.drop_props(r)
     B3.cubes_to_surfaces(r)
+    import headswap
+    headswap.prepare(r)                      # 059g: the head (face and hair) as the user's references draw it
     SC.bake(r, BP.paint_surf)
     tex, glow, size = SC.atlas(r)
     os.makedirs(os.path.join(outdir, 'textures'), exist_ok=True)

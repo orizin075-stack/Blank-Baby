@@ -85,6 +85,29 @@ def eye_x(side, c):
     return c if side == 0 else 7 - c
 
 
+EYE_MODE = 'small'
+FRINGE_MODE = 'strands'
+
+
+def tlm_eyes(rgb, glow, spec, hair, man):
+    """Touhou Little Maid's eyes: two pixels wide and three tall on the 8x8 face (rows 4-6), the top row a darker
+    shade of the iris (no separate black lash), a white highlight pixel at the upper outer corner, the bottom row a
+    lighter shade."""
+    iris = spec.get('iris', '#5a3a2a')
+    iris_r = spec.get('heterochromia') or iris
+    for side, ic in ((0, iris), (1, iris_r)):
+        o, i = (1, 2) if side == 0 else (6, 5)
+        top = 4 if not man else 4
+        dark, mid, light = C(mix(shade(ic, 0.55), '#10081a', 0.3)), C(ic), C(mix(ic, '#ffffff', 0.25))
+        rows = [(dark, dark), (C('#ffffff'), mid), (mid, light)] if not man else [(dark, dark), (C('#f2f0f6'), mid)]
+        for r, (co, ci) in enumerate(rows):
+            for lx, col in ((o, co), (i, ci)):
+                rgb[2 * (top + r):2 * (top + r) + 2, 2 * lx:2 * lx + 2] = col
+                if spec.get('glow_eyes') and not np.allclose(col, C('#ffffff')):
+                    glow[2 * (top + r):2 * (top + r) + 2, 2 * lx:2 * lx + 2, :3] = col
+                    glow[2 * (top + r):2 * (top + r) + 2, 2 * lx:2 * lx + 2, 3] = 230
+
+
 def small_eyes(rgb, glow, spec, hair, top_texel, man):
     """(059g, the user: "目も大きすぎる") eyes four texels wide and three tall: a one-texel lash, two of iris with
     a single white catchlight; men's a white and an iris pixel under the lash."""
@@ -135,6 +158,12 @@ def face(spec, skin, hair, build='woman', bangs='bangs'):
     # hair: gaiaface's strands and pointed fringe, never past row 3 of the 8x8 face (texel 6)
     fr = [min(d, 6) for d in GF.fringe_cut(bangs)]
     hr = GF.strands(hair, N, N, 21, shine_row=1)
+    if FRINGE_MODE == 'clean':
+        # a solid fringe: the hair's colour, a light band near the top, two-pixel dips (the maid mod's bangs)
+        fr = [6, 6, 6, 6, 4, 4, 6, 6, 6, 6, 4, 4, 6, 6, 6, 6]
+        hr = np.tile(C(hair), (N, N, 1)).astype(np.float32)
+        hr[1:3] = C(mix(hair, '#ffffff', 0.22))
+        hr[:, 7:9] = C(shade(hair, 0.85))
     R = GF.hair_ramp(hair)
     for x in range(N):
         d = fr[x]
@@ -164,7 +193,10 @@ def face(spec, skin, hair, build='woman', bangs='bangs'):
     lid = T['s2']
     glow_eyes = bool(spec.get('glow_eyes'))
     highlight = spec.get('highlight', True)
-    small_eyes(rgb, glow, spec, hair, 2 * top + (2 if not man else 0), man)
+    if EYE_MODE == 'tlm':
+        tlm_eyes(rgb, glow, spec, hair, man)
+    else:
+        small_eyes(rgb, glow, spec, hair, 2 * top + (2 if not man else 0), man)
     for side, ic in (() if True else ((0, iris), (1, iris_r))):
         light = spec.get('iris2') or '#%02x%02x%02x' % shade(ic, 1.4)
         pal = {
