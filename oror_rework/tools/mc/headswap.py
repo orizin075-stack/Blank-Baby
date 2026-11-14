@@ -37,9 +37,10 @@ def fit(a, W, H):
 
 # bangs: rows of hair down each column of the 8 x 8 face (2 = rows 0-1, 3 = a point to row 2)
 BANGS = {
-    'bangs': [3, 2, 3, 2, 2, 3, 2, 3], 'blunt': [3, 3, 3, 3, 3, 3, 3, 3], 'parted': [3, 3, 2, 1, 1, 2, 3, 3],
-    'swept': [3, 3, 3, 2, 2, 2, 1, 2], 'messy': [3, 2, 3, 1, 3, 2, 3, 2], 'short': [2, 1, 2, 2, 1, 2, 2, 1],
-    'slick': [1, 1, 1, 1, 1, 1, 1, 1], 'open': [2, 1, 1, 0, 0, 1, 1, 2], 'none': [1, 0, 0, 0, 0, 0, 0, 1],
+    # (059g, the user: "髪ももっと多く使っていい") deep bangs to row 3 with uneven points, as the skins the user sent
+    'bangs': [4, 4, 3, 4, 4, 3, 4, 4], 'blunt': [4, 4, 4, 4, 4, 4, 4, 4], 'parted': [4, 4, 3, 2, 2, 3, 4, 4],
+    'swept': [4, 4, 4, 4, 3, 3, 2, 3], 'messy': [4, 3, 4, 2, 4, 3, 4, 3], 'short': [3, 3, 2, 3, 3, 2, 3, 3],
+    'slick': [2, 2, 2, 2, 2, 2, 2, 2], 'open': [3, 3, 2, 1, 1, 2, 3, 3], 'none': [2, 1, 1, 1, 1, 1, 1, 2],
 }
 EYE_SHAPE = {'normal': 'round', 'big': 'big', 'calm': 'calm', 'sharp': 'sharp', 'fierce': 'sharp', 'sad': 'calm', 'slit': 'slit',
              'closed': 'closed', 'lowered': 'calm', 'void': 'void'}
@@ -64,7 +65,7 @@ def face8(spec, skin, hair, build):
     # tall, the outer column all white, the inner column the iris, darker above and lighter below; a pale pink cheek
     # under the white; the eyes right under the bangs (rows 3-4); men one row tall, white and iris, under a brow
     white = C('#f6f6f8')
-    y0 = 3 if not man else 4
+    y0 = 4
     for side, ic in ((0, iris), (1, iris_r)):
         o, i = (1, 2) if side == 0 else (6, 5)
         dark = C(mix(shade(ic, 0.62), '#140a1a', 0.2))
@@ -149,20 +150,33 @@ def head_glow(face_name, W, H, s):
     return np.zeros((H, W, 4), np.float32)
 
 
+def tones(hair, n, seed):
+    """Hair in three tones, scattered in short vertical runs as the skins paint it (deterministic)."""
+    base, hi, lo = C(hair), C(mix(hair, '#ffffff', 0.2)), C(shade(hair, 0.8))
+    out = np.zeros((n, n, 3), np.float32)
+    for x in range(n):
+        for y in range(n):
+            h = (x * 73 + (y // 2) * 151 + seed * 97) % 10
+            out[y, x] = hi if h < 2 else lo if h > 7 else base
+    return out
+
+
 def hair_layer_fn(hair, bangs, long_hair, ears):
-    hi, lo, base = C(mix(hair, '#ffffff', 0.24)), C(shade(hair, 0.8)), C(hair)
+    hi = C(mix(hair, '#ffffff', 0.24))
     rows = BANGS.get(bangs, BANGS['bangs'])
+    seeds = {'front': 1, 'top': 2, 'left': 3, 'right': 4, 'back': 5, 'bottom': 6}
 
     def fn(face_name, W, H, s):
         c = np.zeros((8, 8, 4), np.float32)
-        c[..., :3] = base
+        c[..., :3] = tones(hair, 8, seeds.get(face_name, 0))
         if face_name == 'front':
             for x in range(8):
                 c[:rows[x], x, 3] = 255
+            side = 7 if long_hair else 6
+            c[:side, 0, 3] = c[:side, 7, 3] = 255                # the hair down both cheeks
+            c[:max(rows[1], 5), 1, 3] = 255                      # and over their outer edge
+            c[:max(rows[6], 5), 6, 3] = 255
             c[0, :, :3] = hi
-            side = 6 if long_hair else 4
-            c[:side, 0, 3] = c[:side, 7, 3] = 255                # locks framing the face
-            c[1:side, 0, :3] = c[1:side, 7, :3] = lo
         elif face_name == 'top':
             c[..., 3] = 255
             c[2, :, :3] = hi
@@ -170,10 +184,9 @@ def hair_layer_fn(hair, bangs, long_hair, ears):
             pass
         else:
             c[..., 3] = 255
-            c[:, 2::3, :3] = lo                                  # strands
             c[1, :, :3] = hi
             if not long_hair:
-                c[6:, :, 3] = 0
+                c[7:, :, 3] = 0
             if ears and face_name in ('left', 'right'):
                 c[3:6, 3:5, 3] = 0
         return fit(c, W, H)
