@@ -577,7 +577,7 @@ def kurma():
     spruce2 = M('leaf', '#356a34')
     trunk = M('wood', '#5a3e24')
     root = r.bone('root', None, (0, 24, 0), anim='root')
-    body = r.bone('body', root, (0, 4, 6), anim='breath')
+    body = r.bone('body', root, (0, -2, 6), anim='breath')
 
     def moss_on(bone, x0, x1, y0, y1, z0, z1, n, side):
         """Moss patches and hanging strands on a face (side: the axis and sign it faces)."""
@@ -591,19 +591,20 @@ def kurma():
             size[1] += rnd.choice((0.0, 0.0, 3.0, 5.0))          # some hang down
             CI.cbox(bone, (c[0], c[1] + size[1] / 2 - 1.0, c[2]), tuple(size), moss if rnd.random() < 0.5 else moss2)
     # ------------------------------------------------------------------ the body under the shell, the plastron
-    CI.rbox(body, (-18.5, -4.0, -26.0), (18.5, 13.0, 30.0), hide, bevel=4.5)
-    CI.rbox(body, (-15.0, 10.0, -24.0), (15.0, 14.2, 27.0), plastron, bevel=2.2)
+    CI.rbox(body, (-18.5, -10.0, -26.0), (18.5, 8.0, 30.0), hide, bevel=4.5)
+    CI.rbox(body, (-15.0, 5.0, -24.0), (15.0, 9.2, 27.0), plastron, bevel=2.2)
+    CI.rbox(body, (-14.0, -6.0, -29.0), (14.0, 8.5, -18.0), plastron, bevel=3.0)                  # the pale chest under the head
     for sx in (-1, 1):
-        moss_on(body, -18.5, 18.5, -3.0, 10.0, -24.0, 28.0, 26, (0, sx))
-        for (y0, z0, z1) in ((2.0, -20.0, -4.0), (6.0, 2.0, 22.0), (0.0, 10.0, 16.0)):        # green light in the seams
+        moss_on(body, -18.5, 18.5, -9.0, 5.0, -24.0, 28.0, 26, (0, sx))
+        for (y0, z0, z1) in ((-4.0, -20.0, -4.0), (0.0, 2.0, 22.0), (-6.0, 10.0, 16.0)):        # green light in the seams
             CI.box(body, (sx * 18.55 - (0.15 if sx < 0 else 0), y0, z0), (sx * 18.55 + (0.15 if sx > 0 else 0), y0 + 0.6, z1), vein)
     # ------------------------------------------------------------------ the shell: a rim of great stone blocks
     n = 26
     RX, RZ, CZ = 26.0, 33.0, 3.0
     for k in range(n):
         a0, a1 = 2 * math.pi * k / n, 2 * math.pi * (k + 1) / n
-        p0 = V(math.sin(a0) * RX, -4.0, CZ + math.cos(a0) * RZ)
-        p1 = V(math.sin(a1) * RX, -4.0, CZ + math.cos(a1) * RZ)
+        p0 = V(math.sin(a0) * RX, -10.0, CZ + math.cos(a0) * RZ)
+        p1 = V(math.sin(a1) * RX, -10.0, CZ + math.cos(a1) * RZ)
         rseg(body, p0, p1, 7.5, 7.0, rim if k % 2 else stone, up=(0, -1, 0), bevel=1.4, ext=1.8)
         m = (p0 + p1) / 2
         out = V(math.sin((a0 + a1) / 2), 0, math.cos((a0 + a1) / 2))
@@ -613,12 +614,12 @@ def kurma():
             CI.box(body, tuple(q + V(-0.45, 0, -0.45)), tuple(q + V(0.45, L, 0.45)), moss if j % 2 else moss2)
     # the shell's top: earth and grass in terraces inside the rim, stepping up toward the peaks
     for (hx, hz, h) in ((23.5, 30.0, 1.5), (20.0, 26.0, 4.0), (16.0, 21.0, 6.5), (11.0, 15.0, 9.0)):
-        CI.rbox(body, (-hx, -4.0 - h, CZ - hz), (hx, -4.0 - h + 2.6, CZ + hz), earth, bevel=3.4)
-        CI.rbox(body, (-hx + 0.7, -4.7 - h, CZ - hz + 0.7), (hx - 0.7, -4.0 - h, CZ + hz - 0.7), grass, bevel=3.4)
+        CI.rbox(body, (-hx, -10.0 - h, CZ - hz), (hx, -10.0 - h + 2.6, CZ + hz), earth, bevel=3.4)
+        CI.rbox(body, (-hx + 0.7, -10.7 - h, CZ - hz + 0.7), (hx - 0.7, -10.0 - h, CZ + hz - 0.7), grass, bevel=3.4)
     # the peaks: jagged grey stone stepping up to snow (the highest toward the front, as on the sheet)
     for (x, z, w, h) in ((-1.0, -3.0, 13.0, 29.0), (9.0, 12.0, 8.5, 21.0), (-10.0, 14.0, 7.0, 15.0), (10.0, -12.0, 6.0, 12.0),
                          (-12.0, -10.0, 5.0, 9.0)):
-        base = -12.5
+        base = -18.5
         steps = 8
         for st in range(steps):
             t0, t1 = st / steps, (st + 1) / steps
@@ -631,7 +632,7 @@ def kurma():
                 CI.box(body, (x - hw * 0.75, base - h * t1 - 0.5, z - hw * 0.65), (x + hw * 0.75, base - h * t1, z + hw * 0.65), snow)
         CI.box(body, (x - w * 0.1, base - h - 1.8, z - w * 0.1), (x + w * 0.1, base - h, z + w * 0.1), snow)
     # a forest of spruces on the terraces
-    tiers = ((22.0, 28.0, -5.5), (18.0, 24.0, -8.0), (14.0, 19.0, -10.5), (9.5, 13.0, -13.0))
+    tiers = ((22.0, 28.0, -11.5), (18.0, 24.0, -14.0), (14.0, 19.0, -16.5), (9.5, 13.0, -19.0))
     for (hx, hz, y) in tiers:
         for k in range(14):
             a = 2 * math.pi * k / 14 + rnd.uniform(-0.1, 0.1)
@@ -642,21 +643,21 @@ def kurma():
                 yb = y - 2.0 * hh - j * 1.6 * hh
                 CI.box(body, (x - rad, yb - th * hh, z - rad), (x + rad, yb, z + rad), spruce if (k + j) % 2 else spruce2)
     # a lake on a terrace and two waterfalls running down over the rim
-    CI.box(body, (3.0, -10.65, 4.0), (12.0, -10.4, 12.0), water)
-    for (z, L) in ((8.0, 22.0), (20.0, 17.0)):
+    CI.box(body, (3.0, -16.65, 4.0), (12.0, -16.4, 12.0), water)
+    for (z, L) in ((8.0, 30.0), (20.0, 24.0)):
         x = math.sqrt(max(1.0, 1 - ((z - CZ) / RZ) ** 2)) * RX
-        CI.box(body, (6.0, -10.7, z - 1.6), (x + 0.4, -10.4, z + 1.6), water)                      # the stream to the edge
-        CI.box(body, (x + 3.9, -10.4, z - 1.6), (x + 4.5, -10.4 + L, z + 1.6), water)              # the fall
-        CI.box(body, (x + 0.4, -10.7, z - 1.6), (x + 4.5, -10.4, z + 1.6), water)
-        CI.box(body, (x + 3.6, -10.4 + L - 1.5, z - 2.2), (x + 5.2, -10.4 + L, z + 2.2), foam)
+        CI.box(body, (6.0, -16.7, z - 2.0), (x + 0.4, -16.4, z + 2.0), water)                      # the stream to the edge
+        CI.box(body, (x + 3.9, -16.4, z - 2.0), (x + 4.5, -16.4 + L, z + 2.0), water)              # the fall
+        CI.box(body, (x + 0.4, -16.7, z - 2.0), (x + 4.5, -16.4, z + 2.0), water)
+        CI.box(body, (x + 3.6, -16.4 + L - 1.5, z - 2.6), (x + 5.2, -16.4 + L, z + 2.6), foam)
     # ------------------------------------------------------------------ the neck and the head: big, held up, a pale throat
-    neck = r.bone('neck', body, (0, 0.0, -25.0), anim='sway', ax=1, amp=0.03, speed=0.04)
-    rseg(neck, V(0, 2.0, -22.0), V(0, -5.0, -36.0), 17.0, 16.0, hide, up=(0, -1, 0), bevel=3.6, ext=2.5)
-    CI.seg(neck, (0, 9.5, -23.0), (0, 2.5, -37.0), 12.0, 1.4, plastron, up=(0, 1, 0))
-    moss_on(neck, -8.5, 8.5, -6.0, 6.0, -36.0, -24.0, 10, (0, -1))
-    head = r.bone('head', neck, (0, -5.0, -36.0), anim='head')
-    A = V(0, -5.0, -36.0)
-    k_ = 1.0
+    neck = r.bone('neck', body, (0, -6.0, -25.0), anim='sway', ax=1, amp=0.03, speed=0.04)
+    rseg(neck, V(0, -4.0, -22.0), V(0, -13.0, -35.0), 18.0, 17.0, hide, up=(0, -1, 0), bevel=3.8, ext=2.5)
+    CI.seg(neck, (0, 4.0, -23.0), (0, -5.0, -37.0), 13.0, 1.4, plastron, up=(0, 1, 0))
+    moss_on(neck, -9.0, 9.0, -14.0, -2.0, -36.0, -24.0, 10, (0, -1))
+    head = r.bone('head', neck, (0, -13.0, -35.0), anim='head')
+    A = V(0, -13.0, -35.0)
+    k_ = 1.3                                        # a massive head (the user's brown beast, image 10)
     H = lambda x, y, z: tuple(A + V(x, y, z) * k_)
     CI.rbox(head, H(-8.0, -8.0, -14.0), H(8.0, 3.0, 1.5), hide, bevel=2.4)                       # the skull
     CI.rbox(head, H(-7.0, -5.5, -24.0), H(7.0, 3.0, -12.0), hide, bevel=2.2)                     # the beak's top
@@ -676,6 +677,11 @@ def kurma():
     moss_on(head, -8.0, 8.0, -8.0, 3.0, -14.0, 1.5, 12, (0, 1))
     jaw = r.bone('jaw', head, H(0, 3.0, -2.0), anim='jaw')
     CI.rbox(jaw, H(-7.2, 3.0, -24.5), H(7.2, 8.0, 1.0), plastron, bevel=1.8)
+    for sx in (-1, 1):                                                                            # rows of white teeth
+        t0, t1 = H(sx * 6.4, 3.0, -23.5), H(sx * 6.4, 3.0, -8.0)
+        CI.teeth(jaw, t0[0], t0[1], t0[2], t1[2], 6, 1.5, M('tooth', '#f2ead8'), down=False)
+        u0, u1 = H(sx * 6.9, 3.0, -25.0), H(sx * 6.9, 3.0, -9.0)
+        CI.teeth(head, u0[0], u0[1], u0[2], u1[2], 6, 1.6, M('tooth', '#f2ead8'), down=True)
     for kk in range(12):                                                                          # moss hanging from the jaw
         x = -6.5 + kk * 1.2
         L = 3.0 + (kk * 37 % 6)
@@ -686,14 +692,14 @@ def kurma():
         sd = 'r' if sx < 0 else 'l'
         for front, z0, anim in ((True, -15.0, 'leg_r' if sx < 0 else 'leg_l'), (False, 21.0, 'leg_l' if sx < 0 else 'leg_r')):
             name = ('leg_f' if front else 'leg_b') + sd
-            hip = V(sx * 16.0, 5.0, z0)
-            knee = V(sx * 19.5, 14.0, z0)
+            hip = V(sx * 16.0, -1.0, z0)
+            knee = V(sx * 19.5, 11.0, z0)
             foot = V(sx * 20.5, 22.0, z0 - 0.5)
             up = r.bone(name, body, tuple(hip), anim=anim)
-            rseg(up, hip + V(0, -3.0, 0), knee, 13.5, 13.5, hide, up=(0, 0, -1), bevel=2.8)
+            rseg(up, hip + V(0, -3.0, 0), knee, 14.5, 14.5, hide, up=(0, 0, -1), bevel=2.8)
             moss_on(up, hip[0] - 6.5, hip[0] + 6.5, hip[1] - 2.0, knee[1], z0 - 6.75, z0 + 6.75, 6, (2, -1))
             low = r.bone(name + '_low', up, tuple(knee), anim='knee')
-            rseg(low, knee - V(0, 1.0, 0), foot, 13.0, 13.0, stone, up=(0, 0, -1), bevel=2.6)
+            rseg(low, knee - V(0, 1.0, 0), foot, 14.0, 14.0, stone, up=(0, 0, -1), bevel=2.6)
             CI.box(low, (foot[0] - 7.0, 21.0, z0 - 7.5), (foot[0] + 7.0, 24.0, z0 + 6.5), dark)
             for t in range(4):                                                                    # the toes
                 x = foot[0] + (t - 1.5) * 3.4
@@ -709,6 +715,6 @@ def kurma():
             CI.box(bone, tuple(m + V(sx * w * 0.32, -w * 0.5 - 1.0, -1.2)), tuple(m + V(sx * (w * 0.32 + 1.6), -w * 0.5 + 0.4, 1.2)), stone)
             CI.box(bone, tuple(m + V(sx * w * 0.5 - (0.15 if sx < 0 else 0), -0.4, -1.4)),
                    tuple(m + V(sx * w * 0.5 + (0.15 if sx > 0 else 0), 0.2, 1.4)), vein)
-    tail_chain(r, body, (0, 5.0, 30.0), 8, 34.0, 12.5, 4.0, hide, lambda t: 0.8 - 0.6 * t, extra=tail_extra)
-    r.height = 24.0 - (-12.5 - 29.0 - 1.8)          # the hitbox to the mountain's snow
+    tail_chain(r, body, (0, 0.0, 30.0), 8, 36.0, 12.5, 4.0, hide, lambda t: 1.6 - 0.8 * t, extra=tail_extra)
+    r.height = 24.0 - (-18.5 - 29.0 - 1.8)          # the hitbox to the mountain's snow
     return r
