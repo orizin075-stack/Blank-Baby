@@ -158,14 +158,14 @@ def enkou():
     tooth = M('tooth', '#f2f4f8')
     mouth = M('simple', '#1a0c18')
     gill = M('simple', '#0a0e1a')
-    prof = profile([(-36, 4.0, 4.0, -8.2), (-32, 8.5, 7.5, -8.6), (-26, 12.0, 11.0, -9.2), (-18, 16.0, 15.0, -9.6), (-8, 19.0, 18.0, -10.0),
+    prof = profile([(-37, 6.0, 5.5, -8.4), (-33, 11.5, 10.0, -8.8), (-26, 15.5, 14.0, -9.4), (-18, 18.5, 17.0, -9.8), (-8, 20.0, 18.5, -10.0),
                     (4, 18.0, 17.0, -10.0), (14, 15.0, 13.5, -10.0), (22, 11.0, 9.5, -10.0), (30, 7.0, 6.0, -10.0), (36, 4.6, 4.4, -10.0),
                     (41, 3.6, 3.8, -10.0)])
     root = r.bone('root', None, (0, 24, 0), anim='root', hover=1.5, speed=0.05)
     body = r.bone('body', root, (0, -10, 0), anim='sway', ax=1, amp=0.05, speed=0.06)
     head = r.bone('head', body, (0, -10, -16), anim='head')
     w_m, h_m, y_m = prof(-17)
-    jaw = r.bone('jaw', head, (0, y_m + h_m * 0.22, -17), rot=(0.22, 0, 0), anim='jaw')
+    jaw = r.bone('jaw', head, (0, y_m + h_m * 0.22, -17), rot=(0.42, 0, 0), anim='jaw')
     tails, prev = [], body
     for i, zt in enumerate((8.0, 18.0, 27.0, 35.0)):
         prev = r.bone(f'tail{i + 1}', prev, (0, -10, zt), anim='tail', i=i, amp=0.14, speed=0.08)
@@ -180,33 +180,44 @@ def enkou():
                 b = tb
         return b
     # ------------------------------------------------------------------ the hull, the mouth under the snout
-    hull(prof, -36.0, 41.0, 2.0, bone_at, hide, belly, 0.42, jaw=(-31.0, -16.0, 0.3, jaw, belly))
-    zm0, zm1 = -31.0, -16.5
+    hull(prof, -37.0, 41.0, 2.0, bone_at, hide, belly, 0.42, jaw=(-33.0, -16.0, 0.34, jaw, belly))
+    zm0, zm1 = -33.0, -16.5
     for z in np.arange(zm0, zm1, 1.5):                                                           # the mouth's dark inside
         w, h, y = prof(z + 0.75)
-        ym = y + h / 2 - h * 0.3
+        ym = y + h / 2 - h * 0.34
         CI.box(head, (-w * 0.42, ym - 0.15, z), (w * 0.42, ym + 0.05, z + 1.6), mouth)
         CI.box(jaw, (-w * 0.4, ym - 0.05, z), (w * 0.4, ym + 0.15, z + 1.6), mouth)
-    for side in (-1, 1):                                                                           # rows of triangular teeth
-        for k in range(10):
-            z = zm0 + 0.8 + k * 1.45
+    for side in (-1, 1):                                                                           # rows of long uneven fangs
+        for kk in range(11):
+            z = zm0 + 0.8 + kk * 1.45
             w, h, y = prof(z)
-            ym = y + h / 2 - h * 0.3
+            ym = y + h / 2 - h * 0.34
             x = side * (w * 0.42 - 0.4)
-            spike(head, V(x, ym - 0.2, z), V(x, ym + 1.7, z), 1.1, tooth)
-            spike(jaw, V(x * 0.95, ym + 0.2, z + 0.7), V(x * 0.95, ym - 1.4, z + 0.7), 1.0, tooth)
-    for k in range(4):                                                                             # and across the front
-        x = -2.4 + k * 1.6
+            L = (3.6 if kk % 2 == 0 else 2.2) * (1.25 if kk in (1, 2, 3) else 1.0)
+            spike(head, V(x, ym - 0.2, z), V(x - side * 0.4, ym + L, z - 0.3), 1.3, tooth)
+            spike(jaw, V(x * 0.95, ym + 0.2, z + 0.7), V(x * 0.95 - side * 0.3, ym - L * 0.85, z + 0.9), 1.2, tooth)
+            if kk % 2 == 1 and kk < 9:
+                spike(head, V(x - side * 1.8, ym - 0.2, z + 0.5), V(x - side * 2.0, ym + L * 0.6, z + 0.3), 0.9, tooth)
+    for kk in range(5):                                                                            # and across the front
+        x = -3.2 + kk * 1.6
         w, h, y = prof(zm0 + 0.3)
-        ym = y + h / 2 - h * 0.3
-        spike(head, V(x, ym - 0.2, zm0 + 0.4), V(x, ym + 1.6, zm0 + 0.4), 1.0, tooth)
+        ym = y + h / 2 - h * 0.34
+        L = 3.2 if kk % 2 == 0 else 2.2
+        spike(head, V(x, ym - 0.2, zm0 + 0.4), V(x * 1.1, ym + L, zm0 + 0.1), 1.2, tooth)
+        spike(jaw, V(x * 0.9, ym + 0.2, zm0 + 1.0), V(x, ym - L * 0.8, zm0 + 0.7), 1.1, tooth)
     # ------------------------------------------------------------------ eyes, gills, the rune ring, veins of light
     for sx in (-1, 1):
         w, h, y = prof(-26.0)
         CI.cbox(head, (sx * (w / 2 - 0.25), y - h * 0.12, -26.0), (0.5, 2.6, 3.4), M('simple', '#070a14'))
         CI.cbox(head, (sx * (w / 2 - 0.15), y - h * 0.12, -26.0), (0.5, 1.8, 2.4), M('energy', '#c8f8ff', glow=True))
         CI.cbox(head, (sx * (w / 2 - 0.05), y - h * 0.12, -25.8), (0.5, 0.9, 1.0), M('energy', '#3aa0ff', glow=True))
-        CI.box(head, (sx * (w / 2 - 0.6) - 0.3, y - h * 0.12 - 1.4, -28.0), (sx * (w / 2 - 0.6) + 0.3, y - h * 0.12 - 0.9, -24.0), fin)  # brow
+        bx = sx * (w / 2 - 1.2)
+        CI.seg(head, (bx, y - h * 0.12 - 1.6, -29.5), (bx + sx * 0.6, y - h * 0.12 - 2.4, -22.0), 2.4, 1.6, crystal, up=(0, -1, 0))  # a heavy brow
+        for j, (dz, L) in enumerate(((-18.5, 5.0), (-16.5, 4.0), (-14.5, 3.0))):                    # spines swept back from the cheeks
+            wc, hc, yc = prof(dz)
+            spike(head if dz < -16 else body, V(sx * (wc / 2 - 0.4), yc - hc * 0.05, dz), V(sx * (wc / 2 + 2.2), yc - hc * 0.05 - 1.0, dz + L), 1.6, crystal2)
+        wj, hj, yj = prof(-24.0)
+        spike(jaw, V(sx * (wj * 0.4), yj + hj / 2 - 0.5, -24.0), V(sx * (wj * 0.4 + 2.0), yj + hj / 2 + 2.6, -20.0), 1.6, crystal)  # under the jaw
         for g in range(5):                                                                         # gill slits
             z = -14.5 + g * 1.5
             w, h, y = prof(z)
@@ -214,7 +225,7 @@ def enkou():
             CI.box(body, (x - 0.12, y - h * 0.22, z), (x + 0.12, y + h * 0.18, z + 0.45), gill)
             CI.box(body, (x - 0.13, y - h * 0.22, z + 0.45), (x + 0.13, y + h * 0.18, z + 0.6), vein)
         p = None
-        for (y0, z0, n) in ((-15.0, -10.0, 9), (-9.0, -4.0, 7), (-14.0, 8.0, 6)):                  # branching veins
+        for (y0, z0, n) in ((-15.0, -12.0, 10), (-9.0, -6.0, 8), (-14.0, 8.0, 7), (-11.0, -26.0, 4), (-7.0, 18.0, 5)):   # branching veins
             p = V(0, y0, z0)
             for k in range(n):
                 q = p + V(0, rnd.uniform(-1.8, 1.8), rnd.uniform(1.8, 3.2))
@@ -229,7 +240,7 @@ def enkou():
                     CI.seg(bone_at(q[2]), tuple(q), tuple(bq), 0.12, 0.35, vein, up=(sx, 0, 0))
                 p = q
     fleck = M('scale', '#5a7ab0', belly='#5a7ab0', scale_size=0.6, contrast=0.5)
-    for _ in range(40):
+    for _ in range(24):
         z = rnd.uniform(-30.0, 38.0)
         w, h, y = prof(z)
         sx = rnd.choice((-1, 1))
@@ -261,14 +272,20 @@ def enkou():
     for k in range(5):                                                                              # the second dorsal
         t = k / 5
         CI.box(tails[1][1], (-0.5, y2 - h2 / 2 - k - 1.0, 23.0 + 3.0 * t), (0.5, y2 - h2 / 2 - k + 0.3, 27.0 - 1.0 * t), fin)
-    for (z, hh) in ((12.0, 3.0), (16.0, 2.6), (30.0, 2.0), (33.5, 1.8)):                         # crystal shards along the back
+    for (z, hh, lean) in ((-20.0, 6.0, 0.7), (-15.0, 8.0, 0.65), (-10.0, 7.0, 0.6), (12.0, 7.5, 0.7), (16.5, 6.0, 0.7), (21.0, 4.5, 0.75),
+                          (30.0, 4.0, 0.8), (33.5, 3.2, 0.8)):                                         # crystal blades along the back
         wz, hz, yz = prof(z)
-        spike(bone_at(z), V(0, yz - hz / 2 + 0.5, z), V(0, yz - hz / 2 - hh, z + hh * 0.7), 1.4, crystal2)
+        base = V(0, yz - hz / 2 + 0.6, z)
+        tip = base + V(0, -hh, hh * lean)
+        bb = bone_at(z)
+        CI.seg(bb, tuple(base), tuple(base + (tip - base) * 0.55), 3.4, 1.2, crystal if int(z) % 2 else crystal2, up=(1, 0, 0), ext=0.3)
+        CI.seg(bb, tuple(base + (tip - base) * 0.55), tuple(tip), 1.6, 1.0, crystal2, up=(1, 0, 0), ext=0.2)
+        CI.seg(bb, tuple(base + (tip - base) * 0.25), tuple(tip), 0.4, 1.2, edge, up=(1, 0, 0))
     for sx in (-1, 1):
         w, h, y = prof(-10.0)
         fb = r.bone('fin_' + ('r' if sx < 0 else 'l'), body, (sx * (w / 2 - 1.0), y + h * 0.18, -10.0), anim='sway', ax=2, amp=0.12, speed=0.08)
         plate_fin(fb, V(sx * (w / 2 - 1.0), y + h * 0.18, -11.0), V(sx * 0.55, 0.8, 0.3), V(0, 0.05, 1.0), 18.0, 13,
-                  lambda t: 10.0 * (1 - t) ** 0.75 + 1.2, lambda t: 7.0 * t ** 1.3, fin, edge=edge, thick=1.3, jag=0.7,
+                  lambda t: 10.0 * (1 - t) ** 0.75 + 1.2, lambda t: 7.0 * t ** 1.3, fin, edge=edge, thick=1.3, jag=1.8,
                   tip_mats=[crystal, crystal2])
         w, h, y = prof(16.0)                                                                       # pelvic fins
         plate_fin(tails[0][1], V(sx * (w / 2 - 1.5), y + h / 2 - 1.0, 15.0), V(sx * 0.6, 0.8, 0.3), V(0, 0.2, 1.0), 6.0, 5,
@@ -279,9 +296,9 @@ def enkou():
     # the tail: a crescent, the upper lobe longer, crystal shards on its trailing edge
     tb = tails[3][1]
     plate_fin(tb, V(0, -11.0, 38.0), V(0, -0.85, 0.55), V(0, 0.2, 1.0), 21.0, 13, lambda t: 10.0 * (1 - t) ** 0.8 + 1.0,
-              lambda t: 1.0 * t, fin, edge=edge, thick=1.4, jag=0.9, tip_mats=[crystal, crystal2])
+              lambda t: 1.0 * t, fin, edge=edge, thick=1.4, jag=2.0, tip_mats=[crystal, crystal2])
     plate_fin(tb, V(0, -8.5, 38.0), V(0, 0.8, 0.5), V(0, -0.15, 1.0), 13.0, 9, lambda t: 8.0 * (1 - t) ** 0.8 + 1.0,
-              lambda t: 0.5 * t, fin, edge=edge, thick=1.4, jag=0.7, tip_mats=[crystal2, crystal])
+              lambda t: 0.5 * t, fin, edge=edge, thick=1.4, jag=1.6, tip_mats=[crystal2, crystal])
     r.height = 24.0 - (top - H)
     r.palette = True                    # 256-colour texture (build_bb.save_palette)
     return r
