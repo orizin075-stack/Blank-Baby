@@ -67,265 +67,401 @@ def feather_plane(bone, base, A, B, n, span, L, w, cols, edge=None, lantern=None
         CI.seg(bone, tuple(base), tuple(base + A * span), 1.4, 2.0, edge, up=tuple(N), ext=0.6)
 
 
+# ===================================================================================================== hulls
+
+def profile(keys):
+    """(z, w, h, y) keys, z ascending: the hull's width, height and centre at any z, eased between keys."""
+    ks = sorted(keys)
+
+    def at(z):
+        if z <= ks[0][0]:
+            return ks[0][1:]
+        for (z0, *a), (z1, *b) in zip(ks, ks[1:]):
+            if z <= z1:
+                t = (z - z0) / (z1 - z0)
+                t = t * t * (3 - 2 * t)
+                return tuple(a[i] + (b[i] - a[i]) * t for i in range(3))
+        return ks[-1][1:]
+    return at
+
+
+def hull(prof, z0, z1, dz, bone_at, top, belly, belly_frac, jaw=None):
+    """A smooth body of slices dz long from z0 to z1 (each a bevelled box, rounder where it is small), dark above and
+    pale below (the countershading of a shark or a whale). bone_at(z) gives each slice's bone. jaw = (z_from, z_to,
+    frac, bone, mat): there the lower `frac` of each slice belongs to the jaw bone."""
+    z = z0
+    while z < z1 - 1e-6:
+        zz = min(z1, z + dz)
+        w, h, y = prof((z + zz) / 2)
+        b = bone_at((z + zz) / 2)
+        bev = min(w, h) * 0.34
+        p0, p1 = V(0, y, z), V(0, y, zz + 0.25)
+        if jaw is not None and jaw[0] <= (z + zz) / 2 <= jaw[1]:
+            jf = jaw[2]
+            hu = h * (1 - jf)
+            yu = y - h / 2 + hu / 2
+            rseg(b, V(0, yu, z), V(0, yu, zz + 0.25), w, hu, top, up=(0, -1, 0), bevel=min(bev, hu * 0.45))
+            hl = h * jf
+            yl = y + h / 2 - hl / 2
+            rseg(jaw[3], V(0, yl, z), V(0, yl, zz + 0.25), w * 0.94, hl, jaw[4], up=(0, -1, 0), bevel=min(bev, hl * 0.45))
+        else:
+            rseg(b, p0, p1, w, h, top, up=(0, -1, 0), bevel=bev)
+            if belly is not None:
+                hb = h * belly_frac
+                yb = y + h / 2 - hb / 2 + 0.12
+                rseg(b, V(0, yb, z + 0.05), V(0, yb, zz + 0.2), w + 0.25, hb, belly, up=(0, -1, 0), bevel=min(bev, hb * 0.45))
+        z = zz
+
+
+def plate_fin(bone, root, A, B, span, n, chord, sweep, mat, edge=None, thick=1.0, jag=0.0, tip_mats=None):
+    """A flat fin of strips: along A (the span) n strips, each running back along B for chord(t), set back by sweep(t);
+    a glowing line along the leading edge; jag makes the trailing edge saw-toothed (a crystal fin)."""
+    A = np.asarray(A, float); A = A / np.linalg.norm(A)
+    B = np.asarray(B, float); B = B - (B @ A) * A; B = B / np.linalg.norm(B)
+    N = np.cross(A, B)
+    root = np.asarray(root, float)
+    lead = []
+    for i in range(n):
+        t = (i + 0.5) / n
+        p = root + A * (span * t) + B * sweep(t)
+        L = chord(t) + (jag if i % 2 else -jag * 0.3)
+        if L <= 0.3:
+            continue
+        m = mat if tip_mats is None or t < 0.7 else tip_mats[i % len(tip_mats)]
+        CI.seg(bone, tuple(p), tuple(p + B * L), span / n * 1.25, thick * (1.0 - 0.5 * t), m, up=tuple(N))
+        lead.append(p)
+    if edge is not None and len(lead) > 1:
+        for p, q in zip(lead, lead[1:]):
+            CI.seg(bone, tuple(p - B * 0.2), tuple(q - B * 0.2), 0.5, thick * 0.9, edge, up=tuple(N), ext=0.3)
+    return N
+
+
 # ===================================================================================================== Enkou
 @recipe
 def enkou():
-    r = CI.rig('enkou', td=1)
-    hide = M('scale', '#141a2c', belly='#c8d0dc', scale_size=1.1, contrast=0.9)
-    vein_hide = M('scale', '#18203a', belly='#18203a', scale_size=1.1, contrast=0.95)
-    belly = M('scale', '#c8d0dc', belly='#e4eaf0', scale_size=1.6, contrast=0.4)
-    crystal = M('gem', '#2a3858', glow=False)
-    crystal2 = M('gem', '#4a6a9a', glow=False)
-    edge = M('gem', '#9fd8ff', glow=True)
-    tooth = M('tooth', '#eef2f6')
-    mouth = M('simple', '#1a0c18')
-    vein = M('energy', '#7ab8f0', glow=True)
-    root = r.bone('root', None, (0, 24, 0), anim='root', hover=1.5, speed=0.05)
-    body = r.bone('body', root, (0, -6, 0), anim='sway', ax=1, amp=0.05, speed=0.06)
-    # ------------------------------------------------------------------ the body: deep at the shoulders, tapering back
-    for (z0, z1, w, h, y) in ((-12.0, 4.0, 19.0, 21.0, -7.0), (2.0, 14.0, 16.0, 17.5, -7.0), (12.0, 22.0, 12.5, 13.5, -7.5)):
-        rseg(body, V(0, y, z0), V(0, y, z1), w, h, vein_hide, up=(0, -1, 0), bevel=3.6)
-        hb = h * 0.34                                                                               # the pale belly
-        rseg(body, V(0, y + h / 2 - hb / 2 + 0.25, z0 + 0.6), V(0, y + h / 2 - hb / 2 + 0.25, z1 - 0.6), w - 1.2, hb, belly, up=(0, -1, 0),
-             bevel=min(3.0, hb * 0.4))
-    # lightning veins: branching lines of light over the flanks (irregular, as sheet 15's)
+    """淵煌 as a shark (the user: "怪獣は化け物すぎる この子のモデルサメよ", "もうちょい凝って"): a streamlined body from a
+    pointed snout to a crescent tail, dark navy above and pale below; the mouth under the snout, a little open on rows
+    of white triangular teeth; a small glowing eye; five gill slits; one tall dorsal fin with a crystal edge and a saw
+    of shards on its trailing edge, a small second dorsal, long sickle pectoral fins, pelvic and anal fins; the tail's
+    upper lobe longer; sheet 15's marks kept: the rune ring on its crown, branching veins of light, crystal shards
+    along its back toward the tail."""
     import random
     rnd = random.Random(15)
+    r = CI.rig('enkou', td=1)
+    hide = M('scale', '#1a2440', belly='#1a2440', scale_size=0.9, contrast=0.9)
+    belly = M('scale', '#c9d2de', belly='#c9d2de', scale_size=1.2, contrast=0.35)
+    fin = M('scale', '#162038', belly='#162038', scale_size=0.8, contrast=0.8)
+    crystal = M('gem', '#3a5688', glow=False)
+    crystal2 = M('gem', '#6a90c8', glow=False)
+    edge = M('energy', '#8fd0ff', glow=True)
+    vein = M('energy', '#7ab8f0', glow=True)
+    tooth = M('tooth', '#f2f4f8')
+    mouth = M('simple', '#1a0c18')
+    gill = M('simple', '#0a0e1a')
+    prof = profile([(-36, 4.0, 4.0, -8.2), (-32, 8.5, 7.5, -8.6), (-26, 12.0, 11.0, -9.2), (-18, 16.0, 15.0, -9.6), (-8, 19.0, 18.0, -10.0),
+                    (4, 18.0, 17.0, -10.0), (14, 15.0, 13.5, -10.0), (22, 11.0, 9.5, -10.0), (30, 7.0, 6.0, -10.0), (36, 4.6, 4.4, -10.0),
+                    (41, 3.6, 3.8, -10.0)])
+    root = r.bone('root', None, (0, 24, 0), anim='root', hover=1.5, speed=0.05)
+    body = r.bone('body', root, (0, -10, 0), anim='sway', ax=1, amp=0.05, speed=0.06)
+    head = r.bone('head', body, (0, -10, -16), anim='head')
+    w_m, h_m, y_m = prof(-17)
+    jaw = r.bone('jaw', head, (0, y_m + h_m * 0.22, -17), rot=(0.22, 0, 0), anim='jaw')
+    tails, prev = [], body
+    for i, zt in enumerate((8.0, 18.0, 27.0, 35.0)):
+        prev = r.bone(f'tail{i + 1}', prev, (0, -10, zt), anim='tail', i=i, amp=0.14, speed=0.08)
+        tails.append((zt, prev))
+
+    def bone_at(z):
+        if z < -16:
+            return head
+        b = body
+        for zt, tb in tails:
+            if z >= zt:
+                b = tb
+        return b
+    # ------------------------------------------------------------------ the hull, the mouth under the snout
+    hull(prof, -36.0, 41.0, 1.5, bone_at, hide, belly, 0.42, jaw=(-31.0, -16.0, 0.3, jaw, belly))
+    zm0, zm1 = -31.0, -16.5
+    for z in np.arange(zm0, zm1, 1.5):                                                           # the mouth's dark inside
+        w, h, y = prof(z + 0.75)
+        ym = y + h / 2 - h * 0.3
+        CI.box(head, (-w * 0.42, ym - 0.15, z), (w * 0.42, ym + 0.05, z + 1.6), mouth)
+        CI.box(jaw, (-w * 0.4, ym - 0.05, z), (w * 0.4, ym + 0.15, z + 1.6), mouth)
+    for side in (-1, 1):                                                                           # rows of triangular teeth
+        for k in range(10):
+            z = zm0 + 0.8 + k * 1.45
+            w, h, y = prof(z)
+            ym = y + h / 2 - h * 0.3
+            x = side * (w * 0.42 - 0.4)
+            spike(head, V(x, ym - 0.2, z), V(x, ym + 1.7, z), 1.1, tooth)
+            spike(jaw, V(x * 0.95, ym + 0.2, z + 0.7), V(x * 0.95, ym - 1.4, z + 0.7), 1.0, tooth)
+    for k in range(4):                                                                             # and across the front
+        x = -2.4 + k * 1.6
+        w, h, y = prof(zm0 + 0.3)
+        ym = y + h / 2 - h * 0.3
+        spike(head, V(x, ym - 0.2, zm0 + 0.4), V(x, ym + 1.6, zm0 + 0.4), 1.0, tooth)
+    # ------------------------------------------------------------------ eyes, gills, the rune ring, veins of light
     for sx in (-1, 1):
-        for (y0, z0, n) in ((-14.0, -11.0, 7), (-5.0, -8.0, 6), (-12.0, 4.0, 6), (-4.0, 9.0, 4)):
-            p = V(sx * 9.6, y0, z0)
+        w, h, y = prof(-26.0)
+        CI.cbox(head, (sx * (w / 2 - 0.25), y - h * 0.12, -26.0), (0.5, 2.6, 3.4), M('simple', '#070a14'))
+        CI.cbox(head, (sx * (w / 2 - 0.15), y - h * 0.12, -26.0), (0.5, 1.8, 2.4), M('energy', '#c8f8ff', glow=True))
+        CI.cbox(head, (sx * (w / 2 - 0.05), y - h * 0.12, -25.8), (0.5, 0.9, 1.0), M('energy', '#3aa0ff', glow=True))
+        CI.box(head, (sx * (w / 2 - 0.6) - 0.3, y - h * 0.12 - 1.4, -28.0), (sx * (w / 2 - 0.6) + 0.3, y - h * 0.12 - 0.9, -24.0), fin)  # brow
+        for g in range(5):                                                                         # gill slits
+            z = -14.5 + g * 1.5
+            w, h, y = prof(z)
+            x = sx * (w / 2 + 0.05)
+            CI.box(body, (x - 0.12, y - h * 0.22, z), (x + 0.12, y + h * 0.18, z + 0.45), gill)
+            CI.box(body, (x - 0.13, y - h * 0.22, z + 0.45), (x + 0.13, y + h * 0.18, z + 0.6), vein)
+        p = None
+        for (y0, z0, n) in ((-15.0, -10.0, 9), (-9.0, -4.0, 7), (-14.0, 8.0, 6)):                  # branching veins
+            p = V(0, y0, z0)
             for k in range(n):
-                q = p + V(0, rnd.uniform(-2.6, 2.6), rnd.uniform(1.6, 3.4))
-                xw = 9.6 if q[2] < 4 else (8.1 if q[2] < 14 else 6.4)
-                q[0] = sx * (xw + 0.05)
-                CI.seg(body, tuple(p), tuple(q), 0.12, 0.4, vein, up=(sx, 0, 0))
-                if rnd.random() < 0.35:                                                            # a branch
-                    b = q + V(0, rnd.choice((-1, 1)) * rnd.uniform(1.5, 3.0), rnd.uniform(0.5, 2.0))
-                    b[0] = q[0]
-                    CI.seg(body, tuple(q), tuple(b), 0.12, 0.4, vein, up=(sx, 0, 0))
+                q = p + V(0, rnd.uniform(-1.8, 1.8), rnd.uniform(1.8, 3.2))
+                w, h, y = prof(q[2])
+                q[1] = min(max(q[1], y - h * 0.42), y + h * 0.05)
+                q[0] = sx * (w / 2 + 0.06)
+                pp = V(sx * (prof(p[2])[0] / 2 + 0.06), p[1], p[2])
+                CI.seg(bone_at(p[2]), tuple(pp), tuple(q), 0.12, 0.35, vein, up=(sx, 0, 0))
+                if rnd.random() < 0.3:
+                    bq = q + V(0, rnd.choice((-1, 1)) * rnd.uniform(1.2, 2.4), rnd.uniform(0.6, 1.6))
+                    bq[0] = q[0]
+                    CI.seg(bone_at(q[2]), tuple(q), tuple(bq), 0.12, 0.35, vein, up=(sx, 0, 0))
                 p = q
-    # the crystal blades down the back: flat shards swept back, largest over the shoulders, light along their edges
-    def blade(bone, base, tip, w, mat, side=(1, 0, 0)):
-        base, tip = np.asarray(base, float), np.asarray(tip, float)
-        mid = base + (tip - base) * 0.55
-        CI.seg(bone, tuple(base), tuple(mid), w, 1.2, mat, up=side, ext=0.4)
-        CI.seg(bone, tuple(mid), tuple(tip), w * 0.5, 1.0, mat, up=side, ext=0.3)
-        CI.seg(bone, tuple(base + (tip - base) * 0.2), tuple(tip), 0.5, 1.3, edge, up=side)
-    for k, (z, h) in enumerate(((-9.0, 10.0), (-4.0, 14.0), (1.0, 12.0), (5.5, 10.0), (10.0, 8.0), (14.0, 6.5), (18.0, 5.0))):
-        y = -18.0 + max(0.0, z) * 0.12
-        blade(body, V(0, y + 1.5, z), V(0, y - h, z + h * 0.6), 5.0 - k * 0.35, crystal if k % 2 else crystal2)
-        for sx in (-1, 1):
-            if k < 5:
-                blade(body, V(sx * 4.5, y + 3.0, z + 1.0), V(sx * 7.5, y - h * 0.45, z + h * 0.55), 3.0, crystal2,
-                      side=(1, 0.6 * sx, 0))
-    # ------------------------------------------------------------------ the fins: jagged, swept back
+    fleck = M('scale', '#5a7ab0', belly='#5a7ab0', scale_size=0.6, contrast=0.5)
+    for _ in range(70):
+        z = rnd.uniform(-30.0, 38.0)
+        w, h, y = prof(z)
+        sx = rnd.choice((-1, 1))
+        yy = rnd.uniform(y - h * 0.48, y + h * 0.05)
+        top_side = yy < y - h * 0.38
+        if top_side:
+            CI.box(bone_at(z), (rnd.uniform(-w * 0.3, w * 0.3) - 0.4, y - h / 2 - 0.12, z - 0.5), (rnd.uniform(-w * 0.3, w * 0.3) + 0.4, y - h / 2 + 0.1, z + 0.5), fleck)
+        else:
+            x = sx * (w / 2 + 0.03)
+            CI.box(bone_at(z), (x - 0.1, yy - 0.4, z - 0.6), (x + 0.1, yy + 0.4, z + 0.6), fleck)
+    w, h, y = prof(-22.0)
+    CI.hoop(head, (0, y - h / 2 - 0.05, -22.0), 2.6, 0.4, vein, axis='y', n=20)
+    CI.seg(head, (0, y - h / 2 - 0.08, -25.6), (0, y - h / 2 - 0.08, -18.4), 0.35, 0.3, vein, up=(0, -1, 0))
+    CI.seg(head, (-3.6, y - h / 2 - 0.08, -22.0), (3.6, y - h / 2 - 0.08, -22.0), 0.35, 0.3, vein, up=(0, -1, 0))
+    # ------------------------------------------------------------------ the fins
+    w, h, y = prof(0.0)
+    top = y - h / 2
+    H = 15.0
+    for k in range(int(H)):                                                                         # the dorsal fin, strip by strip
+        t = k / H
+        zf = -6.0 + 13.0 * t ** 0.85
+        zb = 9.0 - 4.5 * math.sin(math.pi * t) - 2.5 * t + (0.8 if k % 2 else -0.4) * (t > 0.25)
+        if zb - zf < 0.6:
+            zb = zf + 0.6
+        th = 1.8 - 1.0 * t
+        CI.box(body, (-th / 2, top - k - 1.05, zf), (th / 2, top - k + 0.4, zb), crystal if (k // 3) % 2 else fin)
+        CI.box(body, (-th / 2 - 0.1, top - k - 1.05, zf - 0.5), (th / 2 + 0.1, top - k + 0.4, zf), edge)
+    w2, h2, y2 = prof(25.0)
+    for k in range(5):                                                                              # the second dorsal
+        t = k / 5
+        CI.box(tails[1][1], (-0.5, y2 - h2 / 2 - k - 1.0, 23.0 + 3.0 * t), (0.5, y2 - h2 / 2 - k + 0.3, 27.0 - 1.0 * t), fin)
+    for (z, hh) in ((12.0, 3.0), (16.0, 2.6), (30.0, 2.0), (33.5, 1.8)):                         # crystal shards along the back
+        wz, hz, yz = prof(z)
+        spike(bone_at(z), V(0, yz - hz / 2 + 0.5, z), V(0, yz - hz / 2 - hh, z + hh * 0.7), 1.4, crystal2)
     for sx in (-1, 1):
-        fb = r.bone('fin_' + ('r' if sx < 0 else 'l'), body, (sx * 8.5, 0.0, -5.0), rot=(0.0, 0.0, 0.0), anim='sway', ax=2,
-                    amp=0.12, speed=0.08)
-        # a broad fin of jagged blades (sheet 15: 胸びれ), swept back and down, blue light along each blade
-        for i in range(7):
-            t = i / 6
-            d = V(sx * (0.95 - 0.45 * t), 0.5 + 0.25 * t, 0.45 + 1.0 * t)
-            d = d / np.linalg.norm(d)
-            L = 17.0 - 7.0 * t
-            p = V(sx * 8.5, -1.0 + t * 2.0, -6.0 + t * 5.0)
-            spike(fb, p, p + d * L, 4.2 - t * 1.0, crystal if i % 2 else hide)
-            CI.seg(fb, tuple(p + d * L * 0.25), tuple(p + d * L * 0.9), 0.4, 0.4, edge, up=(0, -1, 0))
-        for i in range(3):                                                                         # the pelvic fins
-            d = V(sx * 0.5, 0.8, 0.8 + i * 0.3)
-            p = V(sx * 6.0, 1.0, 12.0 + i * 1.6)
-            spike(body, p, p + d / np.linalg.norm(d) * (9.0 - i * 1.5), 2.8, crystal2)
-    # ------------------------------------------------------------------ the head: a massive maw
-    head = r.bone('head', body, (0, -7.0, -12.0), anim='head')
-    H = lambda x, y, z: (x, y, z)
-    for i in range(6):                                                                              # the skull to a pointed snout
-        t0, t1 = i / 6, (i + 1) / 6
-        tm = (t0 + t1) / 2
-        w = 20.0 - 9.0 * tm ** 1.2
-        top = -18.5 + 8.5 * tm ** 1.3
-        z0, z1 = -9.0 - 22.0 * t0 + (0.6 if i else 0), -9.0 - 22.0 * t1
-        rseg(head, V(0, (top - 5.0) / 2, z0), V(0, (top - 5.0) / 2, z1), w, -5.0 - top, vein_hide, up=(0, -1, 0), bevel=min(3.0, w * 0.18))
-    CI.box(head, (-9.4, -5.2, -30.0), (9.4, -5.0, -9.0), mouth)                                    # the palate
-    for sx in (-1, 1):
-        CI.box(head, (sx * 3.0, -20.0, -23.0), (sx * 10.6, -16.5, -13.0), crystal, rot=(0.2, 0, sx * 0.1), pivot=(sx * 7.0, -18.0, -13.0))  # brow
-        CI.cbox(head, (sx * 10.1, -13.0, -18.5), (0.4, 2.6, 4.2), M('energy', '#bff6ff', glow=True))          # a glowing eye
-        CI.cbox(head, (sx * 10.2, -13.0, -18.5), (0.4, 1.2, 1.6), M('energy', '#4fb8ff', glow=True))
-        # long teeth hanging along the upper jaw, two rows
-        for k in range(9):                                                                          # long uneven fangs, two rows
-            z = -29.0 + k * 2.2
-            x = sx * (8.6 - max(0.0, -z - 24.0) * 0.6)
-            L = (4.2 if k % 2 == 0 else 2.6) * (1.2 if k < 3 else 1.0)
-            spike(head, V(x, -5.4, z), V(x - sx * 0.6, -5.0 + L, z - 0.4), 1.5, tooth)
-            if k % 2:
-                spike(head, V(x - sx * 2.0, -5.4, z + 0.8), V(x - sx * 2.3, -5.0 + L * 0.7, z + 0.5), 1.1, tooth)
-        # gill slits behind the jaw
-        for g in range(3):
-            CI.box(head, (sx * 10.05 - 0.1, -12.0 + g * 0.4, -9.0 + g * 1.8), (sx * 10.05 + 0.1, -6.0, -8.4 + g * 1.8), vein)
-    for k in range(5):
-        x = -4.0 + k * 2.0
-        spike(head, V(x, -5.4, -30.6), V(x * 1.1, -5.0 + (3.6 if k % 2 == 0 else 2.4), -31.2), 1.5, tooth)
-    # the rune ring on its crown
-    CI.hoop(head, (0, -18.1, -18.0), 3.2, 0.5, vein, axis='y', n=20)
-    CI.seg(head, (0, -18.15, -22.5), (0, -18.15, -13.5), 0.4, 0.4, vein, up=(0, -1, 0))
-    jaw = r.bone('jaw', head, (0, -5.0, -9.0), rot=(0.55, 0, 0), anim='jaw')
-    CI.rbox(jaw, (-9.0, -5.0, -29.0), (9.0, 1.5, -8.0), vein_hide, bevel=2.0)
-    CI.box(jaw, (-6.5, 1.3, -26.0), (6.5, 1.7, -9.0), belly)                                       # pale under the jaw
-    CI.box(jaw, (-8.0, -5.1, -28.0), (8.0, -4.9, -9.0), mouth)
-    for sx in (-1, 1):
-        for k in range(8):
-            z = -27.5 + k * 2.3
-            x = sx * (7.8 - max(0.0, -z - 23.0) * 0.6)
-            L = 3.8 if k % 2 else 2.4
-            spike(jaw, V(x, -4.6, z), V(x - sx * 0.5, -4.6 - L, z + 0.4), 1.4, tooth)
-        spike(jaw, V(sx * 8.0, 1.0, -14.0), V(sx * 10.5, 5.0, -10.0), 1.6, crystal2)               # spines under the jaw
+        w, h, y = prof(-10.0)
+        fb = r.bone('fin_' + ('r' if sx < 0 else 'l'), body, (sx * (w / 2 - 1.0), y + h * 0.18, -10.0), anim='sway', ax=2, amp=0.12, speed=0.08)
+        plate_fin(fb, V(sx * (w / 2 - 1.0), y + h * 0.18, -11.0), V(sx * 0.55, 0.8, 0.3), V(0, 0.05, 1.0), 18.0, 13,
+                  lambda t: 10.0 * (1 - t) ** 0.75 + 1.2, lambda t: 7.0 * t ** 1.3, fin, edge=edge, thick=1.3, jag=0.7,
+                  tip_mats=[crystal, crystal2])
+        w, h, y = prof(16.0)                                                                       # pelvic fins
+        plate_fin(tails[0][1], V(sx * (w / 2 - 1.5), y + h / 2 - 1.0, 15.0), V(sx * 0.6, 0.8, 0.3), V(0, 0.2, 1.0), 6.0, 5,
+                  lambda t: 4.0 * (1 - t) + 0.8, lambda t: 2.5 * t, fin, thick=0.9)
+    w, h, y = prof(29.0)                                                                           # the anal fin
     for k in range(4):
-        x = -3.0 + k * 2.0
-        spike(jaw, V(x, -4.6, -28.6), V(x * 1.1, -4.6 - (3.2 if k % 2 == 0 else 2.2), -29.2), 1.4, tooth)
-    # ------------------------------------------------------------------ the tail: long and tapering, a forked crescent fin
-    def tail_extra(bone, p, q, w, i):
-        m = (p + q) / 2
-        if i < 4:
-            spike(bone, m + V(0, -w * 0.4, 0), m + V(0, -w * 0.4 - (5.0 - i), 3.0), 2.0, crystal if i % 2 else crystal2)
-        for sx in (-1, 1):
-            if i % 2 == 0:
-                spike(bone, m + V(sx * w * 0.42, 0.5, 0), m + V(sx * (w * 0.42 + 2.6), 2.0, 2.5), 1.2, crystal2)
-    from dragons_sheet import tail_chain
-    last, tip = tail_chain(r, body, (0, -7.5, 21.0), 5, 30.0, 10.0, 3.0, vein_hide, lambda t: 0.0, amp=0.18, extra=tail_extra)
-    for sgn in (-1, 1):                                                                             # the crescent's two lobes
-        for j in range(6):
-            t = j / 5
-            ang = math.radians(25 + 40 * t)
-            d = V(0, -sgn * math.sin(ang), math.cos(ang))
-            L = 16.0 - 6.0 * abs(t - 0.6) * 1.6
-            p = tip + V(0, -sgn * t * 1.5, -t * 2.0)
-            spike(last, p, p + d * L, 3.6 - t * 1.2, crystal if j % 2 else hide)
-            CI.seg(last, tuple(p + d * L * 0.3), tuple(p + d * L * 0.9), 0.35, 0.35, edge, up=(1, 0, 0))
-    r.height = 24.0 - (-18.0 - 13.0 - 6.0)
+        CI.box(tails[2][1], (-0.4, y + h / 2 + k - 0.2, 28.0 + k * 0.6), (0.4, y + h / 2 + k + 0.8, 31.0 - k * 0.2), fin)
+    # the tail: a crescent, the upper lobe longer, crystal shards on its trailing edge
+    tb = tails[3][1]
+    plate_fin(tb, V(0, -11.0, 38.0), V(0, -0.85, 0.55), V(0, 0.2, 1.0), 21.0, 13, lambda t: 10.0 * (1 - t) ** 0.8 + 1.0,
+              lambda t: 1.0 * t, fin, edge=edge, thick=1.4, jag=0.9, tip_mats=[crystal, crystal2])
+    plate_fin(tb, V(0, -8.5, 38.0), V(0, 0.8, 0.5), V(0, -0.15, 1.0), 13.0, 9, lambda t: 8.0 * (1 - t) ** 0.8 + 1.0,
+              lambda t: 0.5 * t, fin, edge=edge, thick=1.4, jag=0.7, tip_mats=[crystal2, crystal])
+    r.height = 24.0 - (top - H)
     return r
 
 
 # ===================================================================================================== Bahamut
 @recipe
 def bahamut():
+    """バハムート (sheet 18; "もうちょい凝って"): a humpback on a smooth hull - a long head blunt at the snout with knobs
+    (tubercles) along it, the deepest body behind the fins, tapering to the flukes; deep blue above, white below
+    with the grooves of a humpback's throat running from the chin to the navel; gold embroidery along the line
+    between them, gold and crystal diamonds, a gold circlet round the eye; a crown of crystal and gold blades at the
+    back of the head; pectoral fins as long as the body, feathered blue to white with a gold edge and lanterns on
+    chains; a small dorsal hump; on its back the ruins of a temple (pillars, an arch, a broken pediment, steps) among
+    coral, sea grass and kelp, two waterfalls running down its flanks; flukes feathered like the fins."""
     import random
     rnd = random.Random(18)
     r = CI.rig('bahamut', td=1)
-    blue = M('scale', '#1c3c80', belly='#1c3c80', scale_size=1.4, contrast=0.55)
-    throat = M('scale', '#e6eef8', belly='#e6eef8', scale_size=1.2, contrast=0.35)
-    groove = M('simple', '#7fa0d0')
+    blue = M('scale', '#1d3e86', belly='#1d3e86', scale_size=1.2, contrast=0.6)
+    deep = M('scale', '#152f68', belly='#152f68', scale_size=1.2, contrast=0.6)
+    throat = M('scale', '#e9f0f8', belly='#e9f0f8', scale_size=1.1, contrast=0.3)
+    groove = M('simple', '#8aa8d4')
     gold = M('metal', '#d8b060')
     crystal = M('gem', '#5fc8ff', glow=True)
     crystal2 = M('gem', '#2e7fd8', glow=False)
+    knob = M('scale', '#2a54a8', belly='#2a54a8', scale_size=0.8, contrast=0.4)
     fcols = [M('scale', '#1e4592', belly='#1e4592', scale_size=1.0, contrast=0.5), M('scale', '#3a6cc0', belly='#3a6cc0', scale_size=1.0, contrast=0.5),
-             M('scale', '#8ab0e4', belly='#8ab0e4', scale_size=1.0, contrast=0.4), M('scale', '#e8f0fa', belly='#e8f0fa', scale_size=1.0, contrast=0.3)]
+             M('scale', '#8ab0e4', belly='#8ab0e4', scale_size=1.0, contrast=0.4), M('scale', '#eef4fb', belly='#eef4fb', scale_size=1.0, contrast=0.3)]
     stone = M('rock', '#7d8890')
     stone2 = M('rock', '#9aa3aa')
-    coral = [M('gem', c, glow=False) for c in ('#e060c0', '#9a60e0', '#f080a0', '#40c0e0')]
+    moss = M('leaf', '#3e8a52')
+    coral = [M('gem', c, glow=False) for c in ('#e060c0', '#9a60e0', '#f080a0', '#40c0e0', '#ff9a60')]
     kelp = M('leaf', '#2e8a4e')
+    kelp2 = M('leaf', '#4aa860')
     water = M('simple', '#6ac8ff')
+    foam = M('simple', '#dff2ff')
     lantern = M('energy', '#7fe8ff', glow=True)
+    prof = profile([(-46, 9.0, 8.0, -6.5), (-42, 16.0, 13.5, -6.8), (-34, 21.0, 19.0, -7.2), (-22, 24.5, 23.5, -7.6), (-8, 26.0, 25.0, -8.0),
+                    (6, 23.5, 22.0, -8.5), (18, 18.0, 16.5, -9.0), (28, 12.0, 10.5, -9.5), (37, 7.0, 6.0, -9.8), (44, 5.0, 4.4, -10.0)])
     root = r.bone('root', None, (0, 24, 0), anim='root', hover=1.0, speed=0.04)
     body = r.bone('body', root, (0, -8, 0), anim='sway', ax=1, amp=0.03, speed=0.04)
-    # ------------------------------------------------------------------ the body: a whale's, deep in front, tapering back;
-    # its lower part white and grooved from the chin back (the throat's pleats)
-    segs = ((-16.0, 2.0, 24.0, 24.0, -6.0), (0.0, 16.0, 21.0, 21.0, -7.0), (14.0, 28.0, 15.0, 15.0, -8.5))
-    for (z0, z1, w, h, y) in segs:
-        rseg(body, V(0, y, z0), V(0, y, z1), w, h, blue, up=(0, -1, 0), bevel=5.0)
-        hb = h * 0.5
-        rseg(body, V(0, y + h / 2 - hb / 2 + 0.2, z0 + 0.5), V(0, y + h / 2 - hb / 2 + 0.2, z1 - 0.5), w + 0.3, hb, throat, up=(0, -1, 0),
-             bevel=min(4.0, hb * 0.45))
-        for g in range(int(w // 2.4)):                                                                # the grooves underneath
-            x = -w / 2 + 1.6 + g * 2.4
-            CI.box(body, (x - 0.25, y + h / 2 + 0.1, z0 + 2.0), (x + 0.25, y + h / 2 + 0.35, z1 - 2.0), groove)
-        for sx in (-1, 1):                                                                            # and along the flanks' white
-            for g in range(3):
-                yy = y + h / 2 - hb + 1.5 + g * (hb - 2.5) / 3
-                CI.box(body, (sx * (w / 2 + 0.2) - 0.15, yy, z0 + 2.0), (sx * (w / 2 + 0.2) + 0.15, yy + 0.5, z1 - 2.0), groove)
-    # gold lines and diamond marks on the flanks (sheet 18's embroidery)
+    head = r.bone('head', body, (0, -7.6, -20), anim='head')
+    w_j, h_j, y_j = prof(-21.0)
+    jaw = r.bone('jaw', head, (0, y_j + h_j * 0.1, -21.0), rot=(0.0, 0, 0), anim='jaw')
+    tails, prev = [], body
+    for i, zt in enumerate((18.0, 28.0, 37.0)):
+        prev = r.bone(f'tail{i + 1}', prev, (0, -9, zt), anim='tail', i=i, amp=0.12, speed=0.04)
+        tails.append((zt, prev))
+
+    def bone_at(z):
+        if z < -20:
+            return head
+        b = body
+        for zt, tb in tails:
+            if z >= zt:
+                b = tb
+        return b
+    # ------------------------------------------------------------------ the hull: blue above, the white grooved belly
+    hull(prof, -46.0, 45.0, 1.5, bone_at, blue, throat, 0.48, jaw=(-45.0, -20.0, 0.42, jaw, throat))
+    for z in np.arange(-44.0, 12.0, 1.5):                                                            # the grooves
+        w, h, y = prof(z + 0.75)
+        b = jaw if z < -20 else bone_at(z)
+        under = y + h / 2 + 0.16
+        for g in range(int(w * 0.8 // 2.2)):
+            x = -w * 0.4 + 1.1 + g * 2.2
+            CI.box(b, (x - 0.22, under - 0.1, z), (x + 0.22, under + 0.12, z + 1.6), groove)
+        for sx in (-1, 1):
+            for g in range(4):
+                yy = y + h * 0.04 + g * h * 0.11
+                CI.box(b, (sx * (w / 2 + 0.16) - 0.12, yy, z), (sx * (w / 2 + 0.16) + 0.12, yy + 0.45, z + 1.6), groove)
+    # gold embroidery along the line between the blue and the white, and diamonds
     for sx in (-1, 1):
-        for (z0, z1, x, y) in ((-14.0, 2.0, 12.2, -11.0), (2.0, 15.0, 10.7, -11.5), (15.0, 26.0, 7.7, -12.0)):
-            CI.box(body, (sx * x - 0.12, y, z0), (sx * x + 0.12, y + 0.6, z1), gold)
-        for (z, x, y) in ((-6.0, 12.2, -11.0), (9.0, 10.7, -11.5), (21.0, 7.7, -12.0)):
-            CI.cbox(body, (sx * x, y + 0.3, z), (0.5, 3.4, 3.4), gold, rot=(0.785, 0, 0))
-            CI.cbox(body, (sx * (x + 0.1), y + 0.3, z), (0.5, 1.8, 1.8), crystal, rot=(0.785, 0, 0))
-            CI.box(body, (sx * x - 0.12, y + 0.3, z - 0.3), (sx * x + 0.12, y + 5.0, z + 0.3), gold)
-    # ------------------------------------------------------------------ the ruins on its back, coral, kelp, waterfalls
-    top = -18.0
-    CI.rbox(body, (-8.0, top - 1.5, 0.0), (8.0, top + 0.8, 16.0), stone, bevel=0.8)                    # the temple's floor
-    for i, x in enumerate((-6.0, -2.0, 2.0, 6.0)):                                                     # pillars, some broken
-        for j, z in enumerate((2.0, 13.0)):
-            h = 9.0 if (i + j) % 3 else 5.5
-            CI.box(body, (x - 0.8, top - h - 1.5, z - 0.8), (x + 0.8, top - 1.5, z + 0.8), stone2)
-            if h > 6:
-                CI.box(body, (x - 1.2, top - h - 2.5, z - 1.2), (x + 1.2, top - h - 1.5, z + 1.2), stone)
-    for z in (2.0,):                                                                                   # an arch left standing
-        CI.box(body, (-7.0, top - 13.0, z - 1.2), (3.0, top - 11.5, z + 1.2), stone)
-        for x in (-4.0, 0.0):
-            CI.box(body, (x - 1.0, top - 11.5, z - 0.6), (x + 1.0, top - 10.5, z + 0.6), stone2)
-    CI.box(body, (-7.0, top - 13.0, 2.0), (-5.0, top - 11.5, 13.0), stone)
-    CI.box(body, (-2.5, top - 15.0, 6.0), (2.5, top - 13.0, 10.0), stone2)                             # a broken pediment
-    for _ in range(30):                                                                                # coral and kelp
-        x, z = rnd.uniform(-10.0, 10.0), rnd.uniform(-12.0, 24.0)
-        y = (top - 1.5) if -8 <= x <= 8 and 0 <= z <= 16 else -17.0 + max(0.0, z - 2) * 0.12 + abs(x) * 0.25
-        if rnd.random() < 0.55:
+        pts = []
+        for z in np.arange(-40.0, 36.0, 2.0):
+            w, h, y = prof(z)
+            pts.append(V(sx * (w / 2 + 0.2), y + h / 2 - h * 0.48 - 0.4, z))
+        for p, q in zip(pts, pts[1:]):
+            CI.seg(bone_at(p[2]) if p[2] >= -20 else head, tuple(p), tuple(q), 0.2, 0.7, gold, up=(sx, 0, 0), ext=0.2)
+        for z in (-30.0, -12.0, 2.0, 16.0, 28.0):
+            w, h, y = prof(z)
+            c = V(sx * (w / 2 + 0.2), y - h * 0.12, z)
+            b = bone_at(z)
+            CI.cbox(b, tuple(c), (0.5, 3.6, 3.6), gold, rot=(0.785, 0, 0))
+            CI.cbox(b, tuple(c + V(sx * 0.1, 0, 0)), (0.5, 2.0, 2.0), crystal, rot=(0.785, 0, 0))
+            for d in (-1, 1):                                                                         # the motif's arms
+                CI.seg(b, tuple(c + V(0, 0, d * 2.4)), tuple(c + V(0, -1.6, d * 5.5)), 0.2, 0.6, gold, up=(sx, 0, 0))
+                CI.seg(b, tuple(c + V(0, 0, d * 2.4)), tuple(c + V(0, 1.6, d * 5.5)), 0.2, 0.6, gold, up=(sx, 0, 0))
+    # tubercles along the head's top and the jaw's line
+    for z in np.arange(-45.0, -26.0, 2.6):
+        w, h, y = prof(z)
+        for x in (-w * 0.22, 0.0, w * 0.22):
+            CI.cbox(head, (x + rnd.uniform(-0.4, 0.4), y - h / 2 - 0.3, z + rnd.uniform(-0.4, 0.4)), (1.2, 0.9, 1.2), knob)
+    # the eye with a gold circlet
+    for sx in (-1, 1):
+        w, h, y = prof(-26.0)
+        ey = y + h * 0.05
+        CI.cbox(head, (sx * (w / 2 - 0.1), ey, -26.0), (0.5, 1.8, 2.6), M('simple', '#0c1430'))
+        CI.cbox(head, (sx * (w / 2), ey, -26.0), (0.5, 1.0, 1.4), M('energy', '#9fe8ff', glow=True))
+        for k in range(10):
+            a0, a1 = 2 * math.pi * k / 10, 2 * math.pi * (k + 1) / 10
+            p0 = V(sx * (w / 2 + 0.15), ey + math.sin(a0) * 2.0, -26.0 + math.cos(a0) * 2.6)
+            p1 = V(sx * (w / 2 + 0.15), ey + math.sin(a1) * 2.0, -26.0 + math.cos(a1) * 2.6)
+            CI.seg(head, tuple(p0), tuple(p1), 0.2, 0.5, gold, up=(sx, 0, 0), ext=0.2)
+        CI.seg(head, (sx * (w / 2 + 0.15), ey, -28.6), (sx * (prof(-38)[0] / 2 + 0.15), ey + 1.0, -38.0), 0.2, 0.5, gold, up=(sx, 0, 0))
+    # ------------------------------------------------------------------ the crown at the back of the head
+    w, h, y = prof(-22.0)
+    ct = y - h / 2
+    for k in range(15):
+        a = math.pi * k / 14
+        x, z = -math.cos(a) * (w * 0.36), -22.0 - math.sin(a) * 3.0
+        hh = 4.5 + 7.5 * math.sin(a) ** 2 + (1.5 if k % 2 == 0 else 0.0)
+        lean = V(x * 0.08, -1.0, 0.7)
+        mat = (crystal, gold, crystal2)[k % 3]
+        spike(head, V(x, ct + 0.8, z), V(x, ct + 0.8, z) + lean / np.linalg.norm(lean) * hh, 2.6 if k % 3 != 1 else 1.8, mat)
+    CI.box(head, (-w * 0.38, ct - 0.6, -23.5), (w * 0.38, ct + 0.6, -20.5), gold)
+    CI.cbox(head, (0, ct - 1.8, -25.6), (3.2, 3.8, 1.2), crystal, rot=(0, 0, 0.785))
+    CI.cbox(head, (0, ct - 1.8, -25.4), (4.6, 5.2, 0.8), gold, rot=(0, 0, 0.785))
+    # ------------------------------------------------------------------ the dorsal hump, the ruins, coral, kelp, waterfalls
+    w, h, y = prof(24.0)
+    for k in range(4):
+        CI.box(tails[0][1], (-0.8, y - h / 2 - k - 0.8, 22.5 + k * 0.8), (0.8, y - h / 2 - k + 0.4, 27.0 - k * 0.3), blue)
+    w, h, y = prof(4.0)
+    top = y - h / 2 + 0.6
+    CI.rbox(body, (-8.5, top - 1.6, -4.0), (8.5, top + 0.6, 14.0), stone, bevel=0.8)                      # the temple's floor
+    for k in range(3):                                                                                   # steps down its front
+        CI.box(body, (-4.0 + k * 0.6, top - 1.0 + k * 0.6, -5.0 - k * 1.2), (4.0 - k * 0.6, top - 0.4 + k * 0.6, -4.0 - k * 1.2), stone2)
+    for i, x in enumerate((-6.5, -2.2, 2.2, 6.5)):                                                       # pillars, some broken
+        for j, z in enumerate((-1.5, 11.5)):
+            hh = 9.5 if (i + j) % 3 else 5.0
+            CI.box(body, (x - 0.8, top - hh - 1.6, z - 0.8), (x + 0.8, top - 1.6, z + 0.8), stone2)
+            CI.box(body, (x - 1.1, top - 2.4, z - 1.1), (x + 1.1, top - 1.6, z + 1.1), stone)              # the base
+            if hh > 6:
+                CI.box(body, (x - 1.2, top - hh - 2.6, z - 1.2), (x + 1.2, top - hh - 1.6, z + 1.2), stone)  # the capital
+            CI.box(body, (x - 0.85, top - hh * 0.5 - 1.6, z - 0.85), (x + 0.85, top - hh * 0.5 - 1.2, z + 0.85), moss)
+    z = -1.5                                                                                             # an arch left standing
+    CI.box(body, (-7.7, top - 12.6, z - 1.2), (3.4, top - 11.0, z + 1.2), stone)
+    for x in (-4.35, 0.0):
+        for k in range(3):
+            CI.box(body, (x - 1.4 + k * 0.4, top - 11.0 + k * 0.5, z - 0.6), (x + 1.4 - k * 0.4, top - 10.5 + k * 0.5, z + 0.6), stone2)
+    CI.box(body, (-7.7, top - 12.6, -1.5), (-5.3, top - 11.0, 11.5), stone)
+    CI.box(body, (-2.5, top - 14.6, 4.0), (2.5, top - 12.6, 8.0), stone2)                                 # a broken pediment
+    CI.box(body, (-1.5, top - 15.6, 5.0), (1.5, top - 14.6, 7.0), stone2)
+    for _ in range(46):                                                                                  # coral and sea grass
+        z = rnd.uniform(-14.0, 30.0)
+        w, h, y = prof(z)
+        x = rnd.uniform(-w * 0.32, w * 0.32)
+        yb = (top - 1.6) if -8.5 <= x <= 8.5 and -4 <= z <= 14 else y - h / 2 + 0.6
+        if rnd.random() < 0.5:
             c = coral[rnd.randrange(len(coral))]
-            CI.box(body, (x - 0.5, y - 3.0, z - 0.5), (x + 0.5, y, z + 0.5), c)
-            CI.box(body, (x - 1.5, y - 2.5, z - 0.4), (x - 0.5, y - 1.7, z + 0.4), c)
-            CI.box(body, (x + 0.5, y - 3.6, z - 0.4), (x + 1.5, y - 2.8, z + 0.4), c)
+            hh = rnd.uniform(2.0, 4.0)
+            CI.box(bone_at(z), (x - 0.5, yb - hh, z - 0.5), (x + 0.5, yb, z + 0.5), c)
+            CI.box(bone_at(z), (x - 1.6, yb - hh * 0.8, z - 0.4), (x - 0.5, yb - hh * 0.55, z + 0.4), c)
+            CI.box(bone_at(z), (x + 0.5, yb - hh * 1.15, z - 0.4), (x + 1.6, yb - hh * 0.9, z + 0.4), c)
+            CI.box(bone_at(z), (x - 1.6, yb - hh * 1.1, z - 0.4), (x - 1.0, yb - hh * 0.8, z + 0.4), c)
         else:
-            h = rnd.uniform(4.0, 10.0)
-            CI.box(body, (x - 0.4, y - h, z - 0.4), (x + 0.4, y, z + 0.4), kelp)
-    for sx in (-1, 1):                                                                                 # kelp hanging down the flanks
-        for k in range(9):
-            z = -10.0 + k * 3.6 + rnd.uniform(-1, 1)
-            x = sx * (12.3 if z < 2 else (10.8 if z < 15 else 7.9))
-            L = rnd.uniform(5.0, 14.0)
-            CI.box(body, (x - 0.4, -15.0, z - 0.4), (x + 0.4, -15.0 + L, z + 0.4), kelp)
-        for z in (5.0, 10.0):                                                                          # waterfalls down the flanks
-            x = sx * 10.9
-            CI.box(body, (x - 0.3, top + 0.5, z - 1.5), (x + 0.3, top + 15.0, z + 1.5), water)
+            hh = rnd.uniform(4.0, 11.0)
+            CI.box(bone_at(z), (x - 0.4, yb - hh, z - 0.4), (x + 0.4, yb, z + 0.4), kelp if rnd.random() < 0.5 else kelp2)
+    for sx in (-1, 1):                                                                                   # kelp hanging down the flanks
+        for k in range(14):
+            z = -14.0 + k * 3.2 + rnd.uniform(-1, 1)
+            w, h, y = prof(z)
+            x = sx * (w / 2 + 0.3)
+            L = rnd.uniform(5.0, 15.0)
+            CI.box(bone_at(z), (x - 0.4, y - h * 0.35, z - 0.4), (x + 0.4, y - h * 0.35 + L, z + 0.4), kelp if k % 2 else kelp2)
+        for z in (2.0, 9.0):                                                                             # waterfalls down the flanks
+            w, h, y = prof(z)
+            x = sx * (w / 2 + 0.35)
+            CI.box(body, (x - 0.3, top - 0.4, z - 1.6), (x + 0.3, y + h * 0.2, z + 1.6), water)
+            CI.box(body, (x - 0.6, y + h * 0.2 - 1.0, z - 2.2), (x + 0.6, y + h * 0.2, z + 2.2), foam)
     # ------------------------------------------------------------------ the pectoral fins: long feathered wings, lanterns
     for sx in (-1, 1):
-        base = V(sx * 11.5, 4.0, -9.0)
+        w, h, y = prof(-16.0)
+        base = V(sx * (w / 2 - 1.0), y + h * 0.18, -16.0)
         fb = r.bone('fin_' + ('r' if sx < 0 else 'l'), body, tuple(base), anim='sway', ax=2, amp=0.1, speed=0.05)
-        feather_plane(fb, base, V(sx * 0.35, 0.8, 0.5), V(sx * 0.12, -0.35, 1.0), 12, 38.0,
-                      lambda t: 10.0 + 12.0 * math.sin(min(1.0, t * 1.15) * math.pi * 0.9), 3.8, fcols, edge=gold, lantern=lantern, every=4)
-    # ------------------------------------------------------------------ the head: long, rounded, white below; the crown
-    head = r.bone('head', body, (0, -6.0, -16.0), anim='head')
-    for i in range(6):                                                                                  # slices narrowing and lowering forward
-        t0, t1 = i / 6, (i + 1) / 6
-        tm = (t0 + t1) / 2
-        w = 22.0 - 8.0 * tm ** 1.3
-        top = -17.0 + 9.0 * tm ** 1.4
-        z0, z1 = -14.0 - 26.0 * t0 + (0.6 if i else 0), -14.0 - 26.0 * t1
-        rseg(head, V(0, (top + 1.0) / 2, z0), V(0, (top + 1.0) / 2, z1), w, 1.0 - top, blue, up=(0, -1, 0), bevel=min(4.0, w * 0.2))
+        feather_plane(fb, base, V(sx * 0.35, 0.8, 0.5), V(sx * 0.12, -0.35, 1.0), 13, 42.0,
+                      lambda t: 10.0 + 13.0 * math.sin(min(1.0, t * 1.15) * math.pi * 0.9), 3.9, fcols, edge=gold, lantern=lantern, every=4)
+    # ------------------------------------------------------------------ the flukes, feathered
+    zt, tb = tails[-1]
+    w, h, y = prof(43.0)
     for sx in (-1, 1):
-        CI.eye(head, (sx * 10.6, -7.0, -22.0), 3.0, 1.6, 'left' if sx > 0 else 'right',
-               M('eye', '#7fe0ff', pupil='round', mood='calm', lid='#1c3c80', glow_amount=0.6))
-        CI.box(head, (sx * 10.7 - 0.12, -11.0, -30.0), (sx * 10.7 + 0.12, -10.4, -16.0), gold)
-        CI.cbox(head, (sx * 10.7, -10.7, -26.0), (0.5, 3.0, 3.0), gold, rot=(0.785, 0, 0))
-    # the crown: blue crystals and gold blades leaning back in a ring over the back of the head
-    for k in range(13):
-        a = math.pi * k / 12
-        x, z = -math.cos(a) * 8.5, -18.0 - math.sin(a) * 2.5
-        h = 5.0 + 6.0 * math.sin(a) ** 2
-        lean = V(x * 0.1, -1.0, 0.75)
-        spike(head, V(x, -15.5, z), V(x, -15.5, z) + lean / np.linalg.norm(lean) * h, 2.6, (crystal, gold, crystal2)[k % 3])
-    CI.box(head, (-9.0, -17.4, -20.0), (9.0, -16.0, -17.0), gold)
-    CI.cbox(head, (0, -17.8, -21.5), (3.0, 3.6, 1.2), crystal, rot=(0, 0, 0.785))
-    jaw = r.bone('jaw', head, (0, 1.0, -14.0), rot=(0.0, 0, 0), anim='jaw')
-    CI.rbox(jaw, (-10.6, 0.0, -38.5), (10.6, 7.0, -14.0), throat, bevel=3.2)
-    for g in range(8):                                                                                 # the throat's grooves
-        x = -8.4 + g * 2.4
-        CI.box(jaw, (x - 0.25, 6.95, -35.0), (x + 0.25, 7.2, -15.0), groove)
-    for sx in (-1, 1):
-        for g in range(3):
-            CI.box(jaw, (sx * 10.65 - 0.15, 1.5 + g * 1.8, -35.0), (sx * 10.65 + 0.15, 2.0 + g * 1.8, -15.0), groove)
-    # ------------------------------------------------------------------ the tail: tapering to feathered flukes
-    from dragons_sheet import tail_chain
-    last, tip = tail_chain(r, body, (0, -8.5, 27.0), 3, 20.0, 12.0, 5.0, blue, lambda t: -0.6 * t, amp=0.12)
-    for sx in (-1, 1):
-        feather_plane(last, tip - V(0, 0, 2.0), V(sx * 1.0, -0.55, 0.35), V(0, 0, 1.0), 9, 18.0,
-                      lambda t: 7.0 + 9.0 * math.sin(t * math.pi * 0.85), 3.2, fcols, edge=gold, curve=0.0)
-    r.height = 24.0 - (-18.0 - 15.0 - 6.0)
+        feather_plane(tb, V(0, y, 41.0), V(sx * 1.0, -0.5, 0.35), V(0, 0, 1.0), 10, 20.0,
+                      lambda t: 7.0 + 10.0 * math.sin(t * math.pi * 0.85), 3.2, fcols, edge=gold)
+    r.height = 24.0 - (top - 16.0)
     return r
