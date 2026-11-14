@@ -79,6 +79,7 @@ public final class CiDriver {
                 case "raid" -> "oror raid test";
                 case "duel" -> "oror duel test";
                 case "compass" -> "oror compass test";
+                case "shield" -> "oror shield test";
                 default -> null;
             };
             if (command != null) {
@@ -125,6 +126,7 @@ public final class CiDriver {
             case "raid" -> jp.oror.reborn.raid.RaidTest.resultLogged;
             case "duel" -> jp.oror.reborn.duel.DuelTest.resultLogged;
             case "compass" -> jp.oror.reborn.citadel.CapitalCompass.testLogged;
+            case "shield" -> jp.oror.reborn.village.BuildingGuard.shieldLogged;
             default -> true;
         };
     }

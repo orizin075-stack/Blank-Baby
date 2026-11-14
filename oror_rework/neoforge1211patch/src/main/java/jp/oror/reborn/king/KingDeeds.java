@@ -197,13 +197,17 @@ public final class KingDeeds {
     public static void stopped(ServerStoppedEvent e) {
         LATER.clear();
         RESTORE.clear();
+        stopping = false;
     }
 
     /** The world deleted by the broken king, to be put back (on time, or at once when the server stops). */
     private static final List<Runnable> RESTORE = new ArrayList<>();
 
+    private static boolean stopping;
+
     @SubscribeEvent
     public static void stopping(ServerStoppingEvent e) {
+        stopping = true;
         for (Runnable r : new ArrayList<>(RESTORE)) {
             try {
                 r.run();
@@ -1051,18 +1055,38 @@ public final class KingDeeds {
             sound(sl, c, SoundEvents.ENDERMAN_TELEPORT, 3F, 0.3F);
             CompoundTag d = king.getPersistentData();
             d.putInt("OrorKingDeleted", d.getInt("OrorKingDeleted") + gone.size());
+            // (059f) a block someone stood in was never put back (a hole in the palace for good): it is tried again every
+            // two seconds, and put back at the latest a minute on (or when the server stops) unless a player is in it
             Runnable back = new Runnable() {
+                int tries;
+
                 @Override
                 public void run() {
-                    if (!RESTORE.remove(this)) {
+                    if (!RESTORE.contains(this)) {
                         return;
                     }
+                    boolean last = stopping || ++tries > 30, left = false;
                     for (int i = 0; i < gone.size(); i++) {
                         BlockPos p = gone.get(i);
-                        if (!sl.getBlockState(p).isAir() || !sl.getEntitiesOfClass(Entity.class, new AABB(p)).isEmpty()) {
+                        if (p == null) {
+                            continue;
+                        }
+                        if (!sl.getBlockState(p).isAir()) {
+                            gone.set(i, null);
+                            continue;
+                        }
+                        List<Entity> in = sl.getEntitiesOfClass(Entity.class, new AABB(p));
+                        if (!in.isEmpty() && (!last || in.stream().anyMatch(who -> who instanceof Player))) {
+                            left = true;
                             continue;
                         }
                         sl.setBlock(p, was.get(i), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                        gone.set(i, null);
+                    }
+                    if (left && !stopping) {
+                        later(sl, 40, this);
+                    } else {
+                        RESTORE.remove(this);
                     }
                 }
             };

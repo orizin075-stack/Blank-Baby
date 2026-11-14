@@ -23,18 +23,28 @@ public final class CrashNet {
 
     @SubscribeEvent
     public static void started(ServerStartedEvent e) {
+        // (059f) a block entity's tick too (a machine, a turret's station, a spawner of some mod's): one that throws is
+        // taken out (its block stays) rather than stopping the server (the user: "クラッシュする原因も見直して")
+        Boolean entities = set("removeErroringEntities"), blockEntities = set("removeErroringBlockEntities");
+        LOG.info("CRASHNET {\"removeErroringEntities\":true,\"was\":{},\"removeErroringBlockEntities\":true,\"wasBlockEntities\":{}}",
+            entities, blockEntities);
+    }
+
+    /** NeoForge's server setting turned on; what it was (null if it could not be read). */
+    private static Boolean set(String name) {
         try {
             Class<?> cfg = Class.forName("net.neoforged.neoforge.common.NeoForgeConfig");
             Object server = cfg.getField("SERVER").get(null);
-            Field f = server.getClass().getField("removeErroringEntities");
+            Field f = server.getClass().getField(name);
             Object value = f.get(server);
             Object before = value.getClass().getMethod("get").invoke(value);
             if (!Boolean.TRUE.equals(before)) {
                 value.getClass().getMethod("set", Object.class).invoke(value, Boolean.TRUE);
             }
-            LOG.info("CRASHNET {\"removeErroringEntities\":true,\"was\":{}}", before);
+            return Boolean.TRUE.equals(before);
         } catch (ReflectiveOperationException | RuntimeException ex) {
-            LOG.warn("CRASHNET {\"removeErroringEntities\":\"unavailable\",\"why\":\"{}\"}", ex.toString());
+            LOG.warn("CRASHNET {\"{}\":\"unavailable\",\"why\":\"{}\"}", name, ex.toString());
+            return null;
         }
     }
 }
