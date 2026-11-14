@@ -141,10 +141,47 @@ public final class Look {
     /** (058) One part only, from the workflow's input: "relics" goes from the stage straight to the relics' scenes. */
     private static final String ONLY = String.valueOf(System.getenv("OROR_LOOK_ONLY")).trim();
 
+    /** (059f) A frame waited for: taken as soon as the chunks about the camera have come and been drawn, or at its deadline. */
+    private static String pendingShot;
+    private static int pendingFrom, pendingDeadline;
+
+    private static void shotWhenDrawn(String name, int from, int deadline) {
+        pendingShot = name;
+        pendingFrom = from;
+        pendingDeadline = deadline;
+    }
+
+    /** The chunks within eight of the camera are on this client and the renderer has nothing left to build. */
+    private static boolean drawn(Minecraft mc) {
+        if (mc.level == null || mc.player == null) {
+            return false;
+        }
+        int cx = mc.player.chunkPosition().x, cz = mc.player.chunkPosition().z;
+        int r = Math.min(8, mc.options.renderDistance().get());
+        for (int dx = -r; dx <= r; dx += 2) {
+            for (int dz = -r; dz <= r; dz += 2) {
+                if (!mc.level.getChunkSource().hasChunk(cx + dx, cz + dz)) {
+                    return false;
+                }
+            }
+        }
+        try {
+            Method all = mc.levelRenderer.getClass().getMethod("hasRenderedAllSections");
+            return Boolean.TRUE.equals(all.invoke(mc.levelRenderer));
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            return true;
+        }
+    }
+
     private static void play(Minecraft mc, int t) {
         Runnable planned = PLAN.remove(t);
         if (planned != null) {
             planned.run();
+        }
+        if (pendingShot != null && t >= pendingFrom && (t >= pendingDeadline || t - pendingFrom >= 20 && drawn(mc))) {
+            note("frame " + pendingShot + " after " + (t - pendingFrom + 40) + " ticks" + (t >= pendingDeadline ? " (not all drawn)" : ""));
+            shot(mc, pendingShot);
+            pendingShot = null;
         }
         if (ONLY.equals("palace") && t >= 240) {
             // (059) the rebuilt palace: its stairs from the town, the audience hall and the throne with the court, the
@@ -184,9 +221,12 @@ public final class Look {
                     float yaw = (Float) v[4], pitch = (Float) v[5];
                     String name = (String) v[0];
                     PLAN.put(at, () -> atCapital(mc, dx, y - 65, dz, yaw, pitch));
-                    PLAN.put(at + 150, () -> audit(mc, name));
-                    PLAN.put(at + 160, () -> shot(mc, name));
-                    at += 170;
+                    // (059f) the frame once the spot is drawn (up to 24 seconds): after jumps of 500 blocks most of the
+                    // walls' frames of 059e were bare sky, taken eight seconds after the jump with nothing drawn yet
+                    int from = at + 40, deadline = at + 480;
+                    PLAN.put(from, () -> shotWhenDrawn(name, from, deadline));
+                    PLAN.put(at + 485, () -> audit(mc, name));
+                    at += 500;
                 }
                 Object[][] tour = {
                     {"80_palace_hall", 0, 80, 38, 180F, 6F}, {"81_palace_throne", 0, 81, -15, 180F, 8F},
@@ -212,9 +252,10 @@ public final class Look {
                     PLAN.put(at, () -> atCapital(mc, dx, y - 65, dz, yaw, pitch));
                     // (059c) eight seconds for the chunks about a new spot to come and be drawn: three seconds after a
                     // jump of 150 blocks the north stair's chunks were not drawn yet and the spectator saw through them
-                    // (shot 92 of 059b looked as if the stair stood over a hollow)
-                    PLAN.put(at + 160, () -> shot(mc, name));
-                    at += 170;
+                    // (shot 92 of 059b looked as if the stair stood over a hollow); (059f) as long as they take, up to 16
+                    int from = at + 60, deadline = at + 320;
+                    PLAN.put(from, () -> shotWhenDrawn(name, from, deadline));
+                    at += 330;
                 }
                 // (059) the king's AT field struck (on this client only: nobody is hurt), the white cell, then the ring
                 PLAN.put(at, () -> atCapital(mc, 0, 80 - 65, -21, 180F, 4F));
