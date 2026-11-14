@@ -1028,6 +1028,11 @@ public final class Look {
         {"zombie", "iron_sword", ""}, {"skeleton", "bow", ""}, {"vindicator", "iron_axe", ""}, {"pillager", "crossbow", ""}, {"villager", "iron_sword", ""},
         {"husk", "iron_sword", "shield"}, {"piglin_brute", "golden_axe", ""}, {"wither_skeleton", "stone_sword", ""}, {"iron_golem", "", ""}, {"wolf", "", ""}};
     private static final String[] GUARD_MOMENTS = {"none", "guard", "parry", "block", "break", "parried"};
+    /** (059f) OROR's own: five gods (three of the people's rigs, a beast's and a dragon's) and five of the kingdom's. */
+    private static final String[][] OROR_GUARDERS = {
+        {"oror_supreme_bosses:ferdinand"}, {"oror_supreme_bosses:riha"}, {"oror_supreme_bosses:valeria"}, {"oror_supreme_bosses:kurma"},
+        {"oror_supreme_bosses:bahamut"}, {"oror_supreme_bosses:kingdom_guard"}, {"oror_supreme_bosses:imperial_guard"},
+        {"oror_supreme_bosses:royal_bodyguard"}, {"oror_supreme_bosses:villager_general"}, {"oror_supreme_bosses:royal_mage"}};
 
     /**
      * (059e) Each of a guard's moments on ten kinds of mob (MobGuard.demo: Epic Fight's animation where it animates the
@@ -1039,21 +1044,7 @@ public final class Look {
             return;
         }
         if (t == 240) {
-            server.execute(() -> {
-                command(server, "time set noon");
-                command(server, "weather clear 1000000");
-                clearStageNow(server.overworld());
-                for (int i = 0; i < GUARDERS.length; i++) {
-                    String[] g = GUARDERS[i];
-                    double x = sx + (i < 5 ? -11 + i * 2.2 : 2.2 + (i - 5) * 2.2);
-                    StringBuilder hands = new StringBuilder("HandItems:[");
-                    hands.append(g[1].isEmpty() ? "{}" : "{id:\"minecraft:" + g[1] + "\",count:1}").append(",")
-                        .append(g[2].isEmpty() ? "{}" : "{id:\"minecraft:" + g[2] + "\",count:1}").append("]");
-                    command(server, String.format(java.util.Locale.ROOT, "summon minecraft:%s %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Invulnerable:1b,"
-                        + "Rotation:[0f,0f],Tags:[\"oror_look\",\"oror_look_guard\"],%s}", g[0], x, (int) sy, sz + 8, hands));
-                }
-                note("guard scene: " + GUARDERS.length + " mobs");
-            });
+            spawnGuarders(mc, false);
             mc.options.hideGui = true;
             return;
         }
@@ -1061,24 +1052,59 @@ public final class Look {
         if (t < 270) {
             return;
         }
-        if (step >= GUARD_MOMENTS.length) {
-            if (t == 270 + GUARD_MOMENTS.length * 60 + 10) {
+        // (059f) two rounds: the vanilla mobs (g..), then OROR's own gods and royals (o..)
+        int round = step / GUARD_MOMENTS.length, moment0 = step % GUARD_MOMENTS.length;
+        if (round >= 2) {
+            if (t == 270 + 2 * GUARD_MOMENTS.length * 60 + 10) {
                 finish(mc, "complete (guard only)");
             }
             return;
         }
-        String moment = GUARD_MOMENTS[step];
+        if (round == 1 && moment0 == 0 && at == 0) {
+            spawnGuarders(mc, true);
+        }
+        String moment = GUARD_MOMENTS[moment0];
+        String prefix = round == 0 ? "g" : "o";
+        double side = round == 0 ? 6.6 : 6.8;
         if (at == 0) {
-            view(mc, -6.6, 0.9, 14.0, 180F, 6F);
+            view(mc, -side, round == 0 ? 0.9 : 1.3, round == 0 ? 14.0 : 15.0, 180F, 6F);
         } else if (at == 16 || at == 44) {
             demoGuard(mc, moment, at == 16);
+        } else if ((at == 18 || at == 46) && (moment.equals("parry") || moment.equals("block") || moment.equals("break"))) {
+            // (059f) the moment's effects (MobGuard.effects: the flash, the crits and sparks, the sweep), two ticks on
+            shot(mc, String.format(java.util.Locale.ROOT, "%s%02d_%s_fx_%s", prefix, moment0 + 1, moment, at == 18 ? "a" : "b"));
         } else if (at == 28) {
-            shot(mc, String.format(java.util.Locale.ROOT, "g%02d_%s_a", step + 1, moment));
+            shot(mc, String.format(java.util.Locale.ROOT, "%s%02d_%s_a", prefix, moment0 + 1, moment));
         } else if (at == 30) {
-            view(mc, 6.6, 0.9, 14.0, 180F, 6F);
+            view(mc, side, round == 0 ? 0.9 : 1.3, round == 0 ? 14.0 : 15.0, 180F, 6F);
         } else if (at == 56) {
-            shot(mc, String.format(java.util.Locale.ROOT, "g%02d_%s_b", step + 1, moment));
+            shot(mc, String.format(java.util.Locale.ROOT, "%s%02d_%s_b", prefix, moment0 + 1, moment));
         }
+    }
+
+    /** The guard scene's row: the vanilla ten (round 0) or OROR's ten (round 1), five left and five right of the middle. */
+    private static void spawnGuarders(Minecraft mc, boolean oror) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            command(server, "time set noon");
+            command(server, "weather clear 1000000");
+            clearStageNow(server.overworld());
+            String[][] row = oror ? OROR_GUARDERS : GUARDERS;
+            for (int i = 0; i < row.length; i++) {
+                String[] g = row[i];
+                double gap = oror ? 2.6 : 2.2;
+                double x = sx + (i < 5 ? -(oror ? 12 : 11) + i * gap : (oror ? 1.6 : 2.2) + (i - 5) * gap);
+                String id = g[0].contains(":") ? g[0] : "minecraft:" + g[0];
+                StringBuilder extra = new StringBuilder();
+                if (g.length > 1) {
+                    extra.append(",HandItems:[").append(g[1].isEmpty() ? "{}" : "{id:\"minecraft:" + g[1] + "\",count:1}").append(",")
+                        .append(g[2].isEmpty() ? "{}" : "{id:\"minecraft:" + g[2] + "\",count:1}").append("]");
+                }
+                command(server, String.format(java.util.Locale.ROOT, "summon %s %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Invulnerable:1b,"
+                    + "Rotation:[0f,0f],Tags:[\"oror_look\",\"oror_look_guard\"]%s}", id, x, (int) sy, sz + 8, extra));
+            }
+            note("guard scene: " + row.length + (oror ? " OROR mobs" : " mobs"));
+        });
     }
 
     /** Every mob of the guard scene shows the moment (forty ticks, for the frame to fall in its held part). */

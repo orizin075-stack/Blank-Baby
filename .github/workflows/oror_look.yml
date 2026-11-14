@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       only:
-        description: "Only one part of the look ('relics': the 058 relic techniques, gauge and tooltips; 'palace': the 059 palace, the capital's walls, turrets and roads checked, every OROR mob set to fight; 'duel': Duel Dominion's items and grimoire; 'guard': a guard's moments on ten kinds of mob); empty for all of it"
+        description: "Only one part of the look ('relics': the 058 relic techniques, gauge and tooltips; 'palace': the 059 palace, the capital's walls, turrets and roads checked, every OROR mob set to fight; 'duel': Duel Dominion's items and grimoire; 'guard': a guard's moments and their effects on ten kinds of mob, then on OROR's gods and royals); empty for all of it"
         required: false
         default: ''
   push:
@@ -65,7 +65,7 @@ jobs:
             if [ "$OROR_LOOK_ONLY" = relics ]; then rm -f "$OUT"/7[0-9]_*.jpg "$OUT"/popup_RelicTip.jpg; fi
             if [ "$OROR_LOOK_ONLY" = palace ]; then rm -f "$OUT"/[789][0-9]_palace_*.jpg "$OUT"/c[0-9][0-9]_capital_*.jpg "$OUT"/m[0-9][0-9]_mobs_*.jpg; fi
             if [ "$OROR_LOOK_ONLY" = duel ]; then rm -f "$OUT"/d[0-9][0-9]_*.jpg; fi
-            if [ "$OROR_LOOK_ONLY" = guard ]; then rm -f "$OUT"/g[0-9][0-9]_*.jpg; fi
+            if [ "$OROR_LOOK_ONLY" = guard ]; then rm -f "$OUT"/g[0-9][0-9]_*.jpg "$OUT"/o[0-9][0-9]_*.jpg; fi
           fi
           mkdir -p "$OUT"
           G=$RUNNER_TEMP/game; mkdir -p $G/mods
