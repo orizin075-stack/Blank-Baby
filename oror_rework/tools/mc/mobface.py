@@ -125,9 +125,7 @@ def face(spec, skin, hair, build='woman', bangs='bangs'):
     rgb = np.tile(T['s'], (N, N, 1)).astype(np.float32)
     glow = np.zeros((N, N, 4), np.float32)
     # flat skin, lit from the top: the jaw's outer pixels a step darker, the chin's corners two
-    rgb[:, 0:2] = rgb[:, 14:16] = T['s1'] if man else T['s']
-    rgb[12:, 0:2] = rgb[12:, 14:16] = T['s1']
-    rgb[14:, 0:2] = rgb[14:, 14:16] = T['s2']
+    # (059g) flat skin: no shading at the jaw or the cheeks' corners (the references' faces are one tone)
     # hair: gaiaface's strands and pointed fringe, never past row 3 of the 8x8 face (texel 6)
     fr = [min(d, 6) for d in GF.fringe_cut(bangs)]
     hr = GF.strands(hair, N, N, 21, shine_row=1)
