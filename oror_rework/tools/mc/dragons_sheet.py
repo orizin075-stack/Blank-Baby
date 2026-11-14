@@ -550,171 +550,198 @@ def teia():
 # ===================================================================================================== Kurma
 @recipe
 def kurma():
-    """嶺脈地龍 クールマ (sheet 16): a turtle-dragon carrying a mountain. Measured in rim heights (RH = 28 px here: the
-    ground y = 24, the shell's rim y = -4): the shell 2.1 RH long and 1.6 wide, its peaks 1.0 RH over the rim; a long low
-    body on four pillar legs 0.45 RH thick, splayed a little, with 0.35 RH of leg under the pale plastron; a big head
-    0.75 RH long held up at the rim's height on a thick neck with a pale throat; a thick plated tail 1.2 RH long. Grey
-    stone gone green with moss, moss hanging from everything, green light in its seams; on the shell, terraces of earth
-    and grass, jagged grey peaks with snow, a forest of spruces, a lake and two waterfalls running over the rim."""
+    """嶺脈地龍 クールマ (sheet 16; the user: "クールまひどいね"). A turtle-dragon carrying a mountain, built as the sheet is:
+    * the land on its shell is a height map raised in columns, as Minecraft's own land: terraces of grass stepping up
+      from the rim, a jagged grey mountain with three lesser peaks, snow above the line, spruces all over the grass, a
+      lake in a hollow and two streams running from it over the rim in waterfalls;
+    * the rim is a skirt of great stone blocks tipped outward;
+    * under it, a stone body gone green with moss (moss on every upper face, green light in its cracks), a pale throat
+      and plastron, four pillar legs splayed under it with five pale toes each, a long plated tail;
+    * the head a turtle's and a dragon's: big and rounded, a blunt beak pale below and mossy above, a heavy brow over
+      an amber eye, three great stone slabs rising back from the crown, tusks at the corners of the mouth.
+    Measured in rim heights (RH = 34 px: the ground y = 24, the rim's top y = -10): the shell 1.9 RH long and 1.5 wide,
+    the highest peak 0.9 RH over the rim, the plastron 0.35 RH off the ground, the head 0.6 RH long held up at the rim's
+    height, the tail 1.1 RH."""
     import random
     rnd = random.Random(16)
     r = CI.rig('kurma', td=1)
-    stone = M('rock', '#8a877e')
-    rim = M('rock', '#a8a59c')
-    dark = M('rock', '#585c52')
-    hide = M('scale', '#5f6a55', belly='#cdbf9e', scale_size=1.8, contrast=0.7)
+    ROCK, MOSS, SNOW, GRASS = '#86837a', '#5a8a34', '#eef2f4', '#62a03c'
+    mossy = M('rock', '#6a7060', top=MOSS)                                          # the hide: stone gone green on top
+    hide = M('rock', '#6a7060')
+    crest = M('rock', '#c4c0b4')
+    stone = M('rock', ROCK, top=MOSS)
+    rimst = M('rock', '#a7a49b', top=MOSS)
+    pale = M('rock', '#d4c6a4')
+    face = M('rock', '#cbbd9c', top=MOSS)                                           # the pale face, moss on top
     plastron = M('scale', '#d2c4a2', belly='#d8cba8', scale_size=2.2, contrast=0.4)
-    moss = M('leaf', '#5a8a34')
+    grass_col = M('rock', '#7a6a50', top=GRASS)
+    rock_col = M('rock', ROCK, top='#7e8a6a')
+    snow_col = M('rock', '#9a978e', top=SNOW)
+    cliff = M('rock', '#7d7a70', top=GRASS)
+    moss = M('leaf', MOSS)
     moss2 = M('leaf', '#476f2a')
-    grass = M('leaf', '#5f9a3a')
-    earth = M('rock', '#7a5a3c')
-    snow = M('simple', '#eef2f4')
     claw = M('rock', '#d8d2c0')
     vein = M('energy', '#5effc0', glow=True)
     water = M('simple', '#4f94e0')
-    foam = M('simple', '#cfe6ff')
+    foam = M('simple', '#d6ecff')
     spruce = M('leaf', '#2c5a2e')
     spruce2 = M('leaf', '#356a34')
     trunk = M('wood', '#5a3e24')
     root = r.bone('root', None, (0, 24, 0), anim='root')
-    body = r.bone('body', root, (0, -2, 6), anim='breath')
+    body = r.bone('body', root, (0, -4, 4), anim='breath')
 
-    def moss_on(bone, x0, x1, y0, y1, z0, z1, n, side):
-        """Moss patches and hanging strands on a face (side: the axis and sign it faces)."""
+    def hang(bone, at, n, spread, lo=2.0, hi=7.0):
+        """Strands of moss hanging from a point (an edge, a jaw)."""
         for _ in range(n):
-            x, y, z = rnd.uniform(x0, x1), rnd.uniform(y0, y1), rnd.uniform(z0, z1)
-            ax_, sg = side
-            c = [x, y, z]
-            c[ax_] = (x1 if sg > 0 else x0) if ax_ == 0 else ((y1 if sg > 0 else y0) if ax_ == 1 else (z1 if sg > 0 else z0))
-            size = [rnd.uniform(1.5, 3.5), rnd.uniform(1.0, 2.5), rnd.uniform(1.5, 3.5)]
-            size[ax_] = 0.5
-            size[1] += rnd.choice((0.0, 0.0, 3.0, 5.0))          # some hang down
-            CI.cbox(bone, (c[0], c[1] + size[1] / 2 - 1.0, c[2]), tuple(size), moss if rnd.random() < 0.5 else moss2)
-    # ------------------------------------------------------------------ the body under the shell, the plastron
-    CI.rbox(body, (-18.5, -10.0, -26.0), (18.5, 8.0, 30.0), hide, bevel=4.5)
-    CI.rbox(body, (-15.0, 5.0, -24.0), (15.0, 9.2, 27.0), plastron, bevel=2.2)
-    CI.rbox(body, (-14.0, -6.0, -29.0), (14.0, 8.5, -18.0), plastron, bevel=3.0)                  # the pale chest under the head
-    for sx in (-1, 1):
-        moss_on(body, -18.5, 18.5, -9.0, 5.0, -24.0, 28.0, 26, (0, sx))
-        for (y0, z0, z1) in ((-4.0, -20.0, -4.0), (0.0, 2.0, 22.0), (-6.0, 10.0, 16.0)):        # green light in the seams
-            CI.box(body, (sx * 18.55 - (0.15 if sx < 0 else 0), y0, z0), (sx * 18.55 + (0.15 if sx > 0 else 0), y0 + 0.6, z1), vein)
-    # ------------------------------------------------------------------ the shell: a rim of great stone blocks
-    n = 26
-    RX, RZ, CZ = 26.0, 33.0, 3.0
+            q = V(*at) + V(rnd.uniform(-spread, spread), 0, rnd.uniform(-spread, spread))
+            L = rnd.uniform(lo, hi)
+            CI.box(bone, tuple(q + V(-0.45, 0, -0.45)), tuple(q + V(0.45, L, 0.45)), moss if rnd.random() < 0.5 else moss2)
+
+    # ------------------------------------------------------------------ the body under the shell, the plastron and throat
+    CI.rbox(body, (-19.0, -10.0, -24.0), (19.0, 8.5, 28.0), mossy, bevel=5.0)
+    CI.rbox(body, (-15.5, 6.0, -22.0), (15.5, 12.0, 25.0), plastron, bevel=2.6)
+    CI.rbox(body, (-14.5, -6.0, -28.5), (14.5, 10.5, -16.0), plastron, bevel=3.4)                # the pale chest
+    for sx in (-1, 1):                                                                             # light in the flanks' cracks
+        CI.box(body, (sx * 19.05 - 0.1, -2.0, -14.0), (sx * 19.05 + 0.1, -1.4, 2.0), vein)
+        CI.box(body, (sx * 19.05 - 0.1, -2.0, 2.0), (sx * 19.05 + 0.1, 4.0, 2.6), vein)
+        CI.box(body, (sx * 19.05 - 0.1, 3.4, 2.6), (sx * 19.05 + 0.1, 4.0, 16.0), vein)
+    # ------------------------------------------------------------------ the shell: a skirt of great stones round its rim
+    RX, RZ, CZ, RIM = 24.0, 31.0, 3.0, -10.0
+    n = 24
     for k in range(n):
-        a0, a1 = 2 * math.pi * k / n, 2 * math.pi * (k + 1) / n
-        p0 = V(math.sin(a0) * RX, -10.0, CZ + math.cos(a0) * RZ)
-        p1 = V(math.sin(a1) * RX, -10.0, CZ + math.cos(a1) * RZ)
-        rseg(body, p0, p1, 7.5, 7.0, rim if k % 2 else stone, up=(0, -1, 0), bevel=1.4, ext=1.8)
-        m = (p0 + p1) / 2
-        out = V(math.sin((a0 + a1) / 2), 0, math.cos((a0 + a1) / 2))
-        for j in range(3):                                                                   # moss hanging off the rim
-            q = m + out * 3.9 + V((j - 1) * 2.0 * out[2], 2.4, -(j - 1) * 2.0 * out[0])
-            L = rnd.choice((2.0, 4.0, 6.0, 9.0))
-            CI.box(body, tuple(q + V(-0.45, 0, -0.45)), tuple(q + V(0.45, L, 0.45)), moss if j % 2 else moss2)
-    # the shell's top: earth and grass in terraces inside the rim, stepping up toward the peaks
-    for (hx, hz, h) in ((23.5, 30.0, 1.5), (20.0, 26.0, 4.0), (16.0, 21.0, 6.5), (11.0, 15.0, 9.0)):
-        CI.rbox(body, (-hx, -10.0 - h, CZ - hz), (hx, -10.0 - h + 2.6, CZ + hz), earth, bevel=3.4)
-        CI.rbox(body, (-hx + 0.7, -10.7 - h, CZ - hz + 0.7), (hx - 0.7, -10.0 - h, CZ + hz - 0.7), grass, bevel=3.4)
-    # the peaks: jagged grey stone stepping up to snow (the highest toward the front, as on the sheet)
-    for (x, z, w, h) in ((-1.0, -3.0, 13.0, 29.0), (9.0, 12.0, 8.5, 21.0), (-10.0, 14.0, 7.0, 15.0), (10.0, -12.0, 6.0, 12.0),
-                         (-12.0, -10.0, 5.0, 9.0)):
-        base = -18.5
-        steps = 8
-        for st in range(steps):
-            t0, t1 = st / steps, (st + 1) / steps
-            hw = w * (1.0 - t0 * 0.85)
-            for jx, jz in ((0.0, 0.0), (rnd.uniform(-0.3, 0.3), rnd.uniform(-0.3, 0.3))):
-                ox, oz = jx * hw, jz * hw
-                CI.box(body, (x + ox - hw * rnd.uniform(0.7, 1.0), base - h * t1, z + oz - hw * rnd.uniform(0.6, 0.9)),
-                       (x + ox + hw * rnd.uniform(0.7, 1.0), base - h * t0, z + oz + hw * rnd.uniform(0.6, 0.9)), stone if (st + int(jx * 10)) % 2 else rim)
-            if st >= steps - 3:
-                CI.box(body, (x - hw * 0.75, base - h * t1 - 0.5, z - hw * 0.65), (x + hw * 0.75, base - h * t1, z + hw * 0.65), snow)
-        CI.box(body, (x - w * 0.1, base - h - 1.8, z - w * 0.1), (x + w * 0.1, base - h, z + w * 0.1), snow)
-    # a forest of spruces on the terraces
-    tiers = ((22.0, 28.0, -11.5), (18.0, 24.0, -14.0), (14.0, 19.0, -16.5), (9.5, 13.0, -19.0))
-    for (hx, hz, y) in tiers:
-        for k in range(14):
-            a = 2 * math.pi * k / 14 + rnd.uniform(-0.1, 0.1)
-            x, z = math.sin(a) * (hx - 2.0), CZ + math.cos(a) * (hz - 2.0)
-            hh = rnd.uniform(0.8, 1.3)
-            CI.box(body, (x - 0.5, y - 2.0 * hh, z - 0.5), (x + 0.5, y, z + 0.5), trunk)
-            for j, (rad, th) in enumerate(((2.0, 1.8), (1.5, 1.6), (0.8, 1.6))):
-                yb = y - 2.0 * hh - j * 1.6 * hh
-                CI.box(body, (x - rad, yb - th * hh, z - rad), (x + rad, yb, z + rad), spruce if (k + j) % 2 else spruce2)
-    # a lake on a terrace and two waterfalls running down over the rim
-    CI.box(body, (3.0, -16.65, 4.0), (12.0, -16.4, 12.0), water)
-    for (z, L) in ((8.0, 30.0), (20.0, 24.0)):
-        x = math.sqrt(max(1.0, 1 - ((z - CZ) / RZ) ** 2)) * RX
-        CI.box(body, (6.0, -16.7, z - 2.0), (x + 0.4, -16.4, z + 2.0), water)                      # the stream to the edge
-        CI.box(body, (x + 3.9, -16.4, z - 2.0), (x + 4.5, -16.4 + L, z + 2.0), water)              # the fall
-        CI.box(body, (x + 0.4, -16.7, z - 2.0), (x + 4.5, -16.4, z + 2.0), water)
-        CI.box(body, (x + 3.6, -16.4 + L - 1.5, z - 2.6), (x + 5.2, -16.4 + L, z + 2.6), foam)
-    # ------------------------------------------------------------------ the neck and the head: big, held up, a pale throat
-    neck = r.bone('neck', body, (0, -6.0, -25.0), anim='sway', ax=1, amp=0.03, speed=0.04)
-    rseg(neck, V(0, -4.0, -22.0), V(0, -13.0, -35.0), 18.0, 17.0, hide, up=(0, -1, 0), bevel=3.8, ext=2.5)
-    CI.seg(neck, (0, 4.0, -23.0), (0, -5.0, -37.0), 13.0, 1.4, plastron, up=(0, 1, 0))
-    moss_on(neck, -9.0, 9.0, -14.0, -2.0, -36.0, -24.0, 10, (0, -1))
-    head = r.bone('head', neck, (0, -13.0, -35.0), anim='head')
-    A = V(0, -13.0, -35.0)
-    k_ = 1.3                                        # a massive head (the user's brown beast, image 10)
-    H = lambda x, y, z: tuple(A + V(x, y, z) * k_)
-    CI.rbox(head, H(-8.0, -8.0, -14.0), H(8.0, 3.0, 1.5), hide, bevel=2.4)                       # the skull
-    CI.rbox(head, H(-7.0, -5.5, -24.0), H(7.0, 3.0, -12.0), hide, bevel=2.2)                     # the beak's top
-    CI.rbox(head, H(-6.0, -3.5, -26.0), H(6.0, 2.6, -21.0), plastron, bevel=1.6)                 # the pale beak
+        a = 2 * math.pi * (k + 0.5) / n
+        out = V(math.sin(a), 0, math.cos(a))
+        c = V(math.sin(a) * (RX + 1.0), RIM + 2.5, CZ + math.cos(a) * (RZ + 1.0))
+        tang = V(math.cos(a), 0, -math.sin(a))
+        L = 2 * math.pi * math.hypot(RX, RZ) / math.sqrt(2) / n + 2.0
+        CI.seg(body, tuple(c - tang * L / 2), tuple(c + tang * L / 2), 8.0, 6.5, rimst if k % 2 else stone,
+               up=tuple(V(0, -1, 0) * 0.85 + out * 0.5), ext=0.6)
+        hang(body, tuple(c + out * 3.6 + V(0, 2.0, 0)), 4, 2.0, 2.0, 9.0)
+    # ------------------------------------------------------------------ the land on the shell: a height map in columns
+    CELL = 2.5
+    peaks = ((-2.0, -4.0, 30.0, 12.0), (9.0, 12.0, 20.0, 8.5), (-10.0, 14.0, 14.0, 7.0), (10.0, -14.0, 11.0, 6.0), (-12.0, -12.0, 8.0, 5.0))
+    lake_c, lake_r = V(8.0, 0, 4.0), 6.0
+    cells = {}
+    for i in range(int(-RX / CELL) - 1, int(RX / CELL) + 2):
+        for j in range(int(-RZ / CELL) - 1, int(RZ / CELL) + 2):
+            x, z = i * CELL, CZ + j * CELL
+            rn = math.hypot(x / RX, (z - CZ) / RZ)
+            if rn > 0.97:
+                continue
+            terr = 1.5 + math.floor((1.0 - rn) * 4.0) * 3.2                                         # terraces
+            h = terr
+            for (px, pz, ph, pr) in peaks:
+                d = math.hypot(x - px, z - pz)
+                if d < pr:
+                    h = max(h, terr + ph * (1.0 - d / pr) ** 1.15 + rnd.uniform(-1.6, 1.6))
+            if math.hypot(x - lake_c[0], z - lake_c[2]) < lake_r:
+                h = terr - 0.6
+            cells[(i, j)] = (x, z, h, terr)
+    trees = []
+    for (i, j), (x, z, h, terr) in cells.items():
+        top = RIM - 2.0 - h
+        steep = h > terr + 3.0
+        snowy = h > terr + 14.0
+        mat = snow_col if snowy else (rock_col if steep else grass_col)
+        drop = max((h - cells[nb][2] for nb in ((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)) if nb in cells), default=h)
+        if not steep and drop > 2.0:
+            # a terrace's edge: a stone cliff under its grass
+            CI.box(body, (x - CELL / 2 - 0.05, top + 1.0, z - CELL / 2 - 0.05), (x + CELL / 2 + 0.05, top + drop, z + CELL / 2 + 0.05), cliff)
+        CI.box(body, (x - CELL / 2, top, z - CELL / 2), (x + CELL / 2, RIM - 1.0, z + CELL / 2), mat)
+        lake = math.hypot(x - lake_c[0], z - lake_c[2]) < lake_r
+        if lake:
+            CI.box(body, (x - CELL / 2, top - 0.2, z - CELL / 2), (x + CELL / 2, top, z + CELL / 2), water)
+        elif not steep and rnd.random() < 0.2 and math.hypot(x - lake_c[0], z - lake_c[2]) > lake_r + 2.5:
+            trees.append((x + rnd.uniform(-0.5, 0.5), top, z + rnd.uniform(-0.5, 0.5)))
+    for (x, y, z) in trees:
+        hh = rnd.uniform(0.8, 1.35)
+        CI.box(body, (x - 0.45, y - 1.6 * hh, z - 0.45), (x + 0.45, y, z + 0.45), trunk)
+        for k, (rad, th) in enumerate(((1.7, 1.6), (1.25, 1.5), (0.7, 1.5))):
+            yb = y - 1.6 * hh - k * 1.4 * hh
+            CI.box(body, (x - rad, yb - th * hh, z - rad), (x + rad, yb, z + rad), spruce if k % 2 else spruce2)
+    # two streams from the lake to the rim, falling over it
+    for ang in (-0.15, 0.45):
+        d = V(math.cos(ang), 0, math.sin(ang))
+        p = V(lake_c[0], 0, lake_c[2])
+        last = None
+        while True:
+            p = p + d * CELL * 0.8
+            i, j = round(p[0] / CELL), round((p[2] - CZ) / CELL)
+            if (i, j) not in cells:
+                break
+            x, z, h, terr = cells[(i, j)]
+            top = RIM - 2.0 - h
+            CI.box(body, (x - 0.9, top - 0.25, z - 0.9), (x + 0.9, top + 0.05, z + 0.9), water)
+            last = (x, z, top)
+        if last:
+            x, z, top = last
+            for (dd, y0, y1) in ((2.5, top, RIM - 0.5), (5.2, RIM - 0.5, RIM + 6.5), (5.9, RIM + 6.5, RIM + 13.0)):
+                ex = V(x, 0, z) + d * dd
+                CI.box(body, (ex[0] - 1.4, y0, ex[2] - 1.4), (ex[0] + 1.4, y1, ex[2] + 1.4), water)                # the fall down the rim
+            ex = V(x, 0, z) + d * 5.9
+            CI.box(body, (ex[0] - 2.0, RIM + 12.0, ex[2] - 2.0), (ex[0] + 2.0, RIM + 13.5, ex[2] + 2.0), foam)
+    # ------------------------------------------------------------------ the neck and the head
+    neck = r.bone('neck', body, (0, -4.0, -24.0), anim='sway', ax=1, amp=0.03, speed=0.04)
+    rseg(neck, V(0, -1.0, -22.0), V(0, -13.0, -32.0), 17.0, 16.0, hide, up=(0, -1, 0), bevel=4.0, ext=3.0)
+    for k in range(4):                                                                              # the pale wrinkled throat
+        t = k / 4
+        c = V(0, 6.0 - 11.0 * t, -23.0 - 9.0 * t)
+        CI.cbox(neck, tuple(c), (12.5 - k * 0.6, 1.6, 3.2), plastron, rot=(-0.55, 0, 0))
+    hang(neck, (0, 3.0, -30.0), 6, 5.0, 2.0, 7.0)
+    A = V(0, -13.0, -32.0)
+    head = r.bone('head', neck, tuple(A), anim='head')
+    H = lambda x, y, z: tuple(A + V(x, y, z))
+    CI.rbox(head, H(-8.5, -9.0, -12.0), H(8.5, 2.0, 2.5), hide, bevel=3.4)                         # the skull, rounded
+    CI.rbox(head, H(-6.5, -11.0, -10.5), H(6.5, -6.0, 1.0), hide, bevel=2.6)                       # its crown
     for sx in (-1, 1):
-        CI.box(head, H(sx * 3.5, -9.0, -15.0), H(sx * 8.6, -6.6, -4.0), dark, rot=(0.15, 0, 0), pivot=H(sx * 6.0, -7.8, -4.0))   # brow
-        CI.eye(head, H(sx * 8.05, -4.4, -9.5), 3.8, 2.0, 'left' if sx > 0 else 'right',
-               M('eye', '#f0a030', pupil='slit', mood='calm', lid='#585c52'))
-        CI.box(head, H(sx * 2.2 - 0.6, -3.6, -26.1), H(sx * 2.2 + 0.6, -2.8, -25.6), M('simple', '#20201a'))   # nostrils
-        # the stone crest: slabs rising back from the brow, green light in their cracks
-        for j, (dz, h) in enumerate(((-8.0, 7.0), (-2.5, 10.0), (3.5, 8.0))):
-            b0 = V(sx * (3.6 + j * 0.7), -7.0, dz)
-            tip = b0 + V(sx * 1.6, -h, h * 0.55)
-            CI.chain_boxes(head, [H(*b0), H(*(b0 + (tip - b0) * 0.5)), H(*tip)], 4.0, 2.4, rim)
-            mid = b0 + (tip - b0) * 0.5
-            CI.box(head, H(*(mid + V(sx * 1.6, -1.0, -0.6))), H(*(mid + V(sx * 2.1, 1.0, 0.6))), vein)
-    moss_on(head, -8.0, 8.0, -8.0, 3.0, -14.0, 1.5, 12, (0, 1))
-    jaw = r.bone('jaw', head, H(0, 3.0, -2.0), anim='jaw')
-    CI.rbox(jaw, H(-7.2, 3.0, -24.5), H(7.2, 8.0, 1.0), plastron, bevel=1.8)
-    for sx in (-1, 1):                                                                            # rows of white teeth
-        t0, t1 = H(sx * 6.4, 3.0, -23.5), H(sx * 6.4, 3.0, -8.0)
-        CI.teeth(jaw, t0[0], t0[1], t0[2], t1[2], 6, 1.5, M('tooth', '#f2ead8'), down=False)
-        u0, u1 = H(sx * 6.9, 3.0, -25.0), H(sx * 6.9, 3.0, -9.0)
-        CI.teeth(head, u0[0], u0[1], u0[2], u1[2], 6, 1.6, M('tooth', '#f2ead8'), down=True)
-    for kk in range(12):                                                                          # moss hanging from the jaw
-        x = -6.5 + kk * 1.2
-        L = 3.0 + (kk * 37 % 6)
-        zz = -18.0 + (kk % 4) * 4.0
-        CI.box(jaw, H(x - 0.45, 8.0, zz), H(x + 0.45, 8.0 + L, zz + 0.9), moss if kk % 2 else moss2)
-    # ------------------------------------------------------------------ the legs: stone pillars splayed out, pale toes
+        CI.rbox(head, H(sx * 6.0, -5.0, -9.0), H(sx * 10.0, 3.0, 2.0), hide, bevel=1.8)               # the cheeks
+    CI.rbox(head, H(-7.2, -7.5, -18.0), H(7.2, 2.0, -9.0), face, bevel=2.8)                         # the snout
+    CI.rbox(head, H(-6.0, -6.0, -20.5), H(6.0, 1.5, -16.0), face, bevel=2.6)                        # the beak's blunt end
+    CI.rbox(head, H(-7.1, -2.0, -20.0), H(7.1, 2.6, -5.0), pale, bevel=1.6)                          # pale below the eyes
+    for sx in (-1, 1):
+        CI.box(head, H(sx * 3.4, -10.4, -13.5), H(sx * 9.2, -7.6, -3.0), stone, rot=(0.14, 0, 0), pivot=H(sx * 6.0, -9.0, -3.0))   # brow
+        CI.eye(head, H(sx * 8.6, -5.4, -9.0), 4.2, 2.4, 'left' if sx > 0 else 'right',
+               M('eye', '#f0a030', pupil='slit', mood='calm', lid='#5e6058'))
+        CI.box(head, H(sx * 2.0 - 0.6, -5.0, -20.6), H(sx * 2.0 + 0.6, -4.2, -20.1), M('simple', '#20201a'))   # nostrils
+        # three great stone slabs rising back from the crown, green light in their cracks
+        for j, (dz, h, lean) in enumerate(((-7.0, 9.0, 0.45), (-1.5, 13.0, 0.55), (4.5, 10.0, 0.7))):
+            b0 = V(sx * (3.4 + j * 0.8), -8.0, dz)
+            tip = b0 + V(sx * 2.0, -h, h * lean)
+            CI.chain_boxes(head, [H(*b0), H(*(b0 + (tip - b0) * 0.5)), H(*tip)], 4.4, 2.6, crest)
+            mid = b0 + (tip - b0) * 0.45
+            CI.box(head, H(*(mid + V(sx * 2.2 - 0.1, -2.0, -0.4))), H(*(mid + V(sx * 2.2 + 0.1, 2.0, 0.4))), vein)   # a line of light
+        # tusks at the mouth's corners
+        CI.chain_boxes(head, [H(sx * 5.6, 2.6, -16.0), H(sx * 6.0, 5.0, -16.8), H(sx * 5.8, 6.4, -16.2)], 1.5, 0.6, claw)
+    jaw = r.bone('jaw', head, H(0, 2.6, -2.0), anim='jaw')
+    CI.rbox(jaw, H(-7.4, 2.6, -19.5), H(7.4, 8.0, 1.0), pale, bevel=2.2)
+    hang(jaw, H(0, 7.5, -12.0), 12, 5.5, 2.5, 8.0)
+    hang(head, H(0, 2.0, -2.0), 6, 7.0, 2.0, 6.0)
+    # ------------------------------------------------------------------ the legs: pillars splayed under it, five pale toes
     for sx in (-1, 1):
         sd = 'r' if sx < 0 else 'l'
-        for front, z0, anim in ((True, -15.0, 'leg_r' if sx < 0 else 'leg_l'), (False, 21.0, 'leg_l' if sx < 0 else 'leg_r')):
+        for front, z0, anim in ((True, -12.0, 'leg_r' if sx < 0 else 'leg_l'), (False, 18.0, 'leg_l' if sx < 0 else 'leg_r')):
             name = ('leg_f' if front else 'leg_b') + sd
-            hip = V(sx * 16.0, -1.0, z0)
-            knee = V(sx * 19.5, 11.0, z0)
-            foot = V(sx * 20.5, 22.0, z0 - 0.5)
+            hip, knee, foot = V(sx * 16.0, 0.0, z0), V(sx * 20.0, 11.0, z0 - 1.0), V(sx * 21.0, 21.0, z0 - 1.5)
             up = r.bone(name, body, tuple(hip), anim=anim)
-            rseg(up, hip + V(0, -3.0, 0), knee, 14.5, 14.5, hide, up=(0, 0, -1), bevel=2.8)
-            moss_on(up, hip[0] - 6.5, hip[0] + 6.5, hip[1] - 2.0, knee[1], z0 - 6.75, z0 + 6.75, 6, (2, -1))
+            rseg(up, hip + V(0, -4.0, 0), knee, 15.5, 15.5, mossy, up=(0, 0, -1), bevel=3.4)
             low = r.bone(name + '_low', up, tuple(knee), anim='knee')
-            rseg(low, knee - V(0, 1.0, 0), foot, 14.0, 14.0, stone, up=(0, 0, -1), bevel=2.6)
-            CI.box(low, (foot[0] - 7.0, 21.0, z0 - 7.5), (foot[0] + 7.0, 24.0, z0 + 6.5), dark)
-            for t in range(4):                                                                    # the toes
-                x = foot[0] + (t - 1.5) * 3.4
-                CI.rbox(low, (x - 1.5, 19.0, z0 - 10.5), (x + 1.5, 24.0, z0 - 6.0), claw, bevel=0.6)
-            CI.box(low, (foot[0] + sx * 6.55 - 0.1, 13.0, z0 - 3.0), (foot[0] + sx * 6.55 + 0.1, 20.0, z0 - 2.4), vein)
-            CI.box(low, (foot[0] + sx * 6.55 - 0.1, 16.0, z0 - 2.4), (foot[0] + sx * 6.55 + 0.1, 16.6, z0 + 3.0), vein)
-            CI.box(low, (foot[0] - 2.0, 15.0, z0 - 6.6), (foot[0] - 1.4, 19.0, z0 - 6.5), vein)
-    # ------------------------------------------------------------------ the tail: long, thick, plated, green light along it
+            rseg(low, knee - V(0, 1.0, 0), foot, 15.0, 15.0, mossy, up=(0, 0, -1), bevel=3.2)
+            CI.rbox(low, (foot[0] - 8.0, 20.0, foot[2] - 8.0), (foot[0] + 8.0, 24.0, foot[2] + 7.0), stone, bevel=1.4)
+            for t in range(4):                                                                     # the toes
+                x = foot[0] + (t - 1.5) * 3.9
+                L = 4.5 if t in (0, 3) else 6.0
+                CI.rbox(low, (x - 1.6, 17.5, foot[2] - 7.5 - L), (x + 1.6, 24.0, foot[2] - 6.5), claw, bevel=0.8)
+            hang(up, tuple(hip + V(sx * 7.5, -2.0, 0)), 4, 4.0, 2.0, 5.0)
+            ox = foot[0] + sx * 7.55
+            for (y0, y1, zz) in ((10.0, 18.5, foot[2] - 2.0), (13.5, 14.1, foot[2] - 2.0)):
+                CI.box(low, (ox - 0.1, y0, zz - (0.3 if y1 - y0 > 1 else 4.0)), (ox + 0.1, y1, zz + 0.3), vein)
+            CI.box(low, (foot[0] - 3.0, 12.0, foot[2] - 7.55 - 0.1), (foot[0] - 2.4, 19.0, foot[2] - 7.55 + 0.1), vein)
+    # ------------------------------------------------------------------ the tail: long and thick, stone plates along it
     def tail_extra(bone, p, q, w, i):
         m = (p + q) / 2
-        CI.box(bone, tuple(m + V(-w * 0.38, -w * 0.5 - 1.6, -1.6)), tuple(m + V(w * 0.38, -w * 0.5 + 0.4, 1.6)), rim)
+        CI.box(bone, tuple(m + V(-w * 0.3, -w * 0.5 - 2.4, -1.8)), tuple(m + V(w * 0.3, -w * 0.5 + 0.4, 1.8)), rimst)
         for sx in (-1, 1):
-            CI.box(bone, tuple(m + V(sx * w * 0.32, -w * 0.5 - 1.0, -1.2)), tuple(m + V(sx * (w * 0.32 + 1.6), -w * 0.5 + 0.4, 1.2)), stone)
-            CI.box(bone, tuple(m + V(sx * w * 0.5 - (0.15 if sx < 0 else 0), -0.4, -1.4)),
-                   tuple(m + V(sx * w * 0.5 + (0.15 if sx > 0 else 0), 0.2, 1.4)), vein)
-    tail_chain(r, body, (0, 0.0, 30.0), 8, 36.0, 12.5, 4.0, hide, lambda t: 1.6 - 0.8 * t, extra=tail_extra)
-    r.height = 24.0 - (-18.5 - 29.0 - 1.8)          # the hitbox to the mountain's snow
+            CI.box(bone, tuple(m + V(sx * w * 0.42 - 1.2, -w * 0.5 - 1.4, -1.6)), tuple(m + V(sx * w * 0.42 + 1.2, -w * 0.5 + 0.6, 1.6)), stone)
+    tail_chain(r, body, (0, 0.0, 28.0), 8, 38.0, 13.0, 4.0, mossy, lambda t: 1.4 - 0.9 * t, extra=tail_extra)
+    r.height = 24.0 - (RIM - 2.0 - 30.0 - 3.0)       # the hitbox to the mountain's top
     return r
