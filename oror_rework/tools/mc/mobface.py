@@ -106,16 +106,22 @@ def small_eyes(rgb, glow, spec, hair, top_texel, man):
         if man:
             rgb[y + 1:y + 3, x0:x0 + 4] = I
             rgb[y + 1:y + 3, (x0 if side == 0 else x0 + 2):(x0 + 2 if side == 0 else x0 + 4)] = C('#f2f0f6')
+            rows = (y + 1, y + 3)
         else:
+            # (059g, the user's references: "これらと見比べて同じといえる？") two pixels wide and two tall, as theirs:
+            # the lash, then the iris in strong colour, darker at the top, a white highlight at the outer top
             rgb[y + 1, x0:x0 + 4] = dark
-            rgb[y + 2, x0:x0 + 4] = I
+            rgb[y + 2:y + 4, x0:x0 + 4] = I
+            rgb[y + 3, x0:x0 + 4] = C(mix(ic, '#ffffff', 0.18))
             if shape not in ('calm', 'sad', 'void', 'lowered'):
-                rgb[y + 1, x0 + (1 if side == 0 else 2)] = C('#ffffff')
+                hx = x0 if side == 0 else x0 + 3
+                rgb[y + 1:y + 3, hx] = C('#ffffff')
+            rows = (y + 1, y + 4)
         if shape == 'slit':
-            rgb[y + 1:y + 3, x0 + (2 if side == 0 else 1)] = C('#0c0610')
+            rgb[rows[0]:rows[1], x0 + (2 if side == 0 else 1)] = C('#0c0610')
         if spec.get('glow_eyes'):
-            glow[y + 1:y + 3, x0:x0 + 4, :3] = I
-            glow[y + 1:y + 3, x0:x0 + 4, 3] = 230
+            glow[rows[0]:rows[1], x0:x0 + 4, :3] = I
+            glow[rows[0]:rows[1], x0:x0 + 4, 3] = 230
 
 
 def face(spec, skin, hair, build='woman', bangs='bangs'):
