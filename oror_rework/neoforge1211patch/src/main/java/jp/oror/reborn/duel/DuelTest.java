@@ -71,6 +71,8 @@ public final class DuelTest {
     private static FakePlayer fp;
     private static BlockPos site;
     private static volatile boolean vulnerable;
+    private static Mob gloved, meddler;
+    private static long check2At = Long.MAX_VALUE;
 
     private DuelTest() {
     }
@@ -434,13 +436,66 @@ public final class DuelTest {
             fp.setInvisible(false);
             fp.setInvulnerable(false);
             fp.noPhysics = false;
+            step("clickPossess", () -> {
+                fp.setShiftKeyDown(false);
+                fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                dec.getMethod("possessOnClick", net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract.class)
+                    .invoke(null, new net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract(fp,
+                        net.minecraft.world.InteractionHand.MAIN_HAND, sv));
+                boolean in = (Boolean) pmc.getMethod("isPossessing", UUID.class).invoke(null, me);
+                pmc.getMethod("exit", ServerPlayer.class).invoke(null, fp);
+                OUT.put("clickPossess", in);
+            });
+            step("clickFuse", () -> {
+                fp.setShiftKeyDown(true);
+                dec.getMethod("possessOnClick", net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract.class)
+                    .invoke(null, new net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract(fp,
+                        net.minecraft.world.InteractionHand.MAIN_HAND, sv));
+                fp.setShiftKeyDown(false);
+                boolean fused = (Boolean) pmc.getMethod("isFused", UUID.class).invoke(null, me);
+                OUT.put("clickFuse", fused);
+                // fused, the body goes where the host goes
+                sv.teleportTo(sv.getX() + 3.0, sv.getY(), sv.getZ());
+                pmc.getMethod("playerTick", net.neoforged.neoforge.event.tick.PlayerTickEvent.Post.class)
+                    .invoke(null, new net.neoforged.neoforge.event.tick.PlayerTickEvent.Post(fp));
+                OUT.put("fusionFollows", fused && fp.distanceTo(sv) < 2.0);
+                pmc.getMethod("exit", ServerPlayer.class).invoke(null, fp);
+                OUT.put("clickFuseRestored", !fp.isInvisible() && !fp.isInvulnerable() && !fp.noPhysics);
+            });
+            // fused, the host killed: its owner falls with it (Duel Dominion's own rule), the servant drops nothing
+            if (!isGod) step("fusionHostDeath", () -> {
+                net.minecraft.world.phys.Vec3 from = fp.position();
+                boolean in = (Boolean) pmc.getMethod("fuse", ServerPlayer.class, Mob.class).invoke(null, fp, sv);
+                AABB around = sv.getBoundingBox().inflate(6.0);
+                int drops0 = lv.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, around).size()
+                    + lv.getEntitiesOfClass(net.minecraft.world.entity.ExperienceOrb.class, around).size();
+                vulnerable = true;
+                sv.kill();
+                vulnerable = false;
+                int drops1 = lv.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, around).size()
+                    + lv.getEntitiesOfClass(net.minecraft.world.entity.ExperienceOrb.class, around).size();
+                boolean ownerFell = fp.getHealth() <= 0F || fp.isDeadOrDying();
+                boolean still = (Boolean) pmc.getMethod("isPossessing", UUID.class).invoke(null, me);
+                OUT.put("fusionHostDeath", in && !sv.isAlive());
+                OUT.put("fusionHostDeathOwnerFalls", ownerFell);
+                OUT.put("fusionEndsOnHostDeath", !still);
+                OUT.put("noDropsOnServantDeath", drops1 == drops0);
+                fp.setHealth(fp.getMaxHealth());
+                fp.deathTime = 0;
+                fp.setInvisible(false);
+                fp.setInvulnerable(false);
+                fp.noPhysics = false;
+                fp.teleportTo(from.x, from.y, from.z);
+            });
 
             // 7. the servant killed: its revival waits, the revival talisman brings it nearer
             if (!isGod) step("revival", () -> {
                 Class<?> blc = Class.forName("jp.oror.dueldominion.BindingLedger");
                 Object ledger = blc.getMethod("forPlayer", ServerPlayer.class).invoke(null, fp);
                 Method remaining = blc.getMethod("cooldownRemaining", CompoundTag.class, UUID.class, long.class);
-                sv.kill();
+                if (sv.isAlive()) {
+                    sv.kill();
+                }
                 long now = lv.getServer().overworld().getGameTime();
                 CompoundTag s2 = (CompoundTag) read.invoke(null, held(hair, BuiltInRegistries.ENTITY_TYPE.getKey(sv.getType()).toString()));
                 long before = (Long) remaining.invoke(ledger, s2, me, now);
@@ -487,6 +542,137 @@ public final class DuelTest {
             }
             OUT.put("ledgersRoundTrip", same);
         });
+
+        // 10. a duel between two players: both made whole, the loser not killed and not sealed
+        step("pvp", () -> {
+            FakePlayer fp2 = new FakePlayer(lv, new GameProfile(UUID.nameUUIDFromBytes("oror_duel_tester2".getBytes()), "[Duel Tester 2]")) {
+                @Override
+                public boolean isInvulnerableTo(net.minecraft.world.damagesource.DamageSource source) {
+                    return !vulnerable && super.isInvulnerableTo(source);
+                }
+            };
+            fp2.moveTo(fp.getX() + 3.0, fp.getY(), fp.getZ() - 2.0, 0F, 0F);
+            if (fp2.isCreative() || fp2.isSpectator()) {
+                fp2.setGameMode(GameType.SURVIVAL);
+            }
+            fp2.setHealth(5F);
+            int hairs = count(hair);
+            boolean started = (Boolean) dmc.getMethod("start", ServerPlayer.class, LivingEntity.class).invoke(null, fp, fp2);
+            boolean whole = fp2.getHealth() >= fp2.getMaxHealth() - 0.01F;
+            vulnerable = true;
+            fp2.invulnerableTime = 0;
+            fp2.hurt(fp.damageSources().playerAttack(fp), 1000F);
+            vulnerable = false;
+            Object duel = dmc.getMethod("duel", LivingEntity.class).invoke(null, fp);
+            OUT.put("pvpDuel", started && whole);
+            OUT.put("pvpLoserAlive", fp2.getHealth() > 0F && duel == null);
+            OUT.put("pvpNoCapture", count(hair) == hairs);
+        });
+
+        // 11. the grimoire takes the tester's own seal (the hair in the other hand)
+        step("grimoire", () -> {
+            ItemStack g = new ItemStack(item("dominion_grimoire"));
+            ItemStack h = held(hair, "minecraft:zombie");
+            if (h.isEmpty()) {
+                h = held(hair, null);
+            }
+            int slot = fp.getInventory().findSlotMatchingItem(h);
+            if (slot >= 0) {
+                fp.getInventory().setItem(slot, ItemStack.EMPTY);
+            }
+            fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, g);
+            fp.setItemInHand(net.minecraft.world.InteractionHand.OFF_HAND, h);
+            g.use(lv, fp, net.minecraft.world.InteractionHand.MAIN_HAND);
+            ItemStack after = fp.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND);
+            CompoundTag gd = (CompoundTag) read.invoke(null, after);
+            OUT.put("grimoireStored", fp.getItemInHand(net.minecraft.world.InteractionHand.OFF_HAND).isEmpty() && gd.getList("Entries", 10).size() == 1);
+            fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            fp.setItemInHand(net.minecraft.world.InteractionHand.OFF_HAND, ItemStack.EMPTY);
+        });
+
+        // 12. the soul archive keeps an effigy and gives it back
+        step("soulArchive", () -> {
+            List<ItemStack> one = effigies(lv, 1);
+            ItemStack token = one.isEmpty() ? ItemStack.EMPTY : one.get(0);
+            int slot = fp.getInventory().findSlotMatchingItem(token);
+            if (slot >= 0) {
+                fp.getInventory().setItem(slot, ItemStack.EMPTY);
+            }
+            ItemStack a = new ItemStack(item("soul_archive"));
+            fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, a);
+            fp.setItemInHand(net.minecraft.world.InteractionHand.OFF_HAND, token);
+            fp.setShiftKeyDown(false);
+            a.use(lv, fp, net.minecraft.world.InteractionHand.MAIN_HAND);
+            boolean stored = fp.getItemInHand(net.minecraft.world.InteractionHand.OFF_HAND).isEmpty();
+            int before = count(item("spirit_effigy"));
+            fp.setShiftKeyDown(true);
+            fp.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND).use(lv, fp, net.minecraft.world.InteractionHand.MAIN_HAND);
+            fp.setShiftKeyDown(false);
+            OUT.put("soulArchiveStored", stored);
+            OUT.put("soulArchiveReturned", count(item("spirit_effigy")) > before);
+            fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        });
+
+        // 13. the white glove thrown at a zombie (the duel begins where it lands; checked two seconds on)
+        step("glove", () -> {
+            Zombie g = EntityType.ZOMBIE.create(lv);
+            g.moveTo(fp.getX(), fp.getY(), fp.getZ() + 4.0, 180F, 0F);
+            g.setNoAi(true);
+            lv.addFreshEntity(g);
+            MADE.add(g);
+            gloved = g;
+            fp.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, g.getEyePosition());
+            ItemStack glove = new ItemStack(item("white_glove"));
+            fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, glove);
+            glove.use(lv, fp, net.minecraft.world.InteractionHand.MAIN_HAND);
+            fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        });
+    }
+
+    private static int count(Item item) {
+        int n = 0;
+        for (ItemStack s : fp.getInventory().items) {
+            if (s.is(item)) {
+                n += s.getCount();
+            }
+        }
+        for (ItemStack s : fp.getInventory().offhand) {
+            if (s.is(item)) {
+                n += s.getCount();
+            }
+        }
+        return n;
+    }
+
+    /** Two seconds on: the glove's duel, a third party kept out of it, the duelist's own blows let in; then the zombie taken
+     * far off (the duel should end on its own). */
+    private static void glovePhase(ServerLevel lv) {
+        step("gloveDuel", () -> {
+            Class<?> dmc = Class.forName("jp.oror.dueldominion.DuelManager");
+            Object duel = dmc.getMethod("duel", LivingEntity.class).invoke(null, fp);
+            boolean withIt = duel != null && gloved != null && (dmc.getMethod("duel", LivingEntity.class).invoke(null, gloved) == duel);
+            OUT.put("gloveDuel", withIt);
+            if (!withIt) {
+                return;
+            }
+            Zombie m = EntityType.ZOMBIE.create(lv);
+            m.moveTo(gloved.getX() + 2.0, gloved.getY(), gloved.getZ(), 0F, 0F);
+            m.setNoAi(true);
+            lv.addFreshEntity(m);
+            MADE.add(m);
+            meddler = m;
+            float h0 = gloved.getHealth();
+            gloved.invulnerableTime = 0;
+            gloved.hurt(lv.damageSources().mobAttack(m), 4F);
+            float h1 = gloved.getHealth();
+            gloved.invulnerableTime = 0;
+            gloved.hurt(fp.damageSources().playerAttack(fp), 2F);
+            float h2 = gloved.getHealth();
+            OUT.put("interferenceBlocked", h1 >= h0);
+            OUT.put("duelistBlowsCount", h2 < h1);
+            gloved.teleportTo(gloved.getX() + 80.0, gloved.getY(), gloved.getZ());
+        });
+        check2At = lv.getGameTime() + 45;
     }
 
     /** The first stack of the item in the tester's inventory (of the god's kind when asked). */
@@ -528,10 +714,20 @@ public final class DuelTest {
         if (level == null || level.getGameTime() < checkAt) {
             return;
         }
-        if (calledGod != null) {
-            OUT.put("godAliveAfter2s", calledGod.isAlive() && !calledGod.isRemoved() && ((LivingEntity) calledGod).getHealth() > 0F);
-            OUT.put("godRaidCleared", !Raid.active(calledGod));
+        if (check2At == Long.MAX_VALUE) {
+            if (calledGod != null) {
+                OUT.put("godAliveAfter2s", calledGod.isAlive() && !calledGod.isRemoved() && ((LivingEntity) calledGod).getHealth() > 0F);
+                OUT.put("godRaidCleared", !Raid.active(calledGod));
+            }
+            glovePhase(level);
+            checkAt = check2At;
+            return;
         }
+        step("duelEndsFar", () -> {
+            Object duel = Class.forName("jp.oror.dueldominion.DuelManager").getMethod("duel", LivingEntity.class).invoke(null, fp);
+            OUT.put("duelEndsFar", duel == null);
+        });
+        check2At = Long.MAX_VALUE;
         finish();
     }
 
@@ -545,7 +741,10 @@ public final class DuelTest {
             && ok("retribution") && ok("guardian") && ok("binding") && ok("maliceTransfer") && ok("soulSeeker") && ok("exorcism")
             && ok("calamity") && ok("possession") && ok("possessionRestored") && ok("fusion") && ok("fusionRestored")
             && ok("logoutWhileFused") && ok("crashWhileFused") && ok("revival") && ok("duelLost") && ok("duelBuffRemoved")
-            && ok("ledgersRoundTrip");
+            && ok("ledgersRoundTrip") && ok("pvpDuel") && ok("pvpLoserAlive") && ok("pvpNoCapture") && ok("grimoireStored")
+            && ok("soulArchiveStored") && ok("soulArchiveReturned") && ok("gloveDuel") && ok("interferenceBlocked")
+            && ok("duelistBlowsCount") && ok("duelEndsFar") && ok("clickPossess") && ok("noDropsOnServantDeath")
+            && ok("clickFuse") && ok("fusionFollows") && ok("clickFuseRestored") && ok("fusionHostDeath") && ok("fusionEndsOnHostDeath");
         StringBuilder s = new StringBuilder("{\"present\":true");
         for (Map.Entry<String, Object> en : OUT.entrySet()) {
             s.append(",\"").append(en.getKey()).append("\":").append(en.getValue());
@@ -570,6 +769,9 @@ public final class DuelTest {
         FORCED.clear();
         level = null;
         calledGod = null;
+        gloved = null;
+        meddler = null;
+        check2At = Long.MAX_VALUE;
         resultLogged = true;
     }
 
