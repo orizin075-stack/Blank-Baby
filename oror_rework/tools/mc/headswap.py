@@ -60,33 +60,41 @@ def face8(spec, skin, hair, build):
         return f, g
     shape = EYE_SHAPE.get(spec.get('style', 'normal'), 'round')
     iris, iris_r = spec.get('iris', '#5a3a2a'), spec.get('heterochromia') or spec.get('iris', '#5a3a2a')
+    # (059g) the eye as the user's references draw it (Touhou Little Maid, the Minecraft skins): two pixels wide and two
+    # tall, the outer column all white, the inner column the iris, darker above and lighter below; a pale pink cheek
+    # under the white; the eyes right under the bangs (rows 3-4); men one row tall, white and iris, under a brow
+    white = C('#f6f6f8')
+    y0 = 3 if not man else 4
     for side, ic in ((0, iris), (1, iris_r)):
         o, i = (1, 2) if side == 0 else (6, 5)
-        dark = C(mix(shade(ic, 0.5), '#0c0614', 0.3))
+        dark = C(mix(shade(ic, 0.62), '#140a1a', 0.2))
         mid = C(ic)
-        light = C(mix(ic, '#ffffff', 0.28))
-        white = C('#ffffff')
+        lash = C(mix(shade(hair, 0.35), '#120a14', 0.6))
         if man:
-            # the vanilla men's eye: a white and an iris pixel under a short brow (no dark row between)
-            cells = {(4, o): C('#f2f0f6'), (4, i): mid} if shape != 'closed' else {(4, o): dark, (4, i): dark}
-        elif shape == 'big':
-            cells = {(3, o): dark, (3, i): dark, (4, o): white, (4, i): mid, (5, o): mid, (5, i): light}
-        elif shape == 'calm':
-            cells = {(4, o): dark, (4, i): dark, (5, o): mid, (5, i): light}
-        elif shape == 'sharp':
-            cells = {(3, 0 if side == 0 else 7): dark, (4, o): dark, (4, i): dark, (5, o): mid, (5, i): white}
-        elif shape == 'slit':
-            cells = {(4, o): mid, (4, i): dark, (5, o): mid, (5, i): dark}
-        elif shape == 'void':
-            cells = {(4, o): dark, (4, i): dark, (5, o): dark, (5, i): light}
+            cells = {(y0, o): white, (y0, i): mid}
+            if shape == 'closed':
+                cells = {(y0, o): lash, (y0, i): lash}
         elif shape == 'closed':
-            cells = {(5, o): dark, (5, i): dark}
-        else:                                                   # round
-            cells = {(4, o): white, (4, i): dark, (5, o): mid, (5, i): light}
+            cells = {(y0 + 1, o): lash, (y0 + 1, i): lash}
+        elif shape == 'calm':                                   # half-lidded: the lid over the top row
+            cells = {(y0, o): lash, (y0, i): lash, (y0 + 1, o): white, (y0 + 1, i): mid}
+        elif shape == 'void':                                   # dark eyes with a lit pupil
+            cells = {(y0, o): dark, (y0, i): dark, (y0 + 1, o): dark, (y0 + 1, i): C(mix(ic, '#ffffff', 0.3))}
+        elif shape == 'big':                                    # three tall: white over the whole outer column
+            cells = {(y0, o): white, (y0, i): dark, (y0 + 1, o): white, (y0 + 1, i): mid,
+                     (y0 + 2, o): white, (y0 + 2, i): C(mix(ic, '#ffffff', 0.25))}
+        else:                                                   # round, sharp, slit
+            cells = {(y0, o): white, (y0, i): dark, (y0 + 1, o): white, (y0 + 1, i): mid}
+            if shape == 'sharp':
+                cells[(y0 - 1, 0 if side == 0 else 7)] = lash
         for (y, x), col in cells.items():
             f[y, x] = col
-            if spec.get('glow_eyes') and not np.allclose(col, white) and not np.allclose(col, dark):
+            if spec.get('glow_eyes') and x == i and not np.allclose(col, lash):
                 g[y, x, :3], g[y, x, 3] = col, 255
+        if not man and shape not in ('void',):
+            yb = y0 + (3 if shape == 'big' else 2)
+            if yb < 8:
+                f[yb, o] = C(mix(skin, '#ff8aa0', 0.3))         # the pale pink cheek
     if man:
         bc = C(mix(shade(hair, 0.55), '#1a1010', 0.3))
         f[3, 1:3] = f[3, 5:7] = bc                               # men's brows, right over the eyes
