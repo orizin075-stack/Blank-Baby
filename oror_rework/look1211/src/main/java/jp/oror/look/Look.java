@@ -196,8 +196,9 @@ public final class Look {
                 Object[][] audit = {
                     {"c01_capital_outer_wall_gate_n", 0, 105, -510, 180.0F, 31.4F}, {"c02_capital_outer_wall_gate_e", 510, 105, 0, -90.0F, 31.4F},
                     {"c03_capital_outer_wall_gate_s", 0, 105, 510, 0.0F, 31.4F}, {"c04_capital_outer_wall_gate_w", -510, 105, 0, 90.0F, 31.4F},
-                    {"c05_capital_outer_wall_corner_ne", 510, 111, -510, -135.0F, 26.7F},
-                    {"c06_capital_outer_wall_corner_sw", -510, 111, 510, 45.0F, 26.7F},
+                    // (059f) the corners looked away from the capital (their frames bare sky): now back at the wall's corner
+                    {"c05_capital_outer_wall_corner_ne", 510, 111, -510, 45.0F, 26.7F},
+                    {"c06_capital_outer_wall_corner_sw", -510, 111, 510, -135.0F, 26.7F},
                     {"c07_capital_third_wall_gate_n", 0, 99, -412, 180.0F, 27.0F}, {"c08_capital_third_wall_gate_e", 412, 99, 0, -90.0F, 27.0F},
                     {"c09_capital_third_wall_gate_s", 0, 99, 412, 0.0F, 27.0F}, {"c10_capital_third_wall_gate_w", -412, 99, 0, 90.0F, 27.0F},
                     {"c11_capital_third_wall_corner_ne", 412, 105, -412, -135.0F, 23.3F},
