@@ -72,7 +72,7 @@ import org.slf4j.LoggerFactory;
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class CitadelUpdate {
     /** The template's revision: worlds updated to an earlier one are updated again. */
-    public static final int REVISION = 56;
+    public static final int REVISION = 57;
     private static final Logger LOG = LoggerFactory.getLogger("OROR Citadel");
     private static final String FILE = "/data/oror_supreme_bosses/citadel/v12/update.bin";
     /** Blocks looked at a tick. */
@@ -109,7 +109,7 @@ public final class CitadelUpdate {
     private static final Set<Long> QUEUED = new HashSet<>();
     private static final List<Object[]> MUSTER = new ArrayList<>();
     private static final List<Entity> RETIRE = new ArrayList<>();
-    public static int chunksUpdated, blocksChanged, containersEmptied, vehiclesRetired, vehiclesMustered, chunksRebuilt;
+    public static int chunksUpdated, blocksChanged, containersEmptied, vehiclesRetired, vehiclesMustered, vehiclesTurned, chunksRebuilt;
     private static Test test;
 
     private CitadelUpdate() {
@@ -527,10 +527,45 @@ public final class CitadelUpdate {
                 vehiclesRetired++;
             } else {
                 CompoundTag p = v.getPersistentData().getCompound(RoyalPilots.KEY);
+                // (059g) a gun whose post now faces another way (gunfront.py: turned off a gate's tower or a fence it
+                // looked into) is turned with it; one a player rides is left as it is
+                CitadelData.Post post = p.contains("Home") ? postFor(BlockPos.of(p.getLong("Home"))) : null;
+                if (post != null && v.getPassengers().stream().noneMatch(r -> r instanceof Player)
+                        && Math.abs(net.minecraft.util.Mth.wrapDegrees(post.yaw() - p.getFloat("Heading"))) > 1F) {
+                    v.setYRot(post.yaw());
+                    v.setYBodyRot(post.yaw());
+                    v.setYHeadRot(post.yaw());
+                    p.putFloat("Heading", post.yaw());
+                    vehiclesTurned++;
+                }
                 p.putInt("Rev", REVISION);
                 v.getPersistentData().put(RoyalPilots.KEY, p);
             }
         }
+    }
+
+    /** (059g) The vehicle post a vehicle's home is at (as postAt finds it), or null. */
+    static CitadelData.Post postFor(BlockPos home) {
+        CitadelSites.Site site = CitadelSites.nearest(home, CitadelData.HALF * 16 + 32);
+        if (site == null) {
+            return null;
+        }
+        int hx = home.getX() - site.offsetX(), hz = home.getZ() - site.offsetZ();
+        for (int ox = -1; ox <= 1; ox++) {
+            for (int oz = -1; oz <= 1; oz++) {
+                for (CitadelData.Post post : CitadelData.posts((hx >> 4) + ox, (hz >> 4) + oz)) {
+                    if (post.vehicle().isEmpty()) {
+                        continue;
+                    }
+                    BlockPos at = site.toWorld(post.x(), post.y(), post.z());
+                    double dx = at.getX() - home.getX(), dz = at.getZ() - home.getZ();
+                    if (dx * dx + dz * dz <= 9 && Math.abs(at.getY() - home.getY()) <= 4) {
+                        return post;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /** Each vehicle post of the chunk without its vehicle (nor a soldier about to bring it out) gets one. */
@@ -677,7 +712,7 @@ public final class CitadelUpdate {
         src.sendSuccess(() -> Component.literal("自動更新：" + (ledger.auto ? "入" : "切（/oror citadel update on で入）") + "。建て直し待ち：" + ledger.rebuild.size()
             + " チャンク（建て直し済み " + chunksRebuilt + "）。王都の更新（" + REVISION + "版）: 更新の要るチャンク " + total + " のうち " + ledger.done.size()
             + " を更新済み（待ち " + queued + "）。このセッションで " + blocksChanged + " ブロック、空にした王国の容器 " + containersEmptied
-            + "、引き上げた車両 " + vehiclesRetired + "、新しい持ち場に出した車両 " + vehiclesMustered + "。残りは王都を歩くと読み込まれた所から更新されます。")
+            + "、引き上げた車両 " + vehiclesRetired + "、新しい持ち場に出した車両 " + vehiclesMustered + "、向きを直した砲 " + vehiclesTurned + "。残りは王都を歩くと読み込まれた所から更新されます。")
             .withStyle(ChatFormatting.GOLD), false);
         return 1;
     }
