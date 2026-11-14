@@ -10,7 +10,8 @@ from colors import hexc, mix, shade, lum
 import bbface as BF
 import mcface as MF
 import gaiaface as GF
-FACES = GF          # 0.17.27: Grimoire of Gaia / Ice and Fire faces (mcface: the vanilla 8x8 grammar of v0.17.1)
+import mobface as MOB
+FACES = MOB         # 059g: the monster-girl / maid mods' 8x8 faces (gaiaface, 0.17.27, drew them at half a pixel)
 
 SIDE = ('front', 'back', 'left', 'right')
 

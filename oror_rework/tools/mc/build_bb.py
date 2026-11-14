@@ -23,6 +23,8 @@ def recipes():
     out.update(creatures3d.RECIPES)
     out.update(creatures_sc.RECIPES)
     out.update(creatures_ia.RECIPES)         # 0.17.27: the non-human characters, rebuilt as cube models
+    import dragons_if
+    out.update(dragons_if.RECIPES)           # 059g: the dragons and Kurma after the user's references
     return out
 
 
