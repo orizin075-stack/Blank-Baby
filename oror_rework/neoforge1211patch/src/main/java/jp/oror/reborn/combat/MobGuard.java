@@ -272,27 +272,49 @@ public final class MobGuard {
 
     // ---------------------------------------------------------------------------------------------- meeting the blow
 
+    /** What a guard made of a blow: none (it lands), undone (parried or blocked whole), halved, or the guard broken. */
+    public static final int NONE = 0, UNDONE = 1, HALVED = 2, BROKEN = 3;
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void hurt(LivingIncomingDamageEvent e) {
         LivingEntity self = e.getEntity();
-        if (self.level().isClientSide || !(self instanceof Mob m) || !(self.level() instanceof ServerLevel sl)) {
+        if (self.level().isClientSide || !(self instanceof Mob m) || self instanceof SupremeEntity) {
+            // (059f) OROR's characters meet blows at the start of their own hurt (SupremeEntityGuardMixin): in their lore
+            // their blows never reach this event (their soul's health takes them), so a god never parried (CI 27: 0/0)
             return;
         }
-        DamageSource src = e.getSource();
-        if (!(src.getEntity() instanceof LivingEntity attacker) || attacker == self || unblockable(src)) {
-            return;
+        int met = meet(m, e.getSource(), e.getAmount());
+        if (met == UNDONE) {
+            e.setCanceled(true);
+        } else if (met == HALVED) {
+            e.setAmount(e.getAmount() * 0.5F);
+        }
+    }
+
+    /** (059f) A god's blow, at the start of its hurt: true when the guard undid it (the hurt then does nothing). */
+    public static boolean meetGod(SupremeEntity god, DamageSource src, float amount) {
+        return !god.level().isClientSide && meet(god, src, amount) == UNDONE;
+    }
+
+    /** A blow on a mob met by its guard: a parry, a block, its guard broken, or nothing (its effects and moments shown). */
+    static int meet(Mob m, DamageSource src, float amount) {
+        if (!(m.level() instanceof ServerLevel sl)) {
+            return NONE;
+        }
+        if (!(src.getEntity() instanceof LivingEntity attacker) || attacker == m || unblockable(src)) {
+            return NONE;
         }
         boolean projectile = src.getDirectEntity() instanceof Projectile;
         boolean melee = !projectile && src.getDirectEntity() == attacker;
         if (!melee && !projectile || !guards(m) || projectile && ranged(m) || nativeGuardUp(m)) {
-            return;
+            return NONE;
         }
         // (058) a relic's art or technique is no blow a guard can take, nor is any blow on a guard a technique broke
         // or a seal undid, while that lasts
         long now = sl.getGameTime();
-        if (jp.oror.reborn.RelicArts.busy() || self.getPersistentData().getLong("ororSealUntil") > now
-            || self.getPersistentData().getLong("ororGuardBrokenUntil") > now) {
-            return;
+        if (jp.oror.reborn.RelicArts.busy() || m.getPersistentData().getLong("ororSealUntil") > now
+            || m.getPersistentData().getLong("ororGuardBrokenUntil") > now) {
+            return NONE;
         }
         Guard g = guard(m);
         if (g.remaining <= 0 || g.stagger > 0) {
@@ -300,24 +322,23 @@ public final class MobGuard {
             if (melee && g.stagger <= 0) {
                 g.delay = Math.min(g.delay, tier(m).cycle / 2);
             }
-            return;
+            return NONE;
         }
         Vec3 from = src.getSourcePosition();
         if (from == null) {
-            return;
+            return NONE;
         }
         Vec3 to = from.subtract(m.position()).multiply(1, 0, 1);
         Vec3 facing = m.getLookAngle().multiply(1, 0, 1);
         if (to.lengthSqr() < 1.0E-6 || facing.lengthSqr() < 1.0E-6 || to.normalize().dot(facing.normalize()) < 0.2) {
-            return;
+            return NONE;
         }
         Tier tier = tier(m);
         // (059e) the first half of the guard parries (it was its first three ticks: parries were rare enough to go unseen)
         boolean perfect = g.age <= tier.window / 2;
         if (projectile && !(tier == Tier.BOSS || shield(m) || perfect && tier == Tier.ARMED)) {
-            return;
+            return NONE;
         }
-        float amount = e.getAmount();
         float cost = Math.max(1F, amount * (perfect ? 0.05F : 0.3F));
         if (g.stamina < cost) {
             // the guard breaks under the blow: the blow lands, and the mob staggers
@@ -328,30 +349,26 @@ public final class MobGuard {
             count(m, "OrorGuardBreaks");
             effects(sl, m, "break", m.getEyePosition().add(0, -0.3, 0), true);
             show(m, "break", 22, attacker);
-            return;
+            return BROKEN;
         }
         g.stamina -= cost;
         Vec3 contact = m.getEyePosition().lerp(from.add(0, attacker.getBbHeight() * 0.6, 0), 0.35);
         if (perfect) {
-            e.setCanceled(true);
             count(m, "OrorParries");
             effects(sl, m, "parry", contact, true);
             show(m, "parry", 14, attacker);
             if (melee) {
                 parried(attacker, m.position());
             }
-        } else {
-            if (tier != Tier.BOSS && !shield(m)) {
-                e.setAmount(amount * 0.5F);
-            } else {
-                e.setCanceled(true);
-            }
-            count(m, "OrorBlocks");
-            effects(sl, m, "block", contact, true);
-            // (059e) Epic Fight's short guard hit only where the blow is undone: a halved blow plays its own hit (053: a
-            // guard hit on every block left mobs standing in it through a brawl)
-            show(m, e.isCanceled() ? "block" : "block_soft", 12, attacker);
+            return UNDONE;
         }
+        boolean whole = tier == Tier.BOSS || shield(m);
+        count(m, "OrorBlocks");
+        effects(sl, m, "block", contact, true);
+        // (059e) Epic Fight's short guard hit only where the blow is undone: a halved blow plays its own hit (053: a
+        // guard hit on every block left mobs standing in it through a brawl)
+        show(m, whole ? "block" : "block_soft", 12, attacker);
+        return whole ? UNDONE : HALVED;
     }
 
     /**

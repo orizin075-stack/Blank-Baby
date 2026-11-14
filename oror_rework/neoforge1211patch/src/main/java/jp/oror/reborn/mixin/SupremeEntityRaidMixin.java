@@ -23,8 +23,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(value = SupremeEntity.class, remap = false)
 public abstract class SupremeEntityRaidMixin {
-    @Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), require = 0)
+    @Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true, require = 0)
     private void oror$raidEnter(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        // (059f) the god's guard first (MobGuard): in its lore a god's blows never reach the damage event the guard met
+        // every other mob's blows at, so no god ever parried; a blow it parries or blocks whole does nothing, and starts
+        // no raid (here, before Raid.enter: an early return skips Raid.leave at the hurt's end)
+        if (jp.oror.reborn.combat.MobGuard.meetGod((SupremeEntity) (Object) this, source, amount)) {
+            cir.setReturnValue(false);
+            return;
+        }
         Raid.enter((SupremeEntity) (Object) this, source, amount);
     }
 
