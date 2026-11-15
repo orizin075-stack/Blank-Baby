@@ -153,6 +153,11 @@ public final class RoyalPilots {
             }
         }
         String engine = Sbw.engine(v);
+        // (059g) the field guns, the Mk 42 and the TOW fire only when the one aboard presses fire: their gunner does (GunLayer)
+        if (seen != null && v.tickCount % 5 == 2 && (engine.equals("FIXED") || engine.equals("EMPTY") || engine.isEmpty())
+            && !ANTI_AIR.contains(Supply.kind(v))) {
+            GunLayer.lay(v, p, driver, seen);
+        }
         if (engine.equals("AIRCRAFT")) {
             fly(v, p, target);
         } else if (engine.equals("HELICOPTER")) {

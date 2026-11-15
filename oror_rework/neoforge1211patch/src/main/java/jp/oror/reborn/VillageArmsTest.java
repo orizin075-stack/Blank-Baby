@@ -301,6 +301,9 @@ public final class VillageArmsTest {
                         }
                     }
                     r.rec.stage = Math.max(r.rec.stage, 3);
+                    // (CI 44: a castle town sends its strongest out on an expedition, and the tank found no crew: the
+                    // strong villagers' reasons are logged in VILLAGE-ARMS-WAIT) no expedition while the tank is tried
+                    r.rec.nextTrip = Long.MAX_VALUE;
                     VillageProgress.get(r.level).setDirty();
                     phase(r, "tank");
                 }
@@ -424,13 +427,46 @@ public final class VillageArmsTest {
         } catch (ReflectiveOperationException | RuntimeException ex) {
             b.append(",\"pool\":\"").append(ex.getClass().getSimpleName()).append('"');
         }
-        int strong = 0;
+        // each strong villager as the sortie's crew test sees him: what keeps him from the tank
+        b.append(",\"strong\":[");
+        boolean first = true;
         for (Entity m : r.made) {
-            if (m instanceof Villager v && v.isAlive() && VillageAI.strong(v) && !v.isPassenger() && VillageLedger.of(v) == r.home) {
-                strong++;
+            if (m instanceof Villager v && VillageAI.strong(v)) {
+                net.minecraft.nbt.CompoundTag d = VillagerLife.data(v);
+                List<String> no = new ArrayList<>();
+                if (!v.isAlive() || v.isRemoved()) {
+                    no.add("gone");
+                }
+                if (v.isSleeping()) {
+                    no.add("asleep");
+                }
+                if (VillagerIndustry.miner(v)) {
+                    no.add("miner");
+                }
+                if (v.isPassenger()) {
+                    no.add("riding");
+                }
+                if (d.contains("Trip")) {
+                    no.add("trip");
+                }
+                if (d.hasUUID("Flight")) {
+                    no.add("flight");
+                }
+                if (d.hasUUID("Sortie")) {
+                    no.add("sortie");
+                }
+                if (v.getPersistentData().getBoolean("OrorWanderer")) {
+                    no.add("wanderer");
+                }
+                if (VillageLedger.of(v) != r.home) {
+                    no.add("otherVillage");
+                }
+                b.append(first ? "" : ",").append('"').append(v.getVillagerData().getProfession()).append(':').append(no.isEmpty() ? "free" : String.join("+", no))
+                    .append('"');
+                first = false;
             }
         }
-        b.append(",\"crew\":").append(strong).append('}');
+        b.append("],\"trip\":").append(r.rec.trip != null).append('}');
         return b.toString();
     }
 
