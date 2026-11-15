@@ -158,6 +158,9 @@ public final class RoyalPilots {
             if (driver.isNoAi()) {
                 GunLayer.watch(driver, seen);
             }
+            if ("tow".equals(Supply.kind(v))) {
+                GunLayer.layBarrel(v, seen);
+            }
             if (v.tickCount % 5 == 2) {
                 GunLayer.lay(v, p, driver, seen);
             }

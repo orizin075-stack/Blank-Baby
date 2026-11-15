@@ -118,6 +118,28 @@ final class GunLayer {
         gunner.setXRot(pitch);
     }
 
+    /**
+     * (CI 56: the TOW's wire-guided missile steers along its launcher's barrel, not to a place; its barrel stood pitched up,
+     * and every missile flew on over its target) the TOW's barrel laid straight at the target, every tick: its yaw and
+     * its pitch from the turret to the target's middle (Superb Warfare's setTurretYRot and setTurretXRot, the launcher's
+     * own facing as the view the missile may follow).
+     */
+    static void layBarrel(Entity v, LivingEntity target) {
+        Vec3 from = v.position().add(0, 1.0, 0);
+        Vec3 d = target.getBoundingBox().getCenter().subtract(from);
+        float yaw = (float) (Math.atan2(d.z, d.x) * 180.0 / Math.PI) - 90F;
+        float pitch = (float) -(Math.atan2(d.y, d.horizontalDistance()) * 180.0 / Math.PI);
+        Object ty = Sbw.call(v, "getTurretYRot");
+        // the turret's yaw kept as Superb Warfare gives it where it already faces the target (it may be the body's own
+        // frame); where it does not, set it in the world's
+        if (!(ty instanceof Number n) || Math.abs(net.minecraft.util.Mth.wrapDegrees(n.floatValue() - yaw)) > 3F
+            && Math.abs(net.minecraft.util.Mth.wrapDegrees(n.floatValue() - (yaw - v.getYRot()))) > 3F) {
+            Sbw.call(v, "setTurretYRot", yaw);
+        }
+        Sbw.call(v, "setTurretXRot", pitch);
+        v.setXRot(pitch);
+    }
+
     /** Ticks between two rounds: the seat's weapon's own rate (Superb Warfare's vehicleWeaponRpm), three seconds if unknown. */
     private static long interval(Entity v, Mob gunner) {
         try {
