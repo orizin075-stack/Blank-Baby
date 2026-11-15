@@ -1091,6 +1091,23 @@ public final class RoyalPilots {
             return new boolean[]{roll > 0, roll < 0};
         }
         boolean turn = !v.onGround() && agl > 15 && Math.abs(yawErr) > 12 && Math.abs(roll) < (agl > 40 ? 45 : 25);
+        // (CI 61) the wings levelled when it has no turn to make (or is low): left alone, Superb Warfare's aircraft holds its
+        // bank, and the CI aircraft flew its whole approach banked 13 to 30 degrees, slid 23 blocks off the runway's line
+        // and flew into a hill beside the cleared ground. The bank's own roll runs on, so the key is let go as the roll
+        // three ticks on will be under 6 (a roll rate kept per tick, as this is asked more than once a tick)
+        CompoundTag p = v.getPersistentData().getCompound(KEY);
+        long now = v.level().getGameTime();
+        if (p.getLong("RollAt") != now) {
+            p.putFloat("RollRate", p.contains("LastRoll") ? roll - p.getFloat("LastRoll") : 0F);
+            p.putFloat("LastRoll", roll);
+            p.putLong("RollAt", now);
+        }
+        if (!v.onGround() && !turn && Math.abs(roll) > 10 && (Math.abs(yawErr) <= 12 || agl <= 15)) {
+            float ahead = roll + p.getFloat("RollRate") * 3F;
+            if (Math.signum(ahead) == Math.signum(roll) && Math.abs(ahead) > 6F) {
+                return new boolean[]{roll > 0, roll < 0};
+            }
+        }
         return new boolean[]{turn && yawErr < 0, turn && yawErr > 0};
     }
 
