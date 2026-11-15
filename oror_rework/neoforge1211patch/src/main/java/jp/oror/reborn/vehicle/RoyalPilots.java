@@ -533,6 +533,13 @@ public final class RoyalPilots {
                 // down its final leg, and it reached the gate too high to come down to the runway
                 double alt = leg && lined ? Math.max(runwayY + 25, Math.max(lineHigh(v, home, f) + 18, closeHigh(v) + 10))
                     : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
+                // (059g) no descent in a big turn: the CI aircraft, turning about at the initial point onto its final leg
+                // (180 degrees, banked 50 to 60), was still let down toward the height of the way home, nose down six
+                // degrees; it sank thirty blocks in the turn, slowed to 1.7, and flew into the hill beside the line in five
+                // runs of the last ten. The height it has is kept until it faces within sixty degrees of where it goes.
+                if (!(leg && lined) && Math.abs(Mth.wrapDegrees(yawTo(to.subtract(v.position())) - v.getYRot())) > 60) {
+                    alt = Math.max(alt, v.getY());
+                }
                 // lined up, slowed toward the landing speed already; the turns judged by the real height above the ground
                 // (they were told 99 and banked hard at nine blocks)
                 // (lined up 1.5 to 2.0, as on the glide: at 1.15 the CI aircraft sank into the trees beside its line)
@@ -687,6 +694,9 @@ public final class RoyalPilots {
             // close by first (the CI aircraft flew into a hillside a few blocks ahead that the old 12-block-first probe
             // stepped over), then out to two and a half seconds; against a block already, it climbs at once
             danger = v.horizontalCollision;
+            Vec3 flat = m.multiply(1, 0, 1);
+            Vec3 wing = flat.lengthSqr() < 1.0E-4 ? null
+                : new Vec3(-flat.z, 0, flat.x).normalize().scale(v.getBbWidth() / 2.0 + 1.5);
             for (float side : new float[]{0F, -25F, 25F}) {
                 Vec3 course = side == 0F ? m : m.yRot(side * Mth.DEG_TO_RAD);
                 for (int t : new int[]{2, 4, 7, 10, 14, 19, 25, 32, 40, 50}) {
@@ -694,7 +704,13 @@ public final class RoyalPilots {
                         break;
                     }
                     Vec3 at = v.position().add(course.scale(t));
-                    danger = at.y - groundAt(v, at) < (side == 0F ? 14 : 8);
+                    int under = groundAt(v, at);
+                    if (side == 0F && wing != null) {
+                        // (059g) under the wingtips too: the CI aircraft, its course clear, put a wing into a hilltop
+                        // beside it (stopped dead at 90 over ground of 82 to 87)
+                        under = Math.max(under, Math.max(groundAt(v, at.add(wing)), groundAt(v, at.subtract(wing))));
+                    }
+                    danger = at.y - under < (side == 0F ? 14 : 8);
                 }
             }
             p.putBoolean("Danger", danger);
@@ -890,14 +906,16 @@ public final class RoyalPilots {
         return high;
     }
 
-    /** The highest ground all round (sixteen bearings out to 150 blocks), looked at once a second. */
+    /** The highest ground all round (thirty-two bearings out to 150 blocks), looked at once a second. */
     private static int areaHigh(Entity v, CompoundTag p) {
         long now = v.level().getGameTime();
         if (!p.contains("AreaHigh") || now - p.getLong("AreaAt") > 20) {
             int high = groundAt(v, v.position());
-            for (int b = 0; b < 16; b++) {
-                Vec3 bearing = Vec3.directionFromRotation(0, b * 22.5F);
-                for (int d = 25; d <= 150; d += 25) {
+            // (059g) thirty-two bearings every fifteen blocks (sixteen every twenty-five missed the narrow hilltops the CI
+            // aircraft struck on its way home: 39 to 59 blocks between two bearings 100 to 150 out)
+            for (int b = 0; b < 32; b++) {
+                Vec3 bearing = Vec3.directionFromRotation(0, b * 11.25F);
+                for (int d = 15; d <= 150; d += 15) {
                     high = Math.max(high, groundAt(v, v.position().add(bearing.scale(d))));
                 }
             }

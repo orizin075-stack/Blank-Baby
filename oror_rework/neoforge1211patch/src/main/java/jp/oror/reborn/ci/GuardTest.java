@@ -78,6 +78,10 @@ public final class GuardTest {
         Mob guard, villageGuard, dummy;
         int stage;
         int shotsBefore, arrowsBefore;
+        /** (059g) what the village's people with guns dealt the dummy in a stage (it is made whole every tick) */
+        float dealt;
+        int struck;
+        boolean plain;
         final List<String> stages = new ArrayList<>();
     }
 
@@ -328,16 +332,40 @@ public final class GuardTest {
                 next(r, "village_stage");
             }
             case "village_stage" -> {
-                double dist = r.stage == 0 ? 2 : 10;
+                double dist = r.stage % 2 == 0 ? 2 : 10;
                 Vec3 g = r.villageGuard.position();
+                if (t <= 1) {
+                    r.dealt = 0;
+                    r.struck = 0;
+                } else if (r.dummy.getHealth() < r.dummy.getMaxHealth()) {
+                    // (059g, the user: are villagers really shooting) the dummy is made whole each tick: what it lost since
+                    // the last is what the stage's shots dealt
+                    r.dealt += r.dummy.getMaxHealth() - r.dummy.getHealth();
+                    r.struck++;
+                }
                 r.dummy.moveTo(g.x + dist, r.villageGuard.getY(), g.z, 0, 0);
                 r.dummy.setHealth(r.dummy.getMaxHealth());
                 r.villageGuard.setTarget(r.dummy);
                 if (t >= 80) {
-                    r.stages.add((r.stage == 0 ? "2 blocks: " : "10 blocks: ") + BuiltInRegistries.ITEM.getKey(r.villageGuard.getMainHandItem().getItem()).getPath()
-                        + " holstered " + r.villageGuard.getPersistentData().contains("OrorHolsteredGun"));
+                    r.stages.add((r.plain ? "villager " : "") + (r.stage % 2 == 0 ? "2 blocks: " : "10 blocks: ")
+                        + BuiltInRegistries.ITEM.getKey(r.villageGuard.getMainHandItem().getItem()).getPath()
+                        + " holstered " + r.villageGuard.getPersistentData().contains("OrorHolsteredGun")
+                        + String.format(java.util.Locale.ROOT, " struck %d dealt %.1f", r.struck, r.dealt));
                     r.stage++;
-                    if (r.stage >= 2) {
+                    if (r.stage == 2 && !r.plain) {
+                        // (059g) then an ordinary villager of the village, handed the same pistol (the village's own
+                        // gunsmith arms its guards first, then its strongest people: VillageArms)
+                        ItemStack pistol = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("superbwarfare:glock_17")));
+                        Mob plain = spawn(r, "minecraft:villager", r.villageGuard.blockPosition().offset(0, 0, -6), pistol, 0);
+                        if (plain != null) {
+                            r.villageGuard.discard();
+                            r.villageGuard = plain;
+                            r.plain = true;
+                            next(r, "village_stage");
+                            return;
+                        }
+                    }
+                    if (r.stage >= (r.plain ? 4 : 2)) {
                         r.result.put("village", new ArrayList<>(r.stages));
                         LOG.info("GUARD-VILLAGE {}", json(Map.of("stages", r.stages)));
                         finish(r);
