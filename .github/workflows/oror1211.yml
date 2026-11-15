@@ -130,9 +130,9 @@ jobs:
             method com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity 'Mob.getTarget|AI_TURRET|AI_PASSENGER|[Rr]eload|[Aa]mmo|canShoot' | head -2600
             echo "== VehicleEntity: every method"; javap -p -cp "$SBW" com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity 2>&1 | grep -E '^  [a-z].*\(' | head -400
             echo "== the wire-guided missile (059g, CI 52: the TOW's struck nothing)"
-            for c in $(unzip -l "$SBW" | grep -oE 'com/atsuishio/superbwarfare/entity/projectile/[A-Za-z0-9_]*(WireGuide|Missile)[A-Za-z0-9_]*\.class' | grep -v '\$' | sed 's/\.class$//' | tr / . | head -4); do
+            for c in $(unzip -l "$SBW" | grep -oE 'com/atsuishio/superbwarfare/entity/projectile/[A-Za-z0-9_]*(WireGuide|MissileProjectile)[A-Za-z0-9_]*\.class' | grep -v '\$' | sed 's/\.class$//' | tr / . | head -4); do
               echo "== javap -p $c"; javap -p -cp "$SBW" "$c" 2>&1 | head -120
-              echo "== guidance of $c"; method "$c" 'getOwner|LookAngle|getViewVector|pick\(|guide|Guide|setDeltaMovement|getTarget' | head -900
+              echo "== guidance of $c"; method "$c" 'getOwner|LookAngle|getViewVector|pick[(]|guide|Guide|setDeltaMovement|getTarget|TARGET_POS' | head -900
             done
             echo "== vehicle definitions"
             for f in $(unzip -l "$SBW" | grep -oE '[^ ]*vehicles/(mk_42|mle_1934|bl_132|hpj_11|tow|m_1a_2)\.json'); do echo "== $f"; unzip -p "$SBW" "$f" | head -250; done

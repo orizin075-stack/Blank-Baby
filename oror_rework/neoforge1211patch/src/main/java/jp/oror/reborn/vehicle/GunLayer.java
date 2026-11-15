@@ -67,6 +67,7 @@ final class GunLayer {
         }
         p.putString("LayWhy", "fires");
         try {
+            MissileGuide.fired(gunner, target);
             m.invoke(v, gunner, target.getUUID(), target.getBoundingBox().getCenter());
             fired++;
             p.putInt("Fired", p.getInt("Fired") + 1);
