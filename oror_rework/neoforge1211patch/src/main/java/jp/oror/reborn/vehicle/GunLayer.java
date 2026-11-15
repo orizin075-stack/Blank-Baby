@@ -42,12 +42,15 @@ final class GunLayer {
             p.putString("LayWhy", "laying");
             return;
         }
+        if (now < p.getLong("LayNext")) {
+            return;                                   // (CI 48: three rounds a second) the gun's own rate of fire
+        }
         if (!RoyalPilots.lineOfFire(v, target)) {
             p.putString("LayWhy", "noLine");
             return;
         }
         Object can = Sbw.call(v, "canShoot", gunner);
-        if (!Boolean.TRUE.equals(can) && load(v, gunner)) {
+        if (!Boolean.TRUE.equals(can) && load(v, p, gunner)) {
             // (CI 47: every one of the four had no round in its breech, its rounds in the hold) the gunner loads one
             can = Sbw.call(v, "canShoot", gunner);
         }
@@ -66,6 +69,7 @@ final class GunLayer {
             m.invoke(v, gunner, target.getUUID(), target.getBoundingBox().getCenter());
             fired++;
             p.putInt("Fired", p.getInt("Fired") + 1);
+            p.putLong("LayNext", now + interval(v, gunner));
         } catch (ReflectiveOperationException | RuntimeException ex) {
             if (failures++ < 5) {
                 LOG.warn("GUN-LAYER {} could not fire: {}", Supply.kind(v), ex.toString());
@@ -79,7 +83,23 @@ final class GunLayer {
      * vehicle's hold. True if the gun has a round in it after. (The TOW has no hold: its missile comes from the kingdom's
      * depot beside it, Supply.loadLauncher.)
      */
-    static boolean load(Entity v, Mob gunner) {
+    /** Ticks between two rounds: the seat's weapon's own rate (Superb Warfare's vehicleWeaponRpm), three seconds if unknown. */
+    private static long interval(Entity v, Mob gunner) {
+        try {
+            Object rpm = v.getClass().getMethod("vehicleWeaponRpm", LivingEntity.class).invoke(v, gunner);
+            if (rpm instanceof Number n && n.intValue() > 0) {
+                return Math.max(5, (long) Math.ceil(1200.0 / n.intValue()));
+            }
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            // unknown: as below
+        }
+        return 60;
+    }
+
+    /** Missiles a TOW's crew carries beside the depot's (a post with no depot at hand still fires a few). */
+    static final int TOW_SPARE = 6;
+
+    static boolean load(Entity v, CompoundTag p, Mob gunner) {
         int seat = Sbw.call(v, "getSeatIndex", gunner) instanceof Number n ? n.intValue() : 0;
         Object supplier = Sbw.call(v, "getAmmoSupplier");
         boolean[] loaded = {false};
@@ -98,6 +118,13 @@ final class GunLayer {
                         ammo.getClass().getMethod("set", int.class).invoke(ammo, 1);
                         in = 1;
                     }
+                    if (in <= 0 && "tow".equals(Supply.kind(v)) && p.getInt("TowSpent") < TOW_SPARE) {
+                        // the TOW has no hold: one of the missiles its crew carries (the depot beside it refills the tube
+                        // too, Supply.loadLauncher)
+                        ammo.getClass().getMethod("set", int.class).invoke(ammo, 1);
+                        p.putInt("TowSpent", p.getInt("TowSpent") + 1);
+                        in = 1;
+                    }
                     loaded[0] = in > 0;
                 } catch (ReflectiveOperationException | RuntimeException ex) {
                     if (failures++ < 5) {
@@ -113,6 +140,9 @@ final class GunLayer {
         }
         if (loaded[0]) {
             loads++;
+            if ("tow".equals(Supply.kind(v))) {
+                Sbw.call(v, "setLoaded", true);
+            }
         }
         return loaded[0];
     }

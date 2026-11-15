@@ -42,6 +42,8 @@ public final class Supply {
     private static final String[][] IFV = {{"small_shell_he", "64"}, {"small_shell_gs", "64"}, {"medium_anti_ground_missile", "4"}, {"rifle_ammo", "64"}};
     private static final String[][] GUN = {{"large_shell_he", "32"}, {"large_shell_cm", "8"}};
     private static final String[][] CIWS = {{"small_shell_ap", "64"}, {"small_shell_ap", "64"}};
+    /** (059g, CI 48: a depot by a TOW held no missile for it, so it was never loaded) the TOW's wire-guided missiles */
+    private static final String[][] TOW = {{"medium_anti_ground_missile", "4"}};
     private static final String[][] A10 = {{"small_shell_ap", "64"}, {"small_shell_ap", "64"}, {"small_rocket", "16"}, {"large_anti_ground_missile", "2"},
         {"large_anti_ground_missile", "2"}, {"medium_aerial_bomb", "2"}};
     private static final String[][] SCOUT = {{"small_shell_he", "64"}, {"small_shell_he", "64"}, {"small_rocket", "16"}};
@@ -50,7 +52,7 @@ public final class Supply {
     static final Map<String, String[][]> LOAD = Map.ofEntries(
         Map.entry("m_1a_2", TANK), Map.entry("t_90a", TANK), Map.entry("ztz_99a", TANK),
         Map.entry("bmp_2", IFV), Map.entry("bradley", IFV),
-        Map.entry("mk_42", GUN), Map.entry("mle_1934", GUN), Map.entry("bl_132", GUN), Map.entry("hpj_11", CIWS),
+        Map.entry("mk_42", GUN), Map.entry("mle_1934", GUN), Map.entry("bl_132", GUN), Map.entry("hpj_11", CIWS), Map.entry("tow", TOW),
         Map.entry("a_10a", A10), Map.entry("ah_6", SCOUT), Map.entry("mi_28", GUNSHIP));
     private static final String[][] GROUND = {{"large_shell_he", "16"}, {"small_shell_he", "64"}, {"rifle_ammo", "64"}, {"heavy_ammo", "64"}};
     private static final String[][] AIR = {{"small_shell_ap", "64"}, {"small_shell_he", "64"}, {"small_rocket", "16"}, {"large_anti_ground_missile", "2"}};
