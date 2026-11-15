@@ -30,6 +30,16 @@ final class VillagerState {
         if (near != null) {
             s.append(String.format(Locale.ROOT, " off %.1f", v.distanceTo(near)));
         }
+        if (v.getNavigation().isDone() && !v.isPassenger()) {
+            // (CI 63: a crewman stood a whole minute beside a chest, every path to the tank "done" as soon as asked) where
+            // he stands: off the ground, a path cannot be made at all; and what is round his feet
+            BlockPos b = v.blockPosition();
+            s.append(String.format(Locale.ROOT, " y %.2f%s%s", v.getY(), v.onGround() ? " onGround" : " notOnGround", v.isInWall() ? " inWall" : ""));
+            s.append(" feet ").append(block(v, b)).append(" under ").append(block(v, b.below()));
+            s.append(" N ").append(block(v, b.north())).append(" S ").append(block(v, b.south()))
+                .append(" E ").append(block(v, b.east())).append(" W ").append(block(v, b.west()));
+            s.append(String.format(Locale.ROOT, " move %.3f", v.getDeltaMovement().length()));
+        }
         if (v.getTarget() != null) {
             s.append(" target ").append(BuiltInRegistries.ENTITY_TYPE.getKey(v.getTarget().getType()).getPath());
         }
@@ -50,6 +60,10 @@ final class VillagerState {
             }
         }
         return s.toString();
+    }
+
+    private static String block(Villager v, BlockPos p) {
+        return BuiltInRegistries.BLOCK.getKey(v.level().getBlockState(p).getBlock()).getPath();
     }
 
     private static String pos(BlockPos p) {

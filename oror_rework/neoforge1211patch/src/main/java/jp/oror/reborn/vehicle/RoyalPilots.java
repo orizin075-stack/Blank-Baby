@@ -620,7 +620,15 @@ public final class RoyalPilots {
                 // above the glide it may dive more steeply to it (at six degrees it reached the threshold still high)
                 // (on the glide the dive is not held back for speed: so held, 050's second CI aircraft crossed its
                 // touch-down point 15 blocks up and went round until its time ran out)
-                steerSpeed(v, aim, glide, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 6 ? 8F : 4F, false);
+                // (CI 63) near the glide (or under it) it sinks as the glide does: faster than that, the nose is raised as for a
+                // glide that much higher. Steered by its height alone, the CI aircraft met the glide 90 blocks out sinking at
+                // 0.4 (0.17 is the glide's at its speed), went on through it and came down 11 and 26 blocks short
+                double held = glide;
+                if (v.getY() < glide + 4) {
+                    double sinkErr = -speed * GLIDE - v.getDeltaMovement().y;   // over 0: sinking faster than the glide
+                    held += Mth.clamp(sinkErr * 12.0, -2.0, 4.0);
+                }
+                steerSpeed(v, aim, held, fast, slow, v.getY() - groundAt(v, v.position()), v.getY() > glide + 6 ? 8F : 4F, false);
                 if (v.onGround()) {
                     mode = "rollout";
                     p.putLong("Since", now);
