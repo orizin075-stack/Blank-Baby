@@ -136,7 +136,7 @@ public final class VillageArmsTest {
         chest(level, a.offset(-2, 0, -3), new Object[][]{{Items.IRON_INGOT, 64}, {Items.IRON_INGOT, 64}, {Items.IRON_INGOT, 64}, {Items.IRON_INGOT, 32},
             {Items.GOLD_INGOT, 32}});
         chest(level, a.offset(2, 0, -3), new Object[][]{{Items.GUNPOWDER, 64}, {Items.REDSTONE, 64}, {Items.EMERALD, 64}, {Items.EMERALD, 64},
-            {Items.EMERALD, 32}, {Items.BREAD, 64}});
+            {Items.EMERALD, 32}, {Items.BREAD, 64}, {Items.COAL_BLOCK, 16}});
         r.home = VillageLedger.get(level).register(a);
         VillageLedger.get(level).setDirty();
         r.rec = VillageProgress.get(level).of(r.home);

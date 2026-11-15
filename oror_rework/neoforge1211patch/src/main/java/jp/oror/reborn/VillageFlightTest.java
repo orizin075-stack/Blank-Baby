@@ -106,7 +106,7 @@ public final class VillageFlightTest {
         r.center = a;
         level.setBlock(a, Blocks.BELL.defaultBlockState(), 3);
         chest(level, a.offset(-2, 0, -3), new Object[][]{{Items.IRON_INGOT, 64}, {Items.COPPER_INGOT, 16}, {Items.WHITE_WOOL, 16},
-            {Items.STRING, 32}, {Items.OAK_LOG, 64}, {Items.COBBLESTONE, 64}, {Items.REDSTONE, 16}});
+            {Items.STRING, 32}, {Items.OAK_LOG, 64}, {Items.COBBLESTONE, 64}, {Items.REDSTONE, 16}, {Items.COAL, 32}});
         chest(level, a.offset(2, 0, -3), new Object[][]{{Items.WHEAT, 64}, {Items.WHEAT, 64}, {Items.WHEAT, 64}, {Items.BREAD, 64},
             {Items.BREAD, 64}, {Items.PAPER, 64}, {Items.PAPER, 64}});
         r.home = VillageLedger.get(level).register(a);

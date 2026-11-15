@@ -362,6 +362,98 @@ public final class Supply {
         }
     }
 
+    /** A coal's worth: a coal or a charcoal 1, a coal block 9 (what a station's store is counted in). */
+    private static int coalWorth(ItemStack st) {
+        return st.is(net.minecraft.world.item.Items.COAL) || st.is(net.minecraft.world.item.Items.CHARCOAL) ? st.getCount()
+            : st.is(net.minecraft.world.item.Items.COAL_BLOCK) ? st.getCount() * 9 : 0;
+    }
+
+    static int restocked, restockRounds;
+
+    /**
+     * (059g, the user: "エネルギーが切れそうになったら…木炭や石炭を持ってきて補充するように") The crew keep their post's power plant
+     * in fuel. A station burns the coal its hopper feeds it from the coal store over it, and nobody ever filled the store
+     * again: once it was burnt the post charged nothing. Every half minute at its post, for each station within the
+     * vehicle's reach whose store holds under three stacks of coal blocks' worth, the crew carry coal, charcoal and coal
+     * blocks to it from the other chests of the post (48 blocks about, never a depot nor another station's store), up to
+     * four stacks of blocks' worth. Returns the coal's worth carried.
+     */
+    public static int restock(ServerLevel level, Entity v) {
+        int moved = 0;
+        for (BlockEntity st : near(level, v.position(), 8.5 + v.getBbWidth() / 2, Supply::station)) {
+            BlockPos storePos = st.getBlockPos().above(2);
+            if (!(level.getBlockEntity(storePos) instanceof Container store)) {
+                continue;
+            }
+            int have = 0;
+            for (int i = 0; i < store.getContainerSize(); i++) {
+                have += coalWorth(store.getItem(i));
+            }
+            int room = 4 * 64 * 9 - have;
+            if (have >= 3 * 64 * 9 || room <= 0) {
+                continue;
+            }
+            for (BlockEntity be : near(level, Vec3.atCenterOf(storePos), 48, b -> b instanceof Container && !depot(b) && !station(b)
+                && !(b instanceof net.minecraft.world.level.block.entity.HopperBlockEntity) && !b.getBlockPos().equals(storePos)
+                && !(level.getBlockEntity(b.getBlockPos().below(2)) instanceof BlockEntity under && station(under)))) {
+                Container from = (Container) be;
+                for (int i = 0; i < from.getContainerSize() && room > 0; i++) {
+                    ItemStack it = from.getItem(i);
+                    int worth = coalWorth(it);
+                    if (worth <= 0) {
+                        continue;
+                    }
+                    int each = worth / it.getCount();
+                    int n = Math.min(it.getCount(), Math.max(1, room / each));
+                    ItemStack carried = it.copyWithCount(n);
+                    ItemStack left = put(store, carried);
+                    int put = n - left.getCount();
+                    if (put <= 0) {
+                        continue;
+                    }
+                    it.shrink(put);
+                    from.setItem(i, it.isEmpty() ? ItemStack.EMPTY : it);
+                    be.setChanged();
+                    moved += put * each;
+                    room -= put * each;
+                }
+                if (room <= 0) {
+                    break;
+                }
+            }
+            if (moved > 0) {
+                if (level.getBlockEntity(storePos) instanceof BlockEntity sb) {
+                    sb.setChanged();
+                }
+                restocked += moved;
+                restockRounds++;
+                VehicleWatch.event(v, String.format(java.util.Locale.ROOT, "SUPPLY-COAL {\"vehicle\":\"%s\",\"station\":\"%s\",\"carried\":%d,\"had\":%d}",
+                    kind(v), st.getBlockPos().toShortString(), moved, have));
+            }
+        }
+        return moved;
+    }
+
+    /** A stack into a container (onto stacks of the same, then into empty slots); what does not fit comes back. */
+    private static ItemStack put(Container c, ItemStack stack) {
+        ItemStack rest = stack.copy();
+        for (int pass = 0; pass < 2 && !rest.isEmpty(); pass++) {
+            for (int i = 0; i < c.getContainerSize() && !rest.isEmpty(); i++) {
+                ItemStack in = c.getItem(i);
+                if (pass == 0 && !in.isEmpty() && ItemStack.isSameItemSameComponents(in, rest) && in.getCount() < in.getMaxStackSize()) {
+                    int n = Math.min(rest.getCount(), in.getMaxStackSize() - in.getCount());
+                    in.grow(n);
+                    rest.shrink(n);
+                } else if (pass == 1 && in.isEmpty()) {
+                    c.setItem(i, rest.copy());
+                    rest = ItemStack.EMPTY;
+                }
+            }
+        }
+        c.setChanged();
+        return rest;
+    }
+
     /** A charging station within its eight blocks' reach of the vehicle (only for the log: the station does the charging). */
     static boolean charger(ServerLevel level, Entity v) {
         return !near(level, v.position(), 8.5 + v.getBbWidth() / 2, Supply::station).isEmpty();
@@ -373,6 +465,10 @@ public final class Supply {
      */
     static void tick(ServerLevel level, Entity v, CompoundTag p, boolean atPost) {
         long now = level.getGameTime();
+        if (atPost && now - p.getLong("RestockAt") >= 600) {
+            p.putLong("RestockAt", now);
+            restock(level, v);
+        }
         if (atPost) {
             int moved = reload(level, v) + (kind(v).equals("tow") ? loadLauncher(level, v) : 0);
             if (moved > 0) {

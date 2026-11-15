@@ -76,6 +76,7 @@ public final class CiDriver {
                 case "villageflight" -> "oror villageflight test";
                 case "roads" -> "oror roads test";
                 case "villagearms" -> "oror villagearms test";
+                case "fuel" -> "oror fuel test";
                 case "swords" -> "oror swords test";
                 case "crew" -> "oror crew test";
                 case "gunposts" -> "oror gunposts test";
@@ -127,6 +128,7 @@ public final class CiDriver {
             case "villageflight" -> jp.oror.reborn.VillageFlightTest.resultLogged;
             case "roads" -> jp.oror.reborn.VillageRoadTest.resultLogged;
             case "villagearms" -> jp.oror.reborn.VillageArmsTest.resultLogged;
+            case "fuel" -> jp.oror.reborn.FuelTest.resultLogged;
             case "swords" -> jp.oror.reborn.safety.OwnerlessSwords.testLogged;
             case "crew" -> jp.oror.reborn.vehicle.CrewTest.resultLogged;
             case "gunposts" -> jp.oror.reborn.vehicle.GunPostTest.resultLogged;
