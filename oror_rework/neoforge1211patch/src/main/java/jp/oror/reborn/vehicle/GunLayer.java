@@ -69,7 +69,7 @@ final class GunLayer {
             m.invoke(v, gunner, target.getUUID(), target.getBoundingBox().getCenter());
             fired++;
             p.putInt("Fired", p.getInt("Fired") + 1);
-            p.putLong("LayNext", now + interval(v, gunner));
+            p.putLong("LayNext", now + Math.max(interval(v, gunner), reload(v)));
         } catch (ReflectiveOperationException | RuntimeException ex) {
             if (failures++ < 5) {
                 LOG.warn("GUN-LAYER {} could not fire: {}", Supply.kind(v), ex.toString());
@@ -83,6 +83,34 @@ final class GunLayer {
      * vehicle's hold. True if the gun has a round in it after. (The TOW has no hold: its missile comes from the kingdom's
      * depot beside it, Supply.loadLauncher.)
      */
+    /**
+     * (CI 49: still three rounds a second - Superb Warfare gives these guns a rate a hand-loaded gun never has) the least time
+     * a crew takes to load and lay the next round: the Mk 42 two seconds, the Mle 1934 four, the BL-132 six, the TOW seven
+     * and a half (its own rate of eight a minute).
+     */
+    private static long reload(Entity v) {
+        return switch (Supply.kind(v)) {
+            case "mk_42" -> 40;
+            case "mle_1934" -> 80;
+            case "bl_132" -> 120;
+            case "tow" -> 150;
+            default -> 40;
+        };
+    }
+
+    /**
+     * The gunner faces the target, every tick while his gun has one: a TOW's missile is wire-guided where its gunner looks
+     * (CI 49: six fired, none struck, the gunner having no mind of his own to look with).
+     */
+    static void watch(Mob gunner, LivingEntity target) {
+        Vec3 d = target.getBoundingBox().getCenter().subtract(gunner.getEyePosition());
+        float yaw = (float) (Math.atan2(d.z, d.x) * 180.0 / Math.PI) - 90F;
+        float pitch = (float) -(Math.atan2(d.y, d.horizontalDistance()) * 180.0 / Math.PI);
+        gunner.setYRot(yaw);
+        gunner.setYHeadRot(yaw);
+        gunner.setXRot(pitch);
+    }
+
     /** Ticks between two rounds: the seat's weapon's own rate (Superb Warfare's vehicleWeaponRpm), three seconds if unknown. */
     private static long interval(Entity v, Mob gunner) {
         try {
