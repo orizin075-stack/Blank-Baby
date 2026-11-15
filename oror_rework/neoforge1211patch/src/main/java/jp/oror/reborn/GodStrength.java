@@ -21,9 +21,10 @@ import jp.oror.reborn.royal.RoyalRole;
  * (their own was 600 to 1,024, Minecraft's cap; MaxHealthCapMixin lifts it), and what they deal ten to fifty times what it
  * was: by the god's place in the user's raid table (RaidTable's times, ten to a hundred), ten times for the least of them
  * (Kurma) up to fifty for the greatest (Miyohime, the Omnipotent Innocence). Their raid health (RaidTable) is 100,000 too.
- * <p>(the user: "村人王は１００００くらい　以下も魔導士から５～１０倍くらいに") The kingdom too: the villager king 10,000 health (his
- * blows were 1,024 already), and below him health and blows five to ten times what they were, by rank: a general ten, the
- * imperial guard nine, a bodyguard eight, the sage seven, an archmage six, a court mage and a kingdom guard five.</p>
+ * <p>(the user: "村人王は１００００くらい　以下も魔導士から５～１０倍くらいに", then "村人王以下は攻撃力はさっきのでいい") The
+ * kingdom's health too: the villager king 10,000, and below him five to ten times what it was, by rank: a general ten, the
+ * imperial guard nine, a bodyguard eight, the sage seven, an archmage six, a court mage and a kingdom guard five. Their
+ * blows are as they were.</p>
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class GodStrength {
@@ -36,7 +37,7 @@ public final class GodStrength {
 
     public static final double KING_HEALTH = 10_000;
 
-    /** A royal's health and blows multiplied by (the king's health is set to 10,000, his blows as they were). */
+    /** A royal's health multiplied by (the king's is set to 10,000); their blows are as they were. */
     public static double royalTimes(RoyalRole r) {
         return switch (r) {
             case KING -> 1.0;
@@ -118,8 +119,6 @@ public final class GodStrength {
         Entity by = e.getSource().getEntity();
         if (by instanceof SupremeEntity b && b != e.getEntity() && b.spec != null) {
             e.setAmount((float) (e.getAmount() * damageTimes(b.spec.id)));
-        } else if (by instanceof RoyalMob m && m != e.getEntity() && m.role() != null && m.role() != RoyalRole.KING) {
-            e.setAmount((float) (e.getAmount() * royalTimes(m.role())));
         }
     }
 }
