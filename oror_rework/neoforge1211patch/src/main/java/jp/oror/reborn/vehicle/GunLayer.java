@@ -36,6 +36,7 @@ final class GunLayer {
         if (!on.equals(p.getString("LayOn"))) {
             p.putString("LayOn", on);
             p.putLong("LayFrom", now);
+            p.putInt("LayShots", 0);
             return;
         }
         if (now - p.getLong("LayFrom") < 30) {
@@ -69,7 +70,12 @@ final class GunLayer {
             m.invoke(v, gunner, target.getUUID(), target.getBoundingBox().getCenter());
             fired++;
             p.putInt("Fired", p.getInt("Fired") + 1);
-            p.putLong("LayNext", now + Math.max(interval(v, gunner), reload(v)));
+            p.putInt("LayShots", p.getInt("LayShots") + 1);
+            // (059g, the user: "敵が倒せない場合は連射して良いよ　方によっては連射を前提にしてるでしょ") the crew's loading time
+            // while the target goes down; one that has stood two of the gun's rounds, or a hard one (300 health or more),
+            // is fired on at the gun's own rate (Superb Warfare's, the rate its makers built it for)
+            boolean hard = p.getInt("LayShots") >= 2 || target.getMaxHealth() >= 300;
+            p.putLong("LayNext", now + (hard ? interval(v, gunner) : Math.max(interval(v, gunner), reload(v))));
         } catch (ReflectiveOperationException | RuntimeException ex) {
             if (failures++ < 5) {
                 LOG.warn("GUN-LAYER {} could not fire: {}", Supply.kind(v), ex.toString());
