@@ -38,16 +38,26 @@ final class GunLayer {
             p.putLong("LayFrom", now);
             return;
         }
-        if (now - p.getLong("LayFrom") < 30 || !RoyalPilots.lineOfFire(v, target)) {
+        if (now - p.getLong("LayFrom") < 30) {
+            p.putString("LayWhy", "laying");
             return;
         }
-        if (!Boolean.TRUE.equals(Sbw.call(v, "canShoot", gunner))) {
+        if (!RoyalPilots.lineOfFire(v, target)) {
+            p.putString("LayWhy", "noLine");
+            return;
+        }
+        Object can = Sbw.call(v, "canShoot", gunner);
+        if (!Boolean.TRUE.equals(can)) {
+            // (CI 46: not one round) what Superb Warfare says of the gunner's seat, kept for the check
+            p.putString("LayWhy", "cannot:" + can + " " + state(v, gunner));
             return;
         }
         Method m = shoot(v);
         if (m == null) {
+            p.putString("LayWhy", "noMethod");
             return;
         }
+        p.putString("LayWhy", "fires");
         try {
             m.invoke(v, gunner, target.getUUID(), target.getBoundingBox().getCenter());
             fired++;
@@ -57,6 +67,38 @@ final class GunLayer {
                 LOG.warn("GUN-LAYER {} could not fire: {}", Supply.kind(v), ex.toString());
             }
         }
+    }
+
+    /** The gunner's seat as Superb Warfare holds it: its index, its gun's rounds loaded and its spare, the vehicle's hold. */
+    static String state(Entity v, Mob gunner) {
+        StringBuilder b = new StringBuilder();
+        Object seat = Sbw.call(v, "getSeatIndex", gunner);
+        b.append("seat=").append(seat);
+        Object data = null;
+        if (seat instanceof Number n) {
+            try {
+                data = v.getClass().getMethod("getGunData", int.class).invoke(v, n.intValue());
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                b.append(" getGunData=").append(ex.getClass().getSimpleName());
+            }
+        }
+        b.append(" gun=").append(data == null ? "none" : data.getClass().getSimpleName());
+        if (data != null) {
+            for (String f : new String[]{"ammo", "backupAmmoCount", "reload", "shootTimer"}) {
+                try {
+                    Object val = data.getClass().getField(f).get(data);
+                    Object got = val == null ? null : Sbw.call(val, "get");
+                    b.append(' ').append(f).append('=').append(got != null ? got : val);
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    b.append(' ').append(f).append("=?");
+                }
+            }
+            Object maxAmmo = Sbw.call(data, "magazine");
+            b.append(" magazine=").append(maxAmmo);
+        }
+        int[] r = Supply.rounds(v);
+        b.append(" hold=").append(r[0]).append('/').append(r[1]);
+        return b.toString();
     }
 
     private static Method shoot(Entity v) {

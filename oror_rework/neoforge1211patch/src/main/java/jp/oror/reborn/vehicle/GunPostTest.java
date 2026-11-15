@@ -316,11 +316,13 @@ public final class GunPostTest {
             s.append(i == 0 ? "" : ",").append(String.format(Locale.ROOT,
                 "{\"kind\":\"%s\",\"registered\":%b,\"brought\":%b,\"engine\":\"%s\",\"manned\":%b,\"mannedSeconds\":%.1f,\"gunnerNoAi\":%b,"
                     + "\"stillAboard\":%b,\"targeted\":%b,\"turned\":%.1f,\"shots\":%d,\"firstShot\":%.1f,\"hits\":%d,\"gunHits\":%d,"
-                    + "\"firstHit\":%.1f,\"damage\":%.0f,\"kills\":%d,\"health\":%.2f,\"layerFired\":%d,\"shotTypes\":\"%s\",\"hitBy\":\"%s\"}",
+                    + "\"firstHit\":%.1f,\"damage\":%.0f,\"kills\":%d,\"health\":%.2f,\"layerFired\":%d,\"layWhy\":\"%s\",\"shotTypes\":\"%s\",\"hitBy\":\"%s\"}",
                 l.kind, has, v != null, v == null ? "" : Sbw.engine(v), manned, manned ? l.mannedAt / 20.0 : -1, noAi,
                 l.guard != null && v != null && l.guard.getVehicle() == v, aimed, l.maxTurn, l.shots, l.firstShot < 0 ? -1 : l.firstShot / 20.0,
                 l.hits, l.gunHits, l.firstHit < 0 ? -1 : l.firstHit / 20.0, l.damage, l.kills, v == null ? 0F : Sbw.health(v),
                 v == null ? 0 : v.getPersistentData().getCompound(RoyalPilots.KEY).getInt("Fired"),
+                v == null ? "" : (v.getPersistentData().getCompound(RoyalPilots.KEY).getString("LayWhy")
+                    + (l.guard != null && l.guard.getVehicle() == v ? " | " + GunLayer.state(v, l.guard) : "")).replace('"', '\''),
                 String.join(" ", l.shotTypes), String.join(" ", l.hitBy).replace('"', '\'')));
         }
         s.append("],\"pass\":").append(pass).append('}');

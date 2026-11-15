@@ -365,6 +365,10 @@ public final class GuardTest {
                             pistol = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("superbwarfare:glock_17")));
                         }
                         Mob plain = spawn(r, "minecraft:villager", r.villageGuard.blockPosition().offset(0, 0, -6), pistol, 0);
+                        if (plain instanceof net.minecraft.world.entity.npc.Villager vi) {
+                            // (CI 46) one of the village's strong (a weaponsmith): an ordinary villager runs from a fight
+                            vi.setVillagerData(vi.getVillagerData().setProfession(net.minecraft.world.entity.npc.VillagerProfession.WEAPONSMITH).setLevel(3));
+                        }
                         if (plain != null) {
                             r.villageGuard.discard();
                             r.villageGuard = plain;

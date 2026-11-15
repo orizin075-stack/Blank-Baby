@@ -74,6 +74,7 @@ public final class VillageArmsTest {
         boolean guardArmed;
         int villagersArmed;
         final List<String> guns = new ArrayList<>();
+        final java.util.TreeSet<String> otherBy = new java.util.TreeSet<>();
         net.minecraft.world.phys.Vec3 tankFrom;
     }
 
@@ -140,6 +141,9 @@ public final class VillageArmsTest {
         VillageLedger.get(level).setDirty();
         r.rec = VillageProgress.get(level).of(r.home);
         r.rec.stage = Math.max(r.rec.stage, 2);
+        // (CI 46: a town sends its strong to a dungeon, and all three were away when the tank was wanted) no expedition in
+        // the check; the village keeps two of its strong at home once it has a vehicle all the same (VillageHomeGuard)
+        r.rec.nextTrip = Long.MAX_VALUE;
         VillageProgress.get(level).setDirty();
         VillagerProfession[] jobs = {VillagerProfession.WEAPONSMITH, VillagerProfession.ARMORER, VillagerProfession.MASON, VillagerProfession.FARMER,
             VillagerProfession.FARMER, VillagerProfession.LIBRARIAN, VillagerProfession.FISHERMAN};
@@ -236,6 +240,10 @@ public final class VillageArmsTest {
             }
         } else {
             r.otherHits++;
+            if (r.otherBy.size() < 6 && by != null) {
+                r.otherBy.add(BuiltInRegistries.ENTITY_TYPE.getKey(by.getType()).getPath()
+                    + (by instanceof net.minecraft.world.entity.LivingEntity le ? "/" + BuiltInRegistries.ITEM.getKey(le.getMainHandItem().getItem()).getPath() : ""));
+            }
         }
     }
 
@@ -381,10 +389,11 @@ public final class VillageArmsTest {
         LOG.info(String.format(Locale.ROOT, "VILLAGE-ARMS-RESULT {\"present\":true,\"seconds\":%.1f,\"phases\":[%s],\"unlocked\":%.1f,\"table\":%.1f,"
                 + "\"gunsMade\":%d,\"gunsAt\":\"%s\",\"guard\":%b,\"guardArmed\":%b,\"villagersArmed\":%d,\"stage\":%d,\"vehicles\":\"%s\",\"built\":%.1f,"
                 + "\"ironBefore\":%d,\"ironAfter\":%d,\"tank\":\"%s\",\"out\":%.1f,\"boarded\":%.1f,\"maxAboard\":%d,\"moved\":%.1f,\"closest\":%.1f,"
-                + "\"tankHits\":%d,\"tankDamage\":%.0f,\"firstHit\":%.1f,\"otherHits\":%d,\"note\":\"%s\",\"pass\":%b}",
+                + "\"tankHits\":%d,\"tankDamage\":%.0f,\"firstHit\":%.1f,\"otherHits\":%d,\"otherBy\":\"%s\",\"note\":\"%s\",\"pass\":%b}",
             t / 20.0, String.join(",", r.phases), sec(r.unlockedAt), sec(r.tableAt), r.rec.gunsMade, String.join(" ", r.guns), r.guard != null,
             r.guardArmed, r.villagersArmed, r.rec.stage, r.rec.vehicles == null ? "" : r.rec.vehicles, sec(r.builtAt), r.ironBefore, r.ironAfter,
             r.tankType, sec(r.outAt), sec(r.boardedAt), r.maxAboard, r.moved, r.closest, r.tankHits, r.tankDamage, sec(r.firstHitAt), r.otherHits,
+            String.join(" ", r.otherBy),
             note.replace('"', '\''), pass));
         Entity tank = r.tank == null ? null : r.level.getEntity(r.tank);
         if (tank != null) {
