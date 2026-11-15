@@ -75,6 +75,7 @@ public final class CiDriver {
                 case "aa" -> "oror aa test";
                 case "villageflight" -> "oror villageflight test";
                 case "roads" -> "oror roads test";
+                case "villagearms" -> "oror villagearms test";
                 case "swords" -> "oror swords test";
                 case "crew" -> "oror crew test";
                 case "gunposts" -> "oror gunposts test";
@@ -92,7 +93,8 @@ public final class CiDriver {
             return;
         }
         boolean done = next >= CHECKS.size() && CHECKS.stream().allMatch(CiDriver::finished);
-        if (done || t > 90000) {
+        // (059g) 100000 (was 90000): the checks added in 059g (gun posts, roads, village arms) take some 4,500 ticks more
+        if (done || t > 100000) {
             LOG.info("SAFE-UNLOAD {}", jp.oror.reborn.safety.EntityUnloads.report());
             LOG.info("SANE-MOVE {}", jp.oror.reborn.safety.SaneMoves.report());
             LOG.info("CI-DONE {\"complete\":{},\"ticks\":{}}", done, t);
@@ -124,6 +126,7 @@ public final class CiDriver {
             case "aa" -> jp.oror.reborn.vehicle.AntiAirTest.resultLogged;
             case "villageflight" -> jp.oror.reborn.VillageFlightTest.resultLogged;
             case "roads" -> jp.oror.reborn.VillageRoadTest.resultLogged;
+            case "villagearms" -> jp.oror.reborn.VillageArmsTest.resultLogged;
             case "swords" -> jp.oror.reborn.safety.OwnerlessSwords.testLogged;
             case "crew" -> jp.oror.reborn.vehicle.CrewTest.resultLogged;
             case "gunposts" -> jp.oror.reborn.vehicle.GunPostTest.resultLogged;
