@@ -76,6 +76,7 @@ public final class VillageArmsTest {
         final List<String> guns = new ArrayList<>();
         final java.util.TreeSet<String> otherBy = new java.util.TreeSet<>();
         net.minecraft.world.phys.Vec3 tankFrom;
+        String crewSeen = "";
     }
 
     private VillageArmsTest() {
@@ -364,9 +365,20 @@ public final class VillageArmsTest {
                             r.closest = r.closest < 0 ? d : Math.min(r.closest, d);
                         }
                         if (t % 100 == 0) {
+                            // (CI 59: the tank's second crewman never came within 12 blocks of it) what each crewman was about
+                            StringBuilder crew = new StringBuilder();
+                            for (net.minecraft.nbt.Tag c : r.rec.sortie.getList("Crew", 10)) {
+                                if (c instanceof net.minecraft.nbt.CompoundTag ct && ct.hasUUID("Id")) {
+                                    Entity m = r.level.getEntity(ct.getUUID("Id"));
+                                    crew.append(crew.isEmpty() ? "" : " | ").append(m instanceof Villager cv ? VillagerState.of(cv, tank) : m == null ? "gone" : "?");
+                                }
+                            }
                             LOG.info(String.format(Locale.ROOT, "VILLAGE-ARMS-TRACK {\"t\":%d,\"phase\":\"%s\",\"tank\":\"%s\",\"aboard\":%d,\"moved\":%.1f,"
-                                    + "\"toThreat\":%.1f,\"tankHits\":%d,\"otherHits\":%d}", t, r.rec.sortie.getString("Phase"), r.tankType, aboard, r.moved,
-                                r.threat == null ? -1 : tank.distanceTo(r.threat), r.tankHits, r.otherHits));
+                                    + "\"toThreat\":%.1f,\"tankHits\":%d,\"otherHits\":%d,\"crew\":\"%s\"}", t, r.rec.sortie.getString("Phase"), r.tankType, aboard, r.moved,
+                                r.threat == null ? -1 : tank.distanceTo(r.threat), r.tankHits, r.otherHits, crew.toString().replace('"', '\'')));
+                            if ("board".equals(r.rec.sortie.getString("Phase"))) {
+                                r.crewSeen = crew.toString();
+                            }
                         }
                     }
                 }
@@ -389,11 +401,11 @@ public final class VillageArmsTest {
         LOG.info(String.format(Locale.ROOT, "VILLAGE-ARMS-RESULT {\"present\":true,\"seconds\":%.1f,\"phases\":[%s],\"unlocked\":%.1f,\"table\":%.1f,"
                 + "\"gunsMade\":%d,\"gunsAt\":\"%s\",\"guard\":%b,\"guardArmed\":%b,\"villagersArmed\":%d,\"stage\":%d,\"vehicles\":\"%s\",\"built\":%.1f,"
                 + "\"ironBefore\":%d,\"ironAfter\":%d,\"tank\":\"%s\",\"out\":%.1f,\"boarded\":%.1f,\"maxAboard\":%d,\"moved\":%.1f,\"closest\":%.1f,"
-                + "\"tankHits\":%d,\"tankDamage\":%.0f,\"firstHit\":%.1f,\"otherHits\":%d,\"otherBy\":\"%s\",\"note\":\"%s\",\"pass\":%b}",
+                + "\"tankHits\":%d,\"tankDamage\":%.0f,\"firstHit\":%.1f,\"otherHits\":%d,\"otherBy\":\"%s\",\"crewBoarding\":\"%s\",\"note\":\"%s\",\"pass\":%b}",
             t / 20.0, String.join(",", r.phases), sec(r.unlockedAt), sec(r.tableAt), r.rec.gunsMade, String.join(" ", r.guns), r.guard != null,
             r.guardArmed, r.villagersArmed, r.rec.stage, r.rec.vehicles == null ? "" : r.rec.vehicles, sec(r.builtAt), r.ironBefore, r.ironAfter,
             r.tankType, sec(r.outAt), sec(r.boardedAt), r.maxAboard, r.moved, r.closest, r.tankHits, r.tankDamage, sec(r.firstHitAt), r.otherHits,
-            String.join(" ", r.otherBy),
+            String.join(" ", r.otherBy), r.crewSeen.replace('"', '\''),
             note.replace('"', '\''), pass));
         Entity tank = r.tank == null ? null : r.level.getEntity(r.tank);
         if (tank != null) {

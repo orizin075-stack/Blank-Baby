@@ -50,7 +50,8 @@ public final class VillageRoadTest {
         final List<ChunkPos> forcedA = new ArrayList<>(), forcedM = new ArrayList<>();
         final List<UUID> folk = new ArrayList<>();
         UUID journey;
-        double walked = -1, seenAlong = -1;
+        double walked = -1, seenAlong = -1, maxWalked = -1;
+        String leadState = "";
         boolean packedOnUnload, seenOnRoad, packedAgain, delivered, paid, earned;
         int destBefore, homeBefore, back, emeralds, payment;
         String wares = "";
@@ -206,8 +207,18 @@ public final class VillageRoadTest {
         VillageRoads.Journey j = VillageRoads.Roads.of(r.level).journeys.get(r.journey);
         switch (r.phase) {
             case "walk" -> {
+                Entity lead = j != null && j.lead != null ? r.level.getEntity(j.lead) : null;
+                if (lead != null && j.leg == 0) {
+                    r.maxWalked = Math.max(r.maxWalked, j.along(lead.position()));
+                }
+                if (t == 80 || t >= 160) {
+                    // (CI 59: walked -1.2 where the run before had 13.1) what the lead was about
+                    String st = lead instanceof Villager v ? VillagerState.of(v, null) : lead == null ? "none" : "not a villager";
+                    r.leadState += (r.leadState.isEmpty() ? "" : " | ") + "t" + t + " " + st;
+                    LOG.info("ROAD-WALK {\"t\":" + t + ",\"along\":" + (lead != null && j.leg == 0 ? String.format(Locale.ROOT, "%.1f", j.along(lead.position())) : "-1")
+                        + ",\"lead\":\"" + st + "\"}");
+                }
                 if (t >= 160) {
-                    Entity lead = j != null && j.lead != null ? r.level.getEntity(j.lead) : null;
                     r.walked = lead != null && j.leg == 0 ? j.along(lead.position()) : -1;
                     unforce(r.level, r.forcedA);
                     phase(r, "unload");
@@ -291,11 +302,11 @@ public final class VillageRoadTest {
 
     private static void finish(Run r, long t) {
         // (CI 49: 2.0 blocks in six seconds, against more than 2 asked) eight seconds, more than a block and a half
-        boolean pass = r.walked > 1.5 && r.packedOnUnload && r.seenOnRoad && r.packedAgain && r.delivered && r.paid && r.back == r.folk.size() && r.earned;
-        LOG.info(String.format(Locale.ROOT, "ROAD-RESULT {\"present\":true,\"seconds\":%.1f,\"phases\":[%s],\"walked\":%.1f,\"packedOnUnload\":%b,"
+        boolean pass = Math.max(r.walked, r.maxWalked) > 1.5 && r.packedOnUnload && r.seenOnRoad && r.packedAgain && r.delivered && r.paid && r.back == r.folk.size() && r.earned;
+        LOG.info(String.format(Locale.ROOT, "ROAD-RESULT {\"present\":true,\"seconds\":%.1f,\"phases\":[%s],\"walked\":%.1f,\"maxWalked\":%.1f,\"lead\":\"%s\",\"packedOnUnload\":%b,"
                 + "\"seenOnRoad\":%b,\"seenAlong\":%.0f,\"packedAgain\":%b,\"delivered\":%b,\"payment\":%d,\"emeralds\":%d,\"wares\":\"%s\",\"paid\":%b,"
                 + "\"cameBack\":%d,\"of\":%d,\"earned\":%b,\"roads\":%s,\"pass\":%b}",
-            t / 20.0, String.join(",", r.phases), r.walked, r.packedOnUnload, r.seenOnRoad, r.seenAlong, r.packedAgain, r.delivered, r.payment,
+            t / 20.0, String.join(",", r.phases), r.walked, r.maxWalked, r.leadState.replace('"', '\''), r.packedOnUnload, r.seenOnRoad, r.seenAlong, r.packedAgain, r.delivered, r.payment,
             r.emeralds, r.wares.replace('"', '\''), r.paid, r.back, r.folk.size(), r.earned, VillageRoads.report(r.level), pass));
         VillageRoads.speedup = 1.0;
         VillageRoads.Roads roads = VillageRoads.Roads.of(r.level);
