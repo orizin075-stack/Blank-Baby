@@ -494,15 +494,28 @@ public final class DuelTest {
                 OUT.put("clickFuseRestored", !fp.isInvisible() && !fp.isInvulnerable() && !fp.noPhysics);
             });
             // fused, the host killed: its owner falls with it (Duel Dominion's own rule), the servant drops nothing
+            // (CI 39) Duel Dominion finds the host's owner through the server's player list, which a fake player is not in:
+            // the owner never fell, the fusion never ended, and every duel after it was refused (still fused). For this
+            // step the tester is listed by its UUID (and the world keeps its inventory, should its death drop anything).
             if (!isGod) step("fusionHostDeath", () -> {
                 net.minecraft.world.phys.Vec3 from = fp.position();
                 boolean in = (Boolean) pmc.getMethod("fuse", ServerPlayer.class, Mob.class).invoke(null, fp, sv);
                 AABB around = sv.getBoundingBox().inflate(6.0);
                 int drops0 = lv.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, around).size()
                     + lv.getEntitiesOfClass(net.minecraft.world.entity.ExperienceOrb.class, around).size();
+                var keep = lv.getGameRules().getRule(net.minecraft.world.level.GameRules.RULE_KEEPINVENTORY);
+                boolean kept = keep.get();
+                keep.set(true, lv.getServer());
+                net.minecraft.nbt.ListTag inv = fp.getInventory().save(new net.minecraft.nbt.ListTag());
+                listed(lv, true);
                 vulnerable = true;
-                sv.kill();
-                vulnerable = false;
+                try {
+                    sv.kill();
+                } finally {
+                    vulnerable = false;
+                    listed(lv, false);
+                    keep.set(kept, lv.getServer());
+                }
                 int drops1 = lv.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, around).size()
                     + lv.getEntitiesOfClass(net.minecraft.world.entity.ExperienceOrb.class, around).size();
                 boolean ownerFell = fp.getHealth() <= 0F || fp.isDeadOrDying();
@@ -511,6 +524,18 @@ public final class DuelTest {
                 OUT.put("fusionHostDeathOwnerFalls", ownerFell);
                 OUT.put("fusionEndsOnHostDeath", !still);
                 OUT.put("noDropsOnServantDeath", drops1 == drops0);
+                if (still) {
+                    pmc.getMethod("exit", ServerPlayer.class).invoke(null, fp);     // so the steps after it are not refused
+                }
+                fp.getInventory().clearContent();
+                fp.getInventory().load(inv);
+                try {
+                    java.lang.reflect.Field dead = LivingEntity.class.getDeclaredField("dead");
+                    dead.setAccessible(true);
+                    dead.setBoolean(fp, false);
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    LOG.warn("DUEL-TEST revive {}", ex.toString());
+                }
                 fp.setHealth(fp.getMaxHealth());
                 fp.deathTime = 0;
                 fp.setInvisible(false);
@@ -667,6 +692,27 @@ public final class DuelTest {
 
     /** (CI 38) a fake player never ticks: its sixty ticks of spawn protection never run out and no blow lands on it (as
      * KingStoryTest and RelicTest take them away). */
+    /** The tester put in (or taken out of) the player list's UUID map only - what PlayerList.getPlayer reads - so code that
+     * looks a player up by UUID finds it; the list of players itself (what is sent to, saved, ticked) is left alone. */
+    @SuppressWarnings("unchecked")
+    private static void listed(ServerLevel lv, boolean on) {
+        if (fp == null || lv == null) {
+            return;
+        }
+        try {
+            java.lang.reflect.Field f = net.minecraft.server.players.PlayerList.class.getDeclaredField("playersByUUID");
+            f.setAccessible(true);
+            Map<UUID, ServerPlayer> m = (Map<UUID, ServerPlayer>) f.get(lv.getServer().getPlayerList());
+            if (on) {
+                m.putIfAbsent(fp.getUUID(), fp);
+            } else {
+                m.remove(fp.getUUID(), fp);
+            }
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            LOG.warn("DUEL-TEST listed {}", ex.toString());
+        }
+    }
+
     private static void unshield(ServerPlayer p) {
         p.invulnerableTime = 0;
         try {
@@ -807,7 +853,8 @@ public final class DuelTest {
             && ok("ledgersRoundTrip") && ok("pvpDuel") && ok("pvpLoserAlive") && ok("pvpNoCapture") && ok("grimoireStored")
             && ok("soulArchiveStored") && ok("soulArchiveReturned") && ok("gloveDuel") && ok("interferenceBlocked")
             && ok("duelistBlowsCount") && ok("duelEndsFar") && ok("clickPossess") && ok("noDropsOnServantDeath")
-            && ok("clickFuse") && ok("fusionFollows") && ok("clickFuseRestored") && ok("fusionHostDeath") && ok("fusionEndsOnHostDeath");
+            && ok("clickFuse") && ok("fusionFollows") && ok("clickFuseRestored") && ok("fusionHostDeath") && ok("fusionEndsOnHostDeath")
+            && ok("fusionHostDeathOwnerFalls");
         StringBuilder s = new StringBuilder("{\"present\":true");
         for (Map.Entry<String, Object> en : OUT.entrySet()) {
             s.append(",\"").append(en.getKey()).append("\":").append(en.getValue());
@@ -824,6 +871,7 @@ public final class DuelTest {
                 x.discard();
             }
         }
+        listed(level, false);
         if (level != null) {
             for (ChunkPos p : FORCED) {
                 level.setChunkForced(p.x, p.z, false);
