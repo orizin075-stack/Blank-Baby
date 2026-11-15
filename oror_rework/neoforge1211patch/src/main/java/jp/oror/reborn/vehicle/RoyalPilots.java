@@ -622,8 +622,11 @@ public final class RoyalPilots {
                     mode = "rollout";
                     p.putLong("Since", now);
                     p.putBoolean("Landed", true);
-                } else if (blocked || along < -60 && v.getY() > runwayY + 6 || along < -140 || v.getY() > glide + 35
-                    || now - p.getLong("Since") > 900) {
+                } else if (blocked || along < -60 && v.getY() > runwayY + 9 || along < -110 && v.getY() > runwayY + 3 || along < -140
+                    || v.getY() > glide + 35 || now - p.getLong("Since") > 900) {
+                    // (CI 59) 7 up 100 blocks into the runway, sinking, it went round with 130 blocks of the runway left (a
+                    // touch-down there and the 40-block roll-out end well short of its end): round only from 9 up there, or
+                    // 3 up 150 into it
                     // past the touch-down point it goes round only if still well up 60 blocks on (100 into the runway), or
                     // 180 blocks into the runway: just over it, it lands long (050's fourth CI aircraft went round 1.4
                     // blocks over the runway)
@@ -631,6 +634,11 @@ public final class RoyalPilots {
                     p.putLong("Since", now);
                     p.remove("FinalLeg");
                     p.putInt("GoArounds", p.getInt("GoArounds") + 1);
+                    // (CI 59) the throttle forward at once: the glide's power (0.04) came back a hundredth a tick, and the CI
+                    // aircraft sank onto the runway's far end going round, and on into the trees beyond it
+                    if (Sbw.power(v) < 0.8F) {
+                        Sbw.call(v, "setPower", 0.8F);
+                    }
                 }
             }
             case "goaround" -> {
@@ -641,6 +649,10 @@ public final class RoyalPilots {
                 double at = Math.max(v.position().subtract(home).dot(f), 0);
                 Vec3 ahead = home.add(f.scale(at + 150));
                 double alt = Math.max(runwayY + 45, groundAt(v, ahead) + 30);
+                if (speed < 1.8 && v.getY() - groundAt(v, v.position()) < 12) {
+                    // (CI 59) low and slow, nearly level first, to gather speed: nose up 18 degrees at 1.5 it sank on
+                    alt = v.getY() + 4;
+                }
                 steerSpeed(v, ahead, alt, true, false, v.getY() - groundAt(v, v.position()), 6F, true, 1.5F);
                 if (v.getY() > runwayY + 38 && speed > 1.8 || now - p.getLong("Since") > 400) {
                     mode = "return";
@@ -735,8 +747,11 @@ public final class RoyalPilots {
                 }
                 // the climb no steeper than the speed allows (pulled up at 27 degrees at 0.8, 050's CI aircraft stalled into
                 // a hillside it was climbing away from)
-                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot() + away).scale(100)), v.getY() + 40, true,
-                    speed < 1.8 ? -10 : speed < 2.6 ? -18 : -30);
+                // (CI 59) going round low and slow over the runway (always "danger" there, 14 blocks asked), nearly level
+                // until its speed comes: at 1.5 it was asked for 22 degrees, flew at 18 and sank onto the runway
+                boolean slowRound = mode.equals("goaround") && speed < 1.8;
+                steer(v, v.position().add(Vec3.directionFromRotation(0, v.getYRot() + away).scale(100)), v.getY() + (slowRound ? 6 : 40), true,
+                    slowRound ? -4 : speed < 1.8 ? -10 : speed < 2.6 ? -18 : -30);
                 if (mode.equals("dive") || mode.equals("patrol") || mode.equals("climb")) {
                     mode = "pullup";
                     p.putLong("Since", now);
