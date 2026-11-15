@@ -134,7 +134,31 @@ public final class DuelTest {
             public boolean isInvulnerableTo(net.minecraft.world.damagesource.DamageSource source) {
                 return !vulnerable && super.isInvulnerableTo(source);
             }
+
+            @Override
+            public boolean canHarmPlayer(net.minecraft.world.entity.player.Player other) {
+                return vulnerable || super.canHarmPlayer(other);
+            }
+
+            // (059g, CI 38) a fake player has no client to complete a teleport (its connection drops it): moved at once,
+            // as a real player is once its client answers - possession and fusion move the player's body
+            @Override
+            public void teleportTo(double x, double y, double z) {
+                this.moveTo(x, y, z, this.getYRot(), this.getXRot());
+            }
+
+            @Override
+            public boolean teleportTo(ServerLevel to, double x, double y, double z, java.util.Set<net.minecraft.world.entity.RelativeMovement> rel,
+                                      float yRot, float xRot) {
+                if (to != this.serverLevel()) {
+                    return super.teleportTo(to, x, y, z, rel, yRot, xRot);
+                }
+                this.moveTo(x, y, z, yRot, xRot);
+                return true;
+            }
         };
+        // (CI 38) a fake player never ticks: its three seconds of spawn protection never run out, and no blow lands
+        unshield(fp);
         fp.moveTo(site.getX() + 0.5, site.getY(), site.getZ() + 0.5, 0F, 0F);
         if (fp.isCreative() || fp.isSpectator()) {
             fp.setGameMode(GameType.SURVIVAL);
@@ -374,7 +398,9 @@ public final class DuelTest {
             float before = v.getHealth();
             boolean ok = castWith("CALAMITY", "ofuda_calamity", effigies(lv, 7), null);
             OUT.put("calamity", ok);
-            OUT.put("calamityHit", v.getHealth() < before || !v.isAlive());
+            // (CI 38) at seven offerings 禍刻 lays weakness and slowness on the enemies about; harm comes with more
+            OUT.put("calamityHit", v.getHealth() < before || !v.isAlive() || v.hasEffect(net.minecraft.world.effect.MobEffects.WEAKNESS)
+                || v.hasEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN));
             OUT.put("testerAliveAfterCalamity", fp.isAlive() && fp.getHealth() > 0F);
         });
         for (Entity x : List.copyOf(MADE)) {
@@ -400,6 +426,11 @@ public final class DuelTest {
             step("possession", () -> {
                 net.minecraft.world.phys.Vec3 from = fp.position();
                 boolean wasNoAi = sv.isNoAi();
+                // (CI 38: NullPointerException in DistanceManager.removePlayer) the camera moves the player, and the chunk
+                // map lets go of the section it was last in: a fake player was never in one. A real player always is.
+                java.lang.reflect.Method sec = ServerPlayer.class.getDeclaredMethod("setLastSectionPos", net.minecraft.core.SectionPos.class);
+                sec.setAccessible(true);
+                sec.invoke(fp, net.minecraft.core.SectionPos.of(sv));
                 boolean in = (Boolean) pmc.getMethod("enter", ServerPlayer.class, Mob.class).invoke(null, fp, sv);
                 boolean during = (Boolean) pmc.getMethod("isPossessing", UUID.class).invoke(null, me);
                 pmc.getMethod("exit", ServerPlayer.class).invoke(null, fp);
@@ -492,18 +523,17 @@ public final class DuelTest {
             if (!isGod) step("revival", () -> {
                 Class<?> blc = Class.forName("jp.oror.dueldominion.BindingLedger");
                 Object ledger = blc.getMethod("forPlayer", ServerPlayer.class).invoke(null, fp);
-                Method remaining = blc.getMethod("cooldownRemaining", CompoundTag.class, UUID.class, long.class);
                 if (sv.isAlive()) {
                     sv.kill();
                 }
                 long now = lv.getServer().overworld().getGameTime();
-                CompoundTag s2 = (CompoundTag) read.invoke(null, held(hair, BuiltInRegistries.ENTITY_TYPE.getKey(sv.getType()).toString()));
-                long before = (Long) remaining.invoke(ledger, s2, me, now);
+                boolean waiting = (Boolean) blc.getMethod("hasRecovering", UUID.class, long.class).invoke(ledger, me, now);
+                long before = reviveAt(ledger, me);
                 boolean ok = castWith("REVIVAL", "ofuda_revival", effigies(lv, 3), null);
-                long after = (Long) remaining.invoke(ledger, s2, me, now);
-                OUT.put("revivalWaiting", before > 0L);
+                long after = reviveAt(ledger, me);
+                OUT.put("revivalWaiting", waiting);
                 OUT.put("revival", ok && after < before);
-                OUT.put("revivalTicks", "\"" + before + "->" + after + "\"");
+                OUT.put("revivalTicks", "\"" + (before - now) + "->" + (after - now) + "\"");
             });
         }
 
@@ -550,7 +580,13 @@ public final class DuelTest {
                 public boolean isInvulnerableTo(net.minecraft.world.damagesource.DamageSource source) {
                     return !vulnerable && super.isInvulnerableTo(source);
                 }
+
+                @Override
+                public boolean canHarmPlayer(net.minecraft.world.entity.player.Player other) {
+                    return vulnerable || super.canHarmPlayer(other);
+                }
             };
+            unshield(fp2);
             fp2.moveTo(fp.getX() + 3.0, fp.getY(), fp.getZ() - 2.0, 0F, 0F);
             if (fp2.isCreative() || fp2.isSpectator()) {
                 fp2.setGameMode(GameType.SURVIVAL);
@@ -627,6 +663,33 @@ public final class DuelTest {
             glove.use(lv, fp, net.minecraft.world.InteractionHand.MAIN_HAND);
             fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         });
+    }
+
+    /** (CI 38) a fake player never ticks: its sixty ticks of spawn protection never run out and no blow lands on it (as
+     * KingStoryTest and RelicTest take them away). */
+    private static void unshield(ServerPlayer p) {
+        p.invulnerableTime = 0;
+        try {
+            java.lang.reflect.Field f = ServerPlayer.class.getDeclaredField("spawnInvulnerableTime");
+            f.setAccessible(true);
+            f.setInt(p, 0);
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            LOG.warn("DUEL-TEST unshield {}", ex.toString());
+        }
+    }
+
+    /** The earliest revival time among the owner's bindings that wait (the ledger's own record, as it saves it). */
+    private static long reviveAt(Object ledger, UUID owner) throws ReflectiveOperationException {
+        CompoundTag t = (CompoundTag) ledger.getClass().getMethod("save", CompoundTag.class, net.minecraft.core.HolderLookup.Provider.class)
+            .invoke(ledger, new CompoundTag(), level.registryAccess());
+        long best = Long.MAX_VALUE;
+        for (net.minecraft.nbt.Tag e : t.getList("Bindings", 10)) {
+            CompoundTag c = (CompoundTag) e;
+            if (c.hasUUID("Owner") && owner.equals(c.getUUID("Owner")) && c.getLong("ReviveAt") > 0L) {
+                best = Math.min(best, c.getLong("ReviveAt"));
+            }
+        }
+        return best;
     }
 
     private static int count(Item item) {
