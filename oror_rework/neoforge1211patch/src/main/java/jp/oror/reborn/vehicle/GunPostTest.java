@@ -136,6 +136,8 @@ public final class GunPostTest {
             if (!Sbw.has(id(l))) {
                 continue;
             }
+            // (CI 47) the kingdom's depot beside the gun, as at the capital's posts: the TOW's missiles come from it
+            Supply.placeDepot(level, l.post.offset(-3, 0, -3), id(l));
             // the guard posted to the gun as the capital's garrison posts him
             RoyalMob g = RoyalRegistry.TYPES.get(RoyalRole.GUARD).create(level);
             if (g != null) {

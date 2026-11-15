@@ -47,6 +47,10 @@ final class GunLayer {
             return;
         }
         Object can = Sbw.call(v, "canShoot", gunner);
+        if (!Boolean.TRUE.equals(can) && load(v, gunner)) {
+            // (CI 47: every one of the four had no round in its breech, its rounds in the hold) the gunner loads one
+            can = Sbw.call(v, "canShoot", gunner);
+        }
         if (!Boolean.TRUE.equals(can)) {
             // (CI 46: not one round) what Superb Warfare says of the gunner's seat, kept for the check
             p.putString("LayWhy", "cannot:" + can + " " + state(v, gunner));
@@ -67,6 +71,74 @@ final class GunLayer {
                 LOG.warn("GUN-LAYER {} could not fire: {}", Supply.kind(v), ex.toString());
             }
         }
+    }
+
+    /**
+     * The gunner loads a round where his gun has none in it: by Superb Warfare's own reloading from the vehicle's ammunition
+     * (GunData.reloadAmmo, from its ammunition supplier), or else by hand, one of the gun's own rounds taken out of the
+     * vehicle's hold. True if the gun has a round in it after. (The TOW has no hold: its missile comes from the kingdom's
+     * depot beside it, Supply.loadLauncher.)
+     */
+    static boolean load(Entity v, Mob gunner) {
+        int seat = Sbw.call(v, "getSeatIndex", gunner) instanceof Number n ? n.intValue() : 0;
+        Object supplier = Sbw.call(v, "getAmmoSupplier");
+        boolean[] loaded = {false};
+        try {
+            Method modify = v.getClass().getMethod("modifyGunData", int.class, java.util.function.Consumer.class);
+            java.util.function.Consumer<Object> loadIt = data -> {
+                try {
+                    Object ammo = data.getClass().getField("ammo").get(data);
+                    Method get = ammo.getClass().getMethod("get");
+                    int in = get.invoke(ammo) instanceof Number h ? h.intValue() : 0;
+                    if (in <= 0 && supplier instanceof Entity from) {
+                        data.getClass().getMethod("reloadAmmo", Entity.class).invoke(data, from);
+                        in = get.invoke(ammo) instanceof Number after ? after.intValue() : 0;
+                    }
+                    if (in <= 0 && takeRound(v)) {
+                        ammo.getClass().getMethod("set", int.class).invoke(ammo, 1);
+                        in = 1;
+                    }
+                    loaded[0] = in > 0;
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    if (failures++ < 5) {
+                        LOG.warn("GUN-LAYER {} could not load: {}", Supply.kind(v), ex.toString());
+                    }
+                }
+            };
+            modify.invoke(v, seat, loadIt);
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            if (failures++ < 5) {
+                LOG.warn("GUN-LAYER {} has no modifyGunData: {}", Supply.kind(v), ex.toString());
+            }
+        }
+        if (loaded[0]) {
+            loads++;
+        }
+        return loaded[0];
+    }
+
+    static int loads;
+
+    /** One of the gun's own rounds (its kind's load, Supply) out of the vehicle's hold. */
+    private static boolean takeRound(Entity v) {
+        Supply.Hold hold = Supply.hold(v);
+        if (hold == null) {
+            return false;
+        }
+        java.util.Set<String> rounds = new java.util.HashSet<>();
+        for (String[] l : Supply.load(v)) {
+            rounds.add(l[0]);
+        }
+        for (int i = 0; i < hold.size(); i++) {
+            net.minecraft.world.item.ItemStack st = hold.get(i);
+            if (!st.isEmpty() && rounds.contains(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(st.getItem()).getPath())) {
+                st.shrink(1);
+                hold.set(i, st.isEmpty() ? net.minecraft.world.item.ItemStack.EMPTY : st);
+                hold.changed();
+                return true;
+            }
+        }
+        return false;
     }
 
     /** The gunner's seat as Superb Warfare holds it: its index, its gun's rounds loaded and its spare, the vehicle's hold. */
