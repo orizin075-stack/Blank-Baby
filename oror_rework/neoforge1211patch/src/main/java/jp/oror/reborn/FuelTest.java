@@ -151,7 +151,8 @@ public final class FuelTest {
                             stored += s.is(Items.COAL) || s.is(Items.CHARCOAL) ? s.getCount() : s.is(Items.COAL_BLOCK) ? s.getCount() * 9 : 0;
                         }
                     }
-                    boolean ok = moved > 0 && stored == moved && moved <= sourceBefore;
+                    // (CI 52: 169 carried of 152 - a chest of the land about, within the post's 48 blocks, had coal too)
+                    boolean ok = moved >= Math.min(sourceBefore, 4 * 64 * 9) && stored == moved;
                     pass &= ok;
                     out.append(String.format(Locale.ROOT, ",\"post\":{\"sourceBefore\":%d,\"carried\":%d,\"inStore\":%d,\"ok\":%b}", sourceBefore, moved, stored, ok));
                 } else {
