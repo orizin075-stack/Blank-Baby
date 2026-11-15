@@ -244,7 +244,7 @@ jobs:
           # (059e) Duel Dominion with OROR: its check and every line of its own (and any error naming it)
           grep -E 'DUEL-|OROR Duel|dueldominion|DuelDominion' "$RUNNER_TEMP/server/console.log" > out/duel_log.txt || true
           # (059g) the roads between villages, kingdoms and the capital (VillageRoads): its check and every journey's lines
-          grep -E 'ROAD-|VILLAGE-ARMS-|FUEL-RESULT|VILLAGE-FUEL|SUPPLY-COAL|EXPEDITION-HOME-GUARD|銃工房|戦車|OROR_VILLAGE_ARMS' "$RUNNER_TEMP/server/console.log" > out/road_log.txt || true
+          grep -E 'ROAD-|VILLAGE-ARMS-|VILLAGE-CREW-|FUEL-RESULT|VILLAGE-FUEL|SUPPLY-COAL|EXPEDITION-HOME-GUARD|銃工房|戦車|OROR_VILLAGE_ARMS' "$RUNNER_TEMP/server/console.log" > out/road_log.txt || true
           # (053) the capital as generated against its save, uncut (CitadelIntegrity)
           grep -E 'CAPITAL-INTEGRITY' "$RUNNER_TEMP/server/console.log" | sed 's/},/},\n/g' > out/capital_integrity.txt || true
           cat "$RUNNER_TEMP/server/jfr_dump.txt" >> out/war_profile.txt 2>/dev/null || true

@@ -2,7 +2,10 @@ package jp.oror.reborn;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.phys.AABB;
 import org.slf4j.Logger;
@@ -50,5 +53,71 @@ public final class VillageHomeGuard {
                 home.size() + party.size() - out.size());
         }
         return out;
+    }
+
+    static int stepped;
+
+    /**
+     * (CI 63, 64) A tank's crewman called to board who cannot set out: twice the CI's second crewman stood beside the
+     * village's chest, on the ground with open ground all round, and every path to the tank (18 blocks over a level green)
+     * came out empty as soon as it was asked; once he stood there a whole minute and the tank went out with one man. A
+     * crewman of a boarding sortie who has not left his block for three seconds, his path done, steps to the open
+     * neighbouring block nearest the tank and is set walking again (the village's own crew walk goes on from there).
+     * VillagerLife.tick's start (VillagerRoadMixin), every villager each tick; it acts once a second.
+     */
+    public static void unstick(Entity e) {
+        if (!(e instanceof Villager v) || !(v.level() instanceof ServerLevel level) || v.isPassenger() || (v.tickCount + v.getId()) % 20 != 3) {
+            return;
+        }
+        CompoundTag d = VillagerLife.data(v);
+        if (!d.hasUUID("Sortie")) {
+            if (d.contains("OrorBoardStill")) {
+                d.remove("OrorBoardStill");
+                d.remove("OrorBoardAt");
+            }
+            return;
+        }
+        VillageProgress.Record rec = VillageProgress.get(level).villages.get(d.getUUID("Sortie"));
+        if (rec == null || rec.sortie == null || !"board".equals(rec.sortie.getString("Phase")) || !rec.sortie.hasUUID("Vehicle")) {
+            return;
+        }
+        Entity tank = level.getEntity(rec.sortie.getUUID("Vehicle"));
+        if (tank == null || v.distanceTo(tank) < 4) {
+            return;
+        }
+        long here = v.blockPosition().asLong();
+        int still = d.getLong("OrorBoardAt") == here ? d.getInt("OrorBoardStill") + 1 : 0;
+        d.putLong("OrorBoardAt", here);
+        d.putInt("OrorBoardStill", still);
+        if (still < 3 || !v.getNavigation().isDone()) {
+            return;
+        }
+        BlockPos at = v.blockPosition(), best = null;
+        double bestD = Double.MAX_VALUE;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                BlockPos q = at.offset(dx, 0, dz);
+                if ((dx == 0 && dz == 0) || !level.getBlockState(q).getCollisionShape(level, q).isEmpty()
+                    || !level.getBlockState(q.above()).getCollisionShape(level, q.above()).isEmpty()
+                    || !level.getBlockState(q.below()).isFaceSturdy(level, q.below(), net.minecraft.core.Direction.UP)) {
+                    continue;
+                }
+                double dd = q.distToCenterSqr(tank.position());
+                if (dd < bestD) {
+                    bestD = dd;
+                    best = q;
+                }
+            }
+        }
+        String before = VillagerState.of(v, tank);
+        if (best != null) {
+            v.teleportTo(best.getX() + 0.5, best.getY(), best.getZ() + 0.5);
+        }
+        v.getNavigation().stop();
+        VillageAI.walk(v, tank.blockPosition(), VillageAI.pace(v, 0.36), 1);
+        d.putInt("OrorBoardStill", 0);
+        stepped++;
+        LOG.info("VILLAGE-CREW-STEP {\"to\":\"{}\",\"pathNow\":{},\"was\":\"{}\"}", best == null ? "-" : best.toShortString(),
+            !v.getNavigation().isDone(), before.replace('"', '\''));
     }
 }

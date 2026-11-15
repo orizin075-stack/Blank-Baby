@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class VillagerRoadMixin {
     @Inject(method = "tick(Lnet/neoforged/neoforge/event/tick/EntityTickEvent$Post;)V", at = @At("HEAD"), cancellable = true, remap = false)
     private static void oror$road(net.neoforged.neoforge.event.tick.EntityTickEvent.Post e, CallbackInfo ci) {
+        jp.oror.reborn.VillageHomeGuard.unstick(e.getEntity());
         if (jp.oror.reborn.VillageRoads.onLife(e.getEntity())) {
             ci.cancel();
         }

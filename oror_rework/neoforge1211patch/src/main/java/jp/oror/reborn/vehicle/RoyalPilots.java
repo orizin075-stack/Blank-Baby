@@ -599,7 +599,9 @@ public final class RoyalPilots {
                 // (CI 62) the power back on from under 1.75 (was 1.5), off only over 2.0 (was 1.9): wings level now, the glide's
                 // power came off at 2.0 and the CI aircraft, gliding on to 1.55 with the throttle a hundredth a tick from
                 // answering, sank at half a block a tick and came down twice 35 blocks short of the runway
-                boolean slow = speed > 2.0 && !low, fast = speed < 1.75 || low;
+                // (CI 64) and up again, on from under 1.9 and off over 2.15: at the glide's end, 1.67 to 1.7, it sank at 0.42 a
+                // tick with its nose up, the throttle coming back too slowly to hold it, and came down 6 and 24 blocks short
+                boolean slow = speed > 2.15 && !low, fast = speed < 1.9 || low;
                 if (v.getY() - groundAt(v, v.position()) < 6) {
                     // the flare: power off for the touch-down (at 2.15 it came down hard enough to lose a third of its health;
                     // holding 1.3 to 1.8 instead, it floated over the runway and went round), the nose held up by the pitch
