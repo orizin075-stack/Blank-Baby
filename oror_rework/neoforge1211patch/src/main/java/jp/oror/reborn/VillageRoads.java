@@ -28,6 +28,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.Villager;
@@ -44,6 +48,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -360,15 +365,28 @@ public final class VillageRoads {
             return null;
         }
         List<Mob> party = new ArrayList<>();
+        VillageProgress.Record rec = progress.of(v);
+        // (059g, the user: "全員強めに プレイヤーや襲撃者とかが襲ってくるから") the trader one of the strong too where the
+        // village has one with a trade to spare (he stands and fights; a trader of another trade runs), and two to four of
+        // them as his escort, by how far the village has come
         Villager trader = null;
         for (Villager x : folk) {
-            if (!VillageAI.strong(x) && !VillagerIndustry.miner(x) && traded(x) && (trader == null || x.getVillagerXp() > trader.getVillagerXp())) {
+            if (VillageAI.strong(x) && !VillagerIndustry.miner(x) && traded(x) && (trader == null || x.getVillagerXp() > trader.getVillagerXp())) {
                 trader = x;
+            }
+        }
+        long strongCount = folk.stream().filter(VillageAI::strong).count();
+        if (trader == null || strongCount < 2) {
+            trader = null;
+            for (Villager x : folk) {
+                if (!VillagerIndustry.miner(x) && traded(x) && (trader == null || x.getVillagerXp() > trader.getVillagerXp())) {
+                    trader = x;
+                }
             }
         }
         if (trader == null) {
             for (Villager x : folk) {
-                if (!VillageAI.strong(x)) {
+                if (!VillagerIndustry.miner(x)) {
                     trader = x;
                     break;
                 }
@@ -378,10 +396,9 @@ public final class VillageRoads {
             return null;
         }
         party.add(trader);
-        VillageProgress.Record rec = progress.of(v);
-        int escorts = s.population >= 10 || rec.kingdom ? 2 : s.population >= 6 ? 1 : 0;
+        int escorts = rec.kingdom || rec.stage >= 3 ? 4 : rec.stage >= 2 || s.population >= 6 ? 3 : 2;
         for (Villager x : folk) {
-            if (escorts > 0 && x != trader && VillageAI.strong(x) && party.size() < folk.size() / 3 + 1) {
+            if (escorts > 0 && x != trader && VillageAI.strong(x) && !VillagerIndustry.miner(x) && party.size() <= folk.size() / 2) {
                 party.add(x);
                 escorts--;
             }
@@ -404,6 +421,10 @@ public final class VillageRoads {
         }
         if (migrant != null) {
             party.add(migrant);
+        }
+        int tier = rec.kingdom || rec.stage >= 4 ? 3 : Math.max(0, Math.min(2, rec.stage - 1));
+        for (Mob m : party) {
+            arm(level, m, m == trader ? Role.TRADER : m == migrant ? Role.SETTLER : Role.ESCORT, tier, rec.guns || VillageArms.present() && rec.stage >= 2);
         }
         Journey j = dispatch(level, roads, v.id, v.center, rec.name(), dest, party, cargo, now, "trade");
         j.migrant = migrant == null ? null : migrant.getUUID();
@@ -511,6 +532,156 @@ public final class VillageRoads {
         VillagerProfession p = x.getVillagerData().getProfession();
         return p != VillagerProfession.NONE && p != VillagerProfession.NITWIT;
     }
+
+    // --------------------------------------------------------------------------------------------------- arms for the road
+
+    /** Who a traveller is, for how he is armed. */
+    enum Role { TRADER, ESCORT, SETTLER, ROYAL_MERCHANT, ROYAL_GUARD }
+
+    static final ResourceLocation ROAD_HEALTH = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "road_health");
+    static final ResourceLocation ROAD_ARMOR = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "road_armor");
+    static final ResourceLocation TRADER_HEALTH = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "trader_health");
+    static final ResourceLocation TRADER_ARMOR = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "trader_armor");
+    static final ResourceLocation TRADER_TOUGH = ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "trader_toughness");
+    private static final String[][] ARMOUR = {
+        {"iron_helmet", "iron_chestplate", "iron_leggings", "iron_boots"},
+        {"iron_helmet", "iron_chestplate", "iron_leggings", "iron_boots"},
+        {"diamond_helmet", "diamond_chestplate", "diamond_leggings", "diamond_boots"},
+        {"netherite_helmet", "netherite_chestplate", "netherite_leggings", "netherite_boots"}};
+
+    /**
+     * (059g, the user: "全員強めに プレイヤーや襲撃者とかが襲ってくるから") A traveller made fit for the road: more health and
+     * armour while he travels (taken off again at home), by his part and by how far his village has come (tier 0: a
+     * settlement or village, 1 a town, 2 a castle town, 3 a frontier capital or a kingdom): an escort +120 health (+80 a
+     * tier) and 4 armour (+2 a tier), the trader +100 (+60), a settler +40 (+20), the king's merchant +300, the king's guards
+     * +160. The first time he sets out his village arms him too (a settler and the king's guards excepted): iron, iron,
+     * diamond or netherite armour where he has none, a sword in an empty hand, and where the village makes guns (or could:
+     * a town with Superb Warfare) one of its guns in his pack (drawn at range, as the village's own armed are). The gear is
+     * his to keep and drops nothing when he falls (it came from no chest).
+     */
+    static void arm(ServerLevel level, Mob m, Role role, int tier, boolean guns) {
+        double hp = switch (role) {
+            case ESCORT -> 120 + 80 * tier;
+            case TRADER -> 100 + 60 * tier;
+            case SETTLER -> 40 + 20 * tier;
+            case ROYAL_MERCHANT -> 300;
+            case ROYAL_GUARD -> 160;
+        };
+        double armour = role == Role.SETTLER ? 2 : role == Role.ROYAL_MERCHANT ? 10 : 4 + 2 * tier;
+        modifier(m, Attributes.MAX_HEALTH, ROAD_HEALTH, hp);
+        modifier(m, Attributes.ARMOR, ROAD_ARMOR, armour);
+        m.setHealth(m.getMaxHealth());
+        if (role == Role.SETTLER || role == Role.ROYAL_GUARD || m.getPersistentData().getBoolean("OrorRoadArmed")) {
+            return;
+        }
+        m.getPersistentData().putBoolean("OrorRoadArmed", true);
+        int t = role == Role.ROYAL_MERCHANT ? 2 : Math.max(0, Math.min(3, tier));
+        EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+        for (int i = 0; i < slots.length; i++) {
+            if (m.getItemBySlot(slots[i]).isEmpty()) {
+                Item it = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(ARMOUR[t][i]));
+                m.setItemSlot(slots[i], new ItemStack(it));
+                m.setDropChance(slots[i], 0F);
+            }
+        }
+        if (m.getMainHandItem().isEmpty()) {
+            m.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(t >= 3 ? Items.NETHERITE_SWORD : t >= 2 ? Items.DIAMOND_SWORD : Items.IRON_SWORD));
+            m.setDropChance(EquipmentSlot.MAINHAND, 0F);
+        }
+        if (guns && m instanceof Villager v && !VillageArms.armed(v)) {
+            ItemStack gun = VillageArms.villageGun(level, Math.min(4, t + 1));
+            if (!gun.isEmpty()) {
+                v.getInventory().addItem(gun);
+            }
+        }
+    }
+
+    private static void modifier(LivingEntity m, net.minecraft.core.Holder<net.minecraft.world.entity.ai.attributes.Attribute> attr, ResourceLocation id,
+                                 double amount) {
+        AttributeInstance in = m.getAttribute(attr);
+        if (in != null) {
+            in.removeModifier(id);
+            in.addPermanentModifier(new AttributeModifier(id, amount, AttributeModifier.Operation.ADD_VALUE));
+        }
+    }
+
+    private static void unmodify(Entity e) {
+        if (e instanceof LivingEntity m) {
+            for (var attr : List.of(Attributes.MAX_HEALTH, Attributes.ARMOR)) {
+                AttributeInstance in = m.getAttribute(attr);
+                if (in != null) {
+                    in.removeModifier(ROAD_HEALTH);
+                    in.removeModifier(ROAD_ARMOR);
+                }
+            }
+            if (m.getHealth() > m.getMaxHealth()) {
+                m.setHealth(m.getMaxHealth());
+            }
+        }
+    }
+
+    /**
+     * (059g, the user: "あとモブで行商人いるでしょ") The wandering trader too is met by players and raiders on the road: from the
+     * moment it comes into the world it has 200 health, 8 armour and 4 toughness (it had 20 until struck, when it shows what
+     * it really is, WanderingTraders), and its llamas 60 more health.
+     */
+    private static void hardenTrader(Entity e) {
+        if (e instanceof net.minecraft.world.entity.npc.WanderingTrader w && !w.getPersistentData().getBoolean("OrorTraderStrong")) {
+            w.getPersistentData().putBoolean("OrorTraderStrong", true);
+            modifier(w, Attributes.MAX_HEALTH, TRADER_HEALTH, 180);
+            modifier(w, Attributes.ARMOR, TRADER_ARMOR, 8);
+            modifier(w, Attributes.ARMOR_TOUGHNESS, TRADER_TOUGH, 4);
+            w.setHealth(w.getMaxHealth());
+        } else if (e instanceof net.minecraft.world.entity.animal.horse.TraderLlama l && !l.getPersistentData().getBoolean("OrorTraderStrong")) {
+            l.getPersistentData().putBoolean("OrorTraderStrong", true);
+            modifier(l, Attributes.MAX_HEALTH, TRADER_HEALTH, 60);
+            l.setHealth(l.getMaxHealth());
+        }
+    }
+
+    /**
+     * A traveller struck: the whole party turns on whoever struck him (a player, a raider, a monster). A player who strikes
+     * one loses standing with its village (ten points, once in five seconds), and the players about are told.
+     */
+    @SubscribeEvent
+    public static void attacked(LivingIncomingDamageEvent e) {
+        LivingEntity m = e.getEntity();
+        if (!(m.level() instanceof ServerLevel level) || !m.getPersistentData().hasUUID(KEY)) {
+            return;
+        }
+        if (!(e.getSource().getEntity() instanceof LivingEntity foe) || foe == m) {
+            return;
+        }
+        Roads roads = Roads.of(level);
+        Journey j = roads.journeys.get(m.getPersistentData().getUUID(KEY));
+        if (j == null || foe.getPersistentData().hasUUID(KEY) && j.id.equals(foe.getPersistentData().getUUID(KEY))) {
+            return;
+        }
+        for (UUID u : j.walking) {
+            if (level.getEntity(u) instanceof Mob mob && mob.isAlive() && mob.distanceToSqr(m) < 48 * 48
+                && (mob.getTarget() == null || !mob.getTarget().isAlive())) {
+                mob.setTarget(foe);
+            }
+        }
+        if (foe instanceof net.minecraft.world.entity.player.Player p && !p.isCreative() && !p.isSpectator()) {
+            long now = level.getGameTime();
+            Long last = STRUCK.get(j.id);
+            if (last == null || now - last > 100) {
+                STRUCK.put(j.id, now);
+                VillageLedger.Village home = VillageLedger.get(level).villages.get(j.from);
+                if (home != null) {
+                    VillageLedger.get(level).change(home, p.getUUID(), -10, now, "行商隊への攻撃");
+                }
+                if (last == null || now - last > 600) {
+                    tell(level, m.position(), 96, "§c" + p.getName().getString() + "が【" + plain(j.fromName) + "】の"
+                        + ("royal".equals(j.kind) ? "御用商人の一行" : "行商隊") + "を襲った！");
+                }
+            }
+        }
+    }
+
+    /** When a party was last struck by a player (for the standing it costs, at most once in five seconds). */
+    private static final Map<UUID, Long> STRUCK = new HashMap<>();
 
     // --------------------------------------------------------------------------------------------------------- on the road
 
@@ -894,14 +1065,18 @@ public final class VillageRoads {
         if (merchant == null) {
             return;
         }
-        merchant.setVillagerData(merchant.getVillagerData().setProfession(VillagerProfession.LIBRARIAN).setLevel(3));
+        // (059g, "全員強めに") the king's merchant a weaponsmith of the fifth level (he stands and fights), with two of the
+        // imperial guard and two of the kingdom's guards
+        merchant.setVillagerData(merchant.getVillagerData().setProfession(VillagerProfession.WEAPONSMITH).setLevel(5));
         merchant.setCustomName(Component.literal("王都の御用商人"));
         merchant.setPersistenceRequired();
+        arm(level, merchant, Role.ROYAL_MERCHANT, 2, true);
         party.add(merchant);
-        for (int i = 0; i < 2; i++) {
-            RoyalMob g = RoyalRegistry.TYPES.get(RoyalRole.GUARD).create(level);
+        for (RoyalRole role : new RoyalRole[]{RoyalRole.IMPERIAL, RoyalRole.IMPERIAL, RoyalRole.GUARD, RoyalRole.GUARD}) {
+            RoyalMob g = RoyalRegistry.TYPES.get(role).create(level);
             if (g != null) {
                 g.setPersistenceRequired();
+                arm(level, g, Role.ROYAL_GUARD, 2, false);
                 party.add(g);
             }
         }
@@ -1044,6 +1219,7 @@ public final class VillageRoads {
     static void release(Entity m) {
         m.getPersistentData().remove(KEY);
         m.getPersistentData().remove(SEQ);
+        unmodify(m);
     }
 
     private static void end(Roads roads, Journey j) {
@@ -1425,7 +1601,11 @@ public final class VillageRoads {
     @SubscribeEvent
     public static void joined(EntityJoinLevelEvent e) {
         Entity m = e.getEntity();
-        if (!(e.getLevel() instanceof ServerLevel level) || !m.getPersistentData().hasUUID(KEY)) {
+        if (!(e.getLevel() instanceof ServerLevel level)) {
+            return;
+        }
+        hardenTrader(m);
+        if (!m.getPersistentData().hasUUID(KEY)) {
             return;
         }
         Journey j = Roads.of(level).journeys.get(m.getPersistentData().getUUID(KEY));
@@ -1457,6 +1637,17 @@ public final class VillageRoads {
         j.walking.remove(m.getUUID());
         if (m.getUUID().equals(j.migrant)) {
             j.migrant = null;
+        }
+        if (e.getSource().getEntity() instanceof net.minecraft.world.entity.player.Player p && !p.isCreative()) {
+            // a traveller killed by a player: both villages of the road hold it against him
+            long now = level.getGameTime();
+            for (UUID village : new UUID[]{j.from, j.to}) {
+                VillageLedger.Village v = VillageLedger.get(level).villages.get(village);
+                if (v != null) {
+                    VillageLedger.get(level).change(v, p.getUUID(), -40, now, "行商隊の殺害");
+                }
+            }
+            announceTo(level, j.from, p.getName().getString() + "が【" + plain(j.toName) + "】への道で行商隊の" + m.getName().getString() + "を殺しました");
         }
         if (m.getUUID().equals(j.lead)) {
             List<ItemStack> goods = stacks(level, j.leg == 0 ? j.cargo : j.wares);
