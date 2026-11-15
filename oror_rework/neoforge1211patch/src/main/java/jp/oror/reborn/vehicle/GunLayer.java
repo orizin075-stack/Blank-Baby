@@ -120,22 +120,17 @@ final class GunLayer {
 
     /**
      * (CI 56: the TOW's wire-guided missile steers along its launcher's barrel, not to a place; its barrel stood pitched up,
-     * and every missile flew on over its target) the TOW's barrel laid straight at the target, every tick: its yaw and
-     * its pitch from the turret to the target's middle (Superb Warfare's setTurretYRot and setTurretXRot, the launcher's
-     * own facing as the view the missile may follow).
+     * and every missile flew on over its target) the TOW's barrel laid at the target's middle every tick: its pitch
+     * (Superb Warfare's setTurretXRot, and the launcher's own facing, the view the missile may follow); its yaw is Superb
+     * Warfare's own aim, which has it right.
      */
     static void layBarrel(Entity v, LivingEntity target) {
         Vec3 from = v.position().add(0, 1.0, 0);
         Vec3 d = target.getBoundingBox().getCenter().subtract(from);
         float yaw = (float) (Math.atan2(d.z, d.x) * 180.0 / Math.PI) - 90F;
         float pitch = (float) -(Math.atan2(d.y, d.horizontalDistance()) * 180.0 / Math.PI);
-        Object ty = Sbw.call(v, "getTurretYRot");
-        // the turret's yaw kept as Superb Warfare gives it where it already faces the target (it may be the body's own
-        // frame); where it does not, set it in the world's
-        if (!(ty instanceof Number n) || Math.abs(net.minecraft.util.Mth.wrapDegrees(n.floatValue() - yaw)) > 3F
-            && Math.abs(net.minecraft.util.Mth.wrapDegrees(n.floatValue() - (yaw - v.getYRot()))) > 3F) {
-            Sbw.call(v, "setTurretYRot", yaw);
-        }
+        // (CI 58: set in the world's frame the yaw sent the missiles as far the other side; Superb Warfare's own aim had
+        // it right) only the pitch is laid: it stood up, and the missiles flew over the target
         Sbw.call(v, "setTurretXRot", pitch);
         v.setXRot(pitch);
     }

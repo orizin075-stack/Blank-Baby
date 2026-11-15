@@ -1071,10 +1071,11 @@ public final class RoyalPilots {
         // aircraft fell out of the sky; past 50 degrees it is rolled back toward level, and low down it banks less
         // (059g, CI 43) rolled back past 42 (was 50) and banked to 35 at most (was 45): banked to 62 in its turn onto the
         // final leg, the CI aircraft sank thirty blocks and slowed to 1.7, and swung 120 blocks wide into the hills
-        if (!v.onGround() && Math.abs(roll) > 42) {
+        // (CI 44 to 58: held to 35 the landings took too long, one in five to three in five down in time; back to 45 and 50)
+        if (!v.onGround() && Math.abs(roll) > 50) {
             return new boolean[]{roll > 0, roll < 0};
         }
-        boolean turn = !v.onGround() && agl > 15 && Math.abs(yawErr) > 12 && Math.abs(roll) < (agl > 40 ? 35 : 25);
+        boolean turn = !v.onGround() && agl > 15 && Math.abs(yawErr) > 12 && Math.abs(roll) < (agl > 40 ? 45 : 25);
         return new boolean[]{turn && yawErr < 0, turn && yawErr > 0};
     }
 
