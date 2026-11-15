@@ -5852,6 +5852,115 @@ public class com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity exten
   protected final java.util.HashMap<java.lang.String, java.util.function.Function<java.lang.Float, org.joml.Matrix4d>> getPositionTransform();
   protected final void setPositionTransform(java.util.HashMap<java.lang.String, java.util.function.Function<java.lang.Float, org.joml.Matrix4d>>);
 grep: write error: Broken pipe
+== the wire-guided missile (059g, CI 52: the TOW's struck nothing)
+== javap -p com.atsuishio.superbwarfare.entity.projectile.Fim92MissileEntity
+Compiled from "Fim92MissileEntity.kt"
+public class com.atsuishio.superbwarfare.entity.projectile.Fim92MissileEntity extends com.atsuishio.superbwarfare.entity.projectile.Ru9m336MissileEntity implements com.atsuishio.superbwarfare.entity.projectile.BasicGeoProjectileEntity {
+  public com.atsuishio.superbwarfare.entity.projectile.Fim92MissileEntity(net.minecraft.world.entity.EntityType<? extends com.atsuishio.superbwarfare.entity.projectile.Fim92MissileEntity>, net.minecraft.world.level.Level);
+}
+== guidance of com.atsuishio.superbwarfare.entity.projectile.Fim92MissileEntity
+awk: warning: escape sequence `\(' treated as plain `('
+awk: cmd. line:1: (FILENAME=- FNR=3) fatal: invalid regexp: Unmatched ( or \(: /getOwner|LookAngle|getViewVector|pick(|guide|Guide|setDeltaMovement|getTarget/
+== javap -p com.atsuishio.superbwarfare.entity.projectile.IglaMissileEntity
+Compiled from "IglaMissileEntity.kt"
+public class com.atsuishio.superbwarfare.entity.projectile.IglaMissileEntity extends com.atsuishio.superbwarfare.entity.projectile.MissileProjectile implements com.atsuishio.superbwarfare.entity.projectile.BasicGeoProjectileEntity {
+  public com.atsuishio.superbwarfare.entity.projectile.IglaMissileEntity(net.minecraft.world.entity.EntityType<? extends com.atsuishio.superbwarfare.entity.projectile.IglaMissileEntity>, net.minecraft.world.level.Level);
+  public com.atsuishio.superbwarfare.entity.projectile.IglaMissileEntity(net.minecraft.world.entity.Entity, net.minecraft.world.level.Level, float, float, float);
+  protected net.minecraft.world.item.Item getDefaultItem();
+  public void tick();
+  public net.minecraft.sounds.SoundEvent getSound();
+  public float getVolume();
+  public net.minecraft.resources.ResourceLocation getModel();
+  public net.minecraft.resources.ResourceLocation getAnimation();
+  public com.atsuishio.superbwarfare.client.animation.entity.BasicProjectileAnimationInstance<?> getAnimationInstance();
+  public net.minecraft.resources.ResourceLocation getEmissiveTexture();
+  public int getHiddenTicks();
+  public int getFlareHiddenTicks();
+  public com.github.mcmodderanchor.simplebedrockmodel.v2.common.model.runtime.BakedModelInstance getModelInstance();
+}
+== guidance of com.atsuishio.superbwarfare.entity.projectile.IglaMissileEntity
+awk: warning: escape sequence `\(' treated as plain `('
+awk: cmd. line:1: (FILENAME=- FNR=3) fatal: invalid regexp: Unmatched ( or \(: /getOwner|LookAngle|getViewVector|pick(|guide|Guide|setDeltaMovement|getTarget/
+== javap -p com.atsuishio.superbwarfare.entity.projectile.JavelinMissileEntity
+Compiled from "JavelinMissileEntity.kt"
+public class com.atsuishio.superbwarfare.entity.projectile.JavelinMissileEntity extends com.atsuishio.superbwarfare.entity.projectile.MissileProjectile implements com.atsuishio.superbwarfare.entity.projectile.BasicGeoProjectileEntity {
+  public static final com.atsuishio.superbwarfare.entity.projectile.JavelinMissileEntity$Companion Companion;
+  static final kotlin.reflect.KProperty<java.lang.Object>[] $$delegatedProperties;
+  public static final net.minecraft.network.syncher.EntityDataAccessor<java.lang.Boolean> TOP;
+  public final boolean isTop();
+  public final void setTop(boolean);
+  private static java.lang.Object isTop$delegate(com.atsuishio.superbwarfare.entity.projectile.JavelinMissileEntity);
+  public com.atsuishio.superbwarfare.entity.projectile.JavelinMissileEntity(net.minecraft.world.entity.EntityType<? extends com.atsuishio.superbwarfare.entity.projectile.JavelinMissileEntity>, net.minecraft.world.level.Level);
+  public com.atsuishio.superbwarfare.entity.projectile.JavelinMissileEntity(net.minecraft.world.entity.Entity, net.minecraft.world.level.Level, float, float, float, int, net.minecraft.world.phys.Vec3);
+  protected net.minecraft.world.item.Item getDefaultItem();
+  public final void setAttackMode(boolean);
+  protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData$Builder);
+  public void performDamage(net.minecraft.world.entity.Entity, float, boolean);
+  public void tick();
+  public net.minecraft.sounds.SoundEvent getSound();
+  public float getVolume();
+  public net.minecraft.resources.ResourceLocation getModel();
+  public net.minecraft.resources.ResourceLocation getAnimation();
+  public com.atsuishio.superbwarfare.client.animation.entity.BasicProjectileAnimationInstance<?> getAnimationInstance();
+  public net.minecraft.resources.ResourceLocation getEmissiveTexture();
+  public int getHiddenTicks();
+  public int getFlareHiddenTicks();
+  public com.github.mcmodderanchor.simplebedrockmodel.v2.common.model.runtime.BakedModelInstance getModelInstance();
+  static {};
+}
+== guidance of com.atsuishio.superbwarfare.entity.projectile.JavelinMissileEntity
+awk: warning: escape sequence `\(' treated as plain `('
+awk: cmd. line:1: (FILENAME=- FNR=9) fatal: invalid regexp: Unmatched ( or \(: /getOwner|LookAngle|getViewVector|pick(|guide|Guide|setDeltaMovement|getTarget/
+== javap -p com.atsuishio.superbwarfare.entity.projectile.MissileProjectile
+Compiled from "MissileProjectile.kt"
+public abstract class com.atsuishio.superbwarfare.entity.projectile.MissileProjectile extends com.atsuishio.superbwarfare.entity.projectile.DestroyableProjectile implements com.atsuishio.superbwarfare.entity.projectile.ITrackableProjectile,net.neoforged.neoforge.entity.IEntityWithComplexSpawn,com.atsuishio.superbwarfare.entity.IBvrSyncableEntity {
+  public static final com.atsuishio.superbwarfare.entity.projectile.MissileProjectile$Companion Companion;
+  private int guideTypeValue;
+  private boolean distractedValue;
+  private boolean lostValue;
+  private boolean lostTargetValue;
+  private int lostTargetTick;
+  public static final net.minecraft.network.syncher.EntityDataAccessor<java.lang.String> TARGET_UUID;
+  public static final net.minecraft.network.syncher.EntityDataAccessor<net.minecraft.world.phys.Vec3> TARGET_POS;
+  public net.minecraft.world.phys.Vec3 getTargetPos();
+  public void setTargetPos(net.minecraft.world.phys.Vec3);
+  public int getGuideType();
+  public void setGuideType(int);
+  public boolean isDistracted();
+  public void setDistracted(boolean);
+  public boolean isLost();
+  public void setLost(boolean);
+  public boolean isLostTarget();
+  public void setLostTarget(boolean);
+  public java.lang.String getTargetUUID();
+  public void setTargetUUID(java.lang.String);
+  public final int getLostTargetTick();
+  public final void setLostTargetTick(int);
+  public com.atsuishio.superbwarfare.entity.projectile.MissileProjectile(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.ThrowableItemProjectile>, net.minecraft.world.level.Level);
+  public com.atsuishio.superbwarfare.entity.projectile.MissileProjectile(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.ThrowableItemProjectile>, net.minecraft.world.entity.Entity, net.minecraft.world.level.Level);
+  public final void setTargetUuid(java.lang.String);
+  public final void setTargetVec(net.minecraft.world.phys.Vec3);
+  protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData$Builder);
+  public void buildBvrSyncNbt(net.minecraft.nbt.CompoundTag);
+  public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag);
+  public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag);
+  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult);
+  protected void updateRotation();
+  public boolean isNoGravity();
+  public float getCustomGravity();
+  public void tick();
+  public void remove(net.minecraft.world.entity.Entity$RemovalReason);
+  public boolean forceLoadChunk();
+  public void distractedByDecoy();
+  public int getNoHitTicks();
+  public void turn(net.minecraft.world.phys.Vec3, float);
+  public void turnYaw(net.minecraft.world.phys.Vec3, float);
+  private static final boolean distractedByDecoy$lambda$0(net.minecraft.world.entity.Entity);
+  static {};
+}
+== guidance of com.atsuishio.superbwarfare.entity.projectile.MissileProjectile
+awk: warning: escape sequence `\(' treated as plain `('
+awk: cmd. line:1: (FILENAME=- FNR=19) fatal: invalid regexp: Unmatched ( or \(: /getOwner|LookAngle|getViewVector|pick(|guide|Guide|setDeltaMovement|getTarget/
 == vehicle definitions
 == assets/superbwarfare/sbw/vehicles/bl_132.json
 {
