@@ -532,13 +532,13 @@ public final class RoyalPilots {
                 // about the aircraft: the hills 40 blocks off the line held the CI aircraft 40 to 58 over the runway all
                 // down its final leg, and it reached the gate too high to come down to the runway
                 double alt = leg && lined ? Math.max(runwayY + 25, Math.max(lineHigh(v, home, f) + 18, closeHigh(v) + 10))
-                    : Math.max(runwayY + 28, Math.max(high, areaHigh(v, p)) + 25);
+                    : Math.max(runwayY + 36, Math.max(high, areaHigh(v, p)) + 30);   // (059g) +36/+30, was +28/+25
                 // (059g) no descent in a big turn: the CI aircraft, turning about at the initial point onto its final leg
                 // (180 degrees, banked 50 to 60), was still let down toward the height of the way home, nose down six
                 // degrees; it sank thirty blocks in the turn, slowed to 1.7, and flew into the hill beside the line in five
                 // runs of the last ten. The height it has is kept until it faces within sixty degrees of where it goes.
                 if (!(leg && lined) && Math.abs(Mth.wrapDegrees(yawTo(to.subtract(v.position())) - v.getYRot())) > 60) {
-                    alt = Math.max(alt, v.getY());
+                    alt = Math.max(alt, v.getY() + 8);   // (059g, CI 43) a little climb asked: it still sank 30 in a 60-degree bank
                 }
                 // lined up, slowed toward the landing speed already; the turns judged by the real height above the ground
                 // (they were told 99 and banked hard at nine blocks)
@@ -1057,10 +1057,12 @@ public final class RoyalPilots {
         float roll = Sbw.call(v, "getRoll") instanceof Number n ? n.floatValue() : 0F;
         // (050) the bank ran on past the key's release: 70 and 100 degrees over in a go-around nine blocks up, and the CI
         // aircraft fell out of the sky; past 50 degrees it is rolled back toward level, and low down it banks less
-        if (!v.onGround() && Math.abs(roll) > 50) {
+        // (059g, CI 43) rolled back past 42 (was 50) and banked to 35 at most (was 45): banked to 62 in its turn onto the
+        // final leg, the CI aircraft sank thirty blocks and slowed to 1.7, and swung 120 blocks wide into the hills
+        if (!v.onGround() && Math.abs(roll) > 42) {
             return new boolean[]{roll > 0, roll < 0};
         }
-        boolean turn = !v.onGround() && agl > 15 && Math.abs(yawErr) > 12 && Math.abs(roll) < (agl > 40 ? 45 : 25);
+        boolean turn = !v.onGround() && agl > 15 && Math.abs(yawErr) > 12 && Math.abs(roll) < (agl > 40 ? 35 : 25);
         return new boolean[]{turn && yawErr < 0, turn && yawErr > 0};
     }
 

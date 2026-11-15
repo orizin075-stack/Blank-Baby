@@ -318,7 +318,12 @@ public final class GuardTest {
             }
             case "village" -> {
                 BlockPos c = floor(r.level, r.origin.offset(128, 0, 0));
-                ItemStack pistol = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("superbwarfare:glock_17")));
+                // (059g, CI 43) a pistol as the village's gunsmith makes it, with its spare magazines: a bare new one had no
+                // rounds, so the guard drew it and never fired
+                ItemStack pistol = jp.oror.reborn.VillageArms.villageGun(r.level, 0);
+                if (pistol.isEmpty()) {
+                    pistol = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("superbwarfare:glock_17")));
+                }
                 r.villageGuard = spawn(r, "guardvillagers:guard", c, pistol, 0);
                 r.dummy = spawn(r, "minecraft:pillager", c.offset(0, 0, 2), null, 4000);
                 if (r.villageGuard == null || r.dummy == null) {
@@ -355,7 +360,10 @@ public final class GuardTest {
                     if (r.stage == 2 && !r.plain) {
                         // (059g) then an ordinary villager of the village, handed the same pistol (the village's own
                         // gunsmith arms its guards first, then its strongest people: VillageArms)
-                        ItemStack pistol = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("superbwarfare:glock_17")));
+                        ItemStack pistol = jp.oror.reborn.VillageArms.villageGun(r.level, 0);
+                        if (pistol.isEmpty()) {
+                            pistol = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse("superbwarfare:glock_17")));
+                        }
                         Mob plain = spawn(r, "minecraft:villager", r.villageGuard.blockPosition().offset(0, 0, -6), pistol, 0);
                         if (plain != null) {
                             r.villageGuard.discard();

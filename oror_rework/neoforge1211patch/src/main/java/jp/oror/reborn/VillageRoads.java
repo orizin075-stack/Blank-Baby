@@ -103,7 +103,7 @@ public final class VillageRoads {
         UUID id, from, to, lead, migrant;
         BlockPos fromPos, toPos;
         String fromName = "", toName = "", realm = "", kind = "trade", state = "walking";
-        int leg, seq, emeralds, toll, payment;
+        int leg, seq, emeralds, toll, payment, shownTimes;
         long legStart, seenAt, stuckAt;
         double done, stuckFrom;
         boolean crossed;
@@ -285,6 +285,15 @@ public final class VillageRoads {
     public static void tick(ServerTickEvent.Post e) {
         ServerLevel level = e.getServer().overworld();
         long now = level.getGameTime();
+        if (!GONE.isEmpty()) {
+            for (UUID u : List.copyOf(GONE)) {
+                Entity m = level.getEntity(u);
+                if (m != null && !m.isRemoved()) {
+                    m.discard();
+                }
+            }
+            GONE.clear();
+        }
         if (now % 20 != 11) {
             return;
         }
@@ -990,6 +999,7 @@ public final class VillageRoads {
         j.seenAt = now;
         j.stuckAt = now;
         j.stuckFrom = along;
+        j.shownTimes++;
         shown++;
         roads.setDirty();
         tell(level, p, 96, "§e【" + plain(j.fromName) + "】の" + ("royal".equals(j.kind) ? "御用商人の一行" : "行商隊") + "が通りかかりました（"
@@ -1372,13 +1382,24 @@ public final class VillageRoads {
         return true;
     }
 
-    /** A member's ground unloaded under him: into the journey's keeping (a copy stays in the saved ground, refused when it loads). */
+    /** Members taken into a journey's keeping as their ground stopped ticking: discarded on the next tick if still in the world. */
+    private static final Set<UUID> GONE = new HashSet<>();
+
+    /**
+     * A member's ground stopped ticking or unloaded under him: into the journey's keeping. (CI 43: the world stops tracking an
+     * entity as its chunk leaves the ticking range, before the unload sets a removal reason, and the unload itself tells
+     * no one; the party in the first village's unloaded ground was never taken in.) A copy stays in the saved ground and is
+     * refused when it loads; one still in the world is discarded on the next tick.
+     */
     @SubscribeEvent
     public static void left(EntityLeaveLevelEvent e) {
         Entity m = e.getEntity();
-        if (!(e.getLevel() instanceof ServerLevel level) || m.getRemovalReason() != Entity.RemovalReason.UNLOADED_TO_CHUNK
-            || !m.getPersistentData().hasUUID(KEY)) {
+        if (!(e.getLevel() instanceof ServerLevel level) || !m.getPersistentData().hasUUID(KEY)) {
             return;
+        }
+        Entity.RemovalReason why = m.getRemovalReason();
+        if (why != null && why != Entity.RemovalReason.UNLOADED_TO_CHUNK && why != Entity.RemovalReason.UNLOADED_WITH_PLAYER) {
+            return;                                  // killed, discarded, gone to another dimension
         }
         Roads roads = Roads.of(level);
         Journey j = roads.journeys.get(m.getPersistentData().getUUID(KEY));
@@ -1391,6 +1412,9 @@ public final class VillageRoads {
         }
         j.walking.remove(m.getUUID());
         packed++;
+        if (why == null) {
+            GONE.add(m.getUUID());
+        }
         if (j.walking.isEmpty()) {
             toRoad(j, level.getGameTime(), j.along(m.position()));
         }

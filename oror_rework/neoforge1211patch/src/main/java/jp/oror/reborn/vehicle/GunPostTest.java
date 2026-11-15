@@ -45,7 +45,9 @@ import org.slf4j.LoggerFactory;
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class GunPostTest {
     private static final Logger LOG = LoggerFactory.getLogger("OROR Vehicles");
-    private static final String[] KINDS = {"hpj_11", "mle_1934", "bl_132", "mk_42", "tow"};
+    /** (CI 43: only the HPJ-11 fired) the four that did not again with a gunner left his own mind ("+ai"), to see whether
+     * Superb Warfare fires them for a mob that thinks (the garrison's gunners are given no mind of their own). */
+    private static final String[] KINDS = {"hpj_11", "mle_1934", "bl_132", "mk_42", "tow", "mle_1934+ai", "bl_132+ai", "mk_42+ai", "tow+ai"};
     private static final int LANE = 64, RANGE = 34, OFF = 30;
     private static final long TIME = 900;
     public static volatile boolean resultLogged;
@@ -132,13 +134,13 @@ public final class GunPostTest {
                 }
             }
             r.lanes.add(l);
-            if (!Sbw.has(l.kind)) {
+            if (!Sbw.has(id(l))) {
                 continue;
             }
             // the guard posted to the gun as the capital's garrison posts him
             RoyalMob g = RoyalRegistry.TYPES.get(RoyalRole.GUARD).create(level);
             if (g != null) {
-                g.getPersistentData().putString("OrorMotor", l.kind);
+                g.getPersistentData().putString("OrorMotor", id(l));
                 g.getPersistentData().putInt("OrorMotorSeats", 1);
                 g.getPersistentData().putFloat("OrorMotorYaw", 0F);
                 g.getPersistentData().putBoolean("OrorMotorStill", true);
@@ -254,10 +256,13 @@ public final class GunPostTest {
                 }
             } else if (l.gun == null && t % 20 == 3) {
                 for (Entity v : RoyalPilots.near(r.level, net.minecraft.world.phys.Vec3.atBottomCenterOf(l.post), 4)) {
-                    if (BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath().equals(l.kind)) {
+                    if (BuiltInRegistries.ENTITY_TYPE.getKey(v.getType()).getPath().equals(id(l))) {
                         l.gun = v;
                     }
                 }
+            }
+            if (l.kind.endsWith("+ai") && l.guard != null && l.guard.isPassenger() && l.guard.isNoAi()) {
+                l.guard.setNoAi(false);
             }
             if (l.gun != null && l.gun.isAlive()) {
                 float yaw = turret(l.gun);
@@ -283,9 +288,13 @@ public final class GunPostTest {
             }
             LOG.info(s.append('}').toString());
         }
-        if (t >= TIME || t > 300 && r.lanes.stream().allMatch(l -> l.gunHits >= 3 || !Sbw.has(l.kind))) {
+        if (t >= TIME || t > 300 && r.lanes.stream().allMatch(l -> l.gunHits >= 3 || !Sbw.has(id(l)))) {
             finish(r, t);
         }
+    }
+
+    private static String id(Lane l) {
+        return l.kind.replace("+ai", "");
     }
 
     /** The gun's turret heading where Superb Warfare keeps one, else the gun's own. */
@@ -299,12 +308,12 @@ public final class GunPostTest {
         boolean pass = true;
         for (int i = 0; i < r.lanes.size(); i++) {
             Lane l = r.lanes.get(i);
-            boolean has = Sbw.has(l.kind);
+            boolean has = Sbw.has(id(l));
             Entity v = l.gun;
             boolean manned = l.mannedAt >= 0;
             boolean noAi = l.guard != null && l.guard.isNoAi();
             boolean aimed = v != null && v.getPersistentData().getCompound(RoyalPilots.KEY).hasUUID("Target");
-            pass &= !has || v != null && manned && l.gunHits > 0;
+            pass &= !has || l.kind.endsWith("+ai") || v != null && manned && l.gunHits > 0;
             s.append(i == 0 ? "" : ",").append(String.format(Locale.ROOT,
                 "{\"kind\":\"%s\",\"registered\":%b,\"brought\":%b,\"engine\":\"%s\",\"manned\":%b,\"mannedSeconds\":%.1f,\"gunnerNoAi\":%b,"
                     + "\"stillAboard\":%b,\"targeted\":%b,\"turned\":%.1f,\"shots\":%d,\"firstShot\":%.1f,\"hits\":%d,\"gunHits\":%d,"

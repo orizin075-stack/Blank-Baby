@@ -111,6 +111,30 @@ jobs:
             javap -c -p -cp libs/epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman.epicfight.world.capabilities.EpicFightCapabilities \
               | awk '/getEntityPatch\(net.minecraft.world.entity.Entity, java.lang.Class\)/{on=1} on{print; if(++n>14) exit}'
           } 2>&1 | tee -a out/report.txt
+      - name: Superb Warfare's guns the capital's gunners do not fire (059g)
+        run: |
+          set +e
+          # (059g, CI 43) only the HPJ-11 fired of the capital's five kinds of gun: how the other four (Mle 1934, BL-132,
+          # Mk 42, TOW) are aimed and fired, for a gun-layer of OROR's own (out/sbw_guns.txt)
+          SBW=$(ls libs/superbwarfare-*.jar | head -1)
+          VCLS=$(unzip -l "$SBW" | grep -oE 'com/atsuishio/superbwarfare/entity/vehicle/[A-Za-z0-9_/]+\.class' | sed 's/\.class$//' | sort -u)
+          {
+            echo "== $SBW"
+            echo "== vehicle classes"; echo "$VCLS"
+            for c in $(echo "$VCLS" | grep -iE 'mk42|mle1934|bl132|tow|hpj11|/base/|weapon|cannon|artillery|turret' | tr / .); do
+              echo "== javap -p $c"; javap -p -cp "$SBW" "$c" 2>&1 | head -220
+            done
+            for c in $(echo "$VCLS" | grep -iE '/base/VehicleEntity$|/base/AutoAimableEntity$|mk42|mle1934|bl132|tow' | tr / .); do
+              echo "== javap -c (shoot, fire, aim, target, passenger) $c"
+              javap -c -p -cp "$SBW" "$c" 2>&1 | awk '/^  [a-z].*(hoot|ire|im|arget|assenger|urret).*\(/{on=1} on{print} on&&/^$/{on=0}' | head -700
+            done
+            echo "== which classes read a mob's target"
+            for c in $(echo "$VCLS" | tr / .); do n=$(javap -c -p -cp "$SBW" "$c" 2>/dev/null | grep -c 'Mob.getTarget'); [ "$n" -gt 0 ] && echo "$c $n"; done
+            echo "== data"
+            unzip -l "$SBW" | grep -iE 'mk_42|mle_1934|bl_132|/tow|hpj_11' | head -60
+            for f in $(unzip -l "$SBW" | grep -oE 'data/[^ ]*(mk_42|mle_1934|bl_132|tow|hpj_11)[^ ]*\.json' | head -16); do echo "== $f"; unzip -p "$SBW" "$f" | head -200; done
+          } > out/sbw_guns.txt 2>&1
+          true
       - name: Mixin targets in Minecraft (Grand Citadel)
         run: |
           {

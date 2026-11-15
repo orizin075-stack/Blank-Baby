@@ -66,7 +66,7 @@ public final class VillageArmsTest {
         Mob guard;
         Ravager threat;
         UUID tank;
-        String tankType = "";
+        String tankType = "", why = "";
         long unlockedAt = -1, tableAt = -1, builtAt = -1, outAt = -1, boardedAt = -1, firstHitAt = -1;
         int maxAboard, tankHits, otherHits, ironBefore, ironAfter;
         double moved, closest = -1;
@@ -320,6 +320,12 @@ public final class VillageArmsTest {
                         r.level.addFreshEntity(rv);
                         r.threat = rv;
                         r.made.add(rv);
+                        for (Entity m : r.made) {
+                            if (m instanceof Villager v) {
+                                rv.setTarget(v);             // it means the village harm (a ravager is an enemy anyway)
+                                break;
+                            }
+                        }
                     }
                     phase(r, "sortie");
                 } else if (in > 400) {
@@ -353,8 +359,12 @@ public final class VillageArmsTest {
                         }
                     }
                 }
+                if (r.outAt < 0 && in % 200 == 60) {
+                    r.why = why(r, now);
+                    LOG.info("VILLAGE-ARMS-WAIT {}", r.why);
+                }
                 if (r.tankHits >= 3 || in > 1800) {
-                    finish(r, t, "");
+                    finish(r, t, r.outAt < 0 ? r.why : "");
                 }
             }
             default -> {
@@ -395,6 +405,33 @@ public final class VillageArmsTest {
         }
         run = null;
         resultLogged = true;
+    }
+
+    /** (CI 43: the tank was built and never brought out) what the village's sortie asks for, as it stands. */
+    private static String why(Run r, long now) {
+        StringBuilder b = new StringBuilder("{");
+        net.minecraft.world.entity.LivingEntity th = VillageVehicles.threat(r.level, r.home);
+        b.append("\"threat\":\"").append(th == null ? "none" : BuiltInRegistries.ENTITY_TYPE.getKey(th.getType()).getPath()).append('"');
+        b.append(",\"nextSortie\":").append(r.rec.nextSortie - now);
+        b.append(",\"vehicles\":\"").append(r.rec.vehicles).append('"');
+        b.append(",\"sortie\":").append(r.rec.sortie != null);
+        try {
+            VillageWork.Survey s = VillageWork.survey(r.level, r.home);
+            java.lang.reflect.Method pool = VillageVehicles.class.getDeclaredMethod("pool", ServerLevel.class, VillageWork.Survey.class);
+            pool.setAccessible(true);
+            Object at = s == null ? null : pool.invoke(null, r.level, s);
+            b.append(",\"pool\":\"").append(at instanceof BlockPos p ? p.toShortString() : "none").append('"');
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            b.append(",\"pool\":\"").append(ex.getClass().getSimpleName()).append('"');
+        }
+        int strong = 0;
+        for (Entity m : r.made) {
+            if (m instanceof Villager v && v.isAlive() && VillageAI.strong(v) && !v.isPassenger() && VillageLedger.of(v) == r.home) {
+                strong++;
+            }
+        }
+        b.append(",\"crew\":").append(strong).append('}');
+        return b.toString();
     }
 
     private static double sec(long ticks) {

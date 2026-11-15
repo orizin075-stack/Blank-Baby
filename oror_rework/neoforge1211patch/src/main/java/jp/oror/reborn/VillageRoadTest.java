@@ -222,7 +222,7 @@ public final class VillageRoadTest {
                 }
             }
             case "road" -> {
-                if (j != null && "walking".equals(j.state) && j.leg == 0) {
+                if (j != null && "walking".equals(j.state) && j.leg == 0 && j.shownTimes > 0) {
                     r.seenOnRoad = true;
                     Entity lead = j.lead != null ? r.level.getEntity(j.lead) : null;
                     r.seenAlong = lead != null ? j.along(lead.position()) : -1;

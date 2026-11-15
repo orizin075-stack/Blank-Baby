@@ -227,6 +227,11 @@ public final class VillageArms {
       return null;
    }
 
+   /** (059g) A gun as the village's gunsmith makes it (its spare magazines with it), for the guards check. */
+   public static ItemStack villageGun(ServerLevel sl, int tier) {
+      return gun(sl, tier);
+   }
+
    static ItemStack gun(ServerLevel sl, int tier) {
       if (!present()) {
          return ItemStack.EMPTY;
