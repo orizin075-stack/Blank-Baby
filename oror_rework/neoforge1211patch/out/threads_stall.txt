@@ -1,63 +1,64 @@
-== nothing logged for 180s, 18:57:33
-3775:
-2026-11-15 18:57:34
+== nothing logged for 180s, 20:11:09
+3774:
+2026-11-15 20:11:09
 Full thread dump OpenJDK 64-Bit Server VM (21.0.13+9-LTS mixed mode, sharing)
                  JDK version: OpenJDK Runtime Environment Temurin-21.0.13+9 (21.0.13+9) (build 21.0.13+9-LTS)
 
 Threads class SMR info:
-_java_thread_list=0x00007f6ee008f6b0, length=43, elements={
-0x00007f6f740de150, 0x00007f6f740df6c0, 0x00007f6f740e0e50, 0x00007f6f740e2490,
-0x00007f6f740e3a30, 0x00007f6f740e5570, 0x00007f6f740e6c30, 0x00007f6f74135140,
-0x00007f6f742360f0, 0x00007f6f742ab3c0, 0x00007f6f742ba1a0, 0x00007f6f761cc470,
-0x00007f6f770cfb60, 0x00007f6f77906cb0, 0x00007f6e9422c3f0, 0x00007f6e9422dad0,
-0x00007f6e948727c0, 0x00007f6e94998cb0, 0x00007f6ea0e3b770, 0x00007f6ea0e59380,
-0x00007f6e954ddea0, 0x00007f6ea19c8c60, 0x00007f6f76e18440, 0x00007f6ea810cb80,
-0x00007f6e958b24e0, 0x00007f6f76bcf150, 0x00007f6e90f53270, 0x00007f6f7402eed0,
-0x00007f6eb0124b20, 0x00007f6eb012a020, 0x00007f6eb015afc0, 0x00007f6eb0754ce0,
-0x00007f6eb076caf0, 0x00007f6eb0770250, 0x00007f6eb07e2990, 0x00007f6eb07f8560,
-0x00007f6eb08676d0, 0x00007f6eb0f6e310, 0x00007f6edc3609e0, 0x00007f6eb0c8ef60,
-0x00007f6eb0f92670, 0x00007f6eb1630120, 0x00007f6ee084aee0
+_java_thread_list=0x00007f19ec02ba60, length=45, elements={
+0x00007f1a240de170, 0x00007f1a240df6e0, 0x00007f1a240e0e70, 0x00007f1a240e24b0,
+0x00007f1a240e3a50, 0x00007f1a240e5590, 0x00007f1a240e6c50, 0x00007f1a24135180,
+0x00007f1a24265df0, 0x00007f1a242d41c0, 0x00007f1a242e75a0, 0x00007f1a262ad3f0,
+0x00007f1a271a6970, 0x00007f1a27971010, 0x00007f1950236e50, 0x00007f19502473d0,
+0x00007f1950a4a500, 0x00007f194491ac90, 0x00007f1950c70630, 0x00007f1950c8d330,
+0x00007f19451b83e0, 0x00007f1951771460, 0x00007f1a26ef3840, 0x00007f195803e160,
+0x00007f194541bd00, 0x00007f1a2411c6d0, 0x00007f1940f1b6d0, 0x00007f1a2402eed0,
+0x00007f195c3c4fb0, 0x00007f195c3ca4b0, 0x00007f195c3fa5a0, 0x00007f195cb7ef80,
+0x00007f195cb96580, 0x00007f195cb99d20, 0x00007f195cc09100, 0x00007f195cc1b060,
+0x00007f195cc730a0, 0x00007f198835a830, 0x00007f198c1939f0, 0x00007f195c6a3140,
+0x00007f195d366f70, 0x00007f195c645d90, 0x00007f1951d657b0, 0x00007f19445db2c0,
+0x00007f19742cace0
 }
 
-"Reference Handler" #9 [3784] daemon prio=10 os_prio=0 cpu=29.47ms elapsed=3127.30s tid=0x00007f6f740de150 nid=3784 waiting on condition  [0x00007f6f549fe000]
+"Reference Handler" #9 [3787] daemon prio=10 os_prio=0 cpu=25.90ms elapsed=3099.96s tid=0x00007f1a240de170 nid=3787 waiting on condition  [0x00007f1a04ffe000]
    java.lang.Thread.State: RUNNABLE
 	at java.lang.ref.Reference.waitForReferencePendingList(java.base@21.0.13/Native Method)
 	at java.lang.ref.Reference.processPendingReferences(java.base@21.0.13/Reference.java:246)
 	at java.lang.ref.Reference$ReferenceHandler.run(java.base@21.0.13/Reference.java:208)
 
-"Finalizer" #10 [3785] daemon prio=8 os_prio=0 cpu=0.54ms elapsed=3127.30s tid=0x00007f6f740df6c0 nid=3785 in Object.wait()  [0x00007f6f548fe000]
+"Finalizer" #10 [3788] daemon prio=8 os_prio=0 cpu=0.63ms elapsed=3099.96s tid=0x00007f1a240df6e0 nid=3788 in Object.wait()  [0x00007f1a04efe000]
    java.lang.Thread.State: WAITING (on object monitor)
 	at java.lang.Object.wait0(java.base@21.0.13/Native Method)
-	- waiting on <0x0000000680047bd0> (a java.lang.ref.NativeReferenceQueue$Lock)
+	- waiting on <0x0000000680000900> (a java.lang.ref.NativeReferenceQueue$Lock)
 	at java.lang.Object.wait(java.base@21.0.13/Object.java:366)
 	at java.lang.Object.wait(java.base@21.0.13/Object.java:339)
 	at java.lang.ref.NativeReferenceQueue.await(java.base@21.0.13/NativeReferenceQueue.java:48)
 	at java.lang.ref.ReferenceQueue.remove0(java.base@21.0.13/ReferenceQueue.java:158)
 	at java.lang.ref.NativeReferenceQueue.remove(java.base@21.0.13/NativeReferenceQueue.java:89)
-	- locked <0x0000000680047bd0> (a java.lang.ref.NativeReferenceQueue$Lock)
+	- locked <0x0000000680000900> (a java.lang.ref.NativeReferenceQueue$Lock)
 	at java.lang.ref.Finalizer$FinalizerThread.run(java.base@21.0.13/Finalizer.java:173)
 
-"Signal Dispatcher" #11 [3786] daemon prio=9 os_prio=0 cpu=0.25ms elapsed=3127.30s tid=0x00007f6f740e0e50 nid=3786 waiting on condition  [0x0000000000000000]
+"Signal Dispatcher" #11 [3789] daemon prio=9 os_prio=0 cpu=0.21ms elapsed=3099.96s tid=0x00007f1a240e0e70 nid=3789 waiting on condition  [0x0000000000000000]
    java.lang.Thread.State: RUNNABLE
 
-"Service Thread" #12 [3787] daemon prio=9 os_prio=0 cpu=506.91ms elapsed=3127.30s tid=0x00007f6f740e2490 nid=3787 runnable  [0x0000000000000000]
+"Service Thread" #12 [3790] daemon prio=9 os_prio=0 cpu=457.14ms elapsed=3099.96s tid=0x00007f1a240e24b0 nid=3790 runnable  [0x0000000000000000]
    java.lang.Thread.State: RUNNABLE
 
-"Monitor Deflation Thread" #13 [3788] daemon prio=9 os_prio=0 cpu=171.68ms elapsed=3127.30s tid=0x00007f6f740e3a30 nid=3788 runnable  [0x0000000000000000]
+"Monitor Deflation Thread" #13 [3791] daemon prio=9 os_prio=0 cpu=170.71ms elapsed=3099.96s tid=0x00007f1a240e3a50 nid=3791 runnable  [0x0000000000000000]
    java.lang.Thread.State: RUNNABLE
 
-"C2 CompilerThread0" #14 [3789] daemon prio=9 os_prio=0 cpu=194976.68ms elapsed=3127.30s tid=0x00007f6f740e5570 nid=3789 waiting on condition  [0x0000000000000000]
-   java.lang.Thread.State: RUNNABLE
-   No compile task
-
-"C1 CompilerThread0" #16 [3790] daemon prio=9 os_prio=0 cpu=30799.26ms elapsed=3127.30s tid=0x00007f6f740e6c30 nid=3790 waiting on condition  [0x0000000000000000]
+"C2 CompilerThread0" #14 [3792] daemon prio=9 os_prio=0 cpu=191985.50ms elapsed=3099.96s tid=0x00007f1a240e5590 nid=3792 waiting on condition  [0x0000000000000000]
    java.lang.Thread.State: RUNNABLE
    No compile task
 
-"Common-Cleaner" #17 [3791] daemon prio=8 os_prio=0 cpu=5.24ms elapsed=3127.28s tid=0x00007f6f74135140 nid=3791 waiting on condition  [0x00007f6f5422e000]
+"C1 CompilerThread0" #16 [3793] daemon prio=9 os_prio=0 cpu=29031.99ms elapsed=3099.96s tid=0x00007f1a240e6c50 nid=3793 waiting on condition  [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+   No compile task
+
+"Common-Cleaner" #17 [3794] daemon prio=8 os_prio=0 cpu=4.83ms elapsed=3099.94s tid=0x00007f1a24135180 nid=3794 waiting on condition  [0x00007f1a0482e000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x000000068003d9b0> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x0000000680000a28> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(java.base@21.0.13/AbstractQueuedSynchronizer.java:1886)
 	at java.lang.ref.ReferenceQueue.await(java.base@21.0.13/ReferenceQueue.java:71)
@@ -68,29 +69,29 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 	at jdk.internal.misc.InnocuousThread.run(java.base@21.0.13/InnocuousThread.java:186)
 
-"JFR Recorder Thread" #18 [3797] daemon prio=5 os_prio=0 cpu=2729.00ms elapsed=3127.16s tid=0x00007f6f742360f0 nid=3797 runnable  [0x0000000000000000]
+"JFR Recorder Thread" #18 [3796] daemon prio=5 os_prio=0 cpu=2732.43ms elapsed=3099.82s tid=0x00007f1a24265df0 nid=3796 runnable  [0x0000000000000000]
    java.lang.Thread.State: RUNNABLE
 
-"JFR Periodic Tasks" #22 [3801] daemon prio=5 os_prio=0 cpu=18236.34ms elapsed=3126.97s tid=0x00007f6f742ab3c0 nid=3801 in Object.wait()  [0x00007f6f44cde000]
+"JFR Periodic Tasks" #22 [3800] daemon prio=5 os_prio=0 cpu=22364.62ms elapsed=3099.62s tid=0x00007f1a242d41c0 nid=3800 in Object.wait()  [0x00007f19f52e9000]
    java.lang.Thread.State: TIMED_WAITING (on object monitor)
 	at java.lang.Object.wait0(java.base@21.0.13/Native Method)
 	- waiting on <no object reference available>
 	at java.lang.Object.wait(java.base@21.0.13/Object.java:366)
 	at jdk.jfr.internal.PlatformRecorder.takeNap(jdk.jfr@21.0.13/PlatformRecorder.java:561)
-	- locked <0x0000000680047de0> (a jdk.jfr.internal.JVM$ChunkRotationMonitor)
+	- locked <0x0000000680000af8> (a jdk.jfr.internal.JVM$ChunkRotationMonitor)
 	at jdk.jfr.internal.PlatformRecorder.periodicTask(jdk.jfr@21.0.13/PlatformRecorder.java:529)
 	at jdk.jfr.internal.PlatformRecorder.lambda$startDiskMonitor$1(jdk.jfr@21.0.13/PlatformRecorder.java:448)
-	at jdk.jfr.internal.PlatformRecorder$$Lambda/0x00007f6ef804a550.run(jdk.jfr@21.0.13/Unknown Source)
+	at jdk.jfr.internal.PlatformRecorder$$Lambda/0x00007f19a804a550.run(jdk.jfr@21.0.13/Unknown Source)
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"Notification Thread" #25 [3803] daemon prio=9 os_prio=0 cpu=0.06ms elapsed=3126.93s tid=0x00007f6f742ba1a0 nid=3803 runnable  [0x0000000000000000]
+"Notification Thread" #25 [3802] daemon prio=9 os_prio=0 cpu=0.08ms elapsed=3099.58s tid=0x00007f1a242e75a0 nid=3802 runnable  [0x0000000000000000]
    java.lang.Thread.State: RUNNABLE
 
-"JNA Cleaner" #35 [3846] daemon prio=5 os_prio=0 cpu=16.72ms elapsed=3118.20s tid=0x00007f6f761cc470 nid=3846 waiting on condition  [0x00007f6f440fe000]
+"JNA Cleaner" #35 [3848] daemon prio=5 os_prio=0 cpu=16.86ms elapsed=3091.26s tid=0x00007f1a262ad3f0 nid=3848 waiting on condition  [0x00007f19f43fe000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x000000069cba1758> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x000000069ddefdc0> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(java.base@21.0.13/AbstractQueuedSynchronizer.java:1886)
 	at java.lang.ref.ReferenceQueue.await(java.base@21.0.13/ReferenceQueue.java:71)
@@ -98,29 +99,29 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.ref.ReferenceQueue.remove(java.base@21.0.13/ReferenceQueue.java:218)
 	at com.sun.jna.internal.Cleaner$CleanerThread.run(com.sun.jna@5.14.0/Cleaner.java:154)
 
-"DFU cleaning thread" #36 [3875] daemon prio=1 os_prio=0 cpu=75.44ms elapsed=3115.11s tid=0x00007f6f770cfb60 nid=3875 waiting on condition  [0x00007f6ef2ffe000]
+"DFU cleaning thread" #36 [3876] daemon prio=1 os_prio=0 cpu=78.30ms elapsed=3087.62s tid=0x00007f1a271a6970 nid=3876 waiting on condition  [0x00007f19f42fe000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:410)
 	at org.embeddedt.modernfix.dfu.DFUBlaster$CleanerThread.run(modernfix@5.27.26+mc1.21.1/DFUBlaster.java:61)
 
-"Timer hack thread" #37 [3880] daemon prio=5 os_prio=0 cpu=0.17ms elapsed=3113.73s tid=0x00007f6f77906cb0 nid=3880 waiting on condition  [0x00007f6ef2bfe000]
+"Timer hack thread" #37 [3881] daemon prio=5 os_prio=0 cpu=0.12ms elapsed=3086.41s tid=0x00007f1a27971010 nid=3881 waiting on condition  [0x00007f19f41fe000]
    java.lang.Thread.State: TIMED_WAITING (sleeping)
 	at java.lang.Thread.sleep0(java.base@21.0.13/Native Method)
 	at java.lang.Thread.sleep(java.base@21.0.13/Thread.java:509)
 	at net.minecraft.Util$7.run(minecraft@1.21.1/Util.java:759)
 
-"FileSystemWatchService" #42 [3885] daemon prio=5 os_prio=0 cpu=5.96ms elapsed=3113.32s tid=0x00007f6e9422c3f0 nid=3885 runnable  [0x00007f6ef29fe000]
+"FileSystemWatchService" #42 [3886] daemon prio=5 os_prio=0 cpu=6.10ms elapsed=3085.98s tid=0x00007f1950236e50 nid=3886 runnable  [0x00007f19a2ffe000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.fs.LinuxWatchService.poll(java.base@21.0.13/Native Method)
 	at sun.nio.fs.LinuxWatchService$Poller.run(java.base@21.0.13/LinuxWatchService.java:307)
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"config-file-watcher-0-0" #43 [3886] daemon prio=5 os_prio=0 cpu=566.59ms elapsed=3113.32s tid=0x00007f6e9422dad0 nid=3886 waiting on condition  [0x00007f6ef28fe000]
+"config-file-watcher-0-0" #43 [3887] daemon prio=5 os_prio=0 cpu=582.36ms elapsed=3085.98s tid=0x00007f19502473d0 nid=3887 waiting on condition  [0x00007f19a2efe000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000007fe500088> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x0000000693f59550> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(java.base@21.0.13/AbstractQueuedSynchronizer.java:1797)
 	at java.util.concurrent.LinkedBlockingDeque.pollFirst(java.base@21.0.13/LinkedBlockingDeque.java:515)
@@ -130,34 +131,34 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"HttpClient-1-SelectorManager" #45 [3896] daemon prio=5 os_prio=0 cpu=53.32ms elapsed=3112.08s tid=0x00007f6e948727c0 nid=3896 runnable  [0x00007f6ef26fe000]
+"HttpClient-1-SelectorManager" #45 [3893] daemon prio=5 os_prio=0 cpu=58.93ms elapsed=3084.97s tid=0x00007f1950a4a500 nid=3893 runnable  [0x00007f19a2cfe000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.ch.EPoll.wait(java.base@21.0.13/Native Method)
 	at sun.nio.ch.EPollSelectorImpl.doSelect(java.base@21.0.13/EPollSelectorImpl.java:121)
 	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@21.0.13/SelectorImpl.java:130)
-	- locked <0x000000069ff11668> (a sun.nio.ch.Util$2)
-	- locked <0x000000069ff11618> (a sun.nio.ch.EPollSelectorImpl)
+	- locked <0x0000000693f5bd48> (a sun.nio.ch.Util$2)
+	- locked <0x0000000693f5bcf8> (a sun.nio.ch.EPollSelectorImpl)
 	at sun.nio.ch.SelectorImpl.select(java.base@21.0.13/SelectorImpl.java:142)
 	at jdk.internal.net.http.HttpClientImpl$SelectorManager.run(java.net.http@21.0.13/HttpClientImpl.java:1376)
 
-"FileSystemWatchService" #51 [3902] daemon prio=5 os_prio=0 cpu=1.98ms elapsed=3111.82s tid=0x00007f6e94998cb0 nid=3902 runnable  [0x00007f6ef22fe000]
+"FileSystemWatchService" #51 [3903] daemon prio=5 os_prio=0 cpu=1.95ms elapsed=3084.74s tid=0x00007f194491ac90 nid=3903 runnable  [0x00007f19a2dfe000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.fs.LinuxWatchService.poll(java.base@21.0.13/Native Method)
 	at sun.nio.fs.LinuxWatchService$Poller.run(java.base@21.0.13/LinuxWatchService.java:307)
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"FileSystemWatchService" #54 [3904] daemon prio=5 os_prio=0 cpu=0.35ms elapsed=3111.65s tid=0x00007f6ea0e3b770 nid=3904 runnable  [0x00007f6ef20fe000]
+"FileSystemWatchService" #53 [3904] daemon prio=5 os_prio=0 cpu=0.29ms elapsed=3084.59s tid=0x00007f1950c70630 nid=3904 runnable  [0x00007f19a27fe000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.fs.LinuxWatchService.poll(java.base@21.0.13/Native Method)
 	at sun.nio.fs.LinuxWatchService$Poller.run(java.base@21.0.13/LinuxWatchService.java:307)
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"MezzConfig File Watcher server" #55 [3905] daemon prio=5 os_prio=0 cpu=61.92ms elapsed=3111.64s tid=0x00007f6ea0e59380 nid=3905 waiting on condition  [0x00007f6ef1ffe000]
+"MezzConfig File Watcher server" #54 [3905] daemon prio=5 os_prio=0 cpu=60.92ms elapsed=3084.59s tid=0x00007f1950c8d330 nid=3905 waiting on condition  [0x00007f19a26fe000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x000000069ff6ee10> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006894a3788> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(java.base@21.0.13/AbstractQueuedSynchronizer.java:1797)
 	at java.util.concurrent.LinkedBlockingDeque.pollFirst(java.base@21.0.13/LinkedBlockingDeque.java:515)
@@ -166,10 +167,10 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at net.mezzdev.config.modshade.net.mezzdev.filewatcher.FileWatcherThread.runIteration(mezz_config@0.6.8/FileWatcherThread.java:271)
 	at net.mezzdev.config.modshade.net.mezzdev.filewatcher.FileWatcherThread.run(mezz_config@0.6.8/FileWatcherThread.java:221)
 
-"EFN-Tick-Updater-Thread" #57 [3915] daemon prio=5 os_prio=0 cpu=19113.71ms elapsed=3110.03s tid=0x00007f6e954ddea0 nid=3915 waiting on condition  [0x00007f6ef1dfe000]
+"EFN-Tick-Updater-Thread" #57 [3913] daemon prio=5 os_prio=0 cpu=20765.34ms elapsed=3082.89s tid=0x00007f19451b83e0 nid=3913 waiting on condition  [0x00007f19a23fe000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x000000069ff11ce8> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006894a3b60> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(java.base@21.0.13/AbstractQueuedSynchronizer.java:1797)
 	at java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(java.base@21.0.13/ScheduledThreadPoolExecutor.java:1182)
@@ -180,10 +181,10 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"FancyMenu-WebUtils-ConnectivityCheck" #58 [3916] daemon prio=5 os_prio=0 cpu=1160.26ms elapsed=3109.44s tid=0x00007f6ea19c8c60 nid=3916 waiting on condition  [0x00007f6ef1cfe000]
+"FancyMenu-WebUtils-ConnectivityCheck" #58 [3919] daemon prio=5 os_prio=0 cpu=1136.91ms elapsed=3082.24s tid=0x00007f1951771460 nid=3919 waiting on condition  [0x00007f19a22fe000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x000000069ff6ef78> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006894bd4f8> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(java.base@21.0.13/AbstractQueuedSynchronizer.java:1797)
 	at java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(java.base@21.0.13/ScheduledThreadPoolExecutor.java:1182)
@@ -194,10 +195,10 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"modloading-sync-worker" #61 [3923] daemon prio=5 os_prio=0 cpu=4042.21ms elapsed=3108.50s tid=0x00007f6f76e18440 nid=3923 waiting on condition  [0x00007f6ef1bfe000]
+"modloading-sync-worker" #61 [3926] daemon prio=5 os_prio=0 cpu=3758.64ms elapsed=3081.55s tid=0x00007f1a26ef3840 nid=3926 waiting on condition  [0x00007f19a21fe000]
    java.lang.Thread.State: WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000007fe5bc240> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006a07da8e0> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.park(java.base@21.0.13/LockSupport.java:371)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(java.base@21.0.13/AbstractQueuedSynchronizer.java:519)
 	at java.util.concurrent.ForkJoinPool.unmanagedBlock(java.base@21.0.13/ForkJoinPool.java:3780)
@@ -210,10 +211,10 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"FileWatcher-1-thread-1" #62 [3942] daemon prio=5 os_prio=0 cpu=3.42ms elapsed=3105.02s tid=0x00007f6ea810cb80 nid=3942 waiting on condition  [0x00007f6ef1afe000]
+"FileWatcher-1-thread-1" #62 [3941] daemon prio=5 os_prio=0 cpu=2.45ms elapsed=3078.14s tid=0x00007f195803e160 nid=3941 waiting on condition  [0x00007f19a20fe000]
    java.lang.Thread.State: WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x000000069f9aa878> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006894bd688> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.park(java.base@21.0.13/LockSupport.java:371)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(java.base@21.0.13/AbstractQueuedSynchronizer.java:519)
 	at java.util.concurrent.ForkJoinPool.unmanagedBlock(java.base@21.0.13/ForkJoinPool.java:3780)
@@ -227,10 +228,10 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"ConfigSaver" #67 [3947] daemon prio=5 os_prio=0 cpu=1.21ms elapsed=3104.95s tid=0x00007f6e958b24e0 nid=3947 waiting on condition  [0x00007f6ef15fe000]
+"ConfigSaver" #68 [3947] daemon prio=5 os_prio=0 cpu=1.20ms elapsed=3078.09s tid=0x00007f194541bd00 nid=3947 waiting on condition  [0x00007f19a1bfe000]
    java.lang.Thread.State: WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x000000068c2004e8> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006a79f7d70> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.park(java.base@21.0.13/LockSupport.java:371)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(java.base@21.0.13/AbstractQueuedSynchronizer.java:519)
 	at java.util.concurrent.ForkJoinPool.unmanagedBlock(java.base@21.0.13/ForkJoinPool.java:3780)
@@ -243,10 +244,10 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"Yggdrasil Key Fetcher" #70 [3955] daemon prio=5 os_prio=0 cpu=16.72ms elapsed=3103.89s tid=0x00007f6f76bcf150 nid=3955 waiting on condition  [0x00007f6ef14fe000]
+"Yggdrasil Key Fetcher" #70 [3953] daemon prio=5 os_prio=0 cpu=16.31ms elapsed=3077.18s tid=0x00007f1a2411c6d0 nid=3953 waiting on condition  [0x00007f19a1afe000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000006a3278510> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006a79f7ed0> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(java.base@21.0.13/AbstractQueuedSynchronizer.java:1797)
 	at java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(java.base@21.0.13/ScheduledThreadPoolExecutor.java:1182)
@@ -257,41 +258,29 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"Server thread" #75 [4014] prio=5 os_prio=0 cpu=593159.52ms elapsed=3090.27s tid=0x00007f6e90f53270 nid=4014 waiting on condition  [0x00007f6f5412e000]
+"Server thread" #75 [4028] prio=5 os_prio=0 cpu=626359.30ms elapsed=3063.36s tid=0x00007f1940f1b6d0 nid=4028 waiting on condition  [0x00007f1a0472e000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000006a66000b8> (a java.lang.String)
+	- parking to wait for  <0x00000006aa06b338> (a java.lang.String)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at net.minecraft.server.MinecraftServer.wrapOperation$zbf000$modernfix$waitLongerForTasks(minecraft@1.21.1/MinecraftServer.java:2163)
 	at net.minecraft.server.MinecraftServer.waitForTasks(minecraft@1.21.1/MinecraftServer.java:833)
 	at net.minecraft.util.thread.BlockableEventLoop.managedBlock(minecraft@1.21.1/BlockableEventLoop.java:133)
 	at net.minecraft.server.MinecraftServer.managedBlock(minecraft@1.21.1/MinecraftServer.java:821)
 	at net.minecraft.server.MinecraftServer.mixinextras$bridge$managedBlock$287(minecraft@1.21.1/MinecraftServer.java)
-	at net.minecraft.server.MinecraftServer$$Lambda/0x00007f6efbfdeec8.call(minecraft@1.21.1/Unknown Source)
+	at net.minecraft.server.MinecraftServer$$Lambda/0x00007f19abfe4458.call(minecraft@1.21.1/Unknown Source)
 	at net.minecraft.server.MinecraftServer.wrapOperation$zbf000$modernfix$managedBlock(minecraft@1.21.1/MinecraftServer.java:2154)
 	at net.minecraft.server.MinecraftServer.waitUntilNextTick(minecraft@1.21.1/MinecraftServer.java:826)
 	at net.minecraft.server.MinecraftServer.runServer(minecraft@1.21.1/MinecraftServer.java:712)
 	at net.minecraft.server.MinecraftServer.lambda$spin$2(minecraft@1.21.1/MinecraftServer.java:267)
-	at net.minecraft.server.MinecraftServer$$Lambda/0x00007f6efbe06bd8.run(minecraft@1.21.1/Unknown Source)
+	at net.minecraft.server.MinecraftServer$$Lambda/0x00007f19abe08fd8.run(minecraft@1.21.1/Unknown Source)
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"DestroyJavaVM" #78 [3776] prio=5 os_prio=0 cpu=21361.86ms elapsed=3090.27s tid=0x00007f6f7402eed0 nid=3776 waiting on condition  [0x0000000000000000]
+"DestroyJavaVM" #78 [3775] prio=5 os_prio=0 cpu=21825.73ms elapsed=3063.36s tid=0x00007f1a2402eed0 nid=3775 waiting on condition  [0x0000000000000000]
    java.lang.Thread.State: RUNNABLE
 
-"Netty Epoll Server IO #0" #79 [4016] daemon prio=5 os_prio=0 cpu=8.81ms elapsed=3090.09s tid=0x00007f6eb0124b20 nid=4016 runnable  [0x00007f6f449dd000]
-   java.lang.Thread.State: RUNNABLE
-	at io.netty.channel.epoll.Native.epollWait(io.netty.transport.classes.epoll@4.1.97.Final/Native Method)
-	at io.netty.channel.epoll.Native.epollWait(io.netty.transport.classes.epoll@4.1.97.Final/Native.java:209)
-	at io.netty.channel.epoll.Native.epollWait(io.netty.transport.classes.epoll@4.1.97.Final/Native.java:202)
-	at io.netty.channel.epoll.EpollEventLoop.epollWaitNoTimerChange(io.netty.transport.classes.epoll@4.1.97.Final/EpollEventLoop.java:316)
-	at io.netty.channel.epoll.EpollEventLoop.run(io.netty.transport.classes.epoll@4.1.97.Final/EpollEventLoop.java:373)
-	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(io.netty.common@4.1.97.Final/SingleThreadEventExecutor.java:997)
-	at io.netty.util.internal.ThreadExecutorMap$2.run(io.netty.common@4.1.97.Final/ThreadExecutorMap.java:74)
-	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
-	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
-
-"Netty Epoll Server IO #1" #80 [4017] daemon prio=5 os_prio=0 cpu=1.70ms elapsed=3090.08s tid=0x00007f6eb012a020 nid=4017 runnable  [0x00007f6ef0dfe000]
+"Netty Epoll Server IO #0" #79 [4030] daemon prio=5 os_prio=0 cpu=8.73ms elapsed=3063.24s tid=0x00007f195c3c4fb0 nid=4030 runnable  [0x00007f19f4fe8000]
    java.lang.Thread.State: RUNNABLE
 	at io.netty.channel.epoll.Native.epollWait(io.netty.transport.classes.epoll@4.1.97.Final/Native Method)
 	at io.netty.channel.epoll.Native.epollWait(io.netty.transport.classes.epoll@4.1.97.Final/Native.java:209)
@@ -303,36 +292,48 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"HttpClient-3-SelectorManager" #81 [4018] daemon prio=5 os_prio=0 cpu=43.42ms elapsed=3089.96s tid=0x00007f6eb015afc0 nid=4018 runnable  [0x00007f6ef0cfe000]
+"Netty Epoll Server IO #1" #80 [4031] daemon prio=5 os_prio=0 cpu=1.46ms elapsed=3063.23s tid=0x00007f195c3ca4b0 nid=4031 runnable  [0x00007f19a13fe000]
+   java.lang.Thread.State: RUNNABLE
+	at io.netty.channel.epoll.Native.epollWait(io.netty.transport.classes.epoll@4.1.97.Final/Native Method)
+	at io.netty.channel.epoll.Native.epollWait(io.netty.transport.classes.epoll@4.1.97.Final/Native.java:209)
+	at io.netty.channel.epoll.Native.epollWait(io.netty.transport.classes.epoll@4.1.97.Final/Native.java:202)
+	at io.netty.channel.epoll.EpollEventLoop.epollWaitNoTimerChange(io.netty.transport.classes.epoll@4.1.97.Final/EpollEventLoop.java:316)
+	at io.netty.channel.epoll.EpollEventLoop.run(io.netty.transport.classes.epoll@4.1.97.Final/EpollEventLoop.java:373)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(io.netty.common@4.1.97.Final/SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(io.netty.common@4.1.97.Final/ThreadExecutorMap.java:74)
+	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
+	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
+
+"HttpClient-3-SelectorManager" #81 [4032] daemon prio=5 os_prio=0 cpu=49.54ms elapsed=3063.11s tid=0x00007f195c3fa5a0 nid=4032 runnable  [0x00007f19a12fe000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.ch.EPoll.wait(java.base@21.0.13/Native Method)
 	at sun.nio.ch.EPollSelectorImpl.doSelect(java.base@21.0.13/EPollSelectorImpl.java:121)
 	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@21.0.13/SelectorImpl.java:130)
-	- locked <0x00000007f8600350> (a sun.nio.ch.Util$2)
-	- locked <0x00000007f8600300> (a sun.nio.ch.EPollSelectorImpl)
+	- locked <0x00000006aa0d6820> (a sun.nio.ch.Util$2)
+	- locked <0x00000006aa0d67d0> (a sun.nio.ch.EPollSelectorImpl)
 	at sun.nio.ch.SelectorImpl.select(java.base@21.0.13/SelectorImpl.java:142)
 	at jdk.internal.net.http.HttpClientImpl$SelectorManager.run(java.net.http@21.0.13/HttpClientImpl.java:1376)
 
-"LanServerPinger #1" #99 [4134] daemon prio=5 os_prio=0 cpu=293.64ms elapsed=3069.01s tid=0x00007f6eb0754ce0 nid=4134 waiting on condition  [0x00007f6ef032e000]
+"LanServerPinger #1" #95 [4139] daemon prio=5 os_prio=0 cpu=293.73ms elapsed=3043.22s tid=0x00007f195cb7ef80 nid=4139 waiting on condition  [0x00007f19a0b2e000]
    java.lang.Thread.State: TIMED_WAITING (sleeping)
 	at java.lang.Thread.sleep0(java.base@21.0.13/Native Method)
 	at java.lang.Thread.sleep(java.base@21.0.13/Thread.java:509)
 	at net.minecraft.client.server.LanServerPinger.run(minecraft@1.21.1/LanServerPinger.java:52)
 
-"HttpClient-4-SelectorManager" #100 [4135] daemon prio=5 os_prio=0 cpu=76.57ms elapsed=3068.88s tid=0x00007f6eb076caf0 nid=4135 runnable  [0x00007f6ef022e000]
+"HttpClient-4-SelectorManager" #96 [4140] daemon prio=5 os_prio=0 cpu=72.71ms elapsed=3043.13s tid=0x00007f195cb96580 nid=4140 runnable  [0x00007f19a0a2e000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.ch.EPoll.wait(java.base@21.0.13/Native Method)
 	at sun.nio.ch.EPollSelectorImpl.doSelect(java.base@21.0.13/EPollSelectorImpl.java:121)
 	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@21.0.13/SelectorImpl.java:130)
-	- locked <0x00000006b8c00110> (a sun.nio.ch.Util$2)
-	- locked <0x00000006b8c000c0> (a sun.nio.ch.EPollSelectorImpl)
+	- locked <0x00000006c29aa3b0> (a sun.nio.ch.Util$2)
+	- locked <0x00000006c29aa360> (a sun.nio.ch.EPollSelectorImpl)
 	at sun.nio.ch.SelectorImpl.select(java.base@21.0.13/SelectorImpl.java:142)
 	at jdk.internal.net.http.HttpClientImpl$SelectorManager.run(java.net.http@21.0.13/HttpClientImpl.java:1376)
 
-"iron431-patreon-service" #101 [4136] daemon prio=5 os_prio=0 cpu=7.56ms elapsed=3068.88s tid=0x00007f6eb0770250 nid=4136 waiting on condition  [0x00007f6ef012e000]
+"iron431-patreon-service" #97 [4141] daemon prio=5 os_prio=0 cpu=7.50ms elapsed=3043.12s tid=0x00007f195cb99d20 nid=4141 waiting on condition  [0x00007f19a092e000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000006cc8000b8> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006c29aa480> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(java.base@21.0.13/AbstractQueuedSynchronizer.java:1797)
 	at java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(java.base@21.0.13/ScheduledThreadPoolExecutor.java:1182)
@@ -343,30 +344,30 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"HttpClient-5-SelectorManager" #104 [4147] daemon prio=5 os_prio=0 cpu=36.38ms elapsed=3068.78s tid=0x00007f6eb07e2990 nid=4147 runnable  [0x00007f6e7f5fa000]
+"HttpClient-5-SelectorManager" #100 [4148] daemon prio=5 os_prio=0 cpu=44.00ms elapsed=3043.03s tid=0x00007f195cc09100 nid=4148 runnable  [0x00007f192fdfd000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.ch.EPoll.wait(java.base@21.0.13/Native Method)
 	at sun.nio.ch.EPollSelectorImpl.doSelect(java.base@21.0.13/EPollSelectorImpl.java:121)
 	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@21.0.13/SelectorImpl.java:130)
-	- locked <0x00000006b8c00388> (a sun.nio.ch.Util$2)
-	- locked <0x00000006b8c00338> (a sun.nio.ch.EPollSelectorImpl)
+	- locked <0x00000006c5d31530> (a sun.nio.ch.Util$2)
+	- locked <0x00000006c5d314e0> (a sun.nio.ch.EPollSelectorImpl)
 	at sun.nio.ch.SelectorImpl.select(java.base@21.0.13/SelectorImpl.java:142)
 	at jdk.internal.net.http.HttpClientImpl$SelectorManager.run(java.net.http@21.0.13/HttpClientImpl.java:1376)
 
-"HttpClient-6-SelectorManager" #105 [4148] daemon prio=5 os_prio=0 cpu=37.86ms elapsed=3068.77s tid=0x00007f6eb07f8560 nid=4148 runnable  [0x00007f6e7f4fa000]
+"HttpClient-6-SelectorManager" #101 [4149] daemon prio=5 os_prio=0 cpu=44.90ms elapsed=3043.01s tid=0x00007f195cc1b060 nid=4149 runnable  [0x00007f192fcfd000]
    java.lang.Thread.State: RUNNABLE
 	at sun.nio.ch.EPoll.wait(java.base@21.0.13/Native Method)
 	at sun.nio.ch.EPollSelectorImpl.doSelect(java.base@21.0.13/EPollSelectorImpl.java:121)
 	at sun.nio.ch.SelectorImpl.lockAndDoSelect(java.base@21.0.13/SelectorImpl.java:130)
-	- locked <0x00000006cc800270> (a sun.nio.ch.Util$2)
-	- locked <0x00000006cc800220> (a sun.nio.ch.EPollSelectorImpl)
+	- locked <0x00000006c46bd960> (a sun.nio.ch.Util$2)
+	- locked <0x00000006c46bd910> (a sun.nio.ch.EPollSelectorImpl)
 	at sun.nio.ch.SelectorImpl.select(java.base@21.0.13/SelectorImpl.java:142)
 	at jdk.internal.net.http.HttpClientImpl$SelectorManager.run(java.net.http@21.0.13/HttpClientImpl.java:1376)
 
-"Cleaner-0" #106 [4149] daemon prio=8 os_prio=0 cpu=3.91ms elapsed=3068.66s tid=0x00007f6eb08676d0 nid=4149 waiting on condition  [0x00007f6e7f3fa000]
+"Cleaner-0" #102 [4150] daemon prio=8 os_prio=0 cpu=3.79ms elapsed=3042.83s tid=0x00007f195cc730a0 nid=4150 waiting on condition  [0x00007f192fbfd000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000006b8c00458> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006c5d31600> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:269)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(java.base@21.0.13/AbstractQueuedSynchronizer.java:1886)
 	at java.lang.ref.ReferenceQueue.await(java.base@21.0.13/ReferenceQueue.java:71)
@@ -377,22 +378,22 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 	at jdk.internal.misc.InnocuousThread.run(java.base@21.0.13/InnocuousThread.java:186)
 
-"Worker-Main-5" #229 [7204] daemon prio=4 os_prio=0 cpu=529196.91ms elapsed=2397.16s tid=0x00007f6eb0f6e310 nid=7204 waiting on condition  [0x00007f6ef24fe000]
+"Worker-Main-7" #231 [7189] daemon prio=4 os_prio=0 cpu=511539.87ms elapsed=2356.51s tid=0x00007f198835a830 nid=7189 waiting on condition  [0x00007f19a0e2e000]
    java.lang.Thread.State: TIMED_WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x000000069d3e5648> (a java.util.concurrent.ForkJoinPool)
+	- parking to wait for  <0x00000006867dfc50> (a java.util.concurrent.ForkJoinPool)
 	at java.util.concurrent.locks.LockSupport.parkUntil(java.base@21.0.13/LockSupport.java:449)
 	at java.util.concurrent.ForkJoinPool.awaitWork(java.base@21.0.13/ForkJoinPool.java:1891)
 	at java.util.concurrent.ForkJoinPool.runWorker(java.base@21.0.13/ForkJoinPool.java:1809)
 	at java.util.concurrent.ForkJoinWorkerThread.run(java.base@21.0.13/ForkJoinWorkerThread.java:188)
 
-"Attach Listener" #290 [8473] daemon prio=9 os_prio=0 cpu=40.15ms elapsed=2126.01s tid=0x00007f6edc3609e0 nid=8473 waiting on condition  [0x0000000000000000]
+"Attach Listener" #288 [8385] daemon prio=9 os_prio=0 cpu=37.21ms elapsed=2097.88s tid=0x00007f198c1939f0 nid=8385 waiting on condition  [0x0000000000000000]
    java.lang.Thread.State: RUNNABLE
 
-"Uranus Pathfinding Worker #0" #294 [8592] daemon prio=10 os_prio=0 cpu=11753.77ms elapsed=2091.32s tid=0x00007f6eb0c8ef60 nid=8592 waiting on condition  [0x00007f6f4487a000]
+"Uranus Pathfinding Worker #0" #292 [8508] daemon prio=10 os_prio=0 cpu=22668.27ms elapsed=2063.20s tid=0x00007f195c6a3140 nid=8508 waiting on condition  [0x00007f19f4e85000]
    java.lang.Thread.State: WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000006cb127500> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006c2ae77e0> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.park(java.base@21.0.13/LockSupport.java:371)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(java.base@21.0.13/AbstractQueuedSynchronizer.java:519)
 	at java.util.concurrent.ForkJoinPool.unmanagedBlock(java.base@21.0.13/ForkJoinPool.java:3780)
@@ -406,10 +407,10 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"OROR-dialogue-journal" #506 [12661] daemon prio=5 os_prio=0 cpu=4.81ms elapsed=890.11s tid=0x00007f6eb0f92670 nid=12661 waiting on condition  [0x00007f6f44231000]
+"OROR-dialogue-journal" #513 [12556] daemon prio=5 os_prio=0 cpu=5.70ms elapsed=873.18s tid=0x00007f195d366f70 nid=12556 waiting on condition  [0x00007f19a102e000]
    java.lang.Thread.State: WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000006cb000230> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006b4033008> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.park(java.base@21.0.13/LockSupport.java:371)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(java.base@21.0.13/AbstractQueuedSynchronizer.java:519)
 	at java.util.concurrent.ForkJoinPool.unmanagedBlock(java.base@21.0.13/ForkJoinPool.java:3780)
@@ -417,14 +418,14 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(java.base@21.0.13/AbstractQueuedSynchronizer.java:1746)
 	at java.util.concurrent.ArrayBlockingQueue.take(java.base@21.0.13/ArrayBlockingQueue.java:420)
 	at jp.oror.reborn.DialogueArchive.lambda$static$0(oror_supreme_bosses@0.17.39-059-preview/DialogueArchive.java:18)
-	at jp.oror.reborn.DialogueArchive$$Lambda/0x00007f6efc50db18.run(oror_supreme_bosses@0.17.39-059-preview/Unknown Source)
+	at jp.oror.reborn.DialogueArchive$$Lambda/0x00007f19ac4fdfb8.run(oror_supreme_bosses@0.17.39-059-preview/Unknown Source)
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"OROR-conversation" #548 [13396] daemon prio=5 os_prio=0 cpu=3.42ms elapsed=669.61s tid=0x00007f6eb1630120 nid=13396 waiting on condition  [0x00007f6ef12fe000]
+"OROR-conversation" #552 [13251] daemon prio=5 os_prio=0 cpu=3.54ms elapsed=660.86s tid=0x00007f195c645d90 nid=13251 waiting on condition  [0x00007f19a25fe000]
    java.lang.Thread.State: WAITING (parking)
 	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
-	- parking to wait for  <0x00000006c5f4b7e8> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+	- parking to wait for  <0x00000006d9ddac60> (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
 	at java.util.concurrent.locks.LockSupport.park(java.base@21.0.13/LockSupport.java:371)
 	at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(java.base@21.0.13/AbstractQueuedSynchronizer.java:519)
 	at java.util.concurrent.ForkJoinPool.unmanagedBlock(java.base@21.0.13/ForkJoinPool.java:3780)
@@ -437,39 +438,69 @@ _java_thread_list=0x00007f6ee008f6b0, length=43, elements={
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"Keep-Alive-Timer" #681 [15584] daemon prio=8 os_prio=0 cpu=0.09ms elapsed=2.25s tid=0x00007f6ee084aee0 nid=15584 waiting on condition  [0x00007f6f4467a000]
-   java.lang.Thread.State: TIMED_WAITING (sleeping)
-	at java.lang.Thread.sleep0(java.base@21.0.13/Native Method)
-	at java.lang.Thread.sleep(java.base@21.0.13/Thread.java:509)
-	at sun.net.www.http.KeepAliveCache.run(java.base@21.0.13/KeepAliveCache.java:238)
+"HttpClient-4-Worker-19" #668 [15326] daemon prio=5 os_prio=0 cpu=4.72ms elapsed=41.99s tid=0x00007f1951d657b0 nid=15326 waiting on condition  [0x00007f19a18fe000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
+	- parking to wait for  <0x00000006c5d31848> (a java.util.concurrent.SynchronousQueue$Transferer)
+	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:410)
+	at java.util.concurrent.LinkedTransferQueue$DualNode.await(java.base@21.0.13/LinkedTransferQueue.java:452)
+	at java.util.concurrent.SynchronousQueue$Transferer.xferLifo(java.base@21.0.13/SynchronousQueue.java:194)
+	at java.util.concurrent.SynchronousQueue.xfer(java.base@21.0.13/SynchronousQueue.java:235)
+	at java.util.concurrent.SynchronousQueue.poll(java.base@21.0.13/SynchronousQueue.java:338)
+	at java.util.concurrent.ThreadPoolExecutor.getTask(java.base@21.0.13/ThreadPoolExecutor.java:1069)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@21.0.13/ThreadPoolExecutor.java:1130)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@21.0.13/ThreadPoolExecutor.java:642)
 	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
 	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
-	at jdk.internal.misc.InnocuousThread.run(java.base@21.0.13/InnocuousThread.java:186)
 
-"G1 Refine#2" os_prio=0 cpu=42.89ms elapsed=2769.88s tid=0x00007f6f4005e6c0 nid=5569 runnable  
+"HttpClient-4-Worker-20" #669 [15327] daemon prio=5 os_prio=0 cpu=0.18ms elapsed=41.97s tid=0x00007f19445db2c0 nid=15327 waiting on condition  [0x00007f19f4d85000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
+	- parking to wait for  <0x00000006c5d31848> (a java.util.concurrent.SynchronousQueue$Transferer)
+	at java.util.concurrent.locks.LockSupport.parkNanos(java.base@21.0.13/LockSupport.java:410)
+	at java.util.concurrent.LinkedTransferQueue$DualNode.await(java.base@21.0.13/LinkedTransferQueue.java:452)
+	at java.util.concurrent.SynchronousQueue$Transferer.xferLifo(java.base@21.0.13/SynchronousQueue.java:194)
+	at java.util.concurrent.SynchronousQueue.xfer(java.base@21.0.13/SynchronousQueue.java:235)
+	at java.util.concurrent.SynchronousQueue.poll(java.base@21.0.13/SynchronousQueue.java:338)
+	at java.util.concurrent.ThreadPoolExecutor.getTask(java.base@21.0.13/ThreadPoolExecutor.java:1069)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(java.base@21.0.13/ThreadPoolExecutor.java:1130)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(java.base@21.0.13/ThreadPoolExecutor.java:642)
+	at java.lang.Thread.runWith(java.base@21.0.13/Thread.java:1596)
+	at java.lang.Thread.run(java.base@21.0.13/Thread.java:1583)
 
-"G1 Refine#1" os_prio=0 cpu=92.02ms elapsed=2769.88s tid=0x00007f6f4005dd30 nid=5568 runnable  
+"ForkJoinPool.commonPool-worker-14" #670 [15328] daemon prio=5 os_prio=0 cpu=0.18ms elapsed=41.92s tid=0x00007f19742cace0 nid=15328 waiting on condition  [0x00007f19f4c85000]
+   java.lang.Thread.State: TIMED_WAITING (parking)
+	at jdk.internal.misc.Unsafe.park(java.base@21.0.13/Native Method)
+	- parking to wait for  <0x00000006808db1f0> (a java.util.concurrent.ForkJoinPool)
+	at java.util.concurrent.locks.LockSupport.parkUntil(java.base@21.0.13/LockSupport.java:449)
+	at java.util.concurrent.ForkJoinPool.awaitWork(java.base@21.0.13/ForkJoinPool.java:1891)
+	at java.util.concurrent.ForkJoinPool.runWorker(java.base@21.0.13/ForkJoinPool.java:1809)
+	at java.util.concurrent.ForkJoinWorkerThread.run(java.base@21.0.13/ForkJoinWorkerThread.java:188)
 
-os_prio=0 cpu=14151.85ms elapsed=3126.93s tid=0x00007f6f74285da0 nid=3802 runnable  
-"GC Thread#3" os_prio=0 cpu=16712.19ms elapsed=3127.03s tid=0x00007f6eec007f80 nid=3800 runnable  
+"G1 Refine#2" os_prio=0 cpu=35.91ms elapsed=2742.75s tid=0x00007f19f005f530 nid=5487 runnable  
 
-"GC Thread#2" os_prio=0 cpu=17017.44ms elapsed=3127.03s tid=0x00007f6eec007460 nid=3799 runnable  
+"G1 Refine#1" os_prio=0 cpu=170.83ms elapsed=2743.47s tid=0x00007f19f031a080 nid=5482 runnable  
 
-"GC Thread#1" os_prio=0 cpu=16860.97ms elapsed=3127.03s tid=0x00007f6eec006940 nid=3798 runnable  
+os_prio=0 cpu=14153.91ms elapsed=3099.59s tid=0x00007f1a242a9280 nid=3801 runnable  
+"GC Thread#3" os_prio=0 cpu=17299.61ms elapsed=3099.68s tid=0x00007f199c007f80 nid=3799 runnable  
 
-"VM Thread" os_prio=0 cpu=714.52ms elapsed=3127.30s tid=0x00007f6f740d2140 nid=3783 runnable  
+"GC Thread#2" os_prio=0 cpu=17188.59ms elapsed=3099.68s tid=0x00007f199c007460 nid=3798 runnable  
 
-"VM Periodic Task Thread" os_prio=0 cpu=970.61ms elapsed=3127.31s tid=0x00007f6f740c0950 nid=3782 waiting on condition  
+"GC Thread#1" os_prio=0 cpu=17186.22ms elapsed=3099.68s tid=0x00007f199c006940 nid=3797 runnable  
 
-"G1 Service" os_prio=0 cpu=180.29ms elapsed=3127.32s tid=0x00007f6f740af510 nid=3781 runnable  
+"VM Thread" os_prio=0 cpu=698.15ms elapsed=3099.96s tid=0x00007f1a240d2160 nid=3786 runnable  
 
-"G1 Refine#0" os_prio=0 cpu=1699.01ms elapsed=3127.32s tid=0x00007f6f740ae550 nid=3780 runnable  
+"VM Periodic Task Thread" os_prio=0 cpu=961.00ms elapsed=3099.97s tid=0x00007f1a240c0950 nid=3785 waiting on condition  
 
-"G1 Conc#0" os_prio=0 cpu=211956.44ms elapsed=3127.32s tid=0x00007f6f740643c0 nid=3779 runnable  
+"G1 Service" os_prio=0 cpu=190.39ms elapsed=3099.97s tid=0x00007f1a240af510 nid=3782 runnable  
 
-"G1 Main Marker" os_prio=0 cpu=306.15ms elapsed=3127.32s tid=0x00007f6f74063420 nid=3778 runnable  
+"G1 Refine#0" os_prio=0 cpu=1640.35ms elapsed=3099.97s tid=0x00007f1a240ae550 nid=3781 runnable  
 
-"GC Thread#0" os_prio=0 cpu=16899.57ms elapsed=3127.32s tid=0x00007f6f74055e20 nid=3777 runnable  
+"G1 Conc#0" os_prio=0 cpu=192716.28ms elapsed=3099.97s tid=0x00007f1a240643c0 nid=3780 runnable  
 
-JNI global refs: 181, weak refs: 50
+"G1 Main Marker" os_prio=0 cpu=223.52ms elapsed=3099.97s tid=0x00007f1a24063420 nid=3779 runnable  
+
+"GC Thread#0" os_prio=0 cpu=17284.44ms elapsed=3099.97s tid=0x00007f1a24055e20 nid=3778 runnable  
+
+JNI global refs: 178, weak refs: 50
 
