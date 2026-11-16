@@ -34,7 +34,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
  * <li>its depth by how good it is (MobProwess: its level, experience, strength, what it is), 40 for a fresh zombie to
  * 240 for a god, times its own gift (0.85 to 1.2): no two alike;</li>
  * <li>a dodge takes a quarter to an eighth of it (MobDodge), a parry a twentieth of the blow, a block three tenths of
- * it, a blow of its own 6% to 3% of its depth;</li>
+ * it, a blow of its own 3% to 1.5% of its depth (nothing while winded);</li>
  * <li>it comes back after a second's rest, full in 13 seconds for the weakest down to 7 for the best;</li>
  * <li>under a tenth it is winded until it is back to a third: no dodge, no guard raised, slowed and its blows weakened
  * by a third; hunched and sweating, breathing hard (seen and heard), an opening for whoever fights it.</li>
@@ -113,25 +113,35 @@ public final class MobStamina {
         if (p.winded || p.value < cost) {
             return false;
         }
-        take(m, p, cost);
+        take(m, p, cost, true);
         return true;
     }
 
-    /** Takes what it can of a cost (a guard's upkeep, a blow's price): it may wind the mob. */
+    /** Takes what it can of a cost: it may wind the mob, and its stamina rests a second before it comes back. */
     public static void drain(Mob m, float cost) {
-        take(m, pool(m), cost);
+        take(m, pool(m), cost, true);
+    }
+
+    /**
+     * (CI 68) A light cost, its own blow or its guard held up: taken without breaking its rest. Every cost stopping its
+     * stamina coming back, a mob striking every second never got its wind back, winded for as long as it fought.
+     */
+    public static void tire(Mob m, float cost) {
+        take(m, pool(m), cost, false);
     }
 
     /** Empties it (a guard broken under a blow it could not pay for): the mob is winded. */
     public static void empty(Mob m) {
         Pool p = pool(m);
-        take(m, p, p.value);
+        take(m, p, p.value, true);
     }
 
-    private static void take(Mob m, Pool p, float cost) {
+    private static void take(Mob m, Pool p, float cost, boolean rest) {
         long now = m.level().getGameTime();
         p.value = Math.max(0F, p.value - Math.max(0F, cost));
-        p.spentAt = now;
+        if (rest) {
+            p.spentAt = now;
+        }
         p.shownAt = now;
         if (!p.winded && p.value < p.max * 0.1F) {
             p.winded = true;
@@ -207,10 +217,13 @@ public final class MobStamina {
         }
         Pool p = pool(attacker);
         if (p.winded) {
+            // winded: its blow a third weaker, and nothing more taken from it (it would never get its wind back)
             e.setAmount(e.getAmount() * 0.67F);
+            return;
         }
-        // (059h) 6% of its depth for the clumsiest, 3% for the best
-        drain(attacker, p.max * MobProwess.lerp(MobProwess.of(attacker), 0.06F, 0.03F));
+        // (059h) 3% of its depth for the clumsiest, 1.5% for the best (CI 68: at 6% a zombie striking every second spent
+        // as fast as it got its wind back)
+        tire(attacker, p.max * MobProwess.lerp(MobProwess.of(attacker), 0.03F, 0.015F));
     }
 
     private static void count(LivingEntity m, String key) {

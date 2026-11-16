@@ -125,6 +125,7 @@ public final class MobDodge {
         Vec3 to = from.subtract(m.position()).multiply(1, 0, 1);
         Vec3 facing = m.getLookAngle().multiply(1, 0, 1);
         if (to.lengthSqr() < 1.0E-6 || facing.lengthSqr() > 1.0E-6 && to.normalize().dot(facing.normalize()) < (shot ? -0.35 : -0.1)) {
+            note(m, "OrorDodgeBehind");
             return false;   // from behind: it never saw it
         }
         // it learns from every blow it meets, slipped or not
@@ -134,7 +135,11 @@ public final class MobDodge {
             return false;
         }
         Vec3 way = pick(sl, m, to.normalize().scale(-1));
-        if (way == null || !MobStamina.spend(m, cost(m))) {
+        if (way == null) {
+            note(m, "OrorDodgeNoRoom");
+            return false;
+        }
+        if (!MobStamina.spend(m, cost(m))) {
             return false;
         }
         step(sl, m, way, to.normalize().scale(-1), attacker, shot ? direct : null, false);
@@ -250,7 +255,9 @@ public final class MobDodge {
         if (!sl.noCollision(m, there)) {
             return false;
         }
-        if (m.isNoGravity() || m instanceof net.minecraft.world.entity.FlyingMob) {
+        // (CI 68) in the air already (a god hovering, a mob in a leap) there is no ground to keep to: Ferdinand, struck 28
+        // times hovering over the floor, never had room to dodge
+        if (!m.onGround() || m.isNoGravity() || m instanceof net.minecraft.world.entity.FlyingMob) {
             return true;
         }
         BlockPos foot = BlockPos.containing(m.getX() + by.x, m.getY() - 0.2, m.getZ() + by.z);
@@ -302,9 +309,14 @@ public final class MobDodge {
         TechniqueShow.send(m, toLeft ? "dodge_l" : "dodge_r", 0, 1, 10, foe == null ? -1 : foe.getId());
     }
 
-    /** For the checks: dodges (blows, shots landing, shots seen coming). */
+    private static void note(Mob m, String key) {
+        m.getPersistentData().putInt(key, m.getPersistentData().getInt(key) + 1);
+    }
+
+    /** For the checks: dodges (blows, shots landing, shots seen coming), and blows it could not dodge (behind it, no room). */
     public static String tally(LivingEntity m) {
         CompoundTag d = m.getPersistentData();
-        return d.getInt("OrorDodges") + " (" + d.getInt("OrorDodgedBlows") + "/" + d.getInt("OrorDodgedShots") + "/" + d.getInt("OrorDodgedSeen") + ")";
+        return d.getInt("OrorDodges") + " (" + d.getInt("OrorDodgedBlows") + "/" + d.getInt("OrorDodgedShots") + "/" + d.getInt("OrorDodgedSeen")
+            + ") behind " + d.getInt("OrorDodgeBehind") + " noRoom " + d.getInt("OrorDodgeNoRoom");
     }
 }

@@ -44,7 +44,8 @@ import org.slf4j.LoggerFactory;
  * times it was winded. (059h) Two vindicators alike but for their experience (a fresh one, a veteran of 20,000). Pass:
  * four of the six struck dodge at least one blow and two at least twice, a dodge carries a mob at least 0.8 blocks on
  * average, at least one arrow is seen coming and flies past, stamina is spent (some mob below 70%), some mob is winded,
- * and the veteran is the better dodger by 0.3 of prowess and has the deeper stamina.
+ * the veteran is the better dodger by 0.3 of prowess and has the deeper stamina, and the zombie, its stamina emptied
+ * half way, is winded, dodges nothing while winded and gets its wind back. (CI 68) Each lane 56 blocks from the next.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class DodgeTest {
@@ -66,7 +67,7 @@ public final class DodgeTest {
         Mob mob;
         Tester tester;
         boolean archery, veteran, fresh;
-        int blows, arrows, dodgesSeenBefore, lastDodges;
+        int blows, arrows, dodgesSeenBefore, lastDodges, windedDodgesFrom;
         float dealt, minStamina = 1F;
         Vec3 dodgeFrom, prevPos;
         long dodgeAt = -1;
@@ -83,9 +84,13 @@ public final class DodgeTest {
         final List<Lane> lanes = new ArrayList<>();
         String phase = "load";
         long phaseAt;
+        boolean forcedWinded;
+        int windedDodges;
+        long recoveredAt = -1;
     }
 
     private static Run run;
+    private static final int LANES = 7, SPACING = 56;
 
     private DodgeTest() {
     }
@@ -103,11 +108,16 @@ public final class DodgeTest {
         Run r = new Run();
         r.level = src.getServer().overworld();
         r.origin = BlockPos.containing(src.getPosition()).offset(2600, 0, 3400);
-        for (int dx = -3; dx <= 3; dx++) {
-            for (int dz = -2; dz <= 2; dz++) {
-                ChunkPos p = new ChunkPos((r.origin.getX() >> 4) + dx, (r.origin.getZ() >> 4) + dz);
-                if (r.level.setChunkForced(p.x, p.z, true)) {
-                    r.forced.add(p);
+        // (CI 68) each lane 56 blocks from the next, out of one another's way: the god and the kingdom's guard had struck
+        // down the lanes beside them (the wither skeleton, the archers' skeleton)
+        for (int lane = 0; lane < LANES; lane++) {
+            BlockPos at = r.origin.offset(lane * SPACING, 0, 0);
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    ChunkPos p = new ChunkPos((at.getX() >> 4) + dx, (at.getZ() >> 4) + dz);
+                    if (!r.forced.contains(p) && r.level.setChunkForced(p.x, p.z, true)) {
+                        r.forced.add(p);
+                    }
                 }
             }
         }
@@ -137,13 +147,12 @@ public final class DodgeTest {
                 if (t < 40) {
                     return;
                 }
-                BlockPos a = floor(r.level, r.origin);
                 // (059h) two vindicators alike but for their experience: a fresh one and a veteran (MobMind's 20,000)
                 String[][] who = {{"minecraft:zombie", ""}, {"minecraft:vindicator", "iron_axe"}, {"minecraft:vindicator", "iron_axe", "veteran"},
                     {"minecraft:wither_skeleton", "stone_sword"}, {"oror_supreme_bosses:kingdom_guard", "keep"}, {"oror_supreme_bosses:ferdinand", "keep"},
                     {"minecraft:skeleton", "iron_sword"}};
                 for (int i = 0; i < who.length; i++) {
-                    BlockPos spot = a.offset(-48 + i * 16, 0, 0);
+                    BlockPos spot = floor(r.level, r.origin.offset(i * SPACING, 0, 0));
                     EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(ResourceLocation.parse(who[i][0])).orElse(null);
                     Entity en = type == null ? null : type.create(r.level);
                     if (!(en instanceof Mob m)) {
@@ -217,6 +226,19 @@ public final class DodgeTest {
                         l.dodgeAt = -1;
                     }
                     m.setTarget(l.tester);
+                    // (CI 68: no mob ran itself out in fifteen seconds) the zombie's stamina emptied half way: it must be
+                    // winded, dodge nothing while winded, and get its wind back
+                    if (l.id.equals("zombie")) {
+                        if (t == 120) {
+                            MobStamina.drain(m, MobStamina.max(m));
+                            l.windedDodgesFrom = m.getPersistentData().getInt("OrorDodges");
+                            r.forcedWinded = MobStamina.winded(m);
+                        } else if (t > 120 && MobStamina.winded(m)) {
+                            r.windedDodges = m.getPersistentData().getInt("OrorDodges") - l.windedDodgesFrom;
+                        } else if (t > 120 && r.recoveredAt < 0) {
+                            r.recoveredAt = t;
+                        }
+                    }
                     if (l.archery) {
                         // shot at from ten blocks every second: an arrow on course for its chest
                         l.tester.moveTo(m.getX(), m.getY(), m.getZ() + 10.0, 180F, 0F);
@@ -263,7 +285,7 @@ public final class DodgeTest {
     private static BlockPos floor(ServerLevel level, BlockPos at) {
         level.getChunk(at);
         int y = Math.max(level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, at.getX(), at.getZ()), level.getSeaLevel() + 1);
-        for (int dx = -58; dx <= 58; dx++) {
+        for (int dx = -12; dx <= 12; dx++) {
             for (int dz = -10; dz <= 14; dz++) {
                 level.setBlock(new BlockPos(at.getX() + dx, y - 1, at.getZ() + dz), Blocks.STONE.defaultBlockState(), 2);
                 for (int h = 0; h < 12; h++) {
@@ -319,12 +341,14 @@ public final class DodgeTest {
             }
         }
         boolean seasoned = vetP >= 0 && freshP >= 0 && vetP - freshP >= 0.3F && vetMax > freshMax;
+        boolean windOk = r.forcedWinded && r.windedDodges == 0 && r.recoveredAt > 0;
         boolean pass = error.isEmpty() && meleeLanes >= 6 && dodgingMelee >= 4 && twice >= 2 && avgCarry >= 0.8 && seen >= 1 && minStamina < 0.7F
-            && winded >= 1 && seasoned;
+            && winded >= 1 && seasoned && windOk;
         out.append(String.format(Locale.ROOT, "],\"dodgingMelee\":%d,\"twice\":%d,\"avgCarry\":%.2f,\"arrowsPassed\":%d,\"minStamina\":%.2f,\"winded\":%d,"
             + "\"veteran\":{\"prowess\":%.2f,\"stamina\":%.0f},\"fresh\":{\"prowess\":%.2f,\"stamina\":%.0f},\"seasoned\":%b,"
+            + "\"emptied\":{\"winded\":%b,\"dodgesWinded\":%d,\"windBackAt\":%d},"
             + "\"error\":\"%s\",\"pass\":%b}", dodgingMelee, twice, avgCarry, seen, minStamina, winded, vetP, vetMax, freshP, freshMax, seasoned,
-            error.replace('"', '\''), pass));
+            r.forcedWinded, r.windedDodges, r.recoveredAt, error.replace('"', '\''), pass));
         LOG.info(out.toString());
         for (Entity en : r.made) {
             if (!en.isRemoved()) {

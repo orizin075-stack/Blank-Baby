@@ -229,7 +229,7 @@ public final class MobGuard {
             g.remaining--;
             g.age++;
             // (059h) the guard held up costs its stamina (MobStamina, the one store for its guard, its dodges and its blows)
-            MobStamina.drain(m, 0.08F);
+            MobStamina.tire(m, 0.08F);
             return;
         }
         if (g.delay > 0) {
