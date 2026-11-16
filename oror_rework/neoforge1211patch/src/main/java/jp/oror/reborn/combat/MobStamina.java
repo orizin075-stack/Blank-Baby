@@ -36,8 +36,8 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
  * <li>a dodge takes a quarter to an eighth of it (MobDodge), a parry a twentieth of the blow, a block three tenths of
  * it, a blow of its own 3% to 1.5% of its depth (nothing while winded);</li>
  * <li>it comes back after a second's rest, full in 13 seconds for the weakest down to 7 for the best;</li>
- * <li>under a tenth it is winded until it is back to a third: no dodge, no guard raised, slowed and its blows weakened
- * by a third; hunched and sweating, breathing hard (seen and heard), an opening for whoever fights it.</li>
+ * <li>under a tenth it is winded until it is back to a third: no dodge, no guard raised, slowed;
+ * hunched and sweating, breathing hard (seen and heard), an opening for whoever fights it.</li>
  * </ul>
  * Its stamina is shown over a mob whose store is not full (StaminaBars, on the client): a thin bar over its head, yellow,
  * orange when low, flashing red when winded.
@@ -208,7 +208,7 @@ public final class MobStamina {
         }
     }
 
-    /** A mob's own blow (one dodged or parried too: it swung all the same): its price taken; a winded mob's blow weakened by a third. */
+    /** A mob's own blow (one dodged or parried too: it swung all the same): its price taken. */
     @SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
     public static void blow(LivingIncomingDamageEvent e) {
         if (!(e.getSource().getEntity() instanceof Mob attacker) || attacker.level().isClientSide || e.getSource().getDirectEntity() != attacker
@@ -217,8 +217,9 @@ public final class MobStamina {
         }
         Pool p = pool(attacker);
         if (p.winded) {
-            // winded: its blow a third weaker, and nothing more taken from it (it would never get its wind back)
-            e.setAmount(e.getAmount() * 0.67F);
+            // winded: nothing more taken from it (it would never get its wind back). (CI 68) Its blow is not weakened: so
+            // weakened, a village's fighters, winded by dodging their foes' blows, no longer beat the armoured fighters of
+            // the mod's own trials in the blows they are given
             return;
         }
         // (059h) 3% of its depth for the clumsiest, 1.5% for the best (CI 68: at 6% a zombie striking every second spent

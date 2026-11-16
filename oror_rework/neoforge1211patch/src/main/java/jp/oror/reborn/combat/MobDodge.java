@@ -106,7 +106,7 @@ public final class MobDodge {
         }
         Entity direct = src.getDirectEntity();
         LivingEntity attacker = src.getEntity() instanceof LivingEntity l ? l : null;
-        if (attacker == m || direct == m) {
+        if (attacker == m || direct == m || attacker != null && friendly(attacker, m)) {
             return false;
         }
         boolean shot = direct instanceof Projectile;
@@ -214,7 +214,24 @@ public final class MobDodge {
     }
 
     private static boolean allied(Entity owner, Mob m) {
-        return owner instanceof LivingEntity o && (o == m || o.isAlliedTo(m) || m.isAlliedTo(o));
+        return owner instanceof LivingEntity o && (o == m || friendly(o, m));
+    }
+
+    /**
+     * (CI 68) A blow from its own side is no blow to dodge (the village's and the kingdom's own ways meet it): a mob on its
+     * team, the village's folk (its villagers, golems and guards) one of another, the royals one of another. Dodged, a
+     * villager struck by mistake by one of his own village was "struck" in the mod's own trial of friendly blows.
+     */
+    static boolean friendly(LivingEntity a, Mob m) {
+        if (a.isAlliedTo(m) || m.isAlliedTo(a)) {
+            return true;
+        }
+        return folk(a) && folk(m) || a instanceof RoyalMob && m instanceof RoyalMob;
+    }
+
+    private static boolean folk(Entity e) {
+        return e instanceof net.minecraft.world.entity.npc.AbstractVillager || e instanceof net.minecraft.world.entity.animal.IronGolem
+            || net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getNamespace().equals("guardvillagers");
     }
 
     // ------------------------------------------------------------------------------------------------ the step
