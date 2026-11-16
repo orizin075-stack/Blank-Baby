@@ -1100,14 +1100,7 @@ public final class RoyalPilots {
         // (059g, CI 43) rolled back past 42 (was 50) and banked to 35 at most (was 45): banked to 62 in its turn onto the
         // final leg, the CI aircraft sank thirty blocks and slowed to 1.7, and swung 120 blocks wide into the hills
         // (CI 44 to 58: held to 35 the landings took too long, one in five to three in five down in time; back to 45 and 50)
-        if (!v.onGround() && Math.abs(roll) > 50) {
-            return new boolean[]{roll > 0, roll < 0};
-        }
-        boolean turn = !v.onGround() && agl > 15 && Math.abs(yawErr) > 12 && Math.abs(roll) < (agl > 40 ? 45 : 25);
-        // (CI 61) the wings levelled when it has no turn to make (or is low): left alone, Superb Warfare's aircraft holds its
-        // bank, and the CI aircraft flew its whole approach banked 13 to 30 degrees, slid 23 blocks off the runway's line
-        // and flew into a hill beside the cleared ground. The bank's own roll runs on, so the key is let go as the roll
-        // three ticks on will be under 6 (a roll rate kept per tick, as this is asked more than once a tick)
+        // (CI 61) the roll rate, kept per tick (this is asked more than once a tick): the bank's own roll runs on past the key
         CompoundTag p = v.getPersistentData().getCompound(KEY);
         long now = v.level().getGameTime();
         if (p.getLong("RollAt") != now) {
@@ -1115,8 +1108,18 @@ public final class RoyalPilots {
             p.putFloat("LastRoll", roll);
             p.putLong("RollAt", now);
         }
+        float ahead = roll + p.getFloat("RollRate") * 3F;
+        // (CI 65) the limits judged by the roll three ticks on, not the roll now: the key let go at 45 (and back at 50), the
+        // CI aircraft's bank ran on to 55 and 61 in a turn about after a go-around, it sank 18 blocks in the turn and
+        // flew into a hillside
+        if (!v.onGround() && (Math.abs(roll) > 50 || Math.abs(ahead) > 50 && Math.signum(ahead) == Math.signum(roll))) {
+            return new boolean[]{roll > 0, roll < 0};
+        }
+        boolean turn = !v.onGround() && agl > 15 && Math.abs(yawErr) > 12 && Math.abs(ahead) < (agl > 40 ? 45 : 25);
+        // (CI 61) the wings levelled when it has no turn to make (or is low): left alone, Superb Warfare's aircraft holds its
+        // bank, and the CI aircraft flew its whole approach banked 13 to 30 degrees, slid 23 blocks off the runway's line
+        // and flew into a hill beside the cleared ground. The key is let go as the roll three ticks on will be under 6
         if (!v.onGround() && !turn && Math.abs(roll) > 10 && (Math.abs(yawErr) <= 12 || agl <= 15)) {
-            float ahead = roll + p.getFloat("RollRate") * 3F;
             if (Math.signum(ahead) == Math.signum(roll) && Math.abs(ahead) > 6F) {
                 return new boolean[]{roll > 0, roll < 0};
             }

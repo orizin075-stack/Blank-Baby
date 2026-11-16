@@ -110,6 +110,12 @@ public final class VillageHomeGuard {
             }
         }
         String before = VillagerState.of(v, tank);
+        // (CI 65: three steps of a block each, and no path until he was 16 blocks from the tank) why: his follow range (the
+        // pathfinder's reach) and a path tried here and now
+        double reach = v.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.FOLLOW_RANGE);
+        net.minecraft.world.level.pathfinder.Path tried = v.getNavigation().createPath(tank.blockPosition(), 0);
+        String pathTried = tried == null ? "none" : (tried.canReach() ? "reaches" : "short") + " nodes " + tried.getNodeCount()
+            + (tried.getEndNode() == null ? "" : " ends " + tried.getEndNode().asBlockPos().toShortString());
         if (best != null) {
             v.teleportTo(best.getX() + 0.5, best.getY(), best.getZ() + 0.5);
         }
@@ -117,7 +123,7 @@ public final class VillageHomeGuard {
         VillageAI.walk(v, tank.blockPosition(), VillageAI.pace(v, 0.36), 1);
         d.putInt("OrorBoardStill", 0);
         stepped++;
-        LOG.info("VILLAGE-CREW-STEP {\"to\":\"{}\",\"pathNow\":{},\"was\":\"{}\"}", best == null ? "-" : best.toShortString(),
-            !v.getNavigation().isDone(), before.replace('"', '\''));
+        LOG.info("VILLAGE-CREW-STEP {\"to\":\"{}\",\"pathNow\":{},\"followRange\":{},\"pathTried\":\"{}\",\"was\":\"{}\"}",
+            best == null ? "-" : best.toShortString(), !v.getNavigation().isDone(), reach, pathTried, before.replace('"', '\''));
     }
 }
