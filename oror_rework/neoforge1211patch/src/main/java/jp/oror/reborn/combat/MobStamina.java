@@ -3,9 +3,7 @@ package jp.oror.reborn.combat;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
-import jp.oror.reborn.SupremeEntity;
 import jp.oror.reborn.royal.RoyalMob;
-import jp.oror.reborn.royal.RoyalRole;
 import jp.oror.reborn.show.TechniqueShow;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -33,11 +31,11 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
  * too, a single store that its dodges (MobDodge), its guard (MobGuard: the guard's upkeep, a parry's and a block's
  * price, the guard broken when it cannot pay) and its own blows draw on:
  * <ul>
- * <li>its depth by what it is: a boss (OROR's gods, the bosses' tag, the King and his generals) 160, an armed mob (a
- * weapon or a shield, the kingdom's soldiers) 80 to 90, a bare-handed one 50;</li>
- * <li>a dodge takes a fifth of it, a parry a twentieth of the blow, a block three tenths of it, a blow of its own 5% of
- * its depth (a boss's 3%);</li>
- * <li>it comes back after a second's rest, full in about ten seconds;</li>
+ * <li>its depth by how good it is (MobProwess: its level, experience, strength, what it is), 40 for a fresh zombie to
+ * 240 for a god, times its own gift (0.85 to 1.2): no two alike;</li>
+ * <li>a dodge takes a quarter to an eighth of it (MobDodge), a parry a twentieth of the blow, a block three tenths of
+ * it, a blow of its own 6% to 3% of its depth;</li>
+ * <li>it comes back after a second's rest, full in 13 seconds for the weakest down to 7 for the best;</li>
  * <li>under a tenth it is winded until it is back to a third: no dodge, no guard raised, slowed and its blows weakened
  * by a third; hunched and sweating, breathing hard (seen and heard), an opening for whoever fights it.</li>
  * </ul>
@@ -59,13 +57,17 @@ public final class MobStamina {
 
     private static final Map<LivingEntity, Pool> POOLS = new WeakHashMap<>();
 
-    /** How deep a mob's stamina is (by what it is: a boss, armed, bare-handed). */
+    /**
+     * How deep a mob's stamina is: (059h, the user: "スタミナも多めで　一定にしないで") by its prowess (MobProwess: its
+     * level, experience, strength, what it is), 40 for a fresh zombie to 240 for a god, times its own gift (0.85 to 1.2).
+     */
     public static float max(Mob m) {
-        if (m instanceof RoyalMob r) {
-            RoyalRole role = r.role();
-            return role == RoyalRole.KING || role == RoyalRole.GENERAL ? 160F : 90F;
-        }
-        return MobGuard.tier(m).stamina;
+        return MobProwess.lerp(MobProwess.of(m), 40F, 240F) * MobProwess.wind(m);
+    }
+
+    /** Ticks to come back from empty to full: 13 seconds for the weakest, 7 for the best. */
+    static float refill(Mob m) {
+        return MobProwess.lerp(MobProwess.of(m), 260F, 140F);
     }
 
     static Pool pool(Mob m) {
@@ -161,9 +163,17 @@ public final class MobStamina {
             return;
         }
         long now = m.level().getGameTime();
+        if ((now + m.getId()) % 100 == 0) {
+            // (059h) its depth follows its prowess (a level gained, experience, what it has learnt), its share kept
+            float max = max(m);
+            if (Math.abs(max - p.max) > 0.5F) {
+                p.value = p.value * max / Math.max(1F, p.max);
+                p.max = max;
+            }
+        }
         if (p.value < p.max && now - p.spentAt > 20) {
-            // back after a second's rest: full in ten seconds (winded, in thirteen)
-            p.value = Math.min(p.max, p.value + p.max / (p.winded ? 260F : 200F));
+            // back after a second's rest: full in 7 to 13 seconds by its prowess (winded, a third slower)
+            p.value = Math.min(p.max, p.value + p.max / (refill(m) * (p.winded ? 1.3F : 1F)));
         }
         if (p.winded) {
             if (p.value >= p.max * 0.35F && now - p.windedAt >= 40) {
@@ -199,8 +209,8 @@ public final class MobStamina {
         if (p.winded) {
             e.setAmount(e.getAmount() * 0.67F);
         }
-        boolean boss = attacker instanceof SupremeEntity || MobGuard.tier(attacker) == MobGuard.Tier.BOSS;
-        drain(attacker, p.max * (boss ? 0.03F : 0.05F));
+        // (059h) 6% of its depth for the clumsiest, 3% for the best
+        drain(attacker, p.max * MobProwess.lerp(MobProwess.of(attacker), 0.06F, 0.03F));
     }
 
     private static void count(LivingEntity m, String key) {

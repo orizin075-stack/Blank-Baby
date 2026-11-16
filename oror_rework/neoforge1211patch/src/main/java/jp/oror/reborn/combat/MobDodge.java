@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import jp.oror.reborn.SupremeEntity;
 import jp.oror.reborn.royal.RoyalMob;
-import jp.oror.reborn.royal.RoyalRole;
 import jp.oror.reborn.show.TechniqueShow;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,11 +37,10 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * <li>is a quick step to the side the ground allows (a little back, off the blow's line, its face kept to the foe), as far
  * as its own width needs to clear the blow; the swing meets air (its whiff heard), the cut seen through the place it
  * stood, dust kicked up at its feet;</li>
- * <li>takes a fifth of its stamina (MobStamina; a boss's a sixth), and a winded mob does not dodge; between two dodges
- * a boss waits 0.7 seconds, an armed mob 1.1, a bare-handed one 1.6: the blow of a combo after a dodge lands;</li>
- * <li>is likelier the fresher it is: a boss slips 45% of blows and 30% of shots (75% of those it sees coming), an armed
- * mob 32%, 18% and 55%, a bare-handed one 20%, 10% and 40%, each as they stand at full stamina (a little under half
- * that when spent);</li>
+ * <li>takes a quarter to an eighth of its stamina (MobStamina), and a winded mob does not dodge; between two dodges it
+ * waits 1.9 seconds down to under half a second: the blow of a combo after a dodge lands;</li>
+ * <li>is as likely as it is good (its prowess and gift, MobProwess): from one blow in ten to six (shots landing 5% to
+ * 40%, those it sees coming 25% to 88%), each as it stands at full stamina (a little under half that when spent);</li>
  * <li>is never from behind, nor from an explosion, fire, magic or a relic's art, nor while staggered, sealed, its guard
  * broken, riding, asleep or without its AI (a statue, a test's target).</li>
  * </ul>
@@ -54,33 +52,34 @@ public final class MobDodge {
     private MobDodge() {
     }
 
-    enum Kind {
-        BOSS(0.45F, 0.30F, 0.75F, 14, 0.16F), ARMED(0.32F, 0.18F, 0.55F, 22, 0.2F), BARE(0.20F, 0.10F, 0.40F, 32, 0.2F);
+    // (059h, the user: "強くてレベル高いモブ程経験積んでるからうまいし　スタミナも多めで　一定にしないで") how well it dodges
+    // is its prowess (MobProwess: its level, experience, strength, tactics, what it has learnt dodging, what it is) and
+    // its own gift: a fresh zombie slips a blow one time in ten, a seasoned knight four in ten, a god six (with its
+    // gift, at most three in four); it dodges again sooner, spends less on a dodge and steps no further than it needs
 
-        final float blow, shot, seen, cost;
-        final int cooldown;
-
-        Kind(float blow, float shot, float seen, int cooldown, float cost) {
-            this.blow = blow;
-            this.shot = shot;
-            this.seen = seen;
-            this.cooldown = cooldown;
-            this.cost = cost;
-        }
+    /** Its chance of slipping a blow landing (at full stamina). */
+    static float blowChance(Mob m) {
+        return Math.min(0.75F, MobProwess.lerp(MobProwess.of(m), 0.10F, 0.60F) * MobProwess.gift(m));
     }
 
-    static Kind kind(Mob m) {
-        if (m instanceof SupremeEntity) {
-            return Kind.BOSS;
-        }
-        if (m instanceof RoyalMob r) {
-            return r.role() == RoyalRole.KING || r.role() == RoyalRole.GENERAL ? Kind.BOSS : Kind.ARMED;
-        }
-        return switch (MobGuard.tier(m)) {
-            case BOSS -> Kind.BOSS;
-            case ARMED -> Kind.ARMED;
-            default -> Kind.BARE;
-        };
+    /** Of slipping a shot as it lands. */
+    static float shotChance(Mob m) {
+        return Math.min(0.55F, MobProwess.lerp(MobProwess.of(m), 0.05F, 0.40F) * MobProwess.gift(m));
+    }
+
+    /** Of stepping from a shot it sees coming. */
+    static float seenChance(Mob m) {
+        return Math.min(0.95F, MobProwess.lerp(MobProwess.of(m), 0.25F, 0.88F) * MobProwess.gift(m));
+    }
+
+    /** Ticks between two dodges: 1.9 seconds for the clumsiest, under half a second for a god. */
+    static int cooldown(Mob m) {
+        return Math.round(MobProwess.lerp(MobProwess.of(m), 38F, 9F) / MobProwess.gift(m));
+    }
+
+    /** A dodge's price, as a share of its stamina: a quarter for the clumsiest, an eighth for the best. */
+    static float cost(Mob m) {
+        return MobStamina.max(m) * MobProwess.lerp(MobProwess.of(m), 0.25F, 0.13F);
     }
 
     /** Whether it can dodge now (a fighter, on its feet and its own master, not winded, staggered, sealed or riding). */
@@ -95,7 +94,7 @@ public final class MobDodge {
             || d.getLong("ororGuardBrokenUntil") > now) {
             return false;
         }
-        return now - d.getLong("OrorDodgeAt") >= kind(m).cooldown;
+        return now - d.getLong("OrorDodgeAt") >= cooldown(m);
     }
 
     // ------------------------------------------------------------------------------------------------ a blow landing
@@ -128,13 +127,14 @@ public final class MobDodge {
         if (to.lengthSqr() < 1.0E-6 || facing.lengthSqr() > 1.0E-6 && to.normalize().dot(facing.normalize()) < (shot ? -0.35 : -0.1)) {
             return false;   // from behind: it never saw it
         }
-        Kind k = kind(m);
-        float chance = (shot ? k.shot : k.blow) * (0.45F + 0.55F * MobStamina.fraction(m));
+        // it learns from every blow it meets, slipped or not
+        MobProwess.learn(m);
+        float chance = (shot ? shotChance(m) : blowChance(m)) * (0.45F + 0.55F * MobStamina.fraction(m));
         if (m.getRandom().nextFloat() >= chance) {
             return false;
         }
         Vec3 way = pick(sl, m, to.normalize().scale(-1));
-        if (way == null || !MobStamina.spend(m, MobStamina.max(m) * k.cost)) {
+        if (way == null || !MobStamina.spend(m, cost(m))) {
             return false;
         }
         step(sl, m, way, to.normalize().scale(-1), attacker, shot ? direct : null, false);
@@ -168,8 +168,7 @@ public final class MobDodge {
         if (m.getTarget() == null && m.getLastHurtByMob() == null || !able(m)) {
             return;
         }
-        Kind k = kind(m);
-        float cost = MobStamina.max(m) * k.cost;
+        float cost = cost(m);
         if (!MobStamina.has(m, cost)) {
             return;
         }
@@ -189,7 +188,8 @@ public final class MobDodge {
             if (!seen.add(m.getId())) {
                 continue;
             }
-            float chance = k.seen * (0.45F + 0.55F * MobStamina.fraction(m));
+            MobProwess.learn(m);
+            float chance = seenChance(m) * (0.45F + 0.55F * MobStamina.fraction(m));
             if (m.getRandom().nextFloat() >= chance) {
                 continue;
             }
@@ -214,9 +214,12 @@ public final class MobDodge {
 
     // ------------------------------------------------------------------------------------------------ the step
 
-    /** How far it must step to clear a blow: its own half width and a little, at most four blocks. */
+    /**
+     * How far it steps to clear a blow: its own half width and a little, at most four blocks; the better it is, the less
+     * it needs (a clumsy hop of 1.3 blocks past its side, a master's 0.75: by a hair).
+     */
     private static double reach(Mob m) {
-        return Math.min(4.0, m.getBbWidth() * 0.5 + 1.1);
+        return Math.min(4.0, m.getBbWidth() * 0.5 + MobProwess.lerp(MobProwess.of(m), 1.3F, 0.75F));
     }
 
     /**

@@ -41,9 +41,10 @@ import org.slf4j.LoggerFactory;
  * blocks before it by a fake player every half second for fifteen seconds (the striker following it where its steps take
  * it); and a skeleton with a sword shot at by an arrow every second from ten blocks. Measured: blows, dodges (of blows, of
  * shots landing, of shots seen coming), how far each dodge carried it, what it was dealt, its stamina's lowest and the
- * times it was winded. Pass: the zombie, the vindicator, the wither skeleton, the guard and the god each dodge at least
- * one blow and two of them at least twice, a dodge carries a mob at least 0.8 blocks on average, at least one arrow is
- * seen coming and flies past, stamina is spent (some mob below 70%), and some mob is winded.
+ * times it was winded. (059h) Two vindicators alike but for their experience (a fresh one, a veteran of 20,000). Pass:
+ * four of the six struck dodge at least one blow and two at least twice, a dodge carries a mob at least 0.8 blocks on
+ * average, at least one arrow is seen coming and flies past, stamina is spent (some mob below 70%), some mob is winded,
+ * and the veteran is the better dodger by 0.3 of prowess and has the deeper stamina.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class DodgeTest {
@@ -64,7 +65,7 @@ public final class DodgeTest {
         String id;
         Mob mob;
         Tester tester;
-        boolean archery;
+        boolean archery, veteran, fresh;
         int blows, arrows, dodgesSeenBefore, lastDodges;
         float dealt, minStamina = 1F;
         Vec3 dodgeFrom, prevPos;
@@ -137,10 +138,12 @@ public final class DodgeTest {
                     return;
                 }
                 BlockPos a = floor(r.level, r.origin);
-                String[][] who = {{"minecraft:zombie", ""}, {"minecraft:vindicator", "iron_axe"}, {"minecraft:wither_skeleton", "stone_sword"},
-                    {"oror_supreme_bosses:kingdom_guard", "keep"}, {"oror_supreme_bosses:ferdinand", "keep"}, {"minecraft:skeleton", "iron_sword"}};
+                // (059h) two vindicators alike but for their experience: a fresh one and a veteran (MobMind's 20,000)
+                String[][] who = {{"minecraft:zombie", ""}, {"minecraft:vindicator", "iron_axe"}, {"minecraft:vindicator", "iron_axe", "veteran"},
+                    {"minecraft:wither_skeleton", "stone_sword"}, {"oror_supreme_bosses:kingdom_guard", "keep"}, {"oror_supreme_bosses:ferdinand", "keep"},
+                    {"minecraft:skeleton", "iron_sword"}};
                 for (int i = 0; i < who.length; i++) {
-                    BlockPos spot = a.offset(-40 + i * 16, 0, 0);
+                    BlockPos spot = a.offset(-48 + i * 16, 0, 0);
                     EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getOptional(ResourceLocation.parse(who[i][0])).orElse(null);
                     Entity en = type == null ? null : type.create(r.level);
                     if (!(en instanceof Mob m)) {
@@ -163,6 +166,19 @@ public final class DodgeTest {
                     r.made.add(m);
                     Lane l = new Lane();
                     l.id = BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()).getPath();
+                    // its level drawn first (MobLevels' lottery at its birth), then set: the fresh one at the first, the
+                    // veteran by his experience (the fifth)
+                    if (who[i].length > 2) {
+                        jp.oror.reborn.MobLevels.initialize(m);
+                        jp.oror.reborn.MobMind.data(m).putLong("Experience", 20000L);
+                        jp.oror.reborn.MobLevels.set(m, 5);
+                        l.id += "_veteran";
+                        l.veteran = true;
+                    } else if (l.id.equals("vindicator")) {
+                        jp.oror.reborn.MobLevels.initialize(m);
+                        jp.oror.reborn.MobLevels.set(m, 1);
+                        l.fresh = true;
+                    }
                     l.mob = m;
                     l.archery = who[i][0].equals("minecraft:skeleton");
                     l.tester = new Tester(r.level, i);
@@ -247,7 +263,7 @@ public final class DodgeTest {
     private static BlockPos floor(ServerLevel level, BlockPos at) {
         level.getChunk(at);
         int y = Math.max(level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, at.getX(), at.getZ()), level.getSeaLevel() + 1);
-        for (int dx = -50; dx <= 50; dx++) {
+        for (int dx = -58; dx <= 58; dx++) {
             for (int dz = -10; dz <= 14; dz++) {
                 level.setBlock(new BlockPos(at.getX() + dx, y - 1, at.getZ() + dz), Blocks.STONE.defaultBlockState(), 2);
                 for (int h = 0; h < 12; h++) {
@@ -285,16 +301,30 @@ public final class DodgeTest {
             minStamina = Math.min(minStamina, l.minStamina);
             out.append(first ? "" : ",").append(String.format(Locale.ROOT,
                 "{\"mob\":\"%s\",\"blows\":%d,\"arrows\":%d,\"dodges\":\"%s\",\"carried\":%.2f,\"dealt\":%.0f,\"minStamina\":%.2f,\"stamina\":\"%s\","
-                    + "\"guard\":\"%s\",\"alive\":%b}",
+                    + "\"guard\":\"%s\",\"skill\":\"%s\",\"alive\":%b}",
                 l.id, l.blows, l.arrows, MobDodge.tally(m), l.carriedCount == 0 ? 0 : l.carried / l.carriedCount, l.dealt, l.minStamina,
-                MobStamina.describe(m), MobGuard.tally(m), m.isAlive()));
+                MobStamina.describe(m), MobGuard.tally(m), jp.oror.reborn.combat.MobProwess.describe(m), m.isAlive()));
             first = false;
         }
         double avgCarry = carriedCount == 0 ? 0 : carried / carriedCount;
-        boolean pass = error.isEmpty() && meleeLanes >= 5 && dodgingMelee >= 5 && twice >= 2 && avgCarry >= 0.8 && seen >= 1 && minStamina < 0.7F
-            && winded >= 1;
+        // (059h) the veteran better at it and deeper of wind than the fresh one: by its prowess, not by chance
+        float vetP = -1, freshP = -1, vetMax = -1, freshMax = -1;
+        for (Lane l : r.lanes) {
+            if (l.veteran) {
+                vetP = jp.oror.reborn.combat.MobProwess.of(l.mob);
+                vetMax = MobStamina.max(l.mob);
+            } else if (l.fresh) {
+                freshP = jp.oror.reborn.combat.MobProwess.of(l.mob);
+                freshMax = MobStamina.max(l.mob);
+            }
+        }
+        boolean seasoned = vetP >= 0 && freshP >= 0 && vetP - freshP >= 0.3F && vetMax > freshMax;
+        boolean pass = error.isEmpty() && meleeLanes >= 6 && dodgingMelee >= 4 && twice >= 2 && avgCarry >= 0.8 && seen >= 1 && minStamina < 0.7F
+            && winded >= 1 && seasoned;
         out.append(String.format(Locale.ROOT, "],\"dodgingMelee\":%d,\"twice\":%d,\"avgCarry\":%.2f,\"arrowsPassed\":%d,\"minStamina\":%.2f,\"winded\":%d,"
-            + "\"error\":\"%s\",\"pass\":%b}", dodgingMelee, twice, avgCarry, seen, minStamina, winded, error.replace('"', '\''), pass));
+            + "\"veteran\":{\"prowess\":%.2f,\"stamina\":%.0f},\"fresh\":{\"prowess\":%.2f,\"stamina\":%.0f},\"seasoned\":%b,"
+            + "\"error\":\"%s\",\"pass\":%b}", dodgingMelee, twice, avgCarry, seen, minStamina, winded, vetP, vetMax, freshP, freshMax, seasoned,
+            error.replace('"', '\''), pass));
         LOG.info(out.toString());
         for (Entity en : r.made) {
             if (!en.isRemoved()) {
