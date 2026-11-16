@@ -126,4 +126,40 @@ public final class VillageHomeGuard {
         LOG.info("VILLAGE-CREW-STEP {\"to\":\"{}\",\"pathNow\":{},\"followRange\":{},\"pathTried\":\"{}\",\"was\":\"{}\"}",
             best == null ? "-" : best.toShortString(), !v.getNavigation().isDone(), reach, pathTried, before.replace('"', '\''));
     }
+
+    static int waypoints;
+
+    /**
+     * (059h) VillageAI.walk's start (VillageWalkWaypointMixin): a villager sent more than 14 blocks off whose brain has just
+     * failed to find the way there (it remembers it could not reach its walk target) is sent ten blocks toward it instead,
+     * along the ground. The next call sends him to the real place again; failing that, to the next waypoint. True when
+     * the waypoint was given (the walk itself is then not made).
+     */
+    public static boolean waypoint(net.minecraft.world.entity.Mob mob, BlockPos to, float speed, int close) {
+        if (!(mob instanceof Villager v) || !(v.level() instanceof ServerLevel level) || to == null) {
+            return false;
+        }
+        net.minecraft.world.phys.Vec3 d = net.minecraft.world.phys.Vec3.atBottomCenterOf(to).subtract(v.position()).multiply(1, 0, 1);
+        if (d.lengthSqr() < 14 * 14) {
+            return false;
+        }
+        java.util.Optional<Long> failed = v.getBrain().getMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        if (failed.isEmpty() || level.getGameTime() - failed.get() > 200) {
+            return false;
+        }
+        net.minecraft.world.phys.Vec3 at = v.position().add(d.normalize().scale(10));
+        int y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, net.minecraft.util.Mth.floor(at.x),
+            net.minecraft.util.Mth.floor(at.z));
+        if (Math.abs(y - v.getY()) > 6) {
+            y = v.getBlockY();   // a roof or a pit there: on at his own height
+        }
+        BlockPos wp = BlockPos.containing(at.x, y, at.z);
+        v.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.WALK_TARGET,
+            new net.minecraft.world.entity.ai.memory.WalkTarget(wp, speed, Math.max(1, close)));
+        if (waypoints++ < 40) {
+            LOG.info("VILLAGE-CREW-WAYPOINT {\"to\":\"{}\",\"via\":\"{}\",\"off\":{}}", to.toShortString(), wp.toShortString(),
+                String.format(java.util.Locale.ROOT, "%.1f", d.length()));
+        }
+        return true;
+    }
 }

@@ -184,14 +184,17 @@ public final class MobGuard {
         return m.getOffhandItem().canPerformAction(ItemAbilities.SHIELD_BLOCK) || m.getMainHandItem().canPerformAction(ItemAbilities.SHIELD_BLOCK);
     }
 
+    /** (059h) Staggered (a broken guard, parried): it can neither guard nor dodge. */
+    static boolean staggered(Mob m) {
+        Guard g = GUARDS.get(m);
+        return g != null && g.stagger > 0;
+    }
+
     private static Guard guard(Mob m) {
         Guard g = GUARDS.get(m);
         if (g == null) {
             g = new Guard();
             GUARDS.put(m, g);
-        }
-        if (g.stamina < 0) {
-            g.stamina = tier(m).stamina;
         }
         return g;
     }
@@ -225,7 +228,8 @@ public final class MobGuard {
         if (g.remaining > 0) {
             g.remaining--;
             g.age++;
-            g.stamina = Math.max(0F, g.stamina - 0.08F);
+            // (059h) the guard held up costs its stamina (MobStamina, the one store for its guard, its dodges and its blows)
+            MobStamina.drain(m, 0.08F);
             return;
         }
         if (g.delay > 0) {
@@ -234,10 +238,10 @@ public final class MobGuard {
         // (059e, the user: "敵も味方もパリイシステム使わない") against any foe in reach, a player or a mob: the kingdom's
         // soldiers and the mobs they fight guard and parry each other too (053 had it for players' blows only)
         // (059e) one that shoots raises it only when its foe is at arm's reach; one whose own mod's guard is up leaves it to that
+        // (059h) a winded mob raises no guard
         if (g.delay == 0 && t != null && t.isAlive() && m.distanceToSqr(t) < (ranged(m) ? 12.25 : 25.0) && m.getSensing().hasLineOfSight(t)
-            && !nativeGuardUp(m)) {
+            && !nativeGuardUp(m) && !MobStamina.winded(m)) {
             Tier tier = tier(m);
-            g.stamina = Math.min(tier.stamina, g.stamina + 0.4F * tier.cycle);
             g.remaining = tier.window;
             g.age = 0;
             g.delay = tier.cycle;
@@ -288,12 +292,20 @@ public final class MobGuard {
             e.setCanceled(true);
         } else if (met == HALVED) {
             e.setAmount(e.getAmount() * 0.5F);
+        } else if (met == NONE && !(m instanceof RoyalMob) && !nativeGuardUp(m) && MobDodge.dodge(m, e.getSource(), e.getAmount())) {
+            // (059h) its guard down: it may slip the blow instead (the royals dodge after their own guard, MobDodge.royal)
+            e.setCanceled(true);
         }
     }
 
     /** (059f) A god's blow, at the start of its hurt: true when the guard undid it (the hurt then does nothing). */
     public static boolean meetGod(SupremeEntity god, DamageSource src, float amount) {
-        return !god.level().isClientSide && meet(god, src, amount) == UNDONE;
+        if (god.level().isClientSide) {
+            return false;
+        }
+        int met = meet(god, src, amount);
+        // (059h) its guard down, a god may slip the blow (MobDodge)
+        return met == UNDONE || met == NONE && MobDodge.dodge(god, src, amount);
     }
 
     /** A blow on a mob met by its guard: a parry, a block, its guard broken, or nothing (its effects and moments shown). */
@@ -340,9 +352,10 @@ public final class MobGuard {
             return NONE;
         }
         float cost = Math.max(1F, amount * (perfect ? 0.05F : 0.3F));
-        if (g.stamina < cost) {
-            // the guard breaks under the blow: the blow lands, and the mob staggers
-            g.stamina = 0F;
+        // (059h) paid from its stamina (MobStamina): without it the guard breaks under the blow, the blow lands, the mob
+        // staggers and is winded
+        if (!MobStamina.spend(m, cost)) {
+            MobStamina.empty(m);
             g.remaining = 0;
             g.stagger = 20;
             m.getNavigation().stop();
@@ -351,7 +364,6 @@ public final class MobGuard {
             show(m, "break", 22, attacker);
             return BROKEN;
         }
-        g.stamina -= cost;
         Vec3 contact = m.getEyePosition().lerp(from.add(0, attacker.getBbHeight() * 0.6, 0), 0.35);
         if (perfect) {
             count(m, "OrorParries");
@@ -453,7 +465,7 @@ public final class MobGuard {
         }
     }
 
-    private static boolean unblockable(DamageSource src) {
+    static boolean unblockable(DamageSource src) {
         return src.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || src.is(DamageTypeTags.IS_EXPLOSION) || src.is(DamageTypeTags.IS_FIRE)
             || src.is(DamageTypes.MAGIC) || src.is(DamageTypes.INDIRECT_MAGIC) || src.is(DamageTypes.THORNS) || src.is(DamageTypes.SONIC_BOOM)
             || src.typeHolder().unwrapKey().map(k -> k.location().getNamespace().equals("irons_spellbooks")).orElse(false);

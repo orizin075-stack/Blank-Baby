@@ -69,7 +69,8 @@ public final class TechniqueShow {
     /** The client's techniques and moves under way, by entity id (written by the network thread's queued work). */
     public static final Map<Integer, Active> ACTIVE = new ConcurrentHashMap<>();
     /** (059e) A guard's moments, which any mob is drawn with (GuardPoses), not only the characters and the royals. */
-    public static final java.util.Set<String> GUARD_KINDS = java.util.Set.of("guard", "parry", "block", "break", "parried");
+    public static final java.util.Set<String> GUARD_KINDS = java.util.Set.of("guard", "parry", "block", "break", "parried",
+        "dodge_l", "dodge_r", "winded");   // (059h) a dodge's step (MobDodge) and a winded mob's hunch (MobStamina)
     /** The client's guard moments under way (guard raised, parry, block, broken guard, parried), by entity id. */
     public static final Map<Integer, Active> REACT = new ConcurrentHashMap<>();
 

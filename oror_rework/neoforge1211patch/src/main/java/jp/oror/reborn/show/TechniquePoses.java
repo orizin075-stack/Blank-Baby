@@ -173,6 +173,18 @@ public final class TechniquePoses {
             pose("arm_r", -2.5, 0.4, 0.45, "arm_l", -0.3, 0, -0.6, "torso", -0.35, 0.25, 0, "head", -0.3, 0, 0, "root", -0.25, 0, 0, 0,
                 "leg_l", -0.35, 0, 0), "");
 
+        // (059h) a dodge (MobDodge): a quick step off the blow's line, the body leaning out of its way, the arms out for
+        // balance, the weapon kept toward the foe; to its left and to its right
+        def("DODGE_L", pose("torso", 0, 0.25, 0.2, "root", 0, 0.2, 0.3, 0),
+            pose("torso", 0.1, 0.45, 0.35, "head", 0.1, -0.3, 0, "arm_r", -0.9, 0, 0.3, "arm_l", -0.2, 0, -1.0, "leg_l", -0.45, 0, -0.35,
+                "leg_r", 0.3, 0, -0.1, "root", 0.12, 0.35, 0.42, -0.6), "");
+        def("DODGE_R", pose("torso", 0, -0.25, -0.2, "root", 0, -0.2, -0.3, 0),
+            pose("torso", 0.1, -0.45, -0.35, "head", 0.1, 0.3, 0, "arm_r", -0.2, 0, 1.0, "arm_l", -0.9, 0, -0.3, "leg_r", -0.45, 0, 0.35,
+                "leg_l", 0.3, 0, 0.1, "root", 0.12, -0.35, -0.42, -0.6), "");
+        // (059h) winded (MobStamina): bent over, the head hung, the arms heavy, the shoulders heaving
+        def("WINDED", pose("torso", 0.45, 0, 0, "head", 0.4, 0, 0, "arm_r", 0.15, 0, 0.15, "arm_l", 0.15, 0, -0.15, "root", 0.2, 0, 0, -0.8),
+            pose("torso", 0.5, 0, 0, "head", 0.45, 0, 0, "arm_r", 0.25, 0, 0.2, "arm_l", 0.25, 0, -0.2, "root", 0.22, 0, 0, -0.9), "tremble");
+
         // ---- the big moves (BossMoves): each danced its own way, over the moves' own motion
         // a dash and a cut: crouched with the blade drawn low behind, a long lunge sweeping it across
         def("MOVE_DASH_SLASH", pose("arm_r", 0.6, 0.6, 0.3, "torso", 0.35, 0.5, 0, "leg_r", -0.6, 0, 0, "leg_l", 0.4, 0, 0, "root", 0.3, 0, 0, -1),
@@ -259,7 +271,7 @@ public final class TechniquePoses {
     }
 
     /** A guard's moments: weapon-held poses of their own, so the weapon's manner is not laid over them. */
-    private static final java.util.Set<String> DEFENCE = java.util.Set.of("PARRY", "BLOCK", "BREAK", "PARRIED");
+    private static final java.util.Set<String> DEFENCE = java.util.Set.of("PARRY", "BLOCK", "BREAK", "PARRIED", "DODGE_L", "DODGE_R", "WINDED");
 
     // ------------------------------------------------------------------------------------------- the weapon's manner
 

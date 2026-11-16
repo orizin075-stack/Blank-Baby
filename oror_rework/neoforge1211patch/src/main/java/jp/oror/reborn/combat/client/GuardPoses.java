@@ -80,6 +80,13 @@ public final class GuardPoses {
         if (kind.equals("GUARD")) {
             // raised in two ticks and a half, held, lowered in the last three
             w = Math.min(Mth.clamp(time / 2.5F, 0F, 1F), Mth.clamp((length - time) / 3F, 0F, 1F));
+        } else if (kind.equals("WINDED")) {
+            // (059h) winded: bent over in four ticks, held while it is told again, straightened in the last four
+            w = Math.min(Mth.clamp(time / 4F, 0F, 1F), Mth.clamp((length - time) / 4F, 0F, 1F));
+        } else if (kind.startsWith("DODGE")) {
+            // (059h) a dodge: snapped into in a tick and a half, eased out over the rest
+            float u = time / length;
+            w = u < 0.15F ? u / 0.15F : 1F - (u - 0.15F) / 0.85F;
         } else {
             float u = time / length;
             w = u < 0.12F ? u / 0.12F : u < 0.45F ? 1F : 1F - (u - 0.45F) / 0.55F;
@@ -169,6 +176,17 @@ public final class GuardPoses {
                     pose(weapon, w, -2.6F, 0.35F * sw, 0.3F * sw);
                     pose(other, w, -0.3F, 0F, 0.7F * so);
                 }
+                case "DODGE_L", "DODGE_R" -> {
+                    // (059h) the weapon kept toward the foe, the other arm flung out for balance on the side it leans to
+                    float lean = kind.equals("DODGE_L") ? 1F : -1F;
+                    pose(weapon, w, -0.85F, -0.2F * sw, 0.25F * lean);
+                    pose(other, w, -0.25F, 0F, 0.95F * lean);
+                }
+                case "WINDED" -> {
+                    // (059h) the arms hanging heavy, a little forward
+                    pose(weapon, w, 0.2F, 0F, 0.12F * sw);
+                    pose(other, w, 0.2F, 0F, 0.12F * so);
+                }
                 default -> {
                 }
             }
@@ -178,6 +196,7 @@ public final class GuardPoses {
                 case "GUARD", "BLOCK" -> 0.2F;        // the chin tucked behind the guard
                 case "BREAK" -> -0.45F;               // thrown back
                 case "PARRIED" -> -0.35F;
+                case "WINDED" -> 0.45F;               // (059h) hung, breathing hard
                 default -> 0F;
             };
             p.head().xRot += head * w;
@@ -214,6 +233,21 @@ public final class GuardPoses {
                 pose.mulPose(Axis.ZP.rotation(shake));
             }
             case "GUARD" -> lean(pose, 0.05F * w);   // set forward a little, into the guard
+            case "DODGE_L", "DODGE_R" -> {
+                // (059h) the body leaning out of the blow's way to the side it steps, dipped a little at the knees
+                float s = kind.equals("DODGE_L") ? 1F : -1F;
+                pose.translate(0F, 0.08F * w, 0F);
+                pose.translate(0F, FEET, 0F);
+                pose.mulPose(Axis.ZP.rotation(-0.42F * s * w));
+                pose.mulPose(Axis.YP.rotation(0.3F * s * w));
+                pose.translate(0F, -FEET, 0F);
+            }
+            case "WINDED" -> {
+                // (059h) bent over, the shoulders heaving
+                float heave = Mth.sin(time * 0.9F) * 0.04F;
+                lean(pose, (0.32F + heave) * w);
+                pose.translate(0F, 0.06F * w, 0F);
+            }
             default -> {
             }
         }

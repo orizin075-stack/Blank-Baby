@@ -32,7 +32,7 @@ public final class CharacterModel extends RigModel<SupremeEntity> {
         jp.oror.reborn.show.TechniqueShow.Active react = jp.oror.reborn.show.TechniqueShow.REACT.get(e.getId());
         // (059f) the guard merely raised (MobGuard, every two seconds or so in a fight) does not cut into a technique
         // under way: only a parry, a block, a broken guard or being parried do
-        if (react != null && react.mechanic().equals("GUARD")
+        if (react != null && (react.mechanic().equals("GUARD") || react.mechanic().equals("WINDED"))
             && (jp.oror.reborn.waza.client.WazaClient.playing(e.getId()) != null || jp.oror.reborn.show.TechniqueShow.ACTIVE.containsKey(e.getId()))) {
             react = null;
         }

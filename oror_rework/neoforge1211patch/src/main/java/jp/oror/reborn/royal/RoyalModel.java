@@ -456,6 +456,22 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
                 this.head.xRot -= 0.3F * w;
                 this.body.xRot -= 0.25F * w;
             }
+            case "DODGE_L", "DODGE_R" -> {
+                // (059h) a dodge: the sword kept toward the foe, the other arm out for balance, the body leaning off the blow
+                float s = show.mechanic().equals("DODGE_L") ? 1F : -1F;
+                this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, -0.9F);
+                this.leftArm.zRot = Mth.lerp(w, this.leftArm.zRot, -0.9F * s);
+                this.body.zRot -= 0.3F * s * w;
+                this.body.yRot += 0.3F * s * w;
+                this.head.zRot += 0.15F * s * w;
+            }
+            case "WINDED" -> {
+                // (059h) winded: bent over, the head hung, the arms heavy
+                this.body.xRot += 0.4F * w;
+                this.head.xRot += 0.45F * w;
+                this.rightArm.xRot = Mth.lerp(w, this.rightArm.xRot, 0.25F);
+                this.leftArm.xRot = Mth.lerp(w, this.leftArm.xRot, 0.25F);
+            }
             default -> {
             }
         }
