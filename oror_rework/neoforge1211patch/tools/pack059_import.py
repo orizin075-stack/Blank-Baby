@@ -6,8 +6,12 @@ OROR's jar is written with its small entries (under 64 KB since 059g: the many J
 than deflated, so that the import zip's own deflate takes them together: the same entries, checked by CRC, and the
 import zip about half a megabyte smaller (it must stay under 30,000,000 bytes).
 
-(059f) kept in the repository: the 059e builder lived outside it and was lost with a container."""
-import io, json, os, sys, zipfile, zlib
+(059f) kept in the repository: the 059e builder lived outside it and was lost with a container.
+
+(059h) The pictures (PNG) in OROR's jar are packed tighter, pixel for pixel the same (their image data deflated again at
+zlib's best, text and time chunks dropped; checked: header, palette, transparency and scanlines unchanged): 059h's
+import zip was 65,738 bytes over the limit, and this takes some 200 KB off."""
+import io, json, os, struct, sys, zipfile, zlib
 
 src, jar, notes, out = sys.argv[1:5]
 label = sys.argv[5] if len(sys.argv) > 5 else '059g'
@@ -36,12 +40,70 @@ FIRST_ADD = {
 }
 
 
+PNG_SIG = b'\x89PNG\r\n\x1a\n'
+PNG_DROP = (b'tEXt', b'zTXt', b'iTXt', b'tIME')   # text and time only: every chunk that bears on the picture is kept
+
+
+def png_chunks(d):
+    pos, out = 8, []
+    while pos + 8 <= len(d):
+        ln = struct.unpack('>I', d[pos:pos + 4])[0]
+        out.append((d[pos + 4:pos + 8], d[pos + 8:pos + 8 + ln]))
+        pos += 12 + ln
+    return out
+
+
+def png_image(d):
+    """What a PNG shows: its header, palette and transparency, and its filtered scanlines (the IDAT stream unpacked)."""
+    ch = png_chunks(d)
+    keep = tuple((t, b) for t, b in ch if t in (b'IHDR', b'PLTE', b'tRNS'))
+    return keep, zlib.decompress(b''.join(b for t, b in ch if t == b'IDAT'))
+
+
+def png_smaller(d):
+    """(059h) The same picture in fewer bytes: its image data deflated again at the best of zlib's settings, its text and
+    time chunks dropped; the scanlines, filters, palette and every other chunk kept as they were. None if not smaller."""
+    if d[:8] != PNG_SIG:
+        return None
+    try:
+        ch = png_chunks(d)
+        raw = zlib.decompress(b''.join(b for t, b in ch if t == b'IDAT'))
+    except Exception:
+        return None
+    best = None
+    for level, mem, strat in ((9, 8, zlib.Z_DEFAULT_STRATEGY), (9, 9, zlib.Z_DEFAULT_STRATEGY), (9, 9, zlib.Z_FILTERED)):
+        c = zlib.compressobj(level, zlib.DEFLATED, 15, mem, strat)
+        z = c.compress(raw) + c.flush()
+        if best is None or len(z) < len(best):
+            best = z
+    out = [PNG_SIG]
+    idat_done = False
+    for t, b in ch:
+        if t in PNG_DROP:
+            continue
+        if t == b'IDAT':
+            if idat_done:
+                continue
+            idat_done = True
+            b = best
+        out.append(struct.pack('>I', len(b)) + t + b + struct.pack('>I', zlib.crc32(t + b) & 0xffffffff))
+    new = b''.join(out)
+    return new if len(new) < len(d) else None
+
+
 def repack(data):
     zin = zipfile.ZipFile(io.BytesIO(data))
     buf = io.BytesIO()
+    shrunk = 0
     with zipfile.ZipFile(buf, 'w') as z:
         for i in zin.infolist():
             d = zin.read(i.filename)
+            if i.filename.endswith('.png'):
+                # (059h) the import zip was 65,738 bytes over 30,000,000: the pictures packed tighter, pixel for pixel the same
+                smaller = png_smaller(d)
+                if smaller is not None:
+                    shrunk += len(d) - len(smaller)
+                    d = smaller
             ni = zipfile.ZipInfo(i.filename, date_time=i.date_time)
             ni.external_attr = i.external_attr
             # (059g) entries under 64 KB stored for the import zip's own deflate, the rest deflated at level 9
@@ -51,11 +113,15 @@ def repack(data):
             else:
                 ni.compress_type = zipfile.ZIP_DEFLATED
                 z.writestr(ni, d, compresslevel=9)
-    # the same entries, byte for byte
+    # the same entries, byte for byte; (059h) the pictures the same pixel for pixel (header, palette, transparency, scanlines)
     zr = zipfile.ZipFile(io.BytesIO(buf.getvalue()))
-    a = {i.filename: i.CRC for i in zin.infolist()}
-    b = {i.filename: i.CRC for i in zr.infolist()}
-    assert a == b, 'repacked jar differs'
+    assert zin.namelist() == zr.namelist(), 'repacked jar lists other entries'
+    for i in zin.infolist():
+        before, after = zin.read(i.filename), zr.read(i.filename)
+        if before == after:
+            continue
+        assert i.filename.endswith('.png') and png_image(before) == png_image(after), 'repacked jar differs: ' + i.filename
+    print(json.dumps({'pngBytesSaved': shrunk}))
     return buf.getvalue()
 
 
