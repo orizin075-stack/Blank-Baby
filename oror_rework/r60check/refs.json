@@ -1,0 +1,438 @@
+{
+ "refs": [
+  {
+   "kind": "class",
+   "owner": "com/atsuishio/superbwarfare/entity/vehicle/utils/VehicleEngineUtils",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "class",
+   "owner": "net/minecraft/world/level/ServerLevelAccessor",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "class",
+   "owner": "net/minecraft/world/level/block/NetherPortalBlock",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "class",
+   "owner": "net/neoforged/neoforge/attachment/AttachmentHolder",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "class",
+   "owner": "net/neoforged/neoforge/client/event/RenderLivingEvent",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "class",
+   "owner": "yesman/epicfight/api/animation/Pose",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "class",
+   "owner": "yesman/epicfight/api/client/animation/ClientAnimator",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "class",
+   "owner": "yesman/epicfight/api/model/Armature",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "class",
+   "owner": "yesman/epicfight/api/utils/math/OpenMatrix4f",
+   "name": "",
+   "desc": ""
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/client/model/geom/PartPose",
+   "name": "x",
+   "desc": "F"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/client/model/geom/PartPose",
+   "name": "xRot",
+   "desc": "F"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/client/model/geom/PartPose",
+   "name": "y",
+   "desc": "F"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/client/model/geom/PartPose",
+   "name": "yRot",
+   "desc": "F"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/client/model/geom/PartPose",
+   "name": "z",
+   "desc": "F"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/client/model/geom/PartPose",
+   "name": "zRot",
+   "desc": "F"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/core/Direction$Axis",
+   "name": "X",
+   "desc": "Lnet/minecraft/core/Direction$Axis;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/core/Direction$Axis",
+   "name": "Z",
+   "desc": "Lnet/minecraft/core/Direction$Axis;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/sounds/SoundEvents",
+   "name": "GOAT_HORN_SOUND_VARIANTS",
+   "desc": "Lcom/google/common/collect/ImmutableList;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/damagesource/DamageTypes",
+   "name": "MOB_ATTACK",
+   "desc": "Lnet/minecraft/resources/ResourceKey;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/damagesource/DamageTypes",
+   "name": "MOB_ATTACK_NO_AGGRO",
+   "desc": "Lnet/minecraft/resources/ResourceKey;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/damagesource/DamageTypes",
+   "name": "PLAYER_ATTACK",
+   "desc": "Lnet/minecraft/resources/ResourceKey;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/entity/EntityType",
+   "name": "BLAZE",
+   "desc": "Lnet/minecraft/world/entity/EntityType;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/entity/EntityType",
+   "name": "WITHER_SKELETON",
+   "desc": "Lnet/minecraft/world/entity/EntityType;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/level/GameRules",
+   "name": "RULE_DAYLIGHT",
+   "desc": "Lnet/minecraft/world/level/GameRules$Key;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/level/block/Blocks",
+   "name": "BRICKS",
+   "desc": "Lnet/minecraft/world/level/block/Block;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/level/block/Blocks",
+   "name": "CRACKED_STONE_BRICKS",
+   "desc": "Lnet/minecraft/world/level/block/Block;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/level/block/Blocks",
+   "name": "MOSSY_STONE_BRICKS",
+   "desc": "Lnet/minecraft/world/level/block/Block;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/level/block/Blocks",
+   "name": "NETHER_PORTAL",
+   "desc": "Lnet/minecraft/world/level/block/Block;"
+  },
+  {
+   "kind": "field",
+   "owner": "net/minecraft/world/level/block/NetherPortalBlock",
+   "name": "AXIS",
+   "desc": "Lnet/minecraft/world/level/block/state/properties/EnumProperty;"
+  },
+  {
+   "kind": "field",
+   "owner": "yesman/epicfight/api/animation/Pose",
+   "name": "EMPTY_POSE",
+   "desc": "Lyesman/epicfight/api/animation/Pose;"
+  },
+  {
+   "kind": "field",
+   "owner": "yesman/epicfight/api/model/Armature",
+   "name": "rootJoint",
+   "desc": "Lyesman/epicfight/api/animation/Joint;"
+  },
+  {
+   "kind": "field",
+   "owner": "yesman/epicfight/api/utils/math/OpenMatrix4f",
+   "name": "m30",
+   "desc": "F"
+  },
+  {
+   "kind": "field",
+   "owner": "yesman/epicfight/api/utils/math/OpenMatrix4f",
+   "name": "m31",
+   "desc": "F"
+  },
+  {
+   "kind": "field",
+   "owner": "yesman/epicfight/api/utils/math/OpenMatrix4f",
+   "name": "m32",
+   "desc": "F"
+  },
+  {
+   "kind": "imethod",
+   "owner": "net/minecraft/world/level/ServerLevelAccessor",
+   "name": "getMaxBuildHeight",
+   "desc": "()I"
+  },
+  {
+   "kind": "imethod",
+   "owner": "net/minecraft/world/level/ServerLevelAccessor",
+   "name": "getMinBuildHeight",
+   "desc": "()I"
+  },
+  {
+   "kind": "method",
+   "owner": "com/atsuishio/superbwarfare/entity/vehicle/utils/VehicleEngineUtils",
+   "name": "findNearestLandingPos",
+   "desc": "(Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;I)Lnet/minecraft/world/phys/Vec3;"
+  },
+  {
+   "kind": "method",
+   "owner": "com/atsuishio/superbwarfare/entity/vehicle/utils/VehicleEngineUtils",
+   "name": "updateAutoLanding",
+   "desc": "(Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;Lnet/minecraft/world/phys/Vec3;)V"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/client/model/geom/ModelPart",
+   "name": "getInitialPose",
+   "desc": "()Lnet/minecraft/client/model/geom/PartPose;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/core/BlockPos$MutableBlockPos",
+   "name": "asLong",
+   "desc": "()J"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/server/level/ServerLevel",
+   "name": "destroyBlock",
+   "desc": "(Lnet/minecraft/core/BlockPos;Z)Z"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/server/level/ServerLevel",
+   "name": "isEmptyBlock",
+   "desc": "(Lnet/minecraft/core/BlockPos;)Z"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/server/level/ServerPlayer",
+   "name": "getLastHurtByMob",
+   "desc": "()Lnet/minecraft/world/entity/LivingEntity;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/effect/MobEffect",
+   "name": "getDescriptionId",
+   "desc": "()Ljava/lang/String;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/entity/Mob",
+   "name": "getPassengers",
+   "desc": "()Ljava/util/List;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/entity/monster/Vindicator",
+   "name": "discard",
+   "desc": "()V"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/entity/monster/Vindicator",
+   "name": "getPersistentData",
+   "desc": "()Lnet/minecraft/nbt/CompoundTag;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/entity/monster/Vindicator",
+   "name": "getUUID",
+   "desc": "()Ljava/util/UUID;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/entity/monster/Vindicator",
+   "name": "setCustomName",
+   "desc": "(Lnet/minecraft/network/chat/Component;)V"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/entity/monster/Vindicator",
+   "name": "startRiding",
+   "desc": "(Lnet/minecraft/world/entity/Entity;Z)Z"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/item/ItemStack",
+   "name": "<init>",
+   "desc": "(Lnet/minecraft/world/item/Item;)V"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/level/block/state/BlockState",
+   "name": "setValue",
+   "desc": "(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Lnet/minecraft/world/level/block/state/BlockState;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/level/levelgen/structure/BoundingBox",
+   "name": "isInside",
+   "desc": "(Lnet/minecraft/core/Vec3i;)Z"
+  },
+  {
+   "kind": "method",
+   "owner": "net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate$StructureBlockInfo",
+   "name": "<init>",
+   "desc": "(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/nbt/CompoundTag;)V"
+  },
+  {
+   "kind": "method",
+   "owner": "net/neoforged/neoforge/client/event/RenderLivingEvent",
+   "name": "getEntity",
+   "desc": "()Lnet/minecraft/world/entity/LivingEntity;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/neoforged/neoforge/client/event/RenderLivingEvent",
+   "name": "getMultiBufferSource",
+   "desc": "()Lnet/minecraft/client/renderer/MultiBufferSource;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/neoforged/neoforge/client/event/RenderLivingEvent",
+   "name": "getPartialTick",
+   "desc": "()F"
+  },
+  {
+   "kind": "method",
+   "owner": "net/neoforged/neoforge/client/event/RenderLivingEvent",
+   "name": "getPoseStack",
+   "desc": "()Lcom/mojang/blaze3d/vertex/PoseStack;"
+  },
+  {
+   "kind": "method",
+   "owner": "net/neoforged/neoforge/client/event/RenderLivingEvent",
+   "name": "getRenderer",
+   "desc": "()Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;"
+  },
+  {
+   "kind": "method",
+   "owner": "yesman/epicfight/api/client/animation/ClientAnimator",
+   "name": "getPose",
+   "desc": "(F)Lyesman/epicfight/api/animation/Pose;"
+  },
+  {
+   "kind": "method",
+   "owner": "yesman/epicfight/api/model/Armature",
+   "name": "getBoundTransformFor",
+   "desc": "(Lyesman/epicfight/api/animation/Pose;Lyesman/epicfight/api/animation/Joint;)Lyesman/epicfight/api/utils/math/OpenMatrix4f;"
+  },
+  {
+   "kind": "method",
+   "owner": "yesman/epicfight/api/model/Armature",
+   "name": "hasJoint",
+   "desc": "(Ljava/lang/String;)Z"
+  },
+  {
+   "kind": "method",
+   "owner": "yesman/epicfight/api/model/Armature",
+   "name": "searchJointByName",
+   "desc": "(Ljava/lang/String;)Lyesman/epicfight/api/animation/Joint;"
+  },
+  {
+   "kind": "method",
+   "owner": "yesman/epicfight/api/utils/math/OpenMatrix4f",
+   "name": "toQuaternion",
+   "desc": "()Lorg/joml/Quaternionf;"
+  },
+  {
+   "kind": "method",
+   "owner": "yesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch",
+   "name": "getClientAnimator",
+   "desc": "()Lyesman/epicfight/api/client/animation/ClientAnimator;"
+  }
+ ],
+ "mixins": [
+  {
+   "mixin": "GodMeleeParryMixin",
+   "targets": [
+    "yesman/epicfight/skill/guard/GuardSkill",
+    "yesman/epicfight/skill/guard/ParryingSkill",
+    "com/hm/efn/skill/guard/EFNParryingSkill"
+   ],
+   "method": "isBlockableSource",
+   "desc": null
+  },
+  {
+   "mixin": "GodRecoveryAttackMixin",
+   "targets": [
+    "net/minecraft/world/entity/LivingEntity"
+   ],
+   "method": "hurt",
+   "desc": "(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+  },
+  {
+   "mixin": "HaloLandingApiMixin",
+   "targets": [
+    "com/cmhh/halovecs/engine/VehicleEngineUtilsExtension"
+   ],
+   "method": "vtolEngine",
+   "desc": null
+  },
+  {
+   "mixin": "NightfallEnemyParryWindowMixin",
+   "targets": [
+    "com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch"
+   ],
+   "method": "setParry",
+   "desc": null
+  },
+  {
+   "mixin": "NightfallEnemyParryWindowMixin",
+   "targets": [
+    "com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch"
+   ],
+   "method": "preTickServer",
+   "desc": null
+  }
+ ]
+}

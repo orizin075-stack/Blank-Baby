@@ -1,0 +1,82 @@
+# The user's r60 (OROR Nightfall 059h r60), checked without its own files: (1) the dedicated server started with the
+# 059h OROR jar, the 053 pack and the two mods r60 added (The Awakening and Player Animation Library), as r60 asks
+# CurseForge for them; (2) the outside classes, fields and methods r60's OROR jar uses and its mixins' targets
+# (names only, oror_rework/r60check/refs.json), looked up in the real jars; (3) packages carried by two mod jars.
+name: OROR r60 check
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['oror_rework/r60check/*.py', 'oror_rework/r60check/*.json', '.github/workflows/oror_r60_check.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oror-r60-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    defaults:
+      run:
+        shell: bash
+        working-directory: oror_rework/neoforge1211patch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Mod jars
+        run: |
+          O=../r60check/out; rm -rf "$O"; mkdir -p "$O" libs
+          python3 -I tools/cf_fetch.py pack/manifest-0.17.23.json pack/lock-0.17.23.json libs \
+            epic-fight-21.17.3.1-mc1.21.1-neoforge.jar superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar > "$O/fetch.txt" 2>&1 || true
+          curl -sSfL -o libs/nightfall.jar "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
+          curl -sSfL -o libs/indestructible-orig.jar https://mediafilez.forgecdn.net/files/7932/288/indestructible-21.16.3-1.21.1.jar || true
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/pack053
+          key: pack053-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-053.json') }}
+      - name: The 053 pack and r60's two new mods
+        run: |
+          O=../r60check/out
+          python3 -I tools/fetch_pack.py pack/manifest-053.json "$RUNNER_TEMP/pack053" sodium fancytoasts chatplus extrasounds > "$O/pack_fetch.txt" 2>&1 || true
+          python3 -I tools/fetch_pack.py ../r60check/manifest-r60-extra.json "$RUNNER_TEMP/r60extra" >> "$O/pack_fetch.txt" 2>&1 || true
+          tail -4 "$O/pack_fetch.txt"; ls -l "$RUNNER_TEMP/r60extra" | tee "$O/r60extra.txt"
+          for j in "$RUNNER_TEMP"/r60extra/*.jar; do echo "== $j"; unzip -p "$j" META-INF/neoforge.mods.toml; done > "$O/r60extra_mods_toml.txt" 2>&1 || true
+          ls "$RUNNER_TEMP/pack053" | grep -i -E 'anim|player' >> "$O/r60extra.txt" || true
+      - name: Dedicated server - 059h with the 053 pack and The Awakening and Player Animation Library
+        run: |
+          set +e
+          O=../r60check/out
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 3000 'COMPASS-RESULT' 'DODGE-RESULT' 'CITADEL-SELFTEST {' 'GAMETEST-RESULT' 'CI-DONE' \
+            -- compass,guards,dodge,citadel,gametests \
+            -- out/oror_supreme_bosses-0.17.39-059-preview.jar libs/nightfall.jar user_mods/dueldominion-0.17.0-alpha.jar \
+               "$RUNNER_TEMP"/r60extra/*.jar "$RUNNER_TEMP"/pack053/*.jar 2>&1 | tail -40 > "$O/server_test.txt"; echo "rc=${PIPESTATUS[0]}" >> "$O/server_test.txt"
+          L="$RUNNER_TEMP/server/console.log"
+          grep -aE -- '-RESULT|CI-DONE|CITADEL-SELFTEST|GAMETEST \{' "$L" | cut -c1-4000 > "$O/results.txt" || true
+          head -n 2500 "$L" > "$O/console_head.log"; tail -n 1500 "$L" > "$O/console_tail.log"
+          grep -aE 'ERROR|Exception|Caused by|Failed to|requires|Missing|broken mod state|awaken|player_animation|playeranim' "$L" | head -800 > "$O/errors.txt" || true
+          exit 0
+      - name: r60's outside references, mixin targets and split packages
+        run: |
+          O=../r60check/out
+          python3 -I ../r60check/refcheck.py ../r60check/refs.json "$O/refcheck.txt" "$RUNNER_TEMP/server/libraries" "$RUNNER_TEMP/server/mods" libs \
+            2>&1 | tail -5
+      - name: Commit the result
+        if: always()
+        working-directory: .
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f oror_rework/r60check/out
+          git commit -m "OROR r60 check ${GITHUB_SHA::7} [skip ci]" || exit 0
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
+            sleep $((i * 7))
+          done
