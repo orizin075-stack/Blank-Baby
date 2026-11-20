@@ -1,0 +1,77 @@
+ok (superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar) class com/atsuishio/superbwarfare/entity/vehicle/utils/VehicleEngineUtils.
+ok (server-1.21.1-20240808.144430-srg.jar) class net/minecraft/world/level/ServerLevelAccessor.
+ok (server-1.21.1-20240808.144430-srg.jar) class net/minecraft/world/level/block/NetherPortalBlock.
+ok (neoforge-21.1.262-universal.jar) class net/neoforged/neoforge/attachment/AttachmentHolder.
+ok (neoforge-21.1.262-universal.jar) class net/neoforged/neoforge/client/event/RenderLivingEvent.
+ok (epic-fight-21.17.3.1-mc1.21.1-neoforge.jar) class yesman/epicfight/api/animation/Pose.
+ok (epic-fight-21.17.3.1-mc1.21.1-neoforge.jar) class yesman/epicfight/api/client/animation/ClientAnimator.
+ok (epic-fight-21.17.3.1-mc1.21.1-neoforge.jar) class yesman/epicfight/api/model/Armature.
+ok (epic-fight-21.17.3.1-mc1.21.1-neoforge.jar) class yesman/epicfight/api/utils/math/OpenMatrix4f.
+unknown owner (not in these jars) field net/minecraft/client/model/geom/PartPose.xF
+unknown owner (not in these jars) field net/minecraft/client/model/geom/PartPose.xRotF
+unknown owner (not in these jars) field net/minecraft/client/model/geom/PartPose.yF
+unknown owner (not in these jars) field net/minecraft/client/model/geom/PartPose.yRotF
+unknown owner (not in these jars) field net/minecraft/client/model/geom/PartPose.zF
+unknown owner (not in these jars) field net/minecraft/client/model/geom/PartPose.zRotF
+ok             field net/minecraft/core/Direction$Axis.XLnet/minecraft/core/Direction$Axis;
+ok             field net/minecraft/core/Direction$Axis.ZLnet/minecraft/core/Direction$Axis;
+ok             field net/minecraft/sounds/SoundEvents.GOAT_HORN_SOUND_VARIANTSLcom/google/common/collect/ImmutableList;
+ok             field net/minecraft/world/damagesource/DamageTypes.MOB_ATTACKLnet/minecraft/resources/ResourceKey;
+ok             field net/minecraft/world/damagesource/DamageTypes.MOB_ATTACK_NO_AGGROLnet/minecraft/resources/ResourceKey;
+ok             field net/minecraft/world/damagesource/DamageTypes.PLAYER_ATTACKLnet/minecraft/resources/ResourceKey;
+ok             field net/minecraft/world/entity/EntityType.BLAZELnet/minecraft/world/entity/EntityType;
+ok             field net/minecraft/world/entity/EntityType.WITHER_SKELETONLnet/minecraft/world/entity/EntityType;
+ok             field net/minecraft/world/level/GameRules.RULE_DAYLIGHTLnet/minecraft/world/level/GameRules$Key;
+ok             field net/minecraft/world/level/block/Blocks.BRICKSLnet/minecraft/world/level/block/Block;
+ok             field net/minecraft/world/level/block/Blocks.CRACKED_STONE_BRICKSLnet/minecraft/world/level/block/Block;
+ok             field net/minecraft/world/level/block/Blocks.MOSSY_STONE_BRICKSLnet/minecraft/world/level/block/Block;
+ok             field net/minecraft/world/level/block/Blocks.NETHER_PORTALLnet/minecraft/world/level/block/Block;
+ok             field net/minecraft/world/level/block/NetherPortalBlock.AXISLnet/minecraft/world/level/block/state/properties/EnumProperty;
+ok             field yesman/epicfight/api/animation/Pose.EMPTY_POSELyesman/epicfight/api/animation/Pose;
+ok             field yesman/epicfight/api/model/Armature.rootJointLyesman/epicfight/api/animation/Joint;
+ok             field yesman/epicfight/api/utils/math/OpenMatrix4f.m30F
+ok             field yesman/epicfight/api/utils/math/OpenMatrix4f.m31F
+ok             field yesman/epicfight/api/utils/math/OpenMatrix4f.m32F
+ok             imethod net/minecraft/world/level/ServerLevelAccessor.getMaxBuildHeight()I
+ok             imethod net/minecraft/world/level/ServerLevelAccessor.getMinBuildHeight()I
+ok             method com/atsuishio/superbwarfare/entity/vehicle/utils/VehicleEngineUtils.findNearestLandingPos(Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;I)Lnet/minecraft/world/phys/Vec3;
+ok             method com/atsuishio/superbwarfare/entity/vehicle/utils/VehicleEngineUtils.updateAutoLanding(Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;Lnet/minecraft/world/phys/Vec3;)V
+unknown owner (not in these jars) method net/minecraft/client/model/geom/ModelPart.getInitialPose()Lnet/minecraft/client/model/geom/PartPose;
+ok             method net/minecraft/core/BlockPos$MutableBlockPos.asLong()J
+ok             method net/minecraft/server/level/ServerLevel.destroyBlock(Lnet/minecraft/core/BlockPos;Z)Z
+ok             method net/minecraft/server/level/ServerLevel.isEmptyBlock(Lnet/minecraft/core/BlockPos;)Z
+ok             method net/minecraft/server/level/ServerPlayer.getLastHurtByMob()Lnet/minecraft/world/entity/LivingEntity;
+ok             method net/minecraft/world/effect/MobEffect.getDescriptionId()Ljava/lang/String;
+ok             method net/minecraft/world/entity/Mob.getPassengers()Ljava/util/List;
+ok             method net/minecraft/world/entity/monster/Vindicator.discard()V
+MISSING        method net/minecraft/world/entity/monster/Vindicator.getPersistentData()Lnet/minecraft/nbt/CompoundTag;
+ok             method net/minecraft/world/entity/monster/Vindicator.getUUID()Ljava/util/UUID;
+ok             method net/minecraft/world/entity/monster/Vindicator.setCustomName(Lnet/minecraft/network/chat/Component;)V
+ok             method net/minecraft/world/entity/monster/Vindicator.startRiding(Lnet/minecraft/world/entity/Entity;Z)Z
+MISSING        method net/minecraft/world/item/ItemStack.<init>(Lnet/minecraft/world/item/Item;)V
+MISSING        method net/minecraft/world/level/block/state/BlockState.setValue(Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;)Lnet/minecraft/world/level/block/state/BlockState;
+ok             method net/minecraft/world/level/levelgen/structure/BoundingBox.isInside(Lnet/minecraft/core/Vec3i;)Z
+ok             method net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate$StructureBlockInfo.<init>(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/nbt/CompoundTag;)V
+ok             method net/neoforged/neoforge/client/event/RenderLivingEvent.getEntity()Lnet/minecraft/world/entity/LivingEntity;
+ok             method net/neoforged/neoforge/client/event/RenderLivingEvent.getMultiBufferSource()Lnet/minecraft/client/renderer/MultiBufferSource;
+ok             method net/neoforged/neoforge/client/event/RenderLivingEvent.getPartialTick()F
+ok             method net/neoforged/neoforge/client/event/RenderLivingEvent.getPoseStack()Lcom/mojang/blaze3d/vertex/PoseStack;
+ok             method net/neoforged/neoforge/client/event/RenderLivingEvent.getRenderer()Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;
+ok             method yesman/epicfight/api/client/animation/ClientAnimator.getPose(F)Lyesman/epicfight/api/animation/Pose;
+ok             method yesman/epicfight/api/model/Armature.getBoundTransformFor(Lyesman/epicfight/api/animation/Pose;Lyesman/epicfight/api/animation/Joint;)Lyesman/epicfight/api/utils/math/OpenMatrix4f;
+ok             method yesman/epicfight/api/model/Armature.hasJoint(Ljava/lang/String;)Z
+ok             method yesman/epicfight/api/model/Armature.searchJointByName(Ljava/lang/String;)Lyesman/epicfight/api/animation/Joint;
+ok             method yesman/epicfight/api/utils/math/OpenMatrix4f.toQuaternion()Lorg/joml/Quaternionf;
+ok             method yesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch.getClientAnimator()Lyesman/epicfight/api/client/animation/ClientAnimator;
+
+MIXIN GodMeleeParryMixin -> yesman/epicfight/skill/guard/GuardSkill.isBlockableSource: declared [('isBlockableSource', '(Lnet/minecraft/world/damagesource/DamageSource;Z)Z')] (epic-fight-21.17.3.1-mc1.21.1-neoforge.jar)
+MIXIN GodMeleeParryMixin -> yesman/epicfight/skill/guard/ParryingSkill.isBlockableSource: declared [('isBlockableSource', '(Lnet/minecraft/world/damagesource/DamageSource;Z)Z')] (epic-fight-21.17.3.1-mc1.21.1-neoforge.jar)
+MIXIN GodMeleeParryMixin -> com/hm/efn/skill/guard/EFNParryingSkill.isBlockableSource: declared [('isBlockableSource', '(Lnet/minecraft/world/damagesource/DamageSource;Z)Z')] (nightfall.jar)
+MIXIN GodRecoveryAttackMixin -> net/minecraft/world/entity/LivingEntity.hurt: declared [('hurt', '(Lnet/minecraft/world/damagesource/DamageSource;F)Z')] (server-1.21.1-20240808.144430-srg.jar)
+MIXIN HaloLandingApiMixin -> com/cmhh/halovecs/engine/VehicleEngineUtilsExtension.vtolEngine: declared [('vtolEngine', '(Lcom/atsuishio/superbwarfare/entity/vehicle/base/VehicleEntity;Lcom/cmhh/halovecs/engine/VTOLEngine;)V')] (halovecs-1.21.1-5.1.0.jar)
+MIXIN NightfallEnemyParryWindowMixin -> com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParry: declared [('setParry', '(Z)V')] (indestructible-orig.jar)
+MIXIN NightfallEnemyParryWindowMixin -> com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.preTickServer: declared [('preTickServer', '()V')] (indestructible-orig.jar)
+
+packages in more than one mod jar: 0
+
+refs not found: 3 of 65; classes indexed 107249 from 219 jars

@@ -1,0 +1,79 @@
+== /home/runner/work/_temp/r60extra/PlayerAnimationLibNeoforge-1.1.5+mc.1.21.1.jar
+modLoader = "javafml"
+loaderVersion = "*"
+issueTrackerURL = "https://github.com/ZigyTheBird/PlayerAnimationLibrary/issues"
+license = "MIT License"
+
+[[mods]]
+modId = "player_animation_library"
+version = "1.1.5+mc.1.21.1"
+displayName = "Player Animation Library"
+authors = "Zigy, dima_dencep"
+description = '''
+A library that allows mods to animate the player, in a way that doesn't conflict with other mods. (and much more!)
+'''
+
+displayURL = "https://docs.zigythebird.com/pal/intro"
+logoFile = "icon.png"
+
+[[dependencies.player_animation_library]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.player_animation_library]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "player_animation_library.mixins.json"
+== /home/runner/work/_temp/r60extra/awakened-1.23.11-1.21.1.jar
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All Rights Reserved"
+
+[[mixins]]
+config="awakened.mixins.json"
+
+[[mods]]
+modId="awakened"
+version="1.23.11"
+displayName="Awakened"
+logoFile="logo.png"
+logoBlur=false
+description='''
+Awaken a random superpower in a life-threatening moment, then grow into it.
+'''
+
+[[dependencies.awakened]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1.219,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.awakened]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21,1.21.1]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.awakened]]
+    modId="player_animation_library"
+    type="required"
+    versionRange="[1.0,)"
+    ordering="AFTER"
+    side="CLIENT"
+
+[[dependencies.awakened]]
+    modId="curios"
+    type="required"
+    versionRange="[9,)"
+    ordering="AFTER"
+    side="BOTH"

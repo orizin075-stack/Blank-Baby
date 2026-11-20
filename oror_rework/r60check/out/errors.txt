@@ -1,0 +1,205 @@
+[m[32m[07:02:18.410] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "awakened-1.23.11-1.21.1.jar" [locator: {mods folder locator at /home/runner/work/_temp/server/mods}, reader: mod manifest] 
+		Awakened 1.23.11 (awakened)
+		Player Animation Library 1.1.5+mc.1.21.1 (player_animation_library)
+		Player Animator 2.0.4+1.21.1 (playeranimator)
+[m[1;31m[07:02:23.958] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[07:02:23.965] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[07:02:24.115] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[07:02:24.117] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[07:02:24.137] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[07:02:24.138] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[07:02:24.139] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[07:02:24.140] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[07:02:24.141] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[07:02:24.142] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[07:02:24.477] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[07:02:24.480] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[07:02:24.537] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[07:02:24.682] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[07:02:24.685] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[07:02:24.816] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
+[m[33m[07:02:24.816] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[1;31m[07:02:24.938] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[07:02:24.939] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[07:02:24.960] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[07:02:24.987] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[07:02:31] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+java.nio.file.NoSuchFileException: ./config/jupiter.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
+[07:02:32] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
+[07:02:33] [modloading-worker-0/INFO] [co.aw.aw.Awakened/]: Loading awakened
+[07:02:43] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
+[07:02:52] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: halo is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: boot is not a registered slot type!
+[07:02:52] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[07:02:52] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[07:02:53] [Server thread/INFO] [citadel/]: [Citadel] Processing dimension: awakened:pocket
+[07:02:53] [Server thread/INFO] [co.gi.al.al.AlexsCaves/]: [AC] Found BiomeSourceAccessor for dimension: awakened:pocket
+[07:02:54] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.ConnectException: HTTP connect timed out
+[07:03:07] [Worker-Main-3/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[07:03:07] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[07:03:07] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[07:03:08] [Server thread/INFO] [de.ry.sa.Sable/]: Creating physics pipeline for ResourceKey[minecraft:dimension / awakened:pocket] using RapierPhysicsPipelineProvider
+[07:03:09] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[07:03:09] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[07:03:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[07:03:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[07:03:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+[07:03:11] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.ConnectException: HTTP connect timed out
+[07:03:26] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.ConnectException: HTTP connect timed out
+[07:03:41] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.ConnectException: HTTP connect timed out
+[07:05:37] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_signed_decision_controls_native_stance: requires a separately running TUKUYO service; not a pass
+[07:05:37] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_teaching_and_entity_identity_stay_separate: requires a separately running TUKUYO service; not a pass
+[07:05:37] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_signed_decision_controls_native_stance: requires a separately running TUKUYO service; not a pass
+[07:05:37] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_teaching_and_entity_identity_stay_separate: requires a separately running TUKUYO service; not a pass
+[07:06:33] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA boss_gate_requires_and_consumes_key BlockPos{x=192, y=78, z=3000}
+[07:06:33] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'boss_gate_requires_and_consumes_key' (1 tests)...
+[07:06:36] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"boss_gate_requires_and_consumes_key","ok":true,"required":true,"error":""}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-283, y=-56, z=-275}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-50, z=-279}
+[07:07:10] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-57, z=-280}
+[07:07:17] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA pact_is_conditional_and_requires_signature BlockPos{x=0, y=64, z=3192}
+[07:07:17] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'pact_is_conditional_and_requires_signature' (1 tests)...
+[07:07:18] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"pact_is_conditional_and_requires_signature","ok":true,"required":true,"error":""}
+[07:08:30] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"local_squad_rejects_accidental_melee_and_projectile_damage","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Same-village friendly damage cannot start infighting"}
+[07:09:21] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"external_mobs_and_oror_share_combat","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Exact-version pack active modulargolems_3143"}
+[07:10:19] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"skilled_mob_places_actual_water_before_landing","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: A real water source rescues the descending mob"}
+[07:10:42] [Server thread/INFO] [de.ry.sa.Sable/]: Saving sub-levels for level 'ServerLevel[world]'/awakened:pocket
+[07:10:44] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA tempering_requires_material_and_preserves_actual_item_components BlockPos{x=384, y=64, z=4152}
+[07:10:45] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'tempering_requires_material_and_preserves_actual_item_components' (1 tests)...
+[07:10:47] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"tempering_requires_material_and_preserves_actual_item_components","ok":true,"required":true,"error":""}
+[07:11:16] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"low_health_mob_retreats_during_healing","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Actual movement retreats while recovering"}
+[07:11:44] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"terrain_pillar_and_protected_chest_rules","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Native non-guardian pillar and collision-safe ascent"}
+[07:11:50] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"villager_arms_and_defeats_survival_player","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Trade level one villager kills ordinary survival player"}
+[07:12:00] [Server thread/INFO] [co.aw.aw.Awakened/]: Player OrorTestPlayer awakened power 'kinetic_charger'
+[07:12:06] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
+[07:12:06] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
+[07:12:06] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
+[07:12:06] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
+[07:12:06] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
+[07:12:53] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"all_six_ranks_defeat_fully_armored_scripted_survival_fighters","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: All six independent ranks defeat actual armored scripted fighters"}
+[07:14:31] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"buried_ore_is_excavated_smelted_and_collected","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Actual excavation, transport, coal burning and vanilla recipe: 採掘精錬師 / 取引Lv.5 / 通路を掘削しています / 採掘=0鉱石 / 回収=0 / 運搬=0 pos=BlockPos{x=7, y=65, z=4734}"}
+[07:16:21] [Server thread/INFO] [de.ry.sa.Sable/]: Saving sub-levels for level 'ServerLevel[world]'/awakened:pocket
+[07:17:14] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"three_miners_work_simultaneously_without_material_duplication","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Each independent furnace produced exactly one ingot"}
+[07:19:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-414, y=-52, z=-427}
+[07:19:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-407, y=-57, z=-497}
+[07:19:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-406, y=-57, z=-496}
+[07:19:12] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-403, y=-52, z=-425}
+[07:19:12] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-410, y=-52, z=-426}
+[07:19:12] [Worker-Main-1/ERROR] [minecraft/SculkSensorBlockEntity]: Failed to parse vibration listener for Sculk Sensor: 'No key selector in MapLike[{event_delay:0,event_distance:3.602844f,range:8,source:{pos:[I;-404,-59,-499],type:"minecraft:block"}}]'
+[07:19:12] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-350, y=-58, z=-499}
+[07:19:12] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-349, y=-58, z=-499}
+[07:19:13] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-409}
+[07:19:13] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[07:19:13] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[07:19:13] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[07:19:13] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-52, z=-419}
+[07:19:13] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-424, y=-52, z=-422}
+[07:19:13] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-422}
+[07:19:13] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-418}
+[07:19:13] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-409}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-394, y=-52, z=-409}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-395, y=-52, z=-416}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-552}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-51, z=-552}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-247, y=-58, z=-588}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[07:19:14] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/SculkSensorBlockEntity]: Failed to parse vibration listener for Sculk Sensor: 'No key selector in MapLike[{event_delay:0,event_distance:3.602844f,range:8,source:{pos:[I;-404,-59,-499],type:"minecraft:block"}}]'
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-54, z=-542}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-53, z=-542}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-58, z=-502}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-54, z=-542}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-53, z=-542}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-213, y=-52, z=-702}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-200, y=-52, z=-702}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-58, z=-502}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-359, y=-58, z=-502}
+[07:19:14] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-346, y=-57, z=-497}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-362, y=-51, z=-548}
+[07:19:14] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-359, y=-58, z=-502}
+[07:19:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[07:19:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[07:19:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[07:19:45] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-291, y=-57, z=-315}
+[07:19:45] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-292, y=-57, z=-313}
+[07:19:45] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-294, y=-57, z=-313}
+[07:19:45] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-296, y=-57, z=-313}
+[07:19:45] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-295, y=-57, z=-315}
+[07:19:45] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-293, y=-57, z=-315}
+[07:19:47] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/awakened:pocket
+[07:19:47] [Server thread/INFO] [de.ry.sa.Sable/]: Saving sub-levels for level 'ServerLevel[world]'/awakened:pocket
