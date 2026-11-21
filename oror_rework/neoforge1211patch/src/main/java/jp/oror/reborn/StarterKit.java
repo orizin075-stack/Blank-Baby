@@ -17,7 +17,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
  * (051) What every player starts with, once, the first time they come into a world: a full set of iron armour (worn,
- * where the slot is free), sixteen steaks, a Superb Warfare Glock 17 and 96 rounds of handgun ammunition. The mark that
+ * where the slot is free), an iron sword, a shield, an iron pickaxe, torches, thirty-two steaks, a warp stone and an
+ * iron backpack (r62, where those mods are in the pack), a Superb Warfare Glock 17 and 96 rounds of handgun ammunition. The mark that
  * they had it is kept with the player's persisted data, so dying and coming back does not give it again.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
@@ -58,8 +59,31 @@ public final class StarterKit {
             }
             given.add(BuiltInRegistries.ITEM.getKey(armour[i]) + "x1");
         }
-        hand(player, new ItemStack(Items.COOKED_BEEF, 16));
-        given.add("minecraft:cooked_beefx16");
+        // (r62) The rest of the handoff's kit: an iron sword, a shield (in the off hand where it is free), an iron
+        // pickaxe, thirty-two torches, thirty-two steaks, and, where their mods are in the pack, a warp stone
+        // (Waystones, the teleport stone) and an iron backpack (Sophisticated Backpacks).
+        hand(player, new ItemStack(Items.IRON_SWORD));
+        given.add("minecraft:iron_swordx1");
+        ItemStack shield = new ItemStack(Items.SHIELD);
+        if (player.getOffhandItem().isEmpty()) {
+            player.setItemSlot(EquipmentSlot.OFFHAND, shield);
+        } else {
+            hand(player, shield);
+        }
+        given.add("minecraft:shieldx1");
+        hand(player, new ItemStack(Items.IRON_PICKAXE));
+        given.add("minecraft:iron_pickaxex1");
+        hand(player, new ItemStack(Items.TORCH, 32));
+        given.add("minecraft:torchx32");
+        hand(player, new ItemStack(Items.COOKED_BEEF, 32));
+        given.add("minecraft:cooked_beefx32");
+        for (String id : new String[] {"waystones:warp_stone", "sophisticatedbackpacks:iron_backpack"}) {
+            Item it = BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
+            if (it != Items.AIR) {
+                hand(player, new ItemStack(it));
+                given.add(id + "x1");
+            }
+        }
         Item pistol = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("superbwarfare", "glock_17"));
         Item rounds = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("superbwarfare", "handgun_ammo"));
         if (pistol != Items.AIR) {
