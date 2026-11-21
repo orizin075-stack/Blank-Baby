@@ -23,6 +23,12 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * tick: toward its target (or its rider's), circling it fourteen blocks out and ten up and every ten seconds diving on
  * it, a bite or a claw when it is close; with no target, toward the capital. It keeps at least fourteen blocks over the
  * ground, turns to face where it goes and is held up (no gravity) while it lives in the siege.
+ * <p>
+ * The air wing gathers far out (run 194: 686 blocks from the capital), where no player is: there the chunks are loaded
+ * but nothing in them moves, and the dragons hung in the air unticked for the whole siege (a hippogryph flew 57 blocks
+ * and stopped where it left the chunk it was born in). So each mount carries the world with it: a ticket on the chunks
+ * around it (three by three, where things move), renewed while it flies, for as long as a siege lasts after the mount
+ * was first seen; then it is left to the world as any creature is.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class SiegeMounts {
@@ -30,7 +36,39 @@ public final class SiegeMounts {
     private static final double SPEED = 0.62, CLIMB = 0.4;
     private static final java.util.Map<Class<?>, java.util.Optional<Method>> SET_FLYING = new java.util.concurrent.ConcurrentHashMap<>();
 
+    /** Twelve minutes, the length of a siege (AzazelCapitalSiege). */
+    private static final long CARRY = 14400;
+    private static final net.minecraft.server.level.TicketType<net.minecraft.world.level.ChunkPos> TICKET =
+        net.minecraft.server.level.TicketType.create("oror_siege_air", java.util.Comparator.comparingLong(net.minecraft.world.level.ChunkPos::toLong), 100);
+
     private SiegeMounts() {
+    }
+
+    /** Once a second: every mount of the siege, ticking or not, keeps the chunks around it moving. */
+    @SubscribeEvent
+    public static void carry(net.neoforged.neoforge.event.tick.LevelTickEvent.Post e) {
+        if (!(e.getLevel() instanceof ServerLevel level) || level.getGameTime() % 20 != 0) {
+            return;
+        }
+        for (Entity v : level.getAllEntities()) {
+            if (v instanceof Mob m && m.isAlive() && !m.isPassenger() && m.getPersistentData().getBoolean(TAG)) {
+                hold(level, m);
+            }
+        }
+    }
+
+    static void hold(ServerLevel level, Mob m) {
+        var data = m.getPersistentData();
+        long now = level.getGameTime();
+        if (!data.contains("OrorSiegeAirSince")) {
+            data.putLong("OrorSiegeAirSince", now);
+        }
+        long since = data.getLong("OrorSiegeAirSince");
+        if (now - since > CARRY || now < since) {
+            return;
+        }
+        net.minecraft.world.level.ChunkPos cp = m.chunkPosition();
+        level.getChunkSource().addRegionTicket(TICKET, cp, 3, cp);
     }
 
     @SubscribeEvent

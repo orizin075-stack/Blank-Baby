@@ -5,6 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,8 +56,10 @@ import org.slf4j.LoggerFactory;
 /**
  * (r63) The 41 gods' citadels, rebuilt (the user: "神々の城塞も点検し直し 多分ひどいから"), as the game builds them: none
  * was ever near enough for the structure audit to find one, so each is started here with the game's own jigsaw
- * generation (its own height rule and rotation; only its biome is not asked) at a place of its own far out in the
- * overworld, its chunks generated in full and the structure placed in them as /place does. Then StructureAudit's audit
+ * generation (its own height rule, rotation and biome rule) at a place of one of its biomes far out in its own
+ * dimension, its chunks generated in full and the structure placed in them as /place does. (Run 194 started them all
+ * at one row of chunks with any biome let through, and the game gave no start for any; now the reason is logged, and
+ * a stage the world would not make is still set out by hand to be looked at, but the test fails.) Then StructureAudit's audit
  * (missing blocks, ground inside, floating columns, dark places to stand) and the god's seal: a player right-clicks it
  * and the god must rise over it (the seal only gives the god up if there is room for it). The god is sent away again.
  * One STRUCT-AUDIT and one GOD-SEAL line for each, then GODS-RESULT.
@@ -71,6 +85,9 @@ public final class GodCitadelTest {
         int done;
         int placed, sealsRisen, sealsTried;
         final List<String> failed = new ArrayList<>();
+        final List<String> notMade = new ArrayList<>();
+        int made;
+        MinecraftServer server;
         long startedAt;
     }
 
@@ -86,6 +103,7 @@ public final class GodCitadelTest {
         }
         State s = new State();
         s.audit.level = level;
+        s.server = level.getServer();
         Registry<Structure> reg = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
         for (ResourceKey<Structure> k : reg.registryKeySet()) {
             if (k.location().getNamespace().equals("oror_supreme_bosses") && k.location().getPath().endsWith("_citadel")) {
@@ -117,10 +135,11 @@ public final class GodCitadelTest {
         }
         if (s.index >= s.keys.size() && s.phase == 0) {
             StructureAudit.Run a = s.audit;
-            boolean pass = s.placed == s.keys.size() && s.sealsRisen == s.keys.size() && a.floatingTotal == 0 && s.failed.isEmpty();
-            LOG.info("GODS-RESULT {\"citadels\":{},\"placed\":{},\"sealsTried\":{},\"godsRisen\":{},\"missing\":{},\"intruding\":{},\"floatingColumns\":{},"
+            boolean pass = s.made == s.keys.size() && s.placed == s.keys.size() && s.sealsRisen == s.keys.size() && a.floatingTotal == 0
+                && s.failed.isEmpty();
+            LOG.info("GODS-RESULT {\"citadels\":{},\"made\":{},\"notMade\":\"{}\",\"placed\":{},\"sealsTried\":{},\"godsRisen\":{},\"missing\":{},\"intruding\":{},\"floatingColumns\":{},"
                     + "\"indoor\":{},\"dark\":{},\"failed\":\"{}\",\"ticks\":{},\"pass\":{}}",
-                s.keys.size(), s.placed, s.sealsTried, s.sealsRisen, a.missingTotal, a.intrudingTotal, a.floatingTotal, a.indoorTotal, a.darkTotal,
+                s.keys.size(), s.made, String.join("; ", s.notMade).replace('"', '\''), s.placed, s.sealsTried, s.sealsRisen, a.missingTotal, a.intrudingTotal, a.floatingTotal, a.indoorTotal, a.darkTotal,
                 String.join("; ", s.failed).replace('"', '\''), a.level.getGameTime() - s.startedAt, pass);
             resultLogged = true;
             state = null;
@@ -136,19 +155,12 @@ public final class GodCitadelTest {
                 }
                 ResourceKey<Structure> key = s.keys.get(s.index);
                 s.audit.current = key;
-                Holder<Structure> holder = level.registryAccess().registryOrThrow(Registries.STRUCTURE).getHolderOrThrow(key);
-                ChunkGenerator gen = level.getChunkSource().getGenerator();
-                // far out, a place for each, twelve chunks apart
-                ChunkPos at = new ChunkPos(1250 + 12 * s.index, 1250);
-                StructureStart start = holder.value().generate(level.registryAccess(), gen, gen.getBiomeSource(), level.getChunkSource().randomState(),
-                    level.getStructureManager(), level.getSeed(), at, 0, level, b -> true);
-                if (start == null || !start.isValid()) {
-                    s.failed.add(key.location().getPath() + " (no start)");
-                    LOG.info("STRUCT-AUDIT {\"id\":\"{}\",\"found\":false,\"start\":false}", key.location());
+                begin(s, key);
+                if (s.audit.start == null) {
                     s.index++;
                     return;
                 }
-                s.audit.start = start;
+                StructureStart start = s.audit.start;
                 BoundingBox bb = start.getBoundingBox();
                 s.chunks.clear();
                 for (int x = (bb.minX() >> 4) - 1; x <= (bb.maxX() >> 4) + 1; x++) {
@@ -197,6 +209,87 @@ public final class GodCitadelTest {
             }
             default -> s.phase = 0;
         }
+    }
+
+    /**
+     * The citadel's start as the world makes it: in the dimension its biomes are of, at a place of one of its biomes
+     * (each god its own stretch of land, three thousand blocks apart), with the biome rule the world uses. If the game
+     * gives no start there, the reason is looked for and the stage is set out by hand from its pool (so it is still
+     * looked at), and the god is counted among those the world would not make.
+     */
+    private static void begin(State s, ResourceKey<Structure> key) {
+        MinecraftServer server = s.server;
+        Holder<Structure> holder = server.registryAccess().registryOrThrow(Registries.STRUCTURE).getHolderOrThrow(key);
+        Structure structure = holder.value();
+        ServerLevel level = server.overworld();
+        for (ServerLevel l : server.getAllLevels()) {
+            if (l.getChunkSource().getGenerator().getBiomeSource().possibleBiomes().stream().anyMatch(structure.biomes()::contains)) {
+                level = l;
+                break;
+            }
+        }
+        s.audit.level = level;
+        ChunkGenerator gen = level.getChunkSource().getGenerator();
+        var randomState = level.getChunkSource().randomState();
+        int cx = 20000 + 3000 * (s.index % 7), cz = 20000 + 3000 * (s.index / 7);
+        int y = level.dimension() == Level.NETHER ? 34 : 64;
+        Pair<BlockPos, Holder<Biome>> found = gen.getBiomeSource().findBiomeHorizontal(cx, y, cz, 1400, 32, structure.biomes()::contains,
+            level.getRandom(), true, randomState.sampler());
+        String biome = found == null ? "none" : found.getSecond().unwrapKey().map(k -> k.location().toString()).orElse("?");
+        ChunkPos at = found == null ? new ChunkPos(cx >> 4, cz >> 4) : new ChunkPos(found.getFirst());
+        String path = key.location().getPath();
+        StructureStart start = structure.generate(level.registryAccess(), gen, gen.getBiomeSource(), randomState, level.getStructureManager(),
+            level.getSeed(), at, 0, level, structure.biomes()::contains);
+        String why = "";
+        if (start == null || !start.isValid()) {
+            StructureStart any = structure.generate(level.registryAccess(), gen, gen.getBiomeSource(), randomState, level.getStructureManager(),
+                level.getSeed(), at, 0, level, b -> true);
+            why = any != null && any.isValid() ? "biome refused" : "jigsaw gave nothing";
+            start = any != null && any.isValid() ? any : byHand(level, structure, path, at);
+            if (start == null) {
+                why += ", by hand nothing";
+            }
+            s.notMade.add(path + " (" + why + ", " + biome + ")");
+        } else {
+            s.made++;
+        }
+        LOG.info("GOD-START {\"id\":\"{}\",\"dim\":\"{}\",\"biome\":\"{}\",\"chunk\":[{},{}],\"made\":{},\"why\":\"{}\",\"pool\":\"{}\"}", path,
+            level.dimension().location(), biome, at.x, at.z, why.isEmpty(), why, why.isEmpty() ? "" : poolInfo(level, path));
+        if (start == null) {
+            s.failed.add(path + " (no start)");
+            LOG.info("STRUCT-AUDIT {\"id\":\"{}\",\"found\":false,\"start\":false}", key.location());
+        }
+        s.audit.start = start;
+    }
+
+    private static String poolInfo(ServerLevel level, String path) {
+        try {
+            StructureTemplatePool pool = level.registryAccess().registryOrThrow(Registries.TEMPLATE_POOL)
+                .get(ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", path + "/start_pool"));
+            var t = level.getStructureManager().get(ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", path));
+            return "elements=" + (pool == null ? "no pool" : String.valueOf(pool.size())) + " template="
+                + t.map(x -> x.getSize().toShortString()).orElse("none");
+        } catch (RuntimeException ex) {
+            return String.valueOf(ex).replace('"', '\'');
+        }
+    }
+
+    /** The stage set out from its pool's element at the ground, as the jigsaw would with no turn. */
+    private static StructureStart byHand(ServerLevel level, Structure structure, String path, ChunkPos at) {
+        StructureTemplatePool pool = level.registryAccess().registryOrThrow(Registries.TEMPLATE_POOL)
+            .get(ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", path + "/start_pool"));
+        if (pool == null || pool.size() == 0) {
+            return null;
+        }
+        StructurePoolElement el = pool.getRandomTemplate(RandomSource.create(level.getSeed()));
+        int x = at.getMinBlockX(), z = at.getMinBlockZ();
+        int y = level.dimension() == Level.NETHER ? 34 : level.getChunkSource().getGenerator().getFirstFreeHeight(x + 27, z + 27,
+            Heightmap.Types.WORLD_SURFACE_WG, level, level.getChunkSource().randomState());
+        BlockPos pos = new BlockPos(x, y, z);
+        PoolElementStructurePiece piece = new PoolElementStructurePiece(level.getStructureManager(), el, pos, el.getGroundLevelDelta(), Rotation.NONE,
+            el.getBoundingBox(level.getStructureManager(), pos, Rotation.NONE), LiquidSettings.APPLY_WATERLOGGING);
+        StructureStart start = new StructureStart(structure, at, 0, new PiecesContainer(List.<StructurePiece>of(piece)));
+        return start.isValid() ? start : null;
     }
 
     private static void release(State s) {
