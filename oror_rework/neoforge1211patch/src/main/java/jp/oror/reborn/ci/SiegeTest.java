@@ -163,8 +163,10 @@ public final class SiegeTest {
             if (n++ < 8) {
                 String rider = ridden ? BuiltInRegistries.ENTITY_TYPE.getKey(e.getPassengers().get(0).getType()).getPath() : "none";
                 String target = e instanceof Mob m && m.getTarget() != null ? BuiltInRegistries.ENTITY_TYPE.getKey(m.getTarget().getType()).getPath() : "none";
-                line.append(String.format(java.util.Locale.ROOT, "%s%s rider=%s alt=%.1f dist=%.0f path=%.0f mode=%s target=%s", line.length() > 0 ? "; " : "",
-                    t.kind.substring(t.kind.indexOf(':') + 1), rider, alt, d, t.path, e.getPersistentData().getString("OrorSiegeMountMode"), target));
+                // (r63) where the rider sits: up (over the mount's feet, as a share of its height); on the back is about 0.8
+                String seat = ridden ? String.format(java.util.Locale.ROOT, "%.2f", (e.getPassengers().get(0).getY() - e.getY()) / Math.max(0.1, e.getBbHeight())) : "-";
+                line.append(String.format(java.util.Locale.ROOT, "%s%s rider=%s seat=%s alt=%.1f dist=%.0f path=%.0f mode=%s target=%s", line.length() > 0 ? "; " : "",
+                    t.kind.substring(t.kind.indexOf(':') + 1), rider, seat, alt, d, t.path, e.getPersistentData().getString("OrorSiegeMountMode"), target));
             }
         }
         LOG.info("SIEGE-AIR {\"t\":{},\"seen\":{},\"now\":\"{}\"}", r.age, r.tracks.size(), line);
