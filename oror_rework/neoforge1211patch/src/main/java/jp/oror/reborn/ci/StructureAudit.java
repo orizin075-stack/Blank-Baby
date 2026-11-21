@@ -125,9 +125,11 @@ public final class StructureAudit {
             r.index++;
         }
         if (r.index >= r.keys.size() && r.start == null) {
-            LOG.info("STRUCT-AUDIT-RESULT {\"structures\":{},\"found\":{},\"missing\":{},\"intruding\":{},\"floatingColumns\":{},\"indoor\":{},\"dark\":{},\"notFound\":\"{}\",\"ticks\":{}}",
+            LOG.info("STRUCT-AUDIT-RESULT {\"structures\":{},\"found\":{},\"missing\":{},\"intruding\":{},\"floatingColumns\":{},\"indoor\":{},\"dark\":{},\"notFound\":\"{}\",\"footingPieces\":{},\"footingCleared\":{},\"footingLaid\":{},\"ticks\":{}}",
                 r.keys.size(), r.found, r.missingTotal, r.intrudingTotal, r.floatingTotal, r.indoorTotal, r.darkTotal,
-                String.join(" ", r.notFound), r.level.getGameTime() - r.startedAt);
+                String.join(" ", r.notFound), jp.oror.reborn.worldgen.StructureFooting.PIECES.get(),
+                jp.oror.reborn.worldgen.StructureFooting.CLEARED.get(), jp.oror.reborn.worldgen.StructureFooting.FOOTED.get(),
+                r.level.getGameTime() - r.startedAt);
             resultLogged = true;
             run = null;
         }

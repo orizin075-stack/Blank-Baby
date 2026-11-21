@@ -151,6 +151,8 @@ jobs:
                 javap -p -c -cp "$j" 'net.minecraft.world.entity.npc.VillagerTrades$TreasureMapForEmeralds' | grep -E 'getOffer|findNearestMapStructure' | head -6
                 # (059f) what CapitalFireMixin enters: the fire's tick
                 javap -p -cp "$j" net.minecraft.world.level.block.FireBlock | grep -E ' tick\(|checkBurnOut' | head -4
+                # (r62) what StructureFootingMixin follows: a template piece's placing
+                javap -p -cp "$j" net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece | grep -E ' place\(|postProcess' | head -4
                 break
               fi
             done
