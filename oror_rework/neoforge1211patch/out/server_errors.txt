@@ -1,147 +1,123 @@
-[m[1;31m[18:41:14.723] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
-[m[33m[18:41:14.729] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
-[m[33m[18:41:14.844] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
-[m[33m[18:41:14.845] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
-[m[33m[18:41:14.867] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
-[m[33m[18:41:14.868] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
-[m[33m[18:41:14.869] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
-[m[33m[18:41:14.870] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
-[m[33m[18:41:14.871] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
-[m[33m[18:41:14.872] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
-[m[33m[18:41:15.225] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[18:41:15.228] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
-[m[33m[18:41:15.288] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
-[m[33m[18:41:15.428] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[18:41:15.432] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
-[m[1;31m[18:41:15.632] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
-[m[33m[18:41:15.632] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
-[m[1;31m[18:41:15.768] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
-[m[33m[18:41:15.768] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
-[m[33m[18:41:15.790] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
-[m[33m[18:41:15.819] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
-[18:41:21] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+[m[1;31m[19:03:08.886] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[19:03:08.892] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[19:03:09.015] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[19:03:09.017] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[19:03:09.038] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[19:03:09.039] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[19:03:09.040] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[19:03:09.041] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[19:03:09.042] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[19:03:09.043] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[19:03:09.429] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[19:03:09.432] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[19:03:09.500] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[19:03:09.648] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[19:03:09.652] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[19:03:09.849] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
+[m[33m[19:03:09.850] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[1;31m[19:03:10.035] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[19:03:10.036] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[19:03:10.066] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[19:03:10.110] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[19:03:16] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
 java.nio.file.NoSuchFileException: ./config/jupiter.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[18:41:22] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+[19:03:18] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
 java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[18:41:31] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
-[18:41:39] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: halo is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: boot is not a registered slot type!
-[18:41:39] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[18:41:39] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
-[18:41:42] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[18:41:52] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
-[18:41:52] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[18:41:52] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
-[18:41:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[18:41:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[18:41:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
-[18:41:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
-[18:41:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
-[18:41:58] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[18:42:13] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[18:42:28] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[18:43:57] [Worker-Main-1/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (36150, 31, 21797)
-[18:44:35] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28832, 45, 26783)
-[18:44:35] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28845, 46, 26779)
-[18:45:38] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26077, 28, 28849)
-[18:45:38] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26078, 30, 28846)
-[18:45:38] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26078, 28, 28846)
-[18:45:39] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26077, 28, 28849)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26089, 28, 28849)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26083, 30, 28839)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26081, 30, 28839)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26089, 28, 28849)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26101, 14, 28826)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26097, 15, 28830)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26105, 15, 28822)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26101, 37, 28853)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
-[18:45:40] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26115, 11, 28830)
-[18:45:40] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26115, 11, 28822)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26114, 30, 28846)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26114, 30, 28842)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26117, 30, 28839)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26119, 28, 28839)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26124, 30, 28844)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26116, 11, 28844)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26119, 37, 28862)
-[18:45:40] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
-[18:46:34] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[18:46:34] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[18:46:34] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[18:46:34] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-283, y=-56, z=-275}
-[18:46:46] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-80}
-[18:46:46] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-77}
-[18:48:15] [Worker-Main-2/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (727, 29, 2650)
-[18:48:59] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
-[18:48:59] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
-[18:48:59] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
-[18:48:59] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
-[18:48:59] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
-[18:49:35] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-54, z=-74}
-[18:49:35] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-50, z=-77}
-[18:49:35] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-187, y=-50, z=-72}
-[18:49:35] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-184, y=-45, z=-75}
-[18:49:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
-[18:49:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
-[18:49:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
-[18:49:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
-[18:49:36] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-195, y=-54, z=-92}
-[18:49:36] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-54, z=-88}
-[18:49:36] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-50, z=-85}
-[18:49:36] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-183, y=-51, z=-89}
-[18:49:36] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-186, y=-50, z=-90}
-[18:49:36] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-186, y=-45, z=-87}
-[18:49:36] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-189, y=-45, z=-84}
-[18:49:36] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
-[18:49:36] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
-[18:49:36] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
-[18:49:36] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
-[18:49:36] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
-[18:50:56] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[18:50:56] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[18:50:56] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[18:51:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=36, z=50}
-[18:51:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=40, z=58}
-[18:51:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=44, z=61}
-[18:51:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=42, z=60}
-[18:51:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=38, z=55}
-[18:51:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=37, z=54}
-[18:51:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=40, z=53}
-[18:51:12] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=43, z=54}
-[18:51:12] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=28, y=40, z=64}
-[18:52:01] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-80}
-[18:52:01] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-77}
+[19:03:28] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
+[19:03:38] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: halo is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: boot is not a registered slot type!
+[19:03:38] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[19:03:38] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[19:03:39] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[19:03:54] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[19:03:54] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[19:03:54] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[19:03:55] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[19:03:57] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[19:03:57] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[19:03:57] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[19:03:57] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[19:03:57] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+[19:04:10] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[19:04:26] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[19:06:13] [Worker-Main-2/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (36150, 31, 21797)
+[19:06:53] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-99, y=-50, z=-80}
+[19:06:53] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-99, y=-50, z=-77}
+[19:06:53] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28899, 45, 26688)
+[19:06:54] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28900, 50, 26716)
+[19:06:54] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28904, 54, 26729)
+[19:06:54] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28904, 49, 26720)
+[19:06:54] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28900, 50, 26724)
+[19:08:10] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26077, 28, 28849)
+[19:08:10] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26078, 30, 28846)
+[19:08:10] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26078, 28, 28846)
+[19:08:10] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26077, 28, 28849)
+[19:08:11] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26089, 28, 28849)
+[19:08:11] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26083, 30, 28839)
+[19:08:11] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26081, 30, 28839)
+[19:08:11] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26089, 28, 28849)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26101, 14, 28826)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26097, 15, 28830)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26105, 15, 28822)
+[19:08:12] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
+[19:08:12] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26101, 37, 28853)
+[19:08:12] [Worker-Main-3/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
+[19:08:12] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26115, 11, 28830)
+[19:08:12] [Worker-Main-1/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26115, 11, 28822)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26114, 30, 28846)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26114, 30, 28842)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26117, 30, 28839)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26119, 28, 28839)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26124, 30, 28844)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26116, 11, 28844)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26119, 37, 28862)
+[19:08:12] [Worker-Main-2/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
+[19:09:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[19:09:10] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[19:09:10] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[19:09:10] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-283, y=-56, z=-275}
+[19:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-80}
+[19:09:24] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-77}
+[19:10:58] [Worker-Main-1/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (727, 29, 2650)
+[19:11:50] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
+[19:11:50] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
+[19:11:50] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
+[19:11:50] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
+[19:11:50] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
+[19:16:02] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
+[19:16:02] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
+[19:16:02] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
+[19:16:02] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
+[19:16:02] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
