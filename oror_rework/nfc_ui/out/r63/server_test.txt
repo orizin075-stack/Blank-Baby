@@ -1,4 +1,5 @@
 server did not start
+		Placebo-1.21.1-9.9.4.jar                          |Placebo                       |placebo                       |9.9.4               |Manifest: NOSIGNATURE
 		player-animation-lib-forge-2.0.4+1.21.1.jar       |Player Animator               |playeranimator                |2.0.4+1.21.1        |Manifest: NOSIGNATURE
 		ponder-neoforge-1.0.87+mc1.21.1.jar               |Ponder                        |ponder                        |1.0.87+mc1.21.1     |Manifest: NOSIGNATURE
 		prickle-neoforge-1.21.1-21.1.11.jar               |PrickleMC                     |prickle                       |21.1.11             |Manifest: NOSIGNATURE
@@ -49,21 +50,20 @@ server did not start
 		yet_another_config_lib_v3-3.8.2+1.21.1-neoforge.ja|YetAnotherConfigLib           |yet_another_config_lib_v3     |3.8.2+1.21.1-neoforg|Manifest: NOSIGNATURE
 		YouDied-neoforge-1.21-4.0.0.19.jar                |You Died                      |you_died                      |4.0.0.19            |Manifest: 15:a4:a3:0e:d2:f8:64:0c:a4:97:30:5f:48:ba:5f:69:f9:23:42:14:a8:5a:60:3a:b1:b1:29:1a:0a:37:3c:79
 		Zeta-1.1-40.jar                                   |Zeta                          |zeta                          |1.1-40              |Manifest: NOSIGNATURE
-	Crash Report UUID: e2042cb3-790d-4be6-b99c-026cecb2f987
+	Crash Report UUID: f48f356a-0601-4642-9c1e-37d6be33562d
 	FML: 4.0.45
 	NeoForge: 21.1.262
-[11:18:42] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
+[11:21:58] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
 net.neoforged.fml.ModLoadingException: Loading errors encountered:
-	- Epic fight - Avalon (epic_fight_avalon) has failed to load correctly
-	  java.lang.NoClassDefFoundError: net/minecraft/client/particle/ParticleProvider
+	- Tu Di Gong (tudigong) encountered an error while dispatching the net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent event
+	  java.lang.RuntimeException: Attempted to load class net/minecraft/client/gui/screens/Screen for invalid dist DEDICATED_SERVER
 
 	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.waitForFuture(ModLoader.java:281) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
-	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.dispatchParallelTask(ModLoader.java:244) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
-	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.constructMods(ModLoader.java:152) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
-	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:142) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
-	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.internal.CommonModLoader.begin(CommonModLoader.java:49) ~[neoforge-21.1.262-universal.jar%23278!/:?] {re:classloading}
-	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.server.loading.ServerModLoader.load(ServerModLoader.java:34) ~[neoforge-21.1.262-universal.jar%23278!/:?] {re:classloading}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:124) ~[server-1.21.1-20240808.144430-srg.jar%23277!/:?] {re:mixin,re:classloading,pl:mixin:A}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.waitForTask(ModLoader.java:183) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.runInitTask(ModLoader.java:163) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.internal.CommonModLoader.finish(CommonModLoader.java:86) ~[neoforge-21.1.262-universal.jar%23277!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.server.loading.ServerModLoader.load(ServerModLoader.java:36) ~[neoforge-21.1.262-universal.jar%23277!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:124) ~[server-1.21.1-20240808.144430-srg.jar%23276!/:?] {re:mixin,re:classloading,pl:mixin:A}
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
 	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%2359!/:4.0] {}
