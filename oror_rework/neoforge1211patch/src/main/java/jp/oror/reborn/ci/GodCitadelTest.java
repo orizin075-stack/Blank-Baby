@@ -76,6 +76,7 @@ public final class GodCitadelTest {
     }
 
     private static final class State {
+        int diagnosed;
         final StructureAudit.Run audit = new StructureAudit.Run();
         final List<ResourceKey<Structure>> keys = new ArrayList<>();
         int index;
@@ -245,6 +246,9 @@ public final class GodCitadelTest {
             StructureStart any = structure.generate(level.registryAccess(), gen, gen.getBiomeSource(), randomState, level.getStructureManager(),
                 level.getSeed(), at, 0, level, b -> true);
             why = any != null && any.isValid() ? "biome refused" : "jigsaw gave nothing";
+            if (!(any != null && any.isValid()) && s.diagnosed++ < 2) {
+                LOG.info("GOD-WHY {}", diagnose(level, structure, at));
+            }
             start = any != null && any.isValid() ? any : byHand(level, structure, path, at);
             if (start == null) {
                 why += ", by hand nothing";
@@ -260,6 +264,124 @@ public final class GodCitadelTest {
             LOG.info("STRUCT-AUDIT {\"id\":\"{}\",\"found\":false,\"start\":false}", key.location());
         }
         s.audit.start = start;
+    }
+
+    /**
+     * Run 196: the game gave no start for any of the 41 though its biome and its pool were right and the stage set by hand
+     * stood and its seal gave the god up. In vanilla 1.21.1 a jigsaw with a one-element pool and no start jigsaw name
+     * always gives its start piece, so: which mods' mixins sit on the structure classes, what the jigsaw's own fields are,
+     * whether its own findGenerationPoint gives a point, and where the start piece would stand.
+     */
+    private static String diagnose(ServerLevel level, Structure structure, ChunkPos at) {
+        StringBuilder b = new StringBuilder("{\"type\":\"").append(structure.getClass().getName()).append('"');
+        String[] classes = {"net/minecraft/world/level/levelgen/structure/Structure",
+            "net/minecraft/world/level/levelgen/structure/structures/JigsawStructure",
+            "net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement",
+            "net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement$Placer",
+            "net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool",
+            "net/minecraft/world/level/levelgen/structure/pools/SinglePoolElement",
+            "net/minecraft/world/level/levelgen/structure/pools/StructurePoolElement",
+            "net/minecraft/world/level/levelgen/structure/PoolElementStructurePiece",
+            "net/minecraft/world/level/levelgen/structure/StructureStart",
+            "net/minecraft/world/level/levelgen/structure/StructurePiece",
+            "net/minecraft/world/level/levelgen/structure/pieces/StructurePiecesBuilder",
+            "net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate",
+            "net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplateManager",
+            "net/minecraft/world/level/chunk/ChunkGenerator",
+            "net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator",
+            "net/minecraft/world/level/levelgen/heightproviders/ConstantHeight",
+            "net/minecraft/world/level/levelgen/VerticalAnchor$Absolute"};
+        b.append(",\"mixins\":{");
+        try {
+            Class<?> ci = Class.forName("org.spongepowered.asm.mixin.transformer.ClassInfo");
+            Class<?> mi = Class.forName("org.spongepowered.asm.mixin.extensibility.IMixinInfo");
+            Class<?> mc = Class.forName("org.spongepowered.asm.mixin.extensibility.IMixinConfig");
+            for (String c : classes) {
+                Object info = ci.getMethod("forName", String.class).invoke(null, c);
+                if (info == null) {
+                    continue;
+                }
+                java.util.Collection<?> applied = (java.util.Collection<?>) ci.getMethod("getAppliedMixins").invoke(info);
+                if (applied == null || applied.isEmpty()) {
+                    continue;
+                }
+                b.append('"').append(c.substring(c.lastIndexOf('/') + 1)).append("\":\"");
+                for (Object m : applied) {
+                    Object cfg = mi.getMethod("getConfig").invoke(m);
+                    b.append(mi.getMethod("getClassName").invoke(m)).append(" (").append(cfg == null ? "?" : mc.getMethod("getName").invoke(cfg)).append(") ");
+                }
+                b.append("\",");
+            }
+        } catch (Throwable ex) {
+            b.append("\"error\":\"").append(String.valueOf(ex).replace('"', '\'')).append("\"");
+        }
+        b.append('}');
+        // the jigsaw's own fields
+        b.append(",\"fields\":\"");
+        for (Class<?> c = structure.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
+            for (java.lang.reflect.Field f : c.getDeclaredFields()) {
+                if (java.lang.reflect.Modifier.isStatic(f.getModifiers())) {
+                    continue;
+                }
+                try {
+                    f.setAccessible(true);
+                    String v = String.valueOf(f.get(structure));
+                    b.append(f.getName()).append('=').append(v.length() > 120 ? v.substring(0, 120) : v).append("; ");
+                } catch (Throwable ex) {
+                    b.append(f.getName()).append("=?; ");
+                }
+            }
+        }
+        b.append('"');
+        // its own findGenerationPoint, and the start piece as the jigsaw would set it
+        ChunkGenerator gen = level.getChunkSource().getGenerator();
+        try {
+            Object ctx = null;
+            for (java.lang.reflect.Constructor<?> k : Structure.GenerationContext.class.getConstructors()) {
+                if (k.getParameterCount() == 9) {
+                    ctx = k.newInstance(level.registryAccess(), gen, gen.getBiomeSource(), level.getChunkSource().randomState(),
+                        level.getStructureManager(), level.getSeed(), at, level, (java.util.function.Predicate<Holder<Biome>>) h -> true);
+                }
+            }
+            b.append(",\"context\":").append(ctx != null);
+            if (ctx != null) {
+                for (String name : new String[] {"findGenerationPoint", "findValidGenerationPoint"}) {
+                    java.lang.reflect.Method m = null;
+                    for (Class<?> c = structure.getClass(); c != null && m == null; c = c.getSuperclass()) {
+                        try {
+                            m = c.getDeclaredMethod(name, Structure.GenerationContext.class);
+                        } catch (NoSuchMethodException ignored) {
+                        }
+                    }
+                    if (m == null) {
+                        b.append(",\"").append(name).append("\":\"no method\"");
+                        continue;
+                    }
+                    m.setAccessible(true);
+                    Object r = m.invoke(structure, ctx);
+                    String got = r instanceof java.util.Optional<?> o ? (o.isPresent() ? "point " + ((Structure.GenerationStub) o.get()).position() : "empty") : String.valueOf(r);
+                    b.append(",\"").append(name).append("\":\"").append(got).append('"');
+                    if (r instanceof java.util.Optional<?> o && o.isPresent()) {
+                        var pieces = ((Structure.GenerationStub) o.get()).getPiecesBuilder().build();
+                        b.append(",\"").append(name).append("Pieces\":").append(pieces.pieces().size());
+                    }
+                }
+            }
+        } catch (Throwable ex) {
+            Throwable t = ex instanceof java.lang.reflect.InvocationTargetException ite && ite.getCause() != null ? ite.getCause() : ex;
+            b.append(",\"threw\":\"").append(String.valueOf(t).replace('"', '\'')).append(" at ");
+            for (StackTraceElement e : t.getStackTrace()) {
+                b.append(e.getClassName()).append('.').append(e.getMethodName()).append(':').append(e.getLineNumber()).append(' ');
+                if (e.getClassName().startsWith("jp.oror.reborn.ci")) {
+                    break;
+                }
+            }
+            b.append('"');
+        }
+        b.append(",\"build\":[").append(level.getMinBuildHeight()).append(',').append(level.getMaxBuildHeight()).append(']');
+        b.append(",\"ground\":").append(gen.getFirstFreeHeight(at.getMinBlockX() + 27, at.getMinBlockZ() + 27, Heightmap.Types.WORLD_SURFACE_WG, level,
+            level.getChunkSource().randomState()));
+        return b.append('}').toString();
     }
 
     private static String poolInfo(ServerLevel level, String path) {
