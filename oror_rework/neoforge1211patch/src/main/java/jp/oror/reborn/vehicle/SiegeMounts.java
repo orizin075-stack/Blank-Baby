@@ -148,6 +148,50 @@ public final class SiegeMounts {
         m.getPersistentData().putString("OrorSiegeMountMode", target == null ? "capital" : dive ? "dive" : "circle");
     }
 
+    /**
+     * (run 200) The riders came off: of eight mounts only three kept their pillager or vindicator, the fire dragons'
+     * riders gone within ten seconds of the rising, far from the capital and before any fight. The air wing is not the
+     * air wing without its riders, so while rider and mount both live in the same world, a rider of the siege stays on
+     * its mount (what took it off is told once per mount, for the next look). A rider that dies, a mount that dies, and
+     * anything leaving the world, still get off.
+     */
+    private static final java.util.Set<java.util.UUID> TOLD = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
+    @SubscribeEvent
+    public static void keepRider(net.neoforged.neoforge.event.entity.EntityMountEvent e) {
+        if (!e.isDismounting() || e.getLevel().isClientSide() || !(e.getEntityBeingMounted() instanceof Mob mount)
+            || !mount.getPersistentData().getBoolean(TAG)) {
+            return;
+        }
+        Entity rider = e.getEntityMounting();
+        if (rider == null || rider instanceof net.minecraft.world.entity.player.Player || !rider.isAlive() || rider.isRemoved()
+            || !mount.isAlive() || mount.isRemoved() || rider.level() != mount.level()) {
+            return;
+        }
+        if (TOLD.add(mount.getUUID())) {
+            StringBuilder why = new StringBuilder();
+            int n = 0;
+            for (StackTraceElement f : Thread.currentThread().getStackTrace()) {
+                String c = f.getClassName();
+                if (c.startsWith("java.") || c.startsWith("net.neoforged.bus") || c.contains("SiegeMounts") || c.contains("EventHooks")
+                    || c.startsWith("jdk.") || c.contains("$$Lambda")) {
+                    continue;
+                }
+                if (why.length() > 0) {
+                    why.append(" < ");
+                }
+                why.append(c.substring(c.lastIndexOf('.') + 1)).append('.').append(f.getMethodName());
+                if (++n >= 6) {
+                    break;
+                }
+            }
+            org.slf4j.LoggerFactory.getLogger("OROR Siege").info("SIEGE-DISMOUNT {\"mount\":\"{}\",\"rider\":\"{}\",\"kept\":true,\"by\":\"{}\"}",
+                net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(mount.getType()).getPath(),
+                net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(rider.getType()).getPath(), why);
+        }
+        e.setCanceled(true);
+    }
+
     /** Ice and Fire's mounts keep their own "flying" flag; set it so they spread their wings. */
     private static void flying(Mob m) {
         Method f = SET_FLYING.computeIfAbsent(m.getClass(), c -> {
