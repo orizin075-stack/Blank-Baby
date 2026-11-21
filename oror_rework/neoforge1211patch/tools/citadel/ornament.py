@@ -28,16 +28,15 @@ AIRS = ('minecraft:air', 'minecraft:cave_air')
 
 
 def run(folder):
-    t = template_io.Template(folder)
     stats = collections.Counter()
     for x0 in range(-640, 640, TILE):
+        # a fresh template for each strip, saved at its end: the template keeps the region files it read, so a second
+        # save of one template (or one after dropping its edited chunks) would write the old bytes back
+        t = template_io.Template(folder)
         for z0 in range(-640, 640, TILE):
             tile(t, x0, z0, stats)
-            t.chunks.clear()
-            t.sections.clear()
+        stats['chunks_written'] += t.save(folder)
         print(x0, dict(stats), flush=True)
-    n = t.save(folder)
-    stats['chunks_written'] = n
     return dict(stats)
 
 
