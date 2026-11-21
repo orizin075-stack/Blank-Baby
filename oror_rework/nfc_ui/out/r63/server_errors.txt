@@ -1,12 +1,41 @@
-[m[1;31m[11:14:16.995] [main/ERROR] [loading.ModSorter/LOADING]: Missing or unsupported mandatory dependencies:
-[11:14:24] [main/ERROR] [minecraft/CrashReport]: Negative index in crash report handler (0/18)
+[m[33m[11:18:23.109] [main/WARN] [mixin/]: Error loading class: xaero/common/patreon/Patreon (java.lang.ClassNotFoundException: xaero.common.patreon.Patreon) 
+[m[33m[11:18:23.112] [main/WARN] [mixin/]: Error loading class: xaero/map/patreon/Patreon (java.lang.ClassNotFoundException: xaero.map.patreon.Patreon) 
+[m[33m[11:18:23.667] [main/WARN] [mixin/]: Error loading class: vectorwing/farmersdelight/common/block/TomatoBlock (java.lang.ClassNotFoundException: vectorwing.farmersdelight.common.block.TomatoBlock) 
+[m[33m[11:18:24.081] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[11:18:24.289] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[11:18:24.562] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[11:18:24.563] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[11:18:24.652] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[11:18:24.654] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[11:18:24.676] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[11:18:24.677] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[11:18:24.679] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[11:18:24.680] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[11:18:24.681] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[11:18:24.682] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[11:18:24.880] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[1;31m[11:18:25.361] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
+[m[33m[11:18:25.362] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[1;31m[11:18:25.575] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[11:18:25.576] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[11:18:25.627] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[m[33m[11:18:25.638] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[11:18:35] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+java.nio.file.NoSuchFileException: ./config/jupiter.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
+[11:18:36] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
+[11:18:37] [modloading-worker-0/ERROR] [ne.ne.fm.ja.FMLModContainer/LOADING]: Failed to register automatic subscribers. ModID: epic_fight_avalon
+Caused by: java.lang.ClassNotFoundException: net.minecraft.client.particle.ParticleProvider
+[11:18:42] [main/FATAL] [ne.ne.fm.ModLoader/LOADING]: Failed to wait for future Mod Construction, 1 errors found
+[11:18:42] [main/ERROR] [minecraft/CrashReport]: Negative index in crash report handler (0/18)
 net.neoforged.neoforge.logging.CrashReportExtender$ModLoadingCrashException: Mod loading has failed
-	Exception message: <No associated exception found>
-	Exception message: <No associated exception found>
-	Exception message: <No associated exception found>
-	Exception message: <No associated exception found>
-	Exception message: <No associated exception found>
-	Exception message: <No associated exception found>
-	Exception message: <No associated exception found>
-[11:14:24] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
+	Caused by 0: java.lang.NoClassDefFoundError: net/minecraft/client/particle/ParticleProvider
+	Exception message: java.lang.ClassNotFoundException: net.minecraft.client.particle.ParticleProvider
+[11:18:42] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
 net.neoforged.fml.ModLoadingException: Loading errors encountered:

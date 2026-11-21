@@ -1,69 +1,69 @@
 server did not start
-	Frequency (GHz): -0.00
-	Number of physical packages: 1
-	Number of physical CPUs: 2
-	Number of logical CPUs: 4
-	Graphics card #0 name: hyperv_drmdrmfb
-	Graphics card #0 vendor: unknown
-	Graphics card #0 VRAM (MiB): 0.00
-	Graphics card #0 deviceId: unknown
-	Graphics card #0 versionInfo: unknown
-	Virtual memory max (MiB): 11063.52
-	Virtual memory used (MiB): 2696.13
-	Swap memory total (MiB): 3072.00
-	Swap memory used (MiB): 0.00
-	Space in storage for jna.tmpdir (MiB): <path not set>
-	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
-	Space in storage for io.netty.native.workdir (MiB): <path not set>
-	Space in storage for java.io.tmpdir (MiB): available: 83096.53, total: 147813.48
-	Space in storage for workdir (MiB): available: 83096.53, total: 147813.48
-	JVM Flags: 2 total; -Xmx6G -XX:StartFlightRecording=filename=rec.jfr,settings=profile,dumponexit=true
-	ModLauncher: 11.0.5+main.901c6ea8
-	ModLauncher launch target: forgeserver
-	ModLauncher services: 
-		sponge-mixin-0.16.4+mixin.0.8.7.jar mixin PLUGINSERVICE 
-		loader-4.0.45.jar slf4jfixer PLUGINSERVICE 
-		loader-4.0.45.jar runtime_enum_extender PLUGINSERVICE 
-		at-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE 
-		loader-4.0.45.jar runtimedistcleaner PLUGINSERVICE 
-		modlauncher-11.0.5.jar mixin TRANSFORMATIONSERVICE 
-		modlauncher-11.0.5.jar fml TRANSFORMATIONSERVICE 
-	FML Language Providers: 
-		kotlinforforge@5.12.0
-		javafml@4.0
-		lowcodefml@4.0
-		minecraft@4.0
-	Mod List: 
-		server-1.21.1-20240808.144430-srg.jar             |Minecraft                     |minecraft                     |1.21.1              |Manifest: NOSIGNATURE
-		neoforge-21.1.262-universal.jar                   |NeoForge                      |neoforge                      |21.1.262            |Manifest: NOSIGNATURE
-[11:14:24] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
+		player-animation-lib-forge-2.0.4+1.21.1.jar       |Player Animator               |playeranimator                |2.0.4+1.21.1        |Manifest: NOSIGNATURE
+		ponder-neoforge-1.0.87+mc1.21.1.jar               |Ponder                        |ponder                        |1.0.87+mc1.21.1     |Manifest: NOSIGNATURE
+		prickle-neoforge-1.21.1-21.1.11.jar               |PrickleMC                     |prickle                       |21.1.11             |Manifest: NOSIGNATURE
+		Prism-1.21.1-neoforge-1.0.11.jar                  |Prism                         |prism                         |1.0.11              |Manifest: NOSIGNATURE
+		puzzleslib-v21.1.64-mc1.21.1+neoforge.jar         |Puzzles Lib                   |puzzleslib                    |21.1.64             |Manifest: NOSIGNATURE
+		Quark-4.1-488.jar                                 |Quark                         |quark                         |4.1-488             |Manifest: NOSIGNATURE
+		refm-0.3.13-1.21.1.jar                            |Rapier For EpicFightMod       |refm                          |0.3.13-1.21.1       |Manifest: NOSIGNATURE
+		visual_keybinder-1.21.1-0.1.13-neoforge.jar       |Raw's Visual Keybinder        |visual_keybinder              |1.21.1 - 0.1.13-neof|Manifest: NOSIGNATURE
+		resourcefullib-neoforge-1.21-3.0.12.jar           |Resourceful Lib               |resourcefullib                |3.0.12              |Manifest: NOSIGNATURE
+		resourcefulconfig-neoforge-1.21-3.0.11.jar        |Resourcefulconfig             |resourcefulconfig             |3.0.11              |Manifest: NOSIGNATURE
+		rimulib-1.2.2-neoforge.jar                        |Rimulib                       |rimulib                       |1.2.2               |Manifest: NOSIGNATURE
+		ritchiesprojectilelib-2.1.2-mc.1.21.1-neoforge.jar|Ritchie's Projectile Library  |ritchiesprojectilelib         |2.1.2               |Manifest: NOSIGNATURE
+		sable-neoforge-1.21.1-2.0.6.jar                   |Sable                         |sable                         |2.0.6               |Manifest: NOSIGNATURE
+		sable-companion-common-1.21.1-1.6.0.jar           |Sable Companion               |sablecompanion                |1.6.0               |Manifest: NOSIGNATURE
+		smsn-neoforge-1.4.5-1.21.1.jar                    |Save My Shit Network          |smsn                          |1.4.5-1.21.1        |Manifest: NOSIGNATURE
+		SBW-Drone-Warfare-1.21.1-NeoForge-1.0.6.jar       |SBW Drone Warfare             |sbwdroneconfig                |1.0.6               |Manifest: NOSIGNATURE
+		SimpleBedrockModel-2.5.1.1-neoforge-mc1.21.1.jar  |SimpleBedrockModel            |simplebedrockmodel            |2.5.1.1-neoforge-mc1|Manifest: NOSIGNATURE
+		smoothchunk-1.21-4.4.jar                          |Smoothchunk mod               |smoothchunk                   |4.4                 |Manifest: NOSIGNATURE
+		sophisticatedbackpacks-1.21.1-3.26.12.2208.jar    |Sophisticated Backpacks       |sophisticatedbackpacks        |3.26.12             |Manifest: NOSIGNATURE
+		sophisticatedcore-1.21.1-1.5.12.2400.jar          |Sophisticated Core            |sophisticatedcore             |1.5.12              |Manifest: NOSIGNATURE
+		sound-physics-remastered-neoforge-1.21.1-1.5.2.jar|Sound Physics Remastered      |sound_physics_remastered      |1.21.1-1.5.2        |Manifest: NOSIGNATURE
+		spark-1.10.124-neoforge.jar                       |spark                         |spark                         |1.10.124            |Manifest: NOSIGNATURE
+		spiral_tower_village-0.0.4.jar                    |Spiral Tower Village          |spiral_tower_village          |0.0.4               |Manifest: NOSIGNATURE
+		structure_layout_optimizer-neoforge-1.0.13.jar    |Structure Layout Optimizer    |structure_layout_optimizer    |1.0.13              |Manifest: NOSIGNATURE
+		superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar       |Superb Warfare                |superbwarfare                 |0.8.9.2             |Manifest: NOSIGNATURE
+		supplementaries-1.21.1-4.1.4-neoforge.jar         |Supplementaries               |supplementaries               |1.21.1-4.1.4        |Manifest: NOSIGNATURE
+		suppressionmod-1.2.0.jar                          |Suppression Mod               |suppressionmod                |1.2.0               |Manifest: NOSIGNATURE
+		tacz_bandits-1.3.jar                              |TACZ Bandits                  |tacz_bandits                  |1.3                 |Manifest: NOSIGNATURE
+		TaxFreeLevels-1.4.27-neoforge-1.21.1.jar          |Tax Free Levels               |taxfreelevels                 |1.4.27              |Manifest: NOSIGNATURE
+		tenshilib-1.21.1-2.3.1-neoforge.jar               |TenshiLib                     |tenshilib                     |1.21.1-2.3.1-neoforg|Manifest: NOSIGNATURE
+		aether-1.21.1-1.5.10-neoforge.jar                 |The Aether                    |aether                        |1.5.10              |Manifest: NOSIGNATURE
+		tlc-neoforge-1.21.1-2.1.0.jar                     |The Lost Castle               |tlc                           |2.1.0               |Manifest: NOSIGNATURE
+		the-shooting-star-demo-1.5.2-neoforge.jar         |The Shooting Star (Demo)      |shooting_star_demo            |1.5.2-demo          |Manifest: NOSIGNATURE
+		tacz-neoforge-1.21.1-1.1.8-hotfix-r7.jar          |Timeless & Classics Guns: Zero|tacz                          |1.1.8-hotfix-r7     |Manifest: NOSIGNATURE
+		TRansition-1.0.26-1.21.1-neoforge-SNAPSHOT.jar    |TRansition                    |transition                    |1.0.26              |Manifest: NOSIGNATURE
+		treeharvester-1.21.1-10.2.jar                     |Tree Harvester                |treeharvester                 |10.2                |Manifest: NOSIGNATURE
+		TRender-1.0.17-1.21.1-neoforge-SNAPSHOT.jar       |TRender                       |trender                       |1.0.17              |Manifest: NOSIGNATURE
+		tudigong-neoforge-1.21.1-1.4.1.jar                |Tu Di Gong                    |tudigong                      |1.4.1               |Manifest: NOSIGNATURE
+		uranus-2.4.1-bugfix-1.21.1-neoforge.jar           |Uranus                        |uranus                        |2.4.1-bugfix        |Manifest: NOSIGNATURE
+		veil-neoforge-1.21.1-4.3.2.jar                    |Veil                          |veil                          |4.3.2               |Manifest: NOSIGNATURE
+		vix-1.0.9.jar                                     |VIX                           |vix                           |1.0.9               |Manifest: NOSIGNATURE
+		waystones-neoforge-1.21.1-21.1.46.jar             |Waystones                     |waystones                     |21.1.46             |Manifest: NOSIGNATURE
+		WeaponsOfMiracles-2.0.178.jar                     |Weapons of miracle            |wom                           |2.0.178             |Manifest: NOSIGNATURE
+		DungeonsArise-1.21.1-2.1.68-release.jar           |When Dungeons Arise           |dungeons_arise                |2.1.68              |Manifest: NOSIGNATURE
+		xaerominimap-neoforge-1.21.1-26.6.0.jar           |Xaero's Minimap               |xaerominimap                  |26.6.0              |Manifest: NOSIGNATURE
+		xaeroworldmap-neoforge-1.21.1-1.47.0.jar          |Xaero's World Map             |xaeroworldmap                 |1.47.0              |Manifest: NOSIGNATURE
+		xaerolib-neoforge-1.21.1-1.7.3.jar                |XaeroLib                      |xaerolib                      |1.7.3               |Manifest: NOSIGNATURE
+		yet_another_config_lib_v3-3.8.2+1.21.1-neoforge.ja|YetAnotherConfigLib           |yet_another_config_lib_v3     |3.8.2+1.21.1-neoforg|Manifest: NOSIGNATURE
+		YouDied-neoforge-1.21-4.0.0.19.jar                |You Died                      |you_died                      |4.0.0.19            |Manifest: 15:a4:a3:0e:d2:f8:64:0c:a4:97:30:5f:48:ba:5f:69:f9:23:42:14:a8:5a:60:3a:b1:b1:29:1a:0a:37:3c:79
+		Zeta-1.1-40.jar                                   |Zeta                          |zeta                          |1.1-40              |Manifest: NOSIGNATURE
+	Crash Report UUID: e2042cb3-790d-4be6-b99c-026cecb2f987
+	FML: 4.0.45
+	NeoForge: 21.1.262
+[11:18:42] [main/ERROR] [minecraft/Main]: Failed to start the minecraft server
 net.neoforged.fml.ModLoadingException: Loading errors encountered:
-	- Mod tudigong requires cristellib 1 or above
-	  Currently, cristellib is not installed
-	  
-	- Mod structure_layout_optimizer requires resourcefulconfig any
-	  Currently, resourcefulconfig is not installed
-	  
-	- Mod bookofdragons requires faunaengine 1.3 or above
-	  Currently, faunaengine is not installed
-	  
-	- Mod ribbits requires yungsapi 1.21.1-NeoForge-5.1.5 or above
-	  Currently, yungsapi is not installed
-	  
-	- Mod bountiful_npc requires lithostitched 1 or above
-	  Currently, lithostitched is not installed
-	  
-	- Mod tudigong requires lithostitched 1 or above
-	  Currently, lithostitched is not installed
-	  
-	- Mod beyonddimensions requires compixel 0.2.0 or above, and below 0.3
-	  Currently, compixel is not installed
-	  
+	- Epic fight - Avalon (epic_fight_avalon) has failed to load correctly
+	  java.lang.NoClassDefFoundError: net/minecraft/client/particle/ParticleProvider
 
-	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:110) ~[loader-4.0.45.jar%2359!/:4.0] {}
-	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.internal.CommonModLoader.begin(CommonModLoader.java:49) ~[neoforge-21.1.262-universal.jar%23279!/:?] {re:classloading}
-	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.server.loading.ServerModLoader.load(ServerModLoader.java:34) ~[neoforge-21.1.262-universal.jar%23279!/:?] {re:classloading}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:124) ~[server-1.21.1-20240808.144430-srg.jar%23278!/:?] {re:classloading}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.waitForFuture(ModLoader.java:281) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.dispatchParallelTask(ModLoader.java:244) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.constructMods(ModLoader.java:152) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:142) ~[loader-4.0.45.jar%2359!/:4.0] {re:mixin}
+	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.internal.CommonModLoader.begin(CommonModLoader.java:49) ~[neoforge-21.1.262-universal.jar%23278!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.server.loading.ServerModLoader.load(ServerModLoader.java:34) ~[neoforge-21.1.262-universal.jar%23278!/:?] {re:classloading}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:124) ~[server-1.21.1-20240808.144430-srg.jar%23277!/:?] {re:mixin,re:classloading,pl:mixin:A}
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
 	at MC-BOOTSTRAP/fml_loader@4.0.45/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.45.jar%2359!/:4.0] {}
