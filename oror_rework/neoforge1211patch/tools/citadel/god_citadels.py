@@ -1,4 +1,4 @@
-"""god_citadels.py <structure dir> [name ...]: the 41 gods' citadels built anew (r63; the user: "神々の城塞も点検し直し 多分ひどいから").
+"""god_citadels.py (superseded by god_stages.py, whose helpers it keeps: harvest, to_nbt, keep_seal_clear) <structure dir> [name ...]: the 41 gods' citadels built anew (r63; the user: "神々の城塞も点検し直し 多分ひどいから").
 
 Until r62 every god's citadel was one template, a 41x25x41 box of one stone with no roof and lights hanging in the air, the
 god's stone and seal swapped in. Each is now a walled castle in the god's own style, on a 49x49 plinth:
@@ -840,7 +840,7 @@ def to_nbt(g, data_version):
             'entities': []}
 
 
-def keep_seal_clear(nbt):
+def keep_seal_clear(nbt, seal_y=2, centre=None):
     """The god rises over the seal: no light the lighting rule put there stays (eleven wide, thirteen high over it)."""
     pal = [state_key(p) for p in nbt['palette']]
     if 'minecraft:air' not in pal:
@@ -849,7 +849,8 @@ def keep_seal_clear(nbt):
     air = pal.index('minecraft:air')
     for b in nbt['blocks']:
         x, y, z = (anvil.val(v) for v in b['pos'])
-        if abs(x - C) <= 5 and abs(z - C) <= 5 and 3 <= y <= 15:
+        cx = C if centre is None else centre
+        if abs(x - cx) <= 5 and abs(z - cx) <= 5 and seal_y + 1 <= y <= seal_y + 13:
             name = pal[anvil.val(b['state'])].split('[')[0]
             if name.endswith('torch') or name.endswith('lantern') and 'sea_' not in name:
                 b['state'] = Typed(3, air)
