@@ -1,0 +1,89 @@
+# OROR Nightfall r60 (the user's own build): its OROR jar and its overrides' mods, with the 053 pack and r60's two new
+# mods (The Awakening and Player Animation Library), on the same dedicated server as the patch build's checks. The
+# result goes to oror_rework/r60test/out/<variant>.
+name: OROR r60 dedicated-server check
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['oror_rework/r60test/**', '.github/workflows/oror_r60.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: oror-r60-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [r60, r61]
+    defaults:
+      run:
+        shell: bash
+        working-directory: oror_rework/neoforge1211patch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: The variant's mods
+        id: v
+        run: |
+          d=../r60test/mods; [ "${{ matrix.variant }}" = r61 ] && d=../r60test/mods_r61
+          if [ ! -d "$d" ]; then echo "skip=1" >> "$GITHUB_OUTPUT"; echo "no $d"; exit 0; fi
+          echo "dir=$d" >> "$GITHUB_OUTPUT"; ls -l "$d"
+      - name: Nightfall
+        if: steps.v.outputs.skip != '1'
+        run: |
+          mkdir -p libs
+          curl -sSfL -o libs/nightfall.jar "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
+      - uses: actions/cache@v4
+        if: steps.v.outputs.skip != '1'
+        with:
+          path: ${{ runner.temp }}/pack053
+          key: pack053-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-053.json') }}
+      - name: The 053 pack's mods and r60's two new ones
+        if: steps.v.outputs.skip != '1'
+        run: |
+          python3 -I tools/fetch_pack.py pack/manifest-053.json "$RUNNER_TEMP/pack053" sodium fancytoasts chatplus extrasounds > "$RUNNER_TEMP/fetch.txt" 2>&1 || true
+          tail -3 "$RUNNER_TEMP/fetch.txt"
+          python3 -I tools/fetch_pack.py ../r60test/manifest-r60-extra.json "$RUNNER_TEMP/r60extra" 2>&1 | tail -5
+          ls -l "$RUNNER_TEMP/r60extra"
+      - name: Dedicated server with the variant
+        if: steps.v.outputs.skip != '1'
+        run: |
+          set +e
+          O=../r60test/out/${{ matrix.variant }}; rm -rf "$O"; mkdir -p "$O"
+          ls "${{ steps.v.outputs.dir }}" "$RUNNER_TEMP/r60extra" > "$O/mods.txt"
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 5400 'CITADEL-SELFTEST {' 'WAR-RESULT' 'FLIGHT-RESULT' 'LANDING-RESULT' \
+            'GUARD-RESULT' 'DODGE-RESULT' 'GUNPOST-RESULT' 'CREW-RESULT' 'AA-RESULT' 'GAMETEST-RESULT' 'RAID-RESULT' 'DUEL-RESULT' 'CI-DONE' \
+            -- compass,shield,arms,guards,dodge,worn,mobs,gunmobs,story,citadel,capitalload,war,pilots,landings,aa,crew,gunposts,villageflight,roads,villagearms,fuel,sweep,gametests,raid,duel \
+            -- "${{ steps.v.outputs.dir }}"/*.jar libs/nightfall.jar "$RUNNER_TEMP"/r60extra/*.jar "$RUNNER_TEMP"/pack053/*.jar \
+            2>&1 | tail -60 > "$O/server_test.txt"; rc=${PIPESTATUS[0]}
+          L="$RUNNER_TEMP/server/console.log"
+          grep -aE -- '-RESULT|CI-DONE|STARTER-KIT|CITADEL-SELFTEST|SAFE-UNLOAD|GAMETEST \{' "$L" | cut -c1-6000 > "$O/results.txt" || true
+          head -n 3000 "$L" > "$O/console_head.log"; tail -n 3000 "$L" > "$O/console_tail.log"
+          grep -aE 'ERROR|Exception|Caused by|Failed to|Couldn.t|Unable to|requires|Missing|broken mod state|Mixin' "$L" | grep -v 'HttpConnectTimeout\|ConnectException' | head -1500 > "$O/errors.txt" || true
+          grep -aE 'OROR|oror' "$L" | grep -aiE 'warn|error|fail|r4[0-9]|r5[0-9]|r60|siege|heli|starter' | head -1500 > "$O/oror_lines.txt" || true
+          echo "rc=$rc" >> "$O/server_test.txt"
+          exit 0
+      - name: Commit the result
+        if: always() && steps.v.outputs.skip != '1'
+        working-directory: .
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f oror_rework/r60test/out
+          git commit -m "OROR r60 server check (${{ matrix.variant }}) ${GITHUB_SHA::7} [skip ci]" || exit 0
+          for i in 1 2 3 4 5; do
+            git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
+            sleep $((i * 7))
+          done
