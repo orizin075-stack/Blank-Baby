@@ -62,7 +62,10 @@ jobs:
           mkdir -p "$RUNNER_TEMP/srv"; cp "$RUNNER_TEMP"/all/*.jar "$RUNNER_TEMP/srv/"
           rm -f "$RUNNER_TEMP"/srv/BEB-* "$RUNNER_TEMP"/srv/rebind_narrator-* "$RUNNER_TEMP"/srv/clearwater-*
           # Epic Fight - Avalon loads a client class (ParticleProvider) while its mod is constructed: single player only
-          rm -f "$RUNNER_TEMP"/srv/epic_fight_avalon-*
+          # (so do P1nero's: TuDiGong registers its packets with a client screen class; all his left to single player)
+          rm -f "$RUNNER_TEMP"/srv/epic_fight_avalon-* "$RUNNER_TEMP"/srv/tudigong-* "$RUNNER_TEMP"/srv/bountiful_npc-* \
+            "$RUNNER_TEMP"/srv/pbf1-* "$RUNNER_TEMP"/srv/multiplayer_boss_fight-* "$RUNNER_TEMP"/srv/fast_tpa-* "$RUNNER_TEMP"/srv/cataclysm_dimension-*
+          ls "$RUNNER_TEMP/srv" | wc -l
           bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 2400 'COMPASS-RESULT' 'KING-STORY {' 'CI-DONE' \
             -- compass,story -- "$RUNNER_TEMP"/srv/*.jar 2>&1 | tee "$OUT/server_test.txt"; rc=${PIPESTATUS[0]}
           C="$RUNNER_TEMP/server/console.log"
