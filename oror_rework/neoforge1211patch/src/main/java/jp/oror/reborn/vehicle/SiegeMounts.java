@@ -78,6 +78,11 @@ public final class SiegeMounts {
             || !m.getPersistentData().getBoolean(TAG) || !(v.level() instanceof ServerLevel level)) {
             return;
         }
+        if (modelDead(m)) {
+            // a fallen dragon's body falls, and lies where it fell
+            m.setNoGravity(false);
+            return;
+        }
         fly(level, m);
     }
 
@@ -164,8 +169,11 @@ public final class SiegeMounts {
             return;
         }
         Entity rider = e.getEntityMounting();
-        if (rider == null || rider instanceof net.minecraft.world.entity.player.Player || !rider.isAlive() || rider.isRemoved()
-            || !mount.isAlive() || mount.isRemoved() || rider.level() != mount.level()) {
+        // only the siege's own riders (its illagers): a defender a dragon has taken in its mouth is let go as before (run 202);
+        // and a dragon that falls (Ice and Fire's dead dragon stays as a body, tickDeath) lets its rider down
+        if (!(rider instanceof net.minecraft.world.entity.raid.Raider) || !rider.isAlive() || rider.isRemoved()
+            || !mount.isAlive() || mount.isRemoved() || mount.isDeadOrDying() || mount.deathTime > 0 || modelDead(mount)
+            || rider.level() != mount.level()) {
             return;
         }
         if (TOLD.add(mount.getUUID())) {
@@ -190,6 +198,28 @@ public final class SiegeMounts {
                 net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(rider.getType()).getPath(), why);
         }
         e.setCanceled(true);
+    }
+
+    private static final java.util.Map<Class<?>, java.util.Optional<Method>> MODEL_DEAD = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** Ice and Fire's dragon, dead, lies as a body that is still "alive" to the game (isModelDead). */
+    private static boolean modelDead(Mob m) {
+        Method f = MODEL_DEAD.computeIfAbsent(m.getClass(), c -> {
+            try {
+                Method x = c.getMethod("isModelDead");
+                return x.getReturnType() == boolean.class ? java.util.Optional.of(x) : java.util.Optional.empty();
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                return java.util.Optional.empty();
+            }
+        }).orElse(null);
+        if (f == null) {
+            return false;
+        }
+        try {
+            return (boolean) f.invoke(m);
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            return false;
+        }
     }
 
     /** Ice and Fire's mounts keep their own "flying" flag; set it so they spread their wings. */
