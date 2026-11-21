@@ -64,7 +64,9 @@ public final class StructureAudit {
     private static final Logger LOG = LoggerFactory.getLogger("OROR Structures");
     public static volatile boolean resultLogged;
     private static final int CHUNKS_PER_TICK = 4;
-    private static final int RADIUS = 96;
+    private static final int RADIUS = 48;
+    /** wall-clock budget: the dedicated-server job has the lanes before this one to run as well */
+    private static final long BUDGET_MS = 15L * 60 * 1000;
     private static Run run;
 
     private StructureAudit() {
@@ -79,6 +81,7 @@ public final class StructureAudit {
         List<ChunkPos> todo = new ArrayList<>();
         int done;
         long startedAt;
+        long startedMs;
         int found, missingTotal, intrudingTotal, floatingTotal, darkTotal, indoorTotal;
         List<String> notFound = new ArrayList<>();
     }
@@ -101,12 +104,24 @@ public final class StructureAudit {
                 r.keys.add(k);
             }
         }
-        r.keys.sort((a, b) -> a.location().toString().compareTo(b.location().toString()));
+        // the kingdom and the buildings players walk into most first, the gods' citadels after them
+        r.keys.sort((a, b) -> {
+            int ra = rank(a.location().getPath()), rb = rank(b.location().getPath());
+            return ra != rb ? Integer.compare(ra, rb) : a.location().toString().compareTo(b.location().toString());
+        });
         r.startedAt = r.level.getGameTime();
+        r.startedMs = System.currentTimeMillis();
         run = r;
         resultLogged = false;
         LOG.info("STRUCT-AUDIT-START {\"structures\":{}}", r.keys.size());
         return 1;
+    }
+
+    private static int rank(String path) {
+        if (path.contains("kingdom")) {
+            return 0;
+        }
+        return path.endsWith("_citadel") ? 2 : 1;
     }
 
     @SubscribeEvent
@@ -141,6 +156,11 @@ public final class StructureAudit {
                 return;
             }
             r.current = r.keys.get(r.index);
+            if (System.currentTimeMillis() - r.startedMs > BUDGET_MS) {
+                r.notFound.add(r.current.location().getPath() + "(not searched)");
+                r.index++;
+                return;
+            }
             Registry<Structure> reg = r.level.registryAccess().registryOrThrow(Registries.STRUCTURE);
             Holder<Structure> holder = reg.getHolderOrThrow(r.current);
             Pair<BlockPos, Holder<Structure>> at = r.level.getChunkSource().getGenerator()
