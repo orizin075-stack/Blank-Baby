@@ -238,7 +238,7 @@ public final class GodCitadelTest {
             level.getRandom(), true, randomState.sampler());
         if (found == null) {
             // (run 198) the badlands and the windswept hills were not within 1400 blocks of the god's stretch
-            found = gen.getBiomeSource().findBiomeHorizontal(cx, y, cz, 4000, 64, structure.biomes()::contains, level.getRandom(), true,
+            found = gen.getBiomeSource().findBiomeHorizontal(cx, y, cz, 8000, 128, structure.biomes()::contains, level.getRandom(), true,
                 randomState.sampler());
         }
         String biome = found == null ? "none" : found.getSecond().unwrapKey().map(k -> k.location().toString()).orElse("?");
