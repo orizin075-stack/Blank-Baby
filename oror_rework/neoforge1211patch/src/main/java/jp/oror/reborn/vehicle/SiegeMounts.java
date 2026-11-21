@@ -62,6 +62,7 @@ public final class SiegeMounts {
         long now = level.getGameTime();
         if (!data.contains("OrorSiegeAirSince")) {
             data.putLong("OrorSiegeAirSince", now);
+            sturdy(m);
         }
         long since = data.getLong("OrorSiegeAirSince");
         if (now - since > CARRY || now < since) {
@@ -69,6 +70,42 @@ public final class SiegeMounts {
         }
         net.minecraft.world.level.ChunkPos cp = m.chunkPosition();
         level.getChunkSource().addRegionTicket(TICKET, cp, 3, cp);
+    }
+
+    /**
+     * (run 203) The air wing fell before it was a wing: all eight mounts down within fifty seconds of rising (a fire dragon
+     * in fifteen), six hundred blocks out, to the kingdom's guards and mages there. A mount of Azazel's siege has at
+     * least {@value #STURDY} health, so it reaches the capital and the fight is in the capital's sky.
+     */
+    static final double STURDY = 400;
+    private static final net.minecraft.resources.ResourceLocation STURDY_ID =
+        net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("oror_supreme_bosses", "siege_air_sturdy");
+
+    static void sturdy(Mob m) {
+        var hp = m.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
+        // a modifier, not the base: Ice and Fire sets a dragon's base health again as it grows
+        if (hp != null && hp.getValue() < STURDY && hp.getModifier(STURDY_ID) == null) {
+            hp.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(STURDY_ID, STURDY - hp.getValue(),
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE));
+            m.setHealth(m.getMaxHealth());
+        }
+    }
+
+    /** What brings a mount of the siege down, and when, for the next look. */
+    @SubscribeEvent
+    public static void fell(net.neoforged.neoforge.event.entity.living.LivingDeathEvent e) {
+        if (!(e.getEntity() instanceof Mob m) || m.level().isClientSide() || !m.getPersistentData().getBoolean(TAG)) {
+            return;
+        }
+        var src = e.getSource();
+        Entity by = src.getEntity();
+        long since = m.getPersistentData().getLong("OrorSiegeAirSince");
+        org.slf4j.LoggerFactory.getLogger("OROR Siege").info(
+            "SIEGE-FELL {\"mount\":\"{}\",\"max\":{},\"seconds\":{},\"source\":\"{}\",\"by\":\"{}\",\"direct\":\"{}\"}",
+            net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()).getPath(), (int) m.getMaxHealth(),
+            since > 0 ? (m.level().getGameTime() - since) / 20 : -1, src.getMsgId(),
+            by == null ? "none" : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(by.getType()).getPath(),
+            src.getDirectEntity() == null ? "none" : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(src.getDirectEntity().getType()).getPath());
     }
 
     @SubscribeEvent
