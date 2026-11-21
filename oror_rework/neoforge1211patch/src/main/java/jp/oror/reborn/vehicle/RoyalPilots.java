@@ -871,7 +871,14 @@ public final class RoyalPilots {
         Vec3 m = v.getDeltaMovement();
         Vec3 side = new Vec3(-heading.z, 0, heading.x);
         double slip = m.dot(side);
-        v.setDeltaMovement(m.subtract(side.scale(slip * 0.15)));
+        m = m.subtract(side.scale(slip * 0.15));
+        // (r63) the height held steady: the collective answers late, so the keys alone overshot and it bobbed three blocks up
+        // and down every four seconds over its target (CI 190: 79.9 to 85.7 for a hold at 85); near the height wanted, the
+        // climb or sink is eased a quarter of the way to the one wanted each tick, as a stability system would
+        if (!settling && Math.abs(altitude - pos.y) < 6) {
+            m = new Vec3(m.x, vy + (wantVy - vy) * 0.25, m.z);
+        }
+        v.setDeltaMovement(m);
         v.fallDistance = 0;
         if (now % 40 == 0) {
             LOG.info(String.format(java.util.Locale.ROOT, "HELI-TRACK {\"t\":%d,\"mode\":\"%s\",\"y\":%.1f,\"want\":%.1f,\"ground\":%.0f,\"dist\":%.1f,"

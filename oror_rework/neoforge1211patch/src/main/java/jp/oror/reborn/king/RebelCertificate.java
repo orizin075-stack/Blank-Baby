@@ -187,10 +187,12 @@ public final class RebelCertificate {
 
     /** Shown to a rebel: they trust the bearer and trade. */
     public static boolean showRebel(ServerPlayer p, LivingEntity rebel) {
-        CompoundTag k = KingCourt.kept(p);
         if (RebelPact.favour(p) < 5) {
             RebelPact.addFavour(p, 5 - RebelPact.favour(p));
         }
+        // (r63) read after the favour is kept: a copy read before it wrote the favour back to 0 (the certificate won
+        // no trust and no trade)
+        CompoundTag k = KingCourt.kept(p);
         if (!k.getBoolean(SHOWN)) {
             k.putBoolean(SHOWN, true);
             KingCourt.keep(p, k);
