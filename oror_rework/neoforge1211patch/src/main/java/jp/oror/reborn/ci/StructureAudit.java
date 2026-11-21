@@ -72,7 +72,7 @@ public final class StructureAudit {
     private StructureAudit() {
     }
 
-    private static final class Run {
+    static final class Run {
         ServerLevel level;
         List<ResourceKey<Structure>> keys = new ArrayList<>();
         int index;
@@ -242,18 +242,18 @@ public final class StructureAudit {
     }
 
     @SuppressWarnings("unchecked")
-    private static StructureTemplate template(SinglePoolElement el, StructureTemplateManager manager) throws ReflectiveOperationException {
+    static StructureTemplate template(SinglePoolElement el, StructureTemplateManager manager) throws ReflectiveOperationException {
         Either<ResourceLocation, StructureTemplate> t = (Either<ResourceLocation, StructureTemplate>) field(SinglePoolElement.class, "template").get(el);
         return t.map(manager::getOrCreate, x -> x);
     }
 
     @SuppressWarnings("unchecked")
-    private static List<StructureTemplate.StructureBlockInfo> blocks(StructureTemplate t) throws ReflectiveOperationException {
+    static List<StructureTemplate.StructureBlockInfo> blocks(StructureTemplate t) throws ReflectiveOperationException {
         List<StructureTemplate.Palette> palettes = (List<StructureTemplate.Palette>) field(StructureTemplate.class, "palettes").get(t);
         return palettes.isEmpty() ? List.of() : palettes.get(0).blocks();
     }
 
-    private static void audit(Run r) {
+    static void audit(Run r) {
         ServerLevel level = r.level;
         StructureTemplateManager manager = level.getStructureManager();
         long missing = 0, intruding = 0, floating = 0, columns = 0, indoor = 0, dark = 0, cells = 0;

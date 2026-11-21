@@ -107,7 +107,9 @@ public final class SiegeTest {
     static String kind(Entity e) {
         String id = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString();
         return switch (id) {
-            case "iceandfire:fire_dragon", "iceandfire:ice_dragon", "iceandfire:lightning_dragon", "iceandfire:amphithere", "iceandfire:hippogryph" -> id;
+            // the siege's own mounts only (a wild dragon in its cave is not of the siege)
+            case "iceandfire:fire_dragon", "iceandfire:ice_dragon", "iceandfire:lightning_dragon", "iceandfire:amphithere", "iceandfire:hippogryph" ->
+                e.getPersistentData().getBoolean("OrorAzazelSiegeAir") ? id : null;
             case "superbwarfare:ah_6", "superbwarfare:mi_28" -> id;
             default -> null;
         };
@@ -161,15 +163,15 @@ public final class SiegeTest {
             if (n++ < 8) {
                 String rider = ridden ? BuiltInRegistries.ENTITY_TYPE.getKey(e.getPassengers().get(0).getType()).getPath() : "none";
                 String target = e instanceof Mob m && m.getTarget() != null ? BuiltInRegistries.ENTITY_TYPE.getKey(m.getTarget().getType()).getPath() : "none";
-                line.append(String.format(java.util.Locale.ROOT, "%s%s rider=%s alt=%.1f dist=%.0f target=%s", line.length() > 0 ? "; " : "",
-                    t.kind.substring(t.kind.indexOf(':') + 1), rider, alt, d, target));
+                line.append(String.format(java.util.Locale.ROOT, "%s%s rider=%s alt=%.1f dist=%.0f path=%.0f mode=%s target=%s", line.length() > 0 ? "; " : "",
+                    t.kind.substring(t.kind.indexOf(':') + 1), rider, alt, d, t.path, e.getPersistentData().getString("OrorSiegeMountMode"), target));
             }
         }
         LOG.info("SIEGE-AIR {\"t\":{},\"seen\":{},\"now\":\"{}\"}", r.age, r.tracks.size(), line);
     }
 
     private static void finish(Run r) {
-        int mounts = 0, mountsRidden = 0, mountsFlew = 0, mountsCame = 0, helis = 0, helisFlew = 0;
+        int mounts = 0, mountsRidden = 0, mountsFlew = 0, mountsCame = 0, mountsMoved = 0, helis = 0, helisFlew = 0;
         double maxAlt = 0;
         Map<String, Integer> kinds = new HashMap<>();
         for (Track t : r.tracks.values()) {
@@ -185,13 +187,14 @@ public final class SiegeTest {
             mountsRidden += t.ridden * 2 >= t.samples ? 1 : 0;
             mountsFlew += flew ? 1 : 0;
             mountsCame += t.firstDist - t.closest > 40 || t.closest < 120 ? 1 : 0;
+            mountsMoved += t.path > 100 ? 1 : 0;
             maxAlt = Math.max(maxAlt, t.maxAlt);
         }
-        boolean pass = mounts > 0 && mountsFlew * 2 >= mounts && mountsRidden * 2 >= mounts && mountsCame > 0;
+        boolean pass = mounts > 0 && mountsFlew * 2 >= mounts && mountsRidden * 2 >= mounts && mountsCame * 2 >= mounts && mountsMoved * 2 >= mounts;
         LOG.info(String.format(java.util.Locale.ROOT,
             "SIEGE-RESULT {\"present\":true,\"began\":\"%s\",\"mounts\":%d,\"ridden\":%d,\"flew\":%d,\"cameToCapital\":%d,\"maxAlt\":%.1f,"
-                + "\"helis\":%d,\"helisFlew\":%d,\"kinds\":\"%s\",\"pass\":%s}",
-            r.began, mounts, mountsRidden, mountsFlew, mountsCame, maxAlt, helis, helisFlew, kinds, pass));
+                + "\"moved\":%d,\"helis\":%d,\"helisFlew\":%d,\"kinds\":\"%s\",\"pass\":%s}",
+            r.began, mounts, mountsRidden, mountsFlew, mountsCame, maxAlt, mountsMoved, helis, helisFlew, kinds, pass));
         try {
             Method stop = siege().getDeclaredMethod("stop", ServerPlayer.class);
             stop.setAccessible(true);

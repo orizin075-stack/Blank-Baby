@@ -87,6 +87,7 @@ public final class CiDriver {
                 case "shield" -> "oror shield test";
                 case "structures" -> "oror structures audit";
                 case "siege" -> "oror siege test";
+                case "gods" -> "oror structures gods";
                 default -> null;
             };
             if (command != null) {
@@ -97,8 +98,8 @@ public final class CiDriver {
             return;
         }
         boolean done = next >= CHECKS.size() && CHECKS.stream().allMatch(CiDriver::finished);
-        // (059g) 100000 (was 90000): the checks added in 059g (gun posts, roads, village arms) take some 4,500 ticks more
-        if (done || t > 100000) {
+        // (r63) 130000 (the siege and the 41 gods' citadels added); (059g) 100000 (was 90000): the checks added in 059g (gun posts, roads, village arms) take some 4,500 ticks more
+        if (done || t > 130000) {
             LOG.info("SAFE-UNLOAD {}", jp.oror.reborn.safety.EntityUnloads.report());
             LOG.info("SANE-MOVE {}", jp.oror.reborn.safety.SaneMoves.report());
             LOG.info("CI-DONE {\"complete\":{},\"ticks\":{}}", done, t);
@@ -142,6 +143,7 @@ public final class CiDriver {
             case "shield" -> jp.oror.reborn.village.BuildingGuard.shieldLogged;
             case "structures" -> StructureAudit.resultLogged;
             case "siege" -> SiegeTest.resultLogged;
+            case "gods" -> GodCitadelTest.resultLogged;
             default -> true;
         };
     }
