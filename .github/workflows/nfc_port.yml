@@ -61,6 +61,8 @@ jobs:
           # the client-only ones (screens, sounds, a resource look) stay off the dedicated server
           mkdir -p "$RUNNER_TEMP/srv"; cp "$RUNNER_TEMP"/all/*.jar "$RUNNER_TEMP/srv/"
           rm -f "$RUNNER_TEMP"/srv/BEB-* "$RUNNER_TEMP"/srv/rebind_narrator-* "$RUNNER_TEMP"/srv/clearwater-*
+          # Epic Fight - Avalon loads a client class (ParticleProvider) while its mod is constructed: single player only
+          rm -f "$RUNNER_TEMP"/srv/epic_fight_avalon-*
           bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 2400 'COMPASS-RESULT' 'KING-STORY {' 'CI-DONE' \
             -- compass,story -- "$RUNNER_TEMP"/srv/*.jar 2>&1 | tee "$OUT/server_test.txt"; rc=${PIPESTATUS[0]}
           C="$RUNNER_TEMP/server/console.log"
