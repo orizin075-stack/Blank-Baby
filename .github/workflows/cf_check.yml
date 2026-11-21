@@ -22,10 +22,14 @@ jobs:
         run: |
           python3 -I oror_rework/tools/cf/cf_versions.py oror_rework/tools/cf/manabi-1.20.1.json oror_rework/tools/cf/ours-045.json \
             | tee oror_rework/tools/cf/manabi_1211.txt
+      - name: The same for NightfallCraft - The Casket of Reveries 2.2.9.8 against OROR Nightfall r62
+        run: |
+          python3 -I oror_rework/tools/cf/cf_versions.py oror_rework/tools/cf/nightfall-casket-2.2.9.8.json oror_rework/tools/cf/ours-r62.json \
+            | tee oror_rework/tools/cf/nightfall_casket_1211.txt
       - name: Commit the result
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add oror_rework/tools/cf/manabi_1211.txt
+          git add oror_rework/tools/cf/manabi_1211.txt oror_rework/tools/cf/nightfall_casket_1211.txt
           git commit -m "CurseForge 1.21.1 check ${GITHUB_SHA::7} [skip ci]" || exit 0
           for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
