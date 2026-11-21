@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "oror_supreme_bosses:trader_exchange",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 9170344,
+    "spacing": 40,
+    "separation": 16,
+    "exclusion_zone": {
+      "other_set": "oror_supreme_bosses:god_citadels",
+      "chunk_count": 6
+    }
+  }
+}

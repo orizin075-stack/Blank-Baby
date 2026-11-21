@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "oror_supreme_bosses:forbidden_laboratory",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 40,
+    "separation": 18,
+    "salt": 1792932,
+    "exclusion_zone": {
+      "other_set": "oror_supreme_bosses:villager_kingdom",
+      "chunk_count": 6
+    }
+  }
+}

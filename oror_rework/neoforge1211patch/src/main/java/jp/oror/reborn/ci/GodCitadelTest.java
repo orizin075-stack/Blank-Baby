@@ -236,11 +236,35 @@ public final class GodCitadelTest {
         int y = level.dimension() == Level.NETHER ? 34 : 64;
         Pair<BlockPos, Holder<Biome>> found = gen.getBiomeSource().findBiomeHorizontal(cx, y, cz, 1400, 32, structure.biomes()::contains,
             level.getRandom(), true, randomState.sampler());
+        if (found == null) {
+            // (run 198) the badlands and the windswept hills were not within 1400 blocks of the god's stretch
+            found = gen.getBiomeSource().findBiomeHorizontal(cx, y, cz, 4000, 64, structure.biomes()::contains, level.getRandom(), true,
+                randomState.sampler());
+        }
         String biome = found == null ? "none" : found.getSecond().unwrapKey().map(k -> k.location().toString()).orElse("?");
         ChunkPos at = found == null ? new ChunkPos(cx >> 4, cz >> 4) : new ChunkPos(found.getFirst());
         String path = key.location().getPath();
         StructureStart start = structure.generate(level.registryAccess(), gen, gen.getBiomeSource(), randomState, level.getStructureManager(),
             level.getSeed(), at, 0, level, structure.biomes()::contains);
+        // (run 198) the biome is tested where the stage's middle stands, 27 blocks from the chunk the biome was found in, and
+        // at the ground's height: the world tries chunk after chunk, so the test tries those round the place too
+        for (int r = 1; r <= 7 && (start == null || !start.isValid()); r++) {
+            for (int dx = -r; dx <= r && (start == null || !start.isValid()); dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                        continue;
+                    }
+                    ChunkPos c = new ChunkPos(at.x + dx, at.z + dz);
+                    StructureStart t = structure.generate(level.registryAccess(), gen, gen.getBiomeSource(), randomState, level.getStructureManager(),
+                        level.getSeed(), c, 0, level, structure.biomes()::contains);
+                    if (t != null && t.isValid()) {
+                        start = t;
+                        at = c;
+                        break;
+                    }
+                }
+            }
+        }
         String why = "";
         if (start == null || !start.isValid()) {
             StructureStart any = structure.generate(level.registryAccess(), gen, gen.getBiomeSource(), randomState, level.getStructureManager(),

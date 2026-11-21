@@ -142,6 +142,12 @@ def main():
             if new is not None:
                 nbt = new
         old.keep_seal_clear(nbt, g.seal_y, C)
+        if god == 'enkou':
+            # (run 198) the deep-sea stage is under the sea: torches wash away, sea lanterns light it
+            for e in nbt['palette']:
+                if anvil.val(e['Name']) in ('minecraft:torch', 'minecraft:wall_torch'):
+                    e['Name'] = 'minecraft:sea_lantern'
+                    e.pop('Properties', None)
         with open(src, 'wb') as f:
             f.write(gzip.compress(anvil.write_nbt(nbt), 6, mtime=0))
         print(god, 'blocks', len(nbt['blocks']), 'seal_y', g.seal_y, 'lights', (lit or {}).get('placed'), flush=True)
