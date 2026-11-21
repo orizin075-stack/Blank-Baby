@@ -234,6 +234,18 @@ public final class KingStoryTest {
             }
             out.put("rebelFavour", RebelPact.favour(r.rebel));
             out.put("rebelOffers", RebelPact.offers(r.rebel, sl, "illager").size());
+            // (r63) the real way in: an empty hand, a right click on a pillager that no longer hunts one
+            Mob pil = spawn(r, EntityType.PILLAGER, -4, -3);
+            pil.setTarget(r.rebel);
+            out.put("pillagerSpares", pil.getTarget() != r.rebel);
+            ItemStack keep = r.rebel.getMainHandItem().copy();
+            r.rebel.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            int opened = RebelPact.OPENED.get();
+            out.put("rebelTradeClick", String.valueOf(r.rebel.interactOn(pil, net.minecraft.world.InteractionHand.MAIN_HAND)));
+            out.put("rebelTradeOpened", RebelPact.OPENED.get() > opened);
+            out.put("rebelTradeMenu", r.rebel.containerMenu instanceof net.minecraft.world.inventory.MerchantMenu);
+            r.rebel.closeContainer();
+            r.rebel.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, keep);
             int came = RebelPact.summon(r.rebel, sl, "illager");
             out.put("allies", came);
             List<Mob> allies = sl.getEntitiesOfClass(Mob.class, new AABB(r.at).inflate(20), m -> m.getPersistentData().getBoolean(RebelPact.ALLY));
@@ -821,6 +833,19 @@ public final class KingStoryTest {
             }
         }
         out.put("certMap", map);
+        // (r63) the certificate shown to a pillager: trusted at once, and then a trade with an empty hand
+        Mob pil = (Mob) EntityType.PILLAGER.create(sl);
+        pil.moveTo(base.getX() + 2.5, base.getY(), base.getZ() + 3.5, 0F, 0F);
+        sl.addFreshEntity(pil);
+        r.made.add(pil);
+        c.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(RebelCertificate.CERTIFICATE));
+        c.interactOn(pil, net.minecraft.world.InteractionHand.MAIN_HAND);
+        out.put("certTrusted", RebelPact.favour(c) >= 5);
+        c.getInventory().add(new ItemStack(RebelCertificate.CERTIFICATE));
+        c.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        int openedC = RebelPact.OPENED.get();
+        c.interactOn(pil, net.minecraft.world.InteractionHand.MAIN_HAND);
+        out.put("certTradeOpened", RebelPact.OPENED.get() > openedC);
         BlockPos city = RebelCertificate.rebelsCity(sl, w.blockPosition());
         out.put("certCity", city == null ? "none" : city.toShortString());
         c.discard();
@@ -1024,7 +1049,8 @@ public final class KingStoryTest {
             && Boolean.TRUE.equals(o.get("blessed")) && num(o, "grace") == 3 && Boolean.TRUE.equals(o.get("graceHealth"));
         boolean war = Boolean.TRUE.equals(o.get("enemy")) && Boolean.TRUE.equals(o.get("enemyHostile")) && Boolean.TRUE.equals(o.get("friendStillPeace"));
         boolean rebels = Boolean.TRUE.equals(o.get("vindicatorSpares")) && num(o, "rebelFavour") >= 5 && num(o, "allies") == 3
-            && Boolean.TRUE.equals(o.get("alliesSpare"));
+            && Boolean.TRUE.equals(o.get("alliesSpare")) && Boolean.TRUE.equals(o.get("pillagerSpares"))
+            && Boolean.TRUE.equals(o.get("rebelTradeOpened"));
         boolean forms = Boolean.TRUE.equals(o.get("breachedByLord")) && ("0->1".equals(o.get("revive")) || "0->1".equals(o.get("reviveByPlayer"))) && Boolean.TRUE.equals(o.get("film1"))
             && Boolean.TRUE.equals(o.get("filmUntouchable")) && Boolean.TRUE.equals(o.get("film1Done")) && Boolean.TRUE.equals(o.get("film2Done"))
             && Boolean.TRUE.equals(o.get("film3Done")) && num(o, "phase") == 3 && Boolean.TRUE.equals(o.get("armour1")) && Boolean.TRUE.equals(o.get("heroSword"))
@@ -1035,7 +1061,8 @@ public final class KingStoryTest {
             && num(o, "missIn") > 0;
         boolean azazel = num(o, "azazelArts") >= 10 && Boolean.TRUE.equals(o.get("azazelDisarmed"));
         boolean certificate = num(o, "certSeals") == 3 && Boolean.TRUE.equals(o.get("certSealOnce")) && Boolean.TRUE.equals(o.get("certCrafted"))
-            && Boolean.FALSE.equals(o.get("certFriendBefore")) && Boolean.TRUE.equals(o.get("certFriend")) && Boolean.TRUE.equals(o.get("certMap"));
+            && Boolean.FALSE.equals(o.get("certFriendBefore")) && Boolean.TRUE.equals(o.get("certFriend")) && Boolean.TRUE.equals(o.get("certMap"))
+            && Boolean.TRUE.equals(o.get("certTrusted")) && Boolean.TRUE.equals(o.get("certTradeOpened"));
         boolean souls = Boolean.TRUE.equals(o.get("chainBroken")) && Boolean.TRUE.equals(o.get("soulBurning")) && num(o, "soulTaken") >= 1
             && Boolean.TRUE.equals(o.get("soulFreed")) && num(o, "majesty") >= 1 && num(o, "veilFlies") >= 12
             && Boolean.TRUE.equals(o.get("starveHeld"));

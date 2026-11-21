@@ -1,6 +1,7 @@
 package jp.oror.reborn.mixin;
 
 import jp.oror.reborn.worldgen.StructureFooting;
+import jp.oror.reborn.worldgen.StructureGuard;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.StructureManager;
@@ -16,9 +17,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** (r62) After one of OROR's templates is placed in a chunk: the ground left inside it cleared, a footing under it. */
 @Mixin(PoolElementStructurePiece.class)
 public abstract class StructureFootingMixin {
+    /** (r63) While it places itself, its writes pass StructureGuard. */
+    @Inject(method = "place", at = @At("HEAD"))
+    private void oror$placing(WorldGenLevel level, StructureManager structures, ChunkGenerator generator, RandomSource random,
+                              BoundingBox box, BlockPos pos, boolean keepJigsaws, CallbackInfo ci) {
+        StructureGuard.placing((PoolElementStructurePiece) (Object) this);
+    }
+
     @Inject(method = "place", at = @At("TAIL"))
     private void oror$footing(WorldGenLevel level, StructureManager structures, ChunkGenerator generator, RandomSource random,
                               BoundingBox box, BlockPos pos, boolean keepJigsaws, CallbackInfo ci) {
-        StructureFooting.after((PoolElementStructurePiece) (Object) this, level, box);
+        try {
+            StructureFooting.after((PoolElementStructurePiece) (Object) this, level, box);
+        } finally {
+            StructureGuard.placed((PoolElementStructurePiece) (Object) this);
+        }
     }
 }

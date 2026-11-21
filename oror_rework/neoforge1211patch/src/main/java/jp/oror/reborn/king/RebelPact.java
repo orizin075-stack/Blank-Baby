@@ -75,6 +75,8 @@ public final class RebelPact {
     public static final String UNTIL = "OrorRebelUntil";
     public static final String FAVOUR = "OrorRebelFavour";
     public static final String CALL = "OrorRebelCall";
+    /** Shops opened (the CI story test counts a real right click through to the screen). */
+    public static final java.util.concurrent.atomic.AtomicInteger OPENED = new java.util.concurrent.atomic.AtomicInteger();
 
     private RebelPact() {
     }
@@ -260,7 +262,11 @@ public final class RebelPact {
             return;
         }
         if (favour(p) < 5) {
-            p.displayClientMessage(Component.literal("叛逆者たち：王の犬を狩ってから来い。（王の遠征隊を倒すと取引できるようになります）"), true);
+            // (r63) how far off their trust is, and the two ways to it
+            p.displayClientMessage(Component.literal("叛逆者たち：まだ信用できん。（信頼 " + favour(p)
+                + "/5：王の遠征隊を倒すか、反逆証明書を手に持って見せると取引できます）").withStyle(ChatFormatting.GOLD), true);
+            e.setCanceled(true);
+            e.setCancellationResult(InteractionResult.SUCCESS);
             return;
         }
         e.setCanceled(true);
@@ -271,6 +277,8 @@ public final class RebelPact {
             case "ender" -> "エンダーマンの虚ろ市";
             default -> "叛逆者の武器庫";
         }), "rebel_" + f, offers(p, sl, f), (pl, o) -> addFavour(pl, 1));
+        OPENED.incrementAndGet();
+        LOG.info("REBEL-TRADE {\"player\":\"{}\",\"faction\":\"{}\",\"favour\":{}}", p.getGameProfile().getName(), f, favour(p));
     }
 
     static ItemStack horn(String faction) {

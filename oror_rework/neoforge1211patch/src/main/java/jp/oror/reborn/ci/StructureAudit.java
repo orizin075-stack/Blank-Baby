@@ -140,10 +140,11 @@ public final class StructureAudit {
             r.index++;
         }
         if (r.index >= r.keys.size() && r.start == null) {
-            LOG.info("STRUCT-AUDIT-RESULT {\"structures\":{},\"found\":{},\"missing\":{},\"intruding\":{},\"floatingColumns\":{},\"indoor\":{},\"dark\":{},\"notFound\":\"{}\",\"footingPieces\":{},\"footingCleared\":{},\"footingLaid\":{},\"ticks\":{}}",
+            LOG.info("STRUCT-AUDIT-RESULT {\"structures\":{},\"found\":{},\"missing\":{},\"intruding\":{},\"floatingColumns\":{},\"indoor\":{},\"dark\":{},\"notFound\":\"{}\",\"footingPieces\":{},\"footingCleared\":{},\"footingLaid\":{},\"guardStarts\":{},\"guardRefused\":{},\"ticks\":{}}",
                 r.keys.size(), r.found, r.missingTotal, r.intrudingTotal, r.floatingTotal, r.indoorTotal, r.darkTotal,
                 String.join(" ", r.notFound), jp.oror.reborn.worldgen.StructureFooting.PIECES.get(),
                 jp.oror.reborn.worldgen.StructureFooting.CLEARED.get(), jp.oror.reborn.worldgen.StructureFooting.FOOTED.get(),
+                jp.oror.reborn.worldgen.StructureGuard.STARTS.get(), jp.oror.reborn.worldgen.StructureGuard.REFUSED.get(),
                 r.level.getGameTime() - r.startedAt);
             resultLogged = true;
             run = null;
@@ -261,7 +262,7 @@ public final class StructureAudit {
         long gapSum = 0;
         Map<String, Integer> missPairs = new HashMap<>();
         Map<String, Integer> intrudeKinds = new HashMap<>();
-        List<String> darkSamples = new ArrayList<>(), floatSamples = new ArrayList<>(), intrudeSamples = new ArrayList<>();
+        List<String> darkSamples = new ArrayList<>(), floatSamples = new ArrayList<>(), intrudeSamples = new ArrayList<>(), missSamples = new ArrayList<>();
         BlockPos.MutableBlockPos w = new BlockPos.MutableBlockPos();
         for (StructurePiece piece : r.start.getPieces()) {
             pieces++;
@@ -304,6 +305,10 @@ public final class StructureAudit {
                         missing++;
                         missPairs.merge(BuiltInRegistries.BLOCK.getKey(s.getBlock()).getPath() + "->"
                             + BuiltInRegistries.BLOCK.getKey(have.getBlock()).getPath(), 1, Integer::sum);
+                        if (missSamples.size() < 12 && (missing % 37 == 1 || missSamples.size() < 4)) {
+                            missSamples.add(wp.getX() + " " + wp.getY() + " " + wp.getZ() + " " + BuiltInRegistries.BLOCK.getKey(have.getBlock()).getPath()
+                                + " (template " + p.getX() + " " + p.getY() + " " + p.getZ() + ")");
+                        }
                     }
                 }
             }
@@ -407,11 +412,11 @@ public final class StructureAudit {
         BoundingBox bb = r.start.getBoundingBox();
         LOG.info(String.format(Locale.ROOT,
             "STRUCT-AUDIT {\"id\":\"%s\",\"found\":true,\"ground\":\"%s\",\"box\":[%d,%d,%d,%d,%d,%d],\"pieces\":%d,\"templatePieces\":%d,\"cells\":%d,"
-                + "\"missing\":%d,\"missingPct\":%.2f,\"missingTop\":\"%s\",\"intruding\":%d,\"intrudingTop\":\"%s\",\"intrudingAt\":\"%s\","
+                + "\"missing\":%d,\"missingPct\":%.2f,\"missingTop\":\"%s\",\"missingAt\":\"%s\",\"intruding\":%d,\"intrudingTop\":\"%s\",\"intrudingAt\":\"%s\","
                 + "\"columns\":%d,\"floatingColumns\":%d,\"floatingPct\":%.2f,\"maxGap\":%d,\"meanGap\":%.1f,\"floatingAt\":\"%s\","
                 + "\"indoor\":%d,\"dark\":%d,\"darkPct\":%.1f,\"darkAt\":\"%s\"}",
             r.current.location(), grounds, bb.minX(), bb.minY(), bb.minZ(), bb.maxX(), bb.maxY(), bb.maxZ(), pieces, templatePieces, cells,
-            missing, cells == 0 ? 0 : 100.0 * missing / cells, top(missPairs), intruding, top(intrudeKinds), String.join("; ", intrudeSamples),
+            missing, cells == 0 ? 0 : 100.0 * missing / cells, top(missPairs), String.join("; ", missSamples), intruding, top(intrudeKinds), String.join("; ", intrudeSamples),
             columns, floating, columns == 0 ? 0 : 100.0 * floating / columns, maxGap, floating == 0 ? 0 : (double) gapSum / floating,
             String.join("; ", floatSamples), indoor, dark, indoor == 0 ? 0 : 100.0 * dark / indoor, String.join("; ", darkSamples)));
     }

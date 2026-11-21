@@ -1,0 +1,81 @@
+# (r63) NightfallCraft - The Casket of Reveries 2.2.9.8's systems that have Minecraft 1.21.1 NeoForge files, added to the
+# OROR Nightfall pack and run: the 053 pack's mods (as the patch build's dedicated server) plus the additions
+# (oror_rework/nfc_ui/additions-r63.json), every jar's declared dependencies checked, then the dedicated server with
+# OROR's last built jar started on the patch build's seed (world generation, the capital, the king's story with the
+# rebels' trades). Results to oror_rework/nfc_ui/out/r63 on this branch.
+name: NightfallCraft systems on OROR Nightfall
+
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['oror_rework/nfc_ui/additions-r63.json', '.github/workflows/nfc_port.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nfc-port-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  port:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+        working-directory: oror_rework/neoforge1211patch
+    env:
+      OUT: ../nfc_ui/out/r63
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/pack053
+          key: pack053-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-053.json') }}
+      - name: The 053 pack, Nightfall and the additions
+        run: |
+          mkdir -p "$OUT" libs
+          python3 -I tools/fetch_pack.py pack/manifest-053.json "$RUNNER_TEMP/pack053" sodium fancytoasts chatplus extrasounds \
+            > "$OUT/pack_fetch.txt" 2>&1 || true
+          tail -3 "$OUT/pack_fetch.txt"
+          curl -sSfL -o libs/nightfall.jar "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
+          python3 -I ../nfc_ui/tools/pack_tools.py fetch ../nfc_ui/additions-r63.json "$RUNNER_TEMP/add" "$OUT/additions_lock.json" \
+            2>&1 | tee "$OUT/additions_fetch.txt"
+      - name: Declared dependencies of every jar together
+        run: |
+          mkdir -p "$RUNNER_TEMP/all"
+          NEW=$(sed -n 's/^release_version=//p' gradle.properties)
+          cp "$RUNNER_TEMP"/pack053/*.jar "$RUNNER_TEMP"/add/mods/*.jar libs/nightfall.jar user_mods/dueldominion-0.17.0-alpha.jar \
+            out/oror_supreme_bosses-$NEW.jar "$RUNNER_TEMP/all/"
+          python3 -I ../nfc_ui/tools/pack_tools.py depcheck "$RUNNER_TEMP/all" "$OUT/depcheck.txt" | head -80
+      - name: Dedicated server with the additions
+        run: |
+          set +e
+          NEW=$(sed -n 's/^release_version=//p' gradle.properties)
+          # the client-only ones (screens, sounds, a resource look) stay off the dedicated server
+          mkdir -p "$RUNNER_TEMP/srv"; cp "$RUNNER_TEMP"/all/*.jar "$RUNNER_TEMP/srv/"
+          rm -f "$RUNNER_TEMP"/srv/BEB-* "$RUNNER_TEMP"/srv/rebind_narrator-* "$RUNNER_TEMP"/srv/clearwater-*
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 2400 'COMPASS-RESULT' 'KING-STORY {' 'CI-DONE' \
+            -- compass,story -- "$RUNNER_TEMP"/srv/*.jar 2>&1 | tee "$OUT/server_test.txt"; rc=${PIPESTATUS[0]}
+          C="$RUNNER_TEMP/server/console.log"
+          grep -aE 'Loading [0-9]+ mods|Done \(|COMPASS-RESULT|KING-STORY|REBEL-|CI-DONE|STRUCT-GUARD|STRUCT-FOOTING' "$C" | cut -c1-3000 >> "$OUT/server_test.txt"
+          grep -aE 'ERROR|Exception|Caused by|Failed to|Couldn.t|Unable to|Mixin apply failed|InjectionError' "$C" \
+            | grep -v 'HttpConnectTimeout\|ConnectException' | head -800 > "$OUT/server_errors.txt" || true
+          tail -n 3000 "$C" > "$OUT/server_console.log"
+          awk '/Mod List|Loading [0-9]+ mods/{on=1} on{print} /^$/{if(on)exit}' "$C" | head -400 > "$OUT/mods_loaded.txt" || true
+          exit $rc
+      - name: Commit the results
+        if: always()
+        working-directory: .
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add oror_rework/nfc_ui/out/r63
+          git commit -m "NightfallCraft systems on OROR Nightfall ${GITHUB_SHA::7} [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done
