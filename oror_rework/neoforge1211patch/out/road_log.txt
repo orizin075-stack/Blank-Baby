@@ -1,64 +1,61 @@
-[06:43:31] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"25, 93, 38","off":27.3}
-[06:43:46] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"24, 94, 41","off":23.8}
-[06:44:55] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-18, 73, 36","via":"-16, 93, 33","off":14.1}
-[06:57:08] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-COAL {"vehicle":"hpj_11","station":"-397, 68, 993","carried":229,"had":1602}
-[06:57:10] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-COAL {"vehicle":"hpj_11","station":"-339, 68, 764","carried":107,"had":1557}
-[06:58:59] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"18, 93, 49","off":18.5}
-[06:59:01] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"19, 94, 50","off":16.9}
-[06:59:04] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"21, 93, 52","off":14.5}
-[07:00:52] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"18, 94, 33","off":28.8}
-[07:00:55] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"18, 93, 36","off":25.8}
-[07:02:03] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"22, 93, 39","off":22.5}
-[07:08:47] [Server thread/INFO] [OROR Village/]: ROAD-DEPART {"from":"西の里","to":"朝の村","kind":"trade","party":3,"cargo":3,"km":0.26,"crossed":false}
-[07:08:47] [Server thread/INFO] [OROR Village/]: ROAD-TEST-START {"home":[-2600,70,-2600],"dest":[-2340,70,-2600],"party":3}
-[07:08:48] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-2586, 77, -2600","via":"-2590, 70, -2600","off":14.0}
-[07:08:48] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-2586, 77, -2600","via":"-2591, 73, -2600","off":15.2}
-[07:08:48] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-2582, 77, -2600","via":"-2586, 70, -2601","off":14.5}
-[07:08:48] [Server thread/INFO] [OROR Village/]: ROAD-WALK {"t":80,"along":9.2,"lead":"hour 1339 activity idle brainTo -2580,77,-2600 navTo -2580,77,-2600 at -2591,72,-2605 task 行商"}
-[07:08:48] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-2575, 73, -2600","via":"-2580, 76, -2602","off":14.9}
-[07:08:48] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-2576, 72, -2600","via":"-2581, 76, -2602","off":14.9}
-[07:08:49] [Server thread/INFO] [OROR Village/]: ROAD-WALK {"t":160,"along":18.3,"lead":"hour 1419 activity idle brainTo -2569,75,-2600 navTo -2569,78,-2600 at -2582,76,-2604 task 行商"}
-[07:08:57] [Server thread/INFO] [OROR Village/]: ROAD-SEEN {"from":"西の里","to":"朝の村","leg":0,"along":108,"of":260,"members":3}
-[07:09:10] [Server thread/INFO] [OROR Village/]: ROAD-ARRIVE {"from":"西の里","to":"朝の村","seen":false,"goods":3,"worth":7.8,"emeralds":4,"wares":5,"toll":0}
-[07:09:32] [Server thread/INFO] [OROR Village/]: ROAD-RETURN {"from":"西の里","to":"朝の村","seen":false,"goods":6}
-[07:09:33] [Server thread/INFO] [OROR Village/]: ROAD-HOME {"from":"西の里","members":3}
-[07:09:33] [Server thread/INFO] [OROR Village/]: ROAD-RESULT {"present":true,"seconds":51.8,"phases":[[160,"unload"],[162,"road"],[315,"leave"],[317,"out"],[575,"back"],[1015,"homecoming"]],"walked":18.3,"maxWalked":18.3,"lead":"t80 hour 1339 activity idle brainTo -2580,77,-2600 navTo -2580,77,-2600 at -2591,72,-2605 task 行商 | t160 hour 1419 activity idle brainTo -2569,75,-2600 navTo -2569,78,-2600 at -2582,76,-2604 task 行商","packedOnUnload":true,"seenOnRoad":true,"seenAlong":108,"packedAgain":true,"delivered":true,"payment":8,"emeralds":4,"wares":"Iron Ingot×3、Coal×16、Stone Bricks×64、Copper Ingot×4 ほか","paid":true,"cameBack":3,"of":3,"earned":true,"roads":{"onRoads":0,"walking":0,"outOfSight":0,"waitingHome":0,"departed":1,"arrived":1,"cameHome":1,"seen":1,"packed":6,"crossings":0,"settled":0,"robbed":0,"settlersWaiting":0},"pass":true}
-[07:09:41] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-START {"at":[1200,88,-3400],"people":7,"guard":true}
-[07:09:55] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-STEP {"to":"1197, 88, -3400","pathNow":false,"followRange":48.0,"pathTried":"reaches nodes 14 ends 1185, 88, -3396","was":"hour 1284 activity idle brainTo 1198,88,-3401 navTo 1185,88,-3396 (done) at 1198,88,-3401 off 13.6 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.087 task 出撃準備 Sortie"}
-[07:09:56] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":300,"phase":"board","tank":"m_1a_2","aboard":1,"moved":0.0,"toThreat":45.2,"tankHits":0,"otherHits":34,"crew":"hour 1300 activity idle brainTo 1185,88,-3396 navTo 1185,88,-3396 at 1185,89,-3397 off 1.7 riding task 出撃準備 Sortie | hour 1300 activity idle brainTo 1198,88,-3401 navTo 1185,88,-3396 (done) at 1197,88,-3400 off 12.3 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.078 task 出撃準備 Sortie"}
-[07:10:12] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":400,"phase":"fight","tank":"m_1a_2","aboard":2,"moved":5.8,"toThreat":39.7,"tankHits":1,"otherHits":36,"crew":"hour 1400 activity idle brainTo 1185,88,-3396 navTo 1185,88,-3396 at 1190,89,-3398 off 1.7 riding task 出撃準備 Sortie | hour 1400 activity idle brainTo 1185,88,-3396 navTo 1185,88,-3396 at 1192,89,-3397 off 1.7 riding task 出撃準備 Sortie"}
-[07:10:12] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":500,"phase":"fight","tank":"m_1a_2","aboard":2,"moved":7.3,"toThreat":38.9,"tankHits":1,"otherHits":36,"crew":"hour 1500 activity idle brainTo 1191,88,-3402 navTo 1191,88,-3402 at 1192,89,-3397 off 1.7 riding task 出撃準備 Sortie | hour 1500 activity idle brainTo - navTo 1185,88,-3396 (done) at 1191,89,-3398 off 1.7 riding task 出撃準備 Sortie"}
-[07:10:13] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":600,"phase":"fight","tank":"m_1a_2","aboard":2,"moved":7.3,"toThreat":51.3,"tankHits":1,"otherHits":36,"crew":"hour 1600 activity idle brainTo - navTo 1191,88,-3402 (done) at 1179,89,-3396 off 1.7 riding task 出撃準備 Sortie | hour 1600 activity idle brainTo 1186,88,-3398 navTo 1186,88,-3398 at 1180,89,-3395 off 1.7 riding task 出撃準備 Sortie"}
-[07:10:18] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":700,"phase":"fight","tank":"m_1a_2","aboard":2,"moved":7.3,"toThreat":40.8,"tankHits":1,"otherHits":36,"crew":"hour 1700 activity idle brainTo 1179,88,-3395 navTo 1179,88,-3394 at 1190,89,-3394 off 1.7 riding task 出撃準備 Sortie | hour 1700 activity idle brainTo 1186,88,-3394 navTo 1187,88,-3393 at 1189,89,-3396 off 1.7 riding task 出撃準備 Sortie"}
-[07:10:23] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":800,"phase":"fight","tank":"m_1a_2","aboard":2,"moved":7.3,"toThreat":49.2,"tankHits":1,"otherHits":36,"crew":"hour 1800 activity idle brainTo 1182,88,-3397 navTo 1182,88,-3397 at 1181,89,-3399 off 1.7 riding task 出撃準備 Sortie | hour 1800 activity idle brainTo 1186,88,-3394 navTo 1187,88,-3393 at 1182,89,-3397 off 1.7 riding task 出撃準備 Sortie"}
-[07:10:28] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":900,"phase":"fight","tank":"m_1a_2","aboard":2,"moved":7.3,"toThreat":43.1,"tankHits":1,"otherHits":36,"crew":"hour 1900 activity idle brainTo 1182,88,-3397 navTo 1182,88,-3397 at 1188,89,-3393 off 1.7 riding task 出撃準備 Sortie | hour 1900 activity idle brainTo 1187,88,-3394 navTo 1186,88,-3394 at 1187,89,-3394 off 1.7 riding task 出撃準備 Sortie"}
-[07:11:22] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-RESULT {"present":true,"seconds":98.3,"phases":[[125,"tank"],[165,"sortie"]],"unlocked":0.3,"table":0.3,"gunsMade":4,"gunsAt":"45 85 125","guard":true,"guardArmed":true,"villagersArmed":2,"stage":3,"vehicles":"tank,","built":8.3,"ironBefore":224,"ironAfter":224,"tank":"m_1a_2","out":10.3,"boarded":17.0,"maxAboard":2,"moved":7.3,"closest":38.8,"tankHits":1,"tankDamage":700,"firstHit":17.7,"otherHits":36,"otherBy":"guard/mp_443","crewBoarding":"hour 1300 activity idle brainTo 1185,88,-3396 navTo 1185,88,-3396 at 1185,89,-3397 off 1.7 riding task 出撃準備 Sortie | hour 1300 activity idle brainTo 1198,88,-3401 navTo 1185,88,-3396 (done) at 1197,88,-3400 off 12.3 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.078 task 出撃準備 Sortie","note":"","pass":true}
-[07:11:25] [Server thread/INFO] [OROR Village/]: VILLAGE-FUEL 燃料（石炭・木炭）が足りず、M1A2 MBTを0%までしか充電できませんでした
-[07:11:25] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-COAL {"vehicle":"hpj_11","station":"3194, 63, -3194","carried":169,"had":0}
-[07:11:25] [Server thread/INFO] [OROR Village/]: FUEL-RESULT {"present":true,"tank":true,"village":{"fuelBefore":15,"handled":true,"max":10000000,"charged":10000000,"fuelAfter":0,"chargedEmpty":0,"toldShort":true,"sortieDeferred":true,"ok":true},"station":true,"post":{"sourceBefore":152,"carried":169,"inStore":169,"ok":true},"fuel":{"charges":7,"short":1,"burnt":73,"flightsFuelled":1,"deferred":1},"pass":true}
-[07:20:14] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"568, 79, 4366","via":"566, 78, 4372","off":16.4}
-[07:20:15] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"568, 79, 4366","via":"566, 78, 4372","off":16.3}
-[07:20:46] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"21, 93, 41","off":20.4}
-[07:20:48] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"21, 94, 44","off":17.7}
-[07:20:50] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"25, 93, 60","via":"21, 93, 50","off":20.7}
-[07:20:53] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"25, 93, 60","via":"22, 94, 53","off":17.5}
-[07:20:53] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"378, 64, 4533","via":"384, 65, 4536","off":16.4}
-[07:20:55] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"25, 93, 60","via":"22, 93, 54","off":16.4}
-[07:21:09] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 92, 45","off":29.0}
-[07:21:10] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:11] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:12] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:13] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:25] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:26] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:27] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:28] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:29] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:31] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.6}
-[07:21:32] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"15, 91, 44","off":29.3}
-[07:21:36] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"15, 91, 44","off":29.1}
-[07:21:41] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-4, 98, 40","via":"14, 91, 44","off":28.9}
-[07:22:50] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"17, 80, 35","off":26.6}
-[07:22:51] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"16, 80, 38","off":25.1}
-[07:22:53] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"16, 80, 40","off":22.7}
-[07:25:10] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"18, 93, 36","off":25.6}
+[08:18:29] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"25, 93, 36","off":25.3}
+[08:18:31] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"18, 94, 33","off":28.6}
+[08:18:31] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"22, 93, 41","off":20.2}
+[08:32:30] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-COAL {"vehicle":"hpj_11","station":"-397, 68, 993","carried":229,"had":1557}
+[08:32:36] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-COAL {"vehicle":"hpj_11","station":"-339, 68, 764","carried":107,"had":1359}
+[08:39:09] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"21, 93, 43","off":18.6}
+[08:39:13] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"21, 76, 53","via":"16, 93, 43","off":21.3}
+[08:39:13] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"18, 93, 38","off":24.3}
+[08:39:15] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"21, 76, 53","via":"17, 93, 45","off":18.6}
+[08:39:16] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"20, 93, 45","off":17.1}
+[08:48:34] [Server thread/INFO] [OROR Village/]: ROAD-DEPART {"from":"風の村","to":"石台","kind":"trade","party":3,"cargo":3,"km":0.26,"crossed":false}
+[08:48:34] [Server thread/INFO] [OROR Village/]: ROAD-TEST-START {"home":[-2600,70,-2600],"dest":[-2340,70,-2600],"party":3}
+[08:48:34] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-2586, 77, -2600","via":"-2590, 70, -2600","off":14.0}
+[08:48:34] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-2584, 77, -2600","via":"-2588, 70, -2601","off":14.3}
+[08:48:35] [Server thread/INFO] [OROR Village/]: ROAD-WALK {"t":80,"along":5.3,"lead":"hour 1339 activity idle brainTo -2582,77,-2600 navTo -2582,77,-2600 at -2595,72,-2607 task 行商"}
+[08:48:39] [Server thread/INFO] [OROR Village/]: ROAD-WALK {"t":160,"along":9.9,"lead":"hour 1419 activity idle brainTo -2589,73,-2605 navTo -2576,77,-2600 (done) at -2590,73,-2604 y 73.00 onGround feet short_grass under grass_block N air S air E air W air move 0.078 task 行商"}
+[08:48:48] [Server thread/INFO] [OROR Village/]: ROAD-SEEN {"from":"風の村","to":"石台","leg":0,"along":115,"of":260,"members":3}
+[08:49:01] [Server thread/INFO] [OROR Village/]: ROAD-ARRIVE {"from":"風の村","to":"石台","seen":false,"goods":3,"worth":7.8,"emeralds":4,"wares":5,"toll":0}
+[08:49:23] [Server thread/INFO] [OROR Village/]: ROAD-RETURN {"from":"風の村","to":"石台","seen":false,"goods":6}
+[08:49:24] [Server thread/INFO] [OROR Village/]: ROAD-HOME {"from":"風の村","members":3}
+[08:49:24] [Server thread/INFO] [OROR Village/]: ROAD-RESULT {"present":true,"seconds":52.8,"phases":[[160,"unload"],[162,"road"],[336,"leave"],[338,"out"],[596,"back"],[1036,"homecoming"]],"walked":9.9,"maxWalked":9.9,"lead":"t80 hour 1339 activity idle brainTo -2582,77,-2600 navTo -2582,77,-2600 at -2595,72,-2607 task 行商 | t160 hour 1419 activity idle brainTo -2589,73,-2605 navTo -2576,77,-2600 (done) at -2590,73,-2604 y 73.00 onGround feet short_grass under grass_block N air S air E air W air move 0.078 task 行商","packedOnUnload":true,"seenOnRoad":true,"seenAlong":115,"packedAgain":true,"delivered":true,"payment":8,"emeralds":4,"wares":"Iron Ingot×3、Coal×16、Stone Bricks×64、Copper Ingot×4 ほか","paid":true,"cameBack":3,"of":3,"earned":true,"roads":{"onRoads":0,"walking":0,"outOfSight":0,"waitingHome":0,"departed":1,"arrived":1,"cameHome":1,"seen":1,"packed":6,"crossings":0,"settled":0,"robbed":0,"settlersWaiting":0},"pass":true}
+[08:49:32] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-START {"at":[1200,88,-3400],"people":7,"guard":true}
+[08:49:46] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-STEP {"to":"1198, 88, -3401","pathNow":false,"followRange":48.0,"pathTried":"reaches nodes 17 ends 1183, 88, -3394","was":"hour 1284 activity idle brainTo 1198,88,-3402 navTo 1202,88,-3402 (done) at 1199,88,-3402 off 17.5 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.078 task 出撃準備 Sortie"}
+[08:49:47] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":300,"phase":"board","tank":"m_1a_2","aboard":0,"moved":0.0,"toThreat":47.4,"tankHits":0,"otherHits":34,"crew":"hour 1300 activity idle brainTo 1183,88,-3394 navTo 1183,88,-3394 at 1193,88,-3397 off 10.0 task 出撃準備 Sortie | hour 1300 activity idle brainTo 1199,88,-3401 navTo 1200,88,-3402 (done) at 1198,88,-3401 off 16.9 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.079 task 出撃準備 Sortie"}
+[08:49:50] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-STEP {"to":"1197, 88, -3400","pathNow":false,"followRange":48.0,"pathTried":"reaches nodes 16 ends 1183, 88, -3394","was":"hour 1364 activity idle brainTo 1199,88,-3401 navTo 1200,88,-3402 (done) at 1198,88,-3401 off 17.0 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.078 task 出撃準備 Sortie"}
+[08:49:52] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-TRACK {"t":400,"phase":"board","tank":"m_1a_2","aboard":1,"moved":0.0,"toThreat":47.4,"tankHits":0,"otherHits":54,"crew":"hour 1400 activity idle brainTo 1183,88,-3394 navTo 1183,88,-3394 at 1183,89,-3395 off 1.7 riding task 出撃準備 Sortie | hour 1400 activity idle brainTo 1198,88,-3400 navTo 1183,88,-3394 (done) at 1197,88,-3400 off 15.0 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.078 task 出撃準備 Sortie"}
+[08:49:54] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-STEP {"to":"1196, 88, -3399","pathNow":false,"followRange":48.0,"pathTried":"reaches nodes 15 ends 1183, 88, -3394","was":"hour 1444 activity idle brainTo - navTo 1183,88,-3394 (done) at 1197,88,-3400 off 15.0 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.078 task 出撃準備 Sortie"}
+[08:49:56] [Server thread/INFO] [OROR Village/]: VILLAGE-ARMS-RESULT {"present":true,"seconds":24.7,"phases":[[125,"tank"],[165,"sortie"]],"unlocked":0.3,"table":0.3,"gunsMade":3,"gunsAt":"45 85 125","guard":true,"guardArmed":true,"villagersArmed":2,"stage":3,"vehicles":"tank,","built":8.3,"ironBefore":224,"ironAfter":224,"tank":"m_1a_2","out":10.3,"boarded":23.6,"maxAboard":2,"moved":0.0,"closest":47.4,"tankHits":3,"tankDamage":740,"firstHit":24.6,"otherHits":72,"otherBy":"guard/mp_443","crewBoarding":"hour 1400 activity idle brainTo 1183,88,-3394 navTo 1183,88,-3394 at 1183,89,-3395 off 1.7 riding task 出撃準備 Sortie | hour 1400 activity idle brainTo 1198,88,-3400 navTo 1183,88,-3394 (done) at 1197,88,-3400 off 15.0 y 88.00 onGround feet air under grass_block N air S air E air W air move 0.078 task 出撃準備 Sortie","note":"","pass":true}
+[08:50:00] [Server thread/INFO] [OROR Village/]: VILLAGE-FUEL 燃料（石炭・木炭）が足りず、M1A2 MBTを0%までしか充電できませんでした
+[08:50:00] [Server thread/INFO] [OROR Vehicles/]: SUPPLY-COAL {"vehicle":"hpj_11","station":"3194, 63, -3194","carried":169,"had":0}
+[08:50:00] [Server thread/INFO] [OROR Village/]: FUEL-RESULT {"present":true,"tank":true,"village":{"fuelBefore":15,"handled":true,"max":10000000,"charged":10000000,"fuelAfter":0,"chargedEmpty":0,"toldShort":true,"sortieDeferred":true,"ok":true},"station":true,"post":{"sourceBefore":152,"carried":169,"inStore":169,"ok":true},"fuel":{"charges":3,"short":1,"burnt":37,"flightsFuelled":1,"deferred":1},"pass":true}
+[08:59:45] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"13, 75, 12","via":"16, 76, 39","off":37.0}
+[08:59:47] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"20, 76, 48","off":17.9}
+[08:59:49] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"13, 75, 12","via":"15, 73, 29","off":27.2}
+[08:59:50] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"20, 76, 48","off":18.0}
+[08:59:51] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"13, 75, 12","via":"15, 73, 24","off":22.5}
+[08:59:52] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"20, 76, 48","off":18.6}
+[09:02:39] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"770, 67, 4904","via":"774, 67, 4906","off":14.5}
+[09:04:38] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"832, 64, 5145","via":"832, 64, 5140","off":15.0}
+[09:13:30] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"13, 75, 12","via":"14, 74, 19","off":17.0}
+[09:13:31] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"13, 75, 12","via":"14, 73, 16","off":14.2}
+[09:14:57] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6923, 65, 6982","via":"-6909, 65, 6984","off":24.2}
+[09:14:58] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6923, 65, 6982","via":"-6913, 65, 6982","off":19.9}
+[09:14:58] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6951, 65, 7148","via":"-6931, 65, 7127","off":38.5}
+[09:14:58] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6951, 65, 7148","via":"-6935, 65, 7128","off":35.5}
+[09:14:58] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6923, 65, 6982","via":"-6915, 65, 6982","off":18.2}
+[09:14:59] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6951, 65, 7148","via":"-6930, 65, 7127","off":39.3}
+[09:14:59] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6983, 65, 7086","via":"-6980, 68, 7107","off":30.8}
+[09:14:59] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6983, 65, 7086","via":"-6980, 68, 7103","off":27.0}
+[09:14:59] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6956, 65, 7161","via":"-6911, 65, 7128","off":65.6}
+[09:14:59] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6928, 65, 7055","via":"-6927, 68, 7031","off":33.6}
+[09:14:59] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6923, 65, 6982","via":"-6915, 65, 6982","off":18.2}
+[09:15:00] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6951, 65, 7148","via":"-6932, 65, 7134","off":33.7}
+[09:15:00] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6951, 65, 7148","via":"-6931, 65, 7130","off":36.4}
+[09:15:00] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6983, 65, 7086","via":"-6980, 68, 7103","off":27.0}
+[09:15:00] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6983, 65, 7086","via":"-6981, 68, 7101","off":25.5}
+[09:15:00] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6951, 65, 7148","via":"-6933, 65, 7132","off":34.0}
+[09:15:00] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6928, 65, 7055","via":"-6926, 68, 7034","off":30.8}
+[09:15:01] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6983, 65, 7086","via":"-6979, 65, 7115","off":39.0}
+[09:15:01] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6956, 65, 7161","via":"-6913, 65, 7131","off":62.5}
+[09:15:01] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-6956, 65, 7161","via":"-6909, 65, 7134","off":64.5}
