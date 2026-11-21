@@ -91,6 +91,18 @@ public final class SiegeMounts {
         }
     }
 
+    /** (run 204) The siege's dragons burnt and froze their own riders: a mount of the siege does not hurt the siege's illagers. */
+    @SubscribeEvent
+    public static void noFriendlyFire(net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent e) {
+        if (e.getEntity().level().isClientSide() || !(e.getEntity() instanceof net.minecraft.world.entity.raid.Raider)) {
+            return;
+        }
+        Entity by = e.getSource().getEntity();
+        if (by instanceof Mob m && m.getPersistentData().getBoolean(TAG) && !(by instanceof net.minecraft.world.entity.raid.Raider)) {
+            e.setCanceled(true);
+        }
+    }
+
     /** What brings a mount of the siege down, and when, for the next look. */
     @SubscribeEvent
     public static void fell(net.neoforged.neoforge.event.entity.living.LivingDeathEvent e) {
@@ -148,7 +160,8 @@ public final class SiegeMounts {
         if (target != null) {
             double a = now * 0.035 + phase;
             dive = (now + (long) (phase * 100)) % 200 < 50 && pos.distanceTo(target.position()) < 40;
-            goal = dive ? target.position().add(0, 1.5, 0)
+            // (run 204) the dive stops five blocks over the target: down at its head the kingdom's guards cut the dragons down
+            goal = dive ? target.position().add(0, target.getBbHeight() + 5, 0)
                 : target.position().add(Math.cos(a) * 14, 10, Math.sin(a) * 14);
         } else {
             CitadelSites.Site site = level.dimension() == net.minecraft.world.level.Level.OVERWORLD ? CitadelSites.capital() : null;
@@ -184,7 +197,7 @@ public final class SiegeMounts {
             m.yBodyRot = turned;
             m.yHeadRot = turned;
         }
-        if (target != null && now % 20 == 0 && m.distanceToSqr(target) < 7 * 7) {
+        if (target != null && now % 20 == 0 && m.distanceToSqr(target) < (9 + m.getBbWidth()) * (9 + m.getBbWidth())) {
             m.doHurtTarget(target);
         }
         m.getPersistentData().putString("OrorSiegeMountMode", target == null ? "capital" : dive ? "dive" : "circle");
