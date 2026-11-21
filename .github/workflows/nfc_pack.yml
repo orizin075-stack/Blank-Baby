@@ -8,7 +8,7 @@ name: NightfallCraft look check
 on:
   push:
     branches: [claude/jolly-einstein-wvpjq1]
-    paths: ['oror_rework/nfc_ui/additions-*.json', 'oror_rework/nfc_ui/pack/**', 'oror_rework/nfc_ui/harness/**',
+    paths: ['oror_rework/nfc_ui/additions-0.17.25.json', 'oror_rework/nfc_ui/pack/**', 'oror_rework/nfc_ui/harness/**',
             'oror_rework/nfc_ui/tools/pack_tools.py', '.github/workflows/nfc_pack.yml']
   workflow_dispatch:
 
