@@ -826,6 +826,10 @@ public final class RoyalPilots {
         if (target != null) {
             Vec3 off = pos.subtract(target.position()).multiply(1, 0, 1);
             off = off.lengthSqr() < 1 ? Vec3.directionFromRotation(0, v.getYRot()).scale(-1) : off.normalize();
+            // (r63) circling: the point it flies for runs 25 degrees ahead round the target (the way round set by the
+            // helicopter's own id), so it strafes round the enemy with its nose on it instead of hanging still in the air
+            double turn = Math.toRadians((v.getUUID().getLeastSignificantBits() & 1) == 0 ? 25 : -25);
+            off = new Vec3(off.x * Math.cos(turn) - off.z * Math.sin(turn), 0, off.x * Math.sin(turn) + off.z * Math.cos(turn));
             goal = target.position().add(off.scale(35));
             altitude = Math.max(ground, target.getY()) + 22;
             face = target.position().subtract(pos);
@@ -871,7 +875,10 @@ public final class RoyalPilots {
         Vec3 m = v.getDeltaMovement();
         Vec3 side = new Vec3(-heading.z, 0, heading.x);
         double slip = m.dot(side);
-        m = m.subtract(side.scale(slip * 0.15));
+        // (r63) sideways: damped, but when fighting the side speed is led toward the goal (the nose stays on the enemy, so
+        // only a sideways run takes it round him); up to half a block a tick
+        double wantSlip = target != null && pos.y > ground + 6 ? Mth.clamp(flat.dot(side) * 0.04, -0.5, 0.5) : 0;
+        m = m.add(side.scale((wantSlip - slip) * 0.15));
         // (r63) the height held steady: the collective answers late, so the keys alone overshot and it bobbed three blocks up
         // and down every four seconds over its target (CI 190: 79.9 to 85.7 for a hold at 85); near the height wanted, the
         // climb or sink is eased a quarter of the way to the one wanted each tick, as a stability system would
@@ -882,9 +889,9 @@ public final class RoyalPilots {
         v.fallDistance = 0;
         if (now % 40 == 0) {
             LOG.info(String.format(java.util.Locale.ROOT, "HELI-TRACK {\"t\":%d,\"mode\":\"%s\",\"y\":%.1f,\"want\":%.1f,\"ground\":%.0f,\"dist\":%.1f,"
-                    + "\"err\":%.0f,\"speed\":%.2f,\"vy\":%.2f,\"power\":%.3f,\"pitch\":%.0f,\"keys\":\"%s%s\"}",
+                    + "\"err\":%.0f,\"speed\":%.2f,\"vy\":%.2f,\"power\":%.3f,\"pitch\":%.0f,\"keys\":\"%s%s\",\"x\":%.1f,\"z\":%.1f,\"targetDist\":%.1f}",
                 t, p.getString("Mode"), pos.y, altitude, ground, dist, err, v.getDeltaMovement().horizontalDistance(), v.getDeltaMovement().y,
-                Sbw.power(v), pitch, up ? "U" : "", down ? "D" : ""));
+                Sbw.power(v), pitch, up ? "U" : "", down ? "D" : "", pos.x, pos.z, target == null ? -1 : Math.sqrt(v.distanceToSqr(target))));
         }
     }
 
