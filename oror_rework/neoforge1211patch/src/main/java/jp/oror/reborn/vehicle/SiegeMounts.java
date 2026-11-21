@@ -100,6 +100,12 @@ public final class SiegeMounts {
         Entity by = e.getSource().getEntity();
         if (by instanceof Mob m && m.getPersistentData().getBoolean(TAG) && !(by instanceof net.minecraft.world.entity.raid.Raider)) {
             e.setCanceled(true);
+            return;
+        }
+        // (run 205) two riders choked "in a wall": a rider sat on a big dragon brushes leaves and roofs the dragon flies by
+        if (e.getSource().is(net.minecraft.world.damagesource.DamageTypes.IN_WALL) && e.getEntity().getVehicle() instanceof Mob v
+            && v.getPersistentData().getBoolean(TAG)) {
+            e.setCanceled(true);
         }
     }
 
