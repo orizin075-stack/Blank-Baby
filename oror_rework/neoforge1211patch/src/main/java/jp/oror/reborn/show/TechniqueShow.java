@@ -112,7 +112,7 @@ public final class TechniqueShow {
             ACTIVE.put(p.entity(), new Active(p.entity(), character, "MOVE_" + kind.substring(5).toUpperCase(Locale.ROOT), 0, p.windup(), p.length(),
                 p.target(), p.start()));
         } else {
-            REACT.put(p.entity(), new Active(p.entity(), character, kind.toUpperCase(Locale.ROOT), 0, p.windup(), p.length(), p.target(), p.start()));
+            REACT.put(p.entity(), new Active(p.entity(), character, kind.toUpperCase(Locale.ROOT), p.seq(), p.windup(), p.length(), p.target(), p.start()));
         }
     }
 

@@ -559,8 +559,10 @@ public final class EfMotion {
                     case "BROKEN" -> want = first("epicfightx:biped/skill/guard_break1", "epicfight:biped/skill/guard_break", "epicfight:biped/combat/hit_long");
                     case "PARRIED" -> want = first("epicfight:biped/combat/hit_long", "epicfight:biped/combat/hit_short");
                     // (r65) OROR's dodge: Epic Fight Nightfall's step to that side
-                    case "DODGE_L" -> want = first("efn:biped/dodge/step_l", "epicfight:biped/skill/step_left");
-                    case "DODGE_R" -> want = first("efn:biped/dodge/step_r", "epicfight:biped/skill/step_right");
+                    case "DODGE_L" -> want = show.seq() == 1 ? first("efn:biped/dodge/dodge_b", "epicfight:biped/skill/roll_backward")
+                        : first("efn:biped/dodge/step_l", "epicfight:biped/skill/step_left");
+                    case "DODGE_R" -> want = show.seq() == 1 ? first("efn:biped/dodge/dodge_b", "epicfight:biped/skill/roll_backward")
+                        : first("efn:biped/dodge/step_r", "epicfight:biped/skill/step_right");
                     default -> {
                     }
                 }

@@ -253,6 +253,10 @@ public final class MobDodge {
         Vec3 side = new Vec3(-away.z, 0, away.x);
         double r = reach(m);
         Vec3 left = side.scale(0.92).add(away.scale(0.38)).normalize(), right = side.scale(-0.92).add(away.scale(0.38)).normalize();
+        // (r65, the user: "ローリング回避とか") now and then a roll straight back out of reach, where there is room for it
+        if (m.getRandom().nextInt(3) == 0 && room(sl, m, away.scale(r * 1.6))) {
+            return away;
+        }
         boolean l = room(sl, m, left.scale(r)), rr = room(sl, m, right.scale(r));
         if (l && rr) {
             return m.getRandom().nextBoolean() ? left : right;
@@ -297,6 +301,11 @@ public final class MobDodge {
         Vec3 stood = m.position().add(0, m.getBbHeight() * 0.55, 0);
         // a short hop to the side: about its reach in a quarter second, its feet back down at once
         double speed = 0.42 * Math.max(1.0, reach(m) / 1.4);
+        // (r65) straight back is a roll: farther, and lower to the ground
+        boolean roll = way.dot(away) > 0.95;
+        if (roll) {
+            speed *= 1.35;
+        }
         m.setDeltaMovement(way.x * speed, m.onGround() ? 0.2 : Math.max(m.getDeltaMovement().y, 0.05), way.z * speed);
         m.hurtMarked = true;
         m.getNavigation().stop();
@@ -323,9 +332,16 @@ public final class MobDodge {
         // its left or right, as it faces the blow (facing back along it: its left is the side's positive way)
         Vec3 side = new Vec3(-away.z, 0, away.x);
         boolean toLeft = way.dot(side) >= 0;
-        TechniqueShow.send(m, toLeft ? "dodge_l" : "dodge_r", 0, 1, 10, foe == null ? -1 : foe.getId());
-        // (r65) on an Epic Fight humanoid, Epic Fight Nightfall's own step to that side
-        MobGuard.Ef.playNamed(m, toLeft ? "efn:biped/dodge/step_l" : "efn:biped/dodge/step_r");
+        // (seq 1: the roll back, which OROR's own models play as Epic Fight's roll)
+        TechniqueShow.send(m, toLeft ? "dodge_l" : "dodge_r", roll ? 1 : 0, 1, roll ? 14 : 10, foe == null ? -1 : foe.getId());
+        // (r65) on an Epic Fight humanoid, Epic Fight Nightfall's own step to that side, or its roll back
+        if (roll) {
+            if (!MobGuard.Ef.playNamed(m, "efn:biped/dodge/dodge_b")) {
+                MobGuard.Ef.playNamed(m, "epicfight:biped/skill/roll_backward");
+            }
+        } else {
+            MobGuard.Ef.playNamed(m, toLeft ? "efn:biped/dodge/step_l" : "efn:biped/dodge/step_r");
+        }
     }
 
     private static void note(Mob m, String key) {
