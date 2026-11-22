@@ -121,7 +121,9 @@ jobs:
                      yesman.epicfight.api.animation.types.StaticAnimation yesman.epicfight.api.animation.types.DynamicAnimation \
                      yesman.epicfight.api.animation.TransformSheet yesman.epicfight.api.animation.JointTransform \
                      yesman.epicfight.api.animation.Keyframe yesman.epicfight.api.asset.AssetAccessor yesman.epicfight.api.utils.math.Vec3f \
-                     yesman.epicfight.api.utils.math.OpenMatrix4f; do
+                     yesman.epicfight.api.utils.math.OpenMatrix4f yesman.epicfight.api.model.Armature yesman.epicfight.api.animation.Pose \
+                     yesman.epicfight.api.animation.Joint yesman.epicfight.gameasset.Armatures 'yesman.epicfight.gameasset.Armatures$ArmatureAccessor' \
+                     yesman.epicfight.model.armature.HumanoidArmature yesman.epicfight.api.client.model.SkinnedMesh; do
               echo "== $c"; javap -p -cp $EF "$c" 2>&1 | grep -vE 'lambda\$' | grep -E 'public|interface|class' | head -n 60
             done
             unzip -l $EF | grep -E 'animmodels/armatures/biped|assets/epicfight/animmodels/animations/biped/combat/sword_auto1' | head -n 5
