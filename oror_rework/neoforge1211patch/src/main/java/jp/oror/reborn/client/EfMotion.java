@@ -385,6 +385,37 @@ public final class EfMotion {
         return pick(ids, 0);
     }
 
+    /**
+     * (r65, look 'motion') What this reads of an animation at time t, joint by joint (its local translation and its local
+     * turn as a quaternion), for comparing with Epic Fight's own pose of the same moment.
+     */
+    public static String debugLocals(String id, float t, String... joints) {
+        ResourceLocation r = ResourceLocation.tryParse(id);
+        Clip c = r == null ? null : clip(r);
+        if (c == null) {
+            return "no clip";
+        }
+        StringBuilder b = new StringBuilder();
+        Matrix4f m = new Matrix4f();
+        for (String j : joints) {
+            Sheet s = c.joints().get(j);
+            if (s == null) {
+                continue;
+            }
+            s.at(t, m);
+            Vector3f p = m.getTranslation(new Vector3f());
+            Quaternionf q = m.getNormalizedRotation(new Quaternionf());
+            b.append(String.format(java.util.Locale.ROOT, "%s t(%.2f,%.2f,%.2f) q(%.2f,%.2f,%.2f,%.2f) ", j, p.x, p.y, p.z, q.x, q.y, q.z, q.w));
+        }
+        return b.toString();
+    }
+
+    /** The mob's animation and its time now (seconds), or null. */
+    public static String nowAt(LivingEntity e, float partial) {
+        Active a = ACTIVE.get(e.getId());
+        return a == null ? null : a.id() + "@" + String.format(java.util.Locale.ROOT, "%.3f", (e.tickCount + partial - a.start()) / 20F * a.speed());
+    }
+
     /** (r65) Starts an animation on a mob outright (the look check's side by side with Epic Fight's own); whether it could. */
     public static boolean start(LivingEntity e, String id) {
         ResourceLocation r = ResourceLocation.tryParse(id);

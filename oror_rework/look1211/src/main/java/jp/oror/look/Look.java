@@ -1163,8 +1163,8 @@ public final class Look {
                 for (int i = 0; i < MOTION_ROW.length; i++) {
                     String id = MOTION_ROW[i][0].contains(":") ? MOTION_ROW[i][0] : "minecraft:" + MOTION_ROW[i][0];
                     command(server, String.format(java.util.Locale.ROOT, "summon %s %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Invulnerable:1b,"
-                        + "Rotation:[%sf,0f],HandItems:[{id:\"minecraft:iron_sword\",count:1},{}],Tags:[\"oror_look\",\"oror_look_motion\"]}",
-                        id, sx - 6.5 + i * 2.6, (int) sy, sz + 8, MOTION_ROW[i][1]));
+                        + "Rotation:[%sf,0f],HandItems:[{id:\"minecraft:iron_sword\",count:1},{}],Tags:[\"oror_look\",\"oror_look_motion\",\"oror_look_slot%d\"]}",
+                        id, sx - 6.5 + i * 2.6, (int) sy, sz + 8, MOTION_ROW[i][1], i));
                 }
                 note("motion scene: " + MOTION_ROW.length);
             });
@@ -1185,13 +1185,104 @@ public final class Look {
             return;
         }
         String anim = MOTIONS[step];
+        if (at == 46) {
+            // (r65) back to their places and their facing (Epic Fight's attacks step the husks forward and turn them)
+            server.execute(() -> {
+                for (Entity e : server.overworld().getEntities((Entity) null, new AABB(sx - 20, sy - 4, sz - 4, sx + 20, sy + 8, sz + 20),
+                    x -> x.getTags().contains("oror_look_motion"))) {
+                    for (int i = 0; i < MOTION_ROW.length; i++) {
+                        if (e.getTags().contains("oror_look_slot" + i)) {
+                            float yaw = Float.parseFloat(MOTION_ROW[i][1]);
+                            e.moveTo(sx - 6.5 + i * 2.6, (int) sy, sz + 8, yaw, 0F);
+                            e.setYHeadRot(yaw);
+                            if (e instanceof LivingEntity l) {
+                                l.yBodyRot = yaw;
+                            }
+                        }
+                    }
+                }
+            });
+        }
         if (at == 0) {
             playMotion(mc, anim);
         }
         for (int k = 0; k < MOTION_SHOTS.length; k++) {
             if (at == MOTION_SHOTS[k]) {
+                efPoseNote(mc, anim);
                 shot(mc, String.format(java.util.Locale.ROOT, "m%02d_%s_t%02d", step + 1, anim.substring(anim.lastIndexOf('/') + 1), MOTION_SHOTS[k]));
             }
+        }
+    }
+
+    /** (r65) Epic Fight's own pose of a husk now (its joints' local translation and turn), beside what EfMotion reads. */
+    private static void efPoseNote(Minecraft mc, String anim) {
+        String[] joints = {"Root", "Torso", "Chest", "Arm_R", "Hand_R", "Tool_R", "Thigh_R"};
+        try {
+            Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
+            Class<?> living = Class.forName("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
+            Method get = caps.getMethod("getEntityPatch", Entity.class, Class.class);
+            float partial = mc.getTimer().getGameTimeDeltaPartialTick(true);
+            for (Entity e : mc.level.getEntities((Entity) null, new AABB(sx - 20, sy - 4, sz - 4, sx + 20, sy + 8, sz + 20),
+                x -> net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(x.getType()).getPath().equals("husk"))) {
+                Object patch = get.invoke(null, e, living);
+                if (patch instanceof java.util.Optional<?> o) {
+                    patch = o.orElse(null);
+                }
+                if (patch == null) {
+                    continue;
+                }
+                Object animator = patch.getClass().getMethod("getAnimator").invoke(patch);
+                Object pose = null;
+                for (Method m : animator.getClass().getMethods()) {
+                    if (m.getName().equals("getPose") && m.getParameterCount() == 1 && m.getParameterTypes()[0] == float.class) {
+                        pose = m.invoke(animator, partial);
+                        break;
+                    }
+                }
+                StringBuilder b = new StringBuilder("efpose husk x=" + String.format(java.util.Locale.ROOT, "%.1f yaw=%.0f", e.getX() - sx, e.getYRot()) + ": ");
+                if (pose != null) {
+                    java.util.Map<?, ?> data = null;
+                    for (Method m : pose.getClass().getMethods()) {
+                        if (m.getParameterCount() == 0 && java.util.Map.class.isAssignableFrom(m.getReturnType())) {
+                            data = (java.util.Map<?, ?>) m.invoke(pose);
+                            break;
+                        }
+                    }
+                    if (data != null) {
+                        for (String j : joints) {
+                            Object jt = data.get(j);
+                            if (jt == null) {
+                                continue;
+                            }
+                            Object tr = jt.getClass().getMethod("translation").invoke(jt);
+                            org.joml.Quaternionf q = (org.joml.Quaternionf) jt.getClass().getMethod("rotation").invoke(jt);
+                            float tx = tr.getClass().getField("x").getFloat(tr), ty = tr.getClass().getField("y").getFloat(tr), tz = tr.getClass().getField("z").getFloat(tr);
+                            b.append(String.format(java.util.Locale.ROOT, "%s t(%.2f,%.2f,%.2f) q(%.2f,%.2f,%.2f,%.2f) ", j, tx, ty, tz, q.x, q.y, q.z, q.w));
+                        }
+                    } else {
+                        b.append("no map in ").append(pose.getClass().getName());
+                    }
+                } else {
+                    b.append("no pose");
+                }
+                note(b.toString());
+            }
+            // and EfMotion's reading of the same animation, at the time OROR's own models are at
+            Class<?> ef = Class.forName("jp.oror.reborn.client.EfMotion");
+            Method now = ef.getMethod("nowAt", LivingEntity.class, float.class);
+            Method locals = ef.getMethod("debugLocals", String.class, float.class, String[].class);
+            for (Entity e : mc.level.getEntities((Entity) null, new AABB(sx - 20, sy - 4, sz - 4, sx + 20, sy + 8, sz + 20),
+                x -> net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(x.getType()).getPath().equals("kingdom_guard"))) {
+                Object at = now.invoke(null, e, partial);
+                if (at != null) {
+                    String s = at.toString();
+                    float t = Float.parseFloat(s.substring(s.indexOf('@') + 1));
+                    note("efmotion " + s + ": " + locals.invoke(null, anim, t, (Object) joints));
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("efpose error " + ex);
         }
     }
 
