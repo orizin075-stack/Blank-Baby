@@ -84,6 +84,11 @@ public final class StructureAudit {
         long startedMs;
         int found, missingTotal, intrudingTotal, floatingTotal, darkTotal, indoorTotal;
         List<String> notFound = new ArrayList<>();
+        // (r63, run 203) the End's and the Nether's citadels were searched for in the overworld, and the forbidden vault,
+        // which no structure set places (the kingdom's builder does), was counted as not found
+        net.minecraft.server.MinecraftServer server;
+        java.util.Set<ResourceKey<Structure>> inSets = new java.util.HashSet<>();
+        List<String> byCode = new ArrayList<>();
     }
 
     @SubscribeEvent
@@ -97,8 +102,14 @@ public final class StructureAudit {
             return 0;
         }
         Run r = new Run();
+        r.server = src.getServer();
         r.level = src.getServer().overworld();
         Registry<Structure> reg = r.level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        for (net.minecraft.world.level.levelgen.structure.StructureSet ss : r.level.registryAccess().registryOrThrow(Registries.STRUCTURE_SET)) {
+            for (var en : ss.structures()) {
+                en.structure().unwrapKey().ifPresent(r.inSets::add);
+            }
+        }
         for (ResourceKey<Structure> k : reg.registryKeySet()) {
             if (k.location().getNamespace().equals("oror_supreme_bosses")) {
                 r.keys.add(k);
@@ -140,9 +151,9 @@ public final class StructureAudit {
             r.index++;
         }
         if (r.index >= r.keys.size() && r.start == null) {
-            LOG.info("STRUCT-AUDIT-RESULT {\"structures\":{},\"found\":{},\"missing\":{},\"intruding\":{},\"floatingColumns\":{},\"indoor\":{},\"dark\":{},\"notFound\":\"{}\",\"footingPieces\":{},\"footingCleared\":{},\"footingLaid\":{},\"guardStarts\":{},\"guardRefused\":{},\"ticks\":{}}",
+            LOG.info("STRUCT-AUDIT-RESULT {\"structures\":{},\"found\":{},\"missing\":{},\"intruding\":{},\"floatingColumns\":{},\"indoor\":{},\"dark\":{},\"notFound\":\"{}\",\"placedByCode\":\"{}\",\"footingPieces\":{},\"footingCleared\":{},\"footingLaid\":{},\"guardStarts\":{},\"guardRefused\":{},\"ticks\":{}}",
                 r.keys.size(), r.found, r.missingTotal, r.intrudingTotal, r.floatingTotal, r.indoorTotal, r.darkTotal,
-                String.join(" ", r.notFound), jp.oror.reborn.worldgen.StructureFooting.PIECES.get(),
+                String.join(" ", r.notFound), String.join(" ", r.byCode), jp.oror.reborn.worldgen.StructureFooting.PIECES.get(),
                 jp.oror.reborn.worldgen.StructureFooting.CLEARED.get(), jp.oror.reborn.worldgen.StructureFooting.FOOTED.get(),
                 jp.oror.reborn.worldgen.StructureGuard.STARTS.get(), jp.oror.reborn.worldgen.StructureGuard.REFUSED.get(),
                 r.level.getGameTime() - r.startedAt);
@@ -164,8 +175,25 @@ public final class StructureAudit {
             }
             Registry<Structure> reg = r.level.registryAccess().registryOrThrow(Registries.STRUCTURE);
             Holder<Structure> holder = reg.getHolderOrThrow(r.current);
+            if (!r.inSets.contains(r.current)) {
+                r.byCode.add(r.current.location().getPath());
+                LOG.info("STRUCT-AUDIT {\"id\":\"{}\",\"found\":false,\"placedBy\":\"code\"}", r.current.location());
+                r.index++;
+                return;
+            }
+            // the world the structure's biomes are in: the overworld first, then the Nether, then the End
+            r.level = r.server.overworld();
+            for (ServerLevel lv : List.of(r.server.overworld(), r.server.getLevel(net.minecraft.world.level.Level.NETHER),
+                r.server.getLevel(net.minecraft.world.level.Level.END))) {
+                if (lv != null && lv.getChunkSource().getGenerator().getBiomeSource().possibleBiomes().stream().anyMatch(holder.value().biomes()::contains)) {
+                    r.level = lv;
+                    break;
+                }
+            }
+            // the End's outer islands begin a thousand blocks out
+            int radius = r.level.dimension() == net.minecraft.world.level.Level.END ? 160 : RADIUS;
             Pair<BlockPos, Holder<Structure>> at = r.level.getChunkSource().getGenerator()
-                .findNearestMapStructure(r.level, HolderSet.direct(holder), BlockPos.ZERO, RADIUS, false);
+                .findNearestMapStructure(r.level, HolderSet.direct(holder), BlockPos.ZERO, radius, false);
             if (at == null) {
                 r.notFound.add(r.current.location().getPath());
                 LOG.info("STRUCT-AUDIT {\"id\":\"{}\",\"found\":false}", r.current.location());

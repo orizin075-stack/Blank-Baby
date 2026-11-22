@@ -45,9 +45,16 @@ public final class SiegeTest {
 
     private static final class Track {
         String kind;
-        int samples, ridden, airborne;
+        int samples, ridden, airborne, shots;
         double maxAlt, firstDist = -1, closest = 1e9, path;
         double lx = Double.NaN, lz;
+    }
+
+    private static final class Foot {
+        String type, group;
+        int samples;
+        double firstDist = -1, closest = 1e9, maxHp;
+        boolean fromPortal, alive = true;
     }
 
     private static final class Run {
@@ -57,6 +64,8 @@ public final class SiegeTest {
         int age;
         String began;
         final Map<UUID, Track> tracks = new HashMap<>();
+        /** (r63, the user: "ネザーからきちんとモブくる？ボスは？") the siege's ground: every marked attacker, by kind. */
+        final Map<UUID, Foot> foot = new HashMap<>();
         final List<String> notes = new ArrayList<>();
     }
 
@@ -131,7 +140,57 @@ public final class SiegeTest {
         }
     }
 
+    private static String group(Entity e) {
+        if (e.getPersistentData().getBoolean("OrorAzazelSiegeBoss")) {
+            return "boss";
+        }
+        if (e.getPersistentData().getBoolean("OrorAzazelSiegeAir")) {
+            return "air";
+        }
+        String id = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath();
+        return switch (id) {
+            case "piglin_brute", "piglin", "zombified_piglin", "blaze", "wither_skeleton", "ghast", "hoglin", "zoglin", "magma_cube" -> "nether";
+            case "pillager", "vindicator", "evoker", "ravager", "illusioner", "witch", "vex" -> "illager";
+            default -> "other";
+        };
+    }
+
+    private static void census(Run r) {
+        ServerLevel l = r.level;
+        java.util.Set<UUID> seen = new java.util.HashSet<>();
+        for (Entity e : l.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, new AABB(r.center).inflate(RADIUS, 200, RADIUS),
+            x -> x.getPersistentData().getBoolean("OrorAzazelCapitalSiege"))) {
+            seen.add(e.getUUID());
+            Foot f = r.foot.get(e.getUUID());
+            double d = Math.hypot(e.getX() - r.center.getX(), e.getZ() - r.center.getZ());
+            if (f == null) {
+                f = new Foot();
+                f.type = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString();
+                f.group = group(e);
+                f.firstDist = d;
+                // born at a portal of the siege: a nether portal block within four blocks
+                BlockPos b = e.blockPosition();
+                for (BlockPos q : BlockPos.betweenClosed(b.offset(-4, -3, -4), b.offset(4, 4, 4))) {
+                    if (l.getBlockState(q).is(net.minecraft.world.level.block.Blocks.NETHER_PORTAL)) {
+                        f.fromPortal = true;
+                        break;
+                    }
+                }
+                r.foot.put(e.getUUID(), f);
+            }
+            f.samples++;
+            f.closest = Math.min(f.closest, d);
+            f.maxHp = Math.max(f.maxHp, ((net.minecraft.world.entity.LivingEntity) e).getMaxHealth());
+        }
+        for (Map.Entry<UUID, Foot> en : r.foot.entrySet()) {
+            if (!seen.contains(en.getKey())) {
+                en.getValue().alive = false;
+            }
+        }
+    }
+
     private static void sample(Run r) {
+        census(r);
         ServerLevel l = r.level;
         StringBuilder line = new StringBuilder();
         int n = 0;
@@ -146,6 +205,7 @@ public final class SiegeTest {
             if (ridden) {
                 t.ridden++;
             }
+            t.shots = Math.max(t.shots, jp.oror.reborn.vehicle.SiegeGunners.shots(e));
             if (air) {
                 t.airborne++;
             }
@@ -173,7 +233,7 @@ public final class SiegeTest {
     }
 
     private static void finish(Run r) {
-        int mounts = 0, mountsRidden = 0, mountsFlew = 0, mountsCame = 0, mountsMoved = 0, helis = 0, helisFlew = 0;
+        int mounts = 0, mountsRidden = 0, mountsFlew = 0, mountsCame = 0, mountsMoved = 0, helis = 0, helisFlew = 0, shots = 0, gunMounts = 0;
         double maxAlt = 0;
         Map<String, Integer> kinds = new HashMap<>();
         for (Track t : r.tracks.values()) {
@@ -186,6 +246,8 @@ public final class SiegeTest {
                 continue;
             }
             mounts++;
+            shots += t.shots;
+            gunMounts += t.kind.endsWith("hippogryph") || t.kind.endsWith("amphithere") ? 1 : 0;
             mountsRidden += t.ridden * 2 >= t.samples ? 1 : 0;
             mountsFlew += flew ? 1 : 0;
             mountsCame += t.firstDist - t.closest > 40 || t.closest < 120 ? 1 : 0;
@@ -195,8 +257,35 @@ public final class SiegeTest {
         boolean pass = mounts > 0 && mountsFlew * 2 >= mounts && mountsRidden * 2 >= mounts && mountsCame * 2 >= mounts && mountsMoved * 2 >= mounts;
         LOG.info(String.format(java.util.Locale.ROOT,
             "SIEGE-RESULT {\"present\":true,\"began\":\"%s\",\"mounts\":%d,\"ridden\":%d,\"flew\":%d,\"cameToCapital\":%d,\"maxAlt\":%.1f,"
-                + "\"moved\":%d,\"helis\":%d,\"helisFlew\":%d,\"kinds\":\"%s\",\"pass\":%s}",
-            r.began, mounts, mountsRidden, mountsFlew, mountsCame, maxAlt, mountsMoved, helis, helisFlew, kinds, pass));
+                + "\"moved\":%d,\"helis\":%d,\"helisFlew\":%d,\"gunMounts\":%d,\"airShots\":%d,\"kinds\":\"%s\",\"pass\":%s}",
+            r.began, mounts, mountsRidden, mountsFlew, mountsCame, maxAlt, mountsMoved, helis, helisFlew, gunMounts, shots, kinds, pass));
+        // the ground: how many of each kind came, how many from the portals, how near the capital they got; the bosses one by one
+        Map<String, int[]> groups = new java.util.TreeMap<>();
+        Map<String, Integer> types = new java.util.TreeMap<>();
+        StringBuilder bosses = new StringBuilder();
+        for (Foot f : r.foot.values()) {
+            int[] g = groups.computeIfAbsent(f.group, k -> new int[5]);
+            g[0]++;
+            g[1] += f.fromPortal ? 1 : 0;
+            g[2] += f.firstDist - f.closest > 60 ? 1 : 0;
+            g[3] += f.closest < 150 ? 1 : 0;
+            g[4] += f.alive ? 1 : 0;
+            types.merge(f.type, 1, Integer::sum);
+            if (f.group.equals("boss")) {
+                bosses.append(String.format(java.util.Locale.ROOT, "%s%s hp=%.0f from=%.0f closest=%.0f %s", bosses.length() > 0 ? "; " : "", f.type,
+                    f.maxHp, f.firstDist, f.closest, f.alive ? "alive" : "gone"));
+            }
+        }
+        StringBuilder gs = new StringBuilder();
+        for (Map.Entry<String, int[]> en : groups.entrySet()) {
+            int[] g = en.getValue();
+            gs.append(String.format(java.util.Locale.ROOT, "%s\"%s\":{\"came\":%d,\"fromPortal\":%d,\"advanced\":%d,\"atCapital\":%d,\"alive\":%d}",
+                gs.length() > 0 ? "," : "", en.getKey(), g[0], g[1], g[2], g[3], g[4]));
+        }
+        int[] nether = groups.getOrDefault("nether", new int[5]);
+        int[] boss = groups.getOrDefault("boss", new int[5]);
+        boolean groundPass = nether[0] > 0 && nether[2] > 0 && boss[0] > 0;
+        LOG.info("SIEGE-GROUND {\"groups\":{" + gs + "},\"types\":\"" + types + "\",\"bosses\":\"" + bosses + "\",\"pass\":" + groundPass + "}");
         try {
             Method stop = siege().getDeclaredMethod("stop", ServerPlayer.class);
             stop.setAccessible(true);

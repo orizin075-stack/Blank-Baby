@@ -33,7 +33,8 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class SiegeMounts {
     public static final String TAG = "OrorAzazelSiegeAir";
-    private static final double SPEED = 0.62, CLIMB = 0.4;
+    private static final double SPEED = 0.62, CLIMB = 0.4, TRANSIT_SPEED = 1.0;
+    static final int TRANSIT_UNTIL = 160, TRANSIT_UP = 40;
     private static final java.util.Map<Class<?>, java.util.Optional<Method>> SET_FLYING = new java.util.concurrent.ConcurrentHashMap<>();
 
     /** Twelve minutes, the length of a siege (AzazelCapitalSiege). */
@@ -98,7 +99,8 @@ public final class SiegeMounts {
             return;
         }
         Entity by = e.getSource().getEntity();
-        if (by instanceof Mob m && m.getPersistentData().getBoolean(TAG) && !(by instanceof net.minecraft.world.entity.raid.Raider)) {
+        if (by instanceof Mob m && (m.getPersistentData().getBoolean(TAG) && !(by instanceof net.minecraft.world.entity.raid.Raider)
+            || by.getPersistentData().getBoolean(SiegeGunners.GUNNER))) {
             e.setCanceled(true);
             return;
         }
@@ -161,9 +163,25 @@ public final class SiegeMounts {
         Vec3 pos = m.position();
         LivingEntity target = target(m);
         Vec3 goal;
-        boolean dive = false;
+        boolean dive = false, transit = false;
         double phase = (m.getUUID().getLeastSignificantBits() & 1023) / 1023.0 * Math.PI * 2;
-        if (target != null) {
+        // (r63, after run 206) the air wing gathers six hundred blocks out and there met the kingdom's guards and their guns,
+        // and fought them where it rose: no mount ever saw the capital. It crosses first, high and fast, and does not stop
+        // to fight on the way; the fight is over the capital, within {@value #TRANSIT_UNTIL} blocks of its centre.
+        CitadelSites.Site cap = level.dimension() == net.minecraft.world.level.Level.OVERWORLD ? CitadelSites.capital() : null;
+        if (cap != null) {
+            BlockPos c = cap.center();
+            double far = Math.hypot(pos.x - c.getX() - 0.5, pos.z - c.getZ() - 0.5);
+            if (far > TRANSIT_UNTIL) {
+                transit = true;
+                target = null;
+            }
+        }
+        if (transit) {
+            BlockPos c = cap.center();
+            int below = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(pos.x), Mth.floor(pos.z));
+            goal = new Vec3(c.getX() + 0.5 + Math.cos(phase) * 60, Math.max(c.getY() + 45, below + TRANSIT_UP), c.getZ() + 0.5 + Math.sin(phase) * 60);
+        } else if (target != null) {
             double a = now * 0.035 + phase;
             dive = (now + (long) (phase * 100)) % 200 < 50 && pos.distanceTo(target.position()) < 40;
             // (run 204) the dive stops five blocks over the target: down at its head the kingdom's guards cut the dragons down
@@ -185,7 +203,8 @@ public final class SiegeMounts {
         Vec3 d = goal.subtract(pos);
         Vec3 flat = new Vec3(d.x, 0, d.z);
         double h = flat.length();
-        Vec3 want = h > 1e-3 ? flat.scale(Math.min(SPEED, h * 0.08) / h) : Vec3.ZERO;
+        double speed = transit ? TRANSIT_SPEED : SPEED;
+        Vec3 want = h > 1e-3 ? flat.scale(Math.min(speed, h * 0.08) / h) : Vec3.ZERO;
         double vy = Mth.clamp(d.y * 0.08, -CLIMB, CLIMB);
         if (pos.y < ground + 3 && !dive) {
             vy = CLIMB;
@@ -206,7 +225,7 @@ public final class SiegeMounts {
         if (target != null && now % 20 == 0 && m.distanceToSqr(target) < (9 + m.getBbWidth()) * (9 + m.getBbWidth())) {
             m.doHurtTarget(target);
         }
-        m.getPersistentData().putString("OrorSiegeMountMode", target == null ? "capital" : dive ? "dive" : "circle");
+        m.getPersistentData().putString("OrorSiegeMountMode", transit ? "transit" : target == null ? "capital" : dive ? "dive" : "circle");
     }
 
     /**
