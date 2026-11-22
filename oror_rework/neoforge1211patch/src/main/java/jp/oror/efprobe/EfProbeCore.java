@@ -15,7 +15,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -30,8 +29,8 @@ import org.slf4j.LoggerFactory;
  * Epic Fight only by reflection, through what both of its versions have: the entity's patch (EpicFightCapabilities),
  * its animator and the animation its base layer plays.
  * <p>
- * Each kind of mob stands in its own walled lane high in the sky with a stand-in player (a fake player with a diamond
- * sword) who keeps just within its reach in front of it, faces it and strikes every {@value #SWING} ticks, for
+ * Each kind of mob stands in its own walled lane high in the sky with a stand-in (a vindicator, or a husk against the illagers, with a diamond
+ * sword, its own mind off) who keeps just within its reach in front of it, faces it and strikes every {@value #SWING} ticks, for
  * {@value #TICKS} ticks; the mob is told to fight him. Every tick the animation the mob plays is read; each strike is
  * judged on the next tick by the mob's health (it landed, or it did nothing: guarded or parried); every drop in the
  * tester's health is a blow of the mob's. Both are made whole again at once, so the fight goes on. One line per mob,
@@ -45,11 +44,6 @@ public final class EfProbeCore {
 
     /** What differs between the two loaders. */
     public interface Hooks {
-        /** A fake player for lane n that can be hurt (a plain fake player is not), its attack charged when ready(p) is called. */
-        Player tester(ServerLevel level, int n);
-
-        void ready(Player p);
-
         /** The mob's natural gear (finalizeSpawn on this loader). */
         void equip(ServerLevel level, Mob m);
     }
@@ -66,7 +60,7 @@ public final class EfProbeCore {
     static final class Lane {
         String id;
         Mob mob;
-        Player tester;
+        Mob tester;
         BlockPos at;
         String patch = "none";
         final Map<String, Integer> anims = new TreeMap<>();
@@ -119,20 +113,22 @@ public final class EfProbeCore {
             }
             m.setPersistenceRequired();
             l.addFreshEntity(m);
-            Player p = hooks.tester(l, n);
-            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_SWORD));
-            // (run nfc 1) in the world: Epic Fight's attacks land through their animation's hit box, which finds only what is
-            // in the world (no mob there hit the tester once); and a diamond sword's damage (held, its modifiers are only
-            // taken up as the player ticks: the strikes did 0.2)
+            // (r64, run 211) the tester is a mob, the same in both packs: a fake player put in the world crashed NeoForge (mods
+            // send it packets on joining, and it has no connection), and out of the world Epic Fight's blows never find it.
+            // A vindicator with a diamond sword, its own mind off; a husk against the illagers' kin (they will not strike their own)
+            boolean kin = m instanceof net.minecraft.world.entity.raid.Raider;
+            Entity te = (kin ? EntityType.HUSK : EntityType.VINDICATOR).create(l);
+            if (!(te instanceof Mob p)) {
+                continue;
+            }
             p.moveTo(c.getX() + 0.5, c.getY() + 1, c.getZ() - 0.5, 0F, 0F);
+            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_SWORD));
+            p.setNoAi(true);
+            p.setPersistenceRequired();
             var dmg = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE);
             if (dmg != null) {
                 dmg.setBaseValue(8.0);
             }
-            // (run nfc 3, 4) a new player is spared every blow for three seconds, and a fake player does not tick that away:
-            // no mob hurt the tester. Taking the blows past Epic Fight's own path broke it (Avalon: "attackResult.resultType
-            // is null", and the server stopped), so the spared time itself is cleared; and a thousand health, so it never falls
-            unspare(p);
             var hp = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
             if (hp != null) {
                 hp.setBaseValue(1000.0);
@@ -148,34 +144,6 @@ public final class EfProbeCore {
             n++;
         }
         LOG.info("EFP-START {\"pack\":\"{}\",\"lanes\":{}}", pack, LANES.size());
-    }
-
-    private static java.lang.reflect.Field spared;
-
-    /**
-     * ServerPlayer's spawnInvulnerableTime, found as its one private int that holds 60 on a new player (its name differs
-     * between the two loaders' runtime mappings), set to 0.
-     */
-    static void unspare(Player p) {
-        try {
-            if (spared == null) {
-                for (java.lang.reflect.Field f : net.minecraft.server.level.ServerPlayer.class.getDeclaredFields()) {
-                    if (f.getType() == int.class && !java.lang.reflect.Modifier.isStatic(f.getModifiers())) {
-                        f.setAccessible(true);
-                        if (f.getInt(p) == 60) {
-                            spared = f;
-                            break;
-                        }
-                    }
-                }
-                LOG.info("EFP-SPARED {\"field\":\"{}\"}", spared == null ? "none" : spared.getName());
-            }
-            if (spared != null) {
-                spared.setInt(p, 0);
-            }
-        } catch (Throwable t) {
-            LOG.info("EFP-SPARED {\"error\":\"{}\"}", esc(String.valueOf(t)));
-        }
     }
 
     /** A floor of stone and a ring of barriers, five high, around a seven by seven lane. */
@@ -207,7 +175,7 @@ public final class EfProbeCore {
 
     private static void step(Lane lane) {
         Mob m = lane.mob;
-        Player p = lane.tester;
+        Mob p = lane.tester;
         if (m == null || !m.isAlive() || p == null) {
             return;
         }
@@ -259,11 +227,10 @@ public final class EfProbeCore {
         p.setYHeadRot(yaw);
         m.setTarget(p);
         if (age % SWING == 0 && age > 20) {
-            hooks.ready(p);
             lane.swingHp = m.getHealth();
             lane.swings++;
             p.swing(InteractionHand.MAIN_HAND);
-            p.attack(m);
+            p.doHurtTarget(m);
         }
     }
 

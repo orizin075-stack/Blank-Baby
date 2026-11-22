@@ -1,16 +1,11 @@
 package jp.oror.efprobe.forge;
 
-import com.mojang.authlib.GameProfile;
-import java.util.UUID;
 import jp.oror.efprobe.EfProbeCore;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,39 +22,7 @@ public final class EfProbeForge {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    static final class Tester extends FakePlayer {
-        Tester(ServerLevel level, int n) {
-            super(level, new GameProfile(UUID.nameUUIDFromBytes(("oror-efprobe-" + n).getBytes()), "[EF Probe " + n + "]"));
-        }
-
-        @Override
-        public boolean isInvulnerableTo(DamageSource source) {
-            return false;
-        }
-
-        @Override
-        public boolean isInvulnerable() {
-            return false;
-        }
-
-        void ready() {
-            this.attackStrengthTicker = 200;
-        }
-    }
-
     static final EfProbeCore.Hooks HOOKS = new EfProbeCore.Hooks() {
-        @Override
-        public Player tester(ServerLevel level, int n) {
-            return new Tester(level, n);
-        }
-
-        @Override
-        public void ready(Player p) {
-            if (p instanceof Tester t) {
-                t.ready();
-            }
-        }
-
         @Override
         public void equip(ServerLevel level, Mob m) {
             m.finalizeSpawn(level, level.getCurrentDifficultyAt(m.blockPosition()), MobSpawnType.COMMAND, null, null);
