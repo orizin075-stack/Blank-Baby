@@ -66,43 +66,43 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
   ↓ https://piston-meta.mojang.com/v1/packages/ff7ef54488da4a711f3c8a781a9f79105bbe801a/1.21.1.json
  [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.43s
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-[1m*** Started working on [4mdownloadServer[23;0m[23;0m
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
+  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
   ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
-  ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.52s
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.54s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.81s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.84s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.25s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.27s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.73s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.84s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.34s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.57s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.30s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.19s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.96s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.26s
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.57s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.31s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 5.92s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.46s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.39s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.43s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.65s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.67s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.28s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.20s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.48s
-Total runtime: 30.07s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.30s
+Total runtime: 30.57s
 
 
 > Task :compileJava
@@ -257,11 +257,11 @@ Note: Recompile with -Xlint:deprecation for details.
 Note: /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/RelicArts.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 49 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795333643191.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795335025111.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 1m 24s
+BUILD SUCCESSFUL in 1m 18s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -658,6 +658,152 @@ public class yesman.epicfight.api.utils.math.OpenMatrix4f {
   public static yesman.epicfight.api.utils.math.OpenMatrix4f ofScale(float, float, float, yesman.epicfight.api.utils.math.OpenMatrix4f);
   public yesman.epicfight.api.utils.math.OpenMatrix4f rotateDeg(float, yesman.epicfight.api.utils.math.Vec3f);
   public yesman.epicfight.api.utils.math.OpenMatrix4f rotate(float, yesman.epicfight.api.utils.math.Vec3f);
+grep: write error: Broken pipe
+== yesman.epicfight.api.model.Armature
+public class yesman.epicfight.api.model.Armature {
+  public final yesman.epicfight.api.animation.Joint rootJoint;
+  public yesman.epicfight.api.model.Armature(java.lang.String, int, yesman.epicfight.api.animation.Joint, java.util.Map<java.lang.String, yesman.epicfight.api.animation.Joint>);
+  public void setPose(yesman.epicfight.api.animation.Pose);
+  public void bakeOriginMatrices();
+  public yesman.epicfight.api.utils.math.OpenMatrix4f[] getPoseMatrices();
+  public yesman.epicfight.api.utils.math.OpenMatrix4f[] getPoseAsTransformMatrix(yesman.epicfight.api.animation.Pose, boolean);
+  public yesman.epicfight.api.utils.math.OpenMatrix4f getBindedTransformFor(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Joint);
+  public yesman.epicfight.api.utils.math.OpenMatrix4f getBoundTransformFor(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Joint);
+  public yesman.epicfight.api.utils.math.OpenMatrix4f getBoundTransformByJointIndex(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Joint$AccessTicket);
+  public boolean hasJoint(java.lang.String);
+  public yesman.epicfight.api.animation.Joint searchJointById(int);
+  public yesman.epicfight.api.animation.Joint searchJointByName(java.lang.String);
+  public yesman.epicfight.api.animation.Joint$HierarchicalJointAccessor searchPathIndex(java.lang.String);
+  public yesman.epicfight.api.animation.Joint$HierarchicalJointAccessor searchPathIndex(yesman.epicfight.api.animation.Joint, java.lang.String);
+  public void gatherAllJointsInPathToTerminal(java.lang.String, java.util.Collection<java.lang.String>);
+  public int getJointNumber();
+  public java.lang.String toString();
+  public yesman.epicfight.api.model.Armature deepCopy();
+  public com.google.gson.JsonObject toJsonObject();
+== yesman.epicfight.api.animation.Pose
+public class yesman.epicfight.api.animation.Pose {
+  public static final yesman.epicfight.api.animation.Pose EMPTY_POSE;
+  public static yesman.epicfight.api.animation.Pose interpolatePose(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Pose, float);
+  public yesman.epicfight.api.animation.Pose();
+  public yesman.epicfight.api.animation.Pose(java.util.Map<java.lang.String, yesman.epicfight.api.animation.JointTransform>);
+  public void putJointData(java.lang.String, yesman.epicfight.api.animation.JointTransform);
+  public java.util.Map<java.lang.String, yesman.epicfight.api.animation.JointTransform> getJointTransformData();
+  public void disableJoint(com.google.common.base.Predicate<? super java.util.Map$Entry<java.lang.String, yesman.epicfight.api.animation.JointTransform>>);
+  public void disableAllJoints();
+  public boolean hasTransform(java.lang.String);
+  public yesman.epicfight.api.animation.JointTransform get(java.lang.String);
+  public yesman.epicfight.api.animation.JointTransform orElseEmpty(java.lang.String);
+  public yesman.epicfight.api.animation.JointTransform orElse(java.lang.String, yesman.epicfight.api.animation.JointTransform);
+  public void forEachEnabledTransforms(java.util.function.BiConsumer<java.lang.String, yesman.epicfight.api.animation.JointTransform>);
+  public void load(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Pose$LoadOperation);
+  public java.lang.String toString();
+== yesman.epicfight.api.animation.Joint
+public class yesman.epicfight.api.animation.Joint {
+  public static final yesman.epicfight.api.animation.Joint EMPTY;
+  public yesman.epicfight.api.animation.Joint(java.lang.String, int, yesman.epicfight.api.utils.math.OpenMatrix4f);
+  public void addSubJoints(yesman.epicfight.api.animation.Joint...);
+  public void removeSubJoints(yesman.epicfight.api.animation.Joint...);
+  public java.util.List<yesman.epicfight.api.animation.Joint> getAllJoints();
+  public void iterSubJoints(java.util.function.Consumer<yesman.epicfight.api.animation.Joint>);
+  public void initOriginTransform(yesman.epicfight.api.utils.math.OpenMatrix4f);
+  public yesman.epicfight.api.utils.math.OpenMatrix4f getLocalTransform();
+  public yesman.epicfight.api.utils.math.OpenMatrix4f getToOrigin();
+  public java.util.List<yesman.epicfight.api.animation.Joint> getSubJoints();
+  public yesman.epicfight.api.animation.Joint getSubJoint(int);
+  public java.lang.String getName();
+  public int getId();
+  public boolean equals(java.lang.Object);
+  public int hashCode();
+  public yesman.epicfight.api.animation.Joint$HierarchicalJointAccessor$Builder searchPath(yesman.epicfight.api.animation.Joint$HierarchicalJointAccessor$Builder, java.lang.String);
+  public java.lang.String toString();
+  public java.lang.String printIncludingChildren();
+== yesman.epicfight.gameasset.Armatures
+public class yesman.epicfight.gameasset.Armatures {
+  public static final yesman.epicfight.gameasset.Armatures INSTANCE;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.HumanoidArmature> BIPED;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.CreeperArmature> CREEPER;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.EndermanArmature> ENDERMAN;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.HumanoidArmature> SKELETON;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.SpiderArmature> SPIDER;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.IronGolemArmature> IRON_GOLEM;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.RavagerArmature> RAVAGER;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.VexArmature> VEX;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.PiglinArmature> PIGLIN;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.HoglinArmature> HOGLIN;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.DragonArmature> DRAGON;
+  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.WitherArmature> WITHER;
+  public yesman.epicfight.gameasset.Armatures();
+  public static void registerEntityTypes();
+  public static void reload(net.minecraft.server.packs.resources.ResourceManager);
+  public static void registerEntityTypeArmature(net.minecraft.world.entity.EntityType<?>, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.model.Armature>);
+  public static void registerEntityTypeArmatureByPreset(net.minecraft.world.entity.EntityType<?>, java.lang.String);
+  public static <A extends yesman.epicfight.api.model.Armature> A getArmatureFor(yesman.epicfight.world.capabilities.entitypatch.EntityPatch<?>);
+  public static <A extends yesman.epicfight.api.model.Armature> yesman.epicfight.api.asset.AssetAccessor<A> get(net.minecraft.resources.ResourceLocation);
+  public static <A extends yesman.epicfight.api.model.Armature> yesman.epicfight.api.asset.AssetAccessor<A> getOrCreate(net.minecraft.resources.ResourceLocation, yesman.epicfight.gameasset.Armatures$ArmatureContructor<A>);
+  public static <A extends yesman.epicfight.api.model.Armature> java.util.Set<com.mojang.datafixers.util.Pair<net.minecraft.resources.ResourceLocation, yesman.epicfight.api.asset.AssetAccessor<A>>> entry();
+  public static net.minecraft.resources.ResourceLocation wrapLocation(net.minecraft.resources.ResourceLocation);
+== yesman.epicfight.gameasset.Armatures$ArmatureAccessor
+public final class yesman.epicfight.gameasset.Armatures$ArmatureAccessor<A extends yesman.epicfight.api.model.Armature> extends java.lang.Record implements yesman.epicfight.api.asset.AssetAccessor<A> {
+  public yesman.epicfight.gameasset.Armatures$ArmatureAccessor(net.minecraft.resources.ResourceLocation, yesman.epicfight.gameasset.Armatures$ArmatureContructor<A>, boolean);
+  public static <A extends yesman.epicfight.api.model.Armature> yesman.epicfight.gameasset.Armatures$ArmatureAccessor<A> create(java.lang.String, java.lang.String, yesman.epicfight.gameasset.Armatures$ArmatureContructor<A>);
+  public A get();
+  public java.lang.String toString();
+  public int hashCode();
+  public boolean equals(java.lang.Object);
+  public net.minecraft.resources.ResourceLocation registryName();
+  public yesman.epicfight.gameasset.Armatures$ArmatureContructor<A> armatureConstructor();
+  public boolean inRegistry();
+  public java.lang.Object get();
+== yesman.epicfight.model.armature.HumanoidArmature
+public class yesman.epicfight.model.armature.HumanoidArmature extends yesman.epicfight.api.model.Armature implements yesman.epicfight.model.armature.types.HumanLikeArmature {
+  public final yesman.epicfight.api.animation.Joint thighR;
+  public final yesman.epicfight.api.animation.Joint legR;
+  public final yesman.epicfight.api.animation.Joint kneeR;
+  public final yesman.epicfight.api.animation.Joint thighL;
+  public final yesman.epicfight.api.animation.Joint legL;
+  public final yesman.epicfight.api.animation.Joint kneeL;
+  public final yesman.epicfight.api.animation.Joint torso;
+  public final yesman.epicfight.api.animation.Joint chest;
+  public final yesman.epicfight.api.animation.Joint head;
+  public final yesman.epicfight.api.animation.Joint shoulderR;
+  public final yesman.epicfight.api.animation.Joint armR;
+  public final yesman.epicfight.api.animation.Joint handR;
+  public final yesman.epicfight.api.animation.Joint toolR;
+  public final yesman.epicfight.api.animation.Joint elbowR;
+  public final yesman.epicfight.api.animation.Joint shoulderL;
+  public final yesman.epicfight.api.animation.Joint armL;
+  public final yesman.epicfight.api.animation.Joint handL;
+  public final yesman.epicfight.api.animation.Joint toolL;
+  public final yesman.epicfight.api.animation.Joint elbowL;
+  public yesman.epicfight.model.armature.HumanoidArmature(java.lang.String, int, yesman.epicfight.api.animation.Joint, java.util.Map<java.lang.String, yesman.epicfight.api.animation.Joint>);
+  public yesman.epicfight.api.animation.Joint leftToolJoint();
+  public yesman.epicfight.api.animation.Joint rightToolJoint();
+  public yesman.epicfight.api.animation.Joint backToolJoint();
+  public yesman.epicfight.api.animation.Joint leftHandJoint();
+  public yesman.epicfight.api.animation.Joint rightHandJoint();
+  public yesman.epicfight.api.animation.Joint leftArmJoint();
+  public yesman.epicfight.api.animation.Joint rightArmJoint();
+  public yesman.epicfight.api.animation.Joint leftLegJoint();
+  public yesman.epicfight.api.animation.Joint rightLegJoint();
+  public yesman.epicfight.api.animation.Joint leftThighJoint();
+  public yesman.epicfight.api.animation.Joint rightThighJoint();
+  public yesman.epicfight.api.animation.Joint headJoint();
+== yesman.epicfight.api.client.model.SkinnedMesh
+public class yesman.epicfight.api.client.model.SkinnedMesh extends yesman.epicfight.api.client.model.StaticMesh<yesman.epicfight.api.client.model.SkinnedMesh$SkinnedMeshPart> {
+  public yesman.epicfight.api.client.model.SkinnedMesh(java.util.Map<java.lang.String, java.lang.Number[]>, java.util.Map<yesman.epicfight.api.client.model.MeshPartDefinition, java.util.List<yesman.epicfight.api.client.model.VertexBuilder>>, yesman.epicfight.api.client.model.SkinnedMesh, yesman.epicfight.api.client.model.Mesh$RenderProperties);
+  public void destroy();
+  public void getVertexPosition(int, org.joml.Vector4f, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
+  public void getVertexNormal(int, int, org.joml.Vector3f, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
+  public void draw(com.mojang.blaze3d.vertex.PoseStack, com.mojang.blaze3d.vertex.VertexConsumer, yesman.epicfight.api.client.model.Mesh$DrawingFunction, int, float, float, float, float, int);
+  public void drawPosed(com.mojang.blaze3d.vertex.PoseStack, com.mojang.blaze3d.vertex.VertexConsumer, yesman.epicfight.api.client.model.Mesh$DrawingFunction, int, float, float, float, float, int, yesman.epicfight.api.model.Armature, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
+  public void draw(com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.renderer.RenderType, int, float, float, float, float, int, yesman.epicfight.api.model.Armature, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
+  public void draw(com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.renderer.RenderType, yesman.epicfight.api.client.model.Mesh$DrawingFunction, int, float, float, float, float, int, yesman.epicfight.api.model.Armature, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
+  public int getMaxJointCount();
+  public float[] weights();
+  public int[] affectingJointCounts();
+  public int[][] affectingWeightIndices();
+  public int[][] affectingJointIndices();
+  public com.google.gson.JsonObject toJsonObject();
     12647  1980-02-01 00:00   assets/epicfight/animmodels/animations/biped/combat/sword_auto1.json
 
 {
@@ -703,7 +849,7 @@ public class yesman.epicfight.api.utils.math.OpenMatrix4f {
   public void postProcess(net.minecraft.world.level.WorldGenLevel, net.minecraft.world.level.StructureManager, net.minecraft.world.level.chunk.ChunkGenerator, net.minecraft.util.RandomSource, net.minecraft.world.level.levelgen.structure.BoundingBox, net.minecraft.world.level.ChunkPos, net.minecraft.core.BlockPos);
   public void place(net.minecraft.world.level.WorldGenLevel, net.minecraft.world.level.StructureManager, net.minecraft.world.level.chunk.ChunkGenerator, net.minecraft.util.RandomSource, net.minecraft.world.level.levelgen.structure.BoundingBox, net.minecraft.core.BlockPos, boolean);
 replaced 143 old class files; added 453 compiled; overlaid 984 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json'] ; dropped ['data/oror_supreme_bosses/structure/royal034/kingdom_0_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_0_1.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_1.nbt']
-ab7da226638ca29cb632e78606dd933b05046f6f753fb8761d6d7583226252bf  out/oror_supreme_bosses-0.17.39-059-preview.jar
+2022cb1e9029034e243a3890b42a288d13498101ba04e122f0e093a3ef691a5b  out/oror_supreme_bosses-0.17.39-059-preview.jar
 == /home/runner/work/_temp/pack053/alexscaves-2.0.10.jar
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyAttractingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyRepellingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
