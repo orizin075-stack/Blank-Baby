@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -26,6 +27,12 @@ jobs:
             n=$(basename "$f"); curl -sSfL -A 'Mozilla/5.0 (oror-nightfall-ci)' -o "$n" "https://mediafilez.forgecdn.net/files/${f// /%20}" && echo "fetched $n"
           done
           ls -la
+      - name: Epic Fight 1.21.1 biped forward kinematics (for OROR's own models)
+        run: |
+          cd $RUNNER_TEMP/j
+          curl -sSfL -A 'Mozilla/5.0 (oror-nightfall-ci)' -o ef21.jar https://mediafilez.forgecdn.net/files/8175/609/epic-fight-21.17.3.1-mc1.21.1-neoforge.jar
+          curl -sSfL -A 'Mozilla/5.0 (oror-nightfall-ci)' -o efn21.jar https://mediafilez.forgecdn.net/files/8573/921/NightFall-1.21.1-Neoforge-3.4.0.jar
+          python3 -I $GITHUB_WORKSPACE/oror_rework/neoforge1211patch/tools/ef_fk.py ef21.jar efn21.jar
       - name: Data files and mods.toml
         run: |
           cd $RUNNER_TEMP/j
