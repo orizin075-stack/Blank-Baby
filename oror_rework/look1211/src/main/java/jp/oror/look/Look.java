@@ -1146,8 +1146,11 @@ public final class Look {
         "epicfight:biped/skill/guard_sword_hit", "epicfight:biped/combat/hit_long"};
     private static final int[] MOTION_SHOTS = {2, 5, 9, 14, 20};
     /** Left to right: Epic Fight's own facing the camera, OROR's two facing it, then the same three side on. */
-    private static final String[][] MOTION_ROW = {{"husk", "0"}, {"oror_supreme_bosses:kingdom_guard", "0"}, {"villager", "0"},
-        {"husk", "90"}, {"oror_supreme_bosses:kingdom_guard", "90"}, {"villager", "90"}};
+    /**
+     * (r65, run 2) Left and right of the player, facing the camera as the player does: the reference is the player's own
+     * Epic Fight body (the husks did not play these animations as written: their chest, arm and thigh stayed near rest).
+     */
+    private static final String[][] MOTION_ROW = {{"oror_supreme_bosses:kingdom_guard", "0", "-1.7"}, {"villager", "0", "1.7"}};
 
     private static void motionScene(Minecraft mc, int t) {
         IntegratedServer server = mc.getSingleplayerServer();
@@ -1164,14 +1167,21 @@ public final class Look {
                     String id = MOTION_ROW[i][0].contains(":") ? MOTION_ROW[i][0] : "minecraft:" + MOTION_ROW[i][0];
                     command(server, String.format(java.util.Locale.ROOT, "summon %s %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Invulnerable:1b,"
                         + "Rotation:[%sf,0f],HandItems:[{id:\"minecraft:iron_sword\",count:1},{}],Tags:[\"oror_look\",\"oror_look_motion\",\"oror_look_slot%d\"]}",
-                        id, sx - 6.5 + i * 2.6, (int) sy, sz + 8, MOTION_ROW[i][1], i));
+                        id, sx + Double.parseDouble(MOTION_ROW[i][2]), (int) sy, sz + 8, MOTION_ROW[i][1], i));
                 }
                 note("motion scene: " + MOTION_ROW.length);
             });
             return;
         }
         if (t == 250) {
-            view(mc, 0, 1.0, 16.5, 180F, 4F);
+            String name = mc.player.getGameProfile().getName();
+            server.execute(() -> {
+                command(server, "item replace entity " + name + " weapon.mainhand with minecraft:iron_sword");
+                command(server, "gamemode survival " + name);
+                command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %d %.2f 0 0", name, sx, (int) sy, sz + 8));
+            });
+            mc.player.getAbilities().flying = false;
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
             return;
         }
         int step = (t - 280) / 50, at = (t - 280) % 50;
@@ -1186,14 +1196,16 @@ public final class Look {
         }
         String anim = MOTIONS[step];
         if (at == 46) {
-            // (r65) back to their places and their facing (Epic Fight's attacks step the husks forward and turn them)
+            // (r65) back to their places and their facing (Epic Fight's attacks step the body forward and turn it)
+            String pname = mc.player.getGameProfile().getName();
             server.execute(() -> {
+                command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %d %.2f 0 0", pname, sx, (int) sy, sz + 8));
                 for (Entity e : server.overworld().getEntities((Entity) null, new AABB(sx - 20, sy - 4, sz - 4, sx + 20, sy + 8, sz + 20),
                     x -> x.getTags().contains("oror_look_motion"))) {
                     for (int i = 0; i < MOTION_ROW.length; i++) {
                         if (e.getTags().contains("oror_look_slot" + i)) {
                             float yaw = Float.parseFloat(MOTION_ROW[i][1]);
-                            e.moveTo(sx - 6.5 + i * 2.6, (int) sy, sz + 8, yaw, 0F);
+                            e.moveTo(sx + Double.parseDouble(MOTION_ROW[i][2]), (int) sy, sz + 8, yaw, 0F);
                             e.setYHeadRot(yaw);
                             if (e instanceof LivingEntity l) {
                                 l.yBodyRot = yaw;
@@ -1222,8 +1234,7 @@ public final class Look {
             Class<?> living = Class.forName("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
             Method get = caps.getMethod("getEntityPatch", Entity.class, Class.class);
             float partial = mc.getTimer().getGameTimeDeltaPartialTick(true);
-            for (Entity e : mc.level.getEntities((Entity) null, new AABB(sx - 20, sy - 4, sz - 4, sx + 20, sy + 8, sz + 20),
-                x -> net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(x.getType()).getPath().equals("husk"))) {
+            for (Entity e : java.util.List.of((Entity) mc.player)) {
                 Object patch = get.invoke(null, e, living);
                 if (patch instanceof java.util.Optional<?> o) {
                     patch = o.orElse(null);
@@ -1239,7 +1250,7 @@ public final class Look {
                         break;
                     }
                 }
-                StringBuilder b = new StringBuilder("efpose husk x=" + String.format(java.util.Locale.ROOT, "%.1f yaw=%.0f", e.getX() - sx, e.getYRot()) + ": ");
+                StringBuilder b = new StringBuilder("efpose player x=" + String.format(java.util.Locale.ROOT, "%.1f yaw=%.0f", e.getX() - sx, e.getYRot()) + ": ");
                 if (pose != null) {
                     java.util.Map<?, ?> data = null;
                     for (Method m : pose.getClass().getMethods()) {
@@ -1297,11 +1308,7 @@ public final class Look {
                 Class<?> manager = Class.forName("yesman.epicfight.api.animation.AnimationManager");
                 Object accessor = manager.getMethod("byKey", String.class).invoke(null, anim);
                 Method get = caps.getMethod("getEntityPatch", Entity.class, Class.class);
-                for (Entity e : server.overworld().getEntities((Entity) null, new AABB(sx - 12, sy - 4, sz + 4, sx + 12, sy + 6, sz + 12),
-                    x -> x.getTags().contains("oror_look_motion"))) {
-                    if (!net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath().equals("husk")) {
-                        continue;
-                    }
+                for (Entity e : server.getPlayerList().getPlayers()) {
                     Object patch = get.invoke(null, e, living);
                     if (patch instanceof java.util.Optional<?> o) {
                         patch = o.orElse(null);
@@ -1317,7 +1324,7 @@ public final class Look {
                             }
                         }
                     }
-                    b.append(" husk=").append(played);
+                    b.append(" player=").append(played);
                 }
             } catch (ReflectiveOperationException | RuntimeException ex) {
                 b.append(" error ").append(ex);
@@ -1329,8 +1336,7 @@ public final class Look {
             Method start = Class.forName("jp.oror.reborn.client.EfMotion").getMethod("start", LivingEntity.class, String.class);
             int n = 0;
             for (Entity e : mc.level.getEntities((Entity) null, new AABB(sx - 12, sy - 4, sz + 4, sx + 12, sy + 6, sz + 12),
-                x -> x instanceof LivingEntity && !net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(x.getType()).getPath().equals("husk")
-                    && !(x instanceof net.minecraft.world.entity.player.Player))) {
+                x -> x instanceof LivingEntity && !(x instanceof net.minecraft.world.entity.player.Player))) {
                 if (Boolean.TRUE.equals(start.invoke(null, e, anim))) {
                     n++;
                 }
