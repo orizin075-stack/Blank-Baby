@@ -291,18 +291,26 @@ public final class EfMotion {
      * what it holds, is where Epic Fight puts it), with only the forearm's own twist about that line.
      */
     public static void arm(ModelPart part, Pose p, String arm, String hand, String tool, float w) {
+        Quaternionf q = armTurn(p, arm, hand, tool);
+        if (q == null) {
+            pose(part, p.get(arm), p.get(hand), w);
+            return;
+        }
+        poseRot(part, p.get(arm), q, w);
+    }
+
+    /** The arm's turn (Epic Fight's space): aimed from shoulder to wrist, with the forearm's own twist; null if unknown. */
+    static Quaternionf armTurn(Pose p, String arm, String hand, String tool) {
         Map<String, Matrix4f> rest = bind();
         Matrix4f ma = p.get(arm), mh = p.get(hand), mt = p.get(tool);
-        if (part == null || rest == null || ma == null || mh == null || mt == null || !rest.containsKey(arm) || !rest.containsKey(tool)) {
-            pose(part, ma, mh, w);
-            return;
+        if (rest == null || ma == null || mh == null || mt == null || !rest.containsKey(arm) || !rest.containsKey(tool)) {
+            return mh == null ? null : mh.getNormalizedRotation(new Quaternionf());
         }
         Vector3f shoulder0 = rest.get(arm).getTranslation(new Vector3f()), wrist0 = rest.get(tool).getTranslation(new Vector3f());
         Vector3f shoulder = ma.transformPosition(new Vector3f(shoulder0)), wrist = mt.transformPosition(new Vector3f(wrist0));
         Vector3f d0 = new Vector3f(wrist0).sub(shoulder0), d = new Vector3f(wrist).sub(shoulder);
         if (d0.lengthSquared() < 1e-6F || d.lengthSquared() < 1e-6F) {
-            pose(part, ma, mh, w);
-            return;
+            return mh.getNormalizedRotation(new Quaternionf());
         }
         d0.normalize();
         d.normalize();
@@ -317,7 +325,87 @@ public final class EfMotion {
         } else {
             twist.normalize();
         }
-        poseRot(part, ma, new Quaternionf(aim).mul(twist), w);
+        return new Quaternionf(aim).mul(twist);
+    }
+
+    /** A turn of Epic Fight's space as a turn of the model's, three quarters of it. */
+    private static Quaternionf modelTurn(Quaternionf ef) {
+        Matrix3f r = new Matrix3f().rotation(ef);
+        Matrix3f rm = new Matrix3f(A).mul(r).mul(new Matrix3f(A).transpose());
+        return new Quaternionf().slerp(new Quaternionf().setFromNormalized(rm), AMP);
+    }
+
+    private static Quaternionf turnOf(ModelPart part) {
+        return new Quaternionf().rotationZYX(part.zRot, part.yRot, part.xRot);
+    }
+
+    private static void setTurn(ModelPart part, Quaternionf q) {
+        Vector3f eul = q.getEulerAnglesZYX(new Vector3f());
+        part.xRot = eul.x;
+        part.yRot = eul.y;
+        part.zRot = eul.z;
+    }
+
+    /**
+     * (r65, the user: "腕が体から離れてるんすけど") The whole body at once, joined: each part placed by its own joint drifted from
+     * the others (the body alone was blended between waist and chest and brought to three quarters, so the shoulders the
+     * arms followed were not the body's), and the arms stood off from it. Now the legs go first; the body sets its hips
+     * on theirs and turns about them; the head sits on the body's neck and the arms on its shoulders, each turning there
+     * by its own joint. Nothing parts from anything.
+     */
+    public static void biped(Pose p, ModelPart head, ModelPart body, ModelPart rightArm, ModelPart leftArm, ModelPart rightLeg,
+                             ModelPart leftLeg, float w) {
+        if (p == null || body == null || w <= 0) {
+            return;
+        }
+        Vector3f bodyRest = new Vector3f(body.x, body.y, body.z);
+        Vector3f headRest = head == null ? null : new Vector3f(head.x, head.y, head.z);
+        Vector3f rArmRest = rightArm == null ? null : new Vector3f(rightArm.x, rightArm.y, rightArm.z);
+        Vector3f lArmRest = leftArm == null ? null : new Vector3f(leftArm.x, leftArm.y, leftArm.z);
+        Vector3f rLegRest = new Vector3f(rightLeg.x, rightLeg.y, rightLeg.z), lLegRest = new Vector3f(leftLeg.x, leftLeg.y, leftLeg.z);
+        // the legs
+        pose(rightLeg, p.get("Thigh_R"), null, w);
+        pose(leftLeg, p.get("Thigh_L"), null, w);
+        Vector3f hipRest = new Vector3f(rLegRest).add(lLegRest).mul(0.5F);
+        Vector3f hip = new Vector3f(rightLeg.x, rightLeg.y, rightLeg.z).add(leftLeg.x, leftLeg.y, leftLeg.z).mul(0.5F);
+        // the body: turned about its hips, which sit on the legs'
+        Matrix4f bm = mix(p.get("Torso"), p.get("Chest"), 0.5F);
+        Quaternionf qb = turnOf(body);
+        if (bm != null) {
+            qb.slerp(modelTurn(bm.getNormalizedRotation(new Quaternionf())), w);
+        }
+        Vector3f neck = qb.transform(new Vector3f(bodyRest).sub(hipRest)).add(hip);
+        body.x = neck.x;
+        body.y = neck.y;
+        body.z = neck.z;
+        setTurn(body, qb);
+        // the head on the neck
+        if (head != null) {
+            Vector3f at = qb.transform(new Vector3f(headRest).sub(bodyRest)).add(neck);
+            head.x = at.x;
+            head.y = at.y;
+            head.z = at.z;
+            Matrix4f hm = p.get("Head");
+            if (hm != null) {
+                setTurn(head, turnOf(head).slerp(modelTurn(hm.getNormalizedRotation(new Quaternionf())), w));
+            }
+        }
+        // the arms on the shoulders
+        Object[][] arms = {{rightArm, rArmRest, "Arm_R", "Hand_R", "Tool_R"}, {leftArm, lArmRest, "Arm_L", "Hand_L", "Tool_L"}};
+        for (Object[] a : arms) {
+            ModelPart part = (ModelPart) a[0];
+            if (part == null) {
+                continue;
+            }
+            Vector3f at = qb.transform(new Vector3f((Vector3f) a[1]).sub(bodyRest)).add(neck);
+            part.x = at.x;
+            part.y = at.y;
+            part.z = at.z;
+            Quaternionf q = armTurn(p, (String) a[2], (String) a[3], (String) a[4]);
+            if (q != null) {
+                setTurn(part, turnOf(part).slerp(modelTurn(q), w));
+            }
+        }
     }
 
     // ---- which animation, per mob ----
