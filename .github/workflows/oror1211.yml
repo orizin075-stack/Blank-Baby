@@ -216,7 +216,7 @@ jobs:
           # dedicated server (the pack ships its fixed build in overrides; OROR's mixins for it skip themselves without it)
           # (059e) the user's OROR Duel Dominion 0.17.0-alpha (its own jar, as the user sent it), with OROR
           extra=(libs/nightfall.jar user_mods/dueldominion-0.17.0-alpha.jar)
-          TESTS="${ONLY_TESTS:-compass,shield,arms,guards,dodge,worn,spells,mobs,gunmobs,story,citadel,citadelupdate,capitalload,war,pilots,landings,aa,crew,gunposts,villageflight,roads,villagearms,fuel,sweep,gametests,waza,royalwaza,relics,swords,duel,raid,siege,gods,structures}"
+          TESTS="${ONLY_TESTS:-compass,shield,arms,guards,dodge,worn,spells,mobs,gunmobs,story,citadel,citadelupdate,capitalload,war,pilots,landings,aa,crew,gunposts,villageflight,roads,villagearms,fuel,sweep,gametests,waza,royalwaza,relics,swords,duel,raid,siege,efprobe,gods,structures}"
           bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 7800 'CITADEL-SELFTEST {' 'CITADEL-SELFTEST-LATER' 'WAR-RESULT' \
             'FLIGHT-RESULT' 'LANDING-RESULT' 'VILLAGE-FLIGHT {' 'ROAD-RESULT' 'VILLAGE-ARMS-RESULT' 'FUEL-RESULT' 'CITADEL-UPDATE {' 'AA-RESULT' 'KINGSLAYER-TEST' 'GUARD-RESULT' 'WORN-RESULT' 'SPELL-SWEEP-RESULT' 'MOBS-TRACE {' 'GUN-PARRY {' 'KING-STORY {' 'WAZA-RESULT' 'ROYAL-WAZA-RESULT' 'RELIC-RESULT' 'CAPITAL-LOAD {' 'SWEEP-RESULT' 'GAMETEST-RESULT' 'OWNERLESS-SWORD-TEST' 'CREW-RESULT' 'GUNPOST-RESULT' 'DODGE-RESULT' 'RAID-RESULT' 'DUEL-RESULT' 'COMPASS-RESULT' 'CAPITAL-SHIELD' 'STRUCT-AUDIT-RESULT' 'SIEGE-RESULT' 'GODS-RESULT' 'CI-DONE' -- "$TESTS" -- out/oror_supreme_bosses-$NEW.jar "${extra[@]}" "$RUNNER_TEMP"/pack053/*.jar \
             2>&1 | tee out/server_test.txt; rc=${PIPESTATUS[0]}
@@ -231,6 +231,7 @@ jobs:
           grep -E 'STRUCT-AUDIT|OROR Structures' "$RUNNER_TEMP/server/console.log" > out/structure_audit.txt || true
           # (r63) Azazel's siege of the capital and its air wing (SiegeTest)
           grep -E 'SIEGE-|OROR Siege|AzazelCapitalSiege|AzazelSiegeArmies|SiegeAir' "$RUNNER_TEMP/server/console.log" > out/siege_log.txt || true
+          grep -E 'EFP|OROR EF Probe' "$RUNNER_TEMP/server/console.log" > out/efprobe.txt || true
           # every line of the pilots' flights (the console's tail keeps only the end of the run)
           grep -E 'PLANE-TRACK|PLANE-HURT|HELI-TRACK|VEHICLE-|SUPPLY-|FLIGHT-|LANDING-|AA-|GUNPOST-|TURRET-CREW' "$RUNNER_TEMP/server/console.log" > out/flight_log.txt || true
           # every entity and item of OROR's own put to work (/oror sweep)

@@ -88,6 +88,7 @@ public final class CiDriver {
                 case "structures" -> "oror structures audit";
                 case "siege" -> "oror siege test";
                 case "gods" -> "oror structures gods";
+                case "efprobe" -> "oror efprobe test";
                 default -> null;
             };
             if (command != null) {
@@ -144,6 +145,7 @@ public final class CiDriver {
             case "structures" -> StructureAudit.resultLogged;
             case "siege" -> SiegeTest.resultLogged;
             case "gods" -> GodCitadelTest.resultLogged;
+            case "efprobe" -> jp.oror.efprobe.EfProbeCore.done;
             default -> true;
         };
     }
