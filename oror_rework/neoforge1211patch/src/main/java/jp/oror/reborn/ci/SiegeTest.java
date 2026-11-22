@@ -48,6 +48,9 @@ public final class SiegeTest {
         int samples, ridden, airborne, shots;
         double maxAlt, firstDist = -1, closest = 1e9, path;
         double lx = Double.NaN, lz;
+        /** (r65) its rider, and whether the capital shot it out of the saddle (the mount flew on without it) */
+        Entity rider;
+        boolean riderShot;
     }
 
     private static final class Foot {
@@ -204,6 +207,9 @@ public final class SiegeTest {
             boolean air = alt > 4 && !e.onGround();
             if (ridden) {
                 t.ridden++;
+                t.rider = e.getPassengers().get(0);
+            } else if (t.rider != null && !t.rider.isAlive()) {
+                t.riderShot = true;
             }
             t.shots = Math.max(t.shots, jp.oror.reborn.vehicle.SiegeGunners.shots(e));
             if (air) {
@@ -248,7 +254,8 @@ public final class SiegeTest {
             mounts++;
             shots += t.shots;
             gunMounts += t.kind.endsWith("hippogryph") || t.kind.endsWith("amphithere") ? 1 : 0;
-            mountsRidden += t.ridden * 2 >= t.samples ? 1 : 0;
+            // (r65) a mount whose rider the capital's guns killed was ridden till then (the defence won, not the riding failed)
+            mountsRidden += t.ridden * 2 >= t.samples || t.riderShot && t.ridden > 0 ? 1 : 0;
             mountsFlew += flew ? 1 : 0;
             mountsCame += t.firstDist - t.closest > 40 || t.closest < 120 ? 1 : 0;
             mountsMoved += t.path > 100 ? 1 : 0;
@@ -256,9 +263,9 @@ public final class SiegeTest {
         }
         boolean pass = mounts > 0 && mountsFlew * 2 >= mounts && mountsRidden * 2 >= mounts && mountsCame * 2 >= mounts && mountsMoved * 2 >= mounts;
         LOG.info(String.format(java.util.Locale.ROOT,
-            "SIEGE-RESULT {\"present\":true,\"began\":\"%s\",\"mounts\":%d,\"ridden\":%d,\"flew\":%d,\"cameToCapital\":%d,\"maxAlt\":%.1f,"
+            "SIEGE-RESULT {\"present\":true,\"began\":\"%s\",\"mounts\":%d,\"ridden\":%d,\"ridersShot\":%d,\"flew\":%d,\"cameToCapital\":%d,\"maxAlt\":%.1f,"
                 + "\"moved\":%d,\"helis\":%d,\"helisFlew\":%d,\"gunMounts\":%d,\"airShots\":%d,\"kinds\":\"%s\",\"pass\":%s}",
-            r.began, mounts, mountsRidden, mountsFlew, mountsCame, maxAlt, mountsMoved, helis, helisFlew, gunMounts, shots, kinds, pass));
+            r.began, mounts, mountsRidden, (int) r.tracks.values().stream().filter(x -> x.riderShot).count(), mountsFlew, mountsCame, maxAlt, mountsMoved, helis, helisFlew, gunMounts, shots, kinds, pass));
         // the ground: how many of each kind came, how many from the portals, how near the capital they got; the bosses one by one
         Map<String, int[]> groups = new java.util.TreeMap<>();
         Map<String, Integer> types = new java.util.TreeMap<>();
