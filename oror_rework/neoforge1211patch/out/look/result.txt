@@ -1,64 +1,73 @@
-361 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-462 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-522 press selectWorld.create
-523 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-623 screenshot popup_ConfirmScreen
-623 press gui.yes
-624 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-658 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-740 screen none in LOADING
-741 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-841 screenshot popup_
-842 screen none in PLAY
-871 inventory after joining: minecraft:iron_swordx1 minecraft:iron_pickaxex1 minecraft:torchx32 minecraft:cooked_beefx32 waystones:warp_stonex1 sophisticatedbackpacks:iron_backpackx1 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 oror_supreme_bosses:capital_compassx1 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1 minecraft:shieldx1
-886 stage at 16 93 208
-1041 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 1 minecraft:iron_sword, minecraft:zombie -> net.minecraft.client.renderer.entity.ZombieRenderer holding 0 minecraft:air]
-1081 guard scene: 10 mobs
-1139 screenshot g01_none_a
-1167 screenshot g01_none_b
-1187 guard guard: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1199 screenshot g02_guard_a
-1227 screenshot g02_guard_b
-1247 guard parry: zombie=none [ZombiePatch] ef skeleton=none [SkeletonPatch] ef vindicator=none [VindicatorPatch] ef pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] ef piglin_brute=none [PiglinBrutePatch] ef wither_skeleton=none [WitherSkeletonPatch] ef iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1249 screenshot g03_parry_fx_a
-1259 screenshot g03_parry_a
-1277 screenshot g03_parry_fx_b
-1287 screenshot g03_parry_b
-1309 screenshot g04_block_fx_a
-1310 guard block: zombie=none [ZombiePatch] ef skeleton=none [SkeletonPatch] ef vindicator=none [VindicatorPatch] ef pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] ef piglin_brute=none [PiglinBrutePatch] ef wither_skeleton=none [WitherSkeletonPatch] ef iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1319 screenshot g04_block_a
-1337 screenshot g04_block_fx_b
-1347 screenshot g04_block_b
-1369 screenshot g05_break_fx_a
-1369 guard break: zombie=none [ZombiePatch] ef skeleton=none [SkeletonPatch] ef vindicator=none [VindicatorPatch] ef pillager=none [PillagerPatch] ef villager=none [no patch] husk=none [ZombiePatch] ef piglin_brute=none [PiglinBrutePatch] ef wither_skeleton=none [WitherSkeletonPatch] ef iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1379 screenshot g05_break_a
-1397 screenshot g05_break_fx_b
-1407 screenshot g05_break_b
-1428 guard parried: zombie=none [ZombiePatch] skeleton=none [SkeletonPatch] vindicator=none [VindicatorPatch] pillager=none [PillagerPatch] villager=none [no patch] husk=none [ZombiePatch] piglin_brute=none [PiglinBrutePatch] wither_skeleton=none [WitherSkeletonPatch] iron_golem=none [IronGolemPatch] wolf=none [no patch]
-1439 screenshot g06_parried_a
-1467 screenshot g06_parried_b
-1478 guard scene: 10 OROR mobs
-1499 screenshot o01_none_a
-1527 screenshot o01_none_b
-1550 guard guard: ferdinand=none [no patch] riha=none [no patch] valeria=none [no patch] kurma=none [no patch] bahamut=none [no patch] kingdom_guard=royal imperial_guard=royal royal_bodyguard=royal villager_general=royal royal_mage=royal
-1559 screenshot o02_guard_a
-1587 screenshot o02_guard_b
-1607 guard parry: ferdinand=none [no patch] riha=none [no patch] valeria=none [no patch] kurma=none [no patch] bahamut=none [no patch] kingdom_guard=royal imperial_guard=royal royal_bodyguard=royal villager_general=royal royal_mage=royal
-1609 screenshot o03_parry_fx_a
-1619 screenshot o03_parry_a
-1637 screenshot o03_parry_fx_b
-1647 screenshot o03_parry_b
-1667 guard block: ferdinand=none [no patch] riha=none [no patch] valeria=none [no patch] kurma=none [no patch] bahamut=none [no patch] kingdom_guard=royal imperial_guard=royal royal_bodyguard=royal villager_general=royal royal_mage=royal
-1669 screenshot o04_block_fx_a
-1679 screenshot o04_block_a
-1697 screenshot o04_block_fx_b
-1707 screenshot o04_block_b
-1728 guard break: ferdinand=none [no patch] riha=none [no patch] valeria=none [no patch] kurma=none [no patch] bahamut=none [no patch] kingdom_guard=royal imperial_guard=royal royal_bodyguard=royal villager_general=royal royal_mage=royal
-1729 screenshot o05_break_fx_a
-1739 screenshot o05_break_a
-1757 screenshot o05_break_fx_b
-1767 screenshot o05_break_b
-1787 guard parried: ferdinand=none [no patch] riha=none [no patch] valeria=none [no patch] kurma=none [no patch] bahamut=none [no patch] kingdom_guard=royal imperial_guard=royal royal_bodyguard=royal villager_general=royal royal_mage=royal
-1799 screenshot o06_parried_a
-1827 screenshot o06_parried_b
-1841 finished: complete (guard only)
+222 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+323 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+383 press selectWorld.create
+384 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+484 screenshot popup_ConfirmScreen
+484 press gui.yes
+485 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+515 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+821 screen none in LOADING
+822 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+922 screenshot popup_
+923 screen none in PLAY
+952 inventory after joining: minecraft:iron_swordx1 minecraft:iron_pickaxex1 minecraft:torchx32 minecraft:cooked_beefx32 waystones:warp_stonex1 sophisticatedbackpacks:iron_backpackx1 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 oror_supreme_bosses:capital_compassx1 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1 minecraft:shieldx1
+966 stage at 112 115 -944
+1122 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 1 minecraft:iron_sword, minecraft:stray -> net.minecraft.client.renderer.entity.StrayRenderer holding 1 minecraft:bow, minecraft:stray -> net.minecraft.client.renderer.entity.StrayRenderer holding 1 minecraft:bow]
+1166 motion scene: 6
+1202 motion efn:biped/nf_sword/nf_sword_auto1: oror models 4
+1202 motion efn:biped/nf_sword/nf_sword_auto1: husk=true husk=true
+1204 screenshot m01_nf_sword_auto1_t02
+1207 screenshot m01_nf_sword_auto1_t05
+1211 screenshot m01_nf_sword_auto1_t09
+1216 screenshot m01_nf_sword_auto1_t14
+1222 screenshot m01_nf_sword_auto1_t20
+1252 motion efn:biped/nf_sword/nf_sword_auto2: oror models 4
+1252 motion efn:biped/nf_sword/nf_sword_auto2: husk=true husk=true
+1254 screenshot m02_nf_sword_auto2_t02
+1257 screenshot m02_nf_sword_auto2_t05
+1261 screenshot m02_nf_sword_auto2_t09
+1266 screenshot m02_nf_sword_auto2_t14
+1272 screenshot m02_nf_sword_auto2_t20
+1302 motion efn:biped/nf_sword/nf_sword_auto3: oror models 4
+1304 screenshot m03_nf_sword_auto3_t02
+1304 motion efn:biped/nf_sword/nf_sword_auto3: husk=true husk=true
+1307 screenshot m03_nf_sword_auto3_t05
+1311 screenshot m03_nf_sword_auto3_t09
+1316 screenshot m03_nf_sword_auto3_t14
+1322 screenshot m03_nf_sword_auto3_t20
+1352 motion epicfight:biped/combat/sword_auto1: oror models 4
+1353 motion epicfight:biped/combat/sword_auto1: husk=true
+1354 screenshot m04_sword_auto1_t02
+1357 screenshot m04_sword_auto1_t05
+1361 screenshot m04_sword_auto1_t09
+1366 screenshot m04_sword_auto1_t14
+1372 screenshot m04_sword_auto1_t20
+1402 motion epicfight:biped/skill/guard_sword: oror models 4
+1402 motion epicfight:biped/skill/guard_sword: husk=true
+1404 screenshot m05_guard_sword_t02
+1407 screenshot m05_guard_sword_t05
+1411 screenshot m05_guard_sword_t09
+1416 screenshot m05_guard_sword_t14
+1422 screenshot m05_guard_sword_t20
+1452 motion epicfight:biped/skill/guard_sword_hit_active1: oror models 4
+1453 motion epicfight:biped/skill/guard_sword_hit_active1: husk=true
+1454 screenshot m06_guard_sword_hit_active1_t02
+1457 screenshot m06_guard_sword_hit_active1_t05
+1461 screenshot m06_guard_sword_hit_active1_t09
+1466 screenshot m06_guard_sword_hit_active1_t14
+1472 screenshot m06_guard_sword_hit_active1_t20
+1502 motion epicfight:biped/skill/guard_sword_hit: oror models 4
+1504 screenshot m07_guard_sword_hit_t02
+1504 motion epicfight:biped/skill/guard_sword_hit: husk=true
+1507 screenshot m07_guard_sword_hit_t05
+1511 screenshot m07_guard_sword_hit_t09
+1516 screenshot m07_guard_sword_hit_t14
+1522 screenshot m07_guard_sword_hit_t20
+1552 motion epicfight:biped/combat/hit_long: oror models 4
+1552 motion epicfight:biped/combat/hit_long: husk=true
+1554 screenshot m08_hit_long_t02
+1557 screenshot m08_hit_long_t05
+1561 screenshot m08_hit_long_t09
+1566 screenshot m08_hit_long_t14
+1572 screenshot m08_hit_long_t20
+1612 finished: complete (motion only)
