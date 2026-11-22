@@ -296,6 +296,31 @@ public final class MobGuard {
             // (059h) its guard down: it may slip the blow instead (the royals dodge after their own guard, MobDodge.royal)
             e.setCanceled(true);
         }
+        if (e.isCanceled()) {
+            attempted(m, e);
+        }
+    }
+
+    /**
+     * (r65) A blow parried, blocked whole or slipped is still an attack. Cancelled here it reached neither vanilla's hurt
+     * (the struck mob's revenge, a villager's gossip and its golems' anger) nor AdaptiveCombat.damage (listened to at the
+     * normal priority, cancelled events left out): a villager that parried a player's blow neither struck back nor called
+     * its strong neighbours nor raised the alarm (GameTest villagers_alert_allies_after_player_attack, failing whenever
+     * the villager guarded or dodged; the guards beside it stood by). Both are done for it here.
+     */
+    static void attempted(Mob m, LivingIncomingDamageEvent e) {
+        if (!(e.getSource().getEntity() instanceof LivingEntity a) || a == m || !a.isAlive()) {
+            return;
+        }
+        try {
+            if (jp.oror.reborn.AdaptiveCombat.allied(m, a)) {
+                return;
+            }
+            m.setLastHurtByMob(a);
+            jp.oror.reborn.AdaptiveCombat.damage(e);
+        } catch (RuntimeException ex) {
+            // AdaptiveCombat's own bookkeeping failed: the parry still holds
+        }
     }
 
     /** (059f) A god's blow, at the start of its hurt: true when the guard undid it (the hurt then does nothing). */

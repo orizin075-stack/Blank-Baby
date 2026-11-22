@@ -12,9 +12,6 @@ on:
         description: 'OROR checks (empty: all)'
         required: false
         default: ''
-  push:
-    branches: [claude/jolly-einstein-wvpjq1]
-    paths: ['.github/workflows/pack_full.yml', 'oror_rework/packfull/overrides/**']
 
 permissions:
   contents: write
@@ -52,7 +49,7 @@ jobs:
           curl -sSfL -o libs/nightfall.jar "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
           python3 -I ../nfc_ui/tools/pack_tools.py fetch ../nfc_ui/additions-r63.json "$RUNNER_TEMP/add" "$OUT/additions_lock.json" \
             > "$OUT/additions_fetch.txt" 2>&1 || true
-          tail -3 "$OUT/pack_fetch.txt" "$OUT/additions_fetch.txt"
+          tail -n 3 "$OUT/pack_fetch.txt"; tail -n 3 "$OUT/additions_fetch.txt"
           NEW=$(sed -n 's/^release_version=//p' gradle.properties)
           mkdir -p "$RUNNER_TEMP/srv"
           cp "$RUNNER_TEMP"/pack053/*.jar "$RUNNER_TEMP"/r60extra/*.jar "$RUNNER_TEMP"/add/mods/*.jar libs/nightfall.jar \

@@ -2046,6 +2046,14 @@ public final class Look {
                         t.toShortString(), Math.sqrt(e.distanceToSqr(t.getX() + 0.5, t.getY(), t.getZ() + 0.5))));
                 }
                 note(found.isEmpty() ? "no king within 30 blocks of the throne" : String.join("; ", found));
+                // (r65) the whole capital's people with a player in it (the dedicated server's CITADEL-SELFTEST finds none
+                // since 11/11: without a player its forced chunks never tick their entities, so it puts none in)
+                java.util.TreeMap<String, Integer> census = new java.util.TreeMap<>();
+                for (Entity e : level.getEntities((Entity) null, new AABB(t).inflate(260, 80, 260),
+                    x -> x.getType().toString().contains("oror_supreme_bosses") || x instanceof net.minecraft.world.entity.npc.Villager)) {
+                    census.merge(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath(), 1, Integer::sum);
+                }
+                note("capital census " + census);
             } catch (Throwable error) {
                 note("king lookup failed: " + error);
             }

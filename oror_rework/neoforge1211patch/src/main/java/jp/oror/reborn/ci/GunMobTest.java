@@ -249,6 +249,16 @@ public final class GunMobTest {
                 plan.add(new String[]{"minecraft:" + h, "handed"});
             }
         }
+        // (r65) the lanes reach past the 25 chunks forced at the start (40 lanes, 560 blocks): those beyond never ticked
+        // (from the terror phantom on: 0 hits, "still 2", in every run)
+        int lastChunk = (r.at.getX() + plan.size() * 2 * SPACING + 8) >> 4;
+        for (int cx = (r.at.getX() >> 4) + 23; cx <= lastChunk; cx++) {
+            for (int dz = -4; dz <= 3; dz++) {
+                int cz = (r.at.getZ() >> 4) + dz;
+                r.level.setChunkForced(cx, cz, true);
+                r.chunks.add(new int[]{cx, cz});
+            }
+        }
         floor(r, -4, plan.size() * 2 * SPACING + 4, -4, 30);
         int lane = 0;
         for (String[] p : plan) {
@@ -491,14 +501,27 @@ public final class GunMobTest {
         run = null;
         StringBuilder b = new StringBuilder("{");
         int parriedWithGun = 0;
+        // (r65) since 059e a gunner raises OROR's guard at arm's reach and may slip a blow (MobDodge), as every mob does
+        // (CHANGES 059: 弓・クロスボウ・銃を持つモブも、相手が手の届く距離に来たら構えます): a blow turned aside now and then
+        // is its guard at work. What must not be is a gunner that turns most blows aside (a wall with a gun). One that
+        // took none of them without OROR's guard having met any is another mod's own (a mob immune to blades) and is told
+        // apart: "immune".
+        List<String> walls = new ArrayList<>(), immune = new ArrayList<>();
         for (Duel d : r.duels) {
             parriedWithGun += d.gunStrikes - d.gunLanded;
+            int aside = d.gunStrikes - d.gunLanded;
+            String tally = jp.oror.reborn.combat.MobGuard.tally(d.mob);
+            boolean ororMet = !tally.matches("0/0/[0-]+/0");
+            if (d.gunStrikes >= 6 && aside * 3 > d.gunStrikes) {
+                (ororMet ? walls : immune).add(d.name);
+            }
             b.append(b.length() > 1 ? "," : "").append('"').append(d.name).append("\":").append(String.format(Locale.ROOT,
                 "{\"held\":\"%s\",\"strikes\":%d,\"landed\":%d,\"strikesWithGun\":%d,\"turnedAsideWithGun\":%d,\"guard\":\"%s\",\"oror\":\"%s\"}",
                 id(d.mob.getMainHandItem()), d.strikes, d.landed, d.gunStrikes, d.gunStrikes - d.gunLanded, jp.oror.reborn.combat.MobGuard.describe(d.mob),
                 jp.oror.reborn.combat.MobGuard.tally(d.mob)));
         }
-        b.append(",\"turnedAsideWithGun\":").append(parriedWithGun).append(",\"pass\":").append(parriedWithGun == 0).append('}');
+        b.append(",\"turnedAsideWithGun\":").append(parriedWithGun).append(",\"walls\":\"").append(String.join(" ", walls))
+            .append("\",\"immune\":\"").append(String.join(" ", immune)).append("\",\"pass\":").append(walls.isEmpty()).append('}');
         LOG.info("GUN-PARRY {}", b);
         for (Entity x : r.level.getEntities((Entity) null, new AABB(r.at).inflate(400, 30, 60), x -> !(x instanceof Player))) {
             x.discard();

@@ -631,6 +631,12 @@ public final class KingStoryTest {
             out.put("phantasmRatio", base > 0 ? Math.round(blow / base * 10) / 10.0 : -1.0);
             out.put("phantasmSwordGone", r.keeper.getMainHandItem().isEmpty());
             BlockPos c = r.at.offset(8, 3, -8);
+            // (r65) clear of any village and the capital: their blocks are spared the burst (BrokenPhantasm.dug), and the
+            // story's own villagers stand by here (every run since 11/11 dug "半径2・0ブロック", passPhantasm false)
+            for (int k = 0; k < 8 && (jp.oror.reborn.village.BuildingGuard.inVillage(sl, c) || jp.oror.reborn.village.BuildingGuard.inCapital(c, 64)); k++) {
+                c = c.offset(-80, 0, 0);
+            }
+            out.put("phantasmAt", c.toShortString());
             for (BlockPos q : BlockPos.betweenClosed(c.offset(-3, -3, -3), c.offset(3, 3, 3))) {
                 sl.setBlock(q, Blocks.STONE.defaultBlockState(), 2);
             }
