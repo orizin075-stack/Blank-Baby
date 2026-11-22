@@ -362,12 +362,18 @@ public final class Look {
             case 260 -> shot(mc, "10_royals");
             case 270 -> swing(mc, 0);
             case 273 -> shot(mc, "11_royals_swing");
+            // (r65) Epic Fight's combo on OROR's own models: the same swing further on, then the combo's second blow
+            case 278 -> shot(mc, "11b_royals_swing_mid");
+            case 284 -> shot(mc, "11c_royals_swing_late");
+            case 288 -> swing(mc, 0);
+            case 294 -> shot(mc, "11d_royals_combo2");
             case 300 -> view(mc, 0, 0, 10, 0F, 8F);
             case 360 -> shot(mc, "12_villagers");
             case 370 -> swing(mc, 10);
             case 373 -> shot(mc, "13_villagers_swing");
             case 380 -> swing(mc, 10);
             case 382 -> shot(mc, "13b_villagers_swing_early");
+            case 388 -> shot(mc, "13c_villagers_combo2_mid");
             case 400 -> view(mc, -7, 0, 3, 0F, 4F);
             case 460 -> shot(mc, "14_king_close");
             case 470 -> view(mc, -5, 0, 3, 0F, 4F);
