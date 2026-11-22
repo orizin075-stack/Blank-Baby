@@ -1,0 +1,117 @@
+#Full-set armor bonuses (additive attribute modifier amounts).
+[armor_bonuses]
+	#Baal set: gravity attribute change (negative = float more).
+	# Default: -0.04
+	# Range: -1.0 ~ 1.0
+	baalGravity = -0.04
+	#Baal set: bonus movement speed.
+	# Default: 0.2
+	# Range: 0.0 ~ 10.0
+	baalMovementSpeed = 0.2
+	#Gomoria set: bonus block reach.
+	# Default: 3.5
+	# Range: 0.0 ~ 64.0
+	gomoriaBlockReach = 3.5
+	#Gomoria set: bonus entity reach.
+	# Default: 3.0
+	# Range: 0.0 ~ 64.0
+	gomoriaEntityReach = 3.0
+	#Valamon set: bonus attack knockback.
+	# Default: 2.0
+	# Range: 0.0 ~ 10.0
+	valamonAttackKnockback = 2.0
+	#Valamon set: bonus attack speed.
+	# Default: 4.0
+	# Range: 0.0 ~ 100.0
+	valamonAttackSpeed = 4.0
+	#Gargamaw set: bonus knockback resistance.
+	# Default: 2.0
+	# Range: 0.0 ~ 10.0
+	gargamawKnockbackResistance = 2.0
+	#Gomoria/Baal/Valamon sets: bonus max health (in half-hearts).
+	# Default: 20.0
+	# Range: 0.0 ~ 1000.0
+	setMaxHealthTier1 = 20.0
+	#Gargamaw set: bonus max health (in half-hearts).
+	# Default: 40.0
+	# Range: 0.0 ~ 1000.0
+	gargamawMaxHealthTier2 = 40.0
+	#Morphegor set: bonus swim speed.
+	# Default: 6.0
+	# Range: 0.0 ~ 100.0
+	morphegorSwimSpeed = 6.0
+	#Morphegor set: bonus attack damage.
+	# Default: 11.0
+	# Range: 0.0 ~ 1000.0
+	morphegorAttackDamage = 11.0
+
+#Spawn caps for static decoration/structure entities.
+[spawns]
+	#Max decoration entities of a type within the radius before spawns are cancelled.
+	# Default: 3
+	# Range: 1 ~ 64
+	decorationCap = 3
+	#Radius (blocks) for the decoration density check.
+	# Default: 16.0
+	# Range: 1.0 ~ 128.0
+	decorationRadius = 16.0
+	#Radius (blocks) within which duplicate whirlpools are cancelled.
+	# Default: 16.0
+	# Range: 1.0 ~ 128.0
+	whirlpoolRadius = 16.0
+
+#Boss-set damage interaction: while wearing a boss's full armor set, that boss hits you harder but every OTHER boss hits you softer.
+[boss_sets]
+	#Damage multiplier from the SAME boss whose set you wear (1.25 = +25%).
+	# Default: 1.25
+	# Range: 0.0 ~ 100.0
+	ownSetDamageMultiplier = 1.25
+	#Damage multiplier from any OTHER boss while wearing a boss set (0.85 = -15%).
+	# Default: 0.85
+	# Range: 0.0 ~ 100.0
+	otherBossDamageMultiplier = 0.85
+
+#Tiered weapon/armor rebalance: a clean per-tier ladder for the macabre material families,
+#applied as attribute modifiers (mod-compatible, no item classes edited). The bespoke 'special'
+#weapons and the 5 boss armor sets are left untouched. Tune the multipliers after testing.
+[gear_rebalance]
+	#Enable the tiered weapon/armor rebalance.
+	gearRebalance = true
+	#Global multiplier on the rebalanced weapon damage ladder.
+	# Default: 1.0
+	# Range: 0.1 ~ 10.0
+	weaponDamageMultiplier = 1.0
+	#Global multiplier on the rebalanced armor values.
+	# Default: 1.0
+	# Range: 0.1 ~ 10.0
+	armorMultiplier = 1.0
+
+#Boss ability cadence: after a boss fires an ability it waits cooldownTicks, then an extra
+#random gapMin..gapMax ticks before the next ability (which then telegraphs and fires). 20 ticks = 1s.
+[boss_cadence]
+	#Fixed cooldown after an ability fires (ticks). Default 60 = 3s.
+	# Default: 60
+	# Range: 0 ~ 600
+	cooldownTicks = 60
+	#Minimum extra random gap before the next ability (ticks). Default 2 = 0.1s.
+	# Default: 2
+	# Range: 0 ~ 600
+	gapMinTicks = 2
+	#Maximum extra random gap before the next ability (ticks). Default 40 = 2s.
+	# Default: 40
+	# Range: 1 ~ 1200
+	gapMaxTicks = 40
+	#Global multiplier on damage the 5 bosses + their minions/projectiles deal to players.
+	#Raise it to make boss fights harder for mid/high macabre armour (1.0 = unchanged).
+	# Default: 1.0
+	# Range: 0.0 ~ 100.0
+	bossDamageMultiplier = 1.0
+
+#Toggles for the merged optimization/compatibility fixes.
+[fixes]
+	#Spawn caps, frozen decoration entities, suffocation immunity, whirlpool dedup, whisper mute.
+	entityRelatedFixes = true
+	#Apply full-set armor bonuses as attribute modifiers (mod/Curios compatible).
+	armorAttributeFix = true
+	#Enable the boss-set damage interaction (own boss +25%, other bosses -15%).
+	bossSetDamageFix = true

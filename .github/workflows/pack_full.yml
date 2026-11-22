@@ -1,0 +1,107 @@
+# (r65) The import as the user plays it, every OROR check: the 053 pack, the NightfallCraft systems (additions-r63), r60's
+# two mods (The Awakening, Player Animation Library), the jars of the import's overrides/mods (Indestructible and Falchion
+# as OROR builds them, Duel Dominion, OROR's last built jar) and the import's own server-side configs
+# (oror_rework/packfull/overrides: config and defaultconfigs, as the zip carries them), on a dedicated server with the
+# whole OROR suite. Results to oror_rework/packfull/out on this branch.
+name: The pack as played - every OROR check
+
+on:
+  workflow_dispatch:
+    inputs:
+      tests:
+        description: 'OROR checks (empty: all)'
+        required: false
+        default: ''
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['.github/workflows/pack_full.yml', 'oror_rework/packfull/overrides/**']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pack-full-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    defaults:
+      run:
+        shell: bash
+        working-directory: oror_rework/neoforge1211patch
+    env:
+      OUT: ../packfull/out
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/pack053
+          key: pack053-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-053.json') }}
+      - name: Every mod of the import
+        run: |
+          rm -rf "$OUT"; mkdir -p "$OUT" libs
+          python3 -I tools/fetch_pack.py pack/manifest-053.json "$RUNNER_TEMP/pack053" sodium fancytoasts chatplus extrasounds \
+            > "$OUT/pack_fetch.txt" 2>&1 || true
+          python3 -I tools/fetch_pack.py ../r60check/manifest-r60-extra.json "$RUNNER_TEMP/r60extra" >> "$OUT/pack_fetch.txt" 2>&1 || true
+          curl -sSfL -o libs/nightfall.jar "$(python3 -I -c 'import json;print(json.load(open("pack/install-0.17.23.json"))["nightfall"]["url"])')"
+          python3 -I ../nfc_ui/tools/pack_tools.py fetch ../nfc_ui/additions-r63.json "$RUNNER_TEMP/add" "$OUT/additions_lock.json" \
+            > "$OUT/additions_fetch.txt" 2>&1 || true
+          tail -3 "$OUT/pack_fetch.txt" "$OUT/additions_fetch.txt"
+          NEW=$(sed -n 's/^release_version=//p' gradle.properties)
+          mkdir -p "$RUNNER_TEMP/srv"
+          cp "$RUNNER_TEMP"/pack053/*.jar "$RUNNER_TEMP"/r60extra/*.jar "$RUNNER_TEMP"/add/mods/*.jar libs/nightfall.jar \
+            user_mods/dueldominion-0.17.0-alpha.jar ../r60test/mods_r61/indestructible-21.16.3-oror.1.jar \
+            ../r60test/mods_r61/falchionmoveset-21.17.3.1-oror.1.jar out/oror_supreme_bosses-$NEW.jar "$RUNNER_TEMP/srv/"
+          # client-only (as nfc_port.yml): screens, sounds, a resource look, and the mods that load client classes on a server
+          rm -f "$RUNNER_TEMP"/srv/BEB-* "$RUNNER_TEMP"/srv/rebind_narrator-* "$RUNNER_TEMP"/srv/clearwater-* \
+            "$RUNNER_TEMP"/srv/epic_fight_avalon-* "$RUNNER_TEMP"/srv/tudigong-* "$RUNNER_TEMP"/srv/bountiful_npc-* \
+            "$RUNNER_TEMP"/srv/pbf1-* "$RUNNER_TEMP"/srv/multiplayer_boss_fight-* "$RUNNER_TEMP"/srv/fast_tpa-* "$RUNNER_TEMP"/srv/cataclysm_dimension-*
+          ls "$RUNNER_TEMP/srv" | sort > "$OUT/server_jars.txt"; wc -l < "$OUT/server_jars.txt"
+          # the import's configs, in place before the first start (defaultconfigs: the new world's server configs)
+          mkdir -p "$RUNNER_TEMP/server"
+          cp -r ../packfull/overrides/config ../packfull/overrides/defaultconfigs "$RUNNER_TEMP/server/"
+      - name: Dedicated server - every OROR check on the pack as played
+        env:
+          ONLY_TESTS: ${{ inputs.tests }}
+        run: |
+          set +e
+          TESTS="${ONLY_TESTS:-compass,shield,arms,guards,dodge,worn,spells,mobs,gunmobs,story,citadel,citadelupdate,capitalload,war,pilots,landings,aa,crew,gunposts,villageflight,roads,villagearms,fuel,sweep,gametests,waza,royalwaza,relics,swords,duel,raid,siege,efprobe,gods,structures}"
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 13000 'CI-DONE' -- "$TESTS" -- "$RUNNER_TEMP"/srv/*.jar \
+            > "$OUT/server_run.txt" 2>&1; rc=$?
+          tail -n 60 "$OUT/server_run.txt"
+          C="$RUNNER_TEMP/server/console.log"
+          grep -aE -- '-RESULT|CI-DONE|CI checks|CI running|MOBS-TRACE \{|GUN-PARRY \{|KING-STORY \{|CAPITAL-LOAD \{|VILLAGE-FLIGHT \{|CITADEL-SELFTEST|CITADEL-UPDATE \{|GUARD-RESULT|WORN-RESULT|KINGSLAYER-TEST|OWNERLESS-SWORD-TEST|CAPITAL-SHIELD|Loading [0-9]+ mods|Done \(' "$C" \
+            | cut -c1-8000 > "$OUT/results.txt" || true
+          grep -aE 'ERROR|Exception|Caused by|Failed to|Couldn.t|Unable to|Mixin apply failed|InjectionError' "$C" \
+            | grep -v 'HttpConnectTimeout\|ConnectException' | head -1500 > "$OUT/server_errors.txt" || true
+          grep -aE 'jp\.oror|OROR' "$C" | grep -aE 'ERROR|WARN|Exception' | head -600 > "$OUT/oror_warnings.txt" || true
+          grep -aE 'KING-|REBEL-|SUMMON|OROR Story|OROR King|OROR Rebels' "$C" > "$OUT/king_story.txt" || true
+          grep -aE 'GUN-(CENSUS|MOBS|PARRY)' "$C" > "$OUT/gun_mobs.txt" || true
+          grep -aE 'ROAD-|VILLAGE-|FUEL-RESULT|SUPPLY-COAL|EXPEDITION-' "$C" > "$OUT/village_log.txt" || true
+          grep -aE 'WAR-|GARRISON-|CREW-|GUNPOST-|TURRET-CREW|AA-|FLIGHT-|LANDING-' "$C" | cut -c1-3000 > "$OUT/war_log.txt" || true
+          grep -aE 'SIEGE-|OROR Siege|AzazelCapitalSiege|AzazelSiegeArmies|SiegeAir' "$C" > "$OUT/siege_log.txt" || true
+          grep -aE 'RAID-|OROR Raid' "$C" > "$OUT/raid_log.txt" || true
+          grep -aE 'DODGE-|GUARD-|MOBS-' "$C" > "$OUT/combat_log.txt" || true
+          grep -aE 'EFP|OROR EF Probe' "$C" > "$OUT/efprobe.txt" || true
+          grep -aE 'STRUCT-AUDIT|OROR Structures|GODS-' "$C" > "$OUT/structure_audit.txt" || true
+          grep -aE 'WAZA-|RELIC-|SWEEP-|GAMETEST|DUEL-' "$C" | cut -c1-2000 > "$OUT/sweep_log.txt" || true
+          awk '/Mod List|Loading [0-9]+ mods/{on=1} on{print} /^$/{if(on)exit}' "$C" | head -400 > "$OUT/mods_loaded.txt" || true
+          tail -n 3000 "$C" > "$OUT/server_console.log"
+          cp "$RUNNER_TEMP/server/threads_stall.txt" "$OUT/" 2>/dev/null || true
+          ls "$RUNNER_TEMP/server/crash-reports" 2>/dev/null && cp -r "$RUNNER_TEMP/server/crash-reports" "$OUT/" || true
+          exit $rc
+      - name: Commit the results
+        if: always()
+        working-directory: .
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f oror_rework/packfull/out
+          git commit -m "The pack as played - every OROR check ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 5; done

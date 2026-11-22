@@ -1,0 +1,19 @@
+[General]
+	#Mode can be set to NONE, LIST, or ALL
+	#- NONE: Hunger Strike is disabled for all players.
+	#- LIST: Hunger Strike is enabled for players added
+	#        in-game with /hungerstrike command.
+	#- ALL:  Hunger Strike is enabled for all players.
+	#Allowed Values: NONE, LIST, ALL
+	mode = "ALL"
+	#How to translate food points into heart points when consuming food.
+	#At the default value of 0.5, food fills your heart bar at half the rate it would fill hunger.
+	foodHealFactor = 0.75
+	#Controls whether or not the hunger bar is hidden for players on hunger strike.
+	#If the hunger bar is left visible, it will remain filled at half capacity, except when certain potion effects are active like hunger and regeneration.
+	hideHungerBar = true
+	#The default hunger level when no status effects are active.
+	#Valid range is [1 - 20], with 20 being fully filled, and 10 being half-filled.  The default value is 10, which disables health regen but allows sprinting.
+	# Default: 10
+	# Range: 1 ~ 20
+	hungerBaseline = 10
