@@ -123,6 +123,11 @@ public final class ArmedVillagers {
 
         @Override
         public void setupAnim(T e, float walk, float amount, float age, float yaw, float pitch) {
+            // (r64) Epic Fight's motions move the parts' places too: back to their own before each pose
+            this.body.resetPose();
+            this.getHead().resetPose();
+            this.root().getChild("right_leg").resetPose();
+            this.root().getChild("left_leg").resetPose();
             super.setupAnim(e, walk, amount, age, yaw, pitch);
             boolean armed = armed(e);
             this.arms.visible = !armed;
@@ -158,6 +163,19 @@ public final class ArmedVillagers {
                 this.rightArm.xRot -= Mth.sin(f * Mth.PI) * 1.2F + Mth.sin(t * Mth.PI) * -(this.getHead().xRot - 0.7F) * 0.75F;
                 this.rightArm.yRot += this.body.yRot * 2F;
                 this.rightArm.zRot += Mth.sin(t * Mth.PI) * -0.4F;
+            }
+            // (r64) Epic Fight's own motions (EfMotion): its weapon's combo as it swings, the guard, the parry, the stagger
+            if (EfMotion.update(e, age)) {
+                EfMotion.Pose p = EfMotion.now(e, age);
+                if (p != null) {
+                    float w = p.weight();
+                    EfMotion.pose(this.body, p.get("Chest"), null, w);
+                    EfMotion.pose(this.getHead(), p.get("Head"), null, w);
+                    EfMotion.pose(this.rightArm, p.get("Arm_R"), p.get("Hand_R"), w);
+                    EfMotion.pose(this.leftArm, p.get("Arm_L"), p.get("Hand_L"), w);
+                    EfMotion.pose(this.root().getChild("right_leg"), p.get("Thigh_R"), null, w);
+                    EfMotion.pose(this.root().getChild("left_leg"), p.get("Thigh_L"), null, w);
+                }
             }
         }
 

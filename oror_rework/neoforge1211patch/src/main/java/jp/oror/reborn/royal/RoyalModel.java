@@ -152,6 +152,33 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
         roleSwing(mob);
         react(mob, age);
         kingMove(mob, age);
+        efMotion(mob, age);
+    }
+
+    /**
+     * (r64) Epic Fight's own animations on the royals (jp.oror.reborn.client.EfMotion): a swing the next of its weapon's
+     * combo, OROR's guard moments Epic Fight's guard, parry, guarded blow and broken guard, a blow taken its stagger, over
+     * the pose above. The king's forms and casting keep their own.
+     */
+    private void efMotion(RoyalMob mob, float age) {
+        if (mob.isCasting() || shoots(mob.getMainHandItem()) || !jp.oror.reborn.client.EfMotion.update(mob, age)) {
+            return;
+        }
+        jp.oror.reborn.client.EfMotion.Pose p = jp.oror.reborn.client.EfMotion.now(mob, age);
+        if (p == null) {
+            return;
+        }
+        float w = p.weight();
+        float lookYaw = this.head.yRot, lookPitch = this.head.xRot;
+        jp.oror.reborn.client.EfMotion.pose(this.body, p.get("Chest"), null, w);
+        jp.oror.reborn.client.EfMotion.pose(this.head, p.get("Head"), null, w);
+        jp.oror.reborn.client.EfMotion.pose(this.rightArm, p.get("Arm_R"), p.get("Hand_R"), w);
+        jp.oror.reborn.client.EfMotion.pose(this.leftArm, p.get("Arm_L"), p.get("Hand_L"), w);
+        jp.oror.reborn.client.EfMotion.pose(this.rightLeg, p.get("Thigh_R"), null, w);
+        jp.oror.reborn.client.EfMotion.pose(this.leftLeg, p.get("Thigh_L"), null, w);
+        // the eyes stay on the enemy
+        this.head.yRot += lookYaw * 0.5F * w;
+        this.head.xRot += lookPitch * 0.3F * w;
     }
 
     /**
