@@ -1,20 +1,13 @@
 package jp.oror.reborn.client;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.AxeItem;
@@ -59,166 +52,135 @@ public final class EfMotion {
         }
     }
 
-    /** One joint's keyframes. */
-    private record Sheet(float[] time, Vector3f[] pos, Quaternionf[] rot) {
-        Matrix4f at(float t, Matrix4f out) {
-            int n = time.length;
-            if (n == 1 || t <= time[0]) {
-                return out.translationRotate(pos[0], rot[0]);
-            }
-            if (t >= time[n - 1]) {
-                return out.translationRotate(pos[n - 1], rot[n - 1]);
-            }
-            int i = 0;
-            while (i + 1 < n && time[i + 1] < t) {
-                i++;
-            }
-            float u = (t - time[i]) / Math.max(1e-4F, time[i + 1] - time[i]);
-            Vector3f p = new Vector3f(pos[i]).lerp(pos[i + 1], u);
-            Quaternionf q = new Quaternionf(rot[i]).slerp(rot[i + 1], u);
-            return out.translationRotate(p, q);
-        }
-    }
-
-    record Clip(Map<String, Sheet> joints, float length) {
+    /**
+     * (r65, the user: "現物と見比べると若干の違和感が多い") Epic Fight's own reading of an animation, not this class's: read from the
+     * files directly, the joints came out turned otherwise than Epic Fight turns them (the player's own body, set beside
+     * them, showed it: the chest's twist and the thigh's lift the other way about). The pose is Epic Fight's
+     * (StaticAnimation.getRawPose), the joints' places Epic Fight's armature's (the biped's, getBoundTransformFor), and the
+     * axes of its space found from its own resting pose (the head is up, the right arm to the right).
+     */
+    record Clip(ResourceLocation id, float length) {
     }
 
     private static final Map<ResourceLocation, Optional<Clip>> CLIPS = new ConcurrentHashMap<>();
     private static Map<String, Matrix4f> bindWorld;
     private static boolean bindTried;
+    private static yesman.epicfight.model.armature.HumanoidArmature armature;
+    private static final java.util.Set<ResourceLocation> TOLD = ConcurrentHashMap.newKeySet();
 
-    private EfMotion() {
-    }
-
-    private static JsonElement read(ResourceLocation file) {
+    private static yesman.epicfight.api.animation.types.StaticAnimation anim(ResourceLocation id) {
         try {
-            Optional<Resource> r = Minecraft.getInstance().getResourceManager().getResource(file);
-            if (r.isEmpty()) {
-                return null;
-            }
-            try (Reader in = r.get().openAsReader()) {
-                return JsonParser.parseReader(in);
-            }
-        } catch (Exception e) {
+            yesman.epicfight.api.animation.AnimationManager.AnimationAccessor<yesman.epicfight.api.animation.types.StaticAnimation> acc =
+                yesman.epicfight.api.animation.AnimationManager.byKey(id);
+            return acc == null ? null : acc.get();
+        } catch (Throwable t) {
             return null;
         }
     }
 
-    private static Matrix4f rowMajor(JsonArray a) {
-        float[] f = new float[16];
-        for (int i = 0; i < 16; i++) {
-            f[i] = a.get(i).getAsFloat();
-        }
-        // JOML takes its arrays column by column
-        return new Matrix4f().set(f).transpose();
-    }
-
     static Clip clip(ResourceLocation id) {
-        return CLIPS.computeIfAbsent(id, k -> {
-            JsonElement e = read(ResourceLocation.fromNamespaceAndPath(k.getNamespace(), "animmodels/animations/" + k.getPath() + ".json"));
-            if (e == null || !e.isJsonObject() || !e.getAsJsonObject().has("animation")) {
-                LOG.info("EF-MOTION {\"missing\":\"{}\"}", k);
-                return Optional.empty();
+        Optional<Clip> have = CLIPS.get(id);
+        if (have != null) {
+            return have.orElse(null);
+        }
+        yesman.epicfight.api.animation.types.StaticAnimation a = anim(id);
+        if (a == null) {
+            if (TOLD.add(id)) {
+                LOG.info("EF-MOTION {\"missing\":\"{}\"}", id);
             }
-            Map<String, Sheet> joints = new HashMap<>();
-            float length = 0;
-            for (JsonElement je : e.getAsJsonObject().getAsJsonArray("animation")) {
-                JsonObject j = je.getAsJsonObject();
-                String name = j.get("name").getAsString();
-                if (!PARENT.containsKey(name)) {
-                    continue;
-                }
-                JsonArray times = j.getAsJsonArray("time"), mats = j.getAsJsonArray("transform");
-                int n = Math.min(times.size(), mats.size());
-                float[] t = new float[n];
-                Vector3f[] p = new Vector3f[n];
-                Quaternionf[] q = new Quaternionf[n];
-                for (int i = 0; i < n; i++) {
-                    t[i] = times.get(i).getAsFloat();
-                    Matrix4f m = rowMajor(mats.get(i).getAsJsonArray());
-                    p[i] = m.getTranslation(new Vector3f());
-                    q[i] = m.getNormalizedRotation(new Quaternionf());
-                    length = Math.max(length, t[i]);
-                }
-                if (n > 0) {
-                    joints.put(name, new Sheet(t, p, q));
-                }
-            }
-            return joints.isEmpty() ? Optional.empty() : Optional.of(new Clip(joints, length));
-        }).orElse(null);
+            return null;
+        }
+        Clip c = new Clip(id, a.getTotalTime());
+        CLIPS.put(id, Optional.of(c));
+        return c;
     }
 
-    /** The biped's resting pose, joint by joint in Epic Fight's space. */
+    private static Matrix4f joml(yesman.epicfight.api.utils.math.OpenMatrix4f o, boolean transpose) {
+        Matrix4f m = new Matrix4f(o.m00, o.m01, o.m02, o.m03, o.m10, o.m11, o.m12, o.m13, o.m20, o.m21, o.m22, o.m23, o.m30, o.m31, o.m32, o.m33);
+        return transpose ? m.transpose() : m;
+    }
+
+    private static boolean transposed;
+    // the axes of Epic Fight's space, found from its resting pose
+    private static Vector3f up = new Vector3f(0, 0, 1), right = new Vector3f(1, 0, 0), forward = new Vector3f(0, 1, 0);
+    private static Matrix3f A = new Matrix3f(-1, 0, 0, 0, 0, -1, 0, -1, 0);
+
+    private static Vector3f axisOf(Vector3f v, Vector3f not) {
+        float[] c = {Math.abs(v.x), Math.abs(v.y), Math.abs(v.z)};
+        if (not != null) {
+            if (Math.abs(not.x) > 0.5F) c[0] = -1;
+            if (Math.abs(not.y) > 0.5F) c[1] = -1;
+            if (Math.abs(not.z) > 0.5F) c[2] = -1;
+        }
+        int i = c[0] >= c[1] && c[0] >= c[2] ? 0 : c[1] >= c[2] ? 1 : 2;
+        float s = Math.signum(i == 0 ? v.x : i == 1 ? v.y : v.z);
+        return new Vector3f(i == 0 ? s : 0, i == 1 ? s : 0, i == 2 ? s : 0);
+    }
+
+    /** The biped's resting pose, joint by joint, in Epic Fight's space; and that space's axes. */
     private static Map<String, Matrix4f> bind() {
         if (bindTried) {
             return bindWorld;
         }
         bindTried = true;
-        JsonElement e = read(ResourceLocation.fromNamespaceAndPath("epicfight", "animmodels/entity/biped.json"));
-        if (e == null) {
-            LOG.info("EF-MOTION {\"bind\":false}");
-            return null;
-        }
-        Map<String, Matrix4f> local = new HashMap<>();
         try {
-            JsonObject arm = e.getAsJsonObject().getAsJsonObject("armature");
-            List<JsonObject> todo = new ArrayList<>();
-            for (JsonElement r : arm.getAsJsonArray("hierarchy")) {
-                todo.add(r.getAsJsonObject());
+            armature = yesman.epicfight.gameasset.Armatures.BIPED.get();
+            yesman.epicfight.api.animation.Pose empty = new yesman.epicfight.api.animation.Pose();
+            yesman.epicfight.api.animation.Joint head = armature.searchJointByName("Head");
+            yesman.epicfight.api.utils.math.OpenMatrix4f h = armature.getBoundTransformFor(empty, head);
+            Vector3f ht = joml(h, false).getTranslation(new Vector3f());
+            if (ht.length() < 0.3F && new Vector3f(h.m03, h.m13, h.m23).length() > 0.3F) {
+                transposed = true;
             }
-            while (!todo.isEmpty()) {
-                JsonObject node = todo.remove(todo.size() - 1);
-                if (node.has("transform")) {
-                    local.put(node.get("name").getAsString(), rowMajor(node.getAsJsonArray("transform")));
-                }
-                if (node.has("children")) {
-                    for (JsonElement c : node.getAsJsonArray("children")) {
-                        todo.add(c.getAsJsonObject());
-                    }
+            Map<String, Matrix4f> w = new HashMap<>();
+            for (String j : PARENT.keySet()) {
+                yesman.epicfight.api.animation.Joint jt = armature.searchJointByName(j);
+                if (jt != null) {
+                    w.put(j, joml(armature.getBoundTransformFor(empty, jt), transposed));
                 }
             }
-        } catch (RuntimeException ex) {
-            LOG.info("EF-MOTION {\"bind\":\"{}\"}", ex.toString().replace('"', '\''));
-            return null;
+            Vector3f headAt = w.get("Head").getTranslation(new Vector3f());
+            Vector3f armAt = w.get("Arm_R").getTranslation(new Vector3f());
+            up = axisOf(headAt, null);
+            right = axisOf(armAt, up);
+            forward = new Vector3f(up).cross(right);
+            A = new Matrix3f().setRow(0, new Vector3f(right).negate()).setRow(1, new Vector3f(up).negate()).setRow(2, new Vector3f(forward).negate());
+            bindWorld = w;
+            LOG.info("EF-MOTION {\"bind\":{},\"transposed\":{},\"up\":\"{}\",\"right\":\"{}\",\"forward\":\"{}\",\"head\":\"{}\",\"armR\":\"{}\"}",
+                w.size(), transposed, up, right, forward, headAt, armAt);
+        } catch (Throwable t) {
+            LOG.info("EF-MOTION {\"bind\":\"{}\"}", String.valueOf(t).replace('"', '\''));
+            bindWorld = null;
         }
-        bindWorld = world(name -> local.get(name));
-        LOG.info("EF-MOTION {\"bind\":{}}", bindWorld.size());
         return bindWorld;
-    }
-
-    private static Map<String, Matrix4f> world(java.util.function.Function<String, Matrix4f> localOf) {
-        Map<String, Matrix4f> w = new HashMap<>();
-        for (int i = 0; i < TREE.length; i += 2) {
-            String j = TREE[i], p = TREE[i + 1];
-            Matrix4f l = localOf.apply(j);
-            if (l == null) {
-                continue;
-            }
-            Matrix4f pw = p == null ? null : w.get(p);
-            w.put(j, pw == null ? new Matrix4f(l) : new Matrix4f(pw).mul(l));
-        }
-        return w;
     }
 
     /** Each joint's move from rest at time t, in Epic Fight's space (the step forward taken out). */
     static Map<String, Matrix4f> moves(Clip c, float t) {
         Map<String, Matrix4f> rest = bind();
-        if (rest == null) {
+        yesman.epicfight.api.animation.types.StaticAnimation a = anim(c.id());
+        if (rest == null || a == null || armature == null) {
             return null;
         }
-        Map<String, Matrix4f> cache = new HashMap<>();
-        Map<String, Matrix4f> now = world(name -> {
-            Sheet s = c.joints().get(name);
-            if (s == null) {
-                Matrix4f b = rest.get(name);
-                Matrix4f pb = PARENT.get(name) == null ? null : rest.get(PARENT.get(name));
-                return b == null ? null : pb == null ? new Matrix4f(b) : new Matrix4f(pb).invert().mul(b);
+        yesman.epicfight.api.animation.Pose pose;
+        try {
+            pose = a.getRawPose(t);
+        } catch (Throwable ex) {
+            return null;
+        }
+        Map<String, Matrix4f> now = new HashMap<>();
+        for (String j : rest.keySet()) {
+            yesman.epicfight.api.animation.Joint jt = armature.searchJointByName(j);
+            if (jt != null) {
+                now.put(j, joml(armature.getBoundTransformFor(pose, jt), transposed));
             }
-            return s.at(t, cache.computeIfAbsent(name, k -> new Matrix4f()));
-        });
+        }
         Vector3f root = now.containsKey("Root") ? now.get("Root").getTranslation(new Vector3f()) : new Vector3f();
         Vector3f root0 = rest.containsKey("Root") ? rest.get("Root").getTranslation(new Vector3f()) : new Vector3f();
-        Matrix4f unstep = new Matrix4f().translation(root0.x - root.x, root0.y - root.y, 0);
+        Vector3f step = new Vector3f(root).sub(root0);
+        // the step forward and aside taken out (kept: up and down)
+        Vector3f flat = new Vector3f(right).mul(step.dot(right)).add(new Vector3f(forward).mul(step.dot(forward)));
+        Matrix4f unstep = new Matrix4f().translation(-flat.x, -flat.y, -flat.z);
         Map<String, Matrix4f> out = new HashMap<>();
         for (Map.Entry<String, Matrix4f> en : now.entrySet()) {
             Matrix4f b = rest.get(en.getKey());
@@ -227,6 +189,26 @@ public final class EfMotion {
             }
         }
         return out;
+    }
+
+    /** (look 'motion') Epic Fight's own pose of an animation at time t, joint by joint (local translation and turn). */
+    static String rawPose(ResourceLocation id, float t, String... joints) {
+        yesman.epicfight.api.animation.types.StaticAnimation a = anim(id);
+        if (a == null) {
+            return "no animation";
+        }
+        StringBuilder b = new StringBuilder();
+        yesman.epicfight.api.animation.Pose pose = a.getRawPose(t);
+        for (String j : joints) {
+            yesman.epicfight.api.animation.JointTransform jt = pose.get(j);
+            if (jt == null) {
+                continue;
+            }
+            Quaternionf q = jt.rotation();
+            b.append(String.format(java.util.Locale.ROOT, "%s t(%.2f,%.2f,%.2f) q(%.2f,%.2f,%.2f,%.2f) ", j, jt.translation().x, jt.translation().y,
+                jt.translation().z, q.x, q.y, q.z, q.w));
+        }
+        return b.toString();
     }
 
     static final float AMP = 0.75F;
@@ -241,15 +223,14 @@ public final class EfMotion {
         return new Matrix4f().translationRotate(ta.lerp(tb, u), qa.slerp(qb, u));
     }
 
-    // Epic Fight's space to the model's: x_m = -16 x, y_m = 24 - 16 z, z_m = -16 y
-    private static final Matrix3f A = new Matrix3f(-1, 0, 0, 0, 0, -1, 0, -1, 0);
-
+    // Epic Fight's space to the model's (pixels; x to the model's left, y down from the neck, z back): A's rows are -right,
+    // -up and -forward
     private static Vector3f toEf(float x, float y, float z) {
-        return new Vector3f(-x / 16F, -z / 16F, (24F - y) / 16F);
+        return new Vector3f(right).mul(-x / 16F).add(new Vector3f(up).mul((24F - y) / 16F)).add(new Vector3f(forward).mul(-z / 16F));
     }
 
     private static Vector3f toModel(Vector3f e) {
-        return new Vector3f(-e.x * 16F, 24F - e.z * 16F, -e.y * 16F);
+        return new Vector3f(-e.dot(right) * 16F, 24F - e.dot(up) * 16F, -e.dot(forward) * 16F);
     }
 
     /** Poses one part by a joint's move, blended over its own pose by w; the rotation from 'turn' (a joint) if given. */
@@ -479,23 +460,7 @@ public final class EfMotion {
      */
     public static String debugLocals(String id, float t, String... joints) {
         ResourceLocation r = ResourceLocation.tryParse(id);
-        Clip c = r == null ? null : clip(r);
-        if (c == null) {
-            return "no clip";
-        }
-        StringBuilder b = new StringBuilder();
-        Matrix4f m = new Matrix4f();
-        for (String j : joints) {
-            Sheet s = c.joints().get(j);
-            if (s == null) {
-                continue;
-            }
-            s.at(t, m);
-            Vector3f p = m.getTranslation(new Vector3f());
-            Quaternionf q = m.getNormalizedRotation(new Quaternionf());
-            b.append(String.format(java.util.Locale.ROOT, "%s t(%.2f,%.2f,%.2f) q(%.2f,%.2f,%.2f,%.2f) ", j, p.x, p.y, p.z, q.x, q.y, q.z, q.w));
-        }
-        return b.toString();
+        return r == null ? "no id" : rawPose(r, t, joints);
     }
 
     /** The mob's animation and its time now (seconds), or null. */
