@@ -324,6 +324,8 @@ public final class MobDodge {
         Vec3 side = new Vec3(-away.z, 0, away.x);
         boolean toLeft = way.dot(side) >= 0;
         TechniqueShow.send(m, toLeft ? "dodge_l" : "dodge_r", 0, 1, 10, foe == null ? -1 : foe.getId());
+        // (r65) on an Epic Fight humanoid, Epic Fight Nightfall's own step to that side
+        MobGuard.Ef.playNamed(m, toLeft ? "efn:biped/dodge/step_l" : "efn:biped/dodge/step_r");
     }
 
     private static void note(Mob m, String key) {

@@ -41,7 +41,8 @@ import org.slf4j.LoggerFactory;
  * the head by the Head joint, the body by the Chest, the arms by their hands' turn about their shoulders, the legs by the
  * thighs. The step forward an attack takes (its Root's) is left out: the mob moves itself.
  * <p>
- * Which animation: a swing starts the next of its weapon's combo (Nightfall's sword, Epic Fight's axe, longsword, tachi,
+ * Which animation: a swing starts the next of its weapon's combo, which ends in its skill (a dash, Flash Block, Rushing
+ * Tempo, Grasping Spire, as the pack's own mobs use them); OROR's dodge Epic Fight Nightfall's step to that side (Nightfall's sword, Epic Fight's axe, longsword, tachi,
  * Epic Fight Extra's greatsword, spear, dagger, fists), OROR's guard moments (TechniqueShow) Epic Fight's guard, parry,
  * guarded blow, broken guard and parried stagger, a blow taken its short stagger. Blended in and out over a tenth of a
  * second; an animation a pack does not have is skipped and the model keeps its own pose.
@@ -357,17 +358,17 @@ public final class EfMotion {
 
     private static final Map<String, String[]> COMBOS = Map.of(
         "sword", new String[]{"efn:biped/nf_sword/nf_sword_auto1", "efn:biped/nf_sword/nf_sword_auto2", "efn:biped/nf_sword/nf_sword_auto3",
-            "epicfight:biped/combat/sword_auto1", "epicfight:biped/combat/sword_auto2", "epicfight:biped/combat/sword_auto3"},
+            "efn:biped/nf_sword/nf_sword_auto4", "efn:biped/nf_sword/nf_sword_dash", "efn:biped/nf_skill/biped_flashblock1"},
         "axe", new String[]{"epicfight:biped/combat/axe_auto1", "epicfight:biped/combat/axe_auto2"},
         "longsword", new String[]{"epicfight:biped/combat/longsword_auto1", "epicfight:biped/combat/longsword_auto2", "epicfight:biped/combat/longsword_auto3"},
-        "tachi", new String[]{"epicfight:biped/combat/tachi_auto1", "epicfight:biped/combat/tachi_auto2", "epicfight:biped/combat/tachi_auto3"},
-        "greatsword", new String[]{"epicfightx:biped/combat/greatsword_auto1", "epicfightx:biped/combat/greatsword_auto2", "epicfight:biped/combat/greatsword_auto1",
-            "epicfight:biped/combat/greatsword_auto2"},
-        "spear", new String[]{"epicfightx:biped/combat/spear_twohand_auto1", "epicfightx:biped/combat/spear_twohand_auto2", "epicfight:biped/combat/spear_twohand_auto1",
-            "epicfight:biped/combat/spear_twohand_auto2"},
+        "tachi", new String[]{"epicfight:biped/combat/tachi_auto1", "epicfight:biped/combat/tachi_auto2", "epicfight:biped/combat/tachi_auto3",
+            "epicfightx:biped/combat/tachi_dash", "epicfightx:biped/skill/rushing_tempo1"},
+        "greatsword", new String[]{"epicfightx:biped/combat/greatsword_auto1", "epicfightx:biped/combat/greatsword_auto2", "epicfightx:biped/combat/greatsword_dash",
+            "efn:biped/ng_greatsword/ng_great_dash"},
+        "spear", new String[]{"epicfightx:biped/combat/spear_twohand_auto1", "epicfightx:biped/combat/spear_twohand_auto2", "epicfightx:biped/skill/grasping_spire_second"},
         "dagger", new String[]{"epicfightx:biped/combat/dagger_auto1", "epicfightx:biped/combat/dagger_auto2", "epicfightx:biped/combat/dagger_auto3",
-            "epicfight:biped/combat/dagger_auto1", "epicfight:biped/combat/dagger_auto2"},
-        "fist", new String[]{"epicfightx:biped/combat/fist_auto1", "epicfight:biped/combat/fist_auto1", "epicfight:biped/combat/fist_auto2"});
+            "epicfightx:biped/combat/dagger_dash"},
+        "fist", new String[]{"epicfightx:biped/combat/fist_auto1", "epicfightx:biped/combat/fist_auto2", "epicfight:biped/combat/fist_auto1"});
 
     private static ResourceLocation pick(String[] ids, int index) {
         List<ResourceLocation> have = new ArrayList<>();
@@ -408,7 +409,8 @@ public final class EfMotion {
             float into = mob.level().getGameTime() - show.start();
             String k0 = kind(mob.getMainHandItem());
             boolean armedEf = k0 != null && !"fist".equals(k0);
-            if (into >= 0 && into <= show.length() && (armedEf || "PARRIED".equals(show.mechanic()) || "BROKEN".equals(show.mechanic()))) {
+            boolean dodge = show.mechanic().startsWith("DODGE");
+            if (into >= 0 && into <= show.length() && (armedEf || dodge || "PARRIED".equals(show.mechanic()) || "BROKEN".equals(show.mechanic()))) {
                 String k = k0;
                 boolean big = "greatsword".equals(k) || "spear".equals(k) || "longsword".equals(k) || "tachi".equals(k);
                 switch (show.mechanic()) {
@@ -421,6 +423,9 @@ public final class EfMotion {
                     case "BLOCK" -> want = first(big ? "epicfight:biped/skill/guard_longsword_hit" : "epicfight:biped/skill/guard_sword_hit", "epicfight:biped/skill/guard_sword_hit");
                     case "BROKEN" -> want = first("epicfightx:biped/skill/guard_break1", "epicfight:biped/skill/guard_break", "epicfight:biped/combat/hit_long");
                     case "PARRIED" -> want = first("epicfight:biped/combat/hit_long", "epicfight:biped/combat/hit_short");
+                    // (r65) OROR's dodge: Epic Fight Nightfall's step to that side
+                    case "DODGE_L" -> want = first("efn:biped/dodge/step_l", "epicfight:biped/skill/step_left");
+                    case "DODGE_R" -> want = first("efn:biped/dodge/step_r", "epicfight:biped/skill/step_right");
                     default -> {
                     }
                 }

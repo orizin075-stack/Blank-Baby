@@ -696,6 +696,41 @@ public final class MobGuard {
             }
         }
 
+        private static java.lang.invoke.MethodHandle byKey;
+        private static boolean byKeyLooked;
+
+        /**
+         * (r65, the user: "それ以外のエピックファイトのモーションもモブができてるか確認してね ローリング回避とか") An Epic Fight animation by its
+         * name on an Epic Fight humanoid (OROR's own dodge stepped aside with no step of Epic Fight's to show it).
+         */
+        public static boolean playNamed(LivingEntity m, String id) {
+            try {
+                Object p = patch(m);
+                if (p == null || !humanoid.isInstance(p)) {
+                    return false;
+                }
+                if (!byKeyLooked) {
+                    byKeyLooked = true;
+                    Class<?> manager = Class.forName("yesman.epicfight.api.animation.AnimationManager");
+                    Class<?> accessor = Class.forName("yesman.epicfight.api.animation.AnimationManager$AnimationAccessor");
+                    byKey = java.lang.invoke.MethodHandles.publicLookup().findStatic(manager, "byKey",
+                        java.lang.invoke.MethodType.methodType(accessor, String.class));
+                }
+                if (byKey == null) {
+                    return false;
+                }
+                Object anim = byKey.invoke(id);
+                java.lang.invoke.MethodHandle h = play(anim);
+                if (anim != null && h != null) {
+                    h.invoke(p, anim, 0.0F);
+                    return true;
+                }
+            } catch (Throwable ex) {
+                // that animation is not in this pack: the step goes without it
+            }
+            return false;
+        }
+
         /** "one" for a one-handed blade, axe or club, "two" for a two-handed weapon, null for bare hands, bows and guns. */
         static String grip(net.minecraft.world.item.ItemStack s) {
             if (s.isEmpty()) {

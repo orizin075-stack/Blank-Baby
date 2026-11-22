@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class EfProbeCore {
     private static final Logger LOG = LoggerFactory.getLogger("OROR EF Probe");
-    public static final int TICKS = 600, SWING = 12, Y = 180, SPACING = 16;
+    public static final int TICKS = 800, SWING = 16, Y = 180, SPACING = 16;
     static final double REACH = 1.3;
     public static volatile boolean done;
 
@@ -66,7 +66,7 @@ public final class EfProbeCore {
         final Map<String, Integer> anims = new TreeMap<>();
         final Map<String, Integer> cats = new TreeMap<>();
         String last = "";
-        int swings, landed, nothing, mobHits;
+        int swings, landed, nothing, mobHits, efStrikes;
         float swingHp = -1, dmgToTester;
         final List<Float> dealt = new ArrayList<>();
     }
@@ -190,16 +190,11 @@ public final class EfProbeCore {
                 lane.cats.merge(category(a), 1, Integer::sum);
             }
         }
-        // the strike of the tick before: did it do anything?
-        if (lane.swingHp >= 0) {
-            float d = lane.swingHp - m.getHealth();
-            if (d > 0.01F) {
-                lane.landed++;
-                lane.dealt.add(d);
-            } else {
-                lane.nothing++;
-            }
-            lane.swingHp = -1;
+        // any blow that landed on the mob (an Epic Fight strike lands some ticks into its animation)
+        float d0 = m.getMaxHealth() - m.getHealth();
+        if (d0 > 0.01F) {
+            lane.landed++;
+            lane.dealt.add(d0);
             m.setHealth(m.getMaxHealth());
         }
         // the mob's blows on the tester
@@ -227,17 +222,78 @@ public final class EfProbeCore {
         p.setYHeadRot(yaw);
         m.setTarget(p);
         if (age % SWING == 0 && age > 20) {
-            lane.swingHp = m.getHealth();
             lane.swings++;
-            p.swing(InteractionHand.MAIN_HAND);
-            p.doHurtTarget(m);
+            // (r65) the tester strikes with Epic Fight's own sword combo where it can (the pack's mobs dodge, guard and parry
+            // only blows of Epic Fight's attack animations: their "attack_level"), else a plain blow
+            if (!efStrike(p, lane.swings)) {
+                p.swing(InteractionHand.MAIN_HAND);
+                p.doHurtTarget(m);
+            } else {
+                lane.efStrikes++;
+            }
+        }
+    }
+
+    private static final Object[] SWORD = new Object[3];
+    private static boolean swordLooked;
+    private static java.lang.invoke.MethodHandle playSync;
+
+    /** The tester's blow as Epic Fight's sword combo (SWORD_AUTO1 to 3, Epic Fight's Animations in either version). */
+    static boolean efStrike(Mob p, int n) {
+        try {
+            look();
+            if (!swordLooked) {
+                swordLooked = true;
+                Class<?> animations = Class.forName("yesman.epicfight.gameasset.Animations");
+                for (int i = 0; i < 3; i++) {
+                    String f = "SWORD_AUTO" + (i + 1);
+                    SWORD[i] = LK.findStaticGetter(animations, f, animations.getField(f).getType()).invoke();
+                }
+                java.util.ArrayDeque<Class<?>> todo = new java.util.ArrayDeque<>();
+                java.util.Set<Class<?>> seen = new java.util.HashSet<>();
+                if (SWORD[0] != null) {
+                    todo.add(SWORD[0].getClass());
+                }
+                while (!todo.isEmpty() && playSync == null) {
+                    Class<?> c = todo.poll();
+                    if (c == null || !seen.add(c)) {
+                        continue;
+                    }
+                    try {
+                        playSync = LK.findVirtual(livingPatch, "playAnimationSynchronized", java.lang.invoke.MethodType.methodType(void.class, c, float.class));
+                    } catch (Throwable t) {
+                        if (c.getSuperclass() != null) {
+                            todo.add(c.getSuperclass());
+                        }
+                        todo.addAll(java.util.List.of(c.getInterfaces()));
+                    }
+                }
+                LOG.info("EFP-API {\"testerSword\":{},\"playSync\":{}}", SWORD[0] != null, playSync != null);
+            }
+            Object patch = patch(p);
+            Object anim = SWORD[Math.floorMod(n, 3)];
+            if (patch == null || anim == null || playSync == null) {
+                return false;
+            }
+            playSync.invoke(patch, anim, 0.0F);
+            return true;
+        } catch (Throwable t) {
+            tell("efStrike", t);
+            return false;
         }
     }
 
     static String category(String a) {
         String s = a.toLowerCase(java.util.Locale.ROOT);
-        if (s.contains("parr")) {
+        if (s.contains("dodge") || s.contains("/step") || s.contains("roll") || s.contains("evade")) {
+            return "dodge";
+        }
+        if (s.contains("parr") || s.contains("hit_active") || s.contains("counter")) {
             return "parry";
+        }
+        if (s.contains("skill") || s.contains("dash") || s.contains("flash") || s.contains("rushing") || s.contains("spire")
+            || s.contains("sweeping") || s.contains("ground")) {
+            return s.contains("guard") ? "guard" : "skill";
         }
         if (s.contains("guard") || s.contains("block") || s.contains("shield")) {
             return "guard";
@@ -262,7 +318,7 @@ public final class EfProbeCore {
     }
 
     private static void finish() {
-        int patched = 0, withAttack = 0, withGuard = 0, withParry = 0, blocking = 0;
+        int patched = 0, withAttack = 0, withGuard = 0, withParry = 0, blocking = 0, withDodge = 0, withSkill = 0;
         for (Lane lane : LANES) {
             Map<String, Object> o = new LinkedHashMap<>();
             o.put("pack", pack);
@@ -272,7 +328,8 @@ public final class EfProbeCore {
             o.put("alive", lane.mob != null && lane.mob.isAlive());
             o.put("swings", lane.swings);
             o.put("landed", lane.landed);
-            o.put("nothing", lane.nothing);
+            o.put("nothing", Math.max(0, lane.swings - lane.landed));
+            o.put("efStrikes", lane.efStrikes);
             o.put("mobHits", lane.mobHits);
             o.put("dmgToTester", Math.round(lane.dmgToTester * 10) / 10.0);
             List<Float> d = new ArrayList<>(lane.dealt);
@@ -286,7 +343,9 @@ public final class EfProbeCore {
             withAttack += lane.cats.getOrDefault("attack", 0) > 0 ? 1 : 0;
             withGuard += lane.cats.getOrDefault("guard", 0) > 0 ? 1 : 0;
             withParry += lane.cats.getOrDefault("parry", 0) > 0 ? 1 : 0;
-            blocking += lane.nothing > 0 ? 1 : 0;
+            withDodge += lane.cats.getOrDefault("dodge", 0) > 0 ? 1 : 0;
+            withSkill += lane.cats.getOrDefault("skill", 0) > 0 ? 1 : 0;
+            blocking += lane.swings > lane.landed ? 1 : 0;
             if (lane.mob != null) {
                 lane.mob.discard();
             }
@@ -295,8 +354,8 @@ public final class EfProbeCore {
             }
             level.setChunkForced(lane.at.getX() >> 4, lane.at.getZ() >> 4, false);
         }
-        LOG.info("EFP-RESULT {\"pack\":\"{}\",\"mobs\":{},\"patched\":{},\"efAttack\":{},\"efGuard\":{},\"efParry\":{},\"strikesStopped\":{},\"ticks\":{}}",
-            pack, LANES.size(), patched, withAttack, withGuard, withParry, blocking, age);
+        LOG.info("EFP-RESULT {\"pack\":\"{}\",\"mobs\":{},\"patched\":{},\"efAttack\":{},\"efGuard\":{},\"efParry\":{},\"efDodge\":{},\"efSkill\":{},\"strikesStopped\":{},\"ticks\":{}}",
+            pack, LANES.size(), patched, withAttack, withGuard, withParry, withDodge, withSkill, blocking, age);
         age = -1;
         done = true;
     }
