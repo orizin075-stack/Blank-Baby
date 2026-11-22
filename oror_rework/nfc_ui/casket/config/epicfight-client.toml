@@ -1,0 +1,87 @@
+#Login information for epic fight patron server. Do not change these values manually
+access_token = ""
+refresh_token = ""
+#Allowed Values: NULL, DISCORD, PATREON
+provider = "NULL"
+
+[ingame]
+	#Range: 1 ~ 10
+	long_press_count = 2
+	#Range: 0 ~ 30
+	max_hit_projectiles = 30
+	camera_auto_switch = true
+	blood_effects = true
+	show_epicfight_attributes = true
+	first_person_model = true
+	enable_pov_action = true
+	enable_cosmetics = false
+    combat_preferred_items = ["epicfight:iron_longsword", "magistuarmory:netherite_bastardsword", "magistuarmory:bronze_estoc", "magistuarmory:diamond_chivalrylance", "epicfight:netherite_spear", "magistuarmory:netherite_shortsword", "magistuarmory:tin_chivalrylance", "invincible:debug", "magistuarmory:stone_claymore", "magistuarmory:copper_heavywarhammer", "magistuarmory:copper_guisarme", "efn:ruinsgreatsword", "magistuarmory:bronze_ahlspiess", "magistuarmory:netherite_katzbalger", "magistuarmory:steel_heavywarhammer", "aquamirae:remnants_saber", "aether:gravitite_sword", "magistuarmory:silver_katzbalger", "magistuarmory:tin_flamebladedsword", "magistuarmory:wood_heavywarhammer", "magistuarmory:diamond_ranseur", "magistuarmory:silver_heavywarhammer", "magistuarmory:tin_concavehalberd", "magistuarmory:gold_heavywarhammer", "magistuarmory:netherite_chainmorgenstern", "magistuarmory:stone_pike", "magistuarmory:tin_estoc", "magistuarmory:netherite_concavehalberd", "tcrcore:mons_jadae", "epicfight:stone_tachi", "magistuarmory:steel_pike", "magistuarmory:stone_lochaberaxe", "magistuarmory:bronze_pike", "cataclysm:the_annihilator", "magistuarmory:gold_ranseur", "epicfight:wooden_greatsword", "artifacts:vampiric_glove", "magistuarmory:wood_chivalrylance", "magistuarmory:copper_claymore", "epicfight:glove", "wom:evil_tachi", "magistuarmory:gold_bastardsword", "magistuarmory:gold_estoc", "wom:tormented_mind", "magistuarmory:stone_ahlspiess", "minecraft:trident", "aether:flaming_sword", "magistuarmory:steel_bastardsword", "epicfight:wooden_dagger", "tcrcore:ashen_crescent", "magistuarmory:stone_estoc", "efn:exsiliumgladius", "wom:iron_staff", "epicfight:iron_spear", "magistuarmory:wood_flamebladedsword", "epicfight:golden_dagger", "magistuarmory:stone_heavywarhammer", "minecraft:wooden_sword", "aquamirae:dagger_of_greed", "aether:zanite_sword", "magistuarmory:iron_heavywarhammer", "efn:nf_shortsword_e", "magistuarmory:stone_morgenstern", "magistuarmory:iron_ahlspiess", "magistuarmory:wood_ahlspiess", "epicfightx:great_tachi", "magistuarmory:steel_concavehalberd", "magistuarmory:wood_claymore", "efn:air_tachi_e", "magistuarmory:gold_flamebladedsword", "epicfight:iron_dagger", "magistuarmory:bronze_heavywarhammer", "tcrcore:the_incinerator_soul", "tcrcore:lux_jadae", "aquamirae:whisper_of_the_abyss", "p1nero_bow:mortis", "irons_spellbooks:hellrazor", "magistuarmory:heavy_crossbow", "magistuarmory:tin_pike", "magistuarmory:bronze_zweihander", "aether:vampire_blade", "magistuarmory:bronze_lucernhammer", "minecraft:crossbow", "magistuarmory:steel_lochaberaxe", "magistuarmory:silver_zweihander", "magistuarmory:tin_ranseur", "magistuarmory:steel_morgenstern", "irons_spellbooks:misery", "irons_spellbooks:decrepit_scythe", "aquamirae:fin_cutter", "magistuarmory:iron_morgenstern", "tcrcore:magmaheart", "magistuarmory:gold_chainmorgenstern", "wom:blackstar", "invincible:custom_skill_demo", "cataclysm:cursed_bow", "irons_spellbooks:magehunter", "aquamirae:terrible_sword", "epicfight:iron_tachi", "wom:orbit", "minecraft:golden_sword", "aether:holystone_sword", "magistuarmory:diamond_morgenstern", "magistuarmory:diamond_katzbalger", "magistuarmory:wood_shortsword", "aether:valkyrie_lance", "magistuarmory:tin_heavymace", "efn:sword_of_pioneer", "magistuarmory:diamond_flamebladedsword", "efn:fire_exsiliumgladius_e", "epicfight:diamond_spear", "minecraft:diamond_axe", "dodosmobs:amalgam_claws", "magistuarmory:copper_stylet", "magistuarmory:bronze_ranseur", "magistuarmory:gold_zweihander", "minecraft:wooden_axe", "tcrcore:cinderwyrm", "epicfight:netherite_dagger", "magistuarmory:diamond_lochaberaxe", "cataclysm:meat_shredder", "magistuarmory:iron_shortsword", "epicfightx:efx_uchigatana", "efn:yamato_dmc4", "alexsmobs:falconry_glove", "cataclysm:wrath_of_the_desert", "epicfight:wooden_longsword", "magistuarmory:tin_bastardsword", "cataclysm:soul_render", "cataclysm:khopesh", "tcrcore:purging_swallow", "magistuarmory:tin_morgenstern", "magistuarmory:diamond_estoc", "magistuarmory:silver_morgenstern", "efn:air_tachi", "alexsmobs:skelewag_sword", "alexsmobs:tendon_whip", "magistuarmory:netherite_flamebladedsword", "cataclysm:coral_spear", "epicfight:golden_spear", "epicfight:golden_longsword", "tcrcore:iris_jadae", "magistuarmory:tin_claymore", "wom:iron_greataxe", "wom:jabberwocky", "magistuarmory:gold_morgenstern", "magistuarmory:steel_claymore", "magistuarmory:iron_lochaberaxe", "irons_spellbooks:spellbreaker", "magistuarmory:steel_zweihander", "magistuarmory:wood_heavymace", "wom:wooden_staff", "cataclysm:astrape", "efn:excalibur", "efn:broadblade", "tcrcore:dual_bokken", "magistuarmory:bronze_stylet", "magistuarmory:bronze_chivalrylance", "tcrcore:glacis_jadae", "magistuarmory:silver_bastardsword", "irons_spellbooks:claymore", "minecraft:stone_axe", "magistuarmory:stone_chainmorgenstern", "magistuarmory:stone_guisarme", "magistuarmory:stone_concavehalberd", "magistuarmory:stone_katzbalger", "magistuarmory:wood_pike", "magistuarmory:bronze_guisarme", "magistuarmory:diamond_claymore", "magistuarmory:iron_concavehalberd", "magistuarmory:gold_guisarme", "magistuarmory:stone_chivalrylance", "magistuarmory:wood_chainmorgenstern", "wom:hollow_longsword", "aether:phoenix_bow", "epicfightx:eternal_night_scythe", "magistuarmory:tin_heavywarhammer", "cataclysm:infernal_forge", "magistuarmory:iron_katzbalger", "magistuarmory:diamond_guisarme", "efn:arc_tachi", "magistuarmory:netherite_chivalrylance", "invincible:custom_combo_demo", "magistuarmory:netherite_heavymace", "epicfight:stone_longsword", "efn:crescent_moon_e", "magistuarmory:diamond_zweihander", "magistuarmory:gold_ahlspiess", "magistuarmory:stone_flamebladedsword", "magistuarmory:steel_shortsword", "magistuarmory:iron_estoc", "aquamirae:sweet_lance", "efn:flag_bearer", "magistuarmory:diamond_heavywarhammer", "lost_aether_content:phoenix_sword", "cataclysm:coral_bardiche", "epicfight:diamond_tachi", "efn:nf_claw", "super_golem:golem_heart", "efn:meen_spear_e", "magistuarmory:copper_bastardsword", "aether:hammer_of_kingbdogz", "magistuarmory:stone_shortsword", "magistuarmory:diamond_shortsword", "magistuarmory:wood_bastardsword", "cataclysm:black_steel_sword", "irons_spellbooks:legionnaire_flamberge", "magistuarmory:netherite_estoc", "magistuarmory:gold_pike", "epicfight:wooden_tachi", "magistuarmory:diamond_stylet", "magistuarmory:iron_guisarme", "magistuarmory:copper_lochaberaxe", "magistuarmory:tin_chainmorgenstern", "tcrcore:magic_axe", "magistuarmory:bronze_morgenstern", "efn:yamato_dmc4_in_sheath", "magistuarmory:copper_flamebladedsword", "minecraft:iron_sword", "magistuarmory:gold_chivalrylance", "magistuarmory:wood_concavehalberd", "magistuarmory:tin_guisarme", "magistuarmory:silver_estoc", "cataclysm:ancient_spear", "magistuarmory:diamond_heavymace", "efn:hf_murasama", "magistuarmory:iron_chainmorgenstern", "cataclysm:ceraunus", "epicfight:uchigatana", "magistuarmory:bronze_shortsword", "magistuarmory:wood_ranseur", "irons_spellbooks:autoloader_crossbow", "efn:crimson_moon", "magistuarmory:silver_lochaberaxe", "magistuarmory:netherite_stylet", "bosses_of_mass_destruction:earthdive_spear", "magistuarmory:copper_morgenstern", "magistuarmory:tin_katzbalger", "cataclysm:tidal_claws", "magistuarmory:stone_ranseur", "magistuarmory:bronze_flamebladedsword", "magistuarmory:wood_lucernhammer", "magistuarmory:rusted_bastardsword", "epicfight:netherite_tachi", "magistuarmory:netherite_zweihander", "magistuarmory:stone_stylet", "magistuarmory:steel_flamebladedsword", "magistuarmory:silver_heavymace", "minecraft:netherite_sword", "cataclysm:athame", "aether:holy_sword", "magistuarmory:steel_katzbalger", "magistuarmory:bronze_concavehalberd", "irons_spellbooks:keeper_flamberge", "wom:agony", "magistuarmory:copper_ahlspiess", "magistuarmory:silver_ahlspiess", "wom:ender_blaster", "efn:meen_spear", "magistuarmory:steel_chivalrylance", "irons_spellbooks:amethyst_rapier", "magistuarmory:tin_lucernhammer", "magistuarmory:iron_claymore", "magistuarmory:gold_lochaberaxe", "wom:solar", "magistuarmory:iron_stylet", "magistuarmory:silver_claymore", "magistuarmory:steel_heavymace", "epicfight:diamond_longsword", "aquamirae:divider", "magistuarmory:club", "magistuarmory:blacksmith_hammer", "magistuarmory:silver_chainmorgenstern", "aether:skyroot_sword", "magistuarmory:gold_lucernhammer", "magistuarmory:netherite_pike", "artifacts:power_glove", "magistuarmory:wood_lochaberaxe", "magistuarmory:netherite_morgenstern", "magistuarmory:stone_bastardsword", "magistuarmory:gold_claymore", "wom:golden_staff", "minecraft:bow", "wom:ruine", "magistuarmory:bronze_lochaberaxe", "tcrcore:magic_sword", "magistuarmory:wood_stylet", "epicfight:stone_spear", "magistuarmory:silver_guisarme", "magistuarmory:barbedclub", "magistuarmory:noble_sword", "magistuarmory:wood_katzbalger", "magistuarmory:longbow", "aether:candy_cane_sword", "aquamirae:poisoned_blade", "magistuarmory:diamond_ahlspiess", "magistuarmory:diamond_chainmorgenstern", "wom:stone_staff", "magistuarmory:diamond_pike", "magistuarmory:stone_heavymace", "magistuarmory:netherite_lochaberaxe", "wom:diamond_greataxe", "magistuarmory:wood_morgenstern", "magistuarmory:silver_flamebladedsword", "wom:satsujin", "magistuarmory:silver_lucernhammer", "magistuarmory:netherite_ahlspiess", "aether:lightning_sword", "magistuarmory:gold_stylet", "wom:nova", "irons_spellbooks:twilight_gale", "magistuarmory:stone_lucernhammer", "magistuarmory:netherite_guisarme", "magistuarmory:iron_heavymace", "aquamirae:coral_lance", "aquamirae:maze_rose", "wom:herrscher", "epicfight:bokken", "efn:fire_exsiliumgladius", "cataclysm:the_incinerator", "wom:netherite_greataxe", "magistuarmory:copper_estoc", "magistuarmory:gold_concavehalberd", "epicfight:golden_greatsword", "efn:kusabimaru", "magistuarmory:tin_lochaberaxe", "cataclysm:gauntlet_of_guard", "epicfightx:yoto", "tcrcore:magic_tachi", "magistuarmory:bronze_heavymace", "mowziesmobs:blowgun", "magistuarmory:copper_heavymace", "magistuarmory:netherite_claymore", "magistuarmory:copper_zweihander", "wom:moonless", "magistuarmory:tin_zweihander", "sword_soaring:vatansever", "magistuarmory:steel_chainmorgenstern", "magistuarmory:copper_katzbalger", "p1nero_bow:oblivionis", "magistuarmory:gold_katzbalger", "magistuarmory:netherite_heavywarhammer", "epicfight:netherite_greatsword", "magistuarmory:steel_estoc", "magistuarmory:copper_shortsword", "magistuarmory:gold_shortsword", "magistuarmory:steel_guisarme", "wom:netherite_staff", "magistuarmory:steel_lucernhammer", "magistuarmory:iron_chivalrylance", "magistuarmory:copper_ranseur", "magistuarmory:steel_ranseur", "tcrcore:magic_halberd", "magistuarmory:wood_guisarme", "efn:thornwheel", "magistuarmory:copper_pike", "minecraft:diamond_sword", "magistuarmory:iron_bastardsword", "aquamirae:poisoned_chakra", "magistuarmory:rusted_heavymace", "efn:yamato_dmc", "minecraft:golden_axe", "epicfight:diamond_dagger", "magistuarmory:steel_ahlspiess", "epicfight:stone_dagger", "efn:yamato_dmc_in_sheath", "efn:nf_shortsword_2_e", "magistuarmory:bronze_katzbalger", "magistuarmory:gold_heavymace", "wom:antitheus", "mowziesmobs:naga_fang_dagger", "irons_spellbooks:boreal_blade", "efn:crescent_moon", "magistuarmory:silver_shortsword", "magistuarmory:silver_pike", "magistuarmory:copper_concavehalberd", "epicfight:diamond_greatsword", "efn:crimson_moon_e", "magistuarmory:copper_chainmorgenstern", "tcrcore:magic_spear", "magistuarmory:iron_flamebladedsword", "tcrcore:magic_katana", "magistuarmory:netherite_ranseur", "magistuarmory:tin_stylet", "magistuarmory:bronze_chainmorgenstern", "efn:flag_bearer_e", "tcrcore:emberfang", "magistuarmory:diamond_lucernhammer", "mowziesmobs:wrought_axe", "magistuarmory:wood_estoc", "efn:co_tachi", "magistuarmory:silver_stylet", "epicfight:wooden_spear", "efn:exsiliumgladius_e", "wom:napoleon", "magistuarmory:copper_chivalrylance", "magistuarmory:wood_zweihander", "magistuarmory:bronze_claymore", "magistuarmory:netherite_lucernhammer", "minecraft:iron_axe", "magistuarmory:tin_ahlspiess", "epicfight:iron_greatsword", "magistuarmory:bronze_bastardsword", "magistuarmory:diamond_bastardsword", "magistuarmory:iron_zweihander", "magistuarmory:diamond_concavehalberd", "magistuarmory:messer_sword", "tcrcore:magic_greatsword", "magistuarmory:tin_shortsword", "magistuarmory:iron_lucernhammer", "magistuarmory:pitchfork", "magistuarmory:silver_concavehalberd", "wom:golden_greataxe", "magistuarmory:silver_chivalrylance", "efn:nf_shortsword", "tcrcore:magic_longsword", "efn:hf_blade", "magistuarmory:copper_lucernhammer", "magistuarmory:steel_stylet", "epicfight:netherite_longsword", "magistuarmory:stone_zweihander", "epicfight:stone_greatsword", "minecraft:stone_sword", "efn:nf_dual_sword", "minecraft:netherite_axe", "epicfight:golden_tachi", "wom:diamond_staff", "aether:pig_slayer", "magistuarmory:iron_ranseur", "tcrcore:magic_dagger", "magistuarmory:iron_pike", "efn:nf_shortsword_2", "magistuarmory:silver_ranseur"]
+    show_target_indicator = true
+	#Allowed Values: NONE, HURT, TARGET, TARGET_AND_HURT
+	health_bar_show_option = "HURT"
+	use_compute_shader = true
+	enable_target_entity_guide = false
+	#Allowed Values: NONE, CROSSHAIR, HIGHLIGHT, CROSSHAIR_AND_HIGHLIGHT
+	mine_block_guide_option = "NONE"
+	#Allowed Values: NONE, INTERACTION, ITEM_USE, INTERACTION_AND_ITEMUSE
+	key_conflict_resolve_scope = "INTERACTION"
+	enable_player_vanilla_model = true
+	#Allowed Values: ADAPTIVE, SWITCH_MODE
+	preference_work = "ADAPTIVE"
+	mining_preferred_items = ["minecraft:air"]
+	#Range: 0.0 ~ 1.0
+	target_outline_color = 0.0
+	#Defines how the camera toggles perspectives.
+	#
+	#    1. Vanilla (Default)
+	#       Uses Minecraft's default behavior.
+	#       Cycles through all available perspectives.
+	#
+	#    2. Skip Third-Person Front Perspective
+	#       Skips only the front view when toggling.
+	#       Other perspectives remain available.
+	#
+	#Allowed Values: VANILLA, SKIP_THIRD_PERSON_FRONT
+	camera_perspective_toggle_mode = "SKIP_THIRD_PERSON_FRONT"
+
+	[ingame.ui]
+		stamina_bar_x = 120
+		stamina_bar_y = 10
+		#Allowed Values: LEFT, RIGHT, CENTER
+		stamina_bar_x_base = "RIGHT"
+		#Allowed Values: TOP, BOTTOM, CENTER
+		stamina_bar_y_base = "BOTTOM"
+		weapon_innate_x = 42
+		weapon_innate_y = 48
+		#Allowed Values: LEFT, RIGHT, CENTER
+		weapon_innate_x_base = "RIGHT"
+		#Allowed Values: TOP, BOTTOM, CENTER
+		weapon_innate_y_base = "BOTTOM"
+		passives_x = 70
+		passives_y = 36
+		#Allowed Values: LEFT, RIGHT, CENTER
+		passives_x_base = "RIGHT"
+		#Allowed Values: TOP, BOTTOM, CENTER
+		passives_y_base = "BOTTOM"
+		#Allowed Values: HORIZONTAL, VERTICAL
+		passives_align_direction = "HORIZONTAL"
+		charging_bar_x = -119
+		charging_bar_y = 60
+		#Allowed Values: LEFT, RIGHT, CENTER
+		charging_bar_x_base = "CENTER"
+		#Allowed Values: TOP, BOTTOM, CENTER
+		charging_bar_y_base = "CENTER"
+
+	[ingame.camera]
+		#Allowed Values: ALWAYS_BACK, WHEN_AIMING, ALWAYS
+		camera_mode = "ALWAYS"
+		#Range: -10 ~ 10
+		horizontal_location = -4
+		#Range: -2 ~ 5
+		vertical_location = 0
+		#Range: 6 ~ 10
+		zoom = 7
+		#Range: 5 ~ 25
+		lock_on_range = 20
+		lock_on_quick_shift = true
+

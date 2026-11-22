@@ -1,0 +1,42 @@
+
+["Kill Cam Settings"]
+	#Enable the Kill Cam feature
+	enableKillCam = true
+	#Ticks before time slow starts
+	delayBegin = 6
+	#Ticks before time speed returns to normal
+	delayEnd = 11
+	#Time slow speed (lower is slower, 20.0 is normal)
+	amplifier = 2
+	#Kill Cam FOV
+	killCamFov = 0.45
+	#Entities that ALWAYS trigger kill cam (Highest priority) (format: modid:entity_id)
+	whitelist = []
+	#Entities that NEVER trigger kill cam (format: modid:entity_id)
+	blacklist = ["minecraft:silverfish"]
+	#Minimum max health of the entity to trigger time slow
+	minMaxHealth = 999999.0
+	#Trigger kill cam if it's a boss
+	bossCheckEnabled = true
+	#Trigger kill cam if it's the last enemy in the area
+	lastEnemyEnabled = false
+	#Radius to check for nearby enemies
+	lastEnemyRadius = 16.0
+	#Enable the Kill Cam time slow feature
+	enableKillCamTimeSlow = true
+	#Make the player invulnerable during the kill cam time slow
+	invulnerableDuringKillCam = false
+	#Lock the player's turning when the kill cam time slow is active
+	turningLockDuringKillCam = true
+	#Kill Cam screen effect duration (use when time slow disabled)
+	killCamScreenEffectDuration = 30
+
+["Epic Fight Compat"]
+	#List of animation IDs that will trigger the kill cam time slow
+	#You can use an exact animation ID, or a directory prefix ending with '/' to match all animations in it
+	#This is a SERVER-SIDE setting
+	#Example: ["efn:biped/yamato_judgementcut_end", "efn:biped/hf_murasama/slash/"]
+	killCamAnimations = []
+	#Check Skill Damage Tag
+	CheckSkillDamage = false
+

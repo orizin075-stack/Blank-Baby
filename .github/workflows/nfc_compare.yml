@@ -1,0 +1,93 @@
+# NightfallCraft - The Casket of Reveries 2.2.9.8 (Forge 1.20.1-47.4.4) as a dedicated server, with the same Epic Fight
+# check OROR's CI runs (jp.oror.efprobe.EfProbeCore; the user: "モブがきちんとEpic fightのモーションや行動やパリイやガードを
+# するか確認 ナイトフォールクラフトも稼働させて比較"). Its mods come from CurseForge by the pack's own manifest, its configs
+# from the pack's overrides (oror_rework/nfc_ui/casket). A mod that keeps a dedicated server from starting (client only, a
+# missing dependency) is taken out and the server tried again, each with its reason (removed.txt).
+# Results go to oror_rework/nfc_ui/out/efprobe on this branch; nothing from the jars is committed.
+name: NightfallCraft Epic Fight comparison
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['.github/workflows/nfc_compare.yml', 'oror_rework/nfc_ui/efprobe1201/**', 'oror_rework/nfc_ui/tools/server_fix.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: nfc-compare-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 200
+    defaults:
+      run:
+        shell: bash
+    env:
+      U: oror_rework/nfc_ui
+      OUT: oror_rework/nfc_ui/out/efprobe
+      FORGE: 1.20.1-47.4.4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.8'
+      - name: Build the Epic Fight probe (Forge 1.20.1)
+        working-directory: oror_rework/nfc_ui/efprobe1201
+        run: |
+          gradle build --console=plain 2>&1 | tail -n 30
+          ls -la build/libs
+      - name: Install the Forge server and NightfallCraft's mods and configs
+        run: |
+          rm -rf "$OUT"; mkdir -p "$OUT"; S=$RUNNER_TEMP/server; mkdir -p $S/mods
+          curl -sSfL -o $RUNNER_TEMP/forge-installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/$FORGE/forge-$FORGE-installer.jar"
+          (cd $S && java -jar $RUNNER_TEMP/forge-installer.jar --installServer > $RUNNER_TEMP/forge-install.log 2>&1); tail -n 3 $RUNNER_TEMP/forge-install.log
+          python3 -I - $U/casket/manifest.json $RUNNER_TEMP/casket-mods.json <<'PY'
+          import json, sys
+          m = json.load(open(sys.argv[1]))
+          files = [{'projectID': f['projectID'], 'fileID': f['fileID']} for f in m['files']]
+          json.dump({'files': files, 'modlist': [{'path': 'mods/'} for _ in files]}, open(sys.argv[2], 'w'))
+          print(len(files), 'files in the manifest')
+          PY
+          python3 -I $U/tools/pack_tools.py nfcfetch $RUNNER_TEMP/casket-mods.json $S $OUT/files.json 2>&1 | tail -n 3
+          # resource packs and shaders land in mods/ too (the manifest does not say which is which): a server needs neither
+          find $S/mods -maxdepth 1 -type f ! -name '*.jar' -print -delete | sed 's/^/not a mod: /' | head -n 20
+          # TCRMeshes stops any game that is not the official modpack install (seen with 2.2.8.6)
+          for f in $S/mods/tcrmeshes-*.jar; do [ -e "$f" ] && mv "$f" $RUNNER_TEMP/ && echo "tcrmeshes left out"; done
+          cp -r $U/casket/config $S/config
+          cp oror_rework/nfc_ui/efprobe1201/build/libs/oror_efprobe_1201-1.0.0.jar $S/mods/
+          echo 'eula=true' > $S/eula.txt
+          printf 'online-mode=false\nlevel-seed=20261030\nspawn-protection=0\nview-distance=6\nsimulation-distance=6\nmax-tick-time=-1\nlevel-name=world\n' > $S/server.properties
+          echo '-Xms4G -Xmx11G' > $S/user_jvm_args.txt
+          ls $S/mods | wc -l; ls $S/mods > $OUT/mods_list.txt
+      - name: Run the server (taking out what keeps it from starting) and the Epic Fight check
+        run: |
+          S=$RUNNER_TEMP/server; : > $OUT/removed.txt; : > $OUT/attempts.txt
+          for attempt in $(seq 1 18); do
+            rm -rf $S/crash-reports $S/logs
+            (cd $S && timeout 2400 bash run.sh nogui > $S/console.log 2>&1); code=$?
+            started=$(grep -c 'Done (' $S/console.log || true); efp=$(grep -c 'EFP-RESULT' $S/console.log || true)
+            echo "attempt $attempt: exit $code started $started efp $efp mods $(ls $S/mods | wc -l)" | tee -a $OUT/attempts.txt
+            if [ "$efp" -gt 0 ]; then break; fi
+            if [ "$started" -gt 0 ]; then echo "started but no EFP-RESULT" | tee -a $OUT/attempts.txt; break; fi
+            python3 -I $U/tools/server_fix.py $S/mods $S/console.log $S/crash-reports $OUT/removed.txt || {
+              echo "nothing more to take out" | tee -a $OUT/attempts.txt
+              grep -nE 'ERROR|Exception|Caused by|Missing or unsupported|Failure message|Mod File' $S/console.log | head -n 120 > $OUT/last_errors.txt
+              ls $S/crash-reports 2>/dev/null && cp $(ls -t $S/crash-reports/*.txt | head -n 1) $OUT/last_crash.txt
+              break; }
+          done
+          grep -E 'EFP|EF Probe' $S/console.log > $OUT/efp.txt || true
+          grep -nE 'ERROR|Exception|Caused by' $S/console.log | head -n 200 > $OUT/server_errors.txt || true
+          tail -n 60 $S/console.log > $OUT/console_tail.txt
+          cat $OUT/attempts.txt; echo; cat $OUT/removed.txt; echo; cat $OUT/efp.txt | cut -c1-400 | tail -n 30
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$OUT"
+          git commit -m "NightfallCraft Epic Fight comparison ${GITHUB_SHA::7}: ${{ job.status }} [skip ci]" || exit 0
+          for i in 1 2 3 4; do git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 10; done

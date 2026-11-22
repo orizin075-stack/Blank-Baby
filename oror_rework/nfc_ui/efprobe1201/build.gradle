@@ -1,0 +1,32 @@
+// CI-only: the Epic Fight check (jp.oror.efprobe.EfProbeCore, shared with OROR's own CI) as a Forge 1.20.1 mod, run on a
+// NightfallCraft (The Casket of Reveries 2.2.9.8) dedicated server to compare with OROR (the user: "ナイトフォールクラフトも稼働させて比較").
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+}
+
+version = '1.0.0'
+base { archivesName = 'oror_efprobe_1201' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+}
+
+sourceSets {
+    main {
+        java {
+            // the core is the very file OROR builds
+            srcDir '../../neoforge1211patch/src/main/java'
+            include 'jp/oror/efprobe/**'
+        }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}

@@ -1,0 +1,28 @@
+#Soul Like Boss Battle Distance
+#Radius of Soul Like Boss Battle. Minimum is 1, maximum is 128.(Default is 64 blocks)
+#Range: 1 ~ 128
+"Soul Like Boss Battle Distance" = 64
+#Iron Golem Entity
+#Iron Golem entity id.
+"Iron Golem Entity" = ["minecraft:iron_golem"]
+#Soul Like Boss Battle Remove Boss Effects
+#Enable Soul Like Boss Battle Remove Effects
+"Remove Effect" = false
+#Soul Like Boss Battle Check Player Gamemode
+#Soul Like Boss Battle Valid Player's Gamemode: [survival, adventure, creative, spectator]
+Gamemode = ["survival", "adventure"]
+#Multiplier per additional player for boss stats (health and damage). When two or more players are near, each extra player increases boss stats by this percentage (e.g., 0.25 = +25% per player).
+#Range: 0.0 ~ 10.0
+MultiplierPerPlayer = 0.25
+#Soul Like Boss Battle On
+#Enable Soul Like Boss Battle
+"Soul Like Boss Battle On" = false
+#Anti-Iron Golem
+#Not allow Iron Golem hurt BOSS.
+"Anti-Iron Golem" = true
+#Enable scaling boss health and damage based on number of nearby players.
+MultiplierPerPlayerOn = false
+#Soul Like Boss Battle Entity
+#Soul Like Boss Battle Entity id.
+"Soul Like Boss Battle Entity" = ["epicfight_leonidas:leonidas", "minecraft:wither", "minecraft:ender_dragon", "minecraft:warden", "cataclysm:ender_guardian", "cataclysm:ignis", "cataclysm:netherite_monstrosity", "cataclysm:the_harbinger", "cataclysm:the_leviathan", "cataclysm:ancient_ancient_remnant", "cataclysm:ancient_remnant", "cataclysm:maledictus", "aquamirae:captain_cornelia", "block_factorys_bosses:infernal_dragon", "block_factorys_bosses:sandworm", "block_factorys_bosses:yeti", "block_factorys_bosses:underworld_knight", "fdbosses:malkuth", "fdbosses:chesed", "nightfall_invade:arterius", "alexsmobs:void_worm", "mowziesmobs:ferrous_wroughtnaut", "mowziesmobs:frostmaw", "mowziesmobs:umvuthi", "bosses_of_mass_destruction:gauntlet", "bosses_of_mass_destruction:lich", "bosses_of_mass_destruction:obsidilith", "bosses_of_mass_destruction:void_blossom", "ba_bt:land_golem", "ba_bt:ocean_golem", "ba_bt:core_golem", "ba_bt:nether_golem", "ba_bt:sky_golem", "ba_bt:end_golem"]
+

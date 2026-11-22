@@ -1,0 +1,308 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "lun_hui"
+	group: ""
+	icon: {
+		Count: 1
+		id: "tcrcore:proof_of_adventure"
+		tag: {
+			fdbosses: { }
+		}
+	}
+	id: "21DD27D4B4D79570"
+	images: [
+		{
+			color: 0
+			height: 30.0d
+			image: "tcrcore:textures/ftb/altar/altar.png"
+			rotation: 0.0d
+			width: 30.0d
+			x: 0.0d
+			y: 1.0d
+		}
+		{
+			height: 20.0d
+			image: "tcrcore:textures/ftb/magic_bg.png"
+			order: -1
+			rotation: 0.0d
+			width: 32.0d
+			x: 0.0d
+			y: 1.0d
+		}
+	]
+	order_index: 7
+	quest_links: [ ]
+	quests: [
+		{
+			dependencies: ["048CB00656EE47EF"]
+			description: [
+				"{ftbquests.chapter.lun_hui.quest3825BFB29CCBF7E9.description1}"
+				""
+				"{ftbquests.chapter.lun_hui.quest3825BFB29CCBF7E9.description2}"
+				""
+				"&c{entity.tcr_bosses.harbinger_humanoid}"
+				"↓"
+				"&b{entity.tcr_bosses.scylla_humanoid}"
+				"↓"
+				"&4{entity.tcr_bosses.netherite_humanoid}"
+				"↓"
+				"&2{entity.tcr_bosses.maledictus_humanoid}"
+				"↓"
+				"&e{entity.tcr_bosses.ancient_remnant_humanoid}"
+				"↓"
+				"&d{entity.tcr_bosses.ender_guardian_humanoid}"
+				"↓"
+				"&c{entity.tcr_bosses.ignis_humanoid}"
+				"↓"
+				"&5{entity.tcr_bosses.leviathan_humanoid}"
+			]
+			hide_dependency_lines: true
+			hide_until_deps_complete: true
+			id: "3825BFB29CCBF7E9"
+			rewards: [{
+				id: "21A87AFB115FE365"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			subtitle: "{ftbquests.chapter.lun_hui.quest3825BFB29CCBF7E9.subtitle}"
+			tasks: [{
+				id: "29FE508F97B0D8A2"
+				item: {
+					Count: 1
+					id: "tcrcore:wither_soul_stone_activated"
+					tag: {
+						fdbosses: { }
+					}
+				}
+				type: "item"
+			}]
+			x: 0.0d
+			y: -0.5d
+		}
+		{
+			description: [
+				"{ftbquests.chapter.lun_hui.quest3825BFB29CCBF7E9.description2}"
+				""
+				"&c{entity.tcr_bosses.harbinger_humanoid}"
+				"↓"
+				"&b{entity.tcr_bosses.scylla_humanoid}"
+				"↓"
+				"&4{entity.tcr_bosses.netherite_humanoid}"
+				"↓"
+				"&2{entity.tcr_bosses.maledictus_humanoid}"
+				"↓"
+				"&e{entity.tcr_bosses.ancient_remnant_humanoid}"
+				"↓"
+				"&d{entity.tcr_bosses.ender_guardian_humanoid}"
+				"↓"
+				"&c{entity.tcr_bosses.ignis_humanoid}"
+				"↓"
+				"&5{entity.tcr_bosses.leviathan_humanoid}"
+			]
+			icon: {
+				Count: 1
+				id: "summoningrituals:indestructible_altar"
+				tag: {
+					fdbosses: { }
+				}
+			}
+			id: "048CB00656EE47EF"
+			invisible: true
+			rewards: [{
+				id: "3FD22765C4916DC6"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 3.0d
+			subtitle: "{ftbquests.chapter.lun_hui.quest3825BFB29CCBF7E9.subtitle}"
+			tasks: [{
+				advancement: "tcrcore:unlock_epic_boss"
+				criterion: ""
+				id: "2C5FA8ACCAB07D14"
+				type: "advancement"
+			}]
+			x: 0.0d
+			y: 1.0d
+		}
+		{
+			dependencies: ["048CB00656EE47EF"]
+			hide_dependency_lines: true
+			id: "694E0FA7BB8B0BF9"
+			rewards: [{
+				id: "6F403FCAE2AA6DC5"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			tasks: [{
+				entity: "tcr_bosses:ignis_humanoid"
+				icon: "tcrcore:flame_fragment"
+				id: "5262251A70C63296"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.lun_hui.quest694E0FA7BB8B0BF9.title}"
+			x: -5.469387755102041d
+			y: 0.9591836734693899d
+		}
+		{
+			dependencies: ["048CB00656EE47EF"]
+			hide_dependency_lines: true
+			id: "53CFE811E8DFC94B"
+			rewards: [{
+				id: "2D99EEE119BDC388"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			tasks: [{
+				entity: "tcr_bosses:ancient_remnant_humanoid"
+				icon: "tcrcore:desert_fragment"
+				id: "520B1CBA45A7804E"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.lun_hui.quest53CFE811E8DFC94B.title}"
+			x: 0.0d
+			y: 6.428571428571431d
+		}
+		{
+			dependencies: ["048CB00656EE47EF"]
+			hide_dependency_lines: true
+			id: "53F18B77C2660FB3"
+			rewards: [{
+				id: "0E185AFD8CE58FD3"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			tasks: [{
+				entity: "tcr_bosses:ender_guardian_humanoid"
+				icon: "tcrcore:ender_fragment"
+				id: "56FA145B3D60E8DB"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.lun_hui.quest53F18B77C2660FB3.title}"
+			x: -3.8367346938775526d
+			y: 4.877551020408163d
+		}
+		{
+			dependencies: ["048CB00656EE47EF"]
+			hide_dependency_lines: true
+			id: "6DEFCFCCA208D4B5"
+			rewards: [{
+				id: "55256E271EF21ACF"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			tasks: [{
+				entity: "tcr_bosses:scylla_humanoid"
+				icon: "tcrcore:storm_fragment"
+				id: "7D068830BC257276"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.lun_hui.quest6DEFCFCCA208D4B5.title}"
+			x: 3.8367346938775597d
+			y: -2.7959183673469425d
+		}
+		{
+			dependencies: ["048CB00656EE47EF"]
+			hide_dependency_lines: true
+			id: "07B1764854F554EC"
+			rewards: [{
+				id: "0FF8F545EA902A18"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			tasks: [{
+				entity: "tcr_bosses:leviathan_humanoid"
+				icon: "tcrcore:abyss_fragment"
+				id: "44062C8798A4DB80"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.lun_hui.quest7B1764854F554EC.title}"
+			x: -3.8367346938775526d
+			y: -2.8775510204081627d
+		}
+		{
+			dependencies: ["048CB00656EE47EF"]
+			hide_dependency_lines: true
+			id: "5DC5B9BF9FC71C81"
+			rewards: [{
+				id: "5B59BE40C8077B5B"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			tasks: [{
+				entity: "tcr_bosses:maledictus_humanoid"
+				icon: "tcrcore:soul_fragment"
+				id: "262AD844244140AB"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.lun_hui.quest5DC5B9BF9FC71C81.title}"
+			x: 3.8367346938775597d
+			y: 4.7959183673469425d
+		}
+		{
+			dependencies: ["048CB00656EE47EF"]
+			hide_dependency_lines: true
+			id: "2D463BC74C77DD06"
+			rewards: [{
+				id: "0359FF1A7F28D235"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			tasks: [{
+				entity: "tcr_bosses:harbinger_humanoid"
+				icon: "tcrcore:mech_fragment"
+				id: "5A5DD03D372CBBF4"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.lun_hui.quest2D463BC74C77DD06.title}"
+			x: 0.0d
+			y: -4.5d
+		}
+		{
+			dependencies: ["048CB00656EE47EF"]
+			hide_dependency_lines: true
+			id: "49C81203A9E34F2B"
+			rewards: [{
+				id: "4AE33AAD75BE8DDD"
+				type: "xp"
+				xp: 1
+			}]
+			shape: "none"
+			size: 1.5d
+			tasks: [{
+				entity: "tcr_bosses:netherite_humanoid"
+				icon: "tcrcore:netherite_fragment"
+				id: "3E67CB9B98E6D60A"
+				type: "kill"
+				value: 1L
+			}]
+			title: "{ftbquests.chapter.lun_hui.quest49C81203A9E34F2B.title}"
+			x: 5.469387755102041d
+			y: 1.0408163265306172d
+		}
+	]
+	title: "{ftbquests.chapter.lun_hui.title}"
+}
