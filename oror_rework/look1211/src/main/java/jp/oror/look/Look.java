@@ -300,6 +300,12 @@ public final class Look {
             duelScene(mc, t);
             return;
         }
+        if (ONLY.equals("motion") && t >= 240) {
+            // (r65, the user: "現物と見比べると若干の違和感が多いし見比べて") Epic Fight's own animation on its own body beside
+            // the same animation on OROR's block models (EfMotion), started on the same tick, seen front and side
+            motionScene(mc, t);
+            return;
+        }
         if (ONLY.equals("guard") && t >= 240) {
             // (059e) the user: "すべてのモブがパリイを使えるように きちんとモーションを": ten kinds of mob in two rows of five,
             // each of a guard's moments (raised, parry, block, broken, parried) shown on all of them at once
@@ -1131,6 +1137,116 @@ public final class Look {
             view(mc, side, round == 0 ? 0.9 : 1.3, round == 0 ? 14.0 : 15.0, 180F, 6F);
         } else if (at == 56) {
             shot(mc, String.format(java.util.Locale.ROOT, "%s%02d_%s_b", prefix, moment0 + 1, moment));
+        }
+    }
+
+    /** (r65) The motions compared: Epic Fight's own (on husks, its body) and EfMotion's (a royal guard, an armed villager). */
+    private static final String[] MOTIONS = {"efn:biped/nf_sword/nf_sword_auto1", "efn:biped/nf_sword/nf_sword_auto2", "efn:biped/nf_sword/nf_sword_auto3",
+        "epicfight:biped/combat/sword_auto1", "epicfight:biped/skill/guard_sword", "epicfight:biped/skill/guard_sword_hit_active1",
+        "epicfight:biped/skill/guard_sword_hit", "epicfight:biped/combat/hit_long"};
+    private static final int[] MOTION_SHOTS = {2, 5, 9, 14, 20};
+    /** Left to right: Epic Fight's own facing the camera, OROR's two facing it, then the same three side on. */
+    private static final String[][] MOTION_ROW = {{"husk", "0"}, {"oror_supreme_bosses:kingdom_guard", "0"}, {"villager", "0"},
+        {"husk", "90"}, {"oror_supreme_bosses:kingdom_guard", "90"}, {"villager", "90"}};
+
+    private static void motionScene(Minecraft mc, int t) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server == null || mc.player == null) {
+            return;
+        }
+        if (t == 240) {
+            mc.options.hideGui = true;
+            server.execute(() -> {
+                command(server, "time set noon");
+                command(server, "weather clear 1000000");
+                clearStageNow(server.overworld());
+                for (int i = 0; i < MOTION_ROW.length; i++) {
+                    String id = MOTION_ROW[i][0].contains(":") ? MOTION_ROW[i][0] : "minecraft:" + MOTION_ROW[i][0];
+                    command(server, String.format(java.util.Locale.ROOT, "summon %s %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Invulnerable:1b,"
+                        + "Rotation:[%sf,0f],HandItems:[{id:\"minecraft:iron_sword\",count:1},{}],Tags:[\"oror_look\",\"oror_look_motion\"]}",
+                        id, sx - 6.5 + i * 2.6, (int) sy, sz + 8, MOTION_ROW[i][1]));
+                }
+                note("motion scene: " + MOTION_ROW.length);
+            });
+            return;
+        }
+        if (t == 250) {
+            view(mc, 0, 1.0, 16.5, 180F, 4F);
+            return;
+        }
+        int step = (t - 280) / 50, at = (t - 280) % 50;
+        if (t < 280) {
+            return;
+        }
+        if (step >= MOTIONS.length) {
+            if (t == 280 + MOTIONS.length * 50 + 10) {
+                finish(mc, "complete (motion only)");
+            }
+            return;
+        }
+        String anim = MOTIONS[step];
+        if (at == 0) {
+            playMotion(mc, anim);
+        }
+        for (int k = 0; k < MOTION_SHOTS.length; k++) {
+            if (at == MOTION_SHOTS[k]) {
+                shot(mc, String.format(java.util.Locale.ROOT, "m%02d_%s_t%02d", step + 1, anim.substring(anim.lastIndexOf('/') + 1), MOTION_SHOTS[k]));
+            }
+        }
+    }
+
+    /** The animation on every mob of the motion scene at once: Epic Fight's own on the husks, EfMotion on OROR's models. */
+    private static void playMotion(Minecraft mc, String anim) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        server.execute(() -> {
+            StringBuilder b = new StringBuilder("motion " + anim + ":");
+            try {
+                Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
+                Class<?> living = Class.forName("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
+                Class<?> manager = Class.forName("yesman.epicfight.api.animation.AnimationManager");
+                Object accessor = manager.getMethod("byKey", String.class).invoke(null, anim);
+                Method get = caps.getMethod("getEntityPatch", Entity.class, Class.class);
+                for (Entity e : server.overworld().getEntities((Entity) null, new AABB(sx - 12, sy - 4, sz + 4, sx + 12, sy + 6, sz + 12),
+                    x -> x.getTags().contains("oror_look_motion"))) {
+                    if (!net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath().equals("husk")) {
+                        continue;
+                    }
+                    Object patch = get.invoke(null, e, living);
+                    if (patch instanceof java.util.Optional<?> o) {
+                        patch = o.orElse(null);
+                    }
+                    boolean played = false;
+                    if (patch != null && accessor != null) {
+                        for (Method m : patch.getClass().getMethods()) {
+                            if (m.getName().equals("playAnimationSynchronized") && m.getParameterCount() == 2 && m.getParameterTypes()[0].isInstance(accessor)
+                                && m.getParameterTypes()[1] == float.class) {
+                                m.invoke(patch, accessor, 0F);
+                                played = true;
+                                break;
+                            }
+                        }
+                    }
+                    b.append(" husk=").append(played);
+                }
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                b.append(" error ").append(ex);
+            }
+            note(b.toString());
+        });
+        // OROR's models: on this client, the same tick
+        try {
+            Method start = Class.forName("jp.oror.reborn.client.EfMotion").getMethod("start", LivingEntity.class, String.class);
+            int n = 0;
+            for (Entity e : mc.level.getEntities((Entity) null, new AABB(sx - 12, sy - 4, sz + 4, sx + 12, sy + 6, sz + 12),
+                x -> x instanceof LivingEntity && !net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(x.getType()).getPath().equals("husk")
+                    && !(x instanceof net.minecraft.world.entity.player.Player))) {
+                if (Boolean.TRUE.equals(start.invoke(null, e, anim))) {
+                    n++;
+                }
+            }
+            note("motion " + anim + ": oror models " + n);
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("motion " + anim + ": oror error " + ex);
         }
     }
 

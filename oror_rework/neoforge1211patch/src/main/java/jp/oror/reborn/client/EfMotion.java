@@ -384,6 +384,16 @@ public final class EfMotion {
         return pick(ids, 0);
     }
 
+    /** (r65) Starts an animation on a mob outright (the look check's side by side with Epic Fight's own); whether it could. */
+    public static boolean start(LivingEntity e, String id) {
+        ResourceLocation r = ResourceLocation.tryParse(id);
+        if (r == null || clip(r) == null) {
+            return false;
+        }
+        ACTIVE.put(e.getId(), new Active(r, e.tickCount, 1F, false));
+        return true;
+    }
+
     /** What the mob does now, decided from what the client sees of it; then its pose. Returns false if nothing plays. */
     public static boolean update(LivingEntity mob, float age) {
         int id = mob.getId();
