@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
@@ -38,7 +37,7 @@ public final class GunFlank {
     @SubscribeEvent
     public static void tick(EntityTickEvent.Post e) {
         if (!(e.getEntity() instanceof PathfinderMob m) || !(m.level() instanceof ServerLevel sl)
-            || (m.tickCount + m.getId()) % EVERY != 0 || m instanceof RoyalMob || m instanceof FlyingMob || m.isNoAi()
+            || (m.tickCount + m.getId()) % EVERY != 0 || m instanceof RoyalMob || m.isNoGravity() || m.isNoAi()
             || m.isPassenger() || !Guns.held(m.getMainHandItem())) {
             return;
         }
