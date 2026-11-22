@@ -591,7 +591,6 @@ public final class MobGuard {
         private static Object stunShort;
         private static final Map<String, Object> ANIMS = new HashMap<>();
         private static boolean looked, broken, playLooked;
-        private static int alternate;
 
         private Ef() {
         }
@@ -697,6 +696,30 @@ public final class MobGuard {
             }
         }
 
+        /** "one" for a one-handed blade, axe or club, "two" for a two-handed weapon, null for bare hands, bows and guns. */
+        static String grip(net.minecraft.world.item.ItemStack s) {
+            if (s.isEmpty()) {
+                return null;
+            }
+            net.minecraft.world.item.Item it = s.getItem();
+            if (it instanceof net.minecraft.world.item.ProjectileWeaponItem || it instanceof net.minecraft.world.item.ShieldItem) {
+                return null;
+            }
+            String id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(it).toString();
+            if (id.startsWith("superbwarfare:") || id.contains("gun") || id.contains("rifle") || id.contains("pistol") || id.contains("bow")) {
+                return null;
+            }
+            if (id.contains("greatsword") || id.contains("claymore") || id.contains("longsword") || id.contains("tachi") || id.contains("katana")
+                || id.contains("spear") || id.contains("halberd") || id.contains("glaive") || id.contains("colossal") || it instanceof net.minecraft.world.item.TridentItem) {
+                return "two";
+            }
+            if (it instanceof net.minecraft.world.item.TieredItem || id.contains("sword") || id.contains("axe") || id.contains("dagger") || id.contains("mace")
+                || id.contains("blade") || id.contains("club") || id.contains("hammer")) {
+                return "one";
+            }
+            return null;
+        }
+
         /** Plays the moment's animation on an Epic Fight humanoid; whether one was played. */
         static boolean play(LivingEntity m, String kind) {
             try {
@@ -705,13 +728,25 @@ public final class MobGuard {
                     return false;
                 }
                 boolean shield = shield(m);
-                String[] parries = {"SWORD_GUARD_ACTIVE_HIT1", "LONGSWORD_GUARD_ACTIVE_HIT1", "SWORD_GUARD_ACTIVE_HIT2", "LONGSWORD_GUARD_ACTIVE_HIT2"};
+                // (r65, the user: "パリイのモーション壊れてない？ 腕とか おかしいよ") the parry by what is held: the parries went round
+                // four in turn for every mob alike, the two-handed longsword's among them, so a one-handed sword, a bow or bare
+                // hands swung as if gripping a longsword they did not hold. Now a shield's own, a two-hander's longsword parry,
+                // a one-hander's sword parry, each mob turning between its two; bare hands, bows and guns none of Epic
+                // Fight's (OROR's own moment shows instead)
+                String grip = grip(m.getMainHandItem());
+                if (!shield && grip == null && !kind.equals("break")) {
+                    return false;
+                }
+                boolean second = ((m.getId() + m.tickCount / 20) & 1) == 1;
+                String parry = "two".equals(grip) ? (second ? "LONGSWORD_GUARD_ACTIVE_HIT2" : "LONGSWORD_GUARD_ACTIVE_HIT1")
+                    : (second ? "SWORD_GUARD_ACTIVE_HIT2" : "SWORD_GUARD_ACTIVE_HIT1");
                 Object anim = switch (kind) {
                     case "parry" -> shield && ANIMS.containsKey("BIPED_HIT_SHIELD") ? ANIMS.get("BIPED_HIT_SHIELD")
-                        : ANIMS.getOrDefault(parries[alternate++ & 3], ANIMS.get("SWORD_GUARD_HIT"));
+                        : ANIMS.getOrDefault(parry, ANIMS.get("SWORD_GUARD_HIT"));
                     // (059e) a block too, as the blow it took would have been (Epic Fight's short guard hit, not its guard stance)
                     case "block" -> shield && ANIMS.containsKey("BIPED_HIT_SHIELD") ? ANIMS.get("BIPED_HIT_SHIELD") : ANIMS.get("SWORD_GUARD_HIT");
-                    case "break" -> ANIMS.get("SWORD_GUARD_HIT");
+                    // a broken guard: thrown off balance (Epic Fight's neutralized), not a blow taken on the guard
+                    case "break" -> ANIMS.getOrDefault("BIPED_COMMON_NEUTRALIZED", ANIMS.get("SWORD_GUARD_HIT"));
                     default -> null;
                 };
                 java.lang.invoke.MethodHandle h = play(anim);

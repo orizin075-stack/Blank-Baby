@@ -171,8 +171,8 @@ public final class ArmedVillagers {
                     float w = p.weight();
                     EfMotion.pose(this.body, jp.oror.reborn.client.EfMotion.mix(p.get("Torso"), p.get("Chest"), 0.5F), null, w);
                     EfMotion.pose(this.getHead(), p.get("Head"), null, w);
-                    EfMotion.pose(this.rightArm, p.get("Arm_R"), p.get("Hand_R"), w);
-                    EfMotion.pose(this.leftArm, p.get("Arm_L"), p.get("Hand_L"), w);
+                    jp.oror.reborn.client.EfMotion.arm(this.rightArm, p, "Arm_R", "Hand_R", "Tool_R", w);
+                    jp.oror.reborn.client.EfMotion.arm(this.leftArm, p, "Arm_L", "Hand_L", "Tool_L", w);
                     EfMotion.pose(this.root().getChild("right_leg"), p.get("Thigh_R"), null, w);
                     EfMotion.pose(this.root().getChild("left_leg"), p.get("Thigh_L"), null, w);
                 }

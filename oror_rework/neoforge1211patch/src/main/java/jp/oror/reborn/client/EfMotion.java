@@ -50,7 +50,7 @@ public final class EfMotion {
     private static final Logger LOG = LoggerFactory.getLogger("OROR EF Motion");
     private static final String[] TREE = {"Root", null, "Thigh_R", "Root", "Leg_R", "Thigh_R", "Thigh_L", "Root", "Leg_L", "Thigh_L",
         "Torso", "Root", "Chest", "Torso", "Head", "Chest", "Shoulder_R", "Chest", "Arm_R", "Shoulder_R", "Hand_R", "Arm_R",
-        "Shoulder_L", "Chest", "Arm_L", "Shoulder_L", "Hand_L", "Arm_L"};
+        "Shoulder_L", "Chest", "Arm_L", "Shoulder_L", "Hand_L", "Arm_L", "Tool_R", "Hand_R", "Tool_L", "Hand_L"};
     private static final Map<String, String> PARENT = new HashMap<>();
     static {
         for (int i = 0; i < TREE.length; i += 2) {
@@ -256,14 +256,21 @@ public final class EfMotion {
         if (part == null || move == null || w <= 0) {
             return;
         }
+        poseRot(part, move, (turn == null ? move : turn).getNormalizedRotation(new Quaternionf()), w);
+    }
+
+    /** Poses one part: its pivot carried by 'move', turned by 'rot' (Epic Fight's space), blended over its own pose by w. */
+    static void poseRot(ModelPart part, Matrix4f move, Quaternionf rot, float w) {
+        if (part == null || move == null || rot == null || w <= 0) {
+            return;
+        }
         Vector3f pivot = toEf(part.x, part.y, part.z);
         Vector3f moved = move.transformPosition(pivot, new Vector3f());
         // (r65, look run) Epic Fight's swings turn the body 70 to 90 degrees and lift a leg level, which its bending mesh
         // carries and a block model (no waist, no knees) does not: three quarters of every turn and shift
         moved = new Vector3f(pivot).lerp(moved, AMP);
         Vector3f at = toModel(moved);
-        Matrix3f r = new Matrix3f();
-        (turn == null ? move : turn).get3x3(r);
+        Matrix3f r = new Matrix3f().rotation(rot);
         // the turn in the model's axes: A r A^T (A is its own inverse's transpose)
         Matrix3f rm = new Matrix3f(A).mul(r).mul(new Matrix3f(A).transpose());
         Quaternionf q = new Quaternionf().slerp(new Quaternionf().setFromNormalized(rm), AMP);
@@ -274,6 +281,42 @@ public final class EfMotion {
         part.xRot = Mth.lerp(w, part.xRot, eul.x);
         part.yRot = Mth.lerp(w, part.yRot, eul.y);
         part.zRot = Mth.lerp(w, part.zRot, eul.z);
+    }
+
+    /**
+     * (r65, the user: "パリイのモーション壊れてない？ 腕とか おかしいよ") An arm of a block model is one straight block from shoulder to
+     * hand; Epic Fight's bends at the elbow and turns at the wrist, and the block set by the forearm alone (a parry's sharp
+     * bend and turn) pointed wherever the forearm did. It is aimed from the shoulder to the wrist instead (so the hand, and
+     * what it holds, is where Epic Fight puts it), with only the forearm's own twist about that line.
+     */
+    public static void arm(ModelPart part, Pose p, String arm, String hand, String tool, float w) {
+        Map<String, Matrix4f> rest = bind();
+        Matrix4f ma = p.get(arm), mh = p.get(hand), mt = p.get(tool);
+        if (part == null || rest == null || ma == null || mh == null || mt == null || !rest.containsKey(arm) || !rest.containsKey(tool)) {
+            pose(part, ma, mh, w);
+            return;
+        }
+        Vector3f shoulder0 = rest.get(arm).getTranslation(new Vector3f()), wrist0 = rest.get(tool).getTranslation(new Vector3f());
+        Vector3f shoulder = ma.transformPosition(new Vector3f(shoulder0)), wrist = mt.transformPosition(new Vector3f(wrist0));
+        Vector3f d0 = new Vector3f(wrist0).sub(shoulder0), d = new Vector3f(wrist).sub(shoulder);
+        if (d0.lengthSquared() < 1e-6F || d.lengthSquared() < 1e-6F) {
+            pose(part, ma, mh, w);
+            return;
+        }
+        d0.normalize();
+        d.normalize();
+        Quaternionf aim = new Quaternionf().rotationTo(d0, d);
+        // the forearm's twist about the arm's own line (swing and twist apart)
+        Quaternionf rest2 = new Quaternionf(aim).conjugate().mul(mh.getNormalizedRotation(new Quaternionf()));
+        Vector3f v = new Vector3f(rest2.x, rest2.y, rest2.z);
+        float along = v.dot(d0);
+        Quaternionf twist = new Quaternionf(d0.x * along, d0.y * along, d0.z * along, rest2.w);
+        if (twist.lengthSquared() < 1e-8F) {
+            twist.identity();
+        } else {
+            twist.normalize();
+        }
+        poseRot(part, ma, new Quaternionf(aim).mul(twist), w);
     }
 
     // ---- which animation, per mob ----
@@ -353,8 +396,10 @@ public final class EfMotion {
         float startAt = now;
         if (show != null) {
             float into = mob.level().getGameTime() - show.start();
-            if (into >= 0 && into <= show.length()) {
-                String k = kind(mob.getMainHandItem());
+            String k0 = kind(mob.getMainHandItem());
+            boolean armedEf = k0 != null && !"fist".equals(k0);
+            if (into >= 0 && into <= show.length() && (armedEf || "PARRIED".equals(show.mechanic()) || "BROKEN".equals(show.mechanic()))) {
+                String k = k0;
                 boolean big = "greatsword".equals(k) || "spear".equals(k) || "longsword".equals(k) || "tachi".equals(k);
                 switch (show.mechanic()) {
                     case "GUARD" -> {
