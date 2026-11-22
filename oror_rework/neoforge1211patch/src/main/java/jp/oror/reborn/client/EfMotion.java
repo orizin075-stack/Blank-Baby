@@ -175,12 +175,13 @@ public final class EfMotion {
                 now.put(j, joml(armature.getBoundTransformFor(pose, jt), transposed));
             }
         }
-        Vector3f root = now.containsKey("Root") ? now.get("Root").getTranslation(new Vector3f()) : new Vector3f();
-        Vector3f root0 = rest.containsKey("Root") ? rest.get("Root").getTranslation(new Vector3f()) : new Vector3f();
-        Vector3f step = new Vector3f(root).sub(root0);
-        // the step forward and aside taken out (kept: up and down)
-        Vector3f flat = new Vector3f(right).mul(step.dot(right)).add(new Vector3f(forward).mul(step.dot(forward)));
-        Matrix4f unstep = new Matrix4f().translation(-flat.x, -flat.y, -flat.z);
+        // (r65, look 'motion' run 4) the Root's own turn and step taken out: Epic Fight draws the body facing where the mob
+        // faces (the player beside them stood upright and square while the Root turned a hundred degrees), and moves the
+        // mob itself; what is left is each joint's motion about the hips
+        Matrix4f unstep = new Matrix4f();
+        if (now.containsKey("Root") && rest.containsKey("Root")) {
+            unstep = new Matrix4f(rest.get("Root")).mul(new Matrix4f(now.get("Root")).invert());
+        }
         Map<String, Matrix4f> out = new HashMap<>();
         for (Map.Entry<String, Matrix4f> en : now.entrySet()) {
             Matrix4f b = rest.get(en.getKey());
