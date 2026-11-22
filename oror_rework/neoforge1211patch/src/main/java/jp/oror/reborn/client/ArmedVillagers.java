@@ -129,6 +129,10 @@ public final class ArmedVillagers {
             EfMotion.noGrip(this.rightArm, this.leftArm);
             this.root().getChild("right_leg").resetPose();
             this.root().getChild("left_leg").resetPose();
+            // (r65, look run 6) the arms too: their height was never set again, and Epic Fight's dip at the hips carried
+            // them a little lower every frame until they sank into the robe, the sword with them
+            this.rightArm.resetPose();
+            this.leftArm.resetPose();
             super.setupAnim(e, walk, amount, age, yaw, pitch);
             boolean armed = armed(e);
             this.arms.visible = !armed;
