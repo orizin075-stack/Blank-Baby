@@ -125,6 +125,15 @@ public final class EfProbeCore {
             if (dmg != null) {
                 dmg.setBaseValue(8.0);
             }
+            // (run nfc 3, 4) a new player is spared every blow for three seconds, and a fake player does not tick that away:
+            // no mob hurt the tester. Taking the blows past Epic Fight's own path broke it (Avalon: "attackResult.resultType
+            // is null", and the server stopped), so the spared time itself is cleared; and a thousand health, so it never falls
+            unspare(p);
+            var hp = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
+            if (hp != null) {
+                hp.setBaseValue(1000.0);
+            }
+            p.setHealth(p.getMaxHealth());
             l.addFreshEntity(p);
             Lane lane = new Lane();
             lane.id = spec;
@@ -135,6 +144,34 @@ public final class EfProbeCore {
             n++;
         }
         LOG.info("EFP-START {\"pack\":\"{}\",\"lanes\":{}}", pack, LANES.size());
+    }
+
+    private static java.lang.reflect.Field spared;
+
+    /**
+     * ServerPlayer's spawnInvulnerableTime, found as its one private int that holds 60 on a new player (its name differs
+     * between the two loaders' runtime mappings), set to 0.
+     */
+    static void unspare(Player p) {
+        try {
+            if (spared == null) {
+                for (java.lang.reflect.Field f : net.minecraft.server.level.ServerPlayer.class.getDeclaredFields()) {
+                    if (f.getType() == int.class && !java.lang.reflect.Modifier.isStatic(f.getModifiers())) {
+                        f.setAccessible(true);
+                        if (f.getInt(p) == 60) {
+                            spared = f;
+                            break;
+                        }
+                    }
+                }
+                LOG.info("EFP-SPARED {\"field\":\"{}\"}", spared == null ? "none" : spared.getName());
+            }
+            if (spared != null) {
+                spared.setInt(p, 0);
+            }
+        } catch (Throwable t) {
+            LOG.info("EFP-SPARED {\"error\":\"{}\"}", esc(String.valueOf(t)));
+        }
     }
 
     /** A floor of stone and a ring of barriers, five high, around a seven by seven lane. */
