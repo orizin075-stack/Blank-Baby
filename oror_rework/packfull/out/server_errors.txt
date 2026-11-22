@@ -1,482 +1,104 @@
-[m[33m[13:50:46.853] [main/WARN] [mixin/]: Error loading class: xaero/common/patreon/Patreon (java.lang.ClassNotFoundException: xaero.common.patreon.Patreon) 
-[m[33m[13:50:46.855] [main/WARN] [mixin/]: Error loading class: xaero/map/patreon/Patreon (java.lang.ClassNotFoundException: xaero.map.patreon.Patreon) 
-[m[33m[13:50:47.460] [main/WARN] [mixin/]: Error loading class: vectorwing/farmersdelight/common/block/TomatoBlock (java.lang.ClassNotFoundException: vectorwing.farmersdelight.common.block.TomatoBlock) 
-[m[33m[13:50:47.929] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
-[m[33m[13:50:48.096] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
-[m[1;31m[13:50:48.478] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
-[m[33m[13:50:48.480] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
-[m[33m[13:50:48.536] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
-[m[33m[13:50:48.537] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
-[m[33m[13:50:48.560] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
-[m[33m[13:50:48.561] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
-[m[33m[13:50:48.562] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
-[m[33m[13:50:48.564] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
-[m[33m[13:50:48.565] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
-[m[33m[13:50:48.566] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
-[m[33m[13:50:48.767] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
-[m[1;31m[13:50:49.294] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
-[m[33m[13:50:49.295] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
-[m[1;31m[13:50:49.500] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
-[m[33m[13:50:49.501] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
-[m[33m[13:50:49.553] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
-[m[33m[13:50:49.564] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
-[13:51:15] [main/ERROR] [minecraft/AbstractPackResources]: Couldn't load overlays metadata
+[m[33m[19:42:06.784] [main/WARN] [mixin/]: Error loading class: xaero/common/patreon/Patreon (java.lang.ClassNotFoundException: xaero.common.patreon.Patreon) 
+[m[33m[19:42:06.787] [main/WARN] [mixin/]: Error loading class: xaero/map/patreon/Patreon (java.lang.ClassNotFoundException: xaero.map.patreon.Patreon) 
+[m[33m[19:42:07.451] [main/WARN] [mixin/]: Error loading class: vectorwing/farmersdelight/common/block/TomatoBlock (java.lang.ClassNotFoundException: vectorwing.farmersdelight.common.block.TomatoBlock) 
+[m[33m[19:42:07.999] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[19:42:08.176] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[19:42:08.494] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[19:42:08.495] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[19:42:08.550] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[19:42:08.551] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[19:42:08.573] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[19:42:08.574] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[19:42:08.576] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[19:42:08.577] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[19:42:08.578] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[19:42:08.579] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[19:42:08.778] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[1;31m[19:42:09.258] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
+[m[33m[19:42:09.259] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[1;31m[19:42:09.461] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[19:42:09.461] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[19:42:09.515] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[m[33m[19:42:09.575] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[19:42:34] [main/ERROR] [minecraft/AbstractPackResources]: Couldn't load overlays metadata
 com.google.gson.JsonParseException: No key formats in MapLike[{"directory":"overlay_26_3","min_format":[121,0],"max_format":121}]
-[13:51:22] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
-[13:51:29] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[13:51:35] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: halo is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: boot is not a registered slot type!
-[13:51:35] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
-[13:51:35] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named dungeons_gear:venom_glaive
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named dungeons_gear:grave_bane
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named dungeons_gear:glaive
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[13:51:36] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
-[13:51:36] [main/INFO] [Moonlight/]: Failed to load custom color set definition {"id":"quark:rune","colors":{"default":"quark:blank_rune"},"replace":false}. Ignoring
-[13:51:44] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[13:51:59] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[13:52:02] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
-[13:52:02] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[13:52:03] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
-[13:52:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[13:52:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[13:52:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
-[13:52:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
-[13:52:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
-[13:52:13] [Worker-Main-1/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 249, 0, 110)
-[13:52:14] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[13:58:23] [Worker-Main-4/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -3650, 63, -3769)
-[13:58:23] [Worker-Main-4/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -3661, 51, -3773)
-[14:05:53] [Server thread/INFO] [OROR Story/]: KING-STORY {"peaceTarget":true,"peaceHostile":false,"kingOffers":15,"blessed":true,"grace":3,"graceHealth":true,"graceGifts":2,"enemy":true,"enemyHostile":true,"friendStillPeace":true,"vindicatorSpares":true,"piglinSpares":true,"rebelFavour":6,"rebelOffers":5,"pillagerSpares":true,"rebelTradeClick":"SUCCESS","rebelTradeOpened":true,"rebelTradeMenu":false,"allies":3,"alliesSpare":true,"likeness":1,"breachedBefore":false,"k0":"hp=10000.0/10000 field=9999 breached=false phase=0 inv=false noai=false itime=0 alive=true fx:regeneration/2 fx:night_vision/0 fx:speed/1 fx:strength/5 fx:haste/3 fx:resistance/3 fx:fire_resistance/0 fx:water_breathing/0 fx:jump_boost/1 fx:abyssal_shroud/0 FieldAbsorptions=1","lordHit":true,"probeLord":"HIGHEST:o800 HIGH:o800 NORMAL:o800 LOW:o800 LOWEST:o800 PRE:150","probeListeners":"err java.lang.ClassNotFoundException: net.neoforged.bus.EventListenerHelper","breachedByLord":true,"k1":"hp=9850.5/10000 field=0 breached=true phase=0 inv=false noai=false itime=20 alive=true fx:regeneration/2 fx:night_vision/0 fx:speed/1 fx:strength/5 fx:haste/3 fx:resistance/3 fx:fire_resistance/0 fx:water_breathing/0 fx:jump_boost/1 FieldBreaks=1 FieldAbsorptions=1","deathHit":true,"probeDeath":"HIGHEST:o40000 HIGH:o40000 NORMAL:o40000 LOW:o40000 LOWEST:o40000 PRE:7989","k2":"hp=10000.0/10000 field=40000 breached=false phase=1 inv=true noai=true itime=40 alive=true fx:regeneration/2 fx:night_vision/0 fx:speed/1 fx:strength/5 fx:haste/3 fx:resistance/3 fx:fire_resistance/0 fx:water_breathing/0 fx:jump_boost/1 FieldBreaks=3 FieldAbsorptions=1 Resurrections=1","revive":"0->1","reviveAlive":true,"film1":true,"name1":"Lv.6 英雄王アルブ","filmUntouchable":true,"film1Done":true,"scale1":1.5,"armour1":true,"heroSword":true,"name2":"Lv.6 崩壊王アルブ","film2Done":true,"scale2":1.8,"breached2":true,"missOut":23,"missIn":5,"lagHits":4,"phantoms":1,"errorArm":0,"name3":"Lv.6 バアル＝ゼブル［堕ちたる天の王にして蝿の王］","film3Done":true,"scale3":2.2,"bossName3":"Lv.6 バアル＝ゼブル［堕ちたる天の王にして蝿の王］［復活 3/3］","phase":3,"called":7,"mainhand":"minecraft:netherite_hoe","breached3":true,"majesty":5,"chainBroken":true,"soulBurning":true,"fieldWhole":true,"starveHeld":true,"soulTaken":1,"soulFreed":true,"deed_charge":2,"deed_cleave":2,"deed_spear":2,"deed_execution":6,"deed_sunder":2,"deed_desync":2,"deed_rollback":2,"deed_corrupt":2,"deed_ghosts":2,"deed_void":2,"deed_judgment":3,"deed_chaser":2,"deed_driver":2,"deed_gaze":4,"deed_reap":2,"deed_vortex":14,"deed_brand":2,"deed_plague":2,"deed_flurry":6,"deed_crossslash":4,"deed_lunge":2,"deed_javelin":14,"deed_rain":24,"deed_triple":2,"deed_feast":12,"deed_doomsday":52,"deed_dawn":2,"deed_swords":6,"deed_leapin":2,"deed_summon":1,"deed_backstep":1,"deed_chains":6,"deed_overflow":25,"deed_panic":2,"deed_veil":24,"deed_soul":12,"deed_halo":4,"deed_feathers":12,"deed_crucify":6,"deed_creation":1,"deed_wormwood":4,"deed_bowls":14,"deedsLanded":42,"deedsMissed":"","movesLanded":"70/70","movesLandedN":70,"movesMissed":"","trialNotes":"","echoes":6,"moveMisses":0,"stances":"clubs 4 scythe 5 twin 2 spear 2 bow 2","deleted":45,"bolts":3,"swarms":1,"veilFlies":24,"lord":true,"crownDropped":1,"keeperEnemy":true,"presented":true,"festival":1,"favourRise":50,"kingDead":true,"godSlayer":true,"godSlayerHealth":40.0,"testerUnshielded":true,"fieldAfterFight":120,"creaturesCleared":0,"fieldTook":true,"fieldAfterBlow":109,"ceilingHeld":true,"godWeakenedEffect":false,"godWeakened":true,"godBreached":true,"phantasmActive":true,"phantasmBase":5.0,"phantasmBlow":92,"phantasmRatio":18.4,"phantasmSwordGone":true,"phantasmAt":"-4072, 73, 3992","phantasmDug":123,"phantasmPickGone":true,"tiers":"0/2/2/4","phantasmOffered":true,"chamber":"-4000, 48, 4032","circleStone":true,"containers":15,"filled":10,"workshops":5,"workshopKinds":"anvil brewing_stand crafting_table furnace smithing_table","issBlocks":4,"journal":true,"ladders":16,"lying":10,"arrived":true,"respawn":true,"azazelScale":1.45,"azazelDisarmed":true,"azazelHits":"{chains:1,chains_bound:1,disarm:1,dive:1,dudael:8,fangs:1,forge:1,gust:1,rally:1,rend:3,scapegoat:1,scapegoat_bore:1}","azazelProbe":"[rend d=2.5 foes=1] mob:14 mob:14 mob:14 <alive=true hp=968 at=-3997, 70, 4024> [forge d=7.0 foes=1] indirectMagic:16 <alive=true hp=984 at=-3993, 70, 4024> [fangs d=4.0 foes=1] indirectMagic:6 <alive=true hp=994 at=-3996, 70, 4024> [gust d=4.0 foes=1] indirectMagic:8 <alive=true hp=992 at=-3996, 70, 4024> [scapegoat d=7.0 foes=1] indirectMagic:12 <alive=true hp=988 at=-3993, 70, 4024> [dudael d=7.0 foes=1] mob:18 mob:18 mob:18 mob:18 mob:18 mob:18 mob:18 mob:18 <alive=true hp=889 at=-3993, 70, 4024> [disarm d=5.0 foes=1] <alive=true hp=1000 at=-3995, 70, 4024> [dive d=3.0 foes=1] mob:33 <alive=true hp=972 at=-3997, 70, 4024> [chains d=7.0 foes=1] indirectMagic:14 <alive=true hp=986 at=-3993, 70, 4024> [rally d=7.0 foes=1] <alive=true hp=1000 at=-3993, 70, 4024> ","azazelArts":10,"azazelMissed":"","certSeals":3,"certSealOnce":true,"certCrafted":true,"certFriendBefore":false,"certFriend":true,"certMapMillis":736,"certMap":true,"certTrusted":true,"certTradeOpened":true,"certCity":"-4464, 0, 3952","passPeace":true,"passWar":true,"passRebels":true,"passForms":true,"passCrown":true,"passChamber":true,"passDeeds":true,"passMoves":true,"passBroken":true,"passGodSlayer":true,"passPhantasm":true,"passSouls":true,"passAzazel":true,"passCertificate":true,"pass":true}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-376, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-375, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-374, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-373, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-372, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-371, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-370, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:07] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-369, y=77, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=849}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=856}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=858}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=860}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=862}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-377, y=149, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-376, y=149, z=853}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-378, y=149, z=863}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-375, y=167, z=861}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-373, y=168, z=863}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:07:08] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
-java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-372, y=169, z=848}, got Block{minecraft:stone}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23274!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
-[14:15:16] [Worker-Main-10/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
-[14:15:16] [Worker-Main-10/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
-[14:15:16] [Worker-Main-10/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
-[14:15:16] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
-[14:15:16] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
-[14:18:14] [Worker-Main-10/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 147, 60, 119)
-[14:18:14] [Worker-Main-10/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 123, 60, 119)
-[14:18:14] [Worker-Main-10/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 135, 60, 131)
-[14:18:14] [Worker-Main-10/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 135, 60, 107)
-[14:19:05] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=1136, y=-14, z=-219}
-[14:21:55] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=1743, y=-34, z=13}
-[14:21:55] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=1735, y=-46, z=-23}
-[14:22:37] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=1389, y=-50, z=-317}
-[14:23:58] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 147, 60, 119)
-[14:23:58] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 123, 60, 119)
-[14:23:58] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 135, 60, 131)
-[14:23:58] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 135, 60, 107)
-[14:26:52] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-2539, y=-28, z=2672}
-[14:26:52] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-2538, y=-28, z=2672}
-[14:26:59] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2418, 66, 2983)
-[14:26:59] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2429, 54, 2979)
-[14:27:02] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2174, -15, 2393)
-[14:27:50] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1177, -15, -1058)
-[14:28:25] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2375, 68, -2514)
-[14:28:25] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2371, 56, -2525)
-[14:29:17] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1250, -8, -3399)
-[14:35:26] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1426, 64, 2745)
-[14:35:26] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1437, 52, 2749)
-[14:35:26] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"major_dungeons_place_and_resolve_loot","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Loot resolved sword_sanctum"}
-[14:35:26] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1507, 64, 3109)
-[14:36:43] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1507, 64, 3109)
-[14:37:48] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1209, -4, 3598)
-[14:38:54] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1209, -4, 3598)
-[14:39:32] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"external_mobs_and_oror_share_combat","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Exact-version pack active modulargolems_3143"}
-[14:40:11] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"boss_proximity_chests_have_richer_actual_loot","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Real entrance/boss chest diamonds are 1/12"}
-[14:40:59] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"skilled_mob_places_actual_water_before_landing","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: A real water source rescues the descending mob"}
-[14:42:50] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"low_health_mob_retreats_during_healing","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Actual movement retreats while recovering"}
-[14:43:12] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=579, y=-20, z=-338}
-[14:43:27] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1448, 66, 4511)
-[14:43:38] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"terrain_pillar_and_protected_chest_rules","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Native non-guardian pillar and collision-safe ascent"}
-[14:43:41] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=460, y=-21, z=171}
-[14:43:41] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 162, -12, 4697)
-[14:43:55] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"villager_arms_and_defeats_survival_player","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Trade level one villager kills ordinary survival player"}
-[14:45:02] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1448, 66, 4511)
-[14:45:16] [Worker-Main-11/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 162, -12, 4697)
-[14:46:24] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"buried_ore_is_excavated_smelted_and_collected","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Actual excavation, transport, coal burning and vanilla recipe: 採掘精錬師 / 取引Lv.5 / 鉱脈を探しています / 採掘=0鉱石 / 回収=0 / 運搬=0 pos=BlockPos{x=5, y=65, z=4731}"}
-[14:46:59] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1239, -23, 4866)
-[14:47:32] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"giving_furnace_hires_and_consumes_one_item","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Real interaction hires with a supplied furnace"}
-[14:47:59] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"no_fuel_waits_then_real_fuel_resumes_smelting","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: No fuel means no product"}
-[14:48:13] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1239, -23, 4866)
-[14:49:46] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"three_miners_work_simultaneously_without_material_duplication","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Each independent furnace produced exactly one ingot"}
-[14:50:46] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"unemployed_villager_claims_placed_furnace_naturally","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Vanilla job acquisition found a placed furnace"}
-[14:52:59] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: -14, 16, 5583)
-[14:52:59] [Worker-Main-9/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: -14, 16, 5576)
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=681, y=3, z=-183}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=684, y=3, z=-181}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=685, y=5, z=-181}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=684, y=3, z=-187}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=687, y=3, z=-186}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=684, y=-4, z=-184}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=682, y=-2, z=-188}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=684, y=-3, z=-188}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=681, y=-2, z=-179}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=693, y=-4, z=-183}
-[14:53:03] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=688, y=-1, z=-182}
-[14:53:03] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=693, y=0, z=-176}
-[14:53:32] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: 829, 184, 5588)
-[14:53:32] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: 833, 167, 5612)
-[14:53:32] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: 882, 167, 5612)
-[14:53:32] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: 833, 133, 5612)
-[14:53:37] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-403, y=-52, z=-425}
-[14:53:37] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-410, y=-52, z=-426}
-[14:53:38] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-362, y=-51, z=-548}
-[14:53:38] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-54, z=-542}
-[14:53:38] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-53, z=-542}
-[14:53:38] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-323, y=-57, z=-753}
-[14:53:38] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-323, y=-56, z=-754}
-[14:53:38] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-322, y=-56, z=-753}
-[14:53:38] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-322, y=-56, z=-755}
-[14:53:38] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-323, y=-57, z=-751}
-[14:53:38] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-322, y=-55, z=-752}
-[14:53:38] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-51, z=-611}
-[14:53:38] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-50, z=-610}
-[14:53:38] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-394, y=-52, z=-409}
-[14:53:38] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-408}
-[14:53:38] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-395, y=-52, z=-416}
-[14:53:38] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
-[14:53:40] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
-[14:53:41] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-414, y=-52, z=-427}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-403, y=-52, z=-425}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-410, y=-52, z=-426}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-422}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-418}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-409}
-[14:53:41] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-245, y=-57, z=-567}
-[14:53:42] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
-[14:53:42] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
-[14:53:42] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
-[14:53:42] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-373, y=-58, z=-499}
-[14:53:42] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
-[14:53:42] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
-[14:53:48] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-403, y=-58, z=-503}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-234, y=-52, z=-702}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-221, y=-52, z=-702}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-418}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-409}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-394, y=-52, z=-409}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-395, y=-52, z=-416}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
-[14:53:48] [Worker-Main-12/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
-[14:54:04] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: -14, 16, 5583)
-[14:54:04] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: -14, 16, 5576)
-[14:54:32] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: 829, 184, 5588)
-[14:54:32] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: 833, 167, 5612)
-[14:54:32] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: 882, 167, 5612)
-[14:54:32] [Worker-Main-12/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: 833, 133, 5612)
-[14:54:35] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
-[14:54:35] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
-[14:54:35] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
-[14:54:36] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-54, z=-74}
-[14:54:36] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-50, z=-77}
-[14:54:36] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-187, y=-50, z=-72}
-[14:54:36] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-184, y=-45, z=-75}
-[14:54:36] [Worker-Main-11/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-195, y=-54, z=-92}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-54, z=-88}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-50, z=-85}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-183, y=-51, z=-89}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-186, y=-50, z=-90}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-186, y=-45, z=-87}
-[14:54:37] [Worker-Main-9/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-189, y=-45, z=-84}
-[15:03:27] [Worker-Main-15/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (-6958, 28, 7080)
-[15:03:28] [Worker-Main-14/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (-6911, 13, 6994)
-[15:03:30] [Worker-Main-14/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -6679, -9, 7214)
-[15:07:43] [Worker-Main-14/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2174, -15, 2393)
-[15:07:45] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-2314, y=18, z=2537}
-[15:07:45] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-2314, y=18, z=2538}
-[15:07:45] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-2300, y=34, z=2536}
-[15:17:33] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-361, y=-45, z=1357}
-[15:17:33] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-407, y=36, z=1381}
-[15:17:33] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-406, y=36, z=1381}
-[15:18:56] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=332, y=-35, z=86}
-[15:19:20] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-183, y=-3, z=923}
-[15:20:01] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-310, y=-4, z=574}
-[15:21:16] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-405, y=-3, z=698}
-[15:21:16] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-404, y=-3, z=698}
-[15:22:06] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=368, y=-32, z=2932}
-[15:22:06] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=368, y=-32, z=2933}
-[15:23:50] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-989, y=-25, z=793}
-[15:25:55] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-988, y=-25, z=793}
-[15:25:55] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-989, y=-25, z=793}
-[15:26:14] [Worker-Main-19/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2606, 62, -887)
-[15:26:14] [Worker-Main-19/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2595, 50, -883)
-[15:28:06] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-1167, y=36, z=791}
-[15:28:08] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-1223, y=-30, z=697}
-[15:28:08] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-1223, y=-30, z=696}
-[15:28:08] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-1176, y=-49, z=619}
-[15:28:13] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -1145, 70, 370)
-[15:28:13] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -1149, 58, 381)
-[15:29:04] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-1167, y=36, z=789}
-[15:29:04] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-1167, y=36, z=791}
-[15:29:56] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-54, z=-74}
-[15:29:56] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-50, z=-77}
-[15:29:56] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-187, y=-50, z=-72}
-[15:29:56] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-184, y=-45, z=-75}
-[15:29:56] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
-[15:29:56] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
-[15:29:56] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
-[15:29:56] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-195, y=-54, z=-92}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-54, z=-88}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-50, z=-85}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-183, y=-51, z=-89}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-186, y=-50, z=-90}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-186, y=-45, z=-87}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-189, y=-45, z=-84}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
-[15:29:57] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
-[15:30:45] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -953, -26, -878)
-[15:34:34] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-989, y=-25, z=793}
-[15:34:34] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-990, y=-25, z=793}
-[15:37:34] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 25833, 78, 19102)
-[15:37:34] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 25837, 66, 19091)
-[15:38:13] [Worker-Main-17/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3669, y=-34, z=450}
-[15:38:13] [Worker-Main-17/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3669, y=-14, z=450}
-[15:38:13] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3669, y=-14, z=456}
-[15:38:14] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3614, y=-16, z=-1054}
-[15:38:14] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3662, y=-16, z=459}
-[15:38:14] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3663, y=-33, z=451}
-[15:38:14] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3614, y=-16, z=-1054}
-[15:38:21] [Worker-Main-17/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3583, y=-15, z=522}
-[15:38:24] [Worker-Main-18/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 28862, -34, 19639)
-[15:38:47] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3686, y=-16, z=-628}
-[15:38:47] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-3684, y=-16, z=-626}
-[15:39:13] [Worker-Main-19/WARN] [lithostitched/]: Couldn't find template pool reference: ati_structures:lighthouse_rock (Jigsaw block location: 32599, 61, 19834)
-[15:42:49] [Worker-Main-18/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (36150, 31, 21797)
-[15:43:10] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: -7860, 235, -2372)
-[15:43:10] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: -7909, 150, -2274)
-[15:43:10] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: -7982, 252, -2270)
-[15:43:10] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: -7884, 184, -2368)
-[15:43:10] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: -7933, 133, -2270)
-[15:43:10] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:mechanical_nest/mechanical_nest_decoration (Jigsaw block location: -7835, 235, -2368)
-[15:45:06] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 25929, 60, 25757)
-[15:45:06] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 25917, 60, 25769)
-[15:45:06] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 25941, 60, 25769)
-[15:45:06] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 25929, 60, 25781)
-[15:45:42] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-99, y=-50, z=-80}
-[15:45:44] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-99, y=-50, z=-77}
-[15:45:44] [Worker-Main-18/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28899, 45, 26688)
-[15:45:44] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 29038, 18, 26839)
-[15:45:45] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28900, 50, 26716)
-[15:45:45] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28904, 54, 26729)
-[15:45:45] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28904, 49, 26720)
-[15:45:45] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28900, 50, 26724)
-[15:47:23] [Worker-Main-18/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 34798, 24, 25351)
-[15:48:34] [Worker-Main-19/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 19790, 12, 27863)
-[15:48:53] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -9991, -15, -3394)
-[15:49:50] [Worker-Main-18/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26077, 28, 28849)
-[15:49:50] [Worker-Main-18/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26078, 30, 28846)
-[15:49:50] [Worker-Main-18/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26078, 28, 28846)
-[15:49:51] [Worker-Main-18/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26077, 28, 28849)
-[15:49:52] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26089, 28, 28849)
-[15:49:52] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26083, 30, 28839)
-[15:49:52] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26081, 30, 28839)
-[15:49:52] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26089, 28, 28849)
-[15:49:53] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26101, 14, 28826)
-[15:49:53] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26097, 15, 28830)
-[15:49:53] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26105, 15, 28822)
-[15:49:53] [Worker-Main-18/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
-[15:49:53] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26101, 37, 28853)
-[15:49:53] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26115, 11, 28830)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26115, 11, 28822)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26114, 30, 28846)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26114, 30, 28842)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26117, 30, 28839)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26119, 28, 28839)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26124, 30, 28844)
-[15:49:54] [Worker-Main-19/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26116, 11, 28844)
-[15:49:54] [Worker-Main-18/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26119, 37, 28862)
-[15:49:54] [Worker-Main-18/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
-[15:50:05] [Worker-Main-18/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 26297, 134, 29006)
-[15:50:05] [Worker-Main-18/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 26301, 122, 28995)
-[15:51:43] [Worker-Main-19/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 19682, -24, 32377)
-[15:52:05] [Worker-Main-18/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 22127, 72, 31752)
-[15:53:13] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 28705, 70, 31577)
-[15:53:14] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 28741, 72, 31583)
-[15:53:14] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 28746, 72, 31579)
-[15:53:18] [Worker-Main-17/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-185, y=-46, z=-142}
-[15:53:18] [Worker-Main-17/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-176, y=-50, z=-133}
-[15:53:18] [Worker-Main-17/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-50, z=-135}
-[15:53:44] [Worker-Main-17/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-80}
-[15:53:45] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-77}
-[15:57:01] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 34830, -6, 34759)
-[15:57:56] [Worker-Main-18/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (727, 29, 2650)
-[15:58:17] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: 847, 16, 1649)
-[15:58:18] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: 854, 16, 1649)
-[15:58:18] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: 878, 16, 1680)
-[15:58:18] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: 885, 16, 1680)
-[15:58:18] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: 761, 16, 1680)
-[15:58:18] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: 754, 16, 1680)
-[15:58:18] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: 877, 16, 1712)
-[15:58:18] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: dungeons_arise:underworld/foundry/foundry_corridor_gears (Jigsaw block location: 877, 16, 1719)
-[16:01:29] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -6743, 12, 2558)
-[16:03:09] [Worker-Main-19/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1507, 64, 3109)
-[16:03:31] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=665, y=-20, z=-299}
-[16:03:31] [Worker-Main-18/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=677, y=-20, z=-299}
-[16:04:16] [Worker-Main-18/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -953, -26, -878)
-[16:05:28] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-2657, y=-41, z=3094}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-283, y=-56, z=-275}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-50, z=-279}
-[16:06:36] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-57, z=-280}
-[16:06:46] [Worker-Main-19/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -4489, 23, 3698)
-[16:07:35] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (-1008, 8, 78)
-[16:07:36] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (-1008, 8, 78)
-[16:07:36] [Worker-Main-17/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (-1008, 8, 78)
-[16:08:13] [Worker-Main-19/WARN] [lithostitched/]: Couldn't find template pool reference: ati_structures:terrain (Jigsaw block location: -2217, 62, 5577)
-[16:08:46] [Worker-Main-17/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -1138, -8, 2519)
-[16:09:16] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-77}
-[16:09:17] [Worker-Main-19/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-80}
-[16:10:34] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=611, y=-13, z=789}
-[16:10:34] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=610, y=-13, z=789}
-[16:11:16] [Worker-Main-18/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -6622, -6, 1449)
+[19:42:41] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
+[19:42:49] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[19:42:54] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: halo is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: boot is not a registered slot type!
+[19:42:54] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named dungeons_gear:venom_glaive
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named dungeons_gear:grave_bane
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named dungeons_gear:glaive
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[19:42:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[19:42:55] [main/INFO] [Moonlight/]: Failed to load custom color set definition {"id":"quark:rune","colors":{"default":"quark:blank_rune"},"replace":false}. Ignoring
+[19:43:04] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[19:43:19] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[19:43:21] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[19:43:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[19:43:22] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[19:43:27] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[19:43:27] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[19:43:27] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[19:43:27] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[19:43:27] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+[19:43:30] [Worker-Main-2/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 249, 0, 110)
+[19:43:34] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[19:44:00] [Worker-Main-3/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -3650, 63, -3769)
+[19:44:00] [Worker-Main-3/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -3661, 51, -3773)
+[19:50:44] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
+[19:50:44] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
+[19:50:44] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
+[19:50:44] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-195, y=-54, z=-92}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-54, z=-88}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-50, z=-85}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-183, y=-51, z=-89}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-186, y=-50, z=-90}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-186, y=-45, z=-87}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-189, y=-45, z=-84}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-54, z=-74}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-192, y=-50, z=-77}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-187, y=-50, z=-72}
+[19:50:45] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-184, y=-45, z=-75}
+[19:52:21] [Worker-Main-3/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1426, 64, 2745)
+[19:52:21] [Worker-Main-3/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1437, 52, 2749)
+[19:52:26] [Worker-Main-1/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1479, -33, 2626)
+[19:52:57] [Worker-Main-3/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1507, 64, 3109)
+[19:53:50] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=33, y=-17, z=771}
+[19:53:50] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=33, y=-17, z=770}
+[19:53:55] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-989, y=-25, z=793}
+[19:57:19] [Server thread/ERROR] [minecraft/Util]: POI data mismatch: already registered at BlockPos{x=-31, y=24, z=683}
+[20:00:47] [Worker-Main-3/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: 1374, -11, 23047)
+[20:04:42] [Server thread/INFO] [OROR Story/]: KING-STORY {"peaceTarget":true,"peaceHostile":false,"kingOffers":15,"blessed":true,"grace":3,"graceHealth":true,"graceGifts":2,"enemy":true,"enemyHostile":true,"friendStillPeace":true,"vindicatorSpares":true,"piglinSpares":true,"rebelFavour":6,"rebelOffers":5,"pillagerSpares":true,"rebelTradeClick":"SUCCESS","rebelTradeOpened":true,"rebelTradeMenu":false,"allies":3,"alliesSpare":true,"likeness":1,"breachedBefore":false,"k0":"hp=10000.0/10000 field=9999 breached=false phase=0 inv=false noai=false itime=0 alive=true fx:speed/1 fx:night_vision/0 fx:jump_boost/1 fx:fire_resistance/0 fx:resistance/3 fx:regeneration/2 fx:strength/5 fx:haste/3 fx:water_breathing/0 fx:abyssal_shroud/0 FieldAbsorptions=1","lordHit":true,"probeLord":"HIGHEST:o800 HIGH:o800 NORMAL:o800 LOW:o800 LOWEST:o800 PRE:150","probeListeners":"err java.lang.ClassNotFoundException: net.neoforged.bus.EventListenerHelper","breachedByLord":true,"k1":"hp=9850.5/10000 field=0 breached=true phase=0 inv=false noai=false itime=20 alive=true fx:speed/1 fx:night_vision/0 fx:jump_boost/1 fx:fire_resistance/0 fx:resistance/3 fx:regeneration/2 fx:strength/5 fx:haste/3 fx:water_breathing/0 FieldBreaks=1 FieldAbsorptions=1","deathHit":false,"probeDeath":"HIGHEST:o40000 HIGH:o40000 NORMAL:x40000 LOW:x40000 LOWEST:x40000","k2":"hp=4.0/10000 field=0 breached=true phase=0 inv=false noai=false itime=0 alive=true fx:speed/1 fx:night_vision/0 fx:jump_boost/1 fx:fire_resistance/0 fx:resistance/3 fx:regeneration/2 fx:strength/5 fx:haste/3 fx:water_breathing/0 FieldBreaks=3 FieldAbsorptions=1","revive":"0->0","dodgesTaken":"","playerDeathHit":true,"probePlayer":"HIGHEST:o500 HIGH:o500 NORMAL:o500 LOW:o500 LOWEST:o500 PRE:90","k3":"hp=10000.0/10000 field=40000 breached=false phase=1 inv=true noai=true itime=40 alive=true fx:speed/1 fx:night_vision/0 fx:jump_boost/1 fx:fire_resistance/0 fx:resistance/3 fx:regeneration/2 fx:strength/5 fx:haste/3 fx:water_breathing/0 FieldBreaks=4 FieldAbsorptions=1 Resurrections=1","reviveByPlayer":"0->1","reviveAlive":true,"film1":true,"name1":"Lv.6 英雄王アルブ","filmUntouchable":true,"film1Done":true,"scale1":1.5,"armour1":true,"heroSword":true,"name2":"Lv.6 崩壊王アルブ","film2Done":true,"scale2":1.8,"breached2":true,"missOut":51,"missIn":8,"lagHits":5,"phantoms":0,"errorArm":0,"name3":"Lv.6 バアル＝ゼブル［堕ちたる天の王にして蝿の王］","film3Done":true,"scale3":2.2,"bossName3":"Lv.6 バアル＝ゼブル［堕ちたる天の王にして蝿の王］［復活 3/3］","phase":3,"called":7,"mainhand":"minecraft:mace","breached3":true,"majesty":2,"chainBroken":true,"soulBurning":true,"fieldWhole":true,"starveHeld":true,"soulTaken":1,"soulFreed":true,"deed_charge":2,"deed_cleave":2,"deed_spear":2,"deed_execution":6,"deed_sunder":2,"deed_desync":3,"deed_rollback":2,"deed_corrupt":2,"deed_ghosts":2,"deed_void":2,"deed_judgment":2,"deed_chaser":2,"deed_driver":2,"deed_gaze":4,"deed_reap":2,"deed_vortex":6,"deed_brand":2,"deed_plague":2,"deed_flurry":6,"deed_crossslash":4,"deed_lunge":2,"deed_javelin":14,"deed_rain":19,"deed_triple":2,"deed_feast":12,"deed_doomsday":62,"deed_dawn":2,"deed_swords":7,"deed_leapin":2,"deed_summon":1,"deed_backstep":1,"deed_chains":6,"deed_overflow":22,"deed_panic":2,"deed_veil":24,"deed_soul":12,"deed_halo":4,"deed_feathers":12,"deed_crucify":6,"deed_creation":1,"deed_wormwood":8,"deed_bowls":14,"deedsLanded":42,"deedsMissed":"","movesLanded":"69/70","movesLandedN":69,"movesMissed":"broken_shard","trialNotes":"broken_shard(k0.0,z3.5,a)","echoes":6,"moveMisses":8,"stances":"clubs 4 scythe 4 twin 2 spear 2 bow 2","deleted":45,"bolts":0,"swarms":0,"veilFlies":24,"lord":true,"crownDropped":1,"keeperEnemy":true,"presented":true,"festival":1,"favourRise":50,"kingDead":true,"godSlayer":true,"godSlayerHealth":40.0,"testerUnshielded":true,"fieldAfterFight":120,"creaturesCleared":0,"fieldTook":true,"fieldAfterBlow":109,"ceilingHeld":true,"godWeakenedEffect":false,"godWeakened":true,"godBreached":true,"phantasmActive":true,"phantasmBase":5.0,"phantasmBlow":110,"phantasmRatio":22.0,"phantasmSwordGone":true,"phantasmAt":"-4072, 73, 3992","phantasmDug":123,"phantasmPickGone":true,"tiers":"0/2/2/4","phantasmOffered":true,"chamber":"-4000, 48, 4032","circleStone":true,"containers":15,"filled":10,"workshops":5,"workshopKinds":"anvil brewing_stand crafting_table furnace smithing_table","issBlocks":4,"journal":true,"ladders":16,"lying":10,"arrived":true,"respawn":true,"azazelScale":1.45,"azazelDisarmed":true,"azazelHits":"{chains:1,chains_bound:1,disarm:1,dive:1,dudael:7,fangs:1,forge:1,gust:1,rally:1,rend:3,scapegoat:1,scapegoat_bore:1}","azazelProbe":"[rend d=2.5 foes=1] mob:14 mob:14 mob:14 <alive=true hp=968 at=-3997, 70, 4024> [forge d=7.0 foes=1] indirectMagic:16 <alive=true hp=984 at=-3993, 70, 4024> [fangs d=4.0 foes=1] indirectMagic:6 <alive=true hp=994 at=-3996, 70, 4024> [gust d=4.0 foes=1] indirectMagic:8 <alive=true hp=992 at=-3996, 70, 4024> [scapegoat d=7.0 foes=1] indirectMagic:12 <alive=true hp=988 at=-3993, 70, 4024> [dudael d=7.0 foes=1] mob:18 mob:18 mob:18 mob:18 mob:18 mob:18 mob:18 <alive=true hp=903 at=-3993, 70, 4024> [disarm d=5.0 foes=1] <alive=true hp=1000 at=-3995, 70, 4024> [dive d=3.0 foes=1] mob:22 <alive=true hp=983 at=-3997, 70, 4024> [chains d=7.0 foes=1] indirectMagic:14 <alive=true hp=986 at=-3993, 70, 4024> [rally d=7.0 foes=1] mob:4 <alive=true hp=997 at=-3993, 70, 4024> mob:4 ","azazelArts":10,"azazelMissed":"","certSeals":3,"certSealOnce":true,"certCrafted":true,"certFriendBefore":false,"certFriend":true,"certMapMillis":736,"certMap":true,"certTrusted":true,"certTradeOpened":true,"certCity":"-4464, 0, 3952","passPeace":true,"passWar":true,"passRebels":true,"passForms":true,"passCrown":true,"passChamber":true,"passDeeds":true,"passMoves":true,"passBroken":true,"passGodSlayer":true,"passPhantasm":true,"passSouls":true,"passAzazel":true,"passCertificate":true,"pass":true}
+[20:05:13] [Worker-Main-1/WARN] [lithostitched/]: Couldn't find template pool reference: minecraft: (Jigsaw block location: -2174, -15, 2393)
