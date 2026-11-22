@@ -253,7 +253,7 @@ public final class EfMotion {
         // the turn in the model's axes: A r A^T (A is its own inverse's transpose)
         Matrix3f rm = new Matrix3f(A).mul(r).mul(new Matrix3f(A).transpose());
         Quaternionf q = new Quaternionf().slerp(new Quaternionf().setFromNormalized(rm), AMP);
-        Vector3f eul = q.getEulerAnglesZYX(new Vector3f());
+        Vector3f eul = zyx(q);
         part.x = Mth.lerp(w, part.x, at.x);
         part.y = Mth.lerp(w, part.y, at.y);
         part.z = Mth.lerp(w, part.z, at.z);
@@ -313,12 +313,26 @@ public final class EfMotion {
         return new Quaternionf().slerp(new Quaternionf().setFromNormalized(rm), AMP);
     }
 
+    /**
+     * (r65, look run 6) A turn as a model part's angles (ModelPart turns by rotationZYX(zRot, yRot, xRot)). JOML 1.10.5's
+     * own getEulerAnglesZYX, as Minecraft ships it, gives other angles (a 96-degree turn with a tilt came back as a plain
+     * quarter turn, a small one a third short about x): the bodies lay down or tipped toward the eye. Read off the matrix.
+     */
+    static Vector3f zyx(Quaternionf q) {
+        Matrix3f m = new Matrix3f().rotation(q);
+        float s = -m.m02();
+        if (s > 0.9999F || s < -0.9999F) {
+            return new Vector3f((float) Math.atan2(-m.m21(), m.m11()), s > 0 ? Mth.HALF_PI : -Mth.HALF_PI, 0F);
+        }
+        return new Vector3f((float) Math.atan2(m.m12(), m.m22()), (float) Math.asin(s), (float) Math.atan2(m.m01(), m.m00()));
+    }
+
     private static Quaternionf turnOf(ModelPart part) {
         return new Quaternionf().rotationZYX(part.zRot, part.yRot, part.xRot);
     }
 
     private static void setTurn(ModelPart part, Quaternionf q) {
-        Vector3f eul = q.getEulerAnglesZYX(new Vector3f());
+        Vector3f eul = zyx(q);
         part.xRot = eul.x;
         part.yRot = eul.y;
         part.zRot = eul.z;
