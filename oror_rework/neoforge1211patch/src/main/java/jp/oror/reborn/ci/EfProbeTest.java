@@ -36,6 +36,19 @@ public final class EfProbeTest {
             return false;
         }
 
+        /**
+         * (run nfc 2) a new player is spared every blow for its first three seconds, and a fake player never counts them
+         * down (it does not tick): no mob ever hurt the tester. Taken straight to its health, past that.
+         */
+        @Override
+        public boolean hurt(DamageSource source, float amount) {
+            if (amount <= 0 || !this.isAlive()) {
+                return false;
+            }
+            this.actuallyHurt(source, amount);
+            return true;
+        }
+
         void ready() {
             this.attackStrengthTicker = 200;
         }
