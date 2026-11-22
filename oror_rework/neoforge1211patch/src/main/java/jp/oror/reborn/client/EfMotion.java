@@ -155,7 +155,7 @@ public final class EfMotion {
         return bindWorld;
     }
 
-    /** Each joint's move from rest at time t, in Epic Fight's space (the step forward taken out). */
+    /** Each joint's move from rest at time t, in Epic Fight's space (Epic Fight's own drawing matrices). */
     static Map<String, Matrix4f> moves(Clip c, float t) {
         Map<String, Matrix4f> rest = bind();
         yesman.epicfight.api.animation.types.StaticAnimation a = anim(c.id());
@@ -175,18 +175,14 @@ public final class EfMotion {
                 now.put(j, joml(armature.getBoundTransformFor(pose, jt), transposed));
             }
         }
-        // (r65, look 'motion' run 4) the Root's own turn and step taken out: Epic Fight draws the body facing where the mob
-        // faces (the player beside them stood upright and square while the Root turned a hundred degrees), and moves the
-        // mob itself; what is left is each joint's motion about the hips
-        Matrix4f unstep = new Matrix4f();
-        if (now.containsKey("Root") && rest.containsKey("Root")) {
-            unstep = new Matrix4f(rest.get("Root")).mul(new Matrix4f(now.get("Root")).invert());
-        }
+        // (r65, look 'motion' run 5) the Root's turn is kept: Epic Fight's drawing matrices (getPoseAsTransformMatrix) are
+        // exactly these, the Root's turn and drop included, and its player bends and turns its whole body by them; a roll is
+        // nothing but the Root's turn. (Run 4 took it out, misled by the player's pose a few ticks behind the models'.)
         Map<String, Matrix4f> out = new HashMap<>();
         for (Map.Entry<String, Matrix4f> en : now.entrySet()) {
             Matrix4f b = rest.get(en.getKey());
             if (b != null) {
-                out.put(en.getKey(), new Matrix4f(unstep).mul(en.getValue()).mul(new Matrix4f(b).invert()));
+                out.put(en.getKey(), new Matrix4f(en.getValue()).mul(new Matrix4f(b).invert()));
             }
         }
         return out;
@@ -212,7 +208,7 @@ public final class EfMotion {
         return b.toString();
     }
 
-    static final float AMP = 0.75F;
+    static final float AMP = 1.0F;
 
     /** Between two joints' moves (the body hinged between its waist and its chest, so its hips stay on its legs). */
     public static Matrix4f mix(Matrix4f a, Matrix4f b, float u) {
@@ -249,8 +245,8 @@ public final class EfMotion {
         }
         Vector3f pivot = toEf(part.x, part.y, part.z);
         Vector3f moved = move.transformPosition(pivot, new Vector3f());
-        // (r65, look run) Epic Fight's swings turn the body 70 to 90 degrees and lift a leg level, which its bending mesh
-        // carries and a block model (no waist, no knees) does not: three quarters of every turn and shift
+        // (look run 5) the whole of every turn and shift: these are Epic Fight's own drawing matrices now, and the player
+        // beside the models is drawn by them in full
         moved = new Vector3f(pivot).lerp(moved, AMP);
         Vector3f at = toModel(moved);
         Matrix3f r = new Matrix3f().rotation(rot);
@@ -386,8 +382,37 @@ public final class EfMotion {
             Quaternionf q = armTurn(p, (String) a[2], (String) a[3], (String) a[4]);
             if (q != null) {
                 setTurn(part, turnOf(part).slerp(modelTurn(q), w));
+                // what it holds turned as Epic Fight turns its hand's tool joint, about the grip (the block arm points at
+                // the wrist; the forearm's bend, which a straight block has not, is the weapon's)
+                Matrix4f mt = p.get((String) a[4]);
+                if (mt != null) {
+                    Quaternionf now = turnOf(part);
+                    Quaternionf target = new Quaternionf(now).slerp(modelTurn(mt.getNormalizedRotation(new Quaternionf())), w);
+                    GRIP.put(part, new Quaternionf(now).conjugate().mul(target));
+                }
             }
         }
+    }
+
+    /** The turn of what each arm holds, about its grip, beyond the arm's own (render thread only: set in setupAnim). */
+    private static final Map<ModelPart, Quaternionf> GRIP = new java.util.IdentityHashMap<>();
+
+    /** No grip turn on these arms (a model drawn without Epic Fight's motion, or another mob on the same model). */
+    public static void noGrip(ModelPart... arms) {
+        for (ModelPart a : arms) {
+            GRIP.remove(a);
+        }
+    }
+
+    /** After the arm's own translateAndRotate: what it holds turned to Epic Fight's tool joint, about the hand. */
+    public static void grip(ModelPart arm, com.mojang.blaze3d.vertex.PoseStack pose) {
+        Quaternionf c = GRIP.get(arm);
+        if (c == null) {
+            return;
+        }
+        pose.translate(0F, 0.625F, 0F);
+        pose.mulPose(c);
+        pose.translate(0F, -0.625F, 0F);
     }
 
     // ---- which animation, per mob ----

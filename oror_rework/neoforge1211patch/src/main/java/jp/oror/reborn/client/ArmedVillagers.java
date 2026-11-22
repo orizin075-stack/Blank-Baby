@@ -126,6 +126,7 @@ public final class ArmedVillagers {
             // (r64) Epic Fight's motions move the parts' places too: back to their own before each pose
             this.body.resetPose();
             this.getHead().resetPose();
+            EfMotion.noGrip(this.rightArm, this.leftArm);
             this.root().getChild("right_leg").resetPose();
             this.root().getChild("left_leg").resetPose();
             super.setupAnim(e, walk, amount, age, yaw, pitch);
@@ -229,6 +230,7 @@ public final class ArmedVillagers {
                 if (!stack.isEmpty()) {
                     pose.pushPose();
                     model.toHand(side, pose);
+                    EfMotion.grip(side == HumanoidArm.LEFT ? model.leftArm : model.rightArm, pose);
                     pose.mulPose(Axis.XP.rotationDegrees(-90F));
                     pose.mulPose(Axis.YP.rotationDegrees(180F));
                     boolean left = side == HumanoidArm.LEFT;

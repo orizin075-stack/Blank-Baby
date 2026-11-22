@@ -161,6 +161,7 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
      * the pose above. The king's forms and casting keep their own.
      */
     private void efMotion(RoyalMob mob, float age) {
+        jp.oror.reborn.client.EfMotion.noGrip(this.rightArm, this.leftArm);
         if (mob.isCasting() || shoots(mob.getMainHandItem()) || !jp.oror.reborn.client.EfMotion.update(mob, age)) {
             return;
         }
@@ -534,5 +535,6 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
     public void translateToHand(HumanoidArm side, com.mojang.blaze3d.vertex.PoseStack pose) {
         this.root.translateAndRotate(pose);
         (side == HumanoidArm.LEFT ? this.leftArm : this.rightArm).translateAndRotate(pose);
+        jp.oror.reborn.client.EfMotion.grip(side == HumanoidArm.LEFT ? this.leftArm : this.rightArm, pose);
     }
 }
