@@ -1289,6 +1289,8 @@ public final class Look {
                     String s = at.toString();
                     float t = Float.parseFloat(s.substring(s.indexOf('@') + 1));
                     note("efmotion " + s + ": " + locals.invoke(null, anim, t, (Object) joints));
+                    note("efdraw " + s + ": " + ef.getMethod("debugRender", String.class, float.class, String[].class)
+                        .invoke(null, anim, t, (Object) new String[] {"Root", "Chest", "Arm_R", "Hand_R", "Tool_R"}));
                     break;
                 }
             }

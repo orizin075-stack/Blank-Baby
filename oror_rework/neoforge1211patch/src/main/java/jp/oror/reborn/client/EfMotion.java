@@ -464,6 +464,56 @@ public final class EfMotion {
         return r == null ? "no id" : rawPose(r, t, joints);
     }
 
+    /**
+     * (r65, look 'motion') Epic Fight's drawing matrices (getPoseAsTransformMatrix, what its mesh is skinned by) beside
+     * this class's own move of each joint, and the joints' places, in Epic Fight's space; for finding where they part.
+     */
+    public static String debugRender(String id, float t, String... joints) {
+        ResourceLocation r = ResourceLocation.tryParse(id);
+        yesman.epicfight.api.animation.types.StaticAnimation a = r == null ? null : anim(r);
+        Map<String, Matrix4f> rest = bind();
+        if (a == null || rest == null || armature == null) {
+            return "none";
+        }
+        StringBuilder b = new StringBuilder();
+        try {
+            yesman.epicfight.api.animation.Pose pose = a.getRawPose(t);
+            yesman.epicfight.api.utils.math.OpenMatrix4f[] on = armature.getPoseAsTransformMatrix(pose, true);
+            yesman.epicfight.api.utils.math.OpenMatrix4f[] off = armature.getPoseAsTransformMatrix(pose, false);
+            for (String j : joints) {
+                yesman.epicfight.api.animation.Joint jt = armature.searchJointByName(j);
+                if (jt == null || !rest.containsKey(j)) {
+                    continue;
+                }
+                Matrix4f now = joml(armature.getBoundTransformFor(pose, jt), transposed);
+                Matrix4f mine = new Matrix4f(now).mul(new Matrix4f(rest.get(j)).invert());
+                b.append(j).append(" rest").append(v(rest.get(j).getTranslation(new Vector3f()))).append(" now").append(v(now.getTranslation(new Vector3f())))
+                    .append(" mine").append(m(mine));
+                int i = jt.getId();
+                if (on != null && i < on.length) {
+                    b.append(" drawT").append(m(joml(on[i], false)));
+                }
+                if (off != null && i < off.length) {
+                    b.append(" drawF").append(m(joml(off[i], false)));
+                }
+                b.append(" | ");
+            }
+        } catch (Throwable ex) {
+            b.append("error ").append(ex);
+        }
+        return b.toString();
+    }
+
+    private static String v(Vector3f x) {
+        return String.format(java.util.Locale.ROOT, "(%.3f,%.3f,%.3f)", x.x, x.y, x.z);
+    }
+
+    private static String m(Matrix4f x) {
+        Quaternionf q = x.getNormalizedRotation(new Quaternionf());
+        return String.format(java.util.Locale.ROOT, "[q(%.2f,%.2f,%.2f,%.2f) t%s r0(%.2f,%.2f,%.2f)]", q.x, q.y, q.z, q.w, v(x.getTranslation(new Vector3f())),
+            x.m00(), x.m01(), x.m02());
+    }
+
     /** The mob's animation and its time now (seconds), or null. */
     public static String nowAt(LivingEntity e, float partial) {
         Active a = ACTIVE.get(e.getId());
