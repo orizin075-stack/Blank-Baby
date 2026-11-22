@@ -1,0 +1,72 @@
+# One-off look at how NightfallCraft (Casket 2.2.9.8, Forge 1.20.1) gives its mobs their Epic Fight moves, guards and
+# parries (the user: "ナイトフォールクラフトの動きとパリイについてみてみて ... このバージョンに合うように作り直して"), to rebuild
+# them for 1.21.1: Combat Evolution, dodge_parry_reward, p1nero_ec, EpicFight Nightfall, Nightfall Enhance and Epic Fight
+# itself. Their data files (mob patches, behaviours, skills), their animation names and their classes' members are
+# printed to the job log only; nothing from the jars is committed.
+name: NightfallCraft combat inspect
+on:
+  push:
+    branches: [claude/jolly-einstein-wvpjq1]
+    paths: ['.github/workflows/nfc_inspect.yml']
+  workflow_dispatch:
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Fetch
+        run: |
+          mkdir -p $RUNNER_TEMP/j && cd $RUNNER_TEMP/j
+          for f in "8368/239/CombatEvolution-2.2.0.jar" "7867/343/dodge_parry_reward-1.20.1forge-20.14.3.jar" "8212/859/p1nero_ec-20.14.0.9.jar" \
+                   "8392/781/Nightfall Enhance-1.1.4-all.jar" "8366/962/EpicFight Nightfall-3.4.0.jar" "8049/910/epic-fight-20.14.17-mc1.20.1-forge.jar"; do
+            n=$(basename "$f"); curl -sSfL -A 'Mozilla/5.0 (oror-nightfall-ci)' -o "$n" "https://mediafilez.forgecdn.net/files/${f// /%20}" && echo "fetched $n"
+          done
+          ls -la
+      - name: Data files and mods.toml
+        run: |
+          cd $RUNNER_TEMP/j
+          python3 -I - *.jar <<'PY'
+          import sys, zipfile, collections
+          for jar in sys.argv[1:]:
+              if 'epic-fight-20' in jar:
+                  continue
+              z = zipfile.ZipFile(jar)
+              names = z.namelist()
+              print('=' * 100); print(jar, len(names), 'entries')
+              print(z.read('META-INF/mods.toml').decode('utf-8', 'replace')[:3000])
+              tops = collections.Counter('/'.join(n.split('/')[:3]) for n in names if not n.endswith('/'))
+              for k, v in sorted(tops.items()):
+                  print(f'  {v:5d}  {k}')
+              for n in names:
+                  low = n.lower()
+                  if n.endswith(('.json', '.toml', '.json5', '.mcmeta')) and n.startswith('data/') and len(z.read(n)) < 6000 and \
+                          any(k in low for k in ('mobpatch', 'mob_patch', 'patch', 'behavior', 'behaviour', 'skill', 'guard', 'parry', 'dodge', 'combat', 'moveset', 'weapon')):
+                      print('-' * 60, n); print(z.read(n).decode('utf-8', 'replace'))
+              anims = sorted(set(n for n in names if '/animmodels/animations/' in n or '/animations/' in n and n.endswith('.json')))
+              print('animations', len(anims)); [print('   ', a) for a in anims[:400]]
+          PY
+      - name: Classes (members only)
+        run: |
+          cd $RUNNER_TEMP/j
+          for jar in CombatEvolution-2.2.0.jar dodge_parry_reward-1.20.1forge-20.14.3.jar p1nero_ec-20.14.0.9.jar "Nightfall Enhance-1.1.4-all.jar"; do
+            echo "=================== $jar"
+            rm -rf x && mkdir x && (cd x && unzip -q "../$jar" '*.class' 2>/dev/null)
+            find x -name '*.class' | grep -viE '\$[0-9]+\.class$|/shadow/|/libs?/|kotlin/' | sort | head -n 400 | sed 's/^x\///' > classes.txt
+            wc -l classes.txt
+            grep -iE 'guard|parry|dodge|behav|ai/|goal|combat|mobpatch|patch|tactic|stance' classes.txt | head -n 120 | while read c; do
+              javap -p -cp x "${c%.class}" 2>/dev/null | grep -vE '^Compiled|lambda\$' | head -n 40
+            done
+          done
+      - name: Epic Fight 20.14.17's mob-side guard and parry
+        run: |
+          cd $RUNNER_TEMP/j; rm -rf x && mkdir x && (cd x && unzip -q ../epic-fight-20.14.17-mc1.20.1-forge.jar '*.class')
+          for c in yesman/epicfight/world/capabilities/entitypatch/HumanoidMobPatch yesman/epicfight/world/capabilities/entitypatch/MobPatch \
+                   yesman/epicfight/world/entity/ai/goal/CombatBehaviors yesman/epicfight/world/capabilities/entitypatch/mob/ZombiePatch \
+                   yesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch; do
+            echo "== $c"; javap -p -cp x "$c" 2>/dev/null | grep -iE 'guard|parry|block|stun|behavior|combat|class ' | head -n 40
+          done
+          unzip -l epic-fight-20.14.17-mc1.20.1-forge.jar | grep -iE 'data/.*(mobpatch|weapon_type|guard)' | head -n 40
