@@ -137,3 +137,34 @@ if BIND:
                     ang, ax = angle_axis(d)
                     row.append(f'{j} {ang:.0f}deg{ax}')
             print(f'  t={t}: ' + '; '.join(row))
+
+# (run 4) Epic Fight keeps a joint's pose at runtime as its change from rest (rest local^-1 x animation local): the same
+# for nf_sword_auto1, to set beside the husk's logged pose (look 'motion', efpose lines)
+def quat(m):
+    r = [[m[0], m[1], m[2]], [m[4], m[5], m[6]], [m[8], m[9], m[10]]]
+    tr = r[0][0] + r[1][1] + r[2][2]
+    if tr > 0:
+        s = math.sqrt(tr + 1.0) * 2
+        return ((r[2][1] - r[1][2]) / s, (r[0][2] - r[2][0]) / s, (r[1][0] - r[0][1]) / s, 0.25 * s)
+    if r[0][0] > r[1][1] and r[0][0] > r[2][2]:
+        s = math.sqrt(1.0 + r[0][0] - r[1][1] - r[2][2]) * 2
+        return (0.25 * s, (r[0][1] + r[1][0]) / s, (r[0][2] + r[2][0]) / s, (r[2][1] - r[1][2]) / s)
+    if r[1][1] > r[2][2]:
+        s = math.sqrt(1.0 + r[1][1] - r[0][0] - r[2][2]) * 2
+        return ((r[0][1] + r[1][0]) / s, 0.25 * s, (r[1][2] + r[2][1]) / s, (r[0][2] - r[2][0]) / s)
+    s = math.sqrt(1.0 + r[2][2] - r[0][0] - r[1][1]) * 2
+    return ((r[0][2] + r[2][0]) / s, (r[1][2] + r[2][1]) / s, 0.25 * s, (r[1][0] - r[0][1]) / s)
+
+
+if BIND:
+    a = load('efn', 'biped/nf_sword/nf_sword_auto1')
+    for t in (0.13, 0.267, 0.456):
+        row = []
+        for j in ('Root', 'Torso', 'Chest', 'Arm_R', 'Hand_R', 'Tool_R', 'Thigh_R'):
+            if j in a and j in BIND:
+                d = mul(inv_rigid(BIND[j]), at(a[j], t))
+                q = quat(d)
+                row.append(f'{j} t({d[3]:.2f},{d[7]:.2f},{d[11]:.2f}) q({q[0]:.2f},{q[1]:.2f},{q[2]:.2f},{q[3]:.2f})')
+                b = BIND[j]; qb = quat(b)
+                row.append(f'[rest {j} t({b[3]:.2f},{b[7]:.2f},{b[11]:.2f}) q({qb[0]:.2f},{qb[1]:.2f},{qb[2]:.2f},{qb[3]:.2f})]')
+        print(f'delta t={t}: ' + ' '.join(row))
