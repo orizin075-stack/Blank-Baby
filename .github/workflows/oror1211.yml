@@ -194,6 +194,8 @@ jobs:
             > out/pack_fetch.txt 2>&1 || true
           tail -3 out/pack_fetch.txt
           ls "$RUNNER_TEMP/pack053" | grep -i -E 'indestructible|falchion|nightfall|efn' || true
+          # (r64) every animation the Epic Fight mob patches name, against what the pack's 1.21.1 jars hold
+          python3 -I tools/ef_anim_check.py out/ef_anim_check.txt "$RUNNER_TEMP"/pack053/*.jar out/oror_supreme_bosses-0.17.39-059-preview.jar 2>&1 | tail -n 40 || true
           # Alex's Caves' per-entity magnetism and seed holder (a tenth of the battle's server thread by the profile)
           AC=$(ls "$RUNNER_TEMP"/pack053/*.jar | grep -i alexscaves | head -n 1)
           { echo "== $AC"; javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil | grep -E 'static'
