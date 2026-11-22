@@ -51,8 +51,11 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/all"
           NEW=$(sed -n 's/^release_version=//p' gradle.properties)
+          # (r64) and the pack's own Epic Fight jars from its overrides (Indestructible and Falchion, OROR's builds), as the user plays it
           cp "$RUNNER_TEMP"/pack053/*.jar "$RUNNER_TEMP"/add/mods/*.jar libs/nightfall.jar user_mods/dueldominion-0.17.0-alpha.jar \
+            ../r60test/mods_r61/indestructible-21.16.3-oror.1.jar ../r60test/mods_r61/falchionmoveset-21.17.3.1-oror.1.jar \
             out/oror_supreme_bosses-$NEW.jar "$RUNNER_TEMP/all/"
+          python3 -I tools/ef_anim_check.py "$OUT/ef_anim_check.txt" "$RUNNER_TEMP"/all/*.jar 2>&1 | head -n 60 || true
           python3 -I ../nfc_ui/tools/pack_tools.py depcheck "$RUNNER_TEMP/all" "$OUT/depcheck.txt" | head -80
       - name: Dedicated server with the additions
         run: |
@@ -66,9 +69,12 @@ jobs:
           rm -f "$RUNNER_TEMP"/srv/epic_fight_avalon-* "$RUNNER_TEMP"/srv/tudigong-* "$RUNNER_TEMP"/srv/bountiful_npc-* \
             "$RUNNER_TEMP"/srv/pbf1-* "$RUNNER_TEMP"/srv/multiplayer_boss_fight-* "$RUNNER_TEMP"/srv/fast_tpa-* "$RUNNER_TEMP"/srv/cataclysm_dimension-*
           ls "$RUNNER_TEMP/srv" | wc -l
-          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 2400 'COMPASS-RESULT' 'KING-STORY {' 'CI-DONE' \
-            -- compass,story -- "$RUNNER_TEMP"/srv/*.jar 2>&1 | tee "$OUT/server_test.txt"; rc=${PIPESTATUS[0]}
+          # (r64) the Epic Fight check (jp.oror.efprobe) on the pack as played, beside the compass and the king's story
+          bash tools/server_test.sh "$RUNNER_TEMP/server" 21.1.262 20261030 2400 'COMPASS-RESULT' 'EFP-RESULT' 'CI-DONE' \
+            -- compass,efprobe -- "$RUNNER_TEMP"/srv/*.jar 2>&1 | tee "$OUT/server_test.txt"; rc=${PIPESTATUS[0]}
           C="$RUNNER_TEMP/server/console.log"
+          grep -aE 'EFP|OROR EF Probe' "$C" > "$OUT/efprobe.txt" || true
+          grep -aiE 'indestructible|advanced_mobpatch|mobpatch' "$C" | cut -c1-600 | head -n 300 > "$OUT/indestructible_log.txt" || true
           grep -aE 'Loading [0-9]+ mods|Done \(|COMPASS-RESULT|KING-STORY|REBEL-|CI-DONE|STRUCT-GUARD|STRUCT-FOOTING' "$C" | cut -c1-3000 >> "$OUT/server_test.txt"
           grep -aE 'ERROR|Exception|Caused by|Failed to|Couldn.t|Unable to|Mixin apply failed|InjectionError' "$C" \
             | grep -v 'HttpConnectTimeout\|ConnectException' | head -800 > "$OUT/server_errors.txt" || true
