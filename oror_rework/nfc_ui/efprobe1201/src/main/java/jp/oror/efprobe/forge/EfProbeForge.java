@@ -51,7 +51,12 @@ public final class EfProbeForge {
             if (amount <= 0 || !this.isAlive()) {
                 return false;
             }
+            // (run nfc 3) never to nothing: a fake player that falls stopped the server seven seconds into the check
+            float before = this.getHealth();
             this.actuallyHurt(source, amount);
+            if (this.getHealth() < 1F) {
+                this.setHealth(Math.min(1F, before));
+            }
             return true;
         }
 

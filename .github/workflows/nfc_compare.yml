@@ -103,7 +103,7 @@ jobs:
           ls $S/mods | wc -l; ls $S/mods > $OUT/mods_list.txt
       - name: Run the server (taking out what keeps it from starting) and the Epic Fight check
         run: |
-          S=$RUNNER_TEMP/server; : > $OUT/removed.txt; : > $OUT/attempts.txt
+          S=$RUNNER_TEMP/server; : > $OUT/removed.txt; : > $OUT/attempts.txt; : > $OUT/fetched_deps.txt
           for attempt in $(seq 1 18); do
             rm -rf $S/crash-reports $S/logs
             (cd $S && timeout 2400 bash run.sh nogui > $S/console.log 2>&1); code=$?
@@ -111,6 +111,8 @@ jobs:
             echo "attempt $attempt: exit $code started $started efp $efp mods $(ls $S/mods | wc -l)" | tee -a $OUT/attempts.txt
             if [ "$efp" -gt 0 ]; then break; fi
             if [ "$started" -gt 0 ]; then echo "started but no EFP-RESULT" | tee -a $OUT/attempts.txt; break; fi
+            # a missing library first: fetched from CurseForge (its newest Forge 1.20.1 file) rather than its mod taken out
+            if python3 -I $U/tools/fetch_deps.py $S/mods $S/console.log $OUT/fetched_deps.txt; then continue; fi
             python3 -I $U/tools/server_fix.py $S/mods $S/console.log $S/crash-reports $OUT/removed.txt || {
               echo "nothing more to take out" | tee -a $OUT/attempts.txt
               grep -nE 'ERROR|Exception|Caused by|Missing or unsupported|Failure message|Mod File' $S/console.log | head -n 120 > $OUT/last_errors.txt
@@ -118,6 +120,7 @@ jobs:
               break; }
           done
           grep -E 'EFP|EF Probe' $S/console.log > $OUT/efp.txt || true
+          awk '/EFP-START/{on=1} on{print}' $S/console.log | grep -vE 'C2ME|Detected setBlock' | head -n 600 > $OUT/during_check.txt || true
           grep -nE 'ERROR|Exception|Caused by' $S/console.log | head -n 200 > $OUT/server_errors.txt || true
           tail -n 60 $S/console.log > $OUT/console_tail.txt
           cat $OUT/attempts.txt; echo; cat $OUT/removed.txt; echo; cat $OUT/efp.txt | cut -c1-400 | tail -n 30
