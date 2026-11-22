@@ -1212,6 +1212,10 @@ public final class Look {
                             e.setYHeadRot(yaw);
                             if (e instanceof LivingEntity l) {
                                 l.yBodyRot = yaw;
+                                // (run 6) a villager let its sword fall in a swing: armed again each time
+                                if (l.getMainHandItem().isEmpty()) {
+                                    l.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
+                                }
                             }
                         }
                     }
