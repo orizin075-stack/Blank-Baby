@@ -5,12 +5,14 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 /**
  * (r65) A target set on a mob its brain leads (piglins, piglin brutes, hoglins) holds. Their getTarget() reads the brain's
@@ -46,5 +48,41 @@ public final class BrainTargets {
         if (b.checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED)) {
             b.setMemory(MemoryModuleType.ATTACK_TARGET, t);
         }
+    }
+
+    /**
+     * (r65) And it goes to it. Under Epic Fight's patch (the pack as played: NightfallCraft's AdvancedCustomHumanoidMobPatch)
+     * a brute's brain fights by the patch's combat goal, but nothing walks it to its foe: the CI's brute stood 154 of 200
+     * ticks four blocks from the golem and struck it twice, where every goal-led mob closed to arm's reach (the pack as
+     * played, MOBS-TRACE). A brain mob with a foe out of reach and nowhere to walk is walked to it, as its brain's own
+     * SetWalkTargetFromAttackTargetIfTargetOutOfReach would.
+     */
+    @SubscribeEvent
+    public static void close(EntityTickEvent.Post e) {
+        if (!(e.getEntity() instanceof Mob m) || !(m instanceof AbstractPiglin || m instanceof Hoglin) || m.level().isClientSide
+            || (m.tickCount + m.getId()) % 10 != 0 || m.isNoAi() || m.isPassenger()) {
+            return;
+        }
+        LivingEntity t = m.getTarget();
+        if (t == null || !t.isAlive() || t.level() != m.level()) {
+            return;
+        }
+        double d = m.distanceToSqr(t);
+        if (d < 2.5 * 2.5 || d > 32 * 32 || !m.getNavigation().isDone()) {
+            return;
+        }
+        Brain<?> b = m.getBrain();
+        if (!b.checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)) {
+            return;
+        }
+        java.util.Optional<WalkTarget> w = b.getMemory(MemoryModuleType.WALK_TARGET);
+        // walking elsewhere (a hoglin backing off from warped fungus, a piglin to its gold): its brain's choice stands
+        if (w.isPresent() && !(w.get().getTarget() instanceof net.minecraft.world.entity.ai.behavior.EntityTracker et && et.getEntity() == t)) {
+            return;
+        }
+        if (w.isEmpty()) {
+            b.setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(t, 1.0F, 1));
+        }
+        m.getNavigation().moveTo(t, 1.0);
     }
 }
