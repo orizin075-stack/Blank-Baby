@@ -280,6 +280,7 @@ public final class EfProbeCore {
         }
         if (s.contains("attack") || s.contains("auto") || s.contains("combo") || s.contains("swing") || s.contains("slash") || s.contains("stab")
             || s.contains("smash") || s.contains("dash") || s.contains("airslash") || s.contains("skill") || s.contains("bite") || s.contains("claw")
+            || s.contains("onehand") || s.contains("twohand") || s.contains("kick") || s.contains("punch") || s.contains("atk")
             || s.contains("shot") || s.contains("shoot") || s.contains("cast") || s.contains("spell") || s.contains("thrust") || s.contains("sweep")) {
             return "attack";
         }
