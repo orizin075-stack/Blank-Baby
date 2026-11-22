@@ -228,6 +228,18 @@ public final class EfMotion {
         return out;
     }
 
+    static final float AMP = 0.75F;
+
+    /** Between two joints' moves (the body hinged between its waist and its chest, so its hips stay on its legs). */
+    public static Matrix4f mix(Matrix4f a, Matrix4f b, float u) {
+        if (a == null || b == null) {
+            return a == null ? b : a;
+        }
+        Quaternionf qa = a.getNormalizedRotation(new Quaternionf()), qb = b.getNormalizedRotation(new Quaternionf());
+        Vector3f ta = a.getTranslation(new Vector3f()), tb = b.getTranslation(new Vector3f());
+        return new Matrix4f().translationRotate(ta.lerp(tb, u), qa.slerp(qb, u));
+    }
+
     // Epic Fight's space to the model's: x_m = -16 x, y_m = 24 - 16 z, z_m = -16 y
     private static final Matrix3f A = new Matrix3f(-1, 0, 0, 0, 0, -1, 0, -1, 0);
 
@@ -246,12 +258,15 @@ public final class EfMotion {
         }
         Vector3f pivot = toEf(part.x, part.y, part.z);
         Vector3f moved = move.transformPosition(pivot, new Vector3f());
+        // (r65, look run) Epic Fight's swings turn the body 70 to 90 degrees and lift a leg level, which its bending mesh
+        // carries and a block model (no waist, no knees) does not: three quarters of every turn and shift
+        moved = new Vector3f(pivot).lerp(moved, AMP);
         Vector3f at = toModel(moved);
         Matrix3f r = new Matrix3f();
         (turn == null ? move : turn).get3x3(r);
         // the turn in the model's axes: A r A^T (A is its own inverse's transpose)
         Matrix3f rm = new Matrix3f(A).mul(r).mul(new Matrix3f(A).transpose());
-        Quaternionf q = new Quaternionf().setFromNormalized(rm);
+        Quaternionf q = new Quaternionf().slerp(new Quaternionf().setFromNormalized(rm), AMP);
         Vector3f eul = q.getEulerAnglesZYX(new Vector3f());
         part.x = Mth.lerp(w, part.x, at.x);
         part.y = Mth.lerp(w, part.y, at.y);

@@ -169,7 +169,7 @@ public final class ArmedVillagers {
                 EfMotion.Pose p = EfMotion.now(e, age);
                 if (p != null) {
                     float w = p.weight();
-                    EfMotion.pose(this.body, p.get("Chest"), null, w);
+                    EfMotion.pose(this.body, jp.oror.reborn.client.EfMotion.mix(p.get("Torso"), p.get("Chest"), 0.5F), null, w);
                     EfMotion.pose(this.getHead(), p.get("Head"), null, w);
                     EfMotion.pose(this.rightArm, p.get("Arm_R"), p.get("Hand_R"), w);
                     EfMotion.pose(this.leftArm, p.get("Arm_L"), p.get("Hand_L"), w);

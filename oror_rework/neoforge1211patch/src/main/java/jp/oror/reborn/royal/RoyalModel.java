@@ -170,7 +170,7 @@ public final class RoyalModel extends HierarchicalModel<RoyalMob> implements Arm
         }
         float w = p.weight();
         float lookYaw = this.head.yRot, lookPitch = this.head.xRot;
-        jp.oror.reborn.client.EfMotion.pose(this.body, p.get("Chest"), null, w);
+        jp.oror.reborn.client.EfMotion.pose(this.body, jp.oror.reborn.client.EfMotion.mix(p.get("Torso"), p.get("Chest"), 0.5F), null, w);
         jp.oror.reborn.client.EfMotion.pose(this.head, p.get("Head"), null, w);
         jp.oror.reborn.client.EfMotion.pose(this.rightArm, p.get("Arm_R"), p.get("Hand_R"), w);
         jp.oror.reborn.client.EfMotion.pose(this.leftArm, p.get("Arm_L"), p.get("Hand_L"), w);
