@@ -84,3 +84,56 @@ for ns, path in [('epicfight', 'biped/living/idle'), ('epicfight', 'biped/combat
             world[j] = mul(world[p], m) if p and p in world else m
         row = ' '.join(f"{j}=({world[j][3]:.2f},{world[j][7]:.2f},{world[j][11]:.2f})" for j in ('Root', 'Torso', 'Chest', 'Head', 'Shoulder_R', 'Arm_R', 'Elbow_R', 'Hand_R', 'Tool_R', 'Thigh_R', 'Leg_R', 'Knee_R') if j in world)
         print(f'  t={t:.2f} {row}')
+
+# (run 3) each joint's move from rest (world now x world rest^-1, the step forward taken out): the turn's angle and axis,
+# for what OROR's models will do with it
+import math
+
+
+def inv_rigid(m):
+    r = [[m[0], m[1], m[2]], [m[4], m[5], m[6]], [m[8], m[9], m[10]]]
+    t = [m[3], m[7], m[11]]
+    rt = [[r[j][i] for j in range(3)] for i in range(3)]
+    ti = [-sum(rt[i][k] * t[k] for k in range(3)) for i in range(3)]
+    return [rt[0][0], rt[0][1], rt[0][2], ti[0], rt[1][0], rt[1][1], rt[1][2], ti[1], rt[2][0], rt[2][1], rt[2][2], ti[2], 0, 0, 0, 1]
+
+
+def angle_axis(m):
+    tr = m[0] + m[5] + m[10]
+    a = math.degrees(math.acos(max(-1, min(1, (tr - 1) / 2))))
+    ax = (m[9] - m[6], m[2] - m[8], m[4] - m[1])
+    n = math.sqrt(sum(x * x for x in ax)) or 1
+    return a, tuple(round(x / n, 2) for x in ax)
+
+
+if BIND:
+    bw = {}
+    for j in TREE:
+        if j in BIND:
+            p = TREE[j]
+            bw[j] = mul(bw[p], BIND[j]) if p and p in bw else BIND[j]
+    for ns, path in [('efn', 'biped/nf_sword/nf_sword_auto1'), ('efn', 'biped/nf_sword/nf_sword_auto2'), ('epicfightx', 'biped/combat/fist_auto1'),
+                     ('epicfight', 'biped/combat/sword_auto1')]:
+        a = load(ns, path)
+        if not a:
+            print('no', ns, path); continue
+        print('== moves', ns, path)
+        for t in (0.15, 0.3, 0.5, 0.8):
+            world = {}
+            for j in TREE:
+                if j in a:
+                    m = at(a[j], t)
+                elif j in bw:
+                    pj = TREE[j]
+                    m = mul(inv_rigid(bw[pj]), bw[j]) if pj else bw[j]
+                else:
+                    continue
+                p = TREE[j]
+                world[j] = mul(world[p], m) if p and p in world else m
+            row = []
+            for j in ('Root', 'Torso', 'Chest', 'Head', 'Arm_R', 'Hand_R', 'Thigh_R'):
+                if j in world and j in bw:
+                    d = mul(world[j], inv_rigid(bw[j]))
+                    ang, ax = angle_axis(d)
+                    row.append(f'{j} {ang:.0f}deg{ax}')
+            print(f'  t={t}: ' + '; '.join(row))
