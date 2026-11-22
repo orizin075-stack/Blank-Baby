@@ -53,6 +53,34 @@ jobs:
           print(len(files), 'files in the manifest')
           PY
           python3 -I $U/tools/pack_tools.py nfcfetch $RUNNER_TEMP/casket-mods.json $S $OUT/files.json 2>&1 | tail -n 3
+          # (run nfc 1) a file whose name CurseForge's file listing does not give (bookofdragons, which TCR Core needs, so
+          # TCR Core was taken out): its name from CFWidget's listing of the project, then the CDN
+          python3 -I - $OUT/files.json $S/mods <<'PY'
+          import json, sys, urllib.parse, urllib.request
+          H = {'User-Agent': 'Mozilla/5.0 (oror-nightfall-ci)', 'Accept': 'application/json'}
+          rows = json.load(open(sys.argv[1]))
+          for r in rows:
+              if 'error' not in r:
+                  continue
+              name = None
+              try:
+                  d = json.loads(urllib.request.urlopen(urllib.request.Request(f"https://api.cfwidget.com/{r['projectID']}", headers=H), timeout=60).read())
+                  print('cfwidget', r['projectID'], d.get('title'), len(d.get('files') or []))
+                  name = next((f.get('name') for f in d.get('files') or [] if f.get('id') == r['fileID']), None)
+              except Exception as e:
+                  print('cfwidget failed', r['projectID'], e)
+              if not name:
+                  print('still no name for', r); continue
+              url = f"https://mediafilez.forgecdn.net/files/{r['fileID'] // 1000}/{r['fileID'] % 1000}/" + urllib.parse.quote(name)
+              try:
+                  body = urllib.request.urlopen(urllib.request.Request(url, headers=H), timeout=300).read()
+                  open(sys.argv[2] + '/' + name, 'wb').write(body)
+                  r.pop('error'); r['fileName'] = name; r['bytes'] = len(body); r['via'] = 'cfwidget'
+                  print('fetched', name, len(body))
+              except Exception as e:
+                  print('download failed', name, e)
+          json.dump(rows, open(sys.argv[1], 'w'), indent=1)
+          PY
           # resource packs and shaders land in mods/ too (the manifest does not say which is which): a server needs neither
           find $S/mods -maxdepth 1 -type f ! -name '*.jar' -print -delete | sed 's/^/not a mod: /' | head -n 20
           # TCRMeshes stops any game that is not the official modpack install (seen with 2.2.8.6)

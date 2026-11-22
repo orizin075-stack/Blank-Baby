@@ -78,7 +78,6 @@ public final class EfProbeCore {
     private static String pack;
     private static final List<Lane> LANES = new ArrayList<>();
     private static int age = -1;
-    private static boolean apiTold;
 
     private EfProbeCore() {
     }
@@ -118,8 +117,15 @@ public final class EfProbeCore {
             l.addFreshEntity(m);
             Player p = hooks.tester(l, n);
             p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_SWORD));
-            // (as OROR's guard test) the fake player is not added to the world: the mob fights him all the same
+            // (run nfc 1) in the world: Epic Fight's attacks land through their animation's hit box, which finds only what is
+            // in the world (no mob there hit the tester once); and a diamond sword's damage (held, its modifiers are only
+            // taken up as the player ticks: the strikes did 0.2)
             p.moveTo(c.getX() + 0.5, c.getY() + 1, c.getZ() - 0.5, 0F, 0F);
+            var dmg = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE);
+            if (dmg != null) {
+                dmg.setBaseValue(8.0);
+            }
+            l.addFreshEntity(p);
             Lane lane = new Lane();
             lane.id = spec;
             lane.mob = m;
@@ -273,6 +279,9 @@ public final class EfProbeCore {
             if (lane.mob != null) {
                 lane.mob.discard();
             }
+            if (lane.tester != null) {
+                lane.tester.discard();
+            }
             level.setChunkForced(lane.at.getX() >> 4, lane.at.getZ() >> 4, false);
         }
         LOG.info("EFP-RESULT {\"pack\":\"{}\",\"mobs\":{},\"patched\":{},\"efAttack\":{},\"efGuard\":{},\"efParry\":{},\"strikesStopped\":{},\"ticks\":{}}",
@@ -302,112 +311,163 @@ public final class EfProbeCore {
         return s.replace("\\", "\\\\").replace("\"", "'");
     }
 
-    // ---- Epic Fight, by reflection only ----
-    private static Method getPatch, getAnimator;
+    // ---- Epic Fight, by method handles only ----
+    // (run nfc 1) Class.getMethods() on Epic Fight's classes loads every type their methods name, client classes among
+    // them, and on a dedicated server that throws ("Attempted to load class LocalPlayer"): each method is looked up alone,
+    // by its name and its type, with the types either version of Epic Fight gives it.
+    private static final java.lang.invoke.MethodHandles.Lookup LK = java.lang.invoke.MethodHandles.publicLookup();
+    private static java.lang.invoke.MethodHandle getPatch, getAnimator, getPlayerFor, getAnimation;
     private static Class<?> livingPatch;
     private static boolean looked;
+    private static final Map<Class<?>, java.lang.invoke.MethodHandle> NAMES = new java.util.HashMap<>();
 
-    private static Object patch(LivingEntity e) {
+    private static Class<?> cls(String n) {
         try {
-            if (!looked) {
-                looked = true;
-                Class<?> caps = Class.forName("yesman.epicfight.world.capabilities.EpicFightCapabilities");
-                livingPatch = Class.forName("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
-                for (Method x : caps.getMethods()) {
-                    if (x.getName().equals("getEntityPatch") && x.getParameterCount() == 2) {
-                        getPatch = x;
-                    }
+            return Class.forName(n);
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    private static java.lang.invoke.MethodHandle virt(Class<?> owner, String name, List<Class<?>> rets, List<Class<?>> params) {
+        if (owner == null) {
+            return null;
+        }
+        for (Class<?> r : rets) {
+            if (r == null) {
+                continue;
+            }
+            if (params.isEmpty()) {
+                try {
+                    return LK.findVirtual(owner, name, java.lang.invoke.MethodType.methodType(r));
+                } catch (Throwable t) {
+                    continue;
                 }
             }
-            if (getPatch == null) {
-                return null;
+            for (Class<?> p : params) {
+                if (p == null) {
+                    continue;
+                }
+                try {
+                    return LK.findVirtual(owner, name, java.lang.invoke.MethodType.methodType(r, p));
+                } catch (Throwable t) {
+                    // the other shape
+                }
             }
-            Object p = getPatch.invoke(null, e, livingPatch);
+        }
+        return null;
+    }
+
+    private static void look() {
+        if (looked) {
+            return;
+        }
+        looked = true;
+        Class<?> caps = cls("yesman.epicfight.world.capabilities.EpicFightCapabilities");
+        livingPatch = cls("yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch");
+        Class<?> entityPatch = cls("yesman.epicfight.world.capabilities.entitypatch.EntityPatch");
+        for (Class<?> ret : new Class<?>[]{entityPatch, livingPatch, Object.class}) {
+            if (caps == null || ret == null) {
+                continue;
+            }
+            try {
+                getPatch = LK.findStatic(caps, "getEntityPatch", java.lang.invoke.MethodType.methodType(ret, Entity.class, Class.class));
+                break;
+            } catch (Throwable t) {
+                // another erasure
+            }
+        }
+        Class<?> animator = cls("yesman.epicfight.api.animation.Animator");
+        Class<?> player = cls("yesman.epicfight.api.animation.AnimationPlayer");
+        Class<?> dynamic = cls("yesman.epicfight.api.animation.types.DynamicAnimation");
+        Class<?> accessor = cls("yesman.epicfight.api.asset.AssetAccessor");
+        getAnimator = virt(livingPatch, "getAnimator", java.util.Arrays.asList(animator, cls("yesman.epicfight.api.animation.ServerAnimator")), List.of());
+        getPlayerFor = virt(animator, "getPlayerFor", java.util.Arrays.asList(player, java.util.Optional.class), java.util.Arrays.asList(accessor, dynamic));
+        getAnimation = virt(player, "getAnimation", java.util.Arrays.asList(accessor, dynamic, Object.class), List.of());
+        if (getAnimation == null) {
+            getAnimation = virt(player, "getRealAnimation", java.util.Arrays.asList(accessor, dynamic, Object.class), List.of());
+        }
+        LOG.info("EFP-API {\"patch\":{},\"animator\":{},\"playerFor\":{},\"animation\":{}}", getPatch != null, getAnimator != null,
+            getPlayerFor != null, getAnimation != null);
+    }
+
+    private static Object patch(LivingEntity e) {
+        look();
+        if (getPatch == null || livingPatch == null) {
+            return null;
+        }
+        try {
+            Object p = getPatch.invoke(e, livingPatch);
             if (p instanceof java.util.Optional<?> o) {
                 p = o.orElse(null);
             }
-            return p;
+            return livingPatch.isInstance(p) ? p : null;
         } catch (Throwable t) {
-            if (!apiTold) {
-                apiTold = true;
-                LOG.info("EFP-API {\"patch\":\"{}\"}", esc(String.valueOf(t)));
-            }
+            tell("patch", t);
             return null;
         }
     }
 
     /** The name of the animation the patch's base layer plays, whatever the version's shape of it. */
     private static String animation(Object patch) {
+        if (getAnimator == null || getPlayerFor == null || getAnimation == null) {
+            return null;
+        }
         try {
-            if (getAnimator == null) {
-                getAnimator = patch.getClass().getMethod("getAnimator");
-            }
             Object animator = getAnimator.invoke(patch);
-            Object player = null;
-            for (Method x : animator.getClass().getMethods()) {
-                if (x.getName().equals("getPlayerFor") && x.getParameterCount() == 1) {
-                    player = x.invoke(animator, (Object) null);
-                    break;
-                }
-            }
+            Object player = getPlayerFor.invoke(animator, (Object) null);
             if (player instanceof java.util.Optional<?> o) {
                 player = o.orElse(null);
             }
             if (player == null) {
-                tell("no player", animator);
                 return null;
             }
-            Object anim = call(player, "getAnimation");
-            if (anim == null) {
-                anim = call(player, "getRealAnimation");
-            }
-            return name(anim);
+            return name(getAnimation.invoke(player), 0);
         } catch (Throwable t) {
-            if (!apiTold) {
-                apiTold = true;
-                LOG.info("EFP-API {\"animation\":\"{}\"}", esc(String.valueOf(t)));
-            }
+            tell("animation", t);
             return null;
         }
     }
 
-    static String name(Object anim) throws ReflectiveOperationException {
+    static String name(Object anim, int depth) throws Throwable {
         if (anim == null) {
             return "none";
         }
-        for (String n : new String[]{"registryName", "getRegistryName", "getLocation", "location"}) {
-            Object r = call(anim, n);
+        Class<?> c = anim.getClass();
+        java.lang.invoke.MethodHandle h = NAMES.computeIfAbsent(c, k -> {
+            for (String n : new String[]{"registryName", "getRegistryName", "getLocation", "location", "getId"}) {
+                java.lang.invoke.MethodHandle x = virt(k, n, List.of(ResourceLocation.class), List.of());
+                if (x != null) {
+                    return x;
+                }
+            }
+            return null;
+        });
+        if (h != null) {
+            Object r = h.invoke(anim);
             if (r != null) {
                 return String.valueOf(r);
             }
         }
-        Object inner = call(anim, "get");
-        if (inner != null && inner != anim) {
-            return name(inner);
+        if (depth == 0) {
+            java.lang.invoke.MethodHandle get = virt(c, "get", List.of(Object.class), List.of());
+            if (get != null) {
+                Object inner = get.invoke(anim);
+                if (inner != null && inner != anim) {
+                    return name(inner, 1);
+                }
+            }
         }
         return anim.toString();
     }
 
-    private static Object call(Object o, String name) throws ReflectiveOperationException {
-        for (Method x : o.getClass().getMethods()) {
-            if (x.getName().equals(name) && x.getParameterCount() == 0) {
-                return x.invoke(o);
-            }
-        }
-        return null;
-    }
+    private static boolean told;
 
-    private static void tell(String what, Object o) {
-        if (apiTold) {
+    private static void tell(String what, Throwable t) {
+        if (told) {
             return;
         }
-        apiTold = true;
-        StringBuilder b = new StringBuilder();
-        for (Method x : o.getClass().getMethods()) {
-            if (x.getDeclaringClass() != Object.class) {
-                b.append(x.getName()).append('/').append(x.getParameterCount()).append(' ');
-            }
-        }
-        LOG.info("EFP-API {\"{}\":\"{}\",\"methods\":\"{}\"}", what, o.getClass().getName(), esc(b.toString()));
+        told = true;
+        LOG.info("EFP-API {\"{}\":\"{}\"}", what, esc(String.valueOf(t)));
     }
 }
