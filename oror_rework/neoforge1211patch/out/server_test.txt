@@ -1,94 +1,98 @@
 missing: CITADEL-SELFTEST {
-[07:16:53] [Server thread/INFO] [OROR CrashNet/]: CRASHNET {"removeErroringEntities":true,"was":false,"removeErroringBlockEntities":true,"wasBlockEntities":false}
-[07:16:53] [Server thread/INFO] [OROR Safety/]: OROR SAFE-UNLOAD active: entity chunks unload from a copy of their list
-[07:16:58] [Server thread/INFO] [OROR Compass/]: COMPASS-RESULT {"registered":true,"spawn":"0, 134, 0","capital":"-368, 67, 880","given":true,"givenAgain":false,"count":1,"needle":"-368, 67, 880","match":true,"recipe":true,"said":["You received the Royal Capital Compass. Where its needle points lies the villager king's city.","The capital: about 954 blocks to the south-west"],"pass":true}
-[07:16:58] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=0 changedUnderWalk=0 reentries=0 active=true
-[07:16:58] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
-[07:16:58] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":101}
-[m[33m[07:15:58.528] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
-[m[33m[07:16:01.686] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
-[m[33m[07:16:01.881] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
-[m[1;31m[07:16:02.707] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
-[m[33m[07:16:02.713] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
-[m[33m[07:16:02.713] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
-[m[33m[07:16:02.845] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
-[m[33m[07:16:02.846] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
-[m[33m[07:16:02.867] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
-[m[33m[07:16:02.868] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
-[m[33m[07:16:02.869] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
-[m[33m[07:16:02.870] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
-[m[33m[07:16:02.871] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
-[m[33m[07:16:02.872] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
-[m[33m[07:16:03.252] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[07:16:03.255] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
-[m[33m[07:16:03.312] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
-[m[33m[07:16:03.445] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[07:16:03.449] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
-[m[1;31m[07:16:03.668] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
-[m[33m[07:16:03.669] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
-[m[1;31m[07:16:03.832] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
-[m[33m[07:16:03.833] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
-[m[33m[07:16:03.859] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
-[m[33m[07:16:03.894] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
-[07:16:09] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+[07:50:54] [Server thread/INFO] [OROR CrashNet/]: CRASHNET {"removeErroringEntities":true,"was":false,"removeErroringBlockEntities":true,"wasBlockEntities":false}
+[07:50:54] [Server thread/INFO] [OROR Safety/]: OROR SAFE-UNLOAD active: entity chunks unload from a copy of their list
+[07:50:59] [Server thread/INFO] [OROR Compass/]: COMPASS-RESULT {"registered":true,"spawn":"0, 134, 0","capital":"-368, 67, 880","given":true,"givenAgain":false,"count":1,"needle":"-368, 67, 880","match":true,"recipe":true,"said":["You received the Royal Capital Compass. Where its needle points lies the villager king's city.","The capital: about 954 blocks to the south-west"],"pass":true}
+[07:50:59] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=0 changedUnderWalk=0 reentries=0 active=true
+[07:50:59] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
+[07:50:59] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":101}
+[m[33m[07:49:37.399] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
+[m[33m[07:49:41.993] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
+[m[33m[07:49:42.249] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
+[m[1;31m[07:49:43.394] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[07:49:43.405] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[07:49:43.405] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
+[m[33m[07:49:43.567] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[07:49:43.568] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[07:49:43.588] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[07:49:43.589] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[07:49:43.590] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[07:49:43.592] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[07:49:43.593] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[07:49:43.594] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[07:49:44.146] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[07:49:44.149] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[07:49:44.211] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[07:49:44.380] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[07:49:44.385] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[07:49:44.649] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
+[m[33m[07:49:44.649] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[1;31m[07:49:44.909] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[07:49:44.910] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[07:49:44.945] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[07:49:45.003] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[07:49:53] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
 java.nio.file.NoSuchFileException: ./config/jupiter.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[07:16:11] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+[07:49:55] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
 java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[07:16:22] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
-[07:16:31] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: halo is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: boot is not a registered slot type!
-[07:16:31] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[07:16:31] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
-[07:16:32] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
+[07:50:09] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[07:16:41] [Server thread/INFO] [OROR Citadel/]: Royal capital BlockPos{x=-368, y=67, z=880} for spawn BlockPos{x=0, y=0, z=0} (8161 ms)
-[07:16:46] [Worker-Main-2/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
-[07:16:46] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[07:16:47] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[07:50:22] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: halo is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: boot is not a registered slot type!
+[07:50:22] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[07:50:22] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[07:50:24] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[07:16:49] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[07:16:49] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[07:16:49] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
-[07:16:49] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
-[07:16:49] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
-[07:16:53] [Server thread/INFO] [OROR CI/]: CI checks: [compass]
-[07:16:57] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"16, 93, 39","off":23.6}
-[07:16:58] [Server thread/INFO] [OROR CI/]: CI running /oror compass test
-[07:16:58] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=0 changedUnderWalk=0 reentries=0 active=true
-[07:16:58] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
-[07:16:58] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":101}
+[07:50:36] [Server thread/INFO] [OROR Citadel/]: Royal capital BlockPos{x=-368, y=67, z=880} for spawn BlockPos{x=0, y=0, z=0} (11390 ms)
+[07:50:44] [Worker-Main-2/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[07:50:44] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[07:50:44] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[07:50:48] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[07:50:48] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[07:50:48] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[07:50:48] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[07:50:48] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
+Caused by: java.net.ConnectException: HTTP connect timed out
+[07:50:54] [Server thread/INFO] [OROR CI/]: CI checks: [compass]
+[07:50:57] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"22, 93, 35","off":26.0}
+[07:50:58] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"21, 93, 38","off":22.9}
+[07:50:59] [Server thread/INFO] [OROR CI/]: CI running /oror compass test
+[07:50:59] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=0 changedUnderWalk=0 reentries=0 active=true
+[07:50:59] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
+[07:50:59] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":101}

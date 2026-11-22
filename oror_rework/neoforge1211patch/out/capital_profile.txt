@@ -1,137 +1,145 @@
 window CAPITAL-LOAD-START -> CAPITAL-LOAD { None None
-server thread samples in the window 529
+server thread samples in the window 740
 
 == packages anywhere in the stack (share of samples)
 100.0%  net.minecraft
- 52.2%  net.neoforged
- 43.3%  jp.oror
-  0.6%  io.redspace
+ 43.8%  net.neoforged
+ 34.7%  jp.oror
+  0.1%  com.github.alexthe666
+  0.1%  yesman.epicfight
+  0.1%  io.redspace
+  0.1%  dev.shadowsoffire
+  0.1%  com.hm.efn
 
 == on top of the stack (self)
 100.0%  state = "STATE_RUNNABLE"
 
 == anywhere in the stack (inclusive), mods only
 100.0%  state = "STATE_RUNNABLE"
- 41.0%  jp.oror.reborn.citadel.CitadelSites.bind
- 40.8%  jp.oror.reborn.citadel.CitadelSites.chooseCapital
- 40.3%  jp.oror.reborn.citadel.CitadelEvents.load
- 20.6%  jp.oror.reborn.citadel.CitadelSites.glance
- 20.6%  jp.oror.reborn.citadel.CitadelSites.survey
-  3.4%  com.serilum.oreharvester.neoforge.events.NeoForgeWorldEvents.onWorldLoad
-  3.4%  com.serilum.oreharvester_common_neoforge.events.WorldEvents.onWorldLoad
-  3.2%  com.serilum.oreharvester_common_neoforge.processing.PickaxeWhitelist.processPickaxeWhitelist
-  2.8%  com.serilum.treeharvester_common_neoforge.processing.ConfigLists.processConfigLists
+ 33.2%  jp.oror.reborn.citadel.CitadelSites.chooseCapital
+ 32.7%  jp.oror.reborn.citadel.CitadelSites.bind
+ 32.3%  jp.oror.reborn.citadel.CitadelEvents.load
+ 18.5%  jp.oror.reborn.citadel.CitadelSites.glance
+ 14.9%  jp.oror.reborn.citadel.CitadelSites.survey
+  3.6%  com.serilum.oreharvester_common_neoforge.events.WorldEvents.onWorldLoad
+  3.6%  com.serilum.oreharvester.neoforge.events.NeoForgeWorldEvents.onWorldLoad
+  3.5%  com.serilum.oreharvester_common_neoforge.processing.PickaxeWhitelist.processPickaxeWhitelist
+  3.0%  com.serilum.oreharvester_common_neoforge.util.Util.isInIdList
+  2.8%  com.mojang.serialization.Encoder.encodeStart
   2.8%  com.serilum.treeharvester_common_neoforge.events.WorldEvents.onWorldLoad
   2.8%  com.serilum.treeharvester.neoforge.events.NeoForgeWorldEvents.onWorldLoad
-  2.6%  com.serilum.oreharvester_common_neoforge.util.Util.isInIdList
-  2.3%  dev.ryanhcode.sable.Sable.defaultSubLevelContainerInitializer
-  1.9%  com.serilum.treeharvester_common_neoforge.util.Util.isInIdList
-  1.7%  dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertiesDefinitionLoader.applyAll
-  1.7%  com.mojang.serialization.Codec$2.encode
-  1.7%  com.mojang.serialization.Encoder.encodeStart
-  1.7%  com.mojang.serialization.Encoder$1.encode
-  1.5%  dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertiesDefinitionLoader.applyToBlocks
-  0.8%  dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertyTypes.getPropertyType
-  0.4%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.initialize
-  0.4%  dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipeline.init
-  0.4%  dev.ryanhcode.sable.physics.impl.rapier.Rapier3D.loadLibrary
-  0.4%  dev.ryanhcode.sable.physics.impl.rapier.Rapier3D.<clinit>
-  0.4%  net.jpountz.lz4.LZ4FrameInputStream.read
-  0.4%  net.jpountz.lz4.LZ4JavaUnsafeSafeDecompressor.decompress
-  0.4%  net.jpountz.lz4.LZ4FrameInputStream.readBlock
-  0.4%  org.objectweb.asm.ClassReader.<init>
-  0.4%  com.serilum.oreharvester_common_neoforge.util.Util.wildcardToRegex
-  0.4%  dev.architectury.event.forge.EventHandlerImplCommon.event
-  0.4%  io.redspace.ironsspellbooks.capabilities.magic.MagicEvents.onWorldTick
-  0.4%  io.redspace.ironsspellbooks.capabilities.magic.MagicManager.tick
-  0.4%  com.mojang.serialization.codecs.RecordCodecBuilder$Instance$4.encode
-  0.4%  com.mojang.serialization.MapCodec$2.encode
-  0.4%  com.mojang.serialization.MapCodec$MapCodecCodec.encode
-  0.4%  com.mojang.serialization.codecs.RecordCodecBuilder$2.encode
-  0.4%  com.mojang.serialization.codecs.FieldEncoder.encode
-  0.2%  dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipelineProvider.createPipeline
-  0.2%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.<init>
-  0.2%  dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipeline.<init>
-  0.2%  net.jpountz.lz4.LZ4UnsafeUtils.wildIncrementalCopy
-  0.2%  org.objectweb.asm.SymbolTable.putConstantPool
-  0.2%  dev.ryanhcode.sable.api.sublevel.ServerSubLevelContainer.initialize
-  0.2%  org.objectweb.asm.ClassWriter.toByteArray
-  0.2%  com.natamus.collective.neoforge.events.RegisterCollectiveNeoForgeEvents.onWorldLoad
-  0.2%  com.natamus.collective_common_neoforge.data.Constants.initConstantData
-  0.2%  com.natamus.collective_common_neoforge.events.CollectiveEvents.onWorldLoad
-  0.2%  com.serilum.oreharvester_common_neoforge.processing.PickaxeBlacklist.setupPickaxeBlacklist
-  0.2%  com.serilum.oreharvester_common_neoforge.processing.PickaxeBlacklist.attemptProcessingPickaxeBlacklist
-  0.2%  org.objectweb.asm.tree.InvokeDynamicInsnNode.accept
-  0.2%  org.objectweb.asm.SymbolTable.addConstantInvokeDynamic
-  0.2%  org.objectweb.asm.tree.MethodNode.accept
-  0.2%  org.objectweb.asm.tree.InsnList.accept
-  0.2%  org.objectweb.asm.MethodWriter.visitInvokeDynamicInsn
-  0.2%  org.objectweb.asm.SymbolTable.addBootstrapMethod
-  0.2%  org.objectweb.asm.SymbolTable.addConstant
-  0.2%  org.objectweb.asm.tree.ClassNode.accept
-  0.2%  com.mojang.datafixers.Products$P5.apply
-  0.2%  com.mojang.datafixers.kinds.Applicative.ap5
-  0.2%  com.mojang.logging.LogUtils.getLogger
-  0.2%  org.slf4j.LoggerFactory.getLogger
-  0.2%  org.apache.logging.log4j.util.StackLocator.lambda$getCallerClass$2
-  0.2%  org.apache.logging.log4j.util.StackLocator.lambda$getCallerClass$1
-  0.2%  org.apache.logging.slf4j.Log4jLoggerFactory.getLogger
-  0.2%  org.apache.logging.slf4j.Log4jLoggerFactory.getContext
-  0.2%  org.apache.logging.slf4j.Log4jLoggerFactory.lambda$static$0
-  0.2%  org.apache.logging.log4j.util.StackLocatorUtil.getCallerClass
-  0.2%  org.apache.logging.log4j.util.StackLocator.getCallerClass
-  0.2%  org.apache.logging.log4j.spi.AbstractLoggerAdapter.getLogger
+  2.8%  com.serilum.treeharvester_common_neoforge.processing.ConfigLists.processConfigLists
+  2.6%  dev.ryanhcode.sable.Sable.defaultSubLevelContainerInitializer
+  2.6%  com.serilum.treeharvester_common_neoforge.util.Util.isInIdList
+  2.6%  com.mojang.serialization.Codec$2.encode
+  2.6%  com.mojang.serialization.Encoder$1.encode
+  1.2%  com.mojang.serialization.MapCodec$MapCodecCodec.encode
+  1.2%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.initialize
+  1.2%  dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertiesDefinitionLoader.applyToBlocks
+  1.2%  dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertiesDefinitionLoader.applyAll
+  1.1%  dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipeline.init
+  0.9%  com.mojang.serialization.codecs.FieldEncoder.encode
+  0.9%  com.mojang.serialization.codecs.RecordCodecBuilder$2.encode
+  0.9%  com.mojang.serialization.MapCodec$2.encode
+  0.9%  dev.ryanhcode.sable.physics.impl.rapier.Rapier3D.loadLibrary
+  0.9%  dev.ryanhcode.sable.physics.impl.rapier.Rapier3D.<clinit>
+  0.8%  net.jpountz.lz4.LZ4FrameInputStream.readBlock
+  0.8%  net.jpountz.lz4.LZ4JavaUnsafeSafeDecompressor.decompress
+  0.8%  net.jpountz.lz4.LZ4FrameInputStream.read
+  0.7%  com.mojang.serialization.codecs.RecordCodecBuilder$Instance$4.encode
+  0.5%  com.mojang.serialization.codecs.KeyDispatchCodec.encode
+  0.5%  com.mojang.serialization.codecs.ListCodec.encode
+  0.4%  org.objectweb.asm.ClassReader.accept
+  0.4%  org.objectweb.asm.ClassReader.readMethod
+  0.4%  org.objectweb.asm.ClassReader.readCode
+  0.4%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.tickMagnetism
+  0.4%  jp.oror.reborn.perf.MagnetRegions.none
+  0.4%  com.mojang.serialization.Encoder$2.encode
+  0.4%  com.mojang.serialization.Codec$4.encode
+  0.4%  com.mojang.serialization.DataResult$Success.flatMap
+  0.4%  com.mojang.serialization.Codec$1.encode
+  0.4%  com.mojang.serialization.Encoder$2.lambda$encode$0
+  0.3%  dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertyTypes.getPropertyType
+  0.3%  org.objectweb.asm.ClassReader.readUtf
+  0.3%  org.objectweb.asm.ClassReader.readUTF8
+  0.3%  org.openjdk.nashorn.internal.scripts.Script$Recompilation$17$1375A$\^eval\_.initializeCoreMod#transformer
+  0.3%  org.openjdk.nashorn.internal.runtime.ScriptFunctionData.invoke
+  0.3%  org.openjdk.nashorn.internal.runtime.ScriptRuntime.apply
+  0.3%  org.openjdk.nashorn.api.scripting.ScriptObjectMirror.call
+  0.3%  com.natamus.collective_common_neoforge.events.CollectiveEvents.onWorldLoad
+  0.3%  com.natamus.collective.neoforge.events.RegisterCollectiveNeoForgeEvents.onWorldLoad
+  0.3%  org.openjdk.nashorn.internal.runtime.ScriptFunction.invoke
+  0.3%  com.natamus.collective_common_neoforge.data.Constants.initConstantData
+  0.3%  jp.oror.reborn.citadel.CitadelSites.nearStronghold
+  0.3%  com.serilum.oreharvester_common_neoforge.util.Util.wildcardToRegex
+  0.3%  ttv.migami.jeg.gun.MagazineModeServer.refresh
+  0.3%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.handler$zni000$oror_supreme_bosses$oror$attracting
+  0.3%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyAttractingMagnets
+  0.3%  dev.ryanhcode.sable.api.sublevel.ServerSubLevelContainer.tick
+  0.3%  dev.ryanhcode.sable.api.sublevel.SubLevelContainer.lambda$tick$0
+  0.3%  dev.ryanhcode.sable.api.sublevel.SubLevelContainer.tick
+  0.3%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.tick
+  0.3%  com.mojang.serialization.codecs.KeyDispatchCodec.lambda$encode$6
+  0.3%  com.mojang.serialization.codecs.RecordCodecBuilder$Instance$8.encode
+  0.1%  io.netty.util.internal.logging.Slf4JLoggerFactory.newInstance
+  0.1%  org.apache.logging.slf4j.Log4jLoggerFactory.getLogger
+  0.1%  org.apache.logging.log4j.util.StackLocatorUtil.getCallerClass
+  0.1%  org.apache.logging.log4j.util.StackLocator.getCallerClass
 
 == anywhere in the stack (inclusive), Minecraft
- 59.5%  net.minecraft.server.MinecraftServer.runServer
- 59.5%  net.minecraft.server.MinecraftServer.lambda$spin$2
- 49.3%  net.minecraft.server.dedicated.DedicatedServer.initServer
- 49.0%  net.minecraft.server.MinecraftServer.createLevels
- 48.0%  net.minecraft.server.MinecraftServer.loadLevel
- 42.0%  net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator.iterateNoiseColumn
- 41.8%  net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator.getBaseHeight
- 31.2%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.compute
- 31.2%  net.minecraft.world.level.levelgen.DensityFunctions$PureTransformer.compute
- 28.5%  net.minecraft.world.level.levelgen.NoiseChunk$NoiseInterpolator.fillArray
- 28.2%  net.minecraft.world.level.levelgen.NoiseChunk.fillSlice
- 28.0%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.noise
- 28.0%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.fillArray
- 26.7%  net.minecraft.world.level.levelgen.DensityFunctions$RangeChoice.compute
- 26.5%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.mapAll
- 26.1%  net.minecraft.world.level.levelgen.DensityFunctions$PureTransformer.fillArray
- 26.1%  net.minecraft.world.level.levelgen.DensityFunctions$MarkerOrMarked.mapAll
- 25.0%  net.minecraft.world.level.levelgen.DensityFunctions$TransformerWithContext.fillArray
- 21.7%  net.minecraft.world.level.levelgen.DensityFunctions$HolderHolder.mapAll
- 21.0%  net.minecraft.world.level.levelgen.DensityFunctions$Mapped.mapAll
- 20.6%  net.minecraft.util.CubicSpline$Multipoint.mapAll
- 20.2%  net.minecraft.world.level.levelgen.DensityFunctions$Spline.mapAll
- 20.2%  net.minecraft.util.CubicSpline$Multipoint.lambda$mapAll$3
- 19.8%  net.minecraft.world.level.levelgen.NoiseChunk.wrap
- 19.3%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.sampleAndLerp
- 19.3%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.p
- 16.8%  net.minecraft.world.level.levelgen.synth.PerlinNoise.getValue
- 16.8%  net.minecraft.world.level.levelgen.synth.NormalNoise.getValue
- 16.8%  net.minecraft.world.level.levelgen.DensityFunction$NoiseHolder.getValue
- 16.3%  net.minecraft.world.level.levelgen.DensityFunctions$Spline.lambda$mapAll$0
- 16.3%  net.minecraft.world.level.levelgen.DensityFunctions$Spline$Coordinate.mapAll
- 15.3%  net.minecraft.world.level.levelgen.NoiseChunk.initializeForFirstCellX
- 15.3%  net.minecraft.world.level.levelgen.synth.BlendedNoise.compute
- 12.9%  net.minecraft.world.level.levelgen.NoiseChunk.advanceCellX
- 11.5%  net.minecraft.world.level.levelgen.DensityFunctions$MulOrAdd.hashCode
- 10.8%  net.minecraft.world.level.levelgen.DensityFunctions$Noise.compute
-  9.5%  net.minecraft.util.CubicSpline$Multipoint.hashCode
-  8.5%  net.minecraft.world.level.levelgen.DensityFunctions$ShiftedNoise.mapAll
-  8.3%  net.minecraft.server.MinecraftServer.tickServer
-  7.9%  net.minecraft.core.Holder$Direct.hashCode
+ 54.7%  net.minecraft.server.MinecraftServer.runServer
+ 54.3%  net.minecraft.server.MinecraftServer.lambda$spin$2
+ 44.2%  net.minecraft.server.dedicated.DedicatedServer.initServer
+ 42.8%  net.minecraft.server.MinecraftServer.createLevels
+ 42.4%  net.minecraft.server.MinecraftServer.loadLevel
+ 33.4%  net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator.iterateNoiseColumn
+ 33.4%  net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator.getBaseHeight
+ 30.8%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.mapAll
+ 29.3%  net.minecraft.world.level.levelgen.DensityFunctions$MarkerOrMarked.mapAll
+ 24.9%  net.minecraft.world.level.levelgen.DensityFunctions$PureTransformer.compute
+ 24.7%  net.minecraft.world.level.levelgen.DensityFunctions$HolderHolder.mapAll
+ 24.3%  net.minecraft.world.level.levelgen.NoiseChunk.wrap
+ 24.1%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.compute
+ 23.4%  net.minecraft.util.CubicSpline$Multipoint.mapAll
+ 23.4%  net.minecraft.world.level.levelgen.DensityFunctions$Mapped.mapAll
+ 22.7%  net.minecraft.util.CubicSpline$Multipoint.lambda$mapAll$3
+ 21.8%  net.minecraft.world.level.levelgen.DensityFunctions$Spline.mapAll
+ 21.5%  net.minecraft.world.level.levelgen.NoiseChunk$NoiseInterpolator.fillArray
+ 21.4%  net.minecraft.world.level.levelgen.NoiseChunk.fillSlice
+ 20.8%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.fillArray
+ 19.5%  net.minecraft.world.level.levelgen.DensityFunctions$RangeChoice.compute
+ 19.2%  net.minecraft.world.level.levelgen.DensityFunctions$PureTransformer.fillArray
+ 19.2%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.noise
+ 18.1%  net.minecraft.world.level.levelgen.DensityFunctions$Spline.lambda$mapAll$0
+ 18.1%  net.minecraft.world.level.levelgen.DensityFunctions$Spline$Coordinate.mapAll
+ 18.1%  net.minecraft.world.level.levelgen.DensityFunctions$TransformerWithContext.fillArray
+ 14.9%  net.minecraft.world.level.levelgen.DensityFunctions$MulOrAdd.hashCode
+ 14.1%  net.minecraft.world.level.levelgen.synth.NormalNoise.getValue
+ 14.1%  net.minecraft.world.level.levelgen.DensityFunction$NoiseHolder.getValue
+ 14.1%  net.minecraft.world.level.levelgen.synth.PerlinNoise.getValue
+ 13.5%  net.minecraft.util.CubicSpline$Multipoint.hashCode
+ 12.4%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.p
+ 12.4%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.sampleAndLerp
+ 11.4%  net.minecraft.world.level.levelgen.NoiseChunk.initializeForFirstCellX
+ 10.5%  net.minecraft.core.Holder$Direct.hashCode
+ 10.1%  net.minecraft.world.level.levelgen.DensityFunctions$ShiftedNoise.mapAll
+ 10.0%  net.minecraft.world.level.levelgen.NoiseChunk.advanceCellX
+  9.7%  net.minecraft.world.level.levelgen.DensityFunctions$Spline.hashCode
+  9.6%  net.minecraft.world.level.levelgen.synth.BlendedNoise.compute
+  8.6%  net.minecraft.world.level.levelgen.DensityFunctions$Noise.compute
 
 == what the busiest calls spend their time in (callee, share of all samples) and who calls them
-  0.2%  jp.oror.reborn.VillagerLife.tick
-          0.2%  -> jp.oror.reborn.VillageWork.tidy
-          0.2%  <- net.neoforged.bus.ConsumerEventHandler.invoke
-  0.6%  net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
-          0.6%  -> net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
-          0.4%  <- net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
-          0.2%  <- net.minecraft.world.entity.ai.behavior.AcquirePoi.findPathToPois
-  0.2%  jp.oror.reborn.AdaptiveCombat.tick
-          0.2%  -> jp.oror.reborn.VillageAI.tick
-          0.2%  <- net.neoforged.bus.ConsumerEventHandler.invoke
+  0.1%  jp.oror.reborn.VillagerLife.tick
+          0.1%  -> state = "STATE_RUNNABLE"
+          0.1%  <- net.neoforged.bus.ConsumerEventHandler.invoke
+  0.5%  net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
+          0.5%  -> net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
+          0.3%  <- net.minecraft.world.entity.ai.behavior.AcquirePoi.findPathToPois
+          0.3%  <- net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
+  0.1%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
+          0.1%  -> state = "STATE_RUNNABLE"
+          0.1%  <- net.minecraft.world.level.biome.MultiNoiseBiomeSource.setLastSampledDimension
+  0.4%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.tickMagnetism
+          0.3%  -> com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyAttractingMagnets
+          0.1%  -> com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyRepellingMagnets
+          0.4%  <- net.minecraft.world.entity.Entity.handler$boh001$alexscaves$ac_tick
