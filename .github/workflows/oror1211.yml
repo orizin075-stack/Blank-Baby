@@ -241,6 +241,7 @@ jobs:
             | cut -c1-6000 >> out/server_test.txt || true
           { grep -E 'CITADEL-SELFTEST|CITADEL-UPDATE|WAR-|FLIGHT-|SUPPLY-|VILLAGE-FLIGHT|PLANE-TRACK|CI-DONE|OROR (Citadel|War|Vehicles|CI|Village)|Exception|ERROR|WARN.*([Cc]itadel|[Rr]oyal|[Ww]ar)|Missing|requires' "$RUNNER_TEMP/server/console.log" | head -400; } >> out/server_test.txt
           tail -n 4000 "$RUNNER_TEMP/server/console.log" > out/server_console.log
+          python3 -I tools/pass_summary.py "$RUNNER_TEMP/server/console.log" out/pass_summary.txt || true
           # every error and exception of the whole run (the tail above starts late), the first 600 lines
           grep -aE 'ERROR|Exception|Caused by|Failed to|Couldn.t|Unable to' "$RUNNER_TEMP/server/console.log" | grep -v 'HttpConnectTimeout\|ConnectException' | head -600 > out/server_errors.txt || true
           # (r62) every OROR structure as world generation builds it, one line each (StructureAudit)

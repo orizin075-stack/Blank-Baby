@@ -90,6 +90,7 @@ jobs:
           grep -aE 'WAZA-|RELIC-|SWEEP-|GAMETEST|DUEL-' "$C" | cut -c1-2000 > "$OUT/sweep_log.txt" || true
           awk '/Mod List|Loading [0-9]+ mods/{on=1} on{print} /^$/{if(on)exit}' "$C" | head -400 > "$OUT/mods_loaded.txt" || true
           tail -n 3000 "$C" > "$OUT/server_console.log"
+          python3 -I tools/pass_summary.py "$C" "$OUT/pass_summary.txt" || true
           cp "$RUNNER_TEMP/server/threads_stall.txt" "$OUT/" 2>/dev/null || true
           ls "$RUNNER_TEMP/server/crash-reports" 2>/dev/null && cp -r "$RUNNER_TEMP/server/crash-reports" "$OUT/" || true
           exit $rc

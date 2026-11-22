@@ -466,6 +466,14 @@ public final class GunMobTest {
         LOG.info("GUN-PARRY-START {\"duels\":{}}", r.duels.size());
     }
 
+    private static int num(String s) {
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     private static void duelTick(Run r, long age) {
         for (int i = 0; i < r.duels.size(); i++) {
             Duel d = r.duels.get(i);
@@ -511,9 +519,13 @@ public final class GunMobTest {
             parriedWithGun += d.gunStrikes - d.gunLanded;
             int aside = d.gunStrikes - d.gunLanded;
             String tally = jp.oror.reborn.combat.MobGuard.tally(d.mob);
-            boolean ororMet = !tally.matches("0/0/[0-]+/0");
+            // (r65) a wall is OROR's guard turning most blows aside (its parries and blocks); a mob that turns them
+            // aside by its own make (the JEG terror phantoms: the same OROR tally as every other gunner, ten or all
+            // twenty-four blows off) is listed apart
+            String[] f = tally.split("/");
+            int ororTurned = num(f[0]) + num(f[1]);
             if (d.gunStrikes >= 6 && aside * 3 > d.gunStrikes) {
-                (ororMet ? walls : immune).add(d.name);
+                (ororTurned * 3 > d.gunStrikes ? walls : immune).add(d.name);
             }
             b.append(b.length() > 1 ? "," : "").append('"').append(d.name).append("\":").append(String.format(Locale.ROOT,
                 "{\"held\":\"%s\",\"strikes\":%d,\"landed\":%d,\"strikesWithGun\":%d,\"turnedAsideWithGun\":%d,\"guard\":\"%s\",\"oror\":\"%s\"}",
