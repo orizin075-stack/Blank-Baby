@@ -1143,7 +1143,10 @@ public final class Look {
     /** (r65) The motions compared: Epic Fight's own (on husks, its body) and EfMotion's (a royal guard, an armed villager). */
     private static final String[] MOTIONS = {"efn:biped/nf_sword/nf_sword_auto1", "efn:biped/nf_sword/nf_sword_auto2", "efn:biped/nf_sword/nf_sword_auto3",
         "epicfight:biped/combat/sword_auto1", "epicfight:biped/skill/guard_sword", "epicfight:biped/skill/guard_sword_hit_active1",
-        "epicfight:biped/skill/guard_sword_hit", "epicfight:biped/combat/hit_long"};
+        "epicfight:biped/skill/guard_sword_hit", "epicfight:biped/combat/hit_long",
+        // (r65, the user: "ローリング回避とか スキル系色々あったでしょ") the dodges and the skills the mobs end their combos on
+        "efn:biped/dodge/step_l", "epicfight:biped/skill/roll_forward", "efn:biped/nf_skill/biped_flashblock1",
+        "efn:biped/nf_sword/nf_sword_dash", "epicfightx:biped/skill/rushing_tempo1"};
     private static final int[] MOTION_SHOTS = {2, 5, 9, 14, 20};
     /** Left to right: Epic Fight's own facing the camera, OROR's two facing it, then the same three side on. */
     /**
