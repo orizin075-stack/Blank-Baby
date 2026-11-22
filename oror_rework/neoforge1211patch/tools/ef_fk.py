@@ -31,11 +31,41 @@ def load(ns, path):
     return None
 
 
-for z in jars:
-    arm = [n for n in z.namelist() if 'armature' in n and 'biped' in n][:5]
-    if arm:
-        print('armature files', arm)
-        print(z.read(arm[0]).decode('utf-8', 'replace')[:2500])
+# (run 2) the hierarchy and the bind pose from the biped model's own file (no armature file of its own in 1.21.1)
+def find_tree():
+    for z in jars:
+        for n in z.namelist():
+            if n.startswith('assets/epicfight/animmodels/') and n.endswith('.json') and '/animations/' not in n and 'biped' in n:
+                d = json.loads(z.read(n))
+                arm = d.get('armature')
+                if not arm:
+                    continue
+                print('model file', n, 'armature keys', list(arm.keys()))
+                tree, bind = {}, {}
+                def walk(node, parent):
+                    tree[node['name']] = parent
+                    if 'transform' in node:
+                        bind[node['name']] = node['transform']
+                    for c in node.get('children', []):
+                        walk(c, node['name'])
+                for root in arm.get('hierarchy', []):
+                    walk(root, None)
+                print('hierarchy', tree)
+                return tree, bind
+    return None, None
+
+
+t2, BIND = find_tree()
+if t2:
+    TREE = t2
+
+if BIND:
+    world = {}
+    for j in TREE:
+        if j in BIND:
+            p = TREE[j]
+            world[j] = mul(world[p], BIND[j]) if p and p in world else BIND[j]
+    print('bind', ' '.join(f"{j}=({world[j][3]:.2f},{world[j][7]:.2f},{world[j][11]:.2f})" for j in world))
 
 for ns, path in [('epicfight', 'biped/living/idle'), ('epicfight', 'biped/combat/sword_auto1'), ('epicfight', 'biped/skill/guard_sword'),
                  ('epicfight', 'biped/skill/guard_sword_hit_active1'), ('efn', 'biped/nf_sword/nf_sword_auto1'), ('epicfight', 'biped/combat/hit_short')]:
@@ -52,5 +82,5 @@ for ns, path in [('epicfight', 'biped/living/idle'), ('epicfight', 'biped/combat
             m = at(a[j], t)
             p = TREE[j]
             world[j] = mul(world[p], m) if p and p in world else m
-        row = ' '.join(f"{j}=({world[j][3]:.2f},{world[j][7]:.2f},{world[j][11]:.2f})" for j in ('Root', 'Head', 'Hand_R', 'Hand_L', 'Tool_R', 'Knee_R') if j in world)
+        row = ' '.join(f"{j}=({world[j][3]:.2f},{world[j][7]:.2f},{world[j][11]:.2f})" for j in ('Root', 'Torso', 'Chest', 'Head', 'Shoulder_R', 'Arm_R', 'Elbow_R', 'Hand_R', 'Tool_R', 'Thigh_R', 'Leg_R', 'Knee_R') if j in world)
         print(f'  t={t:.2f} {row}')
