@@ -58,7 +58,10 @@ public final class EfProbeCore {
     public static final List<String> MOBS = List.of("minecraft:zombie", "minecraft:zombie+minecraft:iron_sword", "minecraft:husk",
         "minecraft:drowned", "minecraft:skeleton", "minecraft:skeleton+minecraft:iron_sword", "minecraft:stray", "minecraft:wither_skeleton",
         "minecraft:vindicator", "minecraft:pillager", "minecraft:evoker", "minecraft:witch", "minecraft:piglin", "minecraft:piglin_brute",
-        "minecraft:zombified_piglin", "minecraft:enderman", "minecraft:spider", "minecraft:ravager", "minecraft:iron_golem", "minecraft:villager+minecraft:iron_sword");
+        "minecraft:zombified_piglin", "minecraft:enderman", "minecraft:spider", "minecraft:ravager", "minecraft:iron_golem", "minecraft:villager+minecraft:iron_sword",
+        // OROR's kingdom (skipped where OROR is not): the user, "村人王や衛兵や村人もそれらのモーションを行えるように"
+        "oror_supreme_bosses:villager_king", "oror_supreme_bosses:kingdom_guard", "oror_supreme_bosses:imperial_guard",
+        "oror_supreme_bosses:royal_bodyguard", "oror_supreme_bosses:villager_general");
 
     static final class Lane {
         String id;
