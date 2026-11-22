@@ -240,7 +240,7 @@ public final class EfMotion {
     }
 
     /** Poses one part by a joint's move, blended over its own pose by w; the rotation from 'turn' (a joint) if given. */
-    static void pose(ModelPart part, Matrix4f move, Matrix4f turn, float w) {
+    public static void pose(ModelPart part, Matrix4f move, Matrix4f turn, float w) {
         if (part == null || move == null || w <= 0) {
             return;
         }
