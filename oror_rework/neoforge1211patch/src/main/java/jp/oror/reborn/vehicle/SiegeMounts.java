@@ -51,9 +51,17 @@ public final class SiegeMounts {
         if (!(e.getLevel() instanceof ServerLevel level) || level.getGameTime() % 20 != 0) {
             return;
         }
+        // (r64, run 207) the ground host too: of 246 illagers, 30 of the Nether's and three bosses, four, one and one came
+        // sixty blocks nearer in four minutes; they rise 650 to 720 blocks out, where no player is, and stood there unticked
+        java.util.Set<Long> held = new java.util.HashSet<>();
         for (Entity v : level.getAllEntities()) {
-            if (v instanceof Mob m && m.isAlive() && !m.isPassenger() && m.getPersistentData().getBoolean(TAG)) {
-                hold(level, m);
+            if (v instanceof Mob m && m.isAlive() && !m.isPassenger()) {
+                var d = m.getPersistentData();
+                if (d.getBoolean(TAG)) {
+                    hold(level, m);
+                } else if (d.getBoolean("OrorAzazelCapitalSiege") && held.add(m.chunkPosition().toLong())) {
+                    hold(level, m);
+                }
             }
         }
     }
@@ -63,7 +71,9 @@ public final class SiegeMounts {
         long now = level.getGameTime();
         if (!data.contains("OrorSiegeAirSince")) {
             data.putLong("OrorSiegeAirSince", now);
-            sturdy(m);
+            if (data.getBoolean(TAG)) {
+                sturdy(m);
+            }
         }
         long since = data.getLong("OrorSiegeAirSince");
         if (now - since > CARRY || now < since) {
