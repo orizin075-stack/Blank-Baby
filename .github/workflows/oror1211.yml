@@ -115,6 +115,18 @@ jobs:
             echo '== EpicFightCapabilities.getEntityPatch (null entity?)'
             javap -c -p -cp libs/epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman.epicfight.world.capabilities.EpicFightCapabilities \
               | awk '/getEntityPatch\(net.minecraft.world.entity.Entity, java.lang.Class\)/{on=1} on{print; if(++n>14) exit}'
+            # (r64) what OROR's own models need to play Epic Fight's animations (the kingdom's people have no Epic Fight body)
+            EF=libs/epic-fight-21.17.3.1-mc1.21.1-neoforge.jar
+            for c in yesman.epicfight.api.animation.AnimationManager 'yesman.epicfight.api.animation.AnimationManager$AnimationAccessor' \
+                     yesman.epicfight.api.animation.types.StaticAnimation yesman.epicfight.api.animation.types.DynamicAnimation \
+                     yesman.epicfight.api.animation.TransformSheet yesman.epicfight.api.animation.JointTransform \
+                     yesman.epicfight.api.animation.Keyframe yesman.epicfight.api.asset.AssetAccessor yesman.epicfight.api.utils.math.Vec3f \
+                     yesman.epicfight.api.utils.math.OpenMatrix4f; do
+              echo "== $c"; javap -p -cp $EF "$c" 2>&1 | grep -vE 'lambda\$' | grep -E 'public|interface|class' | head -n 60
+            done
+            unzip -l $EF | grep -E 'animmodels/armatures/biped|assets/epicfight/animmodels/animations/biped/combat/sword_auto1' | head -n 5
+            unzip -p $EF assets/epicfight/animmodels/armatures/biped.json 2>/dev/null | head -c 1500; echo
+            unzip -p $EF assets/epicfight/animmodels/animations/biped/combat/sword_auto1.json 2>/dev/null | head -c 1500; echo
           } 2>&1 | tee -a out/report.txt
       - name: Superb Warfare's guns the capital's gunners do not fire (059g)
         run: |
