@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * its animator and the animation its base layer plays.
  * <p>
  * Each kind of mob stands in its own walled lane high in the sky with a stand-in player (a fake player with a diamond
- * sword) who keeps two and a half blocks in front of it, faces it and strikes every {@value #SWING} ticks, for
+ * sword) who keeps just within its reach in front of it, faces it and strikes every {@value #SWING} ticks, for
  * {@value #TICKS} ticks; the mob is told to fight him. Every tick the animation the mob plays is read; each strike is
  * judged on the next tick by the mob's health (it landed, or it did nothing: guarded or parried); every drop in the
  * tester's health is a blow of the mob's. Both are made whole again at once, so the fight goes on. One line per mob,
@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 public final class EfProbeCore {
     private static final Logger LOG = LoggerFactory.getLogger("OROR EF Probe");
     public static final int TICKS = 600, SWING = 12, Y = 180, SPACING = 16;
+    static final double REACH = 1.3;
     public static volatile boolean done;
 
     /** What differs between the two loaders. */
@@ -244,7 +245,9 @@ public final class EfProbeCore {
             flat = new Vec3(0, 0, -1);
         }
         flat = flat.normalize();
-        Vec3 spot = m.position().add(flat.scale(2.5));
+        // (run nfc 5) at 2.5 blocks no blade reached him (a vindicator swung its axe 57 times, 0 hit): within a melee mob's
+        // reach, and still inside the player's
+        Vec3 spot = m.position().add(flat.scale(REACH + m.getBbWidth() * 0.5));
         double cx = lane.at.getX() + 0.5, cz = lane.at.getZ() + 0.5;
         spot = new Vec3(Math.max(cx - 3.2, Math.min(cx + 3.2, spot.x)), lane.at.getY() + 1, Math.max(cz - 3.2, Math.min(cz + 3.2, spot.z)));
         double dx = m.getX() - spot.x, dz = m.getZ() - spot.z;
