@@ -65,24 +65,49 @@ public final class BrainTargets {
         }
         LivingEntity t = m.getTarget();
         if (t == null || !t.isAlive() || t.level() != m.level()) {
+            why(m, "no target");
             return;
         }
         double d = m.distanceToSqr(t);
-        if (d < 2.5 * 2.5 || d > 32 * 32 || !m.getNavigation().isDone()) {
+        if (d < 2.5 * 2.5 || d > 32 * 32) {
+            why(m, d < 6.25 ? "near" : "far");
+            return;
+        }
+        if (!m.getNavigation().isDone()) {
+            why(m, "walking");
             return;
         }
         Brain<?> b = m.getBrain();
         if (!b.checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)) {
+            why(m, "no walk memory");
             return;
         }
         java.util.Optional<WalkTarget> w = b.getMemory(MemoryModuleType.WALK_TARGET);
         // walking elsewhere (a hoglin backing off from warped fungus, a piglin to its gold): its brain's choice stands
         if (w.isPresent() && !(w.get().getTarget() instanceof net.minecraft.world.entity.ai.behavior.EntityTracker et && et.getEntity() == t)) {
+            why(m, "walk elsewhere " + w.get().getTarget().currentBlockPosition().toShortString());
             return;
         }
         if (w.isEmpty()) {
             b.setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(t, 1.0F, 1));
         }
-        m.getNavigation().moveTo(t, 1.0);
+        boolean went = m.getNavigation().moveTo(t, 1.0);
+        why(m, went ? "sent" : "no path");
+        m.getPersistentData().putInt("OrorBrainClose", m.getPersistentData().getInt("OrorBrainClose") + 1);
+    }
+
+    /** (r65) for the checks: why the last look found nothing to do */
+    static void why(Mob m, String s) {
+        m.getPersistentData().putString("OrorBrainCloseWhy", s);
+    }
+
+    /** (r65) for the checks: the brain mob's walking, as close() saw it */
+    public static String trace(Mob m) {
+        net.minecraft.nbt.CompoundTag d = m.getPersistentData();
+        String act = m.getBrain().getActiveNonCoreActivity().map(Object::toString).orElse("-");
+        String walk = m.getBrain().checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)
+            ? m.getBrain().getMemory(MemoryModuleType.WALK_TARGET).map(w -> w.getTarget().currentBlockPosition().toShortString()).orElse("none") : "-";
+        return "close " + d.getInt("OrorBrainClose") + " why " + d.getString("OrorBrainCloseWhy") + " navDone " + m.getNavigation().isDone()
+            + " activity " + act + " walk " + walk + " speed " + String.format(java.util.Locale.ROOT, "%.2f", m.getSpeed());
     }
 }

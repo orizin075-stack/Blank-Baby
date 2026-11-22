@@ -56,6 +56,8 @@ public final class MobTraceTest {
         int hits, still;
         double lx, lz;
         List<String> goals = new ArrayList<>();
+        /** (r65) a brain-led mob's walking at ticks 50, 100 and 150, and every goal it has (* running) at 100 */
+        List<String> brain = new ArrayList<>();
     }
 
     private static final class Run {
@@ -186,6 +188,18 @@ public final class MobTraceTest {
             }
             l.lx = m.getX();
             l.lz = m.getZ();
+            if ((age == 50 || age == 100 || age == 150) && (m instanceof net.minecraft.world.entity.monster.piglin.AbstractPiglin
+                || m instanceof net.minecraft.world.entity.monster.hoglin.Hoglin)) {
+                l.brain.add("t" + age + " d=" + String.format(Locale.ROOT, "%.1f", d) + " " + jp.oror.reborn.combat.BrainTargets.trace(m));
+                if (age == 100) {
+                    StringBuilder all = new StringBuilder("goals");
+                    for (WrappedGoal w : ((MobGoalSelectorAccess) m).oror$getGoals().getAvailableGoals()) {
+                        all.append(' ').append(w.getPriority()).append(':').append(w.getGoal().getClass().getName().replaceAll("^.*\\.", ""))
+                            .append(w.isRunning() ? "*" : "").append(w.getFlags());
+                    }
+                    l.brain.add(all.toString());
+                }
+            }
             if (age == 100) {
                 TreeSet<String> running = new TreeSet<>();
                 for (WrappedGoal w : ((MobGoalSelectorAccess) m).oror$getGoals().getAvailableGoals()) {
@@ -205,8 +219,9 @@ public final class MobTraceTest {
         for (Lane l : r.lanes) {
             boolean ok = RANGED.contains(l.type) ? l.hits >= 1 : l.hits >= 2 && l.minDist < 3.0;
             pass &= ok;
-            out.put(l.type, String.format(Locale.ROOT, "{\"hits\":%d,\"minDist\":%.1f,\"moved\":%.1f,\"stillTicks\":%d,\"alive\":%b,\"ok\":%b,\"goals\":%s}",
-                l.hits, l.minDist, l.moved, l.still, l.mob.isAlive(), ok, l.goals.stream().map(s -> "\"" + s + "\"").toList()));
+            out.put(l.type, String.format(Locale.ROOT, "{\"hits\":%d,\"minDist\":%.1f,\"moved\":%.1f,\"stillTicks\":%d,\"alive\":%b,\"ok\":%b,\"goals\":%s%s}",
+                l.hits, l.minDist, l.moved, l.still, l.mob.isAlive(), ok, l.goals.stream().map(s -> "\"" + s + "\"").toList(),
+                l.brain.isEmpty() ? "" : ",\"brain\":\"" + String.join(" | ", l.brain).replace('"', '\'') + "\""));
         }
         StringBuilder b = new StringBuilder("{");
         out.forEach((k, v) -> b.append(b.length() > 1 ? "," : "").append('"').append(k).append("\":").append(v));
