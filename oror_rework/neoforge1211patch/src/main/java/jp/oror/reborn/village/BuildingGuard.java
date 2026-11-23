@@ -99,6 +99,19 @@ public final class BuildingGuard {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void grief(EntityMobGriefingEvent e) {
         Entity who = e.getEntity();
+        // (r66) no mob of any kind takes blocks from one of OROR's stages (Ice and Fire's fire dragons tore the chaos
+        // citadel's floor up round its spawner: 208 blocks there at placing, 87 two seconds later, 11 dragons by it)
+        if (e.canGrief() && who != null && !who.level().isClientSide && !(who instanceof Player) && who.level() instanceof ServerLevel
+            // villagers farm and build in their own houses, and the capital has its own rule (above and CAPITAL-SHIELD)
+            && !(who instanceof net.minecraft.world.entity.npc.AbstractVillager) && !inCapital(who.blockPosition(), 64)
+            && (jp.oror.reborn.worldgen.StructureGuard.inside(who.blockPosition()) || jp.oror.reborn.worldgen.StructureGuard.inside(who.blockPosition().below(2)))) {
+            e.setCanGrief(false);
+            griefStopped++;
+            if (stageGriefLogged++ < 20) {
+                LOG.info("STAGE-GRIEF {\"by\":\"{}\",\"at\":\"{}\"}", who.getType().toShortString(), who.blockPosition().toShortString());
+            }
+            return;
+        }
         if (!e.canGrief() || who == null || who.level().isClientSide || !(who instanceof Enemy || who instanceof net.minecraft.world.entity.boss.wither.WitherBoss)) {
             return;
         }
@@ -148,7 +161,7 @@ public final class BuildingGuard {
         }
     }
 
-    static int stageBlastsLogged;
+    static int stageBlastsLogged, stageGriefLogged;
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Buildings");
 
     /** In a piece of one of OROR's structures (but the capital and the villages, kept above, and the illagers' city)? */

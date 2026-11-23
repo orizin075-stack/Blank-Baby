@@ -245,7 +245,7 @@ jobs:
           # every error and exception of the whole run (the tail above starts late), the first 600 lines
           grep -aE 'ERROR|Exception|Caused by|Failed to|Couldn.t|Unable to' "$RUNNER_TEMP/server/console.log" | grep -v 'HttpConnectTimeout\|ConnectException' | head -600 > out/server_errors.txt || true
           # (r62) every OROR structure as world generation builds it, one line each (StructureAudit)
-          grep -E 'STRUCT-AUDIT|OROR Structures|STAGE-BLAST' "$RUNNER_TEMP/server/console.log" > out/structure_audit.txt || true
+          grep -E 'STRUCT-AUDIT|OROR Structures|STAGE-BLAST|STAGE-GRIEF|OROR Buildings' "$RUNNER_TEMP/server/console.log" > out/structure_audit.txt || true
           # (r63) Azazel's siege of the capital and its air wing (SiegeTest)
           grep -E 'SIEGE-|OROR Siege|AzazelCapitalSiege|AzazelSiegeArmies|SiegeAir' "$RUNNER_TEMP/server/console.log" > out/siege_log.txt || true
           grep -E 'EFP|OROR EF Probe' "$RUNNER_TEMP/server/console.log" > out/efprobe.txt || true
@@ -281,6 +281,18 @@ jobs:
           grep -E 'CAPITAL-INTEGRITY' "$RUNNER_TEMP/server/console.log" | sed 's/},/},\n/g' > out/capital_integrity.txt || true
           cat "$RUNNER_TEMP/server/jfr_dump.txt" >> out/war_profile.txt 2>/dev/null || true
           exit $rc
+      - name: Ice and Fire's griefing (r66 probe)
+        if: always()
+        run: |
+          J=$(ls "$RUNNER_TEMP"/pack053/iceandfire-*.jar 2>/dev/null | head -1)
+          [ -n "$J" ] || exit 0
+          D="$RUNNER_TEMP/iaf"; rm -rf "$D"; mkdir -p "$D"; (cd "$D" && unzip -q -o "$J" '*.class') || true
+          { echo "$J"
+            for f in $(grep -rlE 'canEntityGrief|RULE_MOBGRIEFING|Griefing|griefing' --include=*.class "$D" | head -30); do
+              c=$(echo "${f#$D/}" | sed 's/\.class$//; s#/#.#g'); echo "== $c"
+              javap -p -c -classpath "$D" "$c" 2>/dev/null | grep -nE '^  [a-zA-Z].*\(|canEntityGrief|MOBGRIEFING|[Gg]riefing|destroyBlock|removeBlock|setBlock' | head -60
+            done; } > out/iaf_probe.txt 2>&1 || true
+          wc -l out/iaf_probe.txt
       - name: Commit the result
         if: always()
         working-directory: .
