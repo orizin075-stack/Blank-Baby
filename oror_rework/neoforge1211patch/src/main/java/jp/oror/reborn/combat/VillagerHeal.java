@@ -29,7 +29,15 @@ public final class VillagerHeal {
             || !v.isAlive() || v.getMainHandItem().isEmpty() || !jp.oror.reborn.RebornConfig.SMART_MOBS.get()) {
             return;
         }
+        // its foe: the one it fights, or the one that just struck it, or the hostile its senses hold (an armed villager
+        // that backs off from a husk has given up its target to the panic its brain runs: the GameTest's villager)
         LivingEntity t = v.getTarget();
+        if (t == null || !t.isAlive()) {
+            t = v.getLastHurtByMob() != null && v.tickCount - v.getLastHurtByMobTimestamp() < 200 ? v.getLastHurtByMob() : null;
+        }
+        if (t == null || !t.isAlive()) {
+            t = v.getBrain().getMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_HOSTILE).orElse(null);
+        }
         if (t == null || !t.isAlive() || t.level() != sl || v.distanceToSqr(t) > 32 * 32) {
             return;
         }

@@ -87,8 +87,11 @@ public final class StructureFooting {
 
     /** What a footing goes down through. */
     private static boolean open(BlockState s) {
+        // (r66) and sand, gravel and the like: the footing stopped on them, then they fell into the cave under them and
+        // left a gap under the floor (the gods' check: under berit's, ferdinand's, mels' and yggdrasil's floors, after placing)
         return s.isAir() || s.is(Blocks.WATER) || s.is(Blocks.LAVA) || s.is(BlockTags.LEAVES) || s.canBeReplaced()
-            || s.is(BlockTags.FLOWERS) || s.is(BlockTags.SAPLINGS) || s.is(Blocks.SNOW);
+            || s.is(BlockTags.FLOWERS) || s.is(BlockTags.SAPLINGS) || s.is(Blocks.SNOW)
+            || s.getBlock() instanceof net.minecraft.world.level.block.FallingBlock;
     }
 
     private static boolean plainFoot(BlockState s) {

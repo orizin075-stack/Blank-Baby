@@ -87,7 +87,7 @@ jobs:
           grep -aE 'DODGE-|GUARD-|MOBS-' "$C" > "$OUT/combat_log.txt" || true
           grep -aE 'EFP|OROR EF Probe' "$C" > "$OUT/efprobe.txt" || true
           grep -aE 'STRUCT-AUDIT|OROR Structures|GODS-|STAGE-BLAST' "$C" > "$OUT/structure_audit.txt" || true
-          grep -aE 'WAZA-|RELIC-|SWEEP-|GAMETEST|DUEL-|OROR_POWER_BATTLE|OROR_INDUSTRY|OROR_COMPAT' "$C" | cut -c1-2000 > "$OUT/sweep_log.txt" || true
+          grep -aE 'WAZA-|RELIC-|SWEEP-|GAMETEST|DUEL-|OROR_POWER_BATTLE|OROR_INDUSTRY|OROR_COMPAT|POWER-DUEL' "$C" | cut -c1-2000 > "$OUT/sweep_log.txt" || true
           awk '/Mod List|Loading [0-9]+ mods/{on=1} on{print} /^$/{if(on)exit}' "$C" | head -400 > "$OUT/mods_loaded.txt" || true
           tail -n 3000 "$C" > "$OUT/server_console.log"
           python3 -I tools/pass_summary.py "$C" "$OUT/pass_summary.txt" || true

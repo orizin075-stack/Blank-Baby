@@ -252,7 +252,7 @@ jobs:
           # every line of the pilots' flights (the console's tail keeps only the end of the run)
           grep -E 'PLANE-TRACK|PLANE-HURT|HELI-TRACK|VEHICLE-|SUPPLY-|FLIGHT-|LANDING-|AA-|GUNPOST-|TURRET-CREW' "$RUNNER_TEMP/server/console.log" > out/flight_log.txt || true
           # every entity and item of OROR's own put to work (/oror sweep)
-          grep -E 'SWEEP-|GUARD-|WORN-|STARTER-KIT|GAMETEST|[Gg]ame[Tt]est|test.*(passed|failed)|OROR_POWER_BATTLE|OROR_INDUSTRY|OROR_COMPAT' "$RUNNER_TEMP/server/console.log" > out/sweep_log.txt || true
+          grep -E 'SWEEP-|GUARD-|WORN-|STARTER-KIT|GAMETEST|[Gg]ame[Tt]est|test.*(passed|failed)|OROR_POWER_BATTLE|OROR_INDUSTRY|OROR_COMPAT|POWER-DUEL' "$RUNNER_TEMP/server/console.log" > out/sweep_log.txt || true
           # where the server thread spent the battle (JFR samples between the war's start and its result)
           J="$RUNNER_TEMP/server/war.jfr"; [ -s "$J" ] || J="$RUNNER_TEMP/server/rec.jfr"
           timeout 600 python3 -I tools/jfr_hot.py "$J" "$RUNNER_TEMP/server/console.log" > out/war_profile.txt 2>&1 || true

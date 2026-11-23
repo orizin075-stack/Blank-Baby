@@ -86,6 +86,7 @@ public final class GodCitadelTest {
         int done;
         int placed, sealsRisen, sealsTried;
         String gapsAtPlacing = "";
+        java.util.Map<BlockPos, Integer> spawnersAtPlacing = new java.util.LinkedHashMap<>();
         final List<String> failed = new ArrayList<>();
         final List<String> notMade = new ArrayList<>();
         int made;
@@ -146,6 +147,32 @@ public final class GodCitadelTest {
             resultLogged = true;
             state = null;
         }
+    }
+
+    /** (r66) The stage's spawners, each with the solid blocks within six of it. */
+    static java.util.Map<BlockPos, Integer> spawners(ServerLevel level, BoundingBox bb) {
+        java.util.Map<BlockPos, Integer> out = new java.util.LinkedHashMap<>();
+        BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+        for (int x = bb.minX(); x <= bb.maxX(); x++) {
+            for (int z = bb.minZ(); z <= bb.maxZ(); z++) {
+                for (int y = bb.minY(); y <= bb.maxY(); y++) {
+                    if (level.getBlockState(m.set(x, y, z)).is(net.minecraft.world.level.block.Blocks.SPAWNER)) {
+                        out.put(m.immutable(), solidAround(level, m.immutable()));
+                    }
+                }
+            }
+        }
+        return out;
+    }
+
+    static int solidAround(ServerLevel level, BlockPos c) {
+        int n = 0;
+        for (BlockPos p : BlockPos.betweenClosed(c.offset(-6, -2, -6), c.offset(6, 4, 6))) {
+            if (!level.getBlockState(p).isAir()) {
+                n++;
+            }
+        }
+        return n;
     }
 
     /**
@@ -231,6 +258,7 @@ public final class GodCitadelTest {
                 }
                 s.placed++;
                 s.gapsAtPlacing = floorGaps(level, start);
+                s.spawnersAtPlacing = spawners(level, start.getBoundingBox());
                 s.wait = SETTLE;
                 s.phase = 3;
             }
@@ -242,6 +270,22 @@ public final class GodCitadelTest {
                 String now = floorGaps(level, s.audit.start);
                 if (!now.isEmpty() || !s.gapsAtPlacing.isEmpty()) {
                     LOG.info("GOD-FLOOR {\"id\":\"{}\",\"gapsAtPlacing\":\"{}\",\"gapsAtAudit\":\"{}\"}", s.audit.current.location(), s.gapsAtPlacing, now);
+                }
+                StringBuilder lost = new StringBuilder();
+                for (java.util.Map.Entry<BlockPos, Integer> sp : s.spawnersAtPlacing.entrySet()) {
+                    int was = sp.getValue(), is = solidAround(level, sp.getKey());
+                    if (is < was) {
+                        java.util.Map<String, Integer> near = new java.util.TreeMap<>();
+                        for (net.minecraft.world.entity.Entity en : level.getEntities((net.minecraft.world.entity.Entity) null,
+                            new net.minecraft.world.phys.AABB(sp.getKey()).inflate(16), x -> true)) {
+                            near.merge(net.minecraft.world.entity.EntityType.getKey(en.getType()).toString(), 1, Integer::sum);
+                        }
+                        lost.append(lost.length() > 0 ? "; " : "").append(sp.getKey().toShortString()).append(' ').append(was).append("->").append(is)
+                            .append(' ').append(near);
+                    }
+                }
+                if (lost.length() > 0) {
+                    LOG.info("GOD-SPAWNER-AREA {\"id\":\"{}\",\"lost\":\"{}\"}", s.audit.current.location(), lost);
                 }
                 StructureAudit.audit(s.audit);
                 seal(s);
