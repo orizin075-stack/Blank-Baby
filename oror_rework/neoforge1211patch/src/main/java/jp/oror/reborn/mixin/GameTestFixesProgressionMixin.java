@@ -42,6 +42,20 @@ public abstract class GameTestFixesProgressionMixin {
         ci.cancel();
     }
 
+    /**
+     * The master villager's duel with the netherite player: as one of the village's fighters (an armorer). Without a
+     * trade it is a civilian, which fights back only while cornered and walks off once a dodge takes it out of reach
+     * (passing some runs and not others since 052).
+     */
+    @org.spongepowered.asm.mixin.injection.Redirect(method = "master_villager_defeats_fully_enchanted_netherite_player",
+        at = @At(value = "INVOKE", target = "Ljp/oror/reborn/AdaptiveCombat;arm(Lnet/minecraft/world/entity/Mob;)V", remap = false), remap = false)
+    private static void oror$masterFighter(net.minecraft.world.entity.Mob m) {
+        if (m instanceof Villager v) {
+            v.setVillagerData(v.getVillagerData().setProfession(net.minecraft.world.entity.npc.VillagerProfession.ARMORER));
+        }
+        jp.oror.reborn.AdaptiveCombat.arm(m);
+    }
+
     @Inject(method = "buried_ore_is_excavated_smelted_and_collected", at = @At("RETURN"), remap = false)
     private static void oror$buried(GameTestHelper h, CallbackInfo ci) {
         GameTestFixes.roof(h, 3, 17, 3, 13);
