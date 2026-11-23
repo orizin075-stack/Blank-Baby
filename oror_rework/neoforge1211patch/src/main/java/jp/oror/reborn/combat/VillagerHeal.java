@@ -23,6 +23,9 @@ public final class VillagerHeal {
     private VillagerHeal() {
     }
 
+    private static final java.util.Map<Villager, LivingEntity> FOE = new java.util.WeakHashMap<>();
+    private static final java.util.Map<Villager, Long> FOE_AT = new java.util.WeakHashMap<>();
+
     @SubscribeEvent
     public static void tick(EntityTickEvent.Post e) {
         if (!(e.getEntity() instanceof Villager v) || !(v.level() instanceof ServerLevel sl) || (v.tickCount + v.getId()) % 5 != 0
@@ -39,6 +42,15 @@ public final class VillagerHeal {
         }
         if (t == null || !t.isAlive()) {
             t = v.getBrain().getMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_HOSTILE).orElse(null);
+        }
+        // (r68) or the foe it last had, for ten seconds: a villager that has backed off past its senses' reach (a husk is
+        // sensed at eight blocks) still knows whom it backs off from (the GameTest's villager, at 10.1 blocks, never healed)
+        long now0 = sl.getGameTime();
+        if (t != null && t.isAlive()) {
+            FOE.put(v, t);
+            FOE_AT.put(v, now0);
+        } else if (FOE.get(v) != null && now0 - FOE_AT.getOrDefault(v, 0L) < 200L) {
+            t = FOE.get(v);
         }
         if (t == null || !t.isAlive() || t.level() != sl || v.distanceToSqr(t) > 32 * 32) {
             return;
