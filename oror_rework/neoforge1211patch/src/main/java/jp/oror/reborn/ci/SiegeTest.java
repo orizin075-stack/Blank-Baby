@@ -70,6 +70,10 @@ public final class SiegeTest {
         /** (r63, the user: "ネザーからきちんとモブくる？ボスは？") the siege's ground: every marked attacker, by kind. */
         final Map<UUID, Foot> foot = new HashMap<>();
         final List<String> notes = new ArrayList<>();
+        /** (r67) the test's own crewed AH-6 on a pad 120 blocks out (the capital's own come only with a player near) */
+        Entity heli;
+        net.minecraft.world.level.ChunkPos heliChunk;
+        double heliMaxAlt;
     }
 
     @SubscribeEvent
@@ -111,7 +115,17 @@ public final class SiegeTest {
             resultLogged = true;
             return 0;
         }
-        LOG.info("SIEGE-START {\"center\":\"{}\",\"began\":\"{}\"}", r.center.toShortString(), r.began);
+        // (r67) a crewed helicopter on a pad 120 blocks east of the centre, as the capital's own stand: does it go up after
+        // the air wing (it looked 64 round and 24 up before, and sat through every siege)
+        if (jp.oror.reborn.vehicle.Sbw.present() && jp.oror.reborn.vehicle.Sbw.has("ah_6")) {
+            int hx = r.center.getX() + 120, hz = r.center.getZ();
+            r.heliChunk = new net.minecraft.world.level.ChunkPos(hx >> 4, hz >> 4);
+            level.setChunkForced(r.heliChunk.x, r.heliChunk.z, true);
+            level.getChunk(r.heliChunk.x, r.heliChunk.z);
+            int hy = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, hx, hz);
+            r.heli = jp.oror.reborn.vehicle.RoyalPilots.deploy(level, new net.minecraft.world.phys.Vec3(hx + 0.5, hy, hz + 0.5), -90F, "ah_6", 2, null);
+        }
+        LOG.info("SIEGE-START {\"center\":\"{}\",\"began\":\"{}\",\"testHeli\":{}}", r.center.toShortString(), r.began, r.heli != null);
         run = r;
         return 1;
     }
@@ -194,6 +208,10 @@ public final class SiegeTest {
 
     private static void sample(Run r) {
         census(r);
+        if (r.heli != null && r.heli.isAlive()) {
+            int g = r.level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, r.heli.getBlockX(), r.heli.getBlockZ());
+            r.heliMaxAlt = Math.max(r.heliMaxAlt, r.heli.getY() - g);
+        }
         ServerLevel l = r.level;
         StringBuilder line = new StringBuilder();
         int n = 0;
@@ -239,6 +257,14 @@ public final class SiegeTest {
     }
 
     private static void finish(Run r) {
+        if (r.heli != null) {
+            net.minecraft.nbt.CompoundTag hp = r.heli.getPersistentData().getCompound(jp.oror.reborn.vehicle.RoyalPilots.KEY);
+            LOG.info(String.format(java.util.Locale.ROOT, "SIEGE-HELI {\"alive\":%b,\"maxAlt\":%.1f,\"mode\":\"%s\",\"crew\":%d,\"target\":%b}",
+                r.heli.isAlive(), r.heliMaxAlt, hp.getString("Mode"), r.heli.getPassengers().size(), hp.hasUUID("Target")));
+            if (r.heliChunk != null) {
+                r.level.setChunkForced(r.heliChunk.x, r.heliChunk.z, false);
+            }
+        }
         int mounts = 0, mountsRidden = 0, mountsFlew = 0, mountsCame = 0, mountsMoved = 0, helis = 0, helisFlew = 0, shots = 0, gunMounts = 0;
         double maxAlt = 0;
         Map<String, Integer> kinds = new HashMap<>();
