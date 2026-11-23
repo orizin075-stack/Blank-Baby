@@ -230,7 +230,12 @@ public final class KingStoryTest {
             for (int i = 0; i < 2; i++) {
                 Villager ex = (Villager) spawn(r, EntityType.VILLAGER, 8, i * 2);
                 ex.getPersistentData().putBoolean("OrorWanderer", true);
-                ex.hurt(r.rebel.damageSources().playerAttack(r.rebel), 10000F);
+                // (r66) struck till it falls: a villager may slip or turn a single blow (MobDodge, MobGuard), and one of
+                // the two lived through it in a run (favour 3, the rebels' trade shut)
+                for (int k = 0; k < 8 && ex.isAlive(); k++) {
+                    ex.invulnerableTime = 0;
+                    ex.hurt(r.rebel.damageSources().playerAttack(r.rebel), 10000F);
+                }
             }
             out.put("rebelFavour", RebelPact.favour(r.rebel));
             out.put("rebelOffers", RebelPact.offers(r.rebel, sl, "illager").size());

@@ -21,7 +21,7 @@ public abstract class IafStageGuardMixin {
     @Inject(method = "canDestroyBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At("HEAD"),
         cancellable = true, remap = false, require = 0)
     private void oror$stage(BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (StructureGuard.inside(pos)) {
+        if (StructureGuard.insideOrUnder(pos)) {
             jp.oror.reborn.village.BuildingGuard.dragonSpared(pos);
             cir.setReturnValue(false);
         }

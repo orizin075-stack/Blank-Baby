@@ -163,4 +163,25 @@ public final class GameTestFixes {
         }
         return selected.contains(id);
     }
+
+    /**
+     * A fighting villager waits for a real descending jump before it counts a critical strike. As one of the village's
+     * fighters (an armorer): a villager without a trade is a civilian, which fights back only while cornered and backs
+     * off once a dodge takes it out of reach (the test failed now and then since 0.17.14 for that).
+     */
+    public static void criticalJump(GameTestHelper h) {
+        Villager v = mob(h, EntityType.VILLAGER, 8, 8);
+        v.setVillagerData(v.getVillagerData().setProfession(VillagerProfession.ARMORER));
+        MobLevels.set(v, 5);
+        AdaptiveCombat.arm(v);
+        MobMind.data(v).putString("Stance", "aggressive");
+        Husk t = mob(h, EntityType.HUSK, 10, 8);
+        t.setNoAi(true);
+        t.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(1024.0);
+        t.setHealth(1024.0F);
+        v.setTarget(t);
+        h.succeedWhen(() -> h.assertTrue(MobMind.data(v).getInt("CriticalHits") > 0 && t.getHealth() < 1024.0F,
+            String.format(Locale.ROOT, "A real jump descends before a critical strike is counted: criticals %d, husk %.0f, %.2f apart, target %s",
+                MobMind.data(v).getInt("CriticalHits"), t.getHealth(), v.distanceTo(t), v.getTarget() == null ? "none" : v.getTarget().getType().toShortString())));
+    }
 }

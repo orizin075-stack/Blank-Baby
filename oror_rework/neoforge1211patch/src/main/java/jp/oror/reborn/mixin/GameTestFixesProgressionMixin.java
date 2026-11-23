@@ -36,6 +36,12 @@ public abstract class GameTestFixesProgressionMixin {
         throw new AssertionError();
     }
 
+    @Inject(method = "critical_attack_waits_for_actual_descending_jump", at = @At("HEAD"), cancellable = true, remap = false)
+    private static void oror$critical(GameTestHelper h, CallbackInfo ci) {
+        GameTestFixes.criticalJump(h);
+        ci.cancel();
+    }
+
     @Inject(method = "buried_ore_is_excavated_smelted_and_collected", at = @At("RETURN"), remap = false)
     private static void oror$buried(GameTestHelper h, CallbackInfo ci) {
         GameTestFixes.roof(h, 3, 17, 3, 13);

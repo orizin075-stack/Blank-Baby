@@ -26,7 +26,9 @@ public final class VillagerHeal {
     @SubscribeEvent
     public static void tick(EntityTickEvent.Post e) {
         if (!(e.getEntity() instanceof Villager v) || !(v.level() instanceof ServerLevel sl) || (v.tickCount + v.getId()) % 5 != 0
-            || !v.isAlive() || v.getMainHandItem().isEmpty() || !jp.oror.reborn.RebornConfig.SMART_MOBS.get()) {
+            || !v.isAlive() || v.isBaby() || !jp.oror.reborn.RebornConfig.SMART_MOBS.get()
+            // a fighter: armed now, or one of the village's fighters, or armed once (its weapon put away as it backs off)
+            || v.getMainHandItem().isEmpty() && !jp.oror.reborn.VillageAI.strong(v) && !MobMind.data(v).getBoolean("VillageGeared")) {
             return;
         }
         // its foe: the one it fights, or the one that just struck it, or the hostile its senses hold (an armed villager

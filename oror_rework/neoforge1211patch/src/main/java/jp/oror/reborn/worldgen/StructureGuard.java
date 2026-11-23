@@ -132,6 +132,16 @@ public final class StructureGuard {
         return false;
     }
 
+    /** (r66) In one of OROR's pieces, or in the four blocks under one (its footing, under the floor). */
+    public static boolean insideOrUnder(BlockPos pos) {
+        for (int d = 0; d <= 4; d++) {
+            if (inside(pos.above(d))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Whether a world-generation write at the place is to be refused. */
     public static boolean refuse(BlockPos pos) {
         if (BOXES.isEmpty() || PLACING.get()[0] > 0) {
