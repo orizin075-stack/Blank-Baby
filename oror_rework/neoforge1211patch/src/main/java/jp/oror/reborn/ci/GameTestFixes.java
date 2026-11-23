@@ -164,6 +164,27 @@ public final class GameTestFixes {
         return selected.contains(id);
     }
 
+    private static final java.util.Map<Villager, float[]> MASTER = new java.util.WeakHashMap<>();
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR GameTest");
+
+    /**
+     * (r68) The master villager's duel with the netherite player, strike by strike: on each new strike its count, those
+     * the game took and turned away, the player's health before and after, his hurt time, the distance and whether the
+     * master was coming down from a jump (a critical). Called each tick from the test's own check.
+     */
+    public static void masterTrace(Player p, Villager v) {
+        net.minecraft.nbt.CompoundTag d = MobMind.data(v);
+        int strikes = d.getInt("Strikes");
+        float[] last = MASTER.computeIfAbsent(v, k -> new float[]{0, p.getHealth()});
+        if (strikes != (int) last[0]) {
+            LOG.info(String.format(Locale.ROOT, "MASTER-DUEL {\"strike\":%d,\"landed\":%d,\"rejected\":%d,\"health\":\"%.1f>%.1f\",\"hurtTime\":%d,"
+                    + "\"dist\":%.2f,\"falling\":%b,\"age\":%d}", strikes, d.getInt("SuccessfulStrikes"), d.getInt("RejectedStrikes"), last[1], p.getHealth(),
+                p.invulnerableTime, v.distanceTo(p), v.fallDistance > 0 && !v.onGround(), v.tickCount));
+            last[0] = strikes;
+            last[1] = p.getHealth();
+        }
+    }
+
     /**
      * A fighting villager waits for a real descending jump before it counts a critical strike. As one of the village's
      * fighters (an armorer): a villager without a trade is a civilian, which fights back only while cornered and backs

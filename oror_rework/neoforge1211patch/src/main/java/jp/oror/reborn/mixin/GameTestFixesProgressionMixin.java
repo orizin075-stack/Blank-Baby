@@ -56,6 +56,12 @@ public abstract class GameTestFixesProgressionMixin {
         jp.oror.reborn.AdaptiveCombat.arm(m);
     }
 
+    /** (r68: failed in 2 of the last 4 full runs) each strike of the master on the netherite player, told (GameTestFixes.masterTrace). */
+    @Inject(method = "lambda$master_villager_defeats_fully_enchanted_netherite_player$1", at = @At("HEAD"), require = 1, remap = false)
+    private static void oror$masterTrace(GameTestHelper h, net.minecraft.world.entity.player.Player p, Villager v, CallbackInfo ci) {
+        GameTestFixes.masterTrace(p, v);
+    }
+
     @Inject(method = "buried_ore_is_excavated_smelted_and_collected", at = @At("RETURN"), remap = false)
     private static void oror$buried(GameTestHelper h, CallbackInfo ci) {
         GameTestFixes.roof(h, 3, 17, 3, 13);

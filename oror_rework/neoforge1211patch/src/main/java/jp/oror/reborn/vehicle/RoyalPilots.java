@@ -224,7 +224,7 @@ public final class RoyalPilots {
         // turret looks 64 up and down, a close-in gun 128 all round
         double reach = heli ? 200 : air ? 160 : aa ? 128 : still ? 96 : 64, high = heli ? 120 : air ? 96 : aa ? 128 : still ? 64 : 24;
         List<LivingEntity> near = v.level().getEntitiesOfClass(LivingEntity.class, v.getBoundingBox().inflate(reach, high, reach),
-            l -> l.isAlive() && RoyalSovereign.hostile(l) && !(l.getVehicle() != null && l.getVehicle() == v));
+            l -> l.isAlive() && RoyalSovereign.hostile(l) && !(l.getVehicle() != null && l.getVehicle() == v) && !buried(l));
         LivingEntity best = null;
         double bestD = Double.MAX_VALUE;
         for (LivingEntity l : near) {
@@ -929,7 +929,19 @@ public final class RoyalPilots {
     /** Within {@code reach} blocks of the vehicle and inside the world's height (an enemy over the sky is out of reach). */
     private static boolean inReach(Entity v, Entity t, double reach) {
         return t.level() == v.level() && t.distanceToSqr(v) < reach * reach
-            && t.getY() > v.level().getMinBuildHeight() && t.getY() < v.level().getMaxBuildHeight() + 16;
+            && t.getY() > v.level().getMinBuildHeight() && t.getY() < v.level().getMaxBuildHeight() + 16 && !buried(t);
+    }
+
+    /**
+     * (r68) More than twelve blocks under the ground over it (in a cave): no gun of a vehicle reaches it, and the siege
+     * check's AH-6 hung over a zombie at -46, 130 blocks under it, at the siege's end. A building's roof is not that deep.
+     */
+    private static boolean buried(Entity t) {
+        if (!(t.level() instanceof ServerLevel sl)) {
+            return false;
+        }
+        net.minecraft.world.level.chunk.LevelChunk c = sl.getChunkSource().getChunkNow(t.getBlockX() >> 4, t.getBlockZ() >> 4);
+        return c != null && t.getY() < c.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, t.getBlockX() & 15, t.getBlockZ() & 15) - 12;
     }
 
     private static int groundAt(Entity v, Vec3 at) {
