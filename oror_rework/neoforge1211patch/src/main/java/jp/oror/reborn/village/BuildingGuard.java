@@ -136,7 +136,7 @@ public final class BuildingGuard {
             int had = e.getAffectedBlocks().size();
             java.util.Map<Long, java.util.List<net.minecraft.world.level.levelgen.structure.StructureStart>> stages = new java.util.HashMap<>();
             e.getAffectedBlocks().removeIf(p -> stage(sl, p, stages));
-            if (e.getAffectedBlocks().size() < had && stageBlastsLogged++ < 20) {
+            if ((e.getAffectedBlocks().size() < had || jp.oror.reborn.worldgen.StructureGuard.inside(at)) && stageBlastsLogged++ < 20) {
                 LOG.info("STAGE-BLAST {\"at\":\"{}\",\"by\":\"{}\",\"spared\":{}}", at.toShortString(),
                     direct == null ? (indirect == null ? "-" : indirect.getType().toShortString()) : direct.getType().toShortString(), had - e.getAffectedBlocks().size());
             }
@@ -161,6 +161,10 @@ public final class BuildingGuard {
                 return id != null && id.getNamespace().equals("oror_supreme_bosses") && !id.getPath().equals("illager_city");
             });
         });
+        // the pieces the world knows of here, or (a stage set out by hand, as the gods' check does) whose boxes StructureGuard holds
+        if (jp.oror.reborn.worldgen.StructureGuard.inside(p) && !inCapital(p, 64)) {
+            return true;
+        }
         for (net.minecraft.world.level.levelgen.structure.StructureStart start : starts) {
             for (net.minecraft.world.level.levelgen.structure.StructurePiece piece : start.getPieces()) {
                 if (piece.getBoundingBox().isInside(p)) {

@@ -85,6 +85,7 @@ public final class GodCitadelTest {
         List<ChunkPos> chunks = new ArrayList<>();
         int done;
         int placed, sealsRisen, sealsTried;
+        String gapsAtPlacing = "";
         final List<String> failed = new ArrayList<>();
         final List<String> notMade = new ArrayList<>();
         int made;
@@ -147,6 +148,41 @@ public final class GodCitadelTest {
         }
     }
 
+    /**
+     * (r66) Under the floor of each of the stage's pieces (the piece's own height): where the floor stands and the cell under
+     * it is air or water, up to eight places. Taken right after placing and again at the audit, to tell a footing never
+     * laid from one taken away after.
+     */
+    static String floorGaps(ServerLevel level, StructureStart start) {
+        StringBuilder b = new StringBuilder();
+        int n = 0;
+        for (net.minecraft.world.level.levelgen.structure.StructurePiece piece : start.getPieces()) {
+            if (!(piece instanceof net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece pe)) {
+                continue;
+            }
+            int y = pe.getPosition().getY();
+            BoundingBox bb = piece.getBoundingBox();
+            BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+            for (int x = bb.minX(); x <= bb.maxX(); x++) {
+                for (int z = bb.minZ(); z <= bb.maxZ(); z++) {
+                    BlockState floor = level.getBlockState(m.set(x, y, z));
+                    if (floor.isAir() || !floor.isCollisionShapeFullBlock(level, m)) {
+                        continue;
+                    }
+                    BlockState under = level.getBlockState(m.set(x, y - 1, z));
+                    if (under.isAir() || under.is(net.minecraft.world.level.block.Blocks.WATER)) {
+                        n++;
+                        if (n <= 8) {
+                            b.append(b.length() > 0 ? "; " : "").append(x).append(' ').append(y).append(' ').append(z).append(' ')
+                                .append(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(under.getBlock()).getPath());
+                        }
+                    }
+                }
+            }
+        }
+        return n == 0 ? "" : n + ": " + b;
+    }
+
     private static void step(State s) {
         ServerLevel level = s.audit.level;
         switch (s.phase) {
@@ -194,6 +230,7 @@ public final class GodCitadelTest {
                     }
                 }
                 s.placed++;
+                s.gapsAtPlacing = floorGaps(level, start);
                 s.wait = SETTLE;
                 s.phase = 3;
             }
@@ -201,6 +238,10 @@ public final class GodCitadelTest {
                 // the light engine catches up with the new blocks
                 if (--s.wait > 0) {
                     return;
+                }
+                String now = floorGaps(level, s.audit.start);
+                if (!now.isEmpty() || !s.gapsAtPlacing.isEmpty()) {
+                    LOG.info("GOD-FLOOR {\"id\":\"{}\",\"gapsAtPlacing\":\"{}\",\"gapsAtAudit\":\"{}\"}", s.audit.current.location(), s.gapsAtPlacing, now);
                 }
                 StructureAudit.audit(s.audit);
                 seal(s);

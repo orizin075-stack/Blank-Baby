@@ -119,6 +119,19 @@ public final class StructureGuard {
         }
     }
 
+    /** (r66) Whether the place lies in one of OROR's pieces (any dimension's: the boxes are kept by place only). */
+    public static boolean inside(BlockPos pos) {
+        BoundingBox[] boxes = BOXES.get(ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4));
+        if (boxes != null) {
+            for (BoundingBox b : boxes) {
+                if (b.isInside(pos)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /** Whether a world-generation write at the place is to be refused. */
     public static boolean refuse(BlockPos pos) {
         if (BOXES.isEmpty() || PLACING.get()[0] > 0) {
