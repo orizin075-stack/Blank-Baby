@@ -289,8 +289,10 @@ public final class SiegeTest {
     private static void finish(Run r) {
         if (r.heli != null) {
             net.minecraft.nbt.CompoundTag hp = r.heli.getPersistentData().getCompound(jp.oror.reborn.vehicle.RoyalPilots.KEY);
-            LOG.info(String.format(java.util.Locale.ROOT, "SIEGE-HELI {\"alive\":%b,\"maxAlt\":%.1f,\"mode\":\"%s\",\"crew\":%d,\"target\":%b}",
-                r.heli.isAlive(), r.heliMaxAlt, hp.getString("Mode"), r.heli.getPassengers().size(), hp.hasUUID("Target")));
+            Entity ht = hp.hasUUID("Target") ? r.level.getEntity(hp.getUUID("Target")) : null;
+            LOG.info(String.format(java.util.Locale.ROOT, "SIEGE-HELI {\"alive\":%b,\"maxAlt\":%.1f,\"y\":%.1f,\"mode\":\"%s\",\"crew\":%d,\"target\":%b,\"what\":\"%s\",\"targetY\":%.1f}",
+                r.heli.isAlive(), r.heliMaxAlt, r.heli.getY(), hp.getString("Mode"), r.heli.getPassengers().size(), hp.hasUUID("Target"),
+                ht == null ? "-" : BuiltInRegistries.ENTITY_TYPE.getKey(ht.getType()).getPath(), ht == null ? -1.0 : ht.getY()));
             if (r.heliChunk != null) {
                 r.level.setChunkForced(r.heliChunk.x, r.heliChunk.z, false);
             }

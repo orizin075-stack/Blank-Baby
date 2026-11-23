@@ -193,7 +193,15 @@ public final class RoyalPilots {
         boolean air = "AIRCRAFT".equals(engine) || heli;
         boolean aa = ANTI_AIR.contains(Supply.kind(v));
         boolean still = engine.equals("FIXED") || engine.equals("EMPTY") || engine.isEmpty();
+        // (r68) the crew's own enemy and the one kept are held only while within the gun's reach and inside the world: the
+        // siege check's AH-6 followed its gunner's enemy, rising without end, from 82 to 1213 blocks up (SIEGE-HELI maxAlt
+        // 988, the enemy at 3700 and 2500 blocks off when the siege ended)
+        double hold = air ? 220 : aa ? 160 : 96;
         for (Entity rider : v.getPassengers()) {
+            if (rider instanceof Mob m && m.getTarget() != null && !inReach(v, m.getTarget(), hold)) {
+                m.setTarget(null);
+                continue;
+            }
             if (rider instanceof Mob m && m.getTarget() != null && m.getTarget().isAlive() && !m.isAlliedTo(m.getTarget())) {
                 p.putUUID("Target", m.getTarget().getUUID());
                 p.putLong("TargetSeen", now);
@@ -202,7 +210,7 @@ public final class RoyalPilots {
         }
         if (p.hasUUID("Target") && v.level() instanceof ServerLevel level && now - p.getLong("TargetSeen") < 400
             && level.getEntity(p.getUUID("Target")) instanceof LivingEntity kept && kept.isAlive()
-            && kept.distanceToSqr(v) < (air ? 220 * 220 : aa ? 160 * 160 : 96 * 96)) {
+            && inReach(v, kept, hold)) {
             if (v.tickCount % 20 == 7) {
                 p.putLong("TargetSeen", now);
             }
@@ -836,7 +844,8 @@ public final class RoyalPilots {
             double turn = Math.toRadians((v.getUUID().getLeastSignificantBits() & 1) == 0 ? 25 : -25);
             off = new Vec3(off.x * Math.cos(turn) - off.z * Math.sin(turn), 0, off.x * Math.sin(turn) + off.z * Math.cos(turn));
             goal = target.position().add(off.scale(35));
-            altitude = Math.max(ground, target.getY()) + 22;
+            // (r68) no higher than 96 over the ground, nor than the sky's top
+            altitude = Math.min(Math.max(ground, target.getY()) + 22, Math.min(ground + 96, v.level().getMaxBuildHeight() - 8));
             face = target.position().subtract(pos);
             p.putString("Mode", "attack");
         } else {
@@ -917,6 +926,12 @@ public final class RoyalPilots {
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Vehicles");
 
     /** The top of the ground at a column; a column of a chunk not loaded counts as the ground under the vehicle. */
+    /** Within {@code reach} blocks of the vehicle and inside the world's height (an enemy over the sky is out of reach). */
+    private static boolean inReach(Entity v, Entity t, double reach) {
+        return t.level() == v.level() && t.distanceToSqr(v) < reach * reach
+            && t.getY() > v.level().getMinBuildHeight() && t.getY() < v.level().getMaxBuildHeight() + 16;
+    }
+
     private static int groundAt(Entity v, Vec3 at) {
         int x = Mth.floor(at.x), z = Mth.floor(at.z);
         net.minecraft.world.level.chunk.LevelChunk chunk = v.level() instanceof ServerLevel sl ? sl.getChunkSource().getChunkNow(x >> 4, z >> 4) : null;

@@ -74,6 +74,8 @@ public final class VillageHomeGuard {
             if (d.contains("OrorBoardStill")) {
                 d.remove("OrorBoardStill");
                 d.remove("OrorBoardAt");
+                d.remove("OrorBoardBest");
+                d.remove("OrorBoardTries");
             }
             return;
         }
@@ -85,12 +87,41 @@ public final class VillageHomeGuard {
         if (tank == null || v.distanceTo(tank) < 4) {
             return;
         }
-        long here = v.blockPosition().asLong();
-        int still = d.getLong("OrorBoardAt") == here ? d.getInt("OrorBoardStill") + 1 : 0;
-        d.putLong("OrorBoardAt", here);
+        // (r68) not "has not left his block" but "has come no nearer the tank": CI 68's second crewman crept a block every
+        // five seconds about the chest, 21 to 18 blocks off, for half a minute, so the stillness count began again each
+        // time and nothing was done; three seconds without coming a block nearer counts
+        float off = v.distanceTo(tank);
+        float best = d.contains("OrorBoardBest") ? d.getFloat("OrorBoardBest") : Float.MAX_VALUE;
+        int still;
+        if (off < best - 1.0F) {
+            d.putFloat("OrorBoardBest", off);
+            still = 0;
+        } else {
+            still = d.getInt("OrorBoardStill") + 1;
+        }
+        d.putLong("OrorBoardAt", v.blockPosition().asLong());
         d.putInt("OrorBoardStill", still);
-        if (still < 3 || !v.getNavigation().isDone()) {
+        if (still < 3) {
             return;
+        }
+        // set walking again once and still no nearer: up to four blocks on along the open ground toward the tank, as a
+        // step over whatever the pathfinder will not cross (each time he is stuck again)
+        int tries = d.getInt("OrorBoardTries") + 1;
+        d.putInt("OrorBoardTries", tries);
+        if (tries > 1) {
+            net.minecraft.world.phys.Vec3 dir = tank.position().subtract(v.position()).multiply(1, 0, 1).normalize();
+            BlockPos hop = hop(level, v, dir);
+            if (hop != null) {
+                v.getNavigation().stop();
+                v.teleportTo(hop.getX() + 0.5, hop.getY(), hop.getZ() + 0.5);
+                VillageAI.walk(v, tank.blockPosition(), VillageAI.pace(v, 0.36), 1);
+                d.putInt("OrorBoardStill", 1);       // the next hop after two seconds more without coming nearer
+                d.putFloat("OrorBoardBest", v.distanceTo(tank));
+                hopped++;
+                LOG.info("VILLAGE-CREW-HOP {\"to\":\"{}\",\"off\":{},\"tries\":{}}", hop.toShortString(),
+                    String.format(java.util.Locale.ROOT, "%.1f", v.distanceTo(tank)), tries);
+                return;
+            }
         }
         BlockPos at = v.blockPosition(), best = null;
         double bestD = Double.MAX_VALUE;
@@ -125,6 +156,34 @@ public final class VillageHomeGuard {
         stepped++;
         LOG.info("VILLAGE-CREW-STEP {\"to\":\"{}\",\"pathNow\":{},\"followRange\":{},\"pathTried\":\"{}\",\"was\":\"{}\"}",
             best == null ? "-" : best.toShortString(), !v.getNavigation().isDone(), reach, pathTried, before.replace('"', '\''));
+    }
+
+    static int hopped;
+
+    /**
+     * The open ground four blocks (else three, two) on from the villager along {@code dir}: its floor within two blocks up or down
+     * of his, with room to stand, and nothing solid in the way at his chest. Null when there is none.
+     */
+    private static BlockPos hop(ServerLevel level, Villager v, net.minecraft.world.phys.Vec3 dir) {
+        for (int n = 4; n >= 2; n--) {
+            net.minecraft.world.phys.Vec3 at = v.position().add(dir.scale(n));
+            for (int dy = 0; dy != 3; dy = dy > 0 ? -dy : -dy + 1) {
+                BlockPos q = BlockPos.containing(at.x, v.getY() + dy, at.z);
+                if (Math.abs(dy) > 2) {
+                    break;
+                }
+                if (level.getBlockState(q).getCollisionShape(level, q).isEmpty()
+                    && level.getBlockState(q.above()).getCollisionShape(level, q.above()).isEmpty()
+                    && level.getBlockState(q.below()).isFaceSturdy(level, q.below(), net.minecraft.core.Direction.UP)
+                    && level.getFluidState(q).isEmpty()
+                    && level.clip(new net.minecraft.world.level.ClipContext(v.getEyePosition(), net.minecraft.world.phys.Vec3.atCenterOf(q.above()),
+                        net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, v)).getType()
+                        == net.minecraft.world.phys.HitResult.Type.MISS) {
+                    return q;
+                }
+            }
+        }
+        return null;
     }
 
     static int waypoints;

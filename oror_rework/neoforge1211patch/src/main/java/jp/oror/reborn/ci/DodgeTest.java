@@ -67,7 +67,7 @@ public final class DodgeTest {
         Mob mob;
         Tester tester;
         boolean archery, veteran, fresh;
-        int blows, arrows, dodgesSeenBefore, lastDodges, windedDodgesFrom;
+        int blows, arrows, blocked, dodgesSeenBefore, lastDodges, windedDodgesFrom;
         float dealt, minStamina = 1F;
         Vec3 dodgeFrom, prevPos;
         long dodgeAt = -1;
@@ -190,6 +190,10 @@ public final class DodgeTest {
                     }
                     l.mob = m;
                     l.archery = who[i][0].equals("minecraft:skeleton");
+                    if (l.archery) {
+                        // a helmet: in the sun it would burn and go to the shade, off the line of the shots
+                        m.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+                    }
                     l.tester = new Tester(r.level, i);
                     l.tester.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                     l.tester.moveTo(m.getX(), m.getY(), m.getZ() + 2.0, 180F, 0F);
@@ -247,8 +251,22 @@ public final class DodgeTest {
                             if (arrow == null) {
                                 continue;
                             }
-                            arrow.setPos(m.getX(), m.getY() + m.getBbHeight() * 0.55, m.getZ() + 9.0);
-                            Vec3 aim = m.position().add(0, m.getBbHeight() * 0.55, 0).subtract(arrow.position());
+                            // (r68: CI 68's skeleton was dealt 1 by 14 arrows, after 44 to 48 in every run before: its chase had
+                            // taken it where the ground or a tree stood between) the arrow set where the line to it is open, nine
+                            // blocks off, else nearer (down to four); those with no open line are counted
+                            Vec3 chest = m.position().add(0, m.getBbHeight() * 0.55, 0);
+                            double from = 9.0;
+                            while (from >= 4.0 && r.level.clip(new net.minecraft.world.level.ClipContext(chest.add(0, 0, from), chest,
+                                net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, m)).getType()
+                                != net.minecraft.world.phys.HitResult.Type.MISS) {
+                                from -= 1.0;
+                            }
+                            if (from < 4.0) {
+                                l.blocked++;
+                                from = 9.0;
+                            }
+                            arrow.setPos(m.getX(), chest.y, m.getZ() + from);
+                            Vec3 aim = chest.subtract(arrow.position());
                             arrow.shoot(aim.x, aim.y, aim.z, 1.6F, 0F);
                             r.level.addFreshEntity(arrow);
                             r.made.add(arrow);
@@ -322,9 +340,9 @@ public final class DodgeTest {
             carriedCount += l.carriedCount;
             minStamina = Math.min(minStamina, l.minStamina);
             out.append(first ? "" : ",").append(String.format(Locale.ROOT,
-                "{\"mob\":\"%s\",\"blows\":%d,\"arrows\":%d,\"dodges\":\"%s\",\"carried\":%.2f,\"dealt\":%.0f,\"minStamina\":%.2f,\"stamina\":\"%s\","
+                "{\"mob\":\"%s\",\"blows\":%d,\"arrows\":%d,\"blocked\":%d,\"dodges\":\"%s\",\"carried\":%.2f,\"dealt\":%.0f,\"minStamina\":%.2f,\"stamina\":\"%s\","
                     + "\"guard\":\"%s\",\"skill\":\"%s\",\"alive\":%b}",
-                l.id, l.blows, l.arrows, MobDodge.tally(m), l.carriedCount == 0 ? 0 : l.carried / l.carriedCount, l.dealt, l.minStamina,
+                l.id, l.blows, l.arrows, l.blocked, MobDodge.tally(m), l.carriedCount == 0 ? 0 : l.carried / l.carriedCount, l.dealt, l.minStamina,
                 MobStamina.describe(m), MobGuard.tally(m), jp.oror.reborn.combat.MobProwess.describe(m), m.isAlive()));
             first = false;
         }
