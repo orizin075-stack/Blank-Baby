@@ -800,6 +800,7 @@ public final class RoyalPilots {
             Sbw.heliKeys(v, false, false, false, false, false, Sbw.power(v) > 0.0004F);
             Sbw.mouse(v, 0, 0);
             p.putString("Mode", "parked");
+            p.remove("HeliFreed");
             return;
         }
         if (!p.contains("HeliStart")) {
@@ -875,6 +876,20 @@ public final class RoyalPilots {
         Sbw.call(v, "setZRot", 0F);
         Sbw.heliKeys(v, up, false, false, false, false, down);
         Sbw.mouse(v, 0, 0);
+        // (r67) held up at full collective and not rising at all (caught in a canopy or under a beam: the siege check's
+        // AH-6 pressed up for five minutes at 0.8 over the ground): lifted clear, at most five times a flight
+        if (up && Math.abs(vy) < 0.01 && pos.y - ground < 3) {
+            int stuck = p.getInt("HeliStuck") + 1;
+            p.putInt("HeliStuck", stuck);
+            if (stuck >= 60 && p.getInt("HeliFreed") < 5) {
+                v.setPos(pos.x, pos.y + 1.5, pos.z);
+                p.putInt("HeliFreed", p.getInt("HeliFreed") + 1);
+                p.putInt("HeliStuck", 0);
+                LOG.info("HELI-FREED {\"at\":\"{}\",\"times\":{}}", v.blockPosition().toShortString(), p.getInt("HeliFreed"));
+            }
+        } else {
+            p.putInt("HeliStuck", 0);
+        }
         // sideways drift (the goal off the nose while turning) is damped
         Vec3 m = v.getDeltaMovement();
         Vec3 side = new Vec3(-heading.z, 0, heading.x);

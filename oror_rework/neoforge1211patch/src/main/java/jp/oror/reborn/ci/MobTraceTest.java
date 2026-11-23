@@ -209,6 +209,14 @@ public final class MobTraceTest {
                                 .append(" target=").append(m.getTarget() == null ? "none" : m.getTarget().getType().toShortString()).append('}');
                         }
                     }
+                    // (r67) the selector's switched-off controls (a MOVE off lets no chasing goal start, however it answers)
+                    try {
+                        java.lang.reflect.Field f = net.minecraft.world.entity.ai.goal.GoalSelector.class.getDeclaredField("disabledFlags");
+                        f.setAccessible(true);
+                        all.append(" disabled=").append(f.get(((MobGoalSelectorAccess) m).oror$getGoals()));
+                    } catch (ReflectiveOperationException | RuntimeException ex) {
+                        all.append(" disabled=?").append(ex.getClass().getSimpleName());
+                    }
                     l.brain.add(all.toString());
                 }
             }

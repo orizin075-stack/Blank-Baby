@@ -115,17 +115,47 @@ public final class SiegeTest {
             resultLogged = true;
             return 0;
         }
-        // (r67) a crewed helicopter on a pad 120 blocks east of the centre, as the capital's own stand: does it go up after
+        // (r67) a crewed helicopter on a pad out of the capital's walls, as the capital's own stand: does it go up after
         // the air wing (it looked 64 round and 24 up before, and sat through every siege)
         if (jp.oror.reborn.vehicle.Sbw.present() && jp.oror.reborn.vehicle.Sbw.has("ah_6")) {
-            int hx = r.center.getX() + 120, hz = r.center.getZ();
+            // a pad with open sky over five by five, out of the capital's walls (120 out stood on a roof under a beam: it
+            // pressed up at full power and never rose)
+            int hx = r.center.getX() + 160, hz = r.center.getZ(), hy = 0;
+            search:
+            for (int d = 160; d <= 320; d += 16) {
+                for (int[] dir : new int[][]{{1, 0}, {0, 1}, {-1, 0}, {0, -1}}) {
+                    int x = r.center.getX() + dir[0] * d, z = r.center.getZ() + dir[1] * d;
+                    level.getChunk(x >> 4, z >> 4);
+                    if (jp.oror.reborn.village.BuildingGuard.inCapital(new BlockPos(x, 64, z), 8)) {
+                        continue;
+                    }
+                    int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+                    boolean open = true;
+                    for (int ox = -2; ox <= 2 && open; ox++) {
+                        for (int oz = -2; oz <= 2 && open; oz++) {
+                            int yy = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x + ox, z + oz);
+                            open = Math.abs(yy - y) <= 1 && level.getFluidState(new BlockPos(x + ox, yy, z + oz)).isEmpty()
+                                && level.getFluidState(new BlockPos(x + ox, yy - 1, z + oz)).isEmpty();
+                        }
+                    }
+                    if (open) {
+                        hx = x;
+                        hz = z;
+                        hy = y;
+                        break search;
+                    }
+                }
+            }
             r.heliChunk = new net.minecraft.world.level.ChunkPos(hx >> 4, hz >> 4);
             level.setChunkForced(r.heliChunk.x, r.heliChunk.z, true);
             level.getChunk(r.heliChunk.x, r.heliChunk.z);
-            int hy = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, hx, hz);
+            if (hy == 0) {
+                hy = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, hx, hz);
+            }
             r.heli = jp.oror.reborn.vehicle.RoyalPilots.deploy(level, new net.minecraft.world.phys.Vec3(hx + 0.5, hy, hz + 0.5), -90F, "ah_6", 2, null);
         }
-        LOG.info("SIEGE-START {\"center\":\"{}\",\"began\":\"{}\",\"testHeli\":{}}", r.center.toShortString(), r.began, r.heli != null);
+        LOG.info("SIEGE-START {\"center\":\"{}\",\"began\":\"{}\",\"testHeli\":\"{}\"}", r.center.toShortString(), r.began,
+            r.heli == null ? "none" : r.heli.blockPosition().toShortString());
         run = r;
         return 1;
     }
