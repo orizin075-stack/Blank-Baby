@@ -245,14 +245,14 @@ jobs:
           # every error and exception of the whole run (the tail above starts late), the first 600 lines
           grep -aE 'ERROR|Exception|Caused by|Failed to|Couldn.t|Unable to' "$RUNNER_TEMP/server/console.log" | grep -v 'HttpConnectTimeout\|ConnectException' | head -600 > out/server_errors.txt || true
           # (r62) every OROR structure as world generation builds it, one line each (StructureAudit)
-          grep -E 'STRUCT-AUDIT|OROR Structures' "$RUNNER_TEMP/server/console.log" > out/structure_audit.txt || true
+          grep -E 'STRUCT-AUDIT|OROR Structures|STAGE-BLAST' "$RUNNER_TEMP/server/console.log" > out/structure_audit.txt || true
           # (r63) Azazel's siege of the capital and its air wing (SiegeTest)
           grep -E 'SIEGE-|OROR Siege|AzazelCapitalSiege|AzazelSiegeArmies|SiegeAir' "$RUNNER_TEMP/server/console.log" > out/siege_log.txt || true
           grep -E 'EFP|OROR EF Probe' "$RUNNER_TEMP/server/console.log" > out/efprobe.txt || true
           # every line of the pilots' flights (the console's tail keeps only the end of the run)
           grep -E 'PLANE-TRACK|PLANE-HURT|HELI-TRACK|VEHICLE-|SUPPLY-|FLIGHT-|LANDING-|AA-|GUNPOST-|TURRET-CREW' "$RUNNER_TEMP/server/console.log" > out/flight_log.txt || true
           # every entity and item of OROR's own put to work (/oror sweep)
-          grep -E 'SWEEP-|GUARD-|WORN-|STARTER-KIT|GAMETEST|[Gg]ame[Tt]est|test.*(passed|failed)' "$RUNNER_TEMP/server/console.log" > out/sweep_log.txt || true
+          grep -E 'SWEEP-|GUARD-|WORN-|STARTER-KIT|GAMETEST|[Gg]ame[Tt]est|test.*(passed|failed)|OROR_POWER_BATTLE|OROR_INDUSTRY|OROR_COMPAT' "$RUNNER_TEMP/server/console.log" > out/sweep_log.txt || true
           # where the server thread spent the battle (JFR samples between the war's start and its result)
           J="$RUNNER_TEMP/server/war.jfr"; [ -s "$J" ] || J="$RUNNER_TEMP/server/rec.jfr"
           timeout 600 python3 -I tools/jfr_hot.py "$J" "$RUNNER_TEMP/server/console.log" > out/war_profile.txt 2>&1 || true

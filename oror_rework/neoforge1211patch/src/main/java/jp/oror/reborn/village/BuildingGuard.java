@@ -131,12 +131,44 @@ public final class BuildingGuard {
             if (site != null || village != null) {
                 e.getAffectedBlocks().removeIf(p -> inCapital(p, 64) || village != null && village.contains(p));
             }
+            // (r66) nor a block of one of OROR's own stages (a god's citadel, the laboratory, the sanctum, the theatre):
+            // the dungeon minions' blasts took the chaos citadel's floor round its spawner (GODS-RESULT, 165 blocks)
+            int had = e.getAffectedBlocks().size();
+            java.util.Map<Long, java.util.List<net.minecraft.world.level.levelgen.structure.StructureStart>> stages = new java.util.HashMap<>();
+            e.getAffectedBlocks().removeIf(p -> stage(sl, p, stages));
+            if (e.getAffectedBlocks().size() < had && stageBlastsLogged++ < 20) {
+                LOG.info("STAGE-BLAST {\"at\":\"{}\",\"by\":\"{}\",\"spared\":{}}", at.toShortString(),
+                    direct == null ? (indirect == null ? "-" : indirect.getType().toShortString()) : direct.getType().toShortString(), had - e.getAffectedBlocks().size());
+            }
         }
         int spared = before - e.getAffectedBlocks().size();
         if (spared > 0) {
             blastsStopped++;
             blocksSpared += spared;
         }
+    }
+
+    static int stageBlastsLogged;
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Buildings");
+
+    /** In a piece of one of OROR's structures (but the capital and the villages, kept above, and the illagers' city)? */
+    static boolean stage(ServerLevel sl, BlockPos p, java.util.Map<Long, java.util.List<net.minecraft.world.level.levelgen.structure.StructureStart>> cache) {
+        net.minecraft.world.level.ChunkPos cp = new net.minecraft.world.level.ChunkPos(p);
+        java.util.List<net.minecraft.world.level.levelgen.structure.StructureStart> starts = cache.computeIfAbsent(cp.toLong(), k -> {
+            var reg = sl.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
+            return sl.structureManager().startsForStructure(cp, st -> {
+                net.minecraft.resources.ResourceLocation id = reg.getKey(st);
+                return id != null && id.getNamespace().equals("oror_supreme_bosses") && !id.getPath().equals("illager_city");
+            });
+        });
+        for (net.minecraft.world.level.levelgen.structure.StructureStart start : starts) {
+            for (net.minecraft.world.level.levelgen.structure.StructurePiece piece : start.getPieces()) {
+                if (piece.getBoundingBox().isInside(p)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /** One of OROR's great beings (a god, the king, a rebel lord), or what it shot. */

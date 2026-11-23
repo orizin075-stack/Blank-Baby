@@ -394,7 +394,10 @@ public final class StructureAudit {
                             gapSum += gap;
                             maxGap = Math.max(maxGap, gap);
                             if (floatSamples.size() < 6) {
-                                floatSamples.add(base.getX() + " " + base.getY() + " " + base.getZ() + " gap " + gap);
+                                // (r66) what fills the gap, and what the column's foot is (the template's lowest block as placed)
+                                floatSamples.add(base.getX() + " " + base.getY() + " " + base.getZ() + " gap " + gap + " "
+                                    + BuiltInRegistries.BLOCK.getKey(level.getBlockState(base.below()).getBlock()).getPath() + " under "
+                                    + BuiltInRegistries.BLOCK.getKey(level.getBlockState(base).getBlock()).getPath() + " (template " + x + " " + low + " " + z + ")");
                             }
                         }
                     }
