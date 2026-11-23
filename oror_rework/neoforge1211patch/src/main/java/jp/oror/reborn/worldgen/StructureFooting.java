@@ -93,7 +93,12 @@ public final class StructureFooting {
             || s.is(BlockTags.FLOWERS) || s.is(BlockTags.SAPLINGS) || s.is(Blocks.SNOW)
             || s.getBlock() instanceof net.minecraft.world.level.block.FallingBlock
             // and ice that melts (to water, or to air over a hollow): berit's and mels' gaps came after placing too
-            || s.is(Blocks.ICE) || s.is(Blocks.FROSTED_ICE) || s.is(Blocks.POWDER_SNOW);
+            || s.is(Blocks.ICE) || s.is(Blocks.FROSTED_ICE) || s.is(Blocks.POWDER_SNOW)
+            // and plants that break off once their neighbours change (a cactus, cane, bamboo or dripstone under a floor
+            // left air there: berit's two-block gap)
+            || s.is(Blocks.CACTUS) || s.is(Blocks.SUGAR_CANE) || s.is(Blocks.BAMBOO) || s.is(Blocks.BAMBOO_SAPLING)
+            || s.is(Blocks.POINTED_DRIPSTONE) || s.is(Blocks.KELP) || s.is(Blocks.KELP_PLANT) || s.is(Blocks.SEAGRASS)
+            || s.is(Blocks.TALL_SEAGRASS) || s.is(BlockTags.CORALS) || s.is(Blocks.BIG_DRIPLEAF) || s.is(Blocks.BIG_DRIPLEAF_STEM);
     }
 
     private static boolean plainFoot(BlockState s) {

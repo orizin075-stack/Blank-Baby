@@ -161,7 +161,14 @@ public final class BuildingGuard {
         }
     }
 
-    static int stageBlastsLogged, stageGriefLogged;
+    static int stageBlastsLogged, stageGriefLogged, dragonSpared;
+
+    /** (r66) A block of OROR's buildings an Ice and Fire dragon did not take (IafStageGuardMixin, IafDestructionStageMixin). */
+    public static void dragonSpared(BlockPos pos) {
+        if (dragonSpared++ % 200 == 0) {
+            LOG.info("STAGE-DRAGON {\"spared\":{},\"at\":\"{}\"}", dragonSpared, pos.toShortString());
+        }
+    }
     private static final java.util.Set<net.minecraft.world.entity.EntityType<?>> GRIEF_SEEN = java.util.concurrent.ConcurrentHashMap.newKeySet();
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Buildings");
 

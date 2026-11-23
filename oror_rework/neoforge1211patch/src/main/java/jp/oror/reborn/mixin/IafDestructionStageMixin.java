@@ -18,19 +18,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Pseudo
 @Mixin(targets = "com.iafenvoy.iceandfire.entity.util.dragon.IafDragonDestructionManager", remap = false)
 public abstract class IafDestructionStageMixin {
-    static int sparedCount;
-
-    static void spared(BlockPos pos) {
-        if (sparedCount++ % 200 == 0) {
-            org.slf4j.LoggerFactory.getLogger("OROR Buildings").info("STAGE-DRAGON {\"spared\":{},\"at\":\"{}\"}", sparedCount, pos.toShortString());
-        }
-    }
-
     @Inject(method = "attackBlock(Lnet/minecraft/world/level/Level;Lcom/iafenvoy/iceandfire/entity/DragonBaseEntity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V",
         at = @At("HEAD"), cancellable = true, remap = false, require = 0)
     private static void oror$attack(Level level, @org.spongepowered.asm.mixin.injection.Coerce Entity dragon, BlockPos pos, BlockState state, CallbackInfo ci) {
         if (StructureGuard.inside(pos)) {
-            spared(pos);
+            jp.oror.reborn.village.BuildingGuard.dragonSpared(pos);
             ci.cancel();
         }
     }
@@ -39,7 +31,7 @@ public abstract class IafDestructionStageMixin {
         at = @At("HEAD"), cancellable = true, remap = false, require = 0)
     private static void oror$attack2(Level level, @org.spongepowered.asm.mixin.injection.Coerce Entity dragon, BlockPos pos, CallbackInfo ci) {
         if (StructureGuard.inside(pos)) {
-            spared(pos);
+            jp.oror.reborn.village.BuildingGuard.dragonSpared(pos);
             ci.cancel();
         }
     }
@@ -49,7 +41,7 @@ public abstract class IafDestructionStageMixin {
         at = @At("HEAD"), cancellable = true, remap = false, require = 0)
     private static void oror$destroy(BlockPos centre, double radius, Level level, Entity dragon, BlockPos pos, CallbackInfo ci) {
         if (StructureGuard.inside(pos)) {
-            spared(pos);
+            jp.oror.reborn.village.BuildingGuard.dragonSpared(pos);
             ci.cancel();
         }
     }
@@ -58,7 +50,7 @@ public abstract class IafDestructionStageMixin {
         at = @At("HEAD"), cancellable = true, remap = false, require = 0)
     private static void oror$charge(BlockPos centre, float radius, Level level, @org.spongepowered.asm.mixin.injection.Coerce Entity dragon, BlockPos pos, CallbackInfo ci) {
         if (StructureGuard.inside(pos)) {
-            spared(pos);
+            jp.oror.reborn.village.BuildingGuard.dragonSpared(pos);
             ci.cancel();
         }
     }
@@ -67,7 +59,7 @@ public abstract class IafDestructionStageMixin {
         at = @At("HEAD"), cancellable = true, remap = false, require = 0)
     private static void oror$charge2(Level level, @org.spongepowered.asm.mixin.injection.Coerce Entity dragon, BlockPos centre, BlockPos pos, CallbackInfo ci) {
         if (StructureGuard.inside(pos)) {
-            spared(pos);
+            jp.oror.reborn.village.BuildingGuard.dragonSpared(pos);
             ci.cancel();
         }
     }

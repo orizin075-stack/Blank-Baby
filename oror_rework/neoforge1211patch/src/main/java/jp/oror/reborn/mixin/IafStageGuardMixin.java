@@ -22,7 +22,7 @@ public abstract class IafStageGuardMixin {
         cancellable = true, remap = false, require = 0)
     private void oror$stage(BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
         if (StructureGuard.inside(pos)) {
-            IafDestructionStageMixin.spared(pos);
+            jp.oror.reborn.village.BuildingGuard.dragonSpared(pos);
             cir.setReturnValue(false);
         }
     }
