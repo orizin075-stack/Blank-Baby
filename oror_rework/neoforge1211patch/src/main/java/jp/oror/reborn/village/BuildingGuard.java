@@ -107,7 +107,7 @@ public final class BuildingGuard {
             && (jp.oror.reborn.worldgen.StructureGuard.inside(who.blockPosition()) || jp.oror.reborn.worldgen.StructureGuard.inside(who.blockPosition().below(2)))) {
             e.setCanGrief(false);
             griefStopped++;
-            if (stageGriefLogged++ < 20) {
+            if (GRIEF_SEEN.add(who.getType()) && stageGriefLogged++ < 20) {
                 LOG.info("STAGE-GRIEF {\"by\":\"{}\",\"at\":\"{}\"}", who.getType().toShortString(), who.blockPosition().toShortString());
             }
             return;
@@ -162,6 +162,7 @@ public final class BuildingGuard {
     }
 
     static int stageBlastsLogged, stageGriefLogged;
+    private static final java.util.Set<net.minecraft.world.entity.EntityType<?>> GRIEF_SEEN = java.util.concurrent.ConcurrentHashMap.newKeySet();
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("OROR Buildings");
 
     /** In a piece of one of OROR's structures (but the capital and the villages, kept above, and the illagers' city)? */
