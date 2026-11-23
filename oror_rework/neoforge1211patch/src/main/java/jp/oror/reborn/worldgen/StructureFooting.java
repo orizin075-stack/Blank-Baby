@@ -91,7 +91,9 @@ public final class StructureFooting {
         // left a gap under the floor (the gods' check: under berit's, ferdinand's, mels' and yggdrasil's floors, after placing)
         return s.isAir() || s.is(Blocks.WATER) || s.is(Blocks.LAVA) || s.is(BlockTags.LEAVES) || s.canBeReplaced()
             || s.is(BlockTags.FLOWERS) || s.is(BlockTags.SAPLINGS) || s.is(Blocks.SNOW)
-            || s.getBlock() instanceof net.minecraft.world.level.block.FallingBlock;
+            || s.getBlock() instanceof net.minecraft.world.level.block.FallingBlock
+            // and ice that melts (to water, or to air over a hollow): berit's and mels' gaps came after placing too
+            || s.is(Blocks.ICE) || s.is(Blocks.FROSTED_ICE) || s.is(Blocks.POWDER_SNOW);
     }
 
     private static boolean plainFoot(BlockState s) {
