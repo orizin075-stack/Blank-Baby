@@ -1,0 +1,14 @@
+3:  public net.neoforged.neoforge.common.util.FakePlayer(net.minecraft.server.level.ServerLevel, com.mojang.authlib.GameProfile);
+22:  public void displayClientMessage(net.minecraft.network.chat.Component, boolean);
+26:  public void awardStat(net.minecraft.stats.Stat<?>, int);
+30:  public boolean isInvulnerableTo(net.minecraft.world.damagesource.DamageSource);
+35:  public boolean canHarmPlayer(net.minecraft.world.entity.player.Player);
+40:  public void die(net.minecraft.world.damagesource.DamageSource);
+44:  public void tick();
+48:  public void updateOptions(net.minecraft.server.level.ClientInformation);
+52:  public java.util.OptionalInt openMenu(net.minecraft.world.MenuProvider, java.util.function.Consumer<net.minecraft.network.RegistryFriendlyByteBuf>);
+54:       0: invokestatic  #30                 // Method java/util/OptionalInt.empty:()Ljava/util/OptionalInt;
+57:  public void openHorseInventory(net.minecraft.world.entity.animal.horse.AbstractHorse, net.minecraft.world.Container);
+61:  public boolean startRiding(net.minecraft.world.entity.Entity, boolean);
+66:  public net.minecraft.server.MinecraftServer getServer();
+71:  public boolean isFakePlayer();
