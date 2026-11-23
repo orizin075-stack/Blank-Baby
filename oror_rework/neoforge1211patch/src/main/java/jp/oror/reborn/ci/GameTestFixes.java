@@ -176,6 +176,19 @@ public final class GameTestFixes {
         net.minecraft.nbt.CompoundTag d = MobMind.data(v);
         int strikes = d.getInt("Strikes");
         float[] last = MASTER.computeIfAbsent(v, k -> new float[]{0, p.getHealth()});
+        // (the failures: the whole five seconds out, in the full runs only, where the world has long gone on and night
+        // falls on the arena) another foe taken in the player's place is told and the duel set back on the player
+        if (p.isAlive() && v.getTarget() != p) {
+            LOG.info(String.format(Locale.ROOT, "MASTER-DUEL-RETARGET {\"from\":\"%s\",\"dist\":%.1f,\"day\":%d,\"age\":%d}",
+                v.getTarget() == null ? "none" : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(v.getTarget().getType()).toString(),
+                v.getTarget() == null ? -1.0 : v.distanceTo(v.getTarget()), v.level().getDayTime() % 24000L, v.tickCount));
+            v.setTarget(p);
+        }
+        if (p.isAlive() && strikes == 0 && v.tickCount > 0 && v.tickCount % 20 == 0) {
+            LOG.info(String.format(Locale.ROOT, "MASTER-DUEL-WAIT {\"age\":%d,\"day\":%d,\"dist\":%.2f,\"target\":%b,\"stance\":\"%s\",\"using\":%b,\"onGround\":%b,"
+                    + "\"main\":\"%s\",\"nav\":%b}", v.tickCount, v.level().getDayTime() % 24000L, v.distanceTo(p), v.getTarget() == p, d.getString("Stance"),
+                v.isUsingItem(), v.onGround(), v.getMainHandItem().getItem(), v.getNavigation().isInProgress()));
+        }
         if (strikes != (int) last[0]) {
             LOG.info(String.format(Locale.ROOT, "MASTER-DUEL {\"strike\":%d,\"landed\":%d,\"rejected\":%d,\"health\":\"%.1f>%.1f\",\"hurtTime\":%d,"
                     + "\"dist\":%.2f,\"falling\":%b,\"age\":%d}", strikes, d.getInt("SuccessfulStrikes"), d.getInt("RejectedStrikes"), last[1], p.getHealth(),
