@@ -740,7 +740,7 @@ public final class VillageRoads {
         if (along > j.stuckFrom + 3) {
             j.stuckFrom = along;
             j.stuckAt = now;
-        } else if (now - j.stuckAt > 600) {
+        } else if (now - j.stuckAt > 300) {
             // a wall, a ravine, water: the party goes round it (a dozen blocks on along the road)
             Vec3 on = j.at(Math.min(j.length(), along + 12));
             BlockPos top = surface(level, on);
@@ -1548,7 +1548,11 @@ public final class VillageRoads {
             return true;
         }
         double along = j.along(v.position());
-        Vec3 goal = j.at(Math.min(j.length(), Math.max(0, along) + 14));
+        // (r67) a point 14 blocks on can sit on a rise it finds no way up (CI 59 and the pack as played: the lead stood
+        // eight seconds, its path to a spot 7 blocks above it ending at once); after a way not found, a nearer one
+        java.util.Optional<Long> lost = v.getBrain().getMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        boolean near = lost.isPresent() && level.getGameTime() - lost.get() < 100 || v.getNavigation().isDone() && v.getDeltaMovement().horizontalDistanceSqr() < 1.0E-4;
+        Vec3 goal = j.at(Math.min(j.length(), Math.max(0, along) + (near ? 6 : 14)));
         BlockPos at = surface(level, goal);
         if (at == null) {
             at = new BlockPos(BlockPos.containing(goal).getX(), v.getBlockY(), BlockPos.containing(goal).getZ());
