@@ -293,6 +293,10 @@ jobs:
               javap -p -c -classpath "$D" "$c" 2>/dev/null | grep -nE '^  [a-zA-Z].*\(|canEntityGrief|MOBGRIEFING|[Gg]riefing|destroyBlock|removeBlock|setBlock' | head -60
             done; } > out/iaf_probe.txt 2>&1 || true
           wc -l out/iaf_probe.txt
+          # (r67) does a fake player open menus at all (the king's story's rebel trade: opened, no MerchantMenu)
+          U=$(ls "$RUNNER_TEMP"/server/libraries/net/neoforged/neoforge/*/neoforge-*-universal.jar 2>/dev/null | head -1)
+          [ -n "$U" ] && javap -p -c -classpath "$U" net.neoforged.neoforge.common.util.FakePlayer 2>/dev/null \
+            | grep -nE '^  [a-zA-Z].*\(|openMenu|OptionalInt' | head -80 > out/fakeplayer_probe.txt || true
       - name: Commit the result
         if: always()
         working-directory: .

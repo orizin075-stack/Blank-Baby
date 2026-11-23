@@ -117,7 +117,12 @@ public final class EfProbeCore {
             // send it packets on joining, and it has no connection), and out of the world Epic Fight's blows never find it.
             // A vindicator with a diamond sword, its own mind off; a husk against the illagers' kin (they will not strike their own)
             boolean kin = m instanceof net.minecraft.world.entity.raid.Raider;
-            Entity te = (kin ? EntityType.HUSK : EntityType.VINDICATOR).create(l);
+            // (r67) with Indestructible the pack's own mob patches put the vindicator in the zombies' faction ("undead"):
+            // a zombie or a skeleton with a sword, an axe or a greatsword never began a blow at it (0 hits, no attack
+            // animation; against a golem they strike as they should), and no guard or parry was ever met. An evoker there
+            // (Epic Fight's own patch, the illagers' faction)
+            boolean indestructible = net.neoforged.fml.ModList.get().isLoaded("indestructible");
+            Entity te = (kin ? EntityType.HUSK : indestructible ? EntityType.EVOKER : EntityType.VINDICATOR).create(l);
             if (!(te instanceof Mob p)) {
                 continue;
             }

@@ -606,7 +606,8 @@ public final class Supply {
     /** The JSON of a vehicle's supply for the reports. */
     public static String report(ServerLevel level, Entity v) {
         int[] r = rounds(v);
-        Object tube = Sbw.call(v, "getLoaded");
+        // (r67) only a launcher has a tube to ask about (the others' reports warned "Superb Warfare has no getLoaded")
+        Object tube = "tow".equals(kind(v)) ? Sbw.call(v, "getLoaded") : null;
         return String.format(java.util.Locale.ROOT, "{\"vehicle\":\"%s\",\"charge\":%.3f,\"rounds\":%d,\"full\":%d,\"charger\":%b,\"depots\":%d%s}", kind(v),
             charge(v), r[0], r[1], charger(level, v), near(level, v.position(), 10, Supply::depot).size(),
             tube instanceof Boolean b ? ",\"loaded\":" + b : "");

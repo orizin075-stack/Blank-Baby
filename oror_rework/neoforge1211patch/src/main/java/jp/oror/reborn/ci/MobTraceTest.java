@@ -196,6 +196,18 @@ public final class MobTraceTest {
                     for (WrappedGoal w : ((MobGoalSelectorAccess) m).oror$getGoals().getAvailableGoals()) {
                         all.append(' ').append(w.getPriority()).append(':').append(w.getGoal().getClass().getName().replaceAll("^.*\\.", ""))
                             .append(w.isRunning() ? "*" : "").append(w.getFlags());
+                        // (r67) why a chasing goal never starts: its canUse now, and the path it would take
+                        if (!w.isRunning() && w.getGoal() instanceof net.minecraft.world.entity.ai.goal.MeleeAttackGoal mg) {
+                            boolean can;
+                            try {
+                                can = mg.canUse();
+                            } catch (RuntimeException ex) {
+                                can = false;
+                            }
+                            net.minecraft.world.level.pathfinder.Path path = m.getTarget() == null ? null : m.getNavigation().createPath(m.getTarget(), 0);
+                            all.append("{canUse=").append(can).append(" path=").append(path == null ? "none" : path.canReach() ? "reach" : "part")
+                                .append(" target=").append(m.getTarget() == null ? "none" : m.getTarget().getType().toShortString()).append('}');
+                        }
                     }
                     l.brain.add(all.toString());
                 }

@@ -185,8 +185,12 @@ public final class RoyalPilots {
 
     private static LivingEntity target(Entity v, CompoundTag p) {
         long now = v.level().getGameTime();
-        boolean air = "AIRCRAFT".equals(Sbw.engine(v));
         String engine = Sbw.engine(v);
+        // (r67) a helicopter looks for its enemy as an aeroplane does: it looked 64 blocks round and 24 up as a tank, so
+        // the capital's Mi-28 and AH-6, 350 blocks from the centre, sat crewed through every siege while the dragons
+        // and the hippogryphs flew 40 to 60 up over the walls (SIEGE-RESULT helisFlew 0 in every run)
+        boolean heli = "HELICOPTER".equals(engine);
+        boolean air = "AIRCRAFT".equals(engine) || heli;
         boolean aa = ANTI_AIR.contains(Supply.kind(v));
         boolean still = engine.equals("FIXED") || engine.equals("EMPTY") || engine.isEmpty();
         for (Entity rider : v.getPassengers()) {
@@ -210,7 +214,7 @@ public final class RoyalPilots {
         }
         // (050) the guns on the walls looked only 24 blocks up and down, so nothing that flew was ever fired on: a
         // turret looks 64 up and down, a close-in gun 128 all round
-        double reach = air ? 160 : aa ? 128 : still ? 96 : 64, high = air ? 96 : aa ? 128 : still ? 64 : 24;
+        double reach = heli ? 200 : air ? 160 : aa ? 128 : still ? 96 : 64, high = heli ? 120 : air ? 96 : aa ? 128 : still ? 64 : 24;
         List<LivingEntity> near = v.level().getEntitiesOfClass(LivingEntity.class, v.getBoundingBox().inflate(reach, high, reach),
             l -> l.isAlive() && RoyalSovereign.hostile(l) && !(l.getVehicle() != null && l.getVehicle() == v));
         LivingEntity best = null;
