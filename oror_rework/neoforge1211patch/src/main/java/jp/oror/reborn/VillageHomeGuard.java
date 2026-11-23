@@ -91,9 +91,9 @@ public final class VillageHomeGuard {
         // five seconds about the chest, 21 to 18 blocks off, for half a minute, so the stillness count began again each
         // time and nothing was done; three seconds without coming a block nearer counts
         float off = v.distanceTo(tank);
-        float best = d.contains("OrorBoardBest") ? d.getFloat("OrorBoardBest") : Float.MAX_VALUE;
+        float nearest = d.contains("OrorBoardBest") ? d.getFloat("OrorBoardBest") : Float.MAX_VALUE;
         int still;
-        if (off < best - 1.0F) {
+        if (off < nearest - 1.0F) {
             d.putFloat("OrorBoardBest", off);
             still = 0;
         } else {
