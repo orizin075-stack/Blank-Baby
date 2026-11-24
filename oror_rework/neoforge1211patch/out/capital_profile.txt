@@ -1,15 +1,15 @@
 window CAPITAL-LOAD-START -> CAPITAL-LOAD { None None
-server thread samples in the window 12081
+server thread samples in the window 10562
 
 == packages anywhere in the stack (share of samples)
 100.0%  net.minecraft
- 58.2%  jp.oror
- 45.2%  net.neoforged
-  0.3%  dev.shadowsoffire
-  0.2%  yesman.epicfight
+ 59.5%  jp.oror
+ 41.7%  net.neoforged
+  0.3%  yesman.epicfight
+  0.2%  dev.shadowsoffire
   0.1%  com.atsuishio
   0.1%  io.redspace
-  0.0%  top.theillusivec4
+  0.1%  top.theillusivec4
   0.0%  com.hm.efn
   0.0%  com.github.alexthe666
 
@@ -18,165 +18,164 @@ server thread samples in the window 12081
 
 == anywhere in the stack (inclusive), mods only
 100.0%  state = "STATE_RUNNABLE"
- 48.8%  jp.oror.reborn.ci.ValidationSupport.lambda$startRunner$7
+ 50.8%  jp.oror.reborn.ci.ValidationSupport.lambda$startRunner$7
  30.5%  jp.oror.reborn.ci.OrorGameTests.tick
+ 11.8%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
  11.6%  com.mojang.serialization.Encoder.encodeStart
- 11.6%  com.mojang.serialization.Codec$2.encode
- 11.6%  com.mojang.serialization.Encoder$1.encode
-  5.2%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
-  3.3%  com.aetherteam.aether.event.listeners.RecipeListener.onNeighborNotified
-  3.2%  com.serilum.treeharvester.neoforge.events.NeoForgeLeafEvents.onNeighbourNotice
-  3.2%  com.serilum.treeharvester_common_neoforge.events.LeafEvents.onNeighbourNotify
-  3.1%  com.mojang.serialization.DataResult$Success.flatMap
-  3.0%  com.aetherteam.aether.event.hooks.RecipeHooks.checkExistenceBanned
-  2.4%  jp.oror.reborn.citadel.CitadelSites.chooseCapital
-  2.3%  com.mojang.serialization.Decoder.parse
+ 11.5%  com.mojang.serialization.Encoder$1.encode
+ 11.5%  com.mojang.serialization.Codec$2.encode
+  3.8%  com.serilum.treeharvester.neoforge.events.NeoForgeLeafEvents.onNeighbourNotice
+  3.8%  com.serilum.treeharvester_common_neoforge.events.LeafEvents.onNeighbourNotify
+  3.0%  com.aetherteam.aether.event.listeners.RecipeListener.onNeighborNotified
+  2.9%  com.mojang.serialization.DataResult$Success.flatMap
+  2.7%  com.aetherteam.aether.event.hooks.RecipeHooks.checkExistenceBanned
+  2.3%  jp.oror.reborn.citadel.CitadelSites.chooseCapital
   2.3%  jp.oror.reborn.citadel.CitadelSites.bind
-  2.3%  jp.oror.reborn.citadel.CitadelEvents.load
-  2.3%  com.mojang.serialization.Codec$2.decode
-  2.2%  com.mojang.serialization.Decoder$1.decode
-  2.2%  com.mojang.serialization.MapCodec$MapCodecCodec.encode
-  2.1%  com.mojang.serialization.codecs.RecordCodecBuilder$2.encode
-  2.1%  com.mojang.serialization.MapCodec$MapCodecCodec.decode
-  2.1%  com.mojang.serialization.MapDecoder.compressedDecode
-  2.1%  com.mojang.serialization.MapDecoder.lambda$compressedDecode$1
-  2.0%  com.mojang.serialization.codecs.RecordCodecBuilder$Instance$4.encode
-  2.0%  com.mojang.serialization.codecs.RecordCodecBuilder$2.decode
-  2.0%  com.mojang.serialization.MapCodec$2.decode
-  2.0%  com.mojang.serialization.codecs.RecordCodecBuilder$Instance$3.decode
-  2.0%  com.mojang.serialization.MapCodec$2.encode
-  2.0%  com.mojang.serialization.codecs.FieldDecoder.decode
-  1.9%  com.mojang.serialization.codecs.FieldEncoder.encode
-  1.9%  com.aetherteam.aether.event.hooks.RecipeHooks.isBlockPlacementConvertable
-  1.9%  com.mojang.serialization.codecs.ListCodec.lambda$decode$2
-  1.9%  com.mojang.serialization.codecs.ListCodec.decode
-  1.8%  com.mojang.serialization.codecs.ListCodec.encode
-  1.8%  jp.oror.reborn.SupremeEntity.tick
-  1.6%  com.mojang.serialization.codecs.ListCodec$DecoderState.accept
-  1.4%  com.aetherteam.nitrogen.recipe.BlockStateIngredient.test
-  1.4%  com.aetherteam.nitrogen.recipe.BlockPropertyPair.matches
-  1.4%  com.aetherteam.aether.recipe.recipes.block.AbstractBiomeParameterRecipe.matches
-  1.4%  com.aetherteam.nitrogen.recipe.recipes.AbstractBlockStateRecipe.matches
-  1.4%  com.aetherteam.aether.recipe.recipes.block.PlacementConversionRecipe.convert
-  1.4%  com.mojang.serialization.Codec$4.decode
-  1.4%  dev.ryanhcode.sable.util.SubLevelInclusiveLevelEntityGetter.get
+  2.2%  jp.oror.reborn.citadel.CitadelEvents.load
+  2.2%  com.mojang.serialization.Decoder.parse
+  2.1%  com.mojang.serialization.Codec$2.decode
+  2.1%  com.mojang.serialization.Decoder$1.decode
+  2.0%  com.mojang.serialization.MapDecoder.compressedDecode
+  2.0%  com.mojang.serialization.MapCodec$MapCodecCodec.decode
+  1.9%  com.mojang.serialization.MapDecoder.lambda$compressedDecode$1
+  1.9%  com.mojang.serialization.codecs.RecordCodecBuilder$2.decode
+  1.9%  com.mojang.serialization.codecs.RecordCodecBuilder$Instance$3.decode
+  1.9%  com.mojang.serialization.MapCodec$2.decode
+  1.9%  com.mojang.serialization.codecs.FieldDecoder.decode
+  1.8%  com.mojang.serialization.MapCodec$MapCodecCodec.encode
+  1.8%  com.mojang.serialization.codecs.RecordCodecBuilder$2.encode
+  1.7%  com.mojang.serialization.codecs.ListCodec.decode
+  1.7%  com.mojang.serialization.codecs.RecordCodecBuilder$Instance$4.encode
+  1.7%  com.mojang.serialization.codecs.ListCodec.lambda$decode$2
+  1.6%  com.mojang.serialization.MapCodec$2.encode
+  1.6%  com.mojang.serialization.codecs.FieldEncoder.encode
+  1.6%  com.aetherteam.aether.event.hooks.RecipeHooks.isBlockPlacementConvertable
+  1.5%  com.mojang.serialization.codecs.ListCodec.encode
+  1.5%  jp.oror.reborn.SupremeEntity.tick
+  1.4%  com.mojang.serialization.codecs.ListCodec$DecoderState.accept
   1.3%  jp.oror.reborn.citadel.CitadelSites.glance
-  1.3%  com.mojang.serialization.Codec$4.encode
-  1.2%  jp.oror.reborn.FamiliarEntity.tick
+  1.2%  com.mojang.serialization.Codec$4.decode
   1.2%  com.mojang.serialization.Codec$1.decode
-  1.2%  com.mojang.serialization.Codec$1.encode
-  1.1%  jp.oror.reborn.citadel.CitadelSites.survey
+  1.1%  com.mojang.brigadier.context.ContextChain.runExecutable
   1.1%  com.mojang.serialization.codecs.KeyDispatchCodec.decode
-  1.0%  com.mojang.serialization.codecs.KeyDispatchCodec.encode
-  1.0%  com.mojang.serialization.Decoder$2.decode
-  1.0%  com.tterrag.registrate.util.entry.BlockEntry.has
-  1.0%  com.tterrag.registrate.util.entry.RegistryEntry.is
+  1.0%  jp.oror.reborn.citadel.CitadelSites.survey
+  1.0%  jp.oror.reborn.FamiliarEntity.tick
+  1.0%  com.mojang.serialization.Codec$4.encode
+  1.0%  com.aetherteam.nitrogen.recipe.BlockPropertyPair.matches
+  1.0%  com.aetherteam.nitrogen.recipe.BlockStateIngredient.test
+  1.0%  dev.ryanhcode.sable.util.SubLevelInclusiveLevelEntityGetter.get
+  1.0%  com.mojang.serialization.Codec$1.encode
+  0.9%  com.aetherteam.aether.recipe.recipes.block.PlacementConversionRecipe.convert
+  0.9%  com.aetherteam.aether.recipe.recipes.block.AbstractBiomeParameterRecipe.matches
+  0.9%  com.aetherteam.nitrogen.recipe.recipes.AbstractBlockStateRecipe.matches
   0.9%  com.mojang.serialization.Decoder$1.lambda$decode$1
-  0.9%  com.mojang.brigadier.context.ContextChain.runExecutable
+  0.8%  com.mojang.serialization.codecs.KeyDispatchCodec.encode
+  0.8%  com.mojang.serialization.Decoder$2.decode
   0.8%  com.aetherteam.aether.event.hooks.RecipeHooks.isBlockPlacementBanned
-  0.8%  jp.oror.reborn.village.BuildingGuard.removalSpared
-  0.8%  com.mojang.serialization.DataResult.apply2stable
+  0.7%  jp.oror.reborn.village.BuildingGuard.removalSpared
+  0.7%  jp.oror.reborn.ci.CiDriver.tick
   0.7%  jp.oror.reborn.ci.ValidationSupport.startRunner
-  0.7%  com.serilum.treeharvester_common_neoforge.util.Util.isTreeLeaf
-  0.7%  dev.ryanhcode.sable.SableCommonEvents.handleBlockChange
-  0.7%  jp.oror.reborn.ci.OrorGameTests.start
+  0.7%  com.mojang.serialization.DataResult.apply2stable
   0.7%  jp.oror.reborn.ci.OrorGameTests.startRunner
-  0.7%  jp.oror.reborn.ci.OrorGameTests.lambda$commands$1
-  0.6%  jp.oror.reborn.AdaptiveCombat.tick
-  0.6%  com.aetherteam.aether.event.listeners.DimensionListener.onWaterExistsInsidePortalFrame
-  0.6%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.handler$zni000$oror_supreme_bosses$oror$same
+  0.7%  dev.ryanhcode.sable.SableCommonEvents.handleBlockChange
+  0.6%  jp.oror.reborn.ci.OrorGameTests.start
   0.6%  com.mojang.serialization.DataResult$Instance.ap2
+  0.6%  com.serilum.treeharvester_common_neoforge.util.Util.isTreeLeaf
+  0.6%  malte0811.ferritecore.fastmap.FastMap.getKeyFor
   0.5%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.handleBlockChange
+  0.5%  dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipeline.handleBlockChange
+  0.5%  com.aetherteam.aether.event.listeners.DimensionListener.onWaterExistsInsidePortalFrame
+  0.5%  malte0811.ferritecore.impl.FastMapEntryMap.get
+  0.5%  malte0811.ferritecore.fastmap.FastMap.getValue
 
 == anywhere in the stack (inclusive), Minecraft
- 58.3%  net.minecraft.server.MinecraftServer.runServer
- 56.2%  net.minecraft.server.MinecraftServer.lambda$spin$2
- 49.7%  net.minecraft.server.MinecraftServer.tickServer
- 48.7%  net.minecraft.gametest.framework.GameTestRunner.spawn
- 48.1%  net.minecraft.world.level.Level.getChunk
- 47.9%  net.minecraft.gametest.framework.GameTestRunner.createStructuresForBatch
- 47.9%  net.minecraft.gametest.framework.GameTestRunner.runBatch
- 47.9%  net.minecraft.world.level.LevelReader.getChunk
- 46.5%  net.minecraft.gametest.framework.GameTestRunner$1.testCompleted
- 46.2%  net.minecraft.server.level.ServerChunkCache$MainThreadExecutor.pollTask
- 46.0%  net.minecraft.server.level.ServerChunkCache.getChunk
- 45.9%  net.minecraft.util.thread.BlockableEventLoop.pollTask
- 45.9%  net.minecraft.util.thread.BlockableEventLoop.doRunTask
- 45.8%  net.minecraft.server.level.ServerChunkCache$MainThreadExecutor.doRunTask
- 44.7%  net.minecraft.gametest.framework.GameTestRunner$1.testPassed
- 43.9%  net.minecraft.gametest.framework.GameTestInfo.lambda$tick$2
- 42.6%  net.minecraft.gametest.framework.GameTestInfo.tick
- 39.4%  net.minecraft.world.level.material.FluidState.tick
- 39.3%  net.minecraft.world.level.material.FlowingFluid.tick
- 39.3%  net.minecraft.world.level.material.FlowingFluid.spread
- 38.9%  net.minecraft.gametest.framework.GameTestTicker.lambda$tick$0
- 38.3%  net.minecraft.server.level.ChunkMap.lambda$prepareTickingChunk$27
- 38.3%  net.minecraft.server.level.ChunkResult$Success.ifSuccess
- 38.3%  net.minecraft.server.level.ChunkMap.lambda$prepareTickingChunk$28
- 38.3%  net.minecraft.world.level.chunk.LevelChunk.postProcessGeneration
- 36.2%  net.minecraft.util.thread.BlockableEventLoop.managedBlock
- 35.5%  net.minecraft.server.level.ServerChunkCache$MainThreadExecutor.managedBlock
- 35.5%  net.minecraft.server.level.ServerLevel.setChunkForced
- 33.0%  net.minecraft.gametest.framework.GameTestTicker.tick
- 31.9%  net.minecraft.server.MinecraftServer.tickChildren
- 31.8%  net.minecraft.server.dedicated.DedicatedServer.tickChildren
- 31.4%  net.minecraft.server.level.ServerLevel.tick
- 30.9%  net.minecraft.world.level.material.FlowingFluid.spreadToSides
- 30.1%  net.minecraft.world.level.material.FlowingFluid.getSpread
- 28.0%  net.minecraft.world.level.material.FlowingFluid.getNewLiquid
- 24.3%  net.minecraft.world.level.Level.getBlockState
- 16.5%  net.minecraft.world.level.biome.MultiNoiseBiomeSource.setLastSampledDimension
- 16.5%  net.minecraft.server.level.ServerChunkCache.handler$bpb000$alexscaves$ac_getChunk
- 14.6%  net.minecraft.server.level.ServerChunkCache.tick
- 13.6%  net.minecraft.gametest.framework.StructureGridSpawner.spawnStructure
+ 56.9%  net.minecraft.server.MinecraftServer.runServer
+ 55.2%  net.minecraft.server.MinecraftServer.lambda$spin$2
+ 54.3%  net.minecraft.world.level.Level.getChunk
+ 54.1%  net.minecraft.world.level.LevelReader.getChunk
+ 53.5%  net.minecraft.server.level.ServerChunkCache.getChunk
+ 50.8%  net.minecraft.gametest.framework.GameTestRunner.spawn
+ 50.2%  net.minecraft.gametest.framework.GameTestRunner.createStructuresForBatch
+ 50.1%  net.minecraft.gametest.framework.GameTestRunner.runBatch
+ 49.3%  net.minecraft.gametest.framework.GameTestRunner$1.testCompleted
+ 49.0%  net.minecraft.gametest.framework.GameTestRunner$1.testPassed
+ 48.0%  net.minecraft.gametest.framework.GameTestInfo.lambda$tick$2
+ 47.6%  net.minecraft.server.level.ServerChunkCache$MainThreadExecutor.pollTask
+ 47.6%  net.minecraft.server.MinecraftServer.tickServer
+ 47.3%  net.minecraft.util.thread.BlockableEventLoop.pollTask
+ 47.3%  net.minecraft.util.thread.BlockableEventLoop.doRunTask
+ 47.2%  net.minecraft.server.level.ServerChunkCache$MainThreadExecutor.doRunTask
+ 44.1%  net.minecraft.gametest.framework.GameTestInfo.tick
+ 43.6%  net.minecraft.gametest.framework.GameTestTicker.lambda$tick$0
+ 41.6%  net.minecraft.world.level.material.FluidState.tick
+ 41.6%  net.minecraft.world.level.material.FlowingFluid.tick
+ 41.5%  net.minecraft.world.level.material.FlowingFluid.spread
+ 40.6%  net.minecraft.server.level.ChunkResult$Success.ifSuccess
+ 40.6%  net.minecraft.server.level.ChunkMap.lambda$prepareTickingChunk$27
+ 40.6%  net.minecraft.server.level.ChunkMap.lambda$prepareTickingChunk$28
+ 40.6%  net.minecraft.world.level.chunk.LevelChunk.postProcessGeneration
+ 37.9%  net.minecraft.util.thread.BlockableEventLoop.managedBlock
+ 36.5%  net.minecraft.server.level.ServerLevel.setChunkForced
+ 36.5%  net.minecraft.server.level.ServerChunkCache$MainThreadExecutor.managedBlock
+ 33.8%  net.minecraft.world.level.Level.getBlockState
+ 33.0%  net.minecraft.world.level.material.FlowingFluid.spreadToSides
+ 32.4%  net.minecraft.world.level.material.FlowingFluid.getSpread
+ 32.3%  net.minecraft.gametest.framework.GameTestTicker.tick
+ 30.2%  net.minecraft.world.level.material.FlowingFluid.getNewLiquid
+ 29.0%  net.minecraft.server.MinecraftServer.tickChildren
+ 29.0%  net.minecraft.server.dedicated.DedicatedServer.tickChildren
+ 28.5%  net.minecraft.server.level.ServerLevel.tick
+ 15.1%  net.minecraft.server.level.ServerChunkCache.tick
+ 14.9%  net.minecraft.gametest.framework.GameTestInfo.prepareTestStructure
+ 14.8%  net.minecraft.gametest.framework.StructureGridSpawner.spawnStructure
+ 14.7%  net.minecraft.gametest.framework.StructureUtils.clearSpaceForStructure
 
 == what the busiest calls spend their time in (callee, share of all samples) and who calls them
   0.0%  jp.oror.reborn.royal.RoyalMob.customServerAiStep
           0.0%  -> jp.oror.reborn.royal.RoyalGuns.tick
           0.0%  <- net.minecraft.world.entity.Mob.serverAiStep
-  0.3%  jp.oror.reborn.VillagerLife.tick
-          0.1%  -> jp.oror.reborn.VillageWork.chores
+  0.1%  jp.oror.reborn.VillagerLife.tick
           0.0%  -> jp.oror.reborn.VillageWork.tidy
-          0.0%  -> jp.oror.reborn.VillageRaids.tick
-          0.0%  -> jp.oror.reborn.VillageVehicles.tick
-          0.0%  -> state = "STATE_RUNNABLE"
-          0.0%  -> jp.oror.reborn.VillagerLife.build
-          0.0%  -> jp.oror.reborn.VillageFlights.crew
           0.0%  -> java.lang.ClassLoader.loadClass
-          0.0%  -> net.neoforged.neoforge.common.ModConfigSpec$ConfigValue.get
+          0.0%  -> jp.oror.reborn.VillageRaids.tick
           0.0%  -> jp.oror.reborn.VillageFlights.tick
-          0.3%  <- net.neoforged.bus.ConsumerEventHandler.invoke
-  2.3%  net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
-          2.1%  -> net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
-          0.1%  -> net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
-          2.0%  <- net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
+          0.0%  -> jp.oror.reborn.VillagerLife.consume
+          0.0%  -> jp.oror.reborn.VillagerLife.pray
+          0.0%  -> jp.oror.reborn.VillageVehicles.tick
+          0.1%  <- net.neoforged.bus.ConsumerEventHandler.invoke
+  0.8%  net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
+          0.6%  -> net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
+          0.2%  -> net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
+          0.5%  <- net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
           0.2%  <- net.minecraft.world.entity.ai.navigation.PathNavigation.moveTo
-          0.1%  <- net.minecraft.world.entity.ai.behavior.AcquirePoi.findPathToPois
-          0.0%  <- com.iafenvoy.iceandfire.entity.ai.AmphithereAIFleePlayerGoal.canUse
+          0.0%  <- net.minecraft.world.entity.ai.behavior.AcquirePoi.findPathToPois
           0.0%  <- net.minecraft.world.entity.ai.goal.AvoidEntityGoal.canUse
-  5.2%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
-          4.6%  -> java.lang.ThreadLocal.set
-          0.6%  -> com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.handler$zni000$oror_supreme_bosses$oror$same
-          0.0%  -> state = "STATE_RUNNABLE"
-          5.2%  <- net.minecraft.world.level.biome.MultiNoiseBiomeSource.setLastSampledDimension
-  0.1%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.tickMagnetism
+          0.0%  <- net.minecraft.world.entity.ai.behavior.MoveToTargetSink.tryComputePath
+ 11.8%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
+         11.5%  -> state = "STATE_RUNNABLE"
+          0.3%  -> com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.handler$zni000$oror_supreme_bosses$oror$same
+         11.8%  <- net.minecraft.world.level.biome.MultiNoiseBiomeSource.setLastSampledDimension
+  0.3%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.tickMagnetism
           0.1%  -> com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyAttractingMagnets
           0.1%  -> com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyRepellingMagnets
+          0.0%  -> com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.attachesToMagnets
+          0.0%  -> state = "STATE_RUNNABLE"
           0.0%  -> java.util.stream.ReferencePipeline.toList
-          0.1%  <- net.minecraft.world.entity.Entity.handler$bpd001$alexscaves$ac_tick
+          0.3%  <- net.minecraft.world.entity.Entity.handler$bpd001$alexscaves$ac_tick
   0.0%  jp.oror.reborn.combat.MobGuard.tick
           0.0%  -> java.util.WeakHashMap.get
-          0.0%  -> jp.oror.reborn.combat.MobGuard.guard
+          0.0%  -> jp.oror.reborn.combat.MobGuard.guards
+          0.0%  -> jp.oror.reborn.combat.MobGuard.count
           0.0%  <- net.neoforged.bus.EventBus.post
-  0.6%  jp.oror.reborn.AdaptiveCombat.tick
-          0.1%  -> jp.oror.reborn.Teamplay.coordinate
-          0.1%  -> net.minecraft.world.entity.ai.navigation.PathNavigation.moveTo
-          0.1%  -> jp.oror.reborn.AdaptiveCombat.strike
-          0.0%  -> jp.oror.reborn.Teamplay.formation
-          0.0%  -> jp.oror.reborn.AdaptiveCombat.footwork
+  0.4%  jp.oror.reborn.AdaptiveCombat.tick
+          0.2%  -> net.minecraft.world.entity.ai.navigation.PathNavigation.moveTo
+          0.0%  -> jp.oror.reborn.Teamplay.coordinate
+          0.0%  -> jp.oror.reborn.AdaptiveCombat.drivenElsewhere
+          0.0%  -> jp.oror.reborn.AdaptiveCombat.strike
+          0.0%  -> jp.oror.reborn.AdaptiveCombat.enemy
           0.0%  -> net.minecraft.world.entity.ai.sensing.Sensing.hasLineOfSight
-          0.0%  -> jp.oror.reborn.MobMind.clock
+          0.0%  -> jp.oror.reborn.MobLevels.refresh
           0.0%  -> jp.oror.reborn.VillageAI.tick
-          0.0%  -> jp.oror.reborn.TerrainPlay.bridge
-          0.0%  -> state = "STATE_RUNNABLE"
-          0.6%  <- net.neoforged.bus.ConsumerEventHandler.invoke
+          0.0%  -> jp.oror.reborn.AdaptiveCombat.growth
+          0.0%  -> jp.oror.reborn.AdaptiveCombat.active
+          0.4%  <- net.neoforged.bus.ConsumerEventHandler.invoke
