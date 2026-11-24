@@ -1980,6 +1980,11 @@ public final class Look {
                     ex.getMethod("put", net.minecraft.world.entity.player.Player.class, float.class).invoke(null, sp, 0F);
                     ex.getMethod("check", net.minecraft.world.entity.player.Player.class).invoke(null, sp);
                     for (net.minecraft.world.entity.Mob m : sp.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, sp.getBoundingBox().inflate(12))) {
+                        if (m instanceof net.minecraft.world.entity.npc.Villager || m instanceof net.minecraft.world.entity.monster.Zombie) {
+                            // (r74) hurt too: the health bar and its pale trail over it
+                            m.invulnerableTime = 0;
+                            m.hurt(sp.serverLevel().damageSources().magic(), m.getMaxHealth() * 0.4F);
+                        }
                         if (m instanceof net.minecraft.world.entity.monster.Zombie) {
                             ms.getMethod("empty", net.minecraft.world.entity.Mob.class).invoke(null, m);
                         } else {
