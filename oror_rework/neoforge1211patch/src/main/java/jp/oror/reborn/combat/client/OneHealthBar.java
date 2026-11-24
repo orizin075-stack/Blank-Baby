@@ -27,12 +27,38 @@ public final class OneHealthBar {
         e.enqueueWork(OneHealthBar::off);
     }
 
+    /** Every mod's configs the tracker holds (read from its fields: its accessors differ between FML versions). */
+    private static Set<ModConfig> configs() {
+        Set<ModConfig> out = new java.util.HashSet<>();
+        for (java.lang.reflect.Field f : ConfigTracker.class.getDeclaredFields()) {
+            if (java.lang.reflect.Modifier.isStatic(f.getModifiers()) || !Map.class.isAssignableFrom(f.getType())) {
+                continue;
+            }
+            try {
+                f.setAccessible(true);
+                for (Object v : ((Map<?, ?>) f.get(ConfigTracker.INSTANCE)).values()) {
+                    if (v instanceof ModConfig mc) {
+                        out.add(mc);
+                    } else if (v instanceof java.util.Collection<?> col) {
+                        for (Object o : col) {
+                            if (o instanceof ModConfig mc) {
+                                out.add(mc);
+                            }
+                        }
+                    }
+                }
+            } catch (ReflectiveOperationException | RuntimeException ex) {
+                // another field
+            }
+        }
+        return out;
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     static void off() {
         try {
-            Map<ModConfig.Type, Set<ModConfig>> sets = ConfigTracker.INSTANCE.configSets();
-            for (ModConfig c : sets.getOrDefault(ModConfig.Type.CLIENT, Set.of())) {
-                if (!"epicfight".equals(c.getModId()) || !(c.getSpec() instanceof ModConfigSpec spec)) {
+            for (ModConfig c : configs()) {
+                if (!"epicfight".equals(c.getModId()) || c.getType() != ModConfig.Type.CLIENT || !(c.getSpec() instanceof ModConfigSpec spec)) {
                     continue;
                 }
                 Object v = spec.getValues().get(List.of("ingame", "health_bar_show_option"));
