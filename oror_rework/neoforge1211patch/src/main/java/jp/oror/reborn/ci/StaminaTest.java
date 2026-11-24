@@ -137,19 +137,10 @@ public final class StaminaTest {
         OUT.put("playerExhaustedBlow", String.format(java.util.Locale.ROOT, "%.2f", a));
         OUT.put("playerBlowHalved", a > 1.5F && a < 2.5F);
         OUT.put("playerStaminaReset", Exhaustion.of(fp)[0] <= 0.01F);
-        boolean efHas;
-        try {
-            Class<?> pp = Class.forName("yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch");
-            java.util.Set<String> names = new java.util.HashSet<>();
-            for (Class<?> k = pp; k != null; k = k.getSuperclass()) {
-                for (java.lang.reflect.Method m : k.getDeclaredMethods()) {
-                    names.add(m.getName());
-                }
-            }
-            efHas = names.contains("getStamina") && names.contains("setStamina") && names.contains("getMaxStamina");
-        } catch (ReflectiveOperationException | LinkageError ex) {
-            efHas = false;
-        }
+        // (CI) not by listing PlayerPatch's methods: that loads client classes on a dedicated server; EfStamina looked up its
+        // three by name on the fake player's own patch
+        Exhaustion.of(fp);
+        boolean efHas = "found".equals(jp.oror.reborn.EfStamina.state());
         OUT.put("efPlayerStamina", efHas);
         OUT.put("cowD", cowD.getId());
     }
