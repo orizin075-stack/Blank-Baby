@@ -1,105 +1,100 @@
 missing: CITADEL-SELFTEST {
-[12:00:21] [Server thread/INFO] [OROR CrashNet/]: CRASHNET {"removeErroringEntities":true,"was":false,"removeErroringBlockEntities":true,"wasBlockEntities":false}
-[12:00:21] [Server thread/INFO] [OROR Safety/]: OROR SAFE-UNLOAD active: entity chunks unload from a copy of their list
-[12:00:41] [Server thread/INFO] [OROR Duel/]: DUEL-RESULT {"present":true,"duelStarted":true,"zombieSealed":true,"sealMade":true,"toggleOut":true,"sealActive":true,"testerAt":"2400, 64, -2400","calledAt":"2402, 64, -2398 true","calledOut":true,"calledBack":true,"godDuel":true,"godRaid":true,"godSealed":true,"godSealHasRaid":false,"godCalledOut":true,"effigies":4,"nightParade":true,"paradeSpirits":1,"healing":true,"retribution":true,"retributionReturned":true,"guardian":true,"binding":true,"maliceTransfer":true,"soulSeeker":true,"exorcism":true,"calamity":true,"calamityHit":true,"testerAliveAfterCalamity":true,"calledForPossession":true,"possession":true,"possessionRestored":true,"fusion":true,"fusionRestored":true,"logoutWhileFused":true,"crashWhileFused":true,"clickPossess":true,"clickFuse":true,"fusionFollows":true,"clickFuseRestored":true,"fusionHostDeath":true,"fusionHostDeathOwnerFalls":true,"fusionEndsOnHostDeath":true,"noDropsOnServantDeath":true,"revivalWaiting":true,"revival":true,"revivalTicks":"6000->4800","duelLost":true,"duelBuffRemoved":true,"ledgerBindingLedger":1,"ledgerSpiritLedger":1,"ledgersRoundTrip":true,"pvpDuel":true,"pvpLoserAlive":true,"pvpNoCapture":true,"grimoireStored":true,"soulArchiveStored":true,"soulArchiveReturned":true,"godAliveAfter2s":true,"godRaidCleared":true,"gloveDuel":true,"crowdWatching":4,"crowdCheers":1,"interferenceBlocked":true,"duelistBlowsCount":true,"duelEndsFar":true,"deserterNotWhenFoeCarried":true,"deserterMarked":true,"deserterAllOnHim":false,"deserterTargets":"[skeleton:target, cow:target, zombie:target] made [villager, cow, zombie, skeleton]","deserterArmed":true,"deserterParty":4,"deserterSatisfiedAfterTen":true,"deserterPartyCame":true,"said":["[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","[決闘] 勝利！ Zombieを封印書に変えた。","召喚：Zombie　素手で右クリック＝憑依、素手でShift＋右クリック＝融合。","封印書へ回収しました：Zombie","[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","文明遊匠 フェルディナント・カーディア：顕現攻略。特殊装備が顕れた。","[決闘] 勝利！ Ferdinandを封印書に変えた。","召喚：Ferdinand　素手で右クリック＝憑依、素手でShift＋右クリック＝融合。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Allay／肩代わり残量：20.0HP","[百鬼符] 霊体1体が加勢します。","[形代呪法] 百鬼符／一霊招来 発動！形代3枚とお札1枚を消費しました。","[形代呪法] 癒生符／魂灯 発動！形代1枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 応報符／応報 発動！形代1枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 護持符／小霊盾 発動！形代1枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 縛霊符／足縛 発動！形代1枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 禍移符／厄落とし 発動！形代3枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 追魂符／追魂針 発動！形代3枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 祓滅符／祓い火 発動！形代3枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 大禍符／禍刻 発動！形代7枚とお札1枚を消費しました。","召喚：Zombie　素手で右クリック＝憑依、素手でShift＋右クリック＝融合。","[憑依] 本体は元の場所で無防備です。Gで戻ります。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[融合] 異常終了から本体の状態を復元しました。","[憑依] 本体は元の場所で無防備です。Gで戻ります。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[融合崩壊] 融合先が死亡したため、あなたも死亡します。","[封印] 召喚個体が倒れました。5分後に同じ封印から復活できます。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 反魂符／鎮魂促進 発動！形代3枚とお札1枚を消費しました。","[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","[決闘] Zombieの勝利。","[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","[決闘] [Duel Tester]の勝利。","魔導書へ収納しました：1 / 128","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","[決闘] 距離超過により中断しました。","【逃亡者の烙印】決闘から逃げた。世界中のモブが手を組み、最上位の武器を手にお前を狩る。気が済むまで（10回死ぬまで）終わらない。","【逃亡者】まだ終わらない。（あと9回）","【逃亡者】まだ終わらない。（あと8回）","【逃亡者】まだ終わらない。（あと7回）","【逃亡者】まだ終わらない。（あと6回）","【逃亡者】まだ終わらない。（あと5回）","【逃亡者】まだ終わらない。（あと4回）","【逃亡者】まだ終わらない。（あと3回）","【逃亡者】まだ終わらない。（あと2回）","【逃亡者】まだ終わらない。（あと1回）","……世界は気が済んだようだ。逃亡者の烙印が消えた。"],"pass":false}
-[12:00:41] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=0 changedUnderWalk=0 reentries=0 active=true
-[12:00:41] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
-[12:00:41] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":245}
-[m[33m[11:59:00.947] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
-[m[33m[11:59:05.424] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
-[m[33m[11:59:05.602] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
-[m[1;31m[11:59:06.627] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
-[m[33m[11:59:06.635] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
-[m[33m[11:59:06.635] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
-[m[33m[11:59:06.865] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
-[m[33m[11:59:06.867] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
-[m[33m[11:59:06.898] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
-[m[33m[11:59:06.899] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
-[m[33m[11:59:06.901] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
-[m[33m[11:59:06.902] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
-[m[33m[11:59:06.903] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
-[m[33m[11:59:06.905] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
-[m[33m[11:59:07.625] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[11:59:07.629] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
-[m[33m[11:59:07.693] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
-[m[33m[11:59:07.885] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[11:59:07.889] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
-[m[1;31m[11:59:08.078] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
-[m[33m[11:59:08.079] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
-[m[1;31m[11:59:08.284] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
-[m[33m[11:59:08.285] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
-[m[33m[11:59:08.319] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
-[m[33m[11:59:08.370] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
-[11:59:18] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+[12:07:13] [Server thread/INFO] [OROR CrashNet/]: CRASHNET {"removeErroringEntities":true,"was":false,"removeErroringBlockEntities":true,"wasBlockEntities":false}
+[12:07:13] [Server thread/INFO] [OROR Safety/]: OROR SAFE-UNLOAD active: entity chunks unload from a copy of their list
+[12:07:30] [Server thread/INFO] [OROR Duel/]: DUEL-RESULT {"present":true,"duelStarted":true,"zombieSealed":true,"sealMade":true,"toggleOut":true,"sealActive":true,"testerAt":"2400, 64, -2400","calledAt":"2402, 64, -2398 true","calledOut":true,"calledBack":true,"godDuel":true,"godRaid":true,"godSealed":true,"godSealHasRaid":false,"godCalledOut":true,"effigies":4,"nightParade":true,"paradeSpirits":1,"healing":true,"retribution":true,"retributionReturned":true,"guardian":true,"binding":true,"maliceTransfer":true,"soulSeeker":true,"exorcism":true,"calamity":true,"calamityHit":true,"testerAliveAfterCalamity":true,"calledForPossession":true,"possession":true,"possessionRestored":true,"fusion":true,"fusionRestored":true,"logoutWhileFused":true,"crashWhileFused":true,"clickPossess":true,"clickFuse":true,"fusionFollows":true,"clickFuseRestored":true,"fusionHostDeath":true,"fusionHostDeathOwnerFalls":true,"fusionEndsOnHostDeath":true,"noDropsOnServantDeath":true,"revivalWaiting":true,"revival":true,"revivalTicks":"6000->4800","duelLost":true,"duelBuffRemoved":true,"ledgerBindingLedger":1,"ledgerSpiritLedger":1,"ledgersRoundTrip":true,"pvpDuel":true,"pvpLoserAlive":true,"pvpNoCapture":true,"grimoireStored":true,"soulArchiveStored":true,"soulArchiveReturned":true,"godAliveAfter2s":true,"godRaidCleared":true,"gloveDuel":true,"crowdWatching":4,"crowdCheers":0,"interferenceBlocked":true,"duelistBlowsCount":true,"duelEndsFar":true,"deserterNotWhenFoeCarried":true,"deserterMarked":true,"deserterAllOnHim":true,"deserterTargets":"[skeleton:target, cow:target, zombie:target] made [villager, cow, zombie, skeleton]","deserterArmed":true,"deserterParty":3,"deserterSatisfiedAfterTen":true,"deserterPartyCame":true,"said":["[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","[決闘] 勝利！ Zombieを封印書に変えた。","召喚：Zombie　素手で右クリック＝憑依、素手でShift＋右クリック＝融合。","封印書へ回収しました：Zombie","[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","文明遊匠 フェルディナント・カーディア：顕現攻略。特殊装備が顕れた。","[決闘] 勝利！ Ferdinandを封印書に変えた。","召喚：Ferdinand　素手で右クリック＝憑依、素手でShift＋右クリック＝融合。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Allay／肩代わり残量：20.0HP","[百鬼符] 霊体1体が加勢します。","[形代呪法] 百鬼符／一霊招来 発動！形代3枚とお札1枚を消費しました。","[形代呪法] 癒生符／魂灯 発動！形代1枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 応報符／応報 発動！形代1枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 護持符／小霊盾 発動！形代1枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 縛霊符／足縛 発動！形代1枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 禍移符／厄落とし 発動！形代3枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 追魂符／追魂針 発動！形代3枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 祓滅符／祓い火 発動！形代3枚とお札1枚を消費しました。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 大禍符／禍刻 発動！形代7枚とお札1枚を消費しました。","召喚：Zombie　素手で右クリック＝憑依、素手でShift＋右クリック＝融合。","[憑依] 本体は元の場所で無防備です。Gで戻ります。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[融合] 異常終了から本体の状態を復元しました。","[憑依] 本体は元の場所で無防備です。Gで戻ります。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[操作解除] 元の姿に戻りました。","[融合] 肉体ごと融合しました。融合先が死ぬとあなたも死亡。Gで分離します。","[融合崩壊] 融合先が死亡したため、あなたも死亡します。","[封印] 召喚個体が倒れました。5分後に同じ封印から復活できます。","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[形代呪法] 反魂符／鎮魂促進 発動！形代3枚とお札1枚を消費しました。","[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","[決闘] Zombieの勝利。","[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","[決闘] [Duel Tester]の勝利。","魔導書へ収納しました：1 / 128","[形代] 封印成功：Vex／肩代わり残量：14.0HP","[決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。","[決闘] 距離超過により中断しました。","【逃亡者の烙印】決闘から逃げた。世界中のモブが手を組み、最上位の武器を手にお前を狩る。気が済むまで（10回死ぬまで）終わらない。","【逃亡者】まだ終わらない。（あと9回）","【逃亡者】まだ終わらない。（あと8回）","【逃亡者】まだ終わらない。（あと7回）","【逃亡者】まだ終わらない。（あと6回）","【逃亡者】まだ終わらない。（あと5回）","【逃亡者】まだ終わらない。（あと4回）","【逃亡者】まだ終わらない。（あと3回）","【逃亡者】まだ終わらない。（あと2回）","【逃亡者】まだ終わらない。（あと1回）","……世界は気が済んだようだ。逃亡者の烙印が消えた。"],"pass":true}
+[12:07:30] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=0 changedUnderWalk=0 reentries=0 active=true
+[12:07:30] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
+[12:07:30] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":245}
+[m[33m[12:06:12.669] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
+[m[33m[12:06:15.970] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
+[m[33m[12:06:16.242] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
+[m[1;31m[12:06:16.787] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[12:06:16.792] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[12:06:16.792] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
+[m[33m[12:06:16.913] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[12:06:16.914] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[12:06:16.931] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[12:06:16.931] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[12:06:16.932] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[12:06:16.933] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[12:06:16.933] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[12:06:16.934] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[12:06:17.350] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[12:06:17.353] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[12:06:17.418] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[12:06:17.571] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[12:06:17.576] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[12:06:17.828] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
+[m[33m[12:06:17.829] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[1;31m[12:06:17.983] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[12:06:17.983] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[12:06:18.011] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[12:06:18.051] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[12:06:25] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
 java.nio.file.NoSuchFileException: ./config/jupiter.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[11:59:20] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+[12:06:27] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
 java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[11:59:36] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
+[12:06:39] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
+[12:06:48] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: halo is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: boot is not a registered slot type!
+[12:06:48] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[12:06:48] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[11:59:49] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: halo is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: boot is not a registered slot type!
-[11:59:49] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[11:59:49] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
-[11:59:50] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
+[12:06:49] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
+[12:06:58] [Server thread/INFO] [OROR Citadel/]: Royal capital BlockPos{x=-368, y=67, z=880} for spawn BlockPos{x=0, y=0, z=0} (8636 ms)
+[12:07:04] [Worker-Main-2/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[12:07:04] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[12:07:05] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[12:00:03] [Server thread/INFO] [OROR Citadel/]: Royal capital BlockPos{x=-368, y=67, z=880} for spawn BlockPos{x=0, y=0, z=0} (11071 ms)
-[12:00:10] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
-[12:00:10] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[12:00:11] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
-[12:00:16] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[12:00:16] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[12:07:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[12:07:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[12:07:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[12:07:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[12:07:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+[12:07:13] [Server thread/INFO] [OROR CI/]: CI checks: [duel]
+[12:07:17] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"23, 93, 34","off":31.0}
+[12:07:18] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"22, 93, 34","off":31.2}
+[12:07:20] [Server thread/INFO] [OROR CI/]: CI running /oror duel test
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[12:00:16] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
-[12:00:16] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
-[12:00:16] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
-[12:00:21] [Server thread/INFO] [OROR CI/]: CI checks: [duel]
-[12:00:24] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"24, 93, 37","off":23.8}
-[12:00:26] [Server thread/INFO] [OROR CI/]: CI running /oror duel test
-java.net.http.HttpConnectTimeoutException: HTTP connect timed out
-Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
-Caused by: java.net.ConnectException: HTTP connect timed out
-[12:00:34] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"24, 93, 40","off":20.9}
-[12:00:37] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-18, 73, 22","via":"-1, 80, 24","off":27.1}
-[12:00:37] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-18, 73, 22","via":"-3, 80, 24","off":25.4}
-[12:00:37] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"19, 93, 36","off":25.0}
-[12:00:37] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"14, 80, 37","off":26.3}
-[12:00:41] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=0 changedUnderWalk=0 reentries=0 active=true
-[12:00:41] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
-[12:00:41] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":245}
+[12:07:26] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"18, 93, 40","off":25.6}
+[12:07:27] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"24, 92, 55","via":"24, 93, 40","off":24.7}
+[12:07:30] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=0 changedUnderWalk=0 reentries=0 active=true
+[12:07:30] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
+[12:07:30] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":245}
