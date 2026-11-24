@@ -883,8 +883,14 @@ public final class DuelTest {
             }
         }
         Deserters.hunt(fp, 40);
-        OUT.put("deserterAllOnHim", mobs.stream().allMatch(m -> Deserters.hunting(m, fp)));
-        OUT.put("deserterTargets", "\"" + mobs.stream().map(m -> m.getType().toShortString() + (m.getTarget() == fp ? ":target" : ":run")).toList() + "\"");
+        // (a fresh villager may be taken out and put back as another entity by the pack: the mobs as they are in the world now)
+        List<Mob> about = lv.getEntitiesOfClass(Mob.class, fp.getBoundingBox().inflate(10), m -> m.isAlive() && !m.isNoAi()
+            && (m.getType() == EntityType.VILLAGER || m.getType() == EntityType.COW || m.getType() == EntityType.ZOMBIE || m.getType() == EntityType.SKELETON));
+        Deserters.hunt(fp, 40);
+        OUT.put("deserterAllOnHim", about.size() >= 4 && about.stream().allMatch(m -> Deserters.hunting(m, fp)));
+        OUT.put("deserterTargets", "\"" + about.stream().map(m -> m.getType().toShortString() + (m.getTarget() == fp ? ":target"
+            : Deserters.hunting(m, fp) ? ":run" : ":none")).toList() + " made " + mobs.stream().map(m -> m.getType().toShortString()
+            + (m.isRemoved() ? ":removed" : "")).toList() + "\"");
         boolean armed = mobs.get(2).getMainHandItem().is(net.minecraft.world.item.Items.NETHERITE_SWORD)
             && mobs.get(3).getMainHandItem().is(net.minecraft.world.item.Items.BOW) && mobs.get(3).getMainHandItem().isEnchanted()
             && mobs.get(2).getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).is(net.minecraft.world.item.Items.NETHERITE_CHESTPLATE);
