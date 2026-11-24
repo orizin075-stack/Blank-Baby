@@ -28,8 +28,8 @@ import org.joml.Vector3f;
  * (r73, the user: "ナイトフォールクラフトは HPバーとスタミナバー両方出てたでしょ") Its health over it as well, as NightfallCraft
  * shows them, the two together: a red health bar (what a blow has just taken lingering pale a moment before it goes) and
  * the stamina bar under it. Shown over a mob (or another player) in a fight: hurt, not at full health or stamina, struck
- * within the last eight seconds, or under the crosshair; Epic Fight's own health bar over a hurt mob is left off in the
- * pack's config (health_bar_show_option NONE) so that there are not two.
+ * within the last eight seconds, or under the crosshair; Epic Fight's own health bar over a hurt mob is turned off when
+ * the game starts (OneHealthBar) so that there are not two.
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses", value = Dist.CLIENT)
 public final class StaminaBars {
