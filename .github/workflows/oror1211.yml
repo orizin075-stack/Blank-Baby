@@ -222,6 +222,13 @@ jobs:
           { echo "== $AC"; javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil | grep -E 'static'
             javap -p -cp "$AC" com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder | grep -E 'setDimension|static'
             unzip -l "$AC" | grep -i -E 'mixin.*(Entity|Level)' | head -n 20; } >> out/report.txt 2>&1 || true
+          # (r70) the config keys of the heavy client mods (Sound Physics' rays, AAA Particles' world effects), for lighter defaults
+          for pat in sound-physics aaa_particles_world aaa_particles-neoforge; do
+            SJ=$(ls "$RUNNER_TEMP"/pack053/*.jar 2>/dev/null | grep -i "$pat" | head -n 1); [ -n "$SJ" ] || continue
+            { echo "== CFGKEYS $SJ"; unzip -l "$SJ" | grep -iE 'config|\.toml|\.properties|\.json5?$' | head -n 30
+              unzip -p "$SJ" '*.class' 2>/dev/null | strings -n 5 | grep -E '^[a-z][a-z0-9_]{3,48}$' | grep -iE 'ray|bounce|occlu|reverb|enabled|particle|amount|count|distance|density|max_|_max|limit|chance|interval|evaluat|simple|firefl|leaf|leaves|wind|dust|weather|ambient' | sort -u | head -n 200
+            } >> out/report.txt 2>&1 || true
+          done
           # (053) what its magnet search reads, and which entities its magnetism moves (for the magnet cache)
           { for m in tickMagnetism getNearbyAttractingMagnets getNearbyRepellingMagnets isPulledByMagnets attachesToMagnets; do
               echo "== MagnetUtil.$m"; javap -c -p -cp "$AC" com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil \

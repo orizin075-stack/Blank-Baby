@@ -169,8 +169,21 @@ public final class BuildingGuard {
         if (!sl.getServer().isSameThread()) {
             return false;
         }
+        // (r70) the place first (most blocks broken are nowhere guarded), the stack only for a guarded one
+        if (!guarded(sl, p)) {
+            return false;
+        }
         String via = sbwVia();
-        return via != null && keepFromShot(sl, p, via);
+        return via != null && keptFromShot(sl, p, via);
+    }
+
+    /** The capital's, a village's or one of OROR's stages'. */
+    private static boolean guarded(ServerLevel sl, BlockPos p) {
+        if (inCapital(p, 64)) {
+            return true;
+        }
+        VillageLedger.Village village = VillageLedger.get(sl).nearest(p);
+        return village != null && village.contains(p) || stage(sl, p, new java.util.HashMap<>());
     }
 
     private static final java.util.Map<String, Integer> SHOT_VIA = new java.util.HashMap<>();
@@ -190,9 +203,12 @@ public final class BuildingGuard {
         if (old.isAir() || old.getBlock() instanceof net.minecraft.world.level.block.LiquidBlock) {
             return false;
         }
+        if (!guarded(sl, p)) {
+            return false;
+        }
         String via = sbwVia();
         if (via != null) {
-            return keepFromShot(sl, p, via);
+            return keptFromShot(sl, p, via);
         }
         if (removalsLogged < 30 && CI && stage(sl, p, new java.util.HashMap<>())) {
             String who = StackWalker.getInstance().walk(f -> {
@@ -234,17 +250,13 @@ public final class BuildingGuard {
         });
     }
 
-    private static boolean keepFromShot(ServerLevel sl, BlockPos p, String via) {
-        VillageLedger.Village village = VillageLedger.get(sl).nearest(p);
-        boolean keep = inCapital(p, 64) || village != null && village.contains(p) || stage(sl, p, new java.util.HashMap<>());
-        if (keep) {
-            int n = SHOT_VIA.merge(via, 1, Integer::sum);
-            if (shotsSpared++ < 20 || n <= 3) {
-                LOG.info("STAGE-SHOT {\"at\":\"{}\",\"block\":\"{}\",\"via\":\"{}\",\"spared\":{}}", p.toShortString(),
-                    net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(sl.getBlockState(p).getBlock()), via, shotsSpared);
-            }
+    private static boolean keptFromShot(ServerLevel sl, BlockPos p, String via) {
+        int n = SHOT_VIA.merge(via, 1, Integer::sum);
+        if (shotsSpared++ < 20 || n <= 3) {
+            LOG.info("STAGE-SHOT {\"at\":\"{}\",\"block\":\"{}\",\"via\":\"{}\",\"spared\":{}}", p.toShortString(),
+                net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(sl.getBlockState(p).getBlock()), via, shotsSpared);
         }
-        return keep;
+        return true;
     }
 
     /** (r66) A block of OROR's buildings an Ice and Fire dragon did not take (IafStageGuardMixin, IafDestructionStageMixin). */

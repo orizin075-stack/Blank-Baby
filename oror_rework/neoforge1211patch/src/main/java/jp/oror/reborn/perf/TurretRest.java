@@ -25,15 +25,44 @@ public final class TurretRest {
     private TurretRest() {
     }
 
-    /** True when this move of v may be skipped (the server's, a still turret of the kingdom's at rest on its floor). */
+    public static long parkedSkipped;
+
+    /**
+     * True when this move of v may be skipped (the server's): a still turret of the kingdom's at rest on its floor, or
+     * (r70, the user: "かなり重い") any machine standing parked on the ground, a player not at its controls: the
+     * capital's tanks, helicopters and aircraft on their pads went through their whole box-against-the-world move every
+     * tick to find that they stay where they are (CI's capital profile: Superb Warfare's vehicles 31% of the server
+     * thread, their move 17%). One whose move is more than its own weight's pull (driven, pushed, lifting, falling) moves
+     * as before, and every twentieth tick each moves as before, so that one whose ground goes falls within a second.
+     */
     public static boolean resting(Entity v, Vec3 step) {
-        if (v.level().isClientSide() || !v.onGround() || v.isVehicle() && v.getControllingPassenger() instanceof net.minecraft.world.entity.player.Player
-            || !v.getTags().contains(RoyalPilots.CREWED) || (v.tickCount + v.getId()) % 20 == 0) {
+        if (v.level().isClientSide() || !v.onGround() || v.getControllingPassenger() instanceof net.minecraft.world.entity.player.Player
+            || (v.tickCount + v.getId()) % 20 == 0) {
             return false;
         }
-        if (step.x * step.x + step.z * step.z > 1.0E-6 || step.y > 1.0E-3 || step.y < -0.6) {
+        if (step.y > 1.0E-3 || step.y < -0.6) {
             return false;
         }
+        double side = step.x * step.x + step.z * step.z;
+        if (!v.getTags().contains(RoyalPilots.CREWED) || !still(v)) {
+            // a machine with an engine, or not the kingdom's: only when it is not moving at all (an engine starting
+            // gives far more than this in its first tick)
+            if (side > 1.0E-8 || v.isVehicle() && v.getControllingPassenger() == null && v.getPassengers().stream().anyMatch(e -> e instanceof net.minecraft.world.entity.player.Player)) {
+                return false;
+            }
+            v.setDeltaMovement(Vec3.ZERO);
+            parkedSkipped++;
+            return true;
+        }
+        if (side > 1.0E-6) {
+            return false;
+        }
+        v.setDeltaMovement(Vec3.ZERO);
+        skipped++;
+        return true;
+    }
+
+    private static boolean still(Entity v) {
         Boolean still = STILL.get(v);
         if (still == null) {
             String engine;
@@ -45,11 +74,6 @@ public final class TurretRest {
             still = engine.equals("FIXED") || engine.equals("EMPTY") || engine.isEmpty();
             STILL.put(v, still);
         }
-        if (!still) {
-            return false;
-        }
-        v.setDeltaMovement(Vec3.ZERO);
-        skipped++;
-        return true;
+        return still;
     }
 }
