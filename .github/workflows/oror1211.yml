@@ -109,6 +109,13 @@ jobs:
             echo '== Superb Warfare charging station (the OROR guns hold 1,000,000 and 600,000 FE)'
             javap -constants -p -cp libs/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar \
               com.atsuishio.superbwarfare.block.entity.ChargingStationBlockEntity | grep -E 'static final int'
+            # (r69) what in Superb Warfare breaks blocks itself (not by an explosion): a line of a god citadel's floor was found broken
+            echo '== Superb Warfare: block breaking outside explosions'
+            mkdir -p "$RUNNER_TEMP/sbwc" && unzip -q -o libs/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 'com/atsuishio/superbwarfare/entity/*' 'com/atsuishio/superbwarfare/tools/*' -d "$RUNNER_TEMP/sbwc"
+            for f in $(cd "$RUNNER_TEMP/sbwc" && grep -rlE --include='*.class' 'destroyBlock|removeBlock' com); do
+              c=$(echo "$f" | sed 's/\.class$//;s#/#.#g')
+              javap -c -p -cp "$RUNNER_TEMP/sbwc" "$c" 2>/dev/null | awk -v c="$c" '/^  [a-zA-Z].*\(.*\);$/{m=$0} /destroyBlock|removeBlock|setBlock/{print c " ::" m " -> " $NF}' | sort -u | head -12
+            done
             echo '== Superb Warfare VehicleEntity.move (059d TurretRestMixin: still turrets skip most moves)'
             javap -p -cp libs/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar \
               com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity | grep -E ' move\(|vMove|vCollide'
