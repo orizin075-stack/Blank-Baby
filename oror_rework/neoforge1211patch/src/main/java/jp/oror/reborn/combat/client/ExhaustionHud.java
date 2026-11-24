@@ -44,9 +44,11 @@ public final class ExhaustionHud {
             // the edges of the screen pulse red, about once a second and a half
             float pulse = 0.5F + 0.5F * Mth.sin(t * 0.21F);
             int a = (int) (40 + 70 * pulse);
-            int edge = Math.max(18, w / 14);
+            // (the look run: a straight falloff left the inner edge seen as a box) fading out as the square of the distance in
+            int edge = Math.max(24, w / 9);
             for (int i = 0; i < edge; i += 2) {
-                int alpha = (int) (a * (1F - i / (float) edge));
+                float f = 1F - i / (float) edge;
+                int alpha = (int) (a * f * f * 0.5F);
                 int c = (alpha << 24) | 0x9A0E0E;
                 g.fill(0, i, w, i + 2, c);
                 g.fill(0, h - i - 2, w, h - i, c);
