@@ -233,6 +233,15 @@ jobs:
               unzip -p "$SJ" '*.class' 2>/dev/null | strings -n 5 | grep -E '^[a-z][a-z0-9_]{3,48}$' | grep -iE 'ray|bounce|occlu|reverb|enabled|particle|amount|count|distance|density|max_|_max|limit|chance|interval|evaluat|simple|firefl|leaf|leaves|wind|dust|weather|ambient' | sort -u | head -n 200
             } >> out/report.txt 2>&1 || true
           done
+          # (r75) which mod draws a health bar over mobs (the look run's green bar under OROR's), and how Epic Fight reads its option
+          { echo "== HEALTHBARS"; for j in "$RUNNER_TEMP"/pack053/*.jar; do
+              unzip -l "$j" 2>/dev/null | grep -i -E 'health_?bar|healthbar|HealthIndicator|TargetIndicator|EntityIndicator|BossBarIndicator' | grep -E '\.class|\.png' | sed "s#^#$(basename $j): #" | head -n 8
+            done
+            EJ=$(ls "$RUNNER_TEMP"/pack053/*.jar | grep -i '/epicfight-' | head -n 1)
+            for c in $(unzip -l "$EJ" | grep -o -E 'yesman/epicfight/[A-Za-z/]*(ClientConfig|HealthBar[A-Za-z]*|Indicator[A-Za-z]*)\.class' | sort -u | head -n 12); do
+              echo "== $c"; javap -p -cp "$EJ" "${c%.class}" 2>/dev/null | grep -i -E 'health|indicator|static|show' | head -n 25
+            done
+          } >> out/report.txt 2>&1 || true
           # (053) what its magnet search reads, and which entities its magnetism moves (for the magnet cache)
           { for m in tickMagnetism getNearbyAttractingMagnets getNearbyRepellingMagnets isPulledByMagnets attachesToMagnets; do
               echo "== MagnetUtil.$m"; javap -c -p -cp "$AC" com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil \
