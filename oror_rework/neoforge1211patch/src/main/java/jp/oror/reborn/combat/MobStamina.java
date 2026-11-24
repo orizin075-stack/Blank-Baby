@@ -211,15 +211,17 @@ public final class MobStamina {
     /** A mob's own blow (one dodged or parried too: it swung all the same): its price taken. */
     @SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
     public static void blow(LivingIncomingDamageEvent e) {
+        // (r73, the user: "全モブに") every mob's own blow, not only a fighter's
         if (!(e.getSource().getEntity() instanceof Mob attacker) || attacker.level().isClientSide || e.getSource().getDirectEntity() != attacker
-            || attacker.isNoAi() || !(attacker instanceof RoyalMob || MobGuard.fighter(attacker))) {
+            || attacker.isNoAi()) {
             return;
         }
         Pool p = pool(attacker);
         if (p.winded) {
-            // winded: nothing more taken from it (it would never get its wind back). (CI 68) Its blow is not weakened: so
-            // weakened, a village's fighters, winded by dodging their foes' blows, no longer beat the armoured fighters of
-            // the mod's own trials in the blows they are given
+            // winded: nothing more taken from it (it would never get its wind back). (CI 68) Its blow was not weakened: so
+            // weakened (by half), a village's fighters, winded by dodging their foes' blows, no longer beat the armoured
+            // fighters of the mod's own trials. (r73, the user asked for it) It is now, but by less: to six tenths (Exhaustion)
+            count(attacker, "OrorWindedBlows");
             return;
         }
         // (059h) 3% of its depth for the clumsiest, 1.5% for the best (CI 68: at 6% a zombie striking every second spent
