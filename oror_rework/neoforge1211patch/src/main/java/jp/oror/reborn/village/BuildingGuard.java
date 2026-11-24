@@ -166,17 +166,83 @@ public final class BuildingGuard {
 
     /** (r69) A block a Superb Warfare round breaks by itself (ShotBlockGuardMixin): kept if it is the capital's, a village's or a stage's. */
     public static boolean shotSpared(ServerLevel sl, BlockPos p) {
-        if (!sl.getServer().isSameThread() || !StackWalker.getInstance().walk(f -> f.limit(10).anyMatch(s -> {
-            String c = s.getClassName();
-            return c.startsWith("com.atsuishio.superbwarfare.entity.projectile.") || c.startsWith("com.atsuishio.superbwarfare.entity.vehicle.AnnihilatorEntity");
-        }))) {
+        if (!sl.getServer().isSameThread()) {
             return false;
         }
+        String via = sbwVia();
+        return via != null && keepFromShot(sl, p, via);
+    }
+
+    private static final java.util.Map<String, Integer> SHOT_VIA = new java.util.HashMap<>();
+    private static int removalsLogged;
+
+    /**
+     * (r69, second look) A block set to air or to a fluid on the server thread (ShotBlockGuardMixin): kept if Superb
+     * Warfare's round, explosion or beam is taking it and it is the capital's, a village's or a stage's. In CI also logs
+     * (STAGE-REMOVED, the first 30) whatever else takes a stage's block that is not a player, OROR itself or the world's
+     * own ticking, so that the next hole has a name.
+     */
+    public static boolean removalSpared(ServerLevel sl, BlockPos p) {
+        if (!sl.getServer().isSameThread()) {
+            return false;
+        }
+        net.minecraft.world.level.block.state.BlockState old = sl.getBlockState(p);
+        if (old.isAir() || old.getBlock() instanceof net.minecraft.world.level.block.LiquidBlock) {
+            return false;
+        }
+        String via = sbwVia();
+        if (via != null) {
+            return keepFromShot(sl, p, via);
+        }
+        if (removalsLogged < 30 && CI && stage(sl, p, new java.util.HashMap<>())) {
+            String who = StackWalker.getInstance().walk(f -> {
+                java.util.List<String> fr = f.limit(64).map(s -> s.getClassName() + "." + s.getMethodName()).toList();
+                if (fr.stream().anyMatch(c -> c.startsWith("jp.oror.") && !c.startsWith("jp.oror.reborn.mixin.") && !c.startsWith("jp.oror.reborn.village.BuildingGuard")
+                    || c.startsWith("net.minecraft.server.level.ServerPlayerGameMode") || c.startsWith("net.minecraft.world.level.levelgen.")
+                    || c.startsWith("net.minecraft.world.level.material.") || c.contains("randomTick") || c.contains("tickBlock") || c.contains("tickFluid"))) {
+                    return null;
+                }
+                return String.join(" < ", fr.stream().filter(c -> !c.startsWith("java.") && !c.startsWith("jdk.") && !c.startsWith("jp.oror.reborn.village.BuildingGuard")
+                    && !c.startsWith("jp.oror.reborn.mixin.ShotBlockGuardMixin")).limit(24).toList());
+            });
+            if (who != null) {
+                removalsLogged++;
+                LOG.info("STAGE-REMOVED {\"at\":\"{}\",\"block\":\"{}\",\"by\":\"{}\"}", p.toShortString(),
+                    net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(old.getBlock()), who);
+            }
+        }
+        return false;
+    }
+
+    private static final boolean CI = !System.getProperty("oror.ci", "").isEmpty();
+
+    /** The Superb Warfare round, explosion or beam taking a block now (its class and method), or null; a vehicle pushing through is not one. */
+    private static String sbwVia() {
+        return StackWalker.getInstance().walk(f -> {
+            String found = null;
+            for (StackWalker.StackFrame s : (Iterable<StackWalker.StackFrame>) f.limit(64)::iterator) {
+                String c = s.getClassName();
+                if (c.startsWith("com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils")) {
+                    return null;
+                }
+                if (found == null && (c.startsWith("com.atsuishio.superbwarfare.entity.projectile.") || c.startsWith("com.atsuishio.superbwarfare.tools.CustomExplosion")
+                    || c.startsWith("com.atsuishio.superbwarfare.entity.vehicle.AnnihilatorEntity"))) {
+                    found = c.substring(c.lastIndexOf('.') + 1) + "." + s.getMethodName();
+                }
+            }
+            return found;
+        });
+    }
+
+    private static boolean keepFromShot(ServerLevel sl, BlockPos p, String via) {
         VillageLedger.Village village = VillageLedger.get(sl).nearest(p);
         boolean keep = inCapital(p, 64) || village != null && village.contains(p) || stage(sl, p, new java.util.HashMap<>());
-        if (keep && shotsSpared++ < 20) {
-            LOG.info("STAGE-SHOT {\"at\":\"{}\",\"block\":\"{}\",\"spared\":{}}", p.toShortString(),
-                net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(sl.getBlockState(p).getBlock()), shotsSpared);
+        if (keep) {
+            int n = SHOT_VIA.merge(via, 1, Integer::sum);
+            if (shotsSpared++ < 20 || n <= 3) {
+                LOG.info("STAGE-SHOT {\"at\":\"{}\",\"block\":\"{}\",\"via\":\"{}\",\"spared\":{}}", p.toShortString(),
+                    net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(sl.getBlockState(p).getBlock()), via, shotsSpared);
+            }
         }
         return keep;
     }

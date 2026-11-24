@@ -58,6 +58,8 @@ public final class MobTraceTest {
         List<String> goals = new ArrayList<>();
         /** (r65) a brain-led mob's walking at ticks 50, 100 and 150, and every goal it has (* running) at 100 */
         List<String> brain = new ArrayList<>();
+        /** (r69) a lane whose mob has not stirred by tick 100 (the blaze, once, in a full run): where and how it stood */
+        String stuck;
     }
 
     private static final class Run {
@@ -220,6 +222,15 @@ public final class MobTraceTest {
                     l.brain.add(all.toString());
                 }
             }
+            if (age == 100 && l.moved < 0.5 && !"pillager".equals(l.type)) {
+                l.stuck = String.format(Locale.ROOT, "at %.1f %.1f %.1f noAi=%b vehicle=%s target=%s sees=%b ground=%b inWall=%b water=%b motion=%.2f,%.2f,%.2f effects=%s tickCount=%d",
+                    m.getX(), m.getY(), m.getZ(), m.isNoAi(), m.getVehicle() == null ? "-" : m.getVehicle().getType().toShortString(),
+                    m.getTarget() == null ? "-" : m.getTarget().getType().toShortString(), m.getTarget() != null && m.getSensing().hasLineOfSight(m.getTarget()),
+                    m.onGround(), m.isInWall(), m.isInWater(), m.getDeltaMovement().x, m.getDeltaMovement().y, m.getDeltaMovement().z,
+                    m.getActiveEffects().stream().map(x -> x.getEffect().getRegisteredName()).toList(), m.tickCount)
+                    + " block=" + BuiltInRegistries.BLOCK.getKey(r.level.getBlockState(m.blockPosition()).getBlock())
+                    + " pd=" + m.getPersistentData().getAllKeys();
+            }
             if (age == 100) {
                 TreeSet<String> running = new TreeSet<>();
                 for (WrappedGoal w : ((MobGoalSelectorAccess) m).oror$getGoals().getAvailableGoals()) {
@@ -241,7 +252,8 @@ public final class MobTraceTest {
             pass &= ok;
             out.put(l.type, String.format(Locale.ROOT, "{\"hits\":%d,\"minDist\":%.1f,\"moved\":%.1f,\"stillTicks\":%d,\"alive\":%b,\"ok\":%b,\"goals\":%s%s}",
                 l.hits, l.minDist, l.moved, l.still, l.mob.isAlive(), ok, l.goals.stream().map(s -> "\"" + s + "\"").toList(),
-                l.brain.isEmpty() ? "" : ",\"brain\":\"" + String.join(" | ", l.brain).replace('"', '\'') + "\""));
+                (l.brain.isEmpty() ? "" : ",\"brain\":\"" + String.join(" | ", l.brain).replace('"', '\'') + "\"")
+                    + (l.stuck == null ? "" : ",\"stuck\":\"" + l.stuck.replace('"', '\'') + "\"")));
         }
         StringBuilder b = new StringBuilder("{");
         out.forEach((k, v) -> b.append(b.length() > 1 ? "," : "").append('"').append(k).append("\":").append(v));
