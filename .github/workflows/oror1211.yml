@@ -179,6 +179,10 @@ jobs:
                 javap -p -cp "$j" net.minecraft.world.level.block.FireBlock | grep -E ' tick\(|checkBurnOut' | head -4
                 # (r62) what StructureFootingMixin follows: a template piece's placing
                 javap -p -cp "$j" net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece | grep -E ' place\(|postProcess' | head -4
+                # (r70) what ToastOneAtATimeMixin enters and what MessagePacer listens to
+                echo "== TOAST"; javap -p -cp "$j" net.minecraft.client.gui.components.toasts.ToastComponent | grep -E 'freeSlots|findFreeIndex|occupiedSlots'
+                echo "== CHATEVENT"; javap -p -cp "$j" 'net.neoforged.neoforge.client.event.ClientChatReceivedEvent$System' | grep -E 'isOverlay|class'
+                echo "== ADDMESSAGE"; javap -p -cp "$j" net.minecraft.client.gui.components.ChatComponent | grep -E ' addMessage\('
                 break
               fi
             done
