@@ -5,7 +5,8 @@ All 32x32, pixel art in Minecraft's manner (a dark outline, light from the upper
 - the ten ofuda: long strips of washi (not rounded cards), a cord at the top, the talisman's colour in a band and in its
   ink sign, brush strokes above and below, a vermilion seal; the forbidden Calamity on blackened paper in blood ink;
 - the effigy (katashiro): a white paper doll, folded hem, a faint spirit-blue edge (not a first-aid doll);
-- the bound hair: a black lock with blue sheen tied with a red-and-white cord and a paper tag;
+- the bound seal book (封印書, r70: the user, "髪じゃない 本"): a small stitch-bound book in indigo, a red-and-white cord tied
+  across it and a talisman pasted over its title slip, spirit light at its fore-edge (it was a lock of hair, after the name);
 - the soul archive: a thread-bound ledger with a soul flame; the grimoire: leather, gold corners and sigil, a clasp;
 - the undead ash: a heap with embers and a bone; the white glove: a gentleman's dueling glove with a gold cuff.
 """
@@ -321,38 +322,48 @@ def effigy():
 
 
 def bound_hair():
+    """(r70) The bound seal book (封印書, the item's id is still bound_hair): a small Japanese stitch-bound book (和綴じ)
+    in indigo, seen a little from the right, its stitching down the left, a title slip with a talisman pasted over it,
+    a red-and-white cord tied across, and the sealed soul's light leaking blue from the fore-edge."""
     px = Px()
-    hair, sheen, deep = rgb('#2a2530'), rgb('#5d6984'), rgb('#120f16')
-    # the lock: a tapering curve from the tie (upper left) to its tip (lower right)
-    import math
-    for i in range(0, 200):
-        t = i / 199.0
-        cx = 9 + 15 * t + 3.5 * math.sin(t * math.pi)
-        cy = 9 + 19 * t - 2.5 * math.sin(t * math.pi)
-        r = 3.4 * (1 - t) + 0.6
-        px.disc(cx, cy, r, hair)
-    # strands of sheen following the curve
-    for off in (-1.6, 0.4, 1.8):
-        for i in range(10, 170):
-            t = i / 199.0
-            cx = 9 + 15 * t + 3.5 * math.sin(t * math.pi) + off * (1 - t) * 0.8
-            cy = 9 + 19 * t - 2.5 * math.sin(t * math.pi) - off * (1 - t) * 0.6
-            if (i // 9) % 2 == 0:
-                px.set(int(round(cx)), int(round(cy)), sheen if off < 1 else light(hair, 0.15))
+    cover, hi, lo, deep = rgb('#2b3566'), rgb('#44528f'), rgb('#1b2247'), rgb('#0b0e20')
+    page, page_lo = rgb('#eee3c6'), rgb('#cdbd96')
+    # the page block, seen at the bottom and the right (the fore-edge)
+    px.rect(8, 26, 25, 27, page)
+    px.rect(25, 6, 26, 27, page)
+    px.pts([(26, 9), (26, 13), (26, 17), (26, 21), (26, 25)], page_lo)
+    px.rect(9, 27, 25, 27, page_lo)
+    # the sealed soul's light at the fore-edge
+    px.pts([(27, 10), (27, 11), (27, 15), (27, 16), (27, 20)], rgb('#7fdcff'))
+    px.pts([(28, 15)], rgb('#bff2ff'))
+    # the cover
+    px.rect(6, 4, 24, 25, cover)
+    px.rect(6, 4, 24, 4, hi)
+    px.rect(7, 5, 7, 24, hi)
+    px.rect(24, 5, 24, 25, lo)
+    px.rect(6, 25, 24, 25, lo)
+    # four-hole stitching (yotsume toji) down the spine, white thread
+    thread = rgb('#e9e4da')
+    for y in (6, 11, 18, 23):
+        px.set(8, y, deep)
+        px.line(6, y, 8, y, thread)
+    px.line(6, 5, 6, 24, thread)
+    # the title slip (daisen) and the talisman pasted over it
+    px.rect(18, 6, 22, 21, page)
+    px.rect(22, 7, 22, 21, page_lo)
+    px.pts([(20, 8), (20, 9), (19, 10), (21, 10), (20, 11), (20, 13), (19, 14), (20, 14), (21, 14), (20, 15), (20, 17), (19, 18), (21, 18)], INK)
+    px.rect(19, 19, 21, 20, SEAL)
+    px.set(21, 20, SEAL_LO)
+    # the red-and-white cord tied across the cover, its knot and bow on the slip
+    for x in range(6, 25):
+        px.set(x, 15, SEAL if (x // 2) % 2 == 0 else rgb('#f2ece2'))
+        px.set(x, 16, SEAL_LO if (x // 2) % 2 == 0 else rgb('#cfc6b6'))
+    px.poly([(13, 13), (11, 11), (10, 14)], SEAL)
+    px.poly([(15, 13), (17, 11), (17, 14)], rgb('#f2ece2'))
+    px.rect(13, 14, 15, 17, SEAL)
+    px.pts([(12, 18), (12, 19), (16, 18), (16, 20)], SEAL)
+    px.pts([(14, 15)], light(SEAL, 0.35))
     px.outline(deep)
-    # the red-and-white cord (mizuhiki) wound round the lock, and its bow
-    for k, col in enumerate((SEAL, rgb('#f2ece2'), SEAL)):
-        px.line(5 + k, 9 + k, 10 + k, 4 + k, col)
-    px.poly([(4, 4), (8, 6), (5, 9), (2, 7)], SEAL)
-    px.poly([(9, 1), (11, 5), (8, 6), (7, 2)], rgb('#f2ece2'))
-    px.pts([(4, 5), (9, 2)], light(SEAL, 0.35))
-    # a paper tag hanging from the cord
-    px.line(3, 9, 3, 13, PAPER_EDGE)
-    px.rect(1, 13, 6, 21, PAPER)
-    px.rect(6, 13, 6, 21, PAPER_LO)
-    px.rect(1, 21, 6, 21, PAPER_LO)
-    px.pts([(3, 15), (4, 15), (3, 16), (2, 17), (4, 17), (3, 18), (3, 19)], INK)
-    px.set(5, 19, SEAL)
     return px
 
 

@@ -209,7 +209,7 @@ public final class GrimoireScreen extends Screen {
         if (e.isEmpty() && pageIndex == 0) {
             int ly = py + 26;
             for (FormattedCharSequence line : font.split(Component.literal(
-                "まだ何も封じていない。決闘に勝って得た封印髪をもう片方の手に持ち、この書を右クリックすると、ここに収められる。"), 104)) {
+                "まだ何も封じていない。決闘に勝って得た封印書をもう片方の手に持ち、この書を右クリックすると、ここに収められる。"), 104)) {
                 g.drawString(font, line, px + 6, ly, INK, false);
                 ly += 10;
             }
