@@ -1939,7 +1939,70 @@ public final class Look {
                     command(server, "oror deserter " + sp.getGameProfile().getName() + " clear");
                 }
             });
-        } else if (k == 130) {
+        } else if (k >= 130) {
+            staminaScene(mc, k - 130);
+        }
+    }
+
+    /**
+     * (r73) Stamina for everyone: the player emptied (exhausted: the screen's edges pulse red, the HUD's bar), a zombie
+     * winded and a cow and a villager tired (their bars over their heads), seen from the front.
+     */
+    private static void staminaScene(Minecraft mc, int k) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        if (k == 0) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            server.execute(() -> {
+                ServerPlayer sp = serverPlayer(server);
+                if (sp == null) {
+                    return;
+                }
+                command(server, "gamemode survival " + name);
+                command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 10", name, sx, sy, sz + 2));
+                ServerLevel level = server.overworld();
+                for (Entity e : level.getEntities((Entity) null, new AABB(sx - 30, sy - 6, sz - 20, sx + 30, sy + 20, sz + 40),
+                    x -> !(x instanceof net.minecraft.world.entity.player.Player))) {
+                    e.discard();
+                }
+                for (String w : new String[]{"zombie", "cow", "villager"}) {
+                    int i = w.equals("zombie") ? 0 : w.equals("cow") ? 1 : 2;
+                    command(server, String.format(java.util.Locale.ROOT, "summon minecraft:%s %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]%s}", w,
+                        sx - 2.5 + i * 2.5, (int) sy, sz + 6.5, w.equals("zombie") ? ",ArmorItems:[{},{},{},{id:\"minecraft:leather_helmet\",count:1}]" : ""));
+                }
+                note("stamina: set out");
+            });
+        } else if (k == 6) {
+            server.execute(() -> {
+                try {
+                    ServerPlayer sp = serverPlayer(server);
+                    Class<?> ex = Class.forName("jp.oror.reborn.combat.Exhaustion"), ms = Class.forName("jp.oror.reborn.combat.MobStamina");
+                    ex.getMethod("put", net.minecraft.world.entity.player.Player.class, float.class).invoke(null, sp, 0F);
+                    ex.getMethod("check", net.minecraft.world.entity.player.Player.class).invoke(null, sp);
+                    for (net.minecraft.world.entity.Mob m : sp.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, sp.getBoundingBox().inflate(12))) {
+                        if (m instanceof net.minecraft.world.entity.monster.Zombie) {
+                            ms.getMethod("empty", net.minecraft.world.entity.Mob.class).invoke(null, m);
+                        } else {
+                            ms.getMethod("drain", net.minecraft.world.entity.Mob.class, float.class).invoke(null, m,
+                                (Float) ms.getMethod("max", net.minecraft.world.entity.Mob.class).invoke(null, m) * (m instanceof net.minecraft.world.entity.animal.Cow ? 0.5F : 0.8F));
+                        }
+                    }
+                    float[] st = (float[]) ex.getMethod("of", net.minecraft.world.entity.player.Player.class).invoke(null, sp);
+                    note(String.format(java.util.Locale.ROOT, "stamina: player %.1f/%.1f exhausted %s", st[0], st[1],
+                        ex.getMethod("exhausted", LivingEntity.class).invoke(null, sp)));
+                } catch (ReflectiveOperationException | RuntimeException e) {
+                    note("stamina: " + e + (e.getCause() == null ? "" : " / " + e.getCause()));
+                }
+            });
+        } else if (k == 16) {
+            shot(mc, "d50_stamina_exhausted_hud");
+        } else if (k == 24) {
+            shot(mc, "d51_stamina_mob_bars");
+        } else if (k == 26) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+        } else if (k == 30) {
+            shot(mc, "d52_stamina_player_bar_front");
+        } else if (k == 40) {
             finish(mc, "complete (duel only)");
         }
     }
