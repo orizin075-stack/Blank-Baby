@@ -682,6 +682,17 @@ public final class DuelTest {
             lv.addFreshEntity(g);
             MADE.add(g);
             gloved = g;
+            // (r71) onlookers about the duel: they should gather in a ring and cheer (DuelCrowd)
+            EntityType<?>[] onlookers = {EntityType.VILLAGER, EntityType.VILLAGER, EntityType.PILLAGER, EntityType.COW};
+            for (int i = 0; i < onlookers.length; i++) {
+                Entity o = onlookers[i].create(lv);
+                if (o != null) {
+                    double ang = Math.PI * 2 * i / onlookers.length;
+                    o.moveTo(fp.getX() + Math.cos(ang) * 11, fp.getY(), fp.getZ() + 2 + Math.sin(ang) * 11, 0F, 0F);
+                    lv.addFreshEntity(o);
+                    MADE.add(o);
+                }
+            }
             fp.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, g.getEyePosition());
             ItemStack glove = new ItemStack(item("white_glove"));
             fp.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, glove);
@@ -761,6 +772,8 @@ public final class DuelTest {
             Object duel = dmc.getMethod("duel", LivingEntity.class).invoke(null, fp);
             boolean withIt = duel != null && gloved != null && (dmc.getMethod("duel", LivingEntity.class).invoke(null, gloved) == duel);
             OUT.put("gloveDuel", withIt);
+            OUT.put("crowdWatching", jp.oror.reborn.duel.DuelCrowd.watching(fp));
+            OUT.put("crowdCheers", jp.oror.reborn.duel.DuelCrowd.cheers);
             if (!withIt) {
                 return;
             }
@@ -854,7 +867,9 @@ public final class DuelTest {
             && ok("soulArchiveStored") && ok("soulArchiveReturned") && ok("gloveDuel") && ok("interferenceBlocked")
             && ok("duelistBlowsCount") && ok("duelEndsFar") && ok("clickPossess") && ok("noDropsOnServantDeath")
             && ok("clickFuse") && ok("fusionFollows") && ok("clickFuseRestored") && ok("fusionHostDeath") && ok("fusionEndsOnHostDeath")
-            && ok("fusionHostDeathOwnerFalls");
+            && ok("fusionHostDeathOwnerFalls")
+            // (r71) the onlookers gathered about the glove's duel
+            && OUT.get("crowdWatching") instanceof Integer w && w >= 3;
         StringBuilder s = new StringBuilder("{\"present\":true");
         for (Map.Entry<String, Object> en : OUT.entrySet()) {
             s.append(",\"").append(en.getKey()).append("\":").append(en.getValue());

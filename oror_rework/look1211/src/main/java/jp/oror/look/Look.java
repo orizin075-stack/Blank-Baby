@@ -123,9 +123,19 @@ public final class Look {
                 }
             }
             case PLAY -> {
+                if (screen != null && screenDriver != null) {
+                    // (r71) a scene that works the open screen itself (the ritual menu)
+                    driverSaw = true;
+                    screenDriver.accept(onScreen);
+                    return;
+                }
                 if (screen != null) {
                     popup(mc, screen);
                     return;
+                }
+                if (driverSaw) {
+                    screenDriver = null;
+                    driverSaw = false;
                 }
                 if (mc.player != null && mc.level != null) {
                     play(mc, ++play);
@@ -1487,6 +1497,9 @@ public final class Look {
     // ------------------------------------------------------------------------------- (r71) a duel and the talismans, played
 
     private static int wonAt = -1, battleEnd = -1;
+    private static java.util.function.IntConsumer screenDriver;
+    private static boolean driverSaw;
+    private static float ringYaw;
     private static final String[][] TALISMANS = {
         // name, item, offerings, the foe set before the player (or "-"), its side offset
         {"HEALING", "ofuda_healing", "1", "-", "0"},
@@ -1563,6 +1576,21 @@ public final class Look {
             shot(mc, "d10_before_the_glove");
             mc.gameMode.useItem(mc.player, InteractionHand.MAIN_HAND);
             note("duel battle: glove thrown at " + (z == null ? "nothing" : z.getType().toShortString()));
+        } else if (t == 380) {
+            // (r71) onlookers: they should gather in a ring about the duel and cheer (OROR's DuelCrowd)
+            server.execute(() -> {
+                String[] who = {"villager {VillagerData:{profession:\"minecraft:farmer\",level:2,type:\"minecraft:plains\"}}",
+                    "villager {VillagerData:{profession:\"minecraft:librarian\",level:2,type:\"minecraft:plains\"}}",
+                    "villager {VillagerData:{profession:\"minecraft:weaponsmith\",level:2,type:\"minecraft:plains\"}}", "wandering_trader {}", "pillager {}",
+                    "witch {}", "cow {}", "sheep {}"};
+                for (int i = 0; i < who.length; i++) {
+                    double ang = Math.PI * 2 * i / who.length;
+                    String[] w = who[i].split(" ", 2);
+                    command(server, String.format(java.util.Locale.ROOT, "summon minecraft:%s %.1f %d %.1f %s", w[0], sx + Math.cos(ang) * 11, (int) sy,
+                        sz + 5 + Math.sin(ang) * 11, w[1].replace("{", "{PersistenceRequired:1b,").replace(",}", "}")));
+                }
+                note("duel battle: onlookers set out");
+            });
         } else if (t == 384) {
             shot(mc, "d11_glove_thrown");
         } else if (t == 396) {
@@ -1591,6 +1619,24 @@ public final class Look {
                 wonAt = t;
                 note("duel battle: the zombie is gone at " + t);
             }
+            if (t == 427 || t == 487) {
+                // the ring: the camera turned to the side, then behind (turned two ticks before its frame)
+                mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+                ringYaw = mc.player.getYRot() + (t == 427 ? 70F : 160F);
+            }
+            if (t >= 427 && t <= 430 || t >= 487 && t <= 490) {
+                mc.player.setYRot(ringYaw);
+                mc.player.setYHeadRot(ringYaw);
+                mc.player.setXRot(5F);
+                if (t == 430 || t == 490) {
+                    shot(mc, t == 430 ? "d13b_crowd_side" : "d13c_crowd_behind");
+                } else {
+                    return;
+                }
+            }
+            if (t == 431 || t == 491) {
+                mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            }
             if (t == 420) {
                 shot(mc, "d13_duel_fight_a");
             } else if (t == 450) {
@@ -1608,6 +1654,12 @@ public final class Look {
             }
         } else if (wonAt > 0 && t == wonAt + 3) {
             shot(mc, "d15_duel_won");
+        } else if (wonAt > 0 && t == wonAt + 5) {
+            ringYaw = mc.player.getYRot() + 180F;
+            mc.player.setYRot(ringYaw);
+            mc.player.setYHeadRot(ringYaw);
+        } else if (wonAt > 0 && t == wonAt + 8) {
+            shot(mc, "d15b_crowd_cheers_the_end");
         } else if (wonAt > 0 && t == wonAt + 10) {
             mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
             int seal = slotOf(mc, "dueldominion:bound_hair");
@@ -1719,9 +1771,7 @@ public final class Look {
         } else if (t >= TALISMAN_FROM) {
             int i = (t - TALISMAN_FROM) / TALISMAN_STEP, k = (t - TALISMAN_FROM) % TALISMAN_STEP;
             if (i >= TALISMANS.length) {
-                if (k == 0) {
-                    finish(mc, "complete (duel only)");
-                }
+                orbitScene(mc, t - TALISMAN_FROM - TALISMANS.length * TALISMAN_STEP);
                 return;
             }
             String[] tl = TALISMANS[i];
@@ -1745,6 +1795,119 @@ public final class Look {
             } else if (k == 60) {
                 server.execute(() -> afterTalisman(server, tl));
             }
+        }
+    }
+
+    /**
+     * (r71) A talisman through its own menu, as a player casts it: two vexes bound by hand, the binding talisman opened,
+     * a bound effigy chosen (it should circle the player), the talisman clicked to confirm, the vindicator aimed at and the
+     * talisman used (the effigies burn).
+     */
+    private static void orbitScene(Minecraft mc, int k) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        if (k == 0) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            server.execute(() -> {
+                ServerLevel level = server.overworld();
+                for (Entity e : level.getEntities((Entity) null, new AABB(sx - 30, sy - 6, sz - 20, sx + 30, sy + 20, sz + 40),
+                    x -> !(x instanceof net.minecraft.world.entity.player.Player))) {
+                    e.discard();
+                }
+                command(server, "clear " + name);
+                command(server, "item replace entity " + name + " hotbar.0 with dueldominion:spirit_effigy 4");
+                command(server, "item replace entity " + name + " hotbar.1 with dueldominion:ofuda_binding 2");
+                command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 10", name, sx, sy, sz + 2));
+                command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vex %.1f %.1f %.1f {NoAI:1b,PersistenceRequired:1b}", sx - 1.2, sy + 0.4, sz + 4));
+                command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vex %.1f %.1f %.1f {NoAI:1b,PersistenceRequired:1b}", sx + 1.2, sy + 0.4, sz + 4));
+                command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vindicator %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}", sx, (int) sy, sz + 11));
+            });
+        } else if (k == 10 || k == 18) {
+            mc.player.getInventory().selected = 0;
+            List<Entity> vexes = new ArrayList<>();
+            for (Entity e : mc.level.entitiesForRendering()) {
+                if (e instanceof net.minecraft.world.entity.monster.Vex && e.isAlive() && e.distanceTo(mc.player) < 8) {
+                    vexes.add(e);
+                }
+            }
+            if (!vexes.isEmpty()) {
+                Entity v = vexes.get(0);
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, v.position().add(0, 0.4, 0));
+                mc.gameMode.interact(mc.player, v, InteractionHand.MAIN_HAND);
+            }
+            note("orbit: effigy on a vex (" + vexes.size() + " about)");
+        } else if (k == 28) {
+            mc.player.getInventory().selected = 1;
+            mc.player.setXRot(10F);
+            mc.player.setYRot(0F);
+            screenDriver = n -> ritualMenu(mc, n);
+            mc.gameMode.useItem(mc.player, InteractionHand.MAIN_HAND);
+        } else if (k == 36) {
+            note("orbit: back from the menu, screen " + (mc.screen == null ? "none" : mc.screen.getClass().getSimpleName()));
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+        } else if (k == 40) {
+            shot(mc, "d25_orbit_front");
+        } else if (k == 48) {
+            shot(mc, "d26_orbit_front_later");
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+        } else if (k == 54) {
+            shot(mc, "d27_orbit_aiming");
+        } else if (k == 58) {
+            Entity foe = null;
+            for (Entity e : mc.level.entitiesForRendering()) {
+                if (e instanceof net.minecraft.world.entity.monster.Vindicator && e.isAlive()) {
+                    foe = e;
+                }
+            }
+            if (foe != null) {
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, foe.getEyePosition());
+            }
+            mc.gameMode.useItem(mc.player, InteractionHand.MAIN_HAND);
+            note("orbit: talisman used at " + (foe == null ? "nothing" : "the vindicator"));
+        } else if (k == 61) {
+            shot(mc, "d28_orbit_burn");
+        } else if (k == 70) {
+            shot(mc, "d29_orbit_after");
+        } else if (k == 80) {
+            finish(mc, "complete (duel only)");
+        }
+    }
+
+    /** The ritual menu worked while it is open: a bound effigy chosen, then the talisman clicked to confirm. */
+    private static void ritualMenu(Minecraft mc, int n) {
+        net.minecraft.world.inventory.AbstractContainerMenu menu = mc.player.containerMenu;
+        if (n == 6) {
+            StringBuilder b = new StringBuilder("orbit: menu " + (mc.screen == null ? "-" : mc.screen.getClass().getSimpleName()) + " slots");
+            for (net.minecraft.world.inventory.Slot slot : menu.slots) {
+                if (!slot.getItem().isEmpty()) {
+                    b.append(' ').append(slot.index).append('=').append(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(slot.getItem().getItem()).getPath())
+                        .append(slot.getItem().has(net.minecraft.core.component.DataComponents.CUSTOM_DATA) ? "*" : "");
+                }
+            }
+            note(b.toString());
+        } else if (n == 10) {
+            for (net.minecraft.world.inventory.Slot slot : menu.slots) {
+                if (net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(slot.getItem().getItem()).getPath().equals("spirit_effigy")
+                    && slot.getItem().has(net.minecraft.core.component.DataComponents.CUSTOM_DATA)) {
+                    mc.gameMode.handleInventoryMouseClick(menu.containerId, slot.index, 0, net.minecraft.world.inventory.ClickType.PICKUP, mc.player);
+                    note("orbit: chose the effigy in slot " + slot.index);
+                    break;
+                }
+            }
+        } else if (n == 22) {
+            shot(mc, "d24_ritual_chosen");
+        } else if (n == 26) {
+            for (net.minecraft.world.inventory.Slot slot : menu.slots) {
+                if (net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(slot.getItem().getItem()).getPath().equals("ofuda_binding")) {
+                    mc.gameMode.handleInventoryMouseClick(menu.containerId, slot.index, 0, net.minecraft.world.inventory.ClickType.PICKUP, mc.player);
+                    note("orbit: talisman clicked in slot " + slot.index);
+                    break;
+                }
+            }
+        } else if (n == 60) {
+            note("orbit: the menu still open after confirming; closed");
+            shot(mc, "d24b_ritual_still_open");
+            mc.setScreen(null);
         }
     }
 
