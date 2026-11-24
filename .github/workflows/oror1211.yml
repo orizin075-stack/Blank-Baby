@@ -237,7 +237,14 @@ jobs:
           { echo "== HEALTHBARS"; for j in "$RUNNER_TEMP"/pack053/*.jar; do
               unzip -l "$j" 2>/dev/null | grep -i -E 'health_?bar|healthbar|HealthIndicator|TargetIndicator|EntityIndicator|BossBarIndicator' | grep -E '\.class|\.png' | sed "s#^#$(basename $j): #" | head -n 8
             done
-            EJ=$(ls "$RUNNER_TEMP"/pack053/*.jar | grep -i '/epicfight-' | head -n 1)
+            for pat in 'epic-fight-' 'WeaponsOfMiracles' 'CombatEvolution'; do
+              PJ=$(ls "$RUNNER_TEMP"/pack053/*.jar | grep -F "$pat" | head -n 1); [ -n "$PJ" ] || continue
+              for c in $(unzip -l "$PJ" | grep -o -E '[A-Za-z0-9_/$]*(ClientConfig|HealthBar|HealthBarMixin)[A-Za-z0-9_$]*\.class' | sort -u | head -n 8); do
+                echo "== $(basename "$PJ") $c"
+                unzip -p "$PJ" "$c" | strings -n 4 | grep -i -E 'health|bar|show|visib|HURT|TARGET|ALWAYS|NONE|epicfight/client|config' | sort -u | head -n 30
+              done
+            done
+            EJ=$(ls "$RUNNER_TEMP"/pack053/*.jar | grep -i '/epic-fight-' | head -n 1)
             for c in $(unzip -l "$EJ" | grep -o -E 'yesman/epicfight/[A-Za-z/]*(ClientConfig|HealthBar[A-Za-z]*|Indicator[A-Za-z]*)\.class' | sort -u | head -n 12); do
               echo "== $c"; javap -p -cp "$EJ" "${c%.class}" 2>/dev/null | grep -i -E 'health|indicator|static|show' | head -n 25
             done
