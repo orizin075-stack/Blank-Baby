@@ -99,12 +99,14 @@ public final class DuelCrowd {
 
     /** How many watch the duel this one fights in (for the CI check), or -1. */
     public static int watching(LivingEntity duellist) {
+        // the duel still on, not one ending (a duellist's earlier duels linger for their last cheer)
+        int most = -1;
         for (Ring r : RINGS) {
             if (r.a == duellist || r.b == duellist) {
-                return r.crowd.size();
+                most = Math.max(most, r.finale < 0 ? r.crowd.size() : 0);
             }
         }
-        return -1;
+        return most;
     }
 
     @SubscribeEvent
