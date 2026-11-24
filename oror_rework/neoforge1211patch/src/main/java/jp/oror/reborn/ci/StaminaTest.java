@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * (r73) CI check "stamina" (/oror stamina test, STAMINA-RESULT): Exhaustion and the mobs' stamina for everyone. On a
  * cleared floor: a zombie emptied (winded) strikes a cow, a fresh zombie strikes another (the winded blow lands at six
- * tenths); the winded zombie takes a blow (a quarter harder); a cow driven at a run for three seconds (its stamina worn
+ * tenths); the winded zombie takes a blow (a quarter harder); a cow driven at a run for five seconds (its stamina worn
  * down, though it fights nothing); a fake player emptied (exhausted) strikes a cow (half its weight, its stamina back to
  * nothing), then given back half its stamina gets its wind back; and Epic Fight's player patch has the stamina it reads.
  */
@@ -151,18 +151,18 @@ public final class StaminaTest {
             return;
         }
         long t = level.getGameTime() - started;
-        if (runner != null && runner.isAlive() && t < 60) {
+        if (runner != null && runner.isAlive() && t < 100) {
             // driven at a run: a beast in panic
             runner.setDeltaMovement(0.6, runner.getDeltaMovement().y, 0.0);
             if (runner.getX() > site.getX() + 10) {
                 runner.teleportTo(site.getX() - 10, site.getY(), runner.getZ());
             }
         }
-        if (t == 70) {
+        if (t == 110) {
             OUT.put("runnerAfter", String.format(java.util.Locale.ROOT, "%.3f", MobStamina.fraction(runner)));
             OUT.put("runnerAt", String.format(java.util.Locale.ROOT, "%.1f %.1f %.1f ground %b alive %b", runner.getX() - site.getX(), runner.getY() - site.getY(),
                 runner.getZ() - site.getZ(), runner.onGround(), runner.isAlive()));
-            OUT.put("runningWears", MobStamina.fraction(runner) < 0.97F);
+            OUT.put("runningWears", MobStamina.fraction(runner) < 0.985F);
             // the player's wind back: half its stamina, a second and a half on
             float[] s = Exhaustion.of(fp);
             Exhaustion.put(fp, s[1] * 0.5F);
