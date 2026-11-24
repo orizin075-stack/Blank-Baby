@@ -1,166 +1,138 @@
-window CAPITAL-LOAD-START -> CAPITAL-LOAD { 08:05:45 08:06:45
-server thread samples in the window 565
+window CAPITAL-LOAD-START -> CAPITAL-LOAD { None None
+server thread samples in the window 579
 
 == packages anywhere in the stack (share of samples)
- 95.2%  net.minecraft
- 23.5%  com.atsuishio
- 21.1%  net.neoforged
- 17.0%  jp.oror
-  5.8%  io.redspace
-  2.7%  dev.shadowsoffire
-  0.2%  yesman.epicfight
-  0.2%  top.theillusivec4
+ 99.8%  net.minecraft
+ 48.5%  net.neoforged
+ 39.2%  jp.oror
+  0.2%  io.redspace
 
 == on top of the stack (self)
 100.0%  state = "STATE_RUNNABLE"
 
 == anywhere in the stack (inclusive), mods only
 100.0%  state = "STATE_RUNNABLE"
- 17.0%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.baseTick
- 10.4%  jp.oror.reborn.perf.MagnetRegions.none
- 10.4%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.tickMagnetism
-  6.9%  com.atsuishio.superbwarfare.data.gun.GunData.get
-  6.4%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.handler$znj000$oror_supreme_bosses$oror$attracting
-  6.4%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyAttractingMagnets
-  6.0%  com.atsuishio.superbwarfare.data.PMC.get
-  5.8%  io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob.rideTick
-  4.6%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
-  4.1%  dev.ryanhcode.sable.util.SubLevelInclusiveLevelEntityGetter.get
-  4.1%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.handler$znj000$oror_supreme_bosses$oror$repelling
-  4.1%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyRepellingMagnets
-  3.7%  com.atsuishio.superbwarfare.init.ModSerializers$VEHICLE_GUN_DATA_MAP_SERIALIZER$1$1.copy
-  3.5%  com.atsuishio.superbwarfare.data.Prop.getDefault
-  3.4%  com.atsuishio.superbwarfare.data.gun.GunData.copy
-  3.2%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.isInFluidType
-  3.2%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.isInLava
-  3.2%  com.atsuishio.superbwarfare.data.gun.GunData.<init>
-  3.2%  com.atsuishio.superbwarfare.event.GunEventHandler.gunTick
-  3.0%  com.atsuishio.superbwarfare.data.gun.GunProp.AMMO_CONSUMER$lambda$10
-  3.0%  com.mojang.datafixers.FunctionType$Instance.lambda$right$6
-  3.0%  com.mojang.datafixers.util.Either.lambda$mapRight$1
-  3.0%  com.mojang.datafixers.util.Either.mapRight
-  3.0%  com.mojang.datafixers.util.Either$Right.map
-  2.8%  com.atsuishio.superbwarfare.data.gun.AmmoConsumer.init
-  2.7%  com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils.terrainCompact
-  2.7%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.terrainCompact
-  2.7%  com.mojang.datafixers.functions.Fold.lambda$eval$2
-  2.3%  com.atsuishio.superbwarfare.entity.vehicle.base.ArtilleryEntity.baseTick
-  2.1%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.move
-  2.1%  com.atsuishio.superbwarfare.tools.ServerSyncedEntityHandler.register
-  2.1%  com.atsuishio.superbwarfare.tools.BvrSyncExclusionKt.getBvrSyncNbt
-  2.1%  com.atsuishio.superbwarfare.tools.ServerSyncedEntityHandler.register$default
-  2.1%  com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils.sampleTerrainTop
-  2.1%  dev.shadowsoffire.apotheosis.AdventureEvents.enchLevels
-  2.1%  com.mojang.datafixers.optics.ListTraversal.lambda$wander$0
-  2.1%  com.mojang.datafixers.FunctionType$Instance.lambda$wander$3
-  2.1%  com.mojang.datafixers.FunctionType$Instance.lambda$wander$4
-  1.9%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.buildBvrSyncNbt
-  1.8%  com.atsuishio.superbwarfare.data.gun.ammo_consumer_strategy.AmmoConsumeStrategy$Companion.match
-  1.8%  com.mojang.datafixers.functions.Comp.applyUnchecked
-  1.8%  com.mojang.datafixers.functions.Comp.lambda$eval$2
-  1.8%  com.mojang.datafixers.types.templates.Named.lambda$hmap$2
-  1.8%  com.mojang.datafixers.types.templates.TaggedChoice.lambda$hmap$2
-  1.8%  com.mojang.datafixers.types.templates.Check.lambda$hmap$1
-  1.8%  com.mojang.datafixers.types.templates.Sum.lambda$hmap$4
-  1.8%  com.mojang.datafixers.functions.Fold.lambda$eval$1
-  1.6%  com.atsuishio.superbwarfare.entity.vehicle.base.AutoAimableEntity.baseTick
-  1.6%  com.atsuishio.superbwarfare.data.gun.GunProp$Companion.modifyProperty
-  1.6%  com.atsuishio.superbwarfare.data.PMC.modify
-  1.6%  com.mojang.datafixers.FunctionType$Instance.lambda$first$1
-  1.4%  jp.oror.reborn.royal.RoyalMob.customServerAiStep
-  1.4%  jp.oror.reborn.vehicle.RoyalPilots.tick
-  1.4%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.canShoot
-  1.4%  com.atsuishio.superbwarfare.data.gun.GunData.canShoot
-  1.4%  com.atsuishio.superbwarfare.item.gun.vehicle.VehicleGunItem.canShoot
-  1.4%  dev.shadowsoffire.placebo.util.CachedObject$CachedObjectSource.getOrCreate
-  1.2%  com.atsuishio.superbwarfare.block.ChargingStationBlock$getTicker$1.tick
-  1.2%  com.atsuishio.superbwarfare.block.entity.ChargingStationBlockEntity$Companion.serverTick
-  1.2%  dev.shadowsoffire.placebo.util.CachedObject.get
-  1.2%  dev.shadowsoffire.apotheosis.socket.SocketHelper.getGems
-  1.2%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.updateInWaterStateAndDoFluidPushing
-  1.2%  com.atsuishio.superbwarfare.data.gun.GunData.countBackupAmmo
-  1.2%  com.mojang.datafixers.DSL.taggedChoiceType
-  1.2%  com.mojang.datafixers.TypedOptic.replaceTagged
-  1.2%  com.mojang.datafixers.types.templates.TaggedChoice$TaggedChoiceType.elementResult
-  1.2%  com.mojang.datafixers.TypedOptic.tagged
-  1.2%  com.mojang.datafixers.types.Type.equals
-  1.1%  com.atsuishio.superbwarfare.block.entity.ChargingStationBlockEntity.access$chargeBlock
+ 34.2%  jp.oror.reborn.citadel.CitadelSites.bind
+ 34.2%  jp.oror.reborn.citadel.CitadelSites.chooseCapital
+ 33.7%  jp.oror.reborn.citadel.CitadelEvents.load
+ 17.1%  jp.oror.reborn.citadel.CitadelSites.survey
+ 16.9%  jp.oror.reborn.citadel.CitadelSites.glance
+  3.6%  jp.oror.reborn.VillagerLife.tick
+  3.6%  jp.oror.reborn.VillageWork.survey
+  3.6%  jp.oror.reborn.VillageWork.wantsWood
+  2.8%  com.serilum.oreharvester.neoforge.events.NeoForgeWorldEvents.onWorldLoad
+  2.8%  com.serilum.oreharvester_common_neoforge.events.WorldEvents.onWorldLoad
+  2.8%  com.serilum.treeharvester_common_neoforge.processing.ConfigLists.processConfigLists
+  2.8%  com.serilum.treeharvester.neoforge.events.NeoForgeWorldEvents.onWorldLoad
+  2.8%  com.serilum.treeharvester_common_neoforge.events.WorldEvents.onWorldLoad
+  2.2%  com.serilum.oreharvester_common_neoforge.processing.PickaxeWhitelist.processPickaxeWhitelist
+  2.2%  com.serilum.treeharvester_common_neoforge.util.Util.isInIdList
+  1.9%  dev.ryanhcode.sable.Sable.defaultSubLevelContainerInitializer
+  1.9%  com.mojang.serialization.Encoder.encodeStart
+  1.7%  com.serilum.oreharvester_common_neoforge.util.Util.isInIdList
+  1.7%  com.mojang.serialization.Encoder$1.encode
+  1.7%  com.mojang.serialization.Codec$2.encode
+  1.2%  dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertiesDefinitionLoader.applyToBlocks
+  1.2%  dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertiesDefinitionLoader.applyAll
+  0.7%  org.objectweb.asm.ClassReader.readCode
+  0.7%  org.objectweb.asm.ClassReader.readMethod
+  0.7%  org.objectweb.asm.ClassReader.accept
+  0.5%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.initialize
+  0.5%  dev.ryanhcode.sable.physics.impl.rapier.Rapier3D.<clinit>
+  0.5%  net.jpountz.lz4.LZ4FrameInputStream.readBlock
+  0.5%  dev.ryanhcode.sable.physics.impl.rapier.Rapier3D.loadLibrary
+  0.5%  net.jpountz.lz4.LZ4FrameInputStream.read
+  0.5%  net.jpountz.lz4.LZ4JavaUnsafeSafeDecompressor.decompress
+  0.5%  dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipeline.init
+  0.5%  com.mojang.serialization.DataResult$Success.flatMap
+  0.5%  dev.ryanhcode.sable.physics.chunk.VoxelNeighborhoodState.getState
+  0.5%  dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipeline.handleBlockChange
+  0.5%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.handleBlockChange
+  0.5%  dev.ryanhcode.sable.SableCommonEvents.handleBlockChange
+  0.5%  dev.ryanhcode.sable.api.sublevel.SubLevelContainer.tick
+  0.5%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.tickPipelinePhysics
+  0.5%  dev.ryanhcode.sable.api.sublevel.ServerSubLevelContainer.tick
+  0.5%  dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem.tick
+  0.5%  dev.ryanhcode.sable.api.sublevel.SubLevelContainer.lambda$tick$0
+  0.5%  com.curseforge.macabre.init.EntityAnimationFactory.onEntityTick
+  0.3%  org.objectweb.asm.ClassReader.readUtf
+  0.3%  org.objectweb.asm.ClassReader.readUTF8
+  0.3%  org.objectweb.asm.Type.getDescriptor
+  0.3%  org.objectweb.asm.Type.appendDescriptor
+  0.3%  org.openjdk.nashorn.internal.runtime.ScriptFunctionData.invoke
+  0.3%  org.openjdk.nashorn.internal.scripts.Script$Recompilation$17$1375A$\^eval\_.initializeCoreMod#transformer
+  0.3%  org.openjdk.nashorn.internal.runtime.ScriptFunction.invoke
+  0.3%  org.openjdk.nashorn.api.scripting.ScriptObjectMirror.call
+  0.3%  org.openjdk.nashorn.internal.runtime.ScriptRuntime.apply
+  0.3%  com.natamus.collective.neoforge.events.RegisterCollectiveNeoForgeEvents.onWorldLoad
+  0.3%  com.natamus.collective_common_neoforge.events.CollectiveEvents.onWorldLoad
+  0.3%  com.natamus.collective_common_neoforge.data.Constants.initConstantData
+  0.3%  jp.oror.reborn.citadel.CitadelSites.nearStronghold
+  0.3%  com.serilum.oreharvester_common_neoforge.processing.OreBlockLists.processOreBlockLists
+  0.3%  com.mojang.serialization.MapCodec$MapCodecCodec.decode
+  0.3%  com.mojang.serialization.MapCodec$2.decode
+  0.3%  com.mojang.serialization.MapDecoder.compressedDecode
+  0.3%  com.mojang.serialization.MapDecoder.lambda$compressedDecode$1
+  0.3%  com.mojang.serialization.Decoder.parse
+  0.3%  dev.ryanhcode.sable.api.block.BlockWithSubLevelCollisionCallback.hasCallback
+  0.3%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.handler$zni000$oror_supreme_bosses$oror$same
+  0.3%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
+  0.3%  com.aetherteam.aether.event.listeners.RecipeListener.onNeighborNotified
+  0.3%  com.aetherteam.aether.event.hooks.RecipeHooks.checkExistenceBanned
+  0.3%  dev.simulated_team.simulated.events.SimulatedCommonEvents.onPhysicsTick
+  0.3%  dev.ryanhcode.sable.neoforge.platform.SableEventPlatformImpl.lambda$onPhysicsTick$1
 
 == anywhere in the stack (inclusive), Minecraft
- 95.0%  net.minecraft.server.MinecraftServer.lambda$spin$2
- 95.0%  net.minecraft.server.MinecraftServer.runServer
- 95.0%  net.minecraft.server.MinecraftServer.tickServer
- 93.1%  net.minecraft.server.dedicated.DedicatedServer.tickChildren
- 93.1%  net.minecraft.server.MinecraftServer.tickChildren
- 92.4%  net.minecraft.server.level.ServerLevel.tick
- 74.2%  net.minecraft.world.level.entity.EntityTickList.forEach
- 74.2%  net.minecraft.server.level.ServerLevel.lambda$tick$2
- 73.3%  net.minecraft.world.level.Level.guardEntityTick
- 73.3%  net.minecraft.server.level.ServerLevel.tickNonPassenger
- 36.8%  net.minecraft.world.entity.Mob.tick
- 36.8%  net.minecraft.world.entity.LivingEntity.tick
- 34.2%  net.minecraft.world.entity.Entity.tick
- 22.1%  net.minecraft.world.level.Level.getChunk
- 21.1%  net.minecraft.world.entity.Mob.aiStep
- 21.1%  net.minecraft.world.entity.LivingEntity.aiStep
- 21.1%  net.minecraft.world.level.LevelReader.getChunk
- 20.9%  net.minecraft.server.level.ServerChunkCache.getChunk
- 18.4%  net.minecraft.server.level.ServerChunkCache.handler$bon000$alexscaves$ac_getChunk
- 18.4%  net.minecraft.world.level.biome.MultiNoiseBiomeSource.setLastSampledDimension
- 14.9%  net.minecraft.server.level.ServerChunkCache.tick
- 14.2%  net.minecraft.world.level.Level.getBlockState
- 13.6%  net.minecraft.world.entity.Entity.move
- 11.2%  net.minecraft.server.level.ChunkMap.tick
- 11.0%  net.minecraft.world.entity.LivingEntity.travel
- 11.0%  net.minecraft.world.entity.Entity.handler$bop001$alexscaves$ac_tick
- 10.8%  net.minecraft.world.entity.item.ItemEntity.tick
-  9.6%  net.minecraft.world.entity.LivingEntity.handleRelativeFrictionAndCalculateMovement
-  8.3%  net.minecraft.world.entity.Mob.serverAiStep
-  7.4%  net.minecraft.world.level.Level.getFluidState
-  6.9%  net.minecraft.world.level.Level.getChunkAt
-  6.9%  net.minecraft.world.level.BlockCollisions.computeNext
-  6.4%  net.minecraft.world.entity.Entity.baseTick
-  5.8%  net.minecraft.server.level.ServerLevel.tickPassenger
-  5.8%  net.minecraft.world.entity.LivingEntity.rideTick
-  5.8%  net.minecraft.world.entity.Entity.rideTick
-  5.7%  net.minecraft.world.entity.ai.goal.GoalSelector.tick
-  5.7%  net.minecraft.server.level.ChunkMap.processUnloads
-  5.5%  net.minecraft.world.entity.Entity.redirect$cgb000$sable$collideRedirect
-  5.1%  net.minecraft.world.entity.Entity.handler$bop000$alexscaves$ac_collide
+ 58.2%  net.minecraft.server.MinecraftServer.runServer
+ 57.7%  net.minecraft.server.MinecraftServer.lambda$spin$2
+ 43.0%  net.minecraft.server.dedicated.DedicatedServer.initServer
+ 41.6%  net.minecraft.server.MinecraftServer.createLevels
+ 41.3%  net.minecraft.server.MinecraftServer.loadLevel
+ 33.5%  net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator.getBaseHeight
+ 33.5%  net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator.iterateNoiseColumn
+ 26.9%  net.minecraft.world.level.levelgen.DensityFunctions$PureTransformer.compute
+ 26.8%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.compute
+ 25.4%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.mapAll
+ 24.5%  net.minecraft.world.level.levelgen.DensityFunctions$MarkerOrMarked.mapAll
+ 21.9%  net.minecraft.world.level.levelgen.DensityFunctions$Ap2.fillArray
+ 21.6%  net.minecraft.world.level.levelgen.NoiseChunk$NoiseInterpolator.fillArray
+ 21.4%  net.minecraft.world.level.levelgen.NoiseChunk.fillSlice
+ 21.2%  net.minecraft.world.level.levelgen.DensityFunctions$HolderHolder.mapAll
+ 21.2%  net.minecraft.world.level.levelgen.DensityFunctions$RangeChoice.compute
+ 20.7%  net.minecraft.world.level.levelgen.DensityFunctions$PureTransformer.fillArray
+ 20.4%  net.minecraft.world.level.levelgen.DensityFunctions$TransformerWithContext.fillArray
+ 19.5%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.noise
+ 19.3%  net.minecraft.world.level.levelgen.NoiseChunk.wrap
+ 19.0%  net.minecraft.world.level.levelgen.DensityFunctions$Mapped.mapAll
+ 18.1%  net.minecraft.util.CubicSpline$Multipoint.mapAll
+ 18.1%  net.minecraft.util.CubicSpline$Multipoint.lambda$mapAll$3
+ 18.0%  net.minecraft.world.level.levelgen.DensityFunctions$Spline.mapAll
+ 15.4%  net.minecraft.world.level.levelgen.synth.NormalNoise.getValue
+ 15.4%  net.minecraft.world.level.levelgen.DensityFunction$NoiseHolder.getValue
+ 15.4%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.p
+ 15.4%  net.minecraft.world.level.levelgen.synth.ImprovedNoise.sampleAndLerp
+ 15.2%  net.minecraft.world.level.levelgen.synth.PerlinNoise.getValue
+ 14.2%  net.minecraft.world.level.levelgen.DensityFunctions$MulOrAdd.hashCode
+ 14.0%  net.minecraft.world.level.levelgen.DensityFunctions$Spline.lambda$mapAll$0
+ 14.0%  net.minecraft.world.level.levelgen.DensityFunctions$Spline$Coordinate.mapAll
+ 14.0%  net.minecraft.util.CubicSpline$Multipoint.hashCode
+ 13.3%  net.minecraft.server.MinecraftServer.tickServer
+ 13.0%  net.minecraft.server.dedicated.DedicatedServer.tickChildren
+ 13.0%  net.minecraft.server.MinecraftServer.tickChildren
+ 12.3%  net.minecraft.world.level.levelgen.synth.BlendedNoise.compute
+ 11.9%  net.minecraft.server.level.ServerLevel.tick
+ 10.9%  net.minecraft.core.Holder$Direct.hashCode
+ 10.7%  net.minecraft.world.level.levelgen.NoiseChunk.initializeForFirstCellX
 
 == what the busiest calls spend their time in (callee, share of all samples) and who calls them
-  1.4%  jp.oror.reborn.royal.RoyalMob.customServerAiStep
-          1.1%  -> jp.oror.reborn.royal.RoyalGuns.tick
-          0.4%  -> jp.oror.reborn.royal.RoyalSovereign.tick
-          1.4%  <- net.minecraft.world.entity.Mob.serverAiStep
-  0.2%  jp.oror.reborn.VillagerLife.tick
-          0.2%  -> state = "STATE_RUNNABLE"
-          0.2%  <- net.neoforged.bus.ConsumerEventHandler.invoke
- 17.0%  com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.baseTick
-          3.9%  -> net.minecraft.world.entity.Entity.baseTick
-          2.7%  -> com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.terrainCompact
-          2.5%  -> com.atsuishio.superbwarfare.event.GunEventHandler.gunTick
-          2.1%  -> com.atsuishio.superbwarfare.tools.ServerSyncedEntityHandler.register$default
-          1.4%  -> com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.move
-          1.4%  -> com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.canShoot
-          0.9%  -> com.atsuishio.superbwarfare.event.GunEventHandler.computeEnvironmentRate
-          0.7%  -> com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.travel
-          0.5%  -> com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.supportEntities
-          0.2%  -> com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.preventStacking
-         13.1%  <- net.minecraft.world.entity.Entity.tick
-          2.3%  <- com.atsuishio.superbwarfare.entity.vehicle.base.ArtilleryEntity.baseTick
-          1.6%  <- com.atsuishio.superbwarfare.entity.vehicle.base.AutoAimableEntity.baseTick
-  3.7%  net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
-          3.7%  -> net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
-          3.7%  <- net.minecraft.world.entity.ai.navigation.PathNavigation.moveTo
-  4.6%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
-          3.9%  -> java.lang.ThreadLocal.set
-          0.7%  -> com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.handler$zni000$oror_supreme_bosses$oror$same
-          4.6%  <- net.minecraft.world.level.biome.MultiNoiseBiomeSource.setLastSampledDimension
- 10.4%  com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.tickMagnetism
-          6.4%  -> com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyAttractingMagnets
-          4.1%  -> com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil.getNearbyRepellingMagnets
-         10.4%  <- net.minecraft.world.entity.Entity.handler$bop001$alexscaves$ac_tick
-  0.2%  jp.oror.reborn.AdaptiveCombat.tick
-          0.2%  -> jp.oror.reborn.MobLevels.refresh
-          0.2%  <- net.neoforged.bus.ConsumerEventHandler.invoke
+  3.6%  jp.oror.reborn.VillagerLife.tick
+          3.6%  -> jp.oror.reborn.VillageWork.wantsWood
+          2.9%  <- net.neoforged.bus.ConsumerEventHandler.invoke
+          0.7%  <- ?
+  0.7%  net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
+          0.7%  -> net.minecraft.world.entity.ai.navigation.PathNavigation.createPath
+          0.5%  <- net.minecraft.world.entity.ai.navigation.GroundPathNavigation.createPath
+          0.2%  <- net.minecraft.world.entity.ai.behavior.AcquirePoi.findPathToPois
+  0.3%  com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.setDimension
+          0.3%  -> com.github.alexmodguy.alexscaves.server.level.biome.ACWorldSeedHolder.handler$zni000$oror_supreme_bosses$oror$same
+          0.3%  <- net.minecraft.world.level.biome.MultiNoiseBiomeSource.setLastSampledDimension
