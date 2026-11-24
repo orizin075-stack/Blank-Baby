@@ -64,45 +64,45 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/c086fab6229047df03bb78951c7a1b8fce8c4892/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.46s
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.43s
+[1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
 [1m*** Started working on [4mdownloadServer[23;0m[23;0m
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
-[1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.45s
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.50s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.74s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 1.09s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.32s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.46s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.77s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.87s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.49s
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.15s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.42s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.21s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.61s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.51s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.65s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.33s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.05s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.54s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.43s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.42s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.65s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.68s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.09s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.16s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.39s
-Total runtime: 30.29s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.25s
+Total runtime: 30.64s
 
 
 > Task :compileJava
@@ -269,11 +269,11 @@ Note: Recompile with -Xlint:deprecation for details.
 Note: /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/RelicArts.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 53 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795534580094.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795534932565.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 1m 21s
+BUILD SUCCESSFUL in 1m 23s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -902,7 +902,7 @@ public class net.neoforged.neoforge.client.event.ClientChatReceivedEvent$System 
   public void addMessage(net.minecraft.network.chat.Component);
   public void addMessage(net.minecraft.network.chat.Component, net.minecraft.network.chat.MessageSignature, net.minecraft.client.GuiMessageTag);
 replaced 143 old class files; added 482 compiled; overlaid 984 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json'] ; dropped ['data/oror_supreme_bosses/structure/royal034/kingdom_0_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_0_1.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_1.nbt']
-4b0beb6c7aa476ba845eddbecbbb2e22ffe62ada79ad3575630725663835832c  out/oror_supreme_bosses-0.17.39-059-preview.jar
+87f17eec5e629ac90ae2edba86056a4bdbeab88a09ba97eaeada01afb6370005  out/oror_supreme_bosses-0.17.39-059-preview.jar
 == /home/runner/work/_temp/pack053/alexscaves-2.0.10.jar
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyAttractingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyRepellingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
@@ -1049,3 +1049,333 @@ epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      5351  1980-02-01 00:00   yesman
 epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      2722  1980-02-01 00:00   yesman/epicfight/config/ClientConfig$HealthBarVisibility.class
 basename: extra operand '1.21.1.jar'
 Try 'basename --help' for more information.
+== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState.class
+%yesman/epicfight/client/gui/HealthBar
+<yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker
+>Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;
+HealthBar.java
+Kyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState
+MLyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState;
+{(Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;Ljava/util/function/Supplier;Ljava/util/function/Supplier;)V
+== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker.class
+	getHealth
+"RuntimeVisibleParameterAnnotations
+%yesman/epicfight/client/gui/HealthBar
+'Lyesman/epicfight/client/gui/HealthBar;
+(Lyesman/epicfight/client/gui/HealthBar;Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V
+<yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker
+>Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;
+HealthBar.java
+Kyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState
+MLyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState;
+RuntimeVisibleAnnotations
+getMaxHealth
+healthState
+{(Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;Ljava/util/function/Supplier;Ljava/util/function/Supplier;)V	
+== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/client/gui/HealthBar.class
+	getHealth
+	getTarget
+	healthEnd
+	maxHealth
+"RuntimeVisibleParameterAnnotations
+$yesman/epicfight/client/gui/EntityUI
+$yesman/epicfight/config/ClientConfig
+%yesman/epicfight/client/gui/HealthBar
+'Lyesman/epicfight/client/gui/HealthBar;
+(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;F)Z
+(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;F)V
+(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;F)Z
+(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;F)V
+(Lyesman/epicfight/client/gui/HealthBar;Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V
+(Lyesman/epicfight/client/gui/HealthBar;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Ljava/util/function/Function;
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/minecraft/world/entity/LivingEntity;)Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;
+.yesman/epicfight/world/effect/VisibleMobEffect
+0Lyesman/epicfight/world/effect/VisibleMobEffect;
+8yesman/epicfight/config/ClientConfig$HealthBarVisibility
+:Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
+<yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker
+>Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;
+A(Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;)V
+HEALTHBARS1
+HEALTHBARS2
+HealthBar.java
+HealthBarVisibility
+Kyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState
+MLyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState;	
+Myesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch
+== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$BlockGuideOptions.class
+$yesman/epicfight/config/ClientConfig
+6gui.epicfight.widget.settings.ui.mine_block_guide.none
+6yesman/epicfight/config/ClientConfig$BlockGuideOptions	
+8Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;	
+9[Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;
+:()Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;
+;()[Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;
+ClientConfig.java
+L(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;
+Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;>;Lnet/minecraft/util/StringRepresentable;
+NONE
+showBlockHighlight
+showCrosshair
+== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode.class
+$yesman/epicfight/config/ClientConfig
+@yesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode	
+BLyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;	
+C[Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;
+ClientConfig.java
+D()Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;
+E()[Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;
+Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;>;Lnet/minecraft/util/StringRepresentable;
+RuntimeInvisibleAnnotations
+RuntimeInvisibleTypeAnnotations
+V(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;
+== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$CanceledVanillaActions.class
+$yesman/epicfight/config/ClientConfig
+;yesman/epicfight/config/ClientConfig$CanceledVanillaActions	
+=Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;	
+>[Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;
+?()Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;
+@()[Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;
+ClientConfig.java
+Dgui.epicfight.widget.settings.controls.canceled_vanilla_actions.none
+Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;>;Lnet/minecraft/util/StringRepresentable;
+NONE
+Q(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;
+== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$HealthBarVisibility.class
+$yesman/epicfight/config/ClientConfig
+0gui.epicfight.widget.settings.ui.health_bar.hurt
+0gui.epicfight.widget.settings.ui.health_bar.none
+2gui.epicfight.widget.settings.ui.health_bar.target
+8yesman/epicfight/config/ClientConfig$HealthBarVisibility	
+:Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;	
+;[Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
+;gui.epicfight.widget.settings.ui.health_bar.target_and_hurt
+<()Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
+=()[Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
+ClientConfig.java
+HURT	
+HealthBarVisibility@1
+Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;>;Lnet/minecraft/util/StringRepresentable;
+N(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
+NONE
+TARGET	
+TARGET_AND_HURT	
+== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy.class
+$yesman/epicfight/config/ClientConfig
+;yesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy	
+=Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;	
+>[Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;
+?()Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;
+@()[Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;
+ClientConfig.java
+Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;>;Lnet/minecraft/util/StringRepresentable;
+Q(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;
+== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$AlignDirection.class
+"reascer/wom/config/WOMClientConfig
+(Ljava/lang/String;ILreascer/wom/config/WOMClientConfig$StartCoordGetter;Lreascer/wom/config/WOMClientConfig$NextCoordGetter;)V
+1reascer/wom/config/WOMClientConfig$AlignDirection	
+2reascer/wom/config/WOMClientConfig$NextCoordGetter
+3Lreascer/wom/config/WOMClientConfig$AlignDirection;	
+3reascer/wom/config/WOMClientConfig$StartCoordGetter
+4Lreascer/wom/config/WOMClientConfig$NextCoordGetter;
+4[Lreascer/wom/config/WOMClientConfig$AlignDirection;
+5Lreascer/wom/config/WOMClientConfig$StartCoordGetter;	
+6()[Lreascer/wom/config/WOMClientConfig$AlignDirection;
+ELjava/lang/Enum<Lreascer/wom/config/WOMClientConfig$AlignDirection;>;
+G(Ljava/lang/String;)Lreascer/wom/config/WOMClientConfig$AlignDirection;
+WOMClientConfig.java
+l(Lreascer/wom/config/WOMClientConfig$StartCoordGetter;Lreascer/wom/config/WOMClientConfig$NextCoordGetter;)V
+== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$HealthBarShowOptions.class
+"reascer/wom/config/WOMClientConfig
+7reascer/wom/config/WOMClientConfig$HealthBarShowOptions	
+9Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;	
+:[Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;
+;()Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;
+<()[Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;
+HURT	
+HealthBarShowOptions@1
+KLjava/lang/Enum<Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;>;
+M(Ljava/lang/String;)Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;
+NONE
+TARGET	
+WOMClientConfig.java
+== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$HorizontalBasis.class
+"reascer/wom/config/WOMClientConfig
+2reascer/wom/config/WOMClientConfig$HorizontalBasis	
+4Lreascer/wom/config/WOMClientConfig$HorizontalBasis;	
+5[Lreascer/wom/config/WOMClientConfig$HorizontalBasis;
+7()[Lreascer/wom/config/WOMClientConfig$HorizontalBasis;
+FLjava/lang/Enum<Lreascer/wom/config/WOMClientConfig$HorizontalBasis;>;
+H(Ljava/lang/String;)Lreascer/wom/config/WOMClientConfig$HorizontalBasis;
+WOMClientConfig.java
+== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$NextCoordGetter.class
+"reascer/wom/config/WOMClientConfig
+(Lreascer/wom/config/WOMClientConfig$HorizontalBasis;Lreascer/wom/config/WOMClientConfig$VerticalBasis;Lyesman/epicfight/api/utils/math/Vec2i;II)Lyesman/epicfight/api/utils/math/Vec2i;
+0reascer/wom/config/WOMClientConfig$VerticalBasis
+2reascer/wom/config/WOMClientConfig$HorizontalBasis
+2reascer/wom/config/WOMClientConfig$NextCoordGetter
+RuntimeVisibleAnnotations
+WOMClientConfig.java
+== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$StartCoordGetter.class
+"reascer/wom/config/WOMClientConfig
+(IIIIILreascer/wom/config/WOMClientConfig$HorizontalBasis;Lreascer/wom/config/WOMClientConfig$VerticalBasis;)Lyesman/epicfight/api/utils/math/Vec2i;
+0reascer/wom/config/WOMClientConfig$VerticalBasis
+2reascer/wom/config/WOMClientConfig$HorizontalBasis
+3reascer/wom/config/WOMClientConfig$StartCoordGetter
+RuntimeVisibleAnnotations
+WOMClientConfig.java
+== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$VerticalBasis.class
+"reascer/wom/config/WOMClientConfig
+0reascer/wom/config/WOMClientConfig$VerticalBasis	
+2Lreascer/wom/config/WOMClientConfig$VerticalBasis;	
+3[Lreascer/wom/config/WOMClientConfig$VerticalBasis;
+5()[Lreascer/wom/config/WOMClientConfig$VerticalBasis;
+DLjava/lang/Enum<Lreascer/wom/config/WOMClientConfig$VerticalBasis;>;
+F(Ljava/lang/String;)Lreascer/wom/config/WOMClientConfig$VerticalBasis;
+WOMClientConfig.java
+== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig.class
+"reascer/wom/config/WOMClientConfig
+#ingame.mob_drop_emerald_over_health
+$Lreascer/wom/config/WOMClientConfig;
+(IIIIILreascer/wom/config/WOMClientConfig$HorizontalBasis;Lreascer/wom/config/WOMClientConfig$VerticalBasis;)Lyesman/epicfight/api/utils/math/Vec2i;
+(Lreascer/wom/config/WOMClientConfig$HorizontalBasis;Lreascer/wom/config/WOMClientConfig$VerticalBasis;Lyesman/epicfight/api/utils/math/Vec2i;II)Lyesman/epicfight/api/utils/math/Vec2i;
++net/neoforged/neoforge/common/ModConfigSpec
+0reascer/wom/config/WOMClientConfig$VerticalBasis
+1reascer/wom/config/WOMClientConfig$AlignDirection
+2Lreascer/wom/config/WOMClientConfig$VerticalBasis;	
+2reascer/wom/config/WOMClientConfig$HorizontalBasis
+2reascer/wom/config/WOMClientConfig$NextCoordGetter
+3net/neoforged/neoforge/common/ModConfigSpec$Builder
+3reascer/wom/config/WOMClientConfig$StartCoordGetter
+4Lreascer/wom/config/WOMClientConfig$HorizontalBasis;	
+4Lreascer/wom/config/WOMClientConfig$NextCoordGetter;
+4net/neoforged/neoforge/common/ModConfigSpec$IntValue
+5Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
+5Lreascer/wom/config/WOMClientConfig$StartCoordGetter;
+6()Lreascer/wom/config/WOMClientConfig$NextCoordGetter;	
+6Lnet/neoforged/neoforge/common/ModConfigSpec$IntValue;	
+7()Lreascer/wom/config/WOMClientConfig$StartCoordGetter;	
+7reascer/wom/config/WOMClientConfig$HealthBarShowOptions
+8(Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;)V
+8net/neoforged/neoforge/common/ModConfigSpec$BooleanValue
+:Lnet/neoforged/neoforge/common/ModConfigSpec$BooleanValue;
+HealthBarShowOptions
+M(Ljava/lang/String;III)Lnet/neoforged/neoforge/common/ModConfigSpec$IntValue;	
+WOMClientConfig.java
+config
+ingame.mob_more_xp_over_health
+== CombatEvolution-2.3.2-NeoForge-1.21.1.jar net/shelmarow/combat_evolution/config/CEClientConfig.class
++net/neoforged/neoforge/common/ModConfigSpec
+-Lnet/neoforged/neoforge/common/ModConfigSpec;
+-Whether to show the icon in the execution HUD
+/()Lnet/neoforged/neoforge/common/ModConfigSpec;	
+1Whether to show text display in the execution HUD
+3net/neoforged/neoforge/common/ModConfigSpec$Builder
+4net/shelmarow/combat_evolution/config/CEClientConfig
+5Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
+5Whether to show the icon for available assassinations
+5net/neoforged/neoforge/common/ModConfigSpec$EnumValue
+6Lnet/shelmarow/combat_evolution/config/CEClientConfig;
+7()Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
+7Lnet/neoforged/neoforge/common/ModConfigSpec$EnumValue;
+7net/neoforged/neoforge/common/ModConfigSpec$ConfigValue
+7net/neoforged/neoforge/common/ModConfigSpec$DoubleValue
+8net/neoforged/neoforge/common/ModConfigSpec$BooleanValue
+9Lnet/neoforged/neoforge/common/ModConfigSpec$ConfigValue;
+9Lnet/neoforged/neoforge/common/ModConfigSpec$DoubleValue;
+:Lnet/neoforged/neoforge/common/ModConfigSpec$BooleanValue;
+CEClientConfig.java
+ConfigValue
+I(Ljava/lang/String;)Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
+MLnet/neoforged/neoforge/common/ModConfigSpec$ConfigValue<Ljava/lang/String;>;
+O(Ljava/lang/String;Z)Lnet/neoforged/neoforge/common/ModConfigSpec$BooleanValue;	
+P(Ljava/lang/String;DDD)Lnet/neoforged/neoforge/common/ModConfigSpec$DoubleValue;	
+RuntimeVisibleAnnotations
+SHOW_TEXT_DISPLAY
+[(Ljava/lang/String;Ljava/lang/Enum;)Lnet/neoforged/neoforge/common/ModConfigSpec$EnumValue;	
+_(Ljava/lang/String;Ljava/lang/Object;)Lnet/neoforged/neoforge/common/ModConfigSpec$ConfigValue;	
+showTextDisplay	
+== CombatEvolution-2.3.2-NeoForge-1.21.1.jar net/shelmarow/combat_evolution/mixins/HealthBarMixin.class
+	getHealth
+	maxHealth
+"RuntimeVisibleParameterAnnotations
+$yesman/epicfight/client/gui/EntityUI
+&textures/gui/bossbar/ce_health_bar.png
+'Lyesman/epicfight/client/gui/HealthBar;
+.yesman/epicfight/world/effect/VisibleMobEffect
+0Lyesman/epicfight/world/effect/VisibleMobEffect;
+4net/shelmarow/combat_evolution/mixins/HealthBarMixin
+6Lnet/shelmarow/combat_evolution/mixins/HealthBarMixin;
+HEALTH_BAR
+HealthBarMixin.java
+Myesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch
+OLyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;
+R(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;FLorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V
+RuntimeInvisibleAnnotations
+RuntimeVisibleAnnotations
+U(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;FLorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V
+getMaxHealth
+healthBGDisplayHeight
+healthBGEndU
+healthBGLeftX
+healthBGStartU
+healthBGWidthPixels
+healthPercent
+shouldDisplayHealthBar
+visibleMobEffect
+== yesman/epicfight/api/client/event/types/hud/TickTargetIndicatorEvent.class
+Compiled from "TickTargetIndicatorEvent.java"
+public class yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent extends yesman.epicfight.api.event.LivingEntityPatchEvent {
+  private yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent$Type type;
+  public yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent(yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
+  public void setType(yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent$Type);
+  public yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent$Type getIndicatorType();
+== yesman/epicfight/client/gui/HealthBar.class
+Compiled from "HealthBar.java"
+public class yesman.epicfight.client.gui.HealthBar extends yesman.epicfight.client.gui.EntityUI {
+  public static final net.minecraft.resources.ResourceLocation HEALTHBARS1;
+  public static final net.minecraft.resources.ResourceLocation HEALTHBARS2;
+  private final java.util.Map<net.minecraft.world.entity.LivingEntity, yesman.epicfight.client.gui.HealthBar$EntityAttributeTracker> trackingEntities;
+  public yesman.epicfight.client.gui.HealthBar();
+  private static boolean lambda$remove$2(java.util.Map$Entry);
+  private static void lambda$reset$1(yesman.epicfight.client.gui.HealthBar$EntityAttributeTracker);
+  private yesman.epicfight.client.gui.HealthBar$EntityAttributeTracker lambda$shouldDraw$0(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, net.minecraft.world.entity.LivingEntity);
+  static {};
+== yesman/epicfight/client/gui/TargetIndicator.class
+Compiled from "TargetIndicator.java"
+public class yesman.epicfight.client.gui.TargetIndicator extends yesman.epicfight.client.gui.EntityUI {
+  public yesman.epicfight.client.gui.TargetIndicator();
+== yesman/epicfight/config/ClientConfig.class
+  private static final net.neoforged.neoforge.common.ModConfigSpec$Builder BUILDER;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue SHOW_TARGET_INDICATOR;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$EnumValue<yesman.epicfight.config.ClientConfig$HealthBarVisibility> HEALTH_BAR_VISIBILITY;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue SHOW_EPICFIGHT_ATTRIBUTES_IN_TOOLTIP;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$DoubleValue TARGET_OUTLINE_COLOR;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$EnumValue<yesman.epicfight.config.ClientConfig$BlockGuideOptions> MINE_BLOCK_GUIDE_OPTION;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_TARGET_ENTITY_GUIDE;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue BLOOD_EFFECTS;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ACTIVATE_COMPUTE_SHADER;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ACTIVATE_PERSISTENT_BUFFER;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue GROUND_SLAMS;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue MAX_STUCK_PROJECTILES;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_ANIMATED_FIRST_PERSON_MODEL;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_PLAYER_VANILLA_MODEL;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_COSMETICS;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_FIRST_PERSON_CAMERA_MOVE;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$ConfigValue<yesman.epicfight.config.ClientConfig$TPSActivationType> TPS_TYPE;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue CAMERA_HORIZONTAL_LOCATION;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue CAMERA_VERTICAL_LOCATION;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue CAMERA_ZOOM;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue LOCK_ON_SNAPPING;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue ENTITY_FOCUSING_RANGE;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue HOLDING_THRESHOLD;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue AUTO_PERSPECTIVE_SWITCHING;
+  public static final net.neoforged.neoforge.common.ModConfigSpec$EnumValue<yesman.epicfight.config.ClientConfig$CanceledVanillaActions> CANCEL_VANILLA_ACTION;
+grep: write error: Broken pipe
+== yesman/epicfight/world/entity/DodgeLocationIndicator.class
+Compiled from "DodgeLocationIndicator.java"
+public class yesman.epicfight.world.entity.DodgeLocationIndicator extends net.minecraft.world.entity.LivingEntity {
+  private static final java.util.List<net.minecraft.world.item.ItemStack> EMPTY_LIST;
+  public yesman.epicfight.world.entity.DodgeLocationIndicator(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.LivingEntity>, net.minecraft.world.level.Level);
+  public yesman.epicfight.world.entity.DodgeLocationIndicator(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
+  static {};
