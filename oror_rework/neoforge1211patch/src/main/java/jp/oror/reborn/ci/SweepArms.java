@@ -43,6 +43,14 @@ final class SweepArms {
     }
 
     private static String steps = "";
+    /** (r69) how many of the three (two guns, the Blueprinter) went as expected, for SWEEP-RESULT's pass. */
+    static int armsTried, armsOk;
+
+    private static boolean tally(boolean ok) {
+        armsTried++;
+        armsOk += ok ? 1 : 0;
+        return ok;
+    }
     private static int cartsLeft = -1;
 
     /** The guns, and the Blueprinter's scan and print begun; check() looks at the print once it has had time to rise. */
@@ -174,7 +182,7 @@ final class SweepArms {
         log("{\"gun\":\"%s\",\"roundsLeftAfterLoad\":%d,\"expect\":2,\"canShootEmpty\":%b,\"canShootOneShort\":%b,\"canShootFull\":%b,"
                 + "\"maxEnergy\":%d,\"zombiesLeft\":\"%s\",\"energyAfter\":%d,\"canShootAgain\":%b,\"ok\":%b}", gun, left, empty, shortOne, full, max,
             living, after == null ? -1 : after.getEnergyStored(), canShoot(stack, p),
-            left == 2 && !empty && !shortOne && full && living.isEmpty() && (after == null || after.getEnergyStored() == 0));
+            tally(left == 2 && !empty && !shortOne && full && living.isEmpty() && (after == null || after.getEnergyStored() == 0)));
     }
 
     // ---------------------------------------------------------------------------------------------- the Blueprinter
@@ -216,7 +224,10 @@ final class SweepArms {
         face(p, Vec3.atBottomCenterOf(lo.offset(4, 8, 8)), Vec3.atCenterOf(far));
         steps.add("scan2:" + p.getMainHandItem().use(level, p, InteractionHand.MAIN_HAND).getResult());
         BlockPos target = base.offset(0, 0, 12);
-        face(p, Vec3.atBottomCenterOf(base), new Vec3(target.getX() + 0.5, target.getY() - 0.5, target.getZ() + 0.5));
+        // (r69) at the top face of the ground block under the target: aimed at that block's middle (half a block lower),
+        // the look met the flat ground three blocks short and the print rose at z+9, not where it was compared (every run:
+        // 43 blocks built, 77 differing, ok false, unseen since the sweep's pass does not count it)
+        face(p, Vec3.atBottomCenterOf(base), new Vec3(target.getX() + 0.5, target.getY() + 0.001, target.getZ() + 0.5));
         steps.add("preview:" + p.getMainHandItem().use(level, p, InteractionHand.MAIN_HAND).getResult());
         steps.add("print:" + p.getMainHandItem().use(level, p, InteractionHand.MAIN_HAND).getResult());
         SweepArms.steps = steps.toString();
@@ -248,7 +259,7 @@ final class SweepArms {
             }
         }
         log("{\"blueprinter\":true,\"steps\":\"%s\",\"cartridgesLeft\":%d,\"printedBlocks\":%d,\"same\":%d,\"differ\":%d,\"expectDiffer\":1,"
-            + "\"diamondsPrinted\":%d,\"ok\":%b}", steps, cartsLeft, built, same, differ, diamonds, differ <= 1 && diamonds == 0 && built > 50);
+            + "\"diamondsPrinted\":%d,\"ok\":%b}", steps, cartsLeft, built, same, differ, diamonds, tally(differ <= 1 && diamonds == 0 && built > 50));
     }
 
     private static String esc(String s) {

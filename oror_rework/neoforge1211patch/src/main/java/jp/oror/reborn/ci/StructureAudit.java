@@ -290,6 +290,10 @@ public final class StructureAudit {
         long gapSum = 0;
         Map<String, Integer> missPairs = new HashMap<>();
         Map<String, Integer> intrudeKinds = new HashMap<>();
+        // (r69) where a block of the template is now air: what else stands there (other structures) and what is over it
+        java.util.Set<String> holeWho = new java.util.TreeSet<>();
+        List<String> holeCols = new ArrayList<>();
+        int holes = 0;
         List<String> darkSamples = new ArrayList<>(), floatSamples = new ArrayList<>(), intrudeSamples = new ArrayList<>(), missSamples = new ArrayList<>();
         BlockPos.MutableBlockPos w = new BlockPos.MutableBlockPos();
         for (StructurePiece piece : r.start.getPieces()) {
@@ -331,6 +335,18 @@ public final class StructureAudit {
                         && !s.is(BlockTags.LEAVES) && !s.is(BlockTags.CROPS) && !s.is(Blocks.WATER) && !s.is(Blocks.LAVA)
                         && !s.is(BlockTags.FIRE) && !s.is(BlockTags.SAPLINGS)) {
                         missing++;
+                        if (have.isAir() && holes++ < 24) {
+                            for (net.minecraft.world.level.levelgen.structure.Structure other : level.structureManager().getAllStructuresAt(wp).keySet()) {
+                                holeWho.add(String.valueOf(level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getKey(other)));
+                            }
+                            if (holeCols.size() < 4) {
+                                StringBuilder col = new StringBuilder(wp.getX() + " " + wp.getY() + " " + wp.getZ() + ":");
+                                for (int dy = -2; dy <= 3; dy++) {
+                                    col.append(' ').append(BuiltInRegistries.BLOCK.getKey(level.getBlockState(wp.above(dy)).getBlock()).getPath());
+                                }
+                                holeCols.add(col.toString());
+                            }
+                        }
                         missPairs.merge(BuiltInRegistries.BLOCK.getKey(s.getBlock()).getPath() + "->"
                             + BuiltInRegistries.BLOCK.getKey(have.getBlock()).getPath(), 1, Integer::sum);
                         if (missSamples.size() < 12 && (missing % 37 == 1 || missSamples.size() < 4)) {
@@ -450,6 +466,10 @@ public final class StructureAudit {
             missing, cells == 0 ? 0 : 100.0 * missing / cells, top(missPairs), String.join("; ", missSamples), intruding, top(intrudeKinds), String.join("; ", intrudeSamples),
             columns, floating, columns == 0 ? 0 : 100.0 * floating / columns, maxGap, floating == 0 ? 0 : (double) gapSum / floating,
             String.join("; ", floatSamples), indoor, dark, indoor == 0 ? 0 : 100.0 * dark / indoor, String.join("; ", darkSamples)));
+        if (holes > 0) {
+            LOG.info("STRUCT-HOLE {\"id\":\"{}\",\"holes\":{},\"structuresThere\":\"{}\",\"columns\":\"{}\"}", r.current.location(), holes,
+                String.join(", ", holeWho), String.join("; ", holeCols));
+        }
     }
 
     private static String top(Map<String, Integer> m) {

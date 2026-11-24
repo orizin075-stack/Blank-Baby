@@ -492,6 +492,11 @@ public final class OrorSweep {
             }
             b.append("}");
         }
+        // (r69) the guns and the Blueprinter counted too (the Blueprinter's print had missed its place in every run unseen)
+        if (SweepArms.armsTried > 0) {
+            b.append(",\"arms\":{\"ok\":").append(SweepArms.armsOk).append(",\"of\":").append(SweepArms.armsTried).append("}")
+                .append(",\"pass\":").append(SweepArms.armsOk == SweepArms.armsTried);
+        }
         LOG.info("SWEEP-RESULT {{},\"seconds\":{}}", b, (r.level.getGameTime() - r.started) / 20);
         if (r.slots[0] != null) {
             for (Slot s : r.slots) {

@@ -68,8 +68,21 @@ public final class EntityUnloads {
         if (walking) {
             reentries++;
             if (reentries <= 3) {
+                // (r69) the calls on one line: the stack went to the console only, cut off before the CI kept it
+                StringBuilder who = new StringBuilder();
+                int n = 0;
+                for (StackTraceElement f : new Throwable().getStackTrace()) {
+                    String c = f.getClassName();
+                    if (c.startsWith("java.") || c.startsWith("jdk.") || c.endsWith("EntityUnloads")) {
+                        continue;
+                    }
+                    who.append(n++ > 0 ? " < " : "").append(c.substring(c.lastIndexOf('.') + 1)).append('.').append(f.getMethodName());
+                    if (n >= 28) {
+                        break;
+                    }
+                }
                 LOG.warn("OROR SAFE-UNLOAD: a chunk's status changed while entities were unloading (this crashed the server before); "
-                    + "who did it:", new Throwable("re-entry " + reentries));
+                    + "re-entry {}, who did it: {}", reentries, who);
             }
         }
     }
