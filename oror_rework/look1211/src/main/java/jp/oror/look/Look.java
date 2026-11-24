@@ -1868,7 +1868,78 @@ public final class Look {
             shot(mc, "d28_orbit_burn");
         } else if (k == 70) {
             shot(mc, "d29_orbit_after");
-        } else if (k == 80) {
+        } else if (k >= 80) {
+            deserterScene(mc, k - 80);
+        }
+    }
+
+    /**
+     * (r72) The deserter's mark: the player marked (as if it had run from a duel), the mobs about it set on it together
+     * with the highest arms; then killed, and its respawn camped by a hunting party.
+     */
+    private static void deserterScene(Minecraft mc, int k) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        if (k == 0) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            server.execute(() -> {
+                ServerLevel level = server.overworld();
+                for (Entity e : level.getEntities((Entity) null, new AABB(sx - 30, sy - 6, sz - 20, sx + 30, sy + 20, sz + 40),
+                    x -> !(x instanceof net.minecraft.world.entity.player.Player))) {
+                    e.discard();
+                }
+                command(server, "clear " + name);
+                command(server, "effect give " + name + " minecraft:resistance 30 3 true");
+                command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 10", name, sx, sy, sz + 2));
+                String[] who = {"villager", "villager", "cow", "zombie", "skeleton", "pillager", "iron_golem", "wolf", "sheep"};
+                for (int i = 0; i < who.length; i++) {
+                    double ang = Math.PI * (0.15 + 0.7 * i / (who.length - 1));
+                    command(server, String.format(java.util.Locale.ROOT, "summon minecraft:%s %.1f %d %.1f {PersistenceRequired:1b}", who[i],
+                        sx + Math.cos(ang) * 9, (int) sy, sz + 2 + Math.sin(ang) * 9));
+                }
+                command(server, "oror deserter " + name + " mark");
+                note("deserter: marked, the mobs set out");
+            });
+        } else if (k == 6) {
+            shot(mc, "d40_deserter_marked");
+        } else if (k == 30) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+        } else if (k == 34) {
+            shot(mc, "d41_deserter_hunted");
+        } else if (k == 60) {
+            shot(mc, "d42_deserter_hunted_later");
+            server.execute(() -> {
+                ServerPlayer sp = serverPlayer(server);
+                if (sp != null) {
+                    StringBuilder b = new StringBuilder("deserter: on him");
+                    for (net.minecraft.world.entity.Mob m : sp.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, sp.getBoundingBox().inflate(24),
+                        m -> m.getTarget() == sp)) {
+                        b.append(' ').append(m.getType().toShortString()).append('/').append(net.minecraft.core.registries.BuiltInRegistries.ITEM
+                            .getKey(m.getMainHandItem().getItem()).getPath());
+                    }
+                    note(b.toString() + String.format(java.util.Locale.ROOT, "; player hp %.1f", sp.getHealth()));
+                }
+            });
+        } else if (k == 66) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            server.execute(() -> command(server, "kill " + name));
+        } else if (k == 90) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+            note("deserter: respawned at " + mc.player.blockPosition().toShortString());
+        } else if (k == 96) {
+            shot(mc, "d43_deserter_respawn_camped");
+        } else if (k == 120) {
+            shot(mc, "d44_deserter_respawn_camped_later");
+            server.execute(() -> {
+                ServerPlayer sp = serverPlayer(server);
+                if (sp != null) {
+                    int n = sp.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, sp.getBoundingBox().inflate(16),
+                        m -> m.getTags().contains("OrorDeserterHunter")).size();
+                    note("deserter: hunters about the respawn " + n);
+                    command(server, "oror deserter " + sp.getGameProfile().getName() + " clear");
+                }
+            });
+        } else if (k == 130) {
             finish(mc, "complete (duel only)");
         }
     }
