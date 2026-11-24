@@ -1,176 +1,178 @@
-271 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-372 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-432 press selectWorld.create
-433 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-533 screenshot popup_ConfirmScreen
-533 press gui.yes
-534 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-563 chat: ……声がする。『応えよ、異界の旅人よ。汝を喚んだのは――』
-563 chat: 声は途切れた。足元の魔法陣が、ゆっくりと光を失っていく。
-563 chat: [JEG] Commands
-563 chat: ------------------------------
-563 chat: /justEnoughGuns unlockGunRecipes - Unlock all gun recipes
-563 chat: ------------------------------
-563 chat: You received a starter kit: a set of iron armour, an iron sword, a shield, an iron pickaxe, 32 torches, 32 steaks, a warp stone, an iron backpack, a Glock 17 and 96 handgun rounds. Right-click the rounds to load them as ammunition.
-563 chat: You received the Royal Capital Compass. Where its needle points lies the villager king's city.
-563 chat: Sword Soaring / Indestructible (indestructible-21.16.3-oror.1.jar) is not installed. Quit the game and run SETUP_NIGHTFALL.cmd in this profile's folder once (Indestructible comes in the import's mods folder).
-563 chat: Weapon controls activate automatically. Press guard just before impact to parry.
-563 chat: OrorTester has made the advancement [Isn't It Iron Pick]
-563 chat: OrorTester has made the advancement [Suit Up]
-564 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-566 chat: OrorTester has made the advancement [Ice and Fire]
-606 screen none in LOADING
-607 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
-707 screenshot popup_
-708 screen none in PLAY
-717 chat: Your game mode has been updated to Creative Mode
-737 inventory after joining: minecraft:iron_swordx1 minecraft:iron_pickaxex1 minecraft:torchx32 minecraft:cooked_beefx32 waystones:warp_stonex1 sophisticatedbackpacks:iron_backpackx1 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 oror_supreme_bosses:capital_compassx1 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1 minecraft:shieldx1
-755 stage at 96 95 -32
-907 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 1 minecraft:iron_sword]
-947 duel scene: hotbar given
-949 chat: Your game mode has been updated to Survival Mode
-975 screenshot d01_duel_hotbar
-979 duel scene: grimoire used, screen jp.oror.reborn.duel.client.GrimoireScreen
-980 screen jp.oror.reborn.duel.client.GrimoireScreen in PLAY
-1080 screenshot popup_GrimoireScreen
-1081 screen none in PLAY
-1083 screenshot d02_grimoire_opening
-1100 screenshot d03_grimoire_open
-1107 screenshot d04_grimoire_turning
-1118 screenshot d05_grimoire_page2
-1136 screenshot d06_grimoire_chosen
-1154 screenshot d07_grimoire_reading_pose
-1171 duel battle: zombie set out
-1184 screenshot d10_before_the_glove
-1184 duel battle: glove thrown at zombie
-1188 chat: [決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。
-1192 screenshot d11_glove_thrown
-1204 screenshot d12_duel_called
-1208 duel battle t400: player hp 20.0/20.0, zombie hp 30.0 dist 1.7
-1228 screenshot d13_duel_fight_a
-1250 duel battle t440: player hp 16.1/20.0, zombie hp 25.4 dist 3.7
-1260 screenshot d14_duel_fight_front
-1288 duel battle t480: player hp 16.1/20.0, zombie hp 20.8 dist 4.0
-1328 duel battle t520: player hp 16.1/20.0, zombie hp 16.2 dist 2.7
-1368 duel battle t560: player hp 16.1/20.0, zombie hp 11.5 dist 3.7
-1408 duel battle t600: player hp 16.1/20.0, zombie hp 6.9 dist 4.3
-1451 duel battle t640: player hp 16.1/20.0, zombie hp 2.3 dist 5.4
-1489 duel battle t680: player hp 16.1/20.0, zombie hp 2.3 dist 3.6
-1494 chat: [決闘] 勝利！ Lv.1 Zombieを封印書に変えた。
-1495 duel battle: the zombie is gone at 687
-1498 screenshot d15_duel_won
-1505 duel battle: the seal book in slot 0
-1511 screenshot d16_seal_book_in_hand
-1515 chat: 召喚：Lv.1 Zombie　右クリック＝憑依、Shift＋右クリック＝融合。
-1529 screenshot d17_called_out
-1535 duel battle: servant seen
-1551 screenshot d18_possessed
-1587 screenshot d19_fused
-1605 screenshot d20_back_from_fusion
-1625 talismans: effigy used on a vex
-1629 screenshot d21_effigy_binding
-1629 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-1639 screenshot d22_effigy_bound
-1644 screen jp.oror.dueldominion.client.RitualScreen in PLAY
-1744 screenshot popup_RitualScreen
-1745 screen none in PLAY
-1752 talismans: ritual screen none
-1752 screenshot d23_ritual_menu
-1756 talisman HEALING: set, foe -
-1765 talisman HEALING: cast true with 1 spirits (asked 1), target -, player hp 12.0
-1765 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-1765 chat: [形代呪法] 癒生符／魂灯 発動！形代1枚とお札1枚を消費しました。
-1767 screenshot d30_healing_a
-1780 screenshot d30_healing_b
-1798 screenshot d30_healing_c
-1816 talisman HEALING: after, player hp 13.8 effects [minecraft:regeneration]; entities about 0
-1826 talisman RETRIBUTION: set, foe vindicator
-1836 talisman RETRIBUTION: cast true with 1 spirits (asked 1), target vindicator, player hp 20.0
-1836 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-1836 chat: [形代呪法] 応報符／応報 発動！形代1枚とお札1枚を消費しました。
-1837 screenshot d31_retribution_a
-1850 screenshot d31_retribution_b
-1868 screenshot d31_retribution_c
-1886 talisman RETRIBUTION: after, player hp 20.0 effects []; foe vindicator alive true hp 24.0 effects []; entities about 1
-1896 talisman GUARDIAN: set, foe -
-1905 talisman GUARDIAN: cast true with 1 spirits (asked 1), target -, player hp 20.0
-1905 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-1905 chat: [形代呪法] 護持符／小霊盾 発動！形代1枚とお札1枚を消費しました。
-1907 screenshot d32_guardian_a
-1920 screenshot d32_guardian_b
-1938 screenshot d32_guardian_c
-1956 talisman GUARDIAN: after, player hp 20.0 effects [minecraft:resistance]; entities about 1
-1966 talisman BINDING: set, foe vindicator
-1976 talisman BINDING: cast true with 1 spirits (asked 1), target vindicator, player hp 20.0
-1976 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-1976 chat: [形代呪法] 縛霊符／足縛 発動！形代1枚とお札1枚を消費しました。
-1977 screenshot d33_binding_a
-1990 screenshot d33_binding_b
-2008 screenshot d33_binding_c
-2026 talisman BINDING: after, player hp 20.0 effects []; foe vindicator alive true hp 24.0 effects [minecraft:slowness]; entities about 1
-2037 talisman MALICE_TRANSFER: set, foe pillager
-2045 talisman MALICE_TRANSFER: cast true with 3 spirits (asked 3), target pillager, player hp 20.0
-2045 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2045 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2045 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2045 chat: [形代呪法] 禍移符／厄落とし 発動！形代3枚とお札1枚を消費しました。
-2047 screenshot d34_malice_transfer_a
-2060 screenshot d34_malice_transfer_b
-2078 screenshot d34_malice_transfer_c
-2096 talisman MALICE_TRANSFER: after, player hp 20.0 effects [minecraft:poison]; foe pillager alive true hp 24.0 effects [minecraft:mining_fatigue]; entities about 1
-2107 talisman SOUL_SEEKER: set, foe pillager
-2117 screenshot d35_soul_seeker_a
-2117 talisman SOUL_SEEKER: cast true with 3 spirits (asked 3), target pillager, player hp 20.0
-2117 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2117 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2117 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2117 chat: [形代呪法] 追魂符／追魂針 発動！形代3枚とお札1枚を消費しました。
-2130 screenshot d35_soul_seeker_b
-2148 screenshot d35_soul_seeker_c
-2166 talisman SOUL_SEEKER: after, player hp 20.0 effects []; foe pillager alive true hp 16.0 effects [minecraft:glowing]; entities about 1
-2176 talisman EXORCISM: set, foe zombie
-2184 talisman EXORCISM: cast true with 3 spirits (asked 3), target zombie, player hp 20.0
-2184 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2184 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2184 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2184 chat: [形代呪法] 祓滅符／祓い火 発動！形代3枚とお札1枚を消費しました。
-2187 screenshot d36_exorcism_a
-2200 screenshot d36_exorcism_b
-2218 screenshot d36_exorcism_c
-2236 talisman EXORCISM: after, player hp 20.0 effects []; foe zombie alive true hp 10.0 effects []; entities about 1
-2246 talisman NIGHT_PARADE: set, foe -
-2255 talisman NIGHT_PARADE: cast true with 3 spirits (asked 3), target -, player hp 20.0
-2255 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2255 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2255 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2255 chat: [百鬼符] 霊体1体が加勢します。
-2255 chat: [形代呪法] 百鬼符／一霊招来 発動！形代3枚とお札1枚を消費しました。
-2257 screenshot d37_night_parade_a
-2270 screenshot d37_night_parade_b
-2288 screenshot d37_night_parade_c
-2306 talisman NIGHT_PARADE: after, player hp 20.0 effects []; entities about 1
-2316 talisman REVIVAL: set, foe -
-2325 talisman REVIVAL: cast false with 3 spirits (asked 3), target -, player hp 20.0
-2326 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2326 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2326 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2326 chat: [形代呪法] 復活待機中の使役モブがいません。消費しません。
-2327 screenshot d38_revival_a
-2340 screenshot d38_revival_b
-2358 screenshot d38_revival_c
-2376 talisman REVIVAL: after, player hp 20.0 effects []; entities about 0
-2386 talisman CALAMITY: set, foe vindicator
-2396 talisman CALAMITY: cast true with 7 spirits (asked 7), target vindicator, player hp 20.0
-2397 screenshot d39_calamity_a
-2397 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2397 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2397 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2397 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2397 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2397 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2397 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
-2397 chat: [形代呪法] 大禍符／禍刻 発動！形代7枚とお札1枚を消費しました。
-2410 screenshot d39_calamity_b
-2428 screenshot d39_calamity_c
-2446 talisman CALAMITY: after, player hp 20.0 effects []; foe vindicator alive true hp 24.0 effects [minecraft:weakness, minecraft:slowness]; entities about 1
-2456 finished: complete (duel only)
+361 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+462 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+522 press selectWorld.create
+523 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+623 screenshot popup_ConfirmScreen
+623 press gui.yes
+624 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+669 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+672 chat: ……声がする。『応えよ、異界の旅人よ。汝を喚んだのは――』
+672 chat: 声は途切れた。足元の魔法陣が、ゆっくりと光を失っていく。
+672 chat: [JEG] Commands
+672 chat: ------------------------------
+672 chat: /justEnoughGuns unlockGunRecipes - Unlock all gun recipes
+672 chat: ------------------------------
+672 chat: You received a starter kit: a set of iron armour, an iron sword, a shield, an iron pickaxe, 32 torches, 32 steaks, a warp stone, an iron backpack, a Glock 17 and 96 handgun rounds. Right-click the rounds to load them as ammunition.
+672 chat: You received the Royal Capital Compass. Where its needle points lies the villager king's city.
+672 chat: Sword Soaring / Indestructible (indestructible-21.16.3-oror.1.jar) is not installed. Quit the game and run SETUP_NIGHTFALL.cmd in this profile's folder once (Indestructible comes in the import's mods folder).
+672 chat: OrorTester has made the advancement [Isn't It Iron Pick]
+672 chat: OrorTester has made the advancement [Suit Up]
+692 chat: OrorTester has made the advancement [Ice and Fire]
+713 screen none in LOADING
+714 screen ttv.migami.jeg.client.MagazineModeClient$1 in PLAY
+732 chat: Weapon controls activate automatically. Press guard just before impact to parry.
+814 screenshot popup_
+815 screen none in PLAY
+818 chat: Your game mode has been updated to Creative Mode
+844 inventory after joining: minecraft:iron_swordx1 minecraft:iron_pickaxex1 minecraft:torchx32 minecraft:cooked_beefx32 waystones:warp_stonex1 sophisticatedbackpacks:iron_backpackx1 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 oror_supreme_bosses:capital_compassx1 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1 minecraft:shieldx1
+859 stage at 0 97 32
+1014 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 1 minecraft:iron_sword, minecraft:pig -> net.minecraft.client.renderer.entity.PigRenderer holding 0 minecraft:air, minecraft:pig -> net.minecraft.client.renderer.entity.PigRenderer holding 0 minecraft:air, minecraft:pig -> net.minecraft.client.renderer.entity.PigRenderer holding 0 minecraft:air, minecraft:pig -> net.minecraft.client.renderer.entity.PigRenderer holding 0 minecraft:air]
+1054 duel scene: hotbar given
+1054 chat: Your game mode has been updated to Survival Mode
+1082 screenshot d01_duel_hotbar
+1086 duel scene: grimoire used, screen jp.oror.reborn.duel.client.GrimoireScreen
+1087 screen jp.oror.reborn.duel.client.GrimoireScreen in PLAY
+1187 screenshot popup_GrimoireScreen
+1188 screen none in PLAY
+1190 screenshot d02_grimoire_opening
+1207 screenshot d03_grimoire_open
+1214 screenshot d04_grimoire_turning
+1225 screenshot d05_grimoire_page2
+1243 screenshot d06_grimoire_chosen
+1261 screenshot d07_grimoire_reading_pose
+1280 duel battle: zombie set out
+1291 screenshot d10_before_the_glove
+1291 duel battle: glove thrown at zombie
+1296 chat: [決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。
+1299 screenshot d11_glove_thrown
+1311 screenshot d12_duel_called
+1315 duel battle t400: player hp 20.0/20.0, zombie hp 30.0 dist 4.2
+1335 screenshot d13_duel_fight_a
+1355 duel battle t440: player hp 20.0/20.0, zombie hp 26.5 dist 4.2
+1367 screenshot d14_duel_fight_front
+1399 duel battle t480: player hp 20.0/20.0, zombie hp 18.3 dist 4.0
+1436 duel battle t520: player hp 20.0/20.0, zombie hp 8.4 dist 6.0
+1477 duel battle t560: player hp 20.0/20.0, zombie hp 3.8 dist 3.8
+1515 duel battle t600: player hp 20.0/20.0, zombie hp 1.5 dist 6.5
+1542 chat: [決闘] 勝利！ Lv.2 Zombieを封印書に変えた。
+1543 duel battle: the zombie is gone at 628
+1546 screenshot d15_duel_won
+1553 duel battle: the seal book in slot 0
+1559 screenshot d16_seal_book_in_hand
+1565 chat: 召喚：Lv.2 Zombie　素手で右クリック＝憑依、素手でShift＋右クリック＝融合。
+1577 screenshot d17_called_out
+1583 duel battle: servant seen
+1584 chat: [憑依] 本体は元の場所で無防備です。Gで戻ります。
+1599 screenshot d18_possessed
+1609 chat: [操作解除] 元の姿に戻りました。
+1619 chat: [憑依] 本体は元の場所で無防備です。Gで戻ります。
+1635 screenshot d19_fused
+1649 chat: [操作解除] 元の姿に戻りました。
+1653 screenshot d20_back_from_fusion
+1673 talismans: effigy used on a vex
+1676 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+1677 screenshot d21_effigy_binding
+1687 screenshot d22_effigy_bound
+1697 screen jp.oror.dueldominion.client.RitualScreen in PLAY
+1797 screenshot popup_RitualScreen
+1798 screen none in PLAY
+1800 talismans: ritual screen none
+1800 screenshot d23_ritual_menu
+1805 talisman HEALING: set, foe -
+1814 talisman HEALING: cast true with 1 spirits (asked 1), target -, player hp 12.0
+1815 screenshot d30_healing_a
+1816 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+1816 chat: [形代呪法] 癒生符／魂灯 発動！形代1枚とお札1枚を消費しました。
+1828 screenshot d30_healing_b
+1846 screenshot d30_healing_c
+1864 talisman HEALING: after, player hp 13.7 effects [minecraft:regeneration]; entities about 0
+1874 talisman RETRIBUTION: set, foe vindicator
+1882 talisman RETRIBUTION: cast true with 1 spirits (asked 1), target vindicator, player hp 20.0
+1885 screenshot d31_retribution_a
+1885 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+1885 chat: [形代呪法] 応報符／応報 発動！形代1枚とお札1枚を消費しました。
+1898 screenshot d31_retribution_b
+1916 screenshot d31_retribution_c
+1934 talisman RETRIBUTION: after, player hp 20.0 effects []; foe vindicator alive true hp 19.5 effects []; entities about 1
+1946 talisman GUARDIAN: set, foe -
+1952 talisman GUARDIAN: cast true with 1 spirits (asked 1), target -, player hp 20.0
+1953 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+1953 chat: [形代呪法] 護持符／小霊盾 発動！形代1枚とお札1枚を消費しました。
+1955 screenshot d32_guardian_a
+1968 screenshot d32_guardian_b
+1986 screenshot d32_guardian_c
+2004 talisman GUARDIAN: after, player hp 20.0 effects [minecraft:resistance]; entities about 1
+2014 talisman BINDING: set, foe vindicator
+2022 talisman BINDING: cast true with 1 spirits (asked 1), target vindicator, player hp 20.0
+2022 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2022 chat: [形代呪法] 縛霊符／足縛 発動！形代1枚とお札1枚を消費しました。
+2025 screenshot d33_binding_a
+2038 screenshot d33_binding_b
+2056 screenshot d33_binding_c
+2074 talisman BINDING: after, player hp 20.0 effects []; foe vindicator alive true hp 24.0 effects [minecraft:slowness]; entities about 1
+2085 talisman MALICE_TRANSFER: set, foe pillager
+2094 talisman MALICE_TRANSFER: cast true with 3 spirits (asked 3), target pillager, player hp 20.0
+2095 screenshot d34_malice_transfer_a
+2095 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2095 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2095 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2095 chat: [形代呪法] 禍移符／厄落とし 発動！形代3枚とお札1枚を消費しました。
+2108 screenshot d34_malice_transfer_b
+2126 screenshot d34_malice_transfer_c
+2144 talisman MALICE_TRANSFER: after, player hp 20.0 effects [minecraft:poison]; foe pillager alive true hp 24.0 effects [minecraft:mining_fatigue]; entities about 1
+2154 talisman SOUL_SEEKER: set, foe pillager
+2162 talisman SOUL_SEEKER: cast true with 3 spirits (asked 3), target pillager, player hp 20.0
+2162 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2162 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2162 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2162 chat: [形代呪法] 追魂符／追魂針 発動！形代3枚とお札1枚を消費しました。
+2165 screenshot d35_soul_seeker_a
+2178 screenshot d35_soul_seeker_b
+2196 screenshot d35_soul_seeker_c
+2216 talisman SOUL_SEEKER: after, player hp 20.0 effects []; foe pillager alive true hp 16.0 effects [minecraft:glowing]; entities about 1
+2226 talisman EXORCISM: set, foe zombie
+2234 talisman EXORCISM: cast true with 3 spirits (asked 3), target zombie, player hp 20.0
+2234 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2234 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2234 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2234 chat: [形代呪法] 祓滅符／祓い火 発動！形代3枚とお札1枚を消費しました。
+2235 screenshot d36_exorcism_a
+2248 screenshot d36_exorcism_b
+2266 screenshot d36_exorcism_c
+2284 talisman EXORCISM: after, player hp 20.0 effects []; foe zombie alive true hp 10.0 effects []; entities about 1
+2295 talisman NIGHT_PARADE: set, foe -
+2303 talisman NIGHT_PARADE: cast true with 3 spirits (asked 3), target -, player hp 20.0
+2305 screenshot d37_night_parade_a
+2305 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2305 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2305 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2305 chat: [百鬼符] 霊体1体が加勢します。
+2305 chat: [形代呪法] 百鬼符／一霊招来 発動！形代3枚とお札1枚を消費しました。
+2318 screenshot d37_night_parade_b
+2336 screenshot d37_night_parade_c
+2354 talisman NIGHT_PARADE: after, player hp 20.0 effects []; entities about 1
+2365 talisman REVIVAL: set, foe -
+2373 talisman REVIVAL: cast false with 3 spirits (asked 3), target -, player hp 20.0
+2374 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2374 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2374 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2374 chat: [形代呪法] 復活待機中の使役モブがいません。消費しません。
+2375 screenshot d38_revival_a
+2388 screenshot d38_revival_b
+2406 screenshot d38_revival_c
+2424 talisman REVIVAL: after, player hp 20.0 effects []; entities about 0
+2434 talisman CALAMITY: set, foe vindicator
+2442 talisman CALAMITY: cast true with 7 spirits (asked 7), target vindicator, player hp 20.0
+2443 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2443 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2443 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2443 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2443 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2443 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2443 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2443 chat: [形代呪法] 大禍符／禍刻 発動！形代7枚とお札1枚を消費しました。
+2445 screenshot d39_calamity_a
+2458 screenshot d39_calamity_b
+2476 screenshot d39_calamity_c
+2494 talisman CALAMITY: after, player hp 20.0 effects []; foe vindicator alive true hp 24.0 effects [minecraft:slowness, minecraft:weakness]; entities about 1
+2504 finished: complete (duel only)
