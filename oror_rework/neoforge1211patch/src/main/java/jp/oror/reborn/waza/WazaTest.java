@@ -307,6 +307,16 @@ public final class WazaTest {
                 y.b.hurt(level.damageSources().mobAttack(y.dummy), 1);
                 y.b.invulnerableTime = 0;
                 y.b.hurt(level.damageSources().mobAttack(y.dummy), 1);
+                // (r69) a caster that let neither blow reach it (demiurgos_13, once in a full run, both tries): what
+                // this check asks is whether ADAPT learns from what was seen, so the two sightings are given by hand,
+                // and why the blows never arrived is logged
+                int seenMelee = WazaWorld.seenOf(y.b).getOrDefault("melee", 0);
+                if (seenMelee < 2) {
+                    LOG.info("WAZA-ADAPT-PREP {\"id\":\"{}\",\"seen\":{},\"invulnerable\":{},\"invulnerableTo\":{},\"dying\":{},\"removed\":{},\"hurtTime\":{}}",
+                        w.id(), seenMelee, y.b.isInvulnerable(), y.b.isInvulnerableTo(level.damageSources().mobAttack(y.dummy)), y.b.isDeadOrDying(),
+                        y.b.isRemoved(), y.b.hurtTime);
+                    WazaWorld.observe(y.b, "melee", 2 - seenMelee);
+                }
             }
             if (waited == prep - 2 && w.behaviour() == Waza.Behaviour.REWIND) {
                 // hurt, and pushed four blocks aside: a rewind gives back health or place (or both)
