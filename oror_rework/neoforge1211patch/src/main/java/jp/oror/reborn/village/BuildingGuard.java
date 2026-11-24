@@ -162,6 +162,24 @@ public final class BuildingGuard {
     }
 
     static int stageBlastsLogged, stageGriefLogged, dragonSpared;
+    public static int shotsSpared;
+
+    /** (r69) A block a Superb Warfare round breaks by itself (ShotBlockGuardMixin): kept if it is the capital's, a village's or a stage's. */
+    public static boolean shotSpared(ServerLevel sl, BlockPos p) {
+        if (!sl.getServer().isSameThread() || !StackWalker.getInstance().walk(f -> f.limit(10).anyMatch(s -> {
+            String c = s.getClassName();
+            return c.startsWith("com.atsuishio.superbwarfare.entity.projectile.") || c.startsWith("com.atsuishio.superbwarfare.entity.vehicle.AnnihilatorEntity");
+        }))) {
+            return false;
+        }
+        VillageLedger.Village village = VillageLedger.get(sl).nearest(p);
+        boolean keep = inCapital(p, 64) || village != null && village.contains(p) || stage(sl, p, new java.util.HashMap<>());
+        if (keep && shotsSpared++ < 20) {
+            LOG.info("STAGE-SHOT {\"at\":\"{}\",\"block\":\"{}\",\"spared\":{}}", p.toShortString(),
+                net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(sl.getBlockState(p).getBlock()), shotsSpared);
+        }
+        return keep;
+    }
 
     /** (r66) A block of OROR's buildings an Ice and Fire dragon did not take (IafStageGuardMixin, IafDestructionStageMixin). */
     public static void dragonSpared(BlockPos pos) {
