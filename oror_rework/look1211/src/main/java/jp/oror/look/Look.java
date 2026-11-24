@@ -59,6 +59,10 @@ public final class Look {
     private static final List<String> log = Collections.synchronizedList(new ArrayList<>());
 
     public Look() {
+        // (r71) what the game said to the player (chat and the line above the hotbar), in the notes beside the frames
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGHEST, true,
+            (net.neoforged.neoforge.client.event.ClientChatReceivedEvent.System event) -> note((event.isOverlay() ? "bar: " : "chat: ")
+                + (event.getMessage() == null ? "" : event.getMessage().getString())));
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> {
             try {
                 tick(Minecraft.getInstance());
@@ -1475,9 +1479,370 @@ public final class Look {
         } else if (t == 350) {
             mc.player.stopUsingItem();
             mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
-        } else if (t == 356) {
-            finish(mc, "complete (duel only)");
+        } else if (t >= 360) {
+            duelBattle(mc, t);
         }
+    }
+
+    // ------------------------------------------------------------------------------- (r71) a duel and the talismans, played
+
+    private static int wonAt = -1, battleEnd = -1;
+    private static final String[][] TALISMANS = {
+        // name, item, offerings, the foe set before the player (or "-"), its side offset
+        {"HEALING", "ofuda_healing", "1", "-", "0"},
+        {"RETRIBUTION", "ofuda_retribution", "1", "vindicator", "0"},
+        {"GUARDIAN", "ofuda_guardian", "1", "-", "0"},
+        {"BINDING", "ofuda_binding", "1", "vindicator", "0"},
+        {"MALICE_TRANSFER", "ofuda_malice_transfer", "3", "pillager", "0"},
+        {"SOUL_SEEKER", "ofuda_soul_seeker", "3", "pillager", "0"},
+        {"EXORCISM", "ofuda_exorcism", "3", "zombie", "0"},
+        {"NIGHT_PARADE", "ofuda_night_parade", "3", "-", "0"},
+        {"REVIVAL", "ofuda_revival", "3", "-", "0"},
+        {"CALAMITY", "ofuda_calamity", "7", "vindicator", "0"}};
+    private static final int TALISMAN_FROM = 1000, TALISMAN_STEP = 70;
+
+    private static ServerPlayer serverPlayer(IntegratedServer server) {
+        return server.getPlayerList().getPlayers().isEmpty() ? null : server.getPlayerList().getPlayers().get(0);
+    }
+
+    private static net.minecraft.world.entity.Mob clientNearest(Minecraft mc, Class<? extends net.minecraft.world.entity.Mob> type, double r) {
+        net.minecraft.world.entity.Mob best = null;
+        for (Entity e : mc.level.entitiesForRendering()) {
+            if (type.isInstance(e) && e.isAlive() && e.distanceTo(mc.player) < r && (best == null || e.distanceTo(mc.player) < best.distanceTo(mc.player))) {
+                best = (net.minecraft.world.entity.Mob) e;
+            }
+        }
+        return best;
+    }
+
+    private static int slotOf(Minecraft mc, String id) {
+        for (int i = 0; i < 36; i++) {
+            if (net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(mc.player.getInventory().getItem(i).getItem()).toString().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** The player in third person, looking along +z at what stands before it (the stage's middle, z + 2). */
+    private static void stand(Minecraft mc, net.minecraft.client.CameraType camera) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        server.execute(() -> command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 10", name, sx, sy, sz + 2)));
+        mc.options.setCameraType(camera);
+    }
+
+    private static void duelBattle(Minecraft mc, int t) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        if (t == 360) {
+            mc.options.hideGui = false;
+            server.execute(() -> {
+                ServerLevel level = server.overworld();
+                for (Entity e : level.getEntities((Entity) null, new AABB(sx - 30, sy - 6, sz - 20, sx + 30, sy + 20, sz + 40),
+                    x -> !(x instanceof net.minecraft.world.entity.player.Player))) {
+                    e.discard();
+                }
+                command(server, "gamemode survival " + name);
+                command(server, "effect clear " + name);
+                command(server, "clear " + name);
+                command(server, "item replace entity " + name + " hotbar.0 with dueldominion:white_glove");
+                command(server, "item replace entity " + name + " hotbar.1 with minecraft:iron_sword");
+                command(server, "difficulty normal");
+                command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 10", name, sx, sy, sz + 2));
+                command(server, String.format(java.util.Locale.ROOT,
+                    "summon minecraft:zombie %.1f %d %.1f {PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"oror_look_duel\"],ArmorItems:[{},{},{},{id:\"minecraft:leather_helmet\",count:1}]}", sx, (int) sy, sz + 7));
+                note("duel battle: zombie set out");
+            });
+        } else if (t == 376) {
+            mc.player.getInventory().selected = 0;
+            Entity z = clientNearest(mc, net.minecraft.world.entity.monster.Zombie.class, 12);
+            if (z != null) {
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, z.getEyePosition());
+            }
+            shot(mc, "d10_before_the_glove");
+            mc.gameMode.useItem(mc.player, InteractionHand.MAIN_HAND);
+            note("duel battle: glove thrown at " + (z == null ? "nothing" : z.getType().toShortString()));
+        } else if (t == 384) {
+            shot(mc, "d11_glove_thrown");
+        } else if (t == 396) {
+            shot(mc, "d12_duel_called");
+            mc.player.getInventory().selected = 1;
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+        } else if (t > 396 && t < 900 && wonAt < 0) {
+            net.minecraft.world.entity.Mob z = clientNearest(mc, net.minecraft.world.entity.monster.Zombie.class, 16);
+            if (z != null) {
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, z.getEyePosition());
+                if (t % 12 == 0 && z.distanceTo(mc.player) < 3.2) {
+                    mc.gameMode.attack(mc.player, z);
+                    mc.player.swing(InteractionHand.MAIN_HAND);
+                }
+                if (t % 12 == 6 && z.distanceTo(mc.player) >= 3.2) {
+                    // closer, as a player would step in
+                    server.execute(() -> {
+                        ServerPlayer sp = serverPlayer(server);
+                        if (sp != null) {
+                            net.minecraft.world.phys.Vec3 d = z.position().subtract(sp.position()).normalize().scale(0.8);
+                            sp.teleportTo(sp.getX() + d.x, sp.getY(), sp.getZ() + d.z);
+                        }
+                    });
+                }
+            } else if (t > 420) {
+                wonAt = t;
+                note("duel battle: the zombie is gone at " + t);
+            }
+            if (t == 420) {
+                shot(mc, "d13_duel_fight_a");
+            } else if (t == 450) {
+                mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+            } else if (t == 452) {
+                shot(mc, "d14_duel_fight_front");
+            } else if (t == 456) {
+                mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            } else if (t % 40 == 0) {
+                server.execute(() -> {
+                    ServerPlayer sp = serverPlayer(server);
+                    note(String.format(java.util.Locale.ROOT, "duel battle t%d: player hp %.1f/%.1f, zombie %s", t, sp == null ? -1F : sp.getHealth(),
+                        sp == null ? -1F : sp.getMaxHealth(), z == null ? "-" : String.format(java.util.Locale.ROOT, "hp %.1f dist %.1f", z.getHealth(), z.distanceTo(mc.player))));
+                });
+            }
+        } else if (wonAt > 0 && t == wonAt + 3) {
+            shot(mc, "d15_duel_won");
+        } else if (wonAt > 0 && t == wonAt + 10) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            int seal = slotOf(mc, "dueldominion:bound_hair");
+            note("duel battle: the seal book in slot " + seal);
+            if (seal >= 0 && seal < 9) {
+                mc.player.getInventory().selected = seal;
+            }
+        } else if (wonAt > 0 && t == wonAt + 16) {
+            shot(mc, "d16_seal_book_in_hand");
+        } else if (wonAt > 0 && t == wonAt + 20) {
+            mc.gameMode.useItem(mc.player, InteractionHand.MAIN_HAND);
+        } else if (wonAt > 0 && t == wonAt + 34) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            shot(mc, "d17_called_out");
+        } else if (wonAt > 0 && t == wonAt + 40) {
+            net.minecraft.world.entity.Mob z = clientNearest(mc, net.minecraft.world.entity.monster.Zombie.class, 12);
+            note("duel battle: servant " + (z == null ? "not seen" : "seen"));
+            if (z != null) {
+                mc.gameMode.interact(mc.player, z, InteractionHand.MAIN_HAND);
+            }
+        } else if (wonAt > 0 && t == wonAt + 56) {
+            shot(mc, "d18_possessed");
+        } else if (wonAt > 0 && t == wonAt + 66) {
+            server.execute(() -> {
+                try {
+                    Class.forName("jp.oror.dueldominion.PossessionManager").getMethod("exit", ServerPlayer.class).invoke(null, serverPlayer(server));
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    note("duel battle: exit " + ex);
+                }
+            });
+        } else if (wonAt > 0 && t == wonAt + 76) {
+            net.minecraft.world.entity.Mob z = clientNearest(mc, net.minecraft.world.entity.monster.Zombie.class, 12);
+            if (z != null) {
+                mc.player.setShiftKeyDown(true);
+                mc.gameMode.interact(mc.player, z, InteractionHand.MAIN_HAND);
+                mc.player.setShiftKeyDown(false);
+            }
+        } else if (wonAt > 0 && t == wonAt + 92) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            shot(mc, "d19_fused");
+        } else if (wonAt > 0 && t == wonAt + 100) {
+            server.execute(() -> {
+                try {
+                    Class.forName("jp.oror.dueldominion.PossessionManager").getMethod("exit", ServerPlayer.class).invoke(null, serverPlayer(server));
+                } catch (ReflectiveOperationException | RuntimeException ex) {
+                    note("duel battle: exit " + ex);
+                }
+            });
+        } else if (wonAt > 0 && t == wonAt + 110) {
+            shot(mc, "d20_back_from_fusion");
+            battleEnd = t;
+        } else if (t == 900 && wonAt < 0) {
+            shot(mc, "d15_duel_not_won");
+            note("duel battle: no win by 900");
+            battleEnd = t;
+        }
+        // the talismans once the duel's part is over: their own clock, starting 40 ticks before TALISMAN_FROM
+        if (battleEnd > 0 && t >= battleEnd + 10) {
+            talismans(mc, t - (battleEnd + 10) + TALISMAN_FROM - 40);
+        }
+    }
+
+    /** The effigies (形代): a vex bound by the player's own hand, then the ritual menu opened, then each talisman cast. */
+    private static void talismans(Minecraft mc, int t) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        int at = TALISMAN_FROM - 40;
+        if (t == at) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            server.execute(() -> {
+                ServerLevel level = server.overworld();
+                for (Entity e : level.getEntities((Entity) null, new AABB(sx - 30, sy - 6, sz - 20, sx + 30, sy + 20, sz + 40),
+                    x -> !(x instanceof net.minecraft.world.entity.player.Player))) {
+                    e.discard();
+                }
+                command(server, "clear " + name);
+                command(server, "effect clear " + name);
+                command(server, "item replace entity " + name + " hotbar.0 with dueldominion:spirit_effigy 8");
+                command(server, "item replace entity " + name + " hotbar.1 with dueldominion:ofuda_healing 4");
+                command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 15", name, sx, sy, sz + 2));
+                command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vex %.1f %.1f %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}",
+                    sx, sy + 0.4, sz + 4));
+            });
+        } else if (t == at + 10) {
+            mc.player.getInventory().selected = 0;
+            Entity v = clientNearest(mc, net.minecraft.world.entity.monster.Vex.class, 8);
+            if (v != null) {
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, v.position().add(0, 0.4, 0));
+                mc.gameMode.interact(mc.player, v, InteractionHand.MAIN_HAND);
+            }
+            note("talismans: effigy used on " + (v == null ? "nothing" : "a vex"));
+        } else if (t == at + 14) {
+            shot(mc, "d21_effigy_binding");
+        } else if (t == at + 24) {
+            shot(mc, "d22_effigy_bound");
+        } else if (t == at + 28) {
+            mc.player.getInventory().selected = 1;
+            mc.gameMode.useItem(mc.player, InteractionHand.MAIN_HAND);
+        } else if (t == at + 36) {
+            note("talismans: ritual screen " + (mc.screen == null ? "none" : mc.screen.getClass().getName()));
+            shot(mc, "d23_ritual_menu");
+        } else if (t == at + 39) {
+            mc.setScreen(null);
+        } else if (t >= TALISMAN_FROM) {
+            int i = (t - TALISMAN_FROM) / TALISMAN_STEP, k = (t - TALISMAN_FROM) % TALISMAN_STEP;
+            if (i >= TALISMANS.length) {
+                if (k == 0) {
+                    finish(mc, "complete (duel only)");
+                }
+                return;
+            }
+            String[] tl = TALISMANS[i];
+            String tag = String.format(java.util.Locale.ROOT, "d%02d_%s", 30 + i, tl[0].toLowerCase(java.util.Locale.ROOT));
+            if (k == 0) {
+                mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+                server.execute(() -> setTalisman(server, tl));
+            } else if (k == 8) {
+                server.execute(() -> castTalisman(server, tl));
+            } else if (k == 11) {
+                shot(mc, tag + "_a");
+            } else if (k == 22) {
+                mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+            } else if (k == 24) {
+                shot(mc, tag + "_b");
+            } else if (k == 40) {
+                mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            } else if (k == 42) {
+                shot(mc, tag + "_c");
+            } else if (k == 60) {
+                server.execute(() -> afterTalisman(server, tl));
+            }
+        }
+    }
+
+    private static final List<Entity> TALISMAN_FOES = new ArrayList<>();
+
+    private static void setTalisman(IntegratedServer server, String[] tl) {
+        ServerLevel level = server.overworld();
+        ServerPlayer sp = serverPlayer(server);
+        if (sp == null) {
+            return;
+        }
+        for (Entity e : level.getEntities((Entity) null, new AABB(sx - 30, sy - 6, sz - 20, sx + 30, sy + 20, sz + 40),
+            x -> !(x instanceof net.minecraft.world.entity.player.Player) && !(x instanceof net.minecraft.world.entity.Display))) {
+            e.discard();
+        }
+        TALISMAN_FOES.clear();
+        sp.teleportTo(level, sx, sy, sz + 2, 0F, 10F);
+        sp.setHealth(sp.getMaxHealth());
+        sp.removeAllEffects();
+        if (tl[0].equals("HEALING")) {
+            sp.setHealth(sp.getMaxHealth() * 0.35F);
+        } else if (tl[0].equals("MALICE_TRANSFER")) {
+            sp.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DIG_SLOWDOWN, 600, 0));
+            sp.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 600, 0));
+        }
+        if (!tl[3].equals("-")) {
+            net.minecraft.world.entity.EntityType<?> type = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.get(
+                net.minecraft.resources.ResourceLocation.withDefaultNamespace(tl[3]));
+            Entity m = type.create(level);
+            if (m instanceof net.minecraft.world.entity.Mob mob) {
+                mob.moveTo(sx, sy, sz + 6, 180F, 0F);
+                mob.setNoAi(true);
+                mob.setPersistenceRequired();
+                // (a zombie at noon would burn by itself)
+                mob.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.LEATHER_HELMET));
+                level.addFreshEntity(mob);
+                TALISMAN_FOES.add(mob);
+            }
+        }
+        sp.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, new net.minecraft.world.phys.Vec3(sx, sy + 1.2, sz + 6));
+        note("talisman " + tl[0] + ": set, foe " + tl[3]);
+    }
+
+    private static void castTalisman(IntegratedServer server, String[] tl) {
+        ServerLevel level = server.overworld();
+        ServerPlayer sp = serverPlayer(server);
+        if (sp == null) {
+            return;
+        }
+        try {
+            Method bind = Class.forName("jp.oror.dueldominion.SpiritBinding").getMethod("bind", ServerPlayer.class, net.minecraft.world.entity.Mob.class);
+            List<net.minecraft.world.item.ItemStack> spirits = new ArrayList<>();
+            for (int n = 0; n < Integer.parseInt(tl[2]); n++) {
+                net.minecraft.world.entity.Mob v = net.minecraft.world.entity.EntityType.VEX.create(level);
+                v.moveTo(sp.getX() - 2, sp.getY() + 1, sp.getZ() - 2, 0F, 0F);
+                v.setNoAi(true);
+                level.addFreshEntity(v);
+                net.minecraft.world.item.ItemStack token = (net.minecraft.world.item.ItemStack) bind.invoke(null, sp, v);
+                if (!token.isEmpty()) {
+                    spirits.add(token);
+                } else if (!v.isRemoved()) {
+                    v.discard();
+                }
+            }
+            Class<?> tc = Class.forName("jp.oror.dueldominion.RitualPolicy$Talisman");
+            @SuppressWarnings({"unchecked", "rawtypes"})
+            Object talisman = Enum.valueOf((Class) tc, tl[0]);
+            Class<?> rc = Class.forName("jp.oror.dueldominion.RitualCasting");
+            net.minecraft.world.item.ItemStack ofuda = new net.minecraft.world.item.ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("dueldominion", tl[1])));
+            LivingEntity target = TALISMAN_FOES.isEmpty() ? null : (LivingEntity) TALISMAN_FOES.get(0);
+            boolean needs = (Boolean) rc.getMethod("requiresTarget", tc).invoke(null, talisman);
+            boolean ok = needs && target != null
+                ? (Boolean) rc.getMethod("cast", ServerPlayer.class, tc, List.class, net.minecraft.world.item.ItemStack.class, LivingEntity.class)
+                    .invoke(null, sp, talisman, spirits, ofuda, target)
+                : (Boolean) rc.getMethod("cast", ServerPlayer.class, tc, List.class, net.minecraft.world.item.ItemStack.class).invoke(null, sp, talisman, spirits, ofuda);
+            note(String.format(java.util.Locale.ROOT, "talisman %s: cast %b with %d spirits (asked %s), target %s, player hp %.1f", tl[0], ok, spirits.size(), tl[2],
+                target == null ? "-" : target.getType().toShortString(), sp.getHealth()));
+            if (tl[0].equals("RETRIBUTION") && target != null) {
+                sp.invulnerableTime = 0;
+                sp.hurt(sp.damageSources().mobAttack((LivingEntity) target), 3F);
+            }
+        } catch (ReflectiveOperationException | RuntimeException ex) {
+            note("talisman " + tl[0] + ": " + ex + (ex.getCause() == null ? "" : " / " + ex.getCause()));
+        }
+    }
+
+    private static void afterTalisman(IntegratedServer server, String[] tl) {
+        ServerPlayer sp = serverPlayer(server);
+        StringBuilder b = new StringBuilder("talisman " + tl[0] + ": after,");
+        if (sp != null) {
+            b.append(String.format(java.util.Locale.ROOT, " player hp %.1f effects %s", sp.getHealth(),
+                sp.getActiveEffects().stream().map(x -> x.getEffect().getRegisteredName()).toList()));
+        }
+        for (Entity f : TALISMAN_FOES) {
+            if (f instanceof LivingEntity le) {
+                b.append(String.format(java.util.Locale.ROOT, "; foe %s alive %b hp %.1f effects %s", le.getType().toShortString(), le.isAlive(), le.getHealth(),
+                    le.getActiveEffects().stream().map(x -> x.getEffect().getRegisteredName()).toList()));
+            }
+        }
+        int near = server.overworld().getEntities((Entity) null, new AABB(sx - 12, sy - 3, sz - 10, sx + 12, sy + 8, sz + 14),
+            x -> !(x instanceof net.minecraft.world.entity.player.Player)).size();
+        b.append("; entities about ").append(near);
+        note(b.toString());
     }
 
     private static void command(IntegratedServer server, String command) {
