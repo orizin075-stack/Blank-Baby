@@ -160,6 +160,8 @@ public final class StaminaTest {
         }
         if (t == 70) {
             OUT.put("runnerAfter", String.format(java.util.Locale.ROOT, "%.3f", MobStamina.fraction(runner)));
+            OUT.put("runnerAt", String.format(java.util.Locale.ROOT, "%.1f %.1f %.1f ground %b alive %b", runner.getX() - site.getX(), runner.getY() - site.getY(),
+                runner.getZ() - site.getZ(), runner.onGround(), runner.isAlive()));
             OUT.put("runningWears", MobStamina.fraction(runner) < 0.97F);
             // the player's wind back: half its stamina, a second and a half on
             float[] s = Exhaustion.of(fp);

@@ -218,7 +218,8 @@ public final class Exhaustion {
             return;
         }
         double v = m.getDeltaMovement().horizontalDistanceSqr();
-        if (v > 0.2 * 0.2 && m.onGround()) {
+        // (CI: a cow driven at a run was off the ground as often as on it) its pace over the ground, whether or not a foot is on it
+        if (v > 0.2 * 0.2 && !m.isInWater()) {
             MobStamina.drain(m, MobStamina.max(m) * 0.006F);
         }
     }
