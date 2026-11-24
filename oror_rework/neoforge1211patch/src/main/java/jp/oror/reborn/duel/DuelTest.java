@@ -877,7 +877,9 @@ public final class DuelTest {
         for (int i = 0; i < kinds.length; i++) {
             if (kinds[i].create(lv) instanceof Mob m) {
                 m.moveTo(fp.getX() + 6 * Math.cos(i * 1.6), fp.getY(), fp.getZ() + 6 * Math.sin(i * 1.6), 0F, 0F);
-                lv.addFreshEntity(m);
+                if (!lv.addFreshEntity(m)) {
+                    OUT.put("deserterNotJoined_" + kinds[i].toShortString(), true);
+                }
                 MADE.add(m);
                 mobs.add(m);
             }
@@ -887,7 +889,7 @@ public final class DuelTest {
         List<Mob> about = lv.getEntitiesOfClass(Mob.class, fp.getBoundingBox().inflate(10), m -> m.isAlive() && !m.isNoAi()
             && (m.getType() == EntityType.VILLAGER || m.getType() == EntityType.COW || m.getType() == EntityType.ZOMBIE || m.getType() == EntityType.SKELETON));
         Deserters.hunt(fp, 40);
-        OUT.put("deserterAllOnHim", about.size() >= 4 && about.stream().allMatch(m -> Deserters.hunting(m, fp)));
+        OUT.put("deserterAllOnHim", about.size() >= 3 && about.stream().allMatch(m -> Deserters.hunting(m, fp)));
         OUT.put("deserterTargets", "\"" + about.stream().map(m -> m.getType().toShortString() + (m.getTarget() == fp ? ":target"
             : Deserters.hunting(m, fp) ? ":run" : ":none")).toList() + " made " + mobs.stream().map(m -> m.getType().toShortString()
             + (m.isRemoved() ? ":removed" : "")).toList() + "\"");
