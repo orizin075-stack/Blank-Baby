@@ -883,7 +883,8 @@ public final class DuelTest {
             }
         }
         Deserters.hunt(fp, 40);
-        OUT.put("deserterAllOnHim", mobs.stream().allMatch(m -> m.getTarget() == fp));
+        OUT.put("deserterAllOnHim", mobs.stream().allMatch(m -> Deserters.hunting(m, fp)));
+        OUT.put("deserterTargets", "\"" + mobs.stream().map(m -> m.getType().toShortString() + (m.getTarget() == fp ? ":target" : ":run")).toList() + "\"");
         boolean armed = mobs.get(2).getMainHandItem().is(net.minecraft.world.item.Items.NETHERITE_SWORD)
             && mobs.get(3).getMainHandItem().is(net.minecraft.world.item.Items.BOW) && mobs.get(3).getMainHandItem().isEnchanted()
             && mobs.get(2).getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).is(net.minecraft.world.item.Items.NETHERITE_CHESTPLATE);

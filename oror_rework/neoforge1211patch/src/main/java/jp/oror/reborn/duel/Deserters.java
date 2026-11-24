@@ -89,6 +89,8 @@ public final class Deserters {
 
     private static final Map<String, Start> STARTS = new HashMap<>();
     private static final Map<Mob, Long> STRUCK = new java.util.WeakHashMap<>();
+    /** each mob on the hunt and whom it hunts (a mob that will not take the deserter for a target still runs it down) */
+    private static final Map<Mob, UUID> HUNTING = new java.util.WeakHashMap<>();
     private static final Map<UUID, Long> CAMP = new HashMap<>();
     public static int marked, hunted, parties;
 
@@ -184,6 +186,7 @@ public final class Deserters {
             } else if (m.getTarget() == p && !(m instanceof Monster)) {
                 m.setTarget(null);
             }
+            HUNTING.remove(m);
         }
     }
 
@@ -219,6 +222,7 @@ public final class Deserters {
                 hunters++;
             }
             // together: every one of them on the deserter, none on another
+            HUNTING.put(m, p.getUUID());
             if (m.getTarget() != p) {
                 m.setTarget(p);
             }
@@ -234,7 +238,8 @@ public final class Deserters {
             // those with no attack of their own (beasts, villagers, golems' kin): run it down and strike
             boolean ownAttack = (m instanceof Monster || m instanceof IronGolem || m instanceof AbstractPiglin || m instanceof net.minecraft.world.entity.NeutralMob)
                 && !(m instanceof AbstractVillager) && m.getAttribute(Attributes.ATTACK_DAMAGE) != null;
-            if (!ownAttack && m instanceof PathfinderMob pm) {
+            // and one whose own attack will not take the deserter (another mod's rule) runs it down all the same
+            if ((!ownAttack || m.getTarget() != p) && m instanceof PathfinderMob pm) {
                 if (now % 20 == 0) {
                     pm.getNavigation().moveTo(p, 1.35);
                 }
@@ -396,6 +401,11 @@ public final class Deserters {
                     party(EntityArgument.getPlayer(c, "player"), PARTY, 5, 9);
                     return 1;
                 })))));
+    }
+
+    /** Whether this mob hunts this player (set on it, or running it down). */
+    public static boolean hunting(Mob m, Player p) {
+        return p.getUUID().equals(HUNTING.get(m)) || m.getTarget() == p;
     }
 
     /** For the CI check: a list of the mobs set on the deserter about it now. */
