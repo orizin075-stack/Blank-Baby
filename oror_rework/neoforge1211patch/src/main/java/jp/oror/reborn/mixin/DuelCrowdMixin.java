@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** (r71) A Duel Dominion duel's start and end, for the ring of mobs that watches it ({@link DuelCrowd}). */
+/** (r71) A Duel Dominion duel's start and end, for the ring of mobs that watches it ({@link DuelCrowd}) and (r72) the deserter's mark. */
 @Pseudo
 @Mixin(targets = "jp.oror.dueldominion.DuelManager", remap = false)
 public abstract class DuelCrowdMixin {
@@ -19,6 +19,7 @@ public abstract class DuelCrowdMixin {
         if (Boolean.TRUE.equals(cir.getReturnValue())) {
             try {
                 DuelCrowd.begun(p, target);
+                jp.oror.reborn.duel.Deserters.begun(p, target);
             } catch (RuntimeException ignored) {
             }
         }
@@ -29,6 +30,8 @@ public abstract class DuelCrowdMixin {
         try {
             if (duel != null) {
                 DuelCrowd.ended(duel.challenger(), duel.defender());
+                // (r72) a player who ran from it bears the deserter's mark
+                jp.oror.reborn.duel.Deserters.ended(duel.challenger(), duel.defender(), why);
             }
         } catch (RuntimeException ignored) {
         }

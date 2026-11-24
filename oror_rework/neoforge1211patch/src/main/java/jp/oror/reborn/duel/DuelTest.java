@@ -848,9 +848,61 @@ public final class DuelTest {
         step("duelEndsFar", () -> {
             Object duel = Class.forName("jp.oror.dueldominion.DuelManager").getMethod("duel", LivingEntity.class).invoke(null, fp);
             OUT.put("duelEndsFar", duel == null);
+            // (r72) the zombie was carried off, the tester stayed: no flight of the tester's
+            OUT.put("deserterNotWhenFoeCarried", !Deserters.marked(fp));
         });
+        step("deserter", () -> deserterCheck(level));
         check2At = Long.MAX_VALUE;
         finish();
+    }
+
+    /**
+     * (r72) The deserter's mark: the tester runs from a duel (out of its reach), and then every mob about it (a villager, a
+     * cow, a zombie, a skeleton) is set on it, the zombie and the skeleton armed with the highest arms; a hunting party
+     * comes; ten deaths and the world is satisfied.
+     */
+    private static void deserterCheck(ServerLevel lv) {
+        Zombie z = EntityType.ZOMBIE.create(lv);
+        z.moveTo(fp.getX(), fp.getY(), fp.getZ() + 4.0, 180F, 0F);
+        z.setNoAi(true);
+        lv.addFreshEntity(z);
+        MADE.add(z);
+        Deserters.begun(fp, z);
+        net.minecraft.world.phys.Vec3 from = fp.position();
+        fp.teleportTo(from.x + 70, from.y, from.z);
+        Deserters.ended(fp, z, "距離超過により中断しました。");
+        OUT.put("deserterMarked", Deserters.marked(fp));
+        List<Mob> mobs = new ArrayList<>();
+        EntityType<?>[] kinds = {EntityType.VILLAGER, EntityType.COW, EntityType.ZOMBIE, EntityType.SKELETON};
+        for (int i = 0; i < kinds.length; i++) {
+            if (kinds[i].create(lv) instanceof Mob m) {
+                m.moveTo(fp.getX() + 6 * Math.cos(i * 1.6), fp.getY(), fp.getZ() + 6 * Math.sin(i * 1.6), 0F, 0F);
+                lv.addFreshEntity(m);
+                MADE.add(m);
+                mobs.add(m);
+            }
+        }
+        Deserters.hunt(fp, 40);
+        OUT.put("deserterAllOnHim", mobs.stream().allMatch(m -> m.getTarget() == fp));
+        boolean armed = mobs.get(2).getMainHandItem().is(net.minecraft.world.item.Items.NETHERITE_SWORD)
+            && mobs.get(3).getMainHandItem().is(net.minecraft.world.item.Items.BOW) && mobs.get(3).getMainHandItem().isEnchanted()
+            && mobs.get(2).getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).is(net.minecraft.world.item.Items.NETHERITE_CHESTPLATE);
+        OUT.put("deserterArmed", armed);
+        int before = Deserters.parties;
+        Deserters.party(fp, 4, 5, 9);
+        int hunters = lv.getEntitiesOfClass(Mob.class, fp.getBoundingBox().inflate(12), m -> m.getTags().contains(Deserters.HUNTER)).size();
+        OUT.put("deserterParty", hunters);
+        for (Mob m : lv.getEntitiesOfClass(Mob.class, fp.getBoundingBox().inflate(12), m -> m.getTags().contains(Deserters.HUNTER))) {
+            MADE.add(m);
+        }
+        for (int i = 0; i < Deserters.DEATHS - 1; i++) {
+            Deserters.died(new net.neoforged.neoforge.event.entity.living.LivingDeathEvent(fp, lv.damageSources().generic()));
+        }
+        boolean stillAfterNine = Deserters.marked(fp) && Deserters.deathsLeft(fp) == 1;
+        Deserters.died(new net.neoforged.neoforge.event.entity.living.LivingDeathEvent(fp, lv.damageSources().generic()));
+        OUT.put("deserterSatisfiedAfterTen", stillAfterNine && !Deserters.marked(fp));
+        OUT.put("deserterPartyCame", Deserters.parties > before);
+        fp.teleportTo(from.x, from.y, from.z);
     }
 
     private static void finish() {
@@ -869,7 +921,10 @@ public final class DuelTest {
             && ok("clickFuse") && ok("fusionFollows") && ok("clickFuseRestored") && ok("fusionHostDeath") && ok("fusionEndsOnHostDeath")
             && ok("fusionHostDeathOwnerFalls")
             // (r71) the onlookers gathered about the glove's duel
-            && OUT.get("crowdWatching") instanceof Integer w && w >= 3;
+            && OUT.get("crowdWatching") instanceof Integer w && w >= 3
+            // (r72) the deserter's mark
+            && ok("deserterNotWhenFoeCarried") && ok("deserterMarked") && ok("deserterAllOnHim") && ok("deserterArmed") && ok("deserterSatisfiedAfterTen")
+            && OUT.get("deserterParty") instanceof Integer hp && hp >= 1;
         StringBuilder s = new StringBuilder("{\"present\":true");
         for (Map.Entry<String, Object> en : OUT.entrySet()) {
             s.append(",\"").append(en.getKey()).append("\":").append(en.getValue());
