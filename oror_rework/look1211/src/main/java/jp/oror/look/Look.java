@@ -1625,7 +1625,10 @@ public final class Look {
         } else if (wonAt > 0 && t == wonAt + 40) {
             net.minecraft.world.entity.Mob z = clientNearest(mc, net.minecraft.world.entity.monster.Zombie.class, 12);
             note("duel battle: servant " + (z == null ? "not seen" : "seen"));
+            // (r71) possession and fusion take an empty hand, as the summoning line now says
+            mc.player.getInventory().selected = 8;
             if (z != null) {
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, z.getEyePosition());
                 mc.gameMode.interact(mc.player, z, InteractionHand.MAIN_HAND);
             }
         } else if (wonAt > 0 && t == wonAt + 56) {
@@ -1640,7 +1643,9 @@ public final class Look {
             });
         } else if (wonAt > 0 && t == wonAt + 76) {
             net.minecraft.world.entity.Mob z = clientNearest(mc, net.minecraft.world.entity.monster.Zombie.class, 12);
+            mc.player.getInventory().selected = 8;
             if (z != null) {
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, z.getEyePosition());
                 mc.player.setShiftKeyDown(true);
                 mc.gameMode.interact(mc.player, z, InteractionHand.MAIN_HAND);
                 mc.player.setShiftKeyDown(false);
@@ -1729,7 +1734,8 @@ public final class Look {
             } else if (k == 11) {
                 shot(mc, tag + "_a");
             } else if (k == 22) {
-                mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
+                // (r71) from the player's own eyes (the front camera stood inside the foe)
+                mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
             } else if (k == 24) {
                 shot(mc, tag + "_b");
             } else if (k == 40) {
