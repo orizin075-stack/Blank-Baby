@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * cheer: they jump, clap (both hands in turn, a clap's sound), raiders throw up their arms as they do after a raid, the
  * villagers celebrate, notes rise. Now and then one of them shouts (いけー！ そこだ！ ...), one shout at a time above its
  * head. A monster in the ring is a spectator: it lets the duellists be. When the duel ends the ring cheers once more and
- * goes back to its business.
+ * goes back to its business, the monsters among it after ten seconds more of calm (unless struck).
  */
 @EventBusSubscriber(modid = "oror_supreme_bosses")
 public final class DuelCrowd {
@@ -277,8 +277,34 @@ public final class DuelCrowd {
         return all;
     }
 
+    /** (r72) the onlookers just let go, and until when they still let everyone be (the look run: a pillager of the ring
+     * shot the winner dead three seconds after the last cheer) */
+    private static final Map<Mob, Long> CALM = new java.util.WeakHashMap<>();
+    private static final int CALM_TICKS = 200;
+
+    @SubscribeEvent
+    public static void calm(ServerTickEvent.Post e) {
+        if (CALM.isEmpty()) {
+            return;
+        }
+        CALM.entrySet().removeIf(en -> {
+            Mob m = en.getKey();
+            if (m == null || !m.isAlive() || m.level().getGameTime() > en.getValue()) {
+                return true;
+            }
+            if (m.getTarget() != null && !(m.getLastHurtByMob() != null && m.getLastHurtByMob() == m.getTarget()
+                && m.tickCount - m.getLastHurtByMobTimestamp() < 100)) {
+                m.setTarget(null);
+            }
+            return false;
+        });
+    }
+
     private static void release(Ring r) {
         for (Mob m : r.crowd) {
+            if (m.isAlive()) {
+                CALM.put(m, m.level().getGameTime() + CALM_TICKS);
+            }
             if (m instanceof Raider raider && raider.getCurrentRaid() == null) {
                 raider.setCelebrating(false);
             }
