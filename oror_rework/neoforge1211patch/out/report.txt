@@ -64,45 +64,45 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/c086fab6229047df03bb78951c7a1b8fce8c4892/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.38s
-[1m*** Started working on [4mdownloadServer[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.29s
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.48s
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.42s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.44s
+[1m*** Started working on [4mstripClient[23;0m[23;0m
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.88s
-[1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.30s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 0.62s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.73s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.53s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.11s
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.89s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.25s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.54s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.53s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.40s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 2.84s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.48s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.04s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 3.98s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 4.18s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 3.52s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.64s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.12s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.10s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.40s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.58s
-Total runtime: 28.67s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 2.72s
+Total runtime: 19.13s
 
 
 > Task :compileJava
@@ -269,11 +269,11 @@ Note: Recompile with -Xlint:deprecation for details.
 Note: /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/RelicArts.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 53 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795535378345.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795567429792.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 1m 18s
+BUILD SUCCESSFUL in 56s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -902,7 +902,7 @@ public class net.neoforged.neoforge.client.event.ClientChatReceivedEvent$System 
   public void addMessage(net.minecraft.network.chat.Component);
   public void addMessage(net.minecraft.network.chat.Component, net.minecraft.network.chat.MessageSignature, net.minecraft.client.GuiMessageTag);
 replaced 143 old class files; added 482 compiled; overlaid 984 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json'] ; dropped ['data/oror_supreme_bosses/structure/royal034/kingdom_0_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_0_1.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_1.nbt']
-f95a4312b10c07f92c11c264e18cf7dd27c07efb5dddaf9d65852d9e093779f8  out/oror_supreme_bosses-0.17.39-059-preview.jar
+72d6b6f253ca029e4cc2db1a1a2f203ad3566e4b40459e3e450c587cd530a225  out/oror_supreme_bosses-0.17.39-059-preview.jar
 == /home/runner/work/_temp/pack053/alexscaves-2.0.10.jar
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyAttractingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyRepellingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
@@ -1033,6 +1033,349 @@ enabled
 limit
 simple_distortion
 window
+== CE classes
+net/shelmarow/combat_evolution/ai/CEDatapackMobPatch.class
+net/shelmarow/combat_evolution/ai/CEPatchReloadListener$CEDatapackMobPatchProvider.class
+net/shelmarow/combat_evolution/ai/event/BeforeCounterEvent.class
+net/shelmarow/combat_evolution/ai/event/BehaviorStartEvent$EventParams.class
+net/shelmarow/combat_evolution/ai/event/BehaviorStartEvent.class
+net/shelmarow/combat_evolution/ai/event/BlockedEvent$EventParams.class
+net/shelmarow/combat_evolution/ai/event/BlockedEvent.class
+net/shelmarow/combat_evolution/ai/event/CounterStartEvent$EventParams.class
+net/shelmarow/combat_evolution/ai/event/CounterStartEvent.class
+net/shelmarow/combat_evolution/ai/event/GuardHitEvent$EventParams.class
+net/shelmarow/combat_evolution/ai/event/GuardHitEvent.class
+net/shelmarow/combat_evolution/ai/event/HitEvent$EventParams.class
+net/shelmarow/combat_evolution/ai/event/HitEvent.class
+net/shelmarow/combat_evolution/ai/event/OnHurtEvent$EventParams.class
+net/shelmarow/combat_evolution/ai/event/OnHurtEvent.class
+net/shelmarow/combat_evolution/ai/event/TimeEvent$EventParams.class
+net/shelmarow/combat_evolution/ai/event/TimeEvent$EventType.class
+net/shelmarow/combat_evolution/ai/event/TimeEvent.class
+net/shelmarow/combat_evolution/ai/event/manager/CEMobEvent.class
+net/shelmarow/combat_evolution/ai/event/manager/CEMobEventManager.class
+net/shelmarow/combat_evolution/ai/event/manager/CEMobEventWithReturn.class
+net/shelmarow/combat_evolution/ai/iml/CustomExecuteEntity.class
+net/shelmarow/combat_evolution/ai/iml/IDamageSourceData.class
+net/shelmarow/combat_evolution/ai/iml/ILivingEntityData.class
+net/shelmarow/combat_evolution/ai/network/SPCEDataPacket.class
+net/shelmarow/combat_evolution/ai/util/BehaviorUtils.class
+net/shelmarow/combat_evolution/ai/util/CEParticleUtils.class
+net/shelmarow/combat_evolution/ai/util/CEPatchUtils.class
+net/shelmarow/combat_evolution/api/event/OnExecutionStartEvent.class
+net/shelmarow/combat_evolution/api/event/RegisterBossBarTypeEvent.class
+net/shelmarow/combat_evolution/api/event/RegisterCustomExecutionEvent.class
+net/shelmarow/combat_evolution/api/event/RegisterHUDTypeEvent.class
+net/shelmarow/combat_evolution/api/event/ShowExecutionIconEvent.class
+net/shelmarow/combat_evolution/bgm/CEMusicEventHandler.class
+net/shelmarow/combat_evolution/bossbar/BossData.class
+net/shelmarow/combat_evolution/bossbar/CEBossEvent.class
+net/shelmarow/combat_evolution/bossbar/client/ClientBossData.class
+net/shelmarow/combat_evolution/bossbar/client/RenderCEBossBarEvent.class
+net/shelmarow/combat_evolution/client/hud/element/ExecutionElement.class
+net/shelmarow/combat_evolution/client/hud/execution/ExecutionHUD$1.class
+net/shelmarow/combat_evolution/client/hud/execution/ExecutionHUD.class
+net/shelmarow/combat_evolution/client/hud/execution/HUDAlignment.class
+net/shelmarow/combat_evolution/client/hud/execution/HUDTypeManager.class
+net/shelmarow/combat_evolution/client/hud/execution/types/DefaultType.class
+net/shelmarow/combat_evolution/client/hud/execution/types/HUDType.class
+net/shelmarow/combat_evolution/client/shader/ExecutionShaderEffect.class
+net/shelmarow/combat_evolution/command/CEExecutionCommand.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackButton.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen$Control.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen$Field.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen$SectionRegion.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen$Type.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackEntitySelectionScreen$Entry.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackEntitySelectionScreen.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackFormScreen$Field.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackFormScreen$Row.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackFormScreen$Type.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackFormScreen.class
+net/shelmarow/combat_evolution/config/screen/CEDatapackGuiScaleSlider.class
+== CE net/shelmarow/combat_evolution/ai/iml/CustomExecuteEntity.class
+Compiled from "CustomExecuteEntity.java"
+public interface net.shelmarow.combat_evolution.ai.iml.CustomExecuteEntity {
+  public abstract boolean canBeExecuted(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
+  public abstract boolean canUseCustomType(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public abstract net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type getExecutionType(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public default boolean canBeAssassinate(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
+}
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)Z
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Z
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)Z
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;)Z
+Ayesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch
+CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
+F(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Z
+FLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
+I(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;)Z
+== CE net/shelmarow/combat_evolution/api/event/OnExecutionStartEvent.class
+Compiled from "OnExecutionStartEvent.java"
+public class net.shelmarow.combat_evolution.api.event.OnExecutionStartEvent extends net.neoforged.bus.api.Event implements net.neoforged.bus.api.ICancellableEvent {
+  private final yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> executor;
+  private final yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> target;
+  private net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type type;
+  public net.shelmarow.combat_evolution.api.event.OnExecutionStartEvent(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> getExecutor();
+  public yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> getTarget();
+  public net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type getType();
+  public void setType(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+}
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
+(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
+CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;	
+E()Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
+FLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
+H()Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
+== CE net/shelmarow/combat_evolution/api/event/RegisterCustomExecutionEvent.class
+Compiled from "RegisterCustomExecutionEvent.java"
+public class net.shelmarow.combat_evolution.api.event.RegisterCustomExecutionEvent extends net.neoforged.bus.api.Event implements net.neoforged.fml.event.IModBusEvent {
+  public net.shelmarow.combat_evolution.api.event.RegisterCustomExecutionEvent();
+  public void registerExecutionByEntity(net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerExecutionByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerExecutionByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerExecutionByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerExecutionByItem(net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerExecutionByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerExecutionByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerExecutionByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerExecutionByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerExecutionByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerExecutionByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerExecutionByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerAssassinationByEntity(net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerAssassinationByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerAssassinationByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerAssassinationByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerAssassinationByItem(net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerAssassinationByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerAssassinationByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerAssassinationByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerAssassinationByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerAssassinationByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
+  public void registerAssassinationByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  public void registerAssassinationByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByCategory$11(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByCategory$10(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByItem$9(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByItem$8(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByEntity$7(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByEntity$6(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByCategory$5(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByCategory$4(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByItem$3(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByItem$2(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByEntity$1(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByEntity$0(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
+}
+ Lorg/apache/commons/lang3/function/TriFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;
+'(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Ljava/util/function/BiFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;)V
+(Ljava/util/function/BiFunction;Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
+(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
+(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Lorg/apache/commons/lang3/function/TriFunction;)V
+(Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
+(Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
+(Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
+(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
+(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Ljava/util/function/BiFunction;)V
+(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
+(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Lorg/apache/commons/lang3/function/TriFunction;)V
+(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Lorg/apache/commons/lang3/function/TriFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;)V
+0Lyesman/epicfight/world/capabilities/item/Style;
+6(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Ljava/util/function/BiFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;)V
+7yesman/epicfight/world/capabilities/item/CapabilityItem
+9Lyesman/epicfight/world/capabilities/item/WeaponCategory;
+>yesman/epicfight/world/capabilities/item/CapabilityItem$Styles
+@Lyesman/epicfight/world/capabilities/item/CapabilityItem$Styles;
+CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
+Ljava/util/function/BiFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;
+|(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Ljava/util/function/BiFunction;)V
+}(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Lorg/apache/commons/lang3/function/TriFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;)V
+== CE net/shelmarow/combat_evolution/api/event/ShowExecutionIconEvent.class
+Compiled from "ShowExecutionIconEvent.java"
+public class net.shelmarow.combat_evolution.api.event.ShowExecutionIconEvent extends net.neoforged.bus.api.Event implements net.neoforged.bus.api.ICancellableEvent {
+  private final yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch playerPatch;
+  private final yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> target;
+  public net.shelmarow.combat_evolution.api.event.ShowExecutionIconEvent(yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
+  public yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch getPlayerPatch();
+  public yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> getTarget();
+}
+(Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V
+(Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;)V
+CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
+E()Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
+FLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
+H()Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
+OLyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;	
+Q()Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;
+== CE net/shelmarow/combat_evolution/client/hud/element/ExecutionElement.class
+Compiled from "ExecutionElement.java"
+public class net.shelmarow.combat_evolution.client.hud.element.ExecutionElement {
+  public double x;
+  public double y;
+  public int width;
+  public int height;
+  public boolean selected;
+  public net.shelmarow.combat_evolution.client.hud.element.ExecutionElement(int, int, int, int);
+  public void renderExample(net.minecraft.client.gui.GuiGraphics, float);
+  public boolean isMouseOver(int, int);
+}
+== CE net/shelmarow/combat_evolution/client/hud/execution/ExecutionHUD.class
+Compiled from "ExecutionHUD.java"
+public class net.shelmarow.combat_evolution.client.hud.execution.ExecutionHUD {
+  private static net.shelmarow.combat_evolution.client.hud.execution.types.HUDType currentHudType;
+  private static boolean showExecutionIcon;
+  private static boolean showAssassinationIcon;
+  private static int lastEligibilityRequestTargetId;
+  private static int lastEligibilityRequestTick;
+  private static int eligibilityTargetId;
+  private static boolean serverSaysAssassinationEligible;
+  private static float timePercent;
+  private static float timePercentO;
+  public net.shelmarow.combat_evolution.client.hud.execution.ExecutionHUD();
+  public static void onPlayerClientTick(net.neoforged.neoforge.event.tick.PlayerTickEvent$Post);
+  public static void render(net.minecraft.client.gui.GuiGraphics, net.minecraft.client.DeltaTracker);
+  public static void drawExecutionIcon(net.minecraft.client.gui.GuiGraphics, float, net.shelmarow.combat_evolution.client.hud.execution.types.HUDType, float);
+  public static void drawExecutionIcon(net.minecraft.client.gui.GuiGraphics, float, net.shelmarow.combat_evolution.client.hud.execution.types.HUDType, float, float, float);
+  public static void setCurrentHudType(net.shelmarow.combat_evolution.client.hud.execution.types.HUDType);
+  public static void setServerAssassinationEligibility(int, boolean);
+  public static void setShowExecutionIcon(boolean);
+  public static void setTimePercent(float);
+  public static void setTimePercentO(float);
+  public static net.shelmarow.combat_evolution.client.hud.execution.types.HUDType getCurrentHudType();
+  public static boolean isShowExecutionIcon();
+  public static float getTimePercent();
+  public static float getTimePercentO();
+  static {};
+}
+'yesman/epicfight/api/animation/Animator
+(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Z
+(Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V	
+(yesman/epicfight/api/asset/AssetAccessor
+*Lyesman/epicfight/api/asset/AssetAccessor;
++()Lyesman/epicfight/api/animation/Animator;
+,()Lyesman/epicfight/api/asset/AssetAccessor;
+.yesman/epicfight/api/animation/AnimationPlayer
+0Lyesman/epicfight/api/animation/AnimationPlayer;
+0yesman/epicfight/api/animation/types/EntityState
+4()Lyesman/epicfight/api/animation/types/EntityState;
+4yesman/epicfight/api/animation/types/StaticAnimation
+9yesman/epicfight/world/capabilities/EpicFightCapabilities
+Ayesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch
+CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
+FLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
+Myesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch
+OLyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;
+\(Lyesman/epicfight/api/asset/AssetAccessor;)Lyesman/epicfight/api/animation/AnimationPlayer;
+cLyesman/epicfight/api/asset/AssetAccessor<+Lyesman/epicfight/api/animation/types/StaticAnimation;>;
+p(Lyesman/epicfight/api/asset/AssetAccessor;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Z
+s(Lnet/minecraft/world/entity/Entity;Ljava/lang/Class;)Lyesman/epicfight/world/capabilities/entitypatch/EntityPatch;
+== CE net/shelmarow/combat_evolution/client/hud/execution/HUDAlignment.class
+Compiled from "HUDAlignment.java"
+public final class net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment extends java.lang.Enum<net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment> {
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment CENTER;
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment CENTER_LEFT;
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment CENTER_RIGHT;
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment TOP;
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment TOP_LEFT;
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment TOP_RIGHT;
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment BOTTOM;
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment BOTTOM_LEFT;
+  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment BOTTOM_RIGHT;
+  private static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment[] $VALUES;
+  public static net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment[] values();
+  public static net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment valueOf(java.lang.String);
+  private net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment();
+  private static net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment[] $values();
+  static {};
+}
+== CE net/shelmarow/combat_evolution/client/hud/execution/HUDTypeManager.class
+Compiled from "HUDTypeManager.java"
+public class net.shelmarow.combat_evolution.client.hud.execution.HUDTypeManager {
+  private static final java.util.Map<net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.client.hud.execution.types.HUDType> HUD_TYPE_MAP;
+  public net.shelmarow.combat_evolution.client.hud.execution.HUDTypeManager();
+  public static void registerHUDType(java.lang.String, net.shelmarow.combat_evolution.client.hud.execution.types.HUDType);
+  public static void setHUDType(java.lang.String);
+  public static net.shelmarow.combat_evolution.client.hud.execution.types.HUDType getHUDType(java.lang.String);
+  public static java.util.List<net.minecraft.resources.ResourceLocation> getAllHUDTypes();
+  static {};
+}
+== EF stun
+  public float getStunShield();
+  public void setStunShield(float);
+  public float getMaxStunShield();
+  public void setMaxStunShield(float);
+  public void playAnimation(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, float);
+  public void playAnimationInstantly(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>);
+  public void playAnimationSynchronized(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, float);
+  public void playAnimationInClientSide(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, float);
+  public boolean applyStun(yesman.epicfight.world.damagesource.StunType, float);
+  public boolean isStunned();
+  public abstract yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation> getHitAnimation(yesman.epicfight.world.damagesource.StunType);
+Compiled from "StunType.java"
+public final class yesman.epicfight.world.damagesource.StunType extends java.lang.Enum<yesman.epicfight.world.damagesource.StunType> {
+  public static final yesman.epicfight.world.damagesource.StunType NONE;
+  public static final yesman.epicfight.world.damagesource.StunType SHORT;
+  public static final yesman.epicfight.world.damagesource.StunType LONG;
+  public static final yesman.epicfight.world.damagesource.StunType HOLD;
+  public static final yesman.epicfight.world.damagesource.StunType KNOCKDOWN;
+  public static final yesman.epicfight.world.damagesource.StunType NEUTRALIZE;
+  public static final yesman.epicfight.world.damagesource.StunType FALL;
+  private final java.lang.String tooltip;
+  private final boolean fixedStunTime;
+  private static final yesman.epicfight.world.damagesource.StunType[] $VALUES;
+  public static yesman.epicfight.world.damagesource.StunType[] values();
+  public static yesman.epicfight.world.damagesource.StunType valueOf(java.lang.String);
+  private yesman.epicfight.world.damagesource.StunType(java.lang.String, boolean);
+  public boolean hasFixedStunTime();
+  public java.lang.String toString();
+  private static yesman.epicfight.world.damagesource.StunType[] $values();
+  static {};
+}
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> BIPED_LANDING;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.KnockdownAnimation> BIPED_KNOCKDOWN;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DodgeAnimation> BIPED_KNOCKDOWN_WAKEUP_LEFT;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DodgeAnimation> BIPED_KNOCKDOWN_WAKEUP_RIGHT;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.procedural.EnderDragonActionAnimation> DRAGON_NEUTRALIZED;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.procedural.EnderDragonActionAnimation> DRAGON_NEUTRALIZED_RECOVERY;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> ENDERMAN_NEUTRALIZED;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> SPIDER_NEUTRALIZED;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> VEX_NEUTRALIZED;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> WITHER_NEUTRALIZED;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> AXE_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> FIST_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> SPEAR_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> SWORD_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> SWORD_DUAL_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> BIPED_COMMON_NEUTRALIZED;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> LONGSWORD_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> TACHI_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> TOOL_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> UCHIGATANA_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> UCHIGATANA_SHEATHING_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> GREATSWORD_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> DAGGER_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> DAGGER_DUAL_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.AttackAnimation> BATTOJUTSU_DASH;
+  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.grappling.GrapplingAttackAnimation> BLADE_RUSH_EXECUTE_BIPED;
+  private static yesman.epicfight.api.animation.types.KnockdownAnimation lambda$build$252(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$183(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$178(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$173(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$166(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$160(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$158(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$154(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$150(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$149(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$146(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$142(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$139(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
+  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$135(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
 == HEALTHBARS
 CombatEvolution-2.3.2-NeoForge-1.21.1.jar:      8667  1980-02-01 00:00   net/shelmarow/combat_evolution/mixins/HealthBarMixin.class
 CombatEvolution-2.3.2-NeoForge-1.21.1.jar:      1097  1980-02-01 00:00   assets/combat_evolution/textures/gui/bossbar/ce_health_bar.png
