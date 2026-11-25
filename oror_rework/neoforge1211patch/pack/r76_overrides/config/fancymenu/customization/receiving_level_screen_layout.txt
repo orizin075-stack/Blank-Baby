@@ -1,0 +1,26 @@
+type = fancymenu_layout
+
+layout-meta {
+  identifier = receiving_level_screen
+  render_custom_elements_behind_vanilla = false
+  last_edited_time = 1793840000000
+  is_enabled = true
+  randommode = false
+  randomgroup = 1
+  randomonlyfirsttime = false
+  layout_index = 0
+}
+
+menu_background {
+  color = #10151FFF
+  instance_identifier = 3b5dba73-ec90-4700-8d78-caddb9ea5b1f-1793840000000
+  background_type = color_fancymenu
+}
+
+customization {
+  action = backgroundoptions
+  keepaspectratio = false
+}
+
+layout_action_executable_blocks {
+}
