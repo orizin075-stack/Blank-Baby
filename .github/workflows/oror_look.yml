@@ -12,7 +12,7 @@ on:
         required: false
         default: ''
       pack:
-        description: "'076': the r76 import as the user has it (its whole manifest, its configs and modified jars, The Shooting Star kept), to see it start; empty for the 053 pack"
+        description: "'076' or '077': that import as the user has it (its whole manifest, its configs and modified jars, The Shooting Star kept; 077 with its own repacked OROR jar from pack/r77), to see it start; empty for the 053 pack"
         required: false
         default: ''
   push:
@@ -62,10 +62,10 @@ jobs:
           path: ${{ runner.temp }}/pack053
           key: pack053-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-053.json') }}
       - uses: actions/cache@v4
-        if: ${{ github.event.inputs.pack == '076' }}
+        if: ${{ github.event.inputs.pack != '' }}
         with:
-          path: ${{ runner.temp }}/pack076
-          key: pack076-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-076.json') }}
+          path: ${{ runner.temp }}/pack${{ github.event.inputs.pack }}
+          key: pack${{ github.event.inputs.pack }}-${{ hashFiles('oror_rework/neoforge1211patch/pack/manifest-07*.json') }}
       - name: The 045 pack's mods, Nightfall and the latest OROR jar
         run: |
           if [ -z "$OROR_LOOK_ONLY" ]; then
@@ -79,15 +79,15 @@ jobs:
           fi
           mkdir -p "$OUT"
           G=$RUNNER_TEMP/game; mkdir -p $G/mods
-          if [ "$OROR_PACK" = 076 ]; then
+          if [ -n "$OROR_PACK" ]; then
             # (r76) the user's crash at the loading screen: the import exactly, its 179 mods, configs and modified jars
-            python3 -I $P/tools/fetch_pack.py $P/pack/manifest-076.json "$RUNNER_TEMP/pack076" > $OUT/pack_fetch.txt 2>&1 || true
+            python3 -I $P/tools/fetch_pack.py $P/pack/manifest-$OROR_PACK.json "$RUNNER_TEMP/pack$OROR_PACK" > $OUT/pack_fetch.txt 2>&1 || true
             tail -3 $OUT/pack_fetch.txt
-            cp "$RUNNER_TEMP"/pack076/*.jar $G/mods/
+            cp "$RUNNER_TEMP"/pack$OROR_PACK/*.jar $G/mods/
             cp -r $P/pack/r76_overrides/* $G/
             cp oror_rework/r60test/mods_r61/falchionmoveset-*.jar oror_rework/r60test/mods_r61/indestructible-*.jar $G/mods/
             NEW=$(sed -n 's/^release_version=//p' $P/gradle.properties)
-            cp $P/out/oror_supreme_bosses-$NEW.jar $G/mods/
+            if ls $P/pack/r$OROR_PACK/oror_supreme_bosses-*.jar > /dev/null 2>&1; then cp $P/pack/r$OROR_PACK/oror_supreme_bosses-*.jar $G/mods/; else cp $P/out/oror_supreme_bosses-$NEW.jar $G/mods/; fi
             cp $P/user_mods/*.jar $G/mods/
             ls $G/mods | wc -l | tee $OUT/mods_count.txt
             ls $G/mods > $OUT/mods.txt
@@ -153,7 +153,7 @@ jobs:
           L=$G/logs/latest.log
           if [ -f $L ]; then
             grep -n -E '\[look\]|OROR|ERROR|FATAL|Exception|Caused by|Mixin apply failed|InvalidInjection' $L | cut -c1-500 | head -n 3000 > $OUT/latest-filtered.log
-            if [ "$OROR_PACK" = 076 ]; then head -c 6000000 $L > $OUT/latest-076.log; fi
+            if [ -n "$OROR_PACK" ]; then head -c 6000000 $L > $OUT/latest-$OROR_PACK.log; fi
           fi
           ls -la $OUT
       # Not from a cancelled run (its empty folder once landed first and made the next run's rebase fail).
