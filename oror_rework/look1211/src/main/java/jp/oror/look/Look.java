@@ -2007,7 +2007,94 @@ public final class Look {
             mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT);
         } else if (k == 30) {
             shot(mc, "d52_stamina_player_bar_front");
-        } else if (k == 40) {
+        } else if (k >= 40) {
+            downScene(mc, k - 40);
+        }
+    }
+
+    /** (r76) The down: a vindicator and a zombie broken (down, kneeling, stars), the vindicator struck (the critical blow), the zombie left to rise. */
+    private static void downScene(Minecraft mc, int k) {
+        IntegratedServer server = mc.getSingleplayerServer();
+        String name = mc.player.getGameProfile().getName();
+        if (k == 0) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            server.execute(() -> {
+                ServerLevel level = server.overworld();
+                for (Entity e : level.getEntities((Entity) null, new AABB(sx - 30, sy - 6, sz - 20, sx + 30, sy + 20, sz + 40),
+                    x -> !(x instanceof net.minecraft.world.entity.player.Player))) {
+                    e.discard();
+                }
+                command(server, "item replace entity " + name + " weapon.mainhand with minecraft:iron_sword");
+                command(server, String.format(java.util.Locale.ROOT, "tp %s %.2f %.2f %.2f 0 10", name, sx, sy, sz + 2));
+                command(server, String.format(java.util.Locale.ROOT, "summon minecraft:vindicator %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}", sx - 1.2, (int) sy, sz + 4.5));
+                command(server, String.format(java.util.Locale.ROOT,
+                    "summon minecraft:zombie %.1f %d %.1f {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],ArmorItems:[{},{},{},{id:\"minecraft:leather_helmet\",count:1}]}",
+                    sx + 2.2, (int) sy, sz + 6.5));
+            });
+        } else if (k == 8) {
+            server.execute(() -> {
+                try {
+                    ServerPlayer sp = serverPlayer(server);
+                    Class<?> ms = Class.forName("jp.oror.reborn.combat.MobStamina");
+                    for (net.minecraft.world.entity.Mob m : sp.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, sp.getBoundingBox().inflate(12))) {
+                        ms.getMethod("empty", net.minecraft.world.entity.Mob.class).invoke(null, m);
+                    }
+                    note("down: both broken, down " + Class.forName("jp.oror.reborn.combat.MobDown").getField("downs").get(null));
+                } catch (ReflectiveOperationException | RuntimeException e) {
+                    note("down: " + e + (e.getCause() == null ? "" : " / " + e.getCause()));
+                }
+            });
+        } else if (k == 14) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+        } else if (k == 20) {
+            shot(mc, "d60_down");
+        } else if (k == 26) {
+            net.minecraft.world.entity.Mob v = clientNearest(mc, net.minecraft.world.entity.monster.Vindicator.class, 10);
+            if (v != null) {
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, v.getEyePosition());
+                server.execute(() -> {
+                    ServerPlayer sp = serverPlayer(server);
+                    for (net.minecraft.world.entity.monster.Vindicator sv : sp.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.monster.Vindicator.class,
+                        sp.getBoundingBox().inflate(10))) {
+                        sp.teleportTo(sv.getX(), sv.getY(), sv.getZ() - 2.2);
+                    }
+                });
+            }
+        } else if (k == 30) {
+            net.minecraft.world.entity.Mob v = clientNearest(mc, net.minecraft.world.entity.monster.Vindicator.class, 10);
+            if (v != null) {
+                mc.player.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, v.getEyePosition());
+                float hp = v.getHealth();
+                mc.gameMode.attack(mc.player, v);
+                mc.player.swing(InteractionHand.MAIN_HAND);
+                note("down: struck the vindicator at " + hp);
+            }
+        } else if (k == 32) {
+            shot(mc, "d61_critical_blow");
+        } else if (k == 38) {
+            shot(mc, "d62_critical_after");
+            server.execute(() -> {
+                ServerPlayer sp = serverPlayer(server);
+                for (net.minecraft.world.entity.Mob m : sp.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, sp.getBoundingBox().inflate(14))) {
+                    note(String.format(java.util.Locale.ROOT, "down: %s hp %.1f/%.1f", m.getType().toShortString(), m.getHealth(), m.getMaxHealth()));
+                }
+            });
+        } else if (k == 120) {
+            mc.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            shot(mc, "d63_risen");
+            server.execute(() -> {
+                try {
+                    ServerPlayer sp = serverPlayer(server);
+                    Class<?> ms = Class.forName("jp.oror.reborn.combat.MobStamina"), md = Class.forName("jp.oror.reborn.combat.MobDown");
+                    for (net.minecraft.world.entity.Mob m : sp.serverLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, sp.getBoundingBox().inflate(14))) {
+                        note(String.format(java.util.Locale.ROOT, "down: %s risen, down %s stamina %.2f", m.getType().toShortString(),
+                            md.getMethod("isDown", LivingEntity.class).invoke(null, m), ms.getMethod("fraction", net.minecraft.world.entity.Mob.class).invoke(null, m)));
+                    }
+                } catch (ReflectiveOperationException | RuntimeException e) {
+                    note("down: " + e);
+                }
+            });
+        } else if (k == 130) {
             finish(mc, "complete (duel only)");
         }
     }
