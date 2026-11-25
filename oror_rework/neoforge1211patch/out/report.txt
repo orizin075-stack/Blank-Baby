@@ -64,48 +64,51 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/c086fab6229047df03bb78951c7a1b8fce8c4892/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.29s
-[1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-[1m*** Started working on [4mdownloadClient[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.42s
 [1m*** Started working on [4mdownloadServer[23;0m[23;0m
+[1m*** Started working on [4mdownloadClient[23;0m[23;0m
+[1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.42s
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.44s
-[1m*** Started working on [4mstripClient[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.45s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 0.62s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.86s
+[1m*** Started working on [4mstripClient[23;0m[23;0m
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.14s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.53s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.68s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.54s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.53s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.88s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.46s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.52s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 2.84s
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.48s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.18s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 3.98s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 5.55s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 3.52s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.24s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.12s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.61s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.40s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.07s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 2.72s
-Total runtime: 19.13s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.35s
+Total runtime: 28.64s
 
 
 > Task :compileJava
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:135: error: method refill(Mob) is already defined in class MobStamina
+    public static void refill(Mob m) {
+                       ^
 warning: unknown enum constant DeprecationLevel.ERROR
   reason: class file for kotlin.DeprecationLevel not found
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/WornGearLayer.java:125: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
@@ -168,10 +171,10 @@ warning: unknown enum constant DeprecationLevel.ERROR
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/RoyalRenderer.java:103: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
                                                              ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:279: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                        ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:279: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                                                ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/ExhaustionHud.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
@@ -268,1457 +271,190 @@ Note: Some input files use or override a deprecated API.
 Note: Recompile with -Xlint:deprecation for details.
 Note: /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/RelicArts.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
+1 error
 53 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795567429792.json
+
+> Task :compileJava FAILED
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795567798285.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 56s
-2 actionable tasks: 2 executed
-== ComboAttacks.executeOnServer (Epic Fight)
-  public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
-== AbstractSpell.canBeCastedBy (Iron's Spells)
-  public io.redspace.ironsspellbooks.api.spells.CastResult canBeCastedBy(int, io.redspace.ironsspellbooks.api.spells.CastSource, io.redspace.ironsspellbooks.api.magic.MagicData, net.minecraft.world.entity.player.Player);
-== AdaptiveCombat.tick (base/oror_supreme_bosses-0.17.39-052-preview.jar)
-  public static void tick(net.neoforged.neoforge.event.tick.EntityTickEvent$Post);
-== Nightfall and Indestructible mod ids
-modId = "efn"
-modId = "neoforge"
-modId = "minecraft"
-modId="indestructible"
-modId="neoforge"
-modId="minecraft"
-== EFNSkills / DPRSkills fields
-  public static final net.neoforged.neoforge.registries.DeferredHolder<yesman.epicfight.skill.Skill, com.hm.efn.skill.dodge.EFNDodgeSkill_Roll> EFN_DODGE_ROLL_HOLDER;
-  public static final net.neoforged.neoforge.registries.DeferredHolder<yesman.epicfight.skill.Skill, com.hm.efn.skill.dodge.EFNDodgeSkill_Step> EFN_DODGE_STEP_HOLDER;
-  public static final net.neoforged.neoforge.registries.DeferredHolder<yesman.epicfight.skill.Skill, com.hm.efn.skill.guard.EFNParryingSkill> EFN_PARRY_HOLDER;
-  public static yesman.epicfight.skill.Skill EFN_DODGE_ROLL;
-  public static yesman.epicfight.skill.Skill EFN_DODGE_STEP;
-  public static yesman.epicfight.skill.Skill EFN_PARRY;
-  public static final net.neoforged.neoforge.registries.DeferredHolder<yesman.epicfight.skill.Skill, com.p1nero.dpr.skill.ParryAndDodgeRewardSkill> STAMINA1;
-== Indestructible AdvancedCustomHumanoidMobPatch: isBlocking/setParry inside preTickServer (NightfallEnemyRecoveryMixin redirects every isBlocking call there)
-32:      61: invokevirtual #252                // Method isBlocking:()Z
-41:      78: invokevirtual #255                // Method getStamina:()F
-44:      83: invokevirtual #156                // Method getMaxStamina:()F
-60:     113: getfield      #47                 // Field regenStaminaStandbyTime:I
-86:     153: invokevirtual #159                // Method setStamina:(F)V
-96:     169: invokevirtual #159                // Method setStamina:(F)V
-103:     180: invokevirtual #159                // Method setStamina:(F)V
-== who calls setParry(true) (NightfallEnemyParryWindowMixin times the window from the last call)
--- com.nameless.indestructible.data.AdvancedMobpatchReloader
-      39: invokevirtual #1100               // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setBlockTick:(I)V
-      45: invokevirtual #1103               // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParry:(Z)V
--- com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch
-  public void setParry(boolean);
-  public void setParryCounter(int);
--- com.nameless.indestructible.world.ai.goal.GuardGoal
-      13: iconst_0
-      14: invokevirtual #45                 // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParryCounter:(I)V
--- com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion
-  public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion setParryCost(float);
-  public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion setParryAnimations(java.lang.Object[]);
-  private static void lambda$setParryAnimations$0(java.util.ArrayList, java.lang.String);
--- com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotionSet
-       7: invokespecial #27                 // Method "<init>":(III)V
-  public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotionSet setParryTimes(int);
-== Superb Warfare charging station (the OROR guns hold 1,000,000 and 600,000 FE)
-  protected static final int SLOT_FUEL = 0;
-  protected static final int SLOT_CHARGE = 1;
-  public static final int MAX_DATA_COUNT = 4;
-  public static final int MAX_ENERGY;
-  public static final int DEFAULT_FUEL_TIME;
-  public static final int CHARGE_SPEED;
-  public static final int CHARGE_OTHER_SPEED;
-  public static final int CHARGE_RADIUS;
-== Superb Warfare: block breaking outside explosions
-com.atsuishio.superbwarfare.tools.CustomExplosion$Builder ::  private static final net.minecraft.world.level.Explosion$BlockInteraction explode$lambda$0(com.atsuishio.superbwarfare.tools.CustomExplosion$Builder); -> destroyBlock:Z
-com.atsuishio.superbwarfare.tools.CustomExplosion$Builder ::  public com.atsuishio.superbwarfare.tools.CustomExplosion$Builder(net.minecraft.world.entity.Entity); -> destroyBlock:Z
-com.atsuishio.superbwarfare.tools.CustomExplosion$Builder ::  public final com.atsuishio.superbwarfare.tools.CustomExplosion$Builder destroyBlock(boolean); -> destroyBlock(boolean);
-com.atsuishio.superbwarfare.tools.CustomExplosion$Builder ::  public final com.atsuishio.superbwarfare.tools.CustomExplosion$Builder destroyBlock(boolean); -> destroyBlock:Z
-com.atsuishio.superbwarfare.tools.CustomExplosion$Builder ::  public final com.atsuishio.superbwarfare.tools.CustomExplosion$Builder keepBlock(); -> destroyBlock:Z
-com.atsuishio.superbwarfare.tools.CustomExplosion$Builder :: -> destroyBlock;
-com.atsuishio.superbwarfare.entity.vehicle.AnnihilatorEntity ::  private final float laserLength(net.minecraft.world.phys.Vec3, net.minecraft.world.entity.LivingEntity, com.atsuishio.superbwarfare.data.gun.GunData); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils ::  private static final kotlin.Unit collideBlocks$lambda$10(com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity, boolean[], net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils ::  private static final kotlin.Unit collideBlocks$lambda$12(com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity, boolean[], net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity ::  private static final kotlin.Unit afterHitBlock$lambda$2(com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity, net.minecraft.world.phys.BlockHitResult, net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity ::  private static final kotlin.Unit afterHitEntity$lambda$0(com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity, net.minecraft.world.phys.EntityHitResult, net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.MediumRocketEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.MediumRocketEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/server/level/ServerLevel.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile ::  private static final void destroyBlock$lambda$6(com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile); -> destroyBlock$lambda$6(com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile);
-com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile ::  public com.atsuishio.superbwarfare.tools.CustomExplosion$Builder buildExplosion(net.minecraft.world.phys.Vec3); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
-com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile ::  public void destroyBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock(net.minecraft.world.phys.BlockHitResult);
-com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile ::  public void destroyBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.MissileProjectile ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.SmallCannonShellEntity ::  private final void causeExplode(net.minecraft.world.phys.Vec3, boolean); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
-com.atsuishio.superbwarfare.entity.projectile.SmallCannonShellEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.ProjectileEntity ::  protected void onHitBlock(net.minecraft.world.phys.BlockHitResult); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
-com.atsuishio.superbwarfare.entity.projectile.ProjectileEntity ::  protected void onHitEntity(net.minecraft.world.phys.EntityHitResult); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
-com.atsuishio.superbwarfare.entity.projectile.C4Entity ::  public final void explode(); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.SmallRocketEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.RpgRocketStandardEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.RpgRocketTBGEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.Tm62Entity ::  public final void touchEntity(); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.MelonBombEntity ::  private static final kotlin.Unit afterHitBlock$lambda$2(net.minecraft.world.level.Level, net.minecraft.world.phys.BlockHitResult, net.minecraft.core.BlockPos); -> net/minecraft/server/level/ServerLevel.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.MelonBombEntity ::  private static final kotlin.Unit afterHitEntity$lambda$0(net.minecraft.world.level.Level, net.minecraft.world.phys.EntityHitResult, net.minecraft.core.BlockPos); -> net/minecraft/server/level/ServerLevel.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.CannonShellEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.CannonShellEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/server/level/ServerLevel.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-== Superb Warfare VehicleEntity.move (059d TurretRestMixin: still turrets skip most moves)
-  public net.minecraft.world.phys.Vec3 vCollide(net.minecraft.world.phys.Vec3);
-  public void vMove(net.minecraft.world.entity.MoverType, net.minecraft.world.phys.Vec3);
-  public void move(net.minecraft.world.entity.MoverType, net.minecraft.world.phys.Vec3);
-== EpicFightCapabilities.getEntityPatch (null entity?)
-== yesman.epicfight.api.animation.AnimationManager
-public class yesman.epicfight.api.animation.AnimationManager extends net.minecraft.server.packs.resources.SimplePreparableReloadListener<java.util.List<net.minecraft.resources.ResourceLocation>> {
-  public yesman.epicfight.api.animation.AnimationManager();
-  public static yesman.epicfight.api.animation.AnimationManager getInstance();
-  public static boolean checkNull(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>);
-  public static <T extends yesman.epicfight.api.animation.types.StaticAnimation> yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<T> byKey(java.lang.String);
-  public static <T extends yesman.epicfight.api.animation.types.StaticAnimation> yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<T> byKey(net.minecraft.resources.ResourceLocation);
-  public static <T extends yesman.epicfight.api.animation.types.StaticAnimation> yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<T> byId(int);
-  public static <T extends yesman.epicfight.api.animation.types.StaticAnimation> yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<T> trasientAccessor(net.minecraft.resources.ResourceLocation);
-  public java.util.Map<net.minecraft.resources.ResourceLocation, yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>> getAnimations(java.util.function.Predicate<yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>>);
-  public yesman.epicfight.api.animation.AnimationClip loadAnimationClip(yesman.epicfight.api.animation.types.StaticAnimation, java.util.function.BiFunction<yesman.epicfight.api.asset.JsonAssetLoader, yesman.epicfight.api.animation.types.StaticAnimation, yesman.epicfight.api.animation.AnimationClip>);
-  public static void readAnimationProperties(yesman.epicfight.api.animation.types.StaticAnimation);
-  public static net.minecraft.resources.ResourceLocation getSubAnimationFileLocation(net.minecraft.resources.ResourceLocation, yesman.epicfight.api.client.animation.AnimationSubFileReader$SubFileType<?>);
-  public static net.minecraft.resources.ResourceLocation idToPath(net.minecraft.resources.ResourceLocation);
-  public static net.minecraft.resources.ResourceLocation pathToId(net.minecraft.resources.ResourceLocation);
-  public static void setServerResourceManager(net.minecraft.server.packs.resources.ResourceManager);
-  public static net.minecraft.server.packs.resources.ResourceManager getAnimationResourceManager();
-  public java.util.stream.Stream<net.minecraft.nbt.CompoundTag> getResourcepackAnimationStream();
-  public void processServerPacket(yesman.epicfight.network.server.SPDatapackSync, boolean);
-  public void validateClientAnimationRegistry(yesman.epicfight.network.client.CPPairingAnimationRegistry, net.minecraft.server.network.ServerGamePacketListenerImpl);
-  public static void addNoWarningModId(java.lang.String);
-== yesman.epicfight.api.animation.AnimationManager$AnimationAccessor
-public interface yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<A extends yesman.epicfight.api.animation.types.DynamicAnimation> extends yesman.epicfight.api.asset.AssetAccessor<A> {
-  public abstract int id();
-  public default boolean idBetween(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>);
-== yesman.epicfight.api.animation.types.StaticAnimation
-public class yesman.epicfight.api.animation.types.StaticAnimation extends yesman.epicfight.api.animation.types.DynamicAnimation implements yesman.epicfight.api.physics.ik.InverseKinematicsProvider {
-  public static final yesman.epicfight.api.animation.AnimationVariables$IndependentVariableKey<java.lang.Boolean> NO_PHYSICS;
-  public static java.lang.String getFileHash(net.minecraft.resources.ResourceLocation);
-  public yesman.epicfight.api.animation.types.StaticAnimation();
-  public yesman.epicfight.api.animation.types.StaticAnimation(boolean, yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.model.Armature>);
-  public yesman.epicfight.api.animation.types.StaticAnimation(float, boolean, yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.model.Armature>);
-  public yesman.epicfight.api.animation.types.StaticAnimation(float, boolean, java.lang.String, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.model.Armature>);
-  public yesman.epicfight.api.animation.types.StaticAnimation(net.minecraft.resources.ResourceLocation, float, boolean, java.lang.String, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.model.Armature>);
-  public void loadAnimation();
-  public void postInit();
-  public yesman.epicfight.api.animation.AnimationClip getAnimationClip();
-  public void setLinkAnimation(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.DynamicAnimation>, yesman.epicfight.api.animation.Pose, boolean, float, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.api.animation.types.LinkAnimation);
-  public void begin(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  public void end(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.DynamicAnimation>, boolean);
-  public void tick(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  public yesman.epicfight.api.animation.types.EntityState getState(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float);
-  public yesman.epicfight.api.utils.datastructure.ParameterizedHashMap<yesman.epicfight.api.animation.types.EntityState$StateFactor<?>> getStatesMap(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float);
-  public <T> T getState(yesman.epicfight.api.animation.types.EntityState$StateFactor<T>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float);
-  public java.util.Optional<yesman.epicfight.api.client.animation.property.JointMaskEntry> getJointMaskEntry(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, boolean);
-  public void modifyPose(yesman.epicfight.api.animation.types.DynamicAnimation, yesman.epicfight.api.animation.Pose, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float, float);
-  public boolean isStaticAnimation();
-  public boolean doesHeadRotFollowEntityHead();
-  public int getId();
-  public boolean equals(java.lang.Object);
-  public boolean idBetween(yesman.epicfight.api.animation.types.StaticAnimation, yesman.epicfight.api.animation.types.StaticAnimation);
-  public boolean in(yesman.epicfight.api.animation.types.StaticAnimation[]);
-  public boolean in(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.DynamicAnimation>[]);
-  public <A extends yesman.epicfight.api.animation.types.StaticAnimation> A setResourceLocation(java.lang.String, java.lang.String);
-  public net.minecraft.resources.ResourceLocation getLocation();
-  public net.minecraft.resources.ResourceLocation getRegistryName();
-  public yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.model.Armature> getArmature();
-  public java.lang.String getFileHash();
-  public float getPlaySpeed(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.api.animation.types.DynamicAnimation);
-  public yesman.epicfight.api.animation.TransformSheet getCoord();
-  public java.lang.String toString();
-  public yesman.epicfight.api.animation.types.StaticAnimation addPropertyUnsafe(yesman.epicfight.api.animation.property.AnimationProperty<?>, java.lang.Object);
-  public <A extends yesman.epicfight.api.animation.types.StaticAnimation, V> A addProperty(yesman.epicfight.api.animation.property.AnimationProperty$StaticAnimationProperty<V>, V);
-  public <A extends yesman.epicfight.api.animation.types.StaticAnimation> A removeProperty(yesman.epicfight.api.animation.property.AnimationProperty$StaticAnimationProperty<?>);
-  public final <A extends yesman.epicfight.api.animation.types.StaticAnimation> A addEvents(yesman.epicfight.api.animation.property.AnimationProperty$StaticAnimationProperty<?>, yesman.epicfight.api.animation.property.AnimationEvent<?, ?>...);
-  public <A extends yesman.epicfight.api.animation.types.StaticAnimation> A addEvents(yesman.epicfight.api.animation.property.AnimationEvent<?, ?>...);
-  public <V> java.util.Optional<V> getProperty(yesman.epicfight.api.animation.property.AnimationProperty<V>);
-  public yesman.epicfight.api.client.animation.Layer$Priority getPriority();
-  public yesman.epicfight.api.client.animation.Layer$LayerType getLayerType();
-  public <A extends yesman.epicfight.api.animation.types.StaticAnimation> A newTimePair(float, float);
-  public <A extends yesman.epicfight.api.animation.types.StaticAnimation> A newConditionalTimePair(java.util.function.Function<yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, java.lang.Integer>, float, float);
-  public <T, A extends yesman.epicfight.api.animation.types.StaticAnimation> A addState(yesman.epicfight.api.animation.types.EntityState$StateFactor<T>, T);
-  public <T, A extends yesman.epicfight.api.animation.types.StaticAnimation> A removeState(yesman.epicfight.api.animation.types.EntityState$StateFactor<T>);
-  public <T, A extends yesman.epicfight.api.animation.types.StaticAnimation> A addConditionalState(int, yesman.epicfight.api.animation.types.EntityState$StateFactor<T>, T);
-  public <T, A extends yesman.epicfight.api.animation.types.StaticAnimation> A addStateRemoveOld(yesman.epicfight.api.animation.types.EntityState$StateFactor<T>, T);
-  public <T, A extends yesman.epicfight.api.animation.types.StaticAnimation> A addStateIfNotExist(yesman.epicfight.api.animation.types.EntityState$StateFactor<T>, T);
-  public java.lang.Object getModifiedLinkState(yesman.epicfight.api.animation.types.EntityState$StateFactor<?>, java.lang.Object, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float);
-  public java.util.List<yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>> getSubAnimations();
-  public yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation> getRealAnimation();
-  public <A extends yesman.epicfight.api.animation.types.DynamicAnimation> yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<A> getAccessor();
-  public void setAccessor(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>);
-  public void invalidate();
-  public boolean isInvalid();
-  public void renderDebugging(com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float, float);
-  public yesman.epicfight.api.physics.ik.InverseKinematicsSimulator$InverseKinematicsObject createSimulationData(yesman.epicfight.api.physics.ik.InverseKinematicsProvider, yesman.epicfight.api.physics.ik.InverseKinematicsSimulatable, yesman.epicfight.api.physics.ik.InverseKinematicsSimulator$InverseKinematicsBuilder);
-  public yesman.epicfight.api.asset.AssetAccessor getRealAnimation();
-== yesman.epicfight.api.animation.types.DynamicAnimation
-public abstract class yesman.epicfight.api.animation.types.DynamicAnimation {
-  public yesman.epicfight.api.animation.types.DynamicAnimation();
-  public yesman.epicfight.api.animation.types.DynamicAnimation(float, boolean);
-  public final yesman.epicfight.api.animation.Pose getRawPose(float);
-  public yesman.epicfight.api.animation.Pose getPoseByTime(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float, float);
-  public void modifyPose(yesman.epicfight.api.animation.types.DynamicAnimation, yesman.epicfight.api.animation.Pose, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float, float);
-  public void putOnPlayer(yesman.epicfight.api.animation.AnimationPlayer, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  public void begin(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  public void tick(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  public void end(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.DynamicAnimation>, boolean);
-  public void linkTick(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.DynamicAnimation>);
-  public boolean hasTransformFor(java.lang.String);
-  public java.util.Optional<yesman.epicfight.api.client.animation.property.JointMaskEntry> getJointMaskEntry(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, boolean);
-  public yesman.epicfight.api.animation.types.EntityState getState(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float);
-  public yesman.epicfight.api.utils.datastructure.ParameterizedMap<yesman.epicfight.api.animation.types.EntityState$StateFactor<?>> getStatesMap(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float);
-  public <T> T getState(yesman.epicfight.api.animation.types.EntityState$StateFactor<T>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float);
-  public yesman.epicfight.api.animation.AnimationClip getAnimationClip();
-  public java.util.Map<java.lang.String, yesman.epicfight.api.animation.TransformSheet> getTransfroms();
-  public float getPlaySpeed(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.api.animation.types.DynamicAnimation);
-  public yesman.epicfight.api.animation.TransformSheet getCoord();
-  public void setTotalTime(float);
-  public float getTotalTime();
-  public float getTransitionTime();
-  public boolean isRepeat();
-  public boolean canBePlayedReverse();
-  public net.minecraft.resources.ResourceLocation getRegistryName();
-  public int getId();
-  public <V> java.util.Optional<V> getProperty(yesman.epicfight.api.animation.property.AnimationProperty<V>);
-  public boolean isComboAttackAnimation();
-  public boolean isMainFrameAnimation();
-  public boolean isReboundAnimation();
-  public boolean isMetaAnimation();
-  public boolean isClientAnimation();
-  public boolean isStaticAnimation();
-  public abstract <A extends yesman.epicfight.api.animation.types.DynamicAnimation> yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<? extends yesman.epicfight.api.animation.types.DynamicAnimation> getAccessor();
-  public abstract yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation> getRealAnimation();
-  public boolean isLinkAnimation();
-  public boolean doesHeadRotFollowEntityHead();
-  public void renderDebugging(com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, float, float);
-== yesman.epicfight.api.animation.TransformSheet
-public class yesman.epicfight.api.animation.TransformSheet {
-  public static final yesman.epicfight.api.animation.TransformSheet EMPTY_SHEET;
-  public static final java.util.function.Function<net.minecraft.world.phys.Vec3, yesman.epicfight.api.animation.TransformSheet> EMPTY_SHEET_PROVIDER;
-  public yesman.epicfight.api.animation.TransformSheet();
-  public yesman.epicfight.api.animation.TransformSheet(int);
-  public yesman.epicfight.api.animation.TransformSheet(java.util.List<yesman.epicfight.api.animation.Keyframe>);
-  public yesman.epicfight.api.animation.TransformSheet(yesman.epicfight.api.animation.Keyframe[]);
-  public yesman.epicfight.api.animation.JointTransform getStartTransform();
-  public yesman.epicfight.api.animation.Keyframe[] getKeyframes();
-  public yesman.epicfight.api.animation.TransformSheet copyAll();
-  public yesman.epicfight.api.animation.TransformSheet copy(int, int);
-  public yesman.epicfight.api.animation.TransformSheet readFrom(yesman.epicfight.api.animation.TransformSheet);
-  public yesman.epicfight.api.animation.TransformSheet createInterpolated(float[]);
-  public void forEach(java.util.function.BiConsumer<java.lang.Integer, yesman.epicfight.api.animation.Keyframe>);
-  public void forEach(java.util.function.BiConsumer<java.lang.Integer, yesman.epicfight.api.animation.Keyframe>, int, int);
-  public yesman.epicfight.api.utils.math.Vec3f getInterpolatedTranslation(float);
-  public org.joml.Quaternionf getInterpolatedRotation(float);
-  public yesman.epicfight.api.animation.JointTransform getInterpolatedTransform(float);
-  public yesman.epicfight.api.animation.JointTransform getInterpolatedTransform(yesman.epicfight.api.animation.TransformSheet$InterpolationInfo);
-  public yesman.epicfight.api.animation.TransformSheet extend(yesman.epicfight.api.animation.TransformSheet);
-  public yesman.epicfight.api.animation.TransformSheet getFirstFrame();
-  public void correctAnimationByNewPosition(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.animation.TransformSheet getCorrectedModelCoord(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, int, int);
-  public yesman.epicfight.api.animation.TransformSheet extendsZCoord(float, int, int);
-  public yesman.epicfight.api.animation.TransformSheet transformToWorldCoordOriginAsDest(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.minecraft.world.phys.Vec3, net.minecraft.world.phys.Vec3, float, float, int, int);
-  public yesman.epicfight.api.animation.TransformSheet$InterpolationInfo getInterpolationInfo(float);
-  public float maxFrameTime();
-  public java.lang.String toString();
-== yesman.epicfight.api.animation.JointTransform
-public class yesman.epicfight.api.animation.JointTransform {
-  public static final java.lang.String ANIMATION_TRANSFORM;
-  public static final java.lang.String JOINT_LOCAL_TRANSFORM;
-  public static final java.lang.String PARENT;
-  public static final java.lang.String RESULT1;
-  public static final java.lang.String RESULT2;
-  public yesman.epicfight.api.animation.JointTransform(yesman.epicfight.api.utils.math.Vec3f, org.joml.Quaternionf, yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.Vec3f translation();
-  public org.joml.Quaternionf rotation();
-  public yesman.epicfight.api.utils.math.Vec3f scale();
-  public void clearTransform();
-  public yesman.epicfight.api.animation.JointTransform copy();
-  public yesman.epicfight.api.animation.JointTransform copyFrom(yesman.epicfight.api.animation.JointTransform);
-  public void jointLocal(yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.utils.math.MatrixOperation);
-  public void parent(yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.utils.math.MatrixOperation);
-  public void animationTransform(yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.utils.math.MatrixOperation);
-  public void frontResult(yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.utils.math.MatrixOperation);
-  public void overwriteRotation(yesman.epicfight.api.animation.JointTransform);
-  public yesman.epicfight.api.animation.JointTransform mergeIfExist(java.lang.String, yesman.epicfight.api.animation.JointTransform);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f getAnimationBoundMatrix(yesman.epicfight.api.animation.Joint, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f toMatrix();
-  public java.lang.String toString();
-  public static yesman.epicfight.api.animation.JointTransform interpolateTransform(yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.animation.JointTransform, float, yesman.epicfight.api.animation.JointTransform);
-  public static yesman.epicfight.api.animation.JointTransform interpolate(yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.animation.JointTransform, float);
-  public static yesman.epicfight.api.animation.JointTransform interpolate(yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.animation.JointTransform, float, yesman.epicfight.api.animation.JointTransform);
-  public static yesman.epicfight.api.animation.JointTransform fromMatrixWithoutScale(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.animation.JointTransform translation(yesman.epicfight.api.utils.math.Vec3f);
-  public static yesman.epicfight.api.animation.JointTransform rotation(org.joml.Quaternionf);
-  public static yesman.epicfight.api.animation.JointTransform scale(yesman.epicfight.api.utils.math.Vec3f);
-  public static yesman.epicfight.api.animation.JointTransform fromMatrix(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.animation.JointTransform translationRotation(yesman.epicfight.api.utils.math.Vec3f, org.joml.Quaternionf);
-  public static yesman.epicfight.api.animation.JointTransform mul(yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.animation.JointTransform, yesman.epicfight.api.utils.math.MatrixOperation);
-  public static yesman.epicfight.api.animation.JointTransform fromPrimitives(float, float, float, float, float, float, float, float, float, float);
-  public static yesman.epicfight.api.animation.JointTransform empty();
-== yesman.epicfight.api.animation.Keyframe
-public class yesman.epicfight.api.animation.Keyframe {
-  public yesman.epicfight.api.animation.Keyframe(float, yesman.epicfight.api.animation.JointTransform);
-  public yesman.epicfight.api.animation.Keyframe(yesman.epicfight.api.animation.Keyframe);
-  public void copyFrom(yesman.epicfight.api.animation.Keyframe);
-  public float time();
-  public void setTime(float);
-  public yesman.epicfight.api.animation.JointTransform transform();
-  public java.lang.String toString();
-  public static yesman.epicfight.api.animation.Keyframe empty();
-== yesman.epicfight.api.asset.AssetAccessor
-public interface yesman.epicfight.api.asset.AssetAccessor<O> extends java.util.function.Supplier<O> {
-  public abstract O get();
-  public abstract net.minecraft.resources.ResourceLocation registryName();
-  public default boolean isPresent();
-  public default boolean isEmpty();
-  public abstract boolean inRegistry();
-  public default boolean checkType(java.lang.Class<?>);
-  public default O orElse(O);
-  public default void ifPresent(java.util.function.Consumer<O>);
-  public default void ifPresentOrElse(java.util.function.Consumer<O>, java.lang.Runnable);
-  public default void doOrThrow(java.util.function.Consumer<O>);
-  public default void checkNotNull();
-== yesman.epicfight.api.utils.math.Vec3f
-public class yesman.epicfight.api.utils.math.Vec3f extends yesman.epicfight.api.utils.math.Vec2f {
-  public static final yesman.epicfight.api.utils.math.Vec3f X_AXIS;
-  public static final yesman.epicfight.api.utils.math.Vec3f Y_AXIS;
-  public static final yesman.epicfight.api.utils.math.Vec3f Z_AXIS;
-  public static final yesman.epicfight.api.utils.math.Vec3f M_X_AXIS;
-  public static final yesman.epicfight.api.utils.math.Vec3f M_Y_AXIS;
-  public static final yesman.epicfight.api.utils.math.Vec3f M_Z_AXIS;
-  public static final yesman.epicfight.api.utils.math.Vec3f ZERO;
-  public float z;
-  public yesman.epicfight.api.utils.math.Vec3f();
-  public yesman.epicfight.api.utils.math.Vec3f(float, float, float);
-  public yesman.epicfight.api.utils.math.Vec3f(double, double, double);
-  public yesman.epicfight.api.utils.math.Vec3f(net.minecraft.world.phys.Vec3);
-  public yesman.epicfight.api.utils.math.Vec3f set(float, float, float);
-  public yesman.epicfight.api.utils.math.Vec3f set(net.minecraft.world.phys.Vec3);
-  public yesman.epicfight.api.utils.math.Vec3f set(yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.Vec3f add(float, float, float);
-  public yesman.epicfight.api.utils.math.Vec3f add(yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.Vec3f add(net.minecraft.world.phys.Vec3);
-  public yesman.epicfight.api.utils.math.Vec3f sub(float, float, float);
-  public yesman.epicfight.api.utils.math.Vec3f sub(yesman.epicfight.api.utils.math.Vec3f);
-  public static yesman.epicfight.api.utils.math.Vec3f add(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public static yesman.epicfight.api.utils.math.Vec3f sub(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.Vec3f multiply(yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.Vec3f multiply(float, float, float);
-  public static yesman.epicfight.api.utils.math.Vec3f multiply(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, float, float, float);
-  public yesman.epicfight.api.utils.math.Vec3f scale(float);
-  public static yesman.epicfight.api.utils.math.Vec3f scale(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, float);
-  public yesman.epicfight.api.utils.math.Vec3f copy();
-  public float length();
-  public float lengthSqr();
-  public float distance(yesman.epicfight.api.utils.math.Vec3f);
-  public float distanceSqr(yesman.epicfight.api.utils.math.Vec3f);
-  public float horizontalDistance();
-  public float horizontalDistanceSqr();
-  public void rotate(float, yesman.epicfight.api.utils.math.Vec3f);
-  public void invalidate();
-  public boolean validateValues();
-  public static yesman.epicfight.api.utils.math.Vec3f rotate(float, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public static yesman.epicfight.api.utils.math.Vec3f rotate(org.joml.Quaternionf, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public static float dot(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public static yesman.epicfight.api.utils.math.Vec3f cross(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public static float getAngleBetween(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public static org.joml.Quaternionf getRotatorBetween(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, org.joml.Quaternionf);
-  public static yesman.epicfight.api.utils.math.Vec3f interpolate(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, float, yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.Vec3f normalize();
-  public static yesman.epicfight.api.utils.math.Vec3f normalize(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public java.lang.String toString();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public static yesman.epicfight.api.utils.math.Vec3f average(java.util.Collection<yesman.epicfight.api.utils.math.Vec3f>, yesman.epicfight.api.utils.math.Vec3f);
-  public static yesman.epicfight.api.utils.math.Vec3f average(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f...);
-  public static int getNearest(yesman.epicfight.api.utils.math.Vec3f, java.util.List<yesman.epicfight.api.utils.math.Vec3f>);
-  public static int getNearest(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f...);
-  public static int getMostSimilar(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f...);
-  public static int getMostSimilar(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f, java.util.List<yesman.epicfight.api.utils.math.Vec3f>);
-  public org.joml.Vector3f toMojangVector();
-  public net.minecraft.world.phys.Vec3 toDoubleVector();
-  public static yesman.epicfight.api.utils.math.Vec3f fromMojangVector(org.joml.Vector3f);
-  public static yesman.epicfight.api.utils.math.Vec3f fromDoubleVector(net.minecraft.world.phys.Vec3);
-== yesman.epicfight.api.utils.math.OpenMatrix4f
-public class yesman.epicfight.api.utils.math.OpenMatrix4f {
-  public static final yesman.epicfight.api.utils.math.OpenMatrix4f IDENTITY;
-  public float m00;
-  public float m01;
-  public float m02;
-  public float m03;
-  public float m10;
-  public float m11;
-  public float m12;
-  public float m13;
-  public float m20;
-  public float m21;
-  public float m22;
-  public float m23;
-  public float m30;
-  public float m31;
-  public float m32;
-  public float m33;
-  public yesman.epicfight.api.utils.math.OpenMatrix4f();
-  public yesman.epicfight.api.utils.math.OpenMatrix4f(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f(yesman.epicfight.api.utils.math.OpenMatrix4f, boolean);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f(yesman.epicfight.api.animation.JointTransform);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f setIdentity();
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f setIdentity(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f load(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f load(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f load(yesman.epicfight.api.utils.math.OpenMatrix4f, float[]);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f load(yesman.epicfight.api.utils.math.OpenMatrix4f, java.nio.FloatBuffer);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f load(java.nio.FloatBuffer);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f store(java.nio.FloatBuffer);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f store(long);
-  public java.util.List<java.lang.Float> toList();
-  public yesman.epicfight.api.utils.math.OpenMatrix4f unmodifiable();
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f add(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f mulFront(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f mulBack(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f mul(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f mulMatrices(yesman.epicfight.api.utils.math.OpenMatrix4f...);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f mulAsOrigin(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f mulAsOriginInverse(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.Vec4f transform(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.Vec4f, yesman.epicfight.api.utils.math.Vec4f);
-  public static net.minecraft.world.phys.Vec3 transform(yesman.epicfight.api.utils.math.OpenMatrix4f, net.minecraft.world.phys.Vec3);
-  public static yesman.epicfight.api.utils.math.Vec3f transform3v(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f transpose();
-  public yesman.epicfight.api.utils.math.OpenMatrix4f transpose(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f transpose(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public float determinant();
-  public yesman.epicfight.api.utils.math.OpenMatrix4f invert();
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f invert(yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f translate(float, float, float);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f translate(yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f translate(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f translate(yesman.epicfight.api.utils.math.Vec3f, yesman.epicfight.api.utils.math.OpenMatrix4f, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f createTranslation(float, float, float);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f ofTranslation(float, float, float, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f createScale(float, float, float);
-  public static yesman.epicfight.api.utils.math.OpenMatrix4f ofScale(float, float, float, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f rotateDeg(float, yesman.epicfight.api.utils.math.Vec3f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f rotate(float, yesman.epicfight.api.utils.math.Vec3f);
-== yesman.epicfight.api.model.Armature
-public class yesman.epicfight.api.model.Armature {
-  public final yesman.epicfight.api.animation.Joint rootJoint;
-  public yesman.epicfight.api.model.Armature(java.lang.String, int, yesman.epicfight.api.animation.Joint, java.util.Map<java.lang.String, yesman.epicfight.api.animation.Joint>);
-  public void setPose(yesman.epicfight.api.animation.Pose);
-  public void bakeOriginMatrices();
-  public yesman.epicfight.api.utils.math.OpenMatrix4f[] getPoseMatrices();
-  public yesman.epicfight.api.utils.math.OpenMatrix4f[] getPoseAsTransformMatrix(yesman.epicfight.api.animation.Pose, boolean);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f getBindedTransformFor(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Joint);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f getBoundTransformFor(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Joint);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f getBoundTransformByJointIndex(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Joint$AccessTicket);
-  public boolean hasJoint(java.lang.String);
-  public yesman.epicfight.api.animation.Joint searchJointById(int);
-  public yesman.epicfight.api.animation.Joint searchJointByName(java.lang.String);
-  public yesman.epicfight.api.animation.Joint$HierarchicalJointAccessor searchPathIndex(java.lang.String);
-  public yesman.epicfight.api.animation.Joint$HierarchicalJointAccessor searchPathIndex(yesman.epicfight.api.animation.Joint, java.lang.String);
-  public void gatherAllJointsInPathToTerminal(java.lang.String, java.util.Collection<java.lang.String>);
-  public int getJointNumber();
-  public java.lang.String toString();
-  public yesman.epicfight.api.model.Armature deepCopy();
-  public com.google.gson.JsonObject toJsonObject();
-== yesman.epicfight.api.animation.Pose
-public class yesman.epicfight.api.animation.Pose {
-  public static final yesman.epicfight.api.animation.Pose EMPTY_POSE;
-  public static yesman.epicfight.api.animation.Pose interpolatePose(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Pose, float);
-  public yesman.epicfight.api.animation.Pose();
-  public yesman.epicfight.api.animation.Pose(java.util.Map<java.lang.String, yesman.epicfight.api.animation.JointTransform>);
-  public void putJointData(java.lang.String, yesman.epicfight.api.animation.JointTransform);
-  public java.util.Map<java.lang.String, yesman.epicfight.api.animation.JointTransform> getJointTransformData();
-  public void disableJoint(com.google.common.base.Predicate<? super java.util.Map$Entry<java.lang.String, yesman.epicfight.api.animation.JointTransform>>);
-  public void disableAllJoints();
-  public boolean hasTransform(java.lang.String);
-  public yesman.epicfight.api.animation.JointTransform get(java.lang.String);
-  public yesman.epicfight.api.animation.JointTransform orElseEmpty(java.lang.String);
-  public yesman.epicfight.api.animation.JointTransform orElse(java.lang.String, yesman.epicfight.api.animation.JointTransform);
-  public void forEachEnabledTransforms(java.util.function.BiConsumer<java.lang.String, yesman.epicfight.api.animation.JointTransform>);
-  public void load(yesman.epicfight.api.animation.Pose, yesman.epicfight.api.animation.Pose$LoadOperation);
-  public java.lang.String toString();
-== yesman.epicfight.api.animation.Joint
-public class yesman.epicfight.api.animation.Joint {
-  public static final yesman.epicfight.api.animation.Joint EMPTY;
-  public yesman.epicfight.api.animation.Joint(java.lang.String, int, yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public void addSubJoints(yesman.epicfight.api.animation.Joint...);
-  public void removeSubJoints(yesman.epicfight.api.animation.Joint...);
-  public java.util.List<yesman.epicfight.api.animation.Joint> getAllJoints();
-  public void iterSubJoints(java.util.function.Consumer<yesman.epicfight.api.animation.Joint>);
-  public void initOriginTransform(yesman.epicfight.api.utils.math.OpenMatrix4f);
-  public yesman.epicfight.api.utils.math.OpenMatrix4f getLocalTransform();
-  public yesman.epicfight.api.utils.math.OpenMatrix4f getToOrigin();
-  public java.util.List<yesman.epicfight.api.animation.Joint> getSubJoints();
-  public yesman.epicfight.api.animation.Joint getSubJoint(int);
-  public java.lang.String getName();
-  public int getId();
-  public boolean equals(java.lang.Object);
-  public int hashCode();
-  public yesman.epicfight.api.animation.Joint$HierarchicalJointAccessor$Builder searchPath(yesman.epicfight.api.animation.Joint$HierarchicalJointAccessor$Builder, java.lang.String);
-  public java.lang.String toString();
-  public java.lang.String printIncludingChildren();
-== yesman.epicfight.gameasset.Armatures
-public class yesman.epicfight.gameasset.Armatures {
-  public static final yesman.epicfight.gameasset.Armatures INSTANCE;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.HumanoidArmature> BIPED;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.CreeperArmature> CREEPER;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.EndermanArmature> ENDERMAN;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.HumanoidArmature> SKELETON;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.SpiderArmature> SPIDER;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.IronGolemArmature> IRON_GOLEM;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.RavagerArmature> RAVAGER;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.VexArmature> VEX;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.PiglinArmature> PIGLIN;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.HoglinArmature> HOGLIN;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.DragonArmature> DRAGON;
-  public static final yesman.epicfight.gameasset.Armatures$ArmatureAccessor<yesman.epicfight.model.armature.WitherArmature> WITHER;
-  public yesman.epicfight.gameasset.Armatures();
-  public static void registerEntityTypes();
-  public static void reload(net.minecraft.server.packs.resources.ResourceManager);
-  public static void registerEntityTypeArmature(net.minecraft.world.entity.EntityType<?>, yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.model.Armature>);
-  public static void registerEntityTypeArmatureByPreset(net.minecraft.world.entity.EntityType<?>, java.lang.String);
-  public static <A extends yesman.epicfight.api.model.Armature> A getArmatureFor(yesman.epicfight.world.capabilities.entitypatch.EntityPatch<?>);
-  public static <A extends yesman.epicfight.api.model.Armature> yesman.epicfight.api.asset.AssetAccessor<A> get(net.minecraft.resources.ResourceLocation);
-  public static <A extends yesman.epicfight.api.model.Armature> yesman.epicfight.api.asset.AssetAccessor<A> getOrCreate(net.minecraft.resources.ResourceLocation, yesman.epicfight.gameasset.Armatures$ArmatureContructor<A>);
-  public static <A extends yesman.epicfight.api.model.Armature> java.util.Set<com.mojang.datafixers.util.Pair<net.minecraft.resources.ResourceLocation, yesman.epicfight.api.asset.AssetAccessor<A>>> entry();
-  public static net.minecraft.resources.ResourceLocation wrapLocation(net.minecraft.resources.ResourceLocation);
-== yesman.epicfight.gameasset.Armatures$ArmatureAccessor
-public final class yesman.epicfight.gameasset.Armatures$ArmatureAccessor<A extends yesman.epicfight.api.model.Armature> extends java.lang.Record implements yesman.epicfight.api.asset.AssetAccessor<A> {
-  public yesman.epicfight.gameasset.Armatures$ArmatureAccessor(net.minecraft.resources.ResourceLocation, yesman.epicfight.gameasset.Armatures$ArmatureContructor<A>, boolean);
-  public static <A extends yesman.epicfight.api.model.Armature> yesman.epicfight.gameasset.Armatures$ArmatureAccessor<A> create(java.lang.String, java.lang.String, yesman.epicfight.gameasset.Armatures$ArmatureContructor<A>);
-  public A get();
-  public java.lang.String toString();
-  public int hashCode();
-  public boolean equals(java.lang.Object);
-  public net.minecraft.resources.ResourceLocation registryName();
-  public yesman.epicfight.gameasset.Armatures$ArmatureContructor<A> armatureConstructor();
-  public boolean inRegistry();
-  public java.lang.Object get();
-== yesman.epicfight.model.armature.HumanoidArmature
-public class yesman.epicfight.model.armature.HumanoidArmature extends yesman.epicfight.api.model.Armature implements yesman.epicfight.model.armature.types.HumanLikeArmature {
-  public final yesman.epicfight.api.animation.Joint thighR;
-  public final yesman.epicfight.api.animation.Joint legR;
-  public final yesman.epicfight.api.animation.Joint kneeR;
-  public final yesman.epicfight.api.animation.Joint thighL;
-  public final yesman.epicfight.api.animation.Joint legL;
-  public final yesman.epicfight.api.animation.Joint kneeL;
-  public final yesman.epicfight.api.animation.Joint torso;
-  public final yesman.epicfight.api.animation.Joint chest;
-  public final yesman.epicfight.api.animation.Joint head;
-  public final yesman.epicfight.api.animation.Joint shoulderR;
-  public final yesman.epicfight.api.animation.Joint armR;
-  public final yesman.epicfight.api.animation.Joint handR;
-  public final yesman.epicfight.api.animation.Joint toolR;
-  public final yesman.epicfight.api.animation.Joint elbowR;
-  public final yesman.epicfight.api.animation.Joint shoulderL;
-  public final yesman.epicfight.api.animation.Joint armL;
-  public final yesman.epicfight.api.animation.Joint handL;
-  public final yesman.epicfight.api.animation.Joint toolL;
-  public final yesman.epicfight.api.animation.Joint elbowL;
-  public yesman.epicfight.model.armature.HumanoidArmature(java.lang.String, int, yesman.epicfight.api.animation.Joint, java.util.Map<java.lang.String, yesman.epicfight.api.animation.Joint>);
-  public yesman.epicfight.api.animation.Joint leftToolJoint();
-  public yesman.epicfight.api.animation.Joint rightToolJoint();
-  public yesman.epicfight.api.animation.Joint backToolJoint();
-  public yesman.epicfight.api.animation.Joint leftHandJoint();
-  public yesman.epicfight.api.animation.Joint rightHandJoint();
-  public yesman.epicfight.api.animation.Joint leftArmJoint();
-  public yesman.epicfight.api.animation.Joint rightArmJoint();
-  public yesman.epicfight.api.animation.Joint leftLegJoint();
-  public yesman.epicfight.api.animation.Joint rightLegJoint();
-  public yesman.epicfight.api.animation.Joint leftThighJoint();
-  public yesman.epicfight.api.animation.Joint rightThighJoint();
-  public yesman.epicfight.api.animation.Joint headJoint();
-== yesman.epicfight.api.client.model.SkinnedMesh
-public class yesman.epicfight.api.client.model.SkinnedMesh extends yesman.epicfight.api.client.model.StaticMesh<yesman.epicfight.api.client.model.SkinnedMesh$SkinnedMeshPart> {
-  public yesman.epicfight.api.client.model.SkinnedMesh(java.util.Map<java.lang.String, java.lang.Number[]>, java.util.Map<yesman.epicfight.api.client.model.MeshPartDefinition, java.util.List<yesman.epicfight.api.client.model.VertexBuilder>>, yesman.epicfight.api.client.model.SkinnedMesh, yesman.epicfight.api.client.model.Mesh$RenderProperties);
-  public void destroy();
-  public void getVertexPosition(int, org.joml.Vector4f, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
-  public void getVertexNormal(int, int, org.joml.Vector3f, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
-  public void draw(com.mojang.blaze3d.vertex.PoseStack, com.mojang.blaze3d.vertex.VertexConsumer, yesman.epicfight.api.client.model.Mesh$DrawingFunction, int, float, float, float, float, int);
-  public void drawPosed(com.mojang.blaze3d.vertex.PoseStack, com.mojang.blaze3d.vertex.VertexConsumer, yesman.epicfight.api.client.model.Mesh$DrawingFunction, int, float, float, float, float, int, yesman.epicfight.api.model.Armature, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
-  public void draw(com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.renderer.RenderType, int, float, float, float, float, int, yesman.epicfight.api.model.Armature, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
-  public void draw(com.mojang.blaze3d.vertex.PoseStack, net.minecraft.client.renderer.MultiBufferSource, net.minecraft.client.renderer.RenderType, yesman.epicfight.api.client.model.Mesh$DrawingFunction, int, float, float, float, float, int, yesman.epicfight.api.model.Armature, yesman.epicfight.api.utils.math.OpenMatrix4f[]);
-  public int getMaxJointCount();
-  public float[] weights();
-  public int[] affectingJointCounts();
-  public int[][] affectingWeightIndices();
-  public int[][] affectingJointIndices();
-  public com.google.gson.JsonObject toJsonObject();
-    12647  1980-02-01 00:00   assets/epicfight/animmodels/animations/biped/combat/sword_auto1.json
+FAILURE: Build failed with an exception.
 
-{
-    "animation": [
-        {
-            "name": "Root",
-            "time": [0.0, 0.1333, 0.3667, 0.6],
-            "transform": [
-                [0.951022, 0.0, 0.309124, -5e-06, 0.309124, 0.0, -0.951022, 0.762034, 0.0, 1.0, 0.0, 0.698149, 0.0, 0.0, 0.0, 1.0],
-                [0.417654, -0.0, 0.908606, -5e-06, 0.889865, 0.202057, -0.40904, 1.002813, -0.18359, 0.979374, 0.08439, 0.535102, 0.0, 0.0, 0.0, 1.0],
-                [0.320841, -0.021447, 0.94689, -5e-06, 0.929169, 0.200916, -0.310286, 1.002813, -0.18359, 0.979374, 0.08439, 0.535102, 0.0, 0.0, 0.0, 1.0],
-                [0.320841, -0.021447, 0.94689, -5e-06, 0.929169, 0.200916, -0.310286, 1.002813, -0.18359, 0.979374, 0.08439, 0.535102, 0.0, 0.0, 0.0, 1.0]
-            ]
-        },
-        {
-            "name": "Thigh_R",
-            "time": [0.0, 0.0667, 0.1333, 0.3667, 0.6],
-            "transform": [
-                [0.948964, 0.206828, 0.238094, 0.124994, 0.008556, -0.771535, 0.636127, -0.002831, 0.315268, -0.601623, -0.733931, -1.2e-05, 0.0, 0.0, 0.0, 1.0],
-                [0.833647, 0.433216, 0.34257, 0.124994, 0.068165, -0.696226, 0.714577, -0.002831, 0.548073, -0.572352, -0.60994, -1.2e-05, 0.0, 0.0, 0.0, 1.0],
-                [0.568274, 0.822746, 0.012286, 0.124994, 0.18984, -0.14562, 0.970956, -0.002831, 0.80064, -0.549436, -0.238946, -1.2e-05, 0.0, 0.0, 0.0, 1.0],
-                [0.529322, 0.848418, 0.000964, 0.124994, 0.255468, -0.160465, 0.953408, -0.002831, 0.809044, -0.504413, -0.
-== build/moddev/artifacts/neoforge-21.1.262.jar
-  public void createStructures(net.minecraft.core.RegistryAccess, net.minecraft.world.level.chunk.ChunkGeneratorStructureState, net.minecraft.world.level.StructureManager, net.minecraft.world.level.chunk.ChunkAccess, net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager);
-  private boolean tryGenerateStructure(net.minecraft.world.level.levelgen.structure.StructureSet$StructureSelectionEntry, net.minecraft.world.level.StructureManager, net.minecraft.core.RegistryAccess, net.minecraft.world.level.levelgen.RandomState, net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager, long, net.minecraft.world.level.chunk.ChunkAccess, net.minecraft.world.level.ChunkPos, net.minecraft.core.SectionPos);
-  private void lambda$createStructures$14(net.minecraft.world.level.StructureManager, net.minecraft.core.SectionPos, net.minecraft.world.level.chunk.ChunkAccess, net.minecraft.world.level.chunk.ChunkGeneratorStructureState, net.minecraft.world.level.ChunkPos, net.minecraft.core.RegistryAccess, net.minecraft.world.level.levelgen.RandomState, net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager, net.minecraft.core.Holder);
-  public void updateChunkStatus(net.minecraft.world.level.ChunkPos, net.minecraft.server.level.FullChunkStatus);
-       8: invokevirtual #255                // Method updateChunkStatus:(Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/entity/Visibility;)V
-  public void updateChunkStatus(net.minecraft.world.level.ChunkPos, net.minecraft.world.level.entity.Visibility);
-  private void processUnloads();
-      10: invokeinterface #393,  2          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSet.removeIf:(Lit/unimi/dsi/fastutil/longs/LongPredicate;)Z
-       5: invokevirtual #415                // Method processUnloads:()V
-      35: invokeinterface #393,  2          // InterfaceMethod it/unimi/dsi/fastutil/longs/LongSet.removeIf:(Lit/unimi/dsi/fastutil/longs/LongPredicate;)Z
-  private boolean lambda$processUnloads$10(long);
-  private void lambda$updateChunkStatus$6(net.minecraft.world.level.entity.Visibility, net.minecraft.world.level.entity.EntitySection);
-       2: invokevirtual #589                // Method net/minecraft/world/level/entity/EntitySection.updateChunkStatus:(Lnet/minecraft/world/level/entity/Visibility;)Lnet/minecraft/world/level/entity/Visibility;
-  private static boolean lambda$updateChunkStatus$5(net.minecraft.world.level.entity.EntityAccess);
-  private static boolean lambda$updateChunkStatus$4(net.minecraft.world.level.entity.EntityAccess);
-  public net.minecraft.world.item.trading.MerchantOffer getOffer(net.minecraft.world.entity.Entity, net.minecraft.util.RandomSource);
-      32: invokevirtual #68                 // Method net/minecraft/server/level/ServerLevel.findNearestMapStructure:(Lnet/minecraft/tags/TagKey;Lnet/minecraft/core/BlockPos;IZ)Lnet/minecraft/core/BlockPos;
-  protected void tick(net.minecraft.world.level.block.state.BlockState, net.minecraft.server.level.ServerLevel, net.minecraft.core.BlockPos, net.minecraft.util.RandomSource);
-  private void checkBurnOut(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, int, net.minecraft.util.RandomSource, int, net.minecraft.core.Direction);
-  public void postProcess(net.minecraft.world.level.WorldGenLevel, net.minecraft.world.level.StructureManager, net.minecraft.world.level.chunk.ChunkGenerator, net.minecraft.util.RandomSource, net.minecraft.world.level.levelgen.structure.BoundingBox, net.minecraft.world.level.ChunkPos, net.minecraft.core.BlockPos);
-  public void place(net.minecraft.world.level.WorldGenLevel, net.minecraft.world.level.StructureManager, net.minecraft.world.level.chunk.ChunkGenerator, net.minecraft.util.RandomSource, net.minecraft.world.level.levelgen.structure.BoundingBox, net.minecraft.core.BlockPos, boolean);
-== TOAST
-  private final java.util.BitSet occupiedSlots;
-  private int findFreeIndex(int);
-  private int freeSlots();
-== CHATEVENT
-public class net.neoforged.neoforge.client.event.ClientChatReceivedEvent$System extends net.neoforged.neoforge.client.event.ClientChatReceivedEvent {
-  public boolean isOverlay();
-== ADDMESSAGE
-  public void addMessage(net.minecraft.network.chat.Component);
-  public void addMessage(net.minecraft.network.chat.Component, net.minecraft.network.chat.MessageSignature, net.minecraft.client.GuiMessageTag);
-replaced 143 old class files; added 482 compiled; overlaid 984 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json'] ; dropped ['data/oror_supreme_bosses/structure/royal034/kingdom_0_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_0_1.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_1.nbt']
-72d6b6f253ca029e4cc2db1a1a2f203ad3566e4b40459e3e450c587cd530a225  out/oror_supreme_bosses-0.17.39-059-preview.jar
-== /home/runner/work/_temp/pack053/alexscaves-2.0.10.jar
-  private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyAttractingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
-  private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyRepellingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
-  public static void tickMagnetism(net.minecraft.world.entity.Entity);
-  public static boolean isEntityOnMovingMetal(net.minecraft.world.entity.Entity);
-  private static net.minecraft.world.phys.Vec3 processMovementControls(float, net.minecraft.world.entity.LivingEntity, net.minecraft.core.Direction);
-  public static net.minecraft.world.phys.Vec3 getEntityMagneticDelta(net.minecraft.world.entity.Entity);
-  public static void setEntityMagneticDelta(net.minecraft.world.entity.Entity, net.minecraft.world.phys.Vec3);
-  public static net.minecraft.core.Direction getEntityMagneticDirection(net.minecraft.world.entity.Entity);
-  public static void setEntityMagneticDirection(net.minecraft.world.entity.Entity, net.minecraft.core.Direction);
-  private static net.minecraft.core.Direction getStandingOnMagnetSurface(net.minecraft.world.entity.Entity);
-  private static net.minecraft.core.Direction calculateClosestDirection(net.minecraft.world.entity.Entity);
-  private static net.minecraft.core.BlockPos getSamplePosForDirection(net.minecraft.world.entity.Entity, net.minecraft.core.Direction, float);
-  private static boolean isDynamicallyMagnetic(net.minecraft.world.entity.LivingEntity, boolean);
-  private static boolean isMagneticFromPotionOnly(net.minecraft.world.entity.LivingEntity);
-  public static float getMagnetismStrengthMultiplier(net.minecraft.world.entity.Entity);
-  private static boolean isSpectatorPlayer(net.minecraft.world.entity.Entity);
-  public static boolean isPulledByMagnets(net.minecraft.world.entity.Entity);
-  public static boolean attachesToMagnets(net.minecraft.world.entity.Entity);
-  public static void rotateHead(net.minecraft.world.entity.LivingEntity);
-  public static net.minecraft.world.phys.Vec3 getEyePositionForAttachment(net.minecraft.world.entity.Entity, net.minecraft.core.Direction, float);
-  public static java.util.List<net.minecraft.world.phys.shapes.VoxelShape> getMovingBlockCollisions(net.minecraft.world.entity.Entity, net.minecraft.world.phys.AABB);
-  public static void turnEntityOnMagnet(net.minecraft.world.entity.Entity, double, double, net.minecraft.core.Direction);
-  public static net.minecraft.world.phys.AABB rotateBoundingBox(net.minecraft.world.entity.EntityDimensions, net.minecraft.core.Direction, net.minecraft.world.phys.Vec3);
-  private static boolean lambda$getNearbyRepellingMagnets$1(net.minecraft.core.Holder);
-  private static boolean lambda$getNearbyAttractingMagnets$0(net.minecraft.core.Holder);
-  private static volatile long worldSeed;
-  private static volatile net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> currentDimension;
-  private static final java.lang.ThreadLocal<net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>> threadDimension;
-  private static volatile boolean initialized;
-  public static synchronized void setSeed(long);
-  public static long getSeed();
-  public static synchronized void setDimension(net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level>);
-  public static net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> getDimension();
-  public static boolean isInitialized();
-  public static synchronized void reset();
-  static {};
-    13028  1980-02-01 00:00   com/github/alexmodguy/alexscaves/mixin/EntityMixin.class
-     4569  1980-02-01 00:00   com/github/alexmodguy/alexscaves/mixin/FallingBlockEntityMixin.class
-     9921  1980-02-01 00:00   com/github/alexmodguy/alexscaves/mixin/LivingEntityMixin.class
-     2584  1980-02-01 00:00   com/github/alexmodguy/alexscaves/mixin/client/ClientLevelDataMixin.class
-     4769  1980-02-01 00:00   com/github/alexmodguy/alexscaves/mixin/client/ClientLevelMixin.class
-    18495  1980-02-01 00:00   com/github/alexmodguy/alexscaves/mixin/client/LevelRendererMixin.class
-     1451  1980-02-01 00:00   com/github/alexmodguy/alexscaves/mixin/client/LivingEntityRendererMixin.class
-== CFGKEYS /home/runner/work/_temp/pack053/sound-physics-remastered-neoforge-1.21.1-1.5.2.jar
-    22379  1980-02-01 00:00   com/sonicether/soundphysics/integration/ClothConfigIntegration.class
-      524  1980-02-01 00:00   sound_physics_remastered.mixins.json
-     1292  1980-02-01 00:00   META-INF/neoforge.mods.toml
-     9732  1980-02-01 00:00   assets/sound_physics_remastered/lang/en_us.json
-    10191  1980-02-01 00:00   assets/sound_physics_remastered/lang/es_es.json
-    10710  1980-02-01 00:00   assets/sound_physics_remastered/lang/es_mx.json
-     9407  1980-02-01 00:00   assets/sound_physics_remastered/lang/pt_br.json
-    13764  1980-02-01 00:00   assets/sound_physics_remastered/lang/ru_ru.json
-     9154  1980-02-01 00:00   assets/sound_physics_remastered/lang/zh_cn.json
-     8912  1980-02-01 00:00   assets/sound_physics_remastered/lang/zh_tw.json
-     1688  1980-02-01 00:00   com/sonicether/soundphysics/config/ConfigUtils.class
-     3491  1980-02-01 00:00   com/sonicether/soundphysics/config/OcclusionConfig.class
-     3098  1980-02-01 00:00   com/sonicether/soundphysics/config/ReflectivityConfig.class
-     2493  1980-02-01 00:00   com/sonicether/soundphysics/config/ReverbParams.class
-    11685  1980-02-01 00:00   com/sonicether/soundphysics/config/SoundPhysicsConfig.class
-     7118  1980-02-01 00:00   com/sonicether/soundphysics/config/SoundRateConfig.class
-     8535  1980-02-01 00:00   com/sonicether/soundphysics/config/SoundTypes.class
-     1250  1980-02-01 00:00   com/sonicether/soundphysics/config/blocksound/BlockDefinition.class
-     2899  1980-02-01 00:00   com/sonicether/soundphysics/config/blocksound/BlockIdDefinition.class
-    10898  1980-02-01 00:00   com/sonicether/soundphysics/config/blocksound/BlockSoundConfigBase.class
-     2566  1980-02-01 00:00   com/sonicether/soundphysics/config/blocksound/BlockSoundTypeDefinition.class
-     3236  1980-02-01 00:00   com/sonicether/soundphysics/config/blocksound/BlockTagDefinition.class
-       74  1980-02-01 00:00   META-INF/maven/de.maxhenkel.configbuilder/configbuilder/pom.properties
-     2834  1980-02-01 00:00   META-INF/maven/de.maxhenkel.configbuilder/configbuilder/pom.xml
-     1837  1980-02-01 00:00   de/maxhenkel/sound_physics_remastered/configbuilder/CommentedProperties$LineReader.class
-      920  1980-02-01 00:00   de/maxhenkel/sound_physics_remastered/configbuilder/CommentedProperties$Pair.class
-     1588  1980-02-01 00:00   de/maxhenkel/sound_physics_remastered/configbuilder/CommentedProperties$Property.class
-    15780  1980-02-01 00:00   de/maxhenkel/sound_physics_remastered/configbuilder/CommentedProperties.class
-      321  1980-02-01 00:00   de/maxhenkel/sound_physics_remastered/configbuilder/CommentedPropertyConfig$1.class
-     2011  1980-02-01 00:00   de/maxhenkel/sound_physics_remastered/configbuilder/CommentedPropertyConfig$Builder.class
-array
-count
-default_block_occlusion_factor
-density
-distance
-enabled
-evaluate_ambient_sounds
-level_clone_max_retain_ticks
-max_occlusion
-max_occlusion_rays
-max_sound_processing_distance
-non_full_block_occlusion_factor
-occlusion_logging
-occlusion_variation
-redirect_non_occluded_sounds
-render_occlusion
-render_sound_bounces
-reverb0
-reverb1
-reverb2
-reverb3
-reverb_attenuation_distance
-reverb_brightness
-reverb_distance
-reverb_gain
-rewind
-simple_voice_chat_hear_self
-simple_voice_chat_integration
-sound_direction_evaluation
-sound_distance_allowance
-sound_update_interval
-strict_occlusion
-== CFGKEYS /home/runner/work/_temp/pack053/aaa_particles_world-neoforge-1.21.1-2.0.0.jar
-     2716  2026-06-19 17:18   cn/chloeprime/aaa_particles_world/client/ClientConfig.class
-      576  2026-06-19 18:39   aaa_particles_world.mixins.json
-      831  2026-06-19 18:39   assets/aaa_particles_world/lang/en_us.json
-      797  2026-06-19 18:39   assets/aaa_particles_world/lang/zh_cn.json
-      186  2026-06-19 18:39   assets/aaa_particles_world/sounds.json
-     2171  2026-06-19 18:39   META-INF/neoforge.mods.toml
-aaa_particles_world
-particle
-== CFGKEYS /home/runner/work/_temp/pack053/aaa_particles-neoforge-1.21.1-2.3.4.jar
-     1404  2026-05-05 00:30   mod/chloeprime/aaaparticles/client/AAAClientConfig.class
-      501  2026-10-18 20:26   aaa_particles-common.mixins.json
-      221  2026-10-18 20:26   aaa_particles.mixins.json
-     1886  2026-10-18 20:26   META-INF/neoforge.mods.toml
-      348  2026-10-09 02:21   META-INF/jarjar/metadata.json
-aaa_particles
-array
-count
-distance
-enabled
-limit
-simple_distortion
-window
-== CE classes
-net/shelmarow/combat_evolution/ai/CEDatapackMobPatch.class
-net/shelmarow/combat_evolution/ai/CEPatchReloadListener$CEDatapackMobPatchProvider.class
-net/shelmarow/combat_evolution/ai/event/BeforeCounterEvent.class
-net/shelmarow/combat_evolution/ai/event/BehaviorStartEvent$EventParams.class
-net/shelmarow/combat_evolution/ai/event/BehaviorStartEvent.class
-net/shelmarow/combat_evolution/ai/event/BlockedEvent$EventParams.class
-net/shelmarow/combat_evolution/ai/event/BlockedEvent.class
-net/shelmarow/combat_evolution/ai/event/CounterStartEvent$EventParams.class
-net/shelmarow/combat_evolution/ai/event/CounterStartEvent.class
-net/shelmarow/combat_evolution/ai/event/GuardHitEvent$EventParams.class
-net/shelmarow/combat_evolution/ai/event/GuardHitEvent.class
-net/shelmarow/combat_evolution/ai/event/HitEvent$EventParams.class
-net/shelmarow/combat_evolution/ai/event/HitEvent.class
-net/shelmarow/combat_evolution/ai/event/OnHurtEvent$EventParams.class
-net/shelmarow/combat_evolution/ai/event/OnHurtEvent.class
-net/shelmarow/combat_evolution/ai/event/TimeEvent$EventParams.class
-net/shelmarow/combat_evolution/ai/event/TimeEvent$EventType.class
-net/shelmarow/combat_evolution/ai/event/TimeEvent.class
-net/shelmarow/combat_evolution/ai/event/manager/CEMobEvent.class
-net/shelmarow/combat_evolution/ai/event/manager/CEMobEventManager.class
-net/shelmarow/combat_evolution/ai/event/manager/CEMobEventWithReturn.class
-net/shelmarow/combat_evolution/ai/iml/CustomExecuteEntity.class
-net/shelmarow/combat_evolution/ai/iml/IDamageSourceData.class
-net/shelmarow/combat_evolution/ai/iml/ILivingEntityData.class
-net/shelmarow/combat_evolution/ai/network/SPCEDataPacket.class
-net/shelmarow/combat_evolution/ai/util/BehaviorUtils.class
-net/shelmarow/combat_evolution/ai/util/CEParticleUtils.class
-net/shelmarow/combat_evolution/ai/util/CEPatchUtils.class
-net/shelmarow/combat_evolution/api/event/OnExecutionStartEvent.class
-net/shelmarow/combat_evolution/api/event/RegisterBossBarTypeEvent.class
-net/shelmarow/combat_evolution/api/event/RegisterCustomExecutionEvent.class
-net/shelmarow/combat_evolution/api/event/RegisterHUDTypeEvent.class
-net/shelmarow/combat_evolution/api/event/ShowExecutionIconEvent.class
-net/shelmarow/combat_evolution/bgm/CEMusicEventHandler.class
-net/shelmarow/combat_evolution/bossbar/BossData.class
-net/shelmarow/combat_evolution/bossbar/CEBossEvent.class
-net/shelmarow/combat_evolution/bossbar/client/ClientBossData.class
-net/shelmarow/combat_evolution/bossbar/client/RenderCEBossBarEvent.class
-net/shelmarow/combat_evolution/client/hud/element/ExecutionElement.class
-net/shelmarow/combat_evolution/client/hud/execution/ExecutionHUD$1.class
-net/shelmarow/combat_evolution/client/hud/execution/ExecutionHUD.class
-net/shelmarow/combat_evolution/client/hud/execution/HUDAlignment.class
-net/shelmarow/combat_evolution/client/hud/execution/HUDTypeManager.class
-net/shelmarow/combat_evolution/client/hud/execution/types/DefaultType.class
-net/shelmarow/combat_evolution/client/hud/execution/types/HUDType.class
-net/shelmarow/combat_evolution/client/shader/ExecutionShaderEffect.class
-net/shelmarow/combat_evolution/command/CEExecutionCommand.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackButton.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen$Control.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen$Field.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen$SectionRegion.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen$Type.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackEditorScreen.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackEntitySelectionScreen$Entry.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackEntitySelectionScreen.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackFormScreen$Field.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackFormScreen$Row.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackFormScreen$Type.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackFormScreen.class
-net/shelmarow/combat_evolution/config/screen/CEDatapackGuiScaleSlider.class
-== CE net/shelmarow/combat_evolution/ai/iml/CustomExecuteEntity.class
-Compiled from "CustomExecuteEntity.java"
-public interface net.shelmarow.combat_evolution.ai.iml.CustomExecuteEntity {
-  public abstract boolean canBeExecuted(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  public abstract boolean canUseCustomType(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public abstract net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type getExecutionType(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public default boolean canBeAssassinate(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-}
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)Z
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Z
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)Z
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;)Z
-Ayesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch
-CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
-F(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Z
-FLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
-I(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;)Z
-== CE net/shelmarow/combat_evolution/api/event/OnExecutionStartEvent.class
-Compiled from "OnExecutionStartEvent.java"
-public class net.shelmarow.combat_evolution.api.event.OnExecutionStartEvent extends net.neoforged.bus.api.Event implements net.neoforged.bus.api.ICancellableEvent {
-  private final yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> executor;
-  private final yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> target;
-  private net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type type;
-  public net.shelmarow.combat_evolution.api.event.OnExecutionStartEvent(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> getExecutor();
-  public yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> getTarget();
-  public net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type getType();
-  public void setType(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-}
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
-CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;	
-E()Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
-FLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
-H()Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
-== CE net/shelmarow/combat_evolution/api/event/RegisterCustomExecutionEvent.class
-Compiled from "RegisterCustomExecutionEvent.java"
-public class net.shelmarow.combat_evolution.api.event.RegisterCustomExecutionEvent extends net.neoforged.bus.api.Event implements net.neoforged.fml.event.IModBusEvent {
-  public net.shelmarow.combat_evolution.api.event.RegisterCustomExecutionEvent();
-  public void registerExecutionByEntity(net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerExecutionByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerExecutionByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerExecutionByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerExecutionByItem(net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerExecutionByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerExecutionByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerExecutionByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerExecutionByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerExecutionByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerExecutionByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerExecutionByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerAssassinationByEntity(net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerAssassinationByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerAssassinationByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerAssassinationByEntity(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerAssassinationByItem(net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerAssassinationByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerAssassinationByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerAssassinationByItem(net.minecraft.resources.ResourceLocation, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerAssassinationByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerAssassinationByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type);
-  public void registerAssassinationByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, java.util.function.BiFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  public void registerAssassinationByCategory(yesman.epicfight.world.capabilities.item.WeaponCategory, yesman.epicfight.world.capabilities.item.Style, org.apache.commons.lang3.function.TriFunction<net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>, net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type>);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByCategory$11(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByCategory$10(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByItem$9(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByItem$8(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByEntity$7(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerAssassinationByEntity$6(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByCategory$5(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByCategory$4(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByItem$3(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByItem$2(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByEntity$1(java.util.function.BiFunction, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-  private static net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type lambda$registerExecutionByEntity$0(net.shelmarow.combat_evolution.execution.ExecutionTypeManager$Type, net.minecraft.world.item.Item, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch);
-}
- Lorg/apache/commons/lang3/function/TriFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;
-'(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Ljava/util/function/BiFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;)V
-(Ljava/util/function/BiFunction;Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
-(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
-(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Lorg/apache/commons/lang3/function/TriFunction;)V
-(Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
-(Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
-(Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;
-(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
-(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Ljava/util/function/BiFunction;)V
-(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;)V
-(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Lorg/apache/commons/lang3/function/TriFunction;)V
-(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Lorg/apache/commons/lang3/function/TriFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;)V
-0Lyesman/epicfight/world/capabilities/item/Style;
-6(Lyesman/epicfight/world/capabilities/item/WeaponCategory;Lyesman/epicfight/world/capabilities/item/Style;Ljava/util/function/BiFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;)V
-7yesman/epicfight/world/capabilities/item/CapabilityItem
-9Lyesman/epicfight/world/capabilities/item/WeaponCategory;
->yesman/epicfight/world/capabilities/item/CapabilityItem$Styles
-@Lyesman/epicfight/world/capabilities/item/CapabilityItem$Styles;
-CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
-Ljava/util/function/BiFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;
-|(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Ljava/util/function/BiFunction;)V
-}(Lnet/minecraft/resources/ResourceLocation;Lyesman/epicfight/world/capabilities/item/Style;Lorg/apache/commons/lang3/function/TriFunction<Lnet/minecraft/world/item/Item;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lnet/shelmarow/combat_evolution/execution/ExecutionTypeManager$Type;>;)V
-== CE net/shelmarow/combat_evolution/api/event/ShowExecutionIconEvent.class
-Compiled from "ShowExecutionIconEvent.java"
-public class net.shelmarow.combat_evolution.api.event.ShowExecutionIconEvent extends net.neoforged.bus.api.Event implements net.neoforged.bus.api.ICancellableEvent {
-  private final yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch playerPatch;
-  private final yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> target;
-  public net.shelmarow.combat_evolution.api.event.ShowExecutionIconEvent(yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  public yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch getPlayerPatch();
-  public yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?> getTarget();
-}
-(Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V
-(Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;)V
-CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
-E()Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
-FLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
-H()Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
-OLyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;	
-Q()Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;
-== CE net/shelmarow/combat_evolution/client/hud/element/ExecutionElement.class
-Compiled from "ExecutionElement.java"
-public class net.shelmarow.combat_evolution.client.hud.element.ExecutionElement {
-  public double x;
-  public double y;
-  public int width;
-  public int height;
-  public boolean selected;
-  public net.shelmarow.combat_evolution.client.hud.element.ExecutionElement(int, int, int, int);
-  public void renderExample(net.minecraft.client.gui.GuiGraphics, float);
-  public boolean isMouseOver(int, int);
-}
-== CE net/shelmarow/combat_evolution/client/hud/execution/ExecutionHUD.class
-Compiled from "ExecutionHUD.java"
-public class net.shelmarow.combat_evolution.client.hud.execution.ExecutionHUD {
-  private static net.shelmarow.combat_evolution.client.hud.execution.types.HUDType currentHudType;
-  private static boolean showExecutionIcon;
-  private static boolean showAssassinationIcon;
-  private static int lastEligibilityRequestTargetId;
-  private static int lastEligibilityRequestTick;
-  private static int eligibilityTargetId;
-  private static boolean serverSaysAssassinationEligible;
-  private static float timePercent;
-  private static float timePercentO;
-  public net.shelmarow.combat_evolution.client.hud.execution.ExecutionHUD();
-  public static void onPlayerClientTick(net.neoforged.neoforge.event.tick.PlayerTickEvent$Post);
-  public static void render(net.minecraft.client.gui.GuiGraphics, net.minecraft.client.DeltaTracker);
-  public static void drawExecutionIcon(net.minecraft.client.gui.GuiGraphics, float, net.shelmarow.combat_evolution.client.hud.execution.types.HUDType, float);
-  public static void drawExecutionIcon(net.minecraft.client.gui.GuiGraphics, float, net.shelmarow.combat_evolution.client.hud.execution.types.HUDType, float, float, float);
-  public static void setCurrentHudType(net.shelmarow.combat_evolution.client.hud.execution.types.HUDType);
-  public static void setServerAssassinationEligibility(int, boolean);
-  public static void setShowExecutionIcon(boolean);
-  public static void setTimePercent(float);
-  public static void setTimePercentO(float);
-  public static net.shelmarow.combat_evolution.client.hud.execution.types.HUDType getCurrentHudType();
-  public static boolean isShowExecutionIcon();
-  public static float getTimePercent();
-  public static float getTimePercentO();
-  static {};
-}
-'yesman/epicfight/api/animation/Animator
-(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Z
-(Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V	
-(yesman/epicfight/api/asset/AssetAccessor
-*Lyesman/epicfight/api/asset/AssetAccessor;
-+()Lyesman/epicfight/api/animation/Animator;
-,()Lyesman/epicfight/api/asset/AssetAccessor;
-.yesman/epicfight/api/animation/AnimationPlayer
-0Lyesman/epicfight/api/animation/AnimationPlayer;
-0yesman/epicfight/api/animation/types/EntityState
-4()Lyesman/epicfight/api/animation/types/EntityState;
-4yesman/epicfight/api/animation/types/StaticAnimation
-9yesman/epicfight/world/capabilities/EpicFightCapabilities
-Ayesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch
-CLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;
-FLyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;
-Myesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch
-OLyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;
-\(Lyesman/epicfight/api/asset/AssetAccessor;)Lyesman/epicfight/api/animation/AnimationPlayer;
-cLyesman/epicfight/api/asset/AssetAccessor<+Lyesman/epicfight/api/animation/types/StaticAnimation;>;
-p(Lyesman/epicfight/api/asset/AssetAccessor;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Z
-s(Lnet/minecraft/world/entity/Entity;Ljava/lang/Class;)Lyesman/epicfight/world/capabilities/entitypatch/EntityPatch;
-== CE net/shelmarow/combat_evolution/client/hud/execution/HUDAlignment.class
-Compiled from "HUDAlignment.java"
-public final class net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment extends java.lang.Enum<net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment> {
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment CENTER;
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment CENTER_LEFT;
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment CENTER_RIGHT;
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment TOP;
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment TOP_LEFT;
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment TOP_RIGHT;
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment BOTTOM;
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment BOTTOM_LEFT;
-  public static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment BOTTOM_RIGHT;
-  private static final net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment[] $VALUES;
-  public static net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment[] values();
-  public static net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment valueOf(java.lang.String);
-  private net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment();
-  private static net.shelmarow.combat_evolution.client.hud.execution.HUDAlignment[] $values();
-  static {};
-}
-== CE net/shelmarow/combat_evolution/client/hud/execution/HUDTypeManager.class
-Compiled from "HUDTypeManager.java"
-public class net.shelmarow.combat_evolution.client.hud.execution.HUDTypeManager {
-  private static final java.util.Map<net.minecraft.resources.ResourceLocation, net.shelmarow.combat_evolution.client.hud.execution.types.HUDType> HUD_TYPE_MAP;
-  public net.shelmarow.combat_evolution.client.hud.execution.HUDTypeManager();
-  public static void registerHUDType(java.lang.String, net.shelmarow.combat_evolution.client.hud.execution.types.HUDType);
-  public static void setHUDType(java.lang.String);
-  public static net.shelmarow.combat_evolution.client.hud.execution.types.HUDType getHUDType(java.lang.String);
-  public static java.util.List<net.minecraft.resources.ResourceLocation> getAllHUDTypes();
-  static {};
-}
-== EF stun
-  public float getStunShield();
-  public void setStunShield(float);
-  public float getMaxStunShield();
-  public void setMaxStunShield(float);
-  public void playAnimation(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, float);
-  public void playAnimationInstantly(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>);
-  public void playAnimationSynchronized(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, float);
-  public void playAnimationInClientSide(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>, float);
-  public boolean applyStun(yesman.epicfight.world.damagesource.StunType, float);
-  public boolean isStunned();
-  public abstract yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation> getHitAnimation(yesman.epicfight.world.damagesource.StunType);
-Compiled from "StunType.java"
-public final class yesman.epicfight.world.damagesource.StunType extends java.lang.Enum<yesman.epicfight.world.damagesource.StunType> {
-  public static final yesman.epicfight.world.damagesource.StunType NONE;
-  public static final yesman.epicfight.world.damagesource.StunType SHORT;
-  public static final yesman.epicfight.world.damagesource.StunType LONG;
-  public static final yesman.epicfight.world.damagesource.StunType HOLD;
-  public static final yesman.epicfight.world.damagesource.StunType KNOCKDOWN;
-  public static final yesman.epicfight.world.damagesource.StunType NEUTRALIZE;
-  public static final yesman.epicfight.world.damagesource.StunType FALL;
-  private final java.lang.String tooltip;
-  private final boolean fixedStunTime;
-  private static final yesman.epicfight.world.damagesource.StunType[] $VALUES;
-  public static yesman.epicfight.world.damagesource.StunType[] values();
-  public static yesman.epicfight.world.damagesource.StunType valueOf(java.lang.String);
-  private yesman.epicfight.world.damagesource.StunType(java.lang.String, boolean);
-  public boolean hasFixedStunTime();
-  public java.lang.String toString();
-  private static yesman.epicfight.world.damagesource.StunType[] $values();
-  static {};
-}
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> BIPED_LANDING;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.KnockdownAnimation> BIPED_KNOCKDOWN;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DodgeAnimation> BIPED_KNOCKDOWN_WAKEUP_LEFT;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DodgeAnimation> BIPED_KNOCKDOWN_WAKEUP_RIGHT;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.procedural.EnderDragonActionAnimation> DRAGON_NEUTRALIZED;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.procedural.EnderDragonActionAnimation> DRAGON_NEUTRALIZED_RECOVERY;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> ENDERMAN_NEUTRALIZED;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> SPIDER_NEUTRALIZED;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> VEX_NEUTRALIZED;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> WITHER_NEUTRALIZED;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> AXE_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> FIST_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> SPEAR_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> SWORD_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> SWORD_DUAL_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.LongHitAnimation> BIPED_COMMON_NEUTRALIZED;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> LONGSWORD_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> TACHI_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> TOOL_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> UCHIGATANA_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> UCHIGATANA_SHEATHING_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> GREATSWORD_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> DAGGER_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.DashAttackAnimation> DAGGER_DUAL_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.AttackAnimation> BATTOJUTSU_DASH;
-  public static yesman.epicfight.api.animation.AnimationManager$AnimationAccessor<yesman.epicfight.api.animation.types.grappling.GrapplingAttackAnimation> BLADE_RUSH_EXECUTE_BIPED;
-  private static yesman.epicfight.api.animation.types.KnockdownAnimation lambda$build$252(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$183(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$178(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$173(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$166(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$160(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$158(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$154(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$150(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$149(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$146(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$142(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$139(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-  private static yesman.epicfight.api.animation.types.DashAttackAnimation lambda$build$135(yesman.epicfight.api.animation.AnimationManager$AnimationAccessor);
-== HEALTHBARS
-CombatEvolution-2.3.2-NeoForge-1.21.1.jar:      8667  1980-02-01 00:00   net/shelmarow/combat_evolution/mixins/HealthBarMixin.class
-CombatEvolution-2.3.2-NeoForge-1.21.1.jar:      1097  1980-02-01 00:00   assets/combat_evolution/textures/gui/bossbar/ce_health_bar.png
-basename: extra operand '1.21.1-3.33.jar'
-Try 'basename --help' for more information.
-WeaponsOfMiracles-2.0.178.jar:      1747  1980-02-01 00:00   reascer/wom/config/WOMClientConfig$HealthBarShowOptions.class
-epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      1502  1980-02-01 00:00   yesman/epicfight/api/client/event/types/hud/TickTargetIndicatorEvent$Type.class
-epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      1992  1980-02-01 00:00   yesman/epicfight/api/client/event/types/hud/TickTargetIndicatorEvent.class
-epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      2446  1980-02-01 00:00   yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState.class
-epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      4220  1980-02-01 00:00   yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker.class
-epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:     13823  1980-02-01 00:00   yesman/epicfight/client/gui/HealthBar.class
-epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      1018  1980-02-01 00:00   yesman/epicfight/client/gui/TargetIndicator$1.class
-epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      5351  1980-02-01 00:00   yesman/epicfight/client/gui/TargetIndicator.class
-epic-fight-21.17.3.1-mc1.21.1-neoforge.jar:      2722  1980-02-01 00:00   yesman/epicfight/config/ClientConfig$HealthBarVisibility.class
-basename: extra operand '1.21.1.jar'
-Try 'basename --help' for more information.
-== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState.class
-%yesman/epicfight/client/gui/HealthBar
-<yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker
->Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;
-HealthBar.java
-Kyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState
-MLyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState;
-{(Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;Ljava/util/function/Supplier;Ljava/util/function/Supplier;)V
-== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker.class
-	getHealth
-"RuntimeVisibleParameterAnnotations
-%yesman/epicfight/client/gui/HealthBar
-'Lyesman/epicfight/client/gui/HealthBar;
-(Lyesman/epicfight/client/gui/HealthBar;Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V
-<yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker
->Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;
-HealthBar.java
-Kyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState
-MLyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState;
-RuntimeVisibleAnnotations
-getMaxHealth
-healthState
-{(Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;Ljava/util/function/Supplier;Ljava/util/function/Supplier;)V	
-== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/client/gui/HealthBar.class
-	getHealth
-	getTarget
-	healthEnd
-	maxHealth
-"RuntimeVisibleParameterAnnotations
-$yesman/epicfight/client/gui/EntityUI
-$yesman/epicfight/config/ClientConfig
-%yesman/epicfight/client/gui/HealthBar
-'Lyesman/epicfight/client/gui/HealthBar;
-(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;F)Z
-(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;F)V
-(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;F)Z
-(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;F)V
-(Lyesman/epicfight/client/gui/HealthBar;Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)V
-(Lyesman/epicfight/client/gui/HealthBar;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;)Ljava/util/function/Function;
-(Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lnet/minecraft/world/entity/LivingEntity;)Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;
-.yesman/epicfight/world/effect/VisibleMobEffect
-0Lyesman/epicfight/world/effect/VisibleMobEffect;
-8yesman/epicfight/config/ClientConfig$HealthBarVisibility
-:Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
-<yesman/epicfight/client/gui/HealthBar$EntityAttributeTracker
->Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;
-A(Lyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker;)V
-HEALTHBARS1
-HEALTHBARS2
-HealthBar.java
-HealthBarVisibility
-Kyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState
-MLyesman/epicfight/client/gui/HealthBar$EntityAttributeTracker$AttributeState;	
-Myesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch
-== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$BlockGuideOptions.class
-$yesman/epicfight/config/ClientConfig
-6gui.epicfight.widget.settings.ui.mine_block_guide.none
-6yesman/epicfight/config/ClientConfig$BlockGuideOptions	
-8Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;	
-9[Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;
-:()Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;
-;()[Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;
-ClientConfig.java
-L(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;
-Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$BlockGuideOptions;>;Lnet/minecraft/util/StringRepresentable;
-NONE
-showBlockHighlight
-showCrosshair
-== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode.class
-$yesman/epicfight/config/ClientConfig
-@yesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode	
-BLyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;	
-C[Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;
-ClientConfig.java
-D()Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;
-E()[Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;
-Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;>;Lnet/minecraft/util/StringRepresentable;
-RuntimeInvisibleAnnotations
-RuntimeInvisibleTypeAnnotations
-V(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$CameraPerspectiveToggleMode;
-== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$CanceledVanillaActions.class
-$yesman/epicfight/config/ClientConfig
-;yesman/epicfight/config/ClientConfig$CanceledVanillaActions	
-=Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;	
->[Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;
-?()Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;
-@()[Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;
-ClientConfig.java
-Dgui.epicfight.widget.settings.controls.canceled_vanilla_actions.none
-Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;>;Lnet/minecraft/util/StringRepresentable;
-NONE
-Q(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$CanceledVanillaActions;
-== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$HealthBarVisibility.class
-$yesman/epicfight/config/ClientConfig
-0gui.epicfight.widget.settings.ui.health_bar.hurt
-0gui.epicfight.widget.settings.ui.health_bar.none
-2gui.epicfight.widget.settings.ui.health_bar.target
-8yesman/epicfight/config/ClientConfig$HealthBarVisibility	
-:Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;	
-;[Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
-;gui.epicfight.widget.settings.ui.health_bar.target_and_hurt
-<()Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
-=()[Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
-ClientConfig.java
-HURT	
-HealthBarVisibility@1
-Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;>;Lnet/minecraft/util/StringRepresentable;
-N(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$HealthBarVisibility;
-NONE
-TARGET	
-TARGET_AND_HURT	
-== epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy.class
-$yesman/epicfight/config/ClientConfig
-;yesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy	
-=Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;	
->[Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;
-?()Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;
-@()[Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;
-ClientConfig.java
-Ljava/lang/Enum<Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;>;Lyesman/epicfight/api/utils/CirculatableEnum<Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;>;Lnet/minecraft/util/StringRepresentable;
-Q(Ljava/lang/String;)Lyesman/epicfight/config/ClientConfig$PlayerBehaviorStrategy;
-== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$AlignDirection.class
-"reascer/wom/config/WOMClientConfig
-(Ljava/lang/String;ILreascer/wom/config/WOMClientConfig$StartCoordGetter;Lreascer/wom/config/WOMClientConfig$NextCoordGetter;)V
-1reascer/wom/config/WOMClientConfig$AlignDirection	
-2reascer/wom/config/WOMClientConfig$NextCoordGetter
-3Lreascer/wom/config/WOMClientConfig$AlignDirection;	
-3reascer/wom/config/WOMClientConfig$StartCoordGetter
-4Lreascer/wom/config/WOMClientConfig$NextCoordGetter;
-4[Lreascer/wom/config/WOMClientConfig$AlignDirection;
-5Lreascer/wom/config/WOMClientConfig$StartCoordGetter;	
-6()[Lreascer/wom/config/WOMClientConfig$AlignDirection;
-ELjava/lang/Enum<Lreascer/wom/config/WOMClientConfig$AlignDirection;>;
-G(Ljava/lang/String;)Lreascer/wom/config/WOMClientConfig$AlignDirection;
-WOMClientConfig.java
-l(Lreascer/wom/config/WOMClientConfig$StartCoordGetter;Lreascer/wom/config/WOMClientConfig$NextCoordGetter;)V
-== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$HealthBarShowOptions.class
-"reascer/wom/config/WOMClientConfig
-7reascer/wom/config/WOMClientConfig$HealthBarShowOptions	
-9Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;	
-:[Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;
-;()Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;
-<()[Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;
-HURT	
-HealthBarShowOptions@1
-KLjava/lang/Enum<Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;>;
-M(Ljava/lang/String;)Lreascer/wom/config/WOMClientConfig$HealthBarShowOptions;
-NONE
-TARGET	
-WOMClientConfig.java
-== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$HorizontalBasis.class
-"reascer/wom/config/WOMClientConfig
-2reascer/wom/config/WOMClientConfig$HorizontalBasis	
-4Lreascer/wom/config/WOMClientConfig$HorizontalBasis;	
-5[Lreascer/wom/config/WOMClientConfig$HorizontalBasis;
-7()[Lreascer/wom/config/WOMClientConfig$HorizontalBasis;
-FLjava/lang/Enum<Lreascer/wom/config/WOMClientConfig$HorizontalBasis;>;
-H(Ljava/lang/String;)Lreascer/wom/config/WOMClientConfig$HorizontalBasis;
-WOMClientConfig.java
-== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$NextCoordGetter.class
-"reascer/wom/config/WOMClientConfig
-(Lreascer/wom/config/WOMClientConfig$HorizontalBasis;Lreascer/wom/config/WOMClientConfig$VerticalBasis;Lyesman/epicfight/api/utils/math/Vec2i;II)Lyesman/epicfight/api/utils/math/Vec2i;
-0reascer/wom/config/WOMClientConfig$VerticalBasis
-2reascer/wom/config/WOMClientConfig$HorizontalBasis
-2reascer/wom/config/WOMClientConfig$NextCoordGetter
-RuntimeVisibleAnnotations
-WOMClientConfig.java
-== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$StartCoordGetter.class
-"reascer/wom/config/WOMClientConfig
-(IIIIILreascer/wom/config/WOMClientConfig$HorizontalBasis;Lreascer/wom/config/WOMClientConfig$VerticalBasis;)Lyesman/epicfight/api/utils/math/Vec2i;
-0reascer/wom/config/WOMClientConfig$VerticalBasis
-2reascer/wom/config/WOMClientConfig$HorizontalBasis
-3reascer/wom/config/WOMClientConfig$StartCoordGetter
-RuntimeVisibleAnnotations
-WOMClientConfig.java
-== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig$VerticalBasis.class
-"reascer/wom/config/WOMClientConfig
-0reascer/wom/config/WOMClientConfig$VerticalBasis	
-2Lreascer/wom/config/WOMClientConfig$VerticalBasis;	
-3[Lreascer/wom/config/WOMClientConfig$VerticalBasis;
-5()[Lreascer/wom/config/WOMClientConfig$VerticalBasis;
-DLjava/lang/Enum<Lreascer/wom/config/WOMClientConfig$VerticalBasis;>;
-F(Ljava/lang/String;)Lreascer/wom/config/WOMClientConfig$VerticalBasis;
-WOMClientConfig.java
-== WeaponsOfMiracles-2.0.178.jar reascer/wom/config/WOMClientConfig.class
-"reascer/wom/config/WOMClientConfig
-#ingame.mob_drop_emerald_over_health
-$Lreascer/wom/config/WOMClientConfig;
-(IIIIILreascer/wom/config/WOMClientConfig$HorizontalBasis;Lreascer/wom/config/WOMClientConfig$VerticalBasis;)Lyesman/epicfight/api/utils/math/Vec2i;
-(Lreascer/wom/config/WOMClientConfig$HorizontalBasis;Lreascer/wom/config/WOMClientConfig$VerticalBasis;Lyesman/epicfight/api/utils/math/Vec2i;II)Lyesman/epicfight/api/utils/math/Vec2i;
-+net/neoforged/neoforge/common/ModConfigSpec
-0reascer/wom/config/WOMClientConfig$VerticalBasis
-1reascer/wom/config/WOMClientConfig$AlignDirection
-2Lreascer/wom/config/WOMClientConfig$VerticalBasis;	
-2reascer/wom/config/WOMClientConfig$HorizontalBasis
-2reascer/wom/config/WOMClientConfig$NextCoordGetter
-3net/neoforged/neoforge/common/ModConfigSpec$Builder
-3reascer/wom/config/WOMClientConfig$StartCoordGetter
-4Lreascer/wom/config/WOMClientConfig$HorizontalBasis;	
-4Lreascer/wom/config/WOMClientConfig$NextCoordGetter;
-4net/neoforged/neoforge/common/ModConfigSpec$IntValue
-5Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
-5Lreascer/wom/config/WOMClientConfig$StartCoordGetter;
-6()Lreascer/wom/config/WOMClientConfig$NextCoordGetter;	
-6Lnet/neoforged/neoforge/common/ModConfigSpec$IntValue;	
-7()Lreascer/wom/config/WOMClientConfig$StartCoordGetter;	
-7reascer/wom/config/WOMClientConfig$HealthBarShowOptions
-8(Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;)V
-8net/neoforged/neoforge/common/ModConfigSpec$BooleanValue
-:Lnet/neoforged/neoforge/common/ModConfigSpec$BooleanValue;
-HealthBarShowOptions
-M(Ljava/lang/String;III)Lnet/neoforged/neoforge/common/ModConfigSpec$IntValue;	
-WOMClientConfig.java
-config
-ingame.mob_more_xp_over_health
-== CombatEvolution-2.3.2-NeoForge-1.21.1.jar net/shelmarow/combat_evolution/config/CEClientConfig.class
-+net/neoforged/neoforge/common/ModConfigSpec
--Lnet/neoforged/neoforge/common/ModConfigSpec;
--Whether to show the icon in the execution HUD
-/()Lnet/neoforged/neoforge/common/ModConfigSpec;	
-1Whether to show text display in the execution HUD
-3net/neoforged/neoforge/common/ModConfigSpec$Builder
-4net/shelmarow/combat_evolution/config/CEClientConfig
-5Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
-5Whether to show the icon for available assassinations
-5net/neoforged/neoforge/common/ModConfigSpec$EnumValue
-6Lnet/shelmarow/combat_evolution/config/CEClientConfig;
-7()Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
-7Lnet/neoforged/neoforge/common/ModConfigSpec$EnumValue;
-7net/neoforged/neoforge/common/ModConfigSpec$ConfigValue
-7net/neoforged/neoforge/common/ModConfigSpec$DoubleValue
-8net/neoforged/neoforge/common/ModConfigSpec$BooleanValue
-9Lnet/neoforged/neoforge/common/ModConfigSpec$ConfigValue;
-9Lnet/neoforged/neoforge/common/ModConfigSpec$DoubleValue;
-:Lnet/neoforged/neoforge/common/ModConfigSpec$BooleanValue;
-CEClientConfig.java
-ConfigValue
-I(Ljava/lang/String;)Lnet/neoforged/neoforge/common/ModConfigSpec$Builder;
-MLnet/neoforged/neoforge/common/ModConfigSpec$ConfigValue<Ljava/lang/String;>;
-O(Ljava/lang/String;Z)Lnet/neoforged/neoforge/common/ModConfigSpec$BooleanValue;	
-P(Ljava/lang/String;DDD)Lnet/neoforged/neoforge/common/ModConfigSpec$DoubleValue;	
-RuntimeVisibleAnnotations
-SHOW_TEXT_DISPLAY
-[(Ljava/lang/String;Ljava/lang/Enum;)Lnet/neoforged/neoforge/common/ModConfigSpec$EnumValue;	
-_(Ljava/lang/String;Ljava/lang/Object;)Lnet/neoforged/neoforge/common/ModConfigSpec$ConfigValue;	
-showTextDisplay	
-== CombatEvolution-2.3.2-NeoForge-1.21.1.jar net/shelmarow/combat_evolution/mixins/HealthBarMixin.class
-	getHealth
-	maxHealth
-"RuntimeVisibleParameterAnnotations
-$yesman/epicfight/client/gui/EntityUI
-&textures/gui/bossbar/ce_health_bar.png
-'Lyesman/epicfight/client/gui/HealthBar;
-.yesman/epicfight/world/effect/VisibleMobEffect
-0Lyesman/epicfight/world/effect/VisibleMobEffect;
-4net/shelmarow/combat_evolution/mixins/HealthBarMixin
-6Lnet/shelmarow/combat_evolution/mixins/HealthBarMixin;
-HEALTH_BAR
-HealthBarMixin.java
-Myesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch
-OLyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;
-R(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;FLorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V
-RuntimeInvisibleAnnotations
-RuntimeVisibleAnnotations
-U(Lnet/minecraft/world/entity/LivingEntity;Lyesman/epicfight/world/capabilities/entitypatch/LivingEntityPatch<*>;Lyesman/epicfight/client/world/capabilites/entitypatch/player/LocalPlayerPatch;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;FLorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V
-getMaxHealth
-healthBGDisplayHeight
-healthBGEndU
-healthBGLeftX
-healthBGStartU
-healthBGWidthPixels
-healthPercent
-shouldDisplayHealthBar
-visibleMobEffect
-== yesman/epicfight/api/client/event/types/hud/TickTargetIndicatorEvent.class
-Compiled from "TickTargetIndicatorEvent.java"
-public class yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent extends yesman.epicfight.api.event.LivingEntityPatchEvent {
-  private yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent$Type type;
-  public yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent(yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch, yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  public void setType(yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent$Type);
-  public yesman.epicfight.api.client.event.types.hud.TickTargetIndicatorEvent$Type getIndicatorType();
-== yesman/epicfight/client/gui/HealthBar.class
-Compiled from "HealthBar.java"
-public class yesman.epicfight.client.gui.HealthBar extends yesman.epicfight.client.gui.EntityUI {
-  public static final net.minecraft.resources.ResourceLocation HEALTHBARS1;
-  public static final net.minecraft.resources.ResourceLocation HEALTHBARS2;
-  private final java.util.Map<net.minecraft.world.entity.LivingEntity, yesman.epicfight.client.gui.HealthBar$EntityAttributeTracker> trackingEntities;
-  public yesman.epicfight.client.gui.HealthBar();
-  private static boolean lambda$remove$2(java.util.Map$Entry);
-  private static void lambda$reset$1(yesman.epicfight.client.gui.HealthBar$EntityAttributeTracker);
-  private yesman.epicfight.client.gui.HealthBar$EntityAttributeTracker lambda$shouldDraw$0(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch, net.minecraft.world.entity.LivingEntity);
-  static {};
-== yesman/epicfight/client/gui/TargetIndicator.class
-Compiled from "TargetIndicator.java"
-public class yesman.epicfight.client.gui.TargetIndicator extends yesman.epicfight.client.gui.EntityUI {
-  public yesman.epicfight.client.gui.TargetIndicator();
-== yesman/epicfight/config/ClientConfig.class
-  private static final net.neoforged.neoforge.common.ModConfigSpec$Builder BUILDER;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue SHOW_TARGET_INDICATOR;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$EnumValue<yesman.epicfight.config.ClientConfig$HealthBarVisibility> HEALTH_BAR_VISIBILITY;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue SHOW_EPICFIGHT_ATTRIBUTES_IN_TOOLTIP;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$DoubleValue TARGET_OUTLINE_COLOR;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$EnumValue<yesman.epicfight.config.ClientConfig$BlockGuideOptions> MINE_BLOCK_GUIDE_OPTION;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_TARGET_ENTITY_GUIDE;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue BLOOD_EFFECTS;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ACTIVATE_COMPUTE_SHADER;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ACTIVATE_PERSISTENT_BUFFER;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue GROUND_SLAMS;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue MAX_STUCK_PROJECTILES;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_ANIMATED_FIRST_PERSON_MODEL;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_PLAYER_VANILLA_MODEL;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_COSMETICS;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue ENABLE_FIRST_PERSON_CAMERA_MOVE;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$ConfigValue<yesman.epicfight.config.ClientConfig$TPSActivationType> TPS_TYPE;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue CAMERA_HORIZONTAL_LOCATION;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue CAMERA_VERTICAL_LOCATION;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue CAMERA_ZOOM;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue LOCK_ON_SNAPPING;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue ENTITY_FOCUSING_RANGE;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$IntValue HOLDING_THRESHOLD;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$BooleanValue AUTO_PERSPECTIVE_SWITCHING;
-  public static final net.neoforged.neoforge.common.ModConfigSpec$EnumValue<yesman.epicfight.config.ClientConfig$CanceledVanillaActions> CANCEL_VANILLA_ACTION;
-grep: write error: Broken pipe
-== yesman/epicfight/world/entity/DodgeLocationIndicator.class
-Compiled from "DodgeLocationIndicator.java"
-public class yesman.epicfight.world.entity.DodgeLocationIndicator extends net.minecraft.world.entity.LivingEntity {
-  private static final java.util.List<net.minecraft.world.item.ItemStack> EMPTY_LIST;
-  public yesman.epicfight.world.entity.DodgeLocationIndicator(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.LivingEntity>, net.minecraft.world.level.Level);
-  public yesman.epicfight.world.entity.DodgeLocationIndicator(yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch<?>);
-  static {};
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler output below.
+  warning: unknown enum constant DeprecationLevel.ERROR
+    reason: class file for kotlin.DeprecationLevel not found
+  Note: Recompile with -Xlint:deprecation for details.
+  Note: /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/RelicArts.java uses unchecked or unsafe operations.
+  Note: Recompile with -Xlint:unchecked for details.
+  Note: Some input files use or override a deprecated API.
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/WornGearLayer.java:125: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = WornGear.NS, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                               ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/WornGearLayer.java:125: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = WornGear.NS, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                       ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGear.java:81: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGear.java:81: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGearRenderer.java:65: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGearRenderer.java:65: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/RebelCertificate.java:90: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/RebelCertificate.java:90: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/GodSlayer.java:93: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/GodSlayer.java:93: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/show/TechniqueShow.java:37: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/show/TechniqueShow.java:37: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/KingslayerArms.java:45: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/KingslayerArms.java:45: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/KingslayerArms.java:179: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/KingslayerArms.java:179: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/AzazelRenderer.java:172: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/AzazelRenderer.java:172: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/RoyalRenderer.java:103: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/RoyalRenderer.java:103: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
+                                                               ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/ExhaustionHud.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/ExhaustionHud.java:21: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/OneHealthBar.java:27: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/OneHealthBar.java:27: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/arms/OrorArms.java:20: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = OrorArms.ID, bus = EventBusSubscriber.Bus.MOD)
+                                           ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/arms/OrorArms.java:20: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = OrorArms.ID, bus = EventBusSubscriber.Bus.MOD)
+                                                                   ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/client/CapitalCompassClient.java:18: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/client/CapitalCompassClient.java:18: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CitadelEvents.java:50: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CitadelEvents.java:50: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CapitalCompass.java:165: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CapitalCompass.java:165: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/waza/WazaNet.java:20: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/waza/WazaNet.java:20: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/waza/MelsCastle.java:207: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/waza/MelsCastle.java:207: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                                 ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/ExpeditionEggs.java:42: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/ExpeditionEggs.java:42: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/GearLooks.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/GearLooks.java:21: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/ArmedVillagers.java:312: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
+                                                         ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/ArmedVillagers.java:312: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
+                                                               ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/relic/RelicNet.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/relic/RelicNet.java:21: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/relic/client/RelicClient.java:75: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+                                                                              ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/relic/client/RelicClient.java:75: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+      @EventBusSubscriber(modid = "oror_supreme_bosses", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+                                                                                                      ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/GrimoireBook.java:35: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/GrimoireBook.java:35: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/client/GrimoireClient.java:30: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                     ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/client/GrimoireClient.java:30: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+  @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                             ^
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:135: error: method refill(Mob) is already defined in class MobStamina
+      public static void refill(Mob m) {
+                         ^
+  1 error
+  53 warnings
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights.
+
+BUILD FAILED in 57s
+2 actionable tasks: 2 executed
