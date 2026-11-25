@@ -199,6 +199,8 @@ public final class MobDown {
             });
         } catch (ClassNotFoundException | LinkageError ex) {
             // Combat Evolution is not here
+        } catch (ReflectiveOperationException ex) {
+            System.out.println("[OROR] Combat Evolution's execution not hooked: " + ex);
         } catch (RuntimeException ex) {
             System.out.println("[OROR] Combat Evolution's execution not hooked: " + ex);
         }
