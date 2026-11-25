@@ -64,51 +64,48 @@ Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/ne
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
   ↓ https://piston-meta.mojang.com/v1/packages/c086fab6229047df03bb78951c7a1b8fce8c4892/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.42s
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.41s
 [1m*** Started working on [4mdownloadServer[23;0m[23;0m
 [1m*** Started working on [4mdownloadClient[23;0m[23;0m
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
-  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.45s
+  ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.40s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.86s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.63s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.14s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.05s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.68s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.56s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.88s
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.46s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.52s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 3.06s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.80s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.20s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.18s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.65s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 5.55s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 4.62s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.24s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.16s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.61s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.34s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.07s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.72s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 5.35s
-Total runtime: 28.64s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 3.62s
+Total runtime: 24.05s
 
 
 > Task :compileJava
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:135: error: method refill(Mob) is already defined in class MobStamina
-    public static void refill(Mob m) {
-                       ^
 warning: unknown enum constant DeprecationLevel.ERROR
   reason: class file for kotlin.DeprecationLevel not found
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/WornGearLayer.java:125: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
@@ -171,6 +168,9 @@ warning: unknown enum constant DeprecationLevel.ERROR
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/RoyalRenderer.java:103: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
                                                              ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobDown.java:185: error: unreported exception NoSuchMethodException; must be caught or declared to be thrown
+            java.lang.reflect.Method target = ev.getMethod("getTarget");
+                                                          ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                        ^
@@ -275,7 +275,7 @@ Note: Recompile with -Xlint:unchecked for details.
 53 warnings
 
 > Task :compileJava FAILED
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795567798285.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795568049526.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
@@ -286,6 +286,9 @@ Execution failed for task ':compileJava'.
 > Compilation failed; see the compiler output below.
   warning: unknown enum constant DeprecationLevel.ERROR
     reason: class file for kotlin.DeprecationLevel not found
+  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobDown.java:185: error: unreported exception NoSuchMethodException; must be caught or declared to be thrown
+              java.lang.reflect.Method target = ev.getMethod("getTarget");
+                                                            ^
   Note: Recompile with -Xlint:deprecation for details.
   Note: /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/RelicArts.java uses unchecked or unsafe operations.
   Note: Recompile with -Xlint:unchecked for details.
@@ -446,9 +449,6 @@ Execution failed for task ':compileJava'.
   /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/client/GrimoireClient.java:30: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
   @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                                              ^
-  /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:135: error: method refill(Mob) is already defined in class MobStamina
-      public static void refill(Mob m) {
-                         ^
   1 error
   53 warnings
 
