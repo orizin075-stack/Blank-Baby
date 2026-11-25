@@ -1,957 +1,276 @@
-562 screen dev.aika.smsn.client.gui.screen.VersionCheckWarningScreen in TITLE
-662 screenshot popup_VersionCheckWarningScreen
-662 press gui.proceed
-663 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-764 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-824 press selectWorld.create
-825 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-925 screenshot popup_ConfirmScreen
-925 press gui.yes
-926 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-965 chat: ……声がする。『応えよ、異界の旅人よ。汝を喚んだのは――』
-965 chat: 声は途切れた。足元の魔法陣が、ゆっくりと光を失っていく。
-965 chat: [JEG] Commands
-965 chat: ------------------------------
-965 chat: /justEnoughGuns unlockGunRecipes - Unlock all gun recipes
-965 chat: ------------------------------
-965 chat: [Awakened] Enjoying your powers? Join the community on Discord. Say hi, share your feedback, and get the latest news!
-965 chat: You received a starter kit: a set of iron armour, an iron sword, a shield, an iron pickaxe, 32 torches, 32 steaks, a warp stone, an iron backpack, a Glock 17 and 96 handgun rounds. Right-click the rounds to load them as ammunition.
-965 chat: You received the Royal Capital Compass. Where its needle points lies the villager king's city.
-965 chat: Nightfall / Sword Soaring is not installed. Quit the game and run SETUP_NIGHTFALL.cmd in this profile's folder once (Indestructible comes in the import's mods folder).
-965 chat: OrorTester has made the advancement [Isn't It Iron Pick]
-965 chat: OrorTester has made the advancement [Suit Up]
-966 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-966 chat: OrorTester has made the advancement [Ice and Fire]
-967 screen net.minecraft.client.gui.screens.DisconnectedScreen in LOADING
-1067 screenshot popup_DisconnectedScreen
-1068 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1168 screenshot popup_TitleScreen
-1169 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1269 screenshot popup_TitleScreen
-1270 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1370 screenshot popup_TitleScreen
-1371 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1471 screenshot popup_TitleScreen
-1472 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1572 screenshot popup_TitleScreen
-1573 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1673 screenshot popup_TitleScreen
-1674 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1774 screenshot popup_TitleScreen
-1775 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1875 screenshot popup_TitleScreen
-1876 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-1976 screenshot popup_TitleScreen
-1977 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2077 screenshot popup_TitleScreen
-2078 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2178 screenshot popup_TitleScreen
-2179 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2279 screenshot popup_TitleScreen
-2280 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2380 screenshot popup_TitleScreen
-2381 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2481 screenshot popup_TitleScreen
-2482 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2582 screenshot popup_TitleScreen
-2583 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2683 screenshot popup_TitleScreen
-2684 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2784 screenshot popup_TitleScreen
-2785 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2885 screenshot popup_TitleScreen
-2886 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-2986 screenshot popup_TitleScreen
-2987 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3087 screenshot popup_TitleScreen
-3088 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3188 screenshot popup_TitleScreen
-3189 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3289 screenshot popup_TitleScreen
-3290 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3390 screenshot popup_TitleScreen
-3391 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3491 screenshot popup_TitleScreen
-3492 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3592 screenshot popup_TitleScreen
-3593 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3693 screenshot popup_TitleScreen
-3694 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3794 screenshot popup_TitleScreen
-3795 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3895 screenshot popup_TitleScreen
-3896 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-3996 screenshot popup_TitleScreen
-3997 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4097 screenshot popup_TitleScreen
-4098 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4198 screenshot popup_TitleScreen
-4199 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4299 screenshot popup_TitleScreen
-4300 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4400 screenshot popup_TitleScreen
-4401 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4501 screenshot popup_TitleScreen
-4502 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4602 screenshot popup_TitleScreen
-4603 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4703 screenshot popup_TitleScreen
-4704 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4804 screenshot popup_TitleScreen
-4805 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-4905 screenshot popup_TitleScreen
-4906 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5006 screenshot popup_TitleScreen
-5007 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5107 screenshot popup_TitleScreen
-5108 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5208 screenshot popup_TitleScreen
-5209 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5309 screenshot popup_TitleScreen
-5310 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5410 screenshot popup_TitleScreen
-5411 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5511 screenshot popup_TitleScreen
-5512 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5612 screenshot popup_TitleScreen
-5613 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5713 screenshot popup_TitleScreen
-5714 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5814 screenshot popup_TitleScreen
-5815 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-5915 screenshot popup_TitleScreen
-5916 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6016 screenshot popup_TitleScreen
-6017 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6117 screenshot popup_TitleScreen
-6118 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6218 screenshot popup_TitleScreen
-6219 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6319 screenshot popup_TitleScreen
-6320 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6420 screenshot popup_TitleScreen
-6421 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6521 screenshot popup_TitleScreen
-6522 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6622 screenshot popup_TitleScreen
-6623 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6723 screenshot popup_TitleScreen
-6724 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6824 screenshot popup_TitleScreen
-6825 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-6925 screenshot popup_TitleScreen
-6926 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7026 screenshot popup_TitleScreen
-7027 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7127 screenshot popup_TitleScreen
-7128 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7228 screenshot popup_TitleScreen
-7229 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7329 screenshot popup_TitleScreen
-7330 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7430 screenshot popup_TitleScreen
-7431 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7531 screenshot popup_TitleScreen
-7532 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7632 screenshot popup_TitleScreen
-7633 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7733 screenshot popup_TitleScreen
-7734 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7834 screenshot popup_TitleScreen
-7835 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-7935 screenshot popup_TitleScreen
-7936 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8036 screenshot popup_TitleScreen
-8037 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8137 screenshot popup_TitleScreen
-8138 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8238 screenshot popup_TitleScreen
-8239 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8339 screenshot popup_TitleScreen
-8340 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8440 screenshot popup_TitleScreen
-8441 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8541 screenshot popup_TitleScreen
-8542 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8642 screenshot popup_TitleScreen
-8643 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8743 screenshot popup_TitleScreen
-8744 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8844 screenshot popup_TitleScreen
-8845 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-8945 screenshot popup_TitleScreen
-8946 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9046 screenshot popup_TitleScreen
-9047 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9147 screenshot popup_TitleScreen
-9148 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9248 screenshot popup_TitleScreen
-9249 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9349 screenshot popup_TitleScreen
-9350 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9450 screenshot popup_TitleScreen
-9451 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9551 screenshot popup_TitleScreen
-9552 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9652 screenshot popup_TitleScreen
-9653 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9753 screenshot popup_TitleScreen
-9754 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9854 screenshot popup_TitleScreen
-9855 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-9955 screenshot popup_TitleScreen
-9956 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10056 screenshot popup_TitleScreen
-10057 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10157 screenshot popup_TitleScreen
-10158 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10258 screenshot popup_TitleScreen
-10259 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10359 screenshot popup_TitleScreen
-10360 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10460 screenshot popup_TitleScreen
-10461 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10561 screenshot popup_TitleScreen
-10562 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10662 screenshot popup_TitleScreen
-10663 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10763 screenshot popup_TitleScreen
-10764 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10864 screenshot popup_TitleScreen
-10865 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-10965 screenshot popup_TitleScreen
-10966 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11066 screenshot popup_TitleScreen
-11067 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11167 screenshot popup_TitleScreen
-11168 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11268 screenshot popup_TitleScreen
-11269 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11369 screenshot popup_TitleScreen
-11370 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11470 screenshot popup_TitleScreen
-11471 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11571 screenshot popup_TitleScreen
-11572 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11672 screenshot popup_TitleScreen
-11673 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11773 screenshot popup_TitleScreen
-11774 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11874 screenshot popup_TitleScreen
-11875 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-11975 screenshot popup_TitleScreen
-11976 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12076 screenshot popup_TitleScreen
-12077 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12177 screenshot popup_TitleScreen
-12178 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12278 screenshot popup_TitleScreen
-12279 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12379 screenshot popup_TitleScreen
-12380 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12480 screenshot popup_TitleScreen
-12481 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12581 screenshot popup_TitleScreen
-12582 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12682 screenshot popup_TitleScreen
-12683 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12783 screenshot popup_TitleScreen
-12784 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12884 screenshot popup_TitleScreen
-12885 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-12985 screenshot popup_TitleScreen
-12986 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13086 screenshot popup_TitleScreen
-13087 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13187 screenshot popup_TitleScreen
-13188 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13288 screenshot popup_TitleScreen
-13289 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13389 screenshot popup_TitleScreen
-13390 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13490 screenshot popup_TitleScreen
-13491 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13591 screenshot popup_TitleScreen
-13592 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13692 screenshot popup_TitleScreen
-13693 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13793 screenshot popup_TitleScreen
-13794 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13894 screenshot popup_TitleScreen
-13895 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-13995 screenshot popup_TitleScreen
-13996 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14096 screenshot popup_TitleScreen
-14097 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14197 screenshot popup_TitleScreen
-14198 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14298 screenshot popup_TitleScreen
-14299 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14399 screenshot popup_TitleScreen
-14400 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14500 screenshot popup_TitleScreen
-14501 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14601 screenshot popup_TitleScreen
-14602 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14702 screenshot popup_TitleScreen
-14703 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14803 screenshot popup_TitleScreen
-14804 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-14904 screenshot popup_TitleScreen
-14905 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15005 screenshot popup_TitleScreen
-15006 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15106 screenshot popup_TitleScreen
-15107 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15207 screenshot popup_TitleScreen
-15208 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15308 screenshot popup_TitleScreen
-15309 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15409 screenshot popup_TitleScreen
-15410 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15510 screenshot popup_TitleScreen
-15511 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15611 screenshot popup_TitleScreen
-15612 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15712 screenshot popup_TitleScreen
-15713 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15813 screenshot popup_TitleScreen
-15814 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-15914 screenshot popup_TitleScreen
-15915 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16015 screenshot popup_TitleScreen
-16016 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16116 screenshot popup_TitleScreen
-16117 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16217 screenshot popup_TitleScreen
-16218 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16318 screenshot popup_TitleScreen
-16319 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16419 screenshot popup_TitleScreen
-16420 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16520 screenshot popup_TitleScreen
-16521 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16621 screenshot popup_TitleScreen
-16622 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16722 screenshot popup_TitleScreen
-16723 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16823 screenshot popup_TitleScreen
-16824 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-16924 screenshot popup_TitleScreen
-16925 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17025 screenshot popup_TitleScreen
-17026 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17126 screenshot popup_TitleScreen
-17127 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17227 screenshot popup_TitleScreen
-17228 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17328 screenshot popup_TitleScreen
-17329 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17429 screenshot popup_TitleScreen
-17430 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17530 screenshot popup_TitleScreen
-17531 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17631 screenshot popup_TitleScreen
-17632 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17732 screenshot popup_TitleScreen
-17733 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17833 screenshot popup_TitleScreen
-17834 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-17934 screenshot popup_TitleScreen
-17935 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18035 screenshot popup_TitleScreen
-18036 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18136 screenshot popup_TitleScreen
-18137 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18237 screenshot popup_TitleScreen
-18238 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18338 screenshot popup_TitleScreen
-18339 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18439 screenshot popup_TitleScreen
-18440 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18540 screenshot popup_TitleScreen
-18541 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18641 screenshot popup_TitleScreen
-18642 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18742 screenshot popup_TitleScreen
-18743 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18843 screenshot popup_TitleScreen
-18844 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-18944 screenshot popup_TitleScreen
-18945 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19045 screenshot popup_TitleScreen
-19046 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19146 screenshot popup_TitleScreen
-19147 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19247 screenshot popup_TitleScreen
-19248 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19348 screenshot popup_TitleScreen
-19349 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19449 screenshot popup_TitleScreen
-19450 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19550 screenshot popup_TitleScreen
-19551 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19651 screenshot popup_TitleScreen
-19652 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19752 screenshot popup_TitleScreen
-19753 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19853 screenshot popup_TitleScreen
-19854 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-19954 screenshot popup_TitleScreen
-19955 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20055 screenshot popup_TitleScreen
-20056 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20156 screenshot popup_TitleScreen
-20157 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20257 screenshot popup_TitleScreen
-20258 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20358 screenshot popup_TitleScreen
-20359 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20459 screenshot popup_TitleScreen
-20460 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20560 screenshot popup_TitleScreen
-20561 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20661 screenshot popup_TitleScreen
-20662 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20762 screenshot popup_TitleScreen
-20763 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20863 screenshot popup_TitleScreen
-20864 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-20964 screenshot popup_TitleScreen
-20965 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21065 screenshot popup_TitleScreen
-21066 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21166 screenshot popup_TitleScreen
-21167 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21267 screenshot popup_TitleScreen
-21268 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21368 screenshot popup_TitleScreen
-21369 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21469 screenshot popup_TitleScreen
-21470 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21570 screenshot popup_TitleScreen
-21571 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21671 screenshot popup_TitleScreen
-21672 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21772 screenshot popup_TitleScreen
-21773 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21873 screenshot popup_TitleScreen
-21874 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-21974 screenshot popup_TitleScreen
-21975 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22075 screenshot popup_TitleScreen
-22076 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22176 screenshot popup_TitleScreen
-22177 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22277 screenshot popup_TitleScreen
-22278 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22378 screenshot popup_TitleScreen
-22379 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22479 screenshot popup_TitleScreen
-22480 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22580 screenshot popup_TitleScreen
-22581 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22681 screenshot popup_TitleScreen
-22682 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22782 screenshot popup_TitleScreen
-22783 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22883 screenshot popup_TitleScreen
-22884 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-22984 screenshot popup_TitleScreen
-22985 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23085 screenshot popup_TitleScreen
-23086 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23186 screenshot popup_TitleScreen
-23187 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23287 screenshot popup_TitleScreen
-23288 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23388 screenshot popup_TitleScreen
-23389 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23489 screenshot popup_TitleScreen
-23490 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23590 screenshot popup_TitleScreen
-23591 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23691 screenshot popup_TitleScreen
-23692 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23792 screenshot popup_TitleScreen
-23793 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23893 screenshot popup_TitleScreen
-23894 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-23994 screenshot popup_TitleScreen
-23995 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24095 screenshot popup_TitleScreen
-24096 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24196 screenshot popup_TitleScreen
-24197 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24297 screenshot popup_TitleScreen
-24298 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24398 screenshot popup_TitleScreen
-24399 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24499 screenshot popup_TitleScreen
-24500 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24600 screenshot popup_TitleScreen
-24601 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24701 screenshot popup_TitleScreen
-24702 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24802 screenshot popup_TitleScreen
-24803 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-24903 screenshot popup_TitleScreen
-24904 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25004 screenshot popup_TitleScreen
-25005 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25105 screenshot popup_TitleScreen
-25106 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25206 screenshot popup_TitleScreen
-25207 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25307 screenshot popup_TitleScreen
-25308 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25408 screenshot popup_TitleScreen
-25409 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25509 screenshot popup_TitleScreen
-25510 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25610 screenshot popup_TitleScreen
-25611 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25711 screenshot popup_TitleScreen
-25712 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25812 screenshot popup_TitleScreen
-25813 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-25913 screenshot popup_TitleScreen
-25914 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26014 screenshot popup_TitleScreen
-26015 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26115 screenshot popup_TitleScreen
-26116 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26216 screenshot popup_TitleScreen
-26217 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26317 screenshot popup_TitleScreen
-26318 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26418 screenshot popup_TitleScreen
-26419 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26519 screenshot popup_TitleScreen
-26520 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26620 screenshot popup_TitleScreen
-26621 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26721 screenshot popup_TitleScreen
-26722 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26822 screenshot popup_TitleScreen
-26823 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-26923 screenshot popup_TitleScreen
-26924 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27024 screenshot popup_TitleScreen
-27025 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27125 screenshot popup_TitleScreen
-27126 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27226 screenshot popup_TitleScreen
-27227 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27327 screenshot popup_TitleScreen
-27328 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27428 screenshot popup_TitleScreen
-27429 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27529 screenshot popup_TitleScreen
-27530 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27630 screenshot popup_TitleScreen
-27631 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27731 screenshot popup_TitleScreen
-27732 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27832 screenshot popup_TitleScreen
-27833 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-27933 screenshot popup_TitleScreen
-27934 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28034 screenshot popup_TitleScreen
-28035 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28135 screenshot popup_TitleScreen
-28136 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28236 screenshot popup_TitleScreen
-28237 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28337 screenshot popup_TitleScreen
-28338 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28438 screenshot popup_TitleScreen
-28439 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28539 screenshot popup_TitleScreen
-28540 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28640 screenshot popup_TitleScreen
-28641 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28741 screenshot popup_TitleScreen
-28742 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28842 screenshot popup_TitleScreen
-28843 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-28943 screenshot popup_TitleScreen
-28944 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29044 screenshot popup_TitleScreen
-29045 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29145 screenshot popup_TitleScreen
-29146 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29246 screenshot popup_TitleScreen
-29247 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29347 screenshot popup_TitleScreen
-29348 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29448 screenshot popup_TitleScreen
-29449 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29549 screenshot popup_TitleScreen
-29550 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29650 screenshot popup_TitleScreen
-29651 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29751 screenshot popup_TitleScreen
-29752 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29852 screenshot popup_TitleScreen
-29853 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-29953 screenshot popup_TitleScreen
-29954 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30054 screenshot popup_TitleScreen
-30055 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30155 screenshot popup_TitleScreen
-30156 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30256 screenshot popup_TitleScreen
-30257 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30357 screenshot popup_TitleScreen
-30358 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30458 screenshot popup_TitleScreen
-30459 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30559 screenshot popup_TitleScreen
-30560 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30660 screenshot popup_TitleScreen
-30661 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30761 screenshot popup_TitleScreen
-30762 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30862 screenshot popup_TitleScreen
-30863 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-30963 screenshot popup_TitleScreen
-30964 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31064 screenshot popup_TitleScreen
-31065 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31165 screenshot popup_TitleScreen
-31166 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31266 screenshot popup_TitleScreen
-31267 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31367 screenshot popup_TitleScreen
-31368 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31468 screenshot popup_TitleScreen
-31469 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31569 screenshot popup_TitleScreen
-31570 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31670 screenshot popup_TitleScreen
-31671 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31771 screenshot popup_TitleScreen
-31772 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31872 screenshot popup_TitleScreen
-31873 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-31973 screenshot popup_TitleScreen
-31974 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32074 screenshot popup_TitleScreen
-32075 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32175 screenshot popup_TitleScreen
-32176 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32276 screenshot popup_TitleScreen
-32277 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32377 screenshot popup_TitleScreen
-32378 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32478 screenshot popup_TitleScreen
-32479 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32579 screenshot popup_TitleScreen
-32580 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32680 screenshot popup_TitleScreen
-32681 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32781 screenshot popup_TitleScreen
-32782 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32882 screenshot popup_TitleScreen
-32883 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-32983 screenshot popup_TitleScreen
-32984 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33084 screenshot popup_TitleScreen
-33085 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33185 screenshot popup_TitleScreen
-33186 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33286 screenshot popup_TitleScreen
-33287 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33387 screenshot popup_TitleScreen
-33388 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33488 screenshot popup_TitleScreen
-33489 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33589 screenshot popup_TitleScreen
-33590 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33690 screenshot popup_TitleScreen
-33691 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33791 screenshot popup_TitleScreen
-33792 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33892 screenshot popup_TitleScreen
-33893 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-33993 screenshot popup_TitleScreen
-33994 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34094 screenshot popup_TitleScreen
-34095 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34195 screenshot popup_TitleScreen
-34196 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34296 screenshot popup_TitleScreen
-34297 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34397 screenshot popup_TitleScreen
-34398 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34498 screenshot popup_TitleScreen
-34499 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34599 screenshot popup_TitleScreen
-34600 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34700 screenshot popup_TitleScreen
-34701 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34801 screenshot popup_TitleScreen
-34802 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-34902 screenshot popup_TitleScreen
-34903 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35003 screenshot popup_TitleScreen
-35004 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35104 screenshot popup_TitleScreen
-35105 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35205 screenshot popup_TitleScreen
-35206 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35306 screenshot popup_TitleScreen
-35307 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35407 screenshot popup_TitleScreen
-35408 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35508 screenshot popup_TitleScreen
-35509 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35609 screenshot popup_TitleScreen
-35610 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35710 screenshot popup_TitleScreen
-35711 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35811 screenshot popup_TitleScreen
-35812 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-35912 screenshot popup_TitleScreen
-35913 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36013 screenshot popup_TitleScreen
-36014 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36114 screenshot popup_TitleScreen
-36115 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36215 screenshot popup_TitleScreen
-36216 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36316 screenshot popup_TitleScreen
-36317 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36417 screenshot popup_TitleScreen
-36418 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36518 screenshot popup_TitleScreen
-36519 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36619 screenshot popup_TitleScreen
-36620 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36720 screenshot popup_TitleScreen
-36721 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36821 screenshot popup_TitleScreen
-36822 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-36922 screenshot popup_TitleScreen
-36923 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37023 screenshot popup_TitleScreen
-37024 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37124 screenshot popup_TitleScreen
-37125 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37225 screenshot popup_TitleScreen
-37226 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37326 screenshot popup_TitleScreen
-37327 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37427 screenshot popup_TitleScreen
-37428 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37528 screenshot popup_TitleScreen
-37529 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37629 screenshot popup_TitleScreen
-37630 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37730 screenshot popup_TitleScreen
-37731 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37831 screenshot popup_TitleScreen
-37832 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-37932 screenshot popup_TitleScreen
-37933 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38033 screenshot popup_TitleScreen
-38034 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38134 screenshot popup_TitleScreen
-38135 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38235 screenshot popup_TitleScreen
-38236 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38336 screenshot popup_TitleScreen
-38337 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38437 screenshot popup_TitleScreen
-38438 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38538 screenshot popup_TitleScreen
-38539 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38639 screenshot popup_TitleScreen
-38640 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38740 screenshot popup_TitleScreen
-38741 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38841 screenshot popup_TitleScreen
-38842 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-38942 screenshot popup_TitleScreen
-38943 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39043 screenshot popup_TitleScreen
-39044 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39144 screenshot popup_TitleScreen
-39145 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39245 screenshot popup_TitleScreen
-39246 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39346 screenshot popup_TitleScreen
-39347 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39447 screenshot popup_TitleScreen
-39448 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39548 screenshot popup_TitleScreen
-39549 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39649 screenshot popup_TitleScreen
-39650 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39750 screenshot popup_TitleScreen
-39751 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39851 screenshot popup_TitleScreen
-39852 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-39952 screenshot popup_TitleScreen
-39953 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40053 screenshot popup_TitleScreen
-40054 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40154 screenshot popup_TitleScreen
-40155 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40255 screenshot popup_TitleScreen
-40256 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40356 screenshot popup_TitleScreen
-40357 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40457 screenshot popup_TitleScreen
-40458 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40558 screenshot popup_TitleScreen
-40559 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40659 screenshot popup_TitleScreen
-40660 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40760 screenshot popup_TitleScreen
-40761 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40861 screenshot popup_TitleScreen
-40862 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-40962 screenshot popup_TitleScreen
-40963 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41063 screenshot popup_TitleScreen
-41064 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41164 screenshot popup_TitleScreen
-41165 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41265 screenshot popup_TitleScreen
-41266 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41366 screenshot popup_TitleScreen
-41367 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41467 screenshot popup_TitleScreen
-41468 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41568 screenshot popup_TitleScreen
-41569 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41669 screenshot popup_TitleScreen
-41670 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41770 screenshot popup_TitleScreen
-41771 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41871 screenshot popup_TitleScreen
-41872 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-41972 screenshot popup_TitleScreen
-41973 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42073 screenshot popup_TitleScreen
-42074 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42174 screenshot popup_TitleScreen
-42175 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42275 screenshot popup_TitleScreen
-42276 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42376 screenshot popup_TitleScreen
-42377 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42477 screenshot popup_TitleScreen
-42478 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42578 screenshot popup_TitleScreen
-42579 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42679 screenshot popup_TitleScreen
-42680 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42780 screenshot popup_TitleScreen
-42781 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42881 screenshot popup_TitleScreen
-42882 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-42982 screenshot popup_TitleScreen
-42983 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43083 screenshot popup_TitleScreen
-43084 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43184 screenshot popup_TitleScreen
-43185 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43285 screenshot popup_TitleScreen
-43286 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43386 screenshot popup_TitleScreen
-43387 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43487 screenshot popup_TitleScreen
-43488 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43588 screenshot popup_TitleScreen
-43589 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43689 screenshot popup_TitleScreen
-43690 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43790 screenshot popup_TitleScreen
-43791 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43891 screenshot popup_TitleScreen
-43892 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-43992 screenshot popup_TitleScreen
-43993 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44093 screenshot popup_TitleScreen
-44094 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44194 screenshot popup_TitleScreen
-44195 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44295 screenshot popup_TitleScreen
-44296 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44396 screenshot popup_TitleScreen
-44397 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44497 screenshot popup_TitleScreen
-44498 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44598 screenshot popup_TitleScreen
-44599 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44699 screenshot popup_TitleScreen
-44700 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44800 screenshot popup_TitleScreen
-44801 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-44901 screenshot popup_TitleScreen
-44902 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45002 screenshot popup_TitleScreen
-45003 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45103 screenshot popup_TitleScreen
-45104 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45204 screenshot popup_TitleScreen
-45205 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45305 screenshot popup_TitleScreen
-45306 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45406 screenshot popup_TitleScreen
-45407 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45507 screenshot popup_TitleScreen
-45508 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45608 screenshot popup_TitleScreen
-45609 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45709 screenshot popup_TitleScreen
-45710 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45810 screenshot popup_TitleScreen
-45811 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-45911 screenshot popup_TitleScreen
-45912 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46012 screenshot popup_TitleScreen
-46013 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46113 screenshot popup_TitleScreen
-46114 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46214 screenshot popup_TitleScreen
-46215 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46315 screenshot popup_TitleScreen
-46316 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46416 screenshot popup_TitleScreen
-46417 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46517 screenshot popup_TitleScreen
-46518 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46618 screenshot popup_TitleScreen
-46619 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46719 screenshot popup_TitleScreen
-46720 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46820 screenshot popup_TitleScreen
-46821 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-46921 screenshot popup_TitleScreen
-46922 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47022 screenshot popup_TitleScreen
-47023 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47123 screenshot popup_TitleScreen
-47124 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47224 screenshot popup_TitleScreen
-47225 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47325 screenshot popup_TitleScreen
-47326 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47426 screenshot popup_TitleScreen
-47427 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47527 screenshot popup_TitleScreen
-47528 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47628 screenshot popup_TitleScreen
-47629 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47729 screenshot popup_TitleScreen
-47730 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47830 screenshot popup_TitleScreen
-47831 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-47931 screenshot popup_TitleScreen
-47932 screen net.minecraft.client.gui.screens.TitleScreen in LOADING
-48000 screenshot 99_timeout_LOADING
-48000 finished: timeout in LOADING
+427 screen dev.aika.smsn.client.gui.screen.VersionCheckWarningScreen in TITLE
+527 screenshot popup_VersionCheckWarningScreen
+527 press gui.proceed
+528 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+629 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+689 press selectWorld.create
+690 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+790 screenshot popup_ConfirmScreen
+790 press gui.yes
+791 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+815 chat: ……声がする。『応えよ、異界の旅人よ。汝を喚んだのは――』
+815 chat: 声は途切れた。足元の魔法陣が、ゆっくりと光を失っていく。
+815 chat: [JEG] Commands
+815 chat: ------------------------------
+815 chat: /justEnoughGuns unlockGunRecipes - Unlock all gun recipes
+815 chat: ------------------------------
+815 chat: [Awakened] Enjoying your powers? Join the community on Discord. Say hi, share your feedback, and get the latest news!
+815 chat: You received a starter kit: a set of iron armour, an iron sword, a shield, an iron pickaxe, 32 torches, 32 steaks, a warp stone, an iron backpack, a Glock 17 and 96 handgun rounds. Right-click the rounds to load them as ammunition.
+815 chat: You received the Royal Capital Compass. Where its needle points lies the villager king's city.
+815 chat: Nightfall / Sword Soaring is not installed. Quit the game and run SETUP_NIGHTFALL.cmd in this profile's folder once (Indestructible comes in the import's mods folder).
+815 chat: OrorTester has made the advancement [Isn't It Iron Pick]
+815 chat: OrorTester has made the advancement [Suit Up]
+816 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+816 chat: OrorTester has made the advancement [Ice and Fire]
+816 chat: 【東沢】遠征隊（6名・戦力756）がダンジョンへの遠征の準備を始めました
+826 chat: 【杉ヶ原】村が「村」に発展しました（村人6人）
+837 screen ttv.migami.jeg.client.MagazineModeClient$1 in LOADING
+937 screenshot popup_
+938 screen none in LOADING
+943 chat: Your game mode has been updated to Creative Mode
+968 inventory after joining: minecraft:iron_swordx1 minecraft:iron_pickaxex1 minecraft:torchx32 minecraft:cooked_beefx32 waystones:warp_stonex1 sophisticatedbackpacks:iron_backpackx1 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 oror_supreme_bosses:capital_compassx1 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1 minecraft:shieldx1
+982 stage at 0 100 0
+1002 chat: 【灯谷】村が「村」に発展しました（村人3人）
+1138 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 1 minecraft:iron_sword, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:villager -> jp.oror.reborn.client.ArmedVillagers$VillagerArmed holding 0 minecraft:air, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 jeg:custom_smg, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 jeg:pump_shotgun, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 jeg:semi_auto_rifle, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:vindicator -> net.minecraft.client.renderer.entity.VindicatorRenderer holding 1 jeg:custom_smg, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun, minecraft:pillager -> net.minecraft.client.renderer.entity.PillagerRenderer holding 1 tacz:modern_kinetic_gun]
+1166 chat: Battle dimension backup completed.
+1178 duel scene: hotbar given
+1180 chat: Your game mode has been updated to Survival Mode
+1206 screenshot d01_duel_hotbar
+1210 duel scene: grimoire used, screen jp.oror.reborn.duel.client.GrimoireScreen
+1211 screen jp.oror.reborn.duel.client.GrimoireScreen in PLAY
+1311 screenshot popup_GrimoireScreen
+1312 screen none in PLAY
+1314 screenshot d02_grimoire_opening
+1331 screenshot d03_grimoire_open
+1338 screenshot d04_grimoire_turning
+1349 screenshot d05_grimoire_page2
+1367 screenshot d06_grimoire_chosen
+1385 screenshot d07_grimoire_reading_pose
+1400 duel battle: zombie set out
+1415 screenshot d10_before_the_glove
+1415 duel battle: glove thrown at zombie
+1423 screenshot d11_glove_thrown
+1435 screenshot d12_duel_called
+1436 duel battle: onlookers set out
+1439 duel battle t400: player hp 20.0/20.0, zombie hp 20.0 dist 5.0
+1441 chat: [決闘] 白い手袋による決闘が成立！　双方が完全回復し、デバフが解除された。
+1459 screenshot d13_duel_fight_a
+1469 screenshot d13b_crowd_side
+1480 duel battle t440: player hp 20.0/20.0, zombie hp 25.4 dist 2.6
+1491 screenshot d14_duel_fight_front
+1524 duel battle t480: player hp 20.0/20.0, zombie hp 25.4 dist 2.3
+1529 screenshot d13c_crowd_behind
+1560 duel battle t520: player hp 16.1/20.0, zombie hp 20.8 dist 4.1
+1604 duel battle t560: player hp 16.1/20.0, zombie hp 20.8 dist 3.1
+1639 duel battle t600: player hp 16.1/20.0, zombie hp 17.4 dist 2.4
+1679 duel battle t640: player hp 9.0/20.0, zombie hp 12.8 dist 4.4
+1721 duel battle t680: player hp 9.0/20.0, zombie hp 8.2 dist 3.0
+1759 duel battle t720: player hp 9.0/20.0, zombie hp 3.5 dist 3.4
+1778 chat: [決闘] 勝利！ Lv.3 Zombieを封印書に変えた。
+1779 duel battle: the zombie is gone at 740
+1782 screenshot d15_duel_won
+1787 screenshot d15b_crowd_cheers_the_end
+1789 duel battle: the seal book in slot 0
+1795 screenshot d16_seal_book_in_hand
+1807 chat: 召喚：Lv.3 Zombie　素手で右クリック＝憑依、素手でShift＋右クリック＝融合。
+1813 screenshot d17_called_out
+1819 duel battle: servant seen
+1823 chat: [憑依] 本体は元の場所で無防備です。Gで戻ります。
+1835 screenshot d18_possessed
+1848 chat: [操作解除] 元の姿に戻りました。
+1861 chat: [憑依] 本体は元の場所で無防備です。Gで戻ります。
+1871 screenshot d19_fused
+1883 chat: [操作解除] 元の姿に戻りました。
+1889 screenshot d20_back_from_fusion
+1909 talismans: effigy used on a vex
+1913 screenshot d21_effigy_binding
+1914 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+1923 screenshot d22_effigy_bound
+1933 screen jp.oror.dueldominion.client.RitualScreen in PLAY
+2033 screenshot popup_RitualScreen
+2034 screen none in PLAY
+2036 talismans: ritual screen none
+2036 screenshot d23_ritual_menu
+2042 talisman HEALING: set, foe -
+2048 talisman HEALING: cast true with 1 spirits (asked 1), target -, player hp 12.0
+2048 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2048 chat: [形代呪法] 癒生符／魂灯 発動！形代1枚とお札1枚を消費しました。
+2051 screenshot d30_healing_a
+2064 screenshot d30_healing_b
+2082 screenshot d30_healing_c
+2102 talisman HEALING: after, player hp 14.0 effects [minecraft:regeneration]; entities about 0
+2110 talisman RETRIBUTION: set, foe vindicator
+2120 talisman RETRIBUTION: cast true with 1 spirits (asked 1), target vindicator, player hp 20.0
+2120 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2120 chat: [形代呪法] 応報符／応報 発動！形代1枚とお札1枚を消費しました。
+2121 screenshot d31_retribution_a
+2134 screenshot d31_retribution_b
+2152 screenshot d31_retribution_c
+2172 talisman RETRIBUTION: after, player hp 20.0 effects []; foe vindicator alive true hp 21.0 effects []; entities about 1
+2183 talisman GUARDIAN: set, foe -
+2190 talisman GUARDIAN: cast true with 1 spirits (asked 1), target -, player hp 20.0
+2190 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2190 chat: [形代呪法] 護持符／小霊盾 発動！形代1枚とお札1枚を消費しました。
+2191 screenshot d32_guardian_a
+2204 screenshot d32_guardian_b
+2222 screenshot d32_guardian_c
+2240 talisman GUARDIAN: after, player hp 20.0 effects [minecraft:resistance]; entities about 0
+2253 talisman BINDING: set, foe vindicator
+2259 talisman BINDING: cast true with 1 spirits (asked 1), target vindicator, player hp 20.0
+2259 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2259 chat: [形代呪法] 縛霊符／足縛 発動！形代1枚とお札1枚を消費しました。
+2261 screenshot d33_binding_a
+2274 screenshot d33_binding_b
+2292 screenshot d33_binding_c
+2310 talisman BINDING: after, player hp 20.0 effects []; foe vindicator alive true hp 24.0 effects [minecraft:slowness]; entities about 1
+2321 talisman MALICE_TRANSFER: set, foe pillager
+2328 talisman MALICE_TRANSFER: cast true with 3 spirits (asked 3), target pillager, player hp 20.0
+2328 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2328 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2328 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2328 chat: [形代呪法] 禍移符／厄落とし 発動！形代3枚とお札1枚を消費しました。
+2331 screenshot d34_malice_transfer_a
+2344 screenshot d34_malice_transfer_b
+2362 screenshot d34_malice_transfer_c
+2380 talisman MALICE_TRANSFER: after, player hp 20.0 effects [minecraft:mining_fatigue]; foe pillager alive true hp 22.0 effects [minecraft:poison]; entities about 1
+2390 talisman SOUL_SEEKER: set, foe pillager
+2398 talisman SOUL_SEEKER: cast true with 3 spirits (asked 3), target pillager, player hp 20.0
+2398 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2398 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2398 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2398 chat: [形代呪法] 追魂符／追魂針 発動！形代3枚とお札1枚を消費しました。
+2401 screenshot d35_soul_seeker_a
+2414 screenshot d35_soul_seeker_b
+2432 screenshot d35_soul_seeker_c
+2450 talisman SOUL_SEEKER: after, player hp 20.0 effects []; foe pillager alive true hp 16.0 effects [minecraft:glowing]; entities about 1
+2461 talisman EXORCISM: set, foe zombie
+2470 talisman EXORCISM: cast true with 3 spirits (asked 3), target zombie, player hp 20.0
+2470 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2470 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2470 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2470 chat: [形代呪法] 祓滅符／祓い火 発動！形代3枚とお札1枚を消費しました。
+2471 screenshot d36_exorcism_a
+2484 screenshot d36_exorcism_b
+2502 screenshot d36_exorcism_c
+2521 talisman EXORCISM: after, player hp 20.0 effects []; foe zombie alive true hp 10.0 effects []; entities about 1
+2530 talisman NIGHT_PARADE: set, foe -
+2539 talisman NIGHT_PARADE: cast true with 3 spirits (asked 3), target -, player hp 20.0
+2539 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2539 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2539 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2539 chat: [百鬼符] 霊体1体が加勢します。
+2539 chat: [形代呪法] 百鬼符／一霊招来 発動！形代3枚とお札1枚を消費しました。
+2541 screenshot d37_night_parade_a
+2554 screenshot d37_night_parade_b
+2556 chat: 【東沢】遠征隊が集まらず、遠征を見送りました
+2572 screenshot d37_night_parade_c
+2590 talisman NIGHT_PARADE: after, player hp 20.0 effects []; entities about 1
+2600 talisman REVIVAL: set, foe -
+2609 talisman REVIVAL: cast false with 3 spirits (asked 3), target -, player hp 20.0
+2609 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2609 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2609 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2609 chat: [形代呪法] 復活待機中の使役モブがいません。消費しません。
+2611 screenshot d38_revival_a
+2624 screenshot d38_revival_b
+2642 screenshot d38_revival_c
+2662 talisman REVIVAL: after, player hp 20.0 effects []; entities about 0
+2670 talisman CALAMITY: set, foe vindicator
+2678 talisman CALAMITY: cast true with 7 spirits (asked 7), target vindicator, player hp 20.0
+2679 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2679 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2679 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2679 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2679 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2679 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2679 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2679 chat: [形代呪法] 大禍符／禍刻 発動！形代7枚とお札1枚を消費しました。
+2681 screenshot d39_calamity_a
+2694 screenshot d39_calamity_b
+2712 screenshot d39_calamity_c
+2730 talisman CALAMITY: after, player hp 20.0 effects []; foe vindicator alive true hp 24.0 effects [minecraft:weakness, minecraft:slowness]; entities about 1
+2750 orbit: effigy on a vex (2 about)
+2751 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2758 orbit: effigy on a vex (1 about)
+2759 chat: [形代] 封印成功：Vex／肩代わり残量：14.0HP
+2771 screen jp.oror.dueldominion.client.RitualScreen in PLAY
+2777 orbit: menu RitualScreen slots 99=spirit_effigy 100=ofuda_binding 101=spirit_effigy* 102=spirit_effigy*
+2781 orbit: chose the effigy in slot 101
+2783 chat: [形代呪法] 1枚目：Vex／足縛：敵一体を鈍足にする
+2793 screenshot d24_ritual_chosen
+2797 orbit: talisman clicked in slot 100
+2798 chat: [形代呪法] 照準モード：対象にカーソルを重ねて発光を確認し、お札を右クリックで発動。Shift＋右クリックで中止。
+2799 screen none in PLAY
+2804 orbit: back from the menu, screen none
+2808 screenshot d25_orbit_front
+2816 screenshot d26_orbit_front_later
+2822 screenshot d27_orbit_aiming
+2826 orbit: talisman used at the vindicator
+2828 chat: [形代呪法] 縛霊符／足縛 発動！形代1枚とお札1枚を消費しました。
+2829 screenshot d28_orbit_burn
+2838 screenshot d29_orbit_after
+2848 deserter: marked, the mobs set out
+2848 chat: 【逃亡者の烙印】決闘から逃げた。世界中のモブが手を組み、最上位の武器を手にお前を狩る。気が済むまで（10回死ぬまで）終わらない。
+2854 screenshot d40_deserter_marked
+2882 screenshot d41_deserter_hunted
+2908 screenshot d42_deserter_hunted_later
+2908 deserter: on him pillager/crossbow iron_golem/air sheep/air wolf/air cow/air pillager/crossbow pillager/crossbow pillager/crossbow pillager/crossbow pillager/crossbow vindicator/netherite_axe pillager/crossbow zombie/netherite_sword skeleton/bow pillager/crossbow pillager/crossbow; player hp 15.1
+2914 chat: 【逃亡者】まだ終わらない。（あと9回）
+2914 chat: OrorTester was killed while fighting Lv.1 Wolf
+2915 screen se.gory_moon.you_died.client.DeathSplashScreen in PLAY
+2935 death: YOU DIED
+2935 screenshot death_2935
+2936 screen net.minecraft.client.gui.screens.DeathScreen in PLAY
+2937 screen none in PLAY
+2943 chat: OrorTester has made the advancement [Awakened]
+2960 deserter: respawned at 0, 61, 0
+2965 chat: Water makes your abilities hit 25% harder. Carry a vessel to keep the bonus away from water, and right-click water to fill it. Each tier holds more: Water Flask → Water Canteen → Water Reservoir → Tidal Vessel → Reservoir Core.
+2966 screenshot d43_deserter_respawn_camped
+2990 screenshot d44_deserter_respawn_camped_later
+2990 deserter: hunters about the respawn 8
+2994 chat: 逃亡者の烙印が取り除かれた。
+3001 stamina: set out
+3003 chat: Your power has awakened
+3003 chat: Press [R] to use your active ability
+3003 chat: Press [V] to switch between abilities
+3003 chat: Press [K] to view your powers and mastery
+3007 stamina: player 0.0/15.0 exhausted true
+3016 screenshot d50_stamina_exhausted_hud
+3024 screenshot d51_stamina_mob_bars
+3030 screenshot d52_stamina_player_bar_front
+3048 down: both broken, down 4
+3060 screenshot d60_down
+3070 down: struck the vindicator at 24.0
+3072 screenshot d61_critical_blow
+3078 screenshot d62_critical_after
+3078 down: vindicator hp 24.0/24.0
+3078 down: pillager hp 23.0/24.5
+3078 down: pillager hp 13.0/73.5
+3078 down: vindicator hp 24.0/24.5
+3078 down: vindicator hp 24.0/49.0
+3078 down: pillager hp 13.0/24.5
+3078 down: vindicator hp 24.0/73.5
+3078 down: pillager hp 23.0/73.5
+3078 down: vindicator hp 19.8/24.5
+3078 down: pillager hp 23.0/34.3
+3078 down: pillager hp 23.0/24.5
+3078 down: pillager hp 24.0/73.4
+3078 down: pillager hp 11.0/34.3
+3078 down: zombie hp 20.0/20.0
+3140 chat: OrorTester was slain by Lv.1 Vindicator
+3141 screen se.gory_moon.you_died.client.DeathSplashScreen in PLAY
+3161 death: YOU DIED
+3161 screenshot death_3161
+3162 screen net.minecraft.client.gui.screens.DeathScreen in PLAY
+3163 screen none in PLAY
+3182 screenshot d63_risen
+3182 down: pillager risen, down false stamina 1.00
+3182 down: vindicator risen, down false stamina 1.00
+3182 down: villager risen, down false stamina 1.00
+3182 down: vindicator risen, down false stamina 1.00
+3182 down: vindicator risen, down false stamina 1.00
+3182 down: vindicator risen, down false stamina 1.00
+3182 down: pillager risen, down false stamina 1.00
+3182 down: pillager risen, down false stamina 1.00
+3182 down: creeper risen, down false stamina 1.00
+3192 finished: complete (duel only)
