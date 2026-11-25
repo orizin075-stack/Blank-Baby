@@ -132,7 +132,7 @@ public final class MobStamina {
 
     /** Empties it (a guard broken under a blow it could not pay for): the mob is winded. */
     /** (r76) Its stamina full again and its wind back at once (up from a down: MobDown). */
-    public static void refill(Mob m) {
+    public static void restore(Mob m) {
         Pool p = pool(m);
         p.value = p.max;
         p.winded = false;

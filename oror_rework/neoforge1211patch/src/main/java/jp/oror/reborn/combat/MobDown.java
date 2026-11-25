@@ -87,7 +87,7 @@ public final class MobDown {
             return;
         }
         rose++;
-        MobStamina.refill(m);
+        MobStamina.restore(m);
         if (!struck && m.level() instanceof ServerLevel sl) {
             sl.playSound(null, m.blockPosition(), SoundEvents.ARMOR_EQUIP_GENERIC.value(), SoundSource.HOSTILE, 0.8F, 0.8F);
             sl.sendParticles(ParticleTypes.CLOUD, m.getX(), m.getY() + 0.2, m.getZ(), 8, 0.3, 0.05, 0.3, 0.02);
