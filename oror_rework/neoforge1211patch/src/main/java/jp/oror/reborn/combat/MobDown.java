@@ -41,7 +41,7 @@ public final class MobDown {
     static final class Down {
         long until;
         boolean executed;
-        long upAt = -1;
+        long upAt = -1, knockAt = -1;
     }
 
     private static final Map<Mob, Down> DOWN = new WeakHashMap<>();
@@ -111,6 +111,10 @@ public final class MobDown {
                 up(m, d.upAt >= 0);
                 continue;
             }
+            if (d.knockAt >= 0 && now >= d.knockAt) {
+                d.knockAt = -1;
+                EpicFightBridge.stun(m, "KNOCKDOWN", 1.0F);
+            }
             // held where it fell: no steps, no lunge
             m.getNavigation().stop();
             Vec3 v = m.getDeltaMovement();
@@ -155,9 +159,10 @@ public final class MobDown {
         e.setAmount(e.getAmount() * (boss ? 2F : 3F) + extra);
         criticals++;
         m.getPersistentData().putInt("OrorCriticals", m.getPersistentData().getInt("OrorCriticals") + 1);
-        // thrown down by it, and up again a moment later with all its stamina
+        // thrown down by it (the tick after: Epic Fight's knockdown, put on in the blow itself, turned the blow away), and
+        // up again a moment later with all its stamina
         d.upAt = m.level().getGameTime() + 20;
-        EpicFightBridge.stun(m, "KNOCKDOWN", 1.0F);
+        d.knockAt = m.level().getGameTime() + 1;
         if (m.level() instanceof ServerLevel sl) {
             Vec3 at = m.position().add(0, m.getBbHeight() * 0.55, 0);
             sl.sendParticles(ParticleTypes.SWEEP_ATTACK, at.x, at.y, at.z, 3, 0.4, 0.2, 0.4, 0);

@@ -133,7 +133,10 @@ public final class StaminaTest {
     /** The critical blow on the downed zombie, by the fake player. */
     private static void critical(ServerLevel lv) {
         float hp = downStruck.getHealth();
+        int before = jp.oror.reborn.combat.MobDown.criticals;
         float dealt = struck(downStruck, lv.damageSources().playerAttack(fp), 4F);
+        OUT.put("criticalCounted", jp.oror.reborn.combat.MobDown.criticals > before);
+        OUT.put("downInvulnerable", downStruck.isInvulnerable() || downStruck.isInvulnerableTo(lv.damageSources().playerAttack(fp)));
         OUT.put("criticalDealt", String.format(java.util.Locale.ROOT, "%.2f of %.1f", dealt, hp));
         OUT.put("criticalBig", dealt >= 9F || !downStruck.isAlive());
     }

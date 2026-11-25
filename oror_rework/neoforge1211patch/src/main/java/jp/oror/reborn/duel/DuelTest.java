@@ -869,7 +869,8 @@ public final class DuelTest {
         MADE.add(z);
         Deserters.begun(fp, z);
         net.minecraft.world.phys.Vec3 from = fp.position();
-        fp.teleportTo(from.x + 70, from.y, from.z);
+        // (who ran is who moved farthest from where the duel began: six blocks is enough, and stays in the forced chunks)
+        fp.teleportTo(from.x + 6, from.y, from.z);
         Deserters.ended(fp, z, "距離超過により中断しました。");
         OUT.put("deserterMarked", Deserters.marked(fp));
         List<Mob> mobs = new ArrayList<>();
