@@ -108,20 +108,34 @@ public final class StaminaTest {
         return before - victim.getHealth();
     }
 
+    private static Mob downStruck, downAlone;
+
+    /** (r76) The down: a zombie emptied goes down and strikes no one; struck down, a critical blow and up with all its
+     * stamina; another emptied and left alone, up again in five seconds with all its stamina. */
     private static void mobs(ServerLevel lv) {
         Mob tired = make(lv, EntityType.ZOMBIE, -6, 0, true), fresh = make(lv, EntityType.ZOMBIE, -6, 4, true);
         Mob cowA = make(lv, EntityType.COW, -4, 0, true), cowB = make(lv, EntityType.COW, -4, 4, true);
         MobStamina.empty(tired);
         OUT.put("zombieWinded", MobStamina.winded(tired));
+        OUT.put("zombieDown", jp.oror.reborn.combat.MobDown.isDown(tired));
         float a = struck(cowA, lv.damageSources().mobAttack(tired), 4F), b = struck(cowB, lv.damageSources().mobAttack(fresh), 4F);
-        OUT.put("windedBlow", String.format(java.util.Locale.ROOT, "%.2f", a));
+        OUT.put("downBlow", String.format(java.util.Locale.ROOT, "%.2f", a));
         OUT.put("freshBlow", String.format(java.util.Locale.ROOT, "%.2f", b));
-        OUT.put("windedBlowWeaker", a > 0 && a < b * 0.75F);
-        float taken = struck(tired, lv.damageSources().magic(), 4F);
-        OUT.put("windedTaken", String.format(java.util.Locale.ROOT, "%.2f", taken));
-        OUT.put("windedTakesMore", taken > 4.5F);
+        OUT.put("downStrikesNone", a == 0F && b > 0F);
+        downStruck = tired;
+        downAlone = make(lv, EntityType.ZOMBIE, -8, 8, true);
+        MobStamina.empty(downAlone);
+        OUT.put("aloneDown", jp.oror.reborn.combat.MobDown.isDown(downAlone));
         runner = make(lv, EntityType.COW, 0, -8, false);
         OUT.put("runnerStart", MobStamina.fraction(runner));
+    }
+
+    /** The critical blow on the downed zombie, by the fake player. */
+    private static void critical(ServerLevel lv) {
+        float hp = downStruck.getHealth();
+        float dealt = struck(downStruck, lv.damageSources().playerAttack(fp), 4F);
+        OUT.put("criticalDealt", String.format(java.util.Locale.ROOT, "%.2f of %.1f", dealt, hp));
+        OUT.put("criticalBig", dealt >= 9F || !downStruck.isAlive());
     }
 
     private static void player(ServerLevel lv) {
@@ -129,6 +143,7 @@ public final class StaminaTest {
         fp.moveTo(site.getX() + 4.5, site.getY(), site.getZ() + 0.5, 0F, 0F);
         fp.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
         Exhaustion.forget(fp);
+        critical(lv);
         Exhaustion.put(fp, 0F);
         Exhaustion.check(fp);
         OUT.put("playerExhausted", Exhaustion.exhausted(fp));
@@ -168,16 +183,21 @@ public final class StaminaTest {
             Exhaustion.put(fp, s[1] * 0.5F);
             Exhaustion.check(fp);
             OUT.put("playerWindBack", !Exhaustion.exhausted(fp));
+            // up again: the struck one at once with all its stamina, the one left alone when its five seconds were out
+            OUT.put("struckUpFull", downStruck.isAlive() ? !jp.oror.reborn.combat.MobDown.isDown(downStruck) && MobStamina.fraction(downStruck) >= 0.99F : true);
+            OUT.put("aloneUpFull", !jp.oror.reborn.combat.MobDown.isDown(downAlone) && MobStamina.fraction(downAlone) >= 0.99F);
             finish();
         }
     }
 
     private static void finish() {
-        boolean pass = !OUT.containsKey("error") && ok("zombieWinded") && ok("windedBlowWeaker") && ok("windedTakesMore") && ok("runningWears")
+        boolean pass = !OUT.containsKey("error") && ok("zombieWinded") && ok("zombieDown") && ok("downStrikesNone") && ok("aloneDown")
+            && ok("criticalBig") && ok("struckUpFull") && ok("aloneUpFull") && ok("runningWears")
             && ok("playerExhausted") && ok("playerBlowHalved") && ok("playerStaminaReset") && ok("playerWindBack") && ok("efPlayerStamina");
         StringBuilder s = new StringBuilder("{\"present\":true");
         OUT.forEach((k, v) -> s.append(",\"").append(k).append("\":").append(v instanceof String str ? "\"" + str + "\"" : v));
         s.append(",\"exhaustedBlows\":").append(Exhaustion.exhaustedBlows).append(",\"exhaustedHits\":").append(Exhaustion.exhaustedHits)
+            .append(",\"downs\":").append(jp.oror.reborn.combat.MobDown.downs).append(",\"criticals\":").append(jp.oror.reborn.combat.MobDown.criticals)
             .append(",\"pass\":").append(pass).append('}');
         LOG.info("STAMINA-RESULT {}", s);
         for (Entity x : MADE) {

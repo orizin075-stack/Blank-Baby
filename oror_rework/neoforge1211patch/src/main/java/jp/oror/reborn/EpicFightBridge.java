@@ -18,7 +18,7 @@ import net.neoforged.fml.ModList;
  * of Epic Fight's attacks. It is now found one method at a time (MethodHandles), as MobGuard and OwnerlessSwords do, and
  * a gun's mode switch failing no longer gives up the patch lookup with it.
  */
-final class EpicFightBridge {
+public final class EpicFightBridge {
     private static boolean broken, looked, gunBroken, warned;
     private static MethodHandle patchOf;
     private static Class<?> mobPatch;
@@ -59,7 +59,7 @@ final class EpicFightBridge {
         System.out.println("[OROR_EPICFIGHT] entity patch lookup disabled: " + why);
     }
 
-    static Object patch(Entity e, boolean player) {
+    public static Object patch(Entity e, boolean player) {
         if (broken || player && gunBroken || e == null || !ModList.get().isLoaded("epicfight")) {
             return null;
         }
@@ -78,6 +78,39 @@ final class EpicFightBridge {
                 System.out.println("[OROR_EPICFIGHT] entity patch lookup failed once: " + ex.getClass().getSimpleName());
             }
             return null;
+        }
+    }
+
+    private static java.lang.reflect.Method applyStun;
+    private static boolean stunLooked;
+
+    /** (r76) Epic Fight's stun on a mob (NEUTRALIZE: knelt, open to Combat Evolution's execution; KNOCKDOWN: thrown down), for time seconds. */
+    public static boolean stun(Entity e, String type, float time) {
+        Object p = patch(e, false);
+        if (p == null) {
+            return false;
+        }
+        try {
+            if (!stunLooked) {
+                stunLooked = true;
+                Class<?> st = Class.forName("yesman.epicfight.world.damagesource.StunType");
+                for (Class<?> k = p.getClass(); k != null && applyStun == null; k = k.getSuperclass()) {
+                    try {
+                        applyStun = k.getDeclaredMethod("applyStun", st, float.class);
+                        applyStun.setAccessible(true);
+                    } catch (NoSuchMethodException ex) {
+                        // up
+                    }
+                }
+            }
+            if (applyStun == null) {
+                return false;
+            }
+            @SuppressWarnings({"unchecked", "rawtypes"})
+            Object kind = Enum.valueOf((Class) applyStun.getParameterTypes()[0], type);
+            return Boolean.TRUE.equals(applyStun.invoke(p, kind, time));
+        } catch (ReflectiveOperationException | RuntimeException | LinkageError ex) {
+            return false;
         }
     }
 

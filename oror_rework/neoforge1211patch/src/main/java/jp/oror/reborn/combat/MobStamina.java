@@ -131,6 +131,15 @@ public final class MobStamina {
     }
 
     /** Empties it (a guard broken under a blow it could not pay for): the mob is winded. */
+    /** (r76) Its stamina full again and its wind back at once (up from a down: MobDown). */
+    public static void refill(Mob m) {
+        Pool p = pool(m);
+        p.value = p.max;
+        p.winded = false;
+        p.spentAt = m.level().getGameTime() - 100;
+        send(m, p, true);
+    }
+
     public static void empty(Mob m) {
         Pool p = pool(m);
         take(m, p, p.value, true);
@@ -145,6 +154,8 @@ public final class MobStamina {
         p.shownAt = now;
         if (!p.winded && p.value < p.max * 0.1F) {
             p.winded = true;
+            // (r76) its stamina broken: it goes down (MobDown), an opening for an execution
+            MobDown.down(m);
             p.windedAt = now;
             count(m, "OrorWinded");
             if (m.level() instanceof ServerLevel sl) {

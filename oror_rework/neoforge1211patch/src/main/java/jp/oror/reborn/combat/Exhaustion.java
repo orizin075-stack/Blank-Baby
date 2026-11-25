@@ -220,7 +220,10 @@ public final class Exhaustion {
         double v = m.getDeltaMovement().horizontalDistanceSqr();
         // (CI: a cow driven at a run was off the ground as often as on it) its pace over the ground, whether or not a foot is on it
         if (v > 0.2 * 0.2 && !m.isInWater() && m.getNavigation() instanceof net.minecraft.world.entity.ai.navigation.GroundPathNavigation) {
-            MobStamina.drain(m, MobStamina.max(m) * 0.006F);
+            // tired by running, never broken by it (a down comes of a fight: MobDown)
+            if (MobStamina.fraction(m) > 0.12F) {
+                MobStamina.drain(m, MobStamina.max(m) * 0.006F);
+            }
         }
     }
 
@@ -243,7 +246,7 @@ public final class Exhaustion {
             }
         }
         // taken exhausted: nothing to meet it with
-        if (exhausted(victim) && !e.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+        if (exhausted(victim) && !MobDown.isDown(victim) && !e.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             e.setAmount(e.getAmount() * TAKEN);
             exhaustedHits++;
         }
