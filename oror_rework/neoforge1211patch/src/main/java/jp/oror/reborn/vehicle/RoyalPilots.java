@@ -202,6 +202,12 @@ public final class RoyalPilots {
                 m.setTarget(null);
                 continue;
             }
+            // (r79, the r78 audit) the crew's enemy and the kept one are asked again whether they are still enemies: one who
+            // made peace (a pact, an owner changed) or is one of the crew's own side is not fired on, nor followed
+            if (rider instanceof Mob m && m.getTarget() != null && jp.oror.reborn.combat.Sides.friends(m, m.getTarget())) {
+                m.setTarget(null);
+                continue;
+            }
             if (rider instanceof Mob m && m.getTarget() != null && m.getTarget().isAlive() && !m.isAlliedTo(m.getTarget())) {
                 p.putUUID("Target", m.getTarget().getUUID());
                 p.putLong("TargetSeen", now);
@@ -210,7 +216,8 @@ public final class RoyalPilots {
         }
         if (p.hasUUID("Target") && v.level() instanceof ServerLevel level && now - p.getLong("TargetSeen") < 400
             && level.getEntity(p.getUUID("Target")) instanceof LivingEntity kept && kept.isAlive()
-            && inReach(v, kept, hold)) {
+            && inReach(v, kept, hold) && RoyalSovereign.hostile(kept)
+            && v.getPassengers().stream().noneMatch(r -> r instanceof LivingEntity lr && jp.oror.reborn.combat.Sides.friends(lr, kept))) {
             if (v.tickCount % 20 == 7) {
                 p.putLong("TargetSeen", now);
             }

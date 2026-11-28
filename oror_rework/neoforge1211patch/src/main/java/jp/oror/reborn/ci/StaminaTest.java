@@ -128,6 +128,26 @@ public final class StaminaTest {
         OUT.put("aloneDown", jp.oror.reborn.combat.MobDown.isDown(downAlone));
         runner = make(lv, EntityType.COW, 0, -8, false);
         OUT.put("runnerStart", MobStamina.fraction(runner));
+        sides(lv);
+    }
+
+    private static Mob allyA, allyB;
+
+    /** (r79) Sides: one of a mob's own side is not taken for a target, and one remembered is let go; a foe is kept. */
+    private static void sides(ServerLevel lv) {
+        Mob golem = make(lv, EntityType.IRON_GOLEM, 6, 0, true), villager = make(lv, EntityType.VILLAGER, 6, 3, true), zombie = make(lv, EntityType.ZOMBIE, 6, 6, true);
+        golem.setTarget(villager);
+        OUT.put("sidesFolkRefused", golem.getTarget() == null);
+        zombie.setTarget(villager);
+        OUT.put("sidesFoeKept", zombie.getTarget() == villager);
+        allyA = make(lv, EntityType.PIGLIN, 9, 0, true);
+        allyB = make(lv, EntityType.PIGLIN, 9, 3, true);
+        allyA.getPersistentData().putBoolean(jp.oror.reborn.king.RebelPact.ALLY, true);
+        allyB.getPersistentData().putBoolean(jp.oror.reborn.king.RebelPact.ALLY, true);
+        // remembered straight into its brain (as its own anger would), not through an order Sides could turn away
+        allyA.getBrain().setMemoryWithExpiry(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT, allyB.getUUID(), 600L);
+        allyA.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET, allyB);
+        OUT.put("sidesAllyRemembered", allyA.getTarget() == allyB);
     }
 
     /** The critical blow on the downed zombie, by the fake player. */
@@ -189,6 +209,11 @@ public final class StaminaTest {
             // up again: the struck one at once with all its stamina, the one left alone when its five seconds were out
             OUT.put("struckUpFull", downStruck.isAlive() ? !jp.oror.reborn.combat.MobDown.isDown(downStruck) && MobStamina.fraction(downStruck) >= 0.99F : true);
             OUT.put("aloneUpFull", !jp.oror.reborn.combat.MobDown.isDown(downAlone) && MobStamina.fraction(downAlone) >= 0.99F);
+            var brain = allyA.getBrain();
+            OUT.put("sidesBrainForgot", allyA.getTarget() == null
+                && brain.getMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT).isEmpty()
+                && brain.getMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET).isEmpty());
+            OUT.put("sidesCounts", jp.oror.reborn.combat.Sides.COUNT[0] + "/" + jp.oror.reborn.combat.Sides.COUNT[1]);
             finish();
         }
     }
@@ -196,7 +221,8 @@ public final class StaminaTest {
     private static void finish() {
         boolean pass = !OUT.containsKey("error") && ok("zombieWinded") && ok("zombieDown") && ok("downStrikesNone") && ok("aloneDown")
             && ok("criticalBig") && ok("struckUpFull") && ok("aloneUpFull") && ok("runningWears")
-            && ok("playerExhausted") && ok("playerBlowHalved") && ok("playerStaminaReset") && ok("playerWindBack") && ok("efPlayerStamina");
+            && ok("playerExhausted") && ok("playerBlowHalved") && ok("playerStaminaReset") && ok("playerWindBack") && ok("efPlayerStamina")
+            && ok("sidesFolkRefused") && ok("sidesFoeKept") && ok("sidesAllyRemembered") && ok("sidesBrainForgot");
         StringBuilder s = new StringBuilder("{\"present\":true");
         OUT.forEach((k, v) -> s.append(",\"").append(k).append("\":").append(v instanceof String str ? "\"" + str + "\"" : v));
         s.append(",\"exhaustedBlows\":").append(Exhaustion.exhaustedBlows).append(",\"exhaustedHits\":").append(Exhaustion.exhaustedHits)

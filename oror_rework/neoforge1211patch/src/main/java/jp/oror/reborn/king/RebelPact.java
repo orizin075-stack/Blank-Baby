@@ -136,7 +136,7 @@ public final class RebelPact {
         return who.getLastHurtByMob() == p && who.tickCount - who.getLastHurtByMobTimestamp() < 200;
     }
 
-    static UUID ownerOf(Entity e) {
+    public static UUID ownerOf(Entity e) {
         CompoundTag d = e.getPersistentData();
         return d.hasUUID(OWNER) ? d.getUUID(OWNER) : null;
     }

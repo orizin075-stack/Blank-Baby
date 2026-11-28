@@ -222,7 +222,7 @@ public final class MobDodge {
      * team, the village's folk (its villagers, golems and guards) one of another, the royals one of another. Dodged, a
      * villager struck by mistake by one of his own village was "struck" in the mod's own trial of friendly blows.
      */
-    static boolean friendly(LivingEntity a, Mob m) {
+    public static boolean friendly(LivingEntity a, Mob m) {
         if (a.isAlliedTo(m) || m.isAlliedTo(a)) {
             return true;
         }

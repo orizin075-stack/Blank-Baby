@@ -44,6 +44,10 @@ public final class Sidearm {
         if (!gun && !holstered || !AdaptiveCombat.guardian(m)) {
             return;
         }
+        // (r79, the r78 audit) not in the middle of a blow, a motion Epic Fight holds it in, a down, or using an item
+        if (m.swinging || m.isUsingItem() || MobDown.isDown(m) || jp.oror.reborn.EpicFightBridge.busy(m)) {
+            return;
+        }
         LivingEntity t = m.getTarget();
         boolean fighting = t != null && t.isAlive();
         double dist = fighting ? m.distanceTo(t) : 99;
@@ -65,8 +69,13 @@ public final class Sidearm {
                 return;
             }
             boolean ours = !main.isEmpty() && net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(main.getItem()).toString().equals(issued);
-            if (!main.isEmpty() && !ours && m instanceof Villager v && v.getInventory().canAddItem(main)) {
-                v.getInventory().addItem(main.copy());
+            if (!main.isEmpty() && !ours) {
+                // (r79, the r78 audit) what he held is kept: into his pack, or dropped at his feet, never lost
+                if (m instanceof Villager v && v.getInventory().canAddItem(main)) {
+                    v.getInventory().addItem(main.copy());
+                } else {
+                    m.spawnAtLocation(main.copy());
+                }
             }
             m.setItemSlot(EquipmentSlot.MAINHAND, holster);
             m.level().playSound(null, m.blockPosition(), SoundEvents.ARMOR_EQUIP_IRON.value(), SoundSource.NEUTRAL, 0.6F, 0.9F);

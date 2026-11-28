@@ -33,7 +33,8 @@ public final class BrainTargets {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void ordered(LivingChangeTargetEvent e) {
-        if (e.getTargetType() != LivingChangeTargetEvent.LivingTargetType.MOB_TARGET) {
+        // (r79) an order turned away (Sides: one of its own side) is not remembered either
+        if (e.getTargetType() != LivingChangeTargetEvent.LivingTargetType.MOB_TARGET || e.isCanceled()) {
             return;
         }
         LivingEntity t = e.getNewAboutToBeSetTarget();
@@ -66,6 +67,12 @@ public final class BrainTargets {
         LivingEntity t = m.getTarget();
         if (t == null || !t.isAlive() || t.level() != m.level()) {
             why(m, "no target");
+            return;
+        }
+        // (r79, the r78 audit) one who has come to be on its side (a pact in the fight) is let go, not walked to
+        if (Sides.friends(m, t)) {
+            Sides.forget(m, t);
+            why(m, "friend");
             return;
         }
         double d = m.distanceToSqr(t);

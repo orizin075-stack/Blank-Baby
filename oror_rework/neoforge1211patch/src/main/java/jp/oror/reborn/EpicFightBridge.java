@@ -114,6 +114,57 @@ public final class EpicFightBridge {
         }
     }
 
+    private static java.lang.reflect.Method entityState, stateAttacking, stateInaction;
+    private static boolean stateLooked;
+
+    /**
+     * (r79, the r78 audit: weapons changed in the middle of Epic Fight's own attack) Whether Epic Fight has the entity in
+     * an attack or another motion it cannot leave (its EntityState's attacking() or inaction()); false where it cannot tell.
+     */
+    public static boolean busy(Entity e) {
+        Object p = patch(e, false);
+        if (p == null) {
+            return false;
+        }
+        try {
+            if (!stateLooked) {
+                stateLooked = true;
+                for (Class<?> k = p.getClass(); k != null && entityState == null; k = k.getSuperclass()) {
+                    try {
+                        entityState = k.getDeclaredMethod("getEntityState");
+                        entityState.setAccessible(true);
+                    } catch (NoSuchMethodException ex) {
+                        // up
+                    }
+                }
+                if (entityState != null) {
+                    Class<?> st = entityState.getReturnType();
+                    try {
+                        stateAttacking = st.getMethod("attacking");
+                    } catch (NoSuchMethodException ex) {
+                        // not in this version
+                    }
+                    try {
+                        stateInaction = st.getMethod("inaction");
+                    } catch (NoSuchMethodException ex) {
+                        // not in this version
+                    }
+                }
+            }
+            if (entityState == null) {
+                return false;
+            }
+            Object state = entityState.invoke(p);
+            if (state == null) {
+                return false;
+            }
+            return stateAttacking != null && Boolean.TRUE.equals(stateAttacking.invoke(state))
+                || stateInaction != null && Boolean.TRUE.equals(stateInaction.invoke(state));
+        } catch (ReflectiveOperationException | RuntimeException | LinkageError ex) {
+            return false;
+        }
+    }
+
     static boolean animates(Entity e) {
         return patch(e, false) != null;
     }
