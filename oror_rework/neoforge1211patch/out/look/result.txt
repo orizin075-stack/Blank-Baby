@@ -1,750 +1,751 @@
-403 screen dev.aika.smsn.client.gui.screen.VersionCheckWarningScreen in TITLE
-503 screenshot popup_VersionCheckWarningScreen
-503 press gui.proceed
-504 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
-605 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
-665 press selectWorld.create
-666 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
-766 screenshot popup_ConfirmScreen
-766 press gui.yes
-767 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
-799 chat: ……声がする。『応えよ、異界の旅人よ。汝を喚んだのは――』
-799 chat: 声は途切れた。足元の魔法陣が、ゆっくりと光を失っていく。
-799 chat: [JEG] Commands
-799 chat: ------------------------------
-799 chat: /justEnoughGuns unlockGunRecipes - Unlock all gun recipes
-799 chat: ------------------------------
-799 chat: [Awakened] Enjoying your powers? Join the community on Discord. Say hi, share your feedback, and get the latest news!
-799 chat: You received a starter kit: a set of iron armour, an iron sword, a shield, an iron pickaxe, 32 torches, 32 steaks, a warp stone, an iron backpack, a Glock 17 and 96 handgun rounds. Right-click the rounds to load them as ammunition.
-799 chat: You received the Royal Capital Compass. Where its needle points lies the villager king's city.
-799 chat: OrorTester has made the advancement [Isn't It Iron Pick]
-799 chat: OrorTester has made the advancement [Suit Up]
-799 chat: OrorTester has made the advancement [Ice and Fire]
-800 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
-819 chat: Weapon controls activate automatically. Press guard just before impact to parry.
-830 screen ttv.migami.jeg.client.MagazineModeClient$1 in LOADING
-930 screenshot popup_
-931 screen none in LOADING
-933 chat: Your game mode has been updated to Creative Mode
-961 inventory after joining: minecraft:iron_swordx1 minecraft:iron_pickaxex1 minecraft:torchx32 minecraft:cooked_beefx32 waystones:warp_stonex1 sophisticatedbackpacks:iron_backpackx1 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 oror_supreme_bosses:capital_compassx1 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1 minecraft:shieldx1
-975 stage at -16 141 16
-1032 chat: Battle dimension backup completed.
-1131 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 1 minecraft:iron_sword, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:bow, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 epicfight:stone_greatsword, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:stone_sword, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 epicfight:stone_greatsword, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:stone_sword, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:bow, minecraft:skeleton -> net.minecraft.client.renderer.entity.SkeletonRenderer holding 1 minecraft:bow]
-1191 screenshot 10_royals
-1201 swing row 0: 8
-1204 screenshot 11_royals_swing
-1209 screenshot 11b_royals_swing_mid
-1215 screenshot 11c_royals_swing_late
-1220 swing row 0: 8
-1225 screenshot 11d_royals_combo2
-1291 screenshot 12_villagers
-1304 screenshot 13_villagers_swing
-1306 swing row 10: 6
-1312 swing row 10: 6
-1313 screenshot 13b_villagers_swing_early
-1319 screenshot 13c_villagers_combo2_mid
-1391 screenshot 14_king_close
-1461 screenshot 15_general_close
-1531 screenshot 16_imperial_close
-1601 screenshot 17_royals_back
-1671 screenshot 18_trader_close
-1675 arms on show
-1791 screenshot 19_arms
-1793 creatures on show
-1911 screenshot 19b_creatures
-1923 gear on show
-2031 screenshot 32_gear
-2071 screenshot 33_gear_worn
-2074 gear at work
-2083 screenshot 34_gear_at_work
-2133 screenshot 35_gear_recharging
-2135 gear worn: 5 of 5
-2147 screenshot 36_gear_worn_front
-2157 screenshot 37_gear_worn_back
-2165 screenshot 38_gear_worn_hand
-2171 gear taken off: 5 of 5
-2171 duel: valeria
-2177 engage: valeria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2188 engage: valeria holds valeria_weapon dist 3.2 move ground_spikes parries 0/0 blocks 0/0 cast 0
-2197 engage: valeria holds valeria_weapon dist 4.4 move ground_spikes parries 0/0 blocks 0/0 cast 0
-2208 engage: valeria holds valeria_weapon dist 5.2 move  parries 0/0 blocks 0/0 cast 0
-2211 screenshot 19c_valeria_00
-2217 screenshot 19c_valeria_01
-2217 engage: valeria holds valeria_weapon dist 4.0 move  parries 0/0 blocks 0/0 cast 0
-2223 screenshot 19c_valeria_02
-2229 screenshot 19c_valeria_03
-2229 engage: valeria holds valeria_weapon dist 2.8 move  parries 0/0 blocks 0/0 cast 0
-2235 screenshot 19c_valeria_04
-2237 engage: valeria holds valeria_weapon dist 2.8 move  parries 0/0 blocks 0/0 cast 0
-2241 screenshot 19c_valeria_05
-2247 screenshot 19c_valeria_06
-2248 engage: valeria holds valeria_weapon dist 3.9 move  parries 0/0 blocks 0/0 cast 0
-2253 screenshot 19c_valeria_07
-2259 screenshot 19c_valeria_08
-2259 engage: valeria holds valeria_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2265 screenshot 19c_valeria_09
-2267 engage: valeria holds valeria_weapon dist 2.9 move  parries 0/0 blocks 0/0 cast 0
-2271 screenshot 19c_valeria_10
-2277 screenshot 19c_valeria_11
-2277 engage: valeria holds valeria_weapon dist 4.9 move  parries 0/0 blocks 0/0 cast 0
-2283 screenshot 19c_valeria_12
-2288 engage: valeria holds valeria_weapon dist 4.9 move  parries 0/0 blocks 0/0 cast 0
-2289 screenshot 19c_valeria_13
-2295 screenshot 19c_valeria_14
-2297 engage: valeria holds valeria_weapon dist 4.5 move  parries 0/0 blocks 0/0 cast 1
-2301 screenshot 19c_valeria_15
-2307 screenshot 19c_valeria_16
-2307 engage: valeria holds valeria_weapon dist 3.3 move spin_slash parries 0/0 blocks 0/0 cast 2
-2313 screenshot 19c_valeria_17
-2318 engage: valeria holds valeria_weapon dist 1.2 move spin_slash parries 0/0 blocks 0/0 cast 3
-2319 screenshot 19c_valeria_18
-2325 screenshot 19c_valeria_19
-2327 engage: valeria holds valeria_weapon dist 3.1 move spin_slash parries 0/0 blocks 0/0 cast 4
-2331 screenshot 19c_valeria_20
-2337 screenshot 19c_valeria_21
-2337 engage: valeria holds valeria_weapon dist 1.3 move  parries 0/0 blocks 0/0 cast 5
-2343 screenshot 19c_valeria_22
-2348 engage: valeria holds valeria_weapon dist 3.4 move  parries 0/0 blocks 0/0 cast 5
-2349 screenshot 19c_valeria_23
-2358 engage: valeria holds valeria_weapon dist 4.3 move  parries 0/0 blocks 0/0 cast 5
-2373 duel: kokuhaku
-2379 engage: kokuhaku holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2387 engage: kokuhaku holds kokuhaku_weapon dist 4.6 move  parries 0/0 blocks 0/0 cast 0
-2399 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
-2407 engage: kokuhaku holds kokuhaku_weapon dist 7.4 move  parries 0/0 blocks 0/0 cast 0
-2411 screenshot 19c_kokuhaku_00
-2417 screenshot 19c_kokuhaku_01
-2418 engage: kokuhaku holds kokuhaku_weapon dist 8.2 move  parries 0/0 blocks 0/0 cast 0
-2423 screenshot 19c_kokuhaku_02
-2427 engage: kokuhaku holds kokuhaku_weapon dist 6.8 move  parries 0/0 blocks 0/0 cast 0
-2429 screenshot 19c_kokuhaku_03
-2435 screenshot 19c_kokuhaku_04
-2438 engage: kokuhaku holds kokuhaku_weapon dist 3.8 move  parries 0/0 blocks 0/0 cast 0
-2441 screenshot 19c_kokuhaku_05
-2447 screenshot 19c_kokuhaku_06
-2447 engage: kokuhaku holds kokuhaku_weapon dist 3.3 move  parries 0/0 blocks 0/0 cast 0
-2453 screenshot 19c_kokuhaku_07
-2458 engage: kokuhaku holds kokuhaku_weapon dist 3.5 move  parries 0/0 blocks 0/0 cast 0
-2459 screenshot 19c_kokuhaku_08
-2465 screenshot 19c_kokuhaku_09
-2468 engage: kokuhaku holds kokuhaku_weapon dist 5.6 move  parries 0/0 blocks 0/0 cast 0
-2471 screenshot 19c_kokuhaku_10
-2477 screenshot 19c_kokuhaku_11
-2477 engage: kokuhaku holds kokuhaku_weapon dist 6.6 move  parries 0/0 blocks 0/0 cast 0
-2483 screenshot 19c_kokuhaku_12
-2487 engage: kokuhaku holds kokuhaku_weapon dist 6.3 move  parries 0/0 blocks 0/0 cast 0
-2489 screenshot 19c_kokuhaku_13
-2495 screenshot 19c_kokuhaku_14
-2497 engage: kokuhaku holds kokuhaku_weapon dist 3.2 move  parries 0/0 blocks 0/0 cast 0
-2501 screenshot 19c_kokuhaku_15
-2507 screenshot 19c_kokuhaku_16
-2507 engage: kokuhaku holds kokuhaku_weapon dist 3.7 move  parries 0/0 blocks 0/0 cast 0
-2513 screenshot 19c_kokuhaku_17
-2517 engage: kokuhaku holds kokuhaku_weapon dist 3.7 move  parries 0/0 blocks 0/0 cast 0
-2519 screenshot 19c_kokuhaku_18
-2525 screenshot 19c_kokuhaku_19
-2527 engage: kokuhaku holds kokuhaku_weapon dist 3.4 move  parries 0/0 blocks 0/0 cast 0
-2531 screenshot 19c_kokuhaku_20
-2537 engage: kokuhaku holds kokuhaku_weapon dist 1.3 move  parries 0/0 blocks 0/0 cast 0
-2537 screenshot 19c_kokuhaku_21
-2543 screenshot 19c_kokuhaku_22
-2547 engage: kokuhaku holds kokuhaku_weapon dist 6.2 move  parries 0/0 blocks 0/0 cast 0
-2549 screenshot 19c_kokuhaku_23
-2557 engage: kokuhaku holds kokuhaku_weapon dist 1.8 move  parries 0/0 blocks 0/0 cast 0
-2572 duel: elseria
-2577 engage: elseria holds air dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2587 engage: elseria holds elseria_weapon dist 4.0 move nova parries 0/0 blocks 0/0 cast 0
-2597 engage: elseria holds elseria_weapon dist 5.1 move nova parries 0/0 blocks 0/0 cast 0
-2608 engage: elseria holds elseria_weapon dist 6.6 move nova parries 0/0 blocks 0/0 cast 0
-2611 screenshot 19c_elseria_00
-2617 screenshot 19c_elseria_01
-2617 engage: elseria holds elseria_weapon dist 5.0 move  parries 0/0 blocks 0/0 cast 0
-2617 bar: 星脈魔祖 エルセリア・アークノア　◆ Primordial Codex ◆ (Awakened)
-2623 screenshot 19c_elseria_02
-2627 engage: elseria holds elseria_legend dist 7.7 move  parries 0/0 blocks 0/0 cast 1
-2629 screenshot 19c_elseria_03
-2635 screenshot 19c_elseria_04
-2638 engage: elseria holds elseria_legend dist 8.4 move  parries 0/0 blocks 0/0 cast 1
-2641 screenshot 19c_elseria_05
-2647 screenshot 19c_elseria_06
-2647 engage: elseria holds elseria_legend dist 7.6 move  parries 0/0 blocks 0/0 cast 1
-2653 screenshot 19c_elseria_07
-2657 engage: elseria holds elseria_legend dist 8.6 move  parries 0/0 blocks 0/0 cast 1
-2659 screenshot 19c_elseria_08
-2665 screenshot 19c_elseria_09
-2667 engage: elseria holds elseria_legend dist 8.5 move  parries 0/0 blocks 0/0 cast 1
-2671 screenshot 19c_elseria_10
-2677 screenshot 19c_elseria_11
-2677 engage: elseria holds elseria_legend dist 9.0 move  parries 0/0 blocks 0/0 cast 1
-2683 screenshot 19c_elseria_12
-2687 engage: elseria holds elseria_legend dist 4.0 move  parries 0/0 blocks 0/0 cast 1
-2689 screenshot 19c_elseria_13
-2695 screenshot 19c_elseria_14
-2699 engage: elseria holds elseria_legend dist 4.5 move  parries 0/0 blocks 0/0 cast 1
-2701 screenshot 19c_elseria_15
-2707 screenshot 19c_elseria_16
-2709 engage: elseria holds elseria_legend dist 5.2 move  parries 0/0 blocks 0/0 cast 3
-2713 screenshot 19c_elseria_17
-2717 engage: elseria holds elseria_legend dist 7.3 move beam parries 0/0 blocks 0/0 cast 4
-2719 screenshot 19c_elseria_18
-2725 screenshot 19c_elseria_19
-2727 engage: elseria holds elseria_legend dist 2.1 move beam parries 0/0 blocks 0/0 cast 5
-2731 screenshot 19c_elseria_20
-2737 screenshot 19c_elseria_21
-2737 engage: elseria holds elseria_legend dist 3.2 move beam parries 0/0 blocks 0/0 cast 6
-2743 screenshot 19c_elseria_22
-2747 engage: elseria holds elseria_legend dist 8.0 move beam parries 0/0 blocks 0/0 cast 8
-2749 screenshot 19c_elseria_23
-2758 engage: elseria holds elseria_legend dist 1.2 move  parries 0/0 blocks 0/0 cast 10
-2771 duel: kingdom_guard
-2779 engage: kingdom_guard holds glock_17 dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2787 engage: kingdom_guard holds glock_17 dist 3.6 move  parries 0/0 blocks 0/0 cast 0
-2797 engage: kingdom_guard holds glock_17 dist 2.7 move  parries 0/0 blocks 0/0 cast 0
-2807 engage: kingdom_guard holds glock_17 dist 3.0 move  parries 0/0 blocks 0/0 cast 0
-2811 screenshot 19c_kingdom_guard_00
-2817 screenshot 19c_kingdom_guard_01
-2817 engage: kingdom_guard holds glock_17 dist 3.4 move  parries 0/0 blocks 0/0 cast 0
-2823 screenshot 19c_kingdom_guard_02
-2827 engage: kingdom_guard holds glock_17 dist 3.0 move  parries 0/0 blocks 0/0 cast 0
-2829 screenshot 19c_kingdom_guard_03
-2835 screenshot 19c_kingdom_guard_04
-2838 engage: kingdom_guard holds glock_17 dist 2.9 move  parries 0/0 blocks 0/0 cast 0
-2841 screenshot 19c_kingdom_guard_05
-2847 screenshot 19c_kingdom_guard_06
-2847 engage: kingdom_guard holds glock_17 dist 2.0 move  parries 0/0 blocks 0/0 cast 0
-2853 screenshot 19c_kingdom_guard_07
-2857 engage: kingdom_guard holds glock_17 dist 2.5 move  parries 0/0 blocks 0/0 cast 0
-2859 screenshot 19c_kingdom_guard_08
-2865 screenshot 19c_kingdom_guard_09
-2867 engage: kingdom_guard holds glock_17 dist 2.5 move  parries 0/0 blocks 0/0 cast 0
-2871 screenshot 19c_kingdom_guard_10
-2877 screenshot 19c_kingdom_guard_11
-2877 engage: kingdom_guard holds glock_17 dist 2.4 move  parries 0/0 blocks 0/0 cast 0
-2883 screenshot 19c_kingdom_guard_12
-2888 engage: kingdom_guard holds glock_17 dist 3.7 move  parries 0/0 blocks 0/0 cast 0
-2889 screenshot 19c_kingdom_guard_13
-2895 screenshot 19c_kingdom_guard_14
-2897 engage: kingdom_guard holds glock_17 dist 5.2 move  parries 0/0 blocks 0/0 cast 0
-2901 screenshot 19c_kingdom_guard_15
-2907 screenshot 19c_kingdom_guard_16
-2907 engage: kingdom_guard holds glock_17 dist 5.3 move  parries 0/0 blocks 0/0 cast 0
-2913 screenshot 19c_kingdom_guard_17
-2917 engage: kingdom_guard holds glock_17 dist 4.0 move  parries 0/0 blocks 0/0 cast 0
-2919 screenshot 19c_kingdom_guard_18
-2925 screenshot 19c_kingdom_guard_19
-2927 engage: kingdom_guard holds glock_17 dist 4.0 move  parries 0/0 blocks 0/0 cast 0
-2931 screenshot 19c_kingdom_guard_20
-2937 screenshot 19c_kingdom_guard_21
-2937 engage: kingdom_guard holds glock_17 dist 1.8 move  parries 0/0 blocks 0/0 cast 0
-2943 screenshot 19c_kingdom_guard_22
-2947 engage: kingdom_guard holds glock_17 dist 1.6 move  parries 0/0 blocks 0/0 cast 0
-2949 screenshot 19c_kingdom_guard_23
-2957 engage: kingdom_guard holds glock_17 dist 1.4 move  parries 0/0 blocks 0/0 cast 0
-2981 throne 208, 101, -876
-3105 chat: Your game mode has been updated to Spectator Mode
-4781 screenshot 20_throne_room
-4821 king at 208.6 101.0 -875.4 (throne 208, 101, -876, 0.15 blocks)
-4821 capital census {imperial_guard=18, kingdom_guard=56, royal_archmage=1, royal_bodyguard=6, royal_mage=4, royal_sage=1, villager=159, villager_general=4, villager_king=1}
-6621 screenshot 21_throne_room_later
-6641 king at 208.3 101.0 -875.7 (throne 208, 101, -876, 0.27 blocks)
-6641 capital census {imperial_guard=18, kingdom_guard=56, royal_archmage=1, royal_bodyguard=6, royal_mage=4, royal_sage=1, villager=159, villager_general=4, villager_king=1}
-6641 over the capital at 208 -848
-6644 chat: 【イシュタリア王国】この地は村人の王国です
-6644 chat: 【イシュタリア王国】遠征隊（2名・戦力232）が「mud tower」（ati_structures）への遠征の準備を始めました
-6655 chat: 【カローネ王国】この地は村人の王国です
-6655 chat: 【カローネ王国】遠征隊（5名・戦力580）がダンジョンへの遠征の準備を始めました
-7842 chat: 【イシュタリア王国】遠征隊が集まらず、遠征を見送りました
-7853 chat: 【カローネ王国】遠征隊が集まらず、遠征を見送りました
-8421 screenshot 22_capital_aerial
-8522 over the capital at -57 -1087
-8678 chat: 【エルセン王国】この地は村人の王国です
-9255 chat: 【グラナート王国】この地は村人の王国です
-9255 chat: 【グラナート王国】遠征隊（6名・戦力696）がダンジョンへの遠征の準備を始めました
-9302 chat: 【ヨルムガ王国】この地は村人の王国です
-9311 chat: 【アルデア王国】この地は村人の王国です
-9350 chat: 【ミルディン王国】この地は村人の王国です
-10021 screenshot 23_helipad
-10031 over the capital at -42 -1225
-11088 chat: §6[王都] §f王都の御用商人が【カローネ王国】へ向けて城門を出ました　荷：Iron Ingot×14、Bread×58、Gold Ingot×7、Steak×58 ほか
-11621 screenshot 24_airbase
-11631 at the capital -57 97 -1098
-11638 chat: 【グラナート王国】遠征隊が集まらず、遠征を見送りました
-13221 screenshot 25_helipad_supply
-13320 at the capital -197 92 -852
-14821 screenshot 26_hangar_supply
-14833 at the capital 278 202 -738
-14966 chat: 【カローネ王国】この地は村人の王国です
-14967 chat: 【カローネ王国】遠征隊（2名・戦力232）が「gnome hut」（ati_structures）への遠征の準備を始めました
-15202 chat: 【アルデア王国】この地は村人の王国です
-15202 chat: 【アルデア王国】遠征隊（2名・戦力232）がダンジョンへの遠征の準備を始めました
-15228 chat: 【ルクセリア王国】この地は村人の王国です
-15271 chat: 【フィオレ王国】この地は村人の王国です
-15370 chat: 【ベルニカ王国】この地は村人の王国です
-15370 chat: 【ベルニカ王国】遠征隊（3名・戦力348）が「tower sand」（apotheosis）への遠征の準備を始めました
-15459 chat: 【ハイデン王国】この地は村人の王国です
-15459 chat: 【ハイデン王国】遠征隊（3名・戦力348）が「coliseum」（dungeons_arise）への遠征の準備を始めました
-16049 chat: 【ルクセリア王国】遠征隊（4名・戦力464）が「scorched mines」（dungeons_arise）への遠征の準備を始めました
-16421 screenshot 27_palace_roofs
-16539 over the capital at 569 -1126
-16843 chat: 【フィオレ王国】この地は村人の王国です
-18021 screenshot 28_airbase_east
-18031 at the capital 208 94 -1052
-18181 chat: 【ミルディン王国】この地は村人の王国です
-18184 chat: 【ミルディン王国】遠征隊（4名・戦力464）が「warped fungussus nest」（legendary_monsters）への遠征の準備を始めました
-18196 chat: 【ヨルムガ王国】この地は村人の王国です
-18196 chat: 【ヨルムガ王国】遠征隊（3名・戦力348）がダンジョンへの遠征の準備を始めました
-18244 chat: 【カローネ王国】この地は村人の王国です
-18292 chat: 【ヨルムガ王国】Lv.1 Villagerが【エルセン王国】から移り住みました
-18409 chat: 【カローネ王国】【カローネ王国】の行商隊（6人）が【ヨルムガ王国】へ出発しました　荷：Bread×51、Steak×26　Unemployedは向こうに移り住みます
-18723 chat: 【エルセン王国】【エルセン王国】の行商隊が【岩の村】から戻りました　持ち帰り：Bread×13、Wheat×20、Hay Bale×20、Leather×6 ほか
-19038 chat: 【エルセン王国】遠征隊（4名・戦力970）が「dark tower」（ati_structures）への遠征の準備を始めました
-19045 chat: 【カローネ王国】村の中心近くに銃工房（改造台）を設けました
-19052 chat: 【ミルディン王国】遠征隊が「warped fungussus nest」（legendary_monsters）へ出発しました
-19112 chat: 【カローネ王国】遠征隊（2名・戦力232）がダンジョンへの遠征の準備を始めました
-19621 screenshot 29_road_fountain
-19633 at the capital 591 109 -1061
-21221 screenshot 30_ranch_barn
-21264 at the capital 713 127 -793
-22821 screenshot 31_fortress_east
-22894 king form 0: scale 1.00, health 1024/10000, holding 0 minecraft:air
-22894 king form 1: scale 1.50, health 1024/10000, holding 1 minecraft:netherite_sword
-22894 king form 2: scale 1.80, health 5500/10000, holding 1 minecraft:netherite_sword
-22894 king form 2: scale 1.80, health 1500/10000, holding 1 minecraft:netherite_sword
-22894 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:trident
-22894 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:bow
-22894 chat: バアル＝ゼブル：天の雷を、ひと振りの槍に。――雷槍、解放。
-22894 chat: バアル＝ゼブル：雲間に掛けし我が弓よ。――虹弓、解放。
-22991 screenshot 40_king_forms
-23041 screenshot 41_king_regal
-23091 screenshot 42_king_hero
-23141 screenshot 43_king_broken_55
-23171 screenshot 43b_king_broken_15
-23206 screenshot 44_king_divine_spear
-23241 screenshot 45_king_divine_bow
-23291 screenshot 46_king_divine_back
-23301 king form 1 (film): scale 1.50, health 1024/10000, holding 1 minecraft:netherite_sword
-23331 screenshot 47_film_hero_kneel
-23351 screenshot 48_film_hero_pillar
-23357 chat: 英雄王アルブ：我が剣は民のために。我が盾は王国のために。
-23388 screenshot 49_film_hero_flash
-23411 king form 2 (film): scale 1.80, health 10000/10000, holding 1 minecraft:netherite_sword
-23411 king form 2 (film): scale 1.80, health 1024/10000, holding 1 minecraft:netherite_sword
-23441 screenshot 50_film_glitch_a
-23481 screenshot 51_film_glitch_b
-23543 king form 3 (film): scale 2.20, health 10000/10000, holding 1 minecraft:mace
-23543 king form 3 (film): scale 2.20, health 10000/10000, holding 1 minecraft:mace
-23543 king form 3 (film): scale 2.20, health 1024/10000, holding 1 minecraft:mace
-23581 screenshot 52_film_divine_peel
-23621 screenshot 53_film_divine_rise
-23656 screenshot 54_film_divine_name
-23657 chat: ――我が真名を知れ。
-23657 chat: バアル＝ゼブル：我はバアル＝ゼブル。堕ちたる天の王にして蝿の王なり。
-23657 chat: バアル＝ゼブル：雷よ、ヤグルシよ、アイムールよ。蝿どもよ。この者らを喰らえ。
-23657 chat: ――我が真名を知れ。
-23657 chat: バアル＝ゼブル：我はバアル＝ゼブル。堕ちたる天の王にして蝿の王なり。
-23657 chat: バアル＝ゼブル：雷よ、ヤグルシよ、アイムールよ。蝿どもよ。この者らを喰らえ。
-23657 chat: ――我が真名を知れ。
-23657 chat: バアル＝ゼブル：我はバアル＝ゼブル。堕ちたる天の王にして蝿の王なり。
-23657 chat: バアル＝ゼブル：雷よ、ヤグルシよ、アイムールよ。蝿どもよ。この者らを喰らえ。
-23676 screenshot 55_film_divine_climax
-23731 waza scenes planned to tick 29102
-23731 relic scenes planned to tick 31325
-23731 king moves planned to tick 31330
-23742 king form 1: scale 1.50, health 1024/10000, holding 1 minecraft:netherite_sword
-23791 screenshot 56_0_sword_hold
-23803 screenshot 56_0_sword_hold_side
-23827 screenshot 57_0_00_sword_sweep_w
-23831 screenshot 57_0_00_sword_sweep_s
-23857 screenshot 57_0_01_sword_return_w
-23861 screenshot 57_0_01_sword_return_s
-23893 screenshot 57_0_02_sword_cleave_w
-23897 screenshot 57_0_02_sword_cleave_s
-23923 screenshot 57_0_03_sword_rising_w
-23927 screenshot 57_0_03_sword_rising_s
-23957 screenshot 57_0_04_sword_thrust_w
-23961 screenshot 57_0_04_sword_thrust_s
-23985 screenshot 57_0_05_sword_bash_w
-23989 screenshot 57_0_05_sword_bash_s
-24023 screenshot 57_0_06_sword_spin_w
-24027 screenshot 57_0_06_sword_spin_s
-24055 screenshot 57_0_07_sword_leap_w
-24059 screenshot 57_0_07_sword_leap_s
-24085 screenshot 57_0_08_sword_dash_w
-24089 screenshot 57_0_08_sword_dash_s
-24121 screenshot 57_0_09_sword_wave_w
-24125 screenshot 57_0_09_sword_wave_s
-24162 king form 2: scale 1.80, health 6000/10000, holding 1 minecraft:netherite_sword
-24211 screenshot 56_1_broken_hold
-24223 screenshot 56_1_broken_hold_side
-24245 screenshot 57_1_00_broken_shard_w
-24249 screenshot 57_1_00_broken_shard_s
-24279 screenshot 57_1_01_broken_lag_w
-24283 screenshot 57_1_01_broken_lag_s
-24309 screenshot 57_1_02_broken_blink_w
-24313 screenshot 57_1_02_broken_blink_s
-24341 screenshot 57_1_03_broken_multi_w
-24345 screenshot 57_1_03_broken_multi_s
-24377 screenshot 57_1_04_broken_rewind_w
-24381 screenshot 57_1_04_broken_rewind_s
-24409 screenshot 57_1_05_broken_blocks_w
-24413 screenshot 57_1_05_broken_blocks_s
-24439 screenshot 57_1_06_broken_grab_w
-24443 screenshot 57_1_06_broken_grab_s
-24471 screenshot 57_1_07_broken_echo_w
-24475 screenshot 57_1_07_broken_echo_s
-24505 screenshot 57_1_08_broken_hitbox_w
-24509 screenshot 57_1_08_broken_hitbox_s
-24535 screenshot 57_1_09_broken_nan_w
-24539 screenshot 57_1_09_broken_nan_s
-24582 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:mace
-24583 chat: バアル＝ゼブル：雷霆よ、我が手に還れ。――神器、解放。
-24631 screenshot 56_2_clubs_hold
-24643 screenshot 56_2_clubs_hold_side
-24667 screenshot 57_2_00_clubs_smite_w
-24671 screenshot 57_2_00_clubs_smite_s
-24697 screenshot 57_2_01_clubs_flurry_w
-24701 screenshot 57_2_01_clubs_flurry_s
-24731 screenshot 57_2_02_clubs_rise_w
-24735 screenshot 57_2_02_clubs_rise_s
-24767 screenshot 57_2_03_clubs_quake_w
-24771 screenshot 57_2_03_clubs_quake_s
-24797 screenshot 57_2_04_clubs_spin_w
-24801 screenshot 57_2_04_clubs_spin_s
-24829 screenshot 57_2_05_clubs_throw_w
-24833 screenshot 57_2_05_clubs_throw_s
-24859 screenshot 57_2_06_clubs_cross_w
-24863 screenshot 57_2_06_clubs_cross_s
-24895 screenshot 57_2_07_clubs_leap_w
-24899 screenshot 57_2_07_clubs_leap_s
-24925 screenshot 57_2_08_clubs_chain_w
-24929 screenshot 57_2_08_clubs_chain_s
-24959 screenshot 57_2_09_clubs_shock_w
-24963 screenshot 57_2_09_clubs_shock_s
-25001 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:netherite_hoe
-25001 chat: バアル＝ゼブル：蝿どもよ、我が手に来れ。――魔器、解放。
-25051 screenshot 56_3_scythe_hold
-25063 screenshot 56_3_scythe_hold_side
-25089 screenshot 57_3_00_scythe_reap_w
-25093 screenshot 57_3_00_scythe_reap_s
-25119 screenshot 57_3_01_scythe_return_w
-25123 screenshot 57_3_01_scythe_return_s
-25155 screenshot 57_3_02_scythe_neck_w
-25159 screenshot 57_3_02_scythe_neck_s
-25185 screenshot 57_3_03_scythe_hook_w
-25189 screenshot 57_3_03_scythe_hook_s
-25219 screenshot 57_3_04_scythe_spin_w
-25223 screenshot 57_3_04_scythe_spin_s
-25251 screenshot 57_3_05_scythe_throw_w
-25255 screenshot 57_3_05_scythe_throw_s
-25283 screenshot 57_3_06_scythe_wave_w
-25287 screenshot 57_3_06_scythe_wave_s
-25313 screenshot 57_3_07_scythe_soul_w
-25317 screenshot 57_3_07_scythe_soul_s
-25343 screenshot 57_3_08_scythe_low_w
-25347 screenshot 57_3_08_scythe_low_s
-25381 screenshot 57_3_09_scythe_leap_w
-25385 screenshot 57_3_09_scythe_leap_s
-25421 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:netherite_sword
-25421 chat: バアル＝ゼブル：光と蝿、ふたつの刃にて汝を刻まん。――双剣、解放。
-25471 screenshot 56_4_twin_hold
-25483 screenshot 56_4_twin_hold_side
-25504 screenshot 57_4_00_twin_double_w
-25508 screenshot 57_4_00_twin_double_s
-25538 screenshot 57_4_01_twin_cross_w
-25542 screenshot 57_4_01_twin_cross_s
-25569 screenshot 57_4_02_twin_stabs_w
-25573 screenshot 57_4_02_twin_stabs_s
-25603 screenshot 57_4_03_twin_whirl_w
-25607 screenshot 57_4_03_twin_whirl_s
-25637 screenshot 57_4_04_twin_leap_w
-25641 screenshot 57_4_04_twin_leap_s
-25667 screenshot 57_4_05_twin_slide_w
-25671 screenshot 57_4_05_twin_slide_s
-25697 screenshot 57_4_06_twin_rise_w
-25701 screenshot 57_4_06_twin_rise_s
-25735 screenshot 57_4_07_twin_xwave_w
-25739 screenshot 57_4_07_twin_xwave_s
-25761 screenshot 57_4_08_twin_behind_w
-25765 screenshot 57_4_08_twin_behind_s
-25795 screenshot 57_4_09_twin_hundred_w
-25799 screenshot 57_4_09_twin_hundred_s
-25841 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:trident
-25841 chat: バアル＝ゼブル：天の雷を、ひと振りの槍に。――雷槍、解放。
-25891 screenshot 56_5_spear_hold
-25903 screenshot 56_5_spear_hold_side
-25927 screenshot 57_5_00_spear_thrust_w
-25931 screenshot 57_5_00_spear_thrust_s
-25957 screenshot 57_5_01_spear_double_w
-25961 screenshot 57_5_01_spear_double_s
-25993 screenshot 57_5_02_spear_sweep_w
-25997 screenshot 57_5_02_spear_sweep_s
-26021 screenshot 57_5_03_spear_butt_w
-26025 screenshot 57_5_03_spear_butt_s
-26057 screenshot 57_5_04_spear_twirl_w
-26061 screenshot 57_5_04_spear_twirl_s
-26091 screenshot 57_5_05_spear_dive_w
-26095 screenshot 57_5_05_spear_dive_s
-26121 screenshot 57_5_06_spear_rush_w
-26125 screenshot 57_5_06_spear_rush_s
-26155 screenshot 57_5_07_spear_throw_w
-26159 screenshot 57_5_07_spear_throw_s
-26187 screenshot 57_5_08_spear_bristle_w
-26191 screenshot 57_5_08_spear_bristle_s
-26217 screenshot 57_5_09_spear_heaven_w
-26221 screenshot 57_5_09_spear_heaven_s
-26261 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:bow
-26261 chat: バアル＝ゼブル：雲間に掛けし我が弓よ。――虹弓、解放。
-26311 screenshot 56_6_bow_hold
-26323 screenshot 56_6_bow_hold_side
-26347 screenshot 57_6_00_bow_quick_w
-26351 screenshot 57_6_00_bow_quick_s
-26379 screenshot 57_6_01_bow_double_w
-26383 screenshot 57_6_01_bow_double_s
-26413 screenshot 57_6_02_bow_fan_w
-26417 screenshot 57_6_02_bow_fan_s
-26445 screenshot 57_6_03_bow_lob_w
-26449 screenshot 57_6_03_bow_lob_s
-26481 screenshot 57_6_04_bow_pierce_w
-26485 screenshot 57_6_04_bow_pierce_s
-26503 screenshot 57_6_05_bow_retreat_w
-26507 screenshot 57_6_05_bow_retreat_s
-26541 screenshot 57_6_06_bow_rainbow_w
-26545 screenshot 57_6_06_bow_rainbow_s
-26571 screenshot 57_6_07_bow_pin_w
-26575 screenshot 57_6_07_bow_pin_s
-26607 screenshot 57_6_08_bow_burst_w
-26611 screenshot 57_6_08_bow_burst_s
-26633 screenshot 57_6_09_bow_strike_w
-26637 screenshot 57_6_09_bow_strike_s
-26683 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:netherite_sword
-26683 chat: バアル＝ゼブル：光と蝿、ふたつの刃にて汝を刻まん。――双剣、解放。
-26713 veil of flies cast
-26771 screenshot 58_veil_above
-26821 screenshot 58_veil_ground
-26841 azazel on the stage: scale 1.45, name Lv.5 アザゼル［神に叛きし者］
-26887 azazel seen: [Lv.5 アザゼル［神に叛きし者］ at 0.0 0.0 10.0 alive true -> jp.oror.reborn.royal.AzazelRenderer$Evokers]
-26891 screenshot 59_azazel_front
-26903 screenshot 59_azazel_side
-26915 screenshot 59_azazel_back
-26937 screenshot 60_00_azazel_rend_w
-26941 screenshot 60_00_azazel_rend_s
-26977 screenshot 60_01_azazel_forge_w
-26981 screenshot 60_01_azazel_forge_s
-27009 screenshot 60_02_azazel_fangs_w
-27013 screenshot 60_02_azazel_fangs_s
-27041 screenshot 60_03_azazel_gust_w
-27045 screenshot 60_03_azazel_gust_s
-27075 screenshot 60_04_azazel_scapegoat_w
-27079 screenshot 60_04_azazel_scapegoat_s
-27115 screenshot 60_05_azazel_dudael_w
-27119 screenshot 60_05_azazel_dudael_s
-27143 screenshot 60_06_azazel_disarm_w
-27147 screenshot 60_06_azazel_disarm_s
-27179 screenshot 60_07_azazel_dive_w
-27183 screenshot 60_07_azazel_dive_s
-27215 screenshot 60_08_azazel_chains_w
-27219 screenshot 60_08_azazel_chains_s
-27251 screenshot 60_09_azazel_rally_w
-27255 screenshot 60_09_azazel_rally_s
-27341 waza start kokuhaku_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-27344 screenshot 62_00_kokuhaku_01_w
-27347 screenshot 62_00_kokuhaku_01_s
-27353 screenshot 62_00_kokuhaku_01_a
-27425 waza start riha_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-27431 screenshot 62_01_riha_01_w
-27436 screenshot 62_01_riha_01_s
-27438 screenshot 62_01_riha_01_a
-27509 waza start tenki_19: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-27546 screenshot 62_02_tenki_19_w
-27549 screenshot 62_02_tenki_19_s
-27563 screenshot 62_02_tenki_19_a
-27635 waza start nortia_02: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-27644 screenshot 62_03_nortia_02_w
-27648 screenshot 62_03_nortia_02_s
-27650 screenshot 62_03_nortia_02_a
-27719 waza start berit_05: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-27721 screenshot 62_04_berit_05_w
-27725 screenshot 62_04_berit_05_s
-27727 screenshot 62_04_berit_05_a
-27797 waza start elseria_12: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-27811 screenshot 62_05_elseria_12_w
-27815 screenshot 62_05_elseria_12_s
-27818 screenshot 62_05_elseria_12_a
-27890 waza start huang_linghua_17: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-27903 screenshot 62_06_huang_linghua_17_w
-27908 screenshot 62_06_huang_linghua_17_s
-27910 screenshot 62_06_huang_linghua_17_a
-27981 waza start valeria_10: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28000 screenshot 62_07_valeria_10_w
-28006 screenshot 62_07_valeria_10_s
-28008 screenshot 62_07_valeria_10_a
-28079 waza start ferdinand_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28084 screenshot 62_08_ferdinand_01_w
-28088 screenshot 62_08_ferdinand_01_s
-28090 screenshot 62_08_ferdinand_01_a
-28161 waza start savior_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28170 screenshot 62_09_savior_01_w
-28175 screenshot 62_09_savior_01_s
-28177 screenshot 62_09_savior_01_a
-28249 waza start lucifara_13: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28267 screenshot 62_10_lucifara_13_w
-28272 screenshot 62_10_lucifara_13_s
-28274 screenshot 62_10_lucifara_13_a
-28344 waza start taika_23: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28406 screenshot 62_11_taika_23_w
-28416 screenshot 62_11_taika_23_s
-28430 screenshot 62_11_taika_23_a
-28504 waza start mary_sue_03: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28506 screenshot 62_12_mary_sue_03_w
-28510 screenshot 62_12_mary_sue_03_s
-28512 screenshot 62_12_mary_sue_03_a
-28583 waza start gokuka_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28584 screenshot 62_13_gokuka_01_w
-28589 screenshot 62_13_gokuka_01_s
-28591 screenshot 62_13_gokuka_01_a
-28662 waza start merlinus_12: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28677 screenshot 62_14_merlinus_12_w
-28683 screenshot 62_14_merlinus_12_s
-28685 screenshot 62_14_merlinus_12_a
-28757 waza start cursed_love_12: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28774 screenshot 62_15_cursed_love_12_w
-28778 screenshot 62_15_cursed_love_12_s
-28780 screenshot 62_15_cursed_love_12_a
-28851 waza start elseria_11: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-28867 screenshot 62_16_elseria_11_w
-28872 screenshot 62_16_elseria_11_s
-28877 screenshot 62_16_elseria_11_a
-28949 waza start kurma_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-29016 screenshot 62_17_kurma_24_w
-29029 screenshot 62_17_kurma_24_s
-29038 screenshot 62_17_kurma_24_a
-29110 waza start teia_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-29176 screenshot 62_18_teia_24_w
-29186 screenshot 62_18_teia_24_s
-29201 screenshot 62_18_teia_24_a
-29273 waza start bahamut_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-29339 screenshot 62_19_bahamut_24_w
-29355 screenshot 62_19_bahamut_24_s
-29366 screenshot 62_19_bahamut_24_a
-29438 waza start demiurgos_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-29498 screenshot 62_20_demiurgos_24_w
-29511 screenshot 62_20_demiurgos_24_s
-29520 screenshot 62_20_demiurgos_24_a
-29593 waza start yggdrasil_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-29657 screenshot 62_21_yggdrasil_24_w
-29670 screenshot 62_21_yggdrasil_24_s
-29678 screenshot 62_21_yggdrasil_24_a
-29750 waza start mels_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-29813 screenshot 62_22_mels_24_w
-29828 screenshot 62_22_mels_24_s
-29839 screenshot 62_22_mels_24_a
-29912 waza start chaos_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
-29978 screenshot 62_23_chaos_24_w
-29992 screenshot 62_23_chaos_24_s
-30001 screenshot 62_23_chaos_24_a
-30043 chat: Your game mode has been updated to Creative Mode
-30068 relic technique 0 started: true
-30068 bar: 特殊技Ⅰ「断装・水鏡」
-30085 screenshot 70_00_kokuhaku_0_ready
-30092 screenshot 70_00_kokuhaku_0_release
-30102 screenshot 70_00_kokuhaku_0_later
-30164 relic technique 2 started: true
-30164 bar: 必殺技「終ノ太刀・無我」
-30228 screenshot 70_01_kokuhaku_2_ready
-30235 screenshot 70_01_kokuhaku_2_release
-30245 screenshot 70_01_kokuhaku_2_later
-30279 screenshot 70_01_kokuhaku_2_finish
-30344 relic technique 0 started: true
-30345 bar: 特殊技Ⅰ「「とまれ」」
-30361 screenshot 70_02_riha_0_ready
-30368 screenshot 70_02_riha_0_release
-30378 screenshot 70_02_riha_0_later
-30439 relic technique 1 started: true
-30439 bar: 特殊技Ⅱ「九霆雷雲」
-30470 screenshot 70_03_elseria_1_ready
-30474 chat: OrorTester has made the advancement [Monster Hunter]
-30477 screenshot 70_03_elseria_1_release
-30487 screenshot 70_03_elseria_1_later
-30549 relic technique 0 started: true
-30549 bar: 特殊技Ⅰ「磁軌斉射」
-30565 screenshot 70_04_valeria_0_ready
-30572 screenshot 70_04_valeria_0_release
-30582 screenshot 70_04_valeria_0_later
-30643 relic technique 0 started: true
-30643 bar: 特殊技Ⅰ「色鬼」
-30651 bar: Nightfall：受け取れる任務報酬 5件 /oror quest list
-30660 screenshot 70_05_nortia_0_ready
-30662 bar: 色鬼――青だけが安全
-30667 screenshot 70_05_nortia_0_release
-30677 screenshot 70_05_nortia_0_later
-30704 bar: Boing!!
-30738 relic technique 2 started: true
-30740 bar: 必殺技「万象救済」
-30803 screenshot 70_06_savior_2_ready
-30810 screenshot 70_06_savior_2_release
-30820 screenshot 70_06_savior_2_later
-30840 screenshot 70_06_savior_2_finish
-30905 relic technique 0 started: true
-30905 bar: 特殊技Ⅰ「地脈破砕」
-30922 screenshot 70_07_kurma_0_ready
-30929 screenshot 70_07_kurma_0_release
-30939 screenshot 70_07_kurma_0_later
-31000 relic technique 2 started: true
-31000 bar: 必殺技「無限次元天航」
-31065 screenshot 70_08_teia_2_ready
-31072 screenshot 70_08_teia_2_release
-31082 screenshot 70_08_teia_2_later
-31116 screenshot 70_08_teia_2_finish
-31182 relic technique 0 started: true
-31182 bar: 特殊技Ⅰ「潮声波」
-31198 screenshot 70_09_bahamut_0_ready
-31205 screenshot 70_09_bahamut_0_release
-31215 screenshot 70_09_bahamut_0_later
-31277 relic technique 2 started: true
-31277 bar: 必殺技「始終同一」
-31341 screenshot 70_10_ouroboros_2_ready
-31348 screenshot 70_10_ouroboros_2_release
-31358 screenshot 70_10_ouroboros_2_later
-31392 screenshot 70_10_ouroboros_2_finish
-31457 relic technique 2 started: true
-31458 bar: 必殺技「世界生命の大樹冠」
-31522 screenshot 70_11_yggdrasil_2_ready
-31529 screenshot 70_11_yggdrasil_2_release
-31539 screenshot 70_11_yggdrasil_2_later
-31554 screenshot 70_11_yggdrasil_2_finish
-31619 relic technique 2 started: true
-31620 bar: 必殺技「無限世界原典」
-31684 screenshot 70_12_demiurgos_2_ready
-31691 screenshot 70_12_demiurgos_2_release
-31701 screenshot 70_12_demiurgos_2_later
-31735 screenshot 70_12_demiurgos_2_finish
-31800 relic technique 2 started: true
-31800 bar: 必殺技「万象を殴り砕く拳」
-31865 screenshot 70_13_brutality_2_ready
-31872 screenshot 70_13_brutality_2_release
-31882 screenshot 70_13_brutality_2_later
-31918 screenshot 70_13_brutality_2_finish
-31983 relic technique 1 started: true
-31983 bar: 特殊技Ⅱ「黒翼円舞」
-32014 screenshot 70_14_lucifara_1_ready
-32021 screenshot 70_14_lucifara_1_release
-32031 screenshot 70_14_lucifara_1_later
-32092 relic technique 1 started: true
-32092 bar: 特殊技Ⅱ「混沌胞子」
-32123 screenshot 70_15_chaos_1_ready
-32130 screenshot 70_15_chaos_1_release
-32140 screenshot 70_15_chaos_1_later
-32196 screenshot 71_relic_gauge
-32207 screen jp.oror.look.Look$RelicTip in PLAY
-32234 screenshot 72_tooltip_weapon
-32250 screen none in PLAY
-32252 screen jp.oror.look.Look$RelicTip in PLAY
-32279 screenshot 73_tooltip_legend
-32296 screen none in PLAY
-32298 screen jp.oror.look.Look$RelicTip in PLAY
-32316 screenshot 74_tooltip_charm
-32332 screen none in PLAY
-32334 screen jp.oror.look.Look$RelicTip in PLAY
-32355 screenshot 75_tooltip_focus
-32370 screen none in PLAY
-32418 finished: complete
+392 screen dev.aika.smsn.client.gui.screen.VersionCheckWarningScreen in TITLE
+492 screenshot popup_VersionCheckWarningScreen
+492 press gui.proceed
+493 screen net.minecraft.client.gui.screens.TitleScreen in TITLE
+594 screen net.minecraft.client.gui.screens.worldselection.CreateWorldScreen in CREATE
+654 press selectWorld.create
+655 screen net.minecraft.client.gui.screens.ConfirmScreen in CREATE
+755 screenshot popup_ConfirmScreen
+755 press gui.yes
+756 screen net.minecraft.client.gui.screens.LevelLoadingScreen in CREATE
+790 chat: ……声がする。『応えよ、異界の旅人よ。汝を喚んだのは――』
+790 chat: 声は途切れた。足元の魔法陣が、ゆっくりと光を失っていく。
+790 chat: [JEG] Commands
+790 chat: ------------------------------
+790 chat: /justEnoughGuns unlockGunRecipes - Unlock all gun recipes
+790 chat: ------------------------------
+790 chat: [Awakened] Enjoying your powers? Join the community on Discord. Say hi, share your feedback, and get the latest news!
+790 chat: You received a starter kit: a set of iron armour, an iron sword, a shield, an iron pickaxe, 32 torches, 32 steaks, a warp stone, an iron backpack, a Glock 17 and 96 handgun rounds. Right-click the rounds to load them as ammunition.
+790 chat: You received the Royal Capital Compass. Where its needle points lies the villager king's city.
+790 chat: Nightfall / Sword Soaring is not installed. Quit the game and run SETUP_NIGHTFALL.cmd in this profile's folder once (Indestructible comes in the import's mods folder).
+790 chat: OrorTester has made the advancement [Isn't It Iron Pick]
+790 chat: OrorTester has made the advancement [Suit Up]
+791 screen net.minecraft.client.gui.screens.ReceivingLevelScreen in LOADING
+791 chat: OrorTester has made the advancement [Ice and Fire]
+850 chat: Battle dimension backup completed.
+1002 screen ttv.migami.jeg.client.MagazineModeClient$1 in LOADING
+1102 screenshot popup_
+1103 screen none in LOADING
+1106 chat: Your game mode has been updated to Creative Mode
+1133 inventory after joining: minecraft:iron_swordx1 minecraft:iron_pickaxex1 minecraft:torchx32 minecraft:cooked_beefx32 waystones:warp_stonex1 sophisticatedbackpacks:iron_backpackx1 superbwarfare:glock_17x1 superbwarfare:handgun_ammox64 superbwarfare:handgun_ammox32 oror_supreme_bosses:capital_compassx1 minecraft:iron_bootsx1 minecraft:iron_leggingsx1 minecraft:iron_chestplatex1 minecraft:iron_helmetx1 minecraft:shieldx1
+1151 stage at 640 87 -608
+1303 renderers: [minecraft:player -> net.minecraft.client.renderer.entity.player.PlayerRenderer holding 1 minecraft:iron_sword, minecraft:squid -> net.minecraft.client.renderer.entity.SquidRenderer holding 0 minecraft:air, minecraft:squid -> net.minecraft.client.renderer.entity.SquidRenderer holding 0 minecraft:air]
+1363 screenshot 10_royals
+1373 swing row 0: 8
+1376 screenshot 11_royals_swing
+1381 screenshot 11b_royals_swing_mid
+1387 screenshot 11c_royals_swing_late
+1392 swing row 0: 8
+1397 screenshot 11d_royals_combo2
+1463 screenshot 12_villagers
+1474 swing row 10: 6
+1476 screenshot 13_villagers_swing
+1483 swing row 10: 6
+1485 screenshot 13b_villagers_swing_early
+1491 screenshot 13c_villagers_combo2_mid
+1563 screenshot 14_king_close
+1633 screenshot 15_general_close
+1703 screenshot 16_imperial_close
+1773 screenshot 17_royals_back
+1843 screenshot 18_trader_close
+1904 arms on show
+1963 screenshot 19_arms
+1965 creatures on show
+2083 screenshot 19b_creatures
+2094 gear on show
+2203 screenshot 32_gear
+2243 screenshot 33_gear_worn
+2245 gear at work
+2255 screenshot 34_gear_at_work
+2305 screenshot 35_gear_recharging
+2307 gear worn: 5 of 5
+2319 screenshot 36_gear_worn_front
+2329 screenshot 37_gear_worn_back
+2337 screenshot 38_gear_worn_hand
+2339 gear taken off: 5 of 5
+2343 duel: valeria
+2351 engage: valeria holds valeria_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2359 engage: valeria holds valeria_weapon dist 2.4 move spin_slash parries 0/0 blocks 0/0 cast 0
+2375 engage: valeria holds valeria_weapon dist 2.7 move spin_slash parries 1/0 blocks 0/0 cast 0
+2380 engage: valeria holds valeria_weapon dist 2.5 move spin_slash parries 1/0 blocks 0/0 cast 0
+2383 screenshot 19c_valeria_00
+2389 screenshot 19c_valeria_01
+2389 engage: valeria holds valeria_weapon dist 2.7 move  parries 1/0 blocks 0/0 cast 0
+2395 screenshot 19c_valeria_02
+2401 screenshot 19c_valeria_03
+2401 engage: valeria holds valeria_weapon dist 3.6 move  parries 1/0 blocks 0/0 cast 0
+2407 screenshot 19c_valeria_04
+2409 engage: valeria holds valeria_weapon dist 2.5 move  parries 1/0 blocks 0/0 cast 0
+2413 screenshot 19c_valeria_05
+2419 engage: valeria holds valeria_weapon dist 4.5 move  parries 2/0 blocks 0/0 cast 0
+2419 screenshot 19c_valeria_06
+2425 screenshot 19c_valeria_07
+2431 screenshot 19c_valeria_08
+2431 engage: valeria holds valeria_weapon dist 3.5 move  parries 2/0 blocks 0/0 cast 0
+2437 screenshot 19c_valeria_09
+2443 screenshot 19c_valeria_10
+2443 engage: valeria holds valeria_weapon dist 4.6 move  parries 2/0 blocks 0/0 cast 0
+2449 screenshot 19c_valeria_11
+2451 engage: valeria holds valeria_weapon dist 3.5 move  parries 2/0 blocks 0/0 cast 1
+2455 screenshot 19c_valeria_12
+2459 engage: valeria holds valeria_weapon dist 3.9 move ground_spikes parries 2/0 blocks 0/0 cast 2
+2461 screenshot 19c_valeria_13
+2467 screenshot 19c_valeria_14
+2469 engage: valeria holds valeria_weapon dist 3.4 move ground_spikes parries 2/0 blocks 0/0 cast 3
+2473 screenshot 19c_valeria_15
+2479 screenshot 19c_valeria_16
+2482 engage: valeria holds valeria_weapon dist 6.0 move ground_spikes parries 2/0 blocks 0/0 cast 4
+2485 screenshot 19c_valeria_17
+2489 engage: valeria holds valeria_weapon dist 4.4 move ground_spikes parries 2/0 blocks 0/0 cast 5
+2491 screenshot 19c_valeria_18
+2497 screenshot 19c_valeria_19
+2499 engage: valeria holds valeria_weapon dist 3.6 move  parries 2/0 blocks 0/0 cast 5
+2503 screenshot 19c_valeria_20
+2509 screenshot 19c_valeria_21
+2509 engage: valeria holds valeria_weapon dist 2.5 move  parries 2/0 blocks 0/0 cast 5
+2515 screenshot 19c_valeria_22
+2519 engage: valeria holds valeria_weapon dist 3.3 move  parries 2/0 blocks 0/0 cast 5
+2521 screenshot 19c_valeria_23
+2530 engage: valeria holds valeria_weapon dist 3.1 move  parries 2/0 blocks 0/0 cast 5
+2544 duel: kokuhaku
+2549 engage: kokuhaku holds kokuhaku_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2559 engage: kokuhaku holds kokuhaku_weapon dist 4.7 move  parries 0/0 blocks 0/0 cast 0
+2569 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
+2581 engage: kokuhaku holds kokuhaku_weapon dist 7.4 move  parries 0/0 blocks 0/0 cast 0
+2583 screenshot 19c_kokuhaku_00
+2589 screenshot 19c_kokuhaku_01
+2589 engage: kokuhaku holds kokuhaku_weapon dist 6.1 move  parries 0/0 blocks 0/0 cast 0
+2594 bar: 剣神 炬珀　◆ Sword Truth: Nothingness Flash ◆ (Awakened)
+2595 screenshot 19c_kokuhaku_02
+2599 engage: kokuhaku holds kokuhaku_legend dist 2.5 move  parries 0/0 blocks 0/0 cast 0
+2601 screenshot 19c_kokuhaku_03
+2607 screenshot 19c_kokuhaku_04
+2610 engage: kokuhaku holds kokuhaku_weapon dist 2.8 move  parries 0/0 blocks 0/0 cast 0
+2613 screenshot 19c_kokuhaku_05
+2619 screenshot 19c_kokuhaku_06
+2619 engage: kokuhaku holds kokuhaku_weapon dist 3.8 move  parries 0/0 blocks 0/0 cast 0
+2625 screenshot 19c_kokuhaku_07
+2629 engage: kokuhaku holds kokuhaku_weapon dist 5.6 move  parries 0/0 blocks 0/0 cast 0
+2631 screenshot 19c_kokuhaku_08
+2637 screenshot 19c_kokuhaku_09
+2643 screenshot 19c_kokuhaku_10
+2649 screenshot 19c_kokuhaku_11
+2655 screenshot 19c_kokuhaku_12
+2661 screenshot 19c_kokuhaku_13
+2667 screenshot 19c_kokuhaku_14
+2673 screenshot 19c_kokuhaku_15
+2679 screenshot 19c_kokuhaku_16
+2685 screenshot 19c_kokuhaku_17
+2691 screenshot 19c_kokuhaku_18
+2697 screenshot 19c_kokuhaku_19
+2700 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
+2700 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
+2700 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
+2700 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
+2700 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
+2700 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
+2700 engage: kokuhaku holds kokuhaku_weapon dist 6.4 move  parries 0/0 blocks 0/0 cast 0
+2700 chat: 【柳の里】村が「村」に発展しました（村人12人）
+2703 screenshot 19c_kokuhaku_20
+2709 screenshot 19c_kokuhaku_21
+2709 engage: kokuhaku holds kokuhaku_weapon dist 7.2 move  parries 0/0 blocks 0/0 cast 0
+2715 screenshot 19c_kokuhaku_22
+2719 engage: kokuhaku holds kokuhaku_weapon dist 2.3 move  parries 0/0 blocks 0/0 cast 0
+2721 screenshot 19c_kokuhaku_23
+2729 engage: kokuhaku holds kokuhaku_weapon dist 4.8 move  parries 0/0 blocks 0/0 cast 0
+2743 duel: elseria
+2750 engage: elseria holds elseria_weapon dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2759 engage: elseria holds elseria_weapon dist 4.0 move nova parries 0/0 blocks 0/0 cast 0
+2769 engage: elseria holds elseria_weapon dist 3.1 move nova parries 0/0 blocks 0/0 cast 0
+2779 engage: elseria holds elseria_weapon dist 3.8 move nova parries 0/0 blocks 0/0 cast 0
+2783 screenshot 19c_elseria_00
+2789 screenshot 19c_elseria_01
+2789 engage: elseria holds elseria_weapon dist 5.6 move  parries 0/0 blocks 0/0 cast 0
+2795 screenshot 19c_elseria_02
+2799 engage: elseria holds elseria_weapon dist 6.5 move  parries 0/0 blocks 0/0 cast 0
+2801 screenshot 19c_elseria_03
+2807 screenshot 19c_elseria_04
+2811 engage: elseria holds elseria_weapon dist 3.2 move  parries 0/0 blocks 0/0 cast 0
+2813 screenshot 19c_elseria_05
+2819 screenshot 19c_elseria_06
+2819 engage: elseria holds elseria_weapon dist 2.7 move  parries 0/0 blocks 0/0 cast 0
+2825 screenshot 19c_elseria_07
+2829 engage: elseria holds elseria_weapon dist 1.7 move  parries 0/0 blocks 0/0 cast 0
+2831 screenshot 19c_elseria_08
+2837 screenshot 19c_elseria_09
+2840 engage: elseria holds elseria_weapon dist 3.0 move  parries 0/0 blocks 0/0 cast 0
+2843 screenshot 19c_elseria_10
+2849 screenshot 19c_elseria_11
+2849 engage: elseria holds elseria_weapon dist 2.7 move  parries 0/0 blocks 0/0 cast 0
+2855 screenshot 19c_elseria_12
+2861 screenshot 19c_elseria_13
+2862 engage: elseria holds elseria_weapon dist 3.9 move  parries 0/0 blocks 0/0 cast 1
+2867 screenshot 19c_elseria_14
+2869 engage: elseria holds elseria_weapon dist 8.4 move beam parries 0/0 blocks 0/0 cast 2
+2873 screenshot 19c_elseria_15
+2879 screenshot 19c_elseria_16
+2879 engage: elseria holds elseria_weapon dist 8.8 move beam parries 0/0 blocks 0/0 cast 4
+2885 screenshot 19c_elseria_17
+2889 engage: elseria holds elseria_weapon dist 6.3 move beam parries 0/0 blocks 0/0 cast 5
+2891 screenshot 19c_elseria_18
+2897 screenshot 19c_elseria_19
+2899 engage: elseria holds elseria_weapon dist 4.6 move beam parries 0/0 blocks 0/0 cast 7
+2903 screenshot 19c_elseria_20
+2909 screenshot 19c_elseria_21
+2911 engage: elseria holds elseria_weapon dist 6.4 move beam parries 0/0 blocks 0/0 cast 8
+2915 screenshot 19c_elseria_22
+2920 engage: elseria holds elseria_weapon dist 4.8 move  parries 0/0 blocks 0/0 cast 9
+2921 screenshot 19c_elseria_23
+2929 engage: elseria holds elseria_weapon dist 4.3 move  parries 0/0 blocks 0/0 cast 9
+2945 duel: kingdom_guard
+2949 engage: kingdom_guard holds glock_17 dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2959 engage: kingdom_guard holds glock_17 dist 3.6 move  parries 0/0 blocks 0/0 cast 0
+2969 engage: kingdom_guard holds glock_17 dist 2.2 move  parries 0/0 blocks 0/0 cast 0
+2979 engage: kingdom_guard holds glock_17 dist 2.4 move  parries 0/0 blocks 0/0 cast 0
+2983 screenshot 19c_kingdom_guard_00
+2989 screenshot 19c_kingdom_guard_01
+2989 engage: kingdom_guard holds glock_17 dist 2.5 move  parries 0/0 blocks 0/0 cast 0
+2995 screenshot 19c_kingdom_guard_02
+2999 engage: kingdom_guard holds glock_17 dist 2.0 move  parries 0/0 blocks 0/0 cast 0
+3001 screenshot 19c_kingdom_guard_03
+3007 screenshot 19c_kingdom_guard_04
+3009 engage: kingdom_guard holds glock_17 dist 2.0 move  parries 0/0 blocks 0/0 cast 0
+3013 screenshot 19c_kingdom_guard_05
+3019 screenshot 19c_kingdom_guard_06
+3019 engage: kingdom_guard holds glock_17 dist 1.4 move  parries 0/0 blocks 0/0 cast 0
+3025 screenshot 19c_kingdom_guard_07
+3029 engage: kingdom_guard holds glock_17 dist 1.2 move  parries 0/0 blocks 0/0 cast 0
+3031 screenshot 19c_kingdom_guard_08
+3037 screenshot 19c_kingdom_guard_09
+3039 engage: kingdom_guard holds glock_17 dist 1.1 move  parries 0/0 blocks 0/0 cast 0
+3043 screenshot 19c_kingdom_guard_10
+3049 screenshot 19c_kingdom_guard_11
+3049 engage: kingdom_guard holds glock_17 dist 1.1 move  parries 0/0 blocks 0/0 cast 0
+3055 screenshot 19c_kingdom_guard_12
+3059 engage: kingdom_guard holds glock_17 dist 2.7 move  parries 0/0 blocks 0/0 cast 0
+3061 screenshot 19c_kingdom_guard_13
+3067 screenshot 19c_kingdom_guard_14
+3069 engage: kingdom_guard holds glock_17 dist 4.6 move  parries 0/0 blocks 0/0 cast 0
+3073 screenshot 19c_kingdom_guard_15
+3079 screenshot 19c_kingdom_guard_16
+3080 engage: kingdom_guard holds glock_17 dist 3.8 move  parries 0/0 blocks 0/0 cast 0
+3085 screenshot 19c_kingdom_guard_17
+3089 engage: kingdom_guard holds glock_17 dist 3.2 move  parries 0/0 blocks 0/0 cast 0
+3091 screenshot 19c_kingdom_guard_18
+3097 screenshot 19c_kingdom_guard_19
+3099 engage: kingdom_guard holds glock_17 dist 2.2 move  parries 0/0 blocks 0/0 cast 0
+3103 screenshot 19c_kingdom_guard_20
+3109 screenshot 19c_kingdom_guard_21
+3110 engage: kingdom_guard holds glock_17 dist 2.2 move  parries 0/0 blocks 0/0 cast 0
+3115 screenshot 19c_kingdom_guard_22
+3119 engage: kingdom_guard holds glock_17 dist 2.5 move  parries 0/0 blocks 0/0 cast 0
+3121 screenshot 19c_kingdom_guard_23
+3129 engage: kingdom_guard holds glock_17 dist 2.0 move  parries 0/0 blocks 0/0 cast 0
+3153 throne -240, 82, 820
+3258 chat: Your game mode has been updated to Spectator Mode
+4953 screenshot 20_throne_room
+4993 king at -239.6 82.0 820.5 (throne -240, 82, 820, 0.09 blocks)
+4993 capital census {imperial_guard=18, kingdom_guard=56, royal_archmage=1, royal_bodyguard=6, royal_mage=4, royal_sage=1, villager=159, villager_general=4, villager_king=1}
+6793 screenshot 21_throne_room_later
+6813 king at -239.7 82.0 820.3 (throne -240, 82, 820, 0.30 blocks)
+6813 capital census {imperial_guard=18, kingdom_guard=56, royal_archmage=1, royal_bodyguard=6, royal_mage=4, royal_sage=1, villager=159, villager_general=4, villager_king=1}
+6814 over the capital at -240 848
+6817 chat: 【カローネ王国】この地は村人の王国です
+6827 chat: 【カローネ王国】この地は村人の王国です
+6827 chat: 【カローネ王国】遠征隊（3名・戦力348）が「aviary」（dungeons_arise）への遠征の準備を始めました
+6889 chat: 【ベルニカ王国】この地は村人の王国です
+6889 chat: 【ベルニカ王国】村の中心近くに銃工房（改造台）を設けました
+7489 chat: 【ベルニカ王国】遠征隊（5名・戦力580）が「marble chateau」（ati_structures）への遠征の準備を始めました
+7826 chat: §6[王都] §f王都の御用商人が【月野】へ向けて城門を出ました　荷：Iron Ingot×14、Bread×58、Gold Ingot×7、Steak×58 ほか
+8083 chat: 【カローネ王国】遠征隊が集まらず、遠征を見送りました
+8593 screenshot 22_capital_aerial
+8702 over the capital at -505 609
+8888 chat: 【ベルニカ王国】この地は村人の王国です
+8888 chat: 【ベルニカ王国】遠征隊（2名・戦力232）が「tavern」（ati_structures）への遠征の準備を始めました
+9370 chat: 【イシュタリア王国】この地は村人の王国です
+9408 chat: 【ヨルムガ王国】この地は村人の王国です
+9408 chat: 【ヨルムガ王国】遠征隊（3名・戦力348）が「jungle tree house」（dungeons_arise）への遠征の準備を始めました
+9481 chat: 【ルクセリア王国】この地は村人の王国です
+9481 chat: 【ルクセリア王国】遠征隊（3名・戦力348）が「burning arena」（cataclysm）への遠征の準備を始めました
+10089 chat: 【ベルニカ王国】遠征隊が集まらず、遠征を見送りました
+10193 screenshot 23_helipad
+10203 over the capital at -490 471
+11793 screenshot 24_airbase
+11803 at the capital -505 78 598
+11816 chat: 【ルクセリア王国】遠征隊が集まらず、遠征を見送りました
+11828 chat: 【ヨルムガ王国】この地は村人の王国です
+13393 screenshot 25_helipad_supply
+13491 at the capital -645 73 844
+14993 screenshot 26_hangar_supply
+15003 at the capital -170 183 958
+15198 chat: 【ミルディン王国】この地は村人の王国です
+15198 chat: 【ミルディン王国】遠征隊（2名・戦力232）が「ati stoneworks」（ati_structures）への遠征の準備を始めました
+15200 chat: 【アルデア王国】この地は村人の王国です
+15362 chat: 【カローネ王国】この地は村人の王国です
+15364 chat: 【ベルニカ王国】この地は村人の王国です
+15374 chat: 【カローネ王国】遠征隊（2名・戦力232）が「old residence」（ati_structures）への遠征の準備を始めました
+15407 chat: 【アルデア王国】この地は村人の王国です
+15407 chat: 【アルデア王国】遠征隊（2名・戦力232）が「dungeon」（dungeoncrawl）への遠征の準備を始めました
+16593 screenshot 27_palace_roofs
+16692 over the capital at 121 570
+17060 chat: 【ルクセリア王国】この地は村人の王国です
+18193 screenshot 28_airbase_east
+18204 at the capital -240 75 644
+18210 chat: 【ベルニカ王国】遠征隊が集まらず、遠征を見送りました
+18292 chat: 【アルデア王国】この地は村人の王国です
+18293 chat: 【アルデア王国】遠征隊（2名・戦力232）がダンジョンへの遠征の準備を始めました
+18308 chat: 【カローネ王国】遠征隊（2名・戦力232）が「obsidilith arena」（bosses_of_mass_destruction）への遠征の準備を始めました
+18313 chat: 【エルセン王国】この地は村人の王国です
+18331 chat: 【エルセン王国】遠征隊（2名・戦力232）が「mechanical nest」（dungeons_arise）への遠征の準備を始めました
+18374 chat: 【フィオレ王国】この地は村人の王国です
+18374 chat: 【フィオレ王国】遠征隊（2名・戦力232）がダンジョンへの遠征の準備を始めました
+19013 chat: 【カローネ王国】【カローネ王国】の行商隊（4人）が【灯谷】へ出発しました　Lv.1 Villagerは向こうに移り住みます
+19793 screenshot 29_road_fountain
+19805 at the capital 143 90 635
+21393 screenshot 30_ranch_barn
+21489 at the capital 265 108 903
+22993 screenshot 31_fortress_east
+23063 king form 0: scale 1.00, health 1024/10000, holding 0 minecraft:air
+23063 king form 1: scale 1.50, health 1024/10000, holding 1 minecraft:netherite_sword
+23063 king form 2: scale 1.80, health 5500/10000, holding 1 minecraft:netherite_sword
+23063 king form 2: scale 1.80, health 1500/10000, holding 1 minecraft:netherite_sword
+23063 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:trident
+23063 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:bow
+23063 chat: バアル＝ゼブル：天の雷を、ひと振りの槍に。――雷槍、解放。
+23063 chat: バアル＝ゼブル：雲間に掛けし我が弓よ。――虹弓、解放。
+23084 chat: 【苔台】Unemployedが【フィオレ王国】から移り住みました
+23098 chat: 【エルセン王国】この地は村人の王国です
+23163 screenshot 40_king_forms
+23213 screenshot 41_king_regal
+23263 screenshot 42_king_hero
+23313 screenshot 43_king_broken_55
+23343 screenshot 43b_king_broken_15
+23378 screenshot 44_king_divine_spear
+23413 screenshot 45_king_divine_bow
+23463 screenshot 46_king_divine_back
+23475 king form 1 (film): scale 1.50, health 1024/10000, holding 1 minecraft:netherite_sword
+23503 screenshot 47_film_hero_kneel
+23523 screenshot 48_film_hero_pillar
+23533 chat: 英雄王アルブ：我が剣は民のために。我が盾は王国のために。
+23560 screenshot 49_film_hero_flash
+23584 king form 2 (film): scale 1.80, health 10000/10000, holding 1 minecraft:netherite_sword
+23584 king form 2 (film): scale 1.80, health 1024/10000, holding 1 minecraft:netherite_sword
+23613 screenshot 50_film_glitch_a
+23653 screenshot 51_film_glitch_b
+23717 king form 3 (film): scale 2.20, health 10000/10000, holding 1 minecraft:mace
+23717 king form 3 (film): scale 2.20, health 10000/10000, holding 1 minecraft:mace
+23717 king form 3 (film): scale 2.20, health 1024/10000, holding 1 minecraft:mace
+23753 screenshot 52_film_divine_peel
+23793 screenshot 53_film_divine_rise
+23811 chat: ――我が真名を知れ。
+23811 chat: バアル＝ゼブル：我はバアル＝ゼブル。堕ちたる天の王にして蝿の王なり。
+23811 chat: バアル＝ゼブル：雷よ、ヤグルシよ、アイムールよ。蝿どもよ。この者らを喰らえ。
+23811 chat: ――我が真名を知れ。
+23811 chat: バアル＝ゼブル：我はバアル＝ゼブル。堕ちたる天の王にして蝿の王なり。
+23811 chat: バアル＝ゼブル：雷よ、ヤグルシよ、アイムールよ。蝿どもよ。この者らを喰らえ。
+23811 chat: ――我が真名を知れ。
+23811 chat: バアル＝ゼブル：我はバアル＝ゼブル。堕ちたる天の王にして蝿の王なり。
+23811 chat: バアル＝ゼブル：雷よ、ヤグルシよ、アイムールよ。蝿どもよ。この者らを喰らえ。
+23828 screenshot 54_film_divine_name
+23848 screenshot 55_film_divine_climax
+23903 waza scenes planned to tick 29102
+23903 relic scenes planned to tick 31325
+23903 king moves planned to tick 31330
+23915 king form 1: scale 1.50, health 1024/10000, holding 1 minecraft:netherite_sword
+23963 screenshot 56_0_sword_hold
+23975 screenshot 56_0_sword_hold_side
+23999 screenshot 57_0_00_sword_sweep_w
+24003 screenshot 57_0_00_sword_sweep_s
+24029 screenshot 57_0_01_sword_return_w
+24033 screenshot 57_0_01_sword_return_s
+24065 screenshot 57_0_02_sword_cleave_w
+24069 screenshot 57_0_02_sword_cleave_s
+24095 screenshot 57_0_03_sword_rising_w
+24099 screenshot 57_0_03_sword_rising_s
+24129 screenshot 57_0_04_sword_thrust_w
+24133 screenshot 57_0_04_sword_thrust_s
+24157 screenshot 57_0_05_sword_bash_w
+24161 screenshot 57_0_05_sword_bash_s
+24195 screenshot 57_0_06_sword_spin_w
+24199 screenshot 57_0_06_sword_spin_s
+24227 screenshot 57_0_07_sword_leap_w
+24231 screenshot 57_0_07_sword_leap_s
+24257 screenshot 57_0_08_sword_dash_w
+24261 screenshot 57_0_08_sword_dash_s
+24293 screenshot 57_0_09_sword_wave_w
+24297 screenshot 57_0_09_sword_wave_s
+24334 king form 2: scale 1.80, health 6000/10000, holding 1 minecraft:netherite_sword
+24383 screenshot 56_1_broken_hold
+24395 screenshot 56_1_broken_hold_side
+24417 screenshot 57_1_00_broken_shard_w
+24421 screenshot 57_1_00_broken_shard_s
+24451 screenshot 57_1_01_broken_lag_w
+24455 screenshot 57_1_01_broken_lag_s
+24481 screenshot 57_1_02_broken_blink_w
+24485 screenshot 57_1_02_broken_blink_s
+24513 screenshot 57_1_03_broken_multi_w
+24517 screenshot 57_1_03_broken_multi_s
+24549 screenshot 57_1_04_broken_rewind_w
+24553 screenshot 57_1_04_broken_rewind_s
+24581 screenshot 57_1_05_broken_blocks_w
+24585 screenshot 57_1_05_broken_blocks_s
+24611 screenshot 57_1_06_broken_grab_w
+24615 screenshot 57_1_06_broken_grab_s
+24643 screenshot 57_1_07_broken_echo_w
+24647 screenshot 57_1_07_broken_echo_s
+24677 screenshot 57_1_08_broken_hitbox_w
+24681 screenshot 57_1_08_broken_hitbox_s
+24707 screenshot 57_1_09_broken_nan_w
+24711 screenshot 57_1_09_broken_nan_s
+24755 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:mace
+24755 chat: バアル＝ゼブル：雷霆よ、我が手に還れ。――神器、解放。
+24803 screenshot 56_2_clubs_hold
+24815 screenshot 56_2_clubs_hold_side
+24839 screenshot 57_2_00_clubs_smite_w
+24843 screenshot 57_2_00_clubs_smite_s
+24869 screenshot 57_2_01_clubs_flurry_w
+24873 screenshot 57_2_01_clubs_flurry_s
+24903 screenshot 57_2_02_clubs_rise_w
+24907 screenshot 57_2_02_clubs_rise_s
+24939 screenshot 57_2_03_clubs_quake_w
+24943 screenshot 57_2_03_clubs_quake_s
+24969 screenshot 57_2_04_clubs_spin_w
+24973 screenshot 57_2_04_clubs_spin_s
+25001 screenshot 57_2_05_clubs_throw_w
+25005 screenshot 57_2_05_clubs_throw_s
+25031 screenshot 57_2_06_clubs_cross_w
+25035 screenshot 57_2_06_clubs_cross_s
+25067 screenshot 57_2_07_clubs_leap_w
+25071 screenshot 57_2_07_clubs_leap_s
+25097 screenshot 57_2_08_clubs_chain_w
+25101 screenshot 57_2_08_clubs_chain_s
+25131 screenshot 57_2_09_clubs_shock_w
+25135 screenshot 57_2_09_clubs_shock_s
+25174 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:netherite_hoe
+25174 chat: バアル＝ゼブル：蝿どもよ、我が手に来れ。――魔器、解放。
+25223 screenshot 56_3_scythe_hold
+25235 screenshot 56_3_scythe_hold_side
+25261 screenshot 57_3_00_scythe_reap_w
+25265 screenshot 57_3_00_scythe_reap_s
+25291 screenshot 57_3_01_scythe_return_w
+25295 screenshot 57_3_01_scythe_return_s
+25327 screenshot 57_3_02_scythe_neck_w
+25331 screenshot 57_3_02_scythe_neck_s
+25357 screenshot 57_3_03_scythe_hook_w
+25361 screenshot 57_3_03_scythe_hook_s
+25391 screenshot 57_3_04_scythe_spin_w
+25395 screenshot 57_3_04_scythe_spin_s
+25423 screenshot 57_3_05_scythe_throw_w
+25427 screenshot 57_3_05_scythe_throw_s
+25455 screenshot 57_3_06_scythe_wave_w
+25459 screenshot 57_3_06_scythe_wave_s
+25485 screenshot 57_3_07_scythe_soul_w
+25489 screenshot 57_3_07_scythe_soul_s
+25515 screenshot 57_3_08_scythe_low_w
+25519 screenshot 57_3_08_scythe_low_s
+25553 screenshot 57_3_09_scythe_leap_w
+25557 screenshot 57_3_09_scythe_leap_s
+25593 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:netherite_sword
+25595 chat: バアル＝ゼブル：光と蝿、ふたつの刃にて汝を刻まん。――双剣、解放。
+25643 screenshot 56_4_twin_hold
+25655 screenshot 56_4_twin_hold_side
+25676 screenshot 57_4_00_twin_double_w
+25680 screenshot 57_4_00_twin_double_s
+25710 screenshot 57_4_01_twin_cross_w
+25714 screenshot 57_4_01_twin_cross_s
+25741 screenshot 57_4_02_twin_stabs_w
+25745 screenshot 57_4_02_twin_stabs_s
+25775 screenshot 57_4_03_twin_whirl_w
+25779 screenshot 57_4_03_twin_whirl_s
+25809 screenshot 57_4_04_twin_leap_w
+25813 screenshot 57_4_04_twin_leap_s
+25839 screenshot 57_4_05_twin_slide_w
+25843 screenshot 57_4_05_twin_slide_s
+25869 screenshot 57_4_06_twin_rise_w
+25873 screenshot 57_4_06_twin_rise_s
+25907 screenshot 57_4_07_twin_xwave_w
+25911 screenshot 57_4_07_twin_xwave_s
+25933 screenshot 57_4_08_twin_behind_w
+25937 screenshot 57_4_08_twin_behind_s
+25967 screenshot 57_4_09_twin_hundred_w
+25971 screenshot 57_4_09_twin_hundred_s
+26013 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:trident
+26014 chat: バアル＝ゼブル：天の雷を、ひと振りの槍に。――雷槍、解放。
+26063 screenshot 56_5_spear_hold
+26075 screenshot 56_5_spear_hold_side
+26099 screenshot 57_5_00_spear_thrust_w
+26103 screenshot 57_5_00_spear_thrust_s
+26129 screenshot 57_5_01_spear_double_w
+26133 screenshot 57_5_01_spear_double_s
+26165 screenshot 57_5_02_spear_sweep_w
+26169 screenshot 57_5_02_spear_sweep_s
+26193 screenshot 57_5_03_spear_butt_w
+26197 screenshot 57_5_03_spear_butt_s
+26229 screenshot 57_5_04_spear_twirl_w
+26233 screenshot 57_5_04_spear_twirl_s
+26263 screenshot 57_5_05_spear_dive_w
+26267 screenshot 57_5_05_spear_dive_s
+26293 screenshot 57_5_06_spear_rush_w
+26297 screenshot 57_5_06_spear_rush_s
+26327 screenshot 57_5_07_spear_throw_w
+26331 screenshot 57_5_07_spear_throw_s
+26359 screenshot 57_5_08_spear_bristle_w
+26363 screenshot 57_5_08_spear_bristle_s
+26389 screenshot 57_5_09_spear_heaven_w
+26393 screenshot 57_5_09_spear_heaven_s
+26436 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:bow
+26436 chat: バアル＝ゼブル：雲間に掛けし我が弓よ。――虹弓、解放。
+26483 screenshot 56_6_bow_hold
+26495 screenshot 56_6_bow_hold_side
+26519 screenshot 57_6_00_bow_quick_w
+26523 screenshot 57_6_00_bow_quick_s
+26551 screenshot 57_6_01_bow_double_w
+26555 screenshot 57_6_01_bow_double_s
+26585 screenshot 57_6_02_bow_fan_w
+26589 screenshot 57_6_02_bow_fan_s
+26617 screenshot 57_6_03_bow_lob_w
+26621 screenshot 57_6_03_bow_lob_s
+26653 screenshot 57_6_04_bow_pierce_w
+26657 screenshot 57_6_04_bow_pierce_s
+26675 screenshot 57_6_05_bow_retreat_w
+26679 screenshot 57_6_05_bow_retreat_s
+26713 screenshot 57_6_06_bow_rainbow_w
+26717 screenshot 57_6_06_bow_rainbow_s
+26743 screenshot 57_6_07_bow_pin_w
+26747 screenshot 57_6_07_bow_pin_s
+26779 screenshot 57_6_08_bow_burst_w
+26783 screenshot 57_6_08_bow_burst_s
+26805 screenshot 57_6_09_bow_strike_w
+26809 screenshot 57_6_09_bow_strike_s
+26853 king form 3 (scythe): scale 2.20, health 1024/10000, holding 1 minecraft:netherite_sword
+26853 chat: バアル＝ゼブル：光と蝿、ふたつの刃にて汝を刻まん。――双剣、解放。
+26884 veil of flies cast
+26943 screenshot 58_veil_above
+26993 screenshot 58_veil_ground
+27013 azazel on the stage: scale 1.45, name Lv.5 アザゼル［神に叛きし者］
+27059 azazel seen: [Lv.5 アザゼル［神に叛きし者］ at 0.0 0.0 10.0 alive true -> jp.oror.reborn.royal.AzazelRenderer$Evokers]
+27063 screenshot 59_azazel_front
+27075 screenshot 59_azazel_side
+27087 screenshot 59_azazel_back
+27109 screenshot 60_00_azazel_rend_w
+27113 screenshot 60_00_azazel_rend_s
+27149 screenshot 60_01_azazel_forge_w
+27153 screenshot 60_01_azazel_forge_s
+27181 screenshot 60_02_azazel_fangs_w
+27185 screenshot 60_02_azazel_fangs_s
+27213 screenshot 60_03_azazel_gust_w
+27217 screenshot 60_03_azazel_gust_s
+27247 screenshot 60_04_azazel_scapegoat_w
+27251 screenshot 60_04_azazel_scapegoat_s
+27287 screenshot 60_05_azazel_dudael_w
+27291 screenshot 60_05_azazel_dudael_s
+27315 screenshot 60_06_azazel_disarm_w
+27319 screenshot 60_06_azazel_disarm_s
+27351 screenshot 60_07_azazel_dive_w
+27355 screenshot 60_07_azazel_dive_s
+27387 screenshot 60_08_azazel_chains_w
+27391 screenshot 60_08_azazel_chains_s
+27423 screenshot 60_09_azazel_rally_w
+27427 screenshot 60_09_azazel_rally_s
+27513 waza start kokuhaku_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+27516 screenshot 62_00_kokuhaku_01_w
+27519 screenshot 62_00_kokuhaku_01_s
+27525 screenshot 62_00_kokuhaku_01_a
+27597 waza start riha_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+27603 screenshot 62_01_riha_01_w
+27608 screenshot 62_01_riha_01_s
+27610 screenshot 62_01_riha_01_a
+27682 waza start tenki_19: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+27718 screenshot 62_02_tenki_19_w
+27721 screenshot 62_02_tenki_19_s
+27735 screenshot 62_02_tenki_19_a
+27807 waza start nortia_02: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+27816 screenshot 62_03_nortia_02_w
+27820 screenshot 62_03_nortia_02_s
+27822 screenshot 62_03_nortia_02_a
+27891 waza start berit_05: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+27893 screenshot 62_04_berit_05_w
+27897 screenshot 62_04_berit_05_s
+27899 screenshot 62_04_berit_05_a
+27969 waza start elseria_12: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+27983 screenshot 62_05_elseria_12_w
+27987 screenshot 62_05_elseria_12_s
+27990 screenshot 62_05_elseria_12_a
+28062 waza start huang_linghua_17: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28075 screenshot 62_06_huang_linghua_17_w
+28080 screenshot 62_06_huang_linghua_17_s
+28082 screenshot 62_06_huang_linghua_17_a
+28152 waza start valeria_10: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28172 screenshot 62_07_valeria_10_w
+28178 screenshot 62_07_valeria_10_s
+28180 screenshot 62_07_valeria_10_a
+28252 waza start ferdinand_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28256 screenshot 62_08_ferdinand_01_w
+28260 screenshot 62_08_ferdinand_01_s
+28262 screenshot 62_08_ferdinand_01_a
+28333 waza start savior_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28342 screenshot 62_09_savior_01_w
+28347 screenshot 62_09_savior_01_s
+28349 screenshot 62_09_savior_01_a
+28423 waza start lucifara_13: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28439 screenshot 62_10_lucifara_13_w
+28444 screenshot 62_10_lucifara_13_s
+28446 screenshot 62_10_lucifara_13_a
+28516 waza start taika_23: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28578 screenshot 62_11_taika_23_w
+28588 screenshot 62_11_taika_23_s
+28602 screenshot 62_11_taika_23_a
+28674 waza start mary_sue_03: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28678 screenshot 62_12_mary_sue_03_w
+28682 screenshot 62_12_mary_sue_03_s
+28684 screenshot 62_12_mary_sue_03_a
+28754 waza start gokuka_01: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28756 screenshot 62_13_gokuka_01_w
+28761 screenshot 62_13_gokuka_01_s
+28763 screenshot 62_13_gokuka_01_a
+28833 waza start merlinus_12: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28849 screenshot 62_14_merlinus_12_w
+28855 screenshot 62_14_merlinus_12_s
+28857 screenshot 62_14_merlinus_12_a
+28928 waza start cursed_love_12: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+28946 screenshot 62_15_cursed_love_12_w
+28950 screenshot 62_15_cursed_love_12_s
+28952 screenshot 62_15_cursed_love_12_a
+29022 waza start elseria_11: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+29039 screenshot 62_16_elseria_11_w
+29044 screenshot 62_16_elseria_11_s
+29049 screenshot 62_16_elseria_11_a
+29123 waza start kurma_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+29188 screenshot 62_17_kurma_24_w
+29201 screenshot 62_17_kurma_24_s
+29210 screenshot 62_17_kurma_24_a
+29282 waza start teia_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+29348 screenshot 62_18_teia_24_w
+29358 screenshot 62_18_teia_24_s
+29373 screenshot 62_18_teia_24_a
+29445 waza start bahamut_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+29511 screenshot 62_19_bahamut_24_w
+29527 screenshot 62_19_bahamut_24_s
+29538 screenshot 62_19_bahamut_24_a
+29610 waza start demiurgos_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+29670 screenshot 62_20_demiurgos_24_w
+29683 screenshot 62_20_demiurgos_24_s
+29692 screenshot 62_20_demiurgos_24_a
+29765 waza start yggdrasil_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+29829 screenshot 62_21_yggdrasil_24_w
+29842 screenshot 62_21_yggdrasil_24_s
+29850 screenshot 62_21_yggdrasil_24_a
+29923 waza start mels_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+29985 screenshot 62_22_mels_24_w
+30000 screenshot 62_22_mels_24_s
+30011 screenshot 62_22_mels_24_a
+30083 waza start chaos_24: java.lang.NoSuchMethodException: jp.oror.reborn.waza.WazaEngine.start(jp.oror.reborn.SupremeEntity,jp.oror.reborn.waza.Waza,net.minecraft.world.entity.LivingEntity,boolean)
+30150 screenshot 62_23_chaos_24_w
+30164 screenshot 62_23_chaos_24_s
+30173 screenshot 62_23_chaos_24_a
+30215 chat: Your game mode has been updated to Creative Mode
+30241 relic technique 0 started: true
+30241 bar: 特殊技Ⅰ「断装・水鏡」
+30257 screenshot 70_00_kokuhaku_0_ready
+30264 screenshot 70_00_kokuhaku_0_release
+30274 screenshot 70_00_kokuhaku_0_later
+30336 relic technique 2 started: true
+30336 bar: 必殺技「終ノ太刀・無我」
+30400 screenshot 70_01_kokuhaku_2_ready
+30407 screenshot 70_01_kokuhaku_2_release
+30417 screenshot 70_01_kokuhaku_2_later
+30451 screenshot 70_01_kokuhaku_2_finish
+30516 relic technique 0 started: true
+30516 bar: 特殊技Ⅰ「「とまれ」」
+30533 screenshot 70_02_riha_0_ready
+30540 screenshot 70_02_riha_0_release
+30550 screenshot 70_02_riha_0_later
+30611 relic technique 1 started: true
+30611 bar: 特殊技Ⅱ「九霆雷雲」
+30642 screenshot 70_03_elseria_1_ready
+30643 chat: OrorTester has made the advancement [Monster Hunter]
+30649 screenshot 70_03_elseria_1_release
+30659 screenshot 70_03_elseria_1_later
+30695 bar: Nightfall：受け取れる任務報酬 5件 /oror quest list
+30720 relic technique 0 started: true
+30720 bar: 特殊技Ⅰ「磁軌斉射」
+30737 screenshot 70_04_valeria_0_ready
+30744 screenshot 70_04_valeria_0_release
+30754 screenshot 70_04_valeria_0_later
+30818 relic technique 0 started: true
+30818 bar: 特殊技Ⅰ「色鬼」
+30832 screenshot 70_05_nortia_0_ready
+30838 bar: 色鬼――黄だけが安全
+30839 screenshot 70_05_nortia_0_release
+30849 screenshot 70_05_nortia_0_later
+30877 bar: Boing!!
+30910 relic technique 2 started: true
+30910 bar: 必殺技「万象救済」
+30975 screenshot 70_06_savior_2_ready
+30982 screenshot 70_06_savior_2_release
+30992 screenshot 70_06_savior_2_later
+31012 screenshot 70_06_savior_2_finish
+31079 relic technique 0 started: true
+31079 bar: 特殊技Ⅰ「地脈破砕」
+31094 screenshot 70_07_kurma_0_ready
+31101 screenshot 70_07_kurma_0_release
+31111 screenshot 70_07_kurma_0_later
+31173 relic technique 2 started: true
+31173 bar: 必殺技「無限次元天航」
+31237 screenshot 70_08_teia_2_ready
+31244 screenshot 70_08_teia_2_release
+31254 screenshot 70_08_teia_2_later
+31288 screenshot 70_08_teia_2_finish
+31353 relic technique 0 started: true
+31353 bar: 特殊技Ⅰ「潮声波」
+31370 screenshot 70_09_bahamut_0_ready
+31377 screenshot 70_09_bahamut_0_release
+31387 screenshot 70_09_bahamut_0_later
+31448 relic technique 2 started: true
+31448 bar: 必殺技「始終同一」
+31513 screenshot 70_10_ouroboros_2_ready
+31520 screenshot 70_10_ouroboros_2_release
+31530 screenshot 70_10_ouroboros_2_later
+31564 screenshot 70_10_ouroboros_2_finish
+31629 relic technique 2 started: true
+31630 bar: 必殺技「世界生命の大樹冠」
+31694 screenshot 70_11_yggdrasil_2_ready
+31701 screenshot 70_11_yggdrasil_2_release
+31711 screenshot 70_11_yggdrasil_2_later
+31726 screenshot 70_11_yggdrasil_2_finish
+31791 relic technique 2 started: true
+31791 bar: 必殺技「無限世界原典」
+31856 screenshot 70_12_demiurgos_2_ready
+31863 screenshot 70_12_demiurgos_2_release
+31873 screenshot 70_12_demiurgos_2_later
+31907 screenshot 70_12_demiurgos_2_finish
+31972 relic technique 2 started: true
+31972 bar: 必殺技「万象を殴り砕く拳」
+32037 screenshot 70_13_brutality_2_ready
+32044 screenshot 70_13_brutality_2_release
+32054 screenshot 70_13_brutality_2_later
+32090 screenshot 70_13_brutality_2_finish
+32155 relic technique 1 started: true
+32155 bar: 特殊技Ⅱ「黒翼円舞」
+32186 screenshot 70_14_lucifara_1_ready
+32193 screenshot 70_14_lucifara_1_release
+32203 screenshot 70_14_lucifara_1_later
+32264 relic technique 1 started: true
+32265 bar: 特殊技Ⅱ「混沌胞子」
+32295 screenshot 70_15_chaos_1_ready
+32302 screenshot 70_15_chaos_1_release
+32312 screenshot 70_15_chaos_1_later
+32368 screenshot 71_relic_gauge
+32379 screen jp.oror.look.Look$RelicTip in PLAY
+32405 screenshot 72_tooltip_weapon
+32418 screen none in PLAY
+32420 screen jp.oror.look.Look$RelicTip in PLAY
+32442 screenshot 73_tooltip_legend
+32456 screen none in PLAY
+32458 screen jp.oror.look.Look$RelicTip in PLAY
+32474 screenshot 74_tooltip_charm
+32486 screen none in PLAY
+32488 screen jp.oror.look.Look$RelicTip in PLAY
+32502 screenshot 75_tooltip_focus
+32514 screen none in PLAY
+32562 finished: complete
