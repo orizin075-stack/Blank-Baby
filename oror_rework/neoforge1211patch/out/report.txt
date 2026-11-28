@@ -63,86 +63,98 @@ Creating Minecraft artifacts without recompilation.
 Loaded 131 artifacts from /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties
 [1m*** Started working on [4mdownloadJson[23;0m[23;0m
   ↓ https://piston-meta.mojang.com/mc/game/version_manifest_v2.json
-  ↓ https://piston-meta.mojang.com/v1/packages/c086fab6229047df03bb78951c7a1b8fce8c4892/1.21.1.json
- [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.45s
-[1m*** Started working on [4mdownloadServer[23;0m[23;0m
-[1m*** Started working on [4mdownloadClient[23;0m[23;0m
+  ↓ https://piston-meta.mojang.com/v1/packages/dfd8a7b2515a97eeea2c32af7645bc7794911eec/1.21.1.json
+ [1m[92m✓[23;0m Completed [4mdownloadJson[23;0m in 0.24s
 [1m*** Started working on [4mdownloadClientMappings[23;0m[23;0m
-  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+[1m*** Started working on [4mdownloadClient[23;0m[23;0m
+[1m*** Started working on [4mdownloadServer[23;0m[23;0m
   ↓ https://piston-data.mojang.com/v1/objects/30c73b1c5da787909b2f73340419fdf13b9def88/client.jar
   ↓ https://piston-data.mojang.com/v1/objects/2244b6f072256667bcd9a73df124d6c58de77992/client.txt
- [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.46s
+  ↓ https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+ [1m[92m✓[23;0m Completed [4mdownloadClientMappings[23;0m in 0.37s
 [1m*** Started working on [4mmergeMappings[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.85s
+ [1m[92m✓[23;0m Completed [4mdownloadClient[23;0m in 0.69s
 [1m*** Started working on [4mstripClient[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 1.36s
+ [1m[92m✓[23;0m Completed [4mdownloadServer[23;0m in 0.99s
 [1m*** Started working on [4mextractServer[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.79s
+ [1m[92m✓[23;0m Completed [4mextractServer[23;0m in 0.54s
 [1m*** Started working on [4mstripServer[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 2.33s
- [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 4.17s
- [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 3.77s
+ [1m[92m✓[23;0m Completed [4mmergeMappings[23;0m in 2.80s
+ [1m[92m✓[23;0m Completed [4mstripClient[23;0m in 2.51s
+ [1m[92m✓[23;0m Completed [4mstripServer[23;0m in 1.69s
 [1m*** Started working on [4mmerge[23;0m[23;0m
  ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar
- [1m[92m✓[23;0m Completed [4mmerge[23;0m in 3.86s
+ [1m[92m✓[23;0m Completed [4mmerge[23;0m in 2.59s
 [1m*** Started working on [4mrename[23;0m[23;0m
  ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all
- [1m[92m✓[23;0m Completed [4mrename[23;0m in 6.02s
+ [1m[92m✓[23;0m Completed [4mrename[23;0m in 4.40s
 [1m*** Started working on [4mbinaryPatch[23;0m[23;0m
   [33mWARNING: [23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest
   ↓ https://maven.neoforged.net/releases/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar
  ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar
- [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 5.33s
+ [1m[92m✓[23;0m Completed [4mbinaryPatch[23;0m in 2.42s
 [1m*** Started working on [4mcopyUnpatchedClasses[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.68s
+ [1m[92m✓[23;0m Completed [4mcopyUnpatchedClasses[23;0m in 1.30s
 [1m*** Started working on [4mapplyDevTransforms[23;0m[23;0m
  ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar
- [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 2.15s
+ [1m[92m✓[23;0m Completed [4mapplyDevTransforms[23;0m in 1.69s
 [1m*** Started working on [4mbinaryWithNeoForge[23;0m[23;0m
- [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 7.16s
-Total runtime: 32.14s
+ [1m[92m✓[23;0m Completed [4mbinaryWithNeoForge[23;0m in 2.54s
+Total runtime: 19.18s
 
 
 > Task :compileJava
 warning: unknown enum constant DeprecationLevel.ERROR
   reason: class file for kotlin.DeprecationLevel not found
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/WornGearLayer.java:125: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = WornGear.NS, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                             ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/WornGearLayer.java:125: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = WornGear.NS, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                                     ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGear.java:81: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                       ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGear.java:81: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                                               ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/arms/OrorArms.java:20: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = OrorArms.ID, bus = EventBusSubscriber.Bus.MOD)
+                                         ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/arms/OrorArms.java:20: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = OrorArms.ID, bus = EventBusSubscriber.Bus.MOD)
+                                                                 ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/GrimoireBook.java:35: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                   ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/GrimoireBook.java:35: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                           ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/client/GrimoireClient.java:30: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                   ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/client/GrimoireClient.java:30: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                           ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGearRenderer.java:65: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                        ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGearRenderer.java:65: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                                                ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/RebelCertificate.java:90: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGear.java:81: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                        ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/RebelCertificate.java:90: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/PlacedGear.java:81: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                                                ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/GodSlayer.java:93: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/WornGearLayer.java:125: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = WornGear.NS, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                             ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/gear/WornGearLayer.java:125: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = WornGear.NS, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                     ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/ArmedVillagers.java:312: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
                                                        ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/GodSlayer.java:93: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                                               ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/show/TechniqueShow.java:37: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/ArmedVillagers.java:312: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
+                                                             ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/GearLooks.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                    ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/show/TechniqueShow.java:37: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/GearLooks.java:21: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                                            ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/KingslayerArms.java:45: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
@@ -156,6 +168,12 @@ warning: unknown enum constant DeprecationLevel.ERROR
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/KingslayerArms.java:179: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                                                ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/show/TechniqueShow.java:37: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                   ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/show/TechniqueShow.java:37: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                           ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/AzazelRenderer.java:172: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                        ^
@@ -168,48 +186,6 @@ warning: unknown enum constant DeprecationLevel.ERROR
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/royal/RoyalRenderer.java:103: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
                                                              ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                       ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                                               ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/ExhaustionHud.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                   ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/ExhaustionHud.java:21: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                                           ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/OneHealthBar.java:27: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                   ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/OneHealthBar.java:27: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                                           ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/arms/OrorArms.java:20: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = OrorArms.ID, bus = EventBusSubscriber.Bus.MOD)
-                                         ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/arms/OrorArms.java:20: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = OrorArms.ID, bus = EventBusSubscriber.Bus.MOD)
-                                                                 ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/client/CapitalCompassClient.java:18: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                   ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/client/CapitalCompassClient.java:18: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                                           ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CitadelEvents.java:50: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                       ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CitadelEvents.java:50: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                                               ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CapitalCompass.java:165: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                       ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CapitalCompass.java:165: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                                               ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/waza/WazaNet.java:20: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                    ^
@@ -222,24 +198,24 @@ warning: unknown enum constant DeprecationLevel.ERROR
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/waza/MelsCastle.java:207: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                                                ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/RebelCertificate.java:90: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                       ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/RebelCertificate.java:90: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                               ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/GodSlayer.java:93: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                       ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/king/GodSlayer.java:93: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                               ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/ExpeditionEggs.java:42: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                    ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/ExpeditionEggs.java:42: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                                            ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/GearLooks.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                   ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/GearLooks.java:21: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-                                                                           ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/ArmedVillagers.java:312: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
-                                                       ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/client/ArmedVillagers.java:312: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = Bus.MOD, value = Dist.CLIENT)
-                                                             ^
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/relic/RelicNet.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
                                                    ^
@@ -252,28 +228,52 @@ warning: unknown enum constant DeprecationLevel.ERROR
 /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/relic/client/RelicClient.java:75: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
     @EventBusSubscriber(modid = "oror_supreme_bosses", value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
                                                                                                     ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/GrimoireBook.java:35: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                   ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/GrimoireBook.java:35: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
-@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
-                                                                           ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/client/GrimoireClient.java:30: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/OneHealthBar.java:27: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                    ^
-/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/duel/client/GrimoireClient.java:30: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/OneHealthBar.java:27: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
 @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
                                                                            ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/ExhaustionHud.java:21: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                   ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/client/ExhaustionHud.java:21: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                           ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                       ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/combat/MobStamina.java:290: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                               ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CapitalCompass.java:165: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                       ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CapitalCompass.java:165: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                               ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/client/CapitalCompassClient.java:18: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                   ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/client/CapitalCompassClient.java:18: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+@EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+                                                                           ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CitadelEvents.java:50: warning: [removal] bus() in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                       ^
+/home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/citadel/CitadelEvents.java:50: warning: [removal] Bus in EventBusSubscriber has been deprecated and marked for removal
+    @EventBusSubscriber(modid = "oror_supreme_bosses", bus = EventBusSubscriber.Bus.MOD)
+                                                                               ^
 Note: Some input files use or override a deprecated API.
 Note: Recompile with -Xlint:deprecation for details.
 Note: /home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/src/main/java/jp/oror/reborn/RelicArts.java uses unchecked or unsafe operations.
 Note: Recompile with -Xlint:unchecked for details.
 53 warnings
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795587976831.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_4-1795867525404.json
 
 [Incubating] Problems report is available at: file:///home/runner/work/Blank-Baby/Blank-Baby/oror_rework/neoforge1211patch/build/reports/problems/problems-report.html
 
-BUILD SUCCESSFUL in 1m 12s
+BUILD SUCCESSFUL in 56s
 2 actionable tasks: 2 executed
 == ComboAttacks.executeOnServer (Epic Fight)
   public void executeOnServer(yesman.epicfight.skill.SkillContainer, net.minecraft.nbt.CompoundTag);
@@ -301,6 +301,69 @@ BUILD SUCCESSFUL in 1m 12s
 --
   public void reserveAnimation(yesman.epicfight.api.asset.AssetAccessor<? extends yesman.epicfight.api.animation.types.StaticAnimation>);
     descriptor: (Lyesman/epicfight/api/asset/AssetAccessor;)V
+== Nightfall particle assets (r77: efn:exp*/fireslash* sprites reported missing)
+      1 assets/efn/particles/
+      1 assets/efn/particles/air_trail.json
+      1 assets/efn/particles/arc_cut.json
+      1 assets/efn/particles/arc_hit.json
+      1 assets/efn/particles/block.json
+      1 assets/efn/particles/blockN.json
+      1 assets/efn/particles/blood_brust.json
+      1 assets/efn/particles/blood_cut.json
+      1 assets/efn/particles/blood_harvest.json
+      1 assets/efn/particles/blood_hit.json
+      1 assets/efn/particles/bloom_trail.json
+      1 assets/efn/particles/color_slash.json
+      1 assets/efn/particles/color_slashN.json
+      1 assets/efn/particles/color_slash_ring.json
+      1 assets/efn/particles/crimson_slash.json
+      1 assets/efn/particles/dmc_jc_blade_trail.json
+      1 assets/efn/particles/dmc_jc_blade_trail_red.json
+      1 assets/efn/particles/efn_parry_flash_main_render.json
+      1 assets/efn/particles/exp.json
+      1 assets/efn/particles/fire_cut.json
+      1 assets/efn/particles/fire_hit.json
+      1 assets/efn/particles/fireslash.json
+      1 assets/efn/particles/flash.json
+      1 assets/efn/particles/hf_blade_cut.json
+      1 assets/efn/particles/hf_blade_hit.json
+      1 assets/efn/particles/judgement_cut_particle.json
+      1 assets/efn/particles/mortal_blade.json
+      1 assets/efn/particles/mortal_blade_charge_black.json
+      1 assets/efn/particles/mortal_blade_charge_red.json
+      1 assets/efn/particles/murasama_cut.json
+      1 assets/efn/particles/murasama_hit.json
+      1 assets/efn/particles/noweapon_afterimage.json
+      1 assets/efn/particles/noweapon_afterimage_blue.json
+      1 assets/efn/particles/noweapon_afterimage_blue_short.json
+      1 assets/efn/particles/noweapon_afterimage_red.json
+      1 assets/efn/particles/sakura_dance.json
+      1 assets/efn/particles/slash.json
+      1 assets/efn/particles/slash_ring.json
+      1 assets/efn/particles/soul_afterimage.json
+      1 assets/efn/particles/space_trail.json
+      1 assets/efn/particles/spark_contractive.json
+      1 assets/efn/particles/spark_contractive_zandatsu.json
+      1 assets/efn/particles/spark_expansive.json
+      1 assets/efn/particles/spark_expansive_zandatsu.json
+      1 assets/efn/particles/spark_normal.json
+      1 assets/efn/particles/spark_normal_zandatsu.json
+      1 assets/efn/particles/trigger.json
+      1 assets/efn/particles/weapon_attach_example.json
+      1 assets/efn/particles/weapon_edge_spark.json
+      2 assets/efn/particles/yamato_cutN.json
+      1 assets/efn/particles/yamato_floor.json
+      2 assets/efn/particles/yamato_hitN.json
+      1 assets/efn/particles/yamato_last_sphere.json
+      1 assets/efn/particles/yamato_sphere.json
+      1 assets/efn/textures/particle/
+      1 assets/efn/textures/particle/air_trail.png
+      4 assets/efn/textures/particle/arc_cutN.png
+      1 assets/efn/textures/particle/black_hole.png
+      1 assets/efn/textures/particle/black_hole_.png
+     16 assets/efn/textures/particle/blood_brustN.png
+caution: filename not matched:  assets/efn/particles/exp1.json
+caution: filename not matched:  assets/efn/particles/fireslash1.json
 == AbstractSpell.canBeCastedBy (Iron's Spells)
   public io.redspace.ironsspellbooks.api.spells.CastResult canBeCastedBy(int, io.redspace.ironsspellbooks.api.spells.CastSource, io.redspace.ironsspellbooks.api.magic.MagicData, net.minecraft.world.entity.player.Player);
 == AdaptiveCombat.tick (base/oror_supreme_bosses-0.17.39-052-preview.jar)
@@ -329,15 +392,9 @@ modId="minecraft"
 96:     169: invokevirtual #159                // Method setStamina:(F)V
 103:     180: invokevirtual #159                // Method setStamina:(F)V
 == who calls setParry(true) (NightfallEnemyParryWindowMixin times the window from the last call)
--- com.nameless.indestructible.data.AdvancedMobpatchReloader
-      39: invokevirtual #1100               // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setBlockTick:(I)V
-      45: invokevirtual #1103               // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParry:(Z)V
 -- com.nameless.indestructible.world.capability.AdvancedCustomHumanoidMobPatch
   public void setParry(boolean);
   public void setParryCounter(int);
--- com.nameless.indestructible.world.ai.goal.GuardGoal
-      13: iconst_0
-      14: invokevirtual #45                 // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParryCounter:(I)V
 -- com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion
   public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion setParryCost(float);
   public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotion setParryAnimations(java.lang.Object[]);
@@ -345,6 +402,12 @@ modId="minecraft"
 -- com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotionSet
        7: invokespecial #27                 // Method "<init>":(III)V
   public com.nameless.indestructible.world.ai.CombatBehaviors.GuardMotionSet setParryTimes(int);
+-- com.nameless.indestructible.world.ai.goal.GuardGoal
+      13: iconst_0
+      14: invokevirtual #45                 // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParryCounter:(I)V
+-- com.nameless.indestructible.data.AdvancedMobpatchReloader
+      39: invokevirtual #1100               // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setBlockTick:(I)V
+      45: invokevirtual #1103               // Method com/nameless/indestructible/world/capability/AdvancedCustomHumanoidMobPatch.setParry:(Z)V
 == Superb Warfare charging station (the OROR guns hold 1,000,000 and 600,000 FE)
   protected static final int SLOT_FUEL = 0;
   protected static final int SLOT_CHARGE = 1;
@@ -361,31 +424,31 @@ com.atsuishio.superbwarfare.tools.CustomExplosion$Builder ::  public final com.a
 com.atsuishio.superbwarfare.tools.CustomExplosion$Builder ::  public final com.atsuishio.superbwarfare.tools.CustomExplosion$Builder destroyBlock(boolean); -> destroyBlock:Z
 com.atsuishio.superbwarfare.tools.CustomExplosion$Builder ::  public final com.atsuishio.superbwarfare.tools.CustomExplosion$Builder keepBlock(); -> destroyBlock:Z
 com.atsuishio.superbwarfare.tools.CustomExplosion$Builder :: -> destroyBlock;
-com.atsuishio.superbwarfare.entity.vehicle.AnnihilatorEntity ::  private final float laserLength(net.minecraft.world.phys.Vec3, net.minecraft.world.entity.LivingEntity, com.atsuishio.superbwarfare.data.gun.GunData); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils ::  private static final kotlin.Unit collideBlocks$lambda$10(com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity, boolean[], net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 com.atsuishio.superbwarfare.entity.vehicle.utils.VehicleMotionUtils ::  private static final kotlin.Unit collideBlocks$lambda$12(com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity, boolean[], net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity ::  private static final kotlin.Unit afterHitBlock$lambda$2(com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity, net.minecraft.world.phys.BlockHitResult, net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity ::  private static final kotlin.Unit afterHitEntity$lambda$0(com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity, net.minecraft.world.phys.EntityHitResult, net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+com.atsuishio.superbwarfare.entity.vehicle.AnnihilatorEntity ::  private final float laserLength(net.minecraft.world.phys.Vec3, net.minecraft.world.entity.LivingEntity, com.atsuishio.superbwarfare.data.gun.GunData); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+com.atsuishio.superbwarfare.entity.projectile.SmallCannonShellEntity ::  private final void causeExplode(net.minecraft.world.phys.Vec3, boolean); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
+com.atsuishio.superbwarfare.entity.projectile.SmallCannonShellEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+com.atsuishio.superbwarfare.entity.projectile.C4Entity ::  public final void explode(); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 com.atsuishio.superbwarfare.entity.projectile.MediumRocketEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
 com.atsuishio.superbwarfare.entity.projectile.MediumRocketEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/server/level/ServerLevel.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+com.atsuishio.superbwarfare.entity.projectile.RpgRocketTBGEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
+com.atsuishio.superbwarfare.entity.projectile.ProjectileEntity ::  protected void onHitBlock(net.minecraft.world.phys.BlockHitResult); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
+com.atsuishio.superbwarfare.entity.projectile.ProjectileEntity ::  protected void onHitEntity(net.minecraft.world.phys.EntityHitResult); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
+com.atsuishio.superbwarfare.entity.projectile.RpgRocketStandardEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
 com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile ::  private static final void destroyBlock$lambda$6(com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile); -> destroyBlock$lambda$6(com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile);
 com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile ::  public com.atsuishio.superbwarfare.tools.CustomExplosion$Builder buildExplosion(net.minecraft.world.phys.Vec3); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
 com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile ::  public void destroyBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock(net.minecraft.world.phys.BlockHitResult);
 com.atsuishio.superbwarfare.entity.projectile.FastThrowableProjectile ::  public void destroyBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity ::  private static final kotlin.Unit afterHitBlock$lambda$2(com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity, net.minecraft.world.phys.BlockHitResult, net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity ::  private static final kotlin.Unit afterHitEntity$lambda$0(com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity, net.minecraft.world.phys.EntityHitResult, net.minecraft.core.BlockPos); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 com.atsuishio.superbwarfare.entity.projectile.MissileProjectile ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.SmallCannonShellEntity ::  private final void causeExplode(net.minecraft.world.phys.Vec3, boolean); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
-com.atsuishio.superbwarfare.entity.projectile.SmallCannonShellEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-com.atsuishio.superbwarfare.entity.projectile.ProjectileEntity ::  protected void onHitBlock(net.minecraft.world.phys.BlockHitResult); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
-com.atsuishio.superbwarfare.entity.projectile.ProjectileEntity ::  protected void onHitEntity(net.minecraft.world.phys.EntityHitResult); -> com/atsuishio/superbwarfare/tools/CustomExplosion$Builder.destroyBlock:(Z)Lcom/atsuishio/superbwarfare/tools/CustomExplosion$Builder;
-com.atsuishio.superbwarfare.entity.projectile.C4Entity ::  public final void explode(); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 com.atsuishio.superbwarfare.entity.projectile.SmallRocketEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.RpgRocketStandardEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.RpgRocketTBGEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
-com.atsuishio.superbwarfare.entity.projectile.Tm62Entity ::  public final void touchEntity(); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 com.atsuishio.superbwarfare.entity.projectile.MelonBombEntity ::  private static final kotlin.Unit afterHitBlock$lambda$2(net.minecraft.world.level.Level, net.minecraft.world.phys.BlockHitResult, net.minecraft.core.BlockPos); -> net/minecraft/server/level/ServerLevel.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 com.atsuishio.superbwarfare.entity.projectile.MelonBombEntity ::  private static final kotlin.Unit afterHitEntity$lambda$0(net.minecraft.world.level.Level, net.minecraft.world.phys.EntityHitResult, net.minecraft.core.BlockPos); -> net/minecraft/server/level/ServerLevel.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 com.atsuishio.superbwarfare.entity.projectile.CannonShellEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> destroyBlock:(Lnet/minecraft/world/phys/BlockHitResult;)V
 com.atsuishio.superbwarfare.entity.projectile.CannonShellEntity ::  public void afterHitBlock(net.minecraft.world.phys.BlockHitResult); -> net/minecraft/server/level/ServerLevel.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+com.atsuishio.superbwarfare.entity.projectile.Tm62Entity ::  public final void touchEntity(); -> net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
 == Superb Warfare VehicleEntity.move (059d TurretRestMixin: still turrets skip most moves)
   public net.minecraft.world.phys.Vec3 vCollide(net.minecraft.world.phys.Vec3);
   public void vMove(net.minecraft.world.entity.MoverType, net.minecraft.world.phys.Vec3);
@@ -926,7 +989,7 @@ public class net.neoforged.neoforge.client.event.ClientChatReceivedEvent$System 
   public void addMessage(net.minecraft.network.chat.Component);
   public void addMessage(net.minecraft.network.chat.Component, net.minecraft.network.chat.MessageSignature, net.minecraft.client.GuiMessageTag);
 replaced 143 old class files; added 486 compiled; overlaid 984 files; merged ['assets/oror_supreme_bosses/lang/en_us.json', 'assets/oror_supreme_bosses/lang/ja_jp.json'] ; dropped ['data/oror_supreme_bosses/structure/royal034/kingdom_0_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_0_1.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_0.nbt', 'data/oror_supreme_bosses/structure/royal034/kingdom_1_1.nbt']
-64771f8b1912640a8b55709d7605c36e06676d2161bbbfeee5766e52f56ad10b  out/oror_supreme_bosses-0.17.39-059-preview.jar
+e62dd24cd33ccc3c6998637d7e13dd00ec8c3fe038f6114952b95842d6c6794c  out/oror_supreme_bosses-0.17.39-059-preview.jar
 == /home/runner/work/_temp/pack053/alexscaves-2.0.10.jar
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyAttractingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
   private static java.util.stream.Stream<net.minecraft.core.BlockPos> getNearbyRepellingMagnets(net.minecraft.core.BlockPos, net.minecraft.server.level.ServerLevel, int);
