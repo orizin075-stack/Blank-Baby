@@ -91,8 +91,8 @@ jobs:
             javap -s -p -cp libs/epic-fight-21.17.3.1-mc1.21.1-neoforge.jar yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch yesman.epicfight.api.animation.ServerAnimator | grep -A1 -E 'playAnimation|reserveAnimation'
             echo '== Nightfall particle assets (r77: efn:exp*/fireslash* sprites reported missing)'
             unzip -l libs/nightfall.jar | grep -E 'assets/efn/(particles|textures/particle)' | awk '{print $4}' | sed -E 's/[0-9]+\.(json|png)$/N.\1/' | sort | uniq -c | head -60
-            unzip -p libs/nightfall.jar assets/efn/particles/exp1.json 2>&1 | head -5
-            unzip -p libs/nightfall.jar assets/efn/particles/fireslash1.json 2>&1 | head -5
+            for j in exp fireslash fire_cut; do echo "-- $j.json"; unzip -p libs/nightfall.jar assets/efn/particles/$j.json 2>&1 | head -c 1500; echo; done
+            unzip -l libs/nightfall.jar | awk '{print $4}' | grep -E 'assets/efn/textures/particle/(exp|fire)' | tr '\n' ' '; echo
             echo '== AbstractSpell.canBeCastedBy (Iron'"'"'s Spells)'
             javap -p -cp libs/irons_spellbooks-1.21.1-3.16.3.jar io.redspace.ironsspellbooks.api.spells.AbstractSpell | grep canBeCastedBy
             BASE=base/oror_supreme_bosses-$(sed -n 's/^base_version=//p' gradle.properties).jar
