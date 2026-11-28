@@ -1,72 +1,316 @@
-[m[1;31m[12:11:49.192] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
-[m[33m[12:11:49.198] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
-[m[33m[12:11:49.329] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
-[m[33m[12:11:49.331] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
-[m[33m[12:11:49.353] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
-[m[33m[12:11:49.354] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
-[m[33m[12:11:49.355] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
-[m[33m[12:11:49.356] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
-[m[33m[12:11:49.357] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
-[m[33m[12:11:49.358] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
-[m[33m[12:11:49.733] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[12:11:49.736] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
-[m[33m[12:11:49.785] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
-[m[33m[12:11:49.913] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[12:11:49.917] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
-[m[1;31m[12:11:50.128] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
-[m[33m[12:11:50.129] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
-[m[1;31m[12:11:50.349] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
-[m[33m[12:11:50.350] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
-[m[33m[12:11:50.376] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
-[m[33m[12:11:50.413] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
-[12:11:57] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+[m[1;31m[12:19:25.026] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[12:19:25.031] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[12:19:25.187] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[12:19:25.189] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[12:19:25.209] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[12:19:25.210] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[12:19:25.211] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[12:19:25.212] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[12:19:25.213] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[12:19:25.214] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[12:19:25.352] [main/WARN] [mixin/]: Error loading class: com/nameless/indestructible/data/AdvancedMobpatchReloader (java.lang.ClassNotFoundException: com.nameless.indestructible.data.AdvancedMobpatchReloader) 
+[m[33m[12:19:25.580] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[12:19:25.584] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[12:19:25.642] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[12:19:25.773] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[12:19:25.777] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[12:19:25.969] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
+[m[33m[12:19:25.970] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[1;31m[12:19:26.118] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[12:19:26.119] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[12:19:26.144] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[12:19:26.177] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[12:19:32] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
 java.nio.file.NoSuchFileException: ./config/jupiter.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[12:11:58] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+[12:19:33] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
 java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[12:12:10] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
-[12:12:19] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: halo is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: boot is not a registered slot type!
-[12:12:19] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[12:12:19] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
-[12:12:20] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[12:12:35] [Worker-Main-2/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
-[12:12:35] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[12:12:35] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
-[12:12:36] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
-[12:12:38] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[12:12:38] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[12:12:38] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
-[12:12:38] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
-[12:12:38] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
-[12:12:51] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[12:19:44] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
+[12:19:53] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: halo is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: boot is not a registered slot type!
+[12:19:53] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[12:19:53] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[12:19:54] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[12:20:08] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[12:20:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[12:20:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[12:20:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[12:20:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[12:20:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[12:20:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[12:20:10] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
+[12:20:11] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[12:20:26] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[12:20:41] [NeoForge Version Check/WARN] [ne.ne.fm.VersionChecker/]: Failed to process update information
+[12:32:59] [Server thread/INFO] [OROR Story/]: KING-STORY {"peaceTarget":true,"peaceHostile":false,"kingOffers":15,"blessed":true,"grace":3,"graceHealth":true,"graceGifts":2,"enemy":true,"enemyHostile":true,"friendStillPeace":true,"vindicatorSpares":true,"piglinSpares":true,"rebelFavour":6,"rebelOffers":5,"pillagerSpares":true,"rebelTradeClick":"SUCCESS","rebelTradeOpened":true,"rebelTradeMenu":false,"allies":3,"alliesSpare":true,"likeness":1,"breachedBefore":false,"k0":"hp=10000.0/10000 field=9999 breached=false phase=0 inv=false noai=false itime=0 alive=true fx:strength/5 fx:jump_boost/1 fx:water_breathing/0 fx:night_vision/0 fx:resistance/3 fx:haste/3 fx:speed/1 fx:abyssal_shroud/0 fx:fire_resistance/0 fx:regeneration/2 FieldAbsorptions=1","lordHit":false,"probeLord":"HIGHEST:o800 HIGH:o800 NORMAL:x800 LOW:x800 LOWEST:x800","probeListeners":"err java.lang.ClassNotFoundException: net.neoforged.bus.EventListenerHelper","breachedByLord":true,"k1":"hp=10000.0/10000 field=0 breached=true phase=0 inv=false noai=false itime=0 alive=true fx:strength/5 fx:jump_boost/1 fx:water_breathing/0 fx:night_vision/0 fx:resistance/3 fx:haste/3 fx:speed/1 fx:fire_resistance/0 fx:regeneration/2 FieldBreaks=1 FieldAbsorptions=1","deathHit":true,"probeDeath":"HIGHEST:o40000 HIGH:o40000 NORMAL:o40000 LOW:o40000 LOWEST:o40000 PRE:7989","k2":"hp=10000.0/10000 field=40000 breached=false phase=1 inv=true noai=true itime=40 alive=true fx:strength/5 fx:jump_boost/1 fx:water_breathing/0 fx:night_vision/0 fx:resistance/3 fx:haste/3 fx:speed/1 fx:fire_resistance/0 fx:regeneration/2 FieldBreaks=3 FieldAbsorptions=1 Resurrections=1","revive":"0->1","reviveAlive":true,"film1":true,"name1":"Lv.6 英雄王アルブ","filmUntouchable":true,"film1Done":true,"scale1":1.5,"armour1":true,"heroSword":true,"name2":"Lv.6 崩壊王アルブ","film2Done":true,"scale2":1.8,"breached2":true,"missOut":27,"missIn":6,"lagHits":6,"phantoms":0,"errorArm":0,"name3":"Lv.6 バアル＝ゼブル［堕ちたる天の王にして蝿の王］","film3Done":true,"scale3":2.2,"bossName3":"Lv.6 バアル＝ゼブル［堕ちたる天の王にして蝿の王］［復活 3/3］","phase":3,"called":7,"mainhand":"minecraft:bow","breached3":true,"majesty":8,"chainBroken":true,"soulBurning":true,"fieldWhole":true,"starveHeld":true,"soulTaken":1,"soulFreed":true,"deed_charge":2,"deed_cleave":2,"deed_spear":2,"deed_execution":6,"deed_sunder":2,"deed_desync":3,"deed_rollback":2,"deed_corrupt":2,"deed_ghosts":2,"deed_void":2,"deed_judgment":2,"deed_chaser":2,"deed_driver":2,"deed_gaze":4,"deed_reap":2,"deed_vortex":6,"deed_brand":2,"deed_plague":2,"deed_flurry":6,"deed_crossslash":4,"deed_lunge":2,"deed_javelin":14,"deed_rain":26,"deed_triple":2,"deed_feast":12,"deed_doomsday":52,"deed_dawn":2,"deed_swords":6,"deed_leapin":2,"deed_summon":1,"deed_backstep":1,"deed_chains":6,"deed_overflow":16,"deed_panic":2,"deed_veil":24,"deed_soul":12,"deed_halo":4,"deed_feathers":12,"deed_crucify":6,"deed_creation":1,"deed_wormwood":4,"deed_bowls":14,"deedsLanded":42,"deedsMissed":"","movesLanded":"69/70","movesLandedN":69,"movesMissed":"broken_blocks","trialNotes":"broken_blocks(k0.0,z10.0,a)","echoes":5,"moveMisses":5,"stances":"clubs 4 scythe 4 twin 2 spear 2 bow 3","deleted":45,"bolts":3,"swarms":1,"veilFlies":25,"lord":true,"crownDropped":1,"keeperEnemy":true,"presented":true,"festival":1,"favourRise":50,"kingDead":true,"godSlayer":true,"godSlayerHealth":40.0,"testerUnshielded":true,"fieldAfterFight":120,"creaturesCleared":0,"fieldTook":true,"fieldAfterBlow":109,"ceilingHeld":true,"godWeakenedEffect":false,"godWeakened":true,"godBreached":true,"phantasmActive":true,"phantasmBase":2.5,"phantasmBlow":41,"phantasmRatio":16.5,"phantasmSwordGone":true,"phantasmAt":"-4072, 73, 3992","phantasmDug":123,"phantasmPickGone":true,"tiers":"0/2/2/4","phantasmOffered":true,"chamber":"-4000, 48, 4032","circleStone":true,"containers":15,"filled":10,"workshops":5,"workshopKinds":"anvil brewing_stand crafting_table furnace smithing_table","issBlocks":4,"journal":true,"ladders":16,"lying":10,"arrived":true,"respawn":true,"azazelScale":1.45,"azazelDisarmed":false,"azazelHits":"{fangs:1,rally:1}","azazelProbe":"[rend d=2.5 foes=0] <alive=true hp=1000 at=-3997, 70, 4024> [forge d=7.0 foes=0] <alive=true hp=1000 at=-3993, 70, 4024> [fangs d=4.0 foes=0] indirectMagic:6 <alive=true hp=994 at=-3996, 70, 4024> [gust d=4.0 foes=0] <alive=true hp=1000 at=-3996, 70, 4024> [scapegoat d=7.0 foes=0] <alive=true hp=1000 at=-3993, 70, 4024> [dudael d=7.0 foes=0] <alive=true hp=1000 at=-3993, 70, 4024> [disarm d=5.0 foes=0] <alive=true hp=1000 at=-3995, 70, 4024> [dive d=3.0 foes=0] <alive=true hp=1000 at=-3997, 70, 4024> [chains d=7.0 foes=0] <alive=true hp=1000 at=-3993, 70, 4024> [rally d=7.0 foes=0] mob:8 <alive=true hp=994 at=-3993, 70, 4024> mob:8 ","azazelArts":2,"azazelMissed":"rend forge gust scapegoat_bore dudael disarm dive chains","certSeals":3,"certSealOnce":true,"certCrafted":true,"certFriendBefore":false,"certFriend":true,"certMapMillis":228,"certMap":true,"certTrusted":true,"certTradeOpened":true,"certCity":"-4464, 0, 3952","passPeace":true,"passWar":true,"passRebels":true,"passForms":true,"passCrown":true,"passChamber":true,"passDeeds":true,"passMoves":true,"passBroken":true,"passGodSlayer":true,"passPhantasm":true,"passSouls":true,"passAzazel":false,"passCertificate":true,"pass":false}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-376, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-375, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-374, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-373, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-372, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-371, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-370, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-369, y=77, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=849}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=856}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=858}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=860}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-382, y=112, z=862}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-377, y=149, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-376, y=149, z=853}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-378, y=149, z=863}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-375, y=167, z=861}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-373, y=168, z=863}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:33:46] [Server thread/ERROR] [minecraft/BlockEntity]: Failed to create block entity minecraft:chest
+java.lang.IllegalStateException: Invalid block entity minecraft:chest // net.minecraft.world.level.block.entity.ChestBlockEntity state at BlockPos{x=-372, y=169, z=848}, got Block{minecraft:stone}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.executeCommandInContext(Commands.java:363) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performCommand(Commands.java:284) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.commands.Commands.performPrefixedCommand(Commands.java:264) ~[server-1.21.1-20240808.144430-srg.jar%23236!/:?] {re:mixin,re:classloading,pl:mixin:APP:cupboard.mixins.json:CommandExceptionLoggingMixin from mod cupboard,pl:mixin:A}
+[12:40:59] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-1, y=-56, z=26}
+[12:40:59] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-2, y=-56, z=26}
+[12:40:59] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=0, y=-56, z=26}
+[12:40:59] [Worker-Main-5/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=18}
+[12:40:59] [Worker-Main-5/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=3, y=-53, z=19}
+[13:00:06] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
+[13:00:06] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
+[13:00:06] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
+[13:00:06] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
+[13:00:06] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-283, y=-56, z=-275}
+[13:00:06] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
+[13:00:06] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
+[13:00:06] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
+[13:00:06] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
+[13:00:06] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
+[13:00:06] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-50, z=-279}
+[13:00:06] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-57, z=-280}
+[13:02:37] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"jeg_native_tactical_goal_fires_a_real_loaded_rifle","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Actual JEG rounds hit; {Age:235L,Armed:1b,ArmingTrained:1b,BaseLevel:5,BeforeArmingHealth:20.0d,Born:44935L,Elite:0b,Experience:33L,FootForward:-0.7f,FootHold:45012L,FootSide:0.35f,FootUntil:45012L,LastClock:45170L,LastTargetHealth:1024.0f,LearnedChoice:'sword',LevelInitialized:1b,LoadoutLevel:5,Managed_chest:{components:{'minecraft:enchantments':{levels:{'minecraft:protection':4,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_chestplate'},Managed_feet:{components:{'minecraft:enchantments':{levels:{'minecraft:protection':4,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_boots'},Managed_head:{components:{'minecraft:enchantments':{levels:{'minecraft:protection':4,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_helmet'},Managed_legs:{components:{'minecraft:enchantments':{levels:{'minecraft:protection':4,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_leggings'},Managed_mainhand:{components:{'minecraft:enchantments':{levels:{'minecraft:sharpness':5,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_sword'},Managed_offhand:{components:{'minecraft:enchantments':{levels:{'minecraft:unbreaking':4}}},count:1,id:'minecraft:shield'},NativeGunGoal:'jeg:TACTICAL',NextAttack:45010L,NextCoordination:45016L,NextHeal:45110L,Opponents:{'minecraft:cow':'spacing_and_cooldown'},OriginalAuto:0b,OriginalWeapon:{components:{'minecraft:enchantments':{levels:{'minecraft:sharpness':5,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_sword'},OutcomeSamples:1,ProfessionApplied:'armorer:5',ProfessionRole:'sword',RankName:'Lv.5 Villager',RetreatUntil:44982L,Schema:1,Selected:'sword',SentRank:5,SentRankColor:8821419,Skills:{healing:2,shield:8,sword:2,tactics:21},Stance:'balanced',Strikes:1,SuccessfulStrikes:1,TacticalOutcomes:{'open_hurt_near:sword':{Wins:1}},VillageGearUntil:45206L,VillageGeared:1b,VillageSightAt:45006L,VillageStand:160528713121857L,VillageStandUntil:45206L,VillageTargetId:29916}"}
+[13:02:43] [Server thread/ERROR] [minecraft/Util]: Error saving [1 minecraft:writable_book]. Original cause: java.lang.IllegalStateException: String "jeg_native_tactical_goal_fires_a_real_loaded_rifle
+[13:02:43] [Server thread/ERROR] [minecraft/LevelChunk]: A BlockEntity type net.minecraft.world.level.block.entity.LecternBlockEntity has thrown an exception trying to write state. It will not persist, Report this to the mod author
+java.lang.IllegalStateException: String "jeg_native_tactical_goal_fires_a_real_loaded_rifle
+	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.common.util.DataComponentUtil.wrapEncodingExceptions(DataComponentUtil.java:36) ~[neoforge-21.1.262-universal.jar%23237!/:?] {re:classloading}
+[13:10:10] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-414, y=-52, z=-427}
+[13:10:10] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-407, y=-57, z=-497}
+[13:10:10] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-406, y=-57, z=-496}
+[13:10:10] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-403, y=-52, z=-425}
+[13:10:10] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-410, y=-52, z=-426}
+[13:10:10] [Worker-Main-8/ERROR] [minecraft/SculkSensorBlockEntity]: Failed to parse vibration listener for Sculk Sensor: 'No key selector in MapLike[{event_delay:0,event_distance:3.602844f,range:8,source:{pos:[I;-404,-59,-499],type:"minecraft:block"}}]'
+[13:10:10] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-350, y=-58, z=-499}
+[13:10:10] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-349, y=-58, z=-499}
+[13:10:11] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-409}
+[13:10:11] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-52, z=-419}
+[13:10:11] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-424, y=-52, z=-422}
+[13:10:11] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[13:10:11] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[13:10:11] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[13:10:11] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-422}
+[13:10:11] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-418}
+[13:10:11] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-409}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-394, y=-52, z=-409}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-395, y=-52, z=-416}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-552}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-51, z=-552}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-247, y=-58, z=-588}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[13:10:12] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[13:10:12] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-54, z=-542}
+[13:10:12] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-53, z=-542}
+[13:10:12] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-58, z=-502}
+[13:10:12] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-54, z=-542}
+[13:10:12] [Worker-Main-8/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-53, z=-542}
+[13:10:12] [Worker-Main-8/ERROR] [minecraft/SculkSensorBlockEntity]: Failed to parse vibration listener for Sculk Sensor: 'No key selector in MapLike[{event_delay:0,event_distance:3.602844f,range:8,source:{pos:[I;-404,-59,-499],type:"minecraft:block"}}]'
+[13:10:13] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[13:10:13] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[13:10:13] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[13:10:13] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-213, y=-52, z=-702}
+[13:10:13] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-200, y=-52, z=-702}
+[13:10:13] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[13:10:13] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[13:10:13] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[13:10:14] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[13:10:14] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[13:10:14] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[13:10:14] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-58, z=-502}
+[13:10:14] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-359, y=-58, z=-502}
+[13:10:14] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-346, y=-57, z=-497}
+[13:10:14] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-362, y=-51, z=-548}
+[13:10:14] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-359, y=-58, z=-502}
+[13:10:43] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[13:10:43] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[13:10:43] [Worker-Main-6/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[13:10:43] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-291, y=-57, z=-315}
+[13:10:43] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-292, y=-57, z=-313}
+[13:10:43] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-294, y=-57, z=-313}
+[13:10:43] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-296, y=-57, z=-313}
+[13:10:43] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-295, y=-57, z=-315}
+[13:10:43] [Worker-Main-7/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-293, y=-57, z=-315}
+[13:19:42] [Worker-Main-9/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (-6958, 28, 7080)
+[13:19:43] [Worker-Main-9/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (-6911, 13, 6994)
+[13:30:08] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-77}
+[13:30:08] [Worker-Main-13/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-80}
+[13:36:47] [Worker-Main-13/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (36150, 31, 21797)
+[13:37:31] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-99, y=-50, z=-80}
+[13:37:32] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28899, 45, 26688)
+[13:37:32] [Worker-Main-13/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-99, y=-50, z=-77}
+[13:37:32] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28900, 50, 26716)
+[13:37:33] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28904, 54, 26729)
+[13:37:33] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28904, 49, 26720)
+[13:37:33] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (28900, 50, 26724)
+[13:38:57] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26077, 28, 28849)
+[13:38:57] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26078, 30, 28846)
+[13:38:57] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26078, 28, 28846)
+[13:38:57] [Worker-Main-13/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26077, 28, 28849)
+[13:38:58] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26089, 28, 28849)
+[13:38:58] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26083, 30, 28839)
+[13:38:58] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26081, 30, 28839)
+[13:38:58] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26089, 28, 28849)
+[13:38:59] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26101, 14, 28826)
+[13:38:59] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26097, 15, 28830)
+[13:38:59] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26105, 15, 28822)
+[13:38:59] [Worker-Main-15/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26101, 37, 28853)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26115, 11, 28830)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26115, 11, 28822)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26114, 30, 28846)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26114, 30, 28842)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26117, 30, 28839)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26119, 28, 28839)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26124, 30, 28844)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26116, 11, 28844)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26119, 37, 28862)
+[13:38:59] [Worker-Main-14/ERROR] [Dungeon Crawl/]: Failed to fetch a mob spawner at (26113, 28, 28849)
+[13:40:07] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[13:40:08] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[13:40:08] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[13:40:08] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-283, y=-56, z=-275}
+[13:40:22] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-80}
+[13:40:22] [Worker-Main-15/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-77}
+[13:42:10] [Worker-Main-13/ERROR] [minecraft/MonsterRoomFeature]: Failed to fetch mob spawner entity at (727, 29, 2650)
+[13:46:47] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-77}
+[13:46:47] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-169, y=-51, z=-80}
+[13:49:07] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=344, y=-57, z=262}
+[13:49:08] [Worker-Main-14/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=348, y=-57, z=249}
+[13:49:12] [Worker-Main-15/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=325, y=-52, z=424}
+[13:49:12] [Worker-Main-15/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=325, y=-52, z=426}
+[13:49:12] [Worker-Main-15/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=325, y=-52, z=423}
