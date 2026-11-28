@@ -20,7 +20,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * (r79, the r78 audit: "全AIで共通の敵対判定を使用する", "敵対記憶・移動目標・攻撃対象を同期する") One answer to "are these
  * two on the same side", for every AI of OROR's and any other mod's that sets a mob's target: a team (vanilla's and any mod's
  * isAlliedTo, both ways), an owner and what it owns (a tamed beast, a summon, a contracted ally), the village's folk among
- * themselves, the kingdom's people and the village's, a god's and its summons (Casters.ally), and the rebels' allies with
+ * themselves, the kingdom's people and the village's, a caster and its summons (Casters.summoner), and the rebels' allies with
  * one another and with the friend they serve. The rebels' allies are one band: two players' hired allies stand together, as
  * both stand against the king.
  * <p>
@@ -49,18 +49,23 @@ public final class Sides {
         if (b instanceof Mob mb && MobDodge.friendly(a, mb) || a instanceof Mob ma && MobDodge.friendly(b, ma)) {
             return true;
         }
-        try {
-            if (a instanceof Mob ma && jp.oror.reborn.waza.Casters.ally(ma, b) || b instanceof Mob mb && jp.oror.reborn.waza.Casters.ally(mb, a)) {
-                return true;
-            }
-        } catch (RuntimeException ex) {
-            // a god's reckoning not to be had: the other checks stand
+        // a caster and what it summoned (Casters.ally's own wider answer, "not his foe" for Azazel and the gods, is no
+        // friendship: it would take from Azazel the target he was set on, and the rebels' lord the king)
+        if (jp.oror.reborn.waza.Casters.summoner(b) == a.getId() || jp.oror.reborn.waza.Casters.summoner(a) == b.getId()) {
+            return true;
+        }
+        if (a instanceof jp.oror.reborn.king.RoyalMob && village(b) || b instanceof jp.oror.reborn.king.RoyalMob && village(a)) {
+            return true;
         }
         boolean ra = a.getPersistentData().getBoolean(RebelPact.ALLY), rb = b.getPersistentData().getBoolean(RebelPact.ALLY);
         if (ra && rb) {
             return true;
         }
         return ra && serves(a, b) || rb && serves(b, a);
+    }
+
+    private static boolean village(LivingEntity e) {
+        return e instanceof net.minecraft.world.entity.npc.AbstractVillager || e instanceof net.minecraft.world.entity.animal.IronGolem;
     }
 
     private static boolean owns(LivingEntity owner, LivingEntity owned) {
