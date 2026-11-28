@@ -154,8 +154,13 @@ public final class MobStamina {
         p.shownAt = now;
         if (!p.winded && p.value < p.max * 0.1F) {
             p.winded = true;
-            // (r76) its stamina broken: it goes down (MobDown), an opening for an execution
-            MobDown.down(m);
+            // (r76) its stamina broken: it goes down (MobDown), an opening for an execution. (r79) Only when it was broken
+            // by what it spent against a foe's pressure (a guard, a dodge, a drain), not by its own blows (tire): a god
+            // casting technique after technique went down by its own hand, and the down refused every blow it struck after
+            // (CI: 56 to 76 of the 984 techniques unreached, all of them through before the down)
+            if (rest) {
+                MobDown.down(m);
+            }
             p.windedAt = now;
             count(m, "OrorWinded");
             if (m.level() instanceof ServerLevel sl) {
