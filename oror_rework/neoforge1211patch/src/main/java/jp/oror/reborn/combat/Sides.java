@@ -34,34 +34,49 @@ public final class Sides {
     }
 
     public static boolean friends(LivingEntity a, LivingEntity b) {
+        return why(a, b) != null;
+    }
+
+    /** Why the two are on one side (for the log), or null. */
+    static String why(LivingEntity a, LivingEntity b) {
         if (a == null || b == null) {
-            return false;
+            return null;
         }
         if (a == b) {
-            return true;
+            return "self";
         }
         if (a.isAlliedTo(b) || b.isAlliedTo(a)) {
-            return true;
+            return "allied";
         }
         if (owns(a, b) || owns(b, a)) {
-            return true;
+            return "owned";
         }
         if (b instanceof Mob mb && MobDodge.friendly(a, mb) || a instanceof Mob ma && MobDodge.friendly(b, ma)) {
-            return true;
+            return "folk";
         }
         // a caster and what it summoned (Casters.ally's own wider answer, "not his foe" for Azazel and the gods, is no
         // friendship: it would take from Azazel the target he was set on, and the rebels' lord the king)
         if (jp.oror.reborn.waza.Casters.summoner(b) == a.getId() || jp.oror.reborn.waza.Casters.summoner(a) == b.getId()) {
-            return true;
+            return "summoned";
         }
         if (a instanceof jp.oror.reborn.royal.RoyalMob && village(b) || b instanceof jp.oror.reborn.royal.RoyalMob && village(a)) {
-            return true;
+            return "kingdom";
         }
         boolean ra = a.getPersistentData().getBoolean(RebelPact.ALLY), rb = b.getPersistentData().getBoolean(RebelPact.ALLY);
         if (ra && rb) {
-            return true;
+            return "rebels";
         }
-        return ra && serves(a, b) || rb && serves(b, a);
+        return ra && serves(a, b) || rb && serves(b, a) ? "serves" : null;
+    }
+
+    private static int logged;
+
+    private static void log(String what, Mob m, LivingEntity t) {
+        if (logged < 60) {
+            logged++;
+            System.out.println("[OROR_SIDES] " + what + " " + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()) + " -> "
+                + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(t.getType()) + ": " + why(m, t));
+        }
     }
 
     private static boolean village(LivingEntity e) {
@@ -94,6 +109,7 @@ public final class Sides {
         if (friends(m, t) && !provoked(m, t)) {
             e.setCanceled(true);
             COUNT[0]++;
+            log("refused", m, t);
         }
     }
 
@@ -106,6 +122,7 @@ public final class Sides {
         if (t != null && friends(m, t) && !provoked(m, t)) {
             forget(m, t);
             COUNT[1]++;
+            log("let go", m, t);
         }
     }
 
