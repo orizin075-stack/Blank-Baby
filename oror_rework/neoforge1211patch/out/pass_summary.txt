@@ -1,45 +1,6 @@
-44 result lines, 3 with a failure
--    AA-RESULT                    false= 
--    CAPITAL-LOAD                 false= 
-ok   CAPITAL-SHIELD               false=zombieGriefsIn 
--    CITADEL-SELFTEST             false=forced,kingAtThrone 
--    CITADEL-TRACE                false= 
-ok   CITADEL-UPDATE               false=staleAtPost 
--    CITADEL-UPDATE-TEST          false= 
-ok   COMPASS-RESULT               false=givenAgain 
-ok   CREW-RESULT                  false= 
-FAIL DODGE-RESULT                 false= 
-ok   DUEL-RESULT                  false=godSealHasRaid 
--    EFP-RESULT                   false= 
--    FLIGHT-RESULT                false= 
-ok   FUEL-RESULT                  false= 
+5 result lines, 2 with a failure
+ok   DODGE-RESULT                 false= 
 -    GAMETEST-RESULT              false= failed=1
-ok   GODS-RESULT                  false= 
--    GUARD-MOBS                   false= 
--    GUARD-RESULT                 false= 
--    GUN-MOBS                     false= 
-ok   GUN-PARRY                    false= 
-ok   GUNPOST-RESULT               false= 
-ok   KING-STORY                   false=peaceHostile,rebelTradeMenu,breachedBefore,lordHit,godWeakenedEffect,certFriendBefore 
--    KINGSLAYER-TEST              false= 
--    LANDING-FLIGHT               false= 
--    LANDING-RESULT               false= 
-ok   MOBS-TRACE                   false= 
-ok   OWNERLESS-SWORD-TEST         false=joinedWithoutOwner 
-ok   RAID-RESULT                  false= 
-ok   RELIC-RESULT                 false= 
-ok   ROAD-RESULT                  false= 
-ok   ROYAL-WAZA-RESULT            false= 
 -    SHORT36-RESULT               false= 
-ok   SIEGE-RESULT                 false= 
-ok   SPELL-SWEEP-RESULT           false= 
-ok   STAMINA-RESULT               false=downInvulnerable 
--    STRUCT-AUDIT-RESULT          false= 
--    SUPPLY-LOAD                  false= 
--    SUPPLY-TEST                  false= 
-ok   SWEEP-RESULT                 false= 
-ok   VILLAGE-ARMS-RESULT          false= 
--    VILLAGE-FLIGHT               false=flewOff 
--    WAR-RESULT                   false= 
-FAIL WAZA-RESULT                  false= failed="relentless_research_02:effect; teia_02:effect; hephaistos_03:effect; ferdinand_03:effect; yggdrasil_05:effect; valeria_05:effect; hephaistos_07:effect; forbidden_arcana_06:effect; yggdrasil_09:effect; ferdinand_10:effect; valeria_10:effect; magna_mater_09:effect; demiurgos_09:effect; eomaia_10:effe
-ok   WORN-RESULT                  false= 
+FAIL STAMINA-RESULT               false=downInvulnerable,playerBlowHalved,runningWears,sidesBrainForgot 
+ok   WAZA-RESULT                  false= 
