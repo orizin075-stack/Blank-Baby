@@ -15,6 +15,10 @@ on:
         description: "'076' or '077': that import as the user has it (its whole manifest, its configs and modified jars, The Shooting Star kept; 077 with its own repacked OROR jar from pack/r77), to see it start; empty for the 053 pack"
         required: false
         default: ''
+      setup:
+        description: "'1': with pack, do what SETUP_NIGHTFALL.cmd does (Nightfall and the patched Sword Soaring)"
+        required: false
+        default: ''
       nostar:
         description: "'1': with pack, leave out The Shooting Star and Rimulib (they stop at the title without a real graphics card)"
         required: false
@@ -94,6 +98,7 @@ jobs:
             if ls $P/pack/r$OROR_PACK/oror_supreme_bosses-*.jar > /dev/null 2>&1; then cp $P/pack/r$OROR_PACK/oror_supreme_bosses-*.jar $G/mods/; else cp $P/out/oror_supreme_bosses-$NEW.jar $G/mods/; fi
             cp $P/user_mods/*.jar $G/mods/
             if [ "${{ github.event.inputs.nostar }}" = 1 ]; then rm -f $G/mods/the-shooting-star*.jar $G/mods/rimulib*.jar; fi
+            if [ "${{ github.event.inputs.setup }}" = 1 ]; then python3 -I $P/tools/setup_nightfall.py $P/pack/r$OROR_PACK/oror-install $G/mods | tee $OUT/setup_nightfall.txt; fi
             ls $G/mods | wc -l | tee $OUT/mods_count.txt
             ls $G/mods > $OUT/mods.txt
             exit 0
