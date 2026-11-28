@@ -69,13 +69,14 @@ public final class Sides {
         return ra && serves(a, b) || rb && serves(b, a) ? "serves" : null;
     }
 
-    private static int logged;
+    private static int logged, loggedFolk;
 
     private static void log(String what, Mob m, LivingEntity t) {
-        if (logged < 60) {
-            logged++;
+        boolean folk = m instanceof net.minecraft.world.entity.npc.AbstractVillager;
+        if (folk ? loggedFolk++ < 300 : logged++ < 60) {
             System.out.println("[OROR_SIDES] " + what + " " + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()) + " -> "
-                + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(t.getType()) + ": " + why(m, t));
+                + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(t.getType()) + ": " + why(m, t) + " ids " + m.getId() + "/" + t.getId()
+                + " t=" + m.level().getGameTime());
         }
     }
 
