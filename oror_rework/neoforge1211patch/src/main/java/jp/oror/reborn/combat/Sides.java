@@ -87,9 +87,6 @@ public final class Sides {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void target(LivingChangeTargetEvent e) {
-        if (Boolean.getBoolean("oror.bisect") || EXPERIMENT) {
-            return;
-        }
         LivingEntity t = e.getNewAboutToBeSetTarget();
         if (t == null || e.isCanceled() || !(e.getEntity() instanceof Mob m) || m.level().isClientSide) {
             return;
@@ -102,7 +99,7 @@ public final class Sides {
 
     @SubscribeEvent
     public static void tick(EntityTickEvent.Post e) {
-        if (EXPERIMENT || !(e.getEntity() instanceof Mob m) || m.level().isClientSide || (m.tickCount + m.getId()) % 10 != 0) {
+        if (!(e.getEntity() instanceof Mob m) || m.level().isClientSide || (m.tickCount + m.getId()) % 10 != 0) {
             return;
         }
         LivingEntity t = m.getTarget();
@@ -135,7 +132,4 @@ public final class Sides {
 
     /** For the checks: targets turned away, targets let go. */
     public static final int[] COUNT = new int[2];
-
-    /** BISECT EXPERIMENT (to be removed): Sides' handlers off. */
-    public static final boolean EXPERIMENT = true;
 }

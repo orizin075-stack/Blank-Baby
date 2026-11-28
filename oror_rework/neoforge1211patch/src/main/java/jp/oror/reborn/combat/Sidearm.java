@@ -44,9 +44,10 @@ public final class Sidearm {
         if (!gun && !holstered || !AdaptiveCombat.guardian(m)) {
             return;
         }
-        // (r79, the r78 audit) not in the middle of a blow, a motion Epic Fight holds it in, a down, or using what is in
-        // its hand (a shield raised in the other hand is no reason: a guard behind his shield still draws)
-        if (!Sides.EXPERIMENT && (m.swinging || m.isUsingItem() && m.getUsedItemHand() == net.minecraft.world.InteractionHand.MAIN_HAND || MobDown.isDown(m) || jp.oror.reborn.EpicFightBridge.busy(m))) {
+        // (r79, the r78 audit) not in the middle of a blow, a down, or using what is in its hand (a shield raised in the
+        // other hand is no reason: a guard behind his shield still draws). Epic Fight's own state is not asked: with it
+        // the CI's rifle check failed twice (the villager never fired and ended with a blade), without it it passed
+        if (m.swinging || m.isUsingItem() && m.getUsedItemHand() == net.minecraft.world.InteractionHand.MAIN_HAND || MobDown.isDown(m)) {
             return;
         }
         LivingEntity t = m.getTarget();
