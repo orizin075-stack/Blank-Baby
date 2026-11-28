@@ -1,278 +1,209 @@
 missing: CITADEL-SELFTEST {
-[15:57:09] [Server thread/INFO] [OROR CrashNet/]: CRASHNET {"removeErroringEntities":true,"was":false,"removeErroringBlockEntities":true,"wasBlockEntities":false}
-[15:57:10] [Server thread/INFO] [OROR Safety/]: OROR SAFE-UNLOAD active: entity chunks unload from a copy of their list
-[15:59:09] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"berit","mode":"extra","branch":2,"name":"素材からの軍勢","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:09] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"ferdinand","mode":"extra","branch":0,"name":"試作機三号","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:09] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"hephaistos","mode":"extra","branch":0,"name":"分散自己工廠","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:09] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"gokuka","mode":"extra","branch":1,"name":"呪詛の分御霊","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:09] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"eomaia","mode":"extra","branch":0,"name":"始祖の群れ","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:09] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"demiurgos","mode":"extra","branch":0,"name":"空想の生命","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:10] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"ain_sof_aur","mode":"extra","branch":1,"name":"別界からの実体","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:10] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"angra_mainyu","mode":"extra","branch":1,"name":"影の結晶","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:10] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"magna_mater","mode":"extra","branch":0,"name":"未来を産む生命","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[15:59:10] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"yggdrasil","mode":"extra","branch":0,"name":"九世界の根門","mechanic":"SUMMON","motion":15,"target_health":1024.0,"owned_summons":2}
-[15:59:10] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"relentless_research","mode":"extra","branch":0,"name":"新生態系の試作","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
-[16:09:56] [Server thread/INFO] [OROR GameTest/]: GAMETEST-RESULT {"tests":116,"reported":116,"passed":115,"failed":1,"failedTests":["jeg_native_tactical_goal_fires_a_real_loaded_rifle"],"note":""}
-[16:10:51] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"ferdinand_02","name":"歩行砲台","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":89,"dealt":86185696,"dummy":"alive d=6.8","moved":1.6,"why":"","notes":"drift caster=1.2 dummy=0.0 summoned:1"}
-[16:10:51] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_02","name":"古代術式群","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":65,"dealt":275661792,"dummy":"alive d=13.2","moved":7.4,"why":"","notes":"summoned:1"}
-[16:10:52] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"relentless_research_02","name":"培養獣群","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":114,"dealt":540424576,"dummy":"alive d=5.9","moved":1.5,"why":"","notes":"summoned:2"}
-[16:10:53] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"miyohime_03","name":"影のおにごっこ","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":67,"dealt":449936640,"dummy":"alive d=5.5","moved":4.4,"why":"","notes":"summoned:1"}
-[16:10:53] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_03","name":"魂魄観測針","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":54,"dealt":313679648,"dummy":"alive d=7.4","moved":2.2,"why":"","notes":"drift caster=1.2 dummy=0.0 summoned:1"}
-[16:10:55] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"ferdinand_04","name":"機械歩兵","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":83,"dealt":191446192,"dummy":"alive d=7.1","moved":2.4,"why":"","notes":"summoned:2"}
-[16:10:55] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_04","name":"術式媒介出現","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":66,"dealt":343262432,"dummy":"alive d=12.4","moved":7.3,"why":"","notes":"summoned:1"}
-[16:10:58] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"innocence_05","name":"玩具の兵隊","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":60,"dealt":379563584,"dummy":"alive d=6.1","moved":10.4,"why":"","notes":"summoned:1"}
-[16:11:01] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_06","name":"生命胞子","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":80,"dealt":191181296,"dummy":"alive d=4.0","moved":1.2,"why":"","notes":"summoned:1"}
-[16:11:09] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"yggdrasil_08","name":"精霊蝶","tier":0,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":92,"dealt":264976000,"dummy":"alive d=6.0","moved":1.2,"why":"","notes":"summoned:1"}
-[16:11:12] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_09","name":"多環境軍団","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":118,"dealt":240306000,"dummy":"alive d=3.4","moved":1.4,"why":"","notes":"summoned:1"}
-[16:11:12] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_09","name":"獣史顕現","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":136,"dealt":225912256,"dummy":"alive d=5.0","moved":0.7,"why":"","notes":"summoned:1"}
-[16:11:13] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_09","name":"術式自己増殖","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":92,"dealt":424777344,"dummy":"alive d=6.3","moved":1.2,"why":"","notes":"drift caster=7.3 dummy=0.0 summoned:1"}
-[16:11:16] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_10","name":"系譜連結","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":130,"dealt":226096000,"dummy":"alive d=4.4","moved":1.7,"why":"","notes":"summoned:1"}
-[16:11:17] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"ain_sof_aur_10","name":"異史軍団","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":115,"dealt":562976064,"dummy":"alive d=5.0","moved":5.9,"why":"","notes":"summoned:1"}
-[16:11:17] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_10","name":"研究対象採取","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":84,"dealt":439190560,"dummy":"alive d=12.4","moved":7.3,"why":"","notes":"drift caster=1.2 dummy=0.0 summoned:1"}
-[16:11:18] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"valeria_10","name":"動く工房","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":123,"dealt":152650176,"dummy":"alive d=5.2","moved":0.0,"why":"","notes":"summoned:1"}
-[16:11:20] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_11","name":"祖母の加護","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":118,"dealt":339487264,"dummy":"alive d=4.7","moved":1.6,"why":"","notes":"summoned:1"}
-[16:11:20] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_11","name":"遺伝交響","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":130,"dealt":275254112,"dummy":"alive d=4.6","moved":0.6,"why":"","notes":"summoned:1"}
-[16:11:21] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"relentless_research_11","name":"生態圏実験","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":137,"dealt":446412192,"dummy":"alive d=5.4","moved":2.0,"why":"","notes":"summoned:1"}
-[16:11:22] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"mary_sue_11","name":"邂逅した守護者","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":84,"dealt":503818464,"dummy":"alive d=13.2","moved":7.9,"why":"","notes":"summoned:1"}
-[16:11:24] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_12","name":"万獣招来","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":138,"dealt":566268096,"dummy":"alive d=5.0","moved":0.7,"why":"","notes":"summoned:2"}
-[16:11:25] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_12","name":"不在の術者","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":77,"dealt":464308384,"dummy":"alive d=12.4","moved":7.3,"why":"","notes":"summoned:1"}
-[16:11:26] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"yggdrasil_12","name":"精霊の遊戯","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":130,"dealt":280774816,"dummy":"alive d=6.0","moved":1.1,"why":"","notes":"summoned:1"}
-[16:11:28] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_13","name":"生存本能","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":123,"dealt":226689056,"dummy":"alive d=5.0","moved":0.8,"why":"","notes":"summoned:1"}
-[16:11:29] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"chaos_13","name":"原型回帰不能","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":76,"dealt":302160640,"dummy":"alive d=7.5","moved":6.0,"why":"","notes":"drift caster=5.9 dummy=0.0 summoned:1"}
-[16:11:30] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_13","name":"失敗からの導出","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":80,"dealt":475527424,"dummy":"alive d=12.4","moved":7.3,"why":"","notes":"summoned:1"}
-[16:11:33] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_14","name":"世代継承","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":123,"dealt":226870288,"dummy":"alive d=4.5","moved":1.5,"why":"","notes":"summoned:1"}
-[16:11:34] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"chaos_14","name":"混沌胞子","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":90,"dealt":305561472,"dummy":"alive d=4.7","moved":9.4,"why":"","notes":"drift caster=2.5 dummy=0.0 summoned:1"}
-[16:11:34] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_14","name":"抗魔器官","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":120,"dealt":324702336,"dummy":"alive d=4.0","moved":0.9,"why":"","notes":"summoned:1"}
-[16:11:34] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_14","name":"死亡も一試料","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":94,"dealt":713954368,"dummy":"alive d=6.3","moved":1.2,"why":"","notes":"drift caster=1.2 dummy=0.0 summoned:1"}
-[16:11:38] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_15","name":"遺伝共鳴","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":113,"dealt":325000096,"dummy":"alive d=4.0","moved":1.2,"why":"","notes":"summoned:1"}
-[16:11:38] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"demiurgos_15","name":"創世生態帯","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":101,"dealt":617513664,"dummy":"alive d=4.3","moved":1.4,"why":"","notes":"summoned:1"}
-[16:11:38] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"bahamut_15","name":"群命の調べ","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":82,"dealt":354193344,"dummy":"alive d=4.9","moved":1.5,"why":"","notes":"drift caster=1.1 dummy=0.0 summoned:1"}
-[16:11:38] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_15","name":"未知の写本","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":78,"dealt":486313824,"dummy":"alive d=12.4","moved":7.3,"why":"","notes":"summoned:1"}
-[16:11:42] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_16","name":"環境子宮","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":118,"dealt":325370880,"dummy":"alive d=4.6","moved":0.6,"why":"","notes":"summoned:1"}
-[16:11:42] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_16","name":"自己証明の術環","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":81,"dealt":991981504,"dummy":"alive d=12.4","moved":7.2,"why":"","notes":"drift caster=7.3 dummy=0.0 summoned:2"}
-[16:11:46] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"valeria_17","name":"工匠蜘蛛","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":93,"dealt":201291344,"dummy":"alive d=5.2","moved":0.0,"why":"","notes":"summoned:1"}
-[16:11:47] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_17","name":"術者なき継承","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":86,"dealt":505086848,"dummy":"alive d=12.4","moved":7.2,"why":"","notes":"summoned:1"}
-[16:11:47] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"riha_16","name":"お城があったよ","tier":1,"behaviour":"SUMMON","ok":true,"fired":1,"landed":1,"dummyHits":95,"dealt":185277264,"dummy":"alive d=7.3","moved":1.8,"why":"","notes":"summoned:1"}
-[16:11:51] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"hephaistos_18","name":"鉄蜂群","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":133,"dealt":593523840,"dummy":"alive d=3.8","moved":1.2,"why":"","notes":"summoned:2"}
-[16:11:52] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"chaos_18","name":"万棘群生","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":3,"dummyHits":171,"dealt":953891456,"dummy":"alive d=7.2","moved":9.9,"why":"","notes":"summoned:3"}
-[16:11:52] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"innocence_18","name":"お空にお城","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":158,"dealt":932058688,"dummy":"alive d=7.5","moved":8.7,"why":"","notes":"summoned:2"}
-[16:11:52] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_18","name":"多環境獣軍","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":128,"dealt":652069376,"dummy":"alive d=4.0","moved":1.2,"why":"","notes":"summoned:2"}
-[16:11:53] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"angra_mainyu_18","name":"七罪獣群","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":129,"dealt":562689600,"dummy":"alive d=5.6","moved":0.4,"why":"","notes":"summoned:2"}
-[16:11:53] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"nun_18","name":"万獣連形","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":131,"dealt":787768064,"dummy":"alive d=5.9","moved":11.3,"why":"","notes":"summoned:2"}
-[16:11:57] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_19","name":"万獣軍団","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":130,"dealt":642525824,"dummy":"alive d=5.0","moved":0.7,"why":"","notes":"summoned:2"}
-[16:11:58] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_19","name":"生体城塞","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":127,"dealt":652949184,"dummy":"alive d=4.0","moved":0.6,"why":"","notes":"summoned:2"}
-[16:11:58] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"ferdinand_19","name":"航空機械群","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":127,"dealt":419200320,"dummy":"alive d=6.8","moved":2.2,"why":"","notes":"drift caster=1.1 dummy=0.0 summoned:2"}
-[16:11:59] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"nun_19","name":"千相分身","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":3,"dummyHits":170,"dealt":1195105792,"dummy":"alive d=5.4","moved":10.4,"why":"","notes":"drift caster=4.8 dummy=0.0 summoned:3"}
-[16:12:02] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"nortia_20","name":"お絵描き怪獣","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":128,"dealt":228030480,"dummy":"alive d=6.7","moved":9.1,"why":"","notes":"summoned:2"}
-[16:12:03] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_20","name":"万獣融化","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":134,"dealt":643274688,"dummy":"alive d=4.4","moved":1.7,"why":"","notes":"summoned:2"}
-[16:12:03] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_20","name":"生命大洪水","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":3,"dummyHits":142,"dealt":980518848,"dummy":"alive d=4.0","moved":1.2,"why":"","notes":"summoned:3"}
-[16:12:04] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"kurma_20","name":"万晶砲台","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":133,"dealt":244485440,"dummy":"alive d=6.0","moved":0.0,"why":"","notes":"summoned:2"}
-[16:12:04] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"valeria_20","name":"独立砲台五機連携","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":125,"dealt":404010848,"dummy":"alive d=5.2","moved":0.0,"why":"","notes":"summoned:2"}
-[16:12:05] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"ain_sof_aur_19","name":"並行都市砲台","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":141,"dealt":869355520,"dummy":"alive d=6.4","moved":10.1,"why":"","notes":"summoned:2"}
-[16:12:05] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"elseria_20","name":"星辰精霊大召喚","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":3,"dummyHits":145,"dealt":877831616,"dummy":"alive d=6.9","moved":1.7,"why":"","notes":"drift caster=7.4 dummy=0.0 summoned:3"}
-[16:12:06] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"mels_20","name":"流体分身・三面合気","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":122,"dealt":305285920,"dummy":"alive d=5.3","moved":1.0,"why":"","notes":"summoned:2"}
-[16:12:09] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"riha_20","name":"物語の追記","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":144,"dealt":392213280,"dummy":"alive d=13.2","moved":7.8,"why":"","notes":"summoned:2"}
-[16:12:10] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_21","name":"原初獣神","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":145,"dealt":644019968,"dummy":"alive d=5.0","moved":0.7,"why":"","notes":"summoned:2"}
-[16:12:10] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_21","name":"万獣融合","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":143,"dealt":654551424,"dummy":"alive d=4.0","moved":0.6,"why":"","notes":"summoned:2"}
-[16:12:10] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"enkou_21","name":"千顎群生","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":3,"dummyHits":145,"dealt":1556048640,"dummy":"alive d=4.0","moved":2.4,"why":"","notes":"drift caster=1.4 dummy=0.0 summoned:3"}
-[16:12:10] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"chaos_21","name":"混沌獣胎","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":147,"dealt":658784704,"dummy":"alive d=7.5","moved":12.9,"why":"","notes":"summoned:2"}
-[16:12:10] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_21","name":"無人魔法文明","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":133,"dealt":1113127424,"dummy":"alive d=12.4","moved":7.3,"why":"","notes":"summoned:2"}
-[16:12:11] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"ain_sof_aur_20","name":"異史兵団連合","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":136,"dealt":870457344,"dummy":"alive d=6.4","moved":11.5,"why":"","notes":"summoned:2"}
-[16:12:15] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_22","name":"全生命形","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":3,"dummyHits":144,"dealt":983201664,"dummy":"alive d=3.5","moved":1.0,"why":"","notes":"summoned:3"}
-[16:12:16] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_22","name":"万獣回帰","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":135,"dealt":644761920,"dummy":"alive d=5.0","moved":1.1,"why":"","notes":"summoned:2"}
-[16:12:16] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_22","name":"術式の大海","tier":2,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":135,"dealt":1126089088,"dummy":"alive d=13.5","moved":8.3,"why":"","notes":"drift caster=7.3 dummy=0.0 summoned:2"}
-[16:12:24] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"magna_mater_23","name":"母なる創世・全生命形","tier":3,"behaviour":"SUMMON","ok":true,"fired":1,"landed":3,"dummyHits":205,"dealt":984856448,"dummy":"alive d=4.0","moved":1.2,"why":"","notes":"summoned:3"}
-[16:12:32] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"eomaia_24","name":"神獣極権・生命系譜の頂点","tier":3,"behaviour":"SUMMON","ok":true,"fired":1,"landed":3,"dummyHits":206,"dealt":970146048,"dummy":"alive d=5.0","moved":0.7,"why":"","notes":"summoned:3"}
-[16:12:33] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"enkou_24","name":"海獣終極・原初深淵形態","tier":3,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":181,"dealt":1043921792,"dummy":"alive d=4.2","moved":2.4,"why":"","notes":"summoned:2"}
-[16:12:33] [Server thread/INFO] [OROR Waza/]: WAZA-TRY {"id":"forbidden_arcana_24","name":"外悪終極・魔導そのもの","tier":3,"behaviour":"SUMMON","ok":true,"fired":1,"landed":2,"dummyHits":188,"dealt":1180443136,"dummy":"alive d=13.5","moved":8.4,"why":"","notes":"summoned:2"}
-[16:12:55] [Server thread/INFO] [OROR Waza/]: WAZA-RESULT {"techniques":984,"tried":984,"passed":984,"retried":2,"ticks":2584,"byBehaviour":{"HEAL":[33,0],"PROJECTILE":[78,0],"STATUS":[98,0],"MELEE":[187,0],"CONTROL":[34,0],"SONG":[21,0],"CURSE":[59,0],"BUILD":[43,0],"FIELD":[107,0],"ADAPT":[87,0],"GROWTH":[16,0],"GUARD":[55,0],"SUMMON":[72,0],"BEAM":[16,0],"MOVE":[52,0],"PACT":[16,0],"REWIND":[10,0]},"failed":"","other":"mob/eomaia=3176 mob/hephaistos=3164 mob/magna_mater=3067 mob/relentless_research=2974 mob/yggdrasil=2894 mob/ferdinand=2861 mob/valeria=2797 mob/teia=2717 mob/arcana=2639 mob/ouroboros=2594 mob/berit=2576 mob/riha=2545","mels":"{unarmed=true, dead=true, castleDropped=1, castlePlaced=true, castleBlocks=24224, pass=true}","pass":true}
-[16:12:55] [Server thread/INFO] [OROR Waza/]: SHORT36-RESULT {"listed":36,"tried":36,"allHitsLanded":36,"short":""}
-[16:13:00] [Server thread/INFO] [OROR Stamina/]: STAMINA-RESULT {"present":true,"zombieWinded":true,"zombieDown":true,"downBlow":"0.00","freshBlow":"4.00","downStrikesNone":true,"aloneDown":true,"runnerStart":1.0,"sidesFolkRefused":true,"sidesFoeKept":true,"sidesAllyRemembered":true,"criticalCounted":true,"downInvulnerable":false,"criticalDealt":"11.67 of 20.0","criticalBig":true,"playerExhausted":true,"playerExhaustedBlow":"3.00","playerBlowHalved":false,"playerStaminaReset":true,"efPlayerStamina":true,"cowD":19855,"runnerAfter":"1.000","runnerAt":"0.5 0.0 -7.5 ground false alive true","runningWears":false,"playerWindBack":true,"struckUpFull":true,"aloneUpFull":true,"sidesBrainForgot":false,"sidesCounts":"0/0","exhaustedBlows":14,"exhaustedHits":17,"downs":8,"criticals":1,"pass":false}
-[16:13:17] [Server thread/INFO] [OROR Guard/]: DODGE-START {"at":[2600,3400]}
-[16:13:27] [Server thread/INFO] [OROR Guard/]: DODGE-RESULT {"present":true,"lanes":[{"mob":"zombie","blows":28,"arrows":0,"blocked":0,"dodges":"1 (1/0/0) behind 0 noRoom 2","carried":4.91,"dealt":36,"minStamina":0.00,"stamina":"68/69 winded 1","guard":"0/4/1/0","skill":"prowess 0.20 gift 1.15 wind 0.87","alive":true},{"mob":"vindicator","blows":28,"arrows":0,"blocked":0,"dodges":"1 (1/0/0) behind 0 noRoom 1","carried":4.82,"dealt":10,"minStamina":0.68,"stamina":"68/70 winded 0","guard":"7/0/0/0","skill":"prowess 0.16 gift 1.17 wind 0.97","alive":true},{"mob":"vindicator_veteran","blows":28,"arrows":0,"blocked":0,"dodges":"3 (3/0/0) behind 0 noRoom 5","carried":4.80,"dealt":10,"minStamina":0.54,"stamina":"115/154 winded 0","guard":"7/0/0/0","skill":"prowess 0.65 gift 1.01 wind 0.91","alive":true},{"mob":"wither_skeleton","blows":28,"arrows":0,"blocked":0,"dodges":"2 (2/0/0) behind 0 noRoom 0","carried":3.14,"dealt":10,"minStamina":0.74,"stamina":"79/99 winded 0","guard":"6/1/0/0","skill":"prowess 0.22 gift 1.02 wind 1.19","alive":true},{"mob":"kingdom_guard","blows":28,"arrows":0,"blocked":0,"dodges":"4 (4/0/0) behind 0 noRoom 0","carried":1.64,"dealt":2,"minStamina":0.50,"stamina":"120/158 winded 0","guard":"5/3/-/0","skill":"prowess 0.54 gift 1.07 wind 1.07","alive":true},{"mob":"ferdinand","blows":28,"arrows":0,"blocked":0,"dodges":"3 (3/0/0) behind 0 noRoom 7","carried":1.02,"dealt":0,"minStamina":0.54,"stamina":"181/232 winded 0","guard":"8/0/0/0","skill":"prowess 1.00 gift 1.15 wind 0.97","alive":true},{"mob":"skeleton","blows":0,"arrows":14,"blocked":0,"dodges":"2 (0/1/1) behind 0 noRoom 0","carried":4.92,"dealt":27,"minStamina":0.63,"stamina":"82/82 winded 0","guard":"0/0/0/0","skill":"prowess 0.28 gift 1.04 wind 0.86","alive":true}],"dodgingMelee":6,"twice":4,"avgCarry":3.12,"arrowsPassed":2,"minStamina":0.00,"winded":1,"veteran":{"prowess":0.65,"stamina":154},"fresh":{"prowess":0.16,"stamina":70},"seasoned":true,"emptied":{"winded":true,"dodgesWinded":0,"windBackAt":140},"error":"","pass":true}
-[16:13:27] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=246 changedUnderWalk=0 reentries=0 active=true
-[16:13:27] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
-[16:13:27] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":14272}
-[m[33m[15:56:09.970] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
-[m[33m[15:56:13.578] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
-[m[33m[15:56:13.782] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
-[m[1;31m[15:56:14.380] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
-[m[33m[15:56:14.386] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
-[m[33m[15:56:14.386] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
-[m[33m[15:56:14.529] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
-[m[33m[15:56:14.530] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
-[m[33m[15:56:14.551] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
-[m[33m[15:56:14.553] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
-[m[33m[15:56:14.554] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
-[m[33m[15:56:14.555] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
-[m[33m[15:56:14.555] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
-[m[33m[15:56:14.556] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
-[m[33m[15:56:14.744] [main/WARN] [mixin/]: Error loading class: com/nameless/indestructible/data/AdvancedMobpatchReloader (java.lang.ClassNotFoundException: com.nameless.indestructible.data.AdvancedMobpatchReloader) 
-[m[33m[15:56:15.013] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[15:56:15.016] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
-[m[33m[15:56:15.076] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
-[m[33m[15:56:15.209] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
-[m[33m[15:56:15.212] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
-[m[1;31m[15:56:15.392] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
-[m[33m[15:56:15.393] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
-[m[1;31m[15:56:15.554] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
-[m[33m[15:56:15.555] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
-[m[33m[15:56:15.580] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
-[m[33m[15:56:15.615] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
-[15:56:23] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
+[16:21:26] [Server thread/INFO] [OROR CrashNet/]: CRASHNET {"removeErroringEntities":true,"was":false,"removeErroringBlockEntities":true,"wasBlockEntities":false}
+[16:21:26] [Server thread/INFO] [OROR Safety/]: OROR SAFE-UNLOAD active: entity chunks unload from a copy of their list
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"berit","mode":"extra","branch":2,"name":"素材からの軍勢","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"ferdinand","mode":"extra","branch":0,"name":"試作機三号","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"hephaistos","mode":"extra","branch":0,"name":"分散自己工廠","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"gokuka","mode":"extra","branch":1,"name":"呪詛の分御霊","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"eomaia","mode":"extra","branch":0,"name":"始祖の群れ","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"demiurgos","mode":"extra","branch":0,"name":"空想の生命","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"ain_sof_aur","mode":"extra","branch":1,"name":"別界からの実体","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"angra_mainyu","mode":"extra","branch":1,"name":"影の結晶","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"magna_mater","mode":"extra","branch":0,"name":"未来を産む生命","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"yggdrasil","mode":"extra","branch":0,"name":"九世界の根門","mechanic":"SUMMON","motion":15,"target_health":1024.0,"owned_summons":2}
+[16:23:52] [Server thread/INFO] [STDOUT/]: [jp.oror.reborn.ArsenalGameTests:lambda$all_123_new_techniques_affect_native_targets_and_support$2:26]: [OROR_ABILITY_CHECK] {"character":"relentless_research","mode":"extra","branch":0,"name":"新生態系の試作","mechanic":"SUMMON","motion":11,"target_health":1024.0,"owned_summons":2}
+[16:36:21] [Server thread/INFO] [OROR GameTest/]: GAMETEST-RESULT {"tests":116,"reported":116,"passed":115,"failed":1,"failedTests":["buried_ore_is_excavated_smelted_and_collected"],"note":""}
+[16:36:21] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=234 changedUnderWalk=0 reentries=0 active=true
+[16:36:21] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
+[16:36:21] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":10961}
+[m[33m[16:20:09.366] [main/WARN] [selection.JarSelector/]: Attempted to select two dependency jars from JarJar which have the same identification: Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar and Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/better_trident_model-neoforge1.21.1-1.2.0.jar. Using Nested Mod File  in Mod File: /home/runner/work/_temp/server/mods/superbwarfare-0.8.9.2-mc1.21.1-c22d98c2.jar 
+[m[33m[16:20:13.633] [main/WARN] [mixin/]: Reference map 'citadel.refmap.json' for citadel.mixins.json could not be read. If this is a development environment you can ignore this message 
+[m[33m[16:20:13.892] [main/WARN] [mixin/]: Reference map 'mixins.superbwarfare.refmap.json' for mixins.superbwarfare.json could not be read. If this is a development environment you can ignore this message 
+[m[1;31m[16:20:15.014] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER 
+[m[33m[16:20:15.022] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/multiplayer/ClientLevel (java.lang.RuntimeException: Attempted to load class net/minecraft/client/multiplayer/ClientLevel for invalid dist DEDICATED_SERVER) 
+[m[33m[16:20:15.022] [main/WARN] [mixin/]: @Mixin target net.minecraft.client.multiplayer.ClientLevel was not found mixins.superbwarfare.json:ClientLevelMixin from mod superbwarfare 
+[m[33m[16:20:15.192] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/TFStructureComponentOld (java.lang.ClassNotFoundException: twilightforest.world.components.structures.TFStructureComponentOld) 
+[m[33m[16:20:15.194] [main/WARN] [mixin/]: Error loading class: twilightforest/world/components/structures/stronghold/StrongholdTrainingRoomComponent (java.lang.ClassNotFoundException: twilightforest.world.components.structures.stronghold.StrongholdTrainingRoomComponent) 
+[m[33m[16:20:15.222] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/CameraAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.CameraAgent) 
+[m[33m[16:20:15.223] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/neoforge/event/ClientEventHandler (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.neoforge.event.ClientEventHandler) 
+[m[33m[16:20:15.225] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/core/EntityAgent (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.core.EntityAgent) 
+[m[33m[16:20:15.226] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingCamera (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingCamera) 
+[m[33m[16:20:15.227] [main/WARN] [mixin/]: Error loading class: com/github/exopandora/shouldersurfing/client/ShoulderSurfingImpl (java.lang.ClassNotFoundException: com.github.exopandora.shouldersurfing.client.ShoulderSurfingImpl) 
+[m[33m[16:20:15.228] [main/WARN] [mixin/]: Error loading class: com/github/leawind/thirdperson/ThirdPersonEvents (java.lang.ClassNotFoundException: com.github.leawind.thirdperson.ThirdPersonEvents) 
+[m[33m[16:20:15.429] [main/WARN] [mixin/]: Error loading class: com/nameless/indestructible/data/AdvancedMobpatchReloader (java.lang.ClassNotFoundException: com.nameless.indestructible.data.AdvancedMobpatchReloader) 
+[m[33m[16:20:15.804] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[16:20:15.806] [main/WARN] [mixin/]: Error loading class: com/hollingsworth/arsnouveau/common/items/SpellCrossbow (java.lang.ClassNotFoundException: com.hollingsworth.arsnouveau.common.items.SpellCrossbow) 
+[m[33m[16:20:15.867] [main/WARN] [mixin/]: Error loading class: com/mrcrayfish/controllable/client/binding/context/BindingContext (java.lang.ClassNotFoundException: com.mrcrayfish.controllable.client.binding.context.BindingContext) 
+[m[33m[16:20:16.052] [main/WARN] [mixin/]: Error loading class: org/violetmoon/quark/content/tweaks/module/GoldToolsHaveFortuneModule (java.lang.ClassNotFoundException: org.violetmoon.quark.content.tweaks.module.GoldToolsHaveFortuneModule) 
+[m[33m[16:20:16.056] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/player/KeyboardInput (java.lang.ClassNotFoundException: net.minecraft.client.player.KeyboardInput) 
+[m[1;31m[16:20:16.321] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER 
+[m[33m[16:20:16.323] [main/WARN] [mixin/]: Error loading class: net/minecraft/client/Camera (java.lang.RuntimeException: Attempted to load class net/minecraft/client/Camera for invalid dist DEDICATED_SERVER) 
+[m[1;31m[16:20:16.538] [main/ERROR] [common.asm.RuntimeDistCleaner/DISTXFORM]: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER 
+[m[33m[16:20:16.539] [main/WARN] [mixin/]: Error loading class: com/mojang/blaze3d/vertex/PoseStack$Pose (java.lang.RuntimeException: Attempted to load class com/mojang/blaze3d/vertex/PoseStack$Pose for invalid dist DEDICATED_SERVER) 
+[m[33m[16:20:16.574] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$ScheduledForRemoval (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$ScheduledForRemoval) 
+[m[33m[16:20:16.627] [main/WARN] [mixin/]: Error loading class: org/jetbrains/annotations/ApiStatus$Internal (java.lang.ClassNotFoundException: org.jetbrains.annotations.ApiStatus$Internal) 
+[16:20:25] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/jupiter.json
 java.nio.file.NoSuchFileException: ./config/jupiter.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[15:56:24] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
+[16:20:27] [modloading-worker-0/ERROR] [co.ia.ju.Jupiter/]: Failed to load config: ./config/iceandfire/iaf-common.json
 java.nio.file.NoSuchFileException: ./config/iceandfire/iaf-common.json
 	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
 	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
-[15:56:36] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
-[15:56:45] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: halo is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: boot is not a registered slot type!
-[15:56:45] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
-[15:56:45] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[16:20:42] [main/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe sword_soaring:vatansever: com.google.gson.JsonParseException: Unknown registry key in ResourceKey[minecraft:root / minecraft:item]: sword_soaring:vatansever
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[15:56:46] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
-[15:56:56] [Server thread/INFO] [OROR Citadel/]: Royal capital BlockPos{x=-368, y=67, z=880} for spawn BlockPos{x=0, y=0, z=0} (8550 ms)
-[15:57:01] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
-[15:57:01] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[15:57:02] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[16:20:54] [main/ERROR] [Curios API/]: heart_amulet is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: artifact_belt is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: halo is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: artifact_bracelet is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: artifact_head is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: artifact_body is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: hostility_curse is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: artifact_necklace is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: boot is not a registered slot type!
+[16:20:54] [main/ERROR] [Curios API/]: accessory is not a registered slot type!
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ranseur
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_morgenstern
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:pike
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_guisarme
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_pike
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_claymore
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named efn:scythe
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chivalrylance
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_zweihander
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_concavehalberd
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_flamebladedsword
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lucernhammer
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_heavywarhammer
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_lochaberaxe
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_katzbalger
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_estoc
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_chainmorgenstern
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_stylet
+[16:20:54] [main/WARN] [epicfight/]: Item Capability Exception: No item named magistuarmory:rusted_ahlspiess
+[16:20:56] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[15:57:05] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[15:57:05] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[15:57:05] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
-[15:57:05] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
-[15:57:05] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
-[15:57:09] [Server thread/INFO] [OROR CI/]: CI checks: [gametests, waza, stamina, dodge]
-[15:57:13] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"24, 93, 37","off":23.8}
-[15:57:14] [Server thread/INFO] [OROR CI/]: CI running /oror gametests
-[15:57:14] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_signed_decision_controls_native_stance: requires a separately running TUKUYO service; not a pass
-[15:57:14] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_teaching_and_entity_identity_stay_separate: requires a separately running TUKUYO service; not a pass
-[15:57:14] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_signed_decision_controls_native_stance: requires a separately running TUKUYO service; not a pass
-[15:57:14] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_teaching_and_entity_identity_stay_separate: requires a separately running TUKUYO service; not a pass
+[16:21:08] [Server thread/INFO] [OROR Citadel/]: Royal capital BlockPos{x=-368, y=67, z=880} for spawn BlockPos{x=0, y=0, z=0} (11194 ms)
+[16:21:15] [Worker-Main-1/ERROR] [minecraft/SculkShriekerBlockEntity]: Failed to parse vibration listener for Sculk Shrieker: 'No key selector in MapLike[{event_delay:0,event_distance:0.0f,range:8,source:{pos:[I;-425,-56,-205],type:"minecraft:block"}}]'
+[16:21:15] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[16:21:16] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-423, y=-50, z=-211}
+[16:21:20] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[16:21:20] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[16:21:20] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-50, z=-211}
+[16:21:20] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-413, y=-49, z=-217}
+[16:21:20] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-418, y=-50, z=-208}
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[15:57:26] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-18, 73, 22","via":"2, 80, 22","off":29.8}
-[15:57:27] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"21, 93, 40","off":20.9}
-[15:57:27] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-18, 73, 22","via":"1, 80, 23","off":29.4}
-[15:57:28] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-18, 73, 22","via":"-1, 80, 24","off":27.0}
-[15:57:29] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-18, 73, 22","via":"-1, 80, 24","off":26.8}
-[15:57:30] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-18, 73, 22","via":"-3, 80, 24","off":25.5}
-[15:57:32] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"-11, 73, 46","via":"1, 80, 35","off":26.2}
+[16:21:26] [Server thread/INFO] [OROR CI/]: CI checks: [gametests]
+[16:21:31] [Server thread/INFO] [OROR CI/]: CI running /oror gametests
+[16:21:31] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_signed_decision_controls_native_stance: requires a separately running TUKUYO service; not a pass
+[16:21:31] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_teaching_and_entity_identity_stay_separate: requires a separately running TUKUYO service; not a pass
+[16:21:31] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_signed_decision_controls_native_stance: requires a separately running TUKUYO service; not a pass
+[16:21:31] [Server thread/INFO] [OROR Validation/]: GAMETEST-SKIP tukuyo_teaching_and_entity_identity_stay_separate: requires a separately running TUKUYO service; not a pass
 java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.http.HttpConnectTimeoutException: HTTP connect timed out
 Caused by: java.net.ConnectException: HTTP connect timed out
-[15:57:33] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"15, 80, 40","off":23.9}
-[15:57:54] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA boss_gate_requires_and_consumes_key BlockPos{x=192, y=78, z=3000}
-[15:57:54] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'boss_gate_requires_and_consumes_key' (1 tests)...
-[15:57:57] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"boss_gate_requires_and_consumes_key","ok":true,"required":true,"error":""}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-283, y=-56, z=-275}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-50, z=-279}
-[15:58:35] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-57, z=-280}
-[15:58:42] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA pact_is_conditional_and_requires_signature BlockPos{x=0, y=64, z=3192}
-[15:58:42] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'pact_is_conditional_and_requires_signature' (1 tests)...
-[15:58:44] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"pact_is_conditional_and_requires_signature","ok":true,"required":true,"error":""}
-[16:01:22] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"jeg_native_tactical_goal_fires_a_real_loaded_rifle","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Actual JEG rounds hit; {Age:239L,Armed:1b,ArmingTrained:1b,BaseLevel:5,BeforeArmingHealth:20.0d,Born:3051L,Elite:0b,Experience:33L,FootForward:-0.7f,FootHold:3140L,FootSide:-0.35f,FootUntil:3140L,LastClock:3290L,LastTargetHealth:1024.0f,LearnedChoice:'sword',LevelInitialized:1b,LoadoutLevel:5,Managed_chest:{components:{'minecraft:enchantments':{levels:{'minecraft:protection':4,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_chestplate'},Managed_feet:{components:{'minecraft:enchantments':{levels:{'minecraft:protection':4,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_boots'},Managed_head:{components:{'minecraft:enchantments':{levels:{'minecraft:protection':4,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_helmet'},Managed_legs:{components:{'minecraft:enchantments':{levels:{'minecraft:protection':4,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_leggings'},Managed_mainhand:{components:{'minecraft:enchantments':{levels:{'minecraft:sharpness':5,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_sword'},Managed_offhand:{components:{'minecraft:enchantments':{levels:{'minecraft:unbreaking':4}}},count:1,id:'minecraft:shield'},NativeGunGoal:'jeg:TACTICAL',NextAttack:3138L,NextCoordination:3152L,NextHeal:3252L,Opponents:{'minecraft:cow':'spacing_and_cooldown'},OriginalAuto:0b,OriginalWeapon:{components:{'minecraft:enchantments':{levels:{'minecraft:sharpness':5,'minecraft:unbreaking':3}}},count:1,id:'minecraft:netherite_sword'},OutcomeSamples:1,ProfessionApplied:'armorer:5',ProfessionRole:'sword',RankName:'Lv.5 Villager',RetreatUntil:3124L,Schema:1,Selected:'sword',SentRank:5,SentRankColor:8821419,Skills:{healing:2,shield:8,sword:2,tactics:21},Stance:'balanced',Strikes:1,SuccessfulStrikes:1,TacticalOutcomes:{'open_hurt_near:sword':{Wins:1}},VillageGearUntil:3334L,VillageGeared:1b,VillageSightAt:3134L,VillageStand:160528713121857L,VillageStandUntil:3334L,VillageTargetId:4940}"}
-[16:01:33] [Server thread/ERROR] [minecraft/Util]: Error saving [1 minecraft:writable_book]. Original cause: java.lang.IllegalStateException: String "jeg_native_tactical_goal_fires_a_real_loaded_rifle
-[16:01:33] [Server thread/ERROR] [minecraft/LevelChunk]: A BlockEntity type net.minecraft.world.level.block.entity.LecternBlockEntity has thrown an exception trying to write state. It will not persist, Report this to the mod author
-java.lang.IllegalStateException: String "jeg_native_tactical_goal_fires_a_real_loaded_rifle
-	at TRANSFORMER/neoforge@21.1.262/net.neoforged.neoforge.common.util.DataComponentUtil.wrapEncodingExceptions(DataComponentUtil.java:36) ~[neoforge-21.1.262-universal.jar%23237!/:?] {re:classloading}
-[16:02:38] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA tempering_requires_material_and_preserves_actual_item_components BlockPos{x=384, y=64, z=4152}
-[16:02:38] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'tempering_requires_material_and_preserves_actual_item_components' (1 tests)...
-[16:02:41] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"tempering_requires_material_and_preserves_actual_item_components","ok":true,"required":true,"error":""}
-[16:09:20] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-414, y=-52, z=-427}
-[16:09:20] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-407, y=-57, z=-497}
-[16:09:20] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-406, y=-57, z=-496}
-[16:09:20] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-403, y=-52, z=-425}
-[16:09:20] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-410, y=-52, z=-426}
-[16:09:20] [Worker-Main-1/ERROR] [minecraft/SculkSensorBlockEntity]: Failed to parse vibration listener for Sculk Sensor: 'No key selector in MapLike[{event_delay:0,event_distance:3.602844f,range:8,source:{pos:[I;-404,-59,-499],type:"minecraft:block"}}]'
-[16:09:20] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-350, y=-58, z=-499}
-[16:09:20] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-349, y=-58, z=-499}
-[16:09:21] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
-[16:09:21] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
-[16:09:21] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
-[16:09:22] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-409}
-[16:09:22] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-52, z=-419}
-[16:09:22] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-424, y=-52, z=-422}
-[16:09:22] [Worker-Main-3/ERROR] [minecraft/SculkSensorBlockEntity]: Failed to parse vibration listener for Sculk Sensor: 'No key selector in MapLike[{event_delay:0,event_distance:3.602844f,range:8,source:{pos:[I;-404,-59,-499],type:"minecraft:block"}}]'
-[16:09:22] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-422}
-[16:09:22] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-418}
-[16:09:22] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-409}
-[16:09:22] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
-[16:09:22] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
-[16:09:22] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
-[16:09:22] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-394, y=-52, z=-409}
-[16:09:22] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-395, y=-52, z=-416}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-213, y=-52, z=-702}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-200, y=-52, z=-702}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-58, z=-502}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-359, y=-58, z=-502}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-346, y=-57, z=-497}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-362, y=-51, z=-548}
-[16:09:24] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-359, y=-58, z=-502}
-[16:09:55] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
-[16:09:55] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
-[16:09:55] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
-[16:09:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-291, y=-57, z=-315}
-[16:09:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-292, y=-57, z=-313}
-[16:09:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-294, y=-57, z=-313}
-[16:09:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-296, y=-57, z=-313}
-[16:09:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-295, y=-57, z=-315}
-[16:09:55] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-293, y=-57, z=-315}
-[16:09:56] [Server thread/INFO] [OROR CI/]: CI running /oror waza test
-[16:12:55] [Server thread/INFO] [OROR CI/]: CI running /oror stamina test
-[16:13:00] [Server thread/INFO] [OROR CI/]: CI running /oror dodge test
-[16:13:27] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=246 changedUnderWalk=0 reentries=0 active=true
-[16:13:27] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
-[16:13:27] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":14272}
+[16:21:48] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"19, 93, 36","off":25.3}
+[16:21:49] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"24, 93, 34","off":27.4}
+[16:21:49] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"19, 93, 37","off":24.8}
+[16:21:51] [Server thread/INFO] [OROR Village/]: VILLAGE-CREW-WAYPOINT {"to":"23, 75, 51","via":"24, 93, 40","off":21.3}
+[16:22:15] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA boss_gate_requires_and_consumes_key BlockPos{x=192, y=78, z=3000}
+[16:22:15] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'boss_gate_requires_and_consumes_key' (1 tests)...
+[16:22:18] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"boss_gate_requires_and_consumes_key","ok":true,"required":true,"error":""}
+[16:23:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-177, y=-55, z=-77}
+[16:23:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-181, y=-50, z=-73}
+[16:23:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-182, y=-45, z=-75}
+[16:23:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-70}
+[16:23:08] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-283, y=-56, z=-275}
+[16:23:08] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-45, z=-85}
+[16:23:08] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-178, y=-41, z=-89}
+[16:23:08] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-92}
+[16:23:08] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-172, y=-54, z=-93}
+[16:23:08] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-175, y=-41, z=-90}
+[16:23:08] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-50, z=-279}
+[16:23:08] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-281, y=-57, z=-280}
+[16:23:17] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA pact_is_conditional_and_requires_signature BlockPos{x=0, y=64, z=3192}
+[16:23:18] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'pact_is_conditional_and_requires_signature' (1 tests)...
+[16:23:19] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"pact_is_conditional_and_requires_signature","ok":true,"required":true,"error":""}
+[16:27:49] [Server thread/INFO] [OROR Validation/]: GAMETEST-ARENA tempering_requires_material_and_preserves_actual_item_components BlockPos{x=384, y=64, z=4152}
+[16:27:49] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'tempering_requires_material_and_preserves_actual_item_components' (1 tests)...
+[16:27:50] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"tempering_requires_material_and_preserves_actual_item_components","ok":true,"required":true,"error":""}
+[16:31:12] [Server thread/INFO] [OROR GameTest/]: GAMETEST {"test":"buried_ore_is_excavated_smelted_and_collected","ok":false,"required":true,"error":"net.minecraft.gametest.framework.GameTestAssertException: Actual excavation, transport, coal burning and vanilla recipe: 採掘精錬師 / 取引Lv.5 / 鉱脈へ移動しています / 採掘=1鉱石 / 回収=0 / 運搬=0 pos=BlockPos{x=3, y=65, z=4734}"}
+[16:35:37] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-414, y=-52, z=-427}
+[16:35:37] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-407, y=-57, z=-497}
+[16:35:37] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-406, y=-57, z=-496}
+[16:35:37] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-403, y=-52, z=-425}
+[16:35:37] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-410, y=-52, z=-426}
+[16:35:37] [Worker-Main-2/ERROR] [minecraft/SculkSensorBlockEntity]: Failed to parse vibration listener for Sculk Sensor: 'No key selector in MapLike[{event_delay:0,event_distance:3.602844f,range:8,source:{pos:[I;-404,-59,-499],type:"minecraft:block"}}]'
+[16:35:37] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-350, y=-58, z=-499}
+[16:35:37] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-349, y=-58, z=-499}
+[16:35:38] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-409}
+[16:35:38] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-420, y=-52, z=-419}
+[16:35:38] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-424, y=-52, z=-422}
+[16:35:39] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[16:35:39] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[16:35:39] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-422, y=-52, z=-391}
+[16:35:39] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-422}
+[16:35:39] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-418}
+[16:35:39] [Worker-Main-3/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-409}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-393, y=-52, z=-400}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-394, y=-52, z=-409}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-395, y=-52, z=-416}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-552}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-51, z=-552}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[16:35:40] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-247, y=-58, z=-588}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-396, y=-52, z=-407}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-404, y=-52, z=-397}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-399, y=-52, z=-395}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-400, y=-52, z=-394}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-54, z=-542}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-53, z=-542}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-58, z=-502}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-54, z=-542}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-53, z=-542}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-213, y=-52, z=-702}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-200, y=-52, z=-702}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-428, y=-52, z=-407}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-404}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-432, y=-52, z=-402}
+[16:35:41] [Worker-Main-2/ERROR] [minecraft/SculkSensorBlockEntity]: Failed to parse vibration listener for Sculk Sensor: 'No key selector in MapLike[{event_delay:0,event_distance:3.602844f,range:8,source:{pos:[I;-404,-59,-499],type:"minecraft:block"}}]'
+[16:35:43] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-361, y=-58, z=-502}
+[16:35:43] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-359, y=-58, z=-502}
+[16:35:43] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-346, y=-57, z=-497}
+[16:35:43] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-362, y=-51, z=-548}
+[16:35:43] [Worker-Main-2/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-359, y=-58, z=-502}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-204}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-320, y=-45, z=-203}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-318, y=-45, z=-202}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-291, y=-57, z=-315}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-292, y=-57, z=-313}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-294, y=-57, z=-313}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-296, y=-57, z=-313}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-295, y=-57, z=-315}
+[16:36:21] [Worker-Main-1/ERROR] [minecraft/BlockAttachedEntity]: Block-attached entity at invalid position: BlockPos{x=-293, y=-57, z=-315}
+[16:36:21] [Server thread/INFO] [OROR CI/]: SAFE-UNLOAD walks=234 changedUnderWalk=0 reentries=0 active=true
+[16:36:21] [Server thread/INFO] [OROR CI/]: SANE-MOVE capped=0 invalid=0
+[16:36:21] [Server thread/INFO] [OROR CI/]: CI-DONE {"complete":true,"ticks":10961}
