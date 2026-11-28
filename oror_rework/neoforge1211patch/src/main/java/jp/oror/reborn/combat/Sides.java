@@ -54,7 +54,7 @@ public final class Sides {
         if (jp.oror.reborn.waza.Casters.summoner(b) == a.getId() || jp.oror.reborn.waza.Casters.summoner(a) == b.getId()) {
             return true;
         }
-        if (a instanceof jp.oror.reborn.king.RoyalMob && village(b) || b instanceof jp.oror.reborn.king.RoyalMob && village(a)) {
+        if (a instanceof jp.oror.reborn.royal.RoyalMob && village(b) || b instanceof jp.oror.reborn.royal.RoyalMob && village(a)) {
             return true;
         }
         boolean ra = a.getPersistentData().getBoolean(RebelPact.ALLY), rb = b.getPersistentData().getBoolean(RebelPact.ALLY);
