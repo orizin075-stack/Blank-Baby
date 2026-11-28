@@ -1,4 +1,10 @@
 /home/runner/work/_temp/pack053/iceandfire-2.1.4.jar
+== com.iafenvoy.iceandfire.config.IafCommonConfig$CyclopsConfig
+13:  public final com.iafenvoy.jupiter.config.entry.BooleanEntry griefing;
+15:  public com.iafenvoy.iceandfire.config.IafCommonConfig$CyclopsConfig();
+84:     162: ldc           #89                 // String config.iceandfire.cyclops.griefing
+87:     168: ldc           #96                 // String griefing
+92:     182: putfield      #102                // Field griefing:Lcom/iafenvoy/jupiter/config/entry/BooleanEntry;
 == com.iafenvoy.iceandfire.config.IafCommonConfig$SeaSerpentConfig
 5:  public final com.iafenvoy.jupiter.config.entry.BooleanEntry griefing;
 17:  public com.iafenvoy.iceandfire.config.IafCommonConfig$SeaSerpentConfig();
@@ -19,12 +25,6 @@
 253:     332: ldc           #156                // String config.iceandfire.dragon.tamedGriefing
 256:     338: ldc           #158                // String tamedGriefing
 261:     352: putfield      #160                // Field tamedGriefing:Lcom/iafenvoy/jupiter/config/entry/BooleanEntry;
-== com.iafenvoy.iceandfire.config.IafCommonConfig$CyclopsConfig
-13:  public final com.iafenvoy.jupiter.config.entry.BooleanEntry griefing;
-15:  public com.iafenvoy.iceandfire.config.IafCommonConfig$CyclopsConfig();
-84:     162: ldc           #89                 // String config.iceandfire.cyclops.griefing
-87:     168: ldc           #96                 // String griefing
-92:     182: putfield      #102                // Field griefing:Lcom/iafenvoy/jupiter/config/entry/BooleanEntry;
 == com.iafenvoy.iceandfire.entity.TrollEntity
 23:  public com.iafenvoy.iceandfire.entity.TrollEntity(net.minecraft.world.entity.EntityType<com.iafenvoy.iceandfire.entity.TrollEntity>, net.minecraft.world.level.Level);
 34:  public static boolean canTrollSpawnOn(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.Mob>, net.minecraft.world.level.ServerLevelAccessor, net.minecraft.world.entity.MobSpawnType, net.minecraft.core.BlockPos, net.minecraft.util.RandomSource);
@@ -64,89 +64,6 @@
 1464:  protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource);
 1471:  protected net.minecraft.sounds.SoundEvent getDeathSound();
 1478:  public com.iafenvoy.uranus.animation.Animation[] getAnimations();
-== com.iafenvoy.iceandfire.entity.CyclopsEntity
-23:  public com.iafenvoy.iceandfire.entity.CyclopsEntity(net.minecraft.world.entity.EntityType<com.iafenvoy.iceandfire.entity.CyclopsEntity>, net.minecraft.world.level.Level);
-73:  public static net.minecraft.world.entity.ai.attributes.AttributeSupplier$Builder bakeAttributes();
-106:  public void setConfigurableAttributes();
-125:  protected net.minecraft.world.entity.ai.navigation.PathNavigation createNavigation(net.minecraft.world.level.Level);
-135:  public int getBaseExperienceReward();
-140:  protected void registerGoals();
-253:  protected void doPush(net.minecraft.world.entity.Entity);
-265:  public boolean doHurtTarget(net.minecraft.world.entity.Entity);
-321:  protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData$Builder);
-339:  public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag);
-363:  public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag);
-382:  public int getVariant();
-392:  public void setVariant(int);
-402:  public boolean isBlinded();
-412:  public void setBlinded(boolean);
-422:  public void positionRider(net.minecraft.world.entity.Entity, net.minecraft.world.entity.Entity$MoveFunction);
-546:  public void travel(net.minecraft.world.phys.Vec3);
-565:  public boolean isPushable();
-570:  public void aiStep();
-899:  private void updatePartIds();
-924:  public void setId(int);
-933:  public boolean isMultipartEntity();
-938:  public net.neoforged.neoforge.entity.PartEntity<?>[] getParts();
-971:  public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor, net.minecraft.world.DifficultyInstance, net.minecraft.world.entity.MobSpawnType, net.minecraft.world.entity.SpawnGroupData);
-989:  public void breakBlock();
-993:       6: getfield      #663                // Field com/iafenvoy/iceandfire/config/IafCommonConfig$CyclopsConfig.griefing:Lcom/iafenvoy/jupiter/config/entry/BooleanEntry;
-1123:     283: invokevirtual #758                // Method net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-1133:  public int getAnimationTick();
-1139:  public void setAnimationTick(int);
-1146:  public void remove(net.minecraft.world.entity.Entity$RemovalReason);
-1167:  public com.iafenvoy.uranus.animation.Animation getAnimation();
-1173:  public void setAnimation(com.iafenvoy.uranus.animation.Animation);
-1180:  public com.iafenvoy.uranus.animation.Animation[] getAnimations();
-1206:  public boolean isBlinking();
-1222:  public void onHitEye(net.minecraft.world.damagesource.DamageSource, float);
-1252:  protected net.minecraft.sounds.SoundEvent getAmbientSound();
-1259:  protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource);
-1266:  protected net.minecraft.sounds.SoundEvent getDeathSound();
-1273:  public boolean canBeTurnedToStone();
-1283:  public boolean isPersistenceRequired();
-1288:  public boolean removeWhenFarAway(double);
-1293:  private static boolean lambda$registerGoals$1(net.minecraft.world.entity.LivingEntity);
-1312:  private static boolean lambda$registerGoals$0(net.minecraft.world.entity.LivingEntity);
-== com.iafenvoy.iceandfire.entity.HydraBreathEntity
-3:  public com.iafenvoy.iceandfire.entity.HydraBreathEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level);
-11:  public com.iafenvoy.iceandfire.entity.HydraBreathEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.HydraEntity, double, double, double);
-26:  protected boolean shouldBurn();
-31:  public boolean hurt(net.minecraft.world.damagesource.DamageSource, float);
-36:  public float getPickRadius();
-41:  public boolean isPickable();
-46:  public void tick();
-253:  protected void onHit(net.minecraft.world.phys.HitResult);
-258:       7: getstatic     #202                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
-330:  private static boolean lambda$tick$0(com.iafenvoy.iceandfire.entity.HydraBreathEntity, net.minecraft.world.entity.Entity);
-== com.iafenvoy.iceandfire.entity.util.dragon.IafDragonDestructionManager
-3:  public com.iafenvoy.iceandfire.entity.util.dragon.IafDragonDestructionManager();
-9:  public static void destroyAreaBreath(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, com.iafenvoy.iceandfire.entity.DragonBaseEntity);
-85:     169: getstatic     #102                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
-234:  public static void destroyAreaCharge(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, com.iafenvoy.iceandfire.entity.DragonBaseEntity);
-272:      72: getstatic     #102                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
-357:     234: invokestatic  #182                // Method destroyBlocks:(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;IIIDLnet/minecraft/world/entity/Entity;)V
-483:  private static net.minecraft.world.damagesource.DamageSource getDamageSource(com.iafenvoy.iceandfire.entity.DragonBaseEntity);
-534:  private static void attackBlock(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState);
-578:      93: invokevirtual #278                // Method net/minecraft/world/level/Level.setBlockAndUpdate:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z
-639:     240: invokevirtual #278                // Method net/minecraft/world/level/Level.setBlockAndUpdate:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z
-643:  private static void attackBlock(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.core.BlockPos);
-654:  private static void applyDragonEffect(net.minecraft.world.entity.LivingEntity, com.iafenvoy.iceandfire.entity.DragonBaseEntity, int);
-708:  private static void causeExplosion(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.world.damagesource.DamageSource, int);
-712:       4: getstatic     #102                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
-749:  private static void destroyBlocks(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, int, int, int, double, net.minecraft.world.entity.Entity);
-773:  public static net.minecraft.world.level.block.state.BlockState transformBlockFire(net.minecraft.world.level.block.state.BlockState);
-913:  public static net.minecraft.world.level.block.state.BlockState transformBlockIce(net.minecraft.world.level.block.state.BlockState);
-1078:  public static net.minecraft.world.level.block.state.BlockState transformBlockLightning(net.minecraft.world.level.block.state.BlockState);
-1222:  private static void lambda$destroyBlocks$6(net.minecraft.core.BlockPos, double, net.minecraft.world.level.Level, net.minecraft.world.entity.Entity, net.minecraft.core.BlockPos);
-1261:      73: invokevirtual #570                // Method net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-1265:  private static void lambda$destroyAreaCharge$5(com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.world.damagesource.DamageSource, float, int, net.minecraft.world.entity.LivingEntity);
-1290:  private static void lambda$destroyAreaCharge$4(net.minecraft.core.BlockPos, float, net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.core.BlockPos);
-1305:  private static void lambda$destroyAreaCharge$3(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.core.BlockPos, net.minecraft.core.BlockPos);
-1334:      54: invokevirtual #570                // Method net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
-1347:  private static void lambda$destroyAreaBreath$2(com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.world.damagesource.DamageSource, float, int, net.minecraft.world.entity.LivingEntity);
-1372:  private static void lambda$destroyAreaBreath$1(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, boolean, net.minecraft.core.BlockPos, float, net.minecraft.core.BlockPos);
-1420:  private static void lambda$destroyAreaBreath$0(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, boolean, net.minecraft.core.BlockPos);
 == com.iafenvoy.iceandfire.entity.util.dragon.DragonUtils
 3:  public com.iafenvoy.iceandfire.entity.util.dragon.DragonUtils();
 9:  public static net.minecraft.core.BlockPos getBlockInViewEscort(com.iafenvoy.iceandfire.entity.DragonBaseEntity);
@@ -182,67 +99,59 @@
 1497:  public static boolean onSameTeam(net.minecraft.world.entity.Entity, net.minecraft.world.entity.Entity);
 1572:  public static boolean isDreadBlock(net.minecraft.world.level.block.state.BlockState);
 1638:  private static boolean lambda$riderLookingAtEntity$0(net.minecraft.world.entity.LivingEntity, net.minecraft.world.entity.Entity);
-== com.iafenvoy.iceandfire.entity.DeathWormEntity
-55:  public com.iafenvoy.iceandfire.entity.DeathWormEntity(net.minecraft.world.entity.EntityType<com.iafenvoy.iceandfire.entity.DeathWormEntity>, net.minecraft.world.level.Level);
-114:  public static net.minecraft.world.entity.ai.attributes.AttributeSupplier$Builder bakeAttributes();
-153:  protected void registerGoals();
-268:  public void setConfigurableAttributes();
-326:  public net.minecraft.world.entity.ai.control.LookControl getLookControl();
-332:  public net.minecraft.sounds.SoundSource getSoundSource();
-337:  public boolean getCanSpawnHere();
-386:  public void onUpdateParts();
-468:  public void updateScale(float);
-497:  private void updatePartIds();
-526:  public void setId(int);
-535:  public boolean isMultipartEntity();
-540:  public net.neoforged.neoforge.entity.PartEntity<?>[] getParts();
-546:  public int getBaseExperienceReward();
-558:  public boolean isFood(net.minecraft.world.item.ItemStack);
-563:  private void clearSegments();
-592:  public void setExplosive(boolean, net.minecraft.world.entity.player.Player);
-605:  public boolean doHurtTarget(net.minecraft.world.entity.Entity);
-643:      84: getstatic     #418                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
-684:  public void die(net.minecraft.world.damagesource.DamageSource);
-693:  protected void checkFallDamage(double, boolean, net.minecraft.world.level.block.state.BlockState, net.minecraft.core.BlockPos);
-697:  protected net.minecraft.resources.ResourceKey<net.minecraft.world.level.storage.loot.LootTable> getDefaultLootTable();
-743:  public net.minecraft.world.entity.AgeableMob getBreedOffspring(net.minecraft.server.level.ServerLevel, net.minecraft.world.entity.AgeableMob);
-748:  protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData$Builder);
-790:  public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag);
-830:  public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag);
-870:  private void setStateField(int, boolean);
-908:  public byte getControlState();
-918:  public void setControlState(byte);
-928:  public int getVariant();
-938:  public void setVariant(int);
-948:  public int getWormJumping();
-958:  public void setWormJumping(int);
-968:  public net.minecraft.core.BlockPos getWormHome();
-977:  public void setWormHome(net.minecraft.core.BlockPos);
-989:  public int getWormAge();
-1001:  public void setWormAge(int);
-1011:  public float getAgeScale();
-1025:  public float getDeathwormScale();
-1049:  public void setDeathWormScale(float);
-1070:  public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor, net.minecraft.world.DifficultyInstance, net.minecraft.world.entity.MobSpawnType, net.minecraft.world.entity.SpawnGroupData);
-1107:  public void positionRider(net.minecraft.world.entity.Entity, net.minecraft.world.entity.Entity$MoveFunction);
-1167:  public net.minecraft.world.entity.LivingEntity getControllingPassenger();
-1192:  public net.minecraft.world.InteractionResult mobInteract(net.minecraft.world.entity.player.Player, net.minecraft.world.InteractionHand);
-1226:  private void switchNavigator(boolean);
-1267:  public boolean hurt(net.minecraft.world.damagesource.DamageSource, float);
-1301:  public void move(net.minecraft.world.entity.MoverType, net.minecraft.world.phys.Vec3);
-1309:  public boolean isInWall();
-1322:  protected void moveTowardsClosestSpace(double, double, double);
-1516:  private void refreshDirtyAttributes();
-1529:  public boolean killedEntity(net.minecraft.server.level.ServerLevel, net.minecraft.world.entity.LivingEntity);
-1542:  public boolean isAlliedTo(net.minecraft.world.entity.Entity);
-1576:  public void aiStep();
-1926:  public int getWormBrightness(boolean);
-1960:  public int getSurface(int, int, int);
-1982:  protected net.minecraft.sounds.SoundEvent getAmbientSound();
-1998:  protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource);
-2014:  protected net.minecraft.sounds.SoundEvent getDeathSound();
-2030:  public void tick();
-2335:  public boolean up();
+== com.iafenvoy.iceandfire.entity.util.dragon.IafDragonDestructionManager
+3:  public com.iafenvoy.iceandfire.entity.util.dragon.IafDragonDestructionManager();
+9:  public static void destroyAreaBreath(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, com.iafenvoy.iceandfire.entity.DragonBaseEntity);
+85:     169: getstatic     #102                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
+234:  public static void destroyAreaCharge(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, com.iafenvoy.iceandfire.entity.DragonBaseEntity);
+272:      72: getstatic     #102                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
+357:     234: invokestatic  #182                // Method destroyBlocks:(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;IIIDLnet/minecraft/world/entity/Entity;)V
+483:  private static net.minecraft.world.damagesource.DamageSource getDamageSource(com.iafenvoy.iceandfire.entity.DragonBaseEntity);
+534:  private static void attackBlock(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.core.BlockPos, net.minecraft.world.level.block.state.BlockState);
+578:      93: invokevirtual #278                // Method net/minecraft/world/level/Level.setBlockAndUpdate:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z
+639:     240: invokevirtual #278                // Method net/minecraft/world/level/Level.setBlockAndUpdate:(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z
+643:  private static void attackBlock(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.core.BlockPos);
+654:  private static void applyDragonEffect(net.minecraft.world.entity.LivingEntity, com.iafenvoy.iceandfire.entity.DragonBaseEntity, int);
+708:  private static void causeExplosion(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.world.damagesource.DamageSource, int);
+712:       4: getstatic     #102                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
+749:  private static void destroyBlocks(net.minecraft.world.level.Level, net.minecraft.core.BlockPos, int, int, int, double, net.minecraft.world.entity.Entity);
+773:  public static net.minecraft.world.level.block.state.BlockState transformBlockFire(net.minecraft.world.level.block.state.BlockState);
+913:  public static net.minecraft.world.level.block.state.BlockState transformBlockIce(net.minecraft.world.level.block.state.BlockState);
+1078:  public static net.minecraft.world.level.block.state.BlockState transformBlockLightning(net.minecraft.world.level.block.state.BlockState);
+1222:  private static void lambda$destroyBlocks$6(net.minecraft.core.BlockPos, double, net.minecraft.world.level.Level, net.minecraft.world.entity.Entity, net.minecraft.core.BlockPos);
+1261:      73: invokevirtual #570                // Method net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+1265:  private static void lambda$destroyAreaCharge$5(com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.world.damagesource.DamageSource, float, int, net.minecraft.world.entity.LivingEntity);
+1290:  private static void lambda$destroyAreaCharge$4(net.minecraft.core.BlockPos, float, net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.core.BlockPos);
+1305:  private static void lambda$destroyAreaCharge$3(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.core.BlockPos, net.minecraft.core.BlockPos);
+1334:      54: invokevirtual #570                // Method net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+1347:  private static void lambda$destroyAreaBreath$2(com.iafenvoy.iceandfire.entity.DragonBaseEntity, net.minecraft.world.damagesource.DamageSource, float, int, net.minecraft.world.entity.LivingEntity);
+1372:  private static void lambda$destroyAreaBreath$1(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, boolean, net.minecraft.core.BlockPos, float, net.minecraft.core.BlockPos);
+1420:  private static void lambda$destroyAreaBreath$0(net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.DragonBaseEntity, boolean, net.minecraft.core.BlockPos);
+== com.iafenvoy.iceandfire.entity.HydraBreathEntity
+3:  public com.iafenvoy.iceandfire.entity.HydraBreathEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level);
+11:  public com.iafenvoy.iceandfire.entity.HydraBreathEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.HydraEntity, double, double, double);
+26:  protected boolean shouldBurn();
+31:  public boolean hurt(net.minecraft.world.damagesource.DamageSource, float);
+36:  public float getPickRadius();
+41:  public boolean isPickable();
+46:  public void tick();
+253:  protected void onHit(net.minecraft.world.phys.HitResult);
+258:       7: getstatic     #202                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
+330:  private static boolean lambda$tick$0(com.iafenvoy.iceandfire.entity.HydraBreathEntity, net.minecraft.world.entity.Entity);
+== com.iafenvoy.iceandfire.entity.SeaSerpentBubblesEntity
+3:  public com.iafenvoy.iceandfire.entity.SeaSerpentBubblesEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level);
+11:  public com.iafenvoy.iceandfire.entity.SeaSerpentBubblesEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level, double, double, double, double, double, double);
+28:  public com.iafenvoy.iceandfire.entity.SeaSerpentBubblesEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.SeaSerpentEntity, double, double, double);
+43:  public boolean isPickable();
+48:  protected boolean shouldBurn();
+53:  public void tick();
+224:  protected boolean canHitEntity(net.minecraft.world.entity.Entity);
+241:  public void autoTarget();
+269:  protected net.minecraft.core.particles.ParticleOptions getTrailParticle();
+274:  public boolean hurt(net.minecraft.world.damagesource.DamageSource, float);
+279:  public float getPickRadius();
+284:  protected void onHit(net.minecraft.world.phys.HitResult);
+289:       7: getstatic     #210                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
 == com.iafenvoy.iceandfire.entity.DragonBaseEntity
 233:  public com.iafenvoy.iceandfire.entity.DragonBaseEntity(net.minecraft.world.entity.EntityType<? extends com.iafenvoy.iceandfire.entity.DragonBaseEntity>, net.minecraft.world.level.Level, com.iafenvoy.iceandfire.data.DragonType, double, double, double, double, double, double);
 384:  public static net.minecraft.world.entity.ai.attributes.AttributeSupplier$Builder bakeAttributes();
@@ -305,20 +214,6 @@
 2006:  public byte getControlState();
 2016:  public void setControlState(byte);
 grep: write error: Broken pipe
-== com.iafenvoy.iceandfire.entity.SeaSerpentBubblesEntity
-3:  public com.iafenvoy.iceandfire.entity.SeaSerpentBubblesEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level);
-11:  public com.iafenvoy.iceandfire.entity.SeaSerpentBubblesEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level, double, double, double, double, double, double);
-28:  public com.iafenvoy.iceandfire.entity.SeaSerpentBubblesEntity(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.projectile.Fireball>, net.minecraft.world.level.Level, com.iafenvoy.iceandfire.entity.SeaSerpentEntity, double, double, double);
-43:  public boolean isPickable();
-48:  protected boolean shouldBurn();
-53:  public void tick();
-224:  protected boolean canHitEntity(net.minecraft.world.entity.Entity);
-241:  public void autoTarget();
-269:  protected net.minecraft.core.particles.ParticleOptions getTrailParticle();
-274:  public boolean hurt(net.minecraft.world.damagesource.DamageSource, float);
-279:  public float getPickRadius();
-284:  protected void onHit(net.minecraft.world.phys.HitResult);
-289:       7: getstatic     #210                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
 == com.iafenvoy.iceandfire.entity.SeaSerpentEntity
 61:  public com.iafenvoy.iceandfire.entity.SeaSerpentEntity(net.minecraft.world.entity.EntityType<com.iafenvoy.iceandfire.entity.SeaSerpentEntity>, net.minecraft.world.level.Level);
 137:  public static boolean isWaterBlock(net.minecraft.world.level.Level, net.minecraft.core.BlockPos);
@@ -381,3 +276,108 @@ grep: write error: Broken pipe
 2459:  public void onWorldSpawn(net.minecraft.util.RandomSource);
 2502:  public net.minecraft.world.entity.AgeableMob getBreedOffspring(net.minecraft.server.level.ServerLevel, net.minecraft.world.entity.AgeableMob);
 grep: write error: Broken pipe
+== com.iafenvoy.iceandfire.entity.DeathWormEntity
+55:  public com.iafenvoy.iceandfire.entity.DeathWormEntity(net.minecraft.world.entity.EntityType<com.iafenvoy.iceandfire.entity.DeathWormEntity>, net.minecraft.world.level.Level);
+114:  public static net.minecraft.world.entity.ai.attributes.AttributeSupplier$Builder bakeAttributes();
+153:  protected void registerGoals();
+268:  public void setConfigurableAttributes();
+326:  public net.minecraft.world.entity.ai.control.LookControl getLookControl();
+332:  public net.minecraft.sounds.SoundSource getSoundSource();
+337:  public boolean getCanSpawnHere();
+386:  public void onUpdateParts();
+468:  public void updateScale(float);
+497:  private void updatePartIds();
+526:  public void setId(int);
+535:  public boolean isMultipartEntity();
+540:  public net.neoforged.neoforge.entity.PartEntity<?>[] getParts();
+546:  public int getBaseExperienceReward();
+558:  public boolean isFood(net.minecraft.world.item.ItemStack);
+563:  private void clearSegments();
+592:  public void setExplosive(boolean, net.minecraft.world.entity.player.Player);
+605:  public boolean doHurtTarget(net.minecraft.world.entity.Entity);
+643:      84: getstatic     #418                // Field net/minecraft/world/level/GameRules.RULE_MOBGRIEFING:Lnet/minecraft/world/level/GameRules$Key;
+684:  public void die(net.minecraft.world.damagesource.DamageSource);
+693:  protected void checkFallDamage(double, boolean, net.minecraft.world.level.block.state.BlockState, net.minecraft.core.BlockPos);
+697:  protected net.minecraft.resources.ResourceKey<net.minecraft.world.level.storage.loot.LootTable> getDefaultLootTable();
+743:  public net.minecraft.world.entity.AgeableMob getBreedOffspring(net.minecraft.server.level.ServerLevel, net.minecraft.world.entity.AgeableMob);
+748:  protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData$Builder);
+790:  public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag);
+830:  public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag);
+870:  private void setStateField(int, boolean);
+908:  public byte getControlState();
+918:  public void setControlState(byte);
+928:  public int getVariant();
+938:  public void setVariant(int);
+948:  public int getWormJumping();
+958:  public void setWormJumping(int);
+968:  public net.minecraft.core.BlockPos getWormHome();
+977:  public void setWormHome(net.minecraft.core.BlockPos);
+989:  public int getWormAge();
+1001:  public void setWormAge(int);
+1011:  public float getAgeScale();
+1025:  public float getDeathwormScale();
+1049:  public void setDeathWormScale(float);
+1070:  public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor, net.minecraft.world.DifficultyInstance, net.minecraft.world.entity.MobSpawnType, net.minecraft.world.entity.SpawnGroupData);
+1107:  public void positionRider(net.minecraft.world.entity.Entity, net.minecraft.world.entity.Entity$MoveFunction);
+1167:  public net.minecraft.world.entity.LivingEntity getControllingPassenger();
+1192:  public net.minecraft.world.InteractionResult mobInteract(net.minecraft.world.entity.player.Player, net.minecraft.world.InteractionHand);
+1226:  private void switchNavigator(boolean);
+1267:  public boolean hurt(net.minecraft.world.damagesource.DamageSource, float);
+1301:  public void move(net.minecraft.world.entity.MoverType, net.minecraft.world.phys.Vec3);
+1309:  public boolean isInWall();
+1322:  protected void moveTowardsClosestSpace(double, double, double);
+1516:  private void refreshDirtyAttributes();
+1529:  public boolean killedEntity(net.minecraft.server.level.ServerLevel, net.minecraft.world.entity.LivingEntity);
+1542:  public boolean isAlliedTo(net.minecraft.world.entity.Entity);
+1576:  public void aiStep();
+1926:  public int getWormBrightness(boolean);
+1960:  public int getSurface(int, int, int);
+1982:  protected net.minecraft.sounds.SoundEvent getAmbientSound();
+1998:  protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource);
+2014:  protected net.minecraft.sounds.SoundEvent getDeathSound();
+2030:  public void tick();
+2335:  public boolean up();
+== com.iafenvoy.iceandfire.entity.CyclopsEntity
+23:  public com.iafenvoy.iceandfire.entity.CyclopsEntity(net.minecraft.world.entity.EntityType<com.iafenvoy.iceandfire.entity.CyclopsEntity>, net.minecraft.world.level.Level);
+73:  public static net.minecraft.world.entity.ai.attributes.AttributeSupplier$Builder bakeAttributes();
+106:  public void setConfigurableAttributes();
+125:  protected net.minecraft.world.entity.ai.navigation.PathNavigation createNavigation(net.minecraft.world.level.Level);
+135:  public int getBaseExperienceReward();
+140:  protected void registerGoals();
+253:  protected void doPush(net.minecraft.world.entity.Entity);
+265:  public boolean doHurtTarget(net.minecraft.world.entity.Entity);
+321:  protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData$Builder);
+339:  public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag);
+363:  public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag);
+382:  public int getVariant();
+392:  public void setVariant(int);
+402:  public boolean isBlinded();
+412:  public void setBlinded(boolean);
+422:  public void positionRider(net.minecraft.world.entity.Entity, net.minecraft.world.entity.Entity$MoveFunction);
+546:  public void travel(net.minecraft.world.phys.Vec3);
+565:  public boolean isPushable();
+570:  public void aiStep();
+899:  private void updatePartIds();
+924:  public void setId(int);
+933:  public boolean isMultipartEntity();
+938:  public net.neoforged.neoforge.entity.PartEntity<?>[] getParts();
+971:  public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor, net.minecraft.world.DifficultyInstance, net.minecraft.world.entity.MobSpawnType, net.minecraft.world.entity.SpawnGroupData);
+989:  public void breakBlock();
+993:       6: getfield      #663                // Field com/iafenvoy/iceandfire/config/IafCommonConfig$CyclopsConfig.griefing:Lcom/iafenvoy/jupiter/config/entry/BooleanEntry;
+1123:     283: invokevirtual #758                // Method net/minecraft/world/level/Level.destroyBlock:(Lnet/minecraft/core/BlockPos;Z)Z
+1133:  public int getAnimationTick();
+1139:  public void setAnimationTick(int);
+1146:  public void remove(net.minecraft.world.entity.Entity$RemovalReason);
+1167:  public com.iafenvoy.uranus.animation.Animation getAnimation();
+1173:  public void setAnimation(com.iafenvoy.uranus.animation.Animation);
+1180:  public com.iafenvoy.uranus.animation.Animation[] getAnimations();
+1206:  public boolean isBlinking();
+1222:  public void onHitEye(net.minecraft.world.damagesource.DamageSource, float);
+1252:  protected net.minecraft.sounds.SoundEvent getAmbientSound();
+1259:  protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource);
+1266:  protected net.minecraft.sounds.SoundEvent getDeathSound();
+1273:  public boolean canBeTurnedToStone();
+1283:  public boolean isPersistenceRequired();
+1288:  public boolean removeWhenFarAway(double);
+1293:  private static boolean lambda$registerGoals$1(net.minecraft.world.entity.LivingEntity);
+1312:  private static boolean lambda$registerGoals$0(net.minecraft.world.entity.LivingEntity);

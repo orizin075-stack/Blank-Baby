@@ -8,7 +8,7 @@ ok   CITADEL-UPDATE               false=staleAtPost
 -    CITADEL-UPDATE-TEST          false= 
 ok   COMPASS-RESULT               false=givenAgain 
 ok   CREW-RESULT                  false= 
-ok   DODGE-RESULT                 false= 
+FAIL DODGE-RESULT                 false= 
 ok   DUEL-RESULT                  false=godSealHasRaid 
 -    EFP-RESULT                   false= 
 -    FLIGHT-RESULT                false= 
@@ -20,7 +20,7 @@ ok   GODS-RESULT                  false=
 -    GUN-MOBS                     false= 
 ok   GUN-PARRY                    false= 
 ok   GUNPOST-RESULT               false= 
-FAIL KING-STORY                   false=peaceHostile,rebelTradeMenu,breachedBefore,lordHit,godWeakenedEffect,azazelDisarmed,certFriendBefore,passAzazel 
+ok   KING-STORY                   false=peaceHostile,rebelTradeMenu,breachedBefore,lordHit,godWeakenedEffect,certFriendBefore 
 -    KINGSLAYER-TEST              false= 
 -    LANDING-FLIGHT               false= 
 -    LANDING-RESULT               false= 
@@ -39,7 +39,7 @@ ok   STAMINA-RESULT               false=downInvulnerable
 -    SUPPLY-TEST                  false= 
 ok   SWEEP-RESULT                 false= 
 ok   VILLAGE-ARMS-RESULT          false= 
--    VILLAGE-FLIGHT               false= 
+-    VILLAGE-FLIGHT               false=flewOff 
 -    WAR-RESULT                   false= 
-FAIL WAZA-RESULT                  false= failed="relentless_research_02:effect; teia_02:effect; hephaistos_03:effect; yggdrasil_05:effect; huang_linghua_04:effect; relentless_research_07:effect; hephaistos_07:effect; eomaia_08:effect; ain_sof_aur_09:effect; ferdinand_10:effect; forbidden_arcana_09:effect; magna_mater_09:effect; teia_10:effect; go
+FAIL WAZA-RESULT                  false= failed="relentless_research_02:effect; teia_02:effect; hephaistos_03:effect; ferdinand_03:effect; yggdrasil_05:effect; valeria_05:effect; hephaistos_07:effect; forbidden_arcana_06:effect; yggdrasil_09:effect; ferdinand_10:effect; valeria_10:effect; magna_mater_09:effect; demiurgos_09:effect; eomaia_10:effe
 ok   WORN-RESULT                  false= 
